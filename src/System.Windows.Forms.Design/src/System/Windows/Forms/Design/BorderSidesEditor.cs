@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor for setting the ToolStripStatusLabel BorderSides property..
 /// </summary>
-[CLSCompliant(false)]
 public partial class BorderSidesEditor : UITypeEditor
 {
     private BorderSidesEditorUI? _borderSidesEditorUI;

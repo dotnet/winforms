@@ -9,7 +9,6 @@ namespace System.Drawing.Design;
 /// <summary>
 ///  Provides an editor that can perform default file searching for cursor (.cur) files.
 /// </summary>
-[CLSCompliant(false)]
 public partial class CursorEditor : UITypeEditor
 {
     private CursorUI? _cursorUI;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- https://learn.microsoft.com/en-us/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
 <Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
@@ -27,7 +27,28 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0014</DiagnosticId>
+    <Target>M:System.Drawing.Imaging.ColorMatrix.#ctor(System.Single[][]):[T:System.CLSCompliantAttribute]</Target>
+    <Left>lib/net8.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
     <Target>M:System.Drawing.Printing.PrintPageEventArgs.get_Graphics:[T:System.Runtime.CompilerServices.NullableContextAttribute]</Target>
+    <Left>lib/net8.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>P:System.Drawing.Imaging.ImageCodecInfo.SignatureMasks:[T:System.CLSCompliantAttribute]</Target>
+    <Left>lib/net8.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>P:System.Drawing.Imaging.ImageCodecInfo.SignaturePatterns:[T:System.CLSCompliantAttribute]</Target>
     <Left>lib/net8.0/System.Drawing.Common.dll</Left>
     <Right>lib/net8.0/System.Drawing.Common.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
@@ -121,6 +142,27 @@
     <Target>T:System.Drawing.Text.PrivateFontCollection:[T:System.Runtime.CompilerServices.NullableContextAttribute]</Target>
     <Left>lib/net8.0/System.Drawing.Common.dll</Left>
     <Right>lib/net8.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>M:System.Drawing.Imaging.ColorMatrix.#ctor(System.Single[][]):[T:System.CLSCompliantAttribute]</Target>
+    <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
+    <Right>lib/netstandard2.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>P:System.Drawing.Imaging.ImageCodecInfo.SignatureMasks:[T:System.CLSCompliantAttribute]</Target>
+    <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
+    <Right>lib/netstandard2.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0014</DiagnosticId>
+    <Target>P:System.Drawing.Imaging.ImageCodecInfo.SignaturePatterns:[T:System.CLSCompliantAttribute]</Target>
+    <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
+    <Right>lib/netstandard2.0/System.Drawing.Common.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
