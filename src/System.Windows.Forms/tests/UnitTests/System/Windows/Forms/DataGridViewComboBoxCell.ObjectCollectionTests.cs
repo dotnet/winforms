@@ -97,6 +97,18 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         _collection[2].Should().Be("C");
     }
 
+    public void ObjectCollection_AddRange_AddsObjectCollectionCorrectly()
+    {
+        DataGridViewComboBoxCell.ObjectCollection items = new(_comboBoxCell) { "Item1", "Item2", "Item3" };
+
+        _collection.AddRange(items);
+
+        _collection.InnerArray.Count.Should().Be(3);
+        _collection[0].Should().Be("Item1");
+        _collection[1].Should().Be("Item2");
+        _collection[2].Should().Be("Item3");
+    }
+
     [WinFormsFact]
     public void ObjectCollection_AddRange_DoesNotAddItems_WhenExceptionIsThrown()
     {
