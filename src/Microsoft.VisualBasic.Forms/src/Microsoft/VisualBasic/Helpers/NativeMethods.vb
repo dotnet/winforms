@@ -131,7 +131,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 #Enable Warning IDE1006
 
             Friend Sub Init()
-                dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
+                dwLength = CType(Marshal.SizeOf(Of MEMORYSTATUSEX)(), UInt32)
             End Sub
 
         End Structure

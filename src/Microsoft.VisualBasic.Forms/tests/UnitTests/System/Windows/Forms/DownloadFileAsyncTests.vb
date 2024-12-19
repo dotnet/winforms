@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFileAsync_AllOptions_Success()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                    .Be(DownloadSmallFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFileAsync_AllOptionsClientHandlerNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -72,7 +72,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFileAsync_AllOptionsInvalidTimeout_Throws()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFileAsync_UriWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -114,7 +114,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                    .Be(DownloadSmallFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
