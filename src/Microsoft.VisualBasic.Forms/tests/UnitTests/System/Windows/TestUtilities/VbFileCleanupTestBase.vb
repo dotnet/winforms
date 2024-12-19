@@ -119,6 +119,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Return folder
         End Function
+
         Friend Sub Dispose() Implements IDisposable.Dispose
             Dispose(disposing:=True)
             GC.SuppressFinalize(Me)
