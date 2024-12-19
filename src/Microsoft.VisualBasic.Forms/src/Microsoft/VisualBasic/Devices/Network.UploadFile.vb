@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports System.Net.Http
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
@@ -280,38 +281,48 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw GetArgumentNullException(NameOf(address))
             End If
 
-            Using client As New WebClientExtended()
-                client.Timeout = connectionTimeout
+            ' Get network credentials
+            Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
+                                                        New HttpClientHandler,
+                                                        New HttpClientHandler With {.Credentials = networkCredentials})
+            Dim dialog As ProgressDialog = Nothing
+            Try
 
-                ' Set credentials if we have any
-                If networkCredentials IsNot Nothing Then
-                    client.Credentials = networkCredentials
+                If showUI AndAlso Environment.UserInteractive Then
+                    ' Construct the local file. This will validate the full name and path
+                    Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
+                        path:=sourceFileName,
+                        paramName:=NameOf(sourceFileName))
+
+                    dialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
                 End If
 
-                Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso Environment.UserInteractive Then
-                    dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = GetResourceString(
-                            resourceKey:=SR.ProgressDialogUploadingLabel,
-                            sourceFileName,
-                        address.AbsolutePath)
-                    }
-                End If
+                Dim t As Task = UploadFileAsync(
+                        sourceFileName,
+                        addressUri:=address,
+                        clientHandler,
+                        dialog,
+                        connectionTimeout,
+                        onUserCancel)
 
-                ' Create the copier
-                Dim copier As New WebClientCopy(client, dialog)
-
-                ' Download the file
-                copier.UploadFile(sourceFileName, address)
-
-                ' Handle a dialog cancel
-                If showUI AndAlso Environment.UserInteractive Then
-                    If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                        Throw New OperationCanceledException()
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    t.Wait()
+                    If t.IsFaulted Then
+                        Throw t.Exception
                     End If
                 End If
-            End Using
+            Catch ex As Exception
+                If ex.InnerException IsNot Nothing Then
+                    Throw ex.InnerException
+                End If
+                Throw
+            Finally
+                CloseProgressDialog(dialog)
+            End Try
 
         End Sub
 
