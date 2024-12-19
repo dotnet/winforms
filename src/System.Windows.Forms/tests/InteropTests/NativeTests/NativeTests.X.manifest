@@ -15,6 +15,10 @@
     <comClass
         clsid="{EA1FCB3A-277C-4C79-AB85-E2ED3E858201}"
         threadingModel="Both" />
+    <!-- AxTestControl -->
+    <comClass
+        clsid="{4EABA135-7C8A-4DB8-B732-2A6AE511D7EB}"
+        threadingModel="Apartment" />
 </file>
 
 </assembly>
