@@ -27,6 +27,7 @@ public class ClipboardComTests
     {
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
+        using BinaryFormatterScope scope = new(enable: false);
         Clipboard.SetDataAsJson("testData", testData);
         ITypedDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
         dataObject.GetDataPresent("testData").Should().BeTrue();
@@ -40,6 +41,7 @@ public class ClipboardComTests
     {
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
+        using BinaryFormatterScope scope = new(enable: false);
         DataObject dataObject = new();
         dataObject.SetDataAsJson("testData", testData);
 
