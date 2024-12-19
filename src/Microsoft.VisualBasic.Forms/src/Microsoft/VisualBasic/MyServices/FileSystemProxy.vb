@@ -653,7 +653,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </param>
         ''' <param name="fileWildcards">The search patterns to use for the file name ("*.*")</param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
-        ''' <exception cref="System.ArgumentNullException">
+        ''' <exception cref="ArgumentNullException">
         '''  <paramref name="directory"/> is Nothing or an empty string.
         ''' </exception>
         ''' <exception cref="ArgumentException">
