@@ -98,8 +98,7 @@ internal static class WinFormsSerializationRecordExtensions
         }
         catch (Exception ex)
         {
-            // loni TODO: localize string
-            throw new NotSupportedException("Failed to deserialize JSON data.", ex);
+            throw new NotSupportedException(SR.ClipboardOrDragDrop_JsonDeserializationFailed, ex);
         }
 
         return true;

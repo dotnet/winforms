@@ -11,7 +11,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Calls GlobalMemoryStatusEx and returns the correct value.
         ''' </summary>
         Private NotInheritable Class InternalMemoryStatus
-            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
+            Private _memoryStatusEx As MEMORYSTATUSEX
 
             Friend Sub New()
             End Sub
@@ -49,7 +49,7 @@ Namespace Microsoft.VisualBasic.Devices
 #Enable Warning IDE0049
 
             Private Sub Refresh()
-                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
+                _memoryStatusEx = New MEMORYSTATUSEX
                 _memoryStatusEx.Init()
                 If Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx) Then
                     Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)

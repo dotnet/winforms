@@ -62,17 +62,17 @@ namespace System.Private.Windows;
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types
 ///         || types.GetRawValue("<JsonBytes>k__BackingField") is not System.Formats.Nrbf.SZArrayRecord<byte> byteData
-///         || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string innerTypeName
-///         || !System.Reflection.Metadata.TypeName.TryParse(innerTypeName.ToCharArray(), out System.Reflection.Metadata.TypeName? result))
+///         || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string innerTypeAssemblyQualifiedName
+///         || !System.Reflection.Metadata.TypeName.TryParse(innerTypeAssemblyQualifiedName.ToCharArray(), out System.Reflection.Metadata.TypeName? innerTypeName))
 ///     {
 ///         // This is supposed to be JsonData, but somehow the data is corrupt.
 ///         throw new InvalidOperationException();
 ///     }
 ///
-///     // TODO: Additional checking on result TypeName to ensure it is expected type.
+///     // TODO: Additional checking on 'innerTypeName' to ensure it is expected type.
 ///
 ///     // This should return the original data that was JSON serialized.
-///     var result = System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+///     var result = System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), innerType);
 ///     // TODO: Process the payload as needed.
 ///  }
 ///
