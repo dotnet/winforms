@@ -4,11 +4,13 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
+Imports System.Text.RegularExpressions
 Imports System.Threading
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
+        Private Const BufferSize As Integer = 4096
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
@@ -44,6 +46,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Public ReadOnly Property Address As String
+
+        Private Shared Function GetBoundary(contentType As String) As String
+            Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
+            Dim element As String = elements.FirstOrDefault(Function(e) e.Trim().StartsWith("boundary=", StringComparison.OrdinalIgnoreCase))
+            Return If(element IsNot Nothing, element.Substring(startIndex:=element.IndexOf("="c) + 1).Trim().Trim(""""c), String.Empty)
+        End Function
 
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
@@ -84,30 +92,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             If request.HttpMethod.Equals("Post", StringComparison.OrdinalIgnoreCase) _
                                 AndAlso request.HasEntityBody Then
 
-                                Using bodyStream As Stream = request.InputStream
-                                    Using reader As New StreamReader(bodyStream, request.ContentEncoding, True, 4096)
-                                        Try
-                                            Dim boundary As String = request.ContentType.Split(";"c)(1) _
-                                                                                        .Split("="c)(1).Trim
-                                            Dim content As String = reader.ReadToEnd()
-                                            ' Extract file data from the multipart form data
-                                            Dim startIndex As Integer = content.IndexOf("filename=""", StringComparison.OrdinalIgnoreCase) + 10
-                                            Dim endIndex As Integer = content.IndexOf("""", startIndex, StringComparison.OrdinalIgnoreCase)
-                                            Dim fileName As String = content.Substring(startIndex, endIndex - startIndex)
-                                            startIndex = content.IndexOf($"{vbCrLf}{vbCrLf}", endIndex, StringComparison.OrdinalIgnoreCase) + 4
-                                            endIndex = content.LastIndexOf($"--{boundary}", StringComparison.OrdinalIgnoreCase) - 2
-                                            Dim fileData As Byte() = request.ContentEncoding.GetBytes(content.Substring(startIndex, endIndex - startIndex))
+                                Dim formData As Dictionary(Of String, String) = GetMultipartFormData(request)
 
-                                            If _fileSize <> fileData.Length Then
-                                                Throw New IOException($"File size mismatch, expected {_fileSize} actual {fileData.Length}")
-                                            End If
-                                            If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                                Throw New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
-                                            End If
-                                        Catch ex As Exception
-                                            ' ignore it will be handled elsewhere
-                                        End Try
+                                Using bodyStream As Stream = request.InputStream
+                                    Using reader As New StreamReader(
+                                        stream:=bodyStream,
+                                        encoding:=request.ContentEncoding,
+                                        detectEncodingFromByteOrderMarks:=True,
+                                        BufferSize)
                                     End Using
+                                    Try
+                                        Dim dataLength As String = formData(NameOf(dataLength))
+                                        If _fileSize.ToString <> dataLength Then
+                                            Throw New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
+                                        End If
+
+                                        Dim fileName As String = formData("file")
+                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
+                                            Throw New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
+                                        End If
+                                    Catch ioEx As IOException
+                                        Throw
+                                    Catch ex As Exception
+                                        Stop
+                                        ' ignore it will be handled elsewhere
+                                    End Try
                                 End Using
                             End If
                             response.StatusCode = 200
@@ -131,6 +140,53 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Task.Run(action)
             Return listener
+        End Function
+
+        ''' <summary>
+        '''  Parses a <see cref="HttpListenerRequest"/> and gets the fileName of the uploaded file
+        '''  and the lenght of the data file in bytes
+        ''' </summary>
+        ''' <param name="request"></param>
+        ''' <returns>
+        '''  A <see cref="Dictionary(Of String, String)"/> that contains the filename and lenght of the data file.
+        ''' </returns>
+        Public Function GetMultipartFormData(request As HttpListenerRequest) As Dictionary(Of String, String)
+            Dim result As New Dictionary(Of String, String)
+
+            If request.ContentType.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase) Then
+                Dim boundary As String = GetBoundary(request.ContentType)
+                Using reader As New StreamReader(request.InputStream, request.ContentEncoding)
+                    Dim content As String = reader.ReadToEnd()
+                    Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
+
+                    For Each part As String In parts
+                        If part.Trim() <> "--" Then
+                            Dim separator As String() = New String() {Environment.NewLine}
+                            Dim lines As String() = part.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+                            If lines.Length > 2 Then
+                                Dim headerParts As String() = lines(0).Split({":"c}, count:=2)
+                                If headerParts.Length = 2 _
+                                    AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
+                                    comparisonType:=StringComparison.OrdinalIgnoreCase) Then
+
+                                    Dim nameMatch As Match = Regex.Match(input:=headerParts(1), pattern:="name=""(?<name>[^""]+)""")
+                                    If nameMatch.Success Then
+                                        Dim name As String = nameMatch.Groups("name").Value
+                                        Dim value As String = headerParts(1).Split("filename=")(1).Trim(""""c)
+                                        result.Add(name, value.Trim())
+                                        If lines.Length > 2 Then
+                                            result.Add("dataLength", lines(1).Length.ToString)
+                                        End If
+                                        Exit For
+                                    End If
+                                End If
+                            End If
+                        End If
+                    Next
+                End Using
+            End If
+
+            Return result
         End Function
 
     End Class
