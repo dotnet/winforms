@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides a design-time editor for specifying the <see cref="Control.Anchor"/> property.
 /// </summary>
-[CLSCompliant(false)]
 public sealed partial class AnchorEditor : UITypeEditor
 {
     private AnchorUI? _anchorUI;

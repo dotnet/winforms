@@ -20,7 +20,9 @@ public class SerializationRecordExtensionsTests
     {
         using MemoryStream stream = new();
         // cs/binary-formatter-without-binder
-        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed
+        // on trusted data and the types are controlled and validated.
+        BinaryFormatter formatter = new();
 
         formatter.Serialize(stream, value);
         stream.Position = 0;
@@ -58,7 +60,9 @@ public class SerializationRecordExtensionsTests
     {
         using MemoryStream stream = new();
         // cs/binary-formatter-without-binder
-        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed
+        // on trusted data and the types are controlled and validated.
+        BinaryFormatter formatter = new();
 
         formatter.Serialize(stream, value);
         stream.Position = 0;
@@ -83,7 +87,9 @@ public class SerializationRecordExtensionsTests
     {
         using MemoryStream stream = new();
         // cs/binary-formatter-without-binder
-        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+        // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed
+        // on trusted data and the types are controlled and validated.
+        BinaryFormatter formatter = new();
 
         formatter.Serialize(stream, "abc");
         stream.Position = 0;

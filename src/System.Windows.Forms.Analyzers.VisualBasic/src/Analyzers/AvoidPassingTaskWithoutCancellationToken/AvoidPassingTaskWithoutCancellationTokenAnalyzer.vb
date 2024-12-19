@@ -39,7 +39,9 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
             Dim memberAccessExpr = DirectCast(invocationExpr.Expression, MemberAccessExpressionSyntax)
             Dim methodSymbol = TryCast(context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol, IMethodSymbol)
 
-            If methodSymbol Is Nothing OrElse methodSymbol.Name <> InvokeAsyncString OrElse methodSymbol.Parameters.Length <> 2 Then
+            If methodSymbol Is Nothing OrElse methodSymbol.Name <> InvokeAsyncString OrElse
+                methodSymbol.Parameters.Length <> 2 Then
+
                 Return
             End If
 
@@ -78,7 +80,9 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
             If funcType.DelegateInvokeMethod?.ReturnType IsNot Nothing Then
                 Dim returnType = TryCast(funcType.DelegateInvokeMethod.ReturnType, INamedTypeSymbol)
 
-                If returnType IsNot Nothing AndAlso (returnType.Name = TaskString OrElse returnType.Name = ValueTaskString) Then
+                If returnType IsNot Nothing AndAlso (returnType.Name = TaskString OrElse
+                    returnType.Name = ValueTaskString) Then
+
                     Dim diagnostic As Diagnostic = Diagnostic.Create(
                         s_avoidFuncReturningTaskWithoutCancellationToken,
                         invocationExpr.GetLocation())
