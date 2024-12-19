@@ -145,8 +145,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR.net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
@@ -169,8 +169,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
             End Using
         End Sub
@@ -193,8 +193,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-               .Throw(Of WebException)() _
-               .WithMessage(SR.net_webstatus_Timeout)
+                   .Throw(Of WebException)() _
+                   .WithMessage(SR.net_webstatus_Timeout)
             End Using
         End Sub
 
@@ -450,8 +450,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\")>
-        <InlineData("/")>
+        <InlineData("\"c)>
+        <InlineData("/"c)>
         Public Sub UploadFile_UriWithAllOptionsWhereCheckFilePathTrailingSeparators_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
@@ -1297,8 +1297,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR.net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
