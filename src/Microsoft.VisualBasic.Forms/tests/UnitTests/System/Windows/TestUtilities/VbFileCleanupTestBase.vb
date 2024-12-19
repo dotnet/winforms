@@ -13,6 +13,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Path.GetTempPath,
             "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
 
+        Friend Const DefaultFileName As String = "Testing.Txt"
         Friend ReadOnly _testDirectories As New HashSet(Of String)
 
         Protected Overrides Sub Finalize()
@@ -40,32 +41,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         ''' <summary>
-        '''  Creates or returns a directory based on the name of the function that
-        '''  call it. The base directory is described above.
-        '''  Even if directory exists this call will success and just return it.
-        ''' </summary>
-        ''' <param name="memberName"></param>
-        ''' <param name="lineNumber">If >0 use line number as part of name.</param>
-        ''' <returns>The name of a directory that is safe to write to and is verified to exist.</returns>
-        Friend Function CreateTempDirectory(
-                <CallerMemberName> Optional memberName As String = Nothing,
-                Optional lineNumber As Integer = -1) As String
-
-            Dim folder As String
-            If lineNumber > 0 Then
-                folder = Path.Combine(BaseTempPath, $"{memberName}{lineNumber}")
-            Else
-                folder = Path.Combine(BaseTempPath, memberName)
-            End If
-
-            If _testDirectories.Add(folder) Then
-                Directory.CreateDirectory(folder)
-            End If
-
-            Return folder
-        End Function
-
-        ''' <summary>
         '''  If size >= 0 then create the file with size length.
         ''' </summary>
         ''' <param name="sourceDirectoryName">Full path to working directory.</param>
@@ -77,7 +52,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </returns>
         Friend Shared Function CreateTempFile(
             sourceDirectoryName As String,
-            Optional filename As String = "Testing.Txt",
+            Optional filename As String = DefaultFileName,
             Optional size As Integer = -1) As String
 
             Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
@@ -115,14 +90,38 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return True
         End Function
 
-        Friend Sub Dispose() Implements IDisposable.Dispose
-            Dispose(disposing:=True)
-            GC.SuppressFinalize(Me)
-        End Sub
-
         Friend Shared Function GetUniqueFileNameWithPath(testDirectory As String) As String
             Return Path.Combine(testDirectory, GetUniqueFileName())
         End Function
 
+        ''' <summary>
+        '''  Creates or returns a directory based on the name of the function that
+        '''  call it. The base directory is described above.
+        '''  Even if directory exists this call will success and just return it.
+        ''' </summary>
+        ''' <param name="memberName"></param>
+        ''' <param name="lineNumber">If >0 use line number as part of name.</param>
+        ''' <returns>The name of a directory that is safe to write to and is verified to exist.</returns>
+        Friend Function CreateTempDirectory(
+                <CallerMemberName> Optional memberName As String = Nothing,
+                Optional lineNumber As Integer = -1) As String
+
+            Dim folder As String
+            If lineNumber > 0 Then
+                folder = Path.Combine(BaseTempPath, $"{memberName}{lineNumber}")
+            Else
+                folder = Path.Combine(BaseTempPath, memberName)
+            End If
+
+            If _testDirectories.Add(folder) Then
+                Directory.CreateDirectory(folder)
+            End If
+
+            Return folder
+        End Function
+        Friend Sub Dispose() Implements IDisposable.Dispose
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
     End Class
 End Namespace
