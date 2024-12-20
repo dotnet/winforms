@@ -40,7 +40,9 @@ internal readonly partial struct TriState : IEquatable<TriState>
     public static explicit operator bool(TriState value) =>
         value.IsDefault ? throw new InvalidCastException(SR.TriStateCompareError) : value == True;
 
-    /// <summary>Provides some interesting information about the TriState in String form.</summary>
+    /// <summary>
+    ///  Provides some interesting information about the TriState in String form.
+    /// </summary>
     public override string ToString() =>
         this == Default ? "Default" :
         this == False ? "False" :
