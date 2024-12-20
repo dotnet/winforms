@@ -1082,8 +1082,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token) _
-                                .ConfigureAwait(continueOnCapturedContext:=False)
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
