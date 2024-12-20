@@ -503,8 +503,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub DownloadFile_UriWithAllOptionsWhereCheckFilePathTrailingSeparators_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -586,8 +585,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub DownloadFile_UriWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -1317,8 +1315,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub DownloadFile_UrlWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)

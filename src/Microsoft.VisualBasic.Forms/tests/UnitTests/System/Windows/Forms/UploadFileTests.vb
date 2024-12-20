@@ -457,8 +457,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub UploadFile_UriWithAllOptionsWhereCheckFilePathTrailingSeparators_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
@@ -513,8 +512,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub UploadFile_UriWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
@@ -1112,8 +1110,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData("\"c)>
-        <InlineData("/"c)>
+        <ClassData(GetType(PathSeparatorTestData))>
         Public Sub UploadFile_UrlWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
