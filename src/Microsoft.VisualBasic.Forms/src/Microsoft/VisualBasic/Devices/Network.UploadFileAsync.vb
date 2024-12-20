@@ -54,9 +54,9 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim client As HttpClient = If(clientHandler Is Nothing,
                                           New HttpClient(),
-                                          New HttpClient(clientHandler)
-                                         )
-            client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout)
+                                          New HttpClient(clientHandler))
+            client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
+
             'Create the copier
             Dim copier As New HttpClientCopy(client, dialog)
 

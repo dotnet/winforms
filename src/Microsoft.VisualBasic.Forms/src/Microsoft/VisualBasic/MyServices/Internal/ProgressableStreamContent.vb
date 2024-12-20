@@ -31,14 +31,18 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             TryComputeLength(size)
 
             Using sInput As Stream = Await _content.ReadAsStreamAsync().ConfigureAwait(continueOnCapturedContext:=False)
-                While True
-                    Dim length As Integer = Await sInput.ReadAsync(buffer).ConfigureAwait(continueOnCapturedContext:=False)
-                    If length <= 0 Then Exit While
+                If sInput.CanRead Then
+                    While True
+                        Dim length As Integer = Await sInput.ReadAsync(buffer).ConfigureAwait(continueOnCapturedContext:=False)
+                        If length <= 0 Then Exit While
 
-                    Await stream.WriteAsync(buffer.AsMemory(start:=0, length)).ConfigureAwait(continueOnCapturedContext:=False)
-                    uploaded += length
-                    _progress?.Invoke(uploaded, size)
-                End While
+                        Await stream.WriteAsync(buffer.AsMemory(start:=0, length)).ConfigureAwait(continueOnCapturedContext:=False)
+                        uploaded += length
+                        _progress?.Invoke(uploaded, size)
+                    End While
+                Else
+                    Stop
+                End If
             End Using
         End Function
 

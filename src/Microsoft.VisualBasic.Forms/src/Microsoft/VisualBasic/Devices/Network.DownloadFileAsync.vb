@@ -154,12 +154,12 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetArgumentNullException(NameOf(addressUri))
             End If
 
+            ' Set credentials if we have any
             Dim client As HttpClient = If(clientHandler Is Nothing,
                                           New HttpClient(),
                                           New HttpClient(clientHandler)
                                          )
 
-            ' Set credentials if we have any
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
 
             'Construct the local file. This will validate the full name and path
