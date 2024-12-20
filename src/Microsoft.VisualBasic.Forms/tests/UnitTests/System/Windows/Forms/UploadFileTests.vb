@@ -132,7 +132,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(
                 fileSize:=SmallTestFileSize,
                 userName:=DefaultUserName,
-                password:=password)
+                password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()

@@ -158,14 +158,26 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) _
                 AndAlso IO.Directory.Exists(path), $"Invalid {NameOf(path)}")
 
-            ' If we have a dialog we need to set up an async download
-            If _progressDialog IsNot Nothing Then
-                _webClient.DownloadFileAsync(address, destinationFileName)
-                'returns when the download sequence is over, whether due to success, error, or being canceled
-                _progressDialog.ShowProgressDialog()
-            Else
-                _webClient.DownloadFile(address, destinationFileName)
-            End If
+            Try
+
+                ' If we have a dialog we need to set up an async download
+                If _progressDialog IsNot Nothing Then
+                    _webClient.DownloadFileAsync(address, destinationFileName)
+                    'returns when the download sequence is over, whether due to success, error, or being canceled
+                    _progressDialog.ShowProgressDialog()
+                Else
+                    _webClient.DownloadFile(address, destinationFileName)
+                End If
+            Catch exTimeout As TimeoutException
+                Throw New WebException(SR.net_webstatus_Timeout)
+            Catch exWebException As WebException
+                If exWebException.Message.Contains("401") Then
+                    Throw New WebException(SR.net_webstatus_Unauthorized)
+                End If
+                Throw New WebException(SR.net_webstatus_Timeout)
+            Catch Ex As Exception
+                Throw
+            End Try
 
             'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
@@ -186,17 +198,27 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert(address IsNot Nothing, $"No {NameOf(address)}")
             Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) _
                 AndAlso IO.File.Exists(sourceFileName), "Invalid file")
+            Try
+                ' If we have a dialog we need to set up an async download
+                If _progressDialog IsNot Nothing Then
+                    _webClient.UploadFileAsync(address, sourceFileName)
 
-            ' If we have a dialog we need to set up an async download
-            If _progressDialog IsNot Nothing Then
-                _webClient.UploadFileAsync(address, sourceFileName)
-
-                ' Returns when the download sequence is over,
-                ' whether due to success, error, or being canceled
-                _progressDialog.ShowProgressDialog()
-            Else
-                _webClient.UploadFile(address, sourceFileName)
-            End If
+                    ' Returns when the download sequence is over,
+                    ' whether due to success, error, or being canceled
+                    _progressDialog.ShowProgressDialog()
+                Else
+                    _webClient.UploadFile(address, sourceFileName)
+                End If
+            Catch exTimeout As TimeoutException
+                Throw New WebException(SR.net_webstatus_Timeout)
+            Catch exWebException As WebException
+                If exWebException.Message.Contains("401") Then
+                    Throw New WebException(SR.net_webstatus_Unauthorized)
+                End If
+                Throw New WebException(SR.net_webstatus_Timeout)
+            Catch Ex As Exception
+                Throw
+            End Try
 
             ' Now that we are back on the main thread, throw the exception we
             ' encountered if the user didn't cancel.
