@@ -13,12 +13,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class DownloadFileTests
         Inherits VbFileCleanupTestBase
 
-        ' The next 2 Constants need to be SR Resources,
-        ' they are not accessible in this project they come from WebClient.
-        Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
-        Private Const SR_net_webstatus_Unauthorized As String =
-            "The remote server returned an error: (401) Unauthorized."
-
         <WinFormsFact>
         Public Sub DownloadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
@@ -244,7 +238,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -269,7 +263,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Timeout)
+                    .WithMessage(SR.net_webstatus_Timeout)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -844,7 +838,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -871,7 +865,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1100,7 +1094,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Timeout)
+                    .WithMessage(SR.net_webstatus_Timeout)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1573,7 +1567,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1600,7 +1594,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub

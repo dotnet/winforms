@@ -13,13 +13,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class UploadFileTests
         Inherits VbFileCleanupTestBase
 
-        ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
-        '                they are not accessible in this project they come from WebClient.
-        Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
-
-        Private Const SR_net_webstatus_Unauthorized As String =
-            "The remote server returned an error: (401) Unauthorized."
-
         <WinFormsFact>
         Public Sub UploadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
@@ -153,7 +146,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
@@ -201,7 +194,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                    .Throw(Of WebException)() _
-                   .WithMessage(SR_net_webstatus_Timeout)
+                   .WithMessage(SR.net_webstatus_Timeout)
             End Using
         End Sub
 
@@ -723,7 +716,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
@@ -749,7 +742,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
@@ -873,7 +866,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Timeout)
+                    .WithMessage(SR.net_webstatus_Timeout)
             End Using
         End Sub
 
@@ -1298,7 +1291,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
@@ -1324,7 +1317,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should() _
                     .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
+                    .WithMessage(SR.net_webstatus_Unauthorized)
             End Using
         End Sub
 
