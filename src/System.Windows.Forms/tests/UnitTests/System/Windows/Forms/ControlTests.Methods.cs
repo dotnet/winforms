@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -1808,6 +1808,8 @@ public partial class ControlTests
         Assert.Equal(1, disposedCallCount);
     }
 
+    // This scenario throws an exception before accessing the native clipboard API,
+    // so it does not touch the clipboard singleton and does not need to be placed in Sequential collection.
     [WinFormsFact]
     public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
     {
@@ -1870,15 +1872,6 @@ public partial class ControlTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-    }
-
-    // This scenario throws an exception before accessing the native clipboard API,
-    // so it does not touch the clipboard singleton and does not need to be placed in Sequential collection.
-    [WinFormsFact]
-    public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
-    {
-        using Control control = new();
-        Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
     }
 
     [WinFormsFact]
