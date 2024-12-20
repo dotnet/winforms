@@ -168,15 +168,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 Else
                     _webClient.DownloadFile(address, destinationFileName)
                 End If
-            Catch exTimeout As TimeoutException
-                Throw New WebException(SR.net_webstatus_Timeout)
-            Catch exWebException As WebException
-                If exWebException.Message.Contains("401") Then
+            Catch ex As WebException
+                If ex.Message.Contains("401") Then
                     Throw New WebException(SR.net_webstatus_Unauthorized)
                 End If
                 Throw New WebException(SR.net_webstatus_Timeout)
-            Catch Ex As Exception
-                Throw
             End Try
 
             'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
@@ -209,15 +205,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 Else
                     _webClient.UploadFile(address, sourceFileName)
                 End If
-            Catch exTimeout As TimeoutException
-                Throw New WebException(SR.net_webstatus_Timeout)
-            Catch exWebException As WebException
-                If exWebException.Message.Contains("401") Then
+            Catch ex As WebException
+                If ex.Message.Contains("401") Then
                     Throw New WebException(SR.net_webstatus_Unauthorized)
                 End If
                 Throw New WebException(SR.net_webstatus_Timeout)
-            Catch Ex As Exception
-                Throw
             End Try
 
             ' Now that we are back on the main thread, throw the exception we
