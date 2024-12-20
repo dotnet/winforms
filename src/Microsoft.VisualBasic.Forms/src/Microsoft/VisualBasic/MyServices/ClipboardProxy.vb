@@ -25,7 +25,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Removes all data from the <see cref="Clipboard"/>.
+        '''  Removes everything from the <see cref="Clipboard"/>.
         ''' </summary>
         Public Sub Clear()
             Clipboard.Clear()
@@ -68,7 +68,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Indicates whether or not text is available on the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsText() As Boolean
@@ -86,7 +86,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''   Retrieves an audio stream from the <see cref="Clipboard"/>.
+        '''  Gets an audio stream from the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns>The audio stream as a <see cref="Stream"/>.</returns>
         Public Function GetAudioStream() As Stream
@@ -110,9 +110,9 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
+        '''  Gets a <see cref="IDataObject"/> from the clipboard.
         ''' </summary>
-        ''' <returns>The <see cref="IDataObject"/>.</returns>
+        ''' <returns>The data object.</returns>
         ''' <remarks>This gives the ability to save an object in multiple formats.</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Function GetDataObject() As IDataObject
@@ -120,7 +120,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Retrieves a collection of file names from the <see cref="Clipboard"/>.
+        '''  Gets a file drop list from the clipboard.
         ''' </summary>
         ''' <returns>The list of file paths as a <see cref="StringCollection"/>.</returns>
         Public Function GetFileDropList() As StringCollection
@@ -130,31 +130,30 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Retrieves an <see cref="Image"/> from the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns><see cref="Image"/></returns>
+        ''' <returns>The <see cref="Image"/>.</returns>
         Public Function GetImage() As Image
             Return Clipboard.GetImage()
         End Function
 
         ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Gets text from the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns>The text as a <see cref="String"/>.</returns>
+        ''' <returns>The text as a <see langword="String"/>.</returns>
         Public Function GetText() As String
             Return Clipboard.GetText()
         End Function
 
         ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/> in the format indicated by the specified
-        '''  <see cref="TextDataFormat"/> value.
+        '''  Gets text from the clipboard saved in the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text to get.</param>
-        ''' <returns>The text as a <see cref="String"/>.</returns>
+        ''' <returns>The text as a <see langword="String"/>.</returns>
         Public Function GetText(format As TextDataFormat) As String
             Return Clipboard.GetText(format)
         End Function
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+        '''  Saves the passed in audio byte array to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <param name="audioBytes">The byte array to be saved.</param>
         Public Sub SetAudio(audioBytes As Byte())
@@ -162,7 +161,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+        '''  Saves the passed in audio stream to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <param name="audioStream">The <see cref="Stream"/> to be saved.</param>
         Public Sub SetAudio(audioStream As Stream)
@@ -170,7 +169,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the specified format.
+        '''  Saves the passed in data to the <see cref="Clipboard"/> in the passed in format.
         ''' </summary>
         ''' <param name="format">The format in which to save the data.</param>
         ''' <param name="data">The data to be saved.</param>
@@ -179,9 +178,9 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Places nonpersistent <see cref="DataObject"/> on the <see cref="Clipboard"/>.
+        '''  Saves a <see cref="DataObject"/> to the clipboard.
         ''' </summary>
-        ''' <param name="data">The <see cref="DataObject"/> to be saved.</param>
+        ''' <param name="data">The data object to be saved.</param>
         ''' <remarks>This gives the ability to save an object in multiple formats.</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Sub SetDataObject(data As DataObject)
@@ -189,8 +188,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/>> and then adds a collection of file names
-        '''  in the <see cref="DataFormats.FileDrop"/> format.
+        '''  Saves the passed in file drop list to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <param name="filePaths">The file drop list as a <see cref="StringCollection"/>.</param>
         Public Sub SetFileDropList(filePaths As StringCollection)
