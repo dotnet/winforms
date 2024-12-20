@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  A <see cref="ObjectModel.ReadOnlyCollection(Of String)"/> containing the command line arguments
         ''' </value>
         ''' <remarks>
-        '''  This function differs from <see cref="System.Environment.GetCommandLineArgs"/>
+        '''  This function differs from <see cref="Environment.GetCommandLineArgs"/>
         '''  in that the path of the executing file (the 0th entry) is omitted from
         '''  the returned collection
         ''' </remarks>

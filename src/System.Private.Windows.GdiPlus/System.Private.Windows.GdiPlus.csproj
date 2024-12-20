@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <StrongNameKeyId>ECMA</StrongNameKeyId>
+    <ChecksumAlgorithm>SHA256</ChecksumAlgorithm>
     <!--
       We align casing and naming with Win32 API. As such some types have all lower case names, which
       in theory may conflict with new C# keywords in the future. Our types here are internal so end

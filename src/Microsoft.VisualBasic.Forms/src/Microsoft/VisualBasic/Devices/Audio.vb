@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
-Imports System.Media
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -15,7 +14,7 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' Object that plays the sounds. We use a private member
         ' so we can ensure we have a reference for async plays
-        Private _sound As SoundPlayer
+        Private _sound As Media.SoundPlayer
 
         ''' <summary>
         '''  Creates a new <see cref="Audio"/> object.
@@ -53,14 +52,14 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Plays the passed in <see cref="SoundPlayer"/> in the passed in <see cref="AudioPlayMode"/>.
+        '''  Plays the passed in <see cref="Media.SoundPlayer"/> in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
-        ''' <param name="sound">The sound to play.</param>
+        ''' <param name="sound">The SoundPlayer to play.</param>
         ''' <param name="mode">The mode in which to play the sound.</param>
-        Private Sub Play(sound As SoundPlayer, mode As AudioPlayMode)
-            Debug.Assert(condition:=sound IsNot Nothing, message:=$"There's no {NameOf(SoundPlayer)}")
-            Dim condition As Boolean = [Enum].IsDefined(enumType:=GetType(AudioPlayMode), value:=mode)
-            Debug.Assert(condition, message:="Enum value is out of range")
+        Private Sub Play(sound As Media.SoundPlayer, mode As AudioPlayMode)
+
+            Debug.Assert(sound IsNot Nothing, "There's no SoundPlayer")
+            Debug.Assert([Enum].IsDefined(mode), "Enum value is out of range")
 
             ' Stopping the sound ensures it's safe to dispose it.
             ' This could happen when we change the value of _sound below
@@ -81,9 +80,11 @@ Namespace Microsoft.VisualBasic.Devices
 
         End Sub
 
-        ''' <inheritdoc cref="SoundPlayer.Stop()"/>
+        ''' <summary>
+        '''  Stops the play of any playing sound.
+        ''' </summary>
         Public Sub [Stop]()
-            Dim sound As New SoundPlayer()
+            Dim sound As New Media.SoundPlayer()
             sound.Stop()
         End Sub
 
@@ -108,7 +109,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub Play(location As String, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
             Dim safeFilename As String = ValidateFilename(location)
-            Dim sound As New SoundPlayer(safeFilename)
+            Dim sound As New Media.SoundPlayer(safeFilename)
             Play(sound, playMode)
         End Sub
 
@@ -133,7 +134,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Plays a <see cref="Stream"/> representation of a .wav file in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
         ''' <param name="stream">The stream representing the .wav file.</param>
-        ''' <param name="playMode">The <see cref="AudioPlayMode"/>> in which the <see cref="stream"/> should be played.</param>
+        ''' <param name="playMode">The mode in which the stream should be played.</param>
         ''' <exception cref="ArgumentNullException">if stream is <see langword="Nothing"/>.</exception>
         Public Sub Play(stream As Stream, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
@@ -141,7 +142,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetArgumentNullException(NameOf(stream))
             End If
 
-            Play(New SoundPlayer(stream), playMode)
+            Play(New Media.SoundPlayer(stream), playMode)
         End Sub
 
         ''' <summary>
@@ -152,7 +153,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ArgumentNullException">
         '''  If systemSound is <see langword="Nothing"/>.
         ''' </exception>
-        Public Sub PlaySystemSound(systemSound As SystemSound)
+        Public Sub PlaySystemSound(systemSound As Media.SystemSound)
             If systemSound Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(systemSound))
             End If

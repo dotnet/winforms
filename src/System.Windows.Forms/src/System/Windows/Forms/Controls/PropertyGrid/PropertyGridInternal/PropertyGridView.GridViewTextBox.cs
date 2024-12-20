@@ -133,6 +133,9 @@ internal partial class PropertyGridView
             {
                 AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
+
+            // MSAA Event:
+            AccessibilityNotifyClients(AccessibleEvents.Focus, childID: -1);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

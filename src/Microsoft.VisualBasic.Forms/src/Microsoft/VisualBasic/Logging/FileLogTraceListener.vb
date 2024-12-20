@@ -959,7 +959,7 @@ Namespace Microsoft.VisualBasic.Logging
             outBuilder.Append($"{source}{Delimiter}")
 
             ' eventType
-            outBuilder.Append($"{[Enum].GetName(GetType(TraceEventType), eventType)}{Delimiter}")
+            outBuilder.Append($"{[Enum].GetName(eventType)}{Delimiter}")
 
             ' id
             outBuilder.Append(FormattableString.Invariant($"{id}{Delimiter}"))
