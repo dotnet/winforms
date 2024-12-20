@@ -286,12 +286,13 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 ' Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
-                        path:=sourceFileName,
-                        paramName:=NameOf(sourceFileName))
+                    path:=sourceFileName,
+                    paramName:=NameOf(sourceFileName))
 
-                Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
-                                                        New HttpClientHandler,
-                                                        New HttpClientHandler With {.Credentials = networkCredentials})
+                Dim clientHandler As HttpClientHandler =
+                    If(networkCredentials Is Nothing,
+                        New HttpClientHandler,
+                        New HttpClientHandler With {.Credentials = networkCredentials})
 
                 dialog = GetProgressDialog(
                     address:=address.AbsolutePath,
@@ -299,12 +300,12 @@ Namespace Microsoft.VisualBasic.Devices
                     showUI)
 
                 Dim t As Task = UploadFileAsync(
-                        sourceFileName,
-                        addressUri:=address,
-                        clientHandler,
-                        dialog,
-                        connectionTimeout,
-                        onUserCancel)
+                    sourceFileName,
+                    addressUri:=address,
+                    clientHandler,
+                    dialog,
+                    connectionTimeout,
+                    onUserCancel)
 
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
