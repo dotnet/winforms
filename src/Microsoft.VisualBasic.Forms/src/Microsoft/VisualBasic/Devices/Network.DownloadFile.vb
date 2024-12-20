@@ -130,7 +130,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address"><see cref="Uri"/> to the remote file,</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">
         '''  Name and path of file where download is saved.
         ''' </param>
@@ -141,7 +141,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">
         '''  Indicates whether or not the file should be overwritten if local file already exists.
         ''' </param>
-
         Public Sub DownloadFile(
             address As Uri,
             destinationFileName As String,
@@ -196,8 +195,6 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
-
-            ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
             DownloadFile(
@@ -314,7 +311,9 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw VbUtils.GetArgumentExceptionWithArgName(
+                    argumentName:=NameOf(connectionTimeout),
+                    resourceKey:=SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
