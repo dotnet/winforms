@@ -12,6 +12,10 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
 
+
+
+
+
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -2579,7 +2583,51 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
+
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
+
+            // Force dark mode on editing label if necessary
+            [DllImport("dwmapi.dll", PreserveSig = false)]
+            static extern void DwmSetWindowAttribute(IntPtr hwnd, int attr,
+               ref int attrValue, int attrSize);
+
+#pragma warning disable WFO5001
+            SystemColorMode thisColorMode;
+            if (Application.ColorMode == SystemColorMode.System)
+            {
+                thisColorMode = Application.SystemColorMode;
+            }
+            else
+            {
+                thisColorMode = Application.ColorMode;
+            }
+
+            if (thisColorMode == SystemColorMode.Dark)
+            {
+                int trueVal = 1;
+                const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+                IntPtr handle = _labelEdit.Handle;
+                Debug.WriteLine(handle.ToString());
+
+                try
+                {
+                    DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, ref trueVal, sizeof(int));
+                }
+                catch (Exception dwmEx)
+                {
+                    string msg = dwmEx.Message;
+                    if (dwmEx.InnerException is not null)
+                    {
+                        msg = msg + Environment.NewLine + dwmEx.InnerException.Message;
+                    }
+                    
+                    Debug.WriteLine(msg);
+                }
+
+            }
+
+#pragma warning restore WFO5001
         }
 
         return (LRESULT)(e.CancelEdit ? 1 : 0);
