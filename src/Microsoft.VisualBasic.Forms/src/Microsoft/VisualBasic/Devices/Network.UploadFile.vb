@@ -288,16 +288,10 @@ Namespace Microsoft.VisualBasic.Devices
                     client.Credentials = networkCredentials
                 End If
 
-                Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso Environment.UserInteractive Then
-                    dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = GetResourceString(
-                            resourceKey:=SR.ProgressDialogUploadingLabel,
-                            sourceFileName,
-                        address.AbsolutePath)
-                    }
-                End If
+                Dim dialog As ProgressDialog = GetProgressDialog(
+                    address:=address.AbsolutePath,
+                    fileNameWithPath:=sourceFileName,
+                    showUI)
 
                 ' Create the copier
                 Dim copier As New WebClientCopy(client, dialog)
@@ -306,7 +300,7 @@ Namespace Microsoft.VisualBasic.Devices
                 copier.UploadFile(sourceFileName, address)
 
                 ' Handle a dialog cancel
-                If showUI AndAlso Environment.UserInteractive Then
+                If InteractiveEnvironment(showUI) Then
                     If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
                         Throw New OperationCanceledException()
                     End If
