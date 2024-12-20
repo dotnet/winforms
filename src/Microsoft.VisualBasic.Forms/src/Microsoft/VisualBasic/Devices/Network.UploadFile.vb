@@ -282,15 +282,16 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             ' Get network credentials
-            Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
-                                                        New HttpClientHandler,
-                                                        New HttpClientHandler With {.Credentials = networkCredentials})
             Dim dialog As ProgressDialog = Nothing
             Try
                 ' Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                         path:=sourceFileName,
                         paramName:=NameOf(sourceFileName))
+
+                Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
+                                                        New HttpClientHandler,
+                                                        New HttpClientHandler With {.Credentials = networkCredentials})
 
                 dialog = GetProgressDialog(
                     address:=address.AbsolutePath,
