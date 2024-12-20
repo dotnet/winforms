@@ -10,8 +10,9 @@ namespace System.Windows.Forms.Tests;
 
 public partial class ControlTests
 {
-    [Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
-                               // and we should not run this test at the same time as other tests using the same format.
+    // Each registered Clipboard format is an OS singleton,
+    // and we should not run this test at the same time as other tests using the same format.
+    [Collection("Sequential")]
     public class ClipboardTests
     {
         public static IEnumerable<object[]> DoDragDrop_TestData()
@@ -55,13 +56,6 @@ public partial class ControlTests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsFact]
-        public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
-        {
-            using Control control = new();
-            Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null!, DragDropEffects.All));
         }
     }
 }

@@ -1856,6 +1856,15 @@ public partial class ControlTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // This scenario throws an exception before accessing the native clipboard API,
+    // so it does not touch the clipboard singleton and does not need to be placed in Sequential collection.
+    [WinFormsFact]
+    public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
+    {
+        using Control control = new();
+        Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
+    }
+
     [WinFormsFact]
     public void Control_DrawToBitmap_NullBitmap_ThrowsArgumentNullException()
     {
