@@ -130,6 +130,41 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
+        ''' <param name="address"><see cref="Uri"/> to the remote file,</param>
+        ''' <param name="destinationFileName">
+        '''  Name and path of file where download is saved.
+        ''' </param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean)
+
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException)
+        End Sub
+
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path.
+        ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="userName">The name of the user performing the download.</param>
@@ -173,40 +208,6 @@ Namespace Microsoft.VisualBasic.Devices
                 connectionTimeout,
                 overwrite,
                 onUserCancel)
-        End Sub
-
-        ''' <summary>
-        '''  Downloads a file from the network to the specified path.
-        ''' </summary>
-        ''' <param name="address"><see cref="Uri"/> to the remote file,</param>
-        ''' <param name="destinationFileName">
-        '''  Name and path of file where download is saved.
-        ''' </param>
-        ''' <param name="userName">The name of the user performing the download.</param>
-        ''' <param name="password">The user's password.</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists.
-        ''' </param>
-        Public Sub DownloadFile(
-            address As Uri,
-            destinationFileName As String,
-            userName As String,
-            password As String,
-            showUI As Boolean,
-            connectionTimeout As Integer,
-            overwrite As Boolean)
-
-            DownloadFile(
-                address,
-                destinationFileName,
-                userName,
-                password,
-                showUI,
-                connectionTimeout,
-                overwrite,
-                UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
