@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports FluentAssertions
+Imports Microsoft.VisualBasic.Devices
 Imports Microsoft.VisualBasic.FileIO
 Imports Xunit
 
@@ -115,13 +116,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
@@ -139,14 +139,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(
                 fileSize:=SmallTestFileSize,
                 userName:=DefaultUserName,
-                password:=DefaultPassword)
+                password:=password)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials:=New NetworkCredential(userName:=DefaultUserName, password),
+                            New NetworkCredential(DefaultUserName, password),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
@@ -344,13 +344,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=Nothing,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -369,13 +368,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -394,13 +392,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -1020,13 +1017,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)

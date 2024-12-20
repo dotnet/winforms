@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports FluentAssertions
+Imports Microsoft.VisualBasic.Devices
 Imports Microsoft.VisualBasic.FileIO
 Imports Xunit
 
@@ -102,13 +103,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True)
@@ -236,7 +236,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials:=New NetworkCredential(userName:=DefaultUserName, password),
+                            GetNetworkCredentials(DefaultUserName, password),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True)
@@ -380,13 +380,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=Nothing,
                             destinationFileName,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -407,13 +406,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -435,13 +433,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             overwrite:=True,
@@ -1013,6 +1010,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
+        <WinFormsFact(Skip:="Manual Testing Only")>
+        Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim webListener As New WebListener(ExtraLargeTestFileSize)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                            address:=webListener.Address,
+                            destinationFileName,
+                            userName:=String.Empty,
+                            password:=String.Empty,
+                            showUI:=True,
+                            connectionTimeout:=TestingConnectionTimeout,
+                            overwrite:=True)
+                    End Sub
+
+                testCode.Should.Throw(Of OperationCanceledException)()
+            End Using
+        End Sub
+
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
@@ -1034,28 +1053,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
                     .Be(LargeTestFileSize)
-            End Using
-        End Sub
-
-        <WinFormsFact(Skip:="Manual Testing Only")>
-        Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Fail()
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
-            Dim webListener As New WebListener(ExtraLargeTestFileSize)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=webListener.Address,
-                            destinationFileName,
-                            userName:=String.Empty,
-                            password:=String.Empty,
-                            showUI:=True,
-                            connectionTimeout:=TestingConnectionTimeout,
-                            overwrite:=True)
-                    End Sub
-
-                testCode.Should.Throw(Of OperationCanceledException)()
             End Using
         End Sub
 
@@ -1192,13 +1189,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
