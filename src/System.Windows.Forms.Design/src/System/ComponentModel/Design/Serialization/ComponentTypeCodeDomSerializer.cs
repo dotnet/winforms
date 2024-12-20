@@ -6,7 +6,8 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
+///  This class performs the same tasks as a CodeDomSerializer only serializing
+///  an object through this class defines a new type.
 /// </summary>
 internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer
 {

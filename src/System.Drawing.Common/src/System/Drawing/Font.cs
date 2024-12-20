@@ -131,7 +131,8 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public int Height => (int)Math.Ceiling(GetHeight());
 
     /// <summary>
-    ///  Get native GDI+ object pointer. This property triggers the creation of the GDI+ native object if not initialized yet.
+    ///  Get native GDI+ object pointer. This property triggers the creation
+    ///  of the GDI+ native object if not initialized yet.
     /// </summary>
     internal GpFont* NativeFont => _nativeFont;
 
@@ -236,10 +237,10 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
             return false;
         }
 
-        // Note: If this and/or the passed-in font are disposed, this method can still return true since we check for cached properties
-        // here.
-        // We need to call properties on the passed-in object since it could be a proxy in a remoting scenario and proxies don't
-        // have access to private/internal fields.
+        // Note: If this and/or the passed-in font are disposed,
+        // this method can still return true since we check for cached properties here.
+        // We need to call properties on the passed-in object since it could be a proxy
+        // in a remoting scenario and proxies don't have access to private/internal fields.
         return font.FontFamily.Equals(FontFamily)
             && font.GdiVerticalFont == GdiVerticalFont
             && font.GdiCharSet == GdiCharSet

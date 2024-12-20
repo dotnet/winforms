@@ -1,7 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// The original code was borrowed from https://github.com/xunit/samples.xunit/blob/93f87d5/UseCulture/UseCultureAttribute.cs
+// The original code was borrowed from
+// https://github.com/xunit/samples.xunit/blob/93f87d5/UseCulture/UseCultureAttribute.cs
 // Licensed under http://www.apache.org/licenses/LICENSE-2.0.
 
 using System.Globalization;
@@ -13,7 +14,8 @@ namespace Xunit;
 
 /// <summary>
 ///  Apply this attribute to your test method to replace the <see cref="Thread.CurrentThread" />
-///  <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" /> with another culture.
+///  <see cref="CultureInfo.CurrentCulture" /> and
+///  <see cref="CultureInfo.CurrentUICulture" /> with another culture.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public class UseCultureAttribute : BeforeAfterTestAttribute
@@ -31,14 +33,17 @@ public class UseCultureAttribute : BeforeAfterTestAttribute
     /// <summary>
     ///  Replaces the culture and UI culture of the current thread with <paramref name="culture" />.
     /// </summary>
-    /// <param name="culture">The name of the culture to set for both <see cref="Culture" /> and <see cref="UICulture" />.</param>
+    /// <param name="culture">
+    ///  The name of the culture to set for both <see cref="Culture" /> and <see cref="UICulture" />.
+    /// </param>
     public UseCultureAttribute(string culture)
         : this(culture, culture)
     {
     }
 
     /// <summary>
-    ///  Replaces the culture and UI culture of the current thread with <paramref name="culture" /> and <paramref name="uiCulture" />.
+    ///  Replaces the culture and UI culture of the current thread with
+    ///  <paramref name="culture" /> and <paramref name="uiCulture" />.
     /// </summary>
     /// <param name="culture">The name of the culture.</param>
     /// <param name="uiCulture">The name of the UI culture.</param>
