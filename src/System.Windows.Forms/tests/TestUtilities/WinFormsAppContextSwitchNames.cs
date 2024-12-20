@@ -49,5 +49,5 @@ public static class WinFormsAppContextSwitchNames
     ///  The switch that controls whether the TreeNodeCollection will insert nodes in the sorted order.
     /// </summary>
     public const string TreeNodeCollectionAddRangeRespectsSortOrder
-        = "System.Windows.Forms.ApplyParentFontToMenus";
+        = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
 }

@@ -150,7 +150,7 @@ public partial class CheckedListBox
         {
             bool isChecked = InnerArray.GetState(index, s_checkedItemMask);
             bool isIndeterminate = InnerArray.GetState(index, s_indeterminateItemMask);
-            Debug.Assert(!isChecked || !isIndeterminate, "Can't be both checked and indeterminate.  Somebody broke our state.");
+            Debug.Assert(!isChecked || !isIndeterminate, "Can't be both checked and indeterminate. Somebody broke our state.");
             if (isIndeterminate)
             {
                 return CheckState.Indeterminate;

@@ -1808,6 +1808,22 @@ public partial class ControlTests
         Assert.Equal(1, disposedCallCount);
     }
 
+    [WinFormsFact]
+    public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
+    {
+        using Control control = new();
+        Action dragDrop = () => control.DoDragDrop(null, DragDropEffects.All);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
+    }
+
+    [WinFormsFact]
+    public void Control_DoDragDropAsJson_NullData_ThrowsArgumentNullException()
+    {
+        using Control control = new();
+        Action dragDrop = () => control.DoDragDropAsJson<string>(null, DragDropEffects.Copy);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
+    }
+
     public static IEnumerable<object[]> DrawToBitmap_TestData()
     {
         yield return new object[] { new Rectangle(0, 0, 1, 1) };
