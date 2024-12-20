@@ -76,7 +76,7 @@ Namespace Microsoft.VisualBasic.Devices
                     .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
                     .LabelText = VbUtils.GetResourceString(
                         resourceKey:=SR.ProgressDialogDownloadingLabel,
-                    address, fullFilename)}
+                   address, fullFilename)}
             End If
             Return Nothing
         End Function

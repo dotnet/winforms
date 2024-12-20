@@ -292,7 +292,10 @@ Namespace Microsoft.VisualBasic.Devices
                         path:=sourceFileName,
                         paramName:=NameOf(sourceFileName))
 
-                dialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
+                dialog = GetProgressDialog(
+                    address:=address.AbsolutePath,
+                    fileNameWithPath:=sourceFileName,
+                    showUI)
 
                 Dim t As Task = UploadFileAsync(
                         sourceFileName,
