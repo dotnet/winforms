@@ -32,15 +32,18 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/> in the <see cref="DataFormats.WaveAudio"/> format./>.
+        '''  Indicates whether or not there's an audio stream saved to the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns><see langword="True"/> if an audio <see cref="Stream"/> is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  see langword="True"/> if an audio <see cref="Stream"/> is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsAudio() As Boolean
             Return Clipboard.ContainsAudio()
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not there is data on the <see cref="Clipboard"/> in the passed in format
+        '''  Indicates whether or not there is data on the <see cref="Clipboard"/> in the passed in format.
         '''  or can be converted to that format.
         ''' </summary>
         ''' <param name="format"></param>
@@ -50,8 +53,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/> that is in the <see cref="DataFormats.FileDrop"/>
-        '''   format or can be converted to that format.
+        '''  Indicates whether or not a file drop list has been saved to the clipboard.
         ''' </summary>
         ''' <returns><see langword="True"/> if a file drop list is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsFileDropList() As Boolean
@@ -59,8 +61,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there Is data on the <see cref="Clipboard"/> that Is in the <see cref="DataFormats.Bitmap"/>
-        '''   format or can be converted to that format.
+        '''  Indicate whether or not an image has been saved to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns><see langword="True"/> if an image is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsImage() As Boolean
@@ -76,8 +77,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in the format indicated by the
-        '''   specified <see cref="TextDataFormat"/> value.
+        '''  Indicates whether or not text is available on the <see cref="Clipboard"/> in
+        '''  the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
         ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
@@ -130,7 +131,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Retrieves an <see cref="Image"/> from the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns>The <see cref="Image"/>.</returns>
+        ''' <returns>The image.</returns>
         Public Function GetImage() As Image
             Return Clipboard.GetImage()
         End Function
@@ -138,7 +139,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Gets text from the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns>The text as a <see langword="String"/>.</returns>
+        ''' <returns>The text as a String.</returns>
         Public Function GetText() As String
             Return Clipboard.GetText()
         End Function
@@ -147,7 +148,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Gets text from the clipboard saved in the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text to get.</param>
-        ''' <returns>The text as a <see langword="String"/>.</returns>
+        ''' <returns>The text as a String.</returns>
         Public Function GetText(format As TextDataFormat) As String
             Return Clipboard.GetText(format)
         End Function
