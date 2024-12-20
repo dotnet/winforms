@@ -287,15 +287,12 @@ Namespace Microsoft.VisualBasic.Devices
                                                         New HttpClientHandler With {.Credentials = networkCredentials})
             Dim dialog As ProgressDialog = Nothing
             Try
-
-                If InteractiveEnvironment(showUI) Then
-                    ' Construct the local file. This will validate the full name and path
-                    Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
+                ' Construct the local file. This will validate the full name and path
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                         path:=sourceFileName,
                         paramName:=NameOf(sourceFileName))
 
-                    dialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
-                End If
+                dialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
 
                 Dim t As Task = UploadFileAsync(
                         sourceFileName,

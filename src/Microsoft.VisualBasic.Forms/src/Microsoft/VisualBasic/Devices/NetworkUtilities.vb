@@ -73,10 +73,10 @@ Namespace Microsoft.VisualBasic.Devices
                     path:=fileNameWithPath,
                     paramName:=NameOf(fileNameWithPath))
                 Return New ProgressDialog With {
-                            .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = VbUtils.GetResourceString(
-                                resourceKey:=SR.ProgressDialogDownloadingLabel,
-                           address, fullFilename)}
+                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                    .LabelText = VbUtils.GetResourceString(
+                        resourceKey:=SR.ProgressDialogDownloadingLabel,
+                    address, fullFilename)}
             End If
             Return Nothing
         End Function
