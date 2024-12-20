@@ -148,7 +148,6 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
-
                 Dim t As Task = DownloadFileAsync(
                     address,
                     destinationFileName,
@@ -216,9 +215,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
-            Dim dialog As ProgressDialog = Nothing
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
-
+            Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
@@ -287,15 +285,7 @@ Namespace Microsoft.VisualBasic.Devices
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
             Dim dialog As ProgressDialog = Nothing
             Try
-                If showUI AndAlso Environment.UserInteractive Then
-                    ' Construct the local file. This will validate the full name and path
-                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
-                        path:=destinationFileName,
-                        paramName:=NameOf(destinationFileName))
-
-                    dialog = GetProgressDialog(address, destinationFileName, showUI)
-                End If
-
+                dialog = GetProgressDialog(addressUri.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
                     addressUri,
                     destinationFileName,
@@ -495,7 +485,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim dialog As ProgressDialog = Nothing
             Try
-                dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
+                dialog = GetProgressDialog(address:=address.AbsolutePath, fileNameWithPath:=destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
                     addressUri:=address,
                     destinationFileName,
