@@ -556,7 +556,7 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.System;
         Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.True(property.CanResetValue(control));
+        Assert.False(property.CanResetValue(control));
 
         control.Renderer = new SubToolStripRenderer();
         Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
@@ -564,10 +564,10 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        Assert.True(property.CanResetValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
         Assert.False(property.CanResetValue(control));
     }
 
@@ -584,7 +584,7 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.System;
         Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         control.Renderer = new SubToolStripRenderer();
         Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
@@ -592,10 +592,10 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        Assert.True(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
         Assert.False(property.ShouldSerializeValue(control));
     }
 
