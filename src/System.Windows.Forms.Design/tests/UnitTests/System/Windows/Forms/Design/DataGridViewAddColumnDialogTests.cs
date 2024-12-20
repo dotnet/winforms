@@ -91,7 +91,6 @@ public sealed class DataGridViewAddColumnDialogTests
     [InlineData("DuplicateLiveColumnName", false, true, false, false, false)]
     public void ValidName_ShouldReturnExpectedResult(string name, bool columnContains, bool containerContains, bool invalidIdentifier, bool allowDuplicateNameInLiveColumnCollection, bool expectedResult)
     {
-        // Arrange
         DataGridViewColumnCollection columns = new(new DataGridView());
         if (columnContains)
         {
