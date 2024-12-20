@@ -2638,32 +2638,50 @@ public partial class TreeView : Control
             {
 
 
-                try
-                {
                     // Try different dwm attributes and values
                     // May be a problem with WIN 10 compatibility
 
-                    int trueVal = 1;
-                    var attr = (int)DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR;
-                    var attrVal = 0x00ff0000;
+                    //int trueVal = 1;
+
+                    //var attr = (int)DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR;
+                    //var attrVal = 0x00ff0000;
 
                     IntPtr handle = _labelEdit.Handle;
                     Debug.WriteLine(handle.ToString());
 
-                    DwmSetWindowAttribute(handle, attr, ref attrVal, Marshal.SizeOf(attrVal) );
-                }
-                catch (Exception dwmEx)
-                {
-                    string msg = dwmEx.Message;
-                    if (dwmEx.InnerException is not null)
-                    {
-                        msg = msg + Environment.NewLine + dwmEx.InnerException.Message;
-                    }
+                for (int attrVal = 0; attrVal <= 10; attrVal++)
                     
-                    Debug.WriteLine(msg);
-                }
+                {
+                    Debug.WriteLine("");
 
+                    for (int attr = 1; attr <= 50; attr++)
+                    {
+                        Debug.WriteLine("");
+                        try
+                        {
+
+                            DwmSetWindowAttribute(handle, attr, ref attrVal, Marshal.SizeOf(attrVal));
+
+
+                        }
+                        catch (Exception dwmEx)
+                        {
+                            string msg = dwmEx.Message;
+                            if (dwmEx.InnerException is not null)
+                            {
+                                msg = msg + Environment.NewLine + dwmEx.InnerException.Message;
+                            }
+
+                            Debug.WriteLine("Attribute:" + attr.ToString());
+                            Debug.WriteLine("Attr Valu:" + attrVal.ToString());
+                            Debug.WriteLine(msg);
+                        }
+                    }
+                }
             }
+
+            // do I need to invalidate to get an update?
+        
 
 #pragma warning restore WFO5001
         }
