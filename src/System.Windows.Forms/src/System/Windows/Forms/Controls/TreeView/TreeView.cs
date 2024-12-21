@@ -3270,20 +3270,28 @@ public partial class TreeView : Control
     {
         switch (m.MsgInternal)
         {
-            // Handle setting color of edit box to background color of parent control
-            // This makes dark mode edit labels the correct color
             case PInvokeCore.WM_CTLCOLOREDIT:
-                [DllImport("Gdi32.dll", PreserveSig = true)]
-                static extern HBRUSH CreateSolidBrush(COLORREF color);
-                [DllImport("Gdi32.dll", PreserveSig = true)]
-                static extern COLORREF SetBkColor(HDC hdc,COLORREF color);
+                // Default handling of edit label colors
+                m.ResultInternal = (LRESULT)0;
+ #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    // Make background of dark mode edit labels the correct color
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern HBRUSH CreateSolidBrush(COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetBkColor(HDC hdc, COLORREF color);
 
-                Color tvColor = BackColor;
-                HBRUSH hBrush = CreateSolidBrush(tvColor);
-                HDC editHDC = (HDC)m.WParamInternal;
-                SetBkColor(editHDC, tvColor);
-                LRESULT lrBrush = (LRESULT)(IntPtr)hBrush;
-                m.ResultInternal = lrBrush;
+                    Color tvColor = BackColor;
+                    HBRUSH hBrush = CreateSolidBrush(tvColor);
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    SetBkColor(editHDC, tvColor);
+                    LRESULT lrBrush = (LRESULT)(IntPtr)hBrush;
+                    m.ResultInternal = lrBrush;
+                }
+#pragma warning restore WFO5001 
+
+
                 break;
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:

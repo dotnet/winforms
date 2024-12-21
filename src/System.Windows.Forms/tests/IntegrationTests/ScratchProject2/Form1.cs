@@ -14,12 +14,19 @@ namespace ScratchProject2
         private void Form1_Load(object? sender, EventArgs e)     
         {
             treeView1.BeforeLabelEdit += treeView1_BeforeLabelEdit;
+            listView1.BeforeLabelEdit += listView1_BeforeLabelEdit;
         }
+
+        private void listView1_BeforeLabelEdit(object? sender, LabelEditEventArgs e)
+        {
+            Debug.WriteLine("ListView Here!");
+        }
+
 
         private void treeView1_BeforeLabelEdit(object? sender, NodeLabelEditEventArgs e)
         {
-            Debug.WriteLine("Here!");
-        } 
+            Debug.WriteLine("TreeView Here!");
+        }
 
     }
 }

@@ -13,7 +13,7 @@ internal static class Program
         Application.EnableVisualStyles();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
 #pragma warning disable WFO5001
-        Application.SetColorMode(SystemColorMode.Classic);
+        Application.SetColorMode(SystemColorMode.Dark);
 #pragma warning restore WFO5001
         Form1 form = new();
         Application.Run(form);
