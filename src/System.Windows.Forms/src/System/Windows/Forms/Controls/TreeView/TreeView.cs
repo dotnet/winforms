@@ -3285,27 +3285,6 @@ public partial class TreeView : Control
                 if (Application.IsDarkModeEnabled)
                 {
                     // Make background of dark mode edit labels the correct color
-                    
-                    /*
-                    [DllImport("Gdi32.dll", PreserveSig = true)]
-                    static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
-                    [DllImport("Gdi32.dll", PreserveSig = true)]
-                    static extern HGDIOBJ GetStockObject(IntPtr brushType);
-                    [DllImport("User32.dll", PreserveSig = true)]
-                    static extern HBRUSH GetSysColorBrush(SYS_COLOR_INDEX index);
-
-                    const int DC_BRUSH = 18;
-                    HDC editHDC = (HDC)m.WParamInternal;
-                    HWND editHandle = (HWND)m.LParamInternal;
-                    Color tvColor = BackColor;
-                    SetDCBrushColor(editHDC, tvColor);
-                    //HGDIOBJ brush = GetStockObject(DC_BRUSH);
-                    HBRUSH brush = GetSysColorBrush(SYS_COLOR_INDEX.COLOR_WINDOW);
-                    // Need to return a pointer to a brush
-                    LRESULT lrBrush = (LRESULT)(IntPtr)brush;
-                    m.ResultInternal = lrBrush;
-                    */
-                    
                     [DllImport("Gdi32.dll", PreserveSig = true)]
                     static extern HBRUSH CreateSolidBrush(COLORREF color);
                     [DllImport("Gdi32.dll", PreserveSig = true)]
@@ -3321,7 +3300,6 @@ public partial class TreeView : Control
                     SetTextColor(editHDC, tvTextColor);
                     LRESULT lrBrush = (LRESULT)(IntPtr)_hBrush;
                     m.ResultInternal = lrBrush;
-                    
                 }
 #pragma warning restore WFO5001 
 
