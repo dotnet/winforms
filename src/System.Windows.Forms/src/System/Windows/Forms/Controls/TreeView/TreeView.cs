@@ -53,6 +53,8 @@ public partial class TreeView : Control
     private bool _hoveredAlready;
     private bool _rightToLeftLayout;
 
+    private HBRUSH _hBrush;     // To hold created dark mode brush for deletion
+
     private nint _mouseDownNode = 0; // ensures we fire nodeClick on the correct node
 
     private const int TREEVIEWSTATE_hideSelection = 0x00000001;
@@ -2102,6 +2104,11 @@ public partial class TreeView : Control
         {
             e.Node.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
+
+        // Delete created _hBrush if it exists
+        [DllImport("Gdi32.dll", PreserveSig = true)]
+        static extern void DeleteObject(HGDIOBJ ho);
+        DeleteObject(_hBrush);
     }
 
     /// <summary>
@@ -3160,6 +3167,32 @@ public partial class TreeView : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                // Default handling of edit label colors
+                m.ResultInternal = (LRESULT)0;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    // Make background of dark mode edit labels the correct color
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern HBRUSH CreateSolidBrush(COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetBkColor(HDC hdc, COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetTextColor(HDC hdc, COLORREF color);
+
+                    Color tvColor = BackColor;
+                    Color tvTextColor = ForeColor;
+                    _hBrush = CreateSolidBrush(tvColor);
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    SetBkColor(editHDC, tvColor);
+                    SetTextColor(editHDC, tvTextColor);
+                    LRESULT lrBrush = (LRESULT)(IntPtr)_hBrush;
+                    m.ResultInternal = lrBrush;
+                }
+#pragma warning restore WFO5001 
+                break;
+
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:
             case PInvokeCore.WM_WINDOWPOSCHANGED:

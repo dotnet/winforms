@@ -56,6 +56,8 @@ public partial class ListView : Control
     private View _viewStyle = View.LargeIcon;
     private string? _toolTipCaption = string.Empty;
 
+    private HBRUSH _hBrush; // To hold created dark mode brush for deletion
+
     private const int LISTVIEWSTATE_ownerDraw = 0x00000001;
     private const int LISTVIEWSTATE_allowColumnReorder = 0x00000002;
     private const int LISTVIEWSTATE_autoArrange = 0x00000004;
@@ -4331,6 +4333,12 @@ public partial class ListView : Control
     protected virtual void OnAfterLabelEdit(LabelEditEventArgs e)
     {
         _onAfterLabelEdit?.Invoke(this, e);
+
+        // Delete created _hBrush if it exists
+        [DllImport("Gdi32.dll", PreserveSig = true)]
+        static extern void DeleteObject(HGDIOBJ ho);
+        DeleteObject(_hBrush);
+
     }
 
     protected override void OnBackgroundImageChanged(EventArgs e)
@@ -6908,6 +6916,32 @@ public partial class ListView : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                // Default handling of edit label colors
+                m.ResultInternal = (LRESULT)0;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    // Make background of dark mode edit labels the correct color
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern HBRUSH CreateSolidBrush(COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetBkColor(HDC hdc, COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetTextColor(HDC hdc, COLORREF color);
+
+                    Color tvColor = BackColor;
+                    Color tvTextColor = ForeColor;
+                    _hBrush = CreateSolidBrush(tvColor);
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    SetBkColor(editHDC, tvColor);
+                    SetTextColor(editHDC, tvTextColor);
+                    LRESULT lrBrush = (LRESULT)(IntPtr)_hBrush;
+                    m.ResultInternal = lrBrush;
+                }
+#pragma warning restore WFO5001 
+                break;
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;
