@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+
 namespace ScratchProject2
 {
     public partial class Form1 : Form
@@ -16,7 +18,7 @@ namespace ScratchProject2
 
         private void treeView1_BeforeLabelEdit(object? sender, NodeLabelEditEventArgs e)
         {
-            Console.WriteLine("Here!");
+            Debug.WriteLine("Here!");
         } 
 
     }

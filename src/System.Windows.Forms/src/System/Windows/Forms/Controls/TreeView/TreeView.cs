@@ -2617,7 +2617,11 @@ public partial class TreeView : Control
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
 
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
+        }
+            
 
+
+            /*
             // Force dark mode on editing label if necessary
             [DllImport("dwmapi.dll", PreserveSig = false)]
             static extern void DwmSetWindowAttribute(IntPtr hwnd, int attr,
@@ -2684,7 +2688,8 @@ public partial class TreeView : Control
         
 
 #pragma warning restore WFO5001
-        }
+            */
+        
 
         return (LRESULT)(e.CancelEdit ? 1 : 0);
     }
@@ -3102,6 +3107,25 @@ public partial class TreeView : Control
 
             switch (nmtv->hdr.code)
             {
+                // Handle setting color of edit box to background color of control
+                case PInvokeCore.WM_CTLCOLOREDIT:
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern LRESULT GetStockObject(IntPtr brushType);
+
+                    const int DC_BRUSH = 18;
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    HWND editHandle = (HWND)m.LParamInternal;
+                    Color tvColor = BackColor;
+                    SetDCBrushColor(editHDC, tvColor);
+                    LRESULT brush = GetStockObject(DC_BRUSH);
+
+                    // Need to return a pointer to a brush
+                    m.ResultInternal = brush;
+                    break;
+
+
                 case PInvoke.TVN_ITEMEXPANDINGW:
                     m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
                     break;
