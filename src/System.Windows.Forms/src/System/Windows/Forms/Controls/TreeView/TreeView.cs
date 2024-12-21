@@ -2891,6 +2891,7 @@ public partial class TreeView : Control
                 // when one item is selected, click and hold on another). This needs to be fixed.
                 Color riFore = renderinfo.ForeColor;
                 Color riBack = renderinfo.BackColor;
+
                 if (renderinfo is not null && !riFore.IsEmpty)
                 {
                     nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
@@ -3107,25 +3108,6 @@ public partial class TreeView : Control
 
             switch (nmtv->hdr.code)
             {
-                // Handle setting color of edit box to background color of control
-                case PInvokeCore.WM_CTLCOLOREDIT:
-                    [DllImport("Gdi32.dll", PreserveSig = true)]
-                    static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
-                    [DllImport("Gdi32.dll", PreserveSig = true)]
-                    static extern LRESULT GetStockObject(IntPtr brushType);
-
-                    const int DC_BRUSH = 18;
-                    HDC editHDC = (HDC)m.WParamInternal;
-                    HWND editHandle = (HWND)m.LParamInternal;
-                    Color tvColor = BackColor;
-                    SetDCBrushColor(editHDC, tvColor);
-                    LRESULT brush = GetStockObject(DC_BRUSH);
-
-                    // Need to return a pointer to a brush
-                    m.ResultInternal = brush;
-                    break;
-
-
                 case PInvoke.TVN_ITEMEXPANDINGW:
                     m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
                     break;
@@ -3288,6 +3270,24 @@ public partial class TreeView : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                // MDO Handle setting color of edit box to background color of control
+                [DllImport("Gdi32.dll", PreserveSig = true)]
+                static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
+                [DllImport("Gdi32.dll", PreserveSig = true)]
+                static extern LRESULT GetStockObject(IntPtr brushType);
+
+                // The WParam seems dodgy
+                const int DC_BRUSH = 18;
+                HDC editHDC = (HDC)m.WParamInternal;
+                HWND editHandle = (HWND)m.LParamInternal;
+                Color tvColor = BackColor;
+                SetDCBrushColor(editHDC, tvColor);
+                LRESULT brush = GetStockObject(DC_BRUSH);
+                Debug.WriteLine(brush.GetType().ToString());
+                // Need to return a pointer to a brush
+                m.ResultInternal = brush;
+                break;
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:
             case PInvokeCore.WM_WINDOWPOSCHANGED:
