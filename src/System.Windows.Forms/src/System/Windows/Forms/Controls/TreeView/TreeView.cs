@@ -3270,23 +3270,20 @@ public partial class TreeView : Control
     {
         switch (m.MsgInternal)
         {
+            // Handle setting color of edit box to background color of parent control
+            // This makes dark mode edit labels the correct color
             case PInvokeCore.WM_CTLCOLOREDIT:
-                // MDO Handle setting color of edit box to background color of control
                 [DllImport("Gdi32.dll", PreserveSig = true)]
-                static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
+                static extern HBRUSH CreateSolidBrush(COLORREF color);
                 [DllImport("Gdi32.dll", PreserveSig = true)]
-                static extern LRESULT GetStockObject(IntPtr brushType);
+                static extern COLORREF SetBkColor(HDC hdc,COLORREF color);
 
-                // The WParam seems dodgy
-                const int DC_BRUSH = 18;
-                HDC editHDC = (HDC)m.WParamInternal;
-                HWND editHandle = (HWND)m.LParamInternal;
                 Color tvColor = BackColor;
-                SetDCBrushColor(editHDC, tvColor);
-                LRESULT brush = GetStockObject(DC_BRUSH);
-                Debug.WriteLine(brush.GetType().ToString());
-                // Need to return a pointer to a brush
-                m.ResultInternal = brush;
+                HBRUSH hBrush = CreateSolidBrush(tvColor);
+                HDC editHDC = (HDC)m.WParamInternal;
+                SetBkColor(editHDC, tvColor);
+                LRESULT lrBrush = (LRESULT)(IntPtr)hBrush;
+                m.ResultInternal = lrBrush;
                 break;
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:
