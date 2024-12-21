@@ -34,6 +34,9 @@ public partial class TreeView : Control
     private const string BackSlash = "\\";
     private const int DefaultTreeViewIndent = 19;
 
+    // To hold created dark mode brush for deletion
+    private HBRUSH _hBrush;
+
     private DrawTreeNodeEventHandler? _onDrawNode;
     private NodeLabelEditEventHandler? _onBeforeLabelEdit;
     private NodeLabelEditEventHandler? _onAfterLabelEdit;
@@ -2106,6 +2109,11 @@ public partial class TreeView : Control
         {
             e.Node.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
+
+        // Delete created _hBrush if it exists
+        [DllImport("Gdi32.dll", PreserveSig = true)]
+        static extern void DeleteObject(HGDIOBJ ho);
+        DeleteObject(_hBrush);
     }
 
     /// <summary>
@@ -3277,17 +3285,43 @@ public partial class TreeView : Control
                 if (Application.IsDarkModeEnabled)
                 {
                     // Make background of dark mode edit labels the correct color
+                    
+                    /*
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern void SetDCBrushColor(HDC hdc, COLORREF attr);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern HGDIOBJ GetStockObject(IntPtr brushType);
+                    [DllImport("User32.dll", PreserveSig = true)]
+                    static extern HBRUSH GetSysColorBrush(SYS_COLOR_INDEX index);
+
+                    const int DC_BRUSH = 18;
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    HWND editHandle = (HWND)m.LParamInternal;
+                    Color tvColor = BackColor;
+                    SetDCBrushColor(editHDC, tvColor);
+                    //HGDIOBJ brush = GetStockObject(DC_BRUSH);
+                    HBRUSH brush = GetSysColorBrush(SYS_COLOR_INDEX.COLOR_WINDOW);
+                    // Need to return a pointer to a brush
+                    LRESULT lrBrush = (LRESULT)(IntPtr)brush;
+                    m.ResultInternal = lrBrush;
+                    */
+                    
                     [DllImport("Gdi32.dll", PreserveSig = true)]
                     static extern HBRUSH CreateSolidBrush(COLORREF color);
                     [DllImport("Gdi32.dll", PreserveSig = true)]
                     static extern COLORREF SetBkColor(HDC hdc, COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetTextColor(HDC hdc, COLORREF color);
 
                     Color tvColor = BackColor;
-                    HBRUSH hBrush = CreateSolidBrush(tvColor);
+                    Color tvTextColor = ForeColor;
+                    _hBrush = CreateSolidBrush(tvColor);
                     HDC editHDC = (HDC)m.WParamInternal;
                     SetBkColor(editHDC, tvColor);
-                    LRESULT lrBrush = (LRESULT)(IntPtr)hBrush;
+                    SetTextColor(editHDC, tvTextColor);
+                    LRESULT lrBrush = (LRESULT)(IntPtr)_hBrush;
                     m.ResultInternal = lrBrush;
+                    
                 }
 #pragma warning restore WFO5001 
 
