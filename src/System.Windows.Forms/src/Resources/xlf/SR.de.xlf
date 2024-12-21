@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">BinaryFormatter wird in der Zwischenablage oder bei Drag &amp;amp; Drop-Vorgängen nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">BinaryFormatter wird in der Zwischenablage oder bei Drag &amp;amp; Drop-Vorgängen nicht unterstützt. Aktivieren Sie es, und verwenden Sie die APIs 'TryGetData&lt;T&gt;' mit einer 'Resolver'-Funktion, die eine Reihe zulässiger Typen definiert, um '{0}' zu deserialisieren.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -979,7 +979,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">'{0}' ist kein konkreter Typ und kann zu einem ungebundenen Deserialisierungsversuch führen. Verwenden Sie einen konkreten Typ, oder definieren Sie alternativ eine 'Resolver'-Funktion, die Typen unterstützt, die Sie aus der Zwischenablage abrufen oder in Drag &amp;amp; Drop-Vorgängen verwenden möchten.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
