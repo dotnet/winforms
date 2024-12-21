@@ -3302,9 +3302,8 @@ public partial class TreeView : Control
                     m.ResultInternal = lrBrush;
                 }
 #pragma warning restore WFO5001 
-
-
                 break;
+
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:
             case PInvokeCore.WM_WINDOWPOSCHANGED:

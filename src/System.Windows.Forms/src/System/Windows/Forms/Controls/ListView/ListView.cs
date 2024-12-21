@@ -6941,9 +6941,8 @@ public partial class ListView : Control
                     m.ResultInternal = lrBrush;
                 }
 #pragma warning restore WFO5001 
-
-
                 break;
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;
