@@ -52,6 +52,44 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return If(element IsNot Nothing, element.Substring(startIndex:=element.IndexOf("="c) + 1).Trim().Trim(""""c), String.Empty)
         End Function
 
+        Private Shared Function GetContentDispositionHeader(
+                lines As List(Of String),
+                ByRef headerParts() As String) As Integer
+            For dispositionIndex As Integer = 0 To lines.Count - 1
+                Dim line As String = lines(dispositionIndex)
+                If line.Contains("Content-Disposition", StringComparison.InvariantCultureIgnoreCase) Then
+                    headerParts = line.Split({":"c}, count:=2)
+                    Dim result As Boolean = headerParts.Length = 2 _
+                        AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
+                        comparisonType:=StringComparison.OrdinalIgnoreCase)
+                    Return dispositionIndex
+                End If
+            Next
+            Return -1
+        End Function
+
+        Private Shared Function GetDataLength(lines As List(Of String), dispositionIndex As Integer) As Integer
+            For Each line As String In lines
+                If line.Substring(0, 1) = vbNullChar Then
+                    Return line.Length
+                End If
+            Next
+            Return 0
+        End Function
+
+        Private Shared Function GetFilename(headerParts() As String) As String
+            Dim value As String = ""
+            Dim line As String = headerParts(1)
+            Dim startIndex As Integer = line.IndexOf("filename=""", StringComparison.InvariantCultureIgnoreCase)
+            If startIndex > -1 Then
+                line = line.Substring(startIndex + 10)
+                Dim length As Integer = line.IndexOf(""""c)
+                value = line.Substring(0, length)
+            End If
+
+            Return value
+        End Function
+
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
@@ -176,42 +214,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return result
         End Function
 
-        Private Shared Function GetFilename(headerParts() As String) As String
-            Dim value As String = ""
-            Dim line As String = headerParts(1)
-            Dim startIndex As Integer = line.IndexOf("filename=""", StringComparison.InvariantCultureIgnoreCase)
-            If startIndex > -1 Then
-                line = line.Substring(startIndex + 10)
-                Dim length As Integer = line.IndexOf(""""c)
-                value = line.Substring(0, length)
-            End If
-
-            Return value
-        End Function
-
-        Private Shared Function GetDataLength(lines As List(Of String), dispositionIndex As Integer) As Integer
-            For Each line As String In lines
-                If line.Substring(0, 1) = vbNullChar Then
-                    Return line.Length
-                End If
-            Next
-            Return 0
-        End Function
-
-        Private Shared Function GetContentDispositionHeader(
-                lines As List(Of String),
-                ByRef headerParts() As String) As Integer
-            For dispositionIndex As Integer = 0 To lines.Count - 1
-                Dim line As String = lines(dispositionIndex)
-                If line.Contains("Content-Disposition", StringComparison.InvariantCultureIgnoreCase) Then
-                    headerParts = line.Split({":"c}, count:=2)
-                    Dim result As Boolean = headerParts.Length = 2 _
-                        AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
-                        comparisonType:=StringComparison.OrdinalIgnoreCase)
-                    Return dispositionIndex
-                End If
-            Next
-            Return -1
-        End Function
     End Class
 End Namespace
