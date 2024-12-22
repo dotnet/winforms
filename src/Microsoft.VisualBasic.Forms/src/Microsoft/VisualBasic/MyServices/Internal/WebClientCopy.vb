@@ -209,6 +209,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 If ex.Message.Contains("401") Then
                     Throw New WebException(SR.net_webstatus_Unauthorized)
                 End If
+                If ex.Message.Contains("500") Then
+                    Throw
+                End If
                 Throw New WebException(SR.net_webstatus_Timeout)
             End Try
 

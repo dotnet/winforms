@@ -96,7 +96,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             address:=New Uri(webListener.Address))
                     End Sub
 
-                testCode.Should.NotThrow()
+                testCode.Should.Throw(Of WebException)()
             End Using
         End Sub
 
@@ -981,7 +981,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereDestinationFileExists_Success()
+        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereUploadFailed_Throws()
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=1)
             Dim webListener As New WebListener(SmallTestFileSize)
@@ -997,7 +997,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
+                testCode.Should.Throw(Of WebException)()
             End Using
         End Sub
 

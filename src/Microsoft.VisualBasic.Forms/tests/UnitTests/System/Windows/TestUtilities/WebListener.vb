@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
-Imports System.Text.RegularExpressions
 Imports System.Threading
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -101,25 +100,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                         detectEncodingFromByteOrderMarks:=True,
                                         BufferSize)
                                     End Using
-                                    Try
-                                        Dim dataLength As String = formData(NameOf(dataLength))
-                                        If _fileSize.ToString <> dataLength Then
-                                            Throw New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
-                                        End If
 
-                                        Dim fileName As String = formData("file")
-                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                            Throw New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
-                                        End If
-                                    Catch ioEx As IOException
-                                        Throw
-                                    Catch ex As Exception
-                                        Stop
-                                        ' ignore it will be handled elsewhere
-                                    End Try
+                                    response.StatusCode = 200
+                                    Dim dataLength As String = formData(NameOf(dataLength))
+                                    If _fileSize.ToString <> dataLength Then
+                                        response.StatusCode = 500
+                                    End If
+
+                                    Dim fileName As String = formData("filename")
+                                    If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
+                                        response.StatusCode = 500
+                                    End If
                                 End Using
                             End If
-                            response.StatusCode = 200
                         Else
                             Dim responseString As String = Strings.StrDup(_fileSize, "A")
                             Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
@@ -168,17 +161,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 Dim dispositionIndex As Integer = GetContentDispositionHeader(lines, headerParts)
 
                                 If dispositionIndex > -1 Then
-                                    Dim nameMatch As Match = Regex.Match(input:=headerParts(1), pattern:="name=""(?<name>[^""]+)""")
-                                    If nameMatch.Success Then
-                                        Dim name As String = nameMatch.Groups("name").Value
-                                        Dim value As String = headerParts(1).Split("filename=")(1).Trim(""""c)
-                                        value = value.Split(";"c)(0).Trim(""""c)
-                                        result.Add(name, value.Trim())
-                                        If lines.Count > dispositionIndex + 1 Then
-                                            result.Add("dataLength", lines(dispositionIndex + 1).Length.ToString)
-                                        End If
-                                        Exit For
+                                    result.Add("filename", GetFilename(headerParts))
+                                    If lines.Count > dispositionIndex + 1 Then
+                                        result.Add("dataLength", GetDataLength(lines, dispositionIndex).ToString)
                                     End If
+                                    Exit For
                                 End If
                             End If
                         End If
@@ -187,6 +174,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
 
             Return result
+        End Function
+
+        Private Shared Function GetFilename(headerParts() As String) As String
+            Dim value As String = ""
+            Dim line As String = headerParts(1)
+            Dim startIndex As Integer = line.IndexOf("filename=""", StringComparison.InvariantCultureIgnoreCase)
+            If startIndex > -1 Then
+                line = line.Substring(startIndex + 10)
+                Dim length As Integer = line.IndexOf(""""c)
+                value = line.Substring(0, length)
+            End If
+
+            Return value
+        End Function
+
+        Private Shared Function GetDataLength(lines As List(Of String), dispositionIndex As Integer) As Integer
+            For Each line As String In lines
+                If line.Substring(0, 1) = vbNullChar Then
+                    Return line.Length
+                End If
+            Next
+            Return 0
         End Function
 
         Private Shared Function GetContentDispositionHeader(
