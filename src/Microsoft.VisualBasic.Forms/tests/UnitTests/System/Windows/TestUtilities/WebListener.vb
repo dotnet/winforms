@@ -162,20 +162,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     For Each part As String In parts
                         If part.Trim() <> "--" Then
                             Dim separator As String() = New String() {Environment.NewLine}
-                            Dim lines As String() = part.Split(separator, StringSplitOptions.RemoveEmptyEntries)
-                            If lines.Length > 2 Then
-                                Dim headerParts As String() = lines(0).Split({":"c}, count:=2)
-                                If headerParts.Length = 2 _
-                                    AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
-                                    comparisonType:=StringComparison.OrdinalIgnoreCase) Then
+                            Dim lines As List(Of String) = part.Split(separator, StringSplitOptions.RemoveEmptyEntries).ToList
+                            If lines.Count > 2 Then
+                                Dim headerParts As String() = Nothing
+                                Dim dispositionIndex As Integer = GetContentDispositionHeader(lines, headerParts)
 
+                                If dispositionIndex > -1 Then
                                     Dim nameMatch As Match = Regex.Match(input:=headerParts(1), pattern:="name=""(?<name>[^""]+)""")
                                     If nameMatch.Success Then
                                         Dim name As String = nameMatch.Groups("name").Value
                                         Dim value As String = headerParts(1).Split("filename=")(1).Trim(""""c)
+                                        value = value.Split(";"c)(0).Trim(""""c)
                                         result.Add(name, value.Trim())
-                                        If lines.Length > 2 Then
-                                            result.Add("dataLength", lines(1).Length.ToString)
+                                        If lines.Count > dispositionIndex + 1 Then
+                                            result.Add("dataLength", lines(dispositionIndex + 1).Length.ToString)
                                         End If
                                         Exit For
                                     End If
@@ -189,5 +189,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return result
         End Function
 
+        Private Shared Function GetContentDispositionHeader(
+                lines As List(Of String),
+                ByRef headerParts() As String) As Integer
+            For dispositionIndex As Integer = 0 To lines.Count - 1
+                Dim line As String = lines(dispositionIndex)
+                If line.Contains("Content-Disposition", StringComparison.InvariantCultureIgnoreCase) Then
+                    headerParts = line.Split({":"c}, count:=2)
+                    Dim result As Boolean = headerParts.Length = 2 _
+                        AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
+                        comparisonType:=StringComparison.OrdinalIgnoreCase)
+                    Return dispositionIndex
+                End If
+            Next
+            Return -1
+        End Function
     End Class
 End Namespace
