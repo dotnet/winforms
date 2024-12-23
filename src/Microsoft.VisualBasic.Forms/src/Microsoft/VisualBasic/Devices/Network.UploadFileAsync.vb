@@ -66,6 +66,9 @@ Namespace Microsoft.VisualBasic.Devices
                     filePath:=normalizedFilePath,
                     requestURI:=addressUri,
                     externalToken:=cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
+            Catch ioEx As IO.IOException
+                Throw
+
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
                     If ex.Message.Contains("401") Then
