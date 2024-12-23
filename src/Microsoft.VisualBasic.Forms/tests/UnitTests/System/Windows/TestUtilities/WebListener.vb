@@ -197,7 +197,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Dim boundary As String = GetBoundary(request.ContentType)
                 Using reader As New StreamReader(request.InputStream, request.ContentEncoding)
                     Try
-
                         Dim content As String = reader.ReadToEnd()
                         Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
 
