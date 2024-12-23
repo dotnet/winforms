@@ -927,7 +927,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact(Skip:="Manual Testing Only")>
+        <WinFormsFact(Skip:="Manual Testing Only, cancel must be hit during testing")>
         Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTrue_Fail()
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=ExtraLargeTestFileSize)
