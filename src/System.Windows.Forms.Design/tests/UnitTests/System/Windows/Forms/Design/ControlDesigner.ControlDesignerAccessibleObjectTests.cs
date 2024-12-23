@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ControlDesignerControlDesignerAccessibleObjectTests
+public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
 {
     private class TestControl : Control
     {
@@ -23,75 +23,80 @@ public class ControlDesignerControlDesignerAccessibleObjectTests
         protected override AccessibleObject CreateAccessibilityInstance() => _accessibilityObject;
     }
 
-    private ControlDesigner.ControlDesignerAccessibleObject CreateAccessibleObject(Mock<AccessibleObject>? mockAccessibleObject = null)
-    {
-        Control control = mockAccessibleObject is not null
-            ? new TestControl(mockAccessibleObject.Object)
-            : new Control();
+    private readonly ControlDesigner _designer;
 
-        ControlDesigner designer = new();
-        return new ControlDesigner.ControlDesignerAccessibleObject(designer, control);
+    public ControlDesignerControlDesignerAccessibleObjectTests()
+    {
+        _designer = new();
+    }
+
+    public void Dispose()
+    {
+        _designer.Dispose();
+    }
+
+    private ControlDesigner.ControlDesignerAccessibleObject CreateAccessibleObject(Action<Mock<AccessibleObject>>? configureMock = null)
+    {
+        Mock<AccessibleObject> mockAccessibleObject = new();
+
+        configureMock?.Invoke(mockAccessibleObject);
+
+        TestControl control = new(mockAccessibleObject.Object);
+        return new ControlDesigner.ControlDesignerAccessibleObject(_designer, control);
     }
 
     [Fact]
-    public void Bounds_ReturnsExpectedBounds()
+    public void Bounds_ReturnsExpectedValue()
     {
         Rectangle expectedBounds = new(10, 10, 100, 100);
-        Mock<AccessibleObject> mockAccessibleObject = new();
-        mockAccessibleObject.Setup(a => a.Bounds).Returns(expectedBounds);
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = CreateAccessibleObject(mockAccessibleObject);
-
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Bounds).Returns(expectedBounds));
         accessibleObject.Bounds.Should().Be(expectedBounds);
     }
 
-    [Theory]
-    [InlineData("Test Description", nameof(AccessibleObject.Description))]
-    [InlineData("Test Value", nameof(AccessibleObject.Value))]
-    [InlineData(AccessibleRole.PushButton, nameof(AccessibleObject.Role))]
-    [InlineData("Parent", nameof(AccessibleObject.Parent))]
-    public void Properties_ReturnExpectedValues(object expectedValue, string propertyName)
+    [Fact]
+    public void Description_ReturnsExpectedValue()
     {
-        Mock<AccessibleObject> mockAccessibleObject = new();
+        string expectedDescription = "Test Description";
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Description).Returns(expectedDescription));
 
-        if (propertyName == nameof(AccessibleObject.Description))
-        {
-            mockAccessibleObject.Setup(a => a.Description).Returns((string)expectedValue);
-        }
-        else if (propertyName == nameof(AccessibleObject.Value))
-        {
-            mockAccessibleObject.Setup(a => a.Value).Returns((string)expectedValue);
-        }
-        else if (propertyName == nameof(AccessibleObject.Role))
-        {
-            mockAccessibleObject.Setup(a => a.Role).Returns((AccessibleRole)expectedValue);
-        }
-        else if (propertyName == nameof(AccessibleObject.Parent))
-        {
-            AccessibleObject parentMock = new Mock<AccessibleObject>().Object;
-            mockAccessibleObject.Setup(a => a.Parent).Returns(parentMock);
-            expectedValue = parentMock;
-        }
+        accessibleObject.Description.Should().Be(expectedDescription);
+    }
 
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = CreateAccessibleObject(mockAccessibleObject);
+    [Fact]
+    public void Value_ReturnsExpectedValue()
+    {
+        string expectedValue = "Test Value";
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Value).Returns(expectedValue));
+        accessibleObject.Value.Should().Be(expectedValue);
+    }
 
-        object? result = typeof(ControlDesigner.ControlDesignerAccessibleObject).GetProperty(propertyName)!.GetValue(accessibleObject, null);
+    [Fact]
+    public void Role_ReturnsExpectedValue()
+    {
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Role).Returns(AccessibleRole.PushButton));
+        accessibleObject.Role.Should().Be(AccessibleRole.PushButton);
+    }
 
-        result.Should().Be(expectedValue);
+    [Fact]
+    public void Parent_ReturnsExpectedValue()
+    {
+        Mock<AccessibleObject> mockParent = new();
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Parent).Returns(mockParent.Object));
+
+        accessibleObject.Parent.Should().Be(mockParent.Object);
     }
 
     [Fact]
     public void DefaultAction_ReturnsEmptyString()
     {
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = CreateAccessibleObject();
-        accessibleObject.DefaultAction.Should().BeEmpty();
+        CreateAccessibleObject().DefaultAction.Should().BeEmpty();
     }
 
     [Fact]
-    public void Name_ReturnsControlName()
+    public void Name_ReturnsExpectedValue()
     {
         Control control = new() { Name = "TestControl" };
-        ControlDesigner designer = new();
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = new(designer, control);
+        var accessibleObject = new ControlDesigner.ControlDesignerAccessibleObject(_designer, control);
 
         accessibleObject.Name.Should().Be("TestControl");
     }
@@ -99,91 +104,56 @@ public class ControlDesignerControlDesignerAccessibleObjectTests
     [Theory]
     [InlineData(AccessibleStates.Selected, true, true)]
     [InlineData(AccessibleStates.Focused, true, true)]
-    public void State_ReturnsExpectedStates(AccessibleStates state, bool isSelected, bool isPrimarySelection)
+    public void State_ReturnsExpectedValue(AccessibleStates state, bool isSelected, bool isPrimarySelection)
     {
         Control control = new();
-        ControlDesigner designer = new();
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = new(designer, control);
-
-        Mock<ISelectionService> selectionServiceMock = new();
-        selectionServiceMock.Setup(s => s.GetComponentSelected(control)).Returns(isSelected);
-        selectionServiceMock.Setup(s => s.PrimarySelection).Returns(isPrimarySelection ? control : null);
+        var accessibleObject = new ControlDesigner.ControlDesignerAccessibleObject(_designer, control);
 
         dynamic accessor = accessibleObject.TestAccessor().Dynamic;
-        accessor._selectionService = selectionServiceMock.Object;
+        accessor._selectionService = Mock.Of<ISelectionService>(s =>
+            s.GetComponentSelected(control) == isSelected &&
+            s.PrimarySelection == (isPrimarySelection ? control : null));
 
         accessibleObject.State.Should().HaveFlag(state);
     }
 
-    [Theory]
-    [InlineData(0, nameof(AccessibleObject.GetChild), typeof(AccessibleObject))]
-    [InlineData(3, nameof(AccessibleObject.GetChildCount), typeof(int))]
-    public void GetChildMethods_ReturnExpectedValues(object expectedValue, string methodName, Type expectedType)
+    [Fact]
+    public void GetChild_ReturnsExpectedValue()
     {
-        Mock<AccessibleObject> mockAccessibleObject = new();
-        if (methodName == nameof(AccessibleObject.GetChild))
-        {
-            AccessibleObject child = new Mock<AccessibleObject>().Object;
-            mockAccessibleObject.Setup(a => a.GetChild(It.IsAny<int>())).Returns(child);
-            expectedValue = child;
-        }
-        else
-        {
-            mockAccessibleObject.Setup(a => a.GetChildCount()).Returns((int)expectedValue);
-        }
+        Mock<AccessibleObject> mockChild = new();
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.GetChild(It.IsAny<int>())).Returns(mockChild.Object));
 
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = CreateAccessibleObject(mockAccessibleObject);
-
-        object? result = typeof(ControlDesigner.ControlDesignerAccessibleObject)
-            .GetMethod(methodName)!.Invoke(accessibleObject, methodName == nameof(AccessibleObject.GetChild) ? new object[] { 0 } : null);
-
-        result.Should().BeAssignableTo(expectedType);
-        result.Should().Be(expectedValue);
+        accessibleObject.GetChild(0).Should().Be(mockChild.Object);
     }
 
-    public static IEnumerable<object?[]> TestCases =>
-    new List<object?[]>
+    [Fact]
+    public void GetChildCount_ReturnsExpectedValue()
     {
-        new object?[] { AccessibleStates.Focused, nameof(ControlDesigner.ControlDesignerAccessibleObject.GetFocused), null },
-        new object?[] { AccessibleStates.Selected, nameof(ControlDesigner.ControlDesignerAccessibleObject.GetSelected), null },
-        new object?[] { AccessibleStates.None, nameof(ControlDesigner.ControlDesignerAccessibleObject.HitTest), 10, 10 }
-    };
+        int expectedChildCount = 3;
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.GetChildCount()).Returns(expectedChildCount));
+        accessibleObject.GetChildCount().Should().Be(expectedChildCount);
+    }
 
-    [Theory]
-    [MemberData(nameof(TestCases))]
-    public void Methods_ReturnExpectedResults(AccessibleStates state, string methodName, int x = 0, int y = 0)
+    [Fact]
+    public void GetFocused_ReturnsExpectedValue()
     {
-        Control control = new();
-        ControlDesigner designer = new();
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.State).Returns(AccessibleStates.Focused));
+        accessibleObject.GetFocused().Should().Be(accessibleObject);
+    }
+
+    [Fact]
+    public void GetSelected_ReturnsExpectedValue()
+    {
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.State).Returns(AccessibleStates.Selected));
+        accessibleObject.GetSelected().Should().Be(accessibleObject);
+    }
+
+    [Fact]
+    public void HitTest_ReturnsExpectedValue()
+    {
         Mock<AccessibleObject> mockAccessibleObject = new();
-        mockAccessibleObject.Setup(a => a.State).Returns(state);
+        var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.HitTest(It.IsAny<int>(), It.IsAny<int>())).Returns(mockAccessibleObject.Object));
 
-        AccessibleObject? expectedAccessibleObject = null;
-        if (methodName == nameof(ControlDesigner.ControlDesignerAccessibleObject.HitTest))
-        {
-            expectedAccessibleObject = new Mock<AccessibleObject>().Object;
-            mockAccessibleObject.Setup(a => a.HitTest(x, y)).Returns(expectedAccessibleObject);
-        }
-
-        TestControl testControl = new(mockAccessibleObject.Object);
-        ControlDesigner.ControlDesignerAccessibleObject accessibleObject = new(designer, testControl);
-
-        object? result = methodName switch
-        {
-            nameof(ControlDesigner.ControlDesignerAccessibleObject.GetFocused) => accessibleObject.GetFocused(),
-            nameof(ControlDesigner.ControlDesignerAccessibleObject.GetSelected) => accessibleObject.GetSelected(),
-            nameof(ControlDesigner.ControlDesignerAccessibleObject.HitTest) => accessibleObject.HitTest(x, y),
-
-            _ => throw new ArgumentException("Invalid method name", nameof(methodName))
-        };
-
-        if (methodName == nameof(ControlDesigner.ControlDesignerAccessibleObject.HitTest))
-        {
-            result.Should().Be(expectedAccessibleObject);
-        }
-        else
-        {
-            result.Should().Be(accessibleObject);
-        }
+        accessibleObject.HitTest(10, 10).Should().Be(mockAccessibleObject.Object);
     }
 }
