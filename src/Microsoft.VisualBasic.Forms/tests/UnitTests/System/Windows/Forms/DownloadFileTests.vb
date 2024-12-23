@@ -1004,10 +1004,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact(Skip:="Manual Testing Only")>
+        <WinFormsFact(Skip:="Manual Testing Only, cancel must be hit during testing")>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Fail()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=ExtraLargeTestFileSize)
             Dim webListener As New WebListener(ExtraLargeTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
