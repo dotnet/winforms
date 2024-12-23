@@ -3,6 +3,7 @@
 
 Imports System.Net
 Imports System.Net.Http
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
@@ -281,7 +282,6 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw GetArgumentNullException(NameOf(address))
             End If
 
-            ' Get network credentials
             Dim dialog As ProgressDialog = Nothing
             Try
                 ' Construct the local file. This will validate the full name and path
@@ -289,11 +289,11 @@ Namespace Microsoft.VisualBasic.Devices
                     path:=sourceFileName,
                     paramName:=NameOf(sourceFileName))
 
+                ' Get network credentials
                 Dim clientHandler As HttpClientHandler =
                     If(networkCredentials Is Nothing,
                         New HttpClientHandler,
                         New HttpClientHandler With {.Credentials = networkCredentials})
-
                 dialog = GetProgressDialog(
                     address:=address.AbsolutePath,
                     fileNameWithPath:=sourceFileName,
@@ -312,9 +312,15 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        'prevent UI freeze
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception

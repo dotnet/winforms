@@ -10,11 +10,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend Class ProgressableStreamContent
         Inherits HttpContent
 
-        Private ReadOnly _content As HttpContent
         Private ReadOnly _bufferSize As Integer
+        Private ReadOnly _content As HttpContent
         Private ReadOnly _progress As Action(Of Long, Long)
-
         Public Sub New(content As HttpContent, progress As Action(Of Long, Long), Optional bufferSize As Integer = 4096)
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bufferSize)
+            ArgumentNullException.ThrowIfNull(content)
             _content = content
             _progress = progress
             _bufferSize = bufferSize
@@ -23,25 +24,29 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Next
         End Sub
 
+        Protected Overrides Sub Dispose(disposing As Boolean)
+            If disposing Then _content.Dispose()
+            MyBase.Dispose(disposing)
+        End Sub
+
         Protected Overrides Async Function SerializeToStreamAsync(stream As Stream, context As TransportContext) As Task
             Dim buffer(_bufferSize - 1) As Byte
             Dim size As Long
             Dim uploaded As Long = 0
-
             TryComputeLength(size)
 
-            Using sInput As Stream = Await _content.ReadAsStreamAsync().ConfigureAwait(continueOnCapturedContext:=False)
+            Using sinput As Stream = Await _content.ReadAsStreamAsync().ConfigureAwait(False)
                 While True
-                    Dim length As Integer = Await sInput.ReadAsync(buffer).ConfigureAwait(continueOnCapturedContext:=False)
-                    If length <= 0 Then Exit While
-
-                    Await stream.WriteAsync(buffer.AsMemory(start:=0, length)).ConfigureAwait(continueOnCapturedContext:=False)
-                    uploaded += length
+                    Dim bytesRead As Long = Await sinput.ReadAsync(buffer).ConfigureAwait(False)
+                    If bytesRead <= 0 Then Exit While
+                    uploaded += bytesRead
                     _progress?.Invoke(uploaded, size)
+                    Await stream.WriteAsync(buffer.AsMemory(0, CInt(bytesRead))).ConfigureAwait(False)
+                    Await Stream.FlushAsync().ConfigureAwait(False)
                 End While
             End Using
+            Await Stream.FlushAsync().ConfigureAwait(False)
         End Function
-
 
         Protected Overrides Function TryComputeLength(ByRef length As Long) As Boolean
             length = _content.Headers.ContentLength.GetValueOrDefault()

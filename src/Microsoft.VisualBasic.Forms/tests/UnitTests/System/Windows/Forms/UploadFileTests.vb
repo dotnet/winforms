@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports FluentAssertions
+Imports Microsoft.VisualBasic.Devices
 Imports Microsoft.VisualBasic.FileIO
 Imports Xunit
 
@@ -26,6 +27,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -36,13 +38,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(String.Empty))
-                    End Sub
+                        Sub()
+                            My.Computer.Network.UploadFile(
+                                sourceFileName,
+                                address:=New Uri(String.Empty))
+                        End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -60,6 +63,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -79,6 +83,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -86,7 +91,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub UploadFile_UriOnlyWrongFileSize_Throw()
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
-            Dim webListener As New WebListener(LargeTestFileSize)
+            Dim webListener As New WebListener(1)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -96,6 +101,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeOfType(Of IOException)()
             End Using
         End Sub
 
@@ -108,18 +114,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -139,7 +145,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials:=New NetworkCredential(userName:=DefaultUserName, password),
+                            New NetworkCredential(DefaultUserName, password),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
@@ -147,6 +153,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -171,7 +178,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -195,6 +202,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                    .Throw(Of WebException)() _
                    .WithMessage(SR.net_webstatus_Timeout)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -216,16 +224,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
-        <WinFormsFact(Skip:="showUI:=True tests fail")>
+        <WinFormsFact>
         Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=LargeTestFileSize)
-            Dim webListener As New WebListener(LargeTestFileSize)
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -235,10 +244,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             userName:=String.Empty,
                             password:=String.Empty,
                             showUI:=True,
-                            connectionTimeout:=TestingConnectionTimeout)
+                            connectionTimeout:=TestingConnectionLargeTimeout)
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -260,8 +270,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -283,6 +294,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of UriFormatException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -304,6 +316,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -325,6 +338,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -337,19 +351,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=Nothing,
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -362,19 +376,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -387,19 +401,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             onUserCancel:=UICancelOption.ThrowException)
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -421,6 +435,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -443,9 +458,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -472,8 +487,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -498,8 +514,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
-                Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
-                    AndAlso e.Message.Contains(NameOf(sourceFileName))
+                    Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
+                        AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should.Throw(Of ArgumentException)().Where(exceptionExpression)
             End Using
         End Sub
@@ -524,11 +540,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
-                Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
-                    AndAlso e.Message.Contains(NameOf(sourceFileName))
+                    Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
+                        AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -551,6 +568,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -575,6 +593,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of FileNotFoundException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -602,8 +621,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -625,7 +645,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -648,8 +668,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -672,6 +693,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -694,6 +716,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -718,8 +741,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR.net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -744,8 +768,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR.net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -763,6 +788,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -779,8 +805,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -796,8 +823,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -820,8 +848,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(value))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(value))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -844,9 +873,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -868,8 +897,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR.net_webstatus_Timeout)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Timeout)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -891,12 +921,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
-        <WinFormsFact(Skip:="Manual Testing Only")>
+        <WinFormsFact(Skip:="Manual Testing Only, cancel must be hit during testing")>
         Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTrue_Fail()
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=ExtraLargeTestFileSize)
@@ -914,14 +945,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of OperationCanceledException)()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
-        <WinFormsFact(Skip:="showUI:=True tests fail")>
+        <WinFormsFact>
         Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=LargeTestFileSize)
-            Dim webListener As New WebListener(LargeTestFileSize)
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=SmallTestFileSize)
+            Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -935,6 +967,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -957,8 +990,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
+                    .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -980,11 +1014,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
         <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereDestinationFileExists_Success()
+        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereUploadFailed_Throws()
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=1)
             Dim webListener As New WebListener(SmallTestFileSize)
@@ -1001,6 +1036,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeOfType(Of IOException)()
             End Using
         End Sub
 
@@ -1013,19 +1049,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
-                Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            networkCredentials,
+                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1050,6 +1086,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1097,8 +1134,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1125,8 +1163,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1149,6 +1188,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1176,8 +1216,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(sourceFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1199,9 +1240,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, sourceFileName, listener)
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1224,8 +1265,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1248,6 +1290,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1270,6 +1313,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1296,6 +1340,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -1322,6 +1367,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 

@@ -54,9 +54,9 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim client As HttpClient = If(clientHandler Is Nothing,
                                           New HttpClient(),
-                                          New HttpClient(clientHandler)
-                                         )
-            client.Timeout = TimeSpan.FromMilliseconds(connectionTimeout)
+                                          New HttpClient(clientHandler))
+            client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
+
             'Create the copier
             Dim copier As New HttpClientCopy(client, dialog)
 
@@ -66,6 +66,9 @@ Namespace Microsoft.VisualBasic.Devices
                     filePath:=normalizedFilePath,
                     requestURI:=addressUri,
                     externalToken:=cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
+            Catch ioEx As IO.IOException
+                Throw
+
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
                     If ex.Message.Contains("401") Then
