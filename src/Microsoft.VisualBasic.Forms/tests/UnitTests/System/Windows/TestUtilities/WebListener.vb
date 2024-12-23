@@ -21,6 +21,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
+            Debug.Assert(fileSize > 0)
             _fileSize = fileSize
             _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
             Address = $"{_fileUrlPrefix}T{fileSize}"
@@ -45,6 +46,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Public ReadOnly Property Address As String
+        Public Property ServerFault As Exception
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -138,19 +140,22 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                         detectEncodingFromByteOrderMarks:=True,
                                         BufferSize)
                                     End Using
-
-                                    response.StatusCode = 200
+                                End Using
+                                Try
                                     Dim dataLength As String = formData(NameOf(dataLength))
                                     If _fileSize.ToString <> dataLength Then
-                                        response.StatusCode = 500
+                                        ServerFault = New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
                                     End If
 
                                     Dim fileName As String = formData("filename")
                                     If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                        response.StatusCode = 500
+                                        ServerFault = New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
                                     End If
-                                End Using
+                                Catch ex As Exception
+                                    ' Ignore is case upload is cancelled
+                                End Try
                             End If
+                            response.StatusCode = 200
                         Else
                             Dim responseString As String = Strings.StrDup(_fileSize, "A")
                             Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
@@ -164,7 +169,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             End Using
                         End If
                     Finally
-                        response?.Close()
+                        Try
+                            response?.Close()
+                        Catch ex As Exception
+
+                        End Try
                         response = Nothing
                     End Try
                 End Sub
@@ -187,27 +196,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If request.ContentType.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase) Then
                 Dim boundary As String = GetBoundary(request.ContentType)
                 Using reader As New StreamReader(request.InputStream, request.ContentEncoding)
-                    Dim content As String = reader.ReadToEnd()
-                    Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
+                    Try
+                        Dim content As String = reader.ReadToEnd()
+                        Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
 
-                    For Each part As String In parts
-                        If part.Trim() <> "--" Then
-                            Dim separator As String() = New String() {Environment.NewLine}
-                            Dim lines As List(Of String) = part.Split(separator, StringSplitOptions.RemoveEmptyEntries).ToList
-                            If lines.Count > 2 Then
-                                Dim headerParts As String() = Nothing
-                                Dim dispositionIndex As Integer = GetContentDispositionHeader(lines, headerParts)
+                        For Each part As String In parts
+                            If part.Trim() <> "--" Then
+                                Dim separator As String() = New String() {Environment.NewLine}
+                                Dim lines As List(Of String) = part.Split(separator, StringSplitOptions.RemoveEmptyEntries).ToList
+                                If lines.Count > 2 Then
+                                    Dim headerParts As String() = Nothing
+                                    Dim dispositionIndex As Integer = GetContentDispositionHeader(lines, headerParts)
 
-                                If dispositionIndex > -1 Then
-                                    result.Add("filename", GetFilename(headerParts))
-                                    If lines.Count > dispositionIndex + 1 Then
-                                        result.Add("dataLength", GetDataLength(lines, dispositionIndex).ToString)
+                                    If dispositionIndex > -1 Then
+                                        result.Add("filename", GetFilename(headerParts))
+                                        If lines.Count > dispositionIndex + 1 Then
+                                            result.Add("dataLength", GetDataLength(lines, dispositionIndex).ToString)
+                                        End If
+                                        Exit For
                                     End If
-                                    Exit For
                                 End If
                             End If
-                        End If
-                    Next
+                        Next
+                    Catch ex As Exception
+                        ' ignore
+                    End Try
                 End Using
             End If
 
