@@ -1,7 +1,7 @@
 #nullable enable
-~override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type
-~override System.ComponentModel.Design.ArrayEditor.GetItems(object editValue) -> object[]
-~override System.ComponentModel.Design.ArrayEditor.SetItems(object editValue, object[] value) -> object
+override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type!
+override System.ComponentModel.Design.ArrayEditor.GetItems(object? editValue) -> object![]!
+override System.ComponentModel.Design.ArrayEditor.SetItems(object? editValue, object![]? value) -> object?
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
 ~override System.Windows.Forms.Design.ComponentTray.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -31,7 +31,7 @@
 ~override System.Windows.Forms.Design.ParentControlDesigner.SnapLines.get -> System.Collections.IList
 ~override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection options) -> void
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
-~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
+System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type! type) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category) -> void
