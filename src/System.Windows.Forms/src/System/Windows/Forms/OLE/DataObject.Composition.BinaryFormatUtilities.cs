@@ -139,7 +139,8 @@ public unsafe partial class DataObject
                 // 1. Doesn't allow arrays that have a non-zero base index (can't create these in C# or VB)
                 // 2. Only allows IObjectReference types that contain primitives (to avoid observable cycle
                 //    dependencies to indeterminate state)
-                // But it usually requires a resolver.
+                // But it usually requires a resolver. Resolver is not available in the legacy mode,
+                // so we will fall back to BinaryFormatter in that case.
                 if (LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization)
                 {
                     try
