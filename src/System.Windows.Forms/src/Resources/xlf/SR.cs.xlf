@@ -969,7 +969,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
-        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <target state="translated">Objekt typu DataObject bude serializován jako prázdný. Pomocí rozhraní API DataObject.SetDataAsJson u objektu můžete serializovat data v rámci objektu json a pak s objektem použít rozhraní API '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
@@ -984,7 +984,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
         <source>Failed to deserialize JSON data.</source>
-        <target state="new">Failed to deserialize JSON data.</target>
+        <target state="translated">Nepovedlo se deserializovat data JSON.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
