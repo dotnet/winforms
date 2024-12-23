@@ -11,13 +11,22 @@ using System.Reflection;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
-public sealed class DataGridViewAddColumnDialogTests
+
+public sealed class DataGridViewAddColumnDialogTests : IDisposable
 {
+    private readonly DataGridView _dataGridView = new();
+    private readonly Container _container = new();
+
+    public void Dispose()
+    {
+        _dataGridView.Dispose();
+        _container.Dispose();
+    }
+
     [Fact]
     public void Constructor_ShouldInitializeFields()
     {
-        DataGridView dataGridView = new();
-        DataGridViewColumnCollection columns = dataGridView.Columns;
+        DataGridViewColumnCollection columns = _dataGridView.Columns;
 
         Mock<ISite> mockSite = new();
         Mock<IUIService> mockUIService = new();
@@ -25,16 +34,16 @@ public sealed class DataGridViewAddColumnDialogTests
 
         mockUIService.Setup(ui => ui.Styles["DialogFont"]).Returns(expectedFont);
         mockSite.Setup(site => site.GetService(typeof(IUIService))).Returns(mockUIService.Object);
-        dataGridView.Site = mockSite.Object;
+        _dataGridView.Site = mockSite.Object;
 
-        DataGridViewAddColumnDialog dialog = new(columns, dataGridView);
+        DataGridViewAddColumnDialog dialog = new(columns, _dataGridView);
 
         DataGridViewColumnCollection dataGridViewColumns = (DataGridViewColumnCollection)dialog.TestAccessor().Dynamic._dataGridViewColumns;
-        DataGridView liveDataGridView = (DataGridView)dialog.TestAccessor().Dynamic._liveDataGridView;
+        using DataGridView liveDataGridView = (DataGridView)dialog.TestAccessor().Dynamic._liveDataGridView;
 
         dialog.Should().NotBeNull();
         dataGridViewColumns.Should().BeSameAs(columns);
-        liveDataGridView.Should().BeSameAs(dataGridView);
+        liveDataGridView.Should().BeSameAs(_dataGridView);
         dialog.Font.Should().Be(expectedFont);
     }
 
@@ -91,16 +100,15 @@ public sealed class DataGridViewAddColumnDialogTests
     [InlineData("DuplicateLiveColumnName", false, true, false, false, false)]
     public void ValidName_ShouldReturnExpectedResult(string name, bool columnContains, bool containerContains, bool invalidIdentifier, bool allowDuplicateNameInLiveColumnCollection, bool expectedResult)
     {
-        DataGridViewColumnCollection columns = new(new DataGridView());
+        DataGridViewColumnCollection columns = _dataGridView.Columns;
         if (columnContains)
         {
             columns.Add(new DataGridViewTextBoxColumn { Name = name });
         }
 
-        Container container = new();
         if (containerContains)
         {
-            container.Add(new Component(), name);
+            _container.Add(new Component(), name);
         }
 
         NameCreationService nameCreationService = new(invalidIdentifier);
@@ -110,7 +118,7 @@ public sealed class DataGridViewAddColumnDialogTests
             liveColumns.Add(new DataGridViewTextBoxColumn { Name = name });
         }
 
-        bool result = DataGridViewAddColumnDialog.ValidName(name, columns, container, nameCreationService, liveColumns, allowDuplicateNameInLiveColumnCollection);
+        bool result = DataGridViewAddColumnDialog.ValidName(name, columns, _container, nameCreationService, liveColumns, allowDuplicateNameInLiveColumnCollection);
 
         result.Should().Be(expectedResult);
     }
