@@ -362,9 +362,14 @@ public static class Clipboard
     {
         data = default;
         resolver.OrThrowIfNull();
+        if (!DataObject.IsValidFormatAndType<T>(format)
+            || GetDataObject() is not { } dataObject)
+        {
+            // Invalid format or no object on the clipboard at all.
+            return false;
+        }
 
-        return GetTypedDataObject<T>(format, out ITypedDataObject? typed)
-            && typed.TryGetData(format, resolver, autoConvert: false, out data);
+        return dataObject.TryGetData(format, resolver, autoConvert: false, out data);
     }
 
     /// <inheritdoc cref="TryGetData{T}(string, Func{TypeName, Type}, out T)"/>
@@ -373,15 +378,6 @@ public static class Clipboard
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
         data = default;
-
-        return GetTypedDataObject<T>(format, out ITypedDataObject? typed) && typed.TryGetData(format, out data);
-    }
-
-    private static bool GetTypedDataObject<T>(
-        string format,
-        [NotNullWhen(true), MaybeNullWhen(false)] out ITypedDataObject typed)
-    {
-        typed = default;
         if (!DataObject.IsValidFormatAndType<T>(format)
             || GetDataObject() is not { } dataObject)
         {
@@ -389,14 +385,7 @@ public static class Clipboard
             return false;
         }
 
-        if (dataObject is not ITypedDataObject typedDataObject)
-        {
-            throw new NotSupportedException(
-                string.Format(SR.ITypeDataObject_Not_Implemented, dataObject.GetType().FullName));
-        }
-
-        typed = typedDataObject;
-        return true;
+        return dataObject.TryGetData(format, out data);
     }
 
     /// <summary>
