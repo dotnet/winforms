@@ -30,13 +30,13 @@ public sealed class DataGridViewAddColumnDialogTests : IDisposable
 
         Mock<ISite> mockSite = new();
         Mock<IUIService> mockUIService = new();
-        Font expectedFont = new("Arial", 12);
+        using Font expectedFont = new("Arial", 12);
 
         mockUIService.Setup(ui => ui.Styles["DialogFont"]).Returns(expectedFont);
         mockSite.Setup(site => site.GetService(typeof(IUIService))).Returns(mockUIService.Object);
         _dataGridView.Site = mockSite.Object;
 
-        DataGridViewAddColumnDialog dialog = new(columns, _dataGridView);
+        using DataGridViewAddColumnDialog dialog = new(columns, _dataGridView);
 
         DataGridViewColumnCollection dataGridViewColumns = (DataGridViewColumnCollection)dialog.TestAccessor().Dynamic._dataGridViewColumns;
         using DataGridView liveDataGridView = (DataGridView)dialog.TestAccessor().Dynamic._liveDataGridView;
@@ -55,7 +55,7 @@ public sealed class DataGridViewAddColumnDialogTests : IDisposable
     {
         ITypeResolutionService? typeResolutionService = useTypeResolutionService.HasValue && useTypeResolutionService.Value ? new MockTypeResolutionService() : null;
 
-        ComponentDesigner? result = DataGridViewAddColumnDialog.GetComponentDesignerForType(typeResolutionService, type);
+        using ComponentDesigner? result = DataGridViewAddColumnDialog.GetComponentDesignerForType(typeResolutionService, type);
 
         if (expectedDesignerType is null)
         {
