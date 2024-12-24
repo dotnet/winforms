@@ -1069,7 +1069,8 @@ public class BitmapTests : FileCleanupTestBase
             Assert.Equal(rectangle.Height, data.Height);
             Assert.Equal(expectedStride, data.Stride);
 
-            // "Reserved" is documented as "Reserved. Do not use.", so it's not clear whether we actually need to test this in any unit tests.
+            // "Reserved" is documented as "Reserved. Do not use.",
+            // so it's not clear whether we actually need to test this in any unit tests.
             Assert.Equal(expectedReserved, data.Reserved);
 
             // Locking with 16bppGrayscale succeeds, but the data can't be unlocked.

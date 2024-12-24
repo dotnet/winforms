@@ -28,7 +28,8 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
     }
 
     /// <summary>
-    ///  Creates a new <see cref="CodeDomComponentSerializationService"/> object using the given service provider to resolve services.
+    ///  Creates a new <see cref="CodeDomComponentSerializationService"/> object using
+    ///  the given service provider to resolve services.
     /// </summary>
     public CodeDomComponentSerializationService(IServiceProvider? provider)
     {
@@ -129,8 +130,9 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
     }
 
     /// <summary>
-    ///  This method deserializes the given store to produce a collection of objects contained within it. If a container is provided,
-    ///  objects that are created that implement <see cref="IComponent"/> will be added to the container.
+    ///  This method deserializes the given store to produce a collection of objects contained within it.
+    ///  If a container is provided, objects that are created that implement
+    ///  <see cref="IComponent"/> will be added to the container.
     /// </summary>
     public override ICollection Deserialize(SerializationStore store)
     {
@@ -145,8 +147,9 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
     }
 
     /// <summary>
-    ///  This method deserializes the given store to produce a collection of objects contained within it. If a container is provided,
-    ///  objects that are created that implement <see cref="IComponent"/> will be added to the container.
+    ///  This method deserializes the given store to produce a collection of objects contained within it.
+    ///  If a container is provided, objects that are created that implement
+    ///  <see cref="IComponent"/> will be added to the container.
     /// </summary>
     public override ICollection Deserialize(SerializationStore store, IContainer container)
     {
@@ -162,12 +165,13 @@ public sealed partial class CodeDomComponentSerializationService : ComponentSeri
     }
 
     /// <summary>
-    ///  This method deserializes the given store, but rather than produce new objects object, the data in the store is applied to
-    ///  an existing set of objects that are taken from the provided container. This allows the caller to pre-create an object
-    ///  however it sees fit. If an object has deserialization state and the object is not named in the set of existing objects,
-    ///  a new object will be created. If that object also implements <see cref="IComponent"/>, it will be added to the given
-    ///  container. Objects in the container must have names and types that match objects in the serialization store in order
-    ///  for an existing object to be used.
+    ///  This method deserializes the given store, but rather than produce new objects object,
+    ///  the data in the store is applied to an existing set of objects that are taken from the provided container.
+    ///  This allows the caller to pre-create an object however it sees fit.
+    ///  If an object has deserialization state and the object is not named in the set of existing objects,
+    ///  a new object will be created. If that object also implements <see cref="IComponent"/>,
+    ///  it will be added to the given container. Objects in the container must have names and
+    ///  types that match objects in the serialization store in order for an existing object to be used.
     /// </summary>
     public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
     {
