@@ -19,11 +19,13 @@ namespace Windows.Win32.System.Com;
 ///  </para>
 ///  <list type="bullet">
 ///   <item><description>IManagedObject          - used .NET Remoting (not available on .NET Core)</description></item>
-///   <item><description>IObjectSafety           - for Code Access Security (not available on .NET Core)</description></item>
+///   <item>
+///         <description>IObjectSafety           - for Code Access Security (not available on .NET Core)</description>
+///   </item>
 ///   <item><description>IWeakReferenceSource    - for WinRT</description></item>
 ///   <item><description>ICustomPropertyProvider - for WinRT XAML (Jupiter)</description></item>
 ///   <item><description>IReferenceTrackerTarget - for WinRT</description></item>
-///   <item><description>IStringable             - for WinRT</description></item>
+///   <item><description>IStringTable            - for WinRT</description></item>
 ///  </list>
 /// </remarks>
 internal unsafe interface IManagedWrapper

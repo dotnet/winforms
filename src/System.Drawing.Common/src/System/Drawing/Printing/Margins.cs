@@ -37,7 +37,8 @@ public partial class Margins : ICloneable
     }
 
     /// <summary>
-    ///  Initializes a new instance of a the <see cref='Margins'/> class with the specified left, right, top, and bottom margins.
+    ///  Initializes a new instance of a the <see cref='Margins'/> class
+    ///  with the specified left, right, top, and bottom margins.
     /// </summary>
     public Margins(int left, int right, int top, int bottom)
     {

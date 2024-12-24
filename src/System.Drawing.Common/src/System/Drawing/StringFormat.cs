@@ -24,7 +24,8 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     }
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref='StringFormat'/> class with the specified <see cref='StringFormatFlags'/>.
+    ///  Initializes a new instance of the <see cref='StringFormat'/>
+    ///  class with the specified <see cref='StringFormatFlags'/>.
     /// </summary>
     public StringFormat(StringFormatFlags options) : this(options, 0)
     {

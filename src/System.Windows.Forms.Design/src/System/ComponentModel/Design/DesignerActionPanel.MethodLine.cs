@@ -32,7 +32,8 @@ internal sealed partial class DesignerActionPanel
             AddedControls.Add(_linkLabel);
         }
 
-        // _methodItem and _actionList are set in UpdateActionItem, which is always called right after the MethodLine object creation
+        // _methodItem and _actionList are set in UpdateActionItem,
+        // which is always called right after the MethodLine object creation
         public override string FocusId => $"METHOD:{_actionList!.GetType().FullName}.{_methodItem!.MemberName}";
 
         public override void Focus()
@@ -68,11 +69,14 @@ internal sealed partial class DesignerActionPanel
                     ex = ex.InnerException!;
                 }
 
-                // NOTE: We had code to rethrow if this was one of [NullReferenceException, StackOverflowException, OutOfMemoryException,
-                // ThreadAbortException]. Removing this rethrow. StackOverflow and ThreadAbort can't be meaningfully caught, and
-                // NullRef and OutOfMemory really shouldn't be caught. Out of these, OOM is the most correct one to call, but OOM is
-                // thrown by GDI+ for pretty much any problem, so isn't reliable as an actual indicator that you're out of memory. If
-                // you really are out of memory, it's very likely you'll get another OOM shortly.
+                // NOTE: We had code to rethrow if this was one of [NullReferenceException, StackOverflowException,
+                // OutOfMemoryException, ThreadAbortException]. Removing this rethrow.
+                // StackOverflow and ThreadAbort can't be meaningfully caught,
+                // and NullRef and OutOfMemory really shouldn't be caught.
+                // Out of these, OOM is the most correct one to call, but OOM is
+                // thrown by GDI+ for pretty much any problem, so isn't reliable as an actual indicator
+                // that you're out of memory. If you really are out of memory,
+                // it's very likely you'll get another OOM shortly.
                 ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_ErrorInvokingAction, _methodItem!.DisplayName, Environment.NewLine + ex.Message));
             }
             finally

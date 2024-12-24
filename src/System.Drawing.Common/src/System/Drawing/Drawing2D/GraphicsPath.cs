@@ -61,9 +61,12 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     ///  Initializes a new instance of the <see cref='GraphicsPath'/> class.
     /// </summary>
     /// <param name="pts">Array of points that define the path.</param>
-    /// <param name="types">Array of <see cref="PathPointType"/> values that specify the type of <paramref name="pts"/></param>
+    /// <param name="types">
+    ///  Array of <see cref="PathPointType"/> values that specify the type of <paramref name="pts"/>
+    /// </param>
     /// <param name="fillMode">
-    ///  A <see cref="Drawing2D.FillMode"/> enumeration that specifies how the interiors of shapes in this <see cref="GraphicsPath"/>
+    ///  A <see cref="Drawing2D.FillMode"/> enumeration that specifies
+    ///  how the interiors of shapes in this <see cref="GraphicsPath"/>
     /// </param>
     public GraphicsPath(Point[] pts, byte[] types, FillMode fillMode)
         : this(pts.OrThrowIfNull().AsSpan(), types.OrThrowIfNull().AsSpan(), fillMode) { }
