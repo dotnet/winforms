@@ -196,28 +196,34 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             _cancelTokenSourcePost = New CancellationTokenSource()
             Dim contentLength As Long = New FileInfo(filePath).Length
             Dim totalBytesRead As Long = 0
+            Dim progress As Action(Of Long, Long) =
+                Sub(bytesRead As Long, streamLength As Long)
+                    totalBytesRead += bytesRead
+                    If _progressDialog IsNot Nothing Then
+                        Dim progressPercentage As Integer = CInt(totalBytesRead / streamLength * 100)
+                        InvokeIncrement(progressPercentage)
+                        Thread.Sleep(millisecondsTimeout:=1)
+                    End If
+                End Sub
             Using linkedStreamCts As CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelTokenSourceReadStream.Token, _cancelTokenSourcePost.Token, externalToken)
                 Try
-                    Using content As New MultipartFormDataContent("----boundary")
-                        Dim progress As Action(Of Long, Long) =
-                            Sub(bytesRead As Long, streamLength As Long)
-                                totalBytesRead += bytesRead
-                                If _progressDialog IsNot Nothing Then
-                                    Dim progressPercentage As Integer = CInt(totalBytesRead / streamLength * 100)
-                                    InvokeIncrement(progressPercentage)
-                                End If
-                            End Sub
-                        Dim fileContent As New StreamContent(File.OpenRead(filePath))
-                        Dim progressContent As New ProgressableStreamContent(fileContent, progress, BufferSize)
+                    Dim response As HttpResponseMessage
+                    Using multipartContent As New MultipartFormDataContent("----boundary")
+                        Dim fileStream As New FileStream(filePath, FileMode.Open, FileAccess.Read)
+                        Dim fileContent As New StreamContent(fileStream)
+                        fileContent.Headers.ContentType = New MediaTypeHeaderValue("application/octet-stream")
                         Dim fileName As String = Path.GetFileName(filePath)
-                        content.Add(fileContent, "file", fileName)
-                        fileContent.Headers.ContentDisposition =
-                            New ContentDispositionHeaderValue(dispositionType:="form-data") With {
-                                .Name = """file""",
-                                .FileName = $"""{fileName}"""}
-
-                        Dim response As HttpResponseMessage =
-                            Await _httpClient.PostAsync(requestURI, content, cancellationToken:=linkedStreamCts.Token).ConfigureAwait(continueOnCapturedContext:=False)
+                        multipartContent.Add(fileContent, "file", $"""{fileName}""")
+                        If _progressDialog Is Nothing Then
+                            response =
+                                Await _httpClient.PostAsync(requestURI, multipartContent, cancellationToken:=linkedStreamCts.Token) _
+                                    .ConfigureAwait(continueOnCapturedContext:=False)
+                        Else
+                            Dim progressContent As New ProgressableStreamContent(multipartContent, progress, BufferSize)
+                            response =
+                                Await _httpClient.PostAsync(requestURI, progressContent, cancellationToken:=linkedStreamCts.Token) _
+                                    .ConfigureAwait(continueOnCapturedContext:=False)
+                        End If
                         response.EnsureSuccessStatusCode()
                         Select Case response.StatusCode
                             Case HttpStatusCode.OK
@@ -227,6 +233,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                 Throw New WebException()
                         End Select
                         response?.Dispose()
+                        Await fileStream.DisposeAsync().ConfigureAwait(False)
                     End Using
                 Catch ex As HttpRequestException
                     Throw
@@ -239,12 +246,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     Else
                         Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
                     End If
+                Finally
+                    CloseProgressDialog(_progressDialog)
                 End Try
             End Using
             If _progressDialog IsNot Nothing Then
                 RemoveHandler _progressDialog.UserHitCancel, AddressOf _progressDialog_UserHitCancel
             End If
         End Function
-
     End Class
 End Namespace

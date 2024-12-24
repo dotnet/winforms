@@ -9,6 +9,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Friend Const LargeTestFileSize As Integer = 104_857_600
         Friend Const SmallTestFileSize As Integer = 18_135
         Friend Const InvalidUrlAddress As String = "invalidURL"
+        Friend Const TestingConnectionLargeTimeout As Integer = 100_000_000
         Friend Const TestingConnectionTimeout As Integer = 100_000
     End Module
 End Namespace

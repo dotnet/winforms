@@ -4,7 +4,6 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
-Imports System.Text.RegularExpressions
 Imports System.Threading
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -22,6 +21,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
+            Debug.Assert(fileSize > 0)
             _fileSize = fileSize
             _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
             Address = $"{_fileUrlPrefix}T{fileSize}"
@@ -46,11 +46,50 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Public ReadOnly Property Address As String
+        Public Property ServerFault As Exception
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
             Dim element As String = elements.FirstOrDefault(Function(e) e.Trim().StartsWith("boundary=", StringComparison.OrdinalIgnoreCase))
             Return If(element IsNot Nothing, element.Substring(startIndex:=element.IndexOf("="c) + 1).Trim().Trim(""""c), String.Empty)
+        End Function
+
+        Private Shared Function GetContentDispositionHeader(
+                lines As List(Of String),
+                ByRef headerParts() As String) As Integer
+            For dispositionIndex As Integer = 0 To lines.Count - 1
+                Dim line As String = lines(dispositionIndex)
+                If line.Contains("Content-Disposition", StringComparison.InvariantCultureIgnoreCase) Then
+                    headerParts = line.Split({":"c}, count:=2)
+                    Dim result As Boolean = headerParts.Length = 2 _
+                        AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
+                        comparisonType:=StringComparison.OrdinalIgnoreCase)
+                    Return dispositionIndex
+                End If
+            Next
+            Return -1
+        End Function
+
+        Private Shared Function GetDataLength(lines As List(Of String), dispositionIndex As Integer) As Integer
+            For Each line As String In lines
+                If line.Substring(0, 1) = vbNullChar Then
+                    Return line.Length
+                End If
+            Next
+            Return 0
+        End Function
+
+        Private Shared Function GetFilename(headerParts() As String) As String
+            Dim value As String = ""
+            Dim line As String = headerParts(1)
+            Dim startIndex As Integer = line.IndexOf("filename=""", StringComparison.InvariantCultureIgnoreCase)
+            If startIndex > -1 Then
+                line = line.Substring(startIndex + 10)
+                Dim length As Integer = line.IndexOf(""""c)
+                value = line.Substring(0, length)
+            End If
+
+            Return value
         End Function
 
         Friend Function ProcessRequests() As HttpListener
@@ -101,23 +140,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                         detectEncodingFromByteOrderMarks:=True,
                                         BufferSize)
                                     End Using
-                                    Try
-                                        Dim dataLength As String = formData(NameOf(dataLength))
-                                        If _fileSize.ToString <> dataLength Then
-                                            Throw New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
-                                        End If
-
-                                        Dim fileName As String = formData("file")
-                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                            Throw New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
-                                        End If
-                                    Catch ioEx As IOException
-                                        Throw
-                                    Catch ex As Exception
-                                        Stop
-                                        ' ignore it will be handled elsewhere
-                                    End Try
                                 End Using
+                                Try
+                                    Dim dataLength As String = formData(NameOf(dataLength))
+                                    If _fileSize.ToString <> dataLength Then
+                                        ServerFault = New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
+                                    End If
+
+                                    Dim fileName As String = formData("filename")
+                                    If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
+                                        ServerFault = New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
+                                    End If
+                                Catch ex As Exception
+                                    ' Ignore is case upload is cancelled
+                                End Try
                             End If
                             response.StatusCode = 200
                         Else
@@ -133,7 +169,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             End Using
                         End If
                     Finally
-                        response?.Close()
+                        Try
+                            response?.Close()
+                        Catch ex As Exception
+
+                        End Try
                         response = Nothing
                     End Try
                 End Sub
@@ -156,33 +196,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If request.ContentType.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase) Then
                 Dim boundary As String = GetBoundary(request.ContentType)
                 Using reader As New StreamReader(request.InputStream, request.ContentEncoding)
-                    Dim content As String = reader.ReadToEnd()
-                    Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
+                    Try
+                        Dim content As String = reader.ReadToEnd()
+                        Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
 
-                    For Each part As String In parts
-                        If part.Trim() <> "--" Then
-                            Dim separator As String() = New String() {Environment.NewLine}
-                            Dim lines As String() = part.Split(separator, StringSplitOptions.RemoveEmptyEntries)
-                            If lines.Length > 2 Then
-                                Dim headerParts As String() = lines(0).Split({":"c}, count:=2)
-                                If headerParts.Length = 2 _
-                                    AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
-                                    comparisonType:=StringComparison.OrdinalIgnoreCase) Then
+                        For Each part As String In parts
+                            If part.Trim() <> "--" Then
+                                Dim separator As String() = New String() {Environment.NewLine}
+                                Dim lines As List(Of String) = part.Split(separator, StringSplitOptions.RemoveEmptyEntries).ToList
+                                If lines.Count > 2 Then
+                                    Dim headerParts As String() = Nothing
+                                    Dim dispositionIndex As Integer = GetContentDispositionHeader(lines, headerParts)
 
-                                    Dim nameMatch As Match = Regex.Match(input:=headerParts(1), pattern:="name=""(?<name>[^""]+)""")
-                                    If nameMatch.Success Then
-                                        Dim name As String = nameMatch.Groups("name").Value
-                                        Dim value As String = headerParts(1).Split("filename=")(1).Trim(""""c)
-                                        result.Add(name, value.Trim())
-                                        If lines.Length > 2 Then
-                                            result.Add("dataLength", lines(1).Length.ToString)
+                                    If dispositionIndex > -1 Then
+                                        result.Add("filename", GetFilename(headerParts))
+                                        If lines.Count > dispositionIndex + 1 Then
+                                            result.Add("dataLength", GetDataLength(lines, dispositionIndex).ToString)
                                         End If
                                         Exit For
                                     End If
                                 End If
                             End If
-                        End If
-                    Next
+                        Next
+                    Catch ex As Exception
+                        ' ignore
+                    End Try
                 End Using
             End If
 
