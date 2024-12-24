@@ -969,7 +969,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
-        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <target state="translated">Obiekt typu "DataObject" będzie serializować jako pusty. Użyj interfejsów API "DataObject.SetDataAsJson" w obiekcie, aby serializować dane wewnątrz obiektu za pomocą kodu JSON, a następnie użyj interfejsu API '{0}' ze swoim obiektem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">

@@ -278,7 +278,7 @@ public unsafe partial class DataObject
                         result = TryGetIStreamData(dataObject, format, resolver, legacyMode, out data);
                     }
                 }
-                catch (Exception e) when (e is not NotSupportedException)
+                catch (Exception e) when (legacyMode || e is not NotSupportedException)
                 {
                     Debug.Fail(e.ToString());
                 }
@@ -337,9 +337,8 @@ public unsafe partial class DataObject
                     data = default;
                     doNotContinue = true;
                 }
-                catch (Exception ex) when (ex is not NotSupportedException)
+                catch (Exception ex) when (legacyMode || ex is not NotSupportedException)
                 {
-                    // Should we catch SerializationExceptions that wrap NotSupported when called from the typed API?
                     Debug.WriteLine(ex.ToString());
                 }
                 finally

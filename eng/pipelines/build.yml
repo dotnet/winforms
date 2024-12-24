@@ -51,7 +51,7 @@ jobs:
   - template: /eng/common/templates-official/steps/enable-internal-sources.yml
   - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
 
-  - task: MicroBuildSigningPlugin@2
+  - task: MicroBuildSigningPlugin@4
     displayName: Install MicroBuild plugin for Signing
     inputs:
       signType: $(_SignType)
