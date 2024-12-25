@@ -5703,6 +5703,30 @@ public class TabControlTests
         Assert.Equal(text, actual);
     }
 
+    [WinFormsFact]
+    public void TabControl_WmSelChange_SelectedTabIsNull_DoesNotThrowException()
+    {
+        using Form form = new();
+        using TabControl control = new();
+        using TabPage page1 = new("text1");
+        using TabPage page2 = new("text2");
+        control.TabPages.Add(page1);
+        control.TabPages.Add(page2);
+        _ = control.AccessibilityObject;
+
+        form.Controls.Add(control);
+        form.Show();
+
+        control.SelectedIndex = 1;
+        control.TabPages.Clear();
+
+        Action act = () => control.TestAccessor().Dynamic.WmSelChange();
+        Application.DoEvents();
+        Thread.Sleep(1000);
+
+        act.Should().NotThrow();
+    }
+
     private class SubTabPage : TabPage
     {
     }
