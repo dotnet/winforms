@@ -3,6 +3,7 @@
 
 Imports System.Net
 Imports System.Net.Http
+Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
@@ -264,6 +265,7 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             onUserCancel As UICancelOption)
 
+            ' Construct the local file. This will validate the full name and path
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             ' Make sure the file exists
@@ -284,11 +286,6 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim dialog As ProgressDialog = Nothing
             Try
-                ' Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
-                    path:=sourceFileName,
-                    paramName:=NameOf(sourceFileName))
-
                 ' Get network credentials
                 Dim clientHandler As HttpClientHandler =
                     If(networkCredentials Is Nothing,
@@ -314,6 +311,7 @@ Namespace Microsoft.VisualBasic.Devices
                     dialog?.ShowProgressDialog()
                     Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
                         'prevent UI freeze
+                        Thread.Sleep(10)
                         Application.DoEvents()
                     Loop
                     If t.IsFaulted Then
