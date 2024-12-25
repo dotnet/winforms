@@ -2,6 +2,8 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports System.Threading
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -373,7 +375,11 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        'prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
                     End If
