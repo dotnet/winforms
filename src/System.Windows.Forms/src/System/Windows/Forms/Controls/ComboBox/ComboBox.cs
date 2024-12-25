@@ -2747,12 +2747,6 @@ public partial class ComboBox : ListControl
 
             base.OnLostFocus(e);
             _canFireLostFocus = false;
-
-            // When the control loses focus, reset the MouseIsOver to False.
-            if (DropDownStyle == ComboBoxStyle.Simple || !DroppedDown)
-            {
-                MouseIsOver = false;
-            }
         }
     }
 

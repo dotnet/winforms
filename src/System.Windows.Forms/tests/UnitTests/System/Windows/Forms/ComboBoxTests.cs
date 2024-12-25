@@ -2764,10 +2764,6 @@ public class ComboBoxTests
 
         string matchingText = comboBoxAccessor.MatchingText;
         matchingText.Should().Be("Test");
-
-        // Verifies the fix for issue "https://github.com/dotnet/winforms/issues/12590"
-        // related to ComboBox dropdown button disappear when switching RightToLeft property.
-        comboBox.MouseIsOver.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -2784,10 +2780,6 @@ public class ComboBoxTests
 
         string matchingText = comboBoxAccessor.MatchingText;
         matchingText.Should().BeEmpty();
-
-        // Verifies the fix for issue "https://github.com/dotnet/winforms/issues/12590"
-        // related to ComboBox dropdown button disappear when switching RightToLeft property.
-        comboBox.MouseIsOver.Should().BeFalse();
     }
 
     private class OwnerDrawComboBox : ComboBox
