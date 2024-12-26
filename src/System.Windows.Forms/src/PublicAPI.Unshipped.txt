@@ -1,4 +1,3 @@
-override System.Windows.Forms.StatusStrip.Select(bool directed, bool forward) -> void
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, out T data) -> bool
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type!>! resolver, out T data) -> bool
 static System.Windows.Forms.DataObjectExtensions.TryGetData<T>(this System.Windows.Forms.IDataObject! dataObject, out T data) -> bool
