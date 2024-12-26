@@ -5709,26 +5709,67 @@ public class TabControlTests
         using Form form = new();
         using TabControl control = new();
         using TabPage page1 = new("text1");
-        using TabPage page2 = new("text2");
         control.TabPages.Add(page1);
-        control.TabPages.Add(page2);
         _ = control.AccessibilityObject;
 
         form.Controls.Add(control);
         form.Show();
-
-        control.SelectedIndex = 1;
-        control.TabPages.Clear();
+        control.SelectedIndex = 0;
 
         Action act = () => control.TestAccessor().Dynamic.WmSelChange();
-        Application.DoEvents();
-        Thread.Sleep(1000);
-
         act.Should().NotThrow();
+
+        control.TabPages.Clear();
+
+        var exception = Record.Exception(() =>
+        {
+            Application.DoEvents();
+            Thread.Sleep(100);
+        });
+
+        exception.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void TabControl_WmSelChange_AccessibilityObjectNotCreated_NoAutomationEventRaised()
+    {
+        using TabControl tabControl = new();
+        using SubTabPage tabPage = new();
+        tabControl.SelectedTab = tabPage;
+        tabControl.SelectedIndex = 1;
+
+        var automationEventRaised = false;
+        tabPage.TabAccessibilityObject = new TabAccessibilityObject
+        {
+            RaiseAutomationEventAction = () => automationEventRaised = true
+        };
+
+        tabControl.TestAccessor().Dynamic.WmSelChange();
+
+        Application.DoEvents();
+        Thread.Sleep(100);
+
+        automationEventRaised.Should().BeFalse();
+    }
+
+    public class TabAccessibilityObject
+    {
+        public Action RaiseAutomationEventAction { get; set; }
+        public void RaiseAutomationEvent(UIA_EVENT_ID eventId)
+        {
+            RaiseAutomationEventAction?.Invoke();
+        }
+    }
+
+    public enum UIA_EVENT_ID
+    {
+        UIA_SelectionItem_ElementSelectedEventId,
+        UIA_AutomationFocusChangedEventId
     }
 
     private class SubTabPage : TabPage
     {
+        public TabAccessibilityObject TabAccessibilityObject { get; set; }
     }
 
     private class NullTextTabPage : TabPage
