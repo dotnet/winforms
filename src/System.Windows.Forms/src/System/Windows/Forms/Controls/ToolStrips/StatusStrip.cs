@@ -439,12 +439,6 @@ public partial class StatusStrip : ToolStrip
         base.SetDisplayedItems();
     }
 
-    protected override void Select(bool directed, bool forward)
-    {
-        RenderMode = ToolStripRenderMode.System;
-        base.Select(directed, forward);
-    }
-
     /// <summary>
     ///  Override this function if you want to do custom table layouts for the
     ///  StatusStrip. The default layoutstyle is tablelayout, and we need to play
