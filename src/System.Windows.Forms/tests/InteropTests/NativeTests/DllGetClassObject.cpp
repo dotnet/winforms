@@ -8,6 +8,9 @@
 
 #include "RawErrorInfoUsageTest.h"
 #include "StandardErrorInfoUsageTest.h"
+#include "AxTestControl.h"
+
+class CNativeTestsModule : public ATL::CAtlDllModuleT<CNativeTestsModule> {} _AtlModule;
 
 STDAPI DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Out_ LPVOID FAR* ppv)
 {
@@ -16,6 +19,9 @@ STDAPI DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Out_ LPVOID FA
 
     if (rclsid == __uuidof(StandardErrorInfoUsageTest))
         return ClassFactoryBasic<StandardErrorInfoUsageTest>::Create(riid, ppv);
+
+    if (rclsid == __uuidof(AxTestControl))
+        return _AtlModule.DllGetClassObject(rclsid, riid, ppv);
 
     return CLASS_E_CLASSNOTAVAILABLE;
 }
