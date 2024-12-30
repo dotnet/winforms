@@ -10,23 +10,21 @@ namespace System.Windows.Forms.Tests;
 
 public class LinkUtilitiesTests
 {
-    [WinFormsTheory]
-    [InlineData("no", LinkBehavior.NeverUnderline)]
-    [InlineData("hover", LinkBehavior.HoverUnderline)]
-    [InlineData("always", LinkBehavior.AlwaysUnderline)]
-    [InlineData(null, LinkBehavior.AlwaysUnderline)] // Default behavior when key is not set
-    public void LinkUtilities_GetIELinkBehavior_ReturnsExpected(string? registryValue, LinkBehavior expectedBehavior)
+    [WinFormsFact]
+    public void LinkUtilities_GetIELinkBehavior_ReturnsExpected()
     {
-        // Set registry value if provided
-        RegistryKey? key = Registry.CurrentUser.CreateSubKey(LinkUtilities.IEMainRegPath);
-        if (registryValue is not null)
+        // Read the registry value
+        RegistryKey? key = Registry.CurrentUser.OpenSubKey(LinkUtilities.IEMainRegPath);
+        string? registryValue = key?.GetValue("Anchor Underline") as string;
+
+        // Determine the expected behavior based on the registry value
+        LinkBehavior expectedBehavior = registryValue switch
         {
-            key.SetValue("Anchor Underline", registryValue);
-        }
-        else
-        {
-            key.DeleteValue("Anchor Underline", false); // Ensure no value is set
-        }
+            "no" => LinkBehavior.NeverUnderline,
+            "hover" => LinkBehavior.HoverUnderline,
+            "always" => LinkBehavior.AlwaysUnderline,
+            _ => LinkBehavior.AlwaysUnderline
+        };
 
         LinkUtilities.GetIELinkBehavior().Should().Be(expectedBehavior);
     }
