@@ -11,12 +11,14 @@ public class ControlDesignerTransparentBehaviorTests : IDisposable
 {
     private readonly TestControlDesigner _designer;
     private readonly TestControl _control;
+    private readonly ControlDesigner.TransparentBehavior _behavior;
 
     public ControlDesignerTransparentBehaviorTests()
     {
         _designer = new();
         _control = new();
         _designer.Initialize(_control);
+        _behavior = new(_designer);
     }
 
     public void Dispose()
@@ -45,24 +47,22 @@ public class ControlDesignerTransparentBehaviorTests : IDisposable
     [Fact]
     public void TransparentBehavior_OnDragDrop_CallsDesignerOnDragDrop()
     {
-        ControlDesigner.TransparentBehavior behavior = new(_designer);
         DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None);
 
-        behavior.OnDragDrop(null, dragEventArgs);
+        _behavior.OnDragDrop(null, dragEventArgs);
 
-        Rectangle controlRect = GetControlRect(behavior);
+        Rectangle controlRect = GetControlRect(_behavior);
         controlRect.Should().Be(Rectangle.Empty);
     }
 
     [Fact]
     public void TransparentBehavior_OnDragEnter_SetsControlRect()
     {
-        ControlDesigner.TransparentBehavior behavior = new(_designer);
         DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None);
 
-        behavior.OnDragEnter(null, dragEventArgs);
+        _behavior.OnDragEnter(null, dragEventArgs);
 
-        Rectangle controlRect = GetControlRect(behavior);
+        Rectangle controlRect = GetControlRect(_behavior);
         controlRect.Should().NotBe(Rectangle.Empty);
         controlRect.Should().Be(_control.RectangleToScreen(_control.ClientRectangle));
     }
@@ -70,23 +70,21 @@ public class ControlDesignerTransparentBehaviorTests : IDisposable
     [Fact]
     public void TransparentBehavior_OnDragLeave_ClearsControlRect()
     {
-        ControlDesigner.TransparentBehavior behavior = new(_designer);
-        behavior.OnDragEnter(null, new DragEventArgs(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None));
+        _behavior.OnDragEnter(null, new DragEventArgs(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None));
 
-        behavior.OnDragLeave(null, EventArgs.Empty);
+        _behavior.OnDragLeave(null, EventArgs.Empty);
 
-        Rectangle controlRect = GetControlRect(behavior);
+        Rectangle controlRect = GetControlRect(_behavior);
         controlRect.Should().Be(Rectangle.Empty);
     }
 
     [Fact]
     public void TransparentBehavior_OnDragOver_SetsEffectToNoneIfOutsideControlRect()
     {
-        ControlDesigner.TransparentBehavior behavior = new(_designer);
-        behavior.OnDragEnter(null, new DragEventArgs(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None));
+        _behavior.OnDragEnter(null, new DragEventArgs(null, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.None));
         DragEventArgs dragEventArgs = new(null, 0, int.MaxValue, int.MaxValue, DragDropEffects.Copy, DragDropEffects.Copy);
 
-        behavior.OnDragOver(null, dragEventArgs);
+        _behavior.OnDragOver(null, dragEventArgs);
 
         dragEventArgs.Effect.Should().Be(DragDropEffects.None);
     }
@@ -94,10 +92,9 @@ public class ControlDesignerTransparentBehaviorTests : IDisposable
     [Fact]
     public void TransparentBehavior_OnGiveFeedback_CallsDesignerOnGiveFeedback()
     {
-        ControlDesigner.TransparentBehavior behavior = new(_designer);
         GiveFeedbackEventArgs feedbackEventArgs = new(DragDropEffects.Copy, true);
 
-        Exception? exception = Record.Exception(() => behavior.OnGiveFeedback(null, feedbackEventArgs));
+        Exception? exception = Record.Exception(() => _behavior.OnGiveFeedback(null, feedbackEventArgs));
         exception.Should().BeNull();
     }
 }
