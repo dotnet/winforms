@@ -2837,9 +2837,9 @@ public partial class TreeView : Control
                         {
                             // Reverse the X-axis drawing coordinates of the rectangle.
                             int invertedX = Width - 2 - bounds.X - textSize.Width;
-                            textLoc = new(invertedX - 1, bounds.Y);
+                            textLoc = new(invertedX - 2, bounds.Y);
                             fillRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
-                            textLoc = new(invertedX, bounds.Y);
+                            textLoc = new(invertedX - 1, bounds.Y);
                             focusRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
                         }
                         else
