@@ -72,7 +72,7 @@ public class ApplicationTests
         Assert.Throws<ArgumentNullException>("value", () => Application.CurrentCulture = null);
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
     {
         RemoteExecutor.Invoke(() =>
@@ -83,7 +83,7 @@ public class ApplicationTests
         }).Dispose();
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
     {
         // This is not a recommended scenario per
@@ -115,7 +115,7 @@ public class ApplicationTests
         Assert.Equal(state, Application.VisualStyleState);
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [EnumData<VisualStyleState>]
     [InvalidEnumData<VisualStyleState>]
     public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)
