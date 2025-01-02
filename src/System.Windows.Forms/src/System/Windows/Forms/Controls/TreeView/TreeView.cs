@@ -2825,9 +2825,29 @@ public partial class TreeView : Control
                     using (Graphics g = nmtvcd->nmcd.hdc.CreateGraphics())
                     {
                         Rectangle bounds = node.Bounds;
+                        Rectangle fillRectangle = node.Bounds;
+                        Rectangle focusRectangle = node.Bounds;
+
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(bounds.X - 1, bounds.Y); // required to center the text
+                        Point textLoc = new(bounds.X + 1, bounds.Y); // required to center the text
+
                         bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+
+                        if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
+                        {
+                            // Reverse the X-axis drawing coordinates of the rectangle.
+                            int invertedX = Width - 2 - bounds.X - textSize.Width;
+                            textLoc = new(invertedX - 2, bounds.Y);
+                            fillRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                            textLoc = new(invertedX - 1, bounds.Y);
+                            focusRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                        }
+                        else
+                        {
+                            textLoc = new(bounds.X - 1, bounds.Y);
+                            fillRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                            focusRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                        }
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
                         OnDrawNode(e);
@@ -2843,15 +2863,14 @@ public partial class TreeView : Control
                             // Draw the actual node.
                             if ((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected)
                             {
-                                g.FillRectangle(SystemBrushes.Highlight, bounds);
-                                ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
+                                g.FillRectangle(SystemBrushes.Highlight, fillRectangle);
+                                ControlPaint.DrawFocusRectangle(g, focusRectangle, color, SystemColors.Highlight);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
-                                g.FillRectangle(brush, bounds);
-
+                                g.FillRectangle(brush, fillRectangle);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                         }
