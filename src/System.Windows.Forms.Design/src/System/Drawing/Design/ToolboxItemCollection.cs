@@ -11,7 +11,8 @@ namespace System.Drawing.Design;
 public sealed class ToolboxItemCollection : ReadOnlyCollectionBase
 {
     /// <summary>
-    ///  Initializes a new instance of <see cref="ToolboxItemCollection"/> based on another <see cref="ToolboxItemCollection"/>.
+    ///  Initializes a new instance of <see cref="ToolboxItemCollection"/>
+    ///  based on another <see cref="ToolboxItemCollection"/>.
     /// </summary>
     public ToolboxItemCollection(ToolboxItemCollection value)
     {
@@ -19,7 +20,8 @@ public sealed class ToolboxItemCollection : ReadOnlyCollectionBase
     }
 
     /// <summary>
-    ///  Initializes a new instance of <see cref="ToolboxItemCollection"/> containing any array of <see cref="ToolboxItem"/> objects.
+    ///  Initializes a new instance of <see cref="ToolboxItemCollection"/>
+    ///  containing any array of <see cref="ToolboxItem"/> objects.
     /// </summary>
     public ToolboxItemCollection(ToolboxItem[] value)
     {
