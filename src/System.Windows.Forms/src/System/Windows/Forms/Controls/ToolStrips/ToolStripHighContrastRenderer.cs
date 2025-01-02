@@ -77,7 +77,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
                     startY += 4;
                 }
 
-                g.FillRectangles(SystemBrushes.ControlLight, shadowRects);
+                g.FillRectangles(SystemBrushes.ControlText, shadowRects);
             }
         }
         else

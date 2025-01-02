@@ -528,8 +528,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 shadowRects[i].Offset(xOffset, -1);
             }
 
-            using var gripDarkBrush = ColorTable.GripDark.GetCachedSolidBrushScope();
-            g.FillRectangles(gripDarkBrush, shadowRects);
+            using var controlTextBrush = SystemColors.ControlText.GetCachedSolidBrushScope();
+            g.FillRectangles(controlTextBrush, shadowRects);
         }
     }
 
