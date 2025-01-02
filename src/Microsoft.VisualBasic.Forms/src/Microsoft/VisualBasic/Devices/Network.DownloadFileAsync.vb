@@ -23,7 +23,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         ''' <param name="onUserCancel"></param>
         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Function DownloadFileAsync(
@@ -60,7 +62,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             addressUri As Uri,
@@ -97,8 +101,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="dialog">ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             addressUri As Uri,
             destinationFileName As String,
@@ -112,6 +121,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
             Await DownloadFileAsync(
                 addressUri,
                 destinationFileName,
@@ -135,7 +145,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             address As String,
@@ -180,8 +192,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             address As String,
@@ -226,7 +242,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         ''' <remarks>
         '''  Function will Throw on unhandled exceptions.
