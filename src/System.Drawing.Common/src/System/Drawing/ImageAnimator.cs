@@ -153,7 +153,8 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///  Advances the frame in all images currently being animated. The new frame is drawn the next time the image is rendered.
+    ///  Advances the frame in all images currently being animated.
+    ///  The new frame is drawn the next time the image is rendered.
     /// </summary>
     public static void UpdateFrames()
     {

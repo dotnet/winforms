@@ -11,20 +11,22 @@ namespace System.ComponentModel.Design.Serialization;
 public sealed partial class CodeDomComponentSerializationService
 {
     /// <summary>
-    ///  The <see cref="CodeDomSerializationStore"/> class is an implementation-specific class that stores serialization data
-    ///  for the CodeDom component serialization service. The service adds state to this serialization store.
+    ///  The <see cref="CodeDomSerializationStore"/> class is an implementation-specific class
+    ///  that stores serialization data for the CodeDom component serialization service.
+    ///  The service adds state to this serialization store.
     ///  Once the store is closed it can be serialized or deserialized in memory.
     /// </summary>
     /// <para>
-    ///   On .NET Framework, once the store is closed it can be saved to a stream. A serialization store can be deserialized
-    ///   at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
-    ///   cannot be saved to a stream or loaded from a stream.
+    ///   On .NET Framework, once the store is closed it can be saved to a stream.
+    ///   A serialization store can be deserialized at a later time by the same type of serialization service.
+    ///   On .NET <see cref="CodeDomSerializationStore"/> class cannot be saved to a stream or loaded from a stream.
     /// </para>
     /// <para>
     ///   <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
     ///   that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
     ///   <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
-    ///   The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    ///   The <see cref="IDisposable" /> pattern is provided for languages that support
+    ///   a "using" syntax like C# and VB .NET.
     /// </para>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
@@ -66,7 +68,8 @@ public sealed partial class CodeDomComponentSerializationService
         private AssemblyName[]? AssemblyNames { get; set; }
 
         /// <summary>
-        ///  If there were errors generated during serialization or deserialization of the store, they will be added to this collection.
+        ///  If there were errors generated during serialization or deserialization of the store,
+        ///  they will be added to this collection.
         /// </summary>
         public override ICollection Errors
         {
@@ -282,7 +285,8 @@ public sealed partial class CodeDomComponentSerializationService
         }
 
         /// <summary>
-        ///  Gets a name for this object. It first tries the object's site, if it exists, and otherwise fabricates a unique name.
+        ///  Gets a name for this object. It first tries the object's site, if it exists,
+        ///  and otherwise fabricates a unique name.
         /// </summary>
         private static string GetObjectName(object value)
         {

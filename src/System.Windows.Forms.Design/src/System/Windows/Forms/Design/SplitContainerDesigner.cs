@@ -254,7 +254,8 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  Overrides our base class. We don't draw the Grids for this Control. Also we Select the Panel1 if nothing is still Selected.
+    ///  Overrides our base class. We don't draw the Grids for this Control.
+    ///  Also we Select the Panel1 if nothing is still Selected.
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs pe)
     {

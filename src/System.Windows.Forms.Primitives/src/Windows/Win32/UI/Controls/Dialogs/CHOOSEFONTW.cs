@@ -88,7 +88,9 @@ internal partial struct CHOOSEFONTW
     /// </summary>
     public int iPointSize;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public CHOOSEFONT_FLAGS Flags;
 
     /// <summary>
@@ -96,7 +98,8 @@ internal partial struct CHOOSEFONTW
     ///   Type: <b><a href="https://learn.microsoft.com/windows/desktop/gdi/colorref">
     ///   COLORREF</a></b> If the <b>CF_EFFECTS</b> flag is set, <b>rgbColors</b> specifies the initial text color.
     ///   When <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">
-    ///   ChooseFont</a> returns successfully, this member contains the RGB value of the text color that the user selected.
+    ///   ChooseFont</a> returns successfully,
+    ///   this member contains the RGB value of the text color that the user selected.
     ///   To create a <a href="https://learn.microsoft.com/windows/desktop/gdi/colorref">COLORREF</a> color value,
     ///   use the <a href="https://learn.microsoft.com/windows/desktop/api/wingdi/nf-wingdi-rgb">RGB</a> macro.
     ///  </para>
@@ -189,7 +192,9 @@ internal partial struct CHOOSEFONTW
     /// </summary>
     public PWSTR lpszStyle;
 
-    /// <summary>Type: <b>WORD</b></summary>
+    /// <summary>
+    ///  Type: <b>WORD</b>
+    /// </summary>
     public CHOOSEFONT_FONT_TYPE nFontType;
 
     public ushort ___MISSING_ALIGNMENT__;

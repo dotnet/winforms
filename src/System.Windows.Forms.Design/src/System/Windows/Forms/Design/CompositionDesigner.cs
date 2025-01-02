@@ -125,7 +125,6 @@ public class ComponentDocumentDesigner : ComponentDesigner, IRootDesigner, ITool
     ///  Gets a value indicating whether the specified tool is supported by this
     ///  designer.
     /// </summary>
-    [CLSCompliant(false)]
     protected virtual bool GetToolSupported(ToolboxItem tool)
     {
         throw new NotImplementedException(SR.NotImplementedByDesign);
