@@ -38,11 +38,12 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption,
             Optional cancelToken As CancellationToken = Nothing) As Task
 
-            Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
-                                                        New HttpClientHandler,
-                                                        New HttpClientHandler With {.Credentials = networkCredentials}
-                                                       )
-            Return DownloadFileAsync(addressUri,
+            Dim clientHandler As HttpClientHandler =
+                If(networkCredentials Is Nothing,
+                   New HttpClientHandler,
+                   New HttpClientHandler With {.Credentials = networkCredentials})
+            Return DownloadFileAsync(
+                addressUri,
                 destinationFileName,
                 clientHandler,
                 dialog,
@@ -76,11 +77,14 @@ Namespace Microsoft.VisualBasic.Devices
             Optional cancelToken As CancellationToken = Nothing) As Task
 
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
-
+            Dim clientHandler As HttpClientHandler =
+                If(networkCredentials Is Nothing,
+                   New HttpClientHandler,
+                   New HttpClientHandler With {.Credentials = networkCredentials})
             Await DownloadFileAsync(
                 addressUri,
                 destinationFileName,
-                networkCredentials,
+                clientHandler,
                 dialog,
                 connectionTimeout,
                 overwrite,
@@ -121,11 +125,151 @@ Namespace Microsoft.VisualBasic.Devices
             Await DownloadFileAsync(
                 addressUri,
                 destinationFileName,
-                networkCredentials,
+                clientHandler:=If(
+                    networkCredentials Is Nothing,
+                    New HttpClientHandler,
+                    New HttpClientHandler With {.Credentials = networkCredentials}),
                 dialog,
                 connectionTimeout,
                 overwrite,
                 onUserCancel,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
+        End Function
+
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path.
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
+        Friend Shared Async Function DownloadFileAsync(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            Optional cancelToken As CancellationToken = Nothing) As Task
+
+            If String.IsNullOrWhiteSpace(address) Then
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
+            End If
+
+            Dim addressUri As Uri = GetUri(address.Trim())
+
+            ' Get network credentials
+            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
+            Dim clientHandler As HttpClientHandler =
+                If(networkCredentials Is Nothing,
+                   New HttpClientHandler,
+                   New HttpClientHandler With {.Credentials = networkCredentials})
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                clientHandler,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
+        End Function
+
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path.
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
+        Friend Shared Async Function DownloadFileAsync(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption,
+            Optional cancelToken As CancellationToken = Nothing) As Task
+
+            If String.IsNullOrWhiteSpace(address) Then
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
+            End If
+
+            Dim addressUri As Uri = GetUri(address.Trim())
+
+            ' Get network credentials
+            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
+            Dim clientHandler As HttpClientHandler =
+                If(networkCredentials Is Nothing,
+                   New HttpClientHandler,
+                   New HttpClientHandler With {.Credentials = networkCredentials})
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                clientHandler,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
+        End Function
+
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path.
+        ''' </summary>
+        ''' <param name="addressUri">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
+        ''' <remarks>
+        '''  Function will Throw on unhandled exceptions.
+        ''' </remarks>
+        Friend Shared Async Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            networkCredentials As ICredentials,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            Optional cancelToken As CancellationToken = Nothing) As Task
+
+            Dim clientHandler As HttpClientHandler =
+                If(networkCredentials Is Nothing,
+                   New HttpClientHandler,
+                   New HttpClientHandler With {.Credentials = networkCredentials})
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                clientHandler,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel:=UICancelOption.ThrowException,
                 cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
@@ -221,123 +365,6 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             End Try
 
-        End Function
-
-        ''' <summary>
-        '''  Downloads a file from the network to the specified path.
-        ''' </summary>
-        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
-        ''' <param name="userName">The name of the user performing the download.</param>
-        ''' <param name="password">The user's password.</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists.
-        ''' </param>
-        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
-        Friend Shared Async Function DownloadFileAsync(
-            address As String,
-            destinationFileName As String,
-            userName As String,
-            password As String,
-            dialog As ProgressDialog,
-            connectionTimeout As Integer,
-            overwrite As Boolean,
-            Optional cancelToken As CancellationToken = Nothing) As Task
-
-            Await DownloadFileAsync(
-                address,
-                destinationFileName,
-                userName,
-                password,
-                dialog,
-                connectionTimeout,
-                overwrite,
-                onUserCancel:=UICancelOption.ThrowException,
-                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
-        End Function
-
-        ''' <summary>
-        '''  Downloads a file from the network to the specified path.
-        ''' </summary>
-        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
-        ''' <param name="userName">The name of the user performing the download.</param>
-        ''' <param name="password">The user's password.</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists.
-        ''' </param>
-        ''' <param name="onUserCancel">
-        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
-        ''' </param>
-        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
-        Friend Shared Async Function DownloadFileAsync(
-            address As String,
-            destinationFileName As String,
-            userName As String,
-            password As String,
-            dialog As ProgressDialog,
-            connectionTimeout As Integer,
-            overwrite As Boolean,
-            onUserCancel As UICancelOption,
-            Optional cancelToken As CancellationToken = Nothing) As Task
-
-            If String.IsNullOrWhiteSpace(address) Then
-                Throw VbUtils.GetArgumentNullException(NameOf(address))
-            End If
-
-            Dim addressUri As Uri = GetUri(address.Trim())
-
-            ' Get network credentials
-            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
-
-            Await DownloadFileAsync(
-                addressUri,
-                destinationFileName,
-                networkCredentials,
-                dialog,
-                connectionTimeout,
-                overwrite,
-                onUserCancel,
-                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
-        End Function
-
-        ''' <summary>
-        '''  Downloads a file from the network to the specified path.
-        ''' </summary>
-        ''' <param name="addressUri">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
-        ''' <param name="dialog">A ProgressDialog or Nothing.</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists.
-        ''' </param>
-        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
-        ''' <remarks>
-        '''  Function will Throw on unhandled exceptions.
-        ''' </remarks>
-        Friend Shared Async Function DownloadFileAsync(
-            addressUri As Uri,
-            destinationFileName As String,
-            networkCredentials As ICredentials,
-            dialog As ProgressDialog,
-            connectionTimeout As Integer,
-            overwrite As Boolean,
-            Optional cancelToken As CancellationToken = Nothing) As Task
-
-            Await DownloadFileAsync(
-                addressUri,
-                destinationFileName,
-                networkCredentials,
-                dialog,
-                connectionTimeout,
-                overwrite,
-                onUserCancel:=UICancelOption.ThrowException,
-                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
     End Class
