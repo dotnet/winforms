@@ -3040,7 +3040,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             DataGridView.OnCommonCellContentClick(e.ColumnIndex, e.RowIndex, e.Clicks > 1);
         }
 
-        if (e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
+        if (DataGridView is not null && e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
         {
             OnMouseUp(e);
         }
