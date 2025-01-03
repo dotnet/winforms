@@ -152,9 +152,9 @@ public class ToolStripSystemRendererTests : IDisposable
     }
 
     [WinFormsFact]
-    public void OnRenderMenuItemBackground_WithBackgroundImage_RendersCorrectly()
+    public void OnRenderMenuItemBackground_WithoutBackgroundImage_RendersCorrectly()
     {
-        using ToolStripMenuItem item = new() { BackgroundImage = new Bitmap(10, 10) };
+        using ToolStripMenuItem item = new();
         ToolStripItemRenderEventArgs args = new(_graphics, item);
 
         Action action = () => _toolStripSystemRenderer.TestAccessor().Dynamic.OnRenderMenuItemBackground(args);
@@ -162,9 +162,9 @@ public class ToolStripSystemRendererTests : IDisposable
     }
 
     [WinFormsFact]
-    public void OnRenderMenuItemBackground_WithoutBackgroundImage_RendersCorrectly()
+    public void OnRenderMenuItemBackground_WithBackgroundImage_RendersCorrectly()
     {
-        using ToolStripMenuItem item = new();
+        using ToolStripMenuItem item = new() { BackgroundImage = new Bitmap(10, 10) };
         ToolStripItemRenderEventArgs args = new(_graphics, item);
 
         Action action = () => _toolStripSystemRenderer.TestAccessor().Dynamic.OnRenderMenuItemBackground(args);
