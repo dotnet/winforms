@@ -86,19 +86,19 @@ public class ToolStripSystemRendererTests : IDisposable
     }
 
     [WinFormsFact]
-    public void OnRenderItemBackground_NullArgs_DoesNotThrow()
-    {
-        Action action = () => _toolStripSystemRenderer.TestAccessor().Dynamic.OnRenderItemBackground(null);
-        action.Should().NotThrow();
-    }
-
-    [WinFormsFact]
     public void OnRenderItemBackground_ValidArgs_DoesNotThrow()
     {
         using ToolStripButton item = new();
         ToolStripItemRenderEventArgs args = new(_graphics, item);
 
         Action action = () => _toolStripSystemRenderer.TestAccessor().Dynamic.OnRenderItemBackground(args);
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void OnRenderItemBackground_NullArgs_DoesNotThrow()
+    {
+        Action action = () => _toolStripSystemRenderer.TestAccessor().Dynamic.OnRenderItemBackground(null);
         action.Should().NotThrow();
     }
 
