@@ -82,6 +82,11 @@
         <target state="translated">페이지(&amp;P)</target>
         <note />
       </trans-unit>
+      <trans-unit id="previewControl.AccessibleDescription">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
       <trans-unit id="previewControl.AccessibleName">
         <source>PreviewControl</source>
         <target state="translated">PreviewControl</target>

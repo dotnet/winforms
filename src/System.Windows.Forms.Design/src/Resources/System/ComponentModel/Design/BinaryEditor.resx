@@ -127,7 +127,7 @@
     <value>0</value>
   </data>
   <data name="byteViewer.Text">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="&gt;&gt;byteViewer.Name">
     <value xml:space="preserve">byteViewer</value>

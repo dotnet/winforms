@@ -37,6 +37,21 @@
         <target state="translated">&amp;Visualização:</target>
         <note />
       </trans-unit>
+      <trans-unit id="listViewCannedMasks.Columns">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="listViewCannedMasks.Columns1">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="listViewCannedMasks.Columns2">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

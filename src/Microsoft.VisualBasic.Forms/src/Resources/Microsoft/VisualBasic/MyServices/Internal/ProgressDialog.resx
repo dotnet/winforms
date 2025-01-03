@@ -114,7 +114,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LabelInfo.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="LabelInfo.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Top, Left, Right</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -146,7 +146,7 @@
   <data name="&gt;&gt;LabelInfo.ZOrder">
     <value xml:space="preserve">2</value>
   </data>
-  <data name="ProgressBarWork.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="ProgressBarWork.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Top, Left, Right</value>
   </data>
   <data name="ProgressBarWork.Location" type="System.Drawing.Point, System.Drawing">
@@ -170,7 +170,7 @@
   <data name="&gt;&gt;ProgressBarWork.ZOrder">
     <value xml:space="preserve">1</value>
   </data>
-  <data name="ButtonCloseDialog.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="ButtonCloseDialog.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Top, Right</value>
   </data>
   <data name="ButtonCloseDialog.AutoSize" type="System.Boolean, mscorlib">

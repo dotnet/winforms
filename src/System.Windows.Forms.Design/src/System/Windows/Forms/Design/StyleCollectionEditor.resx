@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -637,7 +637,7 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="columnsAndRowsListView.Columns">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="membersColumnHeader.Text">
     <value xml:space="preserve">Member</value>
@@ -646,7 +646,7 @@
     <value>75</value>
   </data>
   <data name="columnsAndRowsListView.Columns1">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="sizeTypeColumnHeader.Text">
     <value xml:space="preserve">Size Type</value>
@@ -655,7 +655,7 @@
     <value>75</value>
   </data>
   <data name="columnsAndRowsListView.Columns2">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="valueColumnHeader.Text">
     <value xml:space="preserve">Value</value>

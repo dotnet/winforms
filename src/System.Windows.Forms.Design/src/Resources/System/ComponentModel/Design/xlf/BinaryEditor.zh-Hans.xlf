@@ -17,6 +17,11 @@
         <target state="translated">保存(&amp;S)...</target>
         <note />
       </trans-unit>
+      <trans-unit id="byteViewer.Text">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
       <trans-unit id="groupBoxMode.Text">
         <source>Display Mode</source>
         <target state="translated">显示模式</target>

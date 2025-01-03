@@ -278,7 +278,7 @@
     <value xml:space="preserve">0</value>
   </data>
   <data name="previewControl.AccessibleDescription">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="previewControl.AccessibleName">
     <value xml:space="preserve">PreviewControl</value>

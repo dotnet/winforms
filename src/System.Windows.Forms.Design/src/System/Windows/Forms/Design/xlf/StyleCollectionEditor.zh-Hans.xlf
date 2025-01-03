@@ -37,6 +37,21 @@
         <target state="translated">列和行列表</target>
         <note />
       </trans-unit>
+      <trans-unit id="columnsAndRowsListView.Columns">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsAndRowsListView.Columns1">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnsAndRowsListView.Columns2">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
       <trans-unit id="columnsOrRowsComboBox.Items">
         <source>Columns</source>
         <target state="translated">列</target>

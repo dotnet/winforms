@@ -17,6 +17,11 @@
         <target state="translated">저장(&amp;S)...</target>
         <note />
       </trans-unit>
+      <trans-unit id="byteViewer.Text">
+        <source>0</source>
+        <target state="new">0</target>
+        <note />
+      </trans-unit>
       <trans-unit id="groupBoxMode.Text">
         <source>Display Mode</source>
         <target state="translated">표시 모드</target>

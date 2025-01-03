@@ -116,19 +116,19 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="listViewCannedMasks.Columns">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="maskDescriptionHeader.Width" type="System.Int32, mscorlib">
     <value>160</value>
   </data>
   <data name="listViewCannedMasks.Columns1">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="dataFormatHeader.Width" type="System.Int32, mscorlib">
     <value>160</value>
   </data>
   <data name="listViewCannedMasks.Columns2">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="validatingTypeHeader.Width" type="System.Int32, mscorlib">
     <value>150</value>

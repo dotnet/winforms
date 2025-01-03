@@ -2900,7 +2900,7 @@ information.
 </value>
   </data>
   <data name="ExDlgMsgFooterSwitchable" xml:space="preserve">
-    <value />
+    <value xml:space="preserve">0</value>
   </data>
   <data name="ExDlgMsgHeaderNonSwitchable" xml:space="preserve">
     <value>Application does not support just-in-time (JIT)
