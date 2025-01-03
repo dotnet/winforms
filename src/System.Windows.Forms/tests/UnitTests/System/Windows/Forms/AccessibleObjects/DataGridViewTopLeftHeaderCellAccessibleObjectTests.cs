@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 
@@ -11,7 +13,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     [WinFormsFact]
     public void DataGridViewTopLeftHeaderCellAccessibleObject_Ctor_Default()
     {
-        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null);
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
 
         Assert.Null(accessibleObject.Owner);
     }
@@ -20,7 +22,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     public void DataGridViewTopLeftHeaderCellAccessibleObject_Bounds_ThrowsException_IfOwnerIsNull()
     {
         Assert.Throws<InvalidOperationException>(() =>
-            new DataGridViewTopLeftHeaderCellAccessibleObject(null).Bounds);
+            new DataGridViewTopLeftHeaderCellAccessibleObject(null!).Bounds);
     }
 
     [WinFormsFact]
@@ -57,11 +59,12 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         Assert.True(control.IsHandleCreated);
     }
 
-    public static IEnumerable<object[]> DataGridViewTopLeftHeaderCellAccessibleObject_DefaultAction_TestData()
-    {
-        yield return new object[] { true, SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction };
-        yield return new object[] { false, string.Empty };
-    }
+    public static TheoryData<bool, string> DataGridViewTopLeftHeaderCellAccessibleObject_DefaultAction_TestData =>
+        new TheoryData<bool, string>
+        {
+            { true, SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction },
+            { false, string.Empty }
+        };
 
     [WinFormsTheory]
     [MemberData(nameof(DataGridViewTopLeftHeaderCellAccessibleObject_DefaultAction_TestData))]
@@ -78,6 +81,36 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     }
 
     [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_DefaultAction_ThrowsInvalidOperationException_WhenOwnerIsNull()
+    {
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
+
+        Action action = () => _ = accessibleObject.DefaultAction;
+        action.Should().Throw<InvalidOperationException>().WithMessage(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_State_ThrowsInvalidOperationException_IfOwnerIsNull()
+    {
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
+
+        Action action = () => _ = accessibleObject.State;
+        action.Should().Throw<InvalidOperationException>().WithMessage(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_State_ReturnsSelectable()
+    {
+        using DataGridView control = new();
+        using DataGridViewTopLeftHeaderCell cell = new();
+        control.TopLeftHeaderCell = cell;
+
+        AccessibleStates state = cell.AccessibilityObject.State;
+
+        state.Should().HaveFlag(AccessibleStates.Selectable);
+    }
+
+    [WinFormsFact]
     public void DataGridViewTopLeftHeaderCellAccessibleObject_Value_ReturnsExpected()
     {
         using DataGridViewTopLeftHeaderCell cell = new();
@@ -88,7 +121,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     [WinFormsFact]
     public void DataGridViewTopLeftHeaderCellAccessibleObject_ControlType_ReturnsExpected()
     {
-        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null);
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId;
 
@@ -109,37 +142,99 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         Assert.False(control.IsHandleCreated);
     }
 
-    public static IEnumerable<object[]> DataGridViewTopLeftHeaderCellAccessibleObject_Name_TestData()
-    {
-        yield return new object[] { RightToLeft.No, SR.DataGridView_AccTopLeftColumnHeaderCellName };
-        yield return new object[] { RightToLeft.Yes, SR.DataGridView_AccTopLeftColumnHeaderCellNameRTL };
-    }
+    public static TheoryData<RightToLeft, object?, string> DataGridViewTopLeftHeaderCellAccessibleObject_Name_TestData =>
+        new TheoryData<RightToLeft, object?, string>
+        {
+            { RightToLeft.No, null, SR.DataGridView_AccTopLeftColumnHeaderCellName },
+            { RightToLeft.Yes, null, SR.DataGridView_AccTopLeftColumnHeaderCellNameRTL },
+            { RightToLeft.No, "It is not empty string", string.Empty },
+            { RightToLeft.Yes, "It is not empty string", string.Empty }
+        };
 
     [WinFormsTheory]
     [MemberData(nameof(DataGridViewTopLeftHeaderCellAccessibleObject_Name_TestData))]
-    public void DataGridViewTopLeftHeaderCellAccessibleObject_Name_ReturnsExpected(RightToLeft value, string expected)
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Name_ReturnsExpected(RightToLeft rightToLeft, object? value, string expected)
     {
         using DataGridView control = new();
         using DataGridViewTopLeftHeaderCell cell = new();
 
         control.TopLeftHeaderCell = cell;
-        control.RightToLeft = value;
+        control.RightToLeft = rightToLeft;
+        cell.Value = value;
 
-        Assert.Equal(expected, cell.AccessibilityObject.Name);
-        Assert.False(control.IsHandleCreated);
+        cell.AccessibilityObject.Name.Should().Be(expected);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
-    public void DataGridViewTopLeftHeaderCellAccessibleObject_Name_ReturnsEmptyString_IfOwnerValueIsNotEmptySring()
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Name_ThrowsInvalidOperationException_WhenOwnerIsNull()
+    {
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
+
+        Action action = () => _ = accessibleObject.Name;
+        action.Should().Throw<InvalidOperationException>().WithMessage(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_DoDefaultAction_SelectsAllCells()
     {
         using DataGridView control = new();
         using DataGridViewTopLeftHeaderCell cell = new();
-
-        cell.Value = "It is not empty string";
         control.TopLeftHeaderCell = cell;
+        control.CreateControl();
 
-        Assert.Equal(string.Empty, cell.AccessibilityObject.Name);
-        Assert.False(control.IsHandleCreated);
+        cell.AccessibilityObject.DoDefaultAction();
+
+        control.AreAllCellsSelected(false).Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Navigate_ThrowsInvalidOperationException_IfOwnerIsNull()
+    {
+        DataGridViewTopLeftHeaderCellAccessibleObject accessibleObject = new(null!);
+
+        Action action = () => accessibleObject.Navigate(AccessibleNavigation.Next);
+        action.Should().Throw<InvalidOperationException>().WithMessage(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Navigate_ReturnsNull_IfDataGridViewIsNull()
+    {
+        using DataGridViewTopLeftHeaderCell cell = new();
+        AccessibleObject accessibleObject = cell.AccessibilityObject;
+
+        accessibleObject.Navigate(AccessibleNavigation.Next).Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleNavigation.Previous)]
+    [InlineData(AccessibleNavigation.Left)]
+    [InlineData(AccessibleNavigation.Right)]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Navigate_ReturnsNull_IfNoNavigationPossible(AccessibleNavigation direction)
+    {
+        using DataGridView control = new();
+        using DataGridViewTopLeftHeaderCell cell = new();
+        control.TopLeftHeaderCell = cell;
+        control.CreateControl();
+
+        AccessibleObject accessibleObject = cell.AccessibilityObject;
+
+        accessibleObject.Navigate(direction).Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTopLeftHeaderCellAccessibleObject_Navigate_ReturnsNextSibling()
+    {
+        using DataGridView control = new();
+        using DataGridViewTopLeftHeaderCell cell = new();
+        control.TopLeftHeaderCell = cell;
+        control.Columns.Add(new DataGridViewTextBoxColumn());
+        control.CreateControl();
+
+        AccessibleObject accessibleObject = cell.AccessibilityObject;
+        AccessibleObject expected = control.Columns[0].HeaderCell.AccessibilityObject;
+
+        accessibleObject.Navigate(AccessibleNavigation.Next).Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -151,7 +246,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         using DataGridViewTopLeftHeaderCell cell = new();
 
         control.TopLeftHeaderCell = cell;
-        AccessibleObject expected = control.AccessibilityObject.GetChild(0);
+        AccessibleObject? expected = control.AccessibilityObject.GetChild(0);
 
         Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
@@ -182,7 +277,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         using DataGridViewTopLeftHeaderCell cell = new();
 
         control.TopLeftHeaderCell = cell;
-        AccessibleObject expected = control.AccessibilityObject.GetChild(0)?.GetChild(1);
+        AccessibleObject? expected = control.AccessibilityObject.GetChild(0)?.GetChild(1);
 
         Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
