@@ -75,6 +75,11 @@ public partial class ComboBox
             {
                 DrawFlatCombo(comboBox, g);
             }
+            else
+            {
+                // Draw the drop down
+                DrawFlatComboDropDown(comboBox, g, _dropDownRect);
+            }
 
             bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
 

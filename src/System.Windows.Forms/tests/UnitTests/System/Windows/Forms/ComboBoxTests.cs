@@ -2750,6 +2750,38 @@ public class ComboBoxTests
         Assert.Equal(numItems, comboBox.Items.Count);
     }
 
+    [WinFormsFact]
+    public void ComboBox_OnLostFocus_AutoCompleteModeNone_DoesNotClearMatchingText()
+    {
+        using ComboBox comboBox = new();
+        var comboBoxAccessor = comboBox.TestAccessor().Dynamic;
+        comboBoxAccessor._canFireLostFocus= true;
+        comboBox.AutoCompleteMode = AutoCompleteMode.None;
+        comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+        comboBoxAccessor.MatchingText = "Test";
+        comboBox.DropDownStyle = ComboBoxStyle.Simple;
+        comboBoxAccessor.OnLostFocus(EventArgs.Empty);
+
+        string matchingText = comboBoxAccessor.MatchingText;
+        matchingText.Should().Be("Test");
+    }
+
+    [WinFormsFact]
+    public void ComboBox_OnLostFocus_AutoCompleteModeNotNone_ClearsMatchingText()
+    {
+        using ComboBox comboBox = new();
+        var comboBoxAccessor = comboBox.TestAccessor().Dynamic;
+        comboBoxAccessor._canFireLostFocus = true;
+        comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+        comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+        comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        comboBoxAccessor.MatchingText = "Test";
+        comboBoxAccessor.OnLostFocus(EventArgs.Empty);
+
+        string matchingText = comboBoxAccessor.MatchingText;
+        matchingText.Should().BeEmpty();
+    }
+
     private class OwnerDrawComboBox : ComboBox
     {
         public OwnerDrawComboBox()
