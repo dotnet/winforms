@@ -57,10 +57,10 @@ Namespace Microsoft.VisualBasic.Devices
                                           New HttpClient(clientHandler))
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
 
-            'Create the copier
+            ' Create the copier
             Dim copier As New HttpClientCopy(client, dialog)
 
-            'Upload the file
+            ' Upload the file
             Try
                 Await copier.UploadFileWorkerAsync(
                     filePath:=normalizedFilePath,
