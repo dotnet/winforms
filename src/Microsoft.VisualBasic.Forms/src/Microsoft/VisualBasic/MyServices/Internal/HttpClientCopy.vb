@@ -106,23 +106,23 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
             Dim response As HttpResponseMessage = Nothing
             Dim totalBytesRead As Long = 0
-            Using linkedCts As CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelTokenSourceGet.Token, externalToken)
-                Try
+            Try
+                Using linkedCts As CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelTokenSourceGet.Token, externalToken)
                     response = Await _httpClient.GetAsync(
-                        requestUri:=addressUri,
-                        completionOption:=HttpCompletionOption.ResponseHeadersRead,
-                        cancellationToken:=_cancelTokenSourceGet.Token).ConfigureAwait(continueOnCapturedContext:=False)
-                Catch ex As TaskCanceledException
-                    If ex.CancellationToken = externalToken Then
-                        externalToken.ThrowIfCancellationRequested()
-                    ElseIf ex.CancellationToken = _cancelTokenSourceGet.Token Then
-                        ' a real cancellation, triggered by the caller
-                        Throw
-                    Else
-                        Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
-                    End If
-                End Try
-            End Using
+                    requestUri:=addressUri,
+                    completionOption:=HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken:=_cancelTokenSourceGet.Token).ConfigureAwait(continueOnCapturedContext:=False)
+                End Using
+            Catch ex As TaskCanceledException
+                If ex.CancellationToken = externalToken Then
+                    externalToken.ThrowIfCancellationRequested()
+                ElseIf ex.CancellationToken = _cancelTokenSourceGet.Token Then
+                    ' a real cancellation, triggered by the caller
+                    Throw
+                Else
+                    Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
+                End If
+            End Try
             Select Case response.StatusCode
                 Case HttpStatusCode.OK
                     _cancelTokenSourceReadStream = CancellationTokenSource.CreateLinkedTokenSource(New CancellationTokenSource().Token, externalToken)
