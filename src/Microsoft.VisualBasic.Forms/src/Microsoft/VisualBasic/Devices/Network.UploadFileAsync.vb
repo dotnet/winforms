@@ -76,6 +76,8 @@ Namespace Microsoft.VisualBasic.Devices
                     End If
                     Throw
                 End If
+            Finally
+                CloseProgressDialog(dialog)
             End Try
 
         End Function

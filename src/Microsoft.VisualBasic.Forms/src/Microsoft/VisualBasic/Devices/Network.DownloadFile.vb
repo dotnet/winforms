@@ -150,6 +150,7 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
+                Dim cancelToken As New CancellationToken
                 Dim t As Task = DownloadFileAsync(
                     address,
                     destinationFileName,
@@ -158,7 +159,8 @@ Namespace Microsoft.VisualBasic.Devices
                     dialog,
                     connectionTimeout,
                     overwrite,
-                    onUserCancel:=UICancelOption.ThrowException)
+                    onUserCancel:=UICancelOption.ThrowException,
+                    cancelToken)
 
                 If t.IsFaulted Then
                     ' This will be true if any parameters are bad
@@ -166,7 +168,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Else
                     dialog?.ShowProgressDialog()
                     t.Wait()
-                    If t.IsFaulted Then
+                    If t.IsFaulted OrElse t.IsCanceled Then
                         Throw t.Exception
                     End If
                 End If
