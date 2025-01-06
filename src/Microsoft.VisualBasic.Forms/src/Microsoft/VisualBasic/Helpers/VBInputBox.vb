@@ -104,7 +104,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             labelGraphics.Dispose()
             If labelSizeNeeded.Height > Label.Height Then
                 ' The current label size is not large enough to accommodate the prompt. We need
-                '  to expand the label and the dialog, and move the textbox to make room.
+                ' to expand the label and the dialog, and move the textbox to make room.
                 Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height - Label.Height)
                 Label.Height += dialogHeightChange
                 TextBox.Top += dialogHeightChange

@@ -310,7 +310,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Else
                     dialog?.ShowProgressDialog()
                     Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
-                        'prevent UI freeze
+                        ' prevent UI freeze
                         Thread.Sleep(10)
                         Application.DoEvents()
                     Loop
