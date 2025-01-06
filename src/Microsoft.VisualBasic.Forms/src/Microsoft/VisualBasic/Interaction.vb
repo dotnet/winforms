@@ -19,14 +19,14 @@ Namespace Microsoft.VisualBasic
     Friend Module _Interaction
 
         Private Sub AppActivateHelper(hwndApp As IntPtr, processId As String)
-            '  if no window with name (full or truncated) or task id, return an error
-            '  if the window is not enabled or not visible, get the first window owned
-            '  by it that is not enabled or not visible
+            ' if no window with name (full or truncated) or task id, return an error
+            ' if the window is not enabled or not visible, get the first window owned
+            ' by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
             If Not SafeNativeMethods.IsWindowEnabled(hwndApp) _
                OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
 
-                '  scan to the next window until failure
+                ' scan to the next window until failure
                 hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                 Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
 
@@ -44,13 +44,13 @@ Namespace Microsoft.VisualBasic
                     hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
                 Loop
 
-                '  if scan failed, return an error
+                ' if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
                     Dim message As String = Utils.GetResourceString(SR.ProcessNotFound, processId)
                     Throw New ArgumentException(message)
                 End If
 
-                '  set active window to the owned one
+                ' set active window to the owned one
                 hwndApp = hwndOwned
             End If
 
@@ -180,7 +180,7 @@ Namespace Microsoft.VisualBasic
             Dim windowHandle As IntPtr = NativeMethods.FindWindow(lpClassName:=Nothing, lpWindowName:=Title)
             Const MAX_TITLE_LENGTH As Integer = 511
 
-            '  if no match, search through all parent windows
+            ' if no match, search through all parent windows
             If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then
                 Dim appTitle As String
                 ' Old implementation uses MAX_TITLE_LENGTH characters, INCLUDING NULL character.
@@ -224,7 +224,7 @@ Namespace Microsoft.VisualBasic
                         wFlag:=NativeTypes.GW_CHILD)
 
                     Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
-                        '  get the window caption and test for a right-aligned substring
+                        ' get the window caption and test for a right-aligned substring
                         appTitleLength = NativeMethods.GetWindowText(
                             hWnd:=windowHandle,
                             lpString:=appTitleBuilder,
@@ -317,8 +317,8 @@ Namespace Microsoft.VisualBasic
             ' Only allow legal button combinations to be set, one choice from each group
             ' These bit constants are defined in System.Windows.Forms.MessageBox
             ' Low-order 4 bits (0x000f), legal values: 0, 1, 2, 3, 4, 5
-            '     next 4 bits (0x00f0), legal values: 0, &H10, &H20, &H30, &H40
-            '     next 4 bits (0x0f00), legal values: 0, &H100, &H200
+            ' next 4 bits (0x00f0), legal values: 0, &H10, &H20, &H30, &H40
+            ' next 4 bits (0x0f00), legal values: 0, &H100, &H200
             If ((Buttons And &HFI) > MsgBoxStyle.RetryCancel) _
                OrElse ((Buttons And &HF0I) > MsgBoxStyle.Information) _
                OrElse ((Buttons And &HF00I) > MsgBoxStyle.DefaultButton3) Then
@@ -400,10 +400,10 @@ Namespace Microsoft.VisualBasic
 
                 ' We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
                 ' Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess()
-                '       even though this version of the StartupInfo type uses IntPtr instead of String because
-                '       GetStartupInfo() above requires that version so we don't free the string fields since the
-                '       API manages it instead. But its OK here because we are just passing along the memory
-                '       that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
+                ' even though this version of the StartupInfo type uses IntPtr instead of String because
+                ' GetStartupInfo() above requires that version so we don't free the string fields since the
+                ' API manages it instead. But its OK here because we are just passing along the memory
+                ' that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
                 ok = NativeMethods.CreateProcess(
                     lpApplicationName:=Nothing,
