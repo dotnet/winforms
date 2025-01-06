@@ -362,6 +362,7 @@ Namespace Microsoft.VisualBasic.Devices
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException _
                    OrElse Not dialog.UserCanceledTheDialog Then
+                    CloseProgressDialog(dialog)
                     Throw
                 End If
             End Try
