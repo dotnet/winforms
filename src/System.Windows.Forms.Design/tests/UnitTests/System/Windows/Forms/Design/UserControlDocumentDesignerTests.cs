@@ -10,8 +10,9 @@ public class UserControlDocumentDesignerTests
     [Fact]
     public void Constructor_ShouldSetAutoResizeHandlesToTrue()
     {
-        UserControlDocumentDesigner userControl = new();
+        UserControlDocumentDesigner userControlDocumentDesigner;
+        userControlDocumentDesigner = new();
 
-        userControl.AutoResizeHandles.Should().BeTrue();
+        userControlDocumentDesigner.AutoResizeHandles.Should().BeTrue();
     }
 }
