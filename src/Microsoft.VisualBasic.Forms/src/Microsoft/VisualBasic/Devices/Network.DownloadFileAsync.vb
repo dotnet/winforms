@@ -361,6 +361,7 @@ Namespace Microsoft.VisualBasic.Devices
                     externalToken:=cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
+                    CloseProgressDialog(dialog)
                     Throw
                 End If
             End Try
