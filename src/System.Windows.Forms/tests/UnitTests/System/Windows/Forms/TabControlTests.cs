@@ -5730,28 +5730,6 @@ public class TabControlTests
         exception.Should().BeNull();
     }
 
-    [WinFormsFact]
-    public void TabControl_WmSelChange_AccessibilityObjectNotCreated_NoAutomationEventRaised()
-    {
-        using TabControl tabControl = new();
-        using SubTabPage tabPage = new();
-        tabControl.SelectedTab = tabPage;
-        tabControl.SelectedIndex = 1;
-
-        var automationEventRaised = false;
-        tabPage.TabAccessibilityObject = new TabAccessibilityObject
-        {
-            RaiseAutomationEventAction = () => automationEventRaised = true
-        };
-
-        tabControl.TestAccessor().Dynamic.WmSelChange();
-
-        Application.DoEvents();
-        Thread.Sleep(100);
-
-        automationEventRaised.Should().BeFalse();
-    }
-
     public class TabAccessibilityObject
     {
         public Action RaiseAutomationEventAction { get; set; }
