@@ -6517,19 +6517,17 @@ public partial class DataGridViewCellTests
         dataGridView.Columns.Add(column);
         SubDataGridViewCheckBoxCell cell = (SubDataGridViewCheckBoxCell)dataGridView.Rows[0].Cells[0];
 
-        dataGridView.CellContentClick += new DataGridViewCellEventHandler(dataGridView_CellContentClick);
+        dataGridView.CellContentClick += new DataGridViewCellEventHandler((s, e) =>
+        {
+            DataGridView dataGridView = (DataGridView)s;
+            dataGridView.Rows.Clear();
+            dataGridView.Rows.Add();
+        });
         string cellName = "TestCellName";
         cell.Value = false;
 
         Action act = () => cell.MouseClick(new DataGridViewCellMouseEventArgs(0, 0, 10, 10, new MouseEventArgs(MouseButtons.Left, 1, 10, 10, 0)));
         act.Should().NotThrow();
-    }
-
-    private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-    {
-        DataGridView dataGridView = (DataGridView)sender;
-        dataGridView.Rows.Clear();
-        dataGridView.Rows.Add();
     }
 
     private class SubDataGridViewCheckBoxCell : DataGridViewCheckBoxCell

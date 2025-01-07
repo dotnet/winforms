@@ -3040,6 +3040,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             DataGridView.OnCommonCellContentClick(e.ColumnIndex, e.RowIndex, e.Clicks > 1);
         }
 
+        // Verify that the DataGridView is not null again,because a custom
+        // Click event handler may delete the cell and the parent DataGridView.
         if (DataGridView is not null && e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
         {
             OnMouseUp(e);
