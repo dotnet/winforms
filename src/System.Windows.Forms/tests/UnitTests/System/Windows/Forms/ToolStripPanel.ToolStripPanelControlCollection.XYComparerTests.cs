@@ -13,23 +13,23 @@ public class ToolStripPanel_ToolStripPanelControlCollection_XYComparerTests
     private readonly Control _control1 = new() { Bounds = new Rectangle(10, 20, 100, 100) };
     private readonly Control _control2 = new() { Bounds = new Rectangle(10, 10, 100, 100) };
 
-    [WinFormsFact]
-    public void Compare_FirstControlNull_ReturnsNegativeOne()
+    public void Dispose()
     {
+        _control1.Dispose();
+        _control2.Dispose();
+    }
+
+    [WinFormsFact]
+    public void Compare_FirstControlNull_ReturnsNegativeOne() =>
         _comparer.Compare(null, _control1).Should().Be(-1);
-    }
 
     [WinFormsFact]
-    public void Compare_SecondControlNull_ReturnsOne()
-    {
+    public void Compare_SecondControlNull_ReturnsOne() =>
         _comparer.Compare(_control1, null).Should().Be(1);
-    }
 
     [WinFormsFact]
-    public void Compare_BothControlsNull_ReturnsZero()
-    {
+    public void Compare_BothControlsNull_ReturnsZero() =>
         _comparer.Compare(null, null).Should().Be(0);
-    }
 
     [WinFormsTheory]
     [InlineData(10, 10, 20, 10, -1)]
