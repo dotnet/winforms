@@ -6515,7 +6515,7 @@ public partial class DataGridViewCellTests
 
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(column);
-        SubDataGridViewCheckBoxCell cell = (SubDataGridViewCheckBoxCell)dataGridView.Rows[0].Cells[0];
+        var cell = (SubDataGridViewCheckBoxCell)dataGridView.Rows[0].Cells[0];
 
         dataGridView.CellContentClick += new DataGridViewCellEventHandler((s, e) =>
         {
