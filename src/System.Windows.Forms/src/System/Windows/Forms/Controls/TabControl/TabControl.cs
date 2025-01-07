@@ -1957,7 +1957,14 @@ public partial class TabControl : Control
             if (IsAccessibilityObjectCreated && SelectedTab?.ParentInternal is TabControl)
             {
                 SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
-                BeginInvoke((MethodInvoker)(() => SelectedTab?.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId)));
+                BeginInvoke((MethodInvoker)(() =>
+                {
+                    if (IsAccessibilityObjectCreated && SelectedTab?.ParentInternal is TabControl &&
+                         !SelectedTab.IsDisposed && SelectedTab.TabAccessibilityObject is not null)
+                    {
+                        SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+                    }
+                }));
             }
         }
         else
