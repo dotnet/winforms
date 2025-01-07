@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
+public class ControlDesignerAccessibleObjectTests : IDisposable
 {
     private class TestControl : Control
     {
@@ -25,15 +25,9 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
 
     private readonly ControlDesigner _designer;
 
-    public ControlDesignerControlDesignerAccessibleObjectTests()
-    {
-        _designer = new();
-    }
+    public ControlDesignerAccessibleObjectTests() => _designer = new();
 
-    public void Dispose()
-    {
-        _designer.Dispose();
-    }
+    public void Dispose() => _designer.Dispose();
 
     private ControlDesigner.ControlDesignerAccessibleObject CreateAccessibleObject(Action<Mock<AccessibleObject>>? configureMock = null)
     {
@@ -46,7 +40,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void Bounds_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Bounds_ReturnsExpectedValue()
     {
         Rectangle expectedBounds = new(10, 10, 100, 100);
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Bounds).Returns(expectedBounds));
@@ -54,7 +48,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void Description_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Description_ReturnsExpectedValue()
     {
         string expectedDescription = "Test Description";
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Description).Returns(expectedDescription));
@@ -63,7 +57,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void Value_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Value_ReturnsExpectedValue()
     {
         string expectedValue = "Test Value";
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Value).Returns(expectedValue));
@@ -71,14 +65,14 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void Role_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Role_ReturnsExpectedValue()
     {
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Role).Returns(AccessibleRole.PushButton));
         accessibleObject.Role.Should().Be(AccessibleRole.PushButton);
     }
 
     [Fact]
-    public void Parent_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Parent_ReturnsExpectedValue()
     {
         Mock<AccessibleObject> mockParent = new();
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.Parent).Returns(mockParent.Object));
@@ -87,13 +81,13 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void DefaultAction_ReturnsEmptyString()
+    public void ControlDesignerAccessibleObject_DefaultAction_ReturnsEmptyString()
     {
         CreateAccessibleObject().DefaultAction.Should().BeEmpty();
     }
 
     [Fact]
-    public void Name_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_Name_ReturnsExpectedValue()
     {
         Control control = new() { Name = "TestControl" };
         var accessibleObject = new ControlDesigner.ControlDesignerAccessibleObject(_designer, control);
@@ -104,7 +98,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     [Theory]
     [InlineData(AccessibleStates.Selected, true, true)]
     [InlineData(AccessibleStates.Focused, true, true)]
-    public void State_ReturnsExpectedValue(AccessibleStates state, bool isSelected, bool isPrimarySelection)
+    public void ControlDesignerAccessibleObject_State_ReturnsExpectedValue(AccessibleStates state, bool isSelected, bool isPrimarySelection)
     {
         Control control = new();
         var accessibleObject = new ControlDesigner.ControlDesignerAccessibleObject(_designer, control);
@@ -118,7 +112,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void GetChild_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_GetChild_ReturnsExpectedValue()
     {
         Mock<AccessibleObject> mockChild = new();
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.GetChild(It.IsAny<int>())).Returns(mockChild.Object));
@@ -127,7 +121,7 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void GetChildCount_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_GetChildCount_ReturnsExpectedValue()
     {
         int expectedChildCount = 3;
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.GetChildCount()).Returns(expectedChildCount));
@@ -135,21 +129,21 @@ public class ControlDesignerControlDesignerAccessibleObjectTests : IDisposable
     }
 
     [Fact]
-    public void GetFocused_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_GetFocused_ReturnsExpectedValue()
     {
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.State).Returns(AccessibleStates.Focused));
         accessibleObject.GetFocused().Should().Be(accessibleObject);
     }
 
     [Fact]
-    public void GetSelected_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_GetSelected_ReturnsExpectedValue()
     {
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.State).Returns(AccessibleStates.Selected));
         accessibleObject.GetSelected().Should().Be(accessibleObject);
     }
 
     [Fact]
-    public void HitTest_ReturnsExpectedValue()
+    public void ControlDesignerAccessibleObject_HitTest_ReturnsExpectedValue()
     {
         Mock<AccessibleObject> mockAccessibleObject = new();
         var accessibleObject = CreateAccessibleObject(mock => mock.Setup(a => a.HitTest(It.IsAny<int>(), It.IsAny<int>())).Returns(mockAccessibleObject.Object));
