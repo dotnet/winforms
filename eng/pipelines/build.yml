@@ -56,7 +56,7 @@ jobs:
     env:
       Token: $(dn-bot-dnceng-artifact-feeds-rw)
 
-  - task: MicroBuildSigningPlugin@2
+  - task: MicroBuildSigningPlugin@4
     displayName: Install MicroBuild plugin for Signing
     inputs:
       signType: $(_SignType)
