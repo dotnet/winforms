@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -124,40 +125,6 @@ Namespace Microsoft.VisualBasic.Devices
                 showUI,
                 connectionTimeout,
                 overwrite,
-                onUserCancel:=UICancelOption.ThrowException)
-        End Sub
-
-        ''' <summary>
-        '''  Downloads a file from the network to the specified path.
-        ''' </summary>
-        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
-        ''' <param name="destinationFileName">
-        '''  Name and path of file where download is saved.
-        ''' </param>
-        ''' <param name="userName">The name of the user performing the download.</param>
-        ''' <param name="password">The user's password.</param>
-        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
-        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists.
-        ''' </param>
-        Public Sub DownloadFile(
-            address As Uri,
-            destinationFileName As String,
-            userName As String,
-            password As String,
-            showUI As Boolean,
-            connectionTimeout As Integer,
-            overwrite As Boolean)
-
-            DownloadFile(
-                address,
-                destinationFileName,
-                userName,
-                password,
-                showUI,
-                connectionTimeout,
-                overwrite,
                 UICancelOption.ThrowException)
         End Sub
 
@@ -195,6 +162,8 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
+
+            ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
             DownloadFile(
@@ -205,6 +174,40 @@ Namespace Microsoft.VisualBasic.Devices
                 connectionTimeout,
                 overwrite,
                 onUserCancel)
+        End Sub
+
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path.
+        ''' </summary>
+        ''' <param name="address"><see cref="Uri"/> to the remote file,</param>
+        ''' <param name="destinationFileName">
+        '''  Name and path of file where download is saved.
+        ''' </param>
+        ''' <param name="userName">The name of the user performing the download.</param>
+        ''' <param name="password">The user's password.</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean)
+
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -311,9 +314,7 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw VbUtils.GetArgumentExceptionWithArgName(
-                    argumentName:=NameOf(connectionTimeout),
-                    resourceKey:=SR.Network_BadConnectionTimeout)
+                Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
@@ -327,9 +328,7 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 ' Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
-                    path:=destinationFileName,
-                    paramName:=NameOf(destinationFileName))
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
