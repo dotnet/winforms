@@ -289,7 +289,7 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
 
                 Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso Environment.UserInteractive Then
+                If InteractiveEnvironment(showUI) Then
                     dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
                         .LabelText = GetResourceString(
