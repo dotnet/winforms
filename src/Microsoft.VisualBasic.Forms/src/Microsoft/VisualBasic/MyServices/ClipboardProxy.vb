@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    '''  A class that wraps System.Windows.Forms.Clipboard so that
+    '''  A class that wraps <see cref="Clipboard"/> so that
     '''  a clipboard can be instanced.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
@@ -25,14 +25,14 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Removes everything from the clipboard.
+        '''  Removes everything from the <see cref="Clipboard"/>.
         ''' </summary>
         Public Sub Clear()
             Clipboard.Clear()
         End Sub
 
         ''' <summary>
-        '''  Indicates whether or not there's an audio stream saved to the clipboard.
+        '''  Indicates whether or not there's an audio stream saved to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns><see langword="True"/> if an audio stream is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsAudio() As Boolean
@@ -40,7 +40,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not there is data on the clipboard in the passed in format.
+        '''  Indicates whether or not there is data on the <see cref="Clipboard"/> in the passed in format.
+        '''  or can be converted to that format.
         ''' </summary>
         ''' <param name="format"></param>
         ''' <returns><see langword="True"/> if there's data in the passed in format, otherwise <see langword="False"/>.</returns>
@@ -57,7 +58,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicate whether or not an image has been saved to the clipboard.
+        '''  Indicate whether or not an image has been saved to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns><see langword="True"/> if an image is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsImage() As Boolean
@@ -65,7 +66,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not text is available on the clipboard.
+        '''  Indicates whether or not text is available on the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsText() As Boolean
@@ -73,7 +74,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not text is available on the clipboard in
+        '''  Indicates whether or not text is available on the <see cref="Clipboard"/> in
         '''  the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
@@ -83,15 +84,15 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Gets an audio stream from the clipboard.
+        '''  Gets an audio stream from the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns>The audio stream as a Stream.</returns>
+        ''' <returns>The audio stream as a <see cref="Stream"/>.</returns>
         Public Function GetAudioStream() As Stream
             Return Clipboard.GetAudioStream()
         End Function
 
         ''' <summary>
-        '''  Gets data from the clipboard that's been saved in the passed in format.
+        '''  Gets data from the <see cref="Clipboard"/> that's been saved in the passed in format.
         ''' </summary>
         ''' <param name="format">The type of data being sought.</param>
         ''' <returns>The data.</returns>
@@ -125,7 +126,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Gets an Image from the clipboard.
+        '''  Retrieves an <see cref="Image"/> from the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns>The image.</returns>
         Public Function GetImage() As Image
@@ -133,7 +134,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Gets text from the clipboard.
+        '''  Gets text from the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns>The text as a String.</returns>
         Public Function GetText() As String
@@ -150,7 +151,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Saves the passed in audio byte array to the clipboard.
+        '''  Saves the passed in audio byte array to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <param name="audioBytes">The byte array to be saved.</param>
         Public Sub SetAudio(audioBytes As Byte())
@@ -158,15 +159,15 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in audio stream to the clipboard.
+        '''  Saves the passed in audio stream to the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <param name="audioStream">The stream to be saved.</param>
+        ''' <param name="audioStream">The <see cref="Stream"/> to be saved.</param>
         Public Sub SetAudio(audioStream As Stream)
             Clipboard.SetAudio(audioStream)
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in data to the clipboard in the passed in format.
+        '''  Saves the passed in data to the <see cref="Clipboard"/> in the passed in format.
         ''' </summary>
         ''' <param name="format">The format in which to save the data.</param>
         ''' <param name="data">The data to be saved.</param>
@@ -185,7 +186,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in file drop list to the clipboard.
+        '''  Saves the passed in file drop list to the <see cref="Clipboard"/>.
         ''' </summary>
         ''' <param name="filePaths">The file drop list as a <see cref="StringCollection"/>.</param>
         Public Sub SetFileDropList(filePaths As StringCollection)
