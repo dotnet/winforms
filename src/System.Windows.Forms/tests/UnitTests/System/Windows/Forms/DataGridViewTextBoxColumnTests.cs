@@ -88,6 +88,28 @@ public class DataGridViewTextBoxColumnTests : IDisposable
     }
 
     [WinFormsFact]
+    public static void DataGridViewTextBoxColumn_MaxInputLength_SetNull_DoesNotThrow()
+    {
+        DataGridView? dataGridView = null;
+        DataGridViewTextBoxColumn column = new();
+        dataGridView?.Columns.Add(column);
+
+        Action action = () => column.MaxInputLength = 100;
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void DataGridViewTextBoxColumn_MaxInputLength_NullCellTemplate_ThrowsInvalidOperationException()
+    {
+        _column.CellTemplate = null;
+        int maxInput = 0;
+
+        Action action = () => maxInput = _column.MaxInputLength;
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [WinFormsFact]
     public void DataGridViewTextBoxColumn_SortMode_GetSet()
     {
         _column.SortMode = DataGridViewColumnSortMode.Programmatic;
