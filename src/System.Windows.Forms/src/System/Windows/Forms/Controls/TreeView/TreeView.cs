@@ -2825,28 +2825,24 @@ public partial class TreeView : Control
                     using (Graphics g = nmtvcd->nmcd.hdc.CreateGraphics())
                     {
                         Rectangle bounds = node.Bounds;
-                        Rectangle fillRectangle = node.Bounds;
-                        Rectangle focusRectangle = node.Bounds;
-
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(bounds.X + 1, bounds.Y); // required to center the text
+                        Point textLocation = new(bounds.X, bounds.Y); // required to center the text
 
-                        bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                        Rectangle fillRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+                        Rectangle focusRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+
+                        bounds = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
 
                         if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                         {
                             // Reverse the X-axis drawing coordinates of the rectangle.
-                            int invertedX = Width - 2 - bounds.X - textSize.Width;
-                            textLoc = new(invertedX - 2, bounds.Y);
-                            fillRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
-                            textLoc = new(invertedX - 1, bounds.Y);
-                            focusRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
-                        }
-                        else
-                        {
-                            textLoc = new(bounds.X - 1, bounds.Y);
-                            fillRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
-                            focusRectangle = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                            // Leave four pixels for node prefix symbol.
+                            int invertedX = Width - 4 - bounds.X - textSize.Width;
+
+                            // To ensure that the right side of the rectangle does not
+                            // touch the left edge of the control, 1 pixel is subtracted here.
+                            fillRectangle = new Rectangle(new Point(invertedX - 1, bounds.Y), new(textSize.Width, bounds.Height));
+                            focusRectangle = new Rectangle(new Point(invertedX, bounds.Y), new(textSize.Width, bounds.Height));
                         }
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
