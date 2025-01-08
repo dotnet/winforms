@@ -291,10 +291,15 @@ Namespace Microsoft.VisualBasic.Devices
                     If(networkCredentials Is Nothing,
                         New HttpClientHandler,
                         New HttpClientHandler With {.Credentials = networkCredentials})
-                dialog = GetProgressDialog(
-                    address:=address.AbsolutePath,
-                    fileNameWithPath:=sourceFileName,
-                    showUI)
+                If InteractiveEnvironment(showUI) Then
+                    dialog = New ProgressDialog With {
+                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
+                        .LabelText = GetResourceString(
+                            resourceKey:=SR.ProgressDialogUploadingLabel,
+                            sourceFileName,
+                        address.AbsolutePath)
+                    }
+                End If
 
                 Dim t As Task = UploadFileAsync(
                     sourceFileName,
