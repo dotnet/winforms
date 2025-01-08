@@ -6,8 +6,6 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-
 Namespace Microsoft.VisualBasic.Devices
     Friend Module NetworkUtilities
 
@@ -56,7 +54,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Centralize setup a <see cref="ProgressDialog"/> to be used with FileDownload and FileUpload.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
-        ''' <param name="fileNameWithPath">Name and path of file where download is saved.</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <returns>
         '''  <see langword="New"/> <see cref="ProgressDialog"/> if InteractiveEnvironment <see langword="True"/>
@@ -64,19 +62,21 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </returns>
         Friend Function GetProgressDialog(
             address As String,
-            fileNameWithPath As String,
+            destinationFileName As String,
             showUI As Boolean) As ProgressDialog
 
             If InteractiveEnvironment(showUI) Then
                 ' Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
-                    path:=fileNameWithPath,
-                    paramName:=NameOf(fileNameWithPath))
+                    path:=destinationFileName,
+                    paramName:=NameOf(destinationFileName))
                 Return New ProgressDialog With {
-                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                    .LabelText = VbUtils.GetResourceString(
-                        resourceKey:=SR.ProgressDialogDownloadingLabel,
-                        address, fullFilename)}
+                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                            .LabelText = Utils.GetResourceString(
+                                ResourceKey:=SR.ProgressDialogDownloadingLabel,
+                                address,
+                                fullFilename)
+                            }
             End If
             Return Nothing
         End Function

@@ -493,7 +493,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim dialog As ProgressDialog = Nothing
             Try
-                dialog = GetProgressDialog(address:=address.AbsolutePath, fileNameWithPath:=destinationFileName, showUI)
+                dialog = GetProgressDialog(address:=address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
                     addressUri:=address,
                     destinationFileName,
