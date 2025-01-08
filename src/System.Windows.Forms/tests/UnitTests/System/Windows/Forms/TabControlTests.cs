@@ -5730,24 +5730,8 @@ public class TabControlTests
         exception.Should().BeNull();
     }
 
-    public class TabAccessibilityObject
-    {
-        public Action RaiseAutomationEventAction { get; set; }
-        public void RaiseAutomationEvent(UIA_EVENT_ID eventId)
-        {
-            RaiseAutomationEventAction?.Invoke();
-        }
-    }
-
-    public enum UIA_EVENT_ID
-    {
-        UIA_SelectionItem_ElementSelectedEventId,
-        UIA_AutomationFocusChangedEventId
-    }
-
     private class SubTabPage : TabPage
     {
-        public TabAccessibilityObject TabAccessibilityObject { get; set; }
     }
 
     private class NullTextTabPage : TabPage
