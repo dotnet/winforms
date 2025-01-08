@@ -984,7 +984,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
         <source>Failed to deserialize JSON data.</source>
-        <target state="new">Failed to deserialize JSON data.</target>
+        <target state="translated">Nie można zdeserializować danych JSON.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
