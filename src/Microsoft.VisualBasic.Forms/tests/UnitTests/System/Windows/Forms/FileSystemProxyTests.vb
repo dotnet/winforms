@@ -283,7 +283,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsTheory>
         <InlineData(Nothing)>
-        <InlineData(","c)>
+        <InlineData(",")>
         Public Sub OpenTextFieldParserProxyTest(delimiter As String)
             Dim sourceDirectoryName As String = CreateTempDirectory()
             Dim fileCSV As String = CreateTempFile(sourceDirectoryName)
