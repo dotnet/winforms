@@ -807,7 +807,7 @@ public partial class CollectionEditor
                 {
                     if (_listBox.SelectedItems.Count > 1)
                     {
-                        List<ListItem> toBeDeleted = _listBox.SelectedItems.Cast<ListItem>().ToList();
+                        List<ListItem> toBeDeleted = [.._listBox.SelectedItems.Cast<ListItem>()];
                         foreach (ListItem item in toBeDeleted)
                         {
                             RemoveInternal(item);

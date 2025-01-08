@@ -15,7 +15,7 @@ public partial class PrinterSettings
         /// <summary>
         ///  Initializes a new instance of the <see cref='StringCollection'/> class.
         /// </summary>
-        public StringCollection(string[] array) => _list = new(array);
+        public StringCollection(string[] array) => _list = [..array];
 
         /// <summary>
         ///  Gets a value indicating the number of strings.
