@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests;
 
 public class DataGridViewRowHeightInfoPushedEventArgsTests
 {
-    [WinFormsTheory]
+    [Theory]
     [InlineData(1, 20, 10)]
     [InlineData(0, 20, 10)]
     [InlineData(1, 0, 10)]
