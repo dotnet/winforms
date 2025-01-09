@@ -6523,8 +6523,6 @@ public partial class DataGridViewCellTests
             dataGridView.Rows.Clear();
             dataGridView.Rows.Add();
         });
-        string cellName = "TestCellName";
-        cell.Value = false;
 
         Action act = () => cell.MouseClick(new DataGridViewCellMouseEventArgs(0, 0, 10, 10, new MouseEventArgs(MouseButtons.Left, 1, 10, 10, 0)));
         act.Should().NotThrow();
