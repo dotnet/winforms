@@ -2475,7 +2475,8 @@ internal sealed partial class PropertyGridView :
             }
 
             CommitValue(entry, valueNew, closeDropDown);
-            EditTextBox?.SelectAll();
+            EditTextBox.HookMouseDown = false;
+            EditTextBox.SelectAll();
             return true;
         }
 
@@ -3997,7 +3998,7 @@ internal sealed partial class PropertyGridView :
             startRow = 0;
         }
 
-        if (fullRefresh || OwnerGrid.HavePropertyEntriesChanged())
+        if (OwnerGrid.HavePropertyEntriesChanged())
         {
             if (HasEntries && !InPropertySet && !CommitEditTextBox())
             {
@@ -4018,7 +4019,10 @@ internal sealed partial class PropertyGridView :
             if (oldLength > 0 && !_flags.HasFlag(Flags.NoDefault))
             {
                 _positionData = CaptureGridPositionData();
-                CommonEditorHide(true);
+                if (!fullRefresh)
+                {
+                    CommonEditorHide(true);
+                }
             }
 
             UpdateHelpAttributes(_selectedGridEntry, newEntry: null);
@@ -4299,17 +4303,10 @@ internal sealed partial class PropertyGridView :
             return;
         }
 
-        bool newRow = false;
         int oldSelectedRow = _selectedRow;
-        if (_selectedRow != row || !gridEntry.Equals(_selectedGridEntry))
+        if (_selectedRow != row || (_selectedGridEntry is not null && !gridEntry.Equals(_selectedGridEntry)))
         {
             CommonEditorHide();
-            newRow = true;
-        }
-
-        if (!newRow)
-        {
-            CloseDropDown();
         }
 
         Rectangle rect = GetRectangle(row, RowValue);
@@ -4400,7 +4397,7 @@ internal sealed partial class PropertyGridView :
             _selectedGridEntry.HasFocus = FocusInside;
         }
 
-        if (!_flags.HasFlag(Flags.IsNewSelection))
+        if (!_flags.HasFlag(Flags.IsNewSelection) && !_flags.HasFlag(Flags.InPropertySet))
         {
             Focus();
         }
