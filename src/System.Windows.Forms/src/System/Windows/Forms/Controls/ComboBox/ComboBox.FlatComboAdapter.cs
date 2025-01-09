@@ -60,43 +60,6 @@ public partial class ComboBox
             return (combo.ClientRectangle == _clientRect && combo.RightToLeft == _origRightToLeft);
         }
 
-        public virtual void DrawPopUpCombo(ComboBox comboBox, Graphics g)
-        {
-            if (comboBox.DropDownStyle == ComboBoxStyle.Simple)
-            {
-                return;
-            }
-
-            bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
-
-            // Draw a dark border around everything if we're in popup mode
-            if ((!comboBox.Enabled) || (comboBox.FlatStyle == FlatStyle.Popup))
-            {
-                bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
-                Color borderPenColor = GetPopupOuterBorderColor(comboBox, focused);
-
-                using var borderPen = borderPenColor.GetCachedPenScope();
-                Pen innerPen = comboBox.Enabled ? borderPen : SystemPens.Control;
-
-                // Draw a border around the dropdown.
-                if (rightToLeft)
-                {
-                    g.DrawRectangle(
-                        innerPen,
-                        new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
-                }
-                else
-                {
-                    g.DrawRectangle(
-                        innerPen,
-                        new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
-                }
-
-                // Draw a border around the whole ComboBox.
-                g.DrawRectangle(borderPen, _outerBorder);
-            }
-        }
-
         /// <summary>
         ///  Paints over the edges of the combo box to make it appear flat.
         /// </summary>
@@ -144,6 +107,33 @@ public partial class ComboBox
             using var innerBorderPen = innerBorderColor.GetCachedPenScope();
             g.DrawRectangle(innerBorderPen, _innerBorder);
             g.DrawRectangle(innerBorderPen, _innerInnerBorder);
+
+            // Draw a dark border around everything if we're in popup mode
+            if ((!comboBox.Enabled) || (comboBox.FlatStyle == FlatStyle.Popup))
+            {
+                bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
+                Color borderPenColor = GetPopupOuterBorderColor(comboBox, focused);
+
+                using var borderPen = borderPenColor.GetCachedPenScope();
+                Pen innerPen = comboBox.Enabled ? borderPen : SystemPens.Control;
+
+                // Around the dropdown
+                if (rightToLeft)
+                {
+                    g.DrawRectangle(
+                        innerPen,
+                        new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
+                }
+                else
+                {
+                    g.DrawRectangle(
+                        innerPen,
+                        new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
+                }
+
+                // Around the whole combobox.
+                g.DrawRectangle(borderPen, _outerBorder);
+            }
         }
 
         /// <summary>
