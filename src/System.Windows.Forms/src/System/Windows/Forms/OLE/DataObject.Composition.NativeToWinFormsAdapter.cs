@@ -32,55 +32,55 @@ public unsafe partial class DataObject
 
             #region Com.IDataObject.Interface
 
-            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
+            public HRESULT DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
             }
 
-            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
+            public HRESULT DUnadvise(uint dwConnection)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->DUnadvise(dwConnection);
             }
 
-            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
+            public HRESULT EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->EnumDAdvise(ppenumAdvise);
             }
 
-            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
+            public HRESULT EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->EnumFormatEtc(dwDirection, ppenumFormatEtc);
             }
 
-            HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
+            public HRESULT GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetData(pformatetcIn, pmedium);
             }
 
-            HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
+            public HRESULT GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetDataHere(pformatetc, pmedium);
             }
 
-            HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
+            public HRESULT QueryGetData(Com.FORMATETC* pformatetc)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->QueryGetData(pformatetc);
             }
 
-            HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
+            public HRESULT GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
             }
 
-            HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
+            public HRESULT SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->SetData(pformatetc, pmedium, fRelease);
