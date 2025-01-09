@@ -34,10 +34,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Indicates whether or not there's an audio stream saved to the <see cref="Clipboard"/>.
         ''' </summary>
-        ''' <returns>
-        '''  see langword="True"/> if an audio <see cref="Stream"/> is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <returns><see langword="True"/> if an audio stream is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsAudio() As Boolean
             Return Clipboard.ContainsAudio()
         End Function
