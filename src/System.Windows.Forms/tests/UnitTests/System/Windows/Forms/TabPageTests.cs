@@ -534,7 +534,7 @@ public class TabPageTests
         Assert.Equal(Control.DefaultBackColor, control.BackColor);
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [BoolData]
     public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColorParam)
     {
@@ -614,7 +614,7 @@ public class TabPageTests
         yield return new object[] { false, TabAppearance.Normal, Control.DefaultBackColor };
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [MemberData(nameof(BackColor_GetVisualStylesWithParent_TestData))]
     public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColorParam, TabAppearance parentAppearanceParam, Color expectedParam)
     {
