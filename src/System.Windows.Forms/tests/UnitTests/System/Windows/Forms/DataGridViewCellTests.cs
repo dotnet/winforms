@@ -6603,6 +6603,31 @@ public class DataGridViewCellTests
             Times.Exactly(2));
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/12692
+    [WinFormsFact]
+    public void DataGridViewCell_OnContentClick_ClearAndReAddCell_InvokeOnMouseUpInternal()
+    {
+        using SubDataGridViewCheckBoxCell cellTemplate = new();
+        using DataGridViewColumn column = new()
+        {
+            CellTemplate = cellTemplate
+        };
+
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(column);
+        var cell = (SubDataGridViewCheckBoxCell)dataGridView.Rows[0].Cells[0];
+
+        dataGridView.CellContentClick += new DataGridViewCellEventHandler((s, e) =>
+        {
+            DataGridView dataGridView = (DataGridView)s;
+            dataGridView.Rows.Clear();
+            dataGridView.Rows.Add();
+        });
+
+        Action act = () => cell.MouseClick(new DataGridViewCellMouseEventArgs(0, 0, 10, 10, new MouseEventArgs(MouseButtons.Left, 1, 10, 10, 0)));
+        act.Should().NotThrow();
+    }
+
     private class SubDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
     {
         public SubDataGridViewCheckBoxCell()

@@ -3075,7 +3075,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             DataGridView.OnCommonCellContentClick(e.ColumnIndex, e.RowIndex, e.Clicks > 1);
         }
 
-        if (e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
+        // Verify that the DataGridView is not null again, because a custom
+        // Click event handler may delete the cell and the reference to parent DataGridView.
+        if (DataGridView is not null && e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
         {
             OnMouseUp(e);
         }
@@ -3795,16 +3797,16 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             isFirstDisplayedColumn,
             isFirstDisplayedRow);
 
-        if (DataGridView?.EditingControl is not null)
+        if (DataGridView?.EditingControl is { } editingControl)
         {
             if (setLocation)
             {
-                DataGridView.EditingControl.Location = new Point(editingControlBounds.X, editingControlBounds.Y);
+                editingControl.Location = new Point(editingControlBounds.X, editingControlBounds.Y);
             }
 
             if (setSize)
             {
-                DataGridView.EditingControl.Size = new Size(editingControlBounds.Width, editingControlBounds.Height);
+                editingControl.Size = new Size(editingControlBounds.Width, editingControlBounds.Height);
             }
         }
     }
