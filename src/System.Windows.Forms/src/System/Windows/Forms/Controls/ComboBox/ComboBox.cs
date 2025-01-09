@@ -2052,7 +2052,7 @@ public partial class ComboBox : ListControl
                 else
                 {
                     // Remove one character from matching text and rematch
-                    MatchingText = MatchingText.Remove(MatchingText.Length - 1);
+                    MatchingText = MatchingText[..^1];
                     SelectedIndex = FindString(MatchingText);
                 }
 

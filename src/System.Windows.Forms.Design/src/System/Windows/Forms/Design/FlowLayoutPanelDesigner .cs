@@ -757,7 +757,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // Get the sorted drag controls. We use these for an internal drag.
         if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            _dragControls = data.GetSortedDragControls(out int primaryIndex).OfType<Control>().ToList();
+            _dragControls = [..data.GetSortedDragControls(out int primaryIndex).OfType<Control>()];
             _primaryDragControl = _dragControls[primaryIndex];
         }
 

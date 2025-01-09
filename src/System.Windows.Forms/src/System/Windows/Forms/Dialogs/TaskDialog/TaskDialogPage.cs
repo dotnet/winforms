@@ -868,10 +868,10 @@ public class TaskDialogPage
         radioButtons.BoundPage = this;
 
         // Sort the buttons.
-        _boundCustomButtons = buttons.Where(e => !e.IsStandardButton).ToArray();
-        _boundStandardButtonsByID = new Dictionary<int, TaskDialogButton>(
-            buttons.Where(e => e.IsStandardButton)
-            .Select(e => new KeyValuePair<int, TaskDialogButton>(e.ButtonID, e)));
+        _boundCustomButtons = [..buttons.Where(e => !e.IsStandardButton)];
+        _boundStandardButtonsByID = buttons
+            .Where(e => e.IsStandardButton)
+            .ToDictionary(e => e.ButtonID);
 
         // Assign IDs to the buttons based on their index.
         defaultButtonID = 0;
