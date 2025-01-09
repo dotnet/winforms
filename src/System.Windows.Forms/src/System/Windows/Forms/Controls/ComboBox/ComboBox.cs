@@ -3856,5 +3856,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, shouldRedrawAsSmallButton: false);
+        => new(this, smallButton: false);
 }
