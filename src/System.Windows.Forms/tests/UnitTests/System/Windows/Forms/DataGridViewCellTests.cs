@@ -6623,7 +6623,8 @@ public class DataGridViewCellTests
             dataGridView.Rows.Clear();
             dataGridView.Rows.Add();
         });
-
+        // Set cell value to ensure it is properly formatted.
+        cell.Value = false;
         Action act = () => cell.MouseClick(new DataGridViewCellMouseEventArgs(0, 0, 10, 10, new MouseEventArgs(MouseButtons.Left, 1, 10, 10, 0)));
         act.Should().NotThrow();
     }
