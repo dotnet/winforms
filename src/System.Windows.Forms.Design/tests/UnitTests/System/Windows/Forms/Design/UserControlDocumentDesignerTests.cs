@@ -8,7 +8,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using System.Windows.Forms.Design.Tests.Mocks;
-
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
