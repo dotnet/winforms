@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -25,79 +26,109 @@ public class ToolBarButton : Component
 
     public ToolBarButton(string text) => throw new PlatformNotSupportedException();
 
+    [DefaultValue(null)]
+    [TypeConverter(typeof(ReferenceConverter))]
     public Menu DropDownMenu
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(true)]
+    [Localizable(true)]
     public bool Enabled
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [TypeConverter(typeof(ImageIndexConverter))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [DefaultValue(-1)]
+    [RefreshProperties(RefreshProperties.Repaint)]
+    [Localizable(true)]
     public int ImageIndex
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [TypeConverter(typeof(ImageKeyConverter))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [DefaultValue("")]
+    [Localizable(true)]
+    [RefreshProperties(RefreshProperties.Repaint)]
     public string ImageKey
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Browsable(false)]
     public string Name
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public ToolBar Parent => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    public ToolBar Parent => throw null;
 
+    [DefaultValue(false)]
     public bool PartialPush
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(false)]
     public bool Pushed
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public Rectangle Rectangle => throw new PlatformNotSupportedException();
+    public Rectangle Rectangle => throw null;
 
+    [DefaultValue(ToolBarButtonStyle.PushButton)]
+    [RefreshProperties(RefreshProperties.Repaint)]
     public ToolBarButtonStyle Style
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(false)]
+    [Bindable(true)]
+    [DefaultValue(null)]
+    [TypeConverter(typeof(StringConverter))]
     public object Tag
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue("")]
     public string Text
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue("")]
     public string ToolTipText
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(true)]
+    [Localizable(true)]
     public bool Visible
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 }

@@ -7128,14 +7128,15 @@ public partial class Form : ContainerControl
         }
     }
 
+    // Unsupported types don't support nullability.
 #nullable disable
     [Obsolete(
         Obsoletions.MainMenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public MainMenu Menu
     {
         get;
@@ -7145,10 +7146,10 @@ public partial class Form : ContainerControl
     [Obsolete(
         Obsoletions.MainMenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public MainMenu MergedMenu
     {
         get;

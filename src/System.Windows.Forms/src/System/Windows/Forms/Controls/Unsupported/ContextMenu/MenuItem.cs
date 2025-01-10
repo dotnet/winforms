@@ -10,10 +10,10 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.MenuDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
-[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultEvent(nameof(Click))]
@@ -74,159 +74,188 @@ public class MenuItem : Menu
         EventHandler onSelect,
         MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
+    [Browsable(false)]
+    [DefaultValue(false)]
     public bool BarBreak
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Browsable(false)]
+    [DefaultValue(false)]
     public bool Break
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(false)]
     public bool Checked
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(false)]
     public bool DefaultItem
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(false)]
     public bool OwnerDraw
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue(true)]
     public bool Enabled
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Browsable(false)]
     public int Index
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Browsable(false)]
+    public override bool IsParent
+    {
+        get => throw null;
+    }
+
+    [DefaultValue(false)]
     public bool MdiList
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     protected int MenuID
     {
-        get => throw new PlatformNotSupportedException();
+        get => throw null;
     }
 
+    [DefaultValue(MenuMerge.Add)]
     public MenuMerge MergeType
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(0)]
     public int MergeOrder
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public char Mnemonic => '\0';
+    [Browsable(false)]
+    public char Mnemonic => throw null;
 
+    [Browsable(false)]
     public Menu Parent
     {
-        get => throw new PlatformNotSupportedException();
+        get => throw null;
     }
 
+    [DefaultValue(false)]
     public bool RadioCheck
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
     public string Text
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue(Shortcut.None)]
     public Shortcut Shortcut
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(true)]
+    [Localizable(true)]
     public bool ShowShortcut
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue(true)]
     public bool Visible
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler Click
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public event DrawItemEventHandler DrawItem
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public event MeasureItemEventHandler MeasureItem
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public event EventHandler Popup
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public event EventHandler Select
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public virtual MenuItem CloneMenu() => throw new PlatformNotSupportedException();
+    public virtual MenuItem CloneMenu() => throw null;
 
-    protected void CloneMenu(MenuItem itemSrc) => throw new PlatformNotSupportedException();
+    protected void CloneMenu(MenuItem itemSrc) { }
 
-    public virtual MenuItem MergeMenu() => throw new PlatformNotSupportedException();
+    public virtual MenuItem MergeMenu() => throw null;
 
-    public void MergeMenu(MenuItem itemSrc) => throw new PlatformNotSupportedException();
+    public void MergeMenu(MenuItem itemSrc) { }
 
-    protected virtual void OnClick(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnClick(EventArgs e) { }
 
-    protected virtual void OnDrawItem(DrawItemEventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnDrawItem(DrawItemEventArgs e) { }
 
-    protected virtual void OnInitMenuPopup(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnInitMenuPopup(EventArgs e) { }
 
-    protected virtual void OnMeasureItem(MeasureItemEventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnMeasureItem(MeasureItemEventArgs e) { }
 
-    protected virtual void OnPopup(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnPopup(EventArgs e) { }
 
-    protected virtual void OnSelect(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnSelect(EventArgs e) { }
 
-    public void PerformClick() => throw new PlatformNotSupportedException();
+    public void PerformClick() { }
 
-    public virtual void PerformSelect() => throw new PlatformNotSupportedException();
+    public virtual void PerformSelect() { }
 }

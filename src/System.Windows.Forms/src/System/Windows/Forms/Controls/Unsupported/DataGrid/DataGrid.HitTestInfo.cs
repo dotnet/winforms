@@ -12,19 +12,20 @@ public partial class DataGrid
     [Obsolete(
         Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public sealed class HitTestInfo
     {
-        private HitTestInfo() { }
+        internal HitTestInfo() => throw new PlatformNotSupportedException();
 
         public static readonly HitTestInfo Nowhere;
 
-        public int Column => throw new PlatformNotSupportedException();
+        public int Column => throw null;
 
-        public int Row => throw new PlatformNotSupportedException();
+        public int Row => throw null;
 
-        public HitTestType Type => throw new PlatformNotSupportedException();
+        public HitTestType Type => throw null;
     }
 }

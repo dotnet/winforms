@@ -8,9 +8,10 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public enum DataGridParentRowsLabelStyle
 {
     None = 0,

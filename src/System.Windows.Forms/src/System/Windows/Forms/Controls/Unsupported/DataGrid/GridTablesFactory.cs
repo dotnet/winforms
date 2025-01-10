@@ -10,14 +10,16 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public sealed class GridTablesFactory
 {
     private GridTablesFactory() { }
 
-    public static DataGridTableStyle[] CreateGridTables(DataGridTableStyle gridTable,
+    public static DataGridTableStyle[] CreateGridTables(
+        DataGridTableStyle gridTable,
         object dataSource,
         string dataMember,
         BindingContext bindingManager) => throw new PlatformNotSupportedException();

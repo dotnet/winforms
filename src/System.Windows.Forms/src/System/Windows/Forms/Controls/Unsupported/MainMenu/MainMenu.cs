@@ -10,14 +10,14 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.MainMenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
 [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
 public class MainMenu : Menu
 {
-    public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();
+    public MainMenu() : base(items: default) => throw new PlatformNotSupportedException();
 
     public MainMenu(IContainer container) : this() => throw new PlatformNotSupportedException();
 
@@ -25,19 +25,21 @@ public class MainMenu : Menu
 
     public event EventHandler Collapse
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Localizable(true)]
+    [AmbientValue(RightToLeft.Inherit)]
     public virtual RightToLeft RightToLeft
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public virtual MainMenu CloneMenu() => throw new PlatformNotSupportedException();
+    public virtual MainMenu CloneMenu() => throw null;
 
-    public Form GetForm() => throw new PlatformNotSupportedException();
+    public Form GetForm() => throw null;
 
-    protected internal virtual void OnCollapse(EventArgs e)  => throw new PlatformNotSupportedException();
+    protected internal virtual void OnCollapse(EventArgs e) { }
 }

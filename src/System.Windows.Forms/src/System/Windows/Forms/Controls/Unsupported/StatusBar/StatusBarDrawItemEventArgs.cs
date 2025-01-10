@@ -11,30 +11,35 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class StatusBarDrawItemEventArgs : DrawItemEventArgs
 {
-    public StatusBarDrawItemEventArgs(Graphics g,
+    public StatusBarDrawItemEventArgs(
+        Graphics g,
         Font font,
         Rectangle r,
         int itemId,
         DrawItemState itemState,
-        StatusBarPanel panel) : base(graphics: g,
+        StatusBarPanel panel) : base(
+            graphics: g,
             font: font,
             rect: r,
             index: itemId,
             state: itemState) => throw new PlatformNotSupportedException();
 
-    public StatusBarDrawItemEventArgs(Graphics g,
+    public StatusBarDrawItemEventArgs(
+        Graphics g,
         Font font,
         Rectangle r,
         int itemId,
         DrawItemState itemState,
         StatusBarPanel panel,
         Color foreColor,
-        Color backColor) : base(graphics: g,
+        Color backColor) : base(
+            graphics: g,
             font: font,
             rect: r,
             index: itemId,
@@ -42,5 +47,5 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             foreColor: foreColor,
             backColor: backColor) => throw new PlatformNotSupportedException();
 
-    public StatusBarPanel Panel => throw new PlatformNotSupportedException();
+    public StatusBarPanel Panel => throw null;
 }

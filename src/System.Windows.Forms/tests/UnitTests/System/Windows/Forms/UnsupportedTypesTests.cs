@@ -12,10 +12,10 @@ namespace System.Windows.Forms.Tests;
 // Test for https://github.com/dotnet/winforms/issues/3783
 public class UnsupportedTypesTests
 {
-#pragma warning disable WFDEV005, WFDEV006, WFDEV007, WFDEV008, WFDEV009, WFDEV010, CS0618 // Type or member is obsolete
+#pragma warning disable WFDEV006, CS0618 // Type or member is obsolete
 
-    public static TheoryData<Action> UnsupportedControlsConstructors => new()
-    {
+    public static TheoryData<Action> UnsupportedControlsConstructors =>
+    [
         () => new ContextMenu(),
         () => new ContextMenu(menuItems: null!),
         () => new DataGrid(),
@@ -26,7 +26,7 @@ public class UnsupportedTypesTests
         () => new DataGridPreferredColumnWidthTypeConverter(),
         () => new DataGridTableStyle(),
         () => new DataGridTableStyle(isDefaultTableStyle: true),
-        () => new DataGridTableStyle(null!),
+        () => new DataGridTableStyle(listManager: null!),
         () => new DataGridTextBox(),
         () => new DataGridTextBoxColumn(),
         () => new DataGridTextBoxColumn(prop: null!),
@@ -34,8 +34,10 @@ public class UnsupportedTypesTests
         () => new DataGridTextBoxColumn(prop: null!, format: "format", isDefault: true),
         () => new DataGridTextBoxColumn(prop : null!, isDefault: false),
         () => new TestDataGridColumnStyle(),
+        TestDataGridColumnStyle.CreateCompModSwitches,
         () => new TestDataGridColumnStyle(prop: null!),
         TestDataGridColumnStyle.Create_DataGridColumnHeaderAccessibleObject,
+        TestDataGridColumnStyle.Create_DataGridColumnHeaderAccessibleObject1,
         () => GridTablesFactory.CreateGridTables(gridTable: null!, dataSource: null!, dataMember: "data member", bindingManager: null!),
         () => new Menu.MenuItemCollection(owner: null!),
         () => new MainMenu(),
@@ -48,6 +50,7 @@ public class UnsupportedTypesTests
         () => new MenuItem(text: "text", items: null!),
         () => new MenuItem(MenuMerge.Add, mergeOrder: 1, Shortcut.Alt0, text: "text", onClick: null!, onPopup: null!, onSelect: null, items: null!),
         () => new StatusBar(),
+        () => new StatusBar.StatusBarPanelCollection(owner: null!),
         () => new StatusBarPanel(),
         () => new StatusBarPanelClickEventArgs(statusBarPanel: null!, MouseButtons.Left, clicks: 1, x: 1, y: 1),
         () => new ToolBar(),
@@ -55,7 +58,7 @@ public class UnsupportedTypesTests
         () => new ToolBarButton(text: "text"),
         () => new ToolBar.ToolBarButtonCollection(owner: null!),
         () => new ToolBarButtonClickEventArgs(button: null!)
-    };
+    ];
 
     [Theory]
     [MemberData(nameof(UnsupportedControlsConstructors))]
@@ -72,7 +75,7 @@ public class UnsupportedTypesTests
 
     [Fact]
     public void DataGrid_HitTestInfo_Nowhere_static_IsDefault() =>
-    DataGrid.HitTestInfo.Nowhere.Should().BeNull();
+        DataGrid.HitTestInfo.Nowhere.Should().BeNull();
 
     [Fact]
     public void StatusBarDrawItemEventArgs_Constructor_Throws()
@@ -197,7 +200,6 @@ public class UnsupportedTypesTests
     internal class ControlWithContextMenu : Control
     {
         public int OnContextMenuChangedCount;
-
         public new void OnContextMenuChanged(EventArgs e)
         {
             OnContextMenuChangedCount++;
@@ -208,16 +210,11 @@ public class UnsupportedTypesTests
     internal class TestDataGridColumnStyle : DataGridColumnStyle
     {
         public TestDataGridColumnStyle() : base() { }
-
         public TestDataGridColumnStyle(PropertyDescriptor prop) : base(prop) { }
-
-        public static void Create_DataGridColumnHeaderAccessibleObject()
-        {
-            _ = new DataGridColumnHeaderAccessibleObject();
-        }
-
+        public static void Create_DataGridColumnHeaderAccessibleObject() => _ = new DataGridColumnHeaderAccessibleObject();
+        public static void Create_DataGridColumnHeaderAccessibleObject1() => _ = new DataGridColumnHeaderAccessibleObject(owner: null!);
+        public static void CreateCompModSwitches() => _ = new CompModSwitches();
         public static bool Call_DGEditColumnEditing() => CompModSwitches.DGEditColumnEditing.TraceError;
-
         protected internal override void Abort(int rowNum) => throw new NotImplementedException();
         protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw new NotImplementedException();
         protected internal override void Edit(CurrencyManager source, int rowNum, Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible) => throw new NotImplementedException();

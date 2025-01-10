@@ -8,9 +8,10 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.MenuDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public enum MenuMerge
 {
     Add = 0,

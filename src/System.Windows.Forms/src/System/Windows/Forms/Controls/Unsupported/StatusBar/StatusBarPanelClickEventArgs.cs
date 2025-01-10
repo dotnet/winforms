@@ -10,17 +10,18 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class StatusBarPanelClickEventArgs : MouseEventArgs
 {
-    public StatusBarPanelClickEventArgs(StatusBarPanel statusBarPanel,
+    public StatusBarPanelClickEventArgs(
+        StatusBarPanel statusBarPanel,
         MouseButtons button,
         int clicks,
         int x,
-        int y) : base(button: button, clicks: clicks, x: x, y: y, delta: 0) =>
-            throw new PlatformNotSupportedException();
+        int y) : base(button: button, clicks: clicks, x: x, y: y, delta: 0) => throw new PlatformNotSupportedException();
 
-    public StatusBarPanel StatusBarPanel => throw new PlatformNotSupportedException();
+    public StatusBarPanel StatusBarPanel => throw null;
 }

@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -24,11 +24,11 @@ public class DataGridTextBox : TextBox
 {
     public DataGridTextBox() => throw new PlatformNotSupportedException();
 
-    public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
+    public void SetDataGrid(DataGrid parentGrid) { }
 
     public bool IsInEditOrNavigateMode
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 }

@@ -44,15 +44,16 @@ public class Control_ControlAccessibleObjectTests
         typeof(DateTimePicker), typeof(WebBrowser)
     ];
 
-#pragma warning disable WFDEV006, WFDEV009, WFDEV010 // Type or member is obsolete
-    private static readonly Type[] s_obsoleteControls =
+#pragma warning disable WFDEV006 // Type or member is obsolete
+    private static readonly Type[] s_unsupportedControls =
     [
+        // These controls are implemented in .NET Framework only, NET10+ ships hollowed out types that can't be instantiated.
         typeof(DataGrid),
         typeof(StatusBar),
         typeof(ToolBar),
         typeof(DataGridTextBox)
     ];
-#pragma warning restore WFDEV006, WFDEV009, WFDEV010
+#pragma warning restore WFDEV006
 
     [WinFormsFact]
     public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
@@ -1244,7 +1245,7 @@ public class Control_ControlAccessibleObjectTests
     public static IEnumerable<object[]> ControlAccessibleObject_TestData()
     {
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
-           .Where(t => !s_obsoleteControls.Contains(t))
+           .Where(t => !s_unsupportedControls.Contains(t))
            .Select(type => new object[] { type });
     }
 
@@ -1360,7 +1361,7 @@ public class Control_ControlAccessibleObjectTests
 
         foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
         {
-            if (s_obsoleteControls.Contains(type))
+            if (s_unsupportedControls.Contains(type))
             {
                 continue;
             }
