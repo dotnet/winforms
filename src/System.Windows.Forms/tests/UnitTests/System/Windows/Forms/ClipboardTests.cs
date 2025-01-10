@@ -894,7 +894,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_DataObject_Throws()
     {
-        Clipboard.Clear();
         string format = "format";
         Action action = () => Clipboard.SetDataAsJson(format, new DataObject());
         action.Should().Throw<InvalidOperationException>();
@@ -905,7 +904,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_WithGeneric_ReturnsExpected()
     {
-        Clipboard.Clear();
         List<Point> generic1 = [];
         string format = "list";
         Clipboard.SetDataAsJson(format, generic1);
@@ -942,7 +940,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_ReturnsExpected()
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
         Clipboard.SetDataAsJson("testDataFormat", testData);
@@ -955,7 +952,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_GetData()
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
         // Note that this simulates out of process scenario.
         Clipboard.SetDataAsJson("test", testData);
@@ -973,7 +969,6 @@ public class ClipboardTests
     [BoolData]
     public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
         DataObject dataObject = new();
@@ -999,7 +994,6 @@ public class ClipboardTests
     [BoolData]
     public void Clipboard_SetDataObject_WithMultipleData_ReturnsExpected(bool copy)
     {
-        Clipboard.Clear();
         SimpleTestData testData1 = new() { X = 1, Y = 1 };
         SimpleTestData testData2 = new() { Y = 2, X = 2 };
         DataObject data = new();
@@ -1022,7 +1016,6 @@ public class ClipboardTests
         // This test demonstrates how a user can manually deserialize JsonData<T> that has been serialized onto
         // the clipboard from stream. This may need to be done if type JsonData<T> does not exist in the .NET version
         // the user is utilizing.
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
         Clipboard.SetDataAsJson("testFormat", testData);
 
