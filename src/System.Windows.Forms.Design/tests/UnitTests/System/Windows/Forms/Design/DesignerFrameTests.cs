@@ -5,7 +5,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Reflection;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -37,10 +36,14 @@ public class DesignerFrameTests
 
         designerFrame.Initialize(control);
 
-        FieldInfo? designerField = typeof(DesignerFrame).GetField("_designer", BindingFlags.NonPublic | BindingFlags.Instance);
-        object designer = designerField?.GetValue(designerFrame) ?? throw new InvalidOperationException("Field '_designer' not found in DesignerFrame.");
+        List<Control> controls = designerFrame.Controls.Cast<Control>().ToList();
+        Control? designerRegion = controls.FirstOrDefault(c => c is ScrollableControl);
 
+        designerRegion.Should().NotBeNull();
+
+        Control? designer = designerRegion?.Controls.Cast<Control>().FirstOrDefault();
         designer.Should().Be(control);
+
         control.Visible.Should().BeTrue();
         control.Enabled.Should().BeTrue();
 
@@ -65,11 +68,7 @@ public class DesignerFrameTests
 
         using DesignerFrame designerFrame = new(mockSite.Object);
 
-        if (designerFrame.Site is null)
-        {
-            PropertyInfo? siteProperty = typeof(DesignerFrame).GetProperty("Site", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            siteProperty?.SetValue(designerFrame, mockSite.Object);
-        }
+        designerFrame.Site ??= mockSite.Object;
 
         designerFrame.Should().NotBeNull();
         designerFrame.Site.Should().Be(mockSite.Object);
