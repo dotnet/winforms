@@ -166,7 +166,7 @@ internal class TableLayoutPanelBehavior : Behavior
     {
         if ((_styles is null || isColumn != _currentColumnStyles) && _table is not null)
         {
-            _styles = ((TableLayoutStyleCollection)_changedProp.GetValue(_table)).Cast<TableLayoutStyle>().ToList();
+            _styles = [..((TableLayoutStyleCollection)_changedProp.GetValue(_table)).Cast<TableLayoutStyle>()];
             _currentColumnStyles = isColumn;
         }
     }

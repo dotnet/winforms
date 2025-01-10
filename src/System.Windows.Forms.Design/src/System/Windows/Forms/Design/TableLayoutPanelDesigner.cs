@@ -952,7 +952,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            _dragComponents = new List<IComponent>(data.DragComponents);
+            _dragComponents = [..data.DragComponents];
             return _dragComponents[0] as Control;
         }
 
