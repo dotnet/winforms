@@ -13,73 +13,75 @@ public partial class ToolBar
     [Obsolete(
         Obsoletions.ToolBarMessage,
         error: false,
-        DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public class ToolBarButtonCollection : IList
     {
         public ToolBarButtonCollection(ToolBar owner) => throw new PlatformNotSupportedException();
 
         public virtual ToolBarButton this[int index]
         {
-            get => throw new PlatformNotSupportedException();
-            set => throw new PlatformNotSupportedException();
+            get => throw null;
+            set { }
         }
 
         object IList.this[int index]
         {
-            get => throw new PlatformNotSupportedException();
-            set => throw new PlatformNotSupportedException();
+            get => throw null;
+            set { }
         }
 
-        public virtual ToolBarButton this[string key] => throw new PlatformNotSupportedException();
+        public virtual ToolBarButton this[string key] => throw null;
 
-        public int Count => throw new PlatformNotSupportedException();
+        [Browsable(false)]
+        public int Count => throw null;
 
-        object ICollection.SyncRoot => throw new PlatformNotSupportedException();
+        object ICollection.SyncRoot => throw null;
 
-        bool ICollection.IsSynchronized => throw new PlatformNotSupportedException();
+        bool ICollection.IsSynchronized => throw null;
 
-        bool IList.IsFixedSize => throw new PlatformNotSupportedException();
+        bool IList.IsFixedSize => throw null;
 
-        public bool IsReadOnly => throw new PlatformNotSupportedException();
+        public bool IsReadOnly => throw null;
 
-        public int Add(ToolBarButton button) => throw new PlatformNotSupportedException();
+        public int Add(ToolBarButton button) => throw null;
 
-        public int Add(string text) => throw new PlatformNotSupportedException();
+        public int Add(string text) => throw null;
 
-        int IList.Add(object button) => throw new PlatformNotSupportedException();
+        int IList.Add(object button) => throw null;
 
-        public void AddRange(ToolBarButton[] buttons) => throw new PlatformNotSupportedException();
+        public void AddRange(ToolBarButton[] buttons) { }
 
-        public void Clear() => throw new PlatformNotSupportedException();
+        public void Clear() { }
 
-        public bool Contains(ToolBarButton button) => throw new PlatformNotSupportedException();
+        public bool Contains(ToolBarButton button) => throw null;
 
-        bool IList.Contains(object button) => throw new PlatformNotSupportedException();
+        bool IList.Contains(object button) => throw null;
 
-        public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
+        public virtual bool ContainsKey(string key) => throw null;
 
-        void ICollection.CopyTo(Array dest, int index) => throw new PlatformNotSupportedException();
+        void ICollection.CopyTo(Array dest, int index) { }
 
-        public int IndexOf(ToolBarButton button) => throw new PlatformNotSupportedException();
+        public int IndexOf(ToolBarButton button) => throw null;
 
-        int IList.IndexOf(object button) => throw new PlatformNotSupportedException();
+        int IList.IndexOf(object button) => throw null;
 
-        public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
+        public virtual int IndexOfKey(string key) => throw null;
 
-        public void Insert(int index, ToolBarButton button) => throw new PlatformNotSupportedException();
+        public void Insert(int index, ToolBarButton button) { }
 
-        void IList.Insert(int index, object button) => throw new PlatformNotSupportedException();
+        void IList.Insert(int index, object button) { }
 
-        public void RemoveAt(int index) => throw new PlatformNotSupportedException();
+        public void RemoveAt(int index) { }
 
-        public virtual void RemoveByKey(string key) => throw new PlatformNotSupportedException();
+        public virtual void RemoveByKey(string key) { }
 
-        public void Remove(ToolBarButton button) => throw new PlatformNotSupportedException();
+        public void Remove(ToolBarButton button) { }
 
-        void IList.Remove(object button) => throw new PlatformNotSupportedException();
+        void IList.Remove(object button) { }
 
-        public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
+        public IEnumerator GetEnumerator() => throw null;
     }
 }

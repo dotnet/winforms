@@ -10,16 +10,17 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class ToolBarButtonClickEventArgs : EventArgs
 {
     public ToolBarButtonClickEventArgs(ToolBarButton button) => throw new PlatformNotSupportedException();
 
     public ToolBarButton Button
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 }

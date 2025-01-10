@@ -12,12 +12,13 @@ public partial class DataGridColumnStyle
     [Obsolete(
         Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     protected class CompModSwitches
     {
-        private CompModSwitches() { }
+        public CompModSwitches()  => throw new PlatformNotSupportedException();
 
         public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
     }

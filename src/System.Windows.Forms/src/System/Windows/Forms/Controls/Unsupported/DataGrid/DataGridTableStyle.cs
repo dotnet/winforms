@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -19,355 +20,372 @@ namespace System.Windows.Forms;
 [DesignTimeVisible(false)]
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
-    public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
-
     public DataGridTableStyle() : this(isDefaultTableStyle: false) => throw new PlatformNotSupportedException();
+
+    public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
 
     public DataGridTableStyle(CurrencyManager listManager) : this() => throw new PlatformNotSupportedException();
 
+    [DefaultValue(true)]
     public bool AllowSorting
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler AllowSortingChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public Color AlternatingBackColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler AlternatingBackColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public void ResetAlternatingBackColor() => throw new PlatformNotSupportedException();
+    public void ResetAlternatingBackColor() { }
 
-    protected virtual bool ShouldSerializeAlternatingBackColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeAlternatingBackColor() => throw null;
 
-    protected bool ShouldSerializeBackColor() => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeBackColor() => throw null;
 
-    protected bool ShouldSerializeForeColor() => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeForeColor() => throw null;
 
     public Color BackColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler BackColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public void ResetBackColor() => throw new PlatformNotSupportedException();
+    public void ResetBackColor() { }
 
     public Color ForeColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler ForeColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public void ResetForeColor() => throw new PlatformNotSupportedException();
+    public void ResetForeColor() { }
 
     public Color GridLineColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler GridLineColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeGridLineColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeGridLineColor() => throw null;
 
-    public void ResetGridLineColor() => throw new PlatformNotSupportedException();
+    public void ResetGridLineColor() { }
 
+    [DefaultValue(DataGridLineStyle.Solid)]
     public DataGridLineStyle GridLineStyle
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler GridLineStyleChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public Color HeaderBackColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler HeaderBackColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeHeaderBackColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeHeaderBackColor() => throw null;
 
-    public void ResetHeaderBackColor() => throw new PlatformNotSupportedException();
+    public void ResetHeaderBackColor() { }
 
+    [Localizable(true)]
+    [AmbientValue(null)]
     public Font HeaderFont
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler HeaderFontChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public void ResetHeaderFont() => throw new PlatformNotSupportedException();
+    public void ResetHeaderFont() { }
 
     public Color HeaderForeColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler HeaderForeColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeHeaderForeColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeHeaderForeColor() => throw null;
 
-    public void ResetHeaderForeColor() => throw new PlatformNotSupportedException();
+    public void ResetHeaderForeColor() { }
 
     public Color LinkColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler LinkColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeLinkColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeLinkColor() => throw null;
 
-    public void ResetLinkColor() => throw new PlatformNotSupportedException();
+    public void ResetLinkColor() { }
 
+    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Color LinkHoverColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler LinkHoverColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeLinkHoverColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeLinkHoverColor() => throw null;
 
-    public void ResetLinkHoverColor() => throw new PlatformNotSupportedException();
+    public void ResetLinkHoverColor() { }
 
+    [DefaultValue(75)]
+    [Localizable(true)]
+    [TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))]
     public int PreferredColumnWidth
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler PreferredColumnWidthChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Localizable(true)]
     public int PreferredRowHeight
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler PreferredRowHeightChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected bool ShouldSerializePreferredRowHeight() => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializePreferredRowHeight() => throw null;
 
+    [DefaultValue(true)]
     public bool ColumnHeadersVisible
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler ColumnHeadersVisibleChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [DefaultValue(true)]
     public bool RowHeadersVisible
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler RowHeadersVisibleChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [DefaultValue(35)]
+    [Localizable(true)]
     public int RowHeaderWidth
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler RowHeaderWidthChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public Color SelectionBackColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler SelectionBackColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected bool ShouldSerializeSelectionBackColor() => throw new PlatformNotSupportedException();
+    protected bool ShouldSerializeSelectionBackColor() => throw null;
 
-    public void ResetSelectionBackColor() => throw new PlatformNotSupportedException();
+    public void ResetSelectionBackColor() { }
 
+    [Description("The foreground color for the current data grid row")]
     public Color SelectionForeColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler SelectionForeColorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual bool ShouldSerializeSelectionForeColor() => throw new PlatformNotSupportedException();
+    protected virtual bool ShouldSerializeSelectionForeColor() => throw null;
 
-    public void ResetSelectionForeColor() => throw new PlatformNotSupportedException();
+    public void ResetSelectionForeColor() { }
 
     public static readonly DataGridTableStyle DefaultTableStyle;
 
+    [Editor($"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [DefaultValue("")]
     public string MappingName
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler MappingNameChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public virtual GridColumnStylesCollection GridColumnStyles => throw new PlatformNotSupportedException();
+    [Localizable(true)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    public virtual GridColumnStylesCollection GridColumnStyles => throw null;
 
+    [Browsable(false)]
     public virtual DataGrid DataGrid
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(false)]
     public virtual bool ReadOnly
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler ReadOnlyChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) => throw new PlatformNotSupportedException();
+    public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) => throw null;
 
-    public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
+    public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw null;
 
-    protected internal virtual DataGridColumnStyle CreateGridColumn(System.ComponentModel.PropertyDescriptor prop, bool isDefault)
-         => throw new PlatformNotSupportedException();
+    protected internal virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop, bool isDefault) => throw null;
 
-    protected internal virtual DataGridColumnStyle CreateGridColumn(System.ComponentModel.PropertyDescriptor prop)
-        => throw new PlatformNotSupportedException();
+    protected internal virtual DataGridColumnStyle CreateGridColumn(PropertyDescriptor prop) => throw null;
 
-    protected virtual void OnReadOnlyChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnReadOnlyChanged(EventArgs e) { }
 
-    protected virtual void OnMappingNameChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnMappingNameChanged(EventArgs e) { }
 
-    protected virtual void OnAlternatingBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnAlternatingBackColorChanged(EventArgs e) { }
 
-    protected virtual void OnForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnForeColorChanged(EventArgs e) { }
 
-    protected virtual void OnBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnBackColorChanged(EventArgs e) { }
 
-    protected virtual void OnAllowSortingChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnAllowSortingChanged(EventArgs e) { }
 
-    protected virtual void OnGridLineColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnGridLineColorChanged(EventArgs e) { }
 
-    protected virtual void OnGridLineStyleChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnGridLineStyleChanged(EventArgs e) { }
 
-    protected virtual void OnHeaderBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderBackColorChanged(EventArgs e) { }
 
-    protected virtual void OnHeaderFontChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderFontChanged(EventArgs e) { }
 
-    protected virtual void OnHeaderForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnHeaderForeColorChanged(EventArgs e) { }
 
-    protected virtual void OnLinkColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnLinkColorChanged(EventArgs e) { }
 
-    protected virtual void OnLinkHoverColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnLinkHoverColorChanged(EventArgs e) { }
 
-    protected virtual void OnPreferredRowHeightChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnPreferredRowHeightChanged(EventArgs e) { }
 
-    protected virtual void OnPreferredColumnWidthChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnPreferredColumnWidthChanged(EventArgs e) { }
 
-    protected virtual void OnColumnHeadersVisibleChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnColumnHeadersVisibleChanged(EventArgs e) { }
 
-    protected virtual void OnRowHeadersVisibleChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnRowHeadersVisibleChanged(EventArgs e) { }
 
-    protected virtual void OnRowHeaderWidthChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnRowHeaderWidthChanged(EventArgs e) { }
 
-    protected virtual void OnSelectionForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnSelectionForeColorChanged(EventArgs e) { }
 
-    protected virtual void OnSelectionBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnSelectionBackColorChanged(EventArgs e) { }
 }

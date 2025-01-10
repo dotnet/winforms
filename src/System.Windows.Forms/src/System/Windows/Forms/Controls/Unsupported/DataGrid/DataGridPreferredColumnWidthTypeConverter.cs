@@ -10,10 +10,12 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class DataGridPreferredColumnWidthTypeConverter : TypeConverter
 {
+    // Added explicit constructor to prevent the creation of a default constructor by the compiler.
     public DataGridPreferredColumnWidthTypeConverter() => throw new PlatformNotSupportedException();
 }

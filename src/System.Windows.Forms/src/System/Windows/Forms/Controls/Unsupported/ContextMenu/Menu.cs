@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.MenuDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -23,41 +23,55 @@ public abstract partial class Menu : Component
 
     protected Menu(MenuItem[] items) => throw new PlatformNotSupportedException();
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public IntPtr Handle => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public IntPtr Handle => throw null;
 
-    public virtual bool IsParent => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public virtual bool IsParent => throw null;
 
-    public MenuItem MdiListItem => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public MenuItem MdiListItem => throw null;
 
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string Name
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public MenuItemCollection MenuItems => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [MergableProperty(false)]
+    public MenuItemCollection MenuItems => throw null;
 
+    [Localizable(false)]
+    [Bindable(true)]
+    [DefaultValue(null)]
+    [TypeConverter(typeof(StringConverter))]
     public object Tag
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    protected internal void CloneMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
+    protected internal void CloneMenu(Menu menuSrc) { }
 
-    protected virtual IntPtr CreateMenuHandle() => throw new PlatformNotSupportedException();
+    protected virtual IntPtr CreateMenuHandle() => throw null;
 
-    public MenuItem FindMenuItem(int type, IntPtr value) => throw new PlatformNotSupportedException();
+    public MenuItem FindMenuItem(int type, IntPtr value) => throw null;
 
-    protected int FindMergePosition(int mergeOrder) => throw new PlatformNotSupportedException();
+    protected int FindMergePosition(int mergeOrder) => throw null;
 
-    public ContextMenu GetContextMenu() => throw new PlatformNotSupportedException();
+    public ContextMenu GetContextMenu() => throw null;
 
-    public MainMenu GetMainMenu() => throw new PlatformNotSupportedException();
+    public MainMenu GetMainMenu() => throw null;
 
-    public virtual void MergeMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
+    public virtual void MergeMenu(Menu menuSrc) { }
 
-    protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
-         => throw new PlatformNotSupportedException();
+    protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData) => throw null;
 }

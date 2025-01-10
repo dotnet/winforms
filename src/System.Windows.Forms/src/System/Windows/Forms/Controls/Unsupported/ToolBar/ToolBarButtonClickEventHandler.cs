@@ -10,7 +10,8 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public delegate void ToolBarButtonClickEventHandler(object sender, ToolBarButtonClickEventArgs e);

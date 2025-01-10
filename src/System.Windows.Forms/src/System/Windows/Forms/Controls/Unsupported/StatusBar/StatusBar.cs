@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
@@ -12,7 +11,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -23,125 +22,157 @@ namespace System.Windows.Forms;
 [Designer($"System.Windows.Forms.Design.StatusBarDesigner, {AssemblyRef.SystemDesign}")]
 public partial class StatusBar : Control
 {
+    // Adding this constructor to suppress creation of a default one.
     public StatusBar() => throw new PlatformNotSupportedException();
 
+    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color BackColor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackColorChanged
+    public override Drawing.Image BackgroundImage
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
-
+    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override ImageLayout BackgroundImageLayout
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    [Localizable(true)]
+    [DefaultValue(DockStyle.Bottom)]
+    public override DockStyle Dock
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Color ForeColor
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ForeColorChanged
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override bool DoubleBuffered
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    public override Drawing.Font Font
+    {
+        get => throw null;
+        set { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Color ForeColor
+    {
+        get => throw null;
+        set { }
+    }
+
+    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new ImeMode ImeMode
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ImeModeChanged
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [Localizable(true)]
+    [MergableProperty(false)]
+    public StatusBarPanelCollection Panels => throw null;
 
-    public StatusBarPanelCollection Panels => throw new PlatformNotSupportedException();
-
+    [DefaultValue(false)]
     public bool ShowPanels
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(true)]
     public bool SizingGrip
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public new bool TabStop
+    [DefaultValue(false)]
+    public new bool TabStop { get => throw null; set { } }
+
+    [Localizable(true)]
+    public override string Text { get => throw null; set { } }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler BackColorChanged
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler BackgroundImageChanged
+    {
+        add { }
+        remove { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler BackgroundImageLayoutChanged
+    {
+        add { }
+        remove { }
     }
 
     public event StatusBarDrawItemEventHandler DrawItem
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler ForeColorChanged
+    {
+        add { }
+        remove { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler ImeModeChanged
+    {
+        add { }
+        remove { }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event PaintEventHandler Paint
+    {
+        add { }
+        remove { }
     }
 
     public event StatusBarPanelClickEventHandler PanelClick
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
+    protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) { }
 
-    protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent) => throw new PlatformNotSupportedException();
+    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent) { }
 }

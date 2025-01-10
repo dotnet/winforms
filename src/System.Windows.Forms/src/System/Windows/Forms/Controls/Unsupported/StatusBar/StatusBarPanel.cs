@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -20,77 +20,102 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Text))]
 public class StatusBarPanel : Component, ISupportInitialize
 {
+    // Added public constructor to suppress creation of the default one.
     public StatusBarPanel() => throw new PlatformNotSupportedException();
 
+    [DefaultValue(HorizontalAlignment.Left)]
+    [Localizable(true)]
     public HorizontalAlignment Alignment
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(StatusBarPanelAutoSize.None)]
+    [RefreshProperties(RefreshProperties.All)]
     public StatusBarPanelAutoSize AutoSize
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(StatusBarPanelBorderStyle.Sunken)]
+    [Runtime.InteropServices.DispId(-504)]
     public StatusBarPanelBorderStyle BorderStyle
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(null)]
+    [Localizable(true)]
     public Icon Icon
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [DefaultValue(10)]
+    [Localizable(true)]
+    [RefreshProperties(RefreshProperties.All)]
     public int MinWidth
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
     public string Name
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public StatusBar Parent => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    public StatusBar Parent => throw null;
 
+    [DefaultValue(StatusBarPanelStyle.Text)]
     public StatusBarPanelStyle Style
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(false)]
+    [Bindable(true)]
+    [DefaultValue(null)]
+    [TypeConverter(typeof(StringConverter))]
     public object Tag
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue("")]
     public string Text
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue("")]
     public string ToolTipText
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
+    [Localizable(true)]
+    [DefaultValue(100)]
     public int Width
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    public void BeginInit() => throw new PlatformNotSupportedException();
+    public void BeginInit() { }
 
-    public void EndInit() => throw new PlatformNotSupportedException();
+    public void EndInit() { }
 }

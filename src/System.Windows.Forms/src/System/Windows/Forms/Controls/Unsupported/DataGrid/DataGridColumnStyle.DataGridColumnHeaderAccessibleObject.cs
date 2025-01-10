@@ -14,16 +14,16 @@ public partial class DataGridColumnStyle
     [Obsolete(
         Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     protected class DataGridColumnHeaderAccessibleObject : AccessibleObject
     {
-        public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) =>
-            throw new PlatformNotSupportedException();
+        public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) => throw new PlatformNotSupportedException();
 
         public DataGridColumnHeaderAccessibleObject() => throw new PlatformNotSupportedException();
 
-        protected DataGridColumnStyle Owner => throw new PlatformNotSupportedException();
+        protected DataGridColumnStyle Owner => throw null;
     }
 }

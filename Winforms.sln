@@ -182,6 +182,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "System.Windows.Forms.Analyz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core.Tests", "src\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj", "{B653C860-9B52-4597-9921-24DA79A4E6B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsupportedTypes", "src\System.Windows.Forms\tests\UnsupportedTypes\UnsupportedTypes.csproj", "{607E02DD-4256-4E73-B9A4-4CE2673B3703}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{656C66A4-59CD-4E14-8AE4-1F5BCEECB553}"
 	ProjectSection(SolutionItems) = preProject
 		eng\pipelines\azure-pipelines-codeql.yml = eng\pipelines\azure-pipelines-codeql.yml

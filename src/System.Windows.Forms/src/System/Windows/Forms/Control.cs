@@ -12846,14 +12846,15 @@ public unsafe partial class Control :
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
 
+    // Unsupported types don't support nullability.
 #nullable disable
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public virtual ContextMenu ContextMenu
     {
         get;
@@ -12863,10 +12864,11 @@ public unsafe partial class Control :
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    [Browsable(false)]
+
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     public event EventHandler ContextMenuChanged
     {
         add { }
@@ -12876,9 +12878,10 @@ public unsafe partial class Control :
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     protected virtual void OnContextMenuChanged(EventArgs e) { }
 #nullable enable
 }

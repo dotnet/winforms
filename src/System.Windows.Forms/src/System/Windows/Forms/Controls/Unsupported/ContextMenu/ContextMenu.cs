@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Drawing;
 
 namespace System.Windows.Forms;
 
@@ -12,38 +11,47 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.ContextMenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
 public class ContextMenu : Menu
 {
-    public ContextMenu() : base(items: null) => throw new PlatformNotSupportedException();
+    public ContextMenu() : base(items: default) => throw new PlatformNotSupportedException();
 
-    public ContextMenu(MenuItem[] menuItems) : base(items: menuItems)
-        => throw new PlatformNotSupportedException();
+    public ContextMenu(MenuItem[] menuItems) : base(items: menuItems) => throw new PlatformNotSupportedException();
 
-    public Control SourceControl => throw new PlatformNotSupportedException();
+    [Localizable(true)]
+    [DefaultValue(RightToLeft.No)]
+    public virtual RightToLeft RightToLeft
+    {
+        get => throw null;
+        set { }
+    }
+
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Control SourceControl => throw null;
 
     public event EventHandler Popup
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
     public event EventHandler Collapse
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public virtual RightToLeft RightToLeft
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
+    protected internal virtual void OnCollapse(EventArgs e) { }
 
-    public void Show(Control control, Point pos) => throw new PlatformNotSupportedException();
+    protected internal virtual void OnPopup(EventArgs e) { }
 
-    public void Show(Control control, Point pos, LeftRightAlignment alignment) => throw new PlatformNotSupportedException();
+    protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) => throw null;
+
+    public void Show(Control control, Point pos) { }
+
+    public void Show(Control control, Point pos, LeftRightAlignment alignment) { }
 }

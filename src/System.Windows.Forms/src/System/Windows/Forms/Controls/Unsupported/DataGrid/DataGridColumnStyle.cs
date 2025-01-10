@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -24,113 +25,128 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
 
     public DataGridColumnStyle(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
+    [Localizable(true)]
+    [DefaultValue(HorizontalAlignment.Left)]
     public virtual HorizontalAlignment Alignment
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler AlignmentChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public AccessibleObject HeaderAccessibleObject => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    public AccessibleObject HeaderAccessibleObject => throw null;
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DefaultValue(null)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
     public virtual PropertyDescriptor PropertyDescriptor
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
     public event EventHandler PropertyDescriptorChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    public virtual DataGridTableStyle DataGridTableStyle => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    public virtual DataGridTableStyle DataGridTableStyle => throw null;
 
-    protected int FontHeight => throw new PlatformNotSupportedException();
+    protected int FontHeight => throw null;
 
     public event EventHandler FontChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Localizable(true)]
     public virtual string HeaderText
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler HeaderTextChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Localizable(true)]
+    [DefaultValue("")]
     public string MappingName
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler MappingNameChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Localizable(true)]
     public virtual string NullText
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler NullTextChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [DefaultValue(false)]
     public virtual bool ReadOnly
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler ReadOnlyChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
+    [Localizable(true)]
+    [DefaultValue(100)]
     public virtual int Width
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
     public event EventHandler WidthChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    protected virtual AccessibleObject CreateHeaderAccessibleObject() => throw new PlatformNotSupportedException();
+    protected virtual AccessibleObject CreateHeaderAccessibleObject() => throw null;
 
-    protected virtual void SetDataGrid(DataGrid value) => throw new PlatformNotSupportedException();
+    protected virtual void SetDataGrid(DataGrid value) { }
 
-    protected virtual void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
+    protected virtual void SetDataGridInColumn(DataGrid value) { }
 
-    protected void BeginUpdate() => throw new PlatformNotSupportedException();
+    protected void BeginUpdate() { }
 
-    protected void EndUpdate() => throw new PlatformNotSupportedException();
+    protected void EndUpdate() { }
 
     protected internal abstract Size GetPreferredSize(Graphics g, object value);
 
@@ -138,63 +154,71 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
 
     protected internal abstract int GetPreferredHeight(Graphics g, object value);
 
-    protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
+    protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw null;
 
-    protected virtual void Invalidate() => throw new PlatformNotSupportedException();
+    protected virtual void Invalidate() { }
 
-    protected void CheckValidDataSource(CurrencyManager value) => throw new PlatformNotSupportedException();
+    protected void CheckValidDataSource(CurrencyManager value) { }
 
     protected internal abstract void Abort(int rowNum);
 
     protected internal abstract bool Commit(CurrencyManager dataSource, int rowNum);
 
-    protected internal virtual void Edit(CurrencyManager source,
+    protected internal virtual void Edit(
+        CurrencyManager source,
         int rowNum,
         Rectangle bounds,
-        bool readOnly) => throw new PlatformNotSupportedException();
+        bool readOnly)
+    { }
 
-    protected internal virtual void Edit(CurrencyManager source,
+    protected internal virtual void Edit(
+        CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
-        string displayText) => throw new PlatformNotSupportedException();
+        string displayText)
+    { }
 
-    protected internal abstract void Edit(CurrencyManager source,
+    protected internal abstract void Edit(
+        CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
         string displayText,
         bool cellIsVisible);
 
-    protected internal virtual void EnterNullValue() => throw new PlatformNotSupportedException();
+    protected internal virtual void EnterNullValue() { }
 
-    protected internal virtual void ConcedeFocus() => throw new PlatformNotSupportedException();
+    protected internal virtual void ConcedeFocus() { }
 
-    protected internal abstract void Paint(Graphics g,
+    protected internal abstract void Paint(
+        Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
         bool alignToRight);
 
-    protected internal virtual void Paint(Graphics g,
+    protected internal virtual void Paint(
+        Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight) => throw new PlatformNotSupportedException();
+        bool alignToRight)
+    { }
 
     protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum);
 
-    protected internal virtual void ReleaseHostedControl() => throw new PlatformNotSupportedException();
+    protected internal virtual void ReleaseHostedControl() { }
 
-    public void ResetHeaderText() => throw new PlatformNotSupportedException();
+    public void ResetHeaderText() { }
 
-    protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
+    protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) { }
 
-    void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
+    void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl) { }
 
-    protected internal virtual void ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
+    protected internal virtual void ColumnStartedEditing(Control editingControl) { }
 
-    protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
+    protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText) { }
 }

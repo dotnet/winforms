@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace System.Windows.Forms;
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
@@ -27,60 +28,78 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
 
     public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
 
-    public virtual TextBox TextBox => throw new PlatformNotSupportedException();
+    [Browsable(false)]
+    public virtual TextBox TextBox => throw null;
 
+    [DefaultValue(null)]
+    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     public string Format
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IFormatProvider FormatInfo
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
+        get => throw null;
+        set { }
     }
 
-    protected void HideEditBox() => throw new PlatformNotSupportedException();
+    [DefaultValue(null)]
+    public override PropertyDescriptor PropertyDescriptor
+    {
+        set { }
+    }
 
-    protected void EndEdit() => throw new PlatformNotSupportedException();
+    protected void HideEditBox() { }
 
-    protected void PaintText(Graphics g,
+    protected void EndEdit() { }
+
+    protected void PaintText(
+        Graphics g,
         Rectangle bounds,
         string text,
-        bool alignToRight) => throw new PlatformNotSupportedException();
+        bool alignToRight)
+    { }
 
-    protected void PaintText(Graphics g,
+    protected void PaintText(
+        Graphics g,
         Rectangle textBounds,
         string text,
         Brush backBrush,
         Brush foreBrush,
-        bool alignToRight) => throw new PlatformNotSupportedException();
+        bool alignToRight)
+    { }
 
-    protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
+    protected internal override Size GetPreferredSize(Graphics g, object value) => throw null;
 
-    protected internal override int GetMinimumHeight() => throw new PlatformNotSupportedException();
+    protected internal override int GetMinimumHeight() => throw null;
 
-    protected internal override int GetPreferredHeight(Graphics g, object value) => throw new PlatformNotSupportedException();
+    protected internal override int GetPreferredHeight(Graphics g, object value) => throw null;
 
-    protected internal override void Abort(int rowNum) => throw new PlatformNotSupportedException();
+    protected internal override void Abort(int rowNum) { }
 
-    protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw new PlatformNotSupportedException();
+    protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw null;
 
-    protected internal override void Edit(CurrencyManager source,
+    protected internal override void Edit(
+        CurrencyManager source,
         int rowNum,
         Rectangle bounds,
         bool readOnly,
         string displayText,
-        bool cellIsVisible) => throw new PlatformNotSupportedException();
+        bool cellIsVisible)
+    { }
 
-    protected internal override void Paint(Graphics g,
+    protected internal override void Paint(
+        Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
-        bool alignToRight) => throw new PlatformNotSupportedException();
+        bool alignToRight)
+    { }
 
     protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
-        => throw new PlatformNotSupportedException();
+    { }
 }

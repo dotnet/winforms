@@ -10,9 +10,10 @@ public partial class DataGrid
     [Obsolete(
         Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
     [Flags]
     public enum HitTestType
     {
