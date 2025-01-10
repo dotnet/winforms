@@ -254,7 +254,7 @@ public abstract partial class AxHost
                 return;
             }
 
-            List<Attribute> attributes = new(AttributeArray!);
+            List<Attribute> attributes = [..AttributeArray!];
             attributes.AddRange(_updateAttributes);
             AttributeArray = [.. attributes];
             _updateAttributes.Clear();
