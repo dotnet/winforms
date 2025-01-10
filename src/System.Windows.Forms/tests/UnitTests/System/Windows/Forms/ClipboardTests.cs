@@ -498,10 +498,17 @@ public class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("image");
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/12746")]
     [WinFormsTheory]
     [EnumData<TextDataFormat>]
     public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
     {
+        // Skip validation of TextDataFormat.Rtf on X64 due to the active issue "https://github.com/dotnet/winforms/issues/12746"
+        if (format == TextDataFormat.Rtf && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        {
+            return;
+        }
+
         Clipboard.SetText("text", format);
         Clipboard.GetText(format).Should().Be("text");
         Clipboard.ContainsText(format).Should().BeTrue();
