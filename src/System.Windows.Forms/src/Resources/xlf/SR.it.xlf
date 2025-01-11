@@ -7424,6 +7424,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Il tipo {0} alla riga {1}, posizione {2} ha generato la seguente eccezione durante la conversione: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">L'icona da associare alla descrizione comandi.</target>
