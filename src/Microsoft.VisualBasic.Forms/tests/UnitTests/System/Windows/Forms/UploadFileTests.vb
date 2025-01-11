@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -101,7 +101,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeOfType(Of IOException)()
+                webListener.ServerFaultMessage.Should.StartWith("File size mismatch")
             End Using
         End Sub
 
@@ -125,7 +125,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -153,7 +153,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -178,7 +178,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -202,7 +202,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                    .Throw(Of WebException)() _
                    .WithMessage(SR.net_webstatus_Timeout)
-                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -226,7 +225,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -248,7 +247,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -272,7 +271,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -294,7 +293,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of UriFormatException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -316,7 +315,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -338,7 +337,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -363,7 +362,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -388,7 +387,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -413,7 +412,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -435,7 +434,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -460,7 +459,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -489,7 +488,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -545,7 +544,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -568,7 +567,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -593,7 +592,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of FileNotFoundException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -623,7 +622,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -645,7 +644,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -670,7 +669,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -693,7 +692,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -716,7 +715,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -743,7 +742,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -770,7 +769,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -788,7 +787,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -807,7 +806,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -825,7 +824,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -850,7 +849,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -875,7 +874,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -899,7 +898,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Timeout)
-                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -923,7 +921,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -945,7 +943,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of OperationCanceledException)()
-                webListener.ServerFault.Should.BeNull()
             End Using
         End Sub
 
@@ -967,7 +964,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -992,7 +989,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1014,7 +1011,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1036,7 +1033,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeOfType(Of IOException)()
+                webListener.ServerFaultMessage.Should.StartWith("File size mismatch")
             End Using
         End Sub
 
@@ -1061,7 +1058,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1086,7 +1083,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1136,7 +1133,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1165,7 +1162,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1188,7 +1185,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1218,7 +1215,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1242,7 +1239,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1267,7 +1264,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1290,7 +1287,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1313,7 +1310,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1340,7 +1337,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1367,7 +1364,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFault.Should.BeNull()
+                webListener.ServerFaultMessage.Should.BeNull()
             End Using
         End Sub
 

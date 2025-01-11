@@ -804,7 +804,7 @@ internal partial class CommandSet : IDisposable
                     // Don't snap if we are moving a component in the ComponentTray
                     if (invertSnap && useSnapLines && primaryControl is not null && comp.Site is not null)
                     {
-                        List<IComponent> selComps = SelectionService.GetSelectedComponents().Cast<IComponent>().ToList();
+                        List<IComponent> selComps = [..SelectionService.GetSelectedComponents().Cast<IComponent>()];
 
                         // create our snapline engine
                         dragManager = new DragAssistanceManager(comp.Site, selComps);
