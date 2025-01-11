@@ -84,9 +84,9 @@ public unsafe partial class DataObject :
     internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
 
     /// <summary>
-    ///  Flags that the original data was wrapped for clipboard purposes.
+    ///  Flags that the original data was not a user passed <see cref="IDataObject"/>.
     /// </summary>
-    internal bool IsWrappedForClipboard { get; init; }
+    internal bool IsOriginalNotIDataObject { get; init; }
 
     /// <summary>
     ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
@@ -95,7 +95,7 @@ public unsafe partial class DataObject :
     /// </summary>
     internal IDataObject TryUnwrapInnerIDataObject()
     {
-        Debug.Assert(IsWrappedForClipboard, "This method should only be used for clipboard purposes.");
+        Debug.Assert(!IsOriginalNotIDataObject, "This method should only be used for clipboard purposes.");
         return _innerData.OriginalIDataObject is { } original ? original : this;
     }
 

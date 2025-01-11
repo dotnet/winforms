@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
-public class ToolStripPanel_ToolStripPanelControlCollection_XYComparerTests
+public class ToolStripPanel_ToolStripPanelControlCollection_XYComparerTests : IDisposable
 {
     private readonly ToolStripPanel.ToolStripPanelControlCollection.XYComparer _comparer = new();
     private readonly Control _control1 = new() { Bounds = new Rectangle(10, 20, 100, 100) };
