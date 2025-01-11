@@ -574,19 +574,11 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void Clipboard_Set_DoesNotWrapTwice()
+    public void Clipboard_SetDataObject_DerivedDataObject_ReturnsExpected()
     {
-        string realDataObject = string.Empty;
-        Clipboard.SetDataObject(realDataObject);
-
-        IDataObject? clipboardDataObject = Clipboard.GetDataObject();
-        var dataObject = clipboardDataObject.Should().BeOfType<DataObject>().Subject;
-        dataObject.IsWrappedForClipboard.Should().BeTrue();
-
-        Clipboard.SetDataObject(clipboardDataObject!);
-        IDataObject? clipboardDataObject2 = Clipboard.GetDataObject();
-        clipboardDataObject2.Should().NotBeNull();
-        clipboardDataObject2.Should().BeSameAs(clipboardDataObject);
+        DerivedDataObject derived = new();
+        Clipboard.SetDataObject(derived);
+        Clipboard.GetDataObject().Should().BeSameAs(derived);
     }
 
     [WinFormsFact]
@@ -664,6 +656,16 @@ public class ClipboardTests
 
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(DataFormats.Text).Should().Be(testString);
+
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        Clipboard.GetText().Should().Be(testString);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(testString);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(testString);
+
+        Clipboard.GetData("System.String").Should().BeNull();
     }
 
     [WinFormsFact]
@@ -892,7 +894,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_DataObject_Throws()
     {
-        Clipboard.Clear();
         string format = "format";
         Action action = () => Clipboard.SetDataAsJson(format, new DataObject());
         action.Should().Throw<InvalidOperationException>();
@@ -903,7 +904,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_WithGeneric_ReturnsExpected()
     {
-        Clipboard.Clear();
         List<Point> generic1 = [];
         string format = "list";
         Clipboard.SetDataAsJson(format, generic1);
@@ -940,7 +940,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_ReturnsExpected()
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
         Clipboard.SetDataAsJson("testDataFormat", testData);
@@ -953,7 +952,6 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_GetData()
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
         // Note that this simulates out of process scenario.
         Clipboard.SetDataAsJson("test", testData);
@@ -971,7 +969,6 @@ public class ClipboardTests
     [BoolData]
     public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
     {
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
 
         DataObject dataObject = new();
@@ -981,13 +978,22 @@ public class ClipboardTests
         ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
         returnedDataObject.TryGetData("testDataFormat", out SimpleTestData deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(testData);
+        // We don't expose JsonData<T> in legacy API
+        var legacyResult = Clipboard.GetData("testDataFormat");
+        if (copy)
+        {
+            legacyResult.Should().BeOfType<MemoryStream>();
+        }
+        else
+        {
+            legacyResult.Should().BeNull();
+        }
     }
 
     [WinFormsTheory]
     [BoolData]
     public void Clipboard_SetDataObject_WithMultipleData_ReturnsExpected(bool copy)
     {
-        Clipboard.Clear();
         SimpleTestData testData1 = new() { X = 1, Y = 1 };
         SimpleTestData testData2 = new() { Y = 2, X = 2 };
         DataObject data = new();
@@ -1010,7 +1016,6 @@ public class ClipboardTests
         // This test demonstrates how a user can manually deserialize JsonData<T> that has been serialized onto
         // the clipboard from stream. This may need to be done if type JsonData<T> does not exist in the .NET version
         // the user is utilizing.
-        Clipboard.Clear();
         SimpleTestData testData = new() { X = 1, Y = 1 };
         Clipboard.SetDataAsJson("testFormat", testData);
 
@@ -1169,5 +1174,89 @@ public class ClipboardTests
     {
         Action clipboardSet = () => Clipboard.SetDataAsJson<string>("format", null!);
         clipboardSet.Should().Throw<ArgumentNullException>();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetData_Text_Format_AllUpper()
+    {
+        // The fact that casing on input matters is likely incorrect, but behavior has been this way.
+        Clipboard.SetData("TEXT", "Hello, World!");
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["Text"]);
+
+        // CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.
+        Clipboard.GetText().Should().BeEmpty();
+        Clipboard.GetText(TextDataFormat.Text).Should().BeEmpty();
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().BeEmpty();
+
+        Clipboard.GetData("System.String").Should().BeNull();
+        Clipboard.GetData("TEXT").Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetData_Text_Format_CanonicalCase()
+    {
+        string expected = "Hello, World!";
+        Clipboard.SetData("Text", expected);
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        Clipboard.GetText().Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(expected);
+
+        Clipboard.GetData("System.String").Should().Be(expected);
+
+        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
+        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
+        byte[] array = stream.ToArray();
+        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_Text()
+    {
+        string expected = "Hello, World!";
+        Clipboard.SetDataObject(expected);
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        Clipboard.GetText().Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(expected);
+
+        Clipboard.GetData("System.String").Should().Be(expected);
+
+        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
+        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
+        byte[] array = stream.ToArray();
+        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
     }
 }

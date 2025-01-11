@@ -238,7 +238,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
 
                 if (attributeList.Count > 0)
                 {
-                    newAttributes ??= new(AttributeArray);
+                    newAttributes ??= [..AttributeArray];
 
                     // Push any new attributes into the base type.
                     for (int i = 0; i < attributeList.Count; i++)

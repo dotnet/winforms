@@ -46,7 +46,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Public ReadOnly Property Address As String
-        Public Property ServerFault As Exception
+        ''' <summary>
+        '''  This server will save a <see langword="String"/> when something in the stream doesn't
+        '''  match what is expected. These will never be visible to the user.
+        ''' </summary>
+        ''' <value>A <see langword="String"/> with a description of the issue or <see langword="Nothing"/></value>
+        Public Property ServerFaultMessage As String
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -144,12 +149,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 Try
                                     Dim dataLength As String = formData(NameOf(dataLength))
                                     If _fileSize.ToString <> dataLength Then
-                                        ServerFault = New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
+                                        ServerFaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
                                     End If
 
                                     Dim fileName As String = formData("filename")
                                     If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                        ServerFault = New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
+                                        ServerFaultMessage = $"Filename incorrect, expected 'Testing.Txt', actual {fileName}"
                                     End If
                                 Catch ex As Exception
                                     ' Ignore is case upload is cancelled
@@ -219,7 +224,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             End If
                         Next
                     Catch ex As Exception
-                        ' ignore
+                        ServerFaultMessage = "MultipartFormData format Error"
                     End Try
                 End Using
             End If

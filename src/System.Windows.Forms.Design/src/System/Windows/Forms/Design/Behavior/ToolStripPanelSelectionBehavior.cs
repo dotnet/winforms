@@ -223,7 +223,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
 
         if (e.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            components = new List<IComponent>(data.DragComponents);
+            components = [..data.DragComponents];
 
             foreach (IComponent dragComponent in components)
             {
