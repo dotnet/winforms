@@ -7424,6 +7424,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Le type {0} à la ligne {1}, position {2}, a levé l'exception suivante lors de sa conversion : {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">L'icône à associer à l'info-bulle.</target>
