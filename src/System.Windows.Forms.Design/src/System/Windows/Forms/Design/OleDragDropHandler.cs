@@ -257,7 +257,7 @@ internal partial class OleDragDropHandler
         {
             host?.Activate();
 
-            List<IComponent> selectComps = new(comps);
+            List<IComponent> selectComps = [..comps];
 
             for (int i = 0; i < comps.Length; i++)
             {

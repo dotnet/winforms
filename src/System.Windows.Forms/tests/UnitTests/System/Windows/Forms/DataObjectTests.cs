@@ -3032,10 +3032,6 @@ public partial class DataObjectTests
 
         // We don't expose JsonData<T> in public legacy API
         data.GetData(format).Should().BeNull();
-
-        // For the clipboard, we don't expose JsonData<T> either for in proc scenarios.
-        Clipboard.SetDataObject(data, copy: false);
-        Clipboard.GetData(format).Should().BeNull();
     }
 
     [WinFormsFact]

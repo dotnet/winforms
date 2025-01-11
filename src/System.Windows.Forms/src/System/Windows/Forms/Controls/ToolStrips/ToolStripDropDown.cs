@@ -1948,7 +1948,7 @@ public partial class ToolStripDropDown : ToolStrip
         }
         else
         {
-            List<ToolStripDropDown> dropDowns = new(ActiveDropDowns);
+            List<ToolStripDropDown> dropDowns = [..ActiveDropDowns];
 
             // We can't iterate through the active dropdown collection
             // here as changing visibility changes the collection.

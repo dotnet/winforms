@@ -2052,7 +2052,7 @@ public partial class ComboBox : ListControl
                 else
                 {
                     // Remove one character from matching text and rematch
-                    MatchingText = MatchingText.Remove(MatchingText.Length - 1);
+                    MatchingText = MatchingText[..^1];
                     SelectedIndex = FindString(MatchingText);
                 }
 
@@ -3765,14 +3765,7 @@ public partial class ComboBox : ListControl
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
-                    if ((!Enabled || FlatStyle == FlatStyle.Popup) && MouseIsOver)
-                    {
-                        FlatComboBoxAdapter.DrawPopUpCombo(this, g);
-                    }
-                    else
-                    {
-                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                    }
+                    FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                     return;
                 }
@@ -3856,5 +3849,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, shouldRedrawAsSmallButton: false);
+        => new(this, smallButton: false);
 }

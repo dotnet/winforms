@@ -132,7 +132,7 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Attempts to unwrap a ComWrapper CCW as a particular managed object.
     /// </summary>
-    private static bool TryUnwrapComWrapperCCW<TWrapper>(
+    public static bool TryUnwrapComWrapperCCW<TWrapper>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
     {
