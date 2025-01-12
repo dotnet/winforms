@@ -6,6 +6,8 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
 Namespace Microsoft.VisualBasic.Devices
     Friend Module NetworkUtilities
 
@@ -70,13 +72,14 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                     path:=destinationFileName,
                     paramName:=NameOf(destinationFileName))
+                Dim addressTrimmed As String = address.Replace("//", "/")
                 Return New ProgressDialog With {
-                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = Utils.GetResourceString(
-                                ResourceKey:=SR.ProgressDialogDownloadingLabel,
-                                address,
-                                fullFilename)
-                            }
+                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, addressTrimmed),
+                    .LabelText = VbUtils.GetResourceString(
+                        resourceKey:=SR.ProgressDialogDownloadingLabel,
+                        addressTrimmed,
+                        fullFilename)
+                    }
             End If
             Return Nothing
         End Function

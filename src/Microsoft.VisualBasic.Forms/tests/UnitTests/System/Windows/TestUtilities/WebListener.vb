@@ -10,6 +10,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
         Private Const BufferSize As Integer = 4096
+        Private ReadOnly _address As String
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
@@ -24,7 +25,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Debug.Assert(fileSize > 0)
             _fileSize = fileSize
             _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
-            Address = $"{_fileUrlPrefix}T{fileSize}"
+            _address = $"{_fileUrlPrefix}T{fileSize}"
         End Sub
 
         ''' <summary>
@@ -46,6 +47,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         Public ReadOnly Property Address As String
+            Get
+                Return _address
+            End Get
+        End Property
+
+        Public ReadOnly Property FileSize As Long
+            Get
+                Return _fileSize
+            End Get
+        End Property
+
         ''' <summary>
         '''  This server will save a <see langword="String"/> when something in the stream doesn't
         '''  match what is expected. These will never be visible to the user.
@@ -101,89 +113,92 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
 
-            listener.Prefixes.Add(_fileUrlPrefix)
-            If _userName IsNot Nothing OrElse _password IsNot Nothing Then
-                listener.AuthenticationSchemes = AuthenticationSchemes.Basic
-            End If
-            listener.Start()
-            Dim action As Action =
-                Sub()
-                    ' Start the listener to begin listening for requests.
-                    Dim response As HttpListenerResponse = Nothing
-                    Try
-                        ' Note: GetContext blocks while waiting for a request.
-                        Dim context As HttpListenerContext = listener.GetContext()
-                        ' Create the response.
-                        response = context.Response
+            If _fileUrlPrefix.Contains("8080") Then
 
-                        If context.User?.Identity.IsAuthenticated Then
-                            Dim identity As HttpListenerBasicIdentity =
-                                CType(context.User?.Identity, HttpListenerBasicIdentity)
-
-                            If String.IsNullOrWhiteSpace(identity.Name) _
-                                OrElse identity.Name <> _userName _
-                                OrElse String.IsNullOrWhiteSpace(identity.Password) _
-                                OrElse identity.Password <> _password Then
-
-                                response.StatusCode = HttpStatusCode.Unauthorized
-                                Exit Try
-                            End If
-                        End If
-                        ' Simulate network traffic
-                        Thread.Sleep(millisecondsTimeout:=20)
-                        If listener.Prefixes(0).Contains("UploadFile") Then
-                            Dim request As HttpListenerRequest = context.Request
-                            If request.HttpMethod.Equals("Post", StringComparison.OrdinalIgnoreCase) _
-                                AndAlso request.HasEntityBody Then
-
-                                Dim formData As Dictionary(Of String, String) = GetMultipartFormData(request)
-
-                                Using bodyStream As Stream = request.InputStream
-                                    Using reader As New StreamReader(
-                                        stream:=bodyStream,
-                                        encoding:=request.ContentEncoding,
-                                        detectEncodingFromByteOrderMarks:=True,
-                                        BufferSize)
-                                    End Using
-                                End Using
-                                Try
-                                    Dim dataLength As String = formData(NameOf(dataLength))
-                                    If _fileSize.ToString <> dataLength Then
-                                        ServerFaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
-                                    End If
-
-                                    Dim fileName As String = formData("filename")
-                                    If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                        ServerFaultMessage = $"Filename incorrect, expected 'Testing.Txt', actual {fileName}"
-                                    End If
-                                Catch ex As Exception
-                                    ' Ignore is case upload is cancelled
-                                End Try
-                            End If
-                            response.StatusCode = 200
-                        Else
-                            Dim responseString As String = Strings.StrDup(_fileSize, "A")
-                            Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
-                            response.ContentLength64 = buffer.Length
-                            Using output As Stream = response.OutputStream
-                                Try
-                                    output.Write(buffer, offset:=0, count:=buffer.Length)
-                                Catch ex As Exception
-                                    ' ignore it will be handled elsewhere
-                                End Try
-                            End Using
-                        End If
-                    Finally
+                listener.Prefixes.Add(_fileUrlPrefix)
+                If _userName IsNot Nothing OrElse _password IsNot Nothing Then
+                    listener.AuthenticationSchemes = AuthenticationSchemes.Basic
+                End If
+                listener.Start()
+                Dim action As Action =
+                    Sub()
+                        ' Start the listener to begin listening for requests.
+                        Dim response As HttpListenerResponse = Nothing
                         Try
-                            response?.Close()
-                        Catch ex As Exception
+                            ' Note: GetContext blocks while waiting for a request.
+                            Dim context As HttpListenerContext = listener.GetContext()
+                            ' Create the response.
+                            response = context.Response
 
+                            If context.User?.Identity.IsAuthenticated Then
+                                Dim identity As HttpListenerBasicIdentity =
+                                    CType(context.User?.Identity, HttpListenerBasicIdentity)
+
+                                If String.IsNullOrWhiteSpace(identity.Name) _
+                                    OrElse identity.Name <> _userName _
+                                    OrElse String.IsNullOrWhiteSpace(identity.Password) _
+                                    OrElse identity.Password <> _password Then
+
+                                    response.StatusCode = HttpStatusCode.Unauthorized
+                                    Exit Try
+                                End If
+                            End If
+                            ' Simulate network traffic
+                            Thread.Sleep(millisecondsTimeout:=20)
+                            If listener.Prefixes(0).Contains("UploadFile") Then
+                                Dim request As HttpListenerRequest = context.Request
+                                If request.HttpMethod.Equals("Post", StringComparison.OrdinalIgnoreCase) _
+                                    AndAlso request.HasEntityBody Then
+
+                                    Dim formData As Dictionary(Of String, String) = GetMultipartFormData(request)
+
+                                    Using bodyStream As Stream = request.InputStream
+                                        Using reader As New StreamReader(
+                                            stream:=bodyStream,
+                                            encoding:=request.ContentEncoding,
+                                            detectEncodingFromByteOrderMarks:=True,
+                                            BufferSize)
+                                        End Using
+                                    End Using
+                                    Try
+                                        Dim dataLength As String = formData(NameOf(dataLength))
+                                        If _fileSize.ToString <> dataLength Then
+                                            ServerFaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
+                                        End If
+
+                                        Dim fileName As String = formData("filename")
+                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
+                                            ServerFaultMessage = $"Filename incorrect, expected 'Testing.Txt', actual {fileName}"
+                                        End If
+                                    Catch ex As Exception
+                                        ' Ignore is case upload is cancelled
+                                    End Try
+                                End If
+                                response.StatusCode = 200
+                            Else
+                                Dim responseString As String = Strings.StrDup(_fileSize, "A")
+                                Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
+                                response.ContentLength64 = buffer.Length
+                                Using output As Stream = response.OutputStream
+                                    Try
+                                        output.Write(buffer, offset:=0, count:=buffer.Length)
+                                    Catch ex As Exception
+                                        ' ignore it will be handled elsewhere
+                                    End Try
+                                End Using
+                            End If
+                        Finally
+                            Try
+                                response?.Close()
+                            Catch ex As Exception
+
+                            End Try
+                            response = Nothing
                         End Try
-                        response = Nothing
-                    End Try
-                End Sub
+                    End Sub
 
-            Task.Run(action)
+                Task.Run(action)
+            End If
             Return listener
         End Function
 
