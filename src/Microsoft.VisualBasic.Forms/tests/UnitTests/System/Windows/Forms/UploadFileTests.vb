@@ -90,8 +90,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UploadFile_UriOnlyWrongFileSize_Throw()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(1)
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
