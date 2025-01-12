@@ -11,6 +11,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
         Private Const BufferSize As Integer = 4096
         Private ReadOnly _address As String
+        Private ReadOnly _fileName As String
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
@@ -23,9 +24,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
             Debug.Assert(fileSize > 0)
+            _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip"
             _fileSize = fileSize
             _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
-            _address = $"{_fileUrlPrefix}T{fileSize}"
+            _address = $"{_fileUrlPrefix}{_fileName}"
         End Sub
 
         ''' <summary>
@@ -164,11 +166,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                         Dim dataLength As String = formData(NameOf(dataLength))
                                         If _fileSize.ToString <> dataLength Then
                                             ServerFaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
-                                        End If
-
-                                        Dim fileName As String = formData("filename")
-                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
-                                            ServerFaultMessage = $"Filename incorrect, expected 'Testing.Txt', actual {fileName}"
+                                        Else
+                                            Dim fileName As String = formData("filename")
+                                            If Not fileName.Equals(_fileName, StringComparison.OrdinalIgnoreCase) Then
+                                                ServerFaultMessage = $"Filename incorrect, expected '{_fileName}', actual {fileName}"
+                                            End If
                                         End If
                                     Catch ex As Exception
                                         ' Ignore is case upload is cancelled

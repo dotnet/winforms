@@ -46,6 +46,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
         Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As Integer = -1) As String
+            If filename = DefaultFileName Then
+                filename = $"{[Enum].GetName(GetType(FileSizes), size)}.zip"
+
+            End If
             Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
 
             If size >= 0 Then

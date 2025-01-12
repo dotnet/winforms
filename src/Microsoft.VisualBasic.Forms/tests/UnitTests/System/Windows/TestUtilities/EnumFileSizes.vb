@@ -4,6 +4,7 @@
 Namespace Microsoft.VisualBasic.Forms.Tests
     Friend Module EnumFileSizes
         Friend Enum FileSizes As Integer
+            FileSize1Byte = 1
             FileSize1MB = 1_048_576
             FileSize100MB = 104_857_600
             FileSize1GB = 1_048_576_000
