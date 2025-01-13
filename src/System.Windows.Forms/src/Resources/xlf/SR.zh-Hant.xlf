@@ -969,7 +969,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
-        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <target state="translated">類型 『DataObject』 的物件將串行化為空白。使用物件上的 'DataObject.SetDataAsJson' API 將對象內的數據 JSON 串行化，然後在物件中使用 '{0}' API。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
@@ -984,7 +984,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
         <source>Failed to deserialize JSON data.</source>
-        <target state="new">Failed to deserialize JSON data.</target>
+        <target state="translated">無法還原序列化 JSON 資料。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">

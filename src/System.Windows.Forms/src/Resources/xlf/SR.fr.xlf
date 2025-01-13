@@ -969,7 +969,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
-        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <target state="translated">Un objet de type 'DataObject' va sérialiser comme vide. Utilisez les API « DataObject.SetDataAsJson » sur votre objet pour sérialiser les données au sein de votre objet, puis utilisez l’API '{0}' avec votre objet.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
@@ -984,7 +984,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
         <source>Failed to deserialize JSON data.</source>
-        <target state="new">Failed to deserialize JSON data.</target>
+        <target state="translated">Nous n’avons pas pu désérialiser les données JSON.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">

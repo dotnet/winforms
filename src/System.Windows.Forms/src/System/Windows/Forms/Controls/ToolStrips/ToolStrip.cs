@@ -3933,7 +3933,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <param name="items">contains ToolStrip or ToolStripDropDown items to disconnect</param>
     internal virtual void ReleaseToolStripItemsProviders(ToolStripItemCollection items)
     {
-        ToolStripItem[] itemsArray = items.Cast<ToolStripItem>().ToArray();
+        ToolStripItem[] itemsArray = [..items.Cast<ToolStripItem>()];
         foreach (ToolStripItem toolStripItem in itemsArray)
         {
             if (toolStripItem is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 0)
@@ -4680,16 +4680,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
-    internal void OnItemRemovedInternal(ToolStripItem item, ToolStripItemCollection itemCollection)
+    internal void OnItemRemovedInternal(ToolStripItem item)
     {
         KeyboardToolTipStateMachine.Instance.Unhook(item, ToolTip);
-        if (itemCollection == _toolStripItemCollection)
-        {
-            // To prevent memory leaks when item removed from main collection,
-            // we need to remove it from _displayedItems and _overflowItems too.
-            _displayedItems?.Remove(item);
-            _overflowItems?.Remove(item);
-        }
     }
 
     internal override bool AllowsChildrenToShowToolTips()

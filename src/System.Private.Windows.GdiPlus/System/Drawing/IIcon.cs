@@ -5,5 +5,5 @@ namespace System.Drawing;
 
 internal interface IIcon : IHandle<HICON>
 {
-    public Size Size { get; }
+    Size Size { get; }
 }
