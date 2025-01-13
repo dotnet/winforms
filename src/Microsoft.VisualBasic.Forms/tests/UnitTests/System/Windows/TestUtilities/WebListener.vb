@@ -9,6 +9,7 @@ Imports System.Threading
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
+        Inherits ServerConfiguration
         Private Const BufferSize As Integer = 4096
         Private ReadOnly _address As String
         Private ReadOnly _fileName As String
@@ -16,6 +17,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _serverConfigurationInstance As ServerConfiguration
         Private ReadOnly _upload As Boolean
+        Private Shared ReadOnly s_jsonFilePath As String =
+            Path.Combine(My.Application.Info.DirectoryPath, "System\Windows\TestUtilities\TestData", "ServerConfiguration.JSON")
+
 
         ''' <summary>
         '''  The name of the function that creates the server is used to establish the file to be downloaded.
@@ -26,10 +30,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Debug.Assert(fileSize > 0)
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
-            _serverConfigurationInstance = ServerConfiguration.Load()
-            _fileUrlPrefix = Get_serverConfigurationInstance().GetFileUrlPrefix(_upload)
+            _serverConfigurationInstance = ServerConfigurationLoad(s_jsonFilePath)
+            _fileUrlPrefix = GetServerConfigurationInstance().GetFileUrlPrefix(_upload)
             _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)
-            _address = $"{Get_serverConfigurationInstance().GetFileUrlPrefix(_upload)}{_fileName}"
+            _address = $"{GetServerConfigurationInstance().GetFileUrlPrefix(_upload)}{_fileName}"
         End Sub
 
         ''' <summary>
@@ -50,10 +54,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             If localServer Then
                 _ServerPassword = serverPassword
-                _ServerUerName = serverUserName
+                _ServerUserName = serverUserName
             Else
-                _ServerPassword = Get_serverConfigurationInstance().GetDefaultPassword(_upload)
-                _ServerUerName = Get_serverConfigurationInstance().GetDefaultUserName(_upload)
+                _ServerPassword = GetServerConfigurationInstance().GetDefaultPassword(_upload)
+                _ServerUserName = GetServerConfigurationInstance().GetDefaultUserName(_upload)
             End If
         End Sub
 
@@ -85,7 +89,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <returns></returns>
         Public Property ServerThrowsPasswordErrors As Boolean = True
 
-        Public Property ServerUerName As String
+        Public Property ServerUserName As String
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -138,7 +142,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If _fileUrlPrefix.Contains("8080") Then
 
                 listener.Prefixes.Add(_fileUrlPrefix)
-                If _ServerUerName IsNot Nothing OrElse _ServerPassword IsNot Nothing Then
+                If _ServerUserName IsNot Nothing OrElse _ServerPassword IsNot Nothing Then
                     listener.AuthenticationSchemes = AuthenticationSchemes.Basic
                 End If
                 listener.Start()
@@ -157,7 +161,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                     CType(context.User?.Identity, HttpListenerBasicIdentity)
 
                                 If String.IsNullOrWhiteSpace(identity.Name) _
-                                    OrElse identity.Name <> _ServerUerName _
+                                    OrElse identity.Name <> _ServerUserName _
                                     OrElse String.IsNullOrWhiteSpace(identity.Password) _
                                     OrElse identity.Password <> _ServerPassword Then
 
@@ -224,7 +228,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return listener
         End Function
 
-        Public Function Get_serverConfigurationInstance() As ServerConfiguration
+        Public Function GetServerConfigurationInstance() As ServerConfiguration
             Return _serverConfigurationInstance
         End Function
 

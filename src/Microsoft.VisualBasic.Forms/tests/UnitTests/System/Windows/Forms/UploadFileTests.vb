@@ -13,6 +13,115 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class UploadFileTests
         Inherits VbFileCleanupTestBase
 
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
+        Public Sub UploadFile_UnauthorizedUriWithAllOptions_ExceptOnUserCancelWherePasswordWrong_Throws(password As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(
+                fileSize:=FileSizes.FileSize1MB,
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.UploadFile(
+                            sourceFileName,
+                            address:=New Uri(webListener.Address),
+                            New NetworkCredential(webListener.ServerUserName, password),
+                            showUI:=False,
+                            connectionTimeout:=TestingConnectionTimeout)
+                    End Sub
+
+                testCode.Should() _
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.FaultMessage.Should.BeNull()
+            End Using
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
+        Public Sub UploadFile_UnauthorizedUriWithUserNamePasswordWherePasswordWrong_Throws(password As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(
+                fileSize:=FileSizes.FileSize1MB,
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.UploadFile(
+                            sourceFileName,
+                            address:=New Uri(webListener.Address),
+                            userName:=DefaultUserName,
+                            password)
+                    End Sub
+
+                testCode.Should() _
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.FaultMessage.Should.BeNull()
+            End Using
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
+        Public Sub UploadFile_UnauthorizedUrlWithUserNamePasswordWherePasswordWrong_Throw(password As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(
+                fileSize:=FileSizes.FileSize1MB,
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.UploadFile(
+                            sourceFileName,
+                            address:=webListener.Address,
+                            userName:=DefaultUserName,
+                            password)
+                    End Sub
+
+                testCode.Should() _
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.FaultMessage.Should.BeNull()
+            End Using
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
+        Public Sub UploadFile_UnauthorizedUrlWithUserNamePasswordWherePasswordWrong_Throws(password As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(
+                fileSize:=FileSizes.FileSize1MB,
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.UploadFile(
+                            sourceFileName,
+                            address:=New Uri(webListener.Address),
+                            userName:=DefaultUserName,
+                            password)
+                    End Sub
+
+                testCode.Should() _
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR.net_webstatus_Unauthorized)
+                webListener.FaultMessage.Should.BeNull()
+            End Using
+        End Sub
+
         <WinFormsFact>
         Public Sub UploadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
@@ -119,40 +228,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
-            End Using
-        End Sub
-
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        <InlineData("WrongPassword")>
-        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWherePasswordWrong_Throws(password As String)
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(
-                fileSize:=FileSizes.FileSize1MB,
-                serverUserName:=DefaultUserName,
-                serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(webListener.Address),
-                            New NetworkCredential(DefaultUserName, password),
-                            showUI:=False,
-                            connectionTimeout:=TestingConnectionTimeout)
-                    End Sub
-
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
                 webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
@@ -355,7 +436,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=Nothing,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -380,7 +461,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -405,7 +486,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -746,33 +827,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        <InlineData("WrongPassword")>
-        Public Sub UploadFile_UriWithUserNamePasswordWherePasswordWrong_Throws(password As String)
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(
-                fileSize:=FileSizes.FileSize1MB,
-                serverUserName:=DefaultUserName,
-                serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
-
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
-        End Sub
-
         <WinFormsFact>
         Public Sub UploadFile_UrlOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
@@ -1051,7 +1105,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             onUserCancel:=UICancelOption.ThrowException)
@@ -1310,60 +1364,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
-            End Using
-        End Sub
-
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        <InlineData("WrongPassword")>
-        Public Sub UploadFile_UrlWithUserNamePasswordWherePasswordWrong_Throw(password As String)
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(
-                fileSize:=FileSizes.FileSize1MB,
-                serverUserName:=DefaultUserName,
-                serverPassword:=String.Empty)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=webListener.Address,
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
-
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
-        End Sub
-
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        <InlineData("WrongPassword")>
-        Public Sub UploadFile_UrlWithUserNamePasswordWherePasswordWrong_Throws(password As String)
-            Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(
-                fileSize:=FileSizes.FileSize1MB,
-                serverUserName:=DefaultUserName,
-                serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
-
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
                 webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub

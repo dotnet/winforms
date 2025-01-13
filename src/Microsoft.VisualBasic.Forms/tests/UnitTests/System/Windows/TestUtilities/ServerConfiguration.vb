@@ -1,20 +1,13 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Text.Json
 Imports System.IO
-Imports System.Text.Json.Serialization
+Imports System.Text.Json
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class ServerConfiguration
-
-        Private Shared ReadOnly s_jsonFilePath As String =
-            Path.Combine(My.Computer.FileSystem.SpecialDirectories.MyDocuments, "ServerConfiguration.JSON")
-
-        Private ReadOnly _options As New JsonSerializerOptions() With {
-                .WriteIndented = True
-            }
+        Private ReadOnly _options As New JsonSerializerOptions() With {.WriteIndented = True}
 
         Public Sub New()
 
@@ -46,9 +39,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Property ServerUploadPassword As String = "DefaultPassword"
         Public Property ServerUploadUserName As String = "DefaultUserName"
 
-        Public Shared Function Load() As ServerConfiguration
-            If File.Exists(s_jsonFilePath) Then
-                Dim jsonString As String = File.ReadAllText(s_jsonFilePath)
+        Public Shared Function ServerConfigurationLoad(jsonFilePath As String) As ServerConfiguration
+            If File.Exists(jsonFilePath) Then
+                Dim jsonString As String = File.ReadAllText(jsonFilePath)
                 Return JsonSerializer.Deserialize(Of ServerConfiguration)(jsonString)
             End If
             Return New ServerConfiguration
@@ -78,9 +71,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Function
 
-        Public Sub Save()
+        Public Sub ServerConfigurationSave(jsonFilePath As String)
             Dim jsonString As String = JsonSerializer.Serialize(Me, _options)
-            File.WriteAllText(s_jsonFilePath, jsonString)
+            File.WriteAllText(jsonFilePath, jsonString)
         End Sub
 
     End Class

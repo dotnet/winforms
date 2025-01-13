@@ -30,7 +30,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             My.Computer.Network.DownloadFile(
                                 address:=New Uri(webListener.Address),
                                 destinationFileName,
-                                GetNetworkCredentials(DefaultUserName, password),
+                                GetNetworkCredentials(webListener.ServerUserName, password),
                                 showUI:=False,
                                 connectionTimeout:=TestingConnectionTimeout,
                                 overwrite:=True)
@@ -249,7 +249,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True)
@@ -497,7 +497,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=Nothing,
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -523,7 +523,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -550,7 +550,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             overwrite:=True,
@@ -1252,7 +1252,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
