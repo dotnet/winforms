@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -101,7 +101,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.StartWith("File size mismatch")
+                webListener.FaultMessage.Should.StartWith("File size mismatch")
             End Using
         End Sub
 
@@ -111,8 +111,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -125,7 +125,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -137,8 +137,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -153,7 +153,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -178,7 +178,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -225,7 +225,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -247,7 +247,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -271,7 +271,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -293,7 +293,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of UriFormatException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -315,7 +315,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -337,7 +337,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -347,8 +347,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -362,7 +362,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -372,8 +372,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -387,7 +387,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -397,8 +397,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -412,7 +412,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -434,7 +434,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -459,7 +459,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -488,7 +488,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -544,7 +544,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -567,7 +567,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -592,7 +592,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should().Throw(Of FileNotFoundException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -622,7 +622,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -644,7 +644,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -669,7 +669,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -692,7 +692,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -702,8 +702,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -715,7 +715,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -727,8 +727,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -742,7 +742,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -754,8 +754,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -769,7 +769,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -787,7 +787,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -806,7 +806,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -824,7 +824,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -849,7 +849,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -874,7 +874,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -921,7 +921,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -964,7 +964,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -989,7 +989,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1011,7 +1011,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1033,7 +1033,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.StartWith("File size mismatch")
+                webListener.FaultMessage.Should.StartWith("File size mismatch")
             End Using
         End Sub
 
@@ -1043,8 +1043,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1058,7 +1058,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1083,7 +1083,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1133,7 +1133,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1162,7 +1162,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1185,7 +1185,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1215,7 +1215,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1239,7 +1239,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1264,7 +1264,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of ArgumentNullException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1287,7 +1287,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1297,8 +1297,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1310,7 +1310,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.NotThrow()
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1322,8 +1322,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1337,7 +1337,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 
@@ -1349,8 +1349,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1364,7 +1364,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.ServerFaultMessage.Should.BeNull()
+                webListener.FaultMessage.Should.BeNull()
             End Using
         End Sub
 

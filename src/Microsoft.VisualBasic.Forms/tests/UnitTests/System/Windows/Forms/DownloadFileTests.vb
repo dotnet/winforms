@@ -21,9 +21,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            If webListener.PasswordErrorsIgnored Then
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
                 Using listener As HttpListener = webListener.ProcessRequests()
                     Dim testCode As Action =
                         Sub()
@@ -52,9 +52,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
-            If webListener.PasswordErrorsIgnored Then
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
+            If webListener.ServerThrowsPasswordErrors Then
                 Using listener As HttpListener = webListener.ProcessRequests()
                     Dim testCode As Action =
                         Sub()
@@ -81,9 +81,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            If webListener.PasswordErrorsIgnored Then
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
                 Using listener As HttpListener = webListener.ProcessRequests()
                     Dim testCode As Action =
                         Sub()
@@ -110,9 +110,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
-            If webListener.PasswordErrorsIgnored Then
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
+            If webListener.ServerThrowsPasswordErrors Then
                 Using listener As HttpListener = webListener.ProcessRequests()
                     Dim testCode As Action =
                         Sub()
@@ -139,9 +139,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            If webListener.PasswordErrorsIgnored Then
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
                 Using listener As HttpListener = webListener.ProcessRequests()
                     Dim testCode As Action =
                     Sub()
@@ -241,8 +241,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -489,8 +489,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -515,8 +515,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -542,8 +542,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -916,8 +916,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1244,8 +1244,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1591,8 +1591,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()

@@ -14,9 +14,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileName As String
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
-        Private ReadOnly _password As String
+        Private ReadOnly _serverConfigurationInstance As ServerConfiguration
         Private ReadOnly _upload As Boolean
-        Private ReadOnly _userName As String
 
         ''' <summary>
         '''  The name of the function that creates the server is used to establish the file to be downloaded.
@@ -27,27 +26,35 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Debug.Assert(fileSize > 0)
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
+            _serverConfigurationInstance = ServerConfiguration.Load()
+            _fileUrlPrefix = Get_serverConfigurationInstance().GetFileUrlPrefix(_upload)
             _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)
-            _fileUrlPrefix = $"http://127.0.0.1:8080/"
-            _address = $"{_fileUrlPrefix}{_fileName}"
+            _address = $"{Get_serverConfigurationInstance().GetFileUrlPrefix(_upload)}{_fileName}"
         End Sub
 
         ''' <summary>
         '''  Used for authenticated download.
         ''' </summary>
         ''' <param name="fileSize">Passed to Me.New.</param>
-        ''' <param name="userName">Name to match for authorization.</param>
-        ''' <param name="password">Password to match for authorization.</param>
+        ''' <param name="serverUserName">Name to match for authorization.</param>
+        ''' <param name="serverPassword">Password to match for authorization.</param>
         ''' <param name="memberName">Passed to Me.New.</param>
         Public Sub New(
             fileSize As Integer,
-            userName As String,
-            password As String,
+            serverUserName As String,
+            serverPassword As String,
             <CallerMemberName> Optional memberName As String = Nothing)
 
             Me.New(fileSize, memberName)
-            _userName = userName
-            _password = password
+            Dim localServer As Boolean = _fileUrlPrefix.Contains("8080")
+
+            If localServer Then
+                _ServerPassword = serverPassword
+                _ServerUerName = serverUserName
+            Else
+                _ServerPassword = Get_serverConfigurationInstance().GetDefaultPassword(_upload)
+                _ServerUerName = Get_serverConfigurationInstance().GetDefaultUserName(_upload)
+            End If
         End Sub
 
         Public ReadOnly Property Address As String
@@ -56,19 +63,29 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Get
         End Property
 
+        ''' <summary>
+        '''  This server will save a <see langword="String"/> when something in the stream doesn't
+        '''  match what is expected. These will never be visible to the user.
+        ''' </summary>
+        ''' <value>A <see langword="String"/> with a description of the issue or <see langword="Nothing"/></value>
+        Public Property FaultMessage As String
+
         Public ReadOnly Property FileSize As Long
             Get
                 Return _fileSize
             End Get
         End Property
 
+        Public Property ServerPassword As String
+
         ''' <summary>
-        '''  This server will save a <see langword="String"/> when something in the stream doesn't
-        '''  match what is expected. These will never be visible to the user.
+        '''  Some File servers do not return errors on mismatched passwords so we need to
+        '''  ignore tests that expect errors.
         ''' </summary>
-        ''' <value>A <see langword="String"/> with a description of the issue or <see langword="Nothing"/></value>
-        Public Property ServerFaultMessage As String
-        Public Property PasswordErrorsIgnored As Boolean
+        ''' <returns></returns>
+        Public Property ServerThrowsPasswordErrors As Boolean = True
+
+        Public Property ServerUerName As String
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -121,7 +138,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If _fileUrlPrefix.Contains("8080") Then
 
                 listener.Prefixes.Add(_fileUrlPrefix)
-                If _userName IsNot Nothing OrElse _password IsNot Nothing Then
+                If _ServerUerName IsNot Nothing OrElse _ServerPassword IsNot Nothing Then
                     listener.AuthenticationSchemes = AuthenticationSchemes.Basic
                 End If
                 listener.Start()
@@ -140,9 +157,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                     CType(context.User?.Identity, HttpListenerBasicIdentity)
 
                                 If String.IsNullOrWhiteSpace(identity.Name) _
-                                    OrElse identity.Name <> _userName _
+                                    OrElse identity.Name <> _ServerUerName _
                                     OrElse String.IsNullOrWhiteSpace(identity.Password) _
-                                    OrElse identity.Password <> _password Then
+                                    OrElse identity.Password <> _ServerPassword Then
 
                                     response.StatusCode = HttpStatusCode.Unauthorized
                                     Exit Try
@@ -168,11 +185,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                     Try
                                         Dim dataLength As String = formData(NameOf(dataLength))
                                         If _fileSize.ToString <> dataLength Then
-                                            ServerFaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
+                                            FaultMessage = $"File size mismatch, expected {_fileSize} actual {dataLength}"
                                         Else
                                             Dim fileName As String = formData("filename")
                                             If Not fileName.Equals(_fileName, StringComparison.OrdinalIgnoreCase) Then
-                                                ServerFaultMessage = $"Filename incorrect, expected '{_fileName}', actual {fileName}"
+                                                FaultMessage = $"Filename incorrect, expected '{_fileName}', actual {fileName}"
                                             End If
                                         End If
                                     Catch ex As Exception
@@ -205,6 +222,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Task.Run(action)
             End If
             Return listener
+        End Function
+
+        Public Function Get_serverConfigurationInstance() As ServerConfiguration
+            Return _serverConfigurationInstance
         End Function
 
         ''' <summary>
@@ -244,7 +265,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             End If
                         Next
                     Catch ex As Exception
-                        ServerFaultMessage = "MultipartFormData format Error"
+                        FaultMessage = "MultipartFormData format Error"
                     End Try
                 End Using
             End If
