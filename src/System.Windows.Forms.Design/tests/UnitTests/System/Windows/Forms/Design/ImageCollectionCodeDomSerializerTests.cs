@@ -3,8 +3,11 @@
 
 #nullable enable
 
+using System.CodeDom;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Drawing;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -41,20 +44,21 @@ public sealed class ImageCollectionCodeDomSerializerTests
     [Fact]
     public void Deserialize_ShouldCallBaseSerializer_WhenBaseSerializerFound()
     {
-        var managerMock = new Mock<IDesignerSerializationManager>();
-        var baseSerializerMock = new Mock<CodeDomSerializer>();
+        Mock<IDesignerSerializationManager> managerMock = new();
+        Mock<CodeDomSerializer> baseSerializerMock = new();
 
-        managerMock.Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer)))
-                 .Returns(baseSerializerMock.Object);
+        managerMock
+            .Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer)))
+            .Returns(baseSerializerMock.Object);
 
-        var codeObject = new object();
-        var expectedResult = new object();
+        object codeObject = new();
+        object expectedResult = new();
 
-        baseSerializerMock.Setup(s => s.Deserialize(managerMock.Object, codeObject))
-                          .Returns(expectedResult);
+        baseSerializerMock
+            .Setup(s => s.Deserialize(managerMock.Object, codeObject))
+            .Returns(expectedResult);
 
-        var result = _serializer.Deserialize(managerMock.Object, codeObject);
-
+        object? result = _serializer.Deserialize(managerMock.Object, codeObject);
         baseSerializerMock.Verify(s => s.Deserialize(managerMock.Object, codeObject), Times.Once);
         result.Should().Be(expectedResult);
     }
@@ -62,15 +66,41 @@ public sealed class ImageCollectionCodeDomSerializerTests
     [Fact]
     public void Deserialize_ShouldReturnNull_WhenBaseSerializerNotFound()
     {
-        var managerMock = new Mock<IDesignerSerializationManager>();
-        var baseSerializerMock = new Mock<CodeDomSerializer>();
+        Mock<IDesignerSerializationManager> managerMock = new();
+        Mock<CodeDomSerializer> baseSerializerMock = new();
 
-        managerMock.Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer)))
-                 .Returns(baseSerializerMock.Object);
+        managerMock
+            .Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer)))
+            .Returns(false);
 
-        var codeObject = new object();
-        var result = _serializer.Deserialize(managerMock.Object, codeObject);
+        Trace.Listeners.Clear();
+
+        object codeObject = new();
+        object? result = _serializer.Deserialize(managerMock.Object, codeObject);
 
         result.Should().BeNull();
+    }
+
+    [Fact]
+    public void Serialize_ShouldGenerateCodeStatements_ForImageListWithKeys()
+    {
+        Mock<IDesignerSerializationManager> managerMock = new();
+        Mock<CodeDomSerializer> baseSerializerMock = new();
+        ImageList imageList = new();
+        imageList.Images.Add("Key1", new Bitmap(1, 1));
+        imageList.Images.Add("Key2", new Bitmap(1, 1));
+
+        baseSerializerMock.Setup(b => b.Serialize(managerMock.Object, imageList)).Returns(new CodeStatementCollection());
+
+        managerMock
+            .Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer)))
+            .Returns(baseSerializerMock.Object);
+
+        ContextStack contextStack = new();
+        contextStack.Append(new ImageListCodeDomSerializer());
+        managerMock.Setup(m => m.Context).Returns(contextStack);
+
+        object? result = _serializer.Serialize(managerMock.Object, imageList);
+        result.Should().BeOfType<CodeStatementCollection>();
     }
 }
