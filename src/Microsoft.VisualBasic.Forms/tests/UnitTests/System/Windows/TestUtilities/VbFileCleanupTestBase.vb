@@ -47,7 +47,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </returns>
         Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As Integer = -1) As String
             If filename = DefaultFileName Then
-                filename = $"{[Enum].GetName(GetType(FileSizes), size)}.zip"
+                filename = $"{[Enum].GetName(GetType(FileSizes), size).Replace("FileSize", "")}.zip"
 
             End If
             Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)

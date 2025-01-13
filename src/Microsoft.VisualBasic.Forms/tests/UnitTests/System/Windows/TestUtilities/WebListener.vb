@@ -15,6 +15,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
+        Private ReadOnly _upload As Boolean
         Private ReadOnly _userName As String
 
         ''' <summary>
@@ -24,9 +25,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
             Debug.Assert(fileSize > 0)
-            _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip"
+            _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
-            _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
+            _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)
+            _fileUrlPrefix = $"http://127.0.0.1:8080/"
             _address = $"{_fileUrlPrefix}{_fileName}"
         End Sub
 
@@ -66,6 +68,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         ''' <value>A <see langword="String"/> with a description of the issue or <see langword="Nothing"/></value>
         Public Property ServerFaultMessage As String
+        Public Property PasswordErrorsIgnored As Boolean
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -147,7 +150,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             End If
                             ' Simulate network traffic
                             Thread.Sleep(millisecondsTimeout:=20)
-                            If listener.Prefixes(0).Contains("UploadFile") Then
+                            If _upload Then
                                 Dim request As HttpListenerRequest = context.Request
                                 If request.HttpMethod.Equals("Post", StringComparison.OrdinalIgnoreCase) _
                                     AndAlso request.HasEntityBody Then
