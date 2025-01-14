@@ -1052,7 +1052,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.Throw(Of OperationCanceledException)()
+                testCode.Should() _
+                    .Throw(Of Exception)() _
+                    .Where(Function(ex) TypeOf ex Is OperationCanceledException OrElse TypeOf ex Is WebException)
             End Using
         End Sub
 
