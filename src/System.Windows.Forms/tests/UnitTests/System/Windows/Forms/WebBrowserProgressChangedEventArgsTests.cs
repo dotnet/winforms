@@ -36,6 +36,7 @@ public class WebBrowserProgressChangedEventArgsTests
     public void CurrentProgress_ShouldReturnCorrectValue()
     {
         long expectedCurrentProgress = 75;
+
         WebBrowserProgressChangedEventArgs eventArgs = new(expectedCurrentProgress, 100);
 
         eventArgs.CurrentProgress.Should().Be(expectedCurrentProgress);
