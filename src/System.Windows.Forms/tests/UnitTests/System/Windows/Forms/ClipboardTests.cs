@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.Tests;
@@ -520,20 +521,14 @@ public partial class ClipboardTests
         ((nint)dataUnknown.Value).Should().Be((nint)realDataPointerUnknown.Value);
     }
 
+    private class DerivedDataObject : DataObject { }
+
     [WinFormsFact]
-    public void Clipboard_Set_DoesNotWrapTwice()
+    public void Clipboard_SetDataObject_DerivedDataObject_ReturnsExpected()
     {
-        string realDataObject = string.Empty;
-        Clipboard.SetDataObject(realDataObject);
-
-        IDataObject? clipboardDataObject = Clipboard.GetDataObject();
-        var dataObject = clipboardDataObject.Should().BeOfType<DataObject>().Which;
-        dataObject.IsWrappedForClipboard.Should().BeTrue();
-
-        Clipboard.SetDataObject(clipboardDataObject!);
-        IDataObject? clipboardDataObject2 = Clipboard.GetDataObject();
-        clipboardDataObject2.Should().NotBeNull();
-        clipboardDataObject2.Should().BeSameAs(clipboardDataObject);
+        DerivedDataObject derived = new();
+        Clipboard.SetDataObject(derived);
+        Clipboard.GetDataObject().Should().BeSameAs(derived);
     }
 
     [WinFormsFact]
@@ -588,5 +583,120 @@ public partial class ClipboardTests
         void IDataObject.SetData(Type format, object? data) => throw new NotImplementedException();
         void IDataObject.SetData(object? data) => throw new NotImplementedException();
         void ComTypes.IDataObject.SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool CloseClipboard();
+
+    [DllImport("user32.dll")]
+    private static extern bool OpenClipboard(HWND hWndNewOwner);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetClipboardData(uint uFormat, HANDLE data);
+
+    [WinFormsFact]
+    public unsafe void Clipboard_RawClipboard_SetClipboardData_ReturnsExpected()
+    {
+        OpenClipboard(HWND.Null).Should().BeTrue();
+        string testString = "test";
+        SetClipboardData((uint)CLIPBOARD_FORMAT.CF_UNICODETEXT, (HANDLE)Marshal.StringToHGlobalUni(testString));
+        CloseClipboard().Should().BeTrue();
+
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
+        dataObject.GetData(DataFormats.Text).Should().Be(testString);
+
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        Clipboard.GetText().Should().Be(testString);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(testString);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(testString);
+
+        Clipboard.GetData("System.String").Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetData_Text_Format_AllUpper()
+    {
+        // The fact that casing on input matters is likely incorrect, but behavior has been this way.
+        Clipboard.SetData("TEXT", "Hello, World!");
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["Text"]);
+
+        // CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.
+        Clipboard.GetText().Should().BeEmpty();
+        Clipboard.GetText(TextDataFormat.Text).Should().BeEmpty();
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().BeEmpty();
+
+        Clipboard.GetData("System.String").Should().BeNull();
+        Clipboard.GetData("TEXT").Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetData_Text_Format_CanonicalCase()
+    {
+        string expected = "Hello, World!";
+        Clipboard.SetData("Text", expected);
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        Clipboard.GetText().Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(expected);
+
+        Clipboard.GetData("System.String").Should().Be(expected);
+
+        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
+        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
+        byte[] array = stream.ToArray();
+        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_Text()
+    {
+        string expected = "Hello, World!";
+        Clipboard.SetDataObject(expected);
+        Clipboard.ContainsText().Should().BeTrue();
+        Clipboard.ContainsData("TEXT").Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.Text).Should().BeTrue();
+        Clipboard.ContainsData(DataFormats.UnicodeText).Should().BeTrue();
+
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        string[] formats = dataObject.GetFormats();
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        formats = dataObject.GetFormats(autoConvert: false);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+
+        Clipboard.GetText().Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(expected);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(expected);
+
+        Clipboard.GetData("System.String").Should().Be(expected);
+
+        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
+        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
+        byte[] array = stream.ToArray();
+        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
     }
 }
