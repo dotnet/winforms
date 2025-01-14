@@ -1068,7 +1068,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact> '(Skip:="Manual Testing Only, cancel must be hit during testing")>
+        <WinFormsFact(Skip:="Manual Testing Only, cancel must be hit during testing")>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Fail()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1GB)
