@@ -23,8 +23,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=FileSizes.FileSize1MB,
                 serverUserName:=DefaultUserName,
                 serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
                     Sub()
                         My.Computer.Network.UploadFile(
                             sourceFileName,
@@ -34,11 +35,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    webListener.FaultMessage.Should.BeNull()
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -51,21 +53,23 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=FileSizes.FileSize1MB,
                 serverUserName:=DefaultUserName,
                 serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.UploadFile(
+                                sourceFileName,
+                                address:=New Uri(webListener.Address),
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    webListener.FaultMessage.Should.BeNull()
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -78,21 +82,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=FileSizes.FileSize1MB,
                 serverUserName:=DefaultUserName,
                 serverPassword:=String.Empty)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=webListener.Address,
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.UploadFile(
+                                sourceFileName,
+                                address:=webListener.Address,
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    webListener.FaultMessage.Should.BeNull()
+                End Using
+            End If
+
         End Sub
 
         <WinFormsTheory>
@@ -105,21 +112,23 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=FileSizes.FileSize1MB,
                 serverUserName:=DefaultUserName,
                 serverPassword:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.UploadFile(
-                            sourceFileName,
-                            address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.UploadFile(
+                                sourceFileName,
+                                address:=New Uri(webListener.Address),
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                webListener.FaultMessage.Should.BeNull()
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    webListener.FaultMessage.Should.BeNull()
+                End Using
+            End If
         End Sub
 
         <WinFormsFact>
@@ -135,8 +144,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             address:=New Uri(webListener.Address))
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -208,9 +223,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             sourceFileName,
                             address:=New Uri(webListener.Address))
                     End Sub
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.StartWith("File size mismatch")
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.StartWith("File size mismatch")
             End Using
         End Sub
 
@@ -327,8 +348,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionLargeTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -395,8 +422,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -417,8 +450,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -647,8 +686,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             onUserCancel:=UICancelOption.DoNothing)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -772,8 +817,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             onUserCancel:=UICancelOption.DoNothing)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -791,10 +842,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
-                            password:=DefaultPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
-
                 testCode.Should.NotThrow()
                 webListener.FaultMessage.Should.BeNull()
             End Using
@@ -816,7 +866,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=New Uri(webListener.Address),
-                            userName:=DefaultUserName,
+                            userName:=webListener.ServerUserName,
                             password)
                     End Sub
 
@@ -840,8 +890,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             address:=webListener.Address)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1016,9 +1072,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             showUI:=True,
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
-
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1064,8 +1125,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1086,8 +1153,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             connectionTimeout:=TestingConnectionTimeout)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.StartWith("File size mismatch")
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.StartWith("File size mismatch")
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1238,8 +1311,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             onUserCancel:=UICancelOption.DoNothing)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1340,8 +1419,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             onUserCancel:=UICancelOption.DoNothing)
                     End Sub
 
-                testCode.Should.NotThrow()
-                webListener.FaultMessage.Should.BeNull()
+                If webListener.ServerAcceptsAnonymousLogin Then
+                    testCode.Should.NotThrow()
+                    webListener.FaultMessage.Should.BeNull()
+                Else
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                End If
             End Using
         End Sub
 
@@ -1359,8 +1444,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.UploadFile(
                             sourceFileName,
                             address:=webListener.Address,
-                            userName:=DefaultUserName,
-                            password:=DefaultPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
 
                 testCode.Should.NotThrow()

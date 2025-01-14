@@ -206,7 +206,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     _webClient.UploadFile(address, sourceFileName)
                 End If
             Catch ex As WebException
-                If ex.Message.Contains("401") Then
+                If ex.Message.Contains("401") OrElse ex.Message.Contains("530") Then
                     Throw New WebException(SR.net_webstatus_Unauthorized)
                 End If
                 If ex.Message.Contains("500") Then
@@ -219,8 +219,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             ' encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If _progressDialog Is Nothing OrElse Not _progressDialog.UserCanceledTheDialog Then
+                    If _exceptionEncounteredDuringFileTransfer.Message.Contains("401") OrElse _exceptionEncounteredDuringFileTransfer.Message.Contains("530") Then
+                        Throw New WebException(SR.net_webstatus_Unauthorized)
+                    End If
                     Throw _exceptionEncounteredDuringFileTransfer
                 End If
+                Throw _exceptionEncounteredDuringFileTransfer
             End If
         End Sub
 

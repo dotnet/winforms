@@ -11,15 +11,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
         Inherits ServerConfiguration
         Private Const BufferSize As Integer = 4096
+
+        Private Shared ReadOnly s_jsonFilePath As String =
+            Path.Combine(My.Application.Info.DirectoryPath, "System\Windows\TestUtilities\TestData", "ServerConfiguration.JSON")
+
         Private ReadOnly _address As String
         Private ReadOnly _fileName As String
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _serverConfigurationInstance As ServerConfiguration
+        Private ReadOnly _serverPassword As String
+        Private ReadOnly _serverUserName As String
         Private ReadOnly _upload As Boolean
-        Private Shared ReadOnly s_jsonFilePath As String =
-            Path.Combine(My.Application.Info.DirectoryPath, "System\Windows\TestUtilities\TestData", "ServerConfiguration.JSON")
-
 
         ''' <summary>
         '''  The name of the function that creates the server is used to establish the file to be downloaded.
@@ -31,9 +34,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
             _serverConfigurationInstance = ServerConfigurationLoad(s_jsonFilePath)
-            _fileUrlPrefix = GetServerConfigurationInstance().GetFileUrlPrefix(_upload)
+            _fileUrlPrefix = _serverConfigurationInstance.GetFileUrlPrefix(_upload)
             _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)
-            _address = $"{GetServerConfigurationInstance().GetFileUrlPrefix(_upload)}{_fileName}"
+            ServerAcceptsAnonymousLogin = _serverConfigurationInstance.GetAcceptsAnonymousLogin(_upload)
+            ServerThrowsPasswordErrors = _serverConfigurationInstance.GetThrowsPasswordErrors(_upload)
+            _address = $"{_serverConfigurationInstance.GetFileUrlPrefix(_upload)}{_fileName}"
         End Sub
 
         ''' <summary>
@@ -53,11 +58,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim localServer As Boolean = _fileUrlPrefix.Contains("8080")
 
             If localServer Then
-                _ServerPassword = serverPassword
-                _ServerUserName = serverUserName
+                _serverPassword = serverPassword
+                _serverUserName = serverUserName
             Else
-                _ServerPassword = GetServerConfigurationInstance().GetDefaultPassword(_upload)
-                _ServerUserName = GetServerConfigurationInstance().GetDefaultUserName(_upload)
+                If serverPassword = DefaultPassword Then
+                    _serverPassword = _serverConfigurationInstance.GetDefaultPassword(_upload)
+                Else
+                    _serverPassword = serverPassword
+                End If
+                If serverUserName = DefaultUserName Then
+                    _serverUserName = _serverConfigurationInstance.GetDefaultUserName(_upload)
+                Else
+                    _serverUserName = serverUserName
+                End If
             End If
         End Sub
 
@@ -80,7 +93,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Get
         End Property
 
-        Public Property ServerPassword As String
+        Public Property ServerAcceptsAnonymousLogin As Boolean = True
+
+        Public ReadOnly Property ServerPassword As String
+            Get
+                Return _serverPassword
+            End Get
+        End Property
 
         ''' <summary>
         '''  Some File servers do not return errors on mismatched passwords so we need to
@@ -89,7 +108,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <returns></returns>
         Public Property ServerThrowsPasswordErrors As Boolean = True
 
-        Public Property ServerUserName As String
+        Public ReadOnly Property ServerUserName As String
+            Get
+                Return _serverUserName
+            End Get
+        End Property
 
         Private Shared Function GetBoundary(contentType As String) As String
             Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
@@ -142,7 +165,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If _fileUrlPrefix.Contains("8080") Then
 
                 listener.Prefixes.Add(_fileUrlPrefix)
-                If _ServerUserName IsNot Nothing OrElse _ServerPassword IsNot Nothing Then
+                If _serverUserName IsNot Nothing OrElse _serverPassword IsNot Nothing Then
                     listener.AuthenticationSchemes = AuthenticationSchemes.Basic
                 End If
                 listener.Start()
@@ -161,9 +184,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                     CType(context.User?.Identity, HttpListenerBasicIdentity)
 
                                 If String.IsNullOrWhiteSpace(identity.Name) _
-                                    OrElse identity.Name <> _ServerUserName _
+                                    OrElse identity.Name <> _serverUserName _
                                     OrElse String.IsNullOrWhiteSpace(identity.Password) _
-                                    OrElse identity.Password <> _ServerPassword Then
+                                    OrElse identity.Password <> _serverPassword Then
 
                                     response.StatusCode = HttpStatusCode.Unauthorized
                                     Exit Try
@@ -226,10 +249,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Task.Run(action)
             End If
             Return listener
-        End Function
-
-        Public Function GetServerConfigurationInstance() As ServerConfiguration
-            Return _serverConfigurationInstance
         End Function
 
         ''' <summary>
