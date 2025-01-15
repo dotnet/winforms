@@ -19,22 +19,22 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             fileDownloadUrlPrefix As String,
             fileUploadUrlPrefix As String,
             serverDownloadAllowsAnonymousUser As Boolean,
-            serverDownloadAllowsPasswordErrors As Boolean,
+            serverDownloadIgnoresPasswordErrors As Boolean,
             serverDownloadPassword As String,
             serverDownloadUserName As String,
             serverUploadAllowsAnonymousUser As Boolean,
-            serverUploadAllowsPasswordErrors As Boolean,
+            serverUploadIgnoresPasswordErrors As Boolean,
             serverUploadPassword As String,
             serverUploadUserName As String)
 
             Me.FileDownloadUrlPrefix = fileDownloadUrlPrefix
             Me.FileUploadUrlPrefix = fileUploadUrlPrefix
             Me.ServerDownloadAllowsAnonymousUser = serverDownloadAllowsAnonymousUser
-            Me.ServerDownloadAllowsPasswordErrors = serverDownloadAllowsPasswordErrors
+            Me.ServerDownloadIgnoresPasswordErrors = serverDownloadIgnoresPasswordErrors
             Me.ServerDownloadPassword = serverDownloadPassword
             Me.ServerDownloadUserName = serverDownloadUserName
             Me.ServerUploadAllowsAnonymousUser = serverUploadAllowsAnonymousUser
-            Me.ServerUploadAllowsPasswordErrors = serverUploadAllowsPasswordErrors
+            Me.ServerUploadIgnoresPasswordErrors = serverUploadIgnoresPasswordErrors
             Me.ServerUploadPassword = serverUploadPassword
             Me.ServerUploadUserName = serverUploadUserName
         End Sub
@@ -42,11 +42,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Property FileDownloadUrlPrefix As String = "http://127.0.0.1:8080/"
         Public Property FileUploadUrlPrefix As String = "http://127.0.0.1:8080/"
         Public Property ServerDownloadAllowsAnonymousUser As Boolean = True
-        Public Property ServerDownloadAllowsPasswordErrors As Boolean
+        Public Property ServerDownloadIgnoresPasswordErrors As Boolean
         Public Property ServerDownloadPassword As String = "DefaultPassword"
         Public Property ServerDownloadUserName As String = "DefaultUserName"
         Public Property ServerUploadAllowsAnonymousUser As Boolean = True
-        Public Property ServerUploadAllowsPasswordErrors As Boolean
+        Public Property ServerUploadIgnoresPasswordErrors As Boolean
         Public Property ServerUploadPassword As String = "DefaultPassword"
         Public Property ServerUploadUserName As String = "DefaultUserName"
 
@@ -84,9 +84,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         Friend Function GetThrowsPasswordErrors(uploading As Boolean) As Boolean
             If uploading Then
-                Return Not ServerUploadAllowsPasswordErrors
+                Return Not ServerUploadIgnoresPasswordErrors
             Else
-                Return Not ServerDownloadAllowsPasswordErrors
+                Return Not ServerDownloadIgnoresPasswordErrors
             End If
         End Function
 
