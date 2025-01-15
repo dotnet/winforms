@@ -57,12 +57,11 @@ public sealed class MaskedTextBoxDesignerTests
 
         DesignerVerbCollection verbs = maskedTextBoxDesigner.Verbs;
 
-        // Assert
-        Assert.NotNull(verbs);
-        Assert.NotEmpty(verbs);
+        verbs.Should().NotBeNull();
+        verbs.Count.Should().BeGreaterThan(0);
         DesignerVerb? firstVerb = verbs.Count > 0 ? verbs[0] : null;
-        Assert.NotNull(firstVerb);
-        Assert.Equal(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, firstVerb.Text);
+        firstVerb.Should().NotBeNull();
+        firstVerb!.Text.Should().Be(SR.MaskedTextBoxDesignerVerbsSetMaskDesc);
     }
 
     [Fact]
