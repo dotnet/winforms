@@ -23,7 +23,7 @@ public class DataGridViewSortCompareEventArgsTests : IDisposable
         _column.Dispose();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewSortCompareEventArgs_Constructor_InitializesProperties()
     {
         var cellValue1 = "Value1";
@@ -41,7 +41,7 @@ public class DataGridViewSortCompareEventArgsTests : IDisposable
         e.SortResult.Should().Be(0);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewSortCompareEventArgs_SortResult_Set_GetReturnsExpected()
     {
         var e = new DataGridViewSortCompareEventArgs(_column, null, null, 0, 1)
