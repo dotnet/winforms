@@ -6,7 +6,7 @@
   "ServerDownloadPassword": "",
   "ServerDownloadUserName": "",
   "ServerUploadAllowsAnonymousUser": true,
-  "serverUploadAllowsIgnoresErrors": false,
+  "serverUploadIgnoresPasswordErrors": false,
   "ServerUploadPassword": "",
   "ServerUploadUserName": ""
 }
