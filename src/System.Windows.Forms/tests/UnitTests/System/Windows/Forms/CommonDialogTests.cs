@@ -116,7 +116,7 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
@@ -154,7 +154,7 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
@@ -190,7 +190,7 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)

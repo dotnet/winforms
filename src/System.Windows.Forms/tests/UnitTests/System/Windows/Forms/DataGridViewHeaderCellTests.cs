@@ -3859,7 +3859,7 @@ public class DataGridViewHeaderCellTests
         }
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_MouseDownUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
@@ -4009,7 +4009,7 @@ public class DataGridViewHeaderCellTests
         yield return new object[] { false, 1, ButtonState.Normal };
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [MemberData(nameof(MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData))]
     public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStylesParam, int rowIndexParam, ButtonState expectedButtonStateParam)
     {
@@ -4049,7 +4049,7 @@ public class DataGridViewHeaderCellTests
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_MouseUpUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
@@ -4156,7 +4156,7 @@ public class DataGridViewHeaderCellTests
         yield return new object[] { false, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), ButtonState.Normal };
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseDown_InvokeWithDataGridView_Nop()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
@@ -4188,7 +4188,7 @@ public class DataGridViewHeaderCellTests
         }).Dispose();
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseDown_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
@@ -4364,7 +4364,7 @@ public class DataGridViewHeaderCellTests
         Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseLeave(rowIndex));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, -1)]
     [InlineData(true, 0)]
     [InlineData(false, -2)]
@@ -4399,7 +4399,7 @@ public class DataGridViewHeaderCellTests
         }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString()).Dispose();
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(-2)]
     [InlineData(1)]
     public void DataGridViewHeaderCell_OnMouseLeave_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException(int rowIndexParam)
@@ -4538,7 +4538,7 @@ public class DataGridViewHeaderCellTests
         yield return new object[] { false, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)), ButtonState.Normal };
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseUp_InvokeWithDataGridViewMouseDown_ReturnsExpected()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
@@ -4571,7 +4571,7 @@ public class DataGridViewHeaderCellTests
         }).Dispose();
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseUp_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
