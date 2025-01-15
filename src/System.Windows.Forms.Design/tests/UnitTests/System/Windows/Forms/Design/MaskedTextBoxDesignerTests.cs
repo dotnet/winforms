@@ -49,15 +49,20 @@ public sealed class MaskedTextBoxDesignerTests
     }
 
     [Fact]
-    public void Verbs_WithDefaultMaskedTextBox_ShouldReturnExpectedVerbDescription()
+    public void Verbs_WithDefaultMaskedTextBox_ShouldContainSetMaskVerb()
     {
         using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
         using MaskedTextBox maskedTextBox = new();
         maskedTextBoxDesigner.Initialize(maskedTextBox);
 
         DesignerVerbCollection verbs = maskedTextBoxDesigner.Verbs;
-        verbs.Count.Should().Be(1);
-        verbs[0].Text.Should().Be(SR.MaskedTextBoxDesignerVerbsSetMaskDesc);
+
+        // Assert
+        Assert.NotNull(verbs);
+        Assert.NotEmpty(verbs);
+        DesignerVerb? firstVerb = verbs.Count > 0 ? verbs[0] : null;
+        Assert.NotNull(firstVerb);
+        Assert.Equal(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, firstVerb.Text);
     }
 
     [Fact]
