@@ -19,6 +19,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileName As String
         Private ReadOnly _fileSize As Integer
         Private ReadOnly _fileUrlPrefix As String
+        Private ReadOnly _localServer As Boolean
         Private ReadOnly _serverConfigurationInstance As ServerConfiguration
         Private ReadOnly _serverPassword As String
         Private ReadOnly _serverUserName As String
@@ -29,14 +30,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
-        Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
+        Public Sub New(fileSize As Integer, Optional supportAnonymousLogin As Boolean = True, <CallerMemberName> Optional memberName As String = Nothing)
             Debug.Assert(fileSize > 0)
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
             _serverConfigurationInstance = ServerConfigurationLoad(s_jsonFilePath)
             _fileUrlPrefix = _serverConfigurationInstance.GetFileUrlPrefix(_upload)
+            _localServer = _fileUrlPrefix.Contains("8080")
             _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)
-            ServerAcceptsAnonymousLogin = _serverConfigurationInstance.GetAcceptsAnonymousLogin(_upload)
+            If _localServer Then
+                ServerAcceptsAnonymousLogin = supportAnonymousLogin
+            Else
+                ServerAcceptsAnonymousLogin = _serverConfigurationInstance.GetAcceptsAnonymousLogin(_upload)
+            End If
             ServerThrowsPasswordErrors = _serverConfigurationInstance.GetThrowsPasswordErrors(_upload)
             _address = $"{_serverConfigurationInstance.GetFileUrlPrefix(_upload)}{_fileName}"
         End Sub
@@ -52,12 +58,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             fileSize As Integer,
             serverUserName As String,
             serverPassword As String,
+            Optional supportAnonymousLogin As Boolean = True,
             <CallerMemberName> Optional memberName As String = Nothing)
 
-            Me.New(fileSize, memberName)
-            Dim localServer As Boolean = _fileUrlPrefix.Contains("8080")
+            Me.New(fileSize, supportAnonymousLogin, memberName)
 
-            If localServer Then
+            If _localServer Then
                 _serverPassword = serverPassword
                 _serverUserName = serverUserName
             Else
@@ -165,7 +171,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If _fileUrlPrefix.Contains("8080") Then
 
                 listener.Prefixes.Add(_fileUrlPrefix)
-                If _serverUserName IsNot Nothing OrElse _serverPassword IsNot Nothing Then
+                If Not ServerAcceptsAnonymousLogin _
+                   OrElse _serverUserName IsNot Nothing _
+                   OrElse _serverPassword IsNot Nothing Then
                     listener.AuthenticationSchemes = AuthenticationSchemes.Basic
                 End If
                 listener.Start()

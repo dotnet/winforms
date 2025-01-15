@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             My.Computer.Network.DownloadFile(
                                 address:=New Uri(webListener.Address),
                                 destinationFileName,
-                                userName:=webListener.ServerDownloadUserName,
+                                userName:=webListener.ServerUserName,
                                 password)
                         End Sub
 
@@ -90,7 +90,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             My.Computer.Network.DownloadFile(
                                 address:=New Uri(webListener.Address),
                                 destinationFileName,
-                                userName:=webListener.ServerDownloadUserName,
+                                userName:=webListener.ServerUserName,
                                 password)
                         End Sub
 
@@ -119,7 +119,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             My.Computer.Network.DownloadFile(
                                 address:=webListener.Address,
                                 destinationFileName,
-                                userName:=webListener.ServerDownloadUserName,
+                                userName:=webListener.ServerUserName,
                                 password)
                         End Sub
 
@@ -148,7 +148,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            userName:=webListener.ServerDownloadUserName,
+                            userName:=webListener.ServerUserName,
                             password)
                     End Sub
 
@@ -924,8 +924,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            userName:=webListener.ServerDownloadUserName,
-                            password:=webListener.ServerDownloadPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
 
                 testCode.Should.NotThrow()
@@ -1601,8 +1601,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         My.Computer.Network.DownloadFile(
                             address:=webListener.Address,
                             destinationFileName,
-                            userName:=webListener.ServerDownloadUserName,
-                            password:=webListener.ServerDownloadPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
 
                 testCode.Should.NotThrow()

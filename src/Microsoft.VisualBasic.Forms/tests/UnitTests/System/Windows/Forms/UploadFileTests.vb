@@ -131,11 +131,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriOnly_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriOnly_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -211,11 +212,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriOnlyWrongFileSize_Throw()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriOnlyWrongFileSize_Throw(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -331,11 +333,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereTrue_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereTrue_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -405,11 +408,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -433,11 +437,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereWhereDestinationFileExists_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriWithAllOptions_ExceptOnUserCancelWhereWhereDestinationFileExists_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -668,11 +673,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriWithAllOptionsWhereOnUserCancelIsDoNothing_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriWithAllOptionsWhereOnUserCancelIsDoNothing_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -799,11 +805,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UriWithAllOptionsWithAllOptions_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UriWithAllOptionsWithAllOptions_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -877,11 +884,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlOnly_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlOnly_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1058,11 +1066,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTrue_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTrue_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1110,11 +1119,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1138,11 +1148,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereUploadFailed_Throws()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereUploadFailed_Throws(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=1)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1295,11 +1306,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptionsWhereOnUserCancelIsDoNothing_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlWithAllOptionsWhereOnUserCancelIsDoNothing_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
@@ -1403,11 +1415,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsFact>
-        Public Sub UploadFile_UrlWithAllOptionsWithAllOptions_Success()
+        <WinFormsTheory>
+        <BoolData>
+        Public Sub UploadFile_UrlWithAllOptionsWithAllOptions_Success(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
             Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1MB)
-            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()

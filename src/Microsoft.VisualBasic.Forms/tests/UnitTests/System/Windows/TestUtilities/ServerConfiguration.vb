@@ -43,12 +43,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Property FileUploadUrlPrefix As String = "http://127.0.0.1:8080/"
         Public Property ServerDownloadAllowsAnonymousUser As Boolean = True
         Public Property ServerDownloadIgnoresPasswordErrors As Boolean
-        Public Property ServerDownloadPassword As String = "DefaultPassword"
-        Public Property ServerDownloadUserName As String = "DefaultUserName"
+        Public Property ServerDownloadPassword As String = ""
+        Public Property ServerDownloadUserName As String = ""
         Public Property ServerUploadAllowsAnonymousUser As Boolean = True
         Public Property ServerUploadIgnoresPasswordErrors As Boolean
-        Public Property ServerUploadPassword As String = "DefaultPassword"
-        Public Property ServerUploadUserName As String = "DefaultUserName"
+        Public Property ServerUploadPassword As String = ""
+        Public Property ServerUploadUserName As String = ""
 
         Friend Function GetAcceptsAnonymousLogin(uploading As Boolean) As Boolean
             If uploading Then
