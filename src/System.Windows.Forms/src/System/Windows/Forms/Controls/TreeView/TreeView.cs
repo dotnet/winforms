@@ -2845,8 +2845,6 @@ public partial class TreeView : Control
                                 invertedX -= SystemInformation.VerticalScrollBarWidth;
                             }
 
-                            Trace.WriteLine($"Width: {Width}, node:{node.Text},textSize.Width:{textSize.Width}, bounds.Width:{bounds.Width} invertedX: {invertedX}");
-
                             // To ensure that the right side of the fillRectangle does not
                             // touch the left edge of the node prefix symbol, 1 pixel is subtracted here.
                             fillRectangle = new Rectangle(new Point(invertedX - 1, bounds.Y), new(textSize.Width, bounds.Height));
