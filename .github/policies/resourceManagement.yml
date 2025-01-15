@@ -183,7 +183,7 @@ configuration:
     - if:
       - payloadType: Pull_Request
       - targetsBranch:
-          branch: main
+          branch: release/9.0
       - and:
         - isAction:
             action: Closed
@@ -194,7 +194,7 @@ configuration:
               isRegex: False
       then:
       - addMilestone:
-          milestone: 9.0 RC2
+          milestone: 9.0.2
       description: Apply milestone to PRs on the main branch
       triggerOnOwnActions: true
     - if:
