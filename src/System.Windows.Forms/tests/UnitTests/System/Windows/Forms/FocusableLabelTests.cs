@@ -7,23 +7,19 @@ namespace System.Windows.Forms;
 
 public class FocusableLabelTests
 {
-    [WinFormsFact]
+    [Fact]
     public void UnderlineWhenFocused_DefaultValue_ShouldBeTrue()
     {
-        FocusableLabel label = new();
+        using FocusableLabel label = new();
 
-        var result = label.UnderlineWhenFocused;
-
-        result.Should().BeTrue();
+        label.UnderlineWhenFocused.Should().BeTrue();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void FocusableLabel_ShouldBeSelectableAndTabStop()
     {
-        FocusableLabel label = new();
+        using FocusableLabel label = new();
 
-        var isTabStop = label.TabStop;
-
-        isTabStop.Should().BeTrue("Expected TabStop to be true, indicating the control is selectable.");
+        label.TabStop.Should().BeTrue("Expected TabStop to be true, indicating the control is selectable.");
     }
 }
