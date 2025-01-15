@@ -2836,11 +2836,19 @@ public partial class TreeView : Control
                         if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                         {
                             // Reverse the X-axis drawing coordinates of the rectangle.
-                            // Leave four pixels for node prefix symbol.
-                            int invertedX = Width - 4 - bounds.X - textSize.Width;
+                            // Offset the text three pixels to the left to ensure that the text is centered on the fill rectangle.
+                            int invertedX = Width - bounds.X - textSize.Width - 3;
 
-                            // To ensure that the right side of the rectangle does not
-                            // touch the left edge of the control, 1 pixel is subtracted here.
+                            // Subtract the scroll bar width when the scroll bar appears.
+                            if (Height <= PreferredHeight)
+                            {
+                                invertedX -= SystemInformation.VerticalScrollBarWidth;
+                            }
+
+                            Trace.WriteLine($"Width: {Width}, node:{node.Text},textSize.Width:{textSize.Width}, bounds.Width:{bounds.Width} invertedX: {invertedX}");
+
+                            // To ensure that the right side of the fillRectangle does not
+                            // touch the left edge of the node prefix symbol, 1 pixel is subtracted here.
                             fillRectangle = new Rectangle(new Point(invertedX - 1, bounds.Y), new(textSize.Width, bounds.Height));
                             focusRectangle = new Rectangle(new Point(invertedX, bounds.Y), new(textSize.Width, bounds.Height));
                         }
@@ -2883,6 +2891,35 @@ public partial class TreeView : Control
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                 return;
         }
+    }
+
+    private int PreferredHeight
+    {
+        get
+        {
+            int height = 0;
+            foreach (TreeNode node in Nodes)
+            {
+                height += GetNodeHeight(node);
+            }
+
+            return height;
+        }
+    }
+
+    private int GetNodeHeight(TreeNode node)
+    {
+        int height = ItemHeight;
+
+        if (node.IsExpanded)
+        {
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                height += GetNodeHeight(childNode);
+            }
+        }
+
+        return height;
     }
 
     /// <summary>
