@@ -1152,7 +1152,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <BoolData>
         Public Sub UploadFile_UrlWithAllOptions_ExceptOnUserCancelWhereWhereUploadFailed_Throws(supportAnonymousLogin As Boolean)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim sourceFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB, supportAnonymousLogin)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =

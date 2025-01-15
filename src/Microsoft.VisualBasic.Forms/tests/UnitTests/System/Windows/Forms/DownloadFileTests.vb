@@ -290,7 +290,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereFileExistsNoOverwrite_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -316,7 +316,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -340,7 +340,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereOverwriteWhereDestinationFileExists_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1019,7 +1019,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereFileExistsNoOverwrite_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1095,7 +1095,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize100MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1119,7 +1119,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteWhereDestinationFileExists_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
