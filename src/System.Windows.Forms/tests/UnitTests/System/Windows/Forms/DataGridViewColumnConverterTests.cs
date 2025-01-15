@@ -15,62 +15,74 @@ public class DataGridViewColumnConverterTests : IDisposable
 
     public void Dispose() => _column.Dispose();
 
-    [WinFormsTheory]
+    [Theory]
     [InlineData(typeof(InstanceDescriptor))]
     [InlineData(typeof(string))]
     public void CanConvertTo_ReturnsExpectedResult(Type destinationType) =>
         _converter.CanConvertTo(null, destinationType).Should().BeTrue();
 
-    [WinFormsFact]
-    public void ConvertTo_InstanceDescriptorWithoutCellType_ReturnsInstanceDescriptor()
-    {
-        var descriptor = _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(InstanceDescriptor)) as InstanceDescriptor;
+    [Fact]
+    public void ConvertTo_InstanceDescriptorWithoutCellType_ReturnsInstanceDescriptor() =>
+        AssertInstanceDescriptor(_column);
 
-        descriptor.Should().NotBeNull();
-    }
-
-    [WinFormsFact]
+    [Fact]
     public void ConvertTo_InstanceDescriptorWithHeaderText_ReturnsInstanceDescriptor()
     {
         _column.HeaderText = "Test Header";
-        var descriptor = _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(InstanceDescriptor)) as InstanceDescriptor;
-
-        descriptor.Should().NotBeNull();
+        AssertInstanceDescriptor(_column);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void ConvertTo_InstanceDescriptorWithToolTipText_ReturnsInstanceDescriptor()
     {
         _column.ToolTipText = "Test ToolTip";
-        var descriptor = _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(InstanceDescriptor)) as InstanceDescriptor;
+        AssertInstanceDescriptor(_column);
+    }
+
+    [Fact]
+    public void ConvertTo_NonInstanceDescriptorWithDataPropertyName_ReturnsBaseResult()
+    {
+        _column.DataPropertyName = "TestDataProperty";
+        AssertBaseResult(_column);
+    }
+
+    [Fact]
+    public void ConvertTo_NonInstanceDescriptor_ReturnsBaseResult() =>
+        AssertBaseResult(_column);
+
+    [Fact]
+    public void ConvertTo_NullDestinationType_ThrowsArgumentNullException()
+    {
+        Action action = () => _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, null!);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ConvertTo_InvalidDestinationType_ThrowsNotSupportedException()
+    {
+        Action action = () => _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(int));
+        action.Should().Throw<NotSupportedException>();
+    }
+
+    [Fact]
+    public void ConvertTo_WithCellTypeNotNull_ReturnsInstanceDescriptor()
+    {
+        using DataGridViewTextBoxCell cellTemplate = new();
+        using DataGridViewColumn column = new(cellTemplate);
+
+        var descriptor = _converter.ConvertTo(null, CultureInfo.InvariantCulture, column, typeof(InstanceDescriptor)) as InstanceDescriptor;
 
         descriptor.Should().NotBeNull();
     }
 
-    [WinFormsFact]
-    public void ConvertTo_NonInstanceDescriptorWithDataPropertyName_ReturnsBaseResult()
+    private void AssertInstanceDescriptor(DataGridViewColumn column)
     {
-        _column.DataPropertyName = "TestDataProperty";
-        _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(string)).Should().Be(_column.ToString());
+        var descriptor = _converter.ConvertTo(null, CultureInfo.InvariantCulture, column, typeof(InstanceDescriptor)) as InstanceDescriptor;
+        descriptor.Should().NotBeNull();
     }
 
-    [WinFormsFact]
-    public void ConvertTo_NonInstanceDescriptor_ReturnsBaseResult() =>
-        _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(string)).Should().Be(_column.ToString());
-
-    [WinFormsFact]
-    public void ConvertTo_NullDestinationType_ThrowsArgumentNullException()
+    private void AssertBaseResult(DataGridViewColumn column)
     {
-        Action action = () => _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, null!);
-
-        action.Should().Throw<ArgumentNullException>();
-    }
-
-    [WinFormsFact]
-    public void ConvertTo_InvalidDestinationType_ThrowsNotSupportedException()
-    {
-        Action action = () => _converter.ConvertTo(null, CultureInfo.InvariantCulture, _column, typeof(int));
-
-        action.Should().Throw<NotSupportedException>();
+        _converter.ConvertTo(null, CultureInfo.InvariantCulture, column, typeof(string)).Should().Be(column.ToString());
     }
 }
