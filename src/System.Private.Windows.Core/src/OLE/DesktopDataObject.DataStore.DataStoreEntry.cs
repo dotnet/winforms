@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public partial class DataObject
+internal abstract partial class DesktopDataObject
 {
-    private sealed partial class DataStore
+    internal abstract partial class DataStore
     {
-        private class DataStoreEntry
+        protected class DataStoreEntry
         {
             public object? Data { get; }
             public bool AutoConvert { get; }

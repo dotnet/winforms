@@ -287,21 +287,6 @@
         <target state="translated">Для составного DataBinding источником данных может служить IList или IListSource.</target>
         <note />
       </trans-unit>
-      <trans-unit id="BinaryFormatterNotSupported">
-        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
-        <target state="translated">Сериализация и десериализация BinaryFormatter отключены в этом приложении. Дополнительные сведения см. https://aka.ms/binaryformatter.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
-        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="translated">BinaryFormatter не поддерживается в буфере обмена или операциях перетаскивания.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
-        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="translated">BinaryFormatter не поддерживается в буфере обмена или операциях перетаскивания. Включите его и используйте API "TryGetData&lt;T&gt;" с функцией "resolver", которая определяет набор разрешенных типов для десериализации '{0}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Происходит при изменении контекста привязки.</target>
@@ -962,11 +947,6 @@
         <target state="translated">Создана циклическая ссылка на элемент управления. Элемент управления не может являться владельцем или родителем для самого себя.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOperationFailed">
-        <source>Requested Clipboard operation did not succeed.</source>
-        <target state="translated">Сбой при выполнении запрошенной операции с буфером обмена.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
         <target state="translated">Объект типа "DataObject" будет сериализован как пустой. Используйте API-интерфейсы "DataObject.SetDataAsJson" на объекте для сериализации данных в объекте JSON, а затем используйте API '{0}' с объектом.</target>
@@ -982,29 +962,9 @@
         <target state="translated">'{0}' не является конкретным типом и может привести к нео привязанной попытке десериализации. Используйте конкретный тип или определите функцию "resolver", которая поддерживает типы, которые вы ожидаете получить из буфера обмена, или используйте в операциях перетаскивания.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Сбой десериализации данных JSON.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
-        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="translated">Тип {0} не найден. Если этот тип разрешен, убедитесь, что функция "resolver", указанная в API "TryGetData&lt;T&gt;", поддерживает ее.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
-        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="translated">Используйте API"TryGetData&lt;T&gt;" с функцией "resolver", которая определяет набор разрешенных типов для десериализации '{0}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardSecurityException">
         <source>Due to security restrictions on clipboard, the specified clipboard format cannot be set.</source>
         <target state="translated">Установка указанного формата буфера обмена не допускается ограничениями по безопасности.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Clipboard_InvalidPath">
-        <source>Path "{0}" in the argument "{1}" is not valid.</source>
-        <target state="translated">Недопустимый путь "{0}" в аргументе "{1}".</target>
         <note />
       </trans-unit>
       <trans-unit id="CloseCaption">
@@ -1015,11 +975,6 @@
       <trans-unit id="ClosingWhileCreatingHandle">
         <source>Value {0}() cannot be called while doing CreateHandle().</source>
         <target state="translated">Вызов значения {0}() во время выполнения CreateHandle() невозможен.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEmptyException">
-        <source>Cannot operate with an empty collection.</source>
-        <target state="translated">Работа с пустой коллекцией невозможна.</target>
         <note />
       </trans-unit>
       <trans-unit id="ColumnAlignment">
@@ -4259,11 +4214,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Растровый объект непосредственно не поддерживает не зависящий от устройства растровый формат.  Используйте автоматическое приведение либо выполните SetData с растровым форматом данных.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
-        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="translated">Пробел и пустая строка не являются допустимыми значениями для параметра "format".</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Свойство '{0}' для DataMember не найдено в DataSource.</target>
@@ -5008,11 +4958,6 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
         <target state="translated">Развернуто</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ExternalException">
-        <source>External exception</source>
-        <target state="translated">Внешнее исключение</target>
         <note />
       </trans-unit>
       <trans-unit id="FDFileNamesDescr">
@@ -5814,11 +5759,6 @@ Do you want to replace it?</source>
       <trans-unit id="ISupportInitializeDescr">
         <source>Specifies support for transacted initialization. </source>
         <target state="translated">Определяет поддержку для инициализации транзакции. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ITypeDataObject_Not_Implemented">
-        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
-        <target state="translated">Объекты '{0}' не реализуют интерфейс "ITypedDataObject" и не могут быть прочитаны с помощью методов "TryGetData&lt;T&gt;(string, out T)".</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
@@ -8710,11 +8650,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Коллекция предназначена только для чтения.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Регистрация формата буфера обмена не удалась.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Список потомков для поля {0} создать нельзя.</target>
@@ -11138,11 +11073,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="UnexpectedClipboardType">
         <source>Clipboard contains an unexpected type.</source>
         <target state="translated">Буфер обмена содержит непредвиденный тип.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UnexpectedTypeForClipboardFormat">
-        <source>The specified Clipboard format is not compatible with '{0}' type.</source>
-        <target state="translated">Указанный формат буфера обмена не совместим с типом "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="UnknownAttr">

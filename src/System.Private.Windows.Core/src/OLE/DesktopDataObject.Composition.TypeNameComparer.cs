@@ -3,10 +3,11 @@
 
 using System.Reflection.Metadata;
 
-namespace System.Windows.Forms;
-public unsafe partial class DataObject
+namespace System.Private.Windows.Core.OLE;
+
+internal abstract unsafe partial class DesktopDataObject
 {
-    internal unsafe partial class Composition
+    internal abstract unsafe partial class Composition
     {
         /// <summary>
         ///  Match <see cref="TypeName"/>s by matching full namespace-qualified type names and full assembly names,

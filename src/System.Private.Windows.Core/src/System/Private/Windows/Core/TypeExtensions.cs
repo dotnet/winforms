@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core;
 
 /// <summary>
 ///  Helper methods for comparing <see cref="Type"/>s and <see cref="TypeName"/>s.
@@ -49,7 +49,7 @@ internal static class TypeExtensions
     /// </summary>
     public static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName)
     {
-        type = Formatter.NullableUnwrap(type);
+        type = NullableUnwrap(type);
 
         return type.MatchLessAssemblyVersion(typeName);
     }
@@ -101,12 +101,12 @@ internal static class TypeExtensions
 
         if (typeName.IsArray)
         {
-            return MatchLessAssemblyVersion(type.GetElementType()!, typeName.GetElementType());
+            return type.GetElementType()!.MatchLessAssemblyVersion(typeName.GetElementType());
         }
 
         if (type.IsConstructedGenericType)
         {
-            if (!MatchLessAssemblyVersion(type.GetGenericTypeDefinition(), typeName.GetGenericTypeDefinition()))
+            if (!type.GetGenericTypeDefinition().MatchLessAssemblyVersion(typeName.GetGenericTypeDefinition()))
             {
                 return false;
             }
@@ -121,7 +121,7 @@ internal static class TypeExtensions
 
             for (int i = 0; i < genericTypes.Length; i++)
             {
-                if (!MatchLessAssemblyVersion(genericTypes[i], genericNames[i]))
+                if (!genericTypes[i].MatchLessAssemblyVersion(genericNames[i]))
                 {
                     return false;
                 }
@@ -151,7 +151,7 @@ internal static class TypeExtensions
 
             // Match everything except for the versions.
             return nameInfo.Name == nameInfo1.Name
-                && ((nameInfo.CultureName ?? string.Empty) == nameInfo1.CultureName)
+                && (nameInfo.CultureName ?? string.Empty) == nameInfo1.CultureName
                 && nameInfo.PublicKeyOrToken.AsSpan().SequenceEqual(nameInfo1.PublicKeyOrToken.AsSpan());
         }
     }
@@ -183,12 +183,12 @@ internal static class TypeExtensions
 
         if (y.IsArray)
         {
-            return Matches(x.GetElementType(), y.GetElementType());
+            return x.GetElementType().Matches(y.GetElementType());
         }
 
         if (x.IsConstructedGenericType)
         {
-            if (!Matches(x.GetGenericTypeDefinition(), y.GetGenericTypeDefinition()))
+            if (!x.GetGenericTypeDefinition().Matches(y.GetGenericTypeDefinition()))
             {
                 return false;
             }
@@ -203,7 +203,7 @@ internal static class TypeExtensions
 
             for (int i = 0; i < genericNamesX.Length; i++)
             {
-                if (!Matches(genericNamesX[i], genericNamesY[i]))
+                if (!genericNamesX[i].Matches(genericNamesY[i]))
                 {
                     return false;
                 }
@@ -235,6 +235,20 @@ internal static class TypeExtensions
     }
 
     /// <summary>
+    ///  Extract the inner type from a nullable type.
+    /// </summary>
+    internal static Type NullableUnwrap(Type type)
+    {
+        if (type == typeof(string)) // ...performance optimization for the most common case
+        {
+            return typeof(string);
+        }
+
+        Type? underlyingType = Nullable.GetUnderlyingType(type);
+        return underlyingType ?? type;
+    }
+
+    /// <summary>
     ///  Convert <paramref name="type"/> to <see cref="TypeName"/>. Take into account type forwarding in order
     ///  to create <see cref="TypeName"/> compatible with the type names serialized to the binary format.This
     ///  method removes nullability wrapper from the top level type only because <see cref="TypeName"/> in the
@@ -243,7 +257,7 @@ internal static class TypeExtensions
     public static TypeName ToTypeName(this Type type)
     {
         // Unwrap type that is matched against the root record type.
-        type = Formatter.NullableUnwrap(type);
+        type = NullableUnwrap(type);
         if (!type.TryGetForwardedFromName(out string? assemblyName))
         {
             assemblyName = type.Assembly.FullName;

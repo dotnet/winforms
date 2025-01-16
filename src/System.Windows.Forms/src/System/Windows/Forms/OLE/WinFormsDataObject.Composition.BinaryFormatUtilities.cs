@@ -3,71 +3,26 @@
 
 using System.Formats.Nrbf;
 using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.Core.Nrbf;
+using System.Private.Windows.Core.OLE;
 using System.Reflection.Metadata;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
-using System.Windows.Forms.Primitives;
+using CoreSR = System.Private.Windows.Core.Resources.SR;
 
 namespace System.Windows.Forms;
 
-public unsafe partial class DataObject
+internal partial class WinFormsDataObject
 {
     internal unsafe partial class Composition
     {
-        internal static class BinaryFormatUtilities
+        internal class BinaryFormatUtilities : DesktopDataObject.Composition.BinaryFormatUtilities
         {
-            internal static void WriteObjectToStream(MemoryStream stream, object data, bool restrictSerialization)
-            {
-                long position = stream.Position;
+            public override IBinaryFormatWriter GetBinaryFormatWriter() => new WinFormsBinaryFormatWriter();
 
-                try
-                {
-                    if (WinFormsBinaryFormatWriter.TryWriteCommonObject(stream, data))
-                    {
-                        return;
-                    }
-                }
-                catch (Exception ex) when (!ex.IsCriticalException())
-                {
-                    // Being extra cautious here, but the Try method above should never throw in normal circumstances.
-                    Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
-                }
-
-                if (restrictSerialization)
-                {
-                    throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, data.GetType().FullName));
-                }
-
-                // This check is to help in trimming scenarios with a trim warning on a call to
-                // BinaryFormatter.Serialize(), which has a RequiresUnreferencedCode annotation.
-                // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(),
-                // will not be called,
-                // If the flag is true, the trimmer will generate a warning for calling a method that has a
-                // RequiresUnreferencedCode annotation.
-                if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
-                {
-                    throw new NotSupportedException(SR.BinaryFormatterNotSupported);
-                }
-
-                if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
-                {
-                    throw new NotSupportedException(SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop);
-                }
-
-                stream.Position = position;
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                new BinaryFormatter().Serialize(stream, data);
-#pragma warning restore SYSLIB0011
-            }
-
-            internal static object? ReadObjectFromStream<T>(
-                MemoryStream stream,
-                Func<TypeName, Type>? resolver,
-                bool legacyMode)
+            internal override object? ReadObjectFromStream<T>(MemoryStream stream, Func<TypeName, Type>? resolver, bool legacyMode)
             {
                 long startPosition = stream.Position;
                 SerializationRecord? record;
@@ -82,7 +37,7 @@ public unsafe partial class DataObject
                 {
                     // Couldn't parse for some reason, let BinaryFormatter handle the legacy invocation.
                     // The typed APIs can't compare the specified type when the root record is not available.
-                    if (legacyMode && LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
+                    if (legacyMode && LocalAppContextSwitchesCore.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                     {
                         stream.Position = startPosition;
                         return ReadObjectWithBinaryFormatter<T>(stream, binder);
@@ -128,10 +83,10 @@ public unsafe partial class DataObject
                     return value;
                 }
 
-                if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
+                if (!LocalAppContextSwitchesCore.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                 {
                     throw new NotSupportedException(string.Format(
-                        SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
+                        CoreSR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
                         typeof(T).FullName));
                 }
 
@@ -141,7 +96,7 @@ public unsafe partial class DataObject
                 //    dependencies to indeterminate state)
                 // But it usually requires a resolver. Resolver is not available in the legacy mode,
                 // so we will fall back to BinaryFormatter in that case.
-                if (LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization)
+                if (LocalAppContextSwitchesCore.ClipboardDragDropEnableNrbfSerialization)
                 {
                     try
                     {
@@ -156,10 +111,7 @@ public unsafe partial class DataObject
                 return ReadObjectWithBinaryFormatter<T>(stream, binder);
             }
 
-            internal static object? ReadRestrictedObjectFromStream<T>(
-                MemoryStream stream,
-                Func<TypeName, Type>? resolver,
-                bool legacyMode)
+            internal override object? ReadRestrictedObjectFromStream<T>(MemoryStream stream, Func<TypeName, Type>? resolver, bool legacyMode)
             {
                 long startPosition = stream.Position;
                 SerializationRecord? record;
@@ -195,45 +147,6 @@ public unsafe partial class DataObject
                 return record.TryGetCommonObject(out object? value)
                     ? value
                     : throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
-            }
-
-            private static bool TypeNameIsAssignableToType(TypeName typeName, Type type, ITypeResolver resolver)
-            {
-                try
-                {
-                    return resolver.GetType(typeName)?.IsAssignableTo(type) == true;
-                }
-                catch (Exception ex) when (!ex.IsCriticalException())
-                {
-                    // Clipboard contains a wrong type, we want the typed API to return false to the caller.
-                }
-
-                return false;
-            }
-
-            private static object? ReadObjectWithBinaryFormatter<T>(MemoryStream stream, SerializationBinder binder)
-            {
-                // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(),
-                // which has a RequiresUnreferencedCode annotation.
-                // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Deserialize() will not be called,
-                // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
-                if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
-                {
-                    throw new NotSupportedException(SR.BinaryFormatterNotSupported);
-                }
-
-#pragma warning disable SYSLIB0011, SYSLIB0050 // Type or member is obsolete
-#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
-#pragma warning disable CA2302 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
-                // cs/dangerous-binary-deserialization
-                return new BinaryFormatter()
-                {
-                    Binder = binder,
-                    AssemblyFormat = FormatterAssemblyStyle.Simple
-                }.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior.
-#pragma warning restore CA2300
-#pragma warning restore CA2302
-#pragma warning restore SYSLIB0050, SYSLIB0011
             }
         }
     }

@@ -630,12 +630,6 @@
   <data name="CircularOwner" xml:space="preserve">
     <value>A circular control reference has been made. A control cannot be owned by or parented to itself.</value>
   </data>
-  <data name="Clipboard_InvalidPath" xml:space="preserve">
-    <value>Path "{0}" in the argument "{1}" is not valid.</value>
-  </data>
-  <data name="ClipboardOperationFailed" xml:space="preserve">
-    <value>Requested Clipboard operation did not succeed.</value>
-  </data>
   <data name="ClipboardSecurityException" xml:space="preserve">
     <value>Due to security restrictions on clipboard, the specified clipboard format cannot be set.</value>
   </data>
@@ -650,9 +644,6 @@
   </data>
   <data name="collectionChangingEventDescr" xml:space="preserve">
     <value>Occurs whenever this collection's membership is about to change.</value>
-  </data>
-  <data name="CollectionEmptyException" xml:space="preserve">
-    <value>Cannot operate with an empty collection.</value>
   </data>
   <data name="ColumnAlignment" xml:space="preserve">
     <value>Indicates the horizontal alignment of the text displayed in the column header.</value>
@@ -2526,9 +2517,6 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridVisibleRowCountDescr" xml:space="preserve">
     <value>Returns the count of visible rows in the grid.</value>
   </data>
-  <data name="DataObjectWhitespaceEmptyFormatNotAllowed" xml:space="preserve">
-    <value>Whitespace or empty string is not a valid value for parameter 'format'.</value>
-  </data>
   <data name="DataObjectDibNotSupported" xml:space="preserve">
     <value>Bitmap object does not directly support the device-independent bitmap format.  Either specify auto-conversion or perform a SetData with the Bitmap data format.</value>
   </data>
@@ -2958,9 +2946,6 @@ If you click Continue, the application will ignore this error and attempt to con
   </data>
   <data name="ExDlgWarningText" xml:space="preserve">
     <value>{0}.</value>
-  </data>
-  <data name="ExternalException" xml:space="preserve">
-    <value>External exception</value>
   </data>
   <data name="FDaddExtensionDescr" xml:space="preserve">
     <value>Controls whether extensions are automatically added to file names.</value>
@@ -5013,9 +4998,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ReadonlyControlsCollection" xml:space="preserve">
     <value>Collection is read only.</value>
   </data>
-  <data name="RegisterCFFailed" xml:space="preserve">
-    <value>Clipboard format registration did not succeed.</value>
-  </data>
   <data name="RelatedListManagerChild" xml:space="preserve">
     <value>Child list for field {0} cannot be created.</value>
   </data>
@@ -6643,9 +6625,6 @@ Stack trace where the illegal operation occurred was:
   <data name="UnexpectedClipboardType" xml:space="preserve">
     <value>Clipboard contains an unexpected type.</value>
   </data>
-  <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
-    <value>The specified Clipboard format is not compatible with '{0}' type.</value>
-  </data>
   <data name="FolderBrowserDialogUseDescriptionForTitle" xml:space="preserve">
     <value>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</value>
   </data>
@@ -6970,9 +6949,6 @@ Stack trace where the illegal operation occurred was:
   <data name="BindingNotSupported" xml:space="preserve">
     <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
-  <data name="BinaryFormatterNotSupported" xml:space="preserve">
-    <value>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</value>
-  </data>
   <data name="ControlNotSupportedInTrimming" xml:space="preserve">
     <value>'{0}' is not supported in trimmed applications.</value>
   </data>
@@ -7015,29 +6991,11 @@ Stack trace where the illegal operation occurred was:
   <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
     <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
   </data>
-  <data name="ITypeDataObject_Not_Implemented" xml:space="preserve">
-    <value>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</value>
-  </data>
-  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop" xml:space="preserve">
-    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</value>
-  </data>
-  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
-    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
-  </data>
-  <data name="ClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
-    <value>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
-  </data>
-  <data name="ClipboardOrDragDrop_TypedAPI_InvalidResolver" xml:space="preserve">
-    <value>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</value>
-  </data>
   <data name="ClipboardOrDragDrop_InvalidType" xml:space="preserve">
     <value>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</value>
   </data>
   <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
     <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
-  </data>
-  <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
-    <value>Failed to deserialize JSON data.</value>
   </data>
   <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
     <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>

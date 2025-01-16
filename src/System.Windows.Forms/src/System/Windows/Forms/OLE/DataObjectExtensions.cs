@@ -1,11 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using CoreSR = System.Private.Windows.Core.Resources.SR;
+
 namespace System.Windows.Forms;
 
-/// <summary>
-///  Extension methods for data objects.
-/// </summary>
 public static class DataObjectExtensions
 {
     private static ITypedDataObject GetTypedDataObjectOrThrow(IDataObject dataObject)
@@ -15,7 +14,7 @@ public static class DataObjectExtensions
         if (dataObject is not ITypedDataObject typed)
         {
             throw new NotSupportedException(string.Format(
-                SR.ITypeDataObject_Not_Implemented,
+                CoreSR.ITypeDataObject_Not_Implemented,
                 dataObject.GetType().FullName));
         }
 
