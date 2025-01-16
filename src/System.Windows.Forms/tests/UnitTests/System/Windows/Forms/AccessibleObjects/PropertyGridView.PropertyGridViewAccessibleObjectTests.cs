@@ -305,7 +305,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     public void PropertyGridView_GridViewListBoxAccessibleObject_Name_ReturnsDeterminedName(string name)
     {
         using PropertyGrid propertyGrid = new();
-        Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+        ControlAccessibleObject gridViewAccessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
         PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
 
         propertyGridView.DropDownListBoxAccessibleObject.Name = name;
@@ -317,7 +317,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     public void PropertyGridView_GridViewListBoxAccessibleObject_ReturnsDefaultName()
     {
         using PropertyGrid propertyGrid = new();
-        Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+        ControlAccessibleObject gridViewAccessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
         PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
 
         string listAccessibleName = propertyGridView.DropDownListBoxAccessibleObject.Name;
@@ -328,7 +328,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     public void PropertyGridView_GridViewListBoxAccessibleObject_ReturnsDefaultName_IfBaseNameIsSetAsNull()
     {
         using PropertyGrid propertyGrid = new();
-        Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+        ControlAccessibleObject gridViewAccessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
         PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
 
         propertyGridView.DropDownListBoxAccessibleObject.Name = null;

@@ -167,7 +167,7 @@ public class WinFormsBinaryFormattedObjectTests
         using ImageListStreamer stream = sourceList.ImageStream!;
 
         SerializationRecord rootRecord = stream.SerializeAndDecode();
-        ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
+        ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeName.FullName.Should().Be(typeof(ImageListStreamer).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
         root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();

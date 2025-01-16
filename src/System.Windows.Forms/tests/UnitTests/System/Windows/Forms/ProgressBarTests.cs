@@ -551,7 +551,7 @@ public class ProgressBarTests
     {
         yield return new object[] { Color.Red, Color.Red, 1 };
         yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
-        yield return new object[] { Color.Empty, ProgressBar.DefaultForeColor, 1 };
+        yield return new object[] { Color.Empty, Control.DefaultForeColor, 1 };
     }
 
     [WinFormsTheory]
@@ -608,7 +608,7 @@ public class ProgressBarTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(ProgressBar.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.

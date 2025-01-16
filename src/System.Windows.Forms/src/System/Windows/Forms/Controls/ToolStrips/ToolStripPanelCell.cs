@@ -24,7 +24,9 @@ internal sealed class ToolStripPanelCell : ArrangedElement
 
     private Rectangle _cachedBounds = Rectangle.Empty;
 #if DEBUG
+#pragma warning disable IDE0052 // Remove unread private members
     private readonly string _cellID;
+#pragma warning restore IDE0052
 
     [ThreadStatic]
     private static int t_cellCount;

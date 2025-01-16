@@ -1864,9 +1864,9 @@ public class ListBoxTests
 
     private class CustomCreateItemCollectionListBox : ListBox
     {
-        public ListBox.ObjectCollection CreateListBoxResult { get; set; }
+        public ObjectCollection CreateListBoxResult { get; set; }
 
-        protected override ListBox.ObjectCollection CreateItemCollection() => CreateListBoxResult;
+        protected override ObjectCollection CreateItemCollection() => CreateListBoxResult;
     }
 
     public static IEnumerable<object[]> MultiColumn_Set_TestData()

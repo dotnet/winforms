@@ -3662,9 +3662,9 @@ public partial class ControlTests
 
     private class CustomCreateControlsInstanceControl : Control
     {
-        public Control.ControlCollection CreateControlsResult { get; set; }
+        public ControlCollection CreateControlsResult { get; set; }
 
-        protected override Control.ControlCollection CreateControlsInstance() => CreateControlsResult;
+        protected override ControlCollection CreateControlsInstance() => CreateControlsResult;
     }
 
     [WinFormsFact]

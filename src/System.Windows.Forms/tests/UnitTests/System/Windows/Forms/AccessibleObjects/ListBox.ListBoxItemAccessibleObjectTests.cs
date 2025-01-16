@@ -30,7 +30,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         ListBox.ListBoxAccessibleObject accessibleObject =
             Assert.IsType<ListBox.ListBoxAccessibleObject>(control.AccessibilityObject);
 
-        Collections.Generic.List<Person> persons = TestDataSources.GetPersons();
+        List<Person> persons = TestDataSources.GetPersons();
         Assert.Equal(persons.Count, accessibleObject.GetChildCount());
 
         for (int i = 0; i < persons.Count; i++)

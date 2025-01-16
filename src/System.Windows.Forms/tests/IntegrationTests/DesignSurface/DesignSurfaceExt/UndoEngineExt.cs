@@ -28,7 +28,7 @@ public class UndoEngineExt : UndoEngine
         {
             try
             {
-                UndoEngine.UndoUnit unit = _undoStack.Pop();
+                UndoUnit unit = _undoStack.Pop();
                 unit.Undo();
                 _redoStack.Push(unit);
                 // Log("::Undo - undo action performed: " + unit.Name);
@@ -50,7 +50,7 @@ public class UndoEngineExt : UndoEngine
         {
             try
             {
-                UndoEngine.UndoUnit unit = _redoStack.Pop();
+                UndoUnit unit = _redoStack.Pop();
                 unit.Undo();
                 _undoStack.Push(unit);
                 // Log("::Redo - redo action performed: " + unit.Name);
@@ -66,7 +66,7 @@ public class UndoEngineExt : UndoEngine
         }
     }
 
-    protected override void AddUndoUnit(UndoEngine.UndoUnit unit)
+    protected override void AddUndoUnit(UndoUnit unit)
     {
         _undoStack.Push(unit);
     }
