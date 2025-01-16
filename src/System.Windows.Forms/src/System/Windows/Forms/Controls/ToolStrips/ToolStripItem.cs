@@ -3048,6 +3048,8 @@ public abstract partial class ToolStripItem :
                 ParentInternal.RestoreFocusInternal();
             }
 
+            Owner?.UpdateToolTip(this, true);
+
             return true;
         }
 
