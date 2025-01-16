@@ -221,4 +221,10 @@
   <data name="EnvVarNotFound_Name" xml:space="preserve">
     <value>Environment variable is not defined: '{0}'.</value>
   </data>
+  <data name="net_webstatus_Timeout" xml:space="preserve">
+    <value>The network operation has timed out.</value>
+  </data>
+  <data name="net_webstatus_Unauthorized" xml:space="preserve">
+    <value>The network operation is unauthorized.</value>
+  </data>
 </root>
