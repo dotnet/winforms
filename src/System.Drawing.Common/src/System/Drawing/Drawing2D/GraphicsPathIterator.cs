@@ -190,8 +190,12 @@ public sealed unsafe class GraphicsPathIterator : MarshalByRefObject, IDisposabl
     ///  Copies the <see cref="GraphicsPath.PathPoints"/> property and <see cref="GraphicsPath.PathTypes"/> property data
     ///  of the associated <see cref="GraphicsPath"/>.
     /// </summary>
-    /// <param name="points">Upon return, contains <see cref="PointF"/> structures that represent the points in the path.</param>
-    /// <param name="types">Upon return, contains bytes that represent the types of points in the path.</param>
+    /// <param name="points">
+    ///  Upon return, contains <see cref="PointF"/> structures that represent the points in the path.
+    /// </param>
+    /// <param name="types">
+    ///  Upon return, contains bytes that represent the types of points in the path.
+    /// </param>
     /// <param name="startIndex">The index of the first point to copy.</param>
     /// <param name="endIndex">The index of the last point to copy.</param>
     /// <returns>The number of points copied.</returns>

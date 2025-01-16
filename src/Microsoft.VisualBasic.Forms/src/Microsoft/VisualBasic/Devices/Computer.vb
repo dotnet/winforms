@@ -16,26 +16,26 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Partial Public Class Computer : Inherits ServerComputer
 
-        '  NOTE: The .Net design guidelines state that access to Instance members does not
-        '  have to be thread-safe. Access to Shared members does have to be thread-safe.
-        '  Since My.Computer creates the instance of Computer in a thread-safe way,
-        '  access to the Computer will necessarily be thread-safe. There is nothing to
-        '  prevent a user from passing our computer object across threads or creating
-        '  their own instance and then getting into trouble. But that is completely
-        '  consistent with the rest of the FX design. It is MY.* that is thread safe
-        '  and leads to best practice access to these objects. If you Dim them up yourself,
-        '  you are responsible for managing the threading.
+        ' NOTE: The .Net design guidelines state that access to Instance members does not
+        ' have to be thread-safe. Access to Shared members does have to be thread-safe.
+        ' Since My.Computer creates the instance of Computer in a thread-safe way,
+        ' access to the Computer will necessarily be thread-safe. There is nothing to
+        ' prevent a user from passing our computer object across threads or creating
+        ' their own instance and then getting into trouble. But that is completely
+        ' consistent with the rest of the FX design. It is MY.* that is thread safe
+        ' and leads to best practice access to these objects. If you Dim them up yourself,
+        ' you are responsible for managing the threading.
 
-        'Lazy initialized cache for the clipboard class. (proxies can be shared - they have no state)
+        ' Lazy initialized cache for the clipboard class. (proxies can be shared - they have no state)
         Private Shared s_clipboard As ClipboardProxy
 
-        'Lazy initialized cache for the Keyboard class. SHARED because Keyboard behaves as a ReadOnly singleton class
+        ' Lazy initialized cache for the Keyboard class. SHARED because Keyboard behaves as a ReadOnly singleton class
         Private Shared s_keyboardInstance As Keyboard
 
-        'Lazy initialized cache for the Mouse class. SHARED because Mouse behaves as a ReadOnly singleton class
+        ' Lazy initialized cache for the Mouse class. SHARED because Mouse behaves as a ReadOnly singleton class
         Private Shared s_mouse As Mouse
 
-        'Lazy initialized cache for the Audio class.
+        ' Lazy initialized cache for the Audio class.
         Private _audio As Audio
 
         ''' <summary>
@@ -96,9 +96,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>A <see cref="System.Windows.Forms.Screen"/> object as the primary screen.</value>
         Public ReadOnly Property Screen() As System.Windows.Forms.Screen
             Get
-                'Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens, which
-                'PrimaryScreen relies on to find the primary. So we always need to access the latest PrimaryScreen so we
-                'will get the current resolution reported.
+                ' Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens,
+                ' which PrimaryScreen relies on to find the primary. So we always need to access the latest
+                ' PrimaryScreen so we will get the current resolution reported.
                 Return System.Windows.Forms.Screen.PrimaryScreen
             End Get
         End Property

@@ -96,7 +96,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DeleteDirectoryRecycleWithUICancelOptionsProxyTest()
             Dim sourceDirectoryName As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=1)
+            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=FileSizes.FileSize1Byte)
             Dim data As Byte() = {4}
             _fileSystem.WriteAllBytes(sourceFileName, data, append:=False)
             File.Exists(sourceFileName).Should.BeTrue()
@@ -112,7 +112,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DeleteDirectoryWithUIProxyRecycleTest()
             Dim sourceDirectoryName As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=1)
+            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=FileSizes.FileSize1Byte)
             Dim data As Byte() = {4}
             _fileSystem.WriteAllBytes(sourceFileName, data, append:=False)
             File.Exists(sourceFileName).Should.BeTrue()
@@ -127,7 +127,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DeleteFileWithRecycleOptionProxyTest()
             Dim sourceDirectoryName As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=1)
+            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=FileSizes.FileSize1Byte)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(sourceFileName, byteArray, append:=False)
             File.Exists(sourceFileName).Should.BeTrue()
@@ -146,7 +146,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DeleteFileWithUIProxyTest()
             Dim sourceDirectoryName As String = CreateTempDirectory()
-            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=1)
+            Dim sourceFileName As String = CreateTempFile(sourceDirectoryName, NameOf(sourceFileName), size:=FileSizes.FileSize1Byte)
             Dim data As Byte() = {4}
             _fileSystem.WriteAllBytes(sourceFileName, data, append:=False)
             File.Exists(sourceFileName).Should.BeTrue()
@@ -187,7 +187,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sourceDirectoryName As String = CreateTempDirectory()
             Dim fileA As String = CreateTempFile(sourceDirectoryName, NameOf(fileA))
             _fileSystem.WriteAllText(fileA, "A", append:=False)
-            Dim fileB As String = CreateTempFile(sourceDirectoryName, NameOf(fileB), size:=1)
+            Dim fileB As String = CreateTempFile(sourceDirectoryName, NameOf(fileB), size:=FileSizes.FileSize1Byte)
             Dim fileC As String = CreateTempFile(sourceDirectoryName, NameOf(fileC))
             _fileSystem.WriteAllText(fileC, "C", append:=False)
             Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(

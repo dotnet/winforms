@@ -1,0 +1,12 @@
+{
+  "FileDownloadUrlPrefix": "http://127.0.0.1:8080/",
+  "FileUploadUrlPrefix": "http://127.0.0.1:8080/",
+  "ServerDownloadAllowsAnonymousUser": true,
+  "ServerDownloadIgnoresPasswordErrors": false,
+  "ServerDownloadPassword": "",
+  "ServerDownloadUserName": "",
+  "ServerUploadAllowsAnonymousUser": true,
+  "serverUploadIgnoresPasswordErrors": false,
+  "ServerUploadPassword": "",
+  "ServerUploadUserName": ""
+}
