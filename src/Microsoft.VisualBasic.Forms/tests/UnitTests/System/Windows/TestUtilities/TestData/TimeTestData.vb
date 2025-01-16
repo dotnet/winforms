@@ -6,7 +6,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TimeTestData
         Implements IEnumerable(Of Object())
 
-        Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) _
+            Implements IEnumerable(Of Object()).GetEnumerator
+
             Yield {New DualTimeZones(TimeZone.GMT)}
             Yield {New DualTimeZones(TimeZone.Local)}
         End Function

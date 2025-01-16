@@ -9,7 +9,7 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.CompilerServices
 
     ''' <summary>
-    '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
+    '''  Internal utilities from <see cref="FileIO.FileSystem"/>.
     ''' </summary>
     Friend NotInheritable Class FileSystemUtils
 
@@ -20,10 +20,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>The given path in long format if the path exists.</returns>
         ''' <remarks>
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
-        '''  Use <see cref="DirectoryInfo.GetFiles"/> and <see cref="DirectoryInfo.GetDirectories"/> (which call FindFirstFile) so that we always have permission.
+        '''  Use <see cref="DirectoryInfo.GetFiles"/> and
+        '''  <see cref="DirectoryInfo.GetDirectories"/> (which call FindFirstFile) so that we always have permission.
         '''</remarks>
         Private Shared Function GetLongPath(fullPath As String) As String
-            Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso IO.Path.IsPathRooted(fullPath), "Must be full path")
+            Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso
+                Path.IsPathRooted(fullPath), "Must be full path")
             Try
                 ' If root path, return itself. UNC path do not recognize 8.3 format in root path, so this is fine.
                 If IsRoot(fullPath) Then
@@ -46,8 +48,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
                     Return fullPath
                 End If
             Catch ex As Exception
-                ' Ignore these type of exceptions and return FullPath. These type of exceptions should either be caught by calling functions
-                ' or indicate that caller does not have enough permission and should get back the 8.3 path.
+                ' Ignore these type of exceptions and return FullPath. These type of exceptions should
+                ' either be caught by calling functions or indicate that caller does not have enough permission and
+                ' should get back the 8.3 path.
                 If TypeOf ex Is ArgumentException OrElse
                     TypeOf ex Is ArgumentNullException OrElse
                     TypeOf ex Is PathTooLongException OrElse
@@ -72,9 +75,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Checks if the full path is a root path.
         ''' </summary>
         ''' <param name="path">The path to check.</param>
-        ''' <returns><see langword="True"/> if FullPath is a root path, <see langword="False"/> otherwise.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if FullPath is a root path,
+        '''  <see langword="False"/> otherwise.
+        ''' </returns>
         ''' <remarks>
-        '''   IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
+        '''   <see cref="Path.GetPathRoot"/>: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).
         '''   Therefore, remove any separators at the end to have correct result.
         ''' </remarks>
@@ -94,7 +100,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Removes all directory separators at the end of a path.
         ''' </summary>
         ''' <param name="path">a full or relative path.</param>
-        ''' <returns>If Path is a root path, the same value. Otherwise, removes any directory separators at the end.</returns>
+        ''' <returns>
+        '''  If Path is a root path, the same value. Otherwise, removes any directory separators at the end.
+        ''' </returns>
         ''' <remarks>We decided not to return path with separators at the end.</remarks>
         Private Shared Function RemoveEndingSeparator(path As String) As String
             If IO.Path.IsPathRooted(path) Then

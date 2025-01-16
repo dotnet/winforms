@@ -21,7 +21,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 #Enable Warning IDE1006 ' Naming Styles
         Public Output As String = String.Empty
 
-        'This constructor needed to be able to show the designer at design-time.
+        ' This constructor needed to be able to show the designer at design-time.
         Friend Sub New()
             MyBase.New()
             InitializeComponent()
@@ -41,28 +41,32 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Label = New Label
             SuspendLayout()
             '
-            'OKButton
+            ' OKButton
             '
             resources.ApplyResources(OKButton, "OKButton", CultureInfo.CurrentUICulture)
             OKButton.Name = "OKButton"
             '
-            'MyCancelButton
+            ' MyCancelButton
             '
             MyCancelButton.DialogResult = DialogResult.Cancel
-            resources.ApplyResources(MyCancelButton, "MyCancelButton", CultureInfo.CurrentUICulture)
+            resources.ApplyResources(
+                value:=MyCancelButton,
+                objectName:="MyCancelButton",
+                culture:=CultureInfo.CurrentUICulture)
+
             MyCancelButton.Name = "MyCancelButton"
             '
-            'TextBox
+            ' TextBox
             '
             resources.ApplyResources(TextBox, "TextBox", CultureInfo.CurrentUICulture)
             TextBox.Name = "TextBox"
             '
-            'Label
+            ' Label
             '
             resources.ApplyResources(Label, "Label", CultureInfo.CurrentUICulture)
             Label.Name = "Label"
             '
-            'VBInputBox
+            ' VBInputBox
             '
             AcceptButton = OKButton
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
@@ -80,28 +84,34 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         End Sub
 
-        'Initialize labels etc from the args passed in to InputBox()
-        Private Sub InitializeInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
+        ' Initialize labels etc from the args passed in to InputBox()
+        Private Sub InitializeInputBox(
+            prompt As String,
+            title As String,
+            defaultResponse As String,
+            xPos As Integer,
+            yPos As Integer)
+
             Text = title
             Label.Text = prompt
             TextBox.Text = defaultResponse
             AddHandler OKButton.Click, AddressOf OKButton_Click
             AddHandler MyCancelButton.Click, AddressOf MyCancelButton_Click
 
-            'Re-size the dialog if the prompt is too large
+            ' Re-size the dialog if the prompt is too large
             Dim labelGraphics As Graphics = Label.CreateGraphics
             Dim labelSizeNeeded As SizeF = labelGraphics.MeasureString(prompt, Label.Font, Label.Width)
             labelGraphics.Dispose()
             If labelSizeNeeded.Height > Label.Height Then
-                'The current label size is not large enough to accommodate the prompt. We need
-                '  to expand the label and the dialog, and move the textbox to make room.
+                ' The current label size is not large enough to accommodate the prompt. We need
+                ' to expand the label and the dialog, and move the textbox to make room.
                 Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height - Label.Height)
                 Label.Height += dialogHeightChange
                 TextBox.Top += dialogHeightChange
                 Height += dialogHeightChange
             End If
 
-            'Position the form
+            ' Position the form
             If (xPos = -1) AndAlso (yPos = -1) Then
                 StartPosition = FormStartPosition.CenterScreen
             Else
