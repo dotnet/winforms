@@ -56,11 +56,7 @@ public unsafe partial class DataObject :
     /// </remarks>
     public DataObject(object data)
     {
-        if (data is DataObject dataObject)
-        {
-            _innerData = dataObject._innerData;
-        }
-        else if (data is IDataObject iDataObject)
+        if (data is IDataObject iDataObject)
         {
             _innerData = Composition.CreateFromWinFormsDataObject(iDataObject);
         }
@@ -302,7 +298,10 @@ public unsafe partial class DataObject :
         Func<TypeName, Type>? resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            _innerData.TryGetData(format, resolver!, autoConvert, out data);
+        // Invoke the appropriate overload so we don't fail a null check on a nested object if the resolver is null.
+        resolver is null
+            ? _innerData.TryGetData(format, autoConvert, out data)
+            : _innerData.TryGetData(format, resolver, autoConvert, out data);
 
     public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
 
