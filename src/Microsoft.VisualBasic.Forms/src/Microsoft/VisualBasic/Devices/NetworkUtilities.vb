@@ -72,12 +72,11 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                     path:=destinationFileName,
                     paramName:=NameOf(destinationFileName))
-                Dim addressTrimmed As String = address.Replace("//", "/")
                 Return New ProgressDialog With {
-                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, addressTrimmed),
+                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
                     .LabelText = VbUtils.GetResourceString(
                         resourceKey:=SR.ProgressDialogDownloadingLabel,
-                        addressTrimmed,
+                        address,
                         fullFilename)
                     }
             End If
