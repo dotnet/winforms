@@ -44,7 +44,12 @@ public class DataGridViewSortCompareEventArgsTests : IDisposable
     [Fact]
     public void DataGridViewSortCompareEventArgs_SortResult_Set_GetReturnsExpected()
     {
-        var e = new DataGridViewSortCompareEventArgs(_column, null, null, 0, 1)
+        var e = new DataGridViewSortCompareEventArgs(
+            _column,
+            cellValue1: null,
+            cellValue2: null,
+            rowIndex1: 0,
+            rowIndex2: 1)
         {
             SortResult = 1
         };
