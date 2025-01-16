@@ -699,4 +699,33 @@ public partial class ClipboardTests
         byte[] array = stream.ToArray();
         array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
     }
+
+    [WinFormsFact]
+    public void Clipboard_DerivedDataObject_DataPresent()
+    {
+        // https://github.com/dotnet/winforms/issues/12789
+        SomeDataObject data = new();
+
+        // This was provided as a workaround for the above and should not break, but should
+        // also work without it.
+        data.SetData(SomeDataObject.Format, data);
+
+        Clipboard.SetDataObject(data);
+        Clipboard.ContainsData(SomeDataObject.Format).Should().BeTrue();
+        Clipboard.GetDataObject()!.GetDataPresent(SomeDataObject.Format).Should().BeTrue();
+
+        data = new();
+        Clipboard.SetDataObject(data);
+        Clipboard.ContainsData(SomeDataObject.Format).Should().BeTrue();
+        Clipboard.GetDataObject()!.GetDataPresent(SomeDataObject.Format).Should().BeTrue();
+    }
+
+    public class SomeDataObject : DataObject
+    {
+        public static string Format => "SomeDataObjectId";
+        public override string[] GetFormats() => [Format];
+
+        public override bool GetDataPresent(string format, bool autoConvert)
+            => format == Format || base.GetDataPresent(format, autoConvert);
+    }
 }
