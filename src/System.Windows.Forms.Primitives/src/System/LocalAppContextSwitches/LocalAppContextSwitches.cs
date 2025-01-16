@@ -42,7 +42,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
     private static int s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization;
     private static int s_clipboardDragDropEnableNrbfSerialization;
-    private static int s_moveTreeViewTextLocOnePixel;
+    private static int s_moveTreeViewTextLocationOnePixel;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -270,6 +270,6 @@ internal static partial class LocalAppContextSwitches
     public static bool MoveTreeViewTextLocationOnePixel
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocOnePixel);
+        get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
     }
 }
