@@ -70,11 +70,14 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw
 
             Catch ex As Exception
-                If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
+                If onUserCancel = UICancelOption.ThrowException OrElse (dialog IsNot Nothing AndAlso Not dialog.UserCanceledTheDialog) Then
                     If ex.Message.Contains("401") Then
                         Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
                     End If
                     Throw
+                End If
+                If ex.Message.Contains("401") Then
+                    Throw New WebException(SR.net_webstatus_Unauthorized)
                 End If
             Finally
                 CloseProgressDialog(dialog)

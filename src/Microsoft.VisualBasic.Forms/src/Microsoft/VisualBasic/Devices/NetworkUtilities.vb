@@ -6,6 +6,8 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
 Namespace Microsoft.VisualBasic.Devices
     Friend Module NetworkUtilities
 
@@ -71,12 +73,12 @@ Namespace Microsoft.VisualBasic.Devices
                     path:=destinationFileName,
                     paramName:=NameOf(destinationFileName))
                 Return New ProgressDialog With {
-                            .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = Utils.GetResourceString(
-                                ResourceKey:=SR.ProgressDialogDownloadingLabel,
-                                address,
-                                fullFilename)
-                            }
+                    .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                    .LabelText = VbUtils.GetResourceString(
+                        resourceKey:=SR.ProgressDialogDownloadingLabel,
+                        address,
+                        fullFilename)
+                    }
             End If
             Return Nothing
         End Function
