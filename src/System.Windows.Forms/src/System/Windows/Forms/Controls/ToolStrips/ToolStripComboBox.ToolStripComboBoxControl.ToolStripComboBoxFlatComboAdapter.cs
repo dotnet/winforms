@@ -12,7 +12,7 @@ public partial class ToolStripComboBox
     {
         internal class ToolStripComboBoxFlatComboAdapter : FlatComboAdapter
         {
-            public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, shouldRedrawAsSmallButton: true)
+            public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, smallButton: true)
             {
             }
 

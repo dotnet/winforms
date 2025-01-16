@@ -3899,14 +3899,7 @@ public partial class ComboBox : ListControl
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
-                    if ((!Enabled || FlatStyle == FlatStyle.Popup) && MouseIsOver)
-                    {
-                        FlatComboBoxAdapter.DrawPopUpCombo(this, g);
-                    }
-                    else
-                    {
-                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                    }
+                    FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                     return;
                 }
@@ -3990,5 +3983,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, shouldRedrawAsSmallButton: false);
+        => new(this, smallButton: false);
 }
