@@ -7424,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">位於第 {1} 行位置 {2} 的類型 {0} 在轉換時，擲回下列例外狀況: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">與氣球工具提示關聯的圖示。</target>

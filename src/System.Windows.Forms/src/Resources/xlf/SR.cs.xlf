@@ -7424,6 +7424,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Typ {0} na řádku {1} na pozici {2} vyvolal při převodu následující výjimku: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Ikona spojená s popisem tlačítka v bublině</target>

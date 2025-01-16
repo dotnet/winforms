@@ -29,7 +29,7 @@ public unsafe partial class DataObject
 #endif
             }
 
-            int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection)
+            public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection)
             {
                 using var nativeAdviseSink = ComHelpers.TryGetComScope<Com.IAdviseSink>(adviseSink);
                 fixed (Com.FORMATETC* nativeFormat = &Unsafe.As<FORMATETC, Com.FORMATETC>(ref pFormatetc))
@@ -40,13 +40,13 @@ public unsafe partial class DataObject
                 }
             }
 
-            void ComTypes.IDataObject.DUnadvise(int connection)
+            public void DUnadvise(int connection)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 nativeDataObject.Value->DUnadvise((uint)connection).ThrowOnFailure();
             }
 
-            int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
+            public int EnumDAdvise(out IEnumSTATDATA? enumAdvise)
             {
                 using ComScope<Com.IEnumSTATDATA> nativeStatData = new(null);
                 using var nativeDataObject = _nativeDataObject.GetInterface();
@@ -55,7 +55,7 @@ public unsafe partial class DataObject
                 return result;
             }
 
-            IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR direction)
+            public IEnumFORMATETC EnumFormatEtc(DATADIR direction)
             {
                 using ComScope<Com.IEnumFORMATETC> nativeFormat = new(null);
                 using var nativeDataObject = _nativeDataObject.GetInterface();
@@ -67,7 +67,7 @@ public unsafe partial class DataObject
                 return (IEnumFORMATETC)ComHelpers.GetObjectForIUnknown(nativeFormat);
             }
 
-            int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut)
+            public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 HRESULT result = nativeDataObject.Value->GetCanonicalFormatEtc(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatIn), out Com.FORMATETC nativeFormat);
@@ -75,7 +75,7 @@ public unsafe partial class DataObject
                 return result;
             }
 
-            void ComTypes.IDataObject.GetData(ref FORMATETC format, out STGMEDIUM medium)
+            public void GetData(ref FORMATETC format, out STGMEDIUM medium)
             {
                 Com.FORMATETC nativeFormat = Unsafe.As<FORMATETC, Com.FORMATETC>(ref format);
                 Com.STGMEDIUM nativeMedium = default;
@@ -85,7 +85,7 @@ public unsafe partial class DataObject
                 nativeMedium.ReleaseUnknown();
             }
 
-            void ComTypes.IDataObject.GetDataHere(ref FORMATETC format, ref STGMEDIUM medium)
+            public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium)
             {
                 Com.FORMATETC nativeFormat = Unsafe.As<FORMATETC, Com.FORMATETC>(ref format);
                 Com.STGMEDIUM nativeMedium = (Com.STGMEDIUM)medium;
@@ -95,13 +95,13 @@ public unsafe partial class DataObject
                 nativeMedium.ReleaseUnknown();
             }
 
-            int ComTypes.IDataObject.QueryGetData(ref FORMATETC format)
+            public int QueryGetData(ref FORMATETC format)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->QueryGetData(Unsafe.As<FORMATETC, Com.FORMATETC>(ref format));
             }
 
-            void ComTypes.IDataObject.SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release)
+            public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release)
             {
                 Com.STGMEDIUM nativeMedium = (Com.STGMEDIUM)medium;
                 Com.FORMATETC nativeFormat = Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatIn);

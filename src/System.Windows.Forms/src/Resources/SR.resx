@@ -7042,4 +7042,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
     <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
   </data>
+  <data name="NotSupportedExceptionOnClipboard">
+    <value>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</value>
+  </data>
 </root>

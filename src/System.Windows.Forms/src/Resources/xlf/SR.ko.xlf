@@ -7424,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">줄 {1}, 위치 {2}의 {0} 형식이 변환되는 동안 다음 예외가 throw되었습니다. {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">풍선 도구 설명과 연결할 아이콘입니다.</target>
