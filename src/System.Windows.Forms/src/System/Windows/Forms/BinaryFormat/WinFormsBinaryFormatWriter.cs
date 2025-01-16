@@ -5,13 +5,14 @@ using System.Drawing;
 using System.Private.Windows;
 using System.Private.Windows.Core.BinaryFormat;
 using System.Private.Windows.Core.BinaryFormat.Serializer;
+using System.Private.Windows.Core.Nrbf;
 
 namespace System.Windows.Forms.BinaryFormat;
 
 /// <summary>
 ///  Writer that writes Windows Forms specific types in binary format without using the BinaryFormatter.
 /// </summary>
-internal static class WinFormsBinaryFormatWriter
+internal class WinFormsBinaryFormatWriter : IBinaryFormatWriter
 {
     private static readonly string[] s_dataMemberName = ["Data"];
 
@@ -100,7 +101,7 @@ internal static class WinFormsBinaryFormatWriter
     /// <summary>
     ///  Writes the given Framework, WinForms or System.Drawing.Primitives <paramref name="value"/> if supported.
     /// </summary>
-    public static bool TryWriteCommonObject(Stream stream, object value)
+    public bool TryWriteCommonObject(Stream stream, object value)
     {
         return TryWriteObject(stream, value)
             || BinaryFormatWriter.TryWriteDrawingPrimitivesObject(stream, value);

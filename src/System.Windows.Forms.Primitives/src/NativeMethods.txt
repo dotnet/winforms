@@ -24,8 +24,6 @@ CDM_GETSPEC
 CDRF_*
 CFE_EFFECTS
 CFM_MASK
-CFSTR_DROPDESCRIPTION
-CFSTR_INDRAGLOOP
 CHILDID_SELF
 ChildWindowFromPointEx
 CHOOSECOLOR_FLAGS
@@ -48,7 +46,6 @@ CommandStateChangeConstants
 CommDlgExtendedError
 COPYDATASTRUCT
 CoRegisterMessageFilter
-CP_ACP
 CreateAcceleratorTableW
 CreateActCtx
 CreateBrushIndirect
@@ -84,7 +81,6 @@ DoDragDrop
 DPI_AWARENESS_CONTEXT_*
 DPI_HOSTING_BEHAVIOR
 DragAcceptFiles
-DragQueryFile
 DrawEdge
 DrawFrameControl
 DRAWITEMSTRUCT
@@ -95,8 +91,6 @@ DrawThemeBackground
 DrawThemeEdge
 DrawThemeParentBackground
 DrawThemeText
-DROPDESCRIPTION
-DROPFILES
 DROPIMAGETYPE
 DSH_FLAGS
 DTM_*
@@ -150,7 +144,6 @@ GetCaretBlinkTime
 GetCaretPos
 GetClassInfo
 GetClassName
-GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
@@ -276,7 +269,6 @@ IDataObject
 IDC_*
 IDispatchEx
 IDropSource
-IDragSourceHelper2
 IDropSourceNotify
 IDropTarget
 IDropTargetHelper
@@ -521,11 +513,7 @@ OLECONTF
 OleCreateFontIndirect
 OleCreatePropertyFrame
 OleCreatePropertyFrameIndirect
-OleDuplicateData
-OleFlushClipboard
-OleGetClipboard
 OleInitialize
-OleSetClipboard
 OleUninitialize
 OPEN_FILENAME_FLAGS
 OPEN_FILENAME_FLAGS_EX
@@ -551,13 +539,11 @@ Rectangle
 RedrawWindow
 REGDB_E_CLASSNOTREG
 RegisterClass
-RegisterClipboardFormat
 RegisterDragDrop
 RegisterWindowMessage
 RegLoadMUIString
 ReleaseCapture
 ReleaseDC
-ReleaseStgMedium
 RevokeDragDrop
 RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE
 RoundRect
@@ -724,7 +710,6 @@ WC_STATIC
 WC_TABCONTROL
 WC_TREEVIEW
 WHEEL_DELTA
-WideCharToMultiByte
 WindowFromPoint
 WINDOWPOS
 WINEVENT_INCONTEXT

@@ -8,6 +8,7 @@ using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.TestUtilities;
 using Com = Windows.Win32.System.Com;
+using CoreSR = System.Private.Windows.Core.Resources.SR;
 
 namespace System.Windows.Forms.Tests;
 
@@ -19,7 +20,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     private static string InvalidTypeFormatCombinationMessage =>
         PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidFormatTypeCombination, "*");
     private static string TypeRequiresResolverMessage => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidType, "*");
-    private static string UseTryGetDataWithResolver => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_UseTypedAPI, "*");
+    private static string UseTryGetDataWithResolver => PlaceholdersPattern().Replace(CoreSR.ClipboardOrDragDrop_UseTypedAPI, "*");
 
     private const string FormatterDisabledMessage =
         "BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.";

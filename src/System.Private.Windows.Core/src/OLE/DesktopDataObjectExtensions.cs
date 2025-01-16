@@ -1,12 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Windows.Forms;
+using ITypedDataObject = System.Private.Windows.Core.OLE.ITypedDataObjectDesktop;
+using IDataObject = System.Private.Windows.Core.OLE.IDataObjectDesktop;
+using System.Private.Windows.Core.Resources;
+
+namespace System.Private.Windows.Core.OLE;
 
 /// <summary>
 ///  Extension methods for data objects.
 /// </summary>
-public static class DataObjectExtensions
+internal static class DesktopDataObjectExtensions
 {
     private static ITypedDataObject GetTypedDataObjectOrThrow(IDataObject dataObject)
     {
@@ -21,14 +25,6 @@ public static class DataObjectExtensions
 
         return typed;
     }
-
-    /// <inheritdoc cref="ITypedDataObject.TryGetData{T}(out T)"/>
-    /// <exception cref="NotSupportedException">if the <paramref name="dataObject"/> does not implement <see cref="ITypedDataObject" />.</exception>
-    /// <exception cref="ArgumentNullException">if the <paramref name="dataObject"/> is <see langword="null"/></exception>
-    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
-        this IDataObject dataObject,
-        [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            GetTypedDataObjectOrThrow(dataObject).TryGetData(out data);
 
     /// <inheritdoc cref="ITypedDataObject.TryGetData{T}(string, out T)"/>
     /// <exception cref="NotSupportedException">if the <paramref name="dataObject"/> does not implement <see cref="ITypedDataObject" />.</exception>
@@ -52,7 +48,6 @@ public static class DataObjectExtensions
     /// <inheritdoc cref="ITypedDataObject.TryGetData{T}(string, Func{Reflection.Metadata.TypeName, Type}, bool, out T)"/>
     /// <exception cref="NotSupportedException">if the <paramref name="dataObject"/> does not implement <see cref="ITypedDataObject" />.</exception>
     /// <exception cref="ArgumentNullException">if the <paramref name="dataObject"/> is <see langword="null"/></exception>
-    [CLSCompliant(false)]
     public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         this IDataObject dataObject,
         string format,

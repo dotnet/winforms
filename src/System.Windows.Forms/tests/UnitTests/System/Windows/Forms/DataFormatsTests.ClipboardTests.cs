@@ -12,8 +12,8 @@ public partial class DataFormatsTests
     {
         public static IEnumerable<object[]> GetFormat_Int_TestData()
         {
-            uint manuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat("ManuallyRegisteredFormat");
-            uint longManuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat(new string('a', 255));
+            uint manuallyRegisteredFormatId = PInvokeCore.RegisterClipboardFormat("ManuallyRegisteredFormat");
+            uint longManuallyRegisteredFormatId = PInvokeCore.RegisterClipboardFormat(new string('a', 255));
             yield return new object[] { (int)manuallyRegisteredFormatId, "ManuallyRegisteredFormat" };
             yield return new object[] { (int)longManuallyRegisteredFormatId, new string('a', 255) };
         }
