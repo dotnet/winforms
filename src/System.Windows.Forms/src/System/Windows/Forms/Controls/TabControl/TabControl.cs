@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms.Layout;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -1221,7 +1222,7 @@ public partial class TabControl : Control
     ///  We do some work here to configure the handle.
     ///  Overriders should call base.OnHandleCreated()
     /// </summary>
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         if (!IsHandleCreated)
         {
@@ -1259,6 +1260,24 @@ public partial class TabControl : Control
                     HWND.HWND_TOPMOST,
                     0, 0, 0, 0,
                     SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+
+#pragma warning disable WFO5001
+                if (Application.IsDarkModeEnabled)
+                {
+                    PInvoke.SetWindowTheme(tooltipHwnd, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+                    // Round the corners of the ToolTip window.
+                    if (OsVersion.IsWindows11_OrGreater())
+                    {
+                        DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                        PInvoke.DwmSetWindowAttribute(
+                            tooltipHwnd,
+                            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                            &roundSmall,
+                            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+                    }
+                }
+#pragma warning restore WFO5001
             }
         }
 
