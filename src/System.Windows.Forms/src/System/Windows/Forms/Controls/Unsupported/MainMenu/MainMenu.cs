@@ -15,6 +15,9 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
 [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class MainMenu : Menu
 {
     public MainMenu() : base(items: default) => throw new PlatformNotSupportedException();

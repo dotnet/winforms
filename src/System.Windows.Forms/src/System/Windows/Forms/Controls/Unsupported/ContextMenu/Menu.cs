@@ -16,6 +16,9 @@ namespace System.Windows.Forms;
 [Browsable(false)]
 [ListBindable(false)]
 [ToolboxItemFilter("System.Windows.Forms")]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public abstract partial class Menu : Component
 {
     public const int FindHandle = 0;

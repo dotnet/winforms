@@ -23,6 +23,9 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(DataSource))]
 [DefaultEvent(nameof(Navigate))]
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
     // Implement the default constructor explicitly to ensure that class can't be constructed.

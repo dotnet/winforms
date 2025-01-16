@@ -12855,6 +12855,9 @@ public unsafe partial class Control :
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    /// <summary>
+    ///  This property is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public virtual ContextMenu ContextMenu
     {
         get;
@@ -12869,6 +12872,9 @@ public unsafe partial class Control :
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    /// <summary>
+    ///  This event is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public event EventHandler ContextMenuChanged
     {
         add { }
@@ -12882,6 +12888,9 @@ public unsafe partial class Control :
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    /// <summary>
+    ///  This method is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     protected virtual void OnContextMenuChanged(EventArgs e) { }
 #nullable enable
 }

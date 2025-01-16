@@ -18,6 +18,9 @@ public partial class StatusBar
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
     [ListBindable(false)]
+    /// <summary>
+    ///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public class StatusBarPanelCollection : IList
     {
         public StatusBarPanelCollection(StatusBar owner) => throw new PlatformNotSupportedException();

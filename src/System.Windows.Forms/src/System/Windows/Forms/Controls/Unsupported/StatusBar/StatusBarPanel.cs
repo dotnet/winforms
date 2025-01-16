@@ -18,6 +18,9 @@ namespace System.Windows.Forms;
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultProperty(nameof(Text))]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class StatusBarPanel : Component, ISupportInitialize
 {
     // Added public constructor to suppress creation of the default one.

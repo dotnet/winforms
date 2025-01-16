@@ -17,6 +17,9 @@ public partial class ToolBar
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    /// <summary>
+    ///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public class ToolBarButtonCollection : IList
     {
         public ToolBarButtonCollection(ToolBar owner) => throw new PlatformNotSupportedException();

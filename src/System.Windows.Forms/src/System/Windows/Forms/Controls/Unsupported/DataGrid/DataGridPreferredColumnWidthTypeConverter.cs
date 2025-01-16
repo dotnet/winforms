@@ -14,6 +14,9 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class DataGridPreferredColumnWidthTypeConverter : TypeConverter
 {
     // Added explicit constructor to prevent the creation of a default constructor by the compiler.

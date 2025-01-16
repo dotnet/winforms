@@ -21,6 +21,9 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(ButtonClick))]
 [Designer($"System.Windows.Forms.Design.ToolBarDesigner, {AssemblyRef.SystemDesign}")]
 [DefaultProperty(nameof(Buttons))]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public partial class ToolBar : Control
 {
     // Suppress creation of the default constructor by the compiler. This class should not be constructed.

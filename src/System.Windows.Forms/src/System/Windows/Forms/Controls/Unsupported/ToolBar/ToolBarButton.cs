@@ -20,6 +20,9 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Text))]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class ToolBarButton : Component
 {
     public ToolBarButton() => throw new PlatformNotSupportedException();

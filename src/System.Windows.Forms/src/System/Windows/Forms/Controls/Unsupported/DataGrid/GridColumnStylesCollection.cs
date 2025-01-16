@@ -18,6 +18,9 @@ namespace System.Windows.Forms;
 [Browsable(false)]
 [Editor($"System.Windows.Forms.Design.DataGridColumnCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
 [ListBindable(false)]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class GridColumnStylesCollection : BaseCollection, IList
 {
     private GridColumnStylesCollection() { }

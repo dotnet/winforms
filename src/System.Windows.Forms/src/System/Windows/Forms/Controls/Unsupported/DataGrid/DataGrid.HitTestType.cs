@@ -15,6 +15,9 @@ public partial class DataGrid
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
     [Flags]
+    /// <summary>
+    ///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public enum HitTestType
     {
         None = 0x00000000,

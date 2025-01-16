@@ -19,6 +19,9 @@ namespace System.Windows.Forms;
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultProperty("Header")]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public abstract partial class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
     public DataGridColumnStyle() => throw new PlatformNotSupportedException();

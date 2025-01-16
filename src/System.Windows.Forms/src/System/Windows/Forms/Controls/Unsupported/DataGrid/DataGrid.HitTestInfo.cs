@@ -16,6 +16,9 @@ public partial class DataGrid
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    /// <summary>
+    ///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+    /// </summary>
     public sealed class HitTestInfo
     {
         internal HitTestInfo() => throw new PlatformNotSupportedException();

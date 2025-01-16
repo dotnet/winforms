@@ -15,9 +15,12 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
 [SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "This type is provided for public surface compatibility with .NET Framework only. It can't run.")]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public struct DataGridCell
 {
-    #pragma warning disable IDE0251 // Make member 'readonly' - applies to `set` methods.
+#pragma warning disable IDE0251 // Make member 'readonly' - applies to `set` methods.
     public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
 
     public int ColumnNumber

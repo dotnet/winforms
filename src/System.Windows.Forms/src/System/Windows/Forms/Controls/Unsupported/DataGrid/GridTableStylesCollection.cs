@@ -16,6 +16,9 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
 [ListBindable(false)]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class GridTableStylesCollection : BaseCollection, IList
 {
     private GridTableStylesCollection() { }

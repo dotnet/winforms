@@ -18,6 +18,9 @@ namespace System.Windows.Forms;
 [Browsable(false)]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
     public DataGridTableStyle() : this(isDefaultTableStyle: false) => throw new PlatformNotSupportedException();

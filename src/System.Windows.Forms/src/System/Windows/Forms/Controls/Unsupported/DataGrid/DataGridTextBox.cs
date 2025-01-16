@@ -20,6 +20,9 @@ namespace System.Windows.Forms;
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultProperty("GridEditName")]
+/// <summary>
+///  This type is provided for binary compatibility with the .NET Framework. You should not use it.
+/// </summary>
 public class DataGridTextBox : TextBox
 {
     public DataGridTextBox() => throw new PlatformNotSupportedException();
