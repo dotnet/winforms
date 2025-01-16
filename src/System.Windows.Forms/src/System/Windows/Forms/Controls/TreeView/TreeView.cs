@@ -2830,8 +2830,30 @@ public partial class TreeView : Control
                     {
                         Rectangle bounds = node.Bounds;
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(bounds.X - 1, bounds.Y); // required to center the text
-                        bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                        Point textLocation = new(bounds.X, bounds.Y); // required to center the text
+
+                        Rectangle fillRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+                        Rectangle focusRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+
+                        bounds = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+
+                        if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
+                        {
+                            // Reverse the X-axis drawing coordinates of the rectangle.
+                            // Offset the text three pixels to the left to ensure that the text is centered on the fill rectangle.
+                            int invertedX = Width - bounds.X - textSize.Width - 3;
+
+                            // Subtract the scroll bar width when the scroll bar appears.
+                            if (Height <= PreferredHeight)
+                            {
+                                invertedX -= SystemInformation.VerticalScrollBarWidth;
+                            }
+
+                            // To ensure that the right side of the fillRectangle does not
+                            // touch the left edge of the node prefix symbol, 1 pixel is subtracted here.
+                            fillRectangle = new Rectangle(new Point(invertedX - 1, bounds.Y), new(textSize.Width, bounds.Height));
+                            focusRectangle = new Rectangle(new Point(invertedX, bounds.Y), new(textSize.Width, bounds.Height));
+                        }
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
                         OnDrawNode(e);
@@ -2847,15 +2869,14 @@ public partial class TreeView : Control
                             // Draw the actual node.
                             if ((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected)
                             {
-                                g.FillRectangle(SystemBrushes.Highlight, bounds);
-                                ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
+                                g.FillRectangle(SystemBrushes.Highlight, fillRectangle);
+                                ControlPaint.DrawFocusRectangle(g, focusRectangle, color, SystemColors.Highlight);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
-                                g.FillRectangle(brush, bounds);
-
+                                g.FillRectangle(brush, fillRectangle);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                         }
@@ -2872,6 +2893,35 @@ public partial class TreeView : Control
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                 return;
         }
+    }
+
+    private int PreferredHeight
+    {
+        get
+        {
+            int height = 0;
+            foreach (TreeNode node in Nodes)
+            {
+                height += GetNodeHeight(node);
+            }
+
+            return height;
+        }
+    }
+
+    private int GetNodeHeight(TreeNode node)
+    {
+        int height = ItemHeight;
+
+        if (node.IsExpanded)
+        {
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                height += GetNodeHeight(childNode);
+            }
+        }
+
+        return height;
     }
 
     /// <summary>
