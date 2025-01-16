@@ -9,7 +9,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public MustInherit Class VbFileCleanupTestBase
         Implements IDisposable
 
-        Private Shared ReadOnly s_baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
+        Private Shared ReadOnly s_baseTempPath As String = Path.Combine(
+            Path.GetTempPath,
+            "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
         Friend Const DefaultFileName As String = "Testing.Txt"
         Friend ReadOnly _testDirectories As New HashSet(Of String)
 
@@ -17,7 +19,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dispose(disposing:=False)
         End Sub
 
-        ' The base path is system temp directory / a guaranteed unique directory based on a GUID / a temp directory based on TestName
+        ' The base path is the system temp directory /
+        ' a guaranteed unique directory based on a GUID /
+        ' a temp directory based on TestName
         Friend Shared ReadOnly Property BaseTempPath As String
             Get
                 Return s_baseTempPath
@@ -45,7 +49,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  The full path and file name of the created file.
         '''  If size = FileSize.Unknown no file is create but the full path is returned.
         ''' </returns>
-        Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As FileSizes = FileSizes.Unknown) As String
+        Friend Shared Function CreateTempFile(
+            sourceDirectoryName As String,
+            Optional filename As String = DefaultFileName,
+            Optional size As FileSizes = FileSizes.Unknown) As String
+
             If filename = DefaultFileName AndAlso size <> FileSizes.Unknown Then
                 filename = $"{[Enum].GetName(size).Replace("FileSize", "")}.zip"
             End If
@@ -96,7 +104,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="memberName"></param>
         ''' <param name="lineNumber">If >0 use line number as part of name.</param>
         ''' <returns>The name of a directory that is safe to write to and is verified to exist.</returns>
-        Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing, Optional lineNumber As Integer = -1) As String
+        Friend Function CreateTempDirectory(
+            <CallerMemberName> Optional memberName As String = Nothing,
+            Optional lineNumber As Integer = -1) As String
+
             Dim folder As String
             If lineNumber > 0 Then
                 folder = Path.Combine(BaseTempPath, $"{memberName}{lineNumber}")
