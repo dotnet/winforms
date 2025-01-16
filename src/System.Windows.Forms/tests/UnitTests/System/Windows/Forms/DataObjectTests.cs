@@ -3042,4 +3042,77 @@ public partial class DataObjectTests
         dataObject.TryGetData("test", out Bitmap data).Should().BeFalse();
         data.Should().BeNull();
     }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_DoesNotUnwrapDataStore()
+    {
+        // The inner data should not have it's data store unwrapped.
+        DataObject dataObject = new();
+        DataObject wrapped = new(dataObject);
+        DataObject.Composition composition = wrapped.TestAccessor().Dynamic._innerData;
+        IDataObject original = composition.TestAccessor().Dynamic._winFormsDataObject;
+        original.Should().BeSameAs(dataObject);
+    }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_VirtualsAreCalled()
+    {
+        Mock<DataObject> mock = new(MockBehavior.Loose);
+        DataObject wrapped = new(mock.Object);
+
+        wrapped.GetData("Foo", false);
+        mock.Verify(o => o.GetData("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData("Foo");
+        mock.Verify(o => o.GetData("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData(typeof(string));
+        mock.Verify(o => o.GetData("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo", false);
+        mock.Verify(o => o.GetDataPresent("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo");
+        mock.Verify(o => o.GetDataPresent("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent(typeof(string));
+        mock.Verify(o => o.GetDataPresent("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats(false);
+        mock.Verify(o => o.GetFormats(false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats();
+        mock.Verify(o => o.GetFormats(true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Foo", "Bar");
+        mock.Verify(o => o.SetData("Foo", "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData(typeof(string), "Bar");
+        mock.Verify(o => o.SetData(typeof(string), "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Bar");
+        mock.Verify(o => o.SetData("Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+    }
 }
