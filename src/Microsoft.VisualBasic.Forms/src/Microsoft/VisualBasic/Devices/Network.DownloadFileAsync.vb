@@ -314,10 +314,12 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             ' Set credentials if we have any
-            Dim client As HttpClient = If(clientHandler Is Nothing,
-                                          New HttpClient(),
-                                          New HttpClient(clientHandler)
-                                         )
+            Dim client As HttpClient
+            If clientHandler Is Nothing Then
+                client = New HttpClient()
+            Else
+                client = New HttpClient(clientHandler)
+            End If
 
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
 
