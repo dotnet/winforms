@@ -5,11 +5,9 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.Formats.Nrbf;
 using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
-using Windows.Win32.System.Com;
-using Com = Windows.Win32.System.Com;
+using System.Private.Windows.Core.OLE;
 
 namespace System.Windows.Forms;
 
@@ -18,18 +16,21 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class Clipboard
 {
+    private static DesktopClipboard? s_internalClipboard;
+
+    private static DesktopClipboard InternalClipboard => s_internalClipboard ??= new WinFormsClipboard();
     /// <summary>
     ///  Places non-persistent data on the system <see cref="Clipboard"/>.
     /// </summary>
     /// <inheritdoc cref="SetDataObject(object, bool, int, int)"/>
-    public static void SetDataObject(object data) => SetDataObject(data, copy: false);
+    public static void SetDataObject(object data) => InternalClipboard.SetDataObject(data);
 
     /// <summary>
     ///  Overload that uses default values for retryTimes and retryDelay.
     /// </summary>
     /// <inheritdoc cref="SetDataObject(object, bool, int, int)"/>
     public static void SetDataObject(object data, bool copy) =>
-        SetDataObject(data, copy, retryTimes: 10, retryDelay: 100);
+        InternalClipboard.SetDataObject(data, copy);
 
     /// <summary>
     ///  Places data on the system <see cref="Clipboard"/> and uses copy to specify whether the data
@@ -47,38 +48,18 @@ public static class Clipboard
             throw new ThreadStateException(SR.ThreadMustBeSTA);
         }
 
-        ArgumentNullException.ThrowIfNull(data);
-        ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
-        ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
-
-        // Always wrap the data if not already a DataObject. Mark whether the data is an IDataObject so we unwrap it properly on retrieval.
-        DataObject dataObject = data as DataObject ?? new DataObject(data) { IsOriginalNotIDataObject = data is not IDataObject };
-        using var iDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
-
-        HRESULT hr;
-        int retry = retryTimes;
-        while ((hr = PInvoke.OleSetClipboard(iDataObject)).Failed)
+        if (data is DataObject dataObject)
         {
-            if (--retry < 0)
-            {
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
+            InternalClipboard.SetDataObject(dataObject._innerDataObject, copy, retryTimes, retryDelay);
         }
-
-        if (copy)
+        else if (data is IDataObject iDataObject)
         {
-            retry = retryTimes;
-            while ((hr = PInvoke.OleFlushClipboard()).Failed)
-            {
-                if (--retry < 0)
-                {
-                    throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-                }
-
-                Thread.Sleep(millisecondsTimeout: retryDelay);
-            }
+            // InnerClipboard doesn't understand IDataObject - we need our adapter.
+            InternalClipboard.SetDataObject(new DataObjectAdapter(iDataObject), copy, retryTimes, retryDelay);
+        }
+        else
+        {
+            InternalClipboard.SetDataObject(data, copy, retryTimes, retryDelay);
         }
     }
 
@@ -94,39 +75,18 @@ public static class Clipboard
             return Application.MessageLoop ? throw new ThreadStateException(SR.ThreadMustBeSTA) : null;
         }
 
-        int retryTimes = 10;
-        using ComScope<Com.IDataObject> proxyDataObject = new(null);
-        HRESULT hr;
-        while ((hr = PInvoke.OleGetClipboard(proxyDataObject)).Failed)
+        IDataObjectDesktop? iDataObjectInner = InternalClipboard.GetDataObject();
+        if (iDataObjectInner is DataObjectAdapter adapter)
         {
-            if (--retryTimes < 0)
-            {
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-            }
-
-            Thread.Sleep(millisecondsTimeout: 100);
+            return adapter.OriginalDataObject;
+        }
+        else if (iDataObjectInner is DesktopDataObject dataObjectInner)
+        {
+            return new DataObject(dataObjectInner);
         }
 
-        // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
-        // without giving out the real data object. If the data placed on the clipboard is not one of our CCWs or the clipboard
-        // has been flushed, a wrapper around the proxy for us to use will be given. However, if the data placed on
-        // the clipboard is one of our own and the clipboard has not been flushed, we need to retrieve the real data object
-        // pointer in order to retrieve the original managed object via ComWrappers if an IDataObject was set on the clipboard.
-        // To do this, we must query for an interface that is not known to the proxy e.g. IComCallableWrapper.
-        // If we are able to query for IComCallableWrapper it means that the real data object is one of our CCWs and we've retrieved it successfully,
-        // otherwise it is not ours and we will use the wrapped proxy.
-        var realDataObject = proxyDataObject.TryQuery<IComCallableWrapper>(out hr);
-
-        if (hr.Succeeded
-            && ComHelpers.TryUnwrapComWrapperCCW(realDataObject.AsUnknown, out DataObject? dataObject)
-            && !dataObject.IsOriginalNotIDataObject)
-        {
-            // An IDataObject was given to us to place on the clipboard. We want to unwrap and return it instead of a proxy.
-            return dataObject.TryUnwrapInnerIDataObject();
-        }
-
-        // Original data given wasn't an IDataObject, give the proxy value back.
-        return new DataObject(proxyDataObject.Value);
+        // There should be no other cases..
+        return null;
     }
 
     /// <summary>
@@ -139,52 +99,36 @@ public static class Clipboard
             throw new ThreadStateException(SR.ThreadMustBeSTA);
         }
 
-        HRESULT hr;
-        int retry = 10;
-        while ((hr = PInvoke.OleSetClipboard(null)).Failed)
-        {
-            if (--retry < 0)
-            {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-#pragma warning restore CA2201
-            }
-
-            Thread.Sleep(millisecondsTimeout: 100);
-        }
+        InternalClipboard.Clear();
     }
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
-    public static bool ContainsAudio() => ContainsData(DataFormats.WaveAudioConstant);
+    public static bool ContainsAudio() => InternalClipboard.ContainsAudio();
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the specified format
     ///  or can be converted to that format.
     /// </summary>
-    public static bool ContainsData(string? format) =>
-        !string.IsNullOrWhiteSpace(format) && ContainsData(format, autoConvert: false);
-
-    private static bool ContainsData(string format, bool autoConvert) =>
-        GetDataObject() is IDataObject dataObject && dataObject.GetDataPresent(format, autoConvert: autoConvert);
+    public static bool ContainsData(string? format) => InternalClipboard.ContainsData(format);
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the <see cref="DataFormats.FileDrop"/> format
     ///  or can be converted to that format.
     /// </summary>
-    public static bool ContainsFileDropList() => ContainsData(DataFormats.FileDrop, autoConvert: true);
+    public static bool ContainsFileDropList() => InternalClipboard.ContainsFileDropList();
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the <see cref="DataFormats.Bitmap"/> format
     ///  or can be converted to that format.
     /// </summary>
-    public static bool ContainsImage() => ContainsData(DataFormats.Bitmap, autoConvert: true);
+    public static bool ContainsImage() => InternalClipboard.ContainsImage();
 
     /// <summary>
     ///  Indicates whether there is text data on the Clipboard in <see cref="TextDataFormat.UnicodeText"/> format.
     /// </summary>
-    public static bool ContainsText() => ContainsText(TextDataFormat.UnicodeText);
+    public static bool ContainsText() => InternalClipboard.ContainsText();
 
     /// <summary>
     ///  Indicates whether there is text data on the Clipboard in the format indicated by the specified
@@ -193,13 +137,13 @@ public static class Clipboard
     public static bool ContainsText(TextDataFormat format)
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        return ContainsData(ConvertToDataFormats(format));
+        return InternalClipboard.ContainsText((DesktopTextDataFormat)format);
     }
 
     /// <summary>
     ///  Retrieves an audio stream from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Stream? GetAudioStream() => GetTypedDataIfAvailable<Stream>(DataFormats.WaveAudioConstant);
+    public static Stream? GetAudioStream() => InternalClipboard.GetAudioStream();
 
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
@@ -213,10 +157,7 @@ public static class Clipboard
         DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     public static object? GetData(string format) =>
-        string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
-
-    private static object? GetData(string format, bool autoConvert) =>
-        GetDataObject() is IDataObject dataObject ? dataObject.GetData(format, autoConvert) : null;
+        InternalClipboard.GetData(format);
 
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
@@ -360,11 +301,7 @@ public static class Clipboard
         Func<TypeName, Type> resolver,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
-        data = default;
-        resolver.OrThrowIfNull();
-
-        return GetTypedDataObject<T>(format, out ITypedDataObject? typed)
-            && typed.TryGetData(format, resolver, autoConvert: false, out data);
+        return InternalClipboard.TryGetData(format, resolver, out data);
     }
 
     /// <inheritdoc cref="TryGetData{T}(string, Func{TypeName, Type}, out T)"/>
@@ -372,47 +309,13 @@ public static class Clipboard
         string format,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
-        data = default;
-
-        return GetTypedDataObject<T>(format, out ITypedDataObject? typed) && typed.TryGetData(format, out data);
-    }
-
-    private static bool GetTypedDataObject<T>(
-        string format,
-        [NotNullWhen(true), MaybeNullWhen(false)] out ITypedDataObject typed)
-    {
-        typed = default;
-        if (!DataObject.IsValidFormatAndType<T>(format)
-            || GetDataObject() is not { } dataObject)
-        {
-            // Invalid format or no object on the clipboard at all.
-            return false;
-        }
-
-        if (dataObject is not ITypedDataObject typedDataObject)
-        {
-            throw new NotSupportedException(
-                string.Format(SR.ITypeDataObject_Not_Implemented, dataObject.GetType().FullName));
-        }
-
-        typed = typedDataObject;
-        return true;
+        return InternalClipboard.TryGetData(format, out data);
     }
 
     /// <summary>
     ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.
     /// </summary>
-    public static StringCollection GetFileDropList()
-    {
-        StringCollection result = [];
-
-        if (GetTypedDataIfAvailable<string[]?>(DataFormats.FileDropConstant) is string[] strings)
-        {
-            result.AddRange(strings);
-        }
-
-        return result;
-    }
+    public static StringCollection GetFileDropList() => InternalClipboard.GetFileDropList();
 
     /// <summary>
     ///  Retrieves a <see cref="Bitmap"/> from the <see cref="Clipboard"/>.
@@ -420,12 +323,12 @@ public static class Clipboard
     /// <devdoc>
     ///  <see cref="Bitmap"/>s are re-hydrated from a <see cref="SerializationRecord"/> by reading a byte array.
     /// </devdoc>
-    public static Image? GetImage() => GetTypedDataIfAvailable<Image>(DataFormats.Bitmap);
+    public static Image? GetImage() => InternalClipboard.GetTypedDataIfAvailable<Image>(DataFormats.Bitmap);
 
     /// <summary>
     ///  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
     /// </summary>
-    public static string GetText() => GetText(TextDataFormat.UnicodeText);
+    public static string GetText() => InternalClipboard.GetText();
 
     /// <summary>
     ///  Retrieves text data from the <see cref="Clipboard"/> in the format indicated by the specified
@@ -435,35 +338,18 @@ public static class Clipboard
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-        return GetTypedDataIfAvailable<string>(ConvertToDataFormats(format)) is string text ? text : string.Empty;
-    }
-
-    private static T? GetTypedDataIfAvailable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format)
-    {
-        IDataObject? data = GetDataObject();
-        if (data is ITypedDataObject typed)
-        {
-            return typed.TryGetData(format, autoConvert: true, out T? value) ? value : default;
-        }
-
-        if (data is IDataObject dataObject)
-        {
-            return dataObject.GetData(format, autoConvert: true) is T value ? value : default;
-        }
-
-        return default;
+        return InternalClipboard.GetText((DesktopTextDataFormat)format);
     }
 
     /// <summary>
     ///  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
-    public static void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
+    public static void SetAudio(byte[] audioBytes) => InternalClipboard.SetAudio(audioBytes);
 
     /// <summary>
     ///  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
-    public static void SetAudio(Stream audioStream) =>
-        SetDataObject(new DataObject(DataFormats.WaveAudioConstant, audioStream.OrThrowIfNull()), copy: true);
+    public static void SetAudio(Stream audioStream) => InternalClipboard.SetAudio(audioStream);
 
     /// <summary>
     ///  Clears the Clipboard and then adds data in the specified format.
@@ -475,13 +361,7 @@ public static class Clipboard
     /// </remarks>
     public static void SetData(string format, object data)
     {
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
-        // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
-        SetDataObject(new DataObject(format, data), copy: true);
+        InternalClipboard.SetData(format, data);
     }
 
     /// <summary>
@@ -523,58 +403,28 @@ public static class Clipboard
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public static void SetDataAsJson<T>(string format, T data)
     {
-        data.OrThrowIfNull(nameof(data));
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
         if (typeof(T) == typeof(DataObject))
         {
             throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetDataObject)));
         }
 
-        DataObject dataObject = new();
-        dataObject.SetDataAsJson(format, data);
-        SetDataObject(dataObject, copy: true);
+        InternalClipboard.SetDataAsJson(format, data);
     }
 
     /// <summary>
     ///  Clears the Clipboard and then adds a collection of file names in the <see cref="DataFormats.FileDrop"/> format.
     /// </summary>
-    public static void SetFileDropList(StringCollection filePaths)
-    {
-        if (filePaths.OrThrowIfNull().Count == 0)
-        {
-            throw new ArgumentException(SR.CollectionEmptyException);
-        }
-
-        // Validate the paths to make sure they don't contain invalid characters
-        string[] filePathsArray = new string[filePaths.Count];
-        filePaths.CopyTo(filePathsArray, 0);
-
-        foreach (string path in filePathsArray)
-        {
-            // These are the only error states for Path.GetFullPath
-            if (string.IsNullOrEmpty(path) || path.Contains('\0'))
-            {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, nameof(filePaths)));
-            }
-        }
-
-        SetDataObject(new DataObject(DataFormats.FileDropConstant, autoConvert: true, filePathsArray), copy: true);
-    }
+    public static void SetFileDropList(StringCollection filePaths) => InternalClipboard.SetFileDropList(filePaths);
 
     /// <summary>
     ///  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.
     /// </summary>
-    public static void SetImage(Image image) =>
-        SetDataObject(new DataObject(DataFormats.BitmapConstant, autoConvert: true, image.OrThrowIfNull()), copy: true);
+    public static void SetImage(Image image) => SetDataObject(new DataObject(DataFormats.Bitmap, autoConvert: true, image.OrThrowIfNull()), copy: true);
 
     /// <summary>
     ///  Clears the Clipboard and then adds text data in the <see cref="TextDataFormat.UnicodeText"/> format.
     /// </summary>
-    public static void SetText(string text) => SetText(text, TextDataFormat.UnicodeText);
+    public static void SetText(string text) => InternalClipboard.SetText(text);
 
     /// <summary>
     ///  Clears the Clipboard and then adds text data in the format indicated by the specified
@@ -582,18 +432,7 @@ public static class Clipboard
     /// </summary>
     public static void SetText(string text, TextDataFormat format)
     {
-        text.ThrowIfNullOrEmpty();
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        SetDataObject(new DataObject(ConvertToDataFormats(format), text), copy: true);
+        InternalClipboard.SetText(text, (DesktopTextDataFormat)format);
     }
-
-    private static string ConvertToDataFormats(TextDataFormat format) => format switch
-    {
-        TextDataFormat.Text => DataFormats.Text,
-        TextDataFormat.UnicodeText => DataFormats.UnicodeText,
-        TextDataFormat.Rtf => DataFormats.Rtf,
-        TextDataFormat.Html => DataFormats.Html,
-        TextDataFormat.CommaSeparatedValue => DataFormats.CommaSeparatedValue,
-        _ => DataFormats.UnicodeText,
-    };
 }
