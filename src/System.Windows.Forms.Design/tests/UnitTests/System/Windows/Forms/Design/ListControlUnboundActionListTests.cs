@@ -23,16 +23,10 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         _actionList = new(_designer);
     }
 
-    public void Dispose()
-    {
-        _designer.Dispose();
-    }
+    public void Dispose() => _designer.Dispose();
 
     [Fact]
-    public void Constructor_ShouldInitializeDesigner()
-    {
-        _actionList.Should().NotBeNull();
-    }
+    public void Constructor_ShouldInitializeDesigner() => _actionList.Should().NotBeNull();
 
     [Fact]
     public void GetSortedActionItems_ShouldReturnCorrectItems()
@@ -46,5 +40,12 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         methodItem.DisplayName.Should().Be(SR.ListControlUnboundActionListEditItemsDisplayName);
         methodItem.Category.Should().Be(SR.ItemsCategoryName);
         methodItem.Description.Should().Be(SR.ListControlUnboundActionListEditItemsDescription);
+    }
+
+    [Fact]
+    public void InvokeItemsDialog_ShouldThrowException()
+    {
+        Action action = _actionList.InvokeItemsDialog;
+        action.Should().Throw<Exception>();
     }
 }
