@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+<PropertyGroup>
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
@@ -13,8 +13,13 @@
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="System\Windows\TestUtilities\TestData\ServerConfiguration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />

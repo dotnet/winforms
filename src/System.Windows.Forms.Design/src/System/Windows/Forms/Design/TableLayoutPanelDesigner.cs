@@ -376,7 +376,8 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         // Add Column action list
         _actionLists.Add(new TableLayouPanelRowColumnActionList(this));
 
-        // if one actionList has AutoShow == true then the chrome panel will popup when the user DnD the DataGridView onto the form
+        // if one actionList has AutoShow == true then the chrome panel will popup when
+        // the user DnD the DataGridView onto the form.
         // It would make sense to promote AutoShow to DesignerActionListCollection.
         // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList.
         _actionLists[0].AutoShow = true;

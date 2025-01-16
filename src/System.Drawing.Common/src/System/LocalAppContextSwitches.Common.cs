@@ -1,14 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// Copied from https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
+// Copied from
+// https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
 
 using System.Runtime.CompilerServices;
 
 namespace System;
 
-// Helper method for local caching of compatibility quirks. Keep this lean and simple - this file is included into
-// every framework assembly that implements any compatibility quirks.
+// Helper method for local caching of compatibility quirks. Keep this lean and simple
+// - this file is included into every framework assembly that implements any compatibility quirks.
 internal static partial class LocalAppContextSwitches
 {
     // Returns value of given switch using provided cache.
