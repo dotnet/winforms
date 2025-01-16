@@ -67,6 +67,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="UnsupportedTypes">
+      <HintPath>$(ArtifactsBinDir)\UnsupportedTypes\$(Configuration)\net472\UnsupportedTypes.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="TestResources\Files\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

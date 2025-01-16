@@ -241,7 +241,7 @@ public partial class MainForm : Form
     {
         MinimumSize = default;
         Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
-        Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
+        Debug.WriteLine($"Default font: {DefaultFont}", nameof(MainForm));
 
         List<Button> buttons = [];
         foreach (Control control in overarchingFlowLayoutPanel.Controls)
@@ -291,9 +291,9 @@ public partial class MainForm : Form
         int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
 
         ClientSize = new Size(
-            (biggestButton.Width + padding * 2) * 3 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
-            (int)Math.Ceiling((overarchingFlowLayoutPanel.Controls.Count + 1) / 3.0) * (biggestButton.Height + padding * 2)
-                + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
+            ((biggestButton.Width + (padding * 2)) * 3) + (padding * 2) + (overarchingFlowLayoutPanel.Location.X * 2),
+            ((int)Math.Ceiling((overarchingFlowLayoutPanel.Controls.Count + 1) / 3.0) * (biggestButton.Height + (padding * 2)))
+                + (padding * 2) + (overarchingFlowLayoutPanel.Location.Y * 2));
         MinimumSize = Size;
         Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
     }

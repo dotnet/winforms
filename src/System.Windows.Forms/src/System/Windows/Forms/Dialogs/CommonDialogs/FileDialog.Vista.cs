@@ -103,7 +103,7 @@ public partial class FileDialog
             | OFN_ENABLESIZING  // These shouldn't be set in options (only set in the flags for the legacy dialog)
             | OFN_EXPLORER;     // These shouldn't be set in options (only set in the flags for the legacy dialog)
 
-        System.Diagnostics.Debug.Assert((UnexpectedOptions & _fileNameFlags) == 0, "Unexpected FileDialog options");
+        Debug.Assert((UnexpectedOptions & _fileNameFlags) == 0, "Unexpected FileDialog options");
 #endif
 
         FILEOPENDIALOGOPTIONS result = (FILEOPENDIALOGOPTIONS)_fileNameFlags & BlittableOptions;
