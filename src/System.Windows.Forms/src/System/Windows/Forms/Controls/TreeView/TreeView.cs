@@ -2831,7 +2831,7 @@ public partial class TreeView : Control
                     {
                         Rectangle bounds = node.Bounds;
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(LocalAppContextSwitches.MoveTreeViewTextLocOnePixel ? bounds.X : bounds.X - 1, bounds.Y);
+                        Point textLoc = new(LocalAppContextSwitches.MoveTreeViewTextLocationOnePixel ? bounds.X : bounds.X - 1, bounds.Y);
                         bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));

@@ -28,7 +28,7 @@ internal static partial class LocalAppContextSwitches
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName = "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
     internal const string ClipboardDragDropEnableNrbfSerializationSwitchName = "Windows.ClipboardDragDrop.EnableNrbfSerialization";
-    internal const string MoveTreeViewTextLocOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocOnePixel";
+    internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -267,9 +267,9 @@ internal static partial class LocalAppContextSwitches
     ///  Indicates whether to move the text position of a TreeView node one pixel
     ///  to the right relative to the upper-left corner of the TreeView control.
     /// </summary>
-    public static bool MoveTreeViewTextLocOnePixel
+    public static bool MoveTreeViewTextLocationOnePixel
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(MoveTreeViewTextLocOnePixelSwitchName, ref s_moveTreeViewTextLocOnePixel);
+        get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocOnePixel);
     }
 }
