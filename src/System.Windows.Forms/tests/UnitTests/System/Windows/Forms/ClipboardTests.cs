@@ -5,7 +5,6 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Formats.Nrbf;
@@ -13,6 +12,7 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows.Forms.Primitives;
+using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests;
 // Note: each registered Clipboard format is an OS singleton
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
- // Try up to 3 times before failing.
+// Try up to 3 times before failing.
 [UISettings(MaxAttempts = 3)]
 public class ClipboardTests
 {
@@ -1325,23 +1325,20 @@ public class ClipboardTests
     [BoolData]
     public void Clipboard_RoundTrip_Object_SupportsTypedInterface(bool copy)
     {
-        TestData1 data = new();
-        string format = typeof(TestData1).FullName!;
+        SerializableTestData data = new();
+        string format = typeof(SerializableTestData).FullName!;
 
         // Opt-in into access to the binary formatted stream.
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
-        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
-        using (BinaryFormatterScope scope = new(enable: copy))
-        {
-            Clipboard.SetDataObject(data, copy);
-        }
+        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
+        // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
+        using BinaryFormatterScope scope = new(enable: true);
+
+        Clipboard.SetDataObject(data, copy);
 
         DataObject received = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
 
-        // TODO(TanyaSo) - why the !copy case is not using the DataStore?
-        using BinaryFormatterScope scope1 = new(enable: !copy);
-        // Write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
-        received.TryGetData(format, out TestData1? result).Should().BeTrue();
+        received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
         result.Should().BeEquivalentTo(data);
 
         Clipboard.TryGetData(format, out result).Should().BeTrue();
@@ -1350,7 +1347,7 @@ public class ClipboardTests
 
     private static void CustomDataObject_RoundTrip_SupportsTypedInterface<T>(bool copy) where T : IDataObject, new()
     {
-        TestData1 data = new();
+        SerializableTestData data = new();
         T testDataObject = new();
         string format = ManagedDataObject.s_format;
         testDataObject.SetData(format, data);
@@ -1369,7 +1366,7 @@ public class ClipboardTests
         {
             ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
 
-            received.TryGetData(format, out TestData1? result).Should().BeTrue();
+            received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
             result.Should().BeEquivalentTo(data);
 
             Clipboard.TryGetData(format, out result).Should().BeTrue();
@@ -1380,99 +1377,8 @@ public class ClipboardTests
             T received = Clipboard.GetDataObject().Should().BeOfType<T>().Subject;
             received.Should().Be(testDataObject);
             // When we are not flushing the data to the HGLOBAL, we are reading from our DataStore or the managed test data object.
-            Action tryGetData = () => received.TryGetData(format, out TestData1? result);
+            Action tryGetData = () => received.TryGetData(format, out SerializableTestData? result);
             tryGetData.Should().Throw<NotSupportedException>();
         }
-    }
-
-    private class TypedAndRuntimeDataObject : ManagedAndRuntimeDataObject, ITypedDataObject
-    {
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>([MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, [MaybeNullWhen(false), NotNullWhen(true)] out T data)
-        {
-            data = default;
-            if (format == s_format && _data is T t)
-            {
-                data = t;
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, Func<TypeName, Type> resolver, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-    }
-
-    private class TypedDataObject : ManagedDataObject, ITypedDataObject
-    {
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>([MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, [MaybeNullWhen(false), NotNullWhen(true)] out T data)
-        {
-            data = default;
-            if (format == s_format && _data is T t)
-            {
-                data = t;
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, Func<TypeName, Type> resolver, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-            throw new NotImplementedException();
-    }
-
-    private class ManagedAndRuntimeDataObject : ManagedDataObject, ComTypes.IDataObject
-    {
-        // TODO(TanyaSo) - this implementation is not invoked.
-        public int DAdvise(ref ComTypes.FORMATETC pFormatetc, ComTypes.ADVF advf, ComTypes.IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
-        public void DUnadvise(int connection) => throw new NotImplementedException();
-        public int EnumDAdvise(out ComTypes.IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
-        public ComTypes.IEnumFORMATETC EnumFormatEtc(ComTypes.DATADIR direction) => throw new NotImplementedException();
-        public int GetCanonicalFormatEtc(ref ComTypes.FORMATETC formatIn, out ComTypes.FORMATETC formatOut) => throw new NotImplementedException();
-        public void GetData(ref ComTypes.FORMATETC format, out ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
-        public void GetDataHere(ref ComTypes.FORMATETC format, ref ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
-        public int QueryGetData(ref ComTypes.FORMATETC format) => throw new NotImplementedException();
-        public void SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
-    }
-
-    private class ManagedDataObject : IDataObject
-    {
-        public static string s_format = nameof(TestData1);
-        protected TestData1? _data;
-
-        public object? GetData(string format, bool autoConvert) => format == s_format ? _data : null;
-        public object? GetData(string format) => format == s_format ? _data : null;
-        public object? GetData(Type format) => null;
-        public bool GetDataPresent(string format, bool autoConvert) => format == s_format && _data is not null;
-        public bool GetDataPresent(string format) => format == s_format && _data is not null;
-        public bool GetDataPresent(Type format) => false;
-        public string[] GetFormats(bool autoConvert) => [s_format];
-        public string[] GetFormats() => [s_format];
-        public void SetData(string format, bool autoConvert, object? data)
-        {
-            if (format == s_format)
-            {
-                _data = data as TestData1;
-            }
-        }
-
-        public void SetData(string format, object? data)
-        {
-            if (format == s_format)
-            {
-                _data = data as TestData1;
-            }
-        }
-
-        public void SetData(Type format, object? data) => _data = data as TestData1;
-        public void SetData(object? data) => _data = data as TestData1;
     }
 }
