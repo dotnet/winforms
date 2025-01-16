@@ -7,6 +7,9 @@ namespace System.Windows.Forms;
 
 #nullable disable
 
+/// <summary>
+///  This type is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+/// </summary>
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
@@ -20,7 +23,8 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Text))]
 public class MenuItem : Menu
 {
-    public MenuItem() : this(mergeType: MenuMerge.Add,
+    public MenuItem() : this(
+        mergeType: MenuMerge.Add,
         mergeOrder: 0,
         shortcut: 0,
         text: null,
@@ -29,7 +33,8 @@ public class MenuItem : Menu
         onSelect: null,
         items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text) : this(mergeType: MenuMerge.Add,
+    public MenuItem(string text) : this(
+        mergeType: MenuMerge.Add,
         mergeOrder: 0,
         shortcut: 0,
         text: text,
@@ -38,7 +43,8 @@ public class MenuItem : Menu
         onSelect: null,
         items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick) : this(mergeType: MenuMerge.Add,
+    public MenuItem(string text, EventHandler onClick) : this(
+        mergeType: MenuMerge.Add,
         mergeOrder: 0,
         shortcut: 0,
         text: text,
@@ -47,7 +53,8 @@ public class MenuItem : Menu
         onSelect: null,
         items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(mergeType: MenuMerge.Add,
+    public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(
+        mergeType: MenuMerge.Add,
         mergeOrder: 0,
         shortcut: shortcut,
         text: text,
@@ -56,7 +63,8 @@ public class MenuItem : Menu
         onSelect: null,
         items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, MenuItem[] items) : this(mergeType: MenuMerge.Add,
+    public MenuItem(string text, MenuItem[] items) : this(
+        mergeType: MenuMerge.Add,
         mergeOrder: 0,
         shortcut: 0,
         text: text,
@@ -65,7 +73,8 @@ public class MenuItem : Menu
         onSelect: null,
         items: items) => throw new PlatformNotSupportedException();
 
-    public MenuItem(MenuMerge mergeType,
+    public MenuItem(
+        MenuMerge mergeType,
         int mergeOrder,
         Shortcut shortcut,
         string text,

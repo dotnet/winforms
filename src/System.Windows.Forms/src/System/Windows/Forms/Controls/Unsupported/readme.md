@@ -16,11 +16,11 @@ We should not modify code in this folder.
 * All re-introduced types are decorated with the ObsoleteAttribute that results in a compile time warning. All types share a single deprecation warning Id, to simplify suppression, but have different explanation messages.
 * All re-introduced types are decorated with [Browsable(false)] attribute to not show custom control properties of these types in the property browser.
 * All public members are re-introduced with their metadata, except for the private attributes.
-* Members inherited from the base classes (Control, for example) are not re-introduced even if they had been overridden in the past because they are not required for binary compatibility.
-* Members that are re-added to the existing types (Form and Control) are returning a default value or doing nothing.
-* Non-void public or protected instance members on the restored types `throw null` to save space.
+* Members inherited from the base classes (Control, for example) are not re-introduced even if they had been overridden in the past because they are not required for binary compatibility, unless they are decorated with different attributes.
+* Members that are re-added to the existing types (Form and Control) are returning defaults or doing nothing.
+* Non-void public or protected instance members on the restored types `throw null`, not the `PlatformNotSupportedException` to save space.
 * Void public or protected instance members do nothing.
-* Public or protected fields return the default value.
+* Public or protected fields return default values.
 * Nullability is disabled for all re-added classes, structs and delegates for compatibility with the .NET Framework.
 
 ### Use Case

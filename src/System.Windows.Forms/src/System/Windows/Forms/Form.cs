@@ -7130,6 +7130,9 @@ public partial class Form : ContainerControl
 
     // Unsupported types don't support nullability.
 #nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.MainMenuMessage,
         error: false,
@@ -7143,6 +7146,9 @@ public partial class Form : ContainerControl
         set;
     }
 
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.MainMenuMessage,
         error: false,

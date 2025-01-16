@@ -31,12 +31,12 @@ internal static class Obsoletions
     internal const string ClipboardGetDataDiagnosticId = "WFDEV005";
 
 #pragma warning disable WFDEV006 // Type or member is obsolete
-    internal const string ContextMenuMessage = $"{nameof(ContextMenu)} is not supported. Use {nameof(ContextMenuStrip)} instead.";
-    internal const string DataGridMessage = $"{nameof(DataGrid)} is not supported. Use {nameof(DataGridView)} instead.";
-    internal const string MainMenuMessage = $"{nameof(MainMenu)} is not supported. Use {nameof(MenuStrip)} instead.";
-    internal const string MenuMessage = $"{nameof(Menu)} is not supported. Use {nameof(ToolStripDropDown)} and {nameof(ToolStripDropDownMenu)} instead.";
-    internal const string StatusBarMessage = $"{nameof(StatusBar)} is not supported. Use {nameof(StatusStrip)} instead.";
-    internal const string ToolBarMessage = $"{nameof(ToolBar)} is not supported. Use {nameof(ToolStrip)} instead.";
+    internal const string ContextMenuMessage = $"`{nameof(ContextMenu)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(ContextMenuStrip)}` instead.";
+    internal const string DataGridMessage = $"`{nameof(DataGrid)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(DataGridView)}` instead.";
+    internal const string MainMenuMessage = $"`{nameof(MainMenu)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(MenuStrip)}` instead.";
+    internal const string MenuMessage = $"`{nameof(Menu)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(ToolStripDropDown)}` and `{nameof(ToolStripDropDownMenu)}` instead.";
+    internal const string StatusBarMessage = $"`{nameof(StatusBar)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(StatusStrip)}` instead.";
+    internal const string ToolBarMessage = $"`{nameof(ToolBar)}` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `{nameof(ToolStrip)}` instead.";
 #pragma warning restore WFDEV006
     internal const string UnsupportedControlsDiagnosticId = "WFDEV006";
 }

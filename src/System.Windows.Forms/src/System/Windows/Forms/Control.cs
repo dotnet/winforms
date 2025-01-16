@@ -12848,6 +12848,9 @@ public unsafe partial class Control :
 
     // Unsupported types don't support nullability.
 #nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,
@@ -12861,6 +12864,9 @@ public unsafe partial class Control :
         set;
     }
 
+    /// <summary>
+    ///  This event is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,
@@ -12875,6 +12881,9 @@ public unsafe partial class Control :
         remove { }
     }
 
+    /// <summary>
+    ///  This method is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.ContextMenuMessage,
         error: false,

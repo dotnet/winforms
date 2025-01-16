@@ -7,6 +7,9 @@ namespace System.Windows.Forms;
 
 #nullable disable
 
+/// <summary>
+///  This type is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+/// </summary>
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,

@@ -7,6 +7,9 @@ namespace System.Windows.Forms;
 
 #nullable disable
 
+/// <summary>
+///  This type is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+/// </summary>
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -17,7 +20,7 @@ namespace System.Windows.Forms;
 [SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "This type is provided for public surface compatibility with .NET Framework only. It can't run.")]
 public struct DataGridCell
 {
-    #pragma warning disable IDE0251 // Make member 'readonly' - applies to `set` methods.
+#pragma warning disable IDE0251 // Make member 'readonly' - applies to `set` methods.
     public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
 
     public int ColumnNumber

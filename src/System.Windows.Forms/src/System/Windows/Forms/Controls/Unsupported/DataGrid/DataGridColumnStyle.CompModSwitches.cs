@@ -9,6 +9,9 @@ namespace System.Windows.Forms;
 
 public partial class DataGridColumnStyle
 {
+    /// <summary>
+    ///  This type is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [Obsolete(
         Obsoletions.DataGridMessage,
         error: false,
@@ -18,7 +21,7 @@ public partial class DataGridColumnStyle
     [Browsable(false)]
     protected class CompModSwitches
     {
-        public CompModSwitches()  => throw new PlatformNotSupportedException();
+        public CompModSwitches() => throw new PlatformNotSupportedException();
 
         public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
     }

@@ -10,6 +10,9 @@ namespace System.Windows.Forms;
 
 public partial class DataGridColumnStyle
 {
+    /// <summary>
+    ///  This type is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
     [ComVisible(true)]
     [Obsolete(
         Obsoletions.DataGridMessage,
