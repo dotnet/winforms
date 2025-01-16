@@ -36,19 +36,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         ''' <summary>
-        '''  If size >= 0 then create the file with size length.
+        '''  If size is not FileSize.Unknown then create the file with size length.
         ''' </summary>
         ''' <param name="sourceDirectoryName">Full path to working directory.</param>
         ''' <param name="filename"></param>
-        ''' <param name="size">Size in bytes of the file to be created.</param>
+        ''' <param name="size"><see langword="Enum"/> FileSize of the file to be created.</param>
         ''' <returns>
         '''  The full path and file name of the created file.
-        '''  If size = -1 no file is create but the full path is returned.
+        '''  If size = FileSize.Unknown no file is create but the full path is returned.
         ''' </returns>
-        Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As Integer = -1) As String
-            If filename = DefaultFileName Then
-                filename = $"{[Enum].GetName(GetType(FileSizes), size)}.zip"
-
+        Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As FileSizes = FileSizes.Unknown) As String
+            If filename = DefaultFileName AndAlso size <> FileSizes.Unknown Then
+                filename = $"{[Enum].GetName(size).Replace("FileSize", "")}.zip"
             End If
             Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
 

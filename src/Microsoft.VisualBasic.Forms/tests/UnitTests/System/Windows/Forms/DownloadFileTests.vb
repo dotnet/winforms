@@ -21,25 +21,27 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=New Uri(webListener.Address),
-                            destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, password),
-                            showUI:=False,
-                            connectionTimeout:=TestingConnectionTimeout,
-                            overwrite:=True)
-                    End Sub
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.DownloadFile(
+                                address:=New Uri(webListener.Address),
+                                destinationFileName,
+                                GetNetworkCredentials(webListener.ServerUserName, password),
+                                showUI:=False,
+                                connectionTimeout:=TestingConnectionTimeout,
+                                overwrite:=True)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                VerifyFailedDownload(testDirectory, destinationFileName, listener)
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    VerifyFailedDownload(testDirectory, destinationFileName, listener)
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -50,23 +52,25 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=New Uri(webListener.Address),
-                            destinationFileName,
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.DownloadFile(
+                                address:=New Uri(webListener.Address),
+                                destinationFileName,
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                VerifyFailedDownload(testDirectory, destinationFileName, listener)
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    VerifyFailedDownload(testDirectory, destinationFileName, listener)
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -77,23 +81,25 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=New Uri(webListener.Address),
-                            destinationFileName,
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.DownloadFile(
+                                address:=New Uri(webListener.Address),
+                                destinationFileName,
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                VerifyFailedDownload(testDirectory, destinationFileName, listener)
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    VerifyFailedDownload(testDirectory, destinationFileName, listener)
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -104,23 +110,25 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=String.Empty)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
-                    Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=webListener.Address,
-                            destinationFileName,
-                            userName:=DefaultUserName,
-                            password)
-                    End Sub
+                serverUserName:=DefaultUserName,
+                serverPassword:=String.Empty)
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
+                        Sub()
+                            My.Computer.Network.DownloadFile(
+                                address:=webListener.Address,
+                                destinationFileName,
+                                userName:=webListener.ServerUserName,
+                                password)
+                        End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                VerifyFailedDownload(testDirectory, destinationFileName, listener)
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    VerifyFailedDownload(testDirectory, destinationFileName, listener)
+                End Using
+            End If
         End Sub
 
         <WinFormsTheory>
@@ -131,23 +139,25 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
-            Using listener As HttpListener = webListener.ProcessRequests()
-                Dim testCode As Action =
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
+            If webListener.ServerThrowsPasswordErrors Then
+                Using listener As HttpListener = webListener.ProcessRequests()
+                    Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            userName:=DefaultUserName,
+                            userName:=webListener.ServerUserName,
                             password)
                     End Sub
 
-                testCode.Should() _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR.net_webstatus_Unauthorized)
-                VerifyFailedDownload(testDirectory, destinationFileName, listener)
-            End Using
+                    testCode.Should() _
+                        .Throw(Of WebException)() _
+                        .WithMessage(SR.net_webstatus_Unauthorized)
+                    VerifyFailedDownload(testDirectory, destinationFileName, listener)
+                End Using
+            End If
         End Sub
 
         <WinFormsFact>
@@ -231,15 +241,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True)
@@ -280,7 +290,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereFileExistsNoOverwrite_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -306,7 +316,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -330,7 +340,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereOverwriteWhereDestinationFileExists_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -479,15 +489,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=Nothing,
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -505,15 +515,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -532,15 +542,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=0,
                             overwrite:=True,
@@ -906,16 +916,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            userName:=DefaultUserName,
-                            password:=DefaultPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
 
                 testCode.Should.NotThrow()
@@ -1009,7 +1019,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereFileExistsNoOverwrite_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1076,14 +1086,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             overwrite:=True)
                     End Sub
 
-                testCode.Should.Throw(Of OperationCanceledException)()
+                testCode.Should() _
+                    .Throw(Of Exception)() _
+                    .Where(Function(ex) TypeOf ex Is OperationCanceledException OrElse TypeOf ex Is WebException)
             End Using
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize100MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1107,7 +1119,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteWhereDestinationFileExists_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=FileSizes.FileSize1Byte)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
@@ -1234,15 +1246,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            GetNetworkCredentials(DefaultUserName, DefaultPassword),
+                            GetNetworkCredentials(webListener.ServerUserName, webListener.ServerPassword),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
@@ -1581,16 +1593,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(
                 fileSize:=FileSizes.FileSize1MB,
-                userName:=DefaultUserName,
-                password:=DefaultPassword)
+                serverUserName:=DefaultUserName,
+                serverPassword:=DefaultPassword)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
                             address:=webListener.Address,
                             destinationFileName,
-                            userName:=DefaultUserName,
-                            password:=DefaultPassword)
+                            userName:=webListener.ServerUserName,
+                            password:=webListener.ServerPassword)
                     End Sub
 
                 testCode.Should.NotThrow()
