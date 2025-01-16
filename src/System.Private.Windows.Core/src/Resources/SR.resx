@@ -125,4 +125,46 @@
   <data name="Serialization_MissingType" xml:space="preserve">
     <value>Could not find type '{0}'.</value>
   </data>
+  <data name="RegisterCFFailed" xml:space="preserve">
+    <value>Clipboard format registration did not succeed.</value>
+  </data>
+  <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
+    <value>The specified Clipboard format is not compatible with '{0}' type.</value>
+  </data>
+  <data name="BinaryFormatterNotSupported" xml:space="preserve">
+    <value>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_TypedAPI_InvalidResolver" xml:space="preserve">
+    <value>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</value>
+  </data>
+  <data name="ExternalException" xml:space="preserve">
+    <value>External exception</value>
+  </data>
+  <data name="DataObjectWhitespaceEmptyFormatNotAllowed" xml:space="preserve">
+    <value>Whitespace or empty string is not a valid value for parameter 'format'.</value>
+  </data>
+  <data name="ITypeDataObject_Not_Implemented" xml:space="preserve">
+    <value>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</value>
+  </data>
+  <data name="ClipboardOperationFailed" xml:space="preserve">
+    <value>Requested Clipboard operation did not succeed.</value>
+  </data>
+  <data name="CollectionEmptyException" xml:space="preserve">
+    <value>Cannot operate with an empty collection.</value>
+  </data>
+  <data name="Clipboard_InvalidPath" xml:space="preserve">
+    <value>Path "{0}" in the argument "{1}" is not valid.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
+    <value>Failed to deserialize JSON data.</value>
+  </data>
 </root>

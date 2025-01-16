@@ -287,21 +287,6 @@
         <target state="translated">DataBinding complexa aceita IList ou IListSource como fonte de dados.</target>
         <note />
       </trans-unit>
-      <trans-unit id="BinaryFormatterNotSupported">
-        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
-        <target state="translated">A serialização e a desserialização de BinaryFormatter estão desabilitadas neste aplicativo. Consulte https://aka.ms/binaryformatter para obter mais informações.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
-        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="translated">Não há suporte para BinaryFormatter em operações de área de transferência ou de arrastar e soltar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
-        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="translated">Não há suporte para BinaryFormatter em operações de área de transferência ou de arrastar e soltar. Habilite-o e use as APIs 'TryGetData&lt;T&gt;' com uma função 'resolver' que define um conjunto de tipos permitidos para desserializar '{0}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Ocorre quando o contexto de associação foi alterado.</target>
@@ -962,11 +947,6 @@
         <target state="translated">Foi criada uma referência de controle circular. Um controle não pode ser propriedade ou pai dele mesmo.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOperationFailed">
-        <source>Requested Clipboard operation did not succeed.</source>
-        <target state="translated">A operação de Área de Transferência solicitada não foi bem-sucedida.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
         <target state="translated">Um objeto do tipo 'DataObject' será serializado como vazio. Use as APIs 'DataObject.SetDataAsJson' no objeto para serializar os dados em JSON no objeto e use a API de '{0}' com o objeto.</target>
@@ -982,29 +962,9 @@
         <target state="translated">'{0}' não é um tipo concreto e pode resultar em uma tentativa de desserialização não associado. Use um tipo concreto ou, como alternativa, defina uma função 'resolver' que dê suporte aos tipos que você está esperando recuperar da área de transferência ou use em operações de arrastar e soltar.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Falha ao desserializar dados JSON.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
-        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="translated">Tipo {0} não encontrado. Se esse tipo for permitido, verifique se a função 'resolver' fornecida nas APIs 'TryGetData&lt;T&gt;' dá suporte a ela.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
-        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="translated">Use apIs 'TryGetData&lt;T&gt;' com uma função 'resolver' que define um conjunto de tipos permitidos para desserializar '{0}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardSecurityException">
         <source>Due to security restrictions on clipboard, the specified clipboard format cannot be set.</source>
         <target state="translated">Devido a restrições de segurança na área de transferência, não é possível definir o formato especificado de área de transferência.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Clipboard_InvalidPath">
-        <source>Path "{0}" in the argument "{1}" is not valid.</source>
-        <target state="translated">O caminho "{0}" no argumento "{1}" não é válido.</target>
         <note />
       </trans-unit>
       <trans-unit id="CloseCaption">
@@ -1015,11 +975,6 @@
       <trans-unit id="ClosingWhileCreatingHandle">
         <source>Value {0}() cannot be called while doing CreateHandle().</source>
         <target state="translated">O valor {0}() não pode ser chamado durante CreateHandle().</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEmptyException">
-        <source>Cannot operate with an empty collection.</source>
-        <target state="translated">Não é possível operar com uma coleção vazia.</target>
         <note />
       </trans-unit>
       <trans-unit id="ColumnAlignment">
@@ -4259,11 +4214,6 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">O objeto Bitmap não oferece suporte direto ao formato de bitmap independente de dispositivo. Especifique a conversão automática ou execute SetData com o formato de dados Bitmap.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
-        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
-        <target state="translated">Um espaço em branco ou uma cadeia de caracteres vazia não é um valor válido para o parâmetro 'format'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Não foi possível encontrar a propriedade DataMember '{0}' na DataSource.</target>
@@ -5007,11 +4957,6 @@ Se você clicar em Continuar, o aplicativo ignorará esse erro e tentará contin
       <trans-unit id="ExpandedStateName">
         <source>Expanded</source>
         <target state="translated">Expandido</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ExternalException">
-        <source>External exception</source>
-        <target state="translated">Exceção externa</target>
         <note />
       </trans-unit>
       <trans-unit id="FDFileNamesDescr">
@@ -5813,11 +5758,6 @@ Deseja substituí-lo?</target>
       <trans-unit id="ISupportInitializeDescr">
         <source>Specifies support for transacted initialization. </source>
         <target state="translated">Especifica o suporte para a inicialização transacionada. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ITypeDataObject_Not_Implemented">
-        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
-        <target state="translated">O objeto de '{0}' não implementa a interface 'ITypedDataObject' e não pode ser lido usando os métodos 'TryGetData&lt;T&gt;(string, out T)'.</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
@@ -8709,11 +8649,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A coleção é somente leitura.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">O registro do formato de área de transferência não teve êxito.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Não é possível criar uma lista filho para o campo {0}.</target>
@@ -11137,11 +11072,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="UnexpectedClipboardType">
         <source>Clipboard contains an unexpected type.</source>
         <target state="translated">A área de transferência contém um tipo inesperado.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UnexpectedTypeForClipboardFormat">
-        <source>The specified Clipboard format is not compatible with '{0}' type.</source>
-        <target state="translated">O formato de Área de transferência especificado não é compatível com o tipo '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnknownAttr">
