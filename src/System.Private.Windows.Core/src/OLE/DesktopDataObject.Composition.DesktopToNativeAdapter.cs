@@ -4,29 +4,48 @@
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Text;
+using Windows.Win32;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
+using Windows.Win32.UI.Shell;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+using IDataObject = System.Private.Windows.Core.OLE.IDataObjectDesktop;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public unsafe partial class DataObject
+internal abstract unsafe partial class DesktopDataObject
 {
-    internal unsafe partial class Composition
+    internal abstract unsafe partial class Composition
     {
         /// <summary>
         ///  Maps <see cref="IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private unsafe class WinFormsToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
+        protected abstract unsafe class DesktopToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
         {
             private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
             private readonly IDataObject _dataObject;
 
-            public WinFormsToNativeAdapter(IDataObject dataObject)
+            public DesktopToNativeAdapter(IDataObject dataObject)
             {
                 _dataObject = dataObject;
             }
+
+            /// <summary>
+            ///  Tries to get the compatible bitmap and save it in <paramref name="pMedium"/> if <paramref name="data"/> is a bitmap.
+            /// </summary>
+            public abstract HRESULT TryGetCompatibleBitmap(string format, object data, STGMEDIUM* pMedium);
+
+            /// <summary>
+            ///  Gets the appropriate <see cref="BinaryFormatUtilities"/> for the application.
+            /// </summary>
+            public abstract BinaryFormatUtilities GetBinaryFormatUtilities();
+
+            /// <summary>
+            ///  Returns whether <paramref name="data"/> is an image.
+            /// </summary>
+            public abstract bool IsDataImage(object data);
 
             /// <summary>
             ///  Returns true if the tymed is usable.
@@ -48,7 +67,7 @@ public unsafe partial class DataObject
 
                 if (DragDropHelper.IsInDragLoop(_dataObject))
                 {
-                    string formatName = DataFormats.GetFormat(pformatetcIn->cfFormat).Name;
+                    string formatName = DesktopDataFormats.GetFormat(pformatetcIn->cfFormat).Name;
                     if (!_dataObject.GetDataPresent(formatName))
                     {
                         *pmedium = default;
@@ -110,7 +129,7 @@ public unsafe partial class DataObject
                     return HRESULT.DV_E_TYMED;
                 }
 
-                string format = DataFormats.GetFormat(pformatetc->cfFormat).Name;
+                string format = DesktopDataFormats.GetFormat(pformatetc->cfFormat).Name;
 
                 if (!_dataObject.GetDataPresent(format))
                 {
@@ -146,48 +165,10 @@ public unsafe partial class DataObject
 
                 if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_GDI))
                 {
-                    if (format.Equals(DataFormats.Bitmap) && data is Bitmap bitmap)
-                    {
-                        // Save bitmap
-                        pmedium->u.hBitmap = GetCompatibleBitmap(bitmap);
-                    }
-
-                    return HRESULT.S_OK;
+                    return TryGetCompatibleBitmap(format, data, pmedium);
                 }
 
                 return HRESULT.DV_E_TYMED;
-
-                static HBITMAP GetCompatibleBitmap(Bitmap bitmap)
-                {
-                    using var screenDC = GetDcScope.ScreenDC;
-
-                    // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
-                    // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.
-                    HBITMAP hbitmap = bitmap.GetHBITMAP();
-
-                    // Create a compatible DC to render the source bitmap.
-                    using CreateDcScope sourceDC = new(screenDC);
-                    using SelectObjectScope sourceBitmapSelection = new(sourceDC, hbitmap);
-
-                    // Create a compatible DC and a new compatible bitmap.
-                    using CreateDcScope destinationDC = new(screenDC);
-                    HBITMAP compatibleBitmap = PInvokeCore.CreateCompatibleBitmap(screenDC, bitmap.Size.Width, bitmap.Size.Height);
-
-                    // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-                    using SelectObjectScope destinationBitmapSelection = new(destinationDC, compatibleBitmap);
-                    PInvokeCore.BitBlt(
-                        destinationDC,
-                        0,
-                        0,
-                        bitmap.Size.Width,
-                        bitmap.Size.Height,
-                        sourceDC,
-                        0,
-                        0,
-                        ROP_CODE.SRCCOPY);
-
-                    return compatibleBitmap;
-                }
             }
 
             public HRESULT QueryGetData(FORMATETC* pformatetc)
@@ -212,7 +193,7 @@ public unsafe partial class DataObject
                     return HRESULT.S_FALSE;
                 }
 
-                if (!_dataObject.GetDataPresent(DataFormats.GetFormat(pformatetc->cfFormat).Name))
+                if (!_dataObject.GetDataPresent(DesktopDataFormats.GetFormat(pformatetc->cfFormat).Name))
                 {
                     return HRESULT.DV_E_FORMATETC;
                 }
@@ -245,7 +226,7 @@ public unsafe partial class DataObject
 
                 if (DragDropHelper.IsInDragLoopFormat(*pformatetc) || DragDropHelper.IsInDragLoop(_dataObject))
                 {
-                    string formatName = DataFormats.GetFormat(pformatetc->cfFormat).Name;
+                    string formatName = DesktopDataFormats.GetFormat(pformatetc->cfFormat).Name;
                     if (_dataObject.GetDataPresent(formatName) && _dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                     {
                         dragDropFormat.RefreshData(pformatetc->cfFormat, *pmedium, !fRelease);
@@ -306,36 +287,36 @@ public unsafe partial class DataObject
             {
                 _ when data is Stream dataStream
                     => SaveStreamToHGLOBAL(ref medium.hGlobal, dataStream),
-                DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant
+                DesktopDataFormats.TextConstant or DesktopDataFormats.RtfConstant or DesktopDataFormats.OemTextConstant
                     => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: false),
-                DataFormats.HtmlConstant
+                DesktopDataFormats.HtmlConstant
                     => SaveHtmlToHGLOBAL(medium.hGlobal, data.ToString()!),
-                DataFormats.UnicodeTextConstant
+                DesktopDataFormats.UnicodeTextConstant
                     => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: true),
-                DataFormats.FileDropConstant
+                DesktopDataFormats.FileDropConstant
                     => SaveFileListToHGLOBAL(medium.hGlobal, (string[])data),
                 CF_DEPRECATED_FILENAME
                     => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: false),
                 CF_DEPRECATED_FILENAMEW
                     => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: true),
-                DataFormats.DibConstant when data is Image
+                DesktopDataFormats.DibConstant when IsDataImage(data)
                     // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
                     // an HBITMAP and publish a Dib, we don't need to support this.
                     => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-                _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
+                _ when format == DesktopDataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
                     => SaveObjectToHGLOBAL(ref medium.hGlobal, data, RestrictDeserializationToSafeTypes(format)),
                 _ => HRESULT.E_UNEXPECTED
             };
 
-            private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
+            private HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
             {
                 using MemoryStream stream = new();
                 stream.Write(s_serializedObjectID);
 
                 // Throws in case of serialization failure.
-                BinaryFormatUtilities.WriteObjectToStream(stream, data, restrictSerialization);
+                GetBinaryFormatUtilities().WriteObjectToStream(stream, data, restrictSerialization);
 
                 return SaveStreamToHGLOBAL(ref hglobal, stream);
             }
@@ -481,7 +462,7 @@ public unsafe partial class DataObject
                 {
                     fixed (char* c = value)
                     {
-                        int pinvokeSize = PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                        int pinvokeSize = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null, null);
                         newHandle = PInvokeCore.GlobalReAlloc(hglobal, (uint)pinvokeSize + 1, (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
                         if (newHandle == 0)
                         {
@@ -494,7 +475,7 @@ public unsafe partial class DataObject
                             return HRESULT.E_OUTOFMEMORY;
                         }
 
-                        PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
+                        PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
 
                         // Null terminate
                         buffer[pinvokeSize] = 0;

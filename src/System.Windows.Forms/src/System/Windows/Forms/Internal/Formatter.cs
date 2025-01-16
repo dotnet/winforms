@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using TypeExtensions = System.Private.Windows.Core.TypeExtensions;
 
 namespace System.Windows.Forms;
 
@@ -54,7 +55,7 @@ internal static class Formatter
 
         Type oldTargetType = targetType;
 
-        targetType = NullableUnwrap(targetType);
+        targetType = TypeExtensions.NullableUnwrap(targetType);
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
@@ -248,8 +249,8 @@ internal static class Formatter
 
         Type oldTargetType = targetType;
 
-        sourceType = NullableUnwrap(sourceType);
-        targetType = NullableUnwrap(targetType);
+        sourceType = TypeExtensions.NullableUnwrap(sourceType);
+        targetType = TypeExtensions.NullableUnwrap(targetType);
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
@@ -522,20 +523,6 @@ internal static class Formatter
             // sources, or a null reference for 'business object' data sources).
             return dataSourceNullValue;
         }
-    }
-
-    /// <summary>
-    ///  Extract the inner type from a nullable type.
-    /// </summary>
-    public static Type NullableUnwrap(Type type)
-    {
-        if (type == s_stringType) // ...performance optimization for the most common case
-        {
-            return s_stringType;
-        }
-
-        Type? underlyingType = Nullable.GetUnderlyingType(type);
-        return underlyingType ?? type;
     }
 
     /// <summary>

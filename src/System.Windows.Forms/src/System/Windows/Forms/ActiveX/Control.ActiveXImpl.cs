@@ -21,6 +21,8 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using System.Windows.Forms.Nrbf;
 using RECTL = Windows.Win32.Foundation.RECTL;
 using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.OLE;
+using CoreSR = System.Private.Windows.Core.Resources.SR;
 
 namespace System.Windows.Forms;
 
@@ -1139,9 +1141,9 @@ public partial class Control
 
                     if (!success)
                     {
-                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!DesktopDataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
-                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                            throw new NotSupportedException(CoreSR.BinaryFormatterNotSupported);
                         }
 
                         stream.Position = 0;
@@ -1529,9 +1531,9 @@ public partial class Control
                     {
                         stream.SetLength(0);
 
-                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!DesktopDataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
-                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                            throw new NotSupportedException(CoreSR.BinaryFormatterNotSupported);
                         }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
@@ -1834,7 +1836,7 @@ public partial class Control
         ///  Throws the given hresult. This is used by ActiveX sourcing.
         /// </summary>
         [DoesNotReturn]
-        internal static void ThrowHr(HRESULT hr) => throw new ExternalException(SR.ExternalException, (int)hr);
+        internal static void ThrowHr(HRESULT hr) => throw new ExternalException(CoreSR.ExternalException, (int)hr);
 
         /// <inheritdoc cref="IOleInPlaceActiveObject.TranslateAccelerator(MSG*)"/>
         internal unsafe HRESULT TranslateAccelerator(MSG* lpmsg)

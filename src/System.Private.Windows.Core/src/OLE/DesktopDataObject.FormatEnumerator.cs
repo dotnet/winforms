@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.CompilerServices;
+using Windows.Win32;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+using IDataObject = System.Private.Windows.Core.OLE.IDataObjectDesktop;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public partial class DataObject
+internal abstract partial class DesktopDataObject
 {
     /// <summary>
     ///  Part of IComDataObject, used to interop with OLE.
@@ -43,11 +45,11 @@ public partial class DataObject
                 string format = formats[i];
                 ComTypes.FORMATETC temp = new()
                 {
-                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
+                    cfFormat = (short)(ushort)DesktopDataFormats.GetFormat(format).Id,
                     dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                     ptd = 0,
                     lindex = -1,
-                    tymed = format.Equals(DataFormats.Bitmap) ? ComTypes.TYMED.TYMED_GDI : ComTypes.TYMED.TYMED_HGLOBAL
+                    tymed = format.Equals(DesktopDataFormats.BitmapConstant) ? ComTypes.TYMED.TYMED_GDI : ComTypes.TYMED.TYMED_HGLOBAL
                 };
 
                 _formats.Add(temp);

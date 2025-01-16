@@ -1,27 +1,30 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
+using System.Private.Windows.Core.Resources;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using Windows.Win32;
+using Windows.Win32.System.Memory;
+using Windows.Win32.UI.Shell;
 using Com = Windows.Win32.System.Com;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public unsafe partial class DataObject
+internal abstract unsafe partial class DesktopDataObject
 {
-    internal unsafe partial class Composition
+    internal abstract unsafe partial class Composition
     {
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
         /// </summary>
-        private unsafe class NativeToWinFormsAdapter : ITypedDataObject, Com.IDataObject.Interface
+        internal abstract unsafe class NativeToDesktopAdapter : ITypedDataObjectDesktop, Com.IDataObject.Interface
         {
             private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
-            public NativeToWinFormsAdapter(Com.IDataObject* dataObject)
+            public NativeToDesktopAdapter(Com.IDataObject* dataObject)
             {
 #if DEBUG
                 _nativeDataObject = new(dataObject, takeOwnership: true, trackDisposal: false);
@@ -29,6 +32,22 @@ public unsafe partial class DataObject
                 _nativeDataObject = new(dataObject, takeOwnership: true);
 #endif
             }
+
+            /// <summary>
+            ///  Gets the appropriate <see cref="BinaryFormatUtilities"/> for the application.
+            /// </summary>
+            public abstract BinaryFormatUtilities GetBinaryFormatUtilities();
+
+            /// <summary>
+            ///  Tries to extract the bitmap out if it is present in the <paramref name="dataObject"/> under the given format.
+            /// </summary>
+            /// <returns><see langword="true"/> if successful. Otherwise, <see langword="false"/></returns>
+            public abstract bool TryGetBitmap<T>(Com.IDataObject* dataObject, string format, [NotNullWhen(true)] out object? bitmap);
+
+            /// <summary>
+            ///  Throws <see cref="NotSupportedException"/> if the format and type combination requires a resolver.
+            /// </summary>
+            protected abstract void ThrowIfFormatAndTypeRequireResolver<T>(string format);
 
             #region Com.IDataObject.Interface
 
@@ -91,7 +110,7 @@ public unsafe partial class DataObject
             /// <summary>
             ///  Retrieves the specified format from the specified <paramref name="hglobal"/>.
             /// </summary>
-            private static bool TryGetDataFromHGLOBAL<T>(
+            private bool TryGetDataFromHGLOBAL<T>(
                 HGLOBAL hglobal,
                 string format,
                 Func<TypeName, Type>? resolver,
@@ -106,11 +125,11 @@ public unsafe partial class DataObject
 
                 object? value = format switch
                 {
-                    DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant =>
+                    DesktopDataFormats.TextConstant or DesktopDataFormats.RtfConstant or DesktopDataFormats.OemTextConstant =>
                         ReadStringFromHGLOBAL(hglobal, unicode: false),
-                    DataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
-                    DataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
-                    DataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)(nint)hglobal),
+                    DesktopDataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
+                    DesktopDataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
+                    DesktopDataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                     CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                     CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
                     _ => ReadObjectOrStreamFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format), resolver, legacyMode)
@@ -124,7 +143,7 @@ public unsafe partial class DataObject
 
                 return false;
 
-                static object? ReadObjectOrStreamFromHGLOBAL(
+                object? ReadObjectOrStreamFromHGLOBAL(
                     HGLOBAL hglobal,
                     bool restrictDeserialization,
                     Func<TypeName, Type>? resolver,
@@ -134,8 +153,8 @@ public unsafe partial class DataObject
                     return !isSerializedObject
                         ? stream
                         : restrictDeserialization
-                            ? BinaryFormatUtilities.ReadRestrictedObjectFromStream<T>(stream, resolver, legacyMode)
-                            : BinaryFormatUtilities.ReadObjectFromStream<T>(stream, resolver, legacyMode);
+                            ? GetBinaryFormatUtilities().ReadRestrictedObjectFromStream<T>(stream, resolver, legacyMode)
+                            : GetBinaryFormatUtilities().ReadObjectFromStream<T>(stream, resolver, legacyMode);
                 }
             }
 
@@ -203,7 +222,7 @@ public unsafe partial class DataObject
 
             private static unsafe string[]? ReadFileListFromHDROP(HDROP hdrop)
             {
-                uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
+                uint count = PInvokeCore.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
                 if (count == 0)
                 {
                     return null;
@@ -216,7 +235,7 @@ public unsafe partial class DataObject
                 {
                     for (uint i = 0; i < count; i++)
                     {
-                        uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        uint charactersCopied = PInvokeCore.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
                         if (charactersCopied == 0)
                         {
                             continue;
@@ -249,7 +268,7 @@ public unsafe partial class DataObject
             ///  </para>
             /// </returns>
             /// <exception cref="NotSupportedException"> is deserialization failed.</exception>
-            private static bool TryGetObjectFromDataObject<T>(
+            private bool TryGetObjectFromDataObject<T>(
                 Com.IDataObject* dataObject,
                 string format,
                 Func<TypeName, Type>? resolver,
@@ -264,10 +283,9 @@ public unsafe partial class DataObject
                 try
                 {
                     // Try to get the data as a bitmap first.
-                    if ((typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T))
-                        && TryGetBitmapData(dataObject, format, out Bitmap? bitmap))
+                    if (TryGetBitmap<T>(dataObject, format, out object? bitmap))
                     {
-                        data = (T)(object)bitmap;
+                        data = (T)bitmap;
                         return true;
                     }
 
@@ -286,7 +304,7 @@ public unsafe partial class DataObject
                 return result;
             }
 
-            private static bool TryGetHGLOBALData<T>(
+            private bool TryGetHGLOBALData<T>(
                 Com.IDataObject* dataObject,
                 string format,
                 Func<TypeName, Type>? resolver,
@@ -299,7 +317,7 @@ public unsafe partial class DataObject
 
                 Com.FORMATETC formatetc = new()
                 {
-                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    cfFormat = (ushort)DesktopDataFormats.GetFormat(format).Id,
                     dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
                     tymed = (uint)Com.TYMED.TYMED_HGLOBAL
@@ -343,13 +361,13 @@ public unsafe partial class DataObject
                 }
                 finally
                 {
-                    PInvoke.ReleaseStgMedium(ref medium);
+                    PInvokeCore.ReleaseStgMedium(ref medium);
                 }
 
                 return result;
             }
 
-            private static unsafe bool TryGetIStreamData<T>(
+            private unsafe bool TryGetIStreamData<T>(
                 Com.IDataObject* dataObject,
                 string format,
                 Func<TypeName, Type>? resolver,
@@ -359,7 +377,7 @@ public unsafe partial class DataObject
                 data = default;
                 Com.FORMATETC formatEtc = new()
                 {
-                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                    cfFormat = (ushort)DesktopDataFormats.GetFormat(format).Id,
                     dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
                     tymed = (uint)Com.TYMED.TYMED_ISTREAM
@@ -405,81 +423,7 @@ public unsafe partial class DataObject
                         PInvokeCore.GlobalFree(hglobal);
                     }
 
-                    PInvoke.ReleaseStgMedium(ref medium);
-                }
-            }
-
-            private static bool TryGetBitmapData(Com.IDataObject* dataObject, string format, [NotNullWhen(true)] out Bitmap? data)
-            {
-                data = default;
-                if (format != DataFormats.BitmapConstant)
-                {
-                    return false;
-                }
-
-                Com.FORMATETC formatEtc = new()
-                {
-                    cfFormat = (ushort)DataFormats.GetFormat(format).Id,
-                    dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
-                    lindex = -1,
-                    tymed = (uint)Com.TYMED.TYMED_GDI
-                };
-
-                Com.STGMEDIUM medium = default;
-
-                if (dataObject->QueryGetData(formatEtc).Succeeded)
-                {
-                    HRESULT hr = dataObject->GetData(formatEtc, out medium);
-                    // One of the ways this can happen is when we attempt to put binary formatted data onto the
-                    // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
-                    // The data state, however, is not good, and this error will be returned by Windows when asking to
-                    // get the data out.
-                    Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
-                }
-
-                try
-                {
-                    // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
-                    // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-                    if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
-                        && !medium.hGlobal.IsNull
-                        && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
-                    {
-                        data = (Bitmap)clipboardBitmap.Clone();
-                        clipboardBitmap.Dispose();
-                        return true;
-                    }
-                }
-                finally
-                {
-                    PInvoke.ReleaseStgMedium(ref medium);
-                }
-
-                return false;
-            }
-
-            private static void ThrowIfFormatAndTypeRequireResolver<T>(string format)
-            {
-                // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
-                if (!IsRestrictedFormat(format)
-                    // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
-                    && IsUnboundedType())
-                {
-                    throw new NotSupportedException(string.Format(
-                        SR.ClipboardOrDragDrop_InvalidType,
-                        typeof(T).FullName));
-                }
-
-                static bool IsUnboundedType()
-                {
-                    if (typeof(T) == typeof(object))
-                    {
-                        return true;
-                    }
-
-                    Type type = typeof(T);
-                    // Image is a special case because we are reading Bitmaps directly from the SerializationRecord.
-                    return type.IsInterface || (typeof(T) != typeof(Image) && type.IsAbstract);
+                    PInvokeCore.ReleaseStgMedium(ref medium);
                 }
             }
 
@@ -598,7 +542,7 @@ public unsafe partial class DataObject
 
                 while (enumFORMATETC.Value->Next(1, &formatEtc) == HRESULT.S_OK)
                 {
-                    string name = DataFormats.GetFormat(formatEtc.cfFormat).Name;
+                    string name = DesktopDataFormats.GetFormat(formatEtc.cfFormat).Name;
                     if (autoConvert)
                     {
                         string[] mappedFormats = GetMappedFormats(name)!;
@@ -654,7 +598,7 @@ public unsafe partial class DataObject
             {
                 Com.FORMATETC formatEtc = new()
                 {
-                    cfFormat = (ushort)(DataFormats.GetFormat(format).Id),
+                    cfFormat = (ushort)(DesktopDataFormats.GetFormat(format).Id),
                     dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
                     tymed = (uint)AllowedTymeds

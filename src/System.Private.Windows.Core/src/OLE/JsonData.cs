@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace System.Private.Windows;
 
@@ -117,7 +116,9 @@ internal struct JsonData<T> : IJsonData
         object? result;
         try
         {
+#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
             result = JsonSerializer.Deserialize<T>(JsonBytes);
+#pragma warning restore IL2026
         }
         catch (Exception ex)
         {

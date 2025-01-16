@@ -2,18 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-using System.Drawing;
-using System.Private.Windows;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public partial class DataObject
+internal abstract partial class DesktopDataObject
 {
-    private sealed partial class DataStore : ITypedDataObject
+    internal abstract partial class DataStore : ITypedDataObjectDesktop
     {
-        private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
+        protected readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
+
+        public abstract void SetData(string format, bool autoConvert, object? data);
 
         private bool TryGetDataInternal<T>(
             string format,
@@ -82,25 +82,6 @@ public partial class DataObject
 
         public object? GetData(Type format) => GetData(format.FullName!);
 
-        public void SetData(string format, bool autoConvert, object? data)
-        {
-            if (string.IsNullOrWhiteSpace(format))
-            {
-                ArgumentNullException.ThrowIfNull(format);
-                throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-            }
-
-            // We do not have proper support for Dibs, so if the user explicitly asked
-            // for Dib and provided a Bitmap object we can't convert. Instead, publish as an HBITMAP
-            // and let the system provide the conversion for us.
-            if (data is Bitmap && format.Equals(DataFormats.Dib))
-            {
-                format = autoConvert ? DataFormats.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
-            }
-
-            _mappedData[format] = new DataStoreEntry(data, autoConvert);
-        }
-
         public void SetData(string format, object? data) => SetData(format, autoConvert: true, data);
 
         public void SetData(Type format, object? data)
@@ -114,9 +95,9 @@ public partial class DataObject
             ArgumentNullException.ThrowIfNull(data);
 
             if (data is ISerializable
-                && !_mappedData.ContainsKey(DataFormats.Serializable))
+                && !_mappedData.ContainsKey(DesktopDataFormats.SerializableConstant))
             {
-                SetData(DataFormats.Serializable, data);
+                SetData(DesktopDataFormats.SerializableConstant, data);
             }
 
             SetData(data.GetType(), data);

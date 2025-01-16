@@ -7,51 +7,56 @@ using System.Collections;
 using System.Drawing;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
-using Utilities = System.Windows.Forms.DataObject.Composition.BinaryFormatUtilities;
+using Utilities = System.Windows.Forms.WinFormsDataObject.Composition.BinaryFormatUtilities;
 
 namespace System.Windows.Forms.Tests;
 
 public partial class BinaryFormatUtilitiesTests : IDisposable
 {
     private readonly MemoryStream _stream;
+    private readonly Utilities _utilities;
 
-    public BinaryFormatUtilitiesTests() => _stream = new();
+    public BinaryFormatUtilitiesTests()
+    {
+        _stream = new();
+        _utilities = new();
+    }
 
     public void Dispose() => _stream.Dispose();
 
     private void WriteObjectToStream(object value, bool restrictSerialization = false) =>
-        Utilities.WriteObjectToStream(_stream, value, restrictSerialization);
+        _utilities.WriteObjectToStream(_stream, value, restrictSerialization);
 
     private object? ReadObjectFromStream()
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
+        return _utilities.ReadObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
     }
 
     private object? ReadRestrictedObjectFromStream()
     {
         _stream.Position = 0;
-        return Utilities.ReadRestrictedObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
+        return _utilities.ReadRestrictedObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
     }
 
     private object? ReadObjectFromStream<T>(bool restrictDeserialization, Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
         return restrictDeserialization
-            ? Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false)
-            : Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+            ? _utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false)
+            : _utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
     }
 
     private object? ReadObjectFromStream<T>(Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+        return _utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
     }
 
     private object? ReadRestrictedObjectFromStream<T>(Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
-        return Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false);
+        return _utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false);
     }
 
     private object? RoundTripObject(object value)
@@ -668,7 +673,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         {
             // GetData case.
             stream.Position = 0;
-            Action getData = () => Utilities.ReadObjectFromStream<object>(
+            Action getData = () => _utilities.ReadObjectFromStream<object>(
                stream,
                resolver: null,
                legacyMode: true);
@@ -682,7 +687,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         using BinaryFormatterFullCompatScope scope = new();
         // GetData case.
         stream.Position = 0;
-        var result = Utilities.ReadObjectFromStream<object>(
+        var result = _utilities.ReadObjectFromStream<object>(
            stream,
            resolver: null,
            legacyMode: true).Should().BeOfType<Font>().Subject;
@@ -692,11 +697,11 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         TryGetData(stream);
 
-        static void TryGetData(MemoryStream stream)
+        void TryGetData(MemoryStream stream)
         {
             // TryGetData<Font> case.
             stream.Position = 0;
-            var result = Utilities.ReadObjectFromStream<Font>(
+            var result = _utilities.ReadObjectFromStream<Font>(
                 stream,
                 resolver: FontResolver,
                 legacyMode: false).Should().BeOfType<Font>().Subject;
@@ -739,7 +744,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         // legacyMode == true follows the GetData path.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
+        _utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
             .Should().BeEquivalentTo(value);
     }
 
@@ -754,7 +759,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         // This works because GetData falls back to the BinaryFormatter deserializer, NRBF deserializer fails because it requires a resolver.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
+        _utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
             .Should().BeEquivalentTo(value);
     }
 

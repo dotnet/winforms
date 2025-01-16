@@ -2,86 +2,117 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-using System.Drawing;
+using System.Private.Windows.Core.Resources;
 using System.Reflection.Metadata;
-using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+using IDataObject = System.Private.Windows.Core.OLE.IDataObjectDesktop;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
 /// <summary>
 ///  Implements a basic data transfer mechanism.
 /// </summary>
 [ClassInterface(ClassInterfaceType.None)]
-public unsafe partial class DataObject :
-    ITypedDataObject,
+internal abstract unsafe partial class DesktopDataObject :
+    ITypedDataObjectDesktop,
     Com.IDataObject.Interface,
     ComTypes.IDataObject,
     Com.IManagedWrapper<Com.IDataObject>
 {
-    private const string CF_DEPRECATED_FILENAME = "FileName";
-    private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
-    private const string BitmapFullName = "System.Drawing.Bitmap";
+    protected const string CF_DEPRECATED_FILENAME = "FileName";
+    protected const string CF_DEPRECATED_FILENAMEW = "FileNameW";
+    protected const string BitmapFullName = "System.Drawing.Bitmap";
 
     private readonly Composition _innerData;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
+    ///  Initializes a new instance of the <see cref="DesktopDataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
-    /// <inheritdoc cref="DataObject(object)"/>
-    internal DataObject(Com.IDataObject* data) => _innerData = Composition.CreateFromNativeDataObject(data);
+    /// <inheritdoc cref="DesktopDataObject(object, Composition)"/>
+    internal DesktopDataObject(Com.IDataObject* data, Composition composition) => _innerData = composition.PopulateFromNativeDataObject(data);
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
+    ///  Initializes a new instance of the <see cref="DesktopDataObject"/> class, which can store arbitrary data.
     /// </summary>
-    /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() => _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
+    /// <inheritdoc cref="DesktopDataObject(object, Composition)"/>
+    internal DesktopDataObject(Composition composition) => _innerData = composition.PopulateFromDesktopDataObject(CreateIDataObject());
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
+    ///  Initializes a new instance of the <see cref="DesktopDataObject"/> class, containing the specified data.
     /// </summary>
+    /// <param name="composition">A default <see cref="Composition"/> that will be populated appropriately by this constructor.</param>
     /// <remarks>
     ///  <para>
     ///   If <paramref name="data"/> implements an <see cref="IDataObject"/> interface,
-    ///   we strongly recommend implementing <see cref="ITypedDataObject"/> interface to support the
+    ///   we strongly recommend implementing <see cref="ITypedDataObjectDesktop"/> interface to support the
     ///   `TryGetData{T}` API family that restricts deserialization to the requested and known types.
-    ///   <see cref="Clipboard.TryGetData{T}(string, out T)"/> will throw <see cref="NotSupportedException"/>
-    ///   if <see cref="ITypedDataObject"/> is not implemented.
+    ///   <see cref="DesktopClipboard.TryGetData{T}(string, out T)"/> will throw <see cref="NotSupportedException"/>
+    ///   if <see cref="ITypedDataObjectDesktop"/> is not implemented.
     ///  </para>
     /// </remarks>
-    public DataObject(object data)
+    internal DesktopDataObject(object data, Composition composition)
     {
-        if (data is DataObject dataObject)
+        if (data is DesktopDataObject dataObject)
         {
             _innerData = dataObject._innerData;
+            IsOriginalNotIDataObject = dataObject.IsOriginalNotIDataObject;
         }
         else if (data is IDataObject iDataObject)
         {
-            _innerData = Composition.CreateFromWinFormsDataObject(iDataObject);
+            // This is must be an adapter which knows how to move between internal and public IDataObject.
+            _innerData = composition.PopulateFromDesktopDataObject(iDataObject);
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
-            _innerData = Composition.CreateFromRuntimeDataObject(comDataObject);
+            _innerData = composition.PopulateFromRuntimeDataObject(comDataObject);
         }
         else
         {
-            _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
+            _innerData = composition.PopulateFromDesktopDataObject(CreateIDataObject());
             SetData(data);
         }
     }
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data and its
+    ///  Initializes a new instance of the <see cref="DesktopDataObject"/> class, containing the specified data and its
     ///  associated format.
     /// </summary>
-    public DataObject(string format, object data) : this() => SetData(format, data);
+    internal DesktopDataObject(string format, object data, Composition composition) : this(composition) => SetData(format, data);
 
-    internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
+    internal DesktopDataObject(string format, bool autoConvert, object data, Composition composition) : this(composition) => SetData(format, autoConvert, data);
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if <typeparamref name="T"/> is a known type to the application.
+    ///  Otherwise, <see langword="false"/>
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Be sure to call <see cref="Composition.Binder.IsKnownTypeCore{T}"/> to capture intrinsic types.
+    ///  </para>
+    /// </remarks>
+    public abstract bool IsKnownType<T>();
+
+    /// <summary>
+    ///  Ensures <typeparamref name="T"/> is not of type public DataObject for JSON serialization as
+    ///  it cannot be serialized meaningfully.
+    /// </summary>
+    /// <exception cref="NotSupportedException">If <typeparamref name="T"/> is of type public DataObject.</exception>
+    public abstract void CheckDataObjectForJsonSet<T>();
+
+    /// <summary>
+    ///  Creates the appropriate default <see cref="IDataObject"/> for the application.
+    /// </summary>
+    public abstract IDataObject CreateIDataObject();
+
+    /// <summary>
+    ///  Verify if the specified format is valid and compatible with the specified type <typeparamref name="T"/>.
+    /// </summary>
+    internal abstract bool IsValidFormatAndType<T>(string format);
 
     /// <summary>
     ///  Flags that the original data was not a user passed <see cref="IDataObject"/>.
@@ -89,9 +120,9 @@ public unsafe partial class DataObject :
     internal bool IsOriginalNotIDataObject { get; init; }
 
     /// <summary>
-    ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
+    ///  Returns the inner data that the <see cref="DesktopDataObject"/> was created with if the original data implemented
     ///  <see cref="IDataObject"/>. Otherwise, returns this.
-    ///  This method should only be used if the <see cref="DataObject"/> was created for clipboard purposes.
+    ///  This method should only be used if the <see cref="DesktopDataObject"/> was created for clipboard purposes.
     /// </summary>
     internal IDataObject TryUnwrapInnerIDataObject()
     {
@@ -114,18 +145,18 @@ public unsafe partial class DataObject :
     ///  Stores the data in the specified format.
     ///  If the data is a managed object and format allows for serialization of managed objects, the object will be serialized as JSON.
     /// </summary>
-    /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
+    /// <param name="format">The format associated with the data. See <see cref="DesktopDataFormats"/> for predefined formats.</param>
     /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
     /// <param name="data">The data to store.</param>
     /// <exception cref="InvalidOperationException">
-    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
-    ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
+    ///  If <paramref name="data"/> is a non derived <see cref="DesktopDataObject"/>. This is for better error reporting as <see cref="DesktopDataObject"/> will serialize as empty.
+    ///  If <see cref="DesktopDataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
     ///  passing in <paramref name="data"/>.
     /// </exception>
     /// <remarks>
     ///  <para>
     ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
-    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>
+    ///   and you are using a custom format or <see cref="DesktopDataFormats.SerializableConstant"/>
     ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
     ///  </para>
     ///  <para>
@@ -154,7 +185,8 @@ public unsafe partial class DataObject :
     /// <returns>
     ///  The passed in <paramref name="data"/> as is if the format is restricted. Otherwise the JSON serialized <paramref name="data"/>.
     /// </returns>
-    private static object TryJsonSerialize<T>(string format, T data)
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.SerializeToUtf8Bytes<TValue>(TValue, JsonSerializerOptions)")]
+    private object TryJsonSerialize<T>(string format, T data)
     {
         if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
         {
@@ -162,13 +194,9 @@ public unsafe partial class DataObject :
         }
 
         data.OrThrowIfNull(nameof(data));
+        CheckDataObjectForJsonSet<T>();
 
-        if (typeof(T) == typeof(DataObject))
-        {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetData)));
-        }
-
-        return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
+        return IsRestrictedFormat(format) || IsKnownType<T>()
             ? data
             : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
     }
@@ -177,13 +205,13 @@ public unsafe partial class DataObject :
     ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
     ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
     /// </summary>
-    private static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
-        || format is DataFormats.TextConstant
-            or DataFormats.UnicodeTextConstant
-            or DataFormats.RtfConstant
-            or DataFormats.HtmlConstant
-            or DataFormats.OemTextConstant
-            or DataFormats.FileDropConstant
+    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+        || format is DesktopDataFormats.TextConstant
+            or DesktopDataFormats.UnicodeTextConstant
+            or DesktopDataFormats.RtfConstant
+            or DesktopDataFormats.HtmlConstant
+            or DesktopDataFormats.OemTextConstant
+            or DesktopDataFormats.FileDropConstant
             or CF_DEPRECATED_FILENAME
             or CF_DEPRECATED_FILENAMEW;
 
@@ -199,71 +227,53 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     private static bool RestrictDeserializationToSafeTypes(string format) =>
-        format is DataFormats.StringConstant
+        format is DesktopDataFormats.StringConstant
             or BitmapFullName
-            or DataFormats.CsvConstant
-            or DataFormats.DibConstant
-            or DataFormats.DifConstant
-            or DataFormats.LocaleConstant
-            or DataFormats.PenDataConstant
-            or DataFormats.RiffConstant
-            or DataFormats.SymbolicLinkConstant
-            or DataFormats.TiffConstant
-            or DataFormats.WaveAudioConstant
-            or DataFormats.BitmapConstant
-            or DataFormats.EmfConstant
-            or DataFormats.PaletteConstant
-            or DataFormats.WmfConstant;
+            or DesktopDataFormats.CsvConstant
+            or DesktopDataFormats.DibConstant
+            or DesktopDataFormats.DifConstant
+            or DesktopDataFormats.LocaleConstant
+            or DesktopDataFormats.PenDataConstant
+            or DesktopDataFormats.RiffConstant
+            or DesktopDataFormats.SymbolicLinkConstant
+            or DesktopDataFormats.TiffConstant
+            or DesktopDataFormats.WaveAudioConstant
+            or DesktopDataFormats.BitmapConstant
+            or DesktopDataFormats.EmfConstant
+            or DesktopDataFormats.PaletteConstant
+            or DesktopDataFormats.WmfConstant;
 
     #region IDataObject
-    [Obsolete(
-        Obsoletions.DataObjectGetDataMessage,
-        error: false,
-        DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format, bool autoConvert)
+    public object? GetData(string format, bool autoConvert)
     {
-        object? result = _innerData.GetData(format, autoConvert);
-        // Avoid exposing our internal JsonData<T>
-        return result is IJsonData ? null : result;
+        return _innerData.GetData(format, autoConvert);
     }
 
-    [Obsolete(
-        Obsoletions.DataObjectGetDataMessage,
-        error: false,
-        DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format) => GetData(format, autoConvert: true);
+    public object? GetData(string format) => GetData(format, autoConvert: true);
 
-    [Obsolete(
-        Obsoletions.DataObjectGetDataMessage,
-        error: false,
-        DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
+    public object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
 
-    public virtual bool GetDataPresent(string format, bool autoConvert) => _innerData.GetDataPresent(format, autoConvert);
+    public bool GetDataPresent(string format, bool autoConvert) => _innerData.GetDataPresent(format, autoConvert);
 
-    public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
+    public bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
-    public virtual bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
+    public bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
 
-    public virtual string[] GetFormats(bool autoConvert) => _innerData.GetFormats(autoConvert);
+    public string[] GetFormats(bool autoConvert) => _innerData.GetFormats(autoConvert);
 
-    public virtual string[] GetFormats() => GetFormats(autoConvert: true);
+    public string[] GetFormats() => GetFormats(autoConvert: true);
 
-    public virtual void SetData(string format, bool autoConvert, object? data) =>
+    public void SetData(string format, bool autoConvert, object? data) =>
         _innerData.SetData(format, autoConvert, data);
 
-    public virtual void SetData(string format, object? data) => _innerData.SetData(format, data);
+    public void SetData(string format, object? data) => _innerData.SetData(format, data);
 
-    public virtual void SetData(Type format, object? data) => _innerData.SetData(format, data);
+    public void SetData(Type format, object? data) => _innerData.SetData(format, data);
 
-    public virtual void SetData(object? data) => _innerData.SetData(data);
+    public void SetData(object? data) => _innerData.SetData(data);
     #endregion
 
     #region ITypedDataObject
-    [CLSCompliant(false)]
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         Func<TypeName, Type> resolver,
@@ -295,37 +305,34 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Override this method in the derived class to provide custom data retrieval logic using the typed APIs.
     /// </summary>
-    /// <inheritdoc cref="ITypedDataObject.TryGetData{T}(string, Func{TypeName, Type}, bool, out T)" />
-    [CLSCompliant(false)]
-    protected virtual bool TryGetDataCore<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+    /// <inheritdoc cref="ITypedDataObjectDesktop.TryGetData{T}(string, Func{TypeName, Type}, bool, out T)" />
+    internal virtual bool TryGetDataCore<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         Func<TypeName, Type>? resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
             _innerData.TryGetData(format, resolver!, autoConvert, out data);
 
-    public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
+    public virtual bool ContainsAudio() => GetDataPresent(DesktopDataFormats.WaveAudioConstant, autoConvert: false);
 
-    public virtual bool ContainsFileDropList() => GetDataPresent(DataFormats.FileDropConstant, autoConvert: true);
+    public virtual bool ContainsFileDropList() => GetDataPresent(DesktopDataFormats.FileDropConstant, autoConvert: true);
 
-    public virtual bool ContainsImage() => GetDataPresent(DataFormats.BitmapConstant, autoConvert: true);
+    public virtual bool ContainsImage() => GetDataPresent(DesktopDataFormats.BitmapConstant, autoConvert: true);
 
-    public virtual bool ContainsText() => ContainsText(TextDataFormat.UnicodeText);
+    public virtual bool ContainsText() => ContainsText(DesktopTextDataFormat.UnicodeText);
 
-    public virtual bool ContainsText(TextDataFormat format)
+    public virtual bool ContainsText(DesktopTextDataFormat format)
     {
-        // Valid values are 0x0 to 0x4
-        SourceGenerated.EnumValidator.Validate(format, nameof(format));
         return GetDataPresent(ConvertToDataFormats(format), autoConvert: false);
     }
 
 #pragma warning disable WFDEV005 // Type or member is obsolete
-    public virtual Stream? GetAudioStream() => GetData(DataFormats.WaveAudio, autoConvert: false) as Stream;
+    public virtual Stream? GetAudioStream() => GetData(DesktopDataFormats.WaveAudioConstant, autoConvert: false) as Stream;
 
     public virtual StringCollection GetFileDropList()
     {
         StringCollection dropList = [];
-        if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
+        if (GetData(DesktopDataFormats.FileDropConstant, autoConvert: true) is string[] strings)
         {
             dropList.AddRange(strings);
         }
@@ -333,41 +340,31 @@ public unsafe partial class DataObject :
         return dropList;
     }
 
-    public virtual Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
-
-    public virtual string GetText(TextDataFormat format)
+    public virtual string GetText(DesktopTextDataFormat format)
     {
-        // Valid values are 0x0 to 0x4
-        SourceGenerated.EnumValidator.Validate(format, nameof(format));
         return GetData(ConvertToDataFormats(format), autoConvert: false) is string text ? text : string.Empty;
     }
 #pragma warning restore WFDEV005
 
-    public virtual string GetText() => GetText(TextDataFormat.UnicodeText);
+    public virtual string GetText() => GetText(DesktopTextDataFormat.UnicodeText);
 
     public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 
     public virtual void SetAudio(Stream audioStream) =>
-        SetData(DataFormats.WaveAudioConstant, autoConvert: false, audioStream.OrThrowIfNull());
+        SetData(DesktopDataFormats.WaveAudioConstant, autoConvert: false, audioStream.OrThrowIfNull());
 
     public virtual void SetFileDropList(StringCollection filePaths)
     {
         string[] strings = new string[filePaths.OrThrowIfNull().Count];
         filePaths.CopyTo(strings, 0);
-        SetData(DataFormats.FileDropConstant, true, strings);
+        SetData(DesktopDataFormats.FileDropConstant, true, strings);
     }
 
-    public virtual void SetImage(Image image) => SetData(DataFormats.BitmapConstant, true, image.OrThrowIfNull());
+    public virtual void SetText(string textData) => SetText(textData, DesktopTextDataFormat.UnicodeText);
 
-    public virtual void SetText(string textData) => SetText(textData, TextDataFormat.UnicodeText);
-
-    public virtual void SetText(string textData, TextDataFormat format)
+    public virtual void SetText(string textData, DesktopTextDataFormat format)
     {
         textData.ThrowIfNullOrEmpty();
-
-        // Valid values are 0x0 to 0x4
-        SourceGenerated.EnumValidator.Validate(format, nameof(format));
-
         SetData(ConvertToDataFormats(format), false, textData);
     }
 
@@ -389,51 +386,13 @@ public unsafe partial class DataObject :
         return TryGetDataCore(format, resolver, autoConvert, out data);
     }
 
-    /// <summary>
-    ///  Verify if the specified format is valid and compatible with the specified type <typeparamref name="T"/>.
-    /// </summary>
-    internal static bool IsValidFormatAndType<T>(string format)
+    private static string ConvertToDataFormats(DesktopTextDataFormat format) => format switch
     {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            return false;
-        }
-
-        if (IsValidPredefinedFormatTypeCombination(format))
-        {
-            return true;
-        }
-
-        throw new NotSupportedException(string.Format(
-            SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
-            typeof(T).FullName, format));
-
-        static bool IsValidPredefinedFormatTypeCombination(string format) => format switch
-        {
-            DataFormats.TextConstant
-                or DataFormats.UnicodeTextConstant
-                or DataFormats.StringConstant
-                or DataFormats.RtfConstant
-                or DataFormats.HtmlConstant
-                or DataFormats.OemTextConstant => typeof(string) == typeof(T),
-
-            DataFormats.FileDropConstant
-                or CF_DEPRECATED_FILENAME
-                or CF_DEPRECATED_FILENAMEW => typeof(string[]) == typeof(T),
-
-            DataFormats.BitmapConstant or BitmapFullName =>
-                typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T),
-            _ => true
-        };
-    }
-
-    private static string ConvertToDataFormats(TextDataFormat format) => format switch
-    {
-        TextDataFormat.UnicodeText => DataFormats.UnicodeTextConstant,
-        TextDataFormat.Rtf => DataFormats.RtfConstant,
-        TextDataFormat.Html => DataFormats.HtmlConstant,
-        TextDataFormat.CommaSeparatedValue => DataFormats.CsvConstant,
-        _ => DataFormats.UnicodeTextConstant,
+        DesktopTextDataFormat.UnicodeText => DesktopDataFormats.UnicodeTextConstant,
+        DesktopTextDataFormat.Rtf => DesktopDataFormats.RtfConstant,
+        DesktopTextDataFormat.Html => DesktopDataFormats.HtmlConstant,
+        DesktopTextDataFormat.CommaSeparatedValue => DesktopDataFormats.CsvConstant,
+        _ => DesktopDataFormats.UnicodeTextConstant,
     };
 
     /// <summary>
@@ -442,22 +401,22 @@ public unsafe partial class DataObject :
     private static string[]? GetMappedFormats(string format) => format switch
     {
         null => null,
-        DataFormats.TextConstant or DataFormats.UnicodeTextConstant or DataFormats.StringConstant =>
+        DesktopDataFormats.TextConstant or DesktopDataFormats.UnicodeTextConstant or DesktopDataFormats.StringConstant =>
             [
-                DataFormats.StringConstant,
-                DataFormats.UnicodeTextConstant,
-                DataFormats.TextConstant
+                DesktopDataFormats.StringConstant,
+                DesktopDataFormats.UnicodeTextConstant,
+                DesktopDataFormats.TextConstant
             ],
-        DataFormats.FileDropConstant or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
+        DesktopDataFormats.FileDropConstant or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
             [
-                DataFormats.FileDropConstant,
+                DesktopDataFormats.FileDropConstant,
                 CF_DEPRECATED_FILENAMEW,
                 CF_DEPRECATED_FILENAME
             ],
-        DataFormats.BitmapConstant or BitmapFullName =>
+        DesktopDataFormats.BitmapConstant or BitmapFullName =>
             [
                 BitmapFullName,
-                DataFormats.BitmapConstant
+                DesktopDataFormats.BitmapConstant
             ],
         _ => [format]
     };

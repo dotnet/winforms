@@ -3270,7 +3270,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     fixed (char* b = buffer)
                     {
-                        uint length = PInvoke.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
+                        uint length = PInvokeCore.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
                         if (length != 0)
                         {
                             // Try to load the file as RTF.

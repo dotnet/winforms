@@ -2,20 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.Core.Resources;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Switches = System.Windows.Forms.Primitives.LocalAppContextSwitches;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Core.OLE;
 
-public unsafe partial class DataObject
+internal abstract unsafe partial class DesktopDataObject
 {
-    internal unsafe partial class Composition
+    internal abstract unsafe partial class Composition
     {
         /// <summary>
-        ///  A type resolver for use in the <see cref="NativeToWinFormsAdapter"/> when processing binary formatted stream
-        ///  contained in our <see cref="DataObject"/> class using the typed consumption side APIs, such as
+        ///  A type resolver for use in the <see cref="NativeToDesktopAdapter"/> when processing binary formatted stream
+        ///  contained in our <see cref="DesktopDataObject"/> class using the typed consumption side APIs, such as
         ///  <see cref="TryGetData{T}(out T)"/>. This class recognizes primitive types, exchange types from
         ///  System.Drawing.Primitives, <see cref="List{T}"/>s or arrays of primitive types, and common WinForms types.
         ///  The user can provide a custom resolver for additional types. If the resolver function is not provided,
@@ -26,7 +26,7 @@ public unsafe partial class DataObject
         ///   This class is used in <see cref="BinaryFormatter"/> and NRBF deserialization.
         ///  </para>
         /// </remarks>
-        internal sealed class Binder : SerializationBinder, ITypeResolver
+        internal abstract class Binder : SerializationBinder, ITypeResolver
         {
             private readonly Func<TypeName, Type>? _resolver;
             private readonly bool _legacyMode;
@@ -91,18 +91,15 @@ public unsafe partial class DataObject
                 typeof(decimal[]),
                 typeof(DateTime[]),
                 typeof(TimeSpan[]),
-                // Common WinForms types.
-                typeof(ImageListStreamer),
-                typeof(Drawing.Bitmap),
                 // Exchange types, they are serialized with the .NET Framework assembly name.
                 // In .NET they are located in System.Drawing.Primitives.
                 typeof(Drawing.RectangleF),
-                typeof(PointF),
+                typeof(Drawing.PointF),
                 typeof(Drawing.SizeF),
                 typeof(Drawing.Rectangle),
-                typeof(Point),
+                typeof(Drawing.Point),
                 typeof(Drawing.Size),
-                typeof(Color)
+                typeof(Drawing.Color)
             ];
 
             private static Dictionary<TypeName, Type>? s_knownTypes;
@@ -146,8 +143,26 @@ public unsafe partial class DataObject
                 }
             }
 
+            /// <summary>
+            ///  Returns of an array of additional types that are supported by the application aside from intrinsic types.
+            /// </summary>
+            public abstract Type[] AdditionalSupportedTypes();
+
+            private bool IsAdditionalSupportedType<T>()
+            {
+                foreach (Type type in AdditionalSupportedTypes())
+                {
+                    if (typeof(T) == type)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             [MemberNotNull(nameof(s_knownTypes))]
-            private static void InitializeCommonTypes()
+            private void InitializeCommonTypes()
             {
                 if (s_knownTypes is not null)
                 {
@@ -155,76 +170,83 @@ public unsafe partial class DataObject
                 }
 
                 s_knownTypes = new(TypeNameComparer.Default);
-
                 foreach (Type type in s_intrinsicTypes)
+                {
+                    s_knownTypes.Add(type.ToTypeName(), type);
+                }
+
+                foreach (Type type in AdditionalSupportedTypes())
                 {
                     s_knownTypes.Add(type.ToTypeName(), type);
                 }
             }
 
-            public static bool IsKnownType<T>() =>
+            public static bool IsKnownTypeCore<T>() =>
                 typeof(T) == typeof(byte)
-                    || typeof(T) == typeof(sbyte)
-                    || typeof(T) == typeof(short)
-                    || typeof(T) == typeof(ushort)
-                    || typeof(T) == typeof(int)
-                    || typeof(T) == typeof(uint)
-                    || typeof(T) == typeof(long)
-                    || typeof(T) == typeof(ulong)
-                    || typeof(T) == typeof(double)
-                    || typeof(T) == typeof(float)
-                    || typeof(T) == typeof(char)
-                    || typeof(T) == typeof(bool)
-                    || typeof(T) == typeof(string)
-                    || typeof(T) == typeof(decimal)
-                    || typeof(T) == typeof(DateTime)
-                    || typeof(T) == typeof(TimeSpan)
-                    || typeof(T) == typeof(IntPtr)
-                    || typeof(T) == typeof(UIntPtr)
-                    || typeof(T) == typeof(NotSupportedException)
-                    || typeof(T) == typeof(List<byte>)
-                    || typeof(T) == typeof(List<sbyte>)
-                    || typeof(T) == typeof(List<short>)
-                    || typeof(T) == typeof(List<ushort>)
-                    || typeof(T) == typeof(List<int>)
-                    || typeof(T) == typeof(List<uint>)
-                    || typeof(T) == typeof(List<long>)
-                    || typeof(T) == typeof(List<ulong>)
-                    || typeof(T) == typeof(List<float>)
-                    || typeof(T) == typeof(List<double>)
-                    || typeof(T) == typeof(List<char>)
-                    || typeof(T) == typeof(List<bool>)
-                    || typeof(T) == typeof(List<string>)
-                    || typeof(T) == typeof(List<decimal>)
-                    || typeof(T) == typeof(List<DateTime>)
-                    || typeof(T) == typeof(List<TimeSpan>)
-                    || typeof(T) == typeof(byte[])
-                    || typeof(T) == typeof(sbyte[])
-                    || typeof(T) == typeof(short[])
-                    || typeof(T) == typeof(ushort[])
-                    || typeof(T) == typeof(int[])
-                    || typeof(T) == typeof(uint[])
-                    || typeof(T) == typeof(long[])
-                    || typeof(T) == typeof(ulong[])
-                    || typeof(T) == typeof(float[])
-                    || typeof(T) == typeof(double[])
-                    || typeof(T) == typeof(char[])
-                    || typeof(T) == typeof(bool[])
-                    || typeof(T) == typeof(string[])
-                    || typeof(T) == typeof(decimal[])
-                    || typeof(T) == typeof(DateTime[])
-                    || typeof(T) == typeof(TimeSpan[])
-                    || typeof(T) == typeof(ImageListStreamer)
-                    || typeof(T) == typeof(Drawing.Bitmap)
-                    || typeof(T) == typeof(Drawing.RectangleF)
-                    || typeof(T) == typeof(PointF)
-                    || typeof(T) == typeof(Drawing.SizeF)
-                    || typeof(T) == typeof(Drawing.Rectangle)
-                    || typeof(T) == typeof(Point)
-                    || typeof(T) == typeof(Drawing.Size)
-                    || typeof(T) == typeof(Color);
+                || typeof(T) == typeof(sbyte)
+                || typeof(T) == typeof(short)
+                || typeof(T) == typeof(ushort)
+                || typeof(T) == typeof(int)
+                || typeof(T) == typeof(uint)
+                || typeof(T) == typeof(long)
+                || typeof(T) == typeof(ulong)
+                || typeof(T) == typeof(double)
+                || typeof(T) == typeof(float)
+                || typeof(T) == typeof(char)
+                || typeof(T) == typeof(bool)
+                || typeof(T) == typeof(string)
+                || typeof(T) == typeof(decimal)
+                || typeof(T) == typeof(DateTime)
+                || typeof(T) == typeof(TimeSpan)
+                || typeof(T) == typeof(IntPtr)
+                || typeof(T) == typeof(UIntPtr)
+                || typeof(T) == typeof(NotSupportedException)
+                || typeof(T) == typeof(List<byte>)
+                || typeof(T) == typeof(List<sbyte>)
+                || typeof(T) == typeof(List<short>)
+                || typeof(T) == typeof(List<ushort>)
+                || typeof(T) == typeof(List<int>)
+                || typeof(T) == typeof(List<uint>)
+                || typeof(T) == typeof(List<long>)
+                || typeof(T) == typeof(List<ulong>)
+                || typeof(T) == typeof(List<float>)
+                || typeof(T) == typeof(List<double>)
+                || typeof(T) == typeof(List<char>)
+                || typeof(T) == typeof(List<bool>)
+                || typeof(T) == typeof(List<string>)
+                || typeof(T) == typeof(List<decimal>)
+                || typeof(T) == typeof(List<DateTime>)
+                || typeof(T) == typeof(List<TimeSpan>)
+                || typeof(T) == typeof(byte[])
+                || typeof(T) == typeof(sbyte[])
+                || typeof(T) == typeof(short[])
+                || typeof(T) == typeof(ushort[])
+                || typeof(T) == typeof(int[])
+                || typeof(T) == typeof(uint[])
+                || typeof(T) == typeof(long[])
+                || typeof(T) == typeof(ulong[])
+                || typeof(T) == typeof(float[])
+                || typeof(T) == typeof(double[])
+                || typeof(T) == typeof(char[])
+                || typeof(T) == typeof(bool[])
+                || typeof(T) == typeof(string[])
+                || typeof(T) == typeof(decimal[])
+                || typeof(T) == typeof(DateTime[])
+                || typeof(T) == typeof(TimeSpan[])
+                || typeof(T) == typeof(Drawing.RectangleF)
+                || typeof(T) == typeof(Drawing.PointF)
+                || typeof(T) == typeof(Drawing.SizeF)
+                || typeof(T) == typeof(Drawing.Rectangle)
+                || typeof(T) == typeof(Drawing.Point)
+                || typeof(T) == typeof(Drawing.Size)
+                || typeof(T) == typeof(Drawing.Color);
 
+            public bool IsKnownType<T>() => IsKnownTypeCore<T>() || IsAdditionalSupportedType<T>();
+
+            [RequiresUnreferencedCode("Calls System.Private.Windows.Core.OLE.DataObjectInner.Composition.Binder.UseResolver(TypeName)")]
+#pragma warning disable IL2046 // 'RequiresUnreferencedCodeAttribute' annotations must match across all interface implementations or overrides.
             public override Type? BindToType(string assemblyName, string typeName)
+#pragma warning restore IL2046
             {
                 ArgumentException.ThrowIfNullOrWhiteSpace(assemblyName);
                 ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
@@ -236,7 +258,7 @@ public unsafe partial class DataObject
 
                 if (_legacyMode)
                 {
-                    return Switches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization
+                    return LocalAppContextSwitchesCore.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization
                         ? null
                         : throw new NotSupportedException(string.Format(
                             SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,

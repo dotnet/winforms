@@ -2,12 +2,15 @@ BeginPaint
 BI_COMPRESSION
 BitBlt
 BOOL
+CFSTR_DROPDESCRIPTION
+CFSTR_INDRAGLOOP
 CLIPBRD_E_BAD_DATA
 CLR_*
 CallWindowProc
 CoCreateInstance
 CombineRgn
 CopyImage
+CP_ACP
 CreateBitmap
 CreateCompatibleBitmap
 CreateCompatibleDC
@@ -50,7 +53,11 @@ DRAGDROP_S_CANCEL
 DRAGDROP_S_DROP
 DRAGDROP_S_USEDEFAULTCURSORS
 DrawIconEx
+DragQueryFile
+DROPDESCRIPTION
+DROPFILES
 DV_E_*
+DVASPECT
 E_ABORT
 E_ACCESSDENIED
 E_FAIL
@@ -78,6 +85,7 @@ GetWindowText
 GetWindowTextLength
 GET_CLASS_LONG_INDEX
 GetClientRect
+GetClipboardFormatName
 GetClipRgn
 GetDC
 GetDCEx
@@ -119,7 +127,9 @@ HPROPSHEETPAGE
 HRGN
 HWND
 HWND_*
+IDataObject
 IDI_*
+IDragSourceHelper2
 IEnumUnknown
 IGlobalInterfaceTable
 ImageLockMode
@@ -162,6 +172,10 @@ OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
 OleCreatePictureIndirect
+OleDuplicateData
+OleFlushClipboard
+OleGetClipboard
+OleSetClipboard
 PeekMessage
 PostMessage
 POINTS
@@ -171,7 +185,9 @@ PWSTR
 RealizePalette
 RECT
 REGDB_E_CLASSNOTREG
+RegisterClipboardFormat
 ReleaseDC
+ReleaseStgMedium
 RestoreDC
 RPC_E_CHANGED_MODE
 RPC_E_DISCONNECTED
@@ -215,6 +231,7 @@ SystemParametersInfoForDpi
 TYPE_E_BADMODULEKIND
 UNICODE_STRING_MAX_CHARS
 VIEW_E_DRAW
+WideCharToMultiByte
 WIN32_ERROR
 WINCODEC_ERR_*
 WINDOW_LONG_PTR_INDEX

@@ -50,8 +50,8 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         if (ComWrappers.TryGetObject(unknown, out object? obj) && obj is IDataObject dataObject)
         {
             // If the original data object implemented IDataObject, we might've wrapped it. We need to give the original back out.
-            return dataObject is DataObject winFormsDataObject && winFormsDataObject.OriginalIDataObject is { } originalDataObject
-                ? originalDataObject
+            return dataObject is DataObject winFormsDataObject && winFormsDataObject._innerDataObject.OriginalIDataObject is DataObjectAdapter adapter
+                ? adapter.OriginalDataObject
                 : dataObject;
         }
 
