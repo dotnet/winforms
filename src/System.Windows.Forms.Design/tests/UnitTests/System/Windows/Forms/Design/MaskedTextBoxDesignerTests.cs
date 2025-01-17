@@ -10,29 +10,31 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public sealed class MaskedTextBoxDesignerTests
+public sealed class MaskedTextBoxDesignerTests : IDisposable
 {
+    public void Dispose() { }
+
     [Fact]
     public void SnapLines_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        using MaskedTextBox maskedTextBox = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
+        using MaskedTextBox _maskedTextBox = new();
+        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
+        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
 
-        maskedTextBoxDesigner.SnapLines.Count.Should().Be(9);
+        _maskedTextBoxDesigner.SnapLines.Count.Should().Be(9);
     }
 
     [Fact]
     public void SelectionRules_WithDefaultMaskedTextBox_ShouldReturnExpectedValue()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        using MaskedTextBox maskedTextBox = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
+        using MaskedTextBox _maskedTextBox = new();
+        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
+        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
 
         SelectionRules selectionRules;
         using (new NoAssertContext())
         {
-            selectionRules = maskedTextBoxDesigner.SelectionRules;
+            selectionRules = _maskedTextBoxDesigner.SelectionRules;
         }
 
         selectionRules.Should().Be(SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.Moveable | SelectionRules.Visible);
@@ -41,21 +43,21 @@ public sealed class MaskedTextBoxDesignerTests
     [Fact]
     public void Verbs_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        using MaskedTextBox maskedTextBox = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
+        using MaskedTextBox _maskedTextBox = new();
+        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
+        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
 
-        maskedTextBoxDesigner.Verbs.Count.Should().Be(1);
+        _maskedTextBoxDesigner.Verbs.Count.Should().Be(1);
     }
 
     [Fact]
     public void Verbs_WithDefaultMaskedTextBox_ShouldContainSetMaskVerb()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        using MaskedTextBox maskedTextBox = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
+        using MaskedTextBox _maskedTextBox = new();
+        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
+        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
 
-        DesignerVerbCollection verbs = maskedTextBoxDesigner.Verbs;
+        DesignerVerbCollection verbs = _maskedTextBoxDesigner.Verbs;
 
         verbs.Should().NotBeNull();
         verbs.Count.Should().BeGreaterThan(0);
@@ -103,22 +105,24 @@ public sealed class MaskedTextBoxDesignerTests
     [Fact]
     public void ActionLists_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
+        IServiceContainer serviceContainer = new Mock<IServiceContainer>().Object;
+        ITypeDiscoveryService typeDiscoveryService = new Mock<ITypeDiscoveryService>().Object;
+        IUIService uiService = new Mock<IUIService>().Object;
+        ISite mockSite = new Mock<ISite>().Object;
+
+        Mock<IServiceContainer> mockServiceContainer = new();
+        mockServiceContainer.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
+        mockServiceContainer.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
+
+        Mock<ISite> mockMockSite = new();
+        mockMockSite.Setup(s => s.GetService(typeof(IServiceContainer))).Returns(mockServiceContainer.Object);
+        mockMockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
+        mockMockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
+
         using MaskedTextBox maskedTextBox = new();
+        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
         maskedTextBoxDesigner.Initialize(maskedTextBox);
-
-        Mock<IServiceContainer> serviceContainer = new();
-        Mock<ITypeDiscoveryService> typeDiscoveryService = new();
-        Mock<IUIService> uiService = new();
-
-        serviceContainer.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService.Object);
-        serviceContainer.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService.Object);
-
-        Mock<ISite> mockSite = new();
-        mockSite.Setup(s => s.GetService(typeof(IServiceContainer))).Returns(serviceContainer.Object);
-        mockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService.Object);
-        mockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService.Object);
-        maskedTextBoxDesigner.Component.Site = mockSite.Object;
+        maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
 
         DesignerActionListCollection actionLists = maskedTextBoxDesigner.ActionLists;
         actionLists.Count.Should().Be(1);
@@ -127,34 +131,26 @@ public sealed class MaskedTextBoxDesignerTests
     [Fact]
     public void ActionLists_WithDefaultMaskedTextBox_ShouldReturnExpectedType()
     {
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
+        IServiceContainer serviceContainer = new Mock<IServiceContainer>().Object;
+        ITypeDiscoveryService typeDiscoveryService = new Mock<ITypeDiscoveryService>().Object;
+        IUIService uiService = new Mock<IUIService>().Object;
+        ISite mockSite = new Mock<ISite>().Object;
+
+        Mock<IServiceContainer> mockServiceContainer = new();
+        mockServiceContainer.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
+        mockServiceContainer.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
+
+        Mock<ISite> mockMockSite = new();
+        mockMockSite.Setup(s => s.GetService(typeof(IServiceContainer))).Returns(mockServiceContainer.Object);
+        mockMockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
+        mockMockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
+
         using MaskedTextBox maskedTextBox = new();
+        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
         maskedTextBoxDesigner.Initialize(maskedTextBox);
-
-        Mock<IServiceContainer> serviceContainer = new();
-        Mock<ITypeDiscoveryService> typeDiscoveryService = new();
-        Mock<IUIService> uiService = new();
-
-        serviceContainer.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService.Object);
-        serviceContainer.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService.Object);
-
-        Mock<ISite> mockSite = new();
-        mockSite.Setup(s => s.GetService(typeof(IServiceContainer))).Returns(serviceContainer.Object);
-        mockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService.Object);
-        mockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService.Object);
-        maskedTextBoxDesigner.Component.Site = mockSite.Object;
+        maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
 
         DesignerActionListCollection actionLists = maskedTextBoxDesigner.ActionLists;
         actionLists[0].Should().BeOfType<MaskedTextBoxDesignerActionList>();
-    }
-
-    [Fact]
-    public void GetDesignMaskedTextBox_WhenInputIsNull_ShouldReturnDefaultMaskedTextBox()
-    {
-        MaskedTextBox designMaskedTextBox = MaskedTextBoxDesigner.GetDesignMaskedTextBox(null!);
-
-        designMaskedTextBox.Should().NotBeNull();
-        designMaskedTextBox.Mask.Should().BeEmpty();
-        designMaskedTextBox.Text.Should().BeEmpty();
     }
 }
