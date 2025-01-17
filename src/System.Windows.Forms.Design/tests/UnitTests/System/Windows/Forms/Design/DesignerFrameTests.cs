@@ -12,11 +12,25 @@ namespace System.Windows.Forms.Design.Tests;
 public class DesignerFrameTests : IDisposable
 {
     private readonly Mock<ISite> _mockSite = new();
-    private DesignerFrame _designerFrame;
 
-    public DesignerFrameTests() => _designerFrame = new(_mockSite.Object);
+    public DesignerFrameTests() { }
 
-    public void Dispose() => _designerFrame.Dispose();
+    public void Dispose() { }
+
+    private class TestDesignerFrame : DesignerFrame
+    {
+        public TestDesignerFrame(ISite site) : base(site) { }
+
+        public void TestSetSite(ISite site)
+        {
+            Site = site;
+        }
+
+        public new bool ProcessDialogKey(Keys keyData)
+        {
+            return base.ProcessDialogKey(keyData);
+        }
+    }
 
     private void SetupMocks()
     {
@@ -26,16 +40,21 @@ public class DesignerFrameTests : IDisposable
     }
 
     [Fact]
-    public void DesignerFrame_Constructor_SetsProperties()
+    public void DesignerFrame_Constructor_SetsTextBackColorAndControls()
     {
         SetupMocks();
 
-        using (_designerFrame = new DesignerFrame(_mockSite.Object))
+        DesignerFrame designerFrame = new(_mockSite.Object);
+        try
         {
-            _designerFrame.Text.Should().Be("DesignerFrame");
-            _designerFrame.BackColor.Should().Be(Color.Red);
+            designerFrame.Text.Should().Be("DesignerFrame");
+            designerFrame.BackColor.Should().Be(Color.Red);
 
-            _designerFrame.Controls.Cast<Control>().Should().HaveCount(1);
+            designerFrame.Controls.Cast<Control>().Should().HaveCount(1);
+        }
+        finally
+        {
+            designerFrame.Dispose();
         }
     }
 
@@ -43,86 +62,112 @@ public class DesignerFrameTests : IDisposable
     public void DesignerFrame_Initialize_SetsDesignerProperties()
     {
         Control control = new();
+        DesignerFrame designerFrame = new(_mockSite.Object);
         try
         {
-            _designerFrame.Initialize(control);
+            designerFrame.Initialize(control);
 
-            List<Control> controls = _designerFrame.Controls.Cast<Control>().ToList();
+            List<Control> controls = designerFrame.Controls.Cast<Control>().ToList();
             Control? designerRegion = controls.FirstOrDefault(c => c is ScrollableControl);
 
             designerRegion.Should().NotBeNull();
 
-            Control? designer = designerRegion?.Controls.Cast<Control>().FirstOrDefault();
-            designer.Should().Be(control);
+            Control? containedControl = designerRegion?.Controls.Cast<Control>().FirstOrDefault();
+            containedControl.Should().Be(control);
 
             control.Visible.Should().BeTrue();
             control.Enabled.Should().BeTrue();
 
-            _designerFrame.Controls.Cast<Control>().Should().NotContain(control);
+            designerFrame.Controls.Cast<Control>().Should().NotContain(control);
         }
         finally
         {
             control.Dispose();
+            designerFrame.Dispose();
         }
     }
 
     [Fact]
     public void DesignerFrame_ProcessDialogKey_ReturnsExpectedResult()
     {
-        using (_designerFrame = new DesignerFrame(_mockSite.Object))
+        TestDesignerFrame designerFrame = new(_mockSite.Object);
+        try
         {
-            bool result = _designerFrame.TestAccessor().Dynamic.ProcessDialogKey(Keys.Enter);
+            bool result = designerFrame.ProcessDialogKey(Keys.Enter);
 
             result.Should().BeFalse();
+        }
+        finally
+        {
+            designerFrame.Dispose();
         }
     }
 
     [Fact]
-    public void DesignerFrame_Constructor_SetsSiteProperty()
+    public void DesignerFrame_Constructor_SetsSitePropertyUsingTestSetSite()
     {
-        _designerFrame.Site ??= _mockSite.Object;
+        TestDesignerFrame designerFrame = new(_mockSite.Object);
+        try
+        {
+            designerFrame.TestSetSite(_mockSite.Object);
 
-        _designerFrame.Should().NotBeNull();
-        _designerFrame.Site.Should().Be(_mockSite.Object);
+            designerFrame.Site.Should().Be(_mockSite.Object);
+        }
+        finally
+        {
+            designerFrame.Dispose();
+        }
     }
 
     [Fact]
     public void DesignerFrame_AddControl_AddsControlToFrame()
     {
         Control control = new();
+        DesignerFrame designerFrame = new(_mockSite.Object);
         try
         {
-            _designerFrame.Controls.Add(control);
+            designerFrame.Controls.Add(control);
 
-            _designerFrame.Controls.Cast<Control>().Should().Contain(control);
+            designerFrame.Controls.Cast<Control>().Should().Contain(control);
         }
         finally
         {
             control.Dispose();
+            designerFrame.Dispose();
         }
     }
 
     [Fact]
     public void DesignerFrame_Resize_TriggersExpectedBehavior()
     {
-        using (_designerFrame = new DesignerFrame(_mockSite.Object))
+        DesignerFrame designerFrame = new(_mockSite.Object);
+        try
         {
-            _designerFrame.Resize += (sender, args) => { /* Handle resize if needed */ };
+            designerFrame.Resize += (sender, args) => { /* Handle resize if needed */ };
 
-            _designerFrame.Width = 500;
+            designerFrame.Width = 500;
 
-            _designerFrame.Width.Should().Be(500);
+            designerFrame.Width.Should().Be(500);
+        }
+        finally
+        {
+            designerFrame.Dispose();
         }
     }
 
     [Fact]
     public void Designer_ProcessDialogKey()
     {
-        using (_designerFrame = new DesignerFrame(_mockSite.Object))
+        TestDesignerFrame designerFrame = new(_mockSite.Object);
+        try
         {
-            bool result = _designerFrame.TestAccessor().Dynamic.ProcessDialogKey(Keys.Enter);
+            bool result = designerFrame.ProcessDialogKey(Keys.Enter);
 
             result.Should().BeFalse();
+        }
+        finally
+        {
+            designerFrame.Dispose();
         }
     }
 }
