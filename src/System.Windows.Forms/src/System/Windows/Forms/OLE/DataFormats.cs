@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
+using PrivateOle = System.Private.Windows.Core.Ole;
 
 namespace System.Windows.Forms;
 
@@ -144,8 +144,8 @@ public static partial class DataFormats
     /// </summary>
     public static readonly string Serializable = SerializableConstant;
 
-    private static Format[]? s_formatList;
-    private static int s_formatCount;
+    private static List<PrivateOle.IDataFormat>? s_formatList;
+    private static PrivateOle.IDataFormat[]? s_predefinedFormatList;
 
     private static readonly Lock s_internalSyncObject = new();
 
@@ -155,39 +155,60 @@ public static partial class DataFormats
     public static Format GetFormat(string format)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
+        return (Format)GetOrAddFormat(format, (name, id) => new Format(name, id));
+    }
 
+    private static PrivateOle.IDataFormat GetOrAddFormat(
+        string format,
+        Func<string, int, PrivateOle.IDataFormat> factory)
+    {
         lock (s_internalSyncObject)
         {
             EnsurePredefined();
 
             // It is much faster to do a case sensitive search here.
             // So do the case sensitive compare first, then the expensive one.
-            for (int n = 0; n < s_formatCount; n++)
+            if (TryFindFormat(s_predefinedFormatList, format, StringComparison.Ordinal, out var found)
+                || TryFindFormat(s_formatList, format, StringComparison.Ordinal, out found)
+                || TryFindFormat(s_predefinedFormatList, format, StringComparison.OrdinalIgnoreCase, out found)
+                || TryFindFormat(s_formatList, format, StringComparison.OrdinalIgnoreCase, out found))
             {
-                if (s_formatList[n].Name.Equals(format))
-                {
-                    return s_formatList[n];
-                }
-            }
-
-            for (int n = 0; n < s_formatCount; n++)
-            {
-                if (string.Equals(s_formatList[n].Name, format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return s_formatList[n];
-                }
+                return found;
             }
 
             // Need to add this format string
             uint formatId = PInvoke.RegisterClipboardFormat(format);
             if (formatId == 0)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);
+                throw new Win32Exception(SR.RegisterCFFailed);
             }
 
-            EnsureFormatSpace(1);
-            s_formatList[s_formatCount] = new Format(format, (int)formatId);
-            return s_formatList[s_formatCount++];
+            s_formatList ??= [];
+            PrivateOle.IDataFormat newFormat = factory(format, (int)formatId);
+            s_formatList.Add(newFormat);
+            return newFormat;
+        }
+
+        static bool TryFindFormat(
+            IReadOnlyList<PrivateOle.IDataFormat>? formats,
+            string name,
+            StringComparison comparison,
+            [NotNullWhen(true)] out PrivateOle.IDataFormat? format)
+        {
+            if (formats is not null)
+            {
+                for (int i = 0; i < formats.Count; i++)
+                {
+                    format = formats[i];
+                    if (string.Equals(format.Name, name, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            format = null;
+            return false;
         }
     }
 
@@ -201,32 +222,35 @@ public static partial class DataFormats
         GetFormat((ushort)(id & 0xFFFF));
 
     /// <inheritdoc cref="GetFormat(int)"/>
-    internal static unsafe Format GetFormat(ushort id)
+    internal static Format GetFormat(ushort id) =>
+        (Format)GetOrAddFormat(id, (name, id) => new Format(name, id));
+
+    private static unsafe PrivateOle.IDataFormat GetOrAddFormat(
+        ushort id,
+        Func<string, int, PrivateOle.IDataFormat> factory)
     {
         lock (s_internalSyncObject)
         {
             EnsurePredefined();
 
-            for (int n = 0; n < s_formatCount; n++)
+            if (TryFindFormat(s_predefinedFormatList, id, out PrivateOle.IDataFormat? found)
+                || TryFindFormat(s_formatList, id, out found))
             {
-                if (s_formatList[n].Id == id)
-                {
-                    return s_formatList[n];
-                }
+                return found;
             }
-
-            string? name = null;
 
             // The max length of the name of clipboard formats is equal to the max length
             // of a Win32 Atom of 255 chars. An additional null terminator character is added,
             // giving a required capacity of 256 chars.
-            Span<char> formatName = stackalloc char[256];
-            fixed (char* pFormatName = formatName)
+
+            string? name = null;
+            Span<char> buffer = stackalloc char[256];
+            fixed (char* pBuffer = buffer)
             {
-                int length = PInvoke.GetClipboardFormatName(id, pFormatName, 256);
+                int length = PInvoke.GetClipboardFormatName(id, pBuffer, 256);
                 if (length != 0)
                 {
-                    name = formatName[..length].ToString();
+                    name = buffer[..length].ToString();
                 }
             }
 
@@ -234,29 +258,31 @@ public static partial class DataFormats
             // so we should play it safe.
             name ??= $"Format{id}";
 
-            EnsureFormatSpace(1);
-            s_formatList[s_formatCount] = new Format(name, id);
-            return s_formatList[s_formatCount++];
-        }
-    }
+            s_formatList ??= [];
+            PrivateOle.IDataFormat newFormat = factory(name, (int)id);
+            s_formatList.Add(newFormat);
+            return newFormat;
 
-    /// <summary>
-    ///  Ensures that we have enough room in our format list
-    /// </summary>
-    [MemberNotNull(nameof(s_formatList))]
-    private static void EnsureFormatSpace(int size)
-    {
-        if (s_formatList is null || s_formatList.Length <= s_formatCount + size)
-        {
-            int newSize = s_formatCount + 20;
-
-            Format[] newList = new Format[newSize];
-            for (int n = 0; n < s_formatCount; n++)
+            static bool TryFindFormat(
+                IReadOnlyList<PrivateOle.IDataFormat>? formats,
+                int id,
+                [NotNullWhen(true)] out PrivateOle.IDataFormat? format)
             {
-                newList[n] = s_formatList![n];
-            }
+                if (formats is not null)
+                {
+                    for (int i = 0; i < formats.Count; i++)
+                    {
+                        format = formats[i];
+                        if (format.Id == id)
+                        {
+                            return true;
+                        }
+                    }
+                }
 
-            s_formatList = newList;
+                format = null;
+                return false;
+            }
         }
     }
 
@@ -264,37 +290,28 @@ public static partial class DataFormats
     ///  Ensures that the Win32 predefined formats are setup in our format list.
     ///  This is called anytime we need to search the list
     /// </summary>
-    [MemberNotNull(nameof(s_formatList))]
+    [MemberNotNull(nameof(s_predefinedFormatList))]
     private static void EnsurePredefined()
     {
-        if (s_formatCount == 0)
+        s_predefinedFormatList ??= new Format[]
         {
-            s_formatList =
-            [
-                // Text name                  Win32 format ID
-                new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
-                new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
-                new(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
-                new(WmfConstant,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
-                new(EmfConstant,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
-                new(DifConstant,               (int)CLIPBOARD_FORMAT.CF_DIF),
-                new(TiffConstant,              (int)CLIPBOARD_FORMAT.CF_TIFF),
-                new(OemTextConstant,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
-                new(DibConstant,               (int)CLIPBOARD_FORMAT.CF_DIB),
-                new(PaletteConstant,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
-                new(PenDataConstant,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
-                new(RiffConstant,              (int)CLIPBOARD_FORMAT.CF_RIFF),
-                new(WaveAudioConstant,         (int)CLIPBOARD_FORMAT.CF_WAVE),
-                new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
-                new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
-                new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
-            ];
-
-            s_formatCount = s_formatList.Length;
-        }
-        else
-        {
-            s_formatList ??= [];
-        }
+            // Text name                   Win32 format ID
+            new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
+            new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
+            new(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
+            new(WmfConstant,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
+            new(EmfConstant,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
+            new(DifConstant,               (int)CLIPBOARD_FORMAT.CF_DIF),
+            new(TiffConstant,              (int)CLIPBOARD_FORMAT.CF_TIFF),
+            new(OemTextConstant,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
+            new(DibConstant,               (int)CLIPBOARD_FORMAT.CF_DIB),
+            new(PaletteConstant,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
+            new(PenDataConstant,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
+            new(RiffConstant,              (int)CLIPBOARD_FORMAT.CF_RIFF),
+            new(WaveAudioConstant,         (int)CLIPBOARD_FORMAT.CF_WAVE),
+            new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
+            new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
+            new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
+        };
     }
 }

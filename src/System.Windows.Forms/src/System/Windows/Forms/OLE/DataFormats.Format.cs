@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using PrivateOle = System.Private.Windows.Core.Ole;
+
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -14,7 +16,7 @@ public static partial class DataFormats
     /// <summary>
     ///  Represents a format type.
     /// </summary>
-    public class Format
+    public class Format : PrivateOle.IDataFormat
     {
         /// <summary>
         ///  Initializes a new instance of the <see cref="Format"/> class and
