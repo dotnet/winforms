@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using PrivateOle = System.Private.Windows.Core.Ole;
+using System.Private.Windows.Core.Ole;
 
 namespace System.Windows.Forms;
 
@@ -16,7 +16,7 @@ public static partial class DataFormats
     /// <summary>
     ///  Represents a format type.
     /// </summary>
-    public class Format : PrivateOle.IDataFormat
+    public class Format : IDataFormat<Format>
     {
         /// <summary>
         ///  Initializes a new instance of the <see cref="Format"/> class and
@@ -28,14 +28,10 @@ public static partial class DataFormats
             Id = id;
         }
 
-        /// <summary>
-        ///  Specifies the name of this format.
-        /// </summary>
         public string Name { get; }
 
-        /// <summary>
-        ///  Specifies the ID number for this format.
-        /// </summary>
         public int Id { get; }
+
+        static Format IDataFormat<Format>.Create(string name, int id) => new(name, id);
     }
 }

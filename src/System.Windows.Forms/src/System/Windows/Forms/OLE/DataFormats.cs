@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Private.Windows.Core.Ole;
 using Windows.Win32.System.Ole;
-using PrivateOle = System.Private.Windows.Core.Ole;
 
 namespace System.Windows.Forms;
 
@@ -144,174 +144,173 @@ public static partial class DataFormats
     /// </summary>
     public static readonly string Serializable = SerializableConstant;
 
-    private static List<PrivateOle.IDataFormat>? s_formatList;
-    private static PrivateOle.IDataFormat[]? s_predefinedFormatList;
-
-    private static readonly Lock s_internalSyncObject = new();
-
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified format.
     /// </summary>
     public static Format GetFormat(string format)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
-        return (Format)GetOrAddFormat(format, (name, id) => new Format(name, id));
+        return DataFormatsCore<Format>.GetOrAddFormat(format);
     }
 
-    private static PrivateOle.IDataFormat GetOrAddFormat(
-        string format,
-        Func<string, int, PrivateOle.IDataFormat> factory)
+    internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
     {
-        lock (s_internalSyncObject)
+        private static List<T>? s_formatList;
+        private static T[]? s_predefinedFormatList;
+
+        private static readonly Lock s_internalSyncObject = new();
+
+        internal static T GetOrAddFormat(string format)
         {
-            EnsurePredefined();
-
-            // It is much faster to do a case sensitive search here.
-            // So do the case sensitive compare first, then the expensive one.
-            if (TryFindFormat(s_predefinedFormatList, format, StringComparison.Ordinal, out var found)
-                || TryFindFormat(s_formatList, format, StringComparison.Ordinal, out found)
-                || TryFindFormat(s_predefinedFormatList, format, StringComparison.OrdinalIgnoreCase, out found)
-                || TryFindFormat(s_formatList, format, StringComparison.OrdinalIgnoreCase, out found))
+            lock (s_internalSyncObject)
             {
-                return found;
-            }
+                EnsurePredefined();
 
-            // Need to add this format string
-            uint formatId = PInvoke.RegisterClipboardFormat(format);
-            if (formatId == 0)
-            {
-                throw new Win32Exception(SR.RegisterCFFailed);
-            }
-
-            s_formatList ??= [];
-            PrivateOle.IDataFormat newFormat = factory(format, (int)formatId);
-            s_formatList.Add(newFormat);
-            return newFormat;
-        }
-
-        static bool TryFindFormat(
-            IReadOnlyList<PrivateOle.IDataFormat>? formats,
-            string name,
-            StringComparison comparison,
-            [NotNullWhen(true)] out PrivateOle.IDataFormat? format)
-        {
-            if (formats is not null)
-            {
-                for (int i = 0; i < formats.Count; i++)
+                // It is much faster to do a case sensitive search here.
+                // So do the case sensitive compare first, then the expensive one.
+                if (TryFindFormat(s_predefinedFormatList, format, StringComparison.Ordinal, out var found)
+                    || TryFindFormat(s_formatList, format, StringComparison.Ordinal, out found)
+                    || TryFindFormat(s_predefinedFormatList, format, StringComparison.OrdinalIgnoreCase, out found)
+                    || TryFindFormat(s_formatList, format, StringComparison.OrdinalIgnoreCase, out found))
                 {
-                    format = formats[i];
-                    if (string.Equals(format.Name, name, comparison))
-                    {
-                        return true;
-                    }
+                    return found;
                 }
-            }
 
-            format = null;
-            return false;
-        }
-    }
-
-    /// <summary>
-    ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
-    /// </summary>
-    public static Format GetFormat(int id) =>
-        // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
-        // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
-        // to represent format as an unsigned type.
-        GetFormat((ushort)(id & 0xFFFF));
-
-    /// <inheritdoc cref="GetFormat(int)"/>
-    internal static Format GetFormat(ushort id) =>
-        (Format)GetOrAddFormat(id, (name, id) => new Format(name, id));
-
-    private static unsafe PrivateOle.IDataFormat GetOrAddFormat(
-        ushort id,
-        Func<string, int, PrivateOle.IDataFormat> factory)
-    {
-        lock (s_internalSyncObject)
-        {
-            EnsurePredefined();
-
-            if (TryFindFormat(s_predefinedFormatList, id, out PrivateOle.IDataFormat? found)
-                || TryFindFormat(s_formatList, id, out found))
-            {
-                return found;
-            }
-
-            // The max length of the name of clipboard formats is equal to the max length
-            // of a Win32 Atom of 255 chars. An additional null terminator character is added,
-            // giving a required capacity of 256 chars.
-
-            string? name = null;
-            Span<char> buffer = stackalloc char[256];
-            fixed (char* pBuffer = buffer)
-            {
-                int length = PInvoke.GetClipboardFormatName(id, pBuffer, 256);
-                if (length != 0)
+                // Need to add this format string
+                uint formatId = PInvoke.RegisterClipboardFormat(format);
+                if (formatId == 0)
                 {
-                    name = buffer[..length].ToString();
+                    throw new Win32Exception(SR.RegisterCFFailed);
                 }
+
+                s_formatList ??= [];
+                T newFormat = T.Create(format, (int)formatId);
+                s_formatList.Add(newFormat);
+                return newFormat;
             }
-
-            // This can happen if windows adds a standard format that we don't know about,
-            // so we should play it safe.
-            name ??= $"Format{id}";
-
-            s_formatList ??= [];
-            PrivateOle.IDataFormat newFormat = factory(name, (int)id);
-            s_formatList.Add(newFormat);
-            return newFormat;
 
             static bool TryFindFormat(
-                IReadOnlyList<PrivateOle.IDataFormat>? formats,
-                int id,
-                [NotNullWhen(true)] out PrivateOle.IDataFormat? format)
+                IReadOnlyList<T>? formats,
+                string name,
+                StringComparison comparison,
+                [NotNullWhen(true)] out T? format)
             {
                 if (formats is not null)
                 {
                     for (int i = 0; i < formats.Count; i++)
                     {
                         format = formats[i];
-                        if (format.Id == id)
+                        if (string.Equals(format.Name, name, comparison))
                         {
                             return true;
                         }
                     }
                 }
 
-                format = null;
+                format = default;
                 return false;
             }
         }
     }
 
     /// <summary>
-    ///  Ensures that the Win32 predefined formats are setup in our format list.
-    ///  This is called anytime we need to search the list
+    ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    [MemberNotNull(nameof(s_predefinedFormatList))]
-    private static void EnsurePredefined()
+    public static Format GetFormat(int id) => DataFormatsCore<Format>.GetOrAddFormat(id);
+
+    internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
     {
-        s_predefinedFormatList ??= new Format[]
+        internal static unsafe T GetOrAddFormat(int id)
         {
-            // Text name                   Win32 format ID
-            new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
-            new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
-            new(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
-            new(WmfConstant,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
-            new(EmfConstant,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
-            new(DifConstant,               (int)CLIPBOARD_FORMAT.CF_DIF),
-            new(TiffConstant,              (int)CLIPBOARD_FORMAT.CF_TIFF),
-            new(OemTextConstant,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
-            new(DibConstant,               (int)CLIPBOARD_FORMAT.CF_DIB),
-            new(PaletteConstant,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
-            new(PenDataConstant,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
-            new(RiffConstant,              (int)CLIPBOARD_FORMAT.CF_RIFF),
-            new(WaveAudioConstant,         (int)CLIPBOARD_FORMAT.CF_WAVE),
-            new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
-            new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
-            new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
-        };
+            // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
+            // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
+            // to represent format as an unsigned type.
+            ushort shortId = (ushort)(id & 0xFFFF);
+
+            lock (s_internalSyncObject)
+            {
+                EnsurePredefined();
+
+                if (TryFindFormat(s_predefinedFormatList, shortId, out T? found)
+                    || TryFindFormat(s_formatList, shortId, out found))
+                {
+                    return found;
+                }
+
+                // The max length of the name of clipboard formats is equal to the max length
+                // of a Win32 Atom of 255 chars. An additional null terminator character is added,
+                // giving a required capacity of 256 chars.
+
+                string? name = null;
+                Span<char> buffer = stackalloc char[256];
+                fixed (char* pBuffer = buffer)
+                {
+                    int length = PInvoke.GetClipboardFormatName(shortId, pBuffer, 256);
+                    if (length != 0)
+                    {
+                        name = buffer[..length].ToString();
+                    }
+                }
+
+                // This can happen if windows adds a standard format that we don't know about,
+                // so we should play it safe.
+                name ??= $"Format{shortId}";
+
+                s_formatList ??= [];
+                T newFormat = T.Create(name, shortId);
+                s_formatList.Add(newFormat);
+                return newFormat;
+
+                static bool TryFindFormat(
+                    IReadOnlyList<T>? formats,
+                    int id,
+                    [NotNullWhen(true)] out T? format)
+                {
+                    if (formats is not null)
+                    {
+                        for (int i = 0; i < formats.Count; i++)
+                        {
+                            format = formats[i];
+                            if (format.Id == id)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    format = default;
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Ensures that the Win32 predefined formats are setup in our format list.
+        ///  This is called anytime we need to search the list
+        /// </summary>
+        [MemberNotNull(nameof(s_predefinedFormatList))]
+        private static void EnsurePredefined()
+        {
+            s_predefinedFormatList ??=
+            [
+                // Text name                        Win32 format ID
+                T.Create(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
+                T.Create(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
+                T.Create(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
+                T.Create(WmfConstant,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
+                T.Create(EmfConstant,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
+                T.Create(DifConstant,               (int)CLIPBOARD_FORMAT.CF_DIF),
+                T.Create(TiffConstant,              (int)CLIPBOARD_FORMAT.CF_TIFF),
+                T.Create(OemTextConstant,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
+                T.Create(DibConstant,               (int)CLIPBOARD_FORMAT.CF_DIB),
+                T.Create(PaletteConstant,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
+                T.Create(PenDataConstant,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
+                T.Create(RiffConstant,              (int)CLIPBOARD_FORMAT.CF_RIFF),
+                T.Create(WaveAudioConstant,         (int)CLIPBOARD_FORMAT.CF_WAVE),
+                T.Create(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
+                T.Create(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
+                T.Create(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
+            ];
+        }
     }
 }
