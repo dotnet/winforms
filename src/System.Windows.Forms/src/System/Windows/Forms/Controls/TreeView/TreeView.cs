@@ -1916,10 +1916,6 @@ public partial class TreeView : Control
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)_indent);
         }
-        else if (ScaleHelper.IsScalingRequired)
-        {
-            PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)ScaleHelper.ScaleToInitialSystemDpi(DefaultTreeViewIndent));
-        }
 
         if (_itemHeight != -1)
         {
