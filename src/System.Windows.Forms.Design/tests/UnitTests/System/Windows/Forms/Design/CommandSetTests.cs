@@ -27,19 +27,20 @@ public class CommandSetTests
         mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(mockSelectionService.Object);
         mockSite.Setup(s => s.GetService(typeof(IDictionaryService))).Returns(mockDictionaryService.Object);
 
-        CommandSet commandSet = new(mockSite.Object);
+        using (CommandSet commandSet = new(mockSite.Object))
+        {
+            commandSet.Dispose();
 
-        commandSet.Dispose();
+            mockMenuCommandService.Verify(m => m.RemoveCommand(It.IsAny<MenuCommand>()), Times.AtLeastOnce);
+            mockEventHandlerService.VerifyRemove(e => e.EventHandlerChanged -= It.IsAny<EventHandler>(), Times.Once);
+            mockDesignerHost.VerifyRemove(h => h.Activated -= It.IsAny<EventHandler>(), Times.Once);
+            mockSelectionService.VerifyRemove(s => s.SelectionChanged -= It.IsAny<EventHandler>(), Times.Once);
 
-        mockMenuCommandService.Verify(m => m.RemoveCommand(It.IsAny<MenuCommand>()), Times.AtLeastOnce);
-        mockEventHandlerService.VerifyRemove(e => e.EventHandlerChanged -= It.IsAny<EventHandler>(), Times.Once);
-        mockDesignerHost.VerifyRemove(h => h.Activated -= It.IsAny<EventHandler>(), Times.Once);
-        mockSelectionService.VerifyRemove(s => s.SelectionChanged -= It.IsAny<EventHandler>(), Times.Once);
+            dynamic accessor = commandSet.TestAccessor().Dynamic;
 
-        dynamic accessor = commandSet.TestAccessor().Dynamic;
-
-        ((object)accessor.SelectionService).Should().BeNull();
-        ((object)accessor.BehaviorService).Should().BeNull();
-        ((object)accessor._menuService).Should().BeNull();
+            ((object)accessor.SelectionService).Should().BeNull();
+            ((object)accessor.BehaviorService).Should().BeNull();
+            ((object)accessor._menuService).Should().BeNull();
+        }
     }
 }
