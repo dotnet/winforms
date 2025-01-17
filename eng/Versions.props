@@ -13,37 +13,37 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-alpha.1.25065.17</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>10.0.0-alpha.1.25065.17</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>10.0.0-alpha.1.25065.17</SystemDirectoryServicesPackageVersion>
-    <SystemFormatsNrbfPackageVersion>10.0.0-alpha.1.25065.17</SystemFormatsNrbfPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>10.0.0-alpha.1.25065.17</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>10.0.0-alpha.1.25065.17</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOHashingPackageVersion>10.0.0-alpha.1.25065.17</SystemIOHashingPackageVersion>
-    <SystemIOPackagingPackageVersion>10.0.0-alpha.1.25065.17</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-alpha.1.25066.14</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>10.0.0-alpha.1.25066.14</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>10.0.0-alpha.1.25066.14</SystemDirectoryServicesPackageVersion>
+    <SystemFormatsNrbfPackageVersion>10.0.0-alpha.1.25066.14</SystemFormatsNrbfPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>10.0.0-alpha.1.25066.14</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>10.0.0-alpha.1.25066.14</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOHashingPackageVersion>10.0.0-alpha.1.25066.14</SystemIOHashingPackageVersion>
+    <SystemIOPackagingPackageVersion>10.0.0-alpha.1.25066.14</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>10.0.0-alpha.1.25065.17</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>10.0.0-alpha.1.25066.14</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-alpha.1.25065.17</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>10.0.0-alpha.1.25065.17</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.0-alpha.1.25065.17</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>10.0.0-alpha.1.25065.17</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.0-alpha.1.25065.17</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>10.0.0-alpha.1.25065.17</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-alpha.1.25065.17</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>10.0.0-alpha.1.25065.17</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-alpha.1.25065.17</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>10.0.0-alpha.1.25065.17</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>10.0.0-alpha.1.25065.17</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>10.0.0-alpha.1.25065.17</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25065.17</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25065.17</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25065.17</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-alpha.1.25066.14</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>10.0.0-alpha.1.25066.14</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.0-alpha.1.25066.14</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>10.0.0-alpha.1.25066.14</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>10.0.0-alpha.1.25066.14</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>10.0.0-alpha.1.25066.14</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-alpha.1.25066.14</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>10.0.0-alpha.1.25066.14</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-alpha.1.25066.14</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>10.0.0-alpha.1.25066.14</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>10.0.0-alpha.1.25066.14</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>10.0.0-alpha.1.25066.14</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25066.14</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25066.14</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-alpha.1.25066.14</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
