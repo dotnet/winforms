@@ -104,7 +104,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        public void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, input);
@@ -166,7 +166,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringBoolObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        public void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, autoConvert, input);

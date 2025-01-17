@@ -158,7 +158,7 @@ public class LabelAccessibleObjectTests
     [WinFormsFact]
     public void LabelAccessibleObject_ThrowsArgumentNullException_WhenOwnerIsNull()
     {
-        Action action = () => new Label.LabelAccessibleObject(null);
+        Action action = () => new LabelAccessibleObject(null);
 
         action.Should().Throw<ArgumentNullException>();
     }

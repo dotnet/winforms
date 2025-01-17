@@ -241,7 +241,7 @@ public partial class MainForm : Form
     {
         MinimumSize = default;
         Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
-        Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
+        Debug.WriteLine($"Default font: {DefaultFont}", nameof(MainForm));
 
         List<Button> buttons = [];
         foreach (Control control in overarchingFlowLayoutPanel.Controls)

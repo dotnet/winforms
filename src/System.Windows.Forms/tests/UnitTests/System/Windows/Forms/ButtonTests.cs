@@ -1002,7 +1002,7 @@ public class ButtonTests : AbstractButtonBaseTests
         };
 
         Assert.False(control.IsHandleCreated);
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
         Assert.Equal(AccessibleStates.None, instance.State);
@@ -1023,7 +1023,7 @@ public class ButtonTests : AbstractButtonBaseTests
 
         control.CreateControl();
         Assert.True(control.IsHandleCreated);
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
         Assert.Equal(AccessibleStates.Focusable, instance.State);
@@ -1057,7 +1057,7 @@ public class ButtonTests : AbstractButtonBaseTests
         Assert.Equal(createControl, control.IsHandleCreated);
 
         control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
         Assert.Equal(expectedState, instance.State);
@@ -1079,7 +1079,7 @@ public class ButtonTests : AbstractButtonBaseTests
 
         control.CreateControl();
         Assert.True(control.IsHandleCreated);
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
         Assert.Equal(AccessibleStates.Focusable, instance.State);
@@ -1100,7 +1100,7 @@ public class ButtonTests : AbstractButtonBaseTests
         };
 
         Assert.False(control.IsHandleCreated);
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         Assert.NotNull(instance);
         Assert.Same(control, instance.Owner);
         Assert.Equal(AccessibleStates.None, instance.State);
@@ -1127,7 +1127,7 @@ public class ButtonTests : AbstractButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         instance.DoDefaultAction();
         Assert.Equal(1, callCount);
         Assert.True(control.IsHandleCreated);
@@ -1149,7 +1149,7 @@ public class ButtonTests : AbstractButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        Button.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<Button.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+        ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsAssignableFrom<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
         instance.DoDefaultAction();
         Assert.Equal(0, callCount);
         Assert.False(control.IsHandleCreated);
@@ -3664,13 +3664,13 @@ public class ButtonTests : AbstractButtonBaseTests
     [InlineData(-1)]
     [InlineData(0)]
     [InlineData(1)]
-    public void Button_Flat_ValidBorder(int borderSize) => base.ButtonBase_FlatStyle_ValidFlatButtonBorder(borderSize);
+    public void Button_Flat_ValidBorder(int borderSize) => ButtonBase_FlatStyle_ValidFlatButtonBorder(borderSize);
 
     [WinFormsTheory]
     [InlineData(255, 0, 0)]
     [InlineData(0, 255, 0)]
     [InlineData(0, 0, 255)]
-    public void Button_Flat_ProperColor(int red, int green, int blue) => base.ButtonBase_FlatStyle_ProperFlatButtonColor(red, green, blue);
+    public void Button_Flat_ProperColor(int red, int green, int blue) => ButtonBase_FlatStyle_ProperFlatButtonColor(red, green, blue);
 
     protected override ButtonBase CreateButton() => new SubButton();
 

@@ -58,7 +58,7 @@ public partial class MainForm : Form
     }
 
     // - When the selection changes this sets the PropertyGrid's selected component
-    private void OnSelectionChanged(object sender, System.EventArgs e)
+    private void OnSelectionChanged(object sender, EventArgs e)
     {
         if (_selectionService is null)
             return;
@@ -90,10 +90,10 @@ public partial class MainForm : Form
                 surface.UseSnapLines();
                 break;
             case 2:
-                surface.UseGrid(new System.Drawing.Size(16, 16));
+                surface.UseGrid(new Size(16, 16));
                 break;
             case 3:
-                surface.UseGridWithoutSnapping(new System.Drawing.Size(32, 32));
+                surface.UseGridWithoutSnapping(new Size(32, 32));
                 break;
             case 4:
                 surface.UseNoGuides();

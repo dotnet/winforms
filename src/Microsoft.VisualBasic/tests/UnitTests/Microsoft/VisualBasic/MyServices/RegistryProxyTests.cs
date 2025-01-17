@@ -11,12 +11,12 @@ public class RegistryProxyTests
     public void Properties()
     {
         var registry = (new ServerComputer()).Registry;
-        Assert.Equal(Microsoft.Win32.Registry.CurrentUser, registry.CurrentUser);
-        Assert.Equal(Microsoft.Win32.Registry.LocalMachine, registry.LocalMachine);
-        Assert.Equal(Microsoft.Win32.Registry.ClassesRoot, registry.ClassesRoot);
-        Assert.Equal(Microsoft.Win32.Registry.Users, registry.Users);
-        Assert.Equal(Microsoft.Win32.Registry.PerformanceData, registry.PerformanceData);
-        Assert.Equal(Microsoft.Win32.Registry.CurrentConfig, registry.CurrentConfig);
+        Assert.Equal(Win32.Registry.CurrentUser, registry.CurrentUser);
+        Assert.Equal(Win32.Registry.LocalMachine, registry.LocalMachine);
+        Assert.Equal(Win32.Registry.ClassesRoot, registry.ClassesRoot);
+        Assert.Equal(Win32.Registry.Users, registry.Users);
+        Assert.Equal(Win32.Registry.PerformanceData, registry.PerformanceData);
+        Assert.Equal(Win32.Registry.CurrentConfig, registry.CurrentConfig);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class RegistryProxyTests
         string valueName = GetUniqueName();
         var registry = (new ServerComputer()).Registry;
         Assert.Throws<ArgumentException>(() => registry.SetValue(keyName, valueName, ""));
-        Assert.Throws<ArgumentException>(() => registry.SetValue(keyName, valueName, "", Microsoft.Win32.RegistryValueKind.String));
+        Assert.Throws<ArgumentException>(() => registry.SetValue(keyName, valueName, "", Win32.RegistryValueKind.String));
     }
 
     private static string GetUniqueName() => Guid.NewGuid().ToString("D");
