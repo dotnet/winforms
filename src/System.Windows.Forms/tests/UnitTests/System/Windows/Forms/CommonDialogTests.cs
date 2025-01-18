@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Reflection;
-using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 
 namespace System.Windows.Forms.Tests;
@@ -116,29 +115,32 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
     {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+        Task.Run(() =>
         {
-            bool runDialogResult = bool.Parse(runDialogResultString);
-            DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-            Application.EnableVisualStyles();
-
-            using SubCommonDialog dialog = new()
+            try
             {
-                RunDialogResult = runDialogResult
-            };
-            var owner = new Mock<IWin32Window>(MockBehavior.Strict);
-            owner
-                .Setup(o => o.Handle)
-                .Returns(IntPtr.Zero);
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
-        }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+                Application.EnableVisualStyles();
+
+                using SubCommonDialog dialog = new()
+                {
+                    RunDialogResult = runDialogResultParam
+                };
+                var owner = new Mock<IWin32Window>(MockBehavior.Strict);
+                owner
+            .Setup(o => o.Handle)
+            .Returns(IntPtr.Zero);
+                Assert.Equal(expectedDialogResultParam, dialog.ShowDialog(owner.Object));
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyles.VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsTheory]
@@ -154,26 +156,29 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
     {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+        Task.Run(() =>
         {
-            bool runDialogResult = bool.Parse(runDialogResultString);
-            DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-            Application.EnableVisualStyles();
-
-            using SubCommonDialog dialog = new()
+            try
             {
-                RunDialogResult = runDialogResult
-            };
-            using Control owner = new();
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-        }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+                Application.EnableVisualStyles();
+
+                using SubCommonDialog dialog = new()
+                {
+                    RunDialogResult = runDialogResultParam
+                };
+                using Control owner = new();
+                Assert.Equal(expectedDialogResultParam, dialog.ShowDialog(owner));
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyles.VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsTheory]
@@ -190,27 +195,30 @@ public class CommonDialogTests
         Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
     {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+        Task.Run(() =>
         {
-            bool runDialogResult = bool.Parse(runDialogResultString);
-            DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-
-            Application.EnableVisualStyles();
-
-            using SubCommonDialog dialog = new()
+            try
             {
-                RunDialogResult = runDialogResult
-            };
-            using Control owner = new();
-            Assert.NotEqual(IntPtr.Zero, owner.Handle);
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-        }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+                Application.EnableVisualStyles();
+
+                using SubCommonDialog dialog = new()
+                {
+                    RunDialogResult = runDialogResultParam
+                };
+                using Control owner = new();
+                Assert.NotEqual(IntPtr.Zero, owner.Handle);
+                Assert.Equal(expectedDialogResultParam, dialog.ShowDialog(owner));
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyles.VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsFact]

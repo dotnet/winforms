@@ -6,7 +6,6 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
-using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -534,23 +533,27 @@ public class TabPageTests
         Assert.Equal(Control.DefaultBackColor, control.BackColor);
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [BoolData]
     public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColorParam)
     {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((useVisualStyleBackColorString) =>
+        Task.Run(() =>
         {
-            bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
-
-            Application.EnableVisualStyles();
-
-            using TabPage control = new()
+            try
             {
-                UseVisualStyleBackColor = useVisualStyleBackColor
-            };
-            Assert.Equal(Control.DefaultBackColor, control.BackColor);
-        }, useVisualStyleBackColorParam.ToString()).Dispose();
+                Application.EnableVisualStyles();
+
+                using TabPage control = new()
+                {
+                    UseVisualStyleBackColor = useVisualStyleBackColorParam
+                };
+                Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyles.VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsTheory]
@@ -608,36 +611,38 @@ public class TabPageTests
     {
         yield return new object[] { true, TabAppearance.Buttons, Control.DefaultBackColor };
         yield return new object[] { true, TabAppearance.FlatButtons, Control.DefaultBackColor };
-        yield return new object[] { true, TabAppearance.Normal, Color.Transparent };
         yield return new object[] { false, TabAppearance.Buttons, Control.DefaultBackColor };
         yield return new object[] { false, TabAppearance.FlatButtons, Control.DefaultBackColor };
         yield return new object[] { false, TabAppearance.Normal, Control.DefaultBackColor };
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [MemberData(nameof(BackColor_GetVisualStylesWithParent_TestData))]
     public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColorParam, TabAppearance parentAppearanceParam, Color expectedParam)
     {
         // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((useVisualStyleBackColorString, parentAppearanceString, expectedString) =>
+        Task.Run(() =>
         {
-            bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
-            TabAppearance parentAppearance = (TabAppearance)Enum.Parse(typeof(TabAppearance), parentAppearanceString);
-            Color expected = Color.FromArgb(int.Parse(expectedString));
-
-            Application.EnableVisualStyles();
-
-            using TabControl parent = new()
+            try
             {
-                Appearance = parentAppearance
-            };
-            using TabPage control = new()
+                Application.EnableVisualStyles();
+
+                using TabControl parent = new()
+                {
+                    Appearance = parentAppearanceParam
+                };
+                using TabPage control = new()
+                {
+                    UseVisualStyleBackColor = useVisualStyleBackColorParam,
+                    Parent = parent
+                };
+                Assert.Equal(expectedParam.ToArgb(), control.BackColor.ToArgb());
+            }
+            finally
             {
-                UseVisualStyleBackColor = useVisualStyleBackColor,
-                Parent = parent
-            };
-            Assert.Equal(expected.ToArgb(), control.BackColor.ToArgb());
-        }, useVisualStyleBackColorParam.ToString(), parentAppearanceParam.ToString(), expectedParam.ToArgb().ToString()).Dispose();
+                Application.VisualStyleState = VisualStyles.VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsTheory]

@@ -1,17 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Microsoft.DotNet.RemoteExecutor;
 using static System.Windows.Forms.Application;
 
 namespace System.Windows.Forms.Tests;
 
 public class ParkingWindowTests
 {
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void ParkingWindow_DoesNotThrowOnGarbageCollecting()
     {
-        using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+        Task.Run(() =>
         {
             Control.CheckForIllegalCrossThreadCalls = true;
 
@@ -28,10 +27,11 @@ public class ParkingWindowTests
             {
                 Assert.True(ex is null, $"Expected no exception, but got: {ex.Message}"); // Actually need to check whether GC.Collect() does not throw exception.
             }
-        });
-
-        // verify the remote process succeeded
-        Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
+            finally
+            {
+                Control.CheckForIllegalCrossThreadCalls = true;
+            }
+        }).Wait();
     }
 
     private static Form InitFormWithControlToGarbageCollect()

@@ -72,32 +72,46 @@ public class ApplicationTests
         Assert.Throws<ArgumentNullException>("value", () => Application.CurrentCulture = null);
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
     {
-        RemoteExecutor.Invoke(() =>
+        Task.Run(() =>
         {
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles);
-            Assert.True(Application.RenderWithVisualStyles);
-        }).Dispose();
+            try
+            {
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles);
+                Assert.True(Application.RenderWithVisualStyles);
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsFact]
     public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
     {
         // This is not a recommended scenario per
         // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
         // EnableVisualStyles should be executed before any control-related code is.
-        RemoteExecutor.Invoke(() =>
+        Task.Run(() =>
         {
-            Assert.False(Application.UseVisualStyles);
-            Assert.False(Application.RenderWithVisualStyles);
+            try
+            {
+                Assert.False(Application.UseVisualStyles);
+                Assert.False(Application.RenderWithVisualStyles);
 
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on WinForms app. This is a high priority bug and must be looked into");
-            Assert.True(Application.RenderWithVisualStyles);
-        }).Dispose();
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on WinForms app. This is a high priority bug and must be looked into");
+                Assert.True(Application.RenderWithVisualStyles);
+            }
+            finally
+            {
+                Application.VisualStyleState = VisualStyleState.NoneEnabled;
+            }
+        }).Wait();
     }
 
     [WinFormsFact]
@@ -115,27 +129,26 @@ public class ApplicationTests
         Assert.Equal(state, Application.VisualStyleState);
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+    [WinFormsTheory]
     [EnumData<VisualStyleState>]
     [InvalidEnumData<VisualStyleState>]
     public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)
     {
         // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
         // sends WM_THEMECHANGED to all controls, which can cause a deadlock if another test fails.
-        RemoteExecutor.Invoke((valueString) =>
+        Task.Run(() =>
         {
-            VisualStyleState value = Enum.Parse<VisualStyleState>(valueString);
             VisualStyleState state = Application.VisualStyleState;
             try
             {
-                Application.VisualStyleState = value;
-                Assert.Equal(value, Application.VisualStyleState);
+                Application.VisualStyleState = valueParam;
+                Assert.Equal(valueParam, Application.VisualStyleState);
             }
             finally
             {
                 Application.VisualStyleState = state;
             }
-        }, valueParam.ToString());
+        }).Wait();
     }
 
     [Fact]
