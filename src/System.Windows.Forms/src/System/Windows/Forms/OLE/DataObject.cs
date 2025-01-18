@@ -175,12 +175,12 @@ public unsafe partial class DataObject :
     ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
     /// </summary>
     private static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
-        || format is DataFormatConstants.Text
-            or DataFormatConstants.UnicodeText
-            or DataFormatConstants.Rtf
-            or DataFormatConstants.Html
-            or DataFormatConstants.OemText
-            or DataFormatConstants.FileDrop
+        || format is DataFormatNames.Text
+            or DataFormatNames.UnicodeText
+            or DataFormatNames.Rtf
+            or DataFormatNames.Html
+            or DataFormatNames.OemText
+            or DataFormatNames.FileDrop
             or CF_DEPRECATED_FILENAME
             or CF_DEPRECATED_FILENAMEW;
 
@@ -196,21 +196,21 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     private static bool RestrictDeserializationToSafeTypes(string format) =>
-        format is DataFormatConstants.String
+        format is DataFormatNames.String
             or BitmapFullName
-            or DataFormatConstants.Csv
-            or DataFormatConstants.Dib
-            or DataFormatConstants.Dif
-            or DataFormatConstants.Locale
-            or DataFormatConstants.PenData
-            or DataFormatConstants.Riff
-            or DataFormatConstants.SymbolicLink
-            or DataFormatConstants.Tiff
-            or DataFormatConstants.WaveAudio
-            or DataFormatConstants.Bitmap
-            or DataFormatConstants.Emf
-            or DataFormatConstants.Palette
-            or DataFormatConstants.Wmf;
+            or DataFormatNames.Csv
+            or DataFormatNames.Dib
+            or DataFormatNames.Dif
+            or DataFormatNames.Locale
+            or DataFormatNames.PenData
+            or DataFormatNames.Riff
+            or DataFormatNames.SymbolicLink
+            or DataFormatNames.Tiff
+            or DataFormatNames.WaveAudio
+            or DataFormatNames.Bitmap
+            or DataFormatNames.Emf
+            or DataFormatNames.Palette
+            or DataFormatNames.Wmf;
 
     #region IDataObject
     [Obsolete(
@@ -304,11 +304,11 @@ public unsafe partial class DataObject :
             ? _innerData.TryGetData(format, autoConvert, out data)
             : _innerData.TryGetData(format, resolver, autoConvert, out data);
 
-    public virtual bool ContainsAudio() => GetDataPresent(DataFormatConstants.WaveAudio, autoConvert: false);
+    public virtual bool ContainsAudio() => GetDataPresent(DataFormatNames.WaveAudio, autoConvert: false);
 
-    public virtual bool ContainsFileDropList() => GetDataPresent(DataFormatConstants.FileDrop, autoConvert: true);
+    public virtual bool ContainsFileDropList() => GetDataPresent(DataFormatNames.FileDrop, autoConvert: true);
 
-    public virtual bool ContainsImage() => GetDataPresent(DataFormatConstants.Bitmap, autoConvert: true);
+    public virtual bool ContainsImage() => GetDataPresent(DataFormatNames.Bitmap, autoConvert: true);
 
     public virtual bool ContainsText() => ContainsText(TextDataFormat.UnicodeText);
 
@@ -325,7 +325,7 @@ public unsafe partial class DataObject :
     public virtual StringCollection GetFileDropList()
     {
         StringCollection dropList = [];
-        if (GetData(DataFormatConstants.FileDrop, autoConvert: true) is string[] strings)
+        if (GetData(DataFormatNames.FileDrop, autoConvert: true) is string[] strings)
         {
             dropList.AddRange(strings);
         }
@@ -348,16 +348,16 @@ public unsafe partial class DataObject :
     public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 
     public virtual void SetAudio(Stream audioStream) =>
-        SetData(DataFormatConstants.WaveAudio, autoConvert: false, audioStream.OrThrowIfNull());
+        SetData(DataFormatNames.WaveAudio, autoConvert: false, audioStream.OrThrowIfNull());
 
     public virtual void SetFileDropList(StringCollection filePaths)
     {
         string[] strings = new string[filePaths.OrThrowIfNull().Count];
         filePaths.CopyTo(strings, 0);
-        SetData(DataFormatConstants.FileDrop, true, strings);
+        SetData(DataFormatNames.FileDrop, true, strings);
     }
 
-    public virtual void SetImage(Image image) => SetData(DataFormatConstants.Bitmap, true, image.OrThrowIfNull());
+    public virtual void SetImage(Image image) => SetData(DataFormatNames.Bitmap, true, image.OrThrowIfNull());
 
     public virtual void SetText(string textData) => SetText(textData, TextDataFormat.UnicodeText);
 
@@ -410,18 +410,18 @@ public unsafe partial class DataObject :
 
         static bool IsValidPredefinedFormatTypeCombination(string format) => format switch
         {
-            DataFormatConstants.Text
-                or DataFormatConstants.UnicodeText
-                or DataFormatConstants.String
-                or DataFormatConstants.Rtf
-                or DataFormatConstants.Html
-                or DataFormatConstants.OemText => typeof(string) == typeof(T),
+            DataFormatNames.Text
+                or DataFormatNames.UnicodeText
+                or DataFormatNames.String
+                or DataFormatNames.Rtf
+                or DataFormatNames.Html
+                or DataFormatNames.OemText => typeof(string) == typeof(T),
 
-            DataFormatConstants.FileDrop
+            DataFormatNames.FileDrop
                 or CF_DEPRECATED_FILENAME
                 or CF_DEPRECATED_FILENAMEW => typeof(string[]) == typeof(T),
 
-            DataFormatConstants.Bitmap or BitmapFullName =>
+            DataFormatNames.Bitmap or BitmapFullName =>
                 typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T),
             _ => true
         };
@@ -429,11 +429,11 @@ public unsafe partial class DataObject :
 
     private static string ConvertToDataFormats(TextDataFormat format) => format switch
     {
-        TextDataFormat.UnicodeText => DataFormatConstants.UnicodeText,
-        TextDataFormat.Rtf => DataFormatConstants.Rtf,
-        TextDataFormat.Html => DataFormatConstants.Html,
-        TextDataFormat.CommaSeparatedValue => DataFormatConstants.Csv,
-        _ => DataFormatConstants.UnicodeText,
+        TextDataFormat.UnicodeText => DataFormatNames.UnicodeText,
+        TextDataFormat.Rtf => DataFormatNames.Rtf,
+        TextDataFormat.Html => DataFormatNames.Html,
+        TextDataFormat.CommaSeparatedValue => DataFormatNames.Csv,
+        _ => DataFormatNames.UnicodeText,
     };
 
     /// <summary>
@@ -442,22 +442,22 @@ public unsafe partial class DataObject :
     private static string[]? GetMappedFormats(string format) => format switch
     {
         null => null,
-        DataFormatConstants.Text or DataFormatConstants.UnicodeText or DataFormatConstants.String =>
+        DataFormatNames.Text or DataFormatNames.UnicodeText or DataFormatNames.String =>
             [
-                DataFormatConstants.String,
-                DataFormatConstants.UnicodeText,
-                DataFormatConstants.Text
+                DataFormatNames.String,
+                DataFormatNames.UnicodeText,
+                DataFormatNames.Text
             ],
-        DataFormatConstants.FileDrop or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
+        DataFormatNames.FileDrop or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
             [
-                DataFormatConstants.FileDrop,
+                DataFormatNames.FileDrop,
                 CF_DEPRECATED_FILENAMEW,
                 CF_DEPRECATED_FILENAME
             ],
-        DataFormatConstants.Bitmap or BitmapFullName =>
+        DataFormatNames.Bitmap or BitmapFullName =>
             [
                 BitmapFullName,
-                DataFormatConstants.Bitmap
+                DataFormatNames.Bitmap
             ],
         _ => [format]
     };

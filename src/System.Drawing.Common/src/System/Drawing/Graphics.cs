@@ -1192,7 +1192,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void Clear(Color color) => CheckStatus(PInvokeGdiPlus.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
 
 #if NET9_0_OR_GREATER
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
     public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
         FillRoundedRectangle(brush, (RectangleF)rect, radius);
 

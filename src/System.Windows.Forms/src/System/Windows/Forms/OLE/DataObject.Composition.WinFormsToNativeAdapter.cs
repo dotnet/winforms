@@ -307,24 +307,24 @@ public unsafe partial class DataObject
             {
                 _ when data is Stream dataStream
                     => SaveStreamToHGLOBAL(ref medium.hGlobal, dataStream),
-                DataFormatConstants.Text or DataFormatConstants.Rtf or DataFormatConstants.OemText
+                DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText
                     => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: false),
-                DataFormatConstants.Html
+                DataFormatNames.Html
                     => SaveHtmlToHGLOBAL(medium.hGlobal, data.ToString()!),
-                DataFormatConstants.UnicodeText
+                DataFormatNames.UnicodeText
                     => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: true),
-                DataFormatConstants.FileDrop
+                DataFormatNames.FileDrop
                     => SaveFileListToHGLOBAL(medium.hGlobal, (string[])data),
                 CF_DEPRECATED_FILENAME
                     => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: false),
                 CF_DEPRECATED_FILENAMEW
                     => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: true),
-                DataFormatConstants.Dib when data is Image
+                DataFormatNames.Dib when data is Image
                     // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
                     // an HBITMAP and publish a Dib, we don't need to support this.
                     => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-                _ when format == DataFormatConstants.Serializable || data is ISerializable || data.GetType().IsSerializable
+                _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
                     => SaveObjectToHGLOBAL(ref medium.hGlobal, data, RestrictDeserializationToSafeTypes(format)),
                 _ => HRESULT.E_UNEXPECTED

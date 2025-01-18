@@ -158,7 +158,7 @@ public static class Clipboard
     /// <summary>
     ///  Indicates whether there is data on the Clipboard in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
-    public static bool ContainsAudio() => ContainsData(DataFormatConstants.WaveAudio);
+    public static bool ContainsAudio() => ContainsData(DataFormatNames.WaveAudio);
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the specified format
@@ -200,7 +200,7 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves an audio stream from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Stream? GetAudioStream() => GetTypedDataIfAvailable<Stream>(DataFormatConstants.WaveAudio);
+    public static Stream? GetAudioStream() => GetTypedDataIfAvailable<Stream>(DataFormatNames.WaveAudio);
 
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
@@ -396,7 +396,7 @@ public static class Clipboard
     {
         StringCollection result = [];
 
-        if (GetTypedDataIfAvailable<string[]?>(DataFormatConstants.FileDrop) is string[] strings)
+        if (GetTypedDataIfAvailable<string[]?>(DataFormatNames.FileDrop) is string[] strings)
         {
             result.AddRange(strings);
         }
@@ -453,7 +453,7 @@ public static class Clipboard
     ///  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
     /// </summary>
     public static void SetAudio(Stream audioStream) =>
-        SetDataObject(new DataObject(DataFormatConstants.WaveAudio, audioStream.OrThrowIfNull()), copy: true);
+        SetDataObject(new DataObject(DataFormatNames.WaveAudio, audioStream.OrThrowIfNull()), copy: true);
 
     /// <summary>
     ///  Clears the Clipboard and then adds data in the specified format.
@@ -552,14 +552,14 @@ public static class Clipboard
             }
         }
 
-        SetDataObject(new DataObject(DataFormatConstants.FileDrop, autoConvert: true, filePathsArray), copy: true);
+        SetDataObject(new DataObject(DataFormatNames.FileDrop, autoConvert: true, filePathsArray), copy: true);
     }
 
     /// <summary>
     ///  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.
     /// </summary>
     public static void SetImage(Image image) =>
-        SetDataObject(new DataObject(DataFormatConstants.Bitmap, autoConvert: true, image.OrThrowIfNull()), copy: true);
+        SetDataObject(new DataObject(DataFormatNames.Bitmap, autoConvert: true, image.OrThrowIfNull()), copy: true);
 
     /// <summary>
     ///  Clears the Clipboard and then adds text data in the <see cref="TextDataFormat.UnicodeText"/> format.

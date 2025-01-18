@@ -107,11 +107,11 @@ public unsafe partial class DataObject
 
                 object? value = format switch
                 {
-                    DataFormatConstants.Text or DataFormatConstants.Rtf or DataFormatConstants.OemText =>
+                    DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                         ReadStringFromHGLOBAL(hglobal, unicode: false),
-                    DataFormatConstants.Html => ReadUtf8StringFromHGLOBAL(hglobal),
-                    DataFormatConstants.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
-                    DataFormatConstants.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
+                    DataFormatNames.Html => ReadUtf8StringFromHGLOBAL(hglobal),
+                    DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
+                    DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                     CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                     CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
                     _ => ReadObjectOrStreamFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format), resolver, legacyMode)
@@ -413,7 +413,7 @@ public unsafe partial class DataObject
             private static bool TryGetBitmapData(Com.IDataObject* dataObject, string format, [NotNullWhen(true)] out Bitmap? data)
             {
                 data = default;
-                if (format != DataFormatConstants.Bitmap)
+                if (format != DataFormatNames.Bitmap)
                 {
                     return false;
                 }

@@ -145,22 +145,22 @@ internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
         s_predefinedFormatList ??=
         [
             // Text name                                    Win32 format ID
-            T.Create(DataFormatConstants.UnicodeText,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
-            T.Create(DataFormatConstants.Text,              (int)CLIPBOARD_FORMAT.CF_TEXT),
-            T.Create(DataFormatConstants.Bitmap,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
-            T.Create(DataFormatConstants.Wmf,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
-            T.Create(DataFormatConstants.Emf,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
-            T.Create(DataFormatConstants.Dif,               (int)CLIPBOARD_FORMAT.CF_DIF),
-            T.Create(DataFormatConstants.Tiff,              (int)CLIPBOARD_FORMAT.CF_TIFF),
-            T.Create(DataFormatConstants.OemText,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
-            T.Create(DataFormatConstants.Dib,               (int)CLIPBOARD_FORMAT.CF_DIB),
-            T.Create(DataFormatConstants.Palette,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
-            T.Create(DataFormatConstants.PenData,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
-            T.Create(DataFormatConstants.Riff,              (int)CLIPBOARD_FORMAT.CF_RIFF),
-            T.Create(DataFormatConstants.WaveAudio,         (int)CLIPBOARD_FORMAT.CF_WAVE),
-            T.Create(DataFormatConstants.SymbolicLink,      (int)CLIPBOARD_FORMAT.CF_SYLK),
-            T.Create(DataFormatConstants.FileDrop,          (int)CLIPBOARD_FORMAT.CF_HDROP),
-            T.Create(DataFormatConstants.Locale,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
+            T.Create(DataFormatNames.UnicodeText,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
+            T.Create(DataFormatNames.Text,              (int)CLIPBOARD_FORMAT.CF_TEXT),
+            T.Create(DataFormatNames.Bitmap,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
+            T.Create(DataFormatNames.Wmf,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
+            T.Create(DataFormatNames.Emf,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
+            T.Create(DataFormatNames.Dif,               (int)CLIPBOARD_FORMAT.CF_DIF),
+            T.Create(DataFormatNames.Tiff,              (int)CLIPBOARD_FORMAT.CF_TIFF),
+            T.Create(DataFormatNames.OemText,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
+            T.Create(DataFormatNames.Dib,               (int)CLIPBOARD_FORMAT.CF_DIB),
+            T.Create(DataFormatNames.Palette,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
+            T.Create(DataFormatNames.PenData,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
+            T.Create(DataFormatNames.Riff,              (int)CLIPBOARD_FORMAT.CF_RIFF),
+            T.Create(DataFormatNames.WaveAudio,         (int)CLIPBOARD_FORMAT.CF_WAVE),
+            T.Create(DataFormatNames.SymbolicLink,      (int)CLIPBOARD_FORMAT.CF_SYLK),
+            T.Create(DataFormatNames.FileDrop,          (int)CLIPBOARD_FORMAT.CF_HDROP),
+            T.Create(DataFormatNames.Locale,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
         ];
     }
 }

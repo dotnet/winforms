@@ -3,7 +3,7 @@
 
 namespace System.Private.Windows.Core.Ole;
 
-internal static partial class DataFormatConstants
+internal static partial class DataFormatNames
 {
     internal const string Text = "Text";
     internal const string UnicodeText = "UnicodeText";
