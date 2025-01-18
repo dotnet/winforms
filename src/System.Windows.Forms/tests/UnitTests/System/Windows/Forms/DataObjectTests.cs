@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Private.Windows;
+using System.Private.Windows.Core.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -1210,8 +1211,8 @@ public partial class DataObjectTests
     }
 
     [Theory]
-    [InlineData("WindowsForms10PersistentObject", null)]
-    [InlineData("WindowsForms10PersistentObject", "input")]
+    [InlineData(DataFormatNames.Serializable, null)]
+    [InlineData(DataFormatNames.Serializable, "input")]
     [InlineData("something custom", null)]
     [InlineData("something custom", "input")]
     private void DataObject_SetData_InvokeStringObject_Unbounded_GetReturnsExpected(string format, string input)
@@ -1363,10 +1364,10 @@ public partial class DataObjectTests
     [InlineData("something custom", false, null)]
     [InlineData("something custom", true, "input")]
     [InlineData("something custom", true, null)]
-    [InlineData("WindowsForms10PersistentObject", false, "input")]
-    [InlineData("WindowsForms10PersistentObject", false, null)]
-    [InlineData("WindowsForms10PersistentObject", true, "input")]
-    [InlineData("WindowsForms10PersistentObject", true, null)]
+    [InlineData(DataFormatNames.Serializable, false, "input")]
+    [InlineData(DataFormatNames.Serializable, false, null)]
+    [InlineData(DataFormatNames.Serializable, true, "input")]
+    [InlineData(DataFormatNames.Serializable, true, null)]
     private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
     {
         DataObject dataObject = new();
