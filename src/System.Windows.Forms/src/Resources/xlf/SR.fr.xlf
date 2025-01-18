@@ -8714,11 +8714,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La collection est en lecture seule.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Impossible d'inscrire le format du Presse-papiers.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Impossible de créer une liste enfant pour le champ {0}.</target>

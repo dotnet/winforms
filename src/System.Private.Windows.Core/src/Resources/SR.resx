@@ -125,4 +125,7 @@
   <data name="Serialization_MissingType" xml:space="preserve">
     <value>Could not find type '{0}'.</value>
   </data>
+  <data name="RegisterCFFailed" xml:space="preserve">
+    <value>Clipboard format registration did not succeed.</value>
+  </data>
 </root>

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows.Core.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -106,11 +107,11 @@ public unsafe partial class DataObject
 
                 object? value = format switch
                 {
-                    DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant =>
+                    DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                         ReadStringFromHGLOBAL(hglobal, unicode: false),
-                    DataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
-                    DataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
-                    DataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)(nint)hglobal),
+                    DataFormatNames.Html => ReadUtf8StringFromHGLOBAL(hglobal),
+                    DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
+                    DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                     CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                     CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
                     _ => ReadObjectOrStreamFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format), resolver, legacyMode)
@@ -412,7 +413,7 @@ public unsafe partial class DataObject
             private static bool TryGetBitmapData(Com.IDataObject* dataObject, string format, [NotNullWhen(true)] out Bitmap? data)
             {
                 data = default;
-                if (format != DataFormats.BitmapConstant)
+                if (format != DataFormatNames.Bitmap)
                 {
                     return false;
                 }

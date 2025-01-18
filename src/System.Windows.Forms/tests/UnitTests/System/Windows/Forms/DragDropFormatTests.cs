@@ -24,7 +24,7 @@ public unsafe class DragDropFormatTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat("InShellDragLoop"),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat("InShellDragLoop"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = nint.Zero,
@@ -47,7 +47,7 @@ public unsafe class DragDropFormatTests
         IStream.Interface iStream = new ComManagedStream(memoryStream);
         formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat("DragContext"),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat("DragContext"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = nint.Zero,

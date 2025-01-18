@@ -8714,11 +8714,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">集合为只读。</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">剪贴板格式注册失败。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">无法创建字段 {0} 的子列表。</target>

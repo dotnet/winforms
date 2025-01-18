@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public enum TextDataFormat
 {
-    /// <inheritdoc cref="PrivateOle.TextDataFormat.Text"/>/>
+    /// <inheritdoc cref="PrivateOle.TextDataFormat.Text"/>
     Text = PrivateOle.TextDataFormat.Text,
 
     /// <inheritdoc cref="PrivateOle.TextDataFormat.UnicodeText"/>

@@ -8714,11 +8714,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Kolekce je jen pro čtení.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Registrace formátu schránky se nezdařila.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Nelze vytvořit podřízený seznam pro pole {0}.</target>

@@ -160,7 +160,7 @@ internal static unsafe class DragDropHelper
         {
             ComTypes.FORMATETC formatEtc = new()
             {
-                cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
+                cfFormat = (short)PInvokeCore.RegisterClipboardFormat(format),
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 ptd = IntPtr.Zero,
@@ -265,7 +265,7 @@ internal static unsafe class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(format),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -421,7 +421,7 @@ internal static unsafe class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat(PInvoke.CFSTR_DROPDESCRIPTION),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(PInvoke.CFSTR_DROPDESCRIPTION),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,

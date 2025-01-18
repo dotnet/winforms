@@ -8715,11 +8715,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Коллекция предназначена только для чтения.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Регистрация формата буфера обмена не удалась.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Список потомков для поля {0} создать нельзя.</target>

@@ -8714,11 +8714,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Raccolta in sola lettura.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Registrazione del formato degli Appunti non riuscita.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Impossibile creare un elenco di elementi figlio per il campo {0}.</target>
