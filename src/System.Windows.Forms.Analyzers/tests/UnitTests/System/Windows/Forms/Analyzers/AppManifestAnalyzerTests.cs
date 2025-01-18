@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.VisualBasic.Testing;
-using Xunit;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 

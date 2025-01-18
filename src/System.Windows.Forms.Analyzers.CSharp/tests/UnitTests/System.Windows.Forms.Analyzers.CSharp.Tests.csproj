@@ -34,4 +34,22 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="TestData\AvoidPassingTaskWithoutCancellationToken\AnalyzerTestCode.cs" />
+    <Compile Remove="TestData\AvoidPassingTaskWithoutCancellationToken\AsyncControl.cs" />
+    <Compile Remove="TestData\MissingPropertySerializationConfiguration\AnalyzerTestCode.cs" />
+    <Compile Remove="TestData\MissingPropertySerializationConfiguration\CodeFixTestCode.cs" />
+    <Compile Remove="TestData\MissingPropertySerializationConfiguration\FixedTestCode.cs" />
+    <Compile Remove="TestData\MissingPropertySerializationConfiguration\GlobalUsing.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestData\AvoidPassingTaskWithoutCancellationToken\AnalyzerTestCode.cs" />
+    <None Include="TestData\AvoidPassingTaskWithoutCancellationToken\AsyncControl.cs" />
+    <None Include="TestData\MissingPropertySerializationConfiguration\AnalyzerTestCode.cs" />
+    <None Include="TestData\MissingPropertySerializationConfiguration\GlobalUsing.cs" />
+    <None Include="TestData\MissingPropertySerializationConfiguration\FixedTestCode.cs" />
+    <None Include="TestData\MissingPropertySerializationConfiguration\CodeFixTestCode.cs" />
+  </ItemGroup>
+
 </Project>
