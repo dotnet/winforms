@@ -8714,11 +8714,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Sammlung ist schreibgeschützt.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Fehler beim Registrieren des Zwischenablagenformats.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">Die untergeordnete Liste für das Feld {0} kann nicht erstellt werden.</target>

@@ -8714,11 +8714,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Koleksiyon salt okunur.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Pano biçimi kaydı yapılamadı.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">{0} alanı için al liste oluşturulamıyor.</target>

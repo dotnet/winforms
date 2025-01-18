@@ -1210,8 +1210,8 @@ public partial class DataObjectTests
     }
 
     [Theory]
-    [InlineData(DataFormats.SerializableConstant, null)]
-    [InlineData(DataFormats.SerializableConstant, "input")]
+    [InlineData("WindowsForms10PersistentObject", null)]
+    [InlineData("WindowsForms10PersistentObject", "input")]
     [InlineData("something custom", null)]
     [InlineData("something custom", "input")]
     private void DataObject_SetData_InvokeStringObject_Unbounded_GetReturnsExpected(string format, string input)
@@ -1363,10 +1363,10 @@ public partial class DataObjectTests
     [InlineData("something custom", false, null)]
     [InlineData("something custom", true, "input")]
     [InlineData("something custom", true, null)]
-    [InlineData(DataFormats.SerializableConstant, false, "input")]
-    [InlineData(DataFormats.SerializableConstant, false, null)]
-    [InlineData(DataFormats.SerializableConstant, true, "input")]
-    [InlineData(DataFormats.SerializableConstant, true, null)]
+    [InlineData("WindowsForms10PersistentObject", false, "input")]
+    [InlineData("WindowsForms10PersistentObject", false, null)]
+    [InlineData("WindowsForms10PersistentObject", true, "input")]
+    [InlineData("WindowsForms10PersistentObject", true, null)]
     private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
     {
         DataObject dataObject = new();

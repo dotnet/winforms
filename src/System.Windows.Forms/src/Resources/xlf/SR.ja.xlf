@@ -8714,11 +8714,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">このコレクションは読み取り専用です。</target>
         <note />
       </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">クリップボード形式を登録することができませんでした。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RelatedListManagerChild">
         <source>Child list for field {0} cannot be created.</source>
         <target state="translated">フィールド {0} の子リストを作成できません。</target>

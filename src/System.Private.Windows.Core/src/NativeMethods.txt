@@ -5,6 +5,7 @@ BOOL
 CLIPBRD_E_BAD_DATA
 CLR_*
 CallWindowProc
+CLIPBOARD_FORMAT
 CoCreateInstance
 CombineRgn
 CopyImage
@@ -78,6 +79,7 @@ GetWindowText
 GetWindowTextLength
 GET_CLASS_LONG_INDEX
 GetClientRect
+GetClipboardFormatName
 GetClipRgn
 GetDC
 GetDCEx
@@ -171,6 +173,7 @@ PWSTR
 RealizePalette
 RECT
 REGDB_E_CLASSNOTREG
+RegisterClipboardFormat
 ReleaseDC
 RestoreDC
 RPC_E_CHANGED_MODE

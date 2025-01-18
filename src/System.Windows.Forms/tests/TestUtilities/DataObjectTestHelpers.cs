@@ -15,7 +15,7 @@ public static class DataObjectTestHelpers
     [
          DataFormats.Text,
          DataFormats.UnicodeText,
-         DataFormats.StringConstant,
+         "System.String",
          DataFormats.Rtf,
          DataFormats.Html,
          DataFormats.OemText,
