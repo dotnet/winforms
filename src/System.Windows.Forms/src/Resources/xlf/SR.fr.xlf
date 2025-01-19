@@ -7426,7 +7426,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="NotSupportedExceptionOnClipboard">
         <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
-        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <target state="translated">Le Presse-papiers contient un élément NotSupportedException qui indique l’échec de l’opération d’écriture. '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">

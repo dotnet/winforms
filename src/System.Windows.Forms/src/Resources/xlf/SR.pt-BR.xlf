@@ -7426,7 +7426,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="NotSupportedExceptionOnClipboard">
         <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
-        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <target state="translated">A área de transferência contém uma 'NotSupportedException' que indica que a operação de gravação falhou. '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
