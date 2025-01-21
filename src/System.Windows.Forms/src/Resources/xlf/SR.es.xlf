@@ -7426,7 +7426,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="NotSupportedExceptionOnClipboard">
         <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
-        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <target state="translated">El Portapapeles contiene una excepción "NotSupportedException" que indica que se produjo un error en la operación de escritura. '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">

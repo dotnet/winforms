@@ -7426,7 +7426,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="NotSupportedExceptionOnClipboard">
         <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
-        <target state="new">Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</target>
+        <target state="translated">클립보드에 쓰기 작업이 실패했음을 나타내는 'NotSupportedException'이 있습니다. '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
