@@ -45,11 +45,7 @@ public unsafe partial class DataObject :
     /// </summary>
     public DataObject(object data)
     {
-        if (data is DataObject dataObject)
-        {
-            _innerData = dataObject._innerData;
-        }
-        else if (data is IDataObject iDataObject)
+        if (data is IDataObject iDataObject)
         {
             _innerData = Composition.CreateFromWinFormsDataObject(iDataObject);
         }
