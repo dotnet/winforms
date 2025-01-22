@@ -28,7 +28,7 @@ public sealed class NotifyIconActionListTests : IDisposable
     }
 
     [Fact]
-    public void Constructor_ShouldInitializeDesigner() => _actionList.Should().NotBeNull();
+    public void Constructor_ShouldInitializeActionList() => _actionList.Should().NotBeNull();
 
     [Fact]
     public void ChooseIcon_ShouldNotBeNull()
