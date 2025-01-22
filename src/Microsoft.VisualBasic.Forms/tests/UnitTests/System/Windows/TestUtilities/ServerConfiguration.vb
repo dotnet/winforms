@@ -60,6 +60,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Me.ServerUploadUserName = serverUploadUserName
         End Sub
 
+        <JsonInclude>
         Public Property FileDownloadUrlPrefix As String
             Private Get
                 Return _fileDownloadUrlPrefix
@@ -69,6 +70,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property FileUploadUrlPrefix As String
             Private Get
                 Return _fileUploadUrlPrefix
@@ -78,6 +80,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerDownloadAllowsAnonymousUser As Boolean
             Private Get
                 Return _serverDownloadAllowsAnonymousUser
@@ -87,6 +90,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerDownloadIgnoresPasswordErrors As Boolean
             Private Get
                 Return _serverDownloadIgnoresPasswordErrors
@@ -96,6 +100,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerDownloadPassword As String
             Private Get
                 Return _serverDownloadPassword
@@ -105,6 +110,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerDownloadUserName As String
             Private Get
                 Return _serverDownloadUserName
@@ -114,6 +120,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerUploadAllowsAnonymousUser As Boolean
             Private Get
                 Return _serverUploadAllowsAnonymousUser
@@ -123,6 +130,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerUploadIgnoresPasswordErrors As Boolean
             Private Get
                 Return _serverUploadIgnoresPasswordErrors
@@ -132,6 +140,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerUploadPassword As String
             Private Get
                 Return _serverUploadPassword
@@ -141,6 +150,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Set
         End Property
 
+        <JsonInclude>
         Public Property ServerUploadUserName As String
             Private Get
                 Return _serverUploadUserName
@@ -149,6 +159,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 _serverUploadUserName = Value
             End Set
         End Property
+
+        Private Shared Function GetJsonFilePath(jsonFilePathBase As String, jsonFileName As String) As String
+            If String.IsNullOrWhiteSpace(jsonFilePathBase) Then
+                jsonFilePathBase = s_jsonFilePathBase
+            End If
+            Return Path.Combine(jsonFilePathBase, jsonFileName)
+        End Function
 
         Friend Function GetAcceptsAnonymousLogin(uploading As Boolean) As Boolean
             If uploading Then
@@ -190,9 +207,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Function
 
-        Public Shared Function ServerConfigurationLoad(Optional jsonFileName As String = JsonDefaultFileName) As ServerConfiguration
-            Dim jsonFileNameWithPath As String = Path.Combine(s_jsonFilePathBase, jsonFileName)
+        Public Shared Function ServerConfigurationLoad(
+            Optional jsonFilePathBase As String = "",
+            Optional jsonFileName As String = JsonDefaultFileName) As ServerConfiguration
 
+            Dim jsonFileNameWithPath As String = GetJsonFilePath(jsonFilePathBase, jsonFileName)
             If File.Exists(jsonFileNameWithPath) Then
                 Dim jsonString As String = File.ReadAllText(jsonFileNameWithPath)
                 Return JsonSerializer.Deserialize(Of ServerConfiguration)(jsonString, s_deserializerOptions)
@@ -200,19 +219,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return New ServerConfiguration
         End Function
 
-        Public Overrides Function Equals(obj As Object) As Boolean
-            Return MyBase.Equals(obj)
-        End Function
+        Public Function ServerConfigurationSave(
+            Optional jsonFilePathBase As String = "",
+            Optional jsonFileName As String = JsonDefaultFileName) As String
 
-        Public Overrides Function GetHashCode() As Integer
-            Return MyBase.GetHashCode()
-        End Function
-
-        Public Sub ServerConfigurationSave()
+            Dim jsonFileNameWithPath As String = GetJsonFilePath(jsonFilePathBase, jsonFileName)
             Dim jsonString As String = JsonSerializer.Serialize(Me, _serializerOptions)
-            Dim jsonFileNameWithPath As String = Path.Combine(s_jsonFilePathBase, JsonDefaultFileName)
             File.WriteAllText(jsonFileNameWithPath, jsonString)
-        End Sub
+            Return jsonFileNameWithPath
+        End Function
 
     End Class
 End Namespace
