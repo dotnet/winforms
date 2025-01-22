@@ -10,27 +10,31 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public sealed class MaskedTextBoxDesignerTests : IDisposable
+public class MaskedTextBoxDesignerTests : IDisposable
 {
-    public void Dispose() { }
+    private readonly MaskedTextBox _maskedTextBox = new();
+    private readonly MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
+
+    public MaskedTextBoxDesignerTests()
+    {
+        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
+    }
+
+    public void Dispose()
+    {
+        _maskedTextBox.Dispose();
+        _maskedTextBoxDesigner.Dispose();
+    }
 
     [Fact]
     public void SnapLines_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
     {
-        using MaskedTextBox _maskedTextBox = new();
-        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
-        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
-
         _maskedTextBoxDesigner.SnapLines.Count.Should().Be(9);
     }
 
     [Fact]
     public void SelectionRules_WithDefaultMaskedTextBox_ShouldReturnExpectedValue()
     {
-        using MaskedTextBox _maskedTextBox = new();
-        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
-        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
-
         SelectionRules selectionRules;
         using (new NoAssertContext())
         {
@@ -43,20 +47,12 @@ public sealed class MaskedTextBoxDesignerTests : IDisposable
     [Fact]
     public void Verbs_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
     {
-        using MaskedTextBox _maskedTextBox = new();
-        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
-        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
-
         _maskedTextBoxDesigner.Verbs.Count.Should().Be(1);
     }
 
     [Fact]
     public void Verbs_WithDefaultMaskedTextBox_ShouldContainSetMaskVerb()
     {
-        using MaskedTextBox _maskedTextBox = new();
-        using MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
-        _maskedTextBoxDesigner.Initialize(_maskedTextBox);
-
         DesignerVerbCollection verbs = _maskedTextBoxDesigner.Verbs;
 
         verbs.Should().NotBeNull();
@@ -69,8 +65,7 @@ public sealed class MaskedTextBoxDesignerTests : IDisposable
     [Fact]
     public void GetDesignMaskedTextBox_WithNullInput_ShouldReturnDefaultMaskedTextBox()
     {
-        MaskedTextBox designMaskedTextBox = MaskedTextBoxDesigner.GetDesignMaskedTextBox(null!);
-
+        using MaskedTextBox designMaskedTextBox = MaskedTextBoxDesigner.GetDesignMaskedTextBox(null!);
         designMaskedTextBox.Should().NotBeNull();
         designMaskedTextBox.Mask.Should().BeEmpty();
         designMaskedTextBox.Text.Should().BeEmpty();
@@ -90,8 +85,7 @@ public sealed class MaskedTextBoxDesignerTests : IDisposable
             Culture = new CultureInfo("en-US")
         };
 
-        MaskedTextBox designMaskedTextBox = MaskedTextBoxDesigner.GetDesignMaskedTextBox(maskedTextBox);
-
+        using MaskedTextBox designMaskedTextBox = MaskedTextBoxDesigner.GetDesignMaskedTextBox(maskedTextBox);
         designMaskedTextBox.Should().NotBeNull();
         designMaskedTextBox.Text.Should().Be("123");
         designMaskedTextBox.ValidatingType.Should().Be(typeof(int));
@@ -119,12 +113,9 @@ public sealed class MaskedTextBoxDesignerTests : IDisposable
         mockMockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
         mockMockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
 
-        using MaskedTextBox maskedTextBox = new();
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
-        maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
+        _maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
 
-        DesignerActionListCollection actionLists = maskedTextBoxDesigner.ActionLists;
+        DesignerActionListCollection actionLists = _maskedTextBoxDesigner.ActionLists;
         actionLists.Count.Should().Be(1);
     }
 
@@ -145,12 +136,9 @@ public sealed class MaskedTextBoxDesignerTests : IDisposable
         mockMockSite.Setup(s => s.GetService(typeof(ITypeDiscoveryService))).Returns(typeDiscoveryService);
         mockMockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(uiService);
 
-        using MaskedTextBox maskedTextBox = new();
-        using MaskedTextBoxDesigner maskedTextBoxDesigner = new();
-        maskedTextBoxDesigner.Initialize(maskedTextBox);
-        maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
+        _maskedTextBoxDesigner.Component.Site = mockMockSite.Object;
 
-        DesignerActionListCollection actionLists = maskedTextBoxDesigner.ActionLists;
+        DesignerActionListCollection actionLists = _maskedTextBoxDesigner.ActionLists;
         actionLists[0].Should().BeOfType<MaskedTextBoxDesignerActionList>();
     }
 }
