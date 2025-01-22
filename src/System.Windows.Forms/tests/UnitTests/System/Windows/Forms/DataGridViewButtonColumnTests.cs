@@ -21,9 +21,10 @@ public class DataGridViewButtonColumnTests : IDisposable
     public void Dispose()
     {
         _dataGridView?.Dispose();
+        _column?.Dispose();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_FlatStyle_GetSet_ReturnsExpected()
     {
         _column.FlatStyle.Should().Be(FlatStyle.Standard);
@@ -38,7 +39,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         _column.FlatStyle.Should().Be(FlatStyle.System);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_FlatStyle_SetWithDataGridView_UpdatesRows()
     {
         _dataGridView.Columns.Add(_column);
@@ -54,7 +55,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         ((DataGridViewButtonCell)row.Cells[0]).FlatStyle.Should().Be(FlatStyle.Popup);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_FlatStyle_SetNullButtonCellTemplate_ThrowsInvalidOperationException()
     {
         _column.GetType().GetProperty("CellTemplate")!.SetValue(_column, null);
@@ -63,7 +64,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         action.Should().Throw<InvalidOperationException>();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_Text_Set_GetReturnsExpected()
     {
         _column.Text.Should().BeNull();
@@ -72,7 +73,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         _column.Text.Should().Be("Test");
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_UseColumnTextForButtonValue_Set_GetReturnsExpected()
     {
         _column.UseColumnTextForButtonValue.Should().BeFalse();
@@ -81,7 +82,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         _column.UseColumnTextForButtonValue.Should().BeTrue();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_UseColumnTextForButtonValue_SetWithDataGridView_UpdatesRows()
     {
         _dataGridView.Columns.Add(_column);
@@ -97,16 +98,16 @@ public class DataGridViewButtonColumnTests : IDisposable
         ((DataGridViewButtonCell)row.Cells[0]).UseColumnTextForButtonValue.Should().BeTrue();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_UseColumnTextForButtonValue_SetNullButtonCellTemplate_ThrowsInvalidOperationException()
     {
         _column.GetType().GetProperty("CellTemplate")!.SetValue(_column, null);
 
-        Action action = () => { var useColumnTextForButtonValue = _column.UseColumnTextForButtonValue; };
+        Action action = () => { bool useColumnTextForButtonValue = _column.UseColumnTextForButtonValue; };
         action.Should().Throw<InvalidOperationException>();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_Clone_ReturnsExpected()
     {
         _column.Text = "Test";
@@ -119,10 +120,10 @@ public class DataGridViewButtonColumnTests : IDisposable
         clone.UseColumnTextForButtonValue.Should().BeTrue();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_Clone_WithDifferentType_ReturnsExpected()
     {
-        var customColumn = new CustomDataGridViewButtonColumn
+        CustomDataGridViewButtonColumn customColumn = new()
         {
             Text = "Test",
             FlatStyle = FlatStyle.Flat,
@@ -135,7 +136,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         clone.UseColumnTextForButtonValue.Should().BeTrue();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_ToString_ReturnsExpected()
     {
         _column.ToString().Should().Be("DataGridViewButtonColumn { Name=, Index=-1 }");
@@ -144,25 +145,25 @@ public class DataGridViewButtonColumnTests : IDisposable
         _column.ToString().Should().Be("DataGridViewButtonColumn { Name=TestColumn, Index=-1 }");
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_DefaultCellStyle_GetSet_ReturnsExpected()
     {
-        var style = _column.DefaultCellStyle;
+        DataGridViewCellStyle style = _column.DefaultCellStyle;
         style.Alignment.Should().Be(DataGridViewContentAlignment.MiddleCenter);
 
-        var newStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
+        DataGridViewCellStyle newStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
         _column.DefaultCellStyle = newStyle;
         _column.DefaultCellStyle.Alignment.Should().Be(DataGridViewContentAlignment.BottomRight);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_CellTemplate_SetInvalidType_ThrowsInvalidCastException()
     {
         Action action = () => _column.CellTemplate = new DataGridViewTextBoxCell();
         action.Should().Throw<InvalidCastException>();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_CellTemplate_SetValidType_GetReturnsExpected()
     {
         using DataGridViewButtonCell cell = new();
@@ -170,7 +171,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         _column.CellTemplate.Should().Be(cell);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_Clone_CopiesProperties()
     {
         _column.Text = "Test";
@@ -185,7 +186,7 @@ public class DataGridViewButtonColumnTests : IDisposable
         clone.DefaultCellStyle.Alignment.Should().Be(DataGridViewContentAlignment.BottomRight);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void DataGridViewButtonColumn_ShouldSerializeDefaultCellStyle_ReturnsExpected()
     {
         dynamic accessor = _column.TestAccessor().Dynamic;
