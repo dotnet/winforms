@@ -2690,6 +2690,13 @@ public partial class AccessibleObjectTests
 
     public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverridden_TestData()
     {
+#pragma warning disable WFDEV006 // Type or member is obsolete
+        var dataGridColumnHeaderAccessibleObjectType = typeof(DataGridColumnStyle).GetNestedType("DataGridColumnHeaderAccessibleObject", BindingFlags.NonPublic);
+#pragma warning restore WFDEV006
+        var typesToIgnore = new[]
+        {
+            typeof(ComboBox.ChildAccessibleObject),
+        };
         Assembly assembly = typeof(AccessibleObject).Assembly;
         foreach (Type type in assembly.GetTypes())
         {
@@ -2699,7 +2706,12 @@ public partial class AccessibleObjectTests
                 continue;
             }
 
-            if (type == typeof(ComboBox.ChildAccessibleObject))
+            if (type == dataGridColumnHeaderAccessibleObjectType)
+            {
+                continue;
+            }
+
+            if (typesToIgnore.Contains(type))
             {
                 continue;
             }

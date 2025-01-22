@@ -103,6 +103,7 @@
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ToolTip.CanExtend(System.Object)~System.Boolean")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array,System.Int32)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.UpDownBase.OnMouseUp(System.Windows.Forms.MouseEventArgs)")]
+[assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.Menu.MenuItemCollection.CopyTo(System.Array,System.Int32)")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.GridItemCollection.Empty")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripRenderer.Offset2X")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripRenderer.Offset2Y")]
@@ -152,6 +153,8 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.Version")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ResourceSchema")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.GridItemCollection.Empty")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataGrid.HitTestInfo.Nowhere")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataGridTableStyle.DefaultTableStyle")]
 [assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
 [assembly: SuppressMessage("Performance", "CA1821:Remove empty Finalizers", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.AxHost.ConnectionPointCookie.Finalize")]
 

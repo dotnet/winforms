@@ -7127,4 +7127,38 @@ public partial class Form : ContainerControl
                 break;
         }
     }
+
+    // Unsupported types don't support nullability.
+#nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    public MainMenu Menu
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    public MainMenu MergedMenu
+    {
+        get;
+    }
+#nullable enable
 }
