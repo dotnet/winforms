@@ -9,13 +9,9 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class DesignerFrameTests : IDisposable
+public class DesignerFrameTests
 {
     private readonly Mock<ISite> _mockSite = new();
-
-    public DesignerFrameTests() { }
-
-    public void Dispose() { }
 
     private class TestDesignerFrame : DesignerFrame
     {
@@ -141,12 +137,14 @@ public class DesignerFrameTests : IDisposable
     public void DesignerFrame_Resize_TriggersExpectedBehavior()
     {
         DesignerFrame designerFrame = new(_mockSite.Object);
+        bool resizeEventTriggered = false;
+
         try
         {
-            designerFrame.Resize += (sender, args) => { /* Handle resize if needed */ };
-
+            designerFrame.Resize += (sender, args) => resizeEventTriggered = true;
             designerFrame.Width = 500;
 
+            resizeEventTriggered.Should().BeTrue();
             designerFrame.Width.Should().Be(500);
         }
         finally
