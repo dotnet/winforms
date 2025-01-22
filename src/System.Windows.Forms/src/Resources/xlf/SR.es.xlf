@@ -7424,6 +7424,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El tipo {0} de la línea {1}, posición {2} produjo la siguiente excepción mientras se convertía: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">El Portapapeles contiene una excepción "NotSupportedException" que indica que se produjo un error en la operación de escritura. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Icono que se va a asociar con la información sobre herramientas de globo.</target>
@@ -8707,11 +8712,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">La colección es de solo lectura.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">No se pudo registrar el formato del portapapeles.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

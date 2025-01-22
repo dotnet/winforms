@@ -149,7 +149,7 @@ public class HScrollBar_ScrollBarLastLineButtonAccessibleObjectTests
     public void HScrollBarLastLineButtonAccessibleObject_FragmentNavigate_ReturnsExpected_LastPageButtonIsDisplayed(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using HScrollBar scrollBar = GetHScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarLastLineButtonAccessibleObject accessibleObject = GetLastLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -165,7 +165,7 @@ public class HScrollBar_ScrollBarLastLineButtonAccessibleObjectTests
     public void HScrollBarLastLineButtonAccessibleObject_FragmentNavigate_ReturnsExpected_LastPageButtonIsHidden(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using HScrollBar scrollBar = GetHScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarLastLineButtonAccessibleObject accessibleObject = GetLastLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -181,7 +181,7 @@ public class HScrollBar_ScrollBarLastLineButtonAccessibleObjectTests
     public void HScrollBarLastLineButtonAccessibleObject_FragmentNavigate_ReturnsExpected_MinimumEqualsMaximum(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using HScrollBar scrollBar = GetHScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarLastLineButtonAccessibleObject accessibleObject = GetLastLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -197,7 +197,7 @@ public class HScrollBar_ScrollBarLastLineButtonAccessibleObjectTests
     public void HScrollBarLastLineButtonAccessibleObject_FragmentNavigate_ReturnsExpected_HandleIsNotCreated(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using HScrollBar scrollBar = GetHScrollBar(createControl: false, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarLastLineButtonAccessibleObject accessibleObject = GetLastLineButton(scrollBar);
 
         Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -363,7 +363,7 @@ public class HScrollBar_ScrollBarLastLineButtonAccessibleObjectTests
 
     private ScrollBarLastLineButtonAccessibleObject GetLastLineButton(ScrollBar scrollBar)
     {
-        var accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var accessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         return accessibleObject.LastLineButtonAccessibleObject;
     }
 }

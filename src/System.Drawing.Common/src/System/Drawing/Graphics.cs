@@ -11,6 +11,8 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
+using Drawing2DCoordinateSpace = System.Drawing.Drawing2D.CoordinateSpace;
+
 namespace System.Drawing;
 
 /// <summary>
@@ -1190,7 +1192,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void Clear(Color color) => CheckStatus(PInvokeGdiPlus.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
 
 #if NET9_0_OR_GREATER
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
     public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
         FillRoundedRectangle(brush, (RectangleF)rect, radius);
 
@@ -2580,19 +2582,19 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="destSpace">The destination coordinate space.</param>
     /// <param name="srcSpace">The source coordinate space.</param>
     /// <param name="pts">The points to transform.</param>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params PointF[] pts)
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
     {
         fixed (PointF* p = pts)
         {
@@ -2605,20 +2607,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         }
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params Point[] pts)
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
     {
         fixed (Point* p = pts)
         {

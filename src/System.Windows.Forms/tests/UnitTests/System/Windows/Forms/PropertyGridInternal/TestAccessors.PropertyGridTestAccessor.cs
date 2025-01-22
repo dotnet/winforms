@@ -5,9 +5,9 @@ namespace System;
 
 public static partial class TestAccessors
 {
-    public class PropertyGridTestAccessor : TestAccessor<Windows.Forms.PropertyGrid>
+    public class PropertyGridTestAccessor : TestAccessor<PropertyGrid>
     {
-        public PropertyGridTestAccessor(Windows.Forms.PropertyGrid instance) : base(instance) { }
+        public PropertyGridTestAccessor(PropertyGrid instance) : base(instance) { }
 
         internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic._gridView;
 
@@ -18,6 +18,6 @@ public static partial class TestAccessors
         internal Dictionary<int, int> _designerSelections => Dynamic._designerSelections;
     }
 
-    public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)
+    public static PropertyGridTestAccessor TestAccessor(this PropertyGrid propertyGrid)
         => new(propertyGrid);
 }
