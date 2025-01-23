@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CompilerAnalyzerConfigOptions.cs" />
+    <Compile Remove="CompilerAnalyzerConfigOptionsProvider.cs" />
+    <Compile Remove="TestAdditionalText.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" />
+    <PackageReference Include="Verify.XUnit" />
+    <PackageReference Include="NuGet.Packaging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.CodeDom">
+      <HintPath>d:\nuget\system.codedom\10.0.0-alpha.1.25065.17\lib\net10.0\System.CodeDom.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Windows\Forms\Analyzers\MockData\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
