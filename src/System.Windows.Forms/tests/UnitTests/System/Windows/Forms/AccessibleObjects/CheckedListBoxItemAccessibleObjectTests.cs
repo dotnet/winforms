@@ -328,7 +328,7 @@ public class CheckedListBoxItemAccessibleObjectTests
     public void CheckedListBoxItemAccessibleObject_State_ReturnsNone_WhenHandleNotCreated()
     {
         using CheckedListBox checkedListBox = new();
-        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+        var item = new CheckedListBoxItemAccessibleObject(
             checkedListBox,
             new ItemArray.Entry("Item 1"),
             (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);
@@ -348,7 +348,7 @@ public class CheckedListBoxItemAccessibleObjectTests
                 ? (isChecked.Value ? CheckState.Checked : CheckState.Unchecked)
                 : CheckState.Indeterminate);
         checkedListBox.CreateControl();
-        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+        var item = new CheckedListBoxItemAccessibleObject(
             checkedListBox,
             checkedListBox.Items.InnerArray.GetEntryObject(0, 0),
             (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);
@@ -363,7 +363,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.Items.Add("Item 1");
         checkedListBox.CreateControl();
         checkedListBox.SelectedIndex = 0; // Select and focus the first item
-        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+        var item = new CheckedListBoxItemAccessibleObject(
             checkedListBox,
             checkedListBox.Items.InnerArray.GetEntryObject(0, 0),
             (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);

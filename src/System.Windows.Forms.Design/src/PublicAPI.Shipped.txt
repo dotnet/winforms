@@ -2,8 +2,8 @@
 ~override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type
 ~override System.ComponentModel.Design.ArrayEditor.GetItems(object editValue) -> object[]
 ~override System.ComponentModel.Design.ArrayEditor.SetItems(object editValue, object[] value) -> object
-~override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
-~override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent! component) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary! properties) -> void
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
 ~override System.Windows.Forms.Design.ComponentTray.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -74,7 +74,7 @@
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(params System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
-~System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control
+System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control!
 ~System.Windows.Forms.Design.ComponentTray.ComponentTray(System.ComponentModel.Design.IDesigner mainDesigner, System.IServiceProvider serviceProvider) -> void
 ~System.Windows.Forms.Design.ComponentTray.CreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> void
 ~System.Windows.Forms.Design.ComponentTray.DisplayError(System.Exception e) -> void
@@ -91,7 +91,7 @@
 ~System.Windows.Forms.Design.ParentControlDesigner.GetControl(object component) -> System.Windows.Forms.Control
 ~System.Windows.Forms.Design.ParentControlDesigner.MouseDragTool.get -> System.Drawing.Design.ToolboxItem
 ~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
-~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
+virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem! tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.CanDisplayComponent(System.ComponentModel.IComponent component) -> bool

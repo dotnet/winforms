@@ -150,7 +150,6 @@ GetCaretBlinkTime
 GetCaretPos
 GetClassInfo
 GetClassName
-GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
@@ -551,7 +550,6 @@ Rectangle
 RedrawWindow
 REGDB_E_CLASSNOTREG
 RegisterClass
-RegisterClipboardFormat
 RegisterDragDrop
 RegisterWindowMessage
 RegLoadMUIString

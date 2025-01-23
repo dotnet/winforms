@@ -66,7 +66,7 @@ internal static class DisposalTracking
                 int backtick = friendlyName.IndexOf('`');
                 if (backtick != -1)
                 {
-                    friendlyName = friendlyName.Remove(backtick);
+                    friendlyName = friendlyName[..backtick];
                 }
 
                 friendlyName += $"<{string.Join(",", type.GetGenericArguments().Select(GetFriendlyTypeName))}>";

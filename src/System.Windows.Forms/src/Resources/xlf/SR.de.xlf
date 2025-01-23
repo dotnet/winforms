@@ -7424,6 +7424,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der Typ {0} in Zeile {1}, Position {2}, hat während der Konvertierung die folgende Ausnahme ausgelöst: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Die Zwischenablage enthält eine NotSupportedException, die darauf hinweist, dass beim Schreibvorgang ein Fehler aufgetreten ist. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Das mit der QuickInfo-Sprechblase zu verknüpfende Symbol.</target>
@@ -8707,11 +8712,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Die Sammlung ist schreibgeschützt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Fehler beim Registrieren des Zwischenablagenformats.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

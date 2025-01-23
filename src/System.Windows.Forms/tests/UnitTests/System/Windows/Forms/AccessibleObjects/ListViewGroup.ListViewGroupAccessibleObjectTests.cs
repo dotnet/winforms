@@ -1172,7 +1172,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     public void ListViewGroupAccessibleObject_Bounds_ReturnsExpected(View view, bool showGroups, bool createHandle)
     {
         using ListView listView = GetListViewWithGroups(view, showGroups, createHandle, virtualMode: false);
-        ListView.ListViewAccessibleObject accessibleObject = listView.AccessibilityObject as ListView.ListViewAccessibleObject;
+        ListViewAccessibleObject accessibleObject = listView.AccessibilityObject as ListViewAccessibleObject;
         bool showBounds = listView.IsHandleCreated && listView.GroupsDisplayed;
 
         Assert.Equal(showBounds, !listView.DefaultGroup.AccessibilityObject.Bounds.IsEmpty);
@@ -1193,7 +1193,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         }
 
         using ListView listView = GetListViewWithGroups(view, showGroups: true, createHandle: true, virtualMode: false);
-        ListView.ListViewAccessibleObject accessibleObject = listView.AccessibilityObject as ListView.ListViewAccessibleObject;
+        ListViewAccessibleObject accessibleObject = listView.AccessibilityObject as ListViewAccessibleObject;
         Rectangle listViewBounds = listView.AccessibilityObject.Bounds;
 
         Assert.True(listViewBounds.Contains(listView.DefaultGroup.AccessibilityObject.Bounds));

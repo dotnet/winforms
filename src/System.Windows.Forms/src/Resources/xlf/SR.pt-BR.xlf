@@ -7424,6 +7424,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O tipo {0} na linha {1}, posição {2} apresentou a seguinte exceção durante a conversão: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">A área de transferência contém uma 'NotSupportedException' que indica que a operação de gravação falhou. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">O ícone a ser associado à ToolTip de balão.</target>
@@ -8707,11 +8712,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">A coleção é somente leitura.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">O registro do formato de área de transferência não teve êxito.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

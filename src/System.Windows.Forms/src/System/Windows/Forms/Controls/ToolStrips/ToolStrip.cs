@@ -3286,6 +3286,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         base.OnLostFocus(e);
         ClearAllSelections();
+        ToolTip.Hide(this);
     }
 
     protected internal override void OnLeave(EventArgs e)

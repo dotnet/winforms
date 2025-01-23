@@ -7424,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">位于行 {1}、位置 {2} 的类型 {0} 在转换时引发以下异常:{3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">剪贴板包含“NotSupportedException”，指示写入操作失败。'{0}'。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">与气球状工具提示关联的图标。</target>
@@ -8707,11 +8712,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">集合为只读。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">剪贴板格式注册失败。</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

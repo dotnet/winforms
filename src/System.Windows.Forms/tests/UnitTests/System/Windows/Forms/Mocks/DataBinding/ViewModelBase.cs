@@ -37,7 +37,7 @@ public abstract class ViewModelBase : INotifyPropertyChanged
     /// <see cref="CallerMemberNameAttribute"/>.</param>
     protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
     {
-        if (object.Equals(storage, value))
+        if (Equals(storage, value))
         {
             return false;
         }
