@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
+using Microsoft.WinForms.Utilities.Shared;
 
 namespace Microsoft.WinForms.Test;
 
@@ -50,7 +51,7 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     ///  </para>
     /// </remarks>
     /// <param name="testBasePath">The path containing the analyzer/fixture test files.</param>
-    protected RoslynAnalyzerAndCodeFixTestBase([CallerFilePath] string? testBasePath = default)
+    protected RoslynAnalyzerAndCodeFixTestBase(SourceLanguage language, [CallerFilePath] string? testBasePath = null)
     {
         ArgumentNullException.ThrowIfNull(testBasePath);
         _analyzerTestFilePaths = TestFileLoader.GetTestFilePaths(GetType(), testBasePath);

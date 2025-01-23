@@ -98,17 +98,29 @@ public static class TestFileLoader
             throw new ArgumentException("The base path must be a valid directory.", nameof(basePath));
         }
 
+        // Go up the path to the 'UnitTests' folder, and then go to the TestData folder.
+        DirectoryInfo basePathInfo = new DirectoryInfo(basePath);
+
+        // No go up so often until we've found the UnitTests folder.
+        while (basePathInfo.Name != "UnitTests")
+        {
+            basePathInfo = basePathInfo.Parent
+                ?? throw new InvalidOperationException("Expected a folder 'UnitTest' in the hierarchy, but it could not be found.");
+        }
+
         // Let's see if the class defines an AnalyzerTestPathAttribute:
         AnalyzerTestPathAttribute? analyzerTestPathAttribute = analyzerType.GetCustomAttribute<AnalyzerTestPathAttribute>();
 
         string analyzerPath = analyzerTestPathAttribute is not null
             ? analyzerTestPathAttribute.Path
-            : TestData;
+            : analyzerType.Name;
+
+        // Now go to the TestData folder:
+        basePath = Path.Combine(basePathInfo.FullName, TestData);
 
         var builder = new StringBuilder();
 
-        builder.Append($"{basePath}\\{analyzerPath}");
-        builder.Append('\\');
+        builder.Append($"{basePath}\\{analyzerPath}\\");
 
         analyzerPath = builder.ToString();
 

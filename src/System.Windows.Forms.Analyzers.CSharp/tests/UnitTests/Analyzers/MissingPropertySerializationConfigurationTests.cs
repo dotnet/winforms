@@ -5,12 +5,16 @@ using System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConfigur
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.WinForms.Test;
+using Microsoft.WinForms.Utilities.Shared;
 
 namespace System.Windows.Forms.Analyzers.Test;
 
 public class MissingPropertySerializationConfigurationTests
     : RoslynAnalyzerAndCodeFixTestBase<MissingPropertySerializationConfigurationAnalyzer, DefaultVerifier>
 {
+    public MissingPropertySerializationConfigurationTests() : base(SourceLanguage.CSharp)
+    { }
+
     // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
