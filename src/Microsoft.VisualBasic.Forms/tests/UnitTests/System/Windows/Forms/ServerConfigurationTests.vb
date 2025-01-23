@@ -3,7 +3,6 @@
 
 Imports System.IO
 Imports FluentAssertions
-Imports FluentAssertions.Execution
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -23,13 +22,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub VerifyNew_Fail(uploading As Boolean)
             Dim defaultConfiguration As New ServerConfiguration
             Dim serverConfigurationLoad As ServerConfiguration = ServerConfiguration.ServerConfigurationLoad(jsonFileName:="ServerConfigurationSample.JSON")
-            Using New AssertionScope()
-                defaultConfiguration.GetAcceptsAnonymousLogin(uploading).Should.NotBe(serverConfigurationLoad.GetAcceptsAnonymousLogin(uploading))
-                defaultConfiguration.GetDefaultPassword(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultPassword(uploading))
-                defaultConfiguration.GetDefaultUserName(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultUserName(uploading))
-                defaultConfiguration.GetFileUrlPrefix(uploading).Should.NotBe(serverConfigurationLoad.GetFileUrlPrefix(uploading))
-                defaultConfiguration.GetThrowsPasswordErrors(uploading).Should.NotBe(serverConfigurationLoad.GetThrowsPasswordErrors(uploading))
-            End Using
+            defaultConfiguration.GetAcceptsAnonymousLogin(uploading).Should.NotBe(serverConfigurationLoad.GetAcceptsAnonymousLogin(uploading))
+            defaultConfiguration.GetDefaultPassword(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultPassword(uploading))
+            defaultConfiguration.GetDefaultUserName(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultUserName(uploading))
+            defaultConfiguration.GetFileUrlPrefix(uploading).Should.NotBe(serverConfigurationLoad.GetFileUrlPrefix(uploading))
+            defaultConfiguration.GetThrowsPasswordErrors(uploading).Should.NotBe(serverConfigurationLoad.GetThrowsPasswordErrors(uploading))
         End Sub
 
         <Theory>
