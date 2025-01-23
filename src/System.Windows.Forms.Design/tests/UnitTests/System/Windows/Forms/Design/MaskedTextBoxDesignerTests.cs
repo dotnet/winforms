@@ -27,10 +27,7 @@ public class MaskedTextBoxDesignerTests : IDisposable
     }
 
     [Fact]
-    public void SnapLines_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
-    {
-        _maskedTextBoxDesigner.SnapLines.Count.Should().Be(9);
-    }
+    public void SnapLines_WithDefaultMaskedTextBox_ShouldReturnExpectedCount() => _maskedTextBoxDesigner.SnapLines.Count.Should().Be(9);
 
     [Fact]
     public void SelectionRules_WithDefaultMaskedTextBox_ShouldReturnExpectedValue()
@@ -45,10 +42,7 @@ public class MaskedTextBoxDesignerTests : IDisposable
     }
 
     [Fact]
-    public void Verbs_WithDefaultMaskedTextBox_ShouldReturnExpectedCount()
-    {
-        _maskedTextBoxDesigner.Verbs.Count.Should().Be(1);
-    }
+    public void Verbs_WithDefaultMaskedTextBox_ShouldReturnExpectedCount() => _maskedTextBoxDesigner.Verbs.Count.Should().Be(1);
 
     [Fact]
     public void Verbs_WithDefaultMaskedTextBox_ShouldContainSetMaskVerb()
