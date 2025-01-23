@@ -1606,7 +1606,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Returns the value of the backColor field -- no asking the parent with its color is, etc.
     /// </summary>
-    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty, Color.Empty);
+    internal Color RawBackColor => Properties.GetValueOrDefault(s_backColorProperty, Color.Empty);
 
     /// <summary>
     ///  Returns the parent <see cref="ToolStrip"/>'s renderer

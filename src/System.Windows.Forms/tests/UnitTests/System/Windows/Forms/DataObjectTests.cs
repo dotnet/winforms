@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Private.Windows;
+using System.Private.Windows.Core.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -1210,8 +1211,8 @@ public partial class DataObjectTests
     }
 
     [Theory]
-    [InlineData(DataFormats.SerializableConstant, null)]
-    [InlineData(DataFormats.SerializableConstant, "input")]
+    [InlineData(DataFormatNames.Serializable, null)]
+    [InlineData(DataFormatNames.Serializable, "input")]
     [InlineData("something custom", null)]
     [InlineData("something custom", "input")]
     private void DataObject_SetData_InvokeStringObject_Unbounded_GetReturnsExpected(string format, string input)
@@ -1363,10 +1364,10 @@ public partial class DataObjectTests
     [InlineData("something custom", false, null)]
     [InlineData("something custom", true, "input")]
     [InlineData("something custom", true, null)]
-    [InlineData(DataFormats.SerializableConstant, false, "input")]
-    [InlineData(DataFormats.SerializableConstant, false, null)]
-    [InlineData(DataFormats.SerializableConstant, true, "input")]
-    [InlineData(DataFormats.SerializableConstant, true, null)]
+    [InlineData(DataFormatNames.Serializable, false, "input")]
+    [InlineData(DataFormatNames.Serializable, false, null)]
+    [InlineData(DataFormatNames.Serializable, true, "input")]
+    [InlineData(DataFormatNames.Serializable, true, null)]
     private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
     {
         DataObject dataObject = new();
@@ -3041,5 +3042,78 @@ public partial class DataObjectTests
         dataObject.SetDataAsJson("test", new SimpleTestData() { X = 1, Y = 1 });
         dataObject.TryGetData("test", out Bitmap data).Should().BeFalse();
         data.Should().BeNull();
+    }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_DoesNotUnwrapDataStore()
+    {
+        // The inner data should not have it's data store unwrapped.
+        DataObject dataObject = new();
+        DataObject wrapped = new(dataObject);
+        DataObject.Composition composition = wrapped.TestAccessor().Dynamic._innerData;
+        IDataObject original = composition.TestAccessor().Dynamic._winFormsDataObject;
+        original.Should().BeSameAs(dataObject);
+    }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_VirtualsAreCalled()
+    {
+        Mock<DataObject> mock = new(MockBehavior.Loose);
+        DataObject wrapped = new(mock.Object);
+
+        wrapped.GetData("Foo", false);
+        mock.Verify(o => o.GetData("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData("Foo");
+        mock.Verify(o => o.GetData("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData(typeof(string));
+        mock.Verify(o => o.GetData("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo", false);
+        mock.Verify(o => o.GetDataPresent("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo");
+        mock.Verify(o => o.GetDataPresent("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent(typeof(string));
+        mock.Verify(o => o.GetDataPresent("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats(false);
+        mock.Verify(o => o.GetFormats(false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats();
+        mock.Verify(o => o.GetFormats(true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Foo", "Bar");
+        mock.Verify(o => o.SetData("Foo", "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData(typeof(string), "Bar");
+        mock.Verify(o => o.SetData(typeof(string), "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Bar");
+        mock.Verify(o => o.SetData("Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
     }
 }

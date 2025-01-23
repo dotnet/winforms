@@ -138,7 +138,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
     public void VScrollBarThumbAccessibleObject_FragmentNavigate_ReturnExpected_BothPageButtonsAreDisplayed(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarThumbAccessibleObject accessibleObject = scrollBarAccessibleObject.ThumbAccessibleObject;
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -154,7 +154,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
     public void VScrollBarThumbAccessibleObject_FragmentNavigate_ReturnExpected_FirstPageButtonIsHidden(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarThumbAccessibleObject accessibleObject = scrollBarAccessibleObject.ThumbAccessibleObject;
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -170,7 +170,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
     public void VScrollBarThumbAccessibleObject_FragmentNavigate_ReturnExpected_LastPageButtonIsHidden(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarThumbAccessibleObject accessibleObject = scrollBarAccessibleObject.ThumbAccessibleObject;
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -186,7 +186,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
     public void VScrollBarThumbAccessibleObject_FragmentNavigate_ReturnExpected_MinimumEqualsMaximum(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarThumbAccessibleObject accessibleObject = scrollBarAccessibleObject.ThumbAccessibleObject;
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -283,7 +283,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
 
     private ScrollBarThumbAccessibleObject GetThumb(ScrollBar scrollBar)
     {
-        var accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var accessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         return accessibleObject.ThumbAccessibleObject;
     }
 }

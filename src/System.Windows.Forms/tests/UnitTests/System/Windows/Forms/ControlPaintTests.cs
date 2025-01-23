@@ -37,7 +37,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
             Assert.Empty(result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -62,7 +62,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
             Assert.Empty(result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -108,7 +108,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
             Assert.Empty(result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -140,7 +140,7 @@ public partial class ControlPaintTests
                 Assert.False(hBitmap.IsNull);
                 Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+                using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
                 Assert.Empty(result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -173,7 +173,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
             Assert.Empty(result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -216,7 +216,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
             Assert.Equal(new Color[] { Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 255, 255, 255) }, result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -241,7 +241,7 @@ public partial class ControlPaintTests
             Assert.False(hBitmap.IsNull);
             Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvokeCore.GetObjectType(hBitmap));
 
-            using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
+            using Bitmap result = Image.FromHbitmap((IntPtr)hBitmap);
             Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
             Assert.Equal(new Color[] { Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 255, 255, 255) }, result.Palette.Entries);
             Assert.Equal(bitmap.Size, result.Size);
@@ -497,7 +497,7 @@ public partial class ControlPaintTests
 
     [WinFormsTheory]
     [MemberData(nameof(Dark_Color_Float_TestData))]
-    private void ControlPaint_Dark_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfDarkDark, Color expected)
+    public void ControlPaint_Dark_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfDarkDark, Color expected)
     {
         Assert.Equal(expected, ControlPaint.Dark(baseColor, percOfDarkDark));
 
@@ -530,7 +530,7 @@ public partial class ControlPaintTests
 
     [WinFormsTheory]
     [MemberData(nameof(DarkDark_TestData))]
-    private void ControlPaint_DarkDark_InvokeColorFloat_ReturnsExpected(Color baseColor, Color expected)
+    public void ControlPaint_DarkDark_InvokeColorFloat_ReturnsExpected(Color baseColor, Color expected)
     {
         Assert.Equal(expected, ControlPaint.DarkDark(baseColor));
     }
@@ -2261,7 +2261,7 @@ public partial class ControlPaintTests
 
     [WinFormsTheory]
     [MemberData(nameof(Light_Color_Float_TestData))]
-    private void ControlPaint_Light_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfLightLight, Color expected)
+    public void ControlPaint_Light_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfLightLight, Color expected)
     {
         Assert.Equal(expected, ControlPaint.Light(baseColor, percOfLightLight));
 

@@ -283,7 +283,7 @@ public class ToolStripItemTests
     public static IEnumerable<object[]> AccessibilityObject_Get_TestData()
     {
         yield return new object[] { new AccessibleObject() };
-        yield return new object[] { new SubToolStripItem.ToolStripItemAccessibleObject(new SubToolStripItem()) };
+        yield return new object[] { new ToolStripItem.ToolStripItemAccessibleObject(new SubToolStripItem()) };
     }
 
     [WinFormsTheory]

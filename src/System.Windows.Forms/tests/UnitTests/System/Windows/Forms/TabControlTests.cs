@@ -996,7 +996,7 @@ public class TabControlTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(TabControl.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.

@@ -206,7 +206,7 @@ public class PropertyTabTests
         public int Value { get; set; }
     }
 
-    [DefaultProperty(nameof(ClassWithDefaultProperty.Value))]
+    [DefaultProperty(nameof(Value))]
     private class ClassWithDefaultProperty
     {
         public int Value { get; set; }

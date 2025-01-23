@@ -139,7 +139,7 @@ public class VScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
     public void VScrollBarFirstLineButtonAccessibleObject_FragmentNavigate_ReturnExpected_FirstPageButtonIsDisplayed(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -155,7 +155,7 @@ public class VScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
     public void VScrollBarFirstLineButtonAccessibleObject_FragmentNavigate_ReturnExpected_FirstPageButtonIsHidden(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -171,7 +171,7 @@ public class VScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
     public void VScrollBarFirstLineButtonAccessibleObject_FragmentNavigate_ReturnExpected_MinimumEqualsMaximum(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -187,7 +187,7 @@ public class VScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
     public void VScrollBarFirstLineButtonAccessibleObject_FragmentNavigate_ReturnNull_HandleIsNotCreated(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: false, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
         Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -337,7 +337,7 @@ public class VScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
 
     private ScrollBarFirstLineButtonAccessibleObject GetFirstLineButton(ScrollBar scrollBar)
     {
-        var accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var accessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
         return accessibleObject.FirstLineButtonAccessibleObject;
     }
 }

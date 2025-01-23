@@ -91,7 +91,7 @@ public class DragDropHelperTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(format),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,

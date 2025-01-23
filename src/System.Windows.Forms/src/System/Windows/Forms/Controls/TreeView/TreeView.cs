@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -1915,10 +1916,6 @@ public partial class TreeView : Control
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)_indent);
         }
-        else if (ScaleHelper.IsScalingRequired)
-        {
-            PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)ScaleHelper.ScaleToInitialSystemDpi(DefaultTreeViewIndent));
-        }
 
         if (_itemHeight != -1)
         {
@@ -2830,7 +2827,7 @@ public partial class TreeView : Control
                     {
                         Rectangle bounds = node.Bounds;
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(bounds.X - 1, bounds.Y); // required to center the text
+                        Point textLoc = new(LocalAppContextSwitches.MoveTreeViewTextLocationOnePixel ? bounds.X : bounds.X - 1, bounds.Y);
                         bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));

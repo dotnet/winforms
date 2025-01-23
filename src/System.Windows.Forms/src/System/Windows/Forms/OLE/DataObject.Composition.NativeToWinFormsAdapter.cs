@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows.Core.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -32,55 +33,55 @@ public unsafe partial class DataObject
 
             #region Com.IDataObject.Interface
 
-            HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
+            public HRESULT DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
             }
 
-            HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
+            public HRESULT DUnadvise(uint dwConnection)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->DUnadvise(dwConnection);
             }
 
-            HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
+            public HRESULT EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->EnumDAdvise(ppenumAdvise);
             }
 
-            HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
+            public HRESULT EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->EnumFormatEtc(dwDirection, ppenumFormatEtc);
             }
 
-            HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
+            public HRESULT GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetData(pformatetcIn, pmedium);
             }
 
-            HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
+            public HRESULT GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetDataHere(pformatetc, pmedium);
             }
 
-            HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
+            public HRESULT QueryGetData(Com.FORMATETC* pformatetc)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->QueryGetData(pformatetc);
             }
 
-            HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
+            public HRESULT GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
             }
 
-            HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
+            public HRESULT SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
             {
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 return nativeDataObject.Value->SetData(pformatetc, pmedium, fRelease);
@@ -106,11 +107,11 @@ public unsafe partial class DataObject
 
                 object? value = format switch
                 {
-                    DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant =>
+                    DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                         ReadStringFromHGLOBAL(hglobal, unicode: false),
-                    DataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
-                    DataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
-                    DataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)(nint)hglobal),
+                    DataFormatNames.Html => ReadUtf8StringFromHGLOBAL(hglobal),
+                    DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
+                    DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                     CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                     CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
                     _ => ReadObjectOrStreamFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format), resolver, legacyMode)
@@ -412,7 +413,7 @@ public unsafe partial class DataObject
             private static bool TryGetBitmapData(Com.IDataObject* dataObject, string format, [NotNullWhen(true)] out Bitmap? data)
             {
                 data = default;
-                if (format != DataFormats.BitmapConstant)
+                if (format != DataFormatNames.Bitmap)
                 {
                     return false;
                 }

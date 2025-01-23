@@ -21,7 +21,7 @@ public class DataObjectExtensionsTests
         tryGetData2.Should().Throw<ArgumentNullException>();
         Action tryGetData3 = () => DataObjectExtensions.TryGetData<string>(dataObject: null!, DataFormats.Dib, autoConvert: true, out _);
         tryGetData3.Should().Throw<ArgumentNullException>();
-        Action tryGetData4 = () => DataObjectExtensions.TryGetData<string>(dataObject: null!, DataFormats.EmfConstant, autoConvert: false, out _);
+        Action tryGetData4 = () => DataObjectExtensions.TryGetData<string>(dataObject: null!, DataFormats.EnhancedMetafile, autoConvert: false, out _);
         tryGetData4.Should().Throw<ArgumentNullException>();
         Action tryGetData5 = () => DataObjectExtensions.TryGetData<string>(dataObject: null!, DataFormats.UnicodeText, Resolver, autoConvert: true, out _);
         tryGetData5.Should().Throw<ArgumentNullException>();

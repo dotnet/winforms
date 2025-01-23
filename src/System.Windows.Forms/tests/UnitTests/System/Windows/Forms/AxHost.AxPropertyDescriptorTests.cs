@@ -1386,14 +1386,14 @@ public class AxHostPropertyDescriptorTests
         public string Value { get; set; }
     }
 
-    [CustomAttribute]
+    [Custom]
     private class CustomAxHost : AxHost
     {
         public CustomAxHost(string clsid) : base(clsid)
         {
         }
 
-        [CustomAttribute]
+        [Custom]
         [DefaultValue(null)]
         public string CustomProperty { get; set; }
 
