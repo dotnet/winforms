@@ -28,7 +28,7 @@ The acceptance criteria for adding an obsoletion includes:
 * Register the `WFDEV###` URL in `aka.ms`
     * The vanity name will be `winforms-warnings/WFDEV###`
     * Ensure the link's group owner matches the group owner of `winforms-warnings/WFDEV001`
-    * Connect with `@lonitra` or `@gewarren` with any questions
+    * Connect with `@gewarren` or @merriemcgaw with any questions
 
 ### Obsoletion Diagnostics (`WFDEV001` - `WFDEV999`)
 
