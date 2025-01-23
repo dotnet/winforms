@@ -116,7 +116,7 @@ public unsafe partial class DataObject
                             && record.TryGetNotSupportedException(out object? @object)
                             && @object is NotSupportedException exception)
                         {
-                            throw new NotSupportedException(exception.Message);
+                            throw new NotSupportedException(string.Format(SR.NotSupportedExceptionOnClipboard, exception.Message));
                         }
 
                         return null;
@@ -135,7 +135,7 @@ public unsafe partial class DataObject
                         typeof(T).FullName));
                 }
 
-                // NRBF deserializer is more secure than the BinaryFormatter is:
+                // NRBF deserializer fixes some known BinaryFormatter issues:
                 // 1. Doesn't allow arrays that have a non-zero base index (can't create these in C# or VB)
                 // 2. Only allows IObjectReference types that contain primitives (to avoid observable cycle
                 //    dependencies to indeterminate state)

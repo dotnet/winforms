@@ -9,7 +9,7 @@ public partial class Dialogs
 {
     /// <summary>
     /// Changes the <see cref="ClientGuid"/> metadata to be configurable in the <see cref="PropertyGrid"/> used
-    /// to prepare tests of <see cref="System.Windows.Forms.FileDialog"/> and <see cref="FolderBrowserDialog"/>.
+    /// to prepare tests of <see cref="FileDialog"/> and <see cref="FolderBrowserDialog"/>.
     /// </summary>
     private sealed class ExposedClientGuidMetadata
     {

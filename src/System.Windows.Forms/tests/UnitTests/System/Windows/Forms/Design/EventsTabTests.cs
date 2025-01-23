@@ -172,7 +172,7 @@ public class EventsTabTests
         }
     }
 
-    [DefaultEvent(nameof(ClassWithDefaultEvent.Event))]
+    [DefaultEvent(nameof(Event))]
     private class ClassWithDefaultEvent : Component
     {
         public int Value { get; set; }

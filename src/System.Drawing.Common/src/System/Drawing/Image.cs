@@ -545,7 +545,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Gets an array of <see cref='Imaging.PropertyItem'/> objects that describe this <see cref='Image'/>.
+    ///  Gets an array of <see cref='PropertyItem'/> objects that describe this <see cref='Image'/>.
     /// </summary>
     [Browsable(false)]
     public Imaging.PropertyItem[] PropertyItems

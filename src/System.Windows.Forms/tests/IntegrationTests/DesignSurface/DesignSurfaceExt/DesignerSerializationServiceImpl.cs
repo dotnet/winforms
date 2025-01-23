@@ -16,7 +16,7 @@ internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationS
         _serviceProvider = serviceProvider;
     }
 
-    public System.Collections.ICollection Deserialize(object serializationData)
+    public ICollection Deserialize(object serializationData)
     {
         SerializationStore serializationStore = serializationData as SerializationStore;
         if (serializationStore is not null)
@@ -29,7 +29,7 @@ internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationS
         return Array.Empty<object>();
     }
 
-    public object Serialize(System.Collections.ICollection objects)
+    public object Serialize(ICollection objects)
     {
         ComponentSerializationService componentSerializationService = _serviceProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
         SerializationStore returnObject = null;

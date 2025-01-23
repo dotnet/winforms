@@ -7424,6 +7424,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Le type {0} à la ligne {1}, position {2}, a levé l'exception suivante lors de sa conversion : {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Le Presse-papiers contient un élément NotSupportedException qui indique l’échec de l’opération d’écriture. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">L'icône à associer à l'info-bulle.</target>
@@ -8707,11 +8712,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">La collection est en lecture seule.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Impossible d'inscrire le format du Presse-papiers.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

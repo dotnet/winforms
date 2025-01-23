@@ -11,7 +11,7 @@ public unsafe class ComSafeArrayScopeTests
     [Fact]
     public void ComSafeArrayScope_Construct_NonCOM_ThrowArgumentException()
     {
-        SAFEARRAY* array = SAFEARRAY.CreateEmpty(Variant.VARENUM.VT_INT);
+        SAFEARRAY* array = SAFEARRAY.CreateEmpty(VARENUM.VT_INT);
         try
         {
             Assert.Throws<ArgumentException>(() => new ComSafeArrayScope<IUnknown>(array));

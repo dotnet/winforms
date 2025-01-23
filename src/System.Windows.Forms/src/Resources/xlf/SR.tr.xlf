@@ -7424,6 +7424,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{1} numaralı satırda {2} numaralı konumdaki {0} türü dönüştürülürken aşağıdaki özel durumu döndürdü: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Pano, yazma işleminin başarısız olduğunu gösteren bir 'NotSupportedException' içeriyor. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Balon ToolTip ile ilişkilendirilecek simge.</target>
@@ -8707,11 +8712,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Koleksiyon salt okunur.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Pano biçimi kaydı yapılamadı.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

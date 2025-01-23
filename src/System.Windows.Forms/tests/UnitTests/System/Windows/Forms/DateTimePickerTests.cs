@@ -953,7 +953,7 @@ public class DateTimePickerTests : IDisposable
         using DateTimePicker dateTimePicker = new();
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
-        Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        DateTimeFormatInfo dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.LongDatePattern;
         dateTimePicker.CreateControl();
@@ -967,7 +967,7 @@ public class DateTimePickerTests : IDisposable
         using DateTimePicker dateTimePicker = new();
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
-        Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        DateTimeFormatInfo dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.ShortDatePattern;
         dateTimePicker.CreateControl();
@@ -981,7 +981,7 @@ public class DateTimePickerTests : IDisposable
         using DateTimePicker dateTimePicker = new();
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
-        Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        DateTimeFormatInfo dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.LongTimePattern;
         dateTimePicker.CreateControl();
@@ -995,7 +995,7 @@ public class DateTimePickerTests : IDisposable
         using DateTimePicker dateTimePicker = new();
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
-        Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        DateTimeFormatInfo dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.ShortTimePattern;
         dateTimePicker.CreateControl();

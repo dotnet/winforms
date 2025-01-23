@@ -5,7 +5,7 @@
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class CompositionDesignerTests
+public class ComponentDocumentDesignerTests
 {
     [Fact]
     public void Designer_ThrowsNotImplementedException()

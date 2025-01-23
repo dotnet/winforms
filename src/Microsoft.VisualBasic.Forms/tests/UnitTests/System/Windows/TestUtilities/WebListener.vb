@@ -11,10 +11,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
         Inherits ServerConfiguration
         Private Const BufferSize As Integer = 4096
-
-        Private Shared ReadOnly s_jsonFilePath As String =
-            Path.Combine(My.Application.Info.DirectoryPath, "System\Windows\TestUtilities\TestData", "ServerConfiguration.JSON")
-
         Private ReadOnly _address As String
         Private ReadOnly _fileName As String
         Private ReadOnly _fileSize As Integer
@@ -34,7 +30,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Debug.Assert(fileSize > 0)
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
-            _serverConfigurationInstance = ServerConfigurationLoad(s_jsonFilePath)
+            _serverConfigurationInstance = ServerConfigurationLoad()
             _fileUrlPrefix = _serverConfigurationInstance.GetFileUrlPrefix(_upload)
             _localServer = _fileUrlPrefix.Contains("8080")
             _upload = memberName.Contains("Upload", StringComparison.InvariantCultureIgnoreCase)

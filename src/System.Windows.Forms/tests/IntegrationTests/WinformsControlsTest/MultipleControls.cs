@@ -122,7 +122,7 @@ public partial class MultipleControls : Form
         progressBar1.Value = e.ProgressPercentage;
     }
 
-    private void Button1_Click(object sender, System.EventArgs e)
+    private void Button1_Click(object sender, EventArgs e)
     {
         textBox1.Enabled = !textBox1.Enabled;
     }

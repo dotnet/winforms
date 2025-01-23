@@ -189,7 +189,7 @@ public class CursorConverterTests
         // failing to do so means that the very first call to a static cursor accessor may return a different
         // cursor instance than subsequent calls.
         converter.GetStandardValues();
-        Threading.Thread.MemoryBarrier();
+        Thread.MemoryBarrier();
 
         ICollection<Cursor> values = converter.GetStandardValues().Cast<Cursor>().ToArray();
         Assert.Equal(28, values.Count);

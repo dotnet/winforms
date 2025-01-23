@@ -7,9 +7,9 @@ namespace System.Windows.Forms.DataBinding.TestUtilities;
 
 /// <summary>
 ///  Basic implementation of a command in a ViewModel/UI-Controller which can be bound to a property of type
-///  <see cref="System.Windows.Input.ICommand"/>.
+///  <see cref="Input.ICommand"/>.
 /// </summary>
-public class RelayCommand : System.Windows.Input.ICommand
+public class RelayCommand : Input.ICommand
 {
     public event EventHandler? CanExecuteChanged;
 
