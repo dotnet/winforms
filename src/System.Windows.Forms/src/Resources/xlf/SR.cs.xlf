@@ -7424,6 +7424,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Typ {0} na řádku {1} na pozici {2} vyvolal při převodu následující výjimku: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Schránka obsahuje NotSupportedException, která označuje, že operace zápisu se nezdařila. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Ikona spojená s popisem tlačítka v bublině</target>
@@ -8707,11 +8712,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Kolekce je jen pro čtení.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Registrace formátu schránky se nezdařila.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

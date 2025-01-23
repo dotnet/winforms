@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Private.Windows.Core.Ole;
 using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms.TestUtilities;
@@ -15,7 +16,7 @@ public static class DataObjectTestHelpers
     [
          DataFormats.Text,
          DataFormats.UnicodeText,
-         DataFormats.StringConstant,
+         DataFormatNames.String,
          DataFormats.Rtf,
          DataFormats.Html,
          DataFormats.OemText,

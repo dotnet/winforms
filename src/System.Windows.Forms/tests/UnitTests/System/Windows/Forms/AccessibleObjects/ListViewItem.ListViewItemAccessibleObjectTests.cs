@@ -1058,13 +1058,13 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             Assert.Equal(listView.Items[0].SubItems[0].AccessibilityObject, accessibleObject1.GetChild(0));
             Assert.Equal(listView.Items[0].SubItems[1].AccessibilityObject, accessibleObject1.GetChild(1));
             Assert.Equal(
-                ((ListViewItem.ListViewItemDetailsAccessibleObject)accessibleObject1).GetDetailsSubItemOrFake(2),
+                ((ListViewItemDetailsAccessibleObject)accessibleObject1).GetDetailsSubItemOrFake(2),
                 accessibleObject1.GetChild(2));
 
             Assert.Equal(listView.Items[1].SubItems[0].AccessibilityObject, accessibleObject2.GetChild(0));
             Assert.Equal(listView.Items[1].SubItems[1].AccessibilityObject, accessibleObject2.GetChild(1));
             Assert.Equal(
-                ((ListViewItem.ListViewItemDetailsAccessibleObject)accessibleObject2).GetDetailsSubItemOrFake(2),
+                ((ListViewItemDetailsAccessibleObject)accessibleObject2).GetDetailsSubItemOrFake(2),
                 accessibleObject2.GetChild(2));
         }
         else

@@ -5013,9 +5013,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ReadonlyControlsCollection" xml:space="preserve">
     <value>Collection is read only.</value>
   </data>
-  <data name="RegisterCFFailed" xml:space="preserve">
-    <value>Clipboard format registration did not succeed.</value>
-  </data>
   <data name="RelatedListManagerChild" xml:space="preserve">
     <value>Child list for field {0} cannot be created.</value>
   </data>
@@ -7041,5 +7038,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
     <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
+  </data>
+  <data name="NotSupportedExceptionOnClipboard">
+    <value>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</value>
   </data>
 </root>

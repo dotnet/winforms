@@ -3116,10 +3116,10 @@ public class ScrollBarTests
     }
 
     private ScrollBar.ScrollBarFirstPageButtonAccessibleObject VFirstPageButton(VScrollBar vScrollBar)
-        => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+        => ((ScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
 
     private ScrollBar.ScrollBarLastPageButtonAccessibleObject VLastPageButton(VScrollBar vScrollBar)
-        => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
+        => ((ScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
 
     private void SetHScrollBar(HScrollBar hScrollBar, RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
@@ -3135,10 +3135,10 @@ public class ScrollBarTests
     }
 
     private ScrollBar.ScrollBarFirstPageButtonAccessibleObject HFirstPageButton(HScrollBar hScrollBar)
-        => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+        => ((ScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
 
     private ScrollBar.ScrollBarLastPageButtonAccessibleObject HLastPageButton(HScrollBar hScrollBar)
-        => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
+        => ((ScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
 
     private class VerticalScrollBar : ScrollBar
     {

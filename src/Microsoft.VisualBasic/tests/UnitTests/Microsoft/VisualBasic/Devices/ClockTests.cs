@@ -11,10 +11,10 @@ public class ClockTests
         Clock clock = new();
 
         var before = clock.LocalTime;
-        System.Threading.Thread.Sleep(10);
+        Thread.Sleep(10);
 
         var now = DateTime.Now;
-        System.Threading.Thread.Sleep(10);
+        Thread.Sleep(10);
 
         var after = clock.LocalTime;
 
@@ -28,10 +28,10 @@ public class ClockTests
         Clock clock = new();
 
         var before = clock.GmtTime;
-        System.Threading.Thread.Sleep(10);
+        Thread.Sleep(10);
 
         var now = DateTime.UtcNow;
-        System.Threading.Thread.Sleep(10);
+        Thread.Sleep(10);
 
         var after = clock.GmtTime;
 
@@ -45,7 +45,7 @@ public class ClockTests
         Clock clock = new();
 
         int before = clock.TickCount;
-        System.Threading.Thread.Sleep(10);
+        Thread.Sleep(10);
 
         int after = clock.TickCount;
         Assert.True(before <= after);

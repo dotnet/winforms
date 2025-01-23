@@ -7424,6 +7424,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Il tipo {0} alla riga {1}, posizione {2} ha generato la seguente eccezione durante la conversione: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Gli Appunti contengono un'eccezione 'NotSupportedException' che indica che l'operazione di scrittura non è riuscita. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">L'icona da associare alla descrizione comandi.</target>
@@ -8707,11 +8712,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Raccolta in sola lettura.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Registrazione del formato degli Appunti non riuscita.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">
