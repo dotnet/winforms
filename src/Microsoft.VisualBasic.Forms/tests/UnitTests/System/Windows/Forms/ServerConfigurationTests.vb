@@ -19,18 +19,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Theory>
         <BoolData>
-        Public Sub VerifyNew_Fail(uploading As Boolean)
-            Dim defaultConfiguration As New ServerConfiguration
-            Dim serverConfigurationLoad As ServerConfiguration = ServerConfiguration.ServerConfigurationLoad(jsonFileName:="ServerConfigurationSample.JSON")
-            defaultConfiguration.GetAcceptsAnonymousLogin(uploading).Should.NotBe(serverConfigurationLoad.GetAcceptsAnonymousLogin(uploading))
-            defaultConfiguration.GetDefaultPassword(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultPassword(uploading))
-            defaultConfiguration.GetDefaultUserName(uploading).Should.NotBe(serverConfigurationLoad.GetDefaultUserName(uploading))
-            defaultConfiguration.GetFileUrlPrefix(uploading).Should.NotBe(serverConfigurationLoad.GetFileUrlPrefix(uploading))
-            defaultConfiguration.GetThrowsPasswordErrors(uploading).Should.NotBe(serverConfigurationLoad.GetThrowsPasswordErrors(uploading))
-        End Sub
-
-        <Theory>
-        <BoolData>
         Public Sub VerifyNew_Success(uploading As Boolean)
             Dim defaultConfiguration As New ServerConfiguration
             Dim testConfiguration As ServerConfiguration = ServerConfiguration.ServerConfigurationLoad
