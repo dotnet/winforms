@@ -4,7 +4,7 @@
 #nullable enable
 
 using System.Drawing;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 

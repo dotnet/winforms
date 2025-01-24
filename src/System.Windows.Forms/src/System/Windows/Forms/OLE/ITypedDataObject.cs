@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection.Metadata;
-using System.Private.Windows.Core.Ole;
+using System.Private.Windows.Ole;
 
 namespace System.Windows.Forms;
 

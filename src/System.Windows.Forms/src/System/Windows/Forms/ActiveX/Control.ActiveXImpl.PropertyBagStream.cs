@@ -3,7 +3,7 @@
 
 using System.Collections;
 using System.Formats.Nrbf;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Windows.Forms.Nrbf;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;

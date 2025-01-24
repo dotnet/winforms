@@ -14,7 +14,7 @@ using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
 using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
-namespace System.Private.Windows.Core.BinaryFormat.Tests;
+namespace System.Private.Windows.BinaryFormat.Tests;
 
 public class WinFormsBinaryFormattedObjectTests
 {

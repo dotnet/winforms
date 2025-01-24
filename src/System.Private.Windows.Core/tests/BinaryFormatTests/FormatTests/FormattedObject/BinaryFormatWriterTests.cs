@@ -3,7 +3,7 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;
 using System.Drawing;
