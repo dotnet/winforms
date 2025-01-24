@@ -10,7 +10,7 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class MaskedTextBoxDesignerTests : IDisposable
+public sealed class MaskedTextBoxDesignerTests : IDisposable
 {
     private readonly MaskedTextBox _maskedTextBox = new();
     private readonly MaskedTextBoxDesigner _maskedTextBoxDesigner = new();
