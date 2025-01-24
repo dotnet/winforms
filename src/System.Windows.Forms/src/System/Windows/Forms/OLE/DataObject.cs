@@ -4,13 +4,12 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Reflection.Metadata;
-using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
-using System.Private.Windows.Core.Ole;
+using System.Private.Windows.Ole;
 
 namespace System.Windows.Forms;
 

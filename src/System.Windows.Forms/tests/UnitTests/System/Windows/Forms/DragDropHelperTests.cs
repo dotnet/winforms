@@ -4,7 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
-using System.Private.Windows.Core.Ole;
+using System.Private.Windows.Ole;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
