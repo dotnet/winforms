@@ -2717,7 +2717,7 @@ public partial class DataObjectTests
         }
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
     }
 
@@ -2740,7 +2740,7 @@ public partial class DataObjectTests
         inData.Should().BeSameAs(data);
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
         ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
         typedOutData.GetDataPresent("point").Should().BeTrue();
@@ -2759,7 +2759,7 @@ public partial class DataObjectTests
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
         outData.GetData(typeof(string)).Should().Be(testString);
     }
@@ -2776,7 +2776,7 @@ public partial class DataObjectTests
         inData.Should().NotBeSameAs(data);
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
     }
 
@@ -2792,7 +2792,7 @@ public partial class DataObjectTests
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
     }
 
@@ -3050,8 +3050,7 @@ public partial class DataObjectTests
         // The inner data should not have it's data store unwrapped.
         DataObject dataObject = new();
         DataObject wrapped = new(dataObject);
-        DataObject.Composition composition = wrapped.TestAccessor().Dynamic._innerData;
-        IDataObject original = composition.TestAccessor().Dynamic._winFormsDataObject;
+        wrapped.TryUnwrapUserDataObject(out IDataObject original).Should().BeTrue();
         original.Should().BeSameAs(dataObject);
     }
 

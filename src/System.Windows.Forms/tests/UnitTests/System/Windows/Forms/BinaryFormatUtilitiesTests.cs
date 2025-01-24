@@ -7,7 +7,7 @@ using System.Collections;
 using System.Drawing;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
-using Utilities = System.Windows.Forms.DataObject.Composition.BinaryFormatUtilities;
+using Utilities = System.Windows.Forms.Composition.BinaryFormatUtilities;
 
 namespace System.Windows.Forms.Tests;
 
