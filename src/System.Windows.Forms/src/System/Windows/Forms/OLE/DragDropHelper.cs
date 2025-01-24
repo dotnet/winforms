@@ -10,6 +10,7 @@ using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using PrivateOle = System.Private.Windows.Core.Ole;
 
 namespace System.Windows.Forms;
 
@@ -191,7 +192,7 @@ internal static unsafe class DragDropHelper
     /// <returns>
     ///  <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
     /// </returns>
-    public static unsafe bool IsInDragLoop(IDataObject dataObject)
+    public static unsafe bool IsInDragLoop(PrivateOle.IDataObjectInternal dataObject)
     {
         ArgumentNullException.ThrowIfNull(dataObject);
 

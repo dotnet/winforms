@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
+using System.Private.Windows.Core.Ole;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
@@ -73,7 +74,7 @@ public class DragDropHelperTests
     [Fact]
     public void IsInDragLoop_NullDataObject_ThrowsArgumentNullException()
     {
-        IDataObject dataObject = null;
+        IDataObjectInternal dataObject = null;
         Assert.Throws<ArgumentNullException>(nameof(dataObject), () => DragDropHelper.IsInDragLoop(dataObject));
     }
 
@@ -220,7 +221,7 @@ public class DragDropHelperTests
         {
             DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
             Assert.True(DragDropHelper.IsInDragLoop(dataObject as IComDataObject));
-            Assert.True(DragDropHelper.IsInDragLoop(dataObject as IDataObject));
+            Assert.True(DragDropHelper.IsInDragLoop(dataObject as IDataObjectInternal));
         }
         finally
         {

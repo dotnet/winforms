@@ -12845,4 +12845,52 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
+
+    // Unsupported types don't support nullability.
+#nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    public virtual ContextMenu ContextMenu
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    ///  This event is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    public event EventHandler ContextMenuChanged
+    {
+        add { }
+        remove { }
+    }
+
+    /// <summary>
+    ///  This method is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    protected virtual void OnContextMenuChanged(EventArgs e) { }
+#nullable enable
 }
