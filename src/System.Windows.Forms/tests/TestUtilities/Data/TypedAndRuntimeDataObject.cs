@@ -11,7 +11,7 @@ namespace System.Windows.Forms.TestUtilities;
 internal class TypedAndRuntimeDataObject : ManagedAndRuntimeDataObject, ITypedDataObject
 {
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>([MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-    throw new NotImplementedException();
+        throw new NotImplementedException();
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, [MaybeNullWhen(false), NotNullWhen(true)] out T data)
     {
         data = default;
