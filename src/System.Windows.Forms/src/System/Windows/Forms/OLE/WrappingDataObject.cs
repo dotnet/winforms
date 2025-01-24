@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Used to indentify and wrap user provided data that isn't already a <see cref="DataObject"/> instance.
+///  Used to identify and wrap user provided data that isn't already a <see cref="DataObject"/> instance.
 /// </summary>
 internal sealed class WrappingDataObject : DataObject
 {
