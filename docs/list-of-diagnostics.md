@@ -28,7 +28,7 @@ The acceptance criteria for adding an obsoletion includes:
 * Register the `WFDEV###` URL in `aka.ms`
     * The vanity name will be `winforms-warnings/WFDEV###`
     * Ensure the link's group owner matches the group owner of `winforms-warnings/WFDEV001`
-    * Connect with `@lonitra` or `@gewarren` with any questions
+    * Connect with `@gewarren` or @merriemcgaw with any questions
 
 ### Obsoletion Diagnostics (`WFDEV001` - `WFDEV999`)
 
@@ -43,7 +43,12 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV005`__ | `Clipboard.GetData(string)` method is obsolete. Use `Clipboard.TryGetData<T>` methods instead. |
 |  __`WFDEV005`__ | `DataObject.GetData` methods are obsolete. Use the corresponding `DataObject.TryGetData<T>` instead. |
 |  __`WFDEV005`__ | `ClipboardProxy.GetData(As String)` method is obsolete. Use `ClipboardProxy.TryGetData(Of T)(As String, As T)` instead. |
-
+|  __`WFDEV006`__ | `ContextMenu` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `ContextMenuStrip` instead. |
+|  __`WFDEV006`__ | `DataGrid` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `DataGridView` instead. |
+|  __`WFDEV006`__ | `MainMenu` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `MenuStrip` instead. |
+|  __`WFDEV006`__ | `Menu` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `ToolStripDropDown` and `ToolStripDropDownMenu` instead. |
+|  __`WFDEV006`__ | `StatusBar` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `StatusStrip` instead. |
+|  __`WFDEV006`__ | `ToolBar` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `ToolStrip` instead. |
 
 ## Analyzer Warnings
 

@@ -12,6 +12,7 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows.Forms.Primitives;
+using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
@@ -23,7 +24,8 @@ namespace System.Windows.Forms.Tests;
 // Note: each registered Clipboard format is an OS singleton
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
-[UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
+// Try up to 3 times before failing.
+[UISettings(MaxAttempts = 3)]
 public class ClipboardTests
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
@@ -1110,14 +1112,19 @@ public class ClipboardTests
             // Pasting in different process has been simulated. Manual Json deserialization will need to occur.
             IDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
             received.Should().NotBe(jsonDataObject);
+            received.Should().BeAssignableTo<ITypedDataObject>();
             byte[] jsonBytes = Clipboard.GetData(format).Should().BeOfType<byte[]>().Subject;
             JsonSerializer.Deserialize(jsonBytes, typeof(SimpleTestData)).Should().BeEquivalentTo(data);
+            received.TryGetData(format, out byte[]? jsonBytes1).Should().BeTrue();
+            jsonBytes1.Should().BeEquivalentTo(jsonBytes);
         }
         else
         {
             JsonDataObject received = Clipboard.GetDataObject().Should().BeOfType<JsonDataObject>().Subject;
             received.Should().Be(jsonDataObject);
             received.Deserialize<SimpleTestData>(format).Should().BeEquivalentTo(data);
+            Action tryGetData = () => received.TryGetData(format, out byte[]? _);
+            tryGetData.Should().Throw<NotSupportedException>();
         }
     }
 
@@ -1287,5 +1294,91 @@ public class ClipboardTests
 
         public override bool GetDataPresent(string format, bool autoConvert)
             => format == Format || base.GetDataPresent(format, autoConvert);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_DataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<DataObject>(copy);
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_ManagedAndRuntimeDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<ManagedAndRuntimeDataObject>(copy);
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_TypedAndRuntimeDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<TypedAndRuntimeDataObject>(copy);
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_TypedDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<TypedDataObject>(copy);
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_ManagedDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<ManagedDataObject>(copy);
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_RoundTrip_Object_SupportsTypedInterface(bool copy)
+    {
+        SerializableTestData data = new();
+        string format = typeof(SerializableTestData).FullName!;
+
+        // Opt-in into access to the binary formatted stream.
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
+        // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
+        using BinaryFormatterScope scope = new(enable: true);
+
+        Clipboard.SetDataObject(data, copy);
+
+        DataObject received = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+
+        received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
+        result.Should().BeEquivalentTo(data);
+
+        Clipboard.TryGetData(format, out result).Should().BeTrue();
+        result.Should().BeEquivalentTo(data);
+    }
+
+    private static void CustomDataObject_RoundTrip_SupportsTypedInterface<T>(bool copy) where T : IDataObject, new()
+    {
+        SerializableTestData data = new();
+        T testDataObject = new();
+        string format = ManagedDataObject.s_format;
+        testDataObject.SetData(format, data);
+
+        // Opt-in into access the binary formatted stream.
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
+        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
+        using (BinaryFormatterScope scope = new(enable: copy))
+        {
+            Clipboard.SetDataObject(testDataObject, copy);
+        }
+
+        // copy == true => data was flushed to HGLOBAL and we read it with a WinForms DataObject.
+        // Otherwise this is the user-implemented ITypedDataObject or the WinForms wrapper.
+        if (copy || typeof(T).IsAssignableTo(typeof(ITypedDataObject)))
+        {
+            ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
+
+            received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
+            result.Should().BeEquivalentTo(data);
+
+            Clipboard.TryGetData(format, out result).Should().BeTrue();
+            result.Should().BeEquivalentTo(data);
+        }
+        else
+        {
+            T received = Clipboard.GetDataObject().Should().BeOfType<T>().Subject;
+            received.Should().Be(testDataObject);
+            // When we are not flushing the data to the HGLOBAL, we are reading from our DataStore or the managed test data object.
+            Action tryGetData = () => received.TryGetData(format, out SerializableTestData? result);
+            tryGetData.Should().Throw<NotSupportedException>();
+        }
     }
 }

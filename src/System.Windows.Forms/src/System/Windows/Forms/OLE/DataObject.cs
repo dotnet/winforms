@@ -20,14 +20,11 @@ namespace System.Windows.Forms;
 [ClassInterface(ClassInterfaceType.None)]
 public unsafe partial class DataObject :
     ITypedDataObject,
+    IDataObjectInternal,
     Com.IDataObject.Interface,
     ComTypes.IDataObject,
     Com.IManagedWrapper<Com.IDataObject>
 {
-    private const string CF_DEPRECATED_FILENAME = "FileName";
-    private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
-    private const string BitmapFullName = "System.Drawing.Bitmap";
-
     private readonly Composition _innerData;
 
     /// <summary>
@@ -41,7 +38,7 @@ public unsafe partial class DataObject :
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() => _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
+    public DataObject() => _innerData = Composition.CreateFromManagedDataObject(new DataStore());
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
@@ -57,9 +54,13 @@ public unsafe partial class DataObject :
     /// </remarks>
     public DataObject(object data)
     {
-        if (data is IDataObject iDataObject)
+        if (data is IDataObjectInternal internalDataObject)
         {
-            _innerData = Composition.CreateFromWinFormsDataObject(iDataObject);
+            _innerData = Composition.CreateFromManagedDataObject(internalDataObject);
+        }
+        else if (data is IDataObject iDataObject)
+        {
+            _innerData = Composition.CreateFromManagedDataObject(new DataObjectAdapter(iDataObject));
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
@@ -67,7 +68,7 @@ public unsafe partial class DataObject :
         }
         else
         {
-            _innerData = Composition.CreateFromWinFormsDataObject(new DataStore());
+            _innerData = Composition.CreateFromManagedDataObject(new DataStore());
             SetData(data);
         }
     }
@@ -80,24 +81,18 @@ public unsafe partial class DataObject :
 
     internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
 
-    /// <summary>
-    ///  Flags that the original data was not a user passed <see cref="IDataObject"/>.
-    /// </summary>
-    internal bool IsOriginalNotIDataObject { get; init; }
-
-    /// <summary>
-    ///  Returns the inner data that the <see cref="DataObject"/> was created with if the original data implemented
-    ///  <see cref="IDataObject"/>. Otherwise, returns this.
-    ///  This method should only be used if the <see cref="DataObject"/> was created for clipboard purposes.
-    /// </summary>
-    internal IDataObject TryUnwrapInnerIDataObject()
+    internal virtual bool TryUnwrapUserDataObject([NotNullWhen(true)] out IDataObject? dataObject)
     {
-        Debug.Assert(!IsOriginalNotIDataObject, "This method should only be used for clipboard purposes.");
-        return _innerData.OriginalIDataObject is { } original ? original : this;
-    }
+        dataObject = _innerData.ManagedDataObject switch
+        {
+            DataObject data => data,
+            DataObjectAdapter adapter => adapter.DataObject,
+            DataStore => this,
+            _ => null
+        };
 
-    /// <inheritdoc cref="Composition.OriginalIDataObject"/>
-    internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
+        return dataObject is not null;
+    }
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
@@ -174,15 +169,15 @@ public unsafe partial class DataObject :
     ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
     ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
     /// </summary>
-    private static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
         || format is DataFormatNames.Text
             or DataFormatNames.UnicodeText
             or DataFormatNames.Rtf
             or DataFormatNames.Html
             or DataFormatNames.OemText
             or DataFormatNames.FileDrop
-            or CF_DEPRECATED_FILENAME
-            or CF_DEPRECATED_FILENAMEW;
+            or DataFormatNames.FileNameAnsi
+            or DataFormatNames.FileNameUnicode;
 
     /// <summary>
     ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
@@ -195,9 +190,9 @@ public unsafe partial class DataObject :
     ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
     ///  </para>
     /// </remarks>
-    private static bool RestrictDeserializationToSafeTypes(string format) =>
+    internal static bool RestrictDeserializationToSafeTypes(string format) =>
         format is DataFormatNames.String
-            or BitmapFullName
+            or DataFormatNames.BinaryFormatBitmap
             or DataFormatNames.Csv
             or DataFormatNames.Dib
             or DataFormatNames.Dif
@@ -221,6 +216,7 @@ public unsafe partial class DataObject :
     public virtual object? GetData(string format, bool autoConvert)
     {
         object? result = _innerData.GetData(format, autoConvert);
+
         // Avoid exposing our internal JsonData<T>
         return result is IJsonData ? null : result;
     }
@@ -405,8 +401,8 @@ public unsafe partial class DataObject :
         }
 
         throw new NotSupportedException(string.Format(
-            SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
-            typeof(T).FullName, format));
+           SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
+           typeof(T).FullName, format));
 
         static bool IsValidPredefinedFormatTypeCombination(string format) => format switch
         {
@@ -418,10 +414,10 @@ public unsafe partial class DataObject :
                 or DataFormatNames.OemText => typeof(string) == typeof(T),
 
             DataFormatNames.FileDrop
-                or CF_DEPRECATED_FILENAME
-                or CF_DEPRECATED_FILENAMEW => typeof(string[]) == typeof(T),
+                or DataFormatNames.FileNameAnsi
+                or DataFormatNames.FileNameUnicode => typeof(string[]) == typeof(T),
 
-            DataFormatNames.Bitmap or BitmapFullName =>
+            DataFormatNames.Bitmap or DataFormatNames.BinaryFormatBitmap =>
                 typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T),
             _ => true
         };
@@ -434,32 +430,6 @@ public unsafe partial class DataObject :
         TextDataFormat.Html => DataFormatNames.Html,
         TextDataFormat.CommaSeparatedValue => DataFormatNames.Csv,
         _ => DataFormatNames.UnicodeText,
-    };
-
-    /// <summary>
-    ///  Returns all the "synonyms" for the specified format.
-    /// </summary>
-    private static string[]? GetMappedFormats(string format) => format switch
-    {
-        null => null,
-        DataFormatNames.Text or DataFormatNames.UnicodeText or DataFormatNames.String =>
-            [
-                DataFormatNames.String,
-                DataFormatNames.UnicodeText,
-                DataFormatNames.Text
-            ],
-        DataFormatNames.FileDrop or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW =>
-            [
-                DataFormatNames.FileDrop,
-                CF_DEPRECATED_FILENAMEW,
-                CF_DEPRECATED_FILENAME
-            ],
-        DataFormatNames.Bitmap or BitmapFullName =>
-            [
-                BitmapFullName,
-                DataFormatNames.Bitmap
-            ],
-        _ => [format]
     };
 
     #region ComTypes.IDataObject

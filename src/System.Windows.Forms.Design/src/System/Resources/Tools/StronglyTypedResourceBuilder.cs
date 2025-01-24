@@ -18,7 +18,7 @@ namespace System.Resources.Tools;
 /// <remarks>
 ///  <para>
 ///   Typically, resources separate code from content within an application. Creating and consuming these resources
-///   makes it easier to develop localizable applications. In the .NET Framework, resources are usually consumed by
+///   makes it easier to develop localizable applications. In .NET Framework, resources are usually consumed by
 ///   using the <see cref="ResourceManager"/> class, which contains methods that provide access to culture-specific
 ///   resources at run time. For more information about creating and consuming resources, see
 ///   <seealso href="https://docs.microsoft.com/dotnet/core/extensions/resources">Resources in Desktop Apps</seealso>.

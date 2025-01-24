@@ -319,7 +319,7 @@ public sealed partial class CodeDomComponentSerializationService
 
         /// <summary>
         ///  On .NET Framework, this method implements the save part of <see cref="ISerializable"/> interface. On .NET,
-        ///  this interface is implemented only for binary compatibility with the .NET Framework. Formatter deserialization
+        ///  this interface is implemented only for binary compatibility with .NET Framework. Formatter deserialization
         ///  is disabled .NET by removing the <see cref="SerializableAttribute"/> from this class.
         ///  This method is used in unit tests only.
         /// </summary>
