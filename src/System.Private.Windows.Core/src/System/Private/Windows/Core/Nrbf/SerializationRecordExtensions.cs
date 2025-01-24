@@ -349,7 +349,7 @@ internal static class SerializationRecordExtensions
                 || !classInfo.HasMember("_size")
                 || classInfo.GetRawValue("_size") is not int size
                 || !classInfo.TypeName.IsConstructedGenericType
-                || classInfo.TypeName.GetGenericTypeDefinition().Name != typeof(List<>).Name
+                || classInfo.TypeName.GetGenericTypeDefinition().Name != nameof(List<>)
                 || classInfo.TypeName.GetGenericArguments().Length != 1
                 || classInfo.GetRawValue("_items") is not ArrayRecord arrayRecord
                 || !IsPrimitiveArrayRecord(arrayRecord))
