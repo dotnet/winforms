@@ -44,15 +44,15 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
     ///  <paramref name="nativeDataObject"/> should have associated ComWrappers created wrapper that implements
     ///  <see cref="IDataObject"/> to be passed out as is. Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
     /// </summary>
-    private static IDataObject? CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* nativeDataObject)
+    private static IDataObject? CreateManagedDataObjectForOutgoingDropData(Com.IDataObject* nativeDataObject)
     {
         using var unknown = ComScope<IUnknown>.QueryFrom(nativeDataObject);
-        if (ComWrappers.TryGetObject(unknown, out object? obj) && obj is IDataObject dataObject)
+        if (ComWrappers.TryGetObject(unknown, out object? obj) && obj is IDataObject iDataObject)
         {
             // If the original data object implemented IDataObject, we might've wrapped it. We need to give the original back out.
-            return dataObject is DataObject winFormsDataObject && winFormsDataObject.OriginalIDataObject is { } originalDataObject
+            return iDataObject is DataObject dataObject && dataObject.TryUnwrapUserDataObject(out IDataObject? originalDataObject)
                 ? originalDataObject
-                : dataObject;
+                : iDataObject;
         }
 
         return new DataObject(nativeDataObject);
@@ -68,7 +68,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         }
         else
         {
-            data = CreateWinFormsDataObjectForOutgoingDropData(pDataObj);
+            data = CreateManagedDataObjectForOutgoingDropData(pDataObj);
             if (data is null)
             {
                 return null;

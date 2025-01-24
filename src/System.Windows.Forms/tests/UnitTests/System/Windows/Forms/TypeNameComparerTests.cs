@@ -27,7 +27,7 @@ public class TypeNameComparerTests
     [MemberData(nameof(TypeNameComparerSuccess))]
     public void DictionaryLookupSucceeds(TypeName name, Type expected)
     {
-        Dictionary<TypeName, Type> types = new(DataObject.Composition.TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(Composition.TypeNameComparer.Default)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -52,7 +52,7 @@ public class TypeNameComparerTests
     [MemberData(nameof(TypeNameComparerFail))]
     public void DictionaryLookupVersionMismatch(TypeName name)
     {
-        Dictionary<TypeName, Type> types = new(DataObject.Composition.TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(Composition.TypeNameComparer.Default)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -66,7 +66,7 @@ public class TypeNameComparerTests
     [Fact]
     public void DictionaryLookupFails()
     {
-        Dictionary<TypeName, Type> types = new(DataObject.Composition.TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(Composition.TypeNameComparer.Default)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -84,7 +84,7 @@ public class TypeNameComparerTests
     [Fact]
     public void TypeNameComparer_Null()
     {
-        var comparer = DataObject.Composition.TypeNameComparer.Default;
+        var comparer = Composition.TypeNameComparer.Default;
 
         comparer.Equals(null, null).Should().BeTrue();
         comparer.Equals(null, TypeName.Parse(typeof(int).AssemblyQualifiedName)).Should().BeFalse();
@@ -97,7 +97,7 @@ public class TypeNameComparerTests
     [Fact]
     public void TypeNameComparer_GetHashCode()
     {
-        var comparer = DataObject.Composition.TypeNameComparer.Default;
+        var comparer = Composition.TypeNameComparer.Default;
 
         int hash = comparer.GetHashCode(TypeName.Parse(typeof(int).AssemblyQualifiedName));
         comparer.GetHashCode(TypeName.Parse(typeof(int).AssemblyQualifiedName)).Should().Be(hash);

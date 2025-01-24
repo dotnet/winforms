@@ -3,20 +3,17 @@
 
 namespace System.Windows.Forms;
 
-public partial class DataObject
+internal sealed partial class DataStore
 {
-    private sealed partial class DataStore
+    private class DataStoreEntry
     {
-        private class DataStoreEntry
-        {
-            public object? Data { get; }
-            public bool AutoConvert { get; }
+        public object? Data { get; }
+        public bool AutoConvert { get; }
 
-            public DataStoreEntry(object? data, bool autoConvert)
-            {
-                Data = data;
-                AutoConvert = autoConvert;
-            }
+        public DataStoreEntry(object? data, bool autoConvert)
+        {
+            Data = data;
+            AutoConvert = autoConvert;
         }
     }
 }

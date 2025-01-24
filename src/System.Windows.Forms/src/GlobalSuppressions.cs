@@ -103,6 +103,7 @@
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ToolTip.CanExtend(System.Object)~System.Boolean")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array,System.Int32)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.UpDownBase.OnMouseUp(System.Windows.Forms.MouseEventArgs)")]
+[assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.Menu.MenuItemCollection.CopyTo(System.Array,System.Int32)")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.GridItemCollection.Empty")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripRenderer.Offset2X")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.ToolStripRenderer.Offset2Y")]
@@ -152,6 +153,8 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.Version")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.ResourceSchema")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.GridItemCollection.Empty")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataGrid.HitTestInfo.Nowhere")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataGridTableStyle.DefaultTableStyle")]
 [assembly: SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "Public API", Scope = "type", Target = "~T:System.Windows.Forms.ImeModeConversion")]
 [assembly: SuppressMessage("Performance", "CA1821:Remove empty Finalizers", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.AxHost.ConnectionPointCookie.Finalize")]
 
@@ -229,8 +232,8 @@
 [assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.MdiClient.ShouldSerializeLocation~System.Boolean")]
 
 // Ideally these should be different exceptions, but leaving them as shipped for compatibility
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToWinFormsAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToRuntimeAdapter.EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Composition.NativeToWinFormsAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Composition.NativeToRuntimeAdapter.EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Clipboard.SetDataObject(System.Object,System.Boolean,System.Int32,System.Int32)")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.ComponentModel.Com2Interop.Com2TypeInfoProcessor.ProcessFunctions(Windows.Win32.System.Com.ITypeInfo*,System.Collections.Generic.IDictionary{System.String,System.Windows.Forms.ComponentModel.Com2Interop.Com2TypeInfoProcessor.PropertyInfo},System.Int32,System.Int32,System.Boolean@)")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Control.ActiveXImpl.ThrowHr(Windows.Win32.Foundation.HRESULT)")]
