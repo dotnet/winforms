@@ -158,22 +158,14 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) _
                 AndAlso IO.Directory.Exists(path), $"Invalid {NameOf(path)}")
 
-            Try
-
-                ' If we have a dialog we need to set up an async download
-                If _progressDialog IsNot Nothing Then
-                    _webClient.DownloadFileAsync(address, destinationFileName)
-                    'returns when the download sequence is over, whether due to success, error, or being canceled
-                    _progressDialog.ShowProgressDialog()
-                Else
-                    _webClient.DownloadFile(address, destinationFileName)
-                End If
-            Catch ex As WebException
-                If ex.Message.Contains("401") Then
-                    Throw New WebException(SR.net_webstatus_Unauthorized)
-                End If
-                Throw New WebException(SR.net_webstatus_Timeout)
-            End Try
+            ' If we have a dialog we need to set up an async download
+            If _progressDialog IsNot Nothing Then
+                _webClient.DownloadFileAsync(address, destinationFileName)
+                'returns when the download sequence is over, whether due to success, error, or being canceled
+                _progressDialog.ShowProgressDialog()
+            Else
+                _webClient.DownloadFile(address, destinationFileName)
+            End If
 
             'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
@@ -219,12 +211,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             ' encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If _progressDialog Is Nothing OrElse Not _progressDialog.UserCanceledTheDialog Then
-                    If _exceptionEncounteredDuringFileTransfer.Message.Contains("401") OrElse _exceptionEncounteredDuringFileTransfer.Message.Contains("530") Then
-                        Throw New WebException(SR.net_webstatus_Unauthorized)
-                    End If
                     Throw _exceptionEncounteredDuringFileTransfer
                 End If
-                Throw _exceptionEncounteredDuringFileTransfer
             End If
         End Sub
 
