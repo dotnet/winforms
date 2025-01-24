@@ -1359,7 +1359,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         PropertyDescriptor? displayMemberProperty = props.Find(displayBindingMember.BindingField, true);
         if (displayMemberProperty is null)
         {
-            throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_FieldNotFound, displayMember));
+            throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_PropertyNotFound, displayMember));
         }
         else
         {
@@ -1390,7 +1390,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         PropertyDescriptor? valueMemberProperty = props.Find(valueBindingMember.BindingField, true);
         if (valueMemberProperty is null)
         {
-            throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_FieldNotFound, valueMember));
+            throw new ArgumentException(string.Format(SR.DataGridViewComboBoxCell_PropertyNotFound, valueMember));
         }
         else
         {
