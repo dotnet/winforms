@@ -34,7 +34,7 @@ internal interface IDataObjectInternal
     object? GetData(Type format);
 
     /// <summary>
-    ///  Determines whether data stored in this instance is  associated with the
+    ///  Determines whether data stored in this instance is associated with the
     ///  specified format, using <paramref name="autoConvert"/> to determine whether
     ///  to convert the data to the format.
     /// </summary>
