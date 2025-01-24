@@ -116,7 +116,7 @@ internal interface IDataObjectInternal
         [NotNullWhen(true), MaybeNullWhen(false)] out T data);
 
     /// <summary>
-    ///  <see cref="BinaryFormatter"/> compatible overload that retrieves typed data associated with the specified data format.
+    ///  Retrieves typed data associated with the specified data format.
     /// </summary>
     /// <param name="resolver">
     ///  A user-provided function that defines a closure of <see cref="Type"/>s that can be retrieved from
