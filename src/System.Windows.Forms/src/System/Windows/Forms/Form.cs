@@ -7140,6 +7140,7 @@ public partial class Form : ContainerControl
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public MainMenu Menu
     {
         get;
@@ -7156,6 +7157,7 @@ public partial class Form : ContainerControl
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public MainMenu MergedMenu
     {
         get;
