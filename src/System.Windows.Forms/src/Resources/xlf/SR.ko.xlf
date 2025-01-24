@@ -2522,11 +2522,6 @@
         <target state="translated">DropDownWidth 값은 {0}보다 작을 수 없습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">{0} 필드가 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell 값이 잘못되었습니다.</target>
@@ -2535,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems 값은 {0}보다 작거나 {1}보다 클 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
