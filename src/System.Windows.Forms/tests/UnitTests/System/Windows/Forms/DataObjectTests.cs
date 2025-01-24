@@ -372,7 +372,7 @@ public partial class DataObjectTests
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
     }
 
-    #nullable enable
+#nullable enable
     internal class DataObjectOverridesTryGetDataCore : DataObject
     {
         private readonly string _format;
@@ -399,21 +399,34 @@ public partial class DataObjectTests
             format.Should().Be(_format);
             resolver.Should().BeEquivalentTo(_resolver);
             autoConvert.Should().Be(_autoConvert);
-            typeof(T).Should().Be(typeof(string));
+            typeof(T).Should().Be<string>();
 
             Count++;
+            // This is a mock implementation that never returns anything.
             data = default;
             return false;
         }
     }
 
     [Fact]
-    public void DataObject_TryGetData_InvokeString_CallsTryGetDataCore()
+    public void TryGetData_InvokeString_CallsTryGetDataCore()
     {
         DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: true);
         dataObject.Count.Should().Be(0);
 
         dataObject.TryGetData(out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void TryGetData_Wrapper_InvokeString_CallsTryGetDataCore()
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(out string? data).Should().BeFalse();
         data.Should().BeNull();
         dataObject.Count.Should().Be(1);
     }
@@ -436,6 +449,19 @@ public partial class DataObjectTests
         dataObject.Count.Should().Be(1);
     }
 
+    [Theory]
+    [MemberData(nameof(RestrictedAndUnrestrictedFormat))]
+    public void TryGetData_Wrapper_InvokeStringString_CallsTryGetDataCore(string format)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
     [Fact]
     public void TryGetData_InvokeStringString_ValidationFails()
     {
@@ -445,6 +471,20 @@ public partial class DataObjectTests
 
         // Incompatible format and type.
         Action tryGetData = () => dataObject.TryGetData(format, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public void TryGetData_Wrapper_InvokeStringString_ValidationFails()
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        // Incompatible format and type.
+        Action tryGetData = () => wrapper.TryGetData(format, out string? data);
         tryGetData.Should().Throw<NotSupportedException>();
         dataObject.Count.Should().Be(0);
     }
@@ -469,6 +509,19 @@ public partial class DataObjectTests
         dataObject.Count.Should().Be(1);
     }
 
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_Wrapper_InvokeStringBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, resolver: null, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
     private static Type NotSupportedResolver(TypeName typeName) => throw new NotSupportedException();
 
     [Theory]
@@ -486,12 +539,25 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(FormatAndAutoConvert))]
-    public void DataObject_TryGetData_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    public void TryGetData_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
     {
         DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
         dataObject.Count.Should().Be(0);
 
         dataObject.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_Wrapper_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data).Should().BeFalse();
         data.Should().BeNull();
         dataObject.Count.Should().Be(1);
     }
@@ -508,7 +574,22 @@ public partial class DataObjectTests
         tryGetData.Should().Throw<NotSupportedException>();
         dataObject.Count.Should().Be(0);
     }
-    #nullable disable
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_Wrapper_InvokeStringFuncBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper  = new DataObject(dataObject);
+
+        Action tryGetData = () => wrapper.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+#nullable disable
 
     [Theory]
     [MemberData(nameof(GetData_String_TheoryData))]
