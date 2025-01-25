@@ -69,7 +69,7 @@ internal static class SystemCOLORs
                 continue;
             }
 
-            COLORREF colorRef = (COLORREF)PInvoke.GetSysColor((SYS_COLOR_INDEX)i);
+            COLORREF colorRef = (COLORREF)PInvokeCore.GetSysColor((SYS_COLOR_INDEX)i);
 
             if (dictionary.TryGetValue(colorRef, out List<SYS_COLOR_INDEX> colors))
             {

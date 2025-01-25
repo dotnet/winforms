@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="DragAcceptFiles(HWND, BOOL)"/>
     public static void DragAcceptFiles<T>(T hWnd, BOOL fAccept) where T : IHandle<HWND>

@@ -182,7 +182,7 @@ internal static unsafe class DragDropHelper
         {
             PInvokeCore.GlobalUnlock((HGLOBAL)medium.unionmember);
             var comMedium = (STGMEDIUM)medium;
-            PInvoke.ReleaseStgMedium(ref comMedium);
+            PInvokeCore.ReleaseStgMedium(ref comMedium);
         }
     }
 
@@ -196,8 +196,8 @@ internal static unsafe class DragDropHelper
     {
         ArgumentNullException.ThrowIfNull(dataObject);
 
-        if (dataObject.GetDataPresent(PInvoke.CFSTR_INDRAGLOOP)
-            && dataObject.GetData(PInvoke.CFSTR_INDRAGLOOP) is DragDropFormat dragDropFormat)
+        if (dataObject.GetDataPresent(PInvokeCore.CFSTR_INDRAGLOOP)
+            && dataObject.GetData(PInvokeCore.CFSTR_INDRAGLOOP) is DragDropFormat dragDropFormat)
         {
             try
             {
@@ -221,7 +221,7 @@ internal static unsafe class DragDropHelper
     /// <returns>
     ///  <see langword="true"/> if <paramref name="dataObject"/> is in a drag-and-drop loop; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsInDragLoop(IComDataObject dataObject) => GetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP);
+    public static bool IsInDragLoop(IComDataObject dataObject) => GetBooleanFormat(dataObject, PInvokeCore.CFSTR_INDRAGLOOP);
 
     /// <summary>
     ///  Determines whether the specified format is a drag loop format.
@@ -233,7 +233,7 @@ internal static unsafe class DragDropHelper
     {
         string formatName = DataFormats.GetFormat(format.cfFormat).Name;
         return formatName.Equals(DRAGCONTEXT) || formatName.Equals(DRAGIMAGEBITS) || formatName.Equals(DRAGSOURCEHELPERFLAGS)
-            || formatName.Equals(DRAGWINDOW) || formatName.Equals(PInvoke.CFSTR_DROPDESCRIPTION) || formatName.Equals(PInvoke.CFSTR_INDRAGLOOP)
+            || formatName.Equals(DRAGWINDOW) || formatName.Equals(PInvokeCore.CFSTR_DROPDESCRIPTION) || formatName.Equals(PInvokeCore.CFSTR_INDRAGLOOP)
             || formatName.Equals(ISSHOWINGLAYERED) || formatName.Equals(ISSHOWINGTEXT) || formatName.Equals(USINGDEFAULTDRAGIMAGE);
     }
 
@@ -353,7 +353,7 @@ internal static unsafe class DragDropHelper
             hbmpDragImage = hbmpDragImage,
             sizeDragImage = dragImage is not null ? dragImage.Size : default,
             ptOffset = cursorOffset,
-            crColorKey = (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW)
+            crColorKey = (COLORREF)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW)
         };
 
         // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
@@ -422,7 +422,7 @@ internal static unsafe class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(PInvoke.CFSTR_DROPDESCRIPTION),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(PInvokeCore.CFSTR_DROPDESCRIPTION),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -479,7 +479,7 @@ internal static unsafe class DragDropHelper
     /// </remarks>
     public static void SetInDragLoop(IComDataObject dataObject, bool inDragLoop)
     {
-        SetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP, inDragLoop);
+        SetBooleanFormat(dataObject, PInvokeCore.CFSTR_INDRAGLOOP, inDragLoop);
 
         // If drag loop is over, release the drag and drop formats.
         if (!inDragLoop)

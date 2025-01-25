@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -26,7 +25,7 @@ public partial class PictureBox : Control, ISupportInitialize
         !AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest)
         || useWebRequest;
 
-    private static readonly HttpClient s_httpClient = !LocalAppContextSwitches.ServicePointManagerCheckCrl ? new() :
+    private static readonly HttpClient s_httpClient = !AppContextSwitches.ServicePointManagerCheckCrl ? new() :
         new(new HttpClientHandler { CheckCertificateRevocationList = true });
 
     /// <summary>

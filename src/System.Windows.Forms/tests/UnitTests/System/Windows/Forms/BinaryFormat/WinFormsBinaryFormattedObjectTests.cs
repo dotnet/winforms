@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
+using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -25,7 +26,7 @@ public class WinFormsBinaryFormattedObjectTests
     {
         SimpleTestData testData = new() { X = 1, Y = 1 };
         SerializationRecord format = testData.SerializeAndDecode();
-        ITypeResolver resolver = new Composition.Binder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
         format.TryGetObjectFromJson<SimpleTestData>(resolver, out _).Should().BeFalse();
     }
 
@@ -45,7 +46,7 @@ public class WinFormsBinaryFormattedObjectTests
         stream.Position = 0;
         SerializationRecord binary = NrbfDecoder.Decode(stream);
         binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
-        ITypeResolver resolver = new Composition.Binder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
         binary.TryGetObjectFromJson<int>(resolver, out _).Should().BeTrue();
         binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
         SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;

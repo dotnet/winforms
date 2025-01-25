@@ -311,7 +311,7 @@ public partial class RichTextBoxTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         control.AllowDrop = value;
         Assert.Equal(value, control.AllowDrop);
@@ -1263,7 +1263,7 @@ public partial class RichTextBoxTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         control.EnableAutoDragDrop = value;
         Assert.Equal(value, control.EnableAutoDragDrop);

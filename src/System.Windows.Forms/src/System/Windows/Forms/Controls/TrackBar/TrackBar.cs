@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -1133,7 +1132,7 @@ public partial class TrackBar : Control, ISupportInitialize
         // use the old way of rendering ticks on the trackbar.
         // TBS_AUTOTICKS will be enabled and sending
         // the TBM_SETTICFREQ message to set tick frequency.
-        if (!LocalAppContextSwitches.TrackBarModernRendering)
+        if (!AppContextSwitches.TrackBarModernRendering)
         {
             return true;
         }
@@ -1157,7 +1156,7 @@ public partial class TrackBar : Control, ISupportInitialize
     ///  Determine if the previous decision of whether drawing ticks
     ///  is performed by the native control or the Windows Forms runtime
     ///  is still valid. If it's no longer valid, the native control needs to be recreated.
-    ///  If user opts out of <see cref="Primitives.LocalAppContextSwitches.TrackBarModernRendering"/>
+    ///  If user opts out of <see cref="AppContextSwitches.TrackBarModernRendering"/>
     ///  then this will always return false.
     /// </summary>
     private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();

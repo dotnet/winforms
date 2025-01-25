@@ -7,7 +7,7 @@ using System.Collections;
 using System.Drawing;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
-using Utilities = System.Windows.Forms.Composition.BinaryFormatUtilities;
+using Utilities = System.Windows.Forms.BinaryFormatUtilities;
 
 namespace System.Windows.Forms.Tests;
 
@@ -680,6 +680,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         // Deserialize using the binary formatter.
         using BinaryFormatterFullCompatScope scope = new();
+
         // GetData case.
         stream.Position = 0;
         var result = Utilities.ReadObjectFromStream<object>(

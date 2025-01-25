@@ -10,7 +10,10 @@ public readonly ref struct BinaryFormatterInClipboardDragDropScope
     public BinaryFormatterInClipboardDragDropScope(bool enable)
     {
         Monitor.Enter(typeof(BinaryFormatterInClipboardDragDropScope));
-        _switchScope = new(AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName, GetDefaultValue, enable);
+        _switchScope = new(
+            AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
+            GetDefaultValue,
+            enable);
     }
 
     public void Dispose()
@@ -30,17 +33,17 @@ public readonly ref struct BinaryFormatterInClipboardDragDropScope
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
         foreach (var assembly in assemblies)
         {
-            if (assembly.FullName?.StartsWith("System.Windows.Forms.Primitives,", StringComparison.InvariantCultureIgnoreCase) == true)
+            if (assembly.FullName?.StartsWith("System.Private.Windows.Core,", StringComparison.InvariantCultureIgnoreCase) == true)
             {
-                var type = assembly.GetType("System.Windows.Forms.Primitives.LocalAppContextSwitches")
-                    ?? throw new InvalidOperationException("Could not find LocalAppContextSwitches type in System.Windows.Forms.Primitives assembly.");
+                var type = assembly.GetType("System.Private.Windows.CoreAppContextSwitches")
+                    ?? throw new InvalidOperationException("Could not find CoreAppContextSwitches type in System.Private.Windows.Core assembly.");
 
-                bool value = type.TestAccessor().CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")
+                bool value = type.TestAccessor().Dynamic.GetSwitchDefaultValue
                     (AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName);
                 return value;
             }
         }
 
-        throw new InvalidOperationException("Could not find System.Windows.Forms.Primitives assembly in the test process.");
+        throw new InvalidOperationException("Could not find System.Private.Windows.Core assembly in the test process.");
     }
 }

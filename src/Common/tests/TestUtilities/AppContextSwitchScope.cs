@@ -18,7 +18,7 @@ public readonly ref struct AppContextSwitchScope
     private readonly bool _originalState;
 
     public AppContextSwitchScope(string switchName, bool enable)
-        : this (switchName, getDefaultValue: null, enable)
+        : this(switchName, getDefaultValue: null, enable)
     {
     }
 
