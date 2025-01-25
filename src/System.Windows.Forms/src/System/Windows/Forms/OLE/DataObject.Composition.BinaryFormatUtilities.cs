@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Formats.Nrbf;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using FormatTests.Common;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;

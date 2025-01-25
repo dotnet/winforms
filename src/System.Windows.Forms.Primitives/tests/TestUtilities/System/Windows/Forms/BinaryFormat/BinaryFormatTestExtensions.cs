@@ -6,7 +6,7 @@ using System.Formats.Nrbf;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace System.Private.Windows.Core.BinaryFormat;
+namespace System.Private.Windows.BinaryFormat;
 
 internal static class BinaryFormatTestExtensions
 {

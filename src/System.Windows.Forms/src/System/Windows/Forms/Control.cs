@@ -12858,6 +12858,7 @@ public unsafe partial class Control :
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public virtual ContextMenu ContextMenu
     {
         get;
@@ -12875,6 +12876,7 @@ public unsafe partial class Control :
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public event EventHandler ContextMenuChanged
     {
         add { }
@@ -12891,6 +12893,7 @@ public unsafe partial class Control :
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     protected virtual void OnContextMenuChanged(EventArgs e) { }
 #nullable enable
 }

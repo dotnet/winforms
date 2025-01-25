@@ -2522,11 +2522,6 @@
         <target state="translated">DropDownWidth に {0} より小さい値を指定することはできません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">{0} というフィールドは存在しません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell の値が有効ではありません</target>
@@ -2535,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems に {0} よりも小さい値、または {1} よりも大きい値を指定することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">

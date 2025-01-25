@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Private.Windows.Core.Resources;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;

@@ -10,7 +10,7 @@ using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using PrivateOle = System.Private.Windows.Core.Ole;
+using PrivateOle = System.Private.Windows.Ole;
 
 namespace System.Windows.Forms;
 

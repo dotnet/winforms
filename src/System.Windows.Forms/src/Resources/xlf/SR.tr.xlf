@@ -2522,11 +2522,6 @@
         <target state="translated">DropDownWidth değeri {0} değerinden küçük olamaz.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">{0} adlı alan yok.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell değeri geçerli değil.</target>
@@ -2535,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems değeri {0} değerinden küçük veya {1} değerinden büyük olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">

@@ -2522,11 +2522,6 @@
         <target state="translated">Il valore di DropDownWidth non può essere inferiore a {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">Il campo {0} non esiste.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">Valore di DataGridViewComboBoxCell non valido.</target>
@@ -2535,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">Il valore di MaxDropDownItems non può essere inferiore a {0} o maggiore di {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
