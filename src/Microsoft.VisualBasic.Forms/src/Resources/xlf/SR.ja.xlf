@@ -178,13 +178,13 @@
         <note />
       </trans-unit>
       <trans-unit id="net_webstatus_Timeout">
-        <source>The network operation has timed out.</source>
-        <target state="new">The network operation has timed out.</target>
+        <source>The operation has timed out.</source>
+        <target state="new">The operation has timed out.</target>
         <note />
       </trans-unit>
       <trans-unit id="net_webstatus_Unauthorized">
-        <source>The network operation is unauthorized.</source>
-        <target state="new">The network operation is unauthorized.</target>
+        <source>The remote server returned an error: (401) Unauthorized.</source>
+        <target state="new">The remote server returned an error: (401) Unauthorized.</target>
         <note />
       </trans-unit>
     </body>

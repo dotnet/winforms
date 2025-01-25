@@ -222,9 +222,9 @@
     <value>Environment variable is not defined: '{0}'.</value>
   </data>
   <data name="net_webstatus_Timeout" xml:space="preserve">
-    <value>The network operation has timed out.</value>
+    <value>The operation has timed out.</value>
   </data>
   <data name="net_webstatus_Unauthorized" xml:space="preserve">
-    <value>The network operation is unauthorized.</value>
+    <value>The remote server returned an error: (401) Unauthorized.</value>
   </data>
 </root>
