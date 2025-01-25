@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -447,7 +446,7 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        if (LocalAppContextSwitches.NoClientNotifications)
+        if (AppContextSwitches.NoClientNotifications)
         {
             return DialogResult.None;
         }

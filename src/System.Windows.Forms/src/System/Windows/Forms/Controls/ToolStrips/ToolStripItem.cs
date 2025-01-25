@@ -2192,7 +2192,7 @@ public abstract partial class ToolStripItem :
         {
             using var dropSource = ComHelpers.GetComScope<IDropSource>(CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage));
             using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
-            if (PInvoke.DoDragDrop(dataObjectScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            if (PInvokeCore.DoDragDrop(dataObjectScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }

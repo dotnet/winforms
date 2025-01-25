@@ -250,7 +250,7 @@ public partial class ControlTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.S_OK, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         control.AllowDrop = value;
         Assert.Equal(value, control.AllowDrop);

@@ -202,7 +202,7 @@ internal unsafe partial class Composition
 
         private static unsafe string[]? ReadFileListFromHDROP(HDROP hdrop)
         {
-            uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
+            uint count = PInvokeCore.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
             if (count == 0)
             {
                 return null;
@@ -215,7 +215,7 @@ internal unsafe partial class Composition
             {
                 for (uint i = 0; i < count; i++)
                 {
-                    uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                    uint charactersCopied = PInvokeCore.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
                     if (charactersCopied == 0)
                     {
                         continue;
@@ -342,7 +342,7 @@ internal unsafe partial class Composition
             }
             finally
             {
-                PInvoke.ReleaseStgMedium(ref medium);
+                PInvokeCore.ReleaseStgMedium(ref medium);
             }
 
             return result;
@@ -404,7 +404,7 @@ internal unsafe partial class Composition
                     PInvokeCore.GlobalFree(hglobal);
                 }
 
-                PInvoke.ReleaseStgMedium(ref medium);
+                PInvokeCore.ReleaseStgMedium(ref medium);
             }
         }
 
@@ -451,7 +451,7 @@ internal unsafe partial class Composition
             }
             finally
             {
-                PInvoke.ReleaseStgMedium(ref medium);
+                PInvokeCore.ReleaseStgMedium(ref medium);
             }
 
             return false;

@@ -11,7 +11,6 @@ using System.Formats.Nrbf;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text.Json;
-using System.Windows.Forms.Primitives;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
@@ -558,10 +557,10 @@ public class ClipboardTests
     {
         DataObject data = new();
         using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(data);
-        PInvoke.OleSetClipboard(dataScope).Succeeded.Should().BeTrue();
+        PInvokeCore.OleSetClipboard(dataScope).Succeeded.Should().BeTrue();
 
         using ComScope<Com.IDataObject> proxy = new(null);
-        PInvoke.OleGetClipboard(proxy).Succeeded.Should().BeTrue();
+        PInvokeCore.OleGetClipboard(proxy).Succeeded.Should().BeTrue();
         ((nint)proxy.Value).Should().NotBe((nint)dataScope.Value);
 
         using var dataUnknown = dataScope.Query<Com.IUnknown>();
@@ -674,42 +673,42 @@ public class ClipboardTests
     public void Clipboard_BinaryFormatter_AppContextSwitch()
     {
         // Test the switch to ensure it works as expected in the context of this test assembly.
-        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+        CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
 
         using (BinaryFormatterInClipboardDragDropScope scope = new(enable: true))
         {
-            LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeTrue();
+            CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeTrue();
         }
 
-        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+        CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
 
         using (BinaryFormatterInClipboardDragDropScope scope = new(enable: false))
         {
-            LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+            CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
         }
 
-        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+        CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void Clipboard_NrbfSerializer_AppContextSwitch()
     {
         // Test the switch to ensure it works as expected in the context of this test assembly.
-        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+        CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
 
         using (NrbfSerializerInClipboardDragDropScope scope = new(enable: false))
         {
-            LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeFalse();
+            CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeFalse();
         }
 
-        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+        CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
 
         using (NrbfSerializerInClipboardDragDropScope scope = new(enable: true))
         {
-            LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+            CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
         }
 
-        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+        CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
     }
 
     [WinFormsFact]

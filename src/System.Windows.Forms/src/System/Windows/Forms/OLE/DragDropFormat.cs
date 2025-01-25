@@ -65,7 +65,7 @@ internal class DragDropFormat : IDisposable
                 case TYMED.TYMED_GDI:
                 case TYMED.TYMED_MFPICT:
 
-                    mediumDestination.hGlobal = (HGLOBAL)(nint)PInvoke.OleDuplicateData(
+                    mediumDestination.hGlobal = (HGLOBAL)(nint)PInvokeCore.OleDuplicateData(
                         (HANDLE)(nint)mediumSource.hGlobal,
                         (CLIPBOARD_FORMAT)format,
                         // Note that GMEM_DDESHARE is ignored
@@ -104,7 +104,7 @@ internal class DragDropFormat : IDisposable
         }
         catch
         {
-            PInvoke.ReleaseStgMedium(ref mediumDestination);
+            PInvokeCore.ReleaseStgMedium(ref mediumDestination);
             return default;
         }
     }
@@ -114,7 +114,7 @@ internal class DragDropFormat : IDisposable
     /// </summary>
     private unsafe void ReleaseData()
     {
-        PInvoke.ReleaseStgMedium(ref _medium);
+        PInvokeCore.ReleaseStgMedium(ref _medium);
         _medium.pUnkForRelease = null;
         _medium.tymed = TYMED.TYMED_NULL;
         _medium.hGlobal = HGLOBAL.Null;

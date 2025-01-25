@@ -104,7 +104,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
             // when control finally reaches us.
             if (PInvoke.IsWindow(handle))
             {
-                uint id = PInvoke.GetWindowThreadProcessId(handle, out _);
+                uint id = PInvokeCore.GetWindowThreadProcessId(handle, out _);
                 Application.ThreadContext? context = Application.ThreadContext.FromId(id);
                 nint threadHandle = context is null ? 0 : context.Handle;
 

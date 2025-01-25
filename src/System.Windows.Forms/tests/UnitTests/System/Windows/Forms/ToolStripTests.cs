@@ -458,7 +458,7 @@ public partial class ToolStripTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.S_OK, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         try
         {
@@ -487,7 +487,7 @@ public partial class ToolStripTests
         }
         finally
         {
-            PInvoke.RevokeDragDrop((HWND)control.Handle);
+            PInvokeCore.RevokeDragDrop((HWND)control.Handle);
         }
     }
 

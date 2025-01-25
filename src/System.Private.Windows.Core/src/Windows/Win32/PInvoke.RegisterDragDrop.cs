@@ -5,7 +5,7 @@ using Windows.Win32.System.Ole;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="RegisterDragDrop(HWND, IDropTarget*)"/>
     public static unsafe HRESULT RegisterDragDrop<T>(T hwnd, IDropTarget.Interface pDropTarget)

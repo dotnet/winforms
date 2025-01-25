@@ -3,7 +3,6 @@
 
 using System.Globalization;
 using System.Windows.Forms.Automation;
-using System.Windows.Forms.Primitives;
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -463,7 +462,7 @@ public partial class Control
 
         public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
         {
-            if (HandleInternal.IsNull || LocalAppContextSwitches.NoClientNotifications)
+            if (HandleInternal.IsNull || AppContextSwitches.NoClientNotifications)
             {
                 return;
             }

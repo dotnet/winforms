@@ -10,7 +10,6 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Ole;
@@ -1446,7 +1445,7 @@ public unsafe partial class Control :
     ///  created yet, this method will return the current thread's ID.
     /// </summary>
     internal uint CreateThreadId => IsHandleCreated
-        ? PInvoke.GetWindowThreadProcessId(this, out _)
+        ? PInvokeCore.GetWindowThreadProcessId(this, out _)
         : PInvokeCore.GetCurrentThreadId();
 
     /// <summary>
@@ -2309,7 +2308,7 @@ public unsafe partial class Control :
                 control = marshalingControl;
             }
 
-            return PInvoke.GetWindowThreadProcessId(control, out _) != PInvokeCore.GetCurrentThreadId();
+            return PInvokeCore.GetWindowThreadProcessId(control, out _) != PInvokeCore.GetCurrentThreadId();
         }
     }
 
@@ -4132,7 +4131,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && !LocalAppContextSwitches.NoClientNotifications)
+        if (IsHandleCreated && AppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
@@ -4222,7 +4221,7 @@ public unsafe partial class Control :
 
         SetState(States.CheckedHost, false);
 
-        _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
+        _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
         try
         {
             ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
@@ -4875,7 +4874,7 @@ public unsafe partial class Control :
             using var dropSource = ComHelpers.GetComScope<IDropSource>(
                 new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage));
             using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
-            if (PInvoke.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            if (PInvokeCore.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }
@@ -4964,7 +4963,7 @@ public unsafe partial class Control :
         if (!asyncResult.IsCompleted)
         {
             Control marshaler = FindMarshalingControl();
-            if (PInvoke.GetWindowThreadProcessId(marshaler, out _) == PInvokeCore.GetCurrentThreadId())
+            if (PInvokeCore.GetWindowThreadProcessId(marshaler, out _) == PInvokeCore.GetCurrentThreadId())
             {
                 marshaler.InvokeMarshaledCallbacks();
             }
@@ -6408,7 +6407,7 @@ public unsafe partial class Control :
 
         // We don't want to wait if we're on the same thread, or else we'll deadlock.
         // It is important that syncSameThread always be false for asynchronous calls.
-        bool syncSameThread = synchronous && PInvoke.GetWindowThreadProcessId(this, out _) == PInvokeCore.GetCurrentThreadId();
+        bool syncSameThread = synchronous && PInvokeCore.GetWindowThreadProcessId(this, out _) == PInvokeCore.GetCurrentThreadId();
 
         // Store the compressed stack information from the thread that is calling the Invoke()
         // so we can assign the same security context to the thread that will actually execute
@@ -9473,7 +9472,7 @@ public unsafe partial class Control :
             if (accept)
             {
                 // Register
-                HRESULT hr = PInvoke.RegisterDragDrop(this, new DropTarget(this));
+                HRESULT hr = PInvokeCore.RegisterDragDrop(this, new DropTarget(this));
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -9482,7 +9481,7 @@ public unsafe partial class Control :
             else
             {
                 // Revoke
-                HRESULT hr = PInvoke.RevokeDragDrop(this);
+                HRESULT hr = PInvokeCore.RevokeDragDrop(this);
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_NOTREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -9970,7 +9969,7 @@ public unsafe partial class Control :
     {
         if (_x != x || _y != y || _width != width || _height != height)
         {
-            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2;
             try
             {
                 SetBoundsCore(x, y, width, height, BoundsSpecified.All);
@@ -10018,7 +10017,7 @@ public unsafe partial class Control :
 
         if (_x != x || _y != y || _width != width || _height != height)
         {
-            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2;
             try
             {
                 SetBoundsCore(x, y, width, height, specified);
