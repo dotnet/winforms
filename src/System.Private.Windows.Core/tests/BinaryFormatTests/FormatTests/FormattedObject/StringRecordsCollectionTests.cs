@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Private.Windows.Core.BinaryFormat;
-using System.Private.Windows.Core.BinaryFormat.Serializer;
+using System.Private.Windows.BinaryFormat;
+using System.Private.Windows.BinaryFormat.Serializer;
 
 namespace FormatTests.FormattedObject;
 

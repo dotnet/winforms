@@ -2367,8 +2367,8 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridViewComboBoxCell_DropDownWidthOutOfRange" xml:space="preserve">
     <value>DropDownWidth value cannot be smaller than {0}.</value>
   </data>
-  <data name="DataGridViewComboBoxCell_FieldNotFound" xml:space="preserve">
-    <value>Field called {0} does not exist.</value>
+  <data name="DataGridViewComboBoxCell_PropertyNotFound" xml:space="preserve">
+    <value>Property called {0} does not exist.</value>
   </data>
   <data name="DataGridViewComboBoxCell_InvalidValue" xml:space="preserve">
     <value>DataGridViewComboBoxCell value is not valid.</value>

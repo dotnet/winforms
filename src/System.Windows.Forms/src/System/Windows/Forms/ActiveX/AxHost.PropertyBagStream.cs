@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Formats.Nrbf;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
