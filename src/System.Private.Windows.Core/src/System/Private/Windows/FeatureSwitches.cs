@@ -13,5 +13,6 @@ internal static class FeatureSwitches
     [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
 #endif
     internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization =>
-        !AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) || isEnabled;
+        !AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled)
+        || isEnabled;
 }
