@@ -3,19 +3,16 @@
 
 #nullable enable
 
-using System.Reflection;
-
 namespace System.Windows.Forms;
 
-public class FocusableLabelTests
+public class FocusableLabelTests : IDisposable
 {
-    [Fact]
-    public void UnderlineWhenFocused_ShouldBeTrue()
-    {
-        using FocusableLabel label = new();
+    private readonly FocusableLabel _focusableLabel = new();
 
-        label.UnderlineWhenFocused.Should().BeTrue();
-    }
+    public void Dispose() => _focusableLabel.Dispose();
+
+    [Fact]
+    public void UnderlineWhenFocused_ShouldBeTrue() => _focusableLabel.UnderlineWhenFocused.Should().BeTrue();
 
     [Fact]
     public void UnderlineWhenFocused_SetToFalse_ShouldBeFalse()
@@ -30,22 +27,14 @@ public class FocusableLabelTests
     [Fact]
     public void CreateParams_ClassName_ShouldBeNull()
     {
-        using FocusableLabel label = new();
+        using SubFocusableLabel subLabel = new();
 
-        var createParams = GetCreateParams(label);
-
-        createParams.Should().NotBeNull();
-
-        var className = createParams?.GetType().GetProperty("ClassName")?.GetValue(createParams);
-
-        className.Should().BeNull();
+        subLabel.CreateParams?.ClassName.Should().BeNull();
     }
 
-    private static object? GetCreateParams(Control control)
+    private class SubFocusableLabel : FocusableLabel
     {
-        return typeof(Control)
-        .GetProperty("CreateParams", BindingFlags.NonPublic | BindingFlags.Instance)?
-        .GetValue(control);
+        public CreateParams? CreateParams => base.CreateParams;
     }
 
     [Fact]
@@ -53,6 +42,6 @@ public class FocusableLabelTests
     {
         using FocusableLabel label = new();
 
-        label.TabStop.Should().BeTrue("Expected TabStop to be true, indicating the control is selectable.");
+        label.TabStop.Should().BeTrue();
     }
 }
