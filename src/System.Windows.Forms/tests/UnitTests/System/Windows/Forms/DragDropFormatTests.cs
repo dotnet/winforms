@@ -24,7 +24,7 @@ public unsafe class DragDropFormatTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat("InShellDragLoop"),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat("InShellDragLoop"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = nint.Zero,
@@ -47,7 +47,7 @@ public unsafe class DragDropFormatTests
         IStream.Interface iStream = new ComManagedStream(memoryStream);
         formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat("DragContext"),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat("DragContext"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = nint.Zero,
@@ -143,7 +143,7 @@ public unsafe class DragDropFormatTests
                     hGlobal = dragDropFormat.Medium.tymed switch
                     {
                         Com.TYMED.TYMED_HGLOBAL or Com.TYMED.TYMED_FILE or Com.TYMED.TYMED_ENHMF or Com.TYMED.TYMED_GDI or Com.TYMED.TYMED_MFPICT
-                        => (HGLOBAL)(nint)PInvoke.OleDuplicateData(
+                        => (HGLOBAL)(nint)PInvokeCore.OleDuplicateData(
                             (HANDLE)(nint)dragDropFormat.Medium.hGlobal,
                             (CLIPBOARD_FORMAT)formatEtc.cfFormat,
                             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT),

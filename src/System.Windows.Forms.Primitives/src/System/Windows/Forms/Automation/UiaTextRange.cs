@@ -609,7 +609,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                 if (Start > visibleStart || Start < visibleEnd)
                 {
                     UiaTextProvider.SendKeyboardInputVK(key, true);
-                    _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                    _provider.GetVisibleRangePoints(out _, out _);
                 }
 
                 return HRESULT.S_OK;
@@ -618,7 +618,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             if (Start < visibleStart || Start > visibleEnd)
             {
                 UiaTextProvider.SendKeyboardInputVK(key, true);
-                _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                _provider.GetVisibleRangePoints(out _, out _);
             }
         }
 
@@ -871,7 +871,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
     }
 
-    private static int GetBackgroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
+    private static int GetBackgroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
     private static int GetCapStyle(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None);
@@ -889,7 +889,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     private static int GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
 
-    private static int GetForegroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+    private static int GetForegroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
     private static int GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_CENTER) != 0

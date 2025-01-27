@@ -891,7 +891,7 @@ public partial class BindingSource : Component,
         CurrencyManager cm = (CurrencyManager)sender!;
 
         // track if the current list changed
-        bool currentItemChanged = true;
+        bool currentItemChanged;
 
         if (!string.IsNullOrEmpty(_dataMember))
         {
@@ -1458,7 +1458,7 @@ public partial class BindingSource : Component,
 
     public virtual int Add(object? value)
     {
-        int ret = -1;
+        int position;
 
         // Special case: If no data source has been assigned, the inner list will just
         // be an empty un-typed binding list.
@@ -1479,9 +1479,9 @@ public partial class BindingSource : Component,
             throw new InvalidOperationException(SR.BindingSourceItemTypeIsValueType);
         }
 
-        ret = List.Add(value);
-        OnSimpleListChanged(ListChangedType.ItemAdded, ret);
-        return ret;
+        position = List.Add(value);
+        OnSimpleListChanged(ListChangedType.ItemAdded, position);
+        return position;
     }
 
     public virtual void Clear()
@@ -1513,7 +1513,8 @@ public partial class BindingSource : Component,
 
     public virtual void RemoveAt(int index)
     {
-        object? value = ((IList)this)[index];
+        // Virtual, need to call for compat.
+        _ = this[index];
         List.RemoveAt(index);
         OnSimpleListChanged(ListChangedType.ItemDeleted, index);
     }

@@ -238,7 +238,7 @@ public class Timer : Component
         {
             if (!hwnd.IsNull)
             {
-                return PInvoke.GetWindowThreadProcessId(hwnd, out _) != PInvokeCore.GetCurrentThreadId();
+                return PInvokeCore.GetWindowThreadProcessId(hwnd, out _) != PInvokeCore.GetCurrentThreadId();
             }
 
             return false;

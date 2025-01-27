@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>
+    <CLSCompliant>true</CLSCompliant>
     <Deterministic>true</Deterministic>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>

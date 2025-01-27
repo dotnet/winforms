@@ -425,7 +425,7 @@ public sealed partial class Application
                     case msoloop.FocusWait:
 
                         // For focus wait, check to see if we are now the active application.
-                        PInvoke.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
+                        PInvokeCore.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
                         if (pid == PInvoke.GetCurrentProcessId())
                         {
                             continueLoop = false;

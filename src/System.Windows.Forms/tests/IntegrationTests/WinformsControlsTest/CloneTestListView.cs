@@ -3,6 +3,7 @@
 
 namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 internal class CloneTestListView : ListView
 {
     public void InvokeOnItemChecked(ItemCheckedEventArgs e)

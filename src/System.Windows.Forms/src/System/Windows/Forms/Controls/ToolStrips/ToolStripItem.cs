@@ -1565,17 +1565,9 @@ public abstract partial class ToolStripItem :
                 }
             }
 
-            Size imageSize = Size.Empty;
-            if (usingImageList)
-            {
-                imageSize = Owner?.ImageList?.ImageSize ?? Size.Empty;
-            }
-            else
-            {
-                imageSize = (image is null) ? Size.Empty : image.Size;
-            }
-
-            return imageSize;
+            return usingImageList
+                ? Owner?.ImageList?.ImageSize ?? Size.Empty
+                : (image is null) ? Size.Empty : image.Size;
         }
     }
 
@@ -1614,7 +1606,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Returns the value of the backColor field -- no asking the parent with its color is, etc.
     /// </summary>
-    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty, Color.Empty);
+    internal Color RawBackColor => Properties.GetValueOrDefault(s_backColorProperty, Color.Empty);
 
     /// <summary>
     ///  Returns the parent <see cref="ToolStrip"/>'s renderer
@@ -2169,7 +2161,7 @@ public abstract partial class ToolStripItem :
     {
         if (data is not IComDataObject dataObject)
         {
-            DataObject? iwdata = null;
+            DataObject? iwdata;
             if (data is IDataObject idataObject)
             {
                 iwdata = new DataObject(idataObject);
@@ -2200,7 +2192,7 @@ public abstract partial class ToolStripItem :
         {
             using var dropSource = ComHelpers.GetComScope<IDropSource>(CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage));
             using var dataObjectScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
-            if (PInvoke.DoDragDrop(dataObjectScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            if (PInvokeCore.DoDragDrop(dataObjectScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }
@@ -3056,6 +3048,8 @@ public abstract partial class ToolStripItem :
                 ParentInternal.RestoreFocusInternal();
             }
 
+            Owner?.UpdateToolTip(this, true);
+
             return true;
         }
 
@@ -3444,7 +3438,7 @@ public abstract partial class ToolStripItem :
             return fromPoint;
         }
 
-        Point toPoint = Point.Empty;
+        Point toPoint;
         Point currentToolStripItemLocation = Bounds.Location;
 
         // From: Screen

@@ -388,8 +388,8 @@ public partial class Form : ContainerControl
     ///  its controls.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
-    [SRDescription(nameof(SR.FormAutoScaleDescr)),
-    Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
+    [SRDescription(nameof(SR.FormAutoScaleDescr))]
+    [Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -6064,7 +6064,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    private void UpdateMenuHandles(bool recreateMenu = false)
+    private unsafe void UpdateMenuHandles(bool recreateMenu = false)
     {
         if (!IsHandleCreated)
         {
@@ -7127,4 +7127,40 @@ public partial class Form : ContainerControl
                 break;
         }
     }
+
+    // Unsupported types don't support nullability.
+#nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public MainMenu Menu
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public MainMenu MergedMenu
+    {
+        get;
+    }
+#nullable enable
 }

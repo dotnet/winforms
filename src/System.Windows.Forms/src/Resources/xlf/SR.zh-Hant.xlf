@@ -292,6 +292,16 @@
         <target state="translated">此應用程式內已停用 BinaryFormatter 序列化和還原序列化。如需詳細資訊，請參閱 https://aka.ms/binaryformatter。</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">剪貼簿或拖放操作不支援 BinaryFormatter。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">剪貼簿或拖放操作不支援 BinaryFormatter。請加以啟用，並使用 『TryGetData&lt;T&gt;』 API 搭配 『resolver』 函式，定義一組允許的類型，以還原串行化 '{0}'。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">在繫結內容變更時發生。</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">要求的剪貼簿作業失敗。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">類型 『DataObject』 的物件將串行化為空白。使用物件上的 'DataObject.SetDataAsJson' API 將對象內的數據 JSON 串行化，然後在物件中使用 '{0}' API。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">指定的類型 '{0}' 與指定的格式 '{1}' 不相容。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' 不是實體類型，可能會導致未繫結的還原串行化嘗試。請使用實體類型，或是定義 『resolver』 函式，以支援您預期要從剪貼簿擷取的類型，或是用於拖放操作。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">無法還原序列化 JSON 資料。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">找不到類型 {0}。如果允許此類型，請確定 'TryGetData&lt;T&gt;' API 中提供的 'resolver' 函式支援。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">請使用 『TryGetData&lt;T&gt;』 API 搭配 『resolver』 函式，定義一組允許的類型，以還原串行化 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">DropDownWidth 值不能小於 {0}。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">呼叫 {0} 的欄位不存在。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell 值無效。</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems 值不能小於 {0} 或大於 {1}。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5775,6 +5815,11 @@ Do you want to replace it?</source>
         <target state="translated">為交易性的初始設定指定支援。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">數據物件 '{0}' 未實作 『ITypedDataObject』 介面，因此無法使用 『TryGetData&lt;T&gt;(string， out T)』 方法讀取。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">跨執行緒作業無效: 存取控制項 '{0}' 時所使用的執行緒與建立控制項的執行緒不同。</target>
@@ -7379,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">位於第 {1} 行位置 {2} 的類型 {0} 在轉換時，擲回下列例外狀況: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">剪貼簿包含表示寫入作業失敗的 『NotSupportedException』。'{0}'。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">與氣球工具提示關聯的圖示。</target>
@@ -8662,11 +8712,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">集合是唯讀的。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">剪貼簿格式註冊失敗。</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

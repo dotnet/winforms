@@ -250,7 +250,7 @@ public partial class ControlTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.S_OK, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         control.AllowDrop = value;
         Assert.Equal(value, control.AllowDrop);
@@ -3662,9 +3662,9 @@ public partial class ControlTests
 
     private class CustomCreateControlsInstanceControl : Control
     {
-        public Control.ControlCollection CreateControlsResult { get; set; }
+        public ControlCollection CreateControlsResult { get; set; }
 
-        protected override Control.ControlCollection CreateControlsInstance() => CreateControlsResult;
+        protected override ControlCollection CreateControlsInstance() => CreateControlsResult;
     }
 
     [WinFormsFact]

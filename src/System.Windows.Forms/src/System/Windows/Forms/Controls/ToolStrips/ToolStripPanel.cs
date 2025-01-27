@@ -640,14 +640,6 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
                     controlArray[i].Size = controlArray[i].PreferredSize;
                 }
 
-                Point controlLocation = controlArray[i].Location;
-
-                // right to left has changed while layout was deferred...
-                if (_state[s_stateRightToLeftChanged])
-                {
-                    controlLocation = new Point(Width - controlArray[i].Right, controlLocation.Y);
-                }
-
                 var toolStrip = controlArray[i] as ToolStrip;
                 if (toolStrip is not null)
                 {
@@ -1001,7 +993,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
             toolStripToDrag.PerformLayout();
 #if DEBUG
-            ISupportToolStripPanel draggedControl = toolStripToDrag;
+            ToolStrip draggedControl = toolStripToDrag;
             if (draggedControl.IsCurrentlyDragging)
             {
                 Debug_VerifyNoOverlaps();

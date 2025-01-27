@@ -292,6 +292,16 @@
         <target state="translated">이 애플리케이션 내에서 BinaryFormatter 직렬화 및 역직렬화를 사용할 수 없습니다. 자세한 내용은 https://aka.ms/binaryformatter 페이지를 참조하세요.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">BinaryFormatter는 클립보드 또는 끌어서 놓기 작업에서 지원되지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">BinaryFormatter는 클립보드 또는 끌어서 놓기 작업에서 지원되지 않습니다. 사용하도록 설정하고 '{0}' deserialize할 수 있는 형식 집합을 정의하는 'resolver' 함수와 함께 'TryGetData&lt;T&gt;' API를 사용하세요.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">바인딩 컨텍스트가 변경될 때 발생합니다.</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">요청한 클립보드 작업을 수행하지 못했습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">'DataObject' 형식의 개체는 비어 있는 것으로 직렬화됩니다. 개체에서 'DataObject.SetDataAsJson' API를 사용하여 개체 내에서 데이터를 JSON으로 직렬화한 다음 개체와 함께 '{0}' API를 사용합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">지정한 형식 '{0}' 지정한 형식 '{1}' 호환되지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' 구체적인 형식이 아니므로 바인딩되지 않은 역직렬화를 시도할 수 있습니다. 구체적인 형식을 사용하거나 클립보드에서 검색하거나 끌어서 놓기 작업에 사용할 형식을 지원하는 'resolver' 함수를 정의하십시오.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">JSON 데이터를 역직렬화하지 못했습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">{0} 형식을 찾을 수 없습니다. 이 형식이 허용되는 경우 'TryGetData&lt;T&gt;' API에 제공된 'resolver' 함수가 이를 지원하는지 확인하세요.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">'{0}' 역직렬화할 수 있는 형식 집합을 정의하는 'resolver' 함수와 함께 'TryGetData&lt;T&gt;' API를 사용하세요.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">DropDownWidth 값은 {0}보다 작을 수 없습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">{0} 필드가 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell 값이 잘못되었습니다.</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems 값은 {0}보다 작거나 {1}보다 클 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5775,6 +5815,11 @@ Do you want to replace it?</source>
         <target state="translated">트랜잭트 초기화를 지원합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">데이터 개체 '{0}' 'ITypedDataObject' 인터페이스를 구현하지 않으며 'TryGetData&lt;T&gt;(string, out T)' 메서드를 사용하여 읽을 수 없습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">크로스 스레드 작업이 잘못되었습니다. '{0}' 컨트롤이 자신이 만들어진 스레드가 아닌 스레드에서 액세스되었습니다.</target>
@@ -7379,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">줄 {1}, 위치 {2}의 {0} 형식이 변환되는 동안 다음 예외가 throw되었습니다. {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">클립보드에 쓰기 작업이 실패했음을 나타내는 'NotSupportedException'이 있습니다. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">풍선 도구 설명과 연결할 아이콘입니다.</target>
@@ -8662,11 +8712,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">컬렉션이 읽기 전용입니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">클립보드 형식을 등록하지 못했습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

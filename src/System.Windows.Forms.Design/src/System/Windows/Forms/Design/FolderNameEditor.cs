@@ -9,6 +9,7 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor for choosing a folder from the filesystem.
 /// </summary>
+[CLSCompliant(false)]
 public partial class FolderNameEditor : UITypeEditor
 {
     private FolderBrowser? _folderBrowser;

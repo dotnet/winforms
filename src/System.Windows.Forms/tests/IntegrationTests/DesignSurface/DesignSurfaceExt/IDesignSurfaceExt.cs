@@ -18,8 +18,8 @@ public interface IDesignSurfaceExt
 
     // - select the controls alignment mode
     void UseSnapLines();
-    void UseGrid(System.Drawing.Size gridSize);
-    void UseGridWithoutSnapping(System.Drawing.Size gridSize);
+    void UseGrid(Size gridSize);
+    void UseGridWithoutSnapping(Size gridSize);
     void UseNoGuides();
 
     // - method useful to create control without the ToolBox facility

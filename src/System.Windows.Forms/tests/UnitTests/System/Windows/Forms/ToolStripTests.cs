@@ -458,7 +458,7 @@ public partial class ToolStripTests
 
         DropTargetMock dropTarget = new();
         Assert.Equal(ApartmentState.STA, Application.OleRequired());
-        Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
+        Assert.Equal(HRESULT.S_OK, PInvokeCore.RegisterDragDrop(control, dropTarget));
 
         try
         {
@@ -487,7 +487,7 @@ public partial class ToolStripTests
         }
         finally
         {
-            PInvoke.RevokeDragDrop((HWND)control.Handle);
+            PInvokeCore.RevokeDragDrop((HWND)control.Handle);
         }
     }
 
@@ -7335,37 +7335,6 @@ public partial class ToolStripTests
             currentItemWR = mouseHoverTimer.TestAccessor().Dynamic._currentItem;
             Assert.True(currentItemWR.TryGetTarget(out _));
         }
-    }
-
-    [WinFormsFact]
-    public void ToolStrip_displayedItems_Clear()
-    {
-        using ToolStripMenuItem toolStripMenuItem = new(nameof(toolStripMenuItem));
-        using ToolStripMenuItem listToolStripMenuItem = new(nameof(listToolStripMenuItem));
-        toolStripMenuItem.DropDownItems.Add(listToolStripMenuItem);
-        toolStripMenuItem.DropDownOpened += (sender, e) =>
-        {
-            for (int i = 0; i < 4; i++)
-                listToolStripMenuItem.DropDownItems.Add("MenuItem" + i);
-
-            listToolStripMenuItem.DropDown.PerformLayout(); // needed to populate DisplayedItems collection
-        };
-
-        toolStripMenuItem.DropDownClosed += (sender, e) =>
-        {
-            while (listToolStripMenuItem.DropDownItems.Count > 0)
-                listToolStripMenuItem.DropDownItems[listToolStripMenuItem.DropDownItems.Count - 1].Dispose();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        };
-
-        toolStripMenuItem.ShowDropDown();
-        Assert.Equal(4, listToolStripMenuItem.DropDown.DisplayedItems.Count);
-        toolStripMenuItem.HideDropDown();
-        Assert.Empty(listToolStripMenuItem.DropDown.DisplayedItems);
     }
 
     [WinFormsTheory]

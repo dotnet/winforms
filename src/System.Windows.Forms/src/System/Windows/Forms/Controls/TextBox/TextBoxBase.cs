@@ -1006,8 +1006,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  Gets or sets the number of characters selected in the text
-    ///  box.
+    ///  Gets or sets the number of characters selected in the text box.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Browsable(false)]
@@ -1017,28 +1016,24 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            GetSelectionStartAndLength(out int start, out int length);
-
+            GetSelectionStartAndLength(out int _, out int length);
             return length;
         }
-
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int start, out int length);
 
-            if (value != selLength)
+            if (value != length)
             {
-                Select(selStart, value);
+                Select(start, value);
             }
         }
     }
 
     /// <summary>
-    ///  Gets or sets the starting
-    ///  point of text selected in the text
-    ///  box.
+    ///  Gets or sets the starting point of text selected in the text box.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Browsable(false)]
@@ -1048,21 +1043,18 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            GetSelectionStartAndLength(out int selStart, out _);
-
-            return selStart;
+            GetSelectionStartAndLength(out int start, out _);
+            return start;
         }
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
-
             Select(value, SelectionLength);
         }
     }
 
     /// <summary>
-    ///  Gets or sets
-    ///  the current text in the text box.
+    ///  Gets or sets the current text in the text box.
     /// </summary>
     [Localizable(true)]
     [AllowNull]
@@ -1730,26 +1722,28 @@ public abstract partial class TextBoxBase : Control
     ///  But if you do have it cached, please pass it in. This will avoid
     ///  the expensive call to the TextLength property.
     /// </summary>
-    private protected virtual void SelectInternal(int start, int length, int textLen)
+    private protected virtual void SelectInternal(int selectionStart, int selectionLength, int textLength)
     {
         // if our handle is created - send message...
         if (IsHandleCreated)
         {
-            AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
+            AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, textLength);
 
-            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)s, (LPARAM)e);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)start, (LPARAM)end);
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(end == 0
+                    ? UIA_EVENT_ID.UIA_AutomationFocusChangedEventId
+                    : UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
             }
         }
         else
         {
             // otherwise, wait until handle is created to send this message.
             // Store the indices until then...
-            _selectionStart = start;
-            _selectionLength = length;
+            _selectionStart = selectionStart;
+            _selectionLength = selectionLength;
             _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         }
     }

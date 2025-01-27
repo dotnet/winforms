@@ -9,9 +9,11 @@ namespace System.Windows.Forms.Tests;
 
 public partial class DataObjectTests
 {
-    [Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
-                               // and we should not run this test at the same time as other tests using the same format.
+    // Each registered Clipboard format is an OS singleton,
+    // we should not run this test at the same time as other tests using the same format.
+    [Collection("Sequential")]
     [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
+    #pragma warning disable WFDEV005 // Type or member is obsolete
     public class ClipboardTests
     {
         public static TheoryData<string, bool> GetData_StringBool_TheoryData()
@@ -102,7 +104,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        public void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, input);
@@ -164,7 +166,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringBoolObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        public void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, autoConvert, input);

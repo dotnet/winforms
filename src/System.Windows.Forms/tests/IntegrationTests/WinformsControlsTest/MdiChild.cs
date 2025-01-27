@@ -81,7 +81,7 @@ public partial class MdiChild : Form
         }
     }
 
-    private void panel1_DoubleClick(object sender, System.EventArgs e)
+    private void panel1_DoubleClick(object sender, EventArgs e)
     {
         WindowState = FormWindowState.Normal;
     }

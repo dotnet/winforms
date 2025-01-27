@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1809,54 +1808,22 @@ public partial class ControlTests
         Assert.Equal(1, disposedCallCount);
     }
 
-    public static IEnumerable<object[]> DoDragDrop_TestData()
-    {
-        foreach (DragDropEffects allowedEffects in Enum.GetValues(typeof(DragDropEffects)))
-        {
-            yield return new object[] { "text", allowedEffects };
-            yield return new object[] { new DataObject(), allowedEffects };
-            yield return new object[] { new DataObject("data"), allowedEffects };
-            yield return new object[] { new Mock<IDataObject>(MockBehavior.Strict).Object, allowedEffects };
-            yield return new object[] { new Mock<IComDataObject>(MockBehavior.Strict).Object, allowedEffects };
-        }
-    }
-
-    [WinFormsTheory(Skip = "hangs CI, see https://github.com/dotnet/winforms/issues/3336")]
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3336")]
-    [MemberData(nameof(DoDragDrop_TestData))]
-    public void Control_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
-    {
-        using Control control = new();
-        Assert.Equal(DragDropEffects.None, control.DoDragDrop(data, allowedEffects));
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsTheory(Skip = "hangs CI, see https://github.com/dotnet/winforms/issues/3336")]
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3336")]
-    [MemberData(nameof(DoDragDrop_TestData))]
-    public void Control_DoDragDrop_InvokeWithHandle_ReturnsNone(object data, DragDropEffects allowedEffects)
-    {
-        using Control control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
-        int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
-
-        Assert.Equal(DragDropEffects.None, control.DoDragDrop(data, allowedEffects));
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
-    }
-
+    // This scenario throws an exception before accessing the native clipboard API,
+    // so it does not touch the clipboard singleton and does not need to be placed in Sequential collection.
     [WinFormsFact]
     public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
     {
         using Control control = new();
-        Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
+        Action dragDrop = () => control.DoDragDrop(null, DragDropEffects.All);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
+    }
+
+    [WinFormsFact]
+    public void Control_DoDragDropAsJson_NullData_ThrowsArgumentNullException()
+    {
+        using Control control = new();
+        Action dragDrop = () => control.DoDragDropAsJson<string>(null, DragDropEffects.Copy);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
     }
 
     public static IEnumerable<object[]> DrawToBitmap_TestData()

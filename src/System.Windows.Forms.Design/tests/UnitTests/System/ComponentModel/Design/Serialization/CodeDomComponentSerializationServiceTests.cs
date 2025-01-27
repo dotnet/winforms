@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+// #define DUMP_STATE
+
 using System.CodeDom;
 using System.Collections;
 using System.Reflection;
@@ -52,7 +54,7 @@ public class CodeDomComponentSerializationServiceTests
 
     private static Dictionary<string, CodeDomComponentSerializationState> GetState(SerializationInfo info)
     {
-        return Assert.IsType<Dictionary<string, CodeDomComponentSerializationState>>(info.GetValue("State", typeof(Dictionary<string, CodeDomComponentSerializationService.CodeDomComponentSerializationState>)));
+        return Assert.IsType<Dictionary<string, CodeDomComponentSerializationState>>(info.GetValue("State", typeof(Dictionary<string, CodeDomComponentSerializationState>)));
     }
 
     private static void AssertNullState(SerializationInfo info)
@@ -1694,6 +1696,7 @@ public class CodeDomComponentSerializationServiceTests
         }
     }
 
+#if DUMP_STATE
     private static void DumpState(Hashtable state)
     {
         Console.WriteLine("---- DUMPING ----");
@@ -1765,5 +1768,5 @@ public class CodeDomComponentSerializationServiceTests
                 Console.WriteLine($"- [5]: {state5}");
             }
         }
-    }
+#endif
 }

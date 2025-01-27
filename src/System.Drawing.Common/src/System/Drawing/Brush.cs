@@ -28,7 +28,7 @@ public abstract unsafe class Brush : MarshalByRefObject, ICloneable, IDisposable
     {
         if (_nativeBrush is not null)
         {
-            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeleteBrush(_nativeBrush);
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDeleteBrush(_nativeBrush);
             _nativeBrush = null;
             Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }

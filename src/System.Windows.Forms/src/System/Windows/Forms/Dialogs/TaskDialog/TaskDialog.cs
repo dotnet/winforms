@@ -244,7 +244,7 @@ public partial class TaskDialog : IWin32Window
     internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
     internal bool InvokeRequired => IsHandleCreated &&
-        PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvokeCore.GetCurrentThreadId();
+        PInvokeCore.GetWindowThreadProcessId(_handle, out _) != PInvokeCore.GetCurrentThreadId();
 
     /// <summary>
     ///   Gets or sets the current count of stack frames that are in the

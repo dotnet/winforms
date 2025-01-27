@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
+using System.Private.Windows.Ole;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
@@ -73,7 +74,7 @@ public class DragDropHelperTests
     [Fact]
     public void IsInDragLoop_NullDataObject_ThrowsArgumentNullException()
     {
-        IDataObject dataObject = null;
+        IDataObjectInternal dataObject = null;
         Assert.Throws<ArgumentNullException>(nameof(dataObject), () => DragDropHelper.IsInDragLoop(dataObject));
     }
 
@@ -82,8 +83,8 @@ public class DragDropHelperTests
     [InlineData(DragDropHelper.DRAGIMAGEBITS, true)]
     [InlineData(DragDropHelper.DRAGSOURCEHELPERFLAGS, true)]
     [InlineData(DragDropHelper.DRAGWINDOW, true)]
-    [InlineData(PInvoke.CFSTR_DROPDESCRIPTION, true)]
-    [InlineData(PInvoke.CFSTR_INDRAGLOOP, true)]
+    [InlineData(PInvokeCore.CFSTR_DROPDESCRIPTION, true)]
+    [InlineData(PInvokeCore.CFSTR_INDRAGLOOP, true)]
     [InlineData(DragDropHelper.ISSHOWINGLAYERED, true)]
     [InlineData(DragDropHelper.ISSHOWINGTEXT, true)]
     [InlineData(DragDropHelper.USINGDEFAULTDRAGIMAGE, true)]
@@ -91,7 +92,7 @@ public class DragDropHelperTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
+            cfFormat = (short)PInvokeCore.RegisterClipboardFormat(format),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -108,16 +109,18 @@ public class DragDropHelperTests
         try
         {
             DragDropHelper.SetDragImage(dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.DRAGIMAGEBITS);
+            // This DataObject is backed up by the DataStore.
+            dataObject.TryGetData(DragDropHelper.DRAGIMAGEBITS, out DragDropFormat dragDropFormat).Should().BeTrue();
+            dragDropFormat.Should().NotBeNull();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
             bool isDragImageNull = BitOperations.LeadingZeroCount((uint)(nint)pDragImage->hbmpDragImage).Equals(32);
             Size dragImageSize = pDragImage->sizeDragImage;
             Point offset = pDragImage->ptOffset;
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(dragImage is null, isDragImageNull);
-            Assert.Equal(dragImage is null ? new Size(0, 0) : dragImage.Size, dragImageSize);
-            Assert.Equal(cursorOffset, offset);
+            (dragImage is null).Should().Be(isDragImageNull);
+            (dragImage is null ? new Size(0, 0) : dragImage.Size).Should().Be(dragImageSize);
+            cursorOffset.Should().Be(offset);
         }
         finally
         {
@@ -132,16 +135,18 @@ public class DragDropHelperTests
         try
         {
             DragDropHelper.SetDragImage(dataObject, e);
-            DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.DRAGIMAGEBITS);
+            // This DataObject is backed up by the DataStore.
+            dataObject.TryGetData(DragDropHelper.DRAGIMAGEBITS, out DragDropFormat dragDropFormat).Should().BeTrue();
+            dragDropFormat.Should().NotBeNull();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
             bool isDragImageNull = BitOperations.LeadingZeroCount((uint)(nint)pDragImage->hbmpDragImage).Equals(32);
             Size dragImageSize = pDragImage->sizeDragImage;
             Point offset = pDragImage->ptOffset;
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(e.DragImage is null, isDragImageNull);
-            Assert.Equal(e.DragImage is null ? new Size(0, 0) : e.DragImage.Size, dragImageSize);
-            Assert.Equal(e.CursorOffset, offset);
+            (e.DragImage is null).Should().Be(isDragImageNull);
+            (e.DragImage is null ? new Size(0, 0) : e.DragImage.Size).Should().Be(dragImageSize);
+            e.CursorOffset.Should().Be(offset);
         }
         finally
         {
@@ -153,15 +158,17 @@ public class DragDropHelperTests
     public void SetDragImage_NonSTAThread_ThrowsInvalidOperationException()
     {
         Control.CheckForIllegalCrossThreadCalls = true;
-        Assert.Throws<InvalidOperationException>(() => DragDropHelper.SetDragImage(new DataObject(), new Bitmap(1, 1), new Point(0, 0), false));
+        using Bitmap bitmap = new(1, 1);
+        Assert.Throws<InvalidOperationException>(() => DragDropHelper.SetDragImage(new DataObject(), bitmap, new Point(0, 0), false));
     }
 
     [Fact]
     public void SetDragImage_NullDataObject_ThrowsArgumentNullException()
     {
         DataObject dataObject = null;
+        using Bitmap bitmap = new(1, 1);
         Assert.Throws<ArgumentNullException>(nameof(dataObject),
-            () => DragDropHelper.SetDragImage(dataObject, new Bitmap(1, 1), new Point(0, 0), false));
+            () => DragDropHelper.SetDragImage(dataObject, bitmap, new Point(0, 0), false));
     }
 
     [Fact]
@@ -179,16 +186,17 @@ public class DragDropHelperTests
         {
             DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
             DragDropHelper.ClearDropDescription(dataObject);
-            DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(PInvoke.CFSTR_DROPDESCRIPTION);
+            dataObject.TryGetData(PInvokeCore.CFSTR_DROPDESCRIPTION, autoConvert: false, out DragDropFormat dragDropFormat).Should().BeTrue();
+            dragDropFormat.Should().NotBeNull();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
             DROPIMAGETYPE type = pDropDescription->type;
             string szMessage = pDropDescription->szMessage.ToString();
             string szInsert = pDropDescription->szInsert.ToString();
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(DROPIMAGETYPE.DROPIMAGE_INVALID, type);
-            Assert.Equal(string.Empty, szMessage);
-            Assert.Equal(string.Empty, szInsert);
+            type.Should().Be(DROPIMAGETYPE.DROPIMAGE_INVALID);
+            szMessage.Should().Be(string.Empty);
+            szInsert.Should().Be(string.Empty);
         }
         finally
         {
@@ -213,7 +221,7 @@ public class DragDropHelperTests
         {
             DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
             Assert.True(DragDropHelper.IsInDragLoop(dataObject as IComDataObject));
-            Assert.True(DragDropHelper.IsInDragLoop(dataObject as IDataObject));
+            Assert.True(DragDropHelper.IsInDragLoop(dataObject as IDataObjectInternal));
         }
         finally
         {
@@ -245,9 +253,8 @@ public class DragDropHelperTests
 
         foreach (string format in dataObject.GetFormats())
         {
-            if (dataObject.GetData(format) is DragDropFormat dragDropFormat)
+            if (dataObject.TryGetData(format, out DragDropFormat dragDropFormat))
             {
-                Assert.Equal(0, (int)PInvokeCore.GlobalSize(dragDropFormat.Medium.hGlobal));
                 Assert.Equal(nint.Zero, (nint)dragDropFormat.Medium.pUnkForRelease);
                 Assert.Equal(Com.TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
                 Assert.Equal(nint.Zero, (nint)dragDropFormat.Medium.hGlobal);
@@ -262,7 +269,7 @@ public class DragDropHelperTests
         try
         {
             DragDropHelper.SetDropDescription(e);
-            DragDropFormat dragDropFormat = (DragDropFormat)e.Data.GetData(PInvoke.CFSTR_DROPDESCRIPTION);
+            e.Data.TryGetData(PInvokeCore.CFSTR_DROPDESCRIPTION, out DragDropFormat dragDropFormat).Should().BeTrue();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
             DROPIMAGETYPE type = pDropDescription->type;
@@ -289,7 +296,7 @@ public class DragDropHelperTests
         try
         {
             DragDropHelper.SetDropDescription(dataObject, dropImageType, message, messageReplacementToken);
-            DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(PInvoke.CFSTR_DROPDESCRIPTION);
+            dataObject.TryGetData(PInvokeCore.CFSTR_DROPDESCRIPTION, autoConvert: false, out DragDropFormat dragDropFormat).Should().BeTrue();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
             DROPIMAGETYPE type = pDropDescription->type;
@@ -320,7 +327,7 @@ public class DragDropHelperTests
         try
         {
             DragDropHelper.SetInDragLoop(dataObject, inDragLoop);
-            DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(PInvoke.CFSTR_INDRAGLOOP);
+            dataObject.TryGetData(PInvokeCore.CFSTR_INDRAGLOOP, out DragDropFormat dragDropFormat).Should().BeTrue();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             bool inShellDragLoop = (basePtr is not null) && (*(BOOL*)basePtr == true);
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);

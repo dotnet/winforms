@@ -99,7 +99,7 @@ public partial class PrintPreviewControl
                 return HRESULT.E_FAIL;
             }
 
-            int scrollValue = 0;
+            int scrollValue;
             if (owner._hScrollBar.Visible && horizontalAmount != ScrollAmount.ScrollAmount_NoAmount)
             {
                 switch (horizontalAmount)
@@ -156,7 +156,7 @@ public partial class PrintPreviewControl
                 return HRESULT.E_FAIL;
             }
 
-            int scrollValue = 0;
+            int scrollValue;
             if (owner._hScrollBar.Visible && horizontalPercent >= 0 && horizontalPercent <= 100)
             {
                 scrollValue = owner._hScrollBar.Minimum + (int)((owner._hScrollBar.Maximum - owner._hScrollBar.Minimum) * horizontalPercent);

@@ -3,10 +3,12 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using FluentAssertions;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit.Abstractions;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
 namespace System.Windows.Forms.UITests;
 
@@ -60,7 +62,7 @@ public class DragDropTests : ControlTestBase
         // non-serialized object.
 
         Button? button = null;
-        object? data = null;
+        Button? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -77,7 +79,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
                 {
                     // Get the non-serialized Button.
-                    data = e.Data?.GetData(typeof(Button));
+                    data = (Button?)e.Data?.GetData(typeof(Button));
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -116,9 +118,8 @@ public class DragDropTests : ControlTestBase
         });
 
         Assert.NotNull(data);
-        Assert.True(data is Button);
-        Assert.Equal(button?.Name, ((Button)data).Name);
-        Assert.Equal(button?.Text, ((Button)data).Text);
+        Assert.Equal(button?.Name, data.Name);
+        Assert.Equal(button?.Text, data.Text);
     }
 
     [WinFormsFact(Skip = "Crashes dotnet.exe, see: https://github.com/dotnet/winforms/issues/8598")]
@@ -248,6 +249,7 @@ public class DragDropTests : ControlTestBase
 
             return Task.CompletedTask;
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
             async void RunInputSimulator(Point virtualPointStart, Point virtualPointEnd)
             {
                 await InputSimulator.SendAsync(
@@ -266,6 +268,7 @@ public class DragDropTests : ControlTestBase
                             .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
                             .LeftButtonUp());
             }
+#pragma warning restore VSTHRD100 // Avoid async void methods
         });
     }
 
@@ -275,7 +278,7 @@ public class DragDropTests : ControlTestBase
         // Verifies that we can successfully drag and drop a serialized object.
 
         ListViewItem? listViewItem = null;
-        object? data = null;
+        ListViewItem? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -292,7 +295,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
                 {
                     // Get the serialized ListViewItem.
-                    data = e.Data?.GetData(DataFormats.Serializable);
+                    data = (ListViewItem?)e.Data?.GetData(DataFormats.Serializable);
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -330,9 +333,8 @@ public class DragDropTests : ControlTestBase
         });
 
         Assert.NotNull(data);
-        Assert.True(data is ListViewItem);
-        Assert.Equal(listViewItem?.Name, ((ListViewItem)data).Name);
-        Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
+        Assert.Equal(listViewItem?.Name, data.Name);
+        Assert.Equal(listViewItem?.Text, data.Text);
     }
 
     [WinFormsFact]
@@ -487,6 +489,61 @@ public class DragDropTests : ControlTestBase
             Assert.Equal(dragAcceptRtfContent, form.RichTextBoxDropTarget?.Rtf);
             Assert.Equal(dragAcceptRtfTextContent, form.RichTextBoxDropTarget?.Text);
         });
+    }
+
+    [WinFormsFact]
+    public async Task DragDrop_JsonSerialized_ReturnsExpected_Async()
+    {
+        // Verifies that we can successfully drag and drop a JSON serialized object.
+
+        SimpleTestData testData = new() { X = 10, Y = 10 };
+        object? dropped = null;
+        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        {
+            form.AllowDrop = true;
+            form.ClientSize = new Size(100, 100);
+            form.DragEnter += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(typeof(SimpleTestData)) ?? false)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.DragOver += (s, e) =>
+            {
+                if (e.Data?.TryGetData(out SimpleTestData data) ?? false)
+                {
+                    // Get the JSON serialized Point.
+                    dropped = data;
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.MouseDown += (s, e) =>
+            {
+                form.DoDragDropAsJson(testData, DragDropEffects.Copy);
+            };
+
+            var startRect = form.DisplayRectangle;
+            var startCoordinates = form.PointToScreen(GetCenter(startRect));
+            Point endCoordinates = new(startCoordinates.X + 5, startCoordinates.Y + 5);
+            var virtualPointStart = ToVirtualPoint(startCoordinates);
+            var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator
+                    => inputSimulator.Mouse
+                        .MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .LeftButtonDown()
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                        .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                        .LeftButtonUp());
+        });
+
+        dropped.Should().BeOfType(typeof(SimpleTestData));
+        dropped.Should().BeEquivalentTo(testData);
     }
 
     private void CloseExplorer(string directory)
@@ -861,7 +918,7 @@ public class DragDropTests : ControlTestBase
                     ((MousePosition.Y - _screenOffset.Y) < form.DesktopBounds.Top) ||
                     ((MousePosition.Y - _screenOffset.Y) > form.DesktopBounds.Bottom))
                 {
-                    _testOutputHelper.WriteLine($"Cancelling drag.");
+                    _testOutputHelper.WriteLine($"Canceling drag.");
                     e.Action = DragAction.Cancel;
                 }
             }

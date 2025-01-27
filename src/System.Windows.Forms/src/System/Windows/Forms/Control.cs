@@ -10,8 +10,8 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.Graphics.Dwm;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -1446,7 +1446,7 @@ public unsafe partial class Control :
     ///  created yet, this method will return the current thread's ID.
     /// </summary>
     internal uint CreateThreadId => IsHandleCreated
-        ? PInvoke.GetWindowThreadProcessId(this, out _)
+        ? PInvokeCore.GetWindowThreadProcessId(this, out _)
         : PInvokeCore.GetCurrentThreadId();
 
     /// <summary>
@@ -2309,7 +2309,7 @@ public unsafe partial class Control :
                 control = marshalingControl;
             }
 
-            return PInvoke.GetWindowThreadProcessId(control, out _) != PInvokeCore.GetCurrentThreadId();
+            return PInvokeCore.GetWindowThreadProcessId(control, out _) != PInvokeCore.GetCurrentThreadId();
         }
     }
 
@@ -2743,7 +2743,7 @@ public unsafe partial class Control :
 
         // If we're an ActiveX control, clone the region so it can potentially be modified
         using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-        using RegionScope regionHandle = new(regionCopy ?? region, HWND);
+        using RegionScope regionHandle = (regionCopy ?? region).GetRegionScope(HWND);
 
         if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
         {
@@ -4132,7 +4132,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && !LocalAppContextSwitches.NoClientNotifications)
+        if (IsHandleCreated && AppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
@@ -4222,7 +4222,7 @@ public unsafe partial class Control :
 
         SetState(States.CheckedHost, false);
 
-        _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
+        _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
         try
         {
             ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
@@ -4780,6 +4780,48 @@ public unsafe partial class Control :
         }
     }
 
+    /// <inheritdoc cref="DoDragDropAsJson{T}(T, DragDropEffects, Bitmap?, Point, bool)"/>
+    public DragDropEffects DoDragDropAsJson<T>(T data, DragDropEffects allowedEffects) =>
+        DoDragDropAsJson(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
+
+    /// <summary>
+    ///  Begins a drag operation.
+    /// </summary>
+    /// <param name="data">The data being dragged.</param>
+    /// <param name="allowedEffects">determine which drag operations can occur.</param>
+    /// <param name="dragImage">The drag image bitmap.</param>
+    /// <param name="cursorOffset">The drag image cursor offset.</param>
+    /// <param name="useDefaultDragImage">Indicating whether a layered window drag image is used.</param>
+    /// <returns>A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop operation.</returns>
+    /// <exception cref="InvalidOperationException">
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize empty. If <see cref="DataObject"/>
+    ///  needs to be used to start a drag operation, use <see cref="DataObject.SetDataAsJson{T}(T)"/> to JSON serialize the data being held within the <paramref name="data"/>,
+    ///  then pass the <paramref name="data"/> to <see cref="DoDragDrop(object, DragDropEffects)"/>.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///  The data will be stored as JSON if the data is not an intrinsically handled type. Otherwise, it will be stored
+    ///  the same as <see cref="DoDragDrop(object, DragDropEffects)"/>.
+    ///  </para>
+    /// </remarks>
+    public DragDropEffects DoDragDropAsJson<T>(
+        T data,
+        DragDropEffects allowedEffects,
+        Bitmap? dragImage,
+        Point cursorOffset,
+        bool useDefaultDragImage)
+    {
+        data.OrThrowIfNull(nameof(data));
+        if (typeof(T) == typeof(DataObject))
+        {
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(DoDragDrop)));
+        }
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson(data);
+        return DoDragDrop(dataObject, allowedEffects, dragImage, cursorOffset, useDefaultDragImage);
+    }
+
     /// <summary>
     ///  Begins a drag operation. The allowedEffects determine which
     ///  drag operations can occur. If the drag operation needs to interop
@@ -4788,10 +4830,8 @@ public unsafe partial class Control :
     ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
     ///  implements System.Windows.Forms.IDataObject.
     /// </summary>
-    public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
-    {
-        return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
-    }
+    public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) =>
+        DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
 
     /// <summary>
     ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur.
@@ -4835,7 +4875,7 @@ public unsafe partial class Control :
             using var dropSource = ComHelpers.GetComScope<IDropSource>(
                 new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage));
             using var dataScope = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
-            if (PInvoke.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
+            if (PInvokeCore.DoDragDrop(dataScope, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
             {
                 return DragDropEffects.None;
             }
@@ -4924,7 +4964,7 @@ public unsafe partial class Control :
         if (!asyncResult.IsCompleted)
         {
             Control marshaler = FindMarshalingControl();
-            if (PInvoke.GetWindowThreadProcessId(marshaler, out _) == PInvokeCore.GetCurrentThreadId())
+            if (PInvokeCore.GetWindowThreadProcessId(marshaler, out _) == PInvokeCore.GetCurrentThreadId())
             {
                 marshaler.InvokeMarshaledCallbacks();
             }
@@ -5775,7 +5815,7 @@ public unsafe partial class Control :
         else if (IsHandleCreated)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            using RegionScope regionHandle = new(region, graphics);
+            using RegionScope regionHandle = region.GetRegionScope(graphics);
 
             if (invalidateChildren)
             {
@@ -6368,7 +6408,7 @@ public unsafe partial class Control :
 
         // We don't want to wait if we're on the same thread, or else we'll deadlock.
         // It is important that syncSameThread always be false for asynchronous calls.
-        bool syncSameThread = synchronous && PInvoke.GetWindowThreadProcessId(this, out _) == PInvokeCore.GetCurrentThreadId();
+        bool syncSameThread = synchronous && PInvokeCore.GetWindowThreadProcessId(this, out _) == PInvokeCore.GetCurrentThreadId();
 
         // Store the compressed stack information from the thread that is calling the Invoke()
         // so we can assign the same security context to the thread that will actually execute
@@ -9433,7 +9473,7 @@ public unsafe partial class Control :
             if (accept)
             {
                 // Register
-                HRESULT hr = PInvoke.RegisterDragDrop(this, new DropTarget(this));
+                HRESULT hr = PInvokeCore.RegisterDragDrop(this, new DropTarget(this));
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -9442,7 +9482,7 @@ public unsafe partial class Control :
             else
             {
                 // Revoke
-                HRESULT hr = PInvoke.RevokeDragDrop(this);
+                HRESULT hr = PInvokeCore.RevokeDragDrop(this);
                 if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_NOTREGISTERED)
                 {
                     throw Marshal.GetExceptionForHR((int)hr)!;
@@ -9665,32 +9705,22 @@ public unsafe partial class Control :
         Size minSize = MinimumSize;
         Size maxSize = MaximumSize;
 
-        // clear out min and max size, otherwise this could affect the scaling logic.
+        // Clear out min and max size, otherwise this could affect the scaling logic.
         MinimumSize = Size.Empty;
         MaximumSize = Size.Empty;
 
-        // this is raw because Min/Max size have been cleared at this point.
+        // This is raw because Min/Max size have been cleared at this point.
         Rectangle rawScaledBounds = GetScaledBounds(Bounds, factor, specified);
 
         //
         // Scale Padding and Margin
         //
+
         float dx = factor.Width;
         float dy = factor.Height;
 
         Padding padding = Padding;
         Padding margins = Margin;
-
-        // Clear off specified bits for 1.0 scaling factors
-        if (dx == 1.0F)
-        {
-            specified &= ~(BoundsSpecified.X | BoundsSpecified.Width);
-        }
-
-        if (dy == 1.0F)
-        {
-            specified &= ~(BoundsSpecified.Y | BoundsSpecified.Height);
-        }
 
         if (dx != 1.0F)
         {
@@ -9723,17 +9753,19 @@ public unsafe partial class Control :
         if (!minSize.IsEmpty)
         {
             minSize -= adornmentSize;
-            minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we don't go below 0.
-                                    factor.Width,
-                                    factor.Height) + adornmentSize;
+            minSize = ScaleSize(
+                LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we don't go below 0.
+                factor.Width,
+                factor.Height) + adornmentSize;
         }
 
         if (!maxSize.IsEmpty)
         {
             maxSize -= adornmentSize;
-            maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we don't go below 0.
-                                    factor.Width,
-                                    factor.Height) + adornmentSize;
+            maxSize = ScaleSize(
+                LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we don't go below 0.
+                factor.Width,
+                factor.Height) + adornmentSize;
         }
 
         // Apply the min/max size constraints - don't call ApplySizeConstraints
@@ -9938,7 +9970,7 @@ public unsafe partial class Control :
     {
         if (_x != x || _y != y || _width != width || _height != height)
         {
-            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2;
             try
             {
                 SetBoundsCore(x, y, width, height, BoundsSpecified.All);
@@ -9986,7 +10018,7 @@ public unsafe partial class Control :
 
         if (_x != x || _y != y || _width != width || _height != height)
         {
-            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            _forceAnchorCalculations = AppContextSwitches.AnchorLayoutV2;
             try
             {
                 SetBoundsCore(x, y, width, height, specified);
@@ -11722,7 +11754,7 @@ public unsafe partial class Control :
         PaintEventArgs? pevent = null;
 
         using var paletteScope = doubleBuffered || usingBeginPaint
-            ? SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+            ? dc.HalftonePalette(forceBackground: false, realizePalette: false)
             : default;
 
         bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
@@ -11823,8 +11855,7 @@ public unsafe partial class Control :
         using GetDcScope dc = new(HWND);
 
         // We don't want to unset the palette in this case so we don't do this in a using.
-        var paletteScope = SelectPaletteScope.HalftonePalette(
-            dc,
+        var paletteScope = dc.HalftonePalette(
             forceBackground: true,
             realizePalette: true);
 
@@ -12467,7 +12498,7 @@ public unsafe partial class Control :
                     SYSTEM_PARAMETERS_INFO_ACTION action = (SYSTEM_PARAMETERS_INFO_ACTION)(uint)m.WParamInternal;
 
                     // Left here for debugging purposes.
-                    string? text = m.LParamInternal == 0 ? null : new((char*)m.LParamInternal);
+                    // string? text = m.LParamInternal == 0 ? null : new((char*)m.LParamInternal);
 
                     if (action is SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETNONCLIENTMETRICS && m.LParamInternal == 0)
                     {
@@ -12814,4 +12845,55 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
+
+    // Unsupported types don't support nullability.
+#nullable disable
+    /// <summary>
+    ///  This property is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public virtual ContextMenu ContextMenu
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    ///  This event is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public event EventHandler ContextMenuChanged
+    {
+        add { }
+        remove { }
+    }
+
+    /// <summary>
+    ///  This method is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code.
+    /// </summary>
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.UnsupportedControlsDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    protected virtual void OnContextMenuChanged(EventArgs e) { }
+#nullable enable
 }

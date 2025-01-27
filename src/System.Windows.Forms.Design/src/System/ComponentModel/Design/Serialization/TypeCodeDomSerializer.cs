@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Serialization;
 public partial class TypeCodeDomSerializer : CodeDomSerializerBase
 {
     // Used only during deserialization to provide name to object mapping.
-    private IDictionary? _nameTable;
+    private HybridDictionary? _nameTable;
     private Dictionary<string, OrderedCodeStatementCollection>? _statementTable;
     private static readonly Attribute[] s_designTimeFilter = [DesignOnlyAttribute.Yes];
     private static readonly object s_initMethodKey = new();
@@ -214,7 +214,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     /// </summary>
     private object? DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection? statements)
     {
-        object? value = null;
+        object? value;
 
         // If the name we're looking for isn't in our dictionary, we return null.
         // It is up to the caller to decide if this is an error or not.

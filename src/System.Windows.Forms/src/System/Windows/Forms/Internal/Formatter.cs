@@ -16,6 +16,7 @@ internal static class Formatter
     private static readonly Type s_checkStateType = typeof(CheckState);
     private static readonly object s_parseMethodNotFound = new();
     private static readonly object s_defaultDataSourceNullValue = DBNull.Value;
+
     /// <summary>
     ///  Converts a binary value into a format suitable for display to the end user.
     ///  Used when pushing a value from a back-end data source into a data-bound property on a control.
@@ -54,7 +55,7 @@ internal static class Formatter
 
         Type oldTargetType = targetType;
 
-        targetType = NullableUnwrap(targetType);
+        targetType = targetType.UnwrapIfNullable();
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
@@ -244,36 +245,23 @@ internal static class Formatter
         object? formattedNullValue,
         object? dataSourceNullValue)
     {
-        //
         // Strip away any use of nullable types (eg. Nullable<int>), leaving just the 'real' types
-        //
 
         Type oldTargetType = targetType;
 
-        sourceType = NullableUnwrap(sourceType);
-        targetType = NullableUnwrap(targetType);
+        sourceType = sourceType.UnwrapIfNullable();
+        targetType = targetType.UnwrapIfNullable();
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
-        bool isNullableTargetType = (targetType != oldTargetType);
-
-        //
         // Call the 'real' method to perform the conversion
-        //
 
         object? result = ParseObjectInternal(value, targetType, sourceType, targetConverter, sourceConverter, formatInfo, formattedNullValue);
 
-        //
         // On the way out, substitute DBNull with the appropriate representation of 'null' for the final target type.
         // For most types, this is just DBNull. But for a nullable type, its an instance of that type with no value.
-        //
 
-        if (result == DBNull.Value)
-        {
-            return NullData(oldTargetType, dataSourceNullValue);
-        }
-
-        return result;
+        return result == DBNull.Value ? NullData(oldTargetType, dataSourceNullValue) : result;
     }
 
     /// <summary>
@@ -535,20 +523,6 @@ internal static class Formatter
             // sources, or a null reference for 'business object' data sources).
             return dataSourceNullValue;
         }
-    }
-
-    /// <summary>
-    ///  Extract the inner type from a nullable type
-    /// </summary>
-    private static Type NullableUnwrap(Type type)
-    {
-        if (type == s_stringType) // ...performance optimization for the most common case
-        {
-            return s_stringType;
-        }
-
-        Type? underlyingType = Nullable.GetUnderlyingType(type);
-        return underlyingType ?? type;
     }
 
     /// <summary>

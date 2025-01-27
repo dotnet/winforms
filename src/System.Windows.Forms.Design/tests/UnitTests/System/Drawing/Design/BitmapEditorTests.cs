@@ -19,7 +19,6 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_BitmapExtensions_Get_ReturnsExpected()
     {
-        SubBitmapEditor editor = new();
         List<string> extensions = SubBitmapEditor.BitmapExtensions;
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
         Assert.Same(extensions, SubBitmapEditor.BitmapExtensions);

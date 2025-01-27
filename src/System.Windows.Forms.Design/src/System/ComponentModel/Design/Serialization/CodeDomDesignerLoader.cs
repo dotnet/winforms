@@ -192,7 +192,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // If we do not yet have the compile unit, ask for it.
         if (_documentCompileUnit is null)
         {
-            Debug.Assert(_documentType is null && _documentNamespace is null, "We have no compile unit but we still have a type or namespace.  Our state is inconsistent.");
+            Debug.Assert(_documentType is null && _documentNamespace is null, "We have no compile unit but we still have a type or namespace. Our state is inconsistent.");
             _documentCompileUnit = Parse();
 
             if (_documentCompileUnit is null)

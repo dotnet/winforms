@@ -103,7 +103,7 @@ public sealed unsafe class ColorPalette
         buffer[1] = 256;
         fixed (void* b = buffer)
         {
-            PInvoke.GdipInitializePalette(
+            PInvokeGdiPlus.GdipInitializePalette(
                 (GdiPlus.ColorPalette*)b,
                 (GdiPlus.PaletteType)fixedPaletteType,
                 colorCount,

@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
@@ -11,6 +12,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' <summary>
     '''  A dialog that shows progress used for Network.Download and Network.Upload
     ''' </summary>
+    <DesignerCategory("Default")>
     Friend NotInheritable Class ProgressDialog
         Inherits Form
 
@@ -27,7 +29,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private Const WS_THICKFRAME As Integer = &H40000
 
         'Required by the Windows Form Designer
-        Private ReadOnly _components As System.ComponentModel.IContainer
+        Private ReadOnly _components As IContainer
 
         ' Indicates whether or not the user has canceled the copy
         Private _canceled As Boolean
@@ -119,7 +121,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         'Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            Dim resources As New ComponentResourceManager(GetType(ProgressDialog))
             LabelInfo = New Label
             ProgressBarWork = New ProgressBar
             ButtonCloseDialog = New Button

@@ -87,7 +87,7 @@ internal partial class PropertyGridView
 
                 if (_thisProcessId == 0)
                 {
-                    PInvoke.GetWindowThreadProcessId(_control, out _thisProcessId);
+                    PInvokeCore.GetWindowThreadProcessId(_control, out _thisProcessId);
                 }
 
                 _callBack = MouseHookProc;
@@ -95,7 +95,7 @@ internal partial class PropertyGridView
                 _mouseHookHandle = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_MOUSE,
                     (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
-                    (HINSTANCE)0,
+                    HINSTANCE.Null,
                     PInvokeCore.GetCurrentThreadId());
 
                 Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");
@@ -168,7 +168,7 @@ internal partial class PropertyGridView
                 Debug.Assert(_thisProcessId != 0, "Didn't get our process id!");
 
                 // Make sure the window is in our process.
-                PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
+                PInvokeCore.GetWindowThreadProcessId(hwnd, out uint pid);
 
                 // If this isn't our process, unhook the mouse.
                 if (pid != _thisProcessId)

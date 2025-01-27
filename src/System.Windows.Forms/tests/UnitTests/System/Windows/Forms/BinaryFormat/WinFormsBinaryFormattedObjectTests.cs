@@ -6,26 +6,117 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
+using System.Reflection.Metadata;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
-namespace System.Private.Windows.Core.BinaryFormat.Tests;
+namespace System.Private.Windows.BinaryFormat.Tests;
 
 public class WinFormsBinaryFormattedObjectTests
 {
     private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
 
     [Fact]
+    public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        SerializationRecord format = testData.SerializeAndDecode();
+        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        format.TryGetObjectFromJson<SimpleTestData>(resolver, out _).Should().BeFalse();
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_JsonData_RoundTrip()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+
+        JsonData<SimpleTestData> json = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, json);
+
+        stream.Position = 0;
+        SerializationRecord binary = NrbfDecoder.Decode(stream);
+        binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
+        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        binary.TryGetObjectFromJson<int>(resolver, out _).Should().BeTrue();
+        binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
+        SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;
+        deserialized.Should().BeEquivalentTo(testData);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_Deserialize_FromStream_WithBinaryFormatter()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        JsonData<SimpleTestData> data = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
+        stream.Position = 0;
+
+        using BinaryFormatterScope scope = new(enable: true);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+        BinaryFormatter binaryFormatter = new() { Binder = new JsonDataTestDataBinder() };
+#pragma warning restore SYSLIB0011
+        SimpleTestData deserialized = binaryFormatter.Deserialize(stream).Should().BeOfType<SimpleTestData>().Which;
+        deserialized.Should().BeEquivalentTo(testData);
+    }
+
+    [Serializable]
+    private struct ReplicatedJsonData : IObjectReference
+    {
+        public byte[] JsonBytes { get; set; }
+
+        public string InnerTypeAssemblyQualifiedName { get; set; }
+
+        public readonly object GetRealObject(StreamingContext context)
+        {
+            object? result = null;
+            if (TypeName.TryParse(InnerTypeAssemblyQualifiedName, out TypeName? innerTypeName)
+                && innerTypeName.Matches(typeof(SimpleTestData).ToTypeName()))
+            {
+                result = JsonSerializer.Deserialize<SimpleTestData>(JsonBytes);
+            }
+
+            return result ?? throw new InvalidOperationException();
+        }
+    }
+
+    private class JsonDataTestDataBinder : SerializationBinder
+    {
+        public override Type? BindToType(string assemblyName, string typeName)
+        {
+            if (assemblyName == "System.Private.Windows.VirtualJson"
+                && typeName == "System.Private.Windows.JsonData")
+            {
+                return typeof(ReplicatedJsonData);
+            }
+
+            throw new InvalidOperationException();
+        }
+    }
+
+    [Fact]
     public void BinaryFormattedObject_Bitmap_FromBinaryFormatter()
     {
         using Bitmap bitmap = new(10, 10);
         SerializationRecord rootRecord = bitmap.SerializeAndDecode();
-        Formats.Nrbf.ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
+        ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeNameMatches(typeof(Bitmap)).Should().BeTrue();
         root.TypeName.FullName.Should().Be(typeof(Bitmap).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
-        Formats.Nrbf.ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
+        ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
         rootRecord.TryGetBitmap(out object? result).Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
@@ -76,7 +167,7 @@ public class WinFormsBinaryFormattedObjectTests
         using ImageListStreamer stream = sourceList.ImageStream!;
 
         SerializationRecord rootRecord = stream.SerializeAndDecode();
-        Formats.Nrbf.ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
+        ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeName.FullName.Should().Be(typeof(ImageListStreamer).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
         root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();

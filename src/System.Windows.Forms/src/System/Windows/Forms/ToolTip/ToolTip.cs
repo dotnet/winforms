@@ -1935,6 +1935,11 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             moveToLocation.X = screen.WorkingArea.Right - tipSize.Width;
         }
 
+        if (moveToLocation.X < screen.WorkingArea.Left)
+        {
+            moveToLocation.X = screen.WorkingArea.Left;
+        }
+
         // re-adjust the Y position of the tool tip if it bleeds off the screen working area.
         if (moveToLocation.Y + tipSize.Height > screen.WorkingArea.Bottom)
         {
@@ -2318,8 +2323,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
                     using Graphics graphics = paintScope.HDC.CreateGraphics();
 
-                    IWin32Window? window = GetCurrentToolWindow();
-                    if (window is not null)
+                    if (GetCurrentToolWindow() is IWin32Window window)
                     {
                         Font font;
                         try
@@ -2334,6 +2338,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                         }
 
                         Control? control = window as Control ?? Control.FromHandle(window.Handle);
+
                         OnDraw(
                             new DrawToolTipEventArgs(
                                 graphics,

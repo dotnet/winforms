@@ -808,7 +808,8 @@ public partial class ComboBox : ListControl
     // of the combo box, we need to use the same calculation they do.
     private int GetComboHeight()
     {
-        int cyCombo = 0;
+        int cyCombo;
+
         // Add on CYEDGE just for some extra space in the edit field/static item.
         // It's really only for static text items, but we want static & editable
         // controls to be the same height.
@@ -2051,7 +2052,7 @@ public partial class ComboBox : ListControl
                 else
                 {
                     // Remove one character from matching text and rematch
-                    MatchingText = MatchingText.Remove(MatchingText.Length - 1);
+                    MatchingText = MatchingText[..^1];
                     SelectedIndex = FindString(MatchingText);
                 }
 
@@ -3764,14 +3765,7 @@ public partial class ComboBox : ListControl
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
-                    if ((!Enabled || FlatStyle == FlatStyle.Popup) && MouseIsOver)
-                    {
-                        FlatComboBoxAdapter.DrawPopUpCombo(this, g);
-                    }
-                    else
-                    {
-                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                    }
+                    FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                     return;
                 }
@@ -3855,5 +3849,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, shouldRedrawAsSmallButton: false);
+        => new(this, smallButton: false);
 }

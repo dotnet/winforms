@@ -2857,8 +2857,19 @@ public partial class RichTextBox : TextBoxBase
             if ((flags & PInvoke.SF_RTF) != 0)
             {
                 long streamStart = _editStream.Position;
+
                 byte[] bytes = new byte[SZ_RTF_TAG.Length];
-                _editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
+                try
+                {
+                    // When we reading with `ReadExactly`, we usually will get overshoot at this point anyway in most cases
+                    // and then know that the format cannot be correct. So, we're packing this and throw, but we still need
+                    // to throw an `ArgumentException` to not introduce a breaking change.
+                    _editStream.ReadExactly(bytes, (int)streamStart, SZ_RTF_TAG.Length);
+                }
+                catch (EndOfStreamException ex)
+                {
+                    throw new ArgumentException(SR.InvalidFileFormat, ex);
+                }
 
                 // Encode using the default encoding.
                 string str = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes);
@@ -3100,7 +3111,7 @@ public partial class RichTextBox : TextBoxBase
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETOLECALLBACK, 0, (nint)oleCallback);
         }
 
-        PInvoke.DragAcceptFiles(this, fAccept: false);
+        PInvokeCore.DragAcceptFiles(this, fAccept: false);
     }
 
     // Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
@@ -3259,7 +3270,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     fixed (char* b = buffer)
                     {
-                        uint length = PInvoke.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
+                        uint length = PInvokeCore.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
                         if (length != 0)
                         {
                             // Try to load the file as RTF.

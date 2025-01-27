@@ -516,7 +516,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (e.Control.IsHandleCreated)
         {
             Application.OleRequired();
-            PInvoke.RevokeDragDrop(e.Control);
+            PInvokeCore.RevokeDragDrop(e.Control);
 
             // We only hook the control's children if there was no designer. We leave it up to the designer
             // to hook its own children.
@@ -877,7 +877,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (child.IsHandleCreated)
             {
                 Application.OleRequired();
-                PInvoke.RevokeDragDrop(child);
+                PInvokeCore.RevokeDragDrop(child);
                 HookChildHandles((HWND)child.Handle);
             }
             else
@@ -1219,7 +1219,7 @@ public partial class ControlDesigner : ComponentDesigner
         OnHandleChange();
         if (_revokeDragDrop)
         {
-            PInvoke.RevokeDragDrop(Control);
+            PInvokeCore.RevokeDragDrop(Control);
         }
     }
 
@@ -1665,7 +1665,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Hooks the children of the given control. We need to do this for child controls that are not in design
+    ///  Unhooks the children of the given control. We need to do this for child controls that are not in design
     ///  mode, which is the case for composite controls.
     /// </summary>
     protected void UnhookChildControls(Control firstChild)
@@ -1674,11 +1674,9 @@ public partial class ControlDesigner : ComponentDesigner
 
         foreach (Control child in firstChild.Controls)
         {
-            IWindowTarget? oldTarget = null;
             if (child is not null)
             {
-                // No, no designer means we must replace the window target in this control.
-                oldTarget = child.WindowTarget;
+                IWindowTarget? oldTarget = child.WindowTarget;
                 if (oldTarget is ChildWindowTarget target)
                 {
                     child.WindowTarget = target.OldWindowTarget;
@@ -2409,7 +2407,7 @@ public partial class ControlDesigner : ComponentDesigner
                     // have a Windows Forms control associated with them, we have to RevokeDragDrop()
                     // for them so that the ParentControlDesigner()'s drag-drop support can work
                     // correctly.
-                    PInvoke.RevokeDragDrop(hwndChild);
+                    PInvokeCore.RevokeDragDrop(hwndChild);
                     new ChildSubClass(this, hwndChild);
                     SubclassedChildWindows[hwndChild] = true;
                 }
@@ -2430,7 +2428,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     private static bool IsWindowInCurrentProcess(HWND hwnd)
     {
-        PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
+        PInvokeCore.GetWindowThreadProcessId(hwnd, out uint pid);
         return pid == CurrentProcessId;
     }
 

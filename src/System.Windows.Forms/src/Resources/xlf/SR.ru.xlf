@@ -292,6 +292,16 @@
         <target state="translated">Сериализация и десериализация BinaryFormatter отключены в этом приложении. Дополнительные сведения см. https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">BinaryFormatter не поддерживается в буфере обмена или операциях перетаскивания.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">BinaryFormatter не поддерживается в буфере обмена или операциях перетаскивания. Включите его и используйте API "TryGetData&lt;T&gt;" с функцией "resolver", которая определяет набор разрешенных типов для десериализации '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Происходит при изменении контекста привязки.</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">Сбой при выполнении запрошенной операции с буфером обмена.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">Объект типа "DataObject" будет сериализован как пустой. Используйте API-интерфейсы "DataObject.SetDataAsJson" на объекте для сериализации данных в объекте JSON, а затем используйте API '{0}' с объектом.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">Указанный тип '{0}' несовместим с указанным форматом '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' не является конкретным типом и может привести к нео привязанной попытке десериализации. Используйте конкретный тип или определите функцию "resolver", которая поддерживает типы, которые вы ожидаете получить из буфера обмена, или используйте в операциях перетаскивания.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">Сбой десериализации данных JSON.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">Тип {0} не найден. Если этот тип разрешен, убедитесь, что функция "resolver", указанная в API "TryGetData&lt;T&gt;", поддерживает ее.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">Используйте API"TryGetData&lt;T&gt;" с функцией "resolver", которая определяет набор разрешенных типов для десериализации '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">Значение DropDownWidth не может быть меньше {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">Поле с именем {0} не существует.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">Недопустимое значение DataGridViewComboBoxCell.</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">Значение MaxDropDownItems не может быть меньше {0} или больше {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5776,6 +5816,11 @@ Do you want to replace it?</source>
         <target state="translated">Определяет поддержку для инициализации транзакции. </target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">Объекты '{0}' не реализуют интерфейс "ITypedDataObject" и не могут быть прочитаны с помощью методов "TryGetData&lt;T&gt;(string, out T)".</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">Недопустимая операция в нескольких потоках: попытка доступа к элементу управления '{0}' не из того потока, в котором он был создан.</target>
@@ -7380,6 +7425,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">При преобразовании типа {0} в строке {1} в позиции {2} возникло следующее исключение: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Буфер обмена содержит исключение NotSupportedException, которое указывает на сбой операции записи. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">Значок для связывания с подсказкой.</target>
@@ -8663,11 +8713,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Коллекция предназначена только для чтения.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Регистрация формата буфера обмена не удалась.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

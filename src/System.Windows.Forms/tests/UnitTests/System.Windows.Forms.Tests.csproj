@@ -5,6 +5,7 @@
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <RootNamespace />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
@@ -62,6 +63,12 @@
     </Reference>
     <Reference Include="Interop.SHDocVw">
       <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnsupportedTypes">
+      <HintPath>$(ArtifactsBinDir)\UnsupportedTypes\$(Configuration)\net472\UnsupportedTypes.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -19,7 +19,7 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
     public CustomLineCap(GraphicsPath? fillPath, GraphicsPath? strokePath, LineCap baseCap, float baseInset)
     {
         GpCustomLineCap* lineCap;
-        PInvoke.GdipCreateCustomLineCap(
+        PInvokeGdiPlus.GdipCreateCustomLineCap(
             fillPath.Pointer(),
             strokePath.Pointer(),
             (GdiPlus.LineCap)baseCap,
@@ -34,10 +34,10 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
     internal static CustomLineCap CreateCustomLineCapObject(GpCustomLineCap* cap)
     {
         GdiPlus.CustomLineCapType capType;
-        Status status = PInvoke.GdipGetCustomLineCapType(cap, &capType);
+        Status status = PInvokeGdiPlus.GdipGetCustomLineCapType(cap, &capType);
         if (status != Status.Ok)
         {
-            PInvoke.GdipDeleteCustomLineCap(cap);
+            PInvokeGdiPlus.GdipDeleteCustomLineCap(cap);
             throw status.GetException();
         }
 
@@ -49,7 +49,7 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
                 return new AdjustableArrowCap(cap);
         }
 
-        PInvoke.GdipDeleteCustomLineCap(cap);
+        PInvokeGdiPlus.GdipDeleteCustomLineCap(cap);
         throw Status.NotImplemented.GetException();
     }
 
@@ -76,7 +76,7 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
 
         if (_nativeCap is not null && Gdip.Initialized)
         {
-            Status status = PInvoke.GdipDeleteCustomLineCap(_nativeCap);
+            Status status = PInvokeGdiPlus.GdipDeleteCustomLineCap(_nativeCap);
             _nativeCap = null;
             Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
@@ -91,14 +91,14 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
     internal virtual object CoreClone()
     {
         GpCustomLineCap* clonedCap;
-        PInvoke.GdipCloneCustomLineCap(_nativeCap, &clonedCap).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneCustomLineCap(_nativeCap, &clonedCap).ThrowIfFailed();
         GC.KeepAlive(this);
         return CreateCustomLineCapObject(clonedCap);
     }
 
     public void SetStrokeCaps(LineCap startCap, LineCap endCap)
     {
-        PInvoke.GdipSetCustomLineCapStrokeCaps(_nativeCap, (GdiPlus.LineCap)startCap, (GdiPlus.LineCap)endCap).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSetCustomLineCapStrokeCaps(_nativeCap, (GdiPlus.LineCap)startCap, (GdiPlus.LineCap)endCap).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -107,7 +107,7 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         fixed (LineCap* sc = &startCap)
         fixed (LineCap* ec = &endCap)
         {
-            PInvoke.GdipGetCustomLineCapStrokeCaps(_nativeCap, (GdiPlus.LineCap*)sc, (GdiPlus.LineCap*)ec).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetCustomLineCapStrokeCaps(_nativeCap, (GdiPlus.LineCap*)sc, (GdiPlus.LineCap*)ec).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -117,13 +117,13 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         get
         {
             LineJoin lineJoin;
-            PInvoke.GdipGetCustomLineCapStrokeJoin(_nativeCap, (GdiPlus.LineJoin*)&lineJoin).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetCustomLineCapStrokeJoin(_nativeCap, (GdiPlus.LineJoin*)&lineJoin).ThrowIfFailed();
             GC.KeepAlive(this);
             return lineJoin;
         }
         set
         {
-            PInvoke.GdipSetCustomLineCapStrokeJoin(_nativeCap, (GdiPlus.LineJoin)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetCustomLineCapStrokeJoin(_nativeCap, (GdiPlus.LineJoin)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -133,13 +133,13 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         get
         {
             LineCap baseCap;
-            PInvoke.GdipGetCustomLineCapBaseCap(_nativeCap, (GdiPlus.LineCap*)&baseCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetCustomLineCapBaseCap(_nativeCap, (GdiPlus.LineCap*)&baseCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return baseCap;
         }
         set
         {
-            PInvoke.GdipSetCustomLineCapBaseCap(_nativeCap, (GdiPlus.LineCap)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetCustomLineCapBaseCap(_nativeCap, (GdiPlus.LineCap)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -149,13 +149,13 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         get
         {
             float inset;
-            PInvoke.GdipGetCustomLineCapBaseInset(_nativeCap, &inset).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetCustomLineCapBaseInset(_nativeCap, &inset).ThrowIfFailed();
             GC.KeepAlive(this);
             return inset;
         }
         set
         {
-            PInvoke.GdipSetCustomLineCapBaseInset(_nativeCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetCustomLineCapBaseInset(_nativeCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -165,13 +165,13 @@ public unsafe class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
         get
         {
             float widthScale;
-            PInvoke.GdipGetCustomLineCapWidthScale(_nativeCap, &widthScale).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetCustomLineCapWidthScale(_nativeCap, &widthScale).ThrowIfFailed();
             GC.KeepAlive(this);
             return widthScale;
         }
         set
         {
-            PInvoke.GdipSetCustomLineCapWidthScale(_nativeCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetCustomLineCapWidthScale(_nativeCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }

@@ -71,7 +71,7 @@ public sealed partial class BehaviorService
                     if (_thisProcessID == 0)
                     {
                         AdornerWindow adornerWindow = s_adornerWindowList[0];
-                        PInvoke.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
+                        PInvokeCore.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                     }
 
                     _callBack = MouseHookProc;
@@ -79,7 +79,7 @@ public sealed partial class BehaviorService
                     _mouseHookHandle = PInvoke.SetWindowsHookEx(
                         WINDOWS_HOOK_ID.WH_MOUSE,
                         (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
-                        (HINSTANCE)0,
+                        HINSTANCE.Null,
                         PInvokeCore.GetCurrentThreadId());
 
                     _isHooked = _mouseHookHandle != 0;
@@ -165,7 +165,7 @@ public sealed partial class BehaviorService
                         Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
                         // Make sure the window is in our process
-                        PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
+                        PInvokeCore.GetWindowThreadProcessId(hwnd, out uint pid);
 
                         // If this isn't our process, bail
                         if (pid != _thisProcessID)

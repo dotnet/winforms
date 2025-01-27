@@ -1949,7 +1949,7 @@
     <type fullname="System.UriSyntaxFlags" preserve="all" />
 </assembly>
 
-<assembly fullname="System.Private.Windows.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+<assembly fullname="System.Private.Windows, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <type fullname="Windows.Win32.UI.Accessibility.HIGHCONTRASTW_FLAGS" preserve="all" />
     <type fullname="Windows.Win32.UI.WindowsAndMessaging.DI_FLAGS" preserve="all" />
     <type fullname="Windows.Win32.UI.WindowsAndMessaging.GDI_IMAGE_TYPE" preserve="all" />
@@ -2008,12 +2008,12 @@
     <type fullname="Windows.Win32.Graphics.GdiPlus.Status" preserve="all" />
     <type fullname="Windows.Win32.Graphics.GdiPlus.Unit" preserve="all" />
     <type fullname="Windows.Win32.Foundation.WIN32_ERROR" preserve="all" />
-    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryArrayType" preserve="all" />
-    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryType" preserve="all" />
-    <type fullname="System.Private.Windows.Core.BinaryFormat.PrimitiveType" preserve="all" />
-    <type fullname="System.Private.Windows.Core.BinaryFormat.RecordType" preserve="all" />
+    <type fullname="System.Private.Windows.BinaryFormat.BinaryArrayType" preserve="all" />
+    <type fullname="System.Private.Windows.BinaryFormat.BinaryType" preserve="all" />
+    <type fullname="System.Private.Windows.BinaryFormat.PrimitiveType" preserve="all" />
+    <type fullname="System.Private.Windows.BinaryFormat.RecordType" preserve="all" />
     <type fullname="System.Drawing.ApplyGraphicsProperties" preserve="all" />
-    <type fullname="System.Private.Windows.Core.BinaryFormat.BinaryFormattedObjectExtensions/TryGetDelegate" preserve="all" />
+    <type fullname="System.Private.Windows.BinaryFormat.BinaryFormattedObjectExtensions/TryGetDelegate" preserve="all" />
 </assembly>
 
 <assembly fullname="System.Private.Xml, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">

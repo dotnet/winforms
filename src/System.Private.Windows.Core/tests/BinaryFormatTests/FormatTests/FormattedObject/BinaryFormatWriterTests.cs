@@ -3,10 +3,11 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace FormatTests.FormattedObject;
 
@@ -34,6 +35,8 @@ public class BinaryFormatWriterTests
     [MemberData(nameof(TryWriteFrameworkObject_SupportedObjects_TestData))]
     public void BinaryFormatWriter_TryWriteFrameworkObject_SupportedObjects_BinaryFormatterRead(object value)
     {
+        Debug.Print(value.ToString());
+
         using MemoryStream stream = new();
         bool success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
         success.Should().BeTrue();
@@ -162,8 +165,8 @@ public class BinaryFormatWriterTests
         stream.Position.Should().Be(0);
     }
 
-    public static IEnumerable<object[]?> TryWriteFrameworkObject_SupportedObjects_TestData =>
-        ((IEnumerable<object[]?>)HashtableTests.Hashtables_TestData).Concat(
+    public static IEnumerable<object[]> TryWriteFrameworkObject_SupportedObjects_TestData =>
+        ((IEnumerable<object[]>)HashtableTests.Hashtables_TestData).Concat(
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
@@ -176,14 +179,14 @@ public class BinaryFormatWriterTests
             ListTests.ArrayLists_UnsupportedTestData).Concat(
             Array_UnsupportedTestData);
 
-    public static TheoryData<object> SystemDrawing_TestData => new()
-    {
+    public static TheoryData<object> SystemDrawing_TestData =>
+    [
         default(PointF),
         default(RectangleF)
-    };
+    ];
 
-    public static TheoryData<object> DrawingPrimitives_TestData => new()
-    {
+    public static TheoryData<object> DrawingPrimitives_TestData =>
+    [
         new Point(-1, 2),
         new Point(int.MaxValue, int.MinValue),
         Point.Empty,
@@ -204,28 +207,29 @@ public class BinaryFormatWriterTests
         Color.FromArgb(4, Color.Yellow),
         Color.FromName("Blue"),
         SystemColors.ButtonFace
-    };
+    ];
 
-    public static TheoryData<string?[]> StringArray_Parse_Data => new()
-    {
+    public static TheoryData<Array> StringArray_Parse_Data =>
+    [
         new string?[] { "one", "two" },
         new string?[] { "yes", "no", null },
         new string?[] { "same", "same", "same" }
-    };
+    ];
 
-    public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
-    {
+    public static TheoryData<Array> PrimitiveArray_Parse_Data =>
+    [
         new int[] { 1, 2, 3 },
         new int[] { 1, 2, 1 },
         new float[] { 1.0f, float.NaN, float.PositiveInfinity },
         new DateTime[] { DateTime.MaxValue }
-    };
+    ];
 
-    public static IEnumerable<object[]> Array_TestData => ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
+    public static IEnumerable<object[]> Array_TestData =>
+        ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
 
-    public static TheoryData<Array> Array_UnsupportedTestData => new()
-    {
+    public static TheoryData<Array> Array_UnsupportedTestData =>
+    [
         new Point[] { default },
         new object[] { new() },
-    };
+    ];
 }

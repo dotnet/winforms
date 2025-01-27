@@ -996,7 +996,7 @@ public class TabControlTests
 
         // Set different.
         control.ForeColor = Color.Empty;
-        Assert.Equal(TabControl.DefaultForeColor, control.ForeColor);
+        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
         Assert.Equal(2, callCount);
 
         // Remove handler.
@@ -5701,6 +5701,33 @@ public class TabControlTests
         actual = tabControl._controlTipText;
 
         Assert.Equal(text, actual);
+    }
+
+    [WinFormsFact]
+    public void TabControl_WmSelChange_SelectedTabIsNull_DoesNotThrowException()
+    {
+        using Form form = new();
+        using TabControl control = new();
+        using TabPage page1 = new("text1");
+        control.TabPages.Add(page1);
+        _ = control.AccessibilityObject;
+
+        form.Controls.Add(control);
+        form.Show();
+        control.SelectedIndex = 0;
+
+        Action act = () => control.TestAccessor().Dynamic.WmSelChange();
+        act.Should().NotThrow();
+
+        control.TabPages.Clear();
+
+        var exception = Record.Exception(() =>
+        {
+            Application.DoEvents();
+            Thread.Sleep(100);
+        });
+
+        exception.Should().BeNull();
     }
 
     private class SubTabPage : TabPage

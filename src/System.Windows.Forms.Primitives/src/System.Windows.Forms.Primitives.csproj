@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Primitives</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CLSCompliant>true</CLSCompliant>
     <Nullable>enable</Nullable>
     <!--
       We align casing and naming with Win32 API. As such some types have all lower case names, which
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
     <ProjectReference Include="..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
     <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
+    <ProjectReference Include="..\..\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
     <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" Link="System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" />
   </ItemGroup>
 

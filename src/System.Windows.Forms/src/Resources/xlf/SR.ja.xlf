@@ -292,6 +292,16 @@
         <target state="translated">BinaryFormatter のシリアル化と逆シリアル化は、このアプリケーションでは無効です。詳細については、https://aka.ms/binaryformatter を参照してください。</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">BinaryFormatter はクリップボードまたはドラッグ アンド ドロップ操作ではサポートされていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">BinaryFormatter はクリップボードまたはドラッグ アンド ドロップ操作ではサポートされていません。これを有効にして、'{0}' を逆シリアル化するために許可される型のセットを定義する 'resolver' 関数を含む 'TryGetData&lt;T&gt;' API を使用してください。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">バインド コンテキストが変更されたときに発生します。</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">要求されたクリップボード操作に成功しませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">型 'DataObject' のオブジェクトは空としてシリアル化されます。オブジェクトで 'DataObject.SetDataAsJson' API を使用してオブジェクト内のデータを JSON シリアル化してから、オブジェクトで '{0}' API を使用します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">指定された型 '{0}' は、指定された形式 '{1}' と互換性がありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' は具象型ではないため、バインドされていない逆シリアル化が試行される可能性があります。具象型を使用するか、クリップボードから取得する必要のある型をサポートする 'resolver' 関数を定義するか、ドラッグ アンド ドロップ操作で使用してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">トークン データを逆シリアル化できませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">型 {0} が見つかりません。この型が許可されている場合は、'TryGetData&lt;T&gt;' API で指定された 'resolver' 関数でサポートされていることを確認してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">'TryGetData&lt;T&gt;' API は、'{0}' を逆シリアル化するために許可される型のセットを定義する 'resolver' 関数と共に使用してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">DropDownWidth に {0} より小さい値を指定することはできません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">{0} というフィールドは存在しません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">DataGridViewComboBoxCell の値が有効ではありません</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">MaxDropDownItems に {0} よりも小さい値、または {1} よりも大きい値を指定することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5775,6 +5815,11 @@ Do you want to replace it?</source>
         <target state="translated">処理された初期化のサポートを指定します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">データ オブジェクト '{0}' は 'ITypedDataObject' インターフェイスを実装していないため、'TryGetData&lt;T&gt;(string, out T)' メソッドを使用して読み取ることができません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">有効ではないスレッド間の操作: コントロールが作成されたスレッド以外のスレッドからコントロール '{0}' がアクセスされました。</target>
@@ -7379,6 +7424,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">変換中、行 {1}、場所 {2} にある型 {0} が次の例外をスローしました:{3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">クリップボードに、書き込み操作が失敗したことを示す 'NotSupportedException' が含まれています。'{0}'。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">バルーン ToolTip に関連付けるアイコンです。</target>
@@ -8662,11 +8712,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">このコレクションは読み取り専用です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">クリップボード形式を登録することができませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

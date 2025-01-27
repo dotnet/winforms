@@ -1,0 +1,3 @@
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, ByRef data As T) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, resolver As System.Func(Of System.Reflection.Metadata.TypeName, System.Type), ByRef data As T) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataAsJson(Of T)(format As String, data As T) -> Void

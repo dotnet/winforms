@@ -103,11 +103,11 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         {
             if (useEmbeddedColorManagement)
             {
-                PInvoke.GdipLoadImageFromFileICM(fn, &image).ThrowIfFailed();
+                PInvokeGdiPlus.GdipLoadImageFromFileICM(fn, &image).ThrowIfFailed();
             }
             else
             {
-                PInvoke.GdipLoadImageFromFile(fn, &image).ThrowIfFailed();
+                PInvokeGdiPlus.GdipLoadImageFromFile(fn, &image).ThrowIfFailed();
             }
         }
 
@@ -148,7 +148,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         ValidateImage(image);
         _nativeImage = image;
         GdiPlus.ImageType type = default;
-        PInvoke.GdipGetImageType(_nativeImage, &type).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetImageType(_nativeImage, &type).ThrowIfFailed();
         GetAnimatedGifRawData(this, filename: null, stream);
         return image;
     }
@@ -165,11 +165,11 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         if (useEmbeddedColorManagement)
         {
-            PInvoke.GdipLoadImageFromStreamICM(stream, &image).ThrowIfFailed();
+            PInvokeGdiPlus.GdipLoadImageFromStreamICM(stream, &image).ThrowIfFailed();
         }
         else
         {
-            PInvoke.GdipLoadImageFromStream(stream, &image).ThrowIfFailed();
+            PInvokeGdiPlus.GdipLoadImageFromStream(stream, &image).ThrowIfFailed();
         }
 
         return image;
@@ -197,7 +197,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public object Clone()
     {
         GpImage* cloneImage;
-        PInvoke.GdipCloneImage(_nativeImage, &cloneImage).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneImage(_nativeImage, &cloneImage).ThrowIfFailed();
         ValidateImage(cloneImage);
         GC.KeepAlive(this);
         return CreateImageObject(cloneImage);
@@ -210,7 +210,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             return;
         }
 
-        Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDisposeImage(_nativeImage);
+        Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDisposeImage(_nativeImage);
         _nativeImage = null;
         Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
     }
@@ -230,7 +230,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         Guid encoder = format.Encoder;
         if (encoder == Guid.Empty)
         {
-            encoder = ImageCodecInfoHelper.GetEncoderClsid(PInvokeCore.ImageFormatPNG);
+            encoder = ImageCodecInfoHelper.GetEncoderClsid(PInvokeGdiPlus.ImageFormatPNG);
         }
 
         Save(filename, encoder, null);
@@ -272,7 +272,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
             fixed (char* fn = filename)
             {
-                PInvoke.GdipSaveImageToFile(_nativeImage, fn, &encoder, nativeParameters).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSaveImageToFile(_nativeImage, fn, &encoder, nativeParameters).ThrowIfFailed();
             }
         }
         finally
@@ -343,7 +343,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         try
         {
-            PInvoke.GdipSaveAdd(_nativeImage, nativeParameters).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSaveAdd(_nativeImage, nativeParameters).ThrowIfFailed();
         }
         finally
         {
@@ -375,7 +375,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         try
         {
-            PInvoke.GdipSaveAddImage(_nativeImage, image._nativeImage, nativeParameters).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSaveAddImage(_nativeImage, image._nativeImage, nativeParameters).ThrowIfFailed();
         }
         finally
         {
@@ -409,7 +409,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             float width;
             float height;
 
-            PInvoke.GdipGetImageDimension(_nativeImage, &width, &height).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageDimension(_nativeImage, &width, &height).ThrowIfFailed();
             GC.KeepAlive(this);
             return new SizeF(width, height);
         }
@@ -431,7 +431,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint width;
-            PInvoke.GdipGetImageWidth(_nativeImage, &width).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageWidth(_nativeImage, &width).ThrowIfFailed();
             GC.KeepAlive(this);
             return (int)width;
         }
@@ -448,7 +448,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint height;
-            PInvoke.GdipGetImageHeight(_nativeImage, &height).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageHeight(_nativeImage, &height).ThrowIfFailed();
             GC.KeepAlive(this);
             return (int)height;
         }
@@ -462,7 +462,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             float horzRes;
-            PInvoke.GdipGetImageHorizontalResolution(_nativeImage, &horzRes).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageHorizontalResolution(_nativeImage, &horzRes).ThrowIfFailed();
             GC.KeepAlive(this);
             return horzRes;
         }
@@ -476,7 +476,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             float vertRes;
-            PInvoke.GdipGetImageVerticalResolution(_nativeImage, &vertRes).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageVerticalResolution(_nativeImage, &vertRes).ThrowIfFailed();
             GC.KeepAlive(this);
             return vertRes;
         }
@@ -491,7 +491,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint flags;
-            PInvoke.GdipGetImageFlags(_nativeImage, &flags).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageFlags(_nativeImage, &flags).ThrowIfFailed();
             GC.KeepAlive(this);
             return (int)flags;
         }
@@ -505,7 +505,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             Guid guid = default;
-            PInvoke.GdipGetImageRawFormat(_nativeImage, &guid).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImageRawFormat(_nativeImage, &guid).ThrowIfFailed();
             GC.KeepAlive(this);
             return new ImageFormat(guid);
         }
@@ -525,7 +525,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint count;
-            PInvoke.GdipGetPropertyCount(_nativeImage, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPropertyCount(_nativeImage, &count).ThrowIfFailed();
             if (count == 0)
             {
                 return [];
@@ -534,7 +534,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             int[] propid = new int[count];
             fixed (int* pPropid = propid)
             {
-                PInvoke.GdipGetPropertyIdList(_nativeImage, count, (uint*)pPropid).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetPropertyIdList(_nativeImage, count, (uint*)pPropid).ThrowIfFailed();
             }
 
             GC.KeepAlive(this);
@@ -543,7 +543,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Gets an array of <see cref='Imaging.PropertyItem'/> objects that describe this <see cref='Image'/>.
+    ///  Gets an array of <see cref='PropertyItem'/> objects that describe this <see cref='Image'/>.
     /// </summary>
     [Browsable(false)]
     public Imaging.PropertyItem[] PropertyItems
@@ -551,7 +551,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint size, count;
-            PInvoke.GdipGetPropertySize(_nativeImage, &size, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPropertySize(_nativeImage, &size, &count).ThrowIfFailed();
 
             if (size == 0 || count == 0)
             {
@@ -563,7 +563,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             fixed (byte* b = buffer)
             {
                 GdiPlus.PropertyItem* properties = (GdiPlus.PropertyItem*)b;
-                PInvoke.GdipGetAllPropertyItems(_nativeImage, size, count, properties);
+                PInvokeGdiPlus.GdipGetAllPropertyItems(_nativeImage, size, count, properties);
 
                 for (int i = 0; i < count; i++)
                 {
@@ -599,12 +599,12 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             // sizeof(ColorPalette) + (pal->Count-1)*sizeof(ARGB)
 
             int size;
-            PInvoke.GdipGetImagePaletteSize(_nativeImage, &size).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetImagePaletteSize(_nativeImage, &size).ThrowIfFailed();
 
             using BufferScope<uint> buffer = new(size / sizeof(uint));
             fixed (uint* b = buffer)
             {
-                PInvoke.GdipGetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b, size).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b, size).ThrowIfFailed();
                 GC.KeepAlive(this);
                 return ColorPalette.ConvertFromBuffer(buffer);
             }
@@ -614,7 +614,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             using BufferScope<uint> buffer = value.ConvertToBuffer();
             fixed (uint* b = buffer)
             {
-                PInvoke.GdipSetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSetImagePalette(_nativeImage, (GdiPlus.ColorPalette*)b).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
         }
@@ -631,7 +631,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         // GDI+ had to ignore the callback as System.Drawing didn't define it correctly so it was eventually removed
         // completely in Windows 7. As such, we don't need to pass it to GDI+.
-        PInvoke.GdipGetImageThumbnail(
+        PInvokeGdiPlus.GdipGetImageThumbnail(
             this.Pointer(),
             (uint)thumbWidth,
             (uint)thumbHeight,
@@ -647,11 +647,11 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     {
         try
         {
-            PInvoke.GdipImageForceValidation(image).ThrowIfFailed();
+            PInvokeGdiPlus.GdipImageForceValidation(image).ThrowIfFailed();
         }
         catch
         {
-            PInvoke.GdipDisposeImage(image);
+            PInvokeGdiPlus.GdipDisposeImage(image);
             throw;
         }
     }
@@ -663,7 +663,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     {
         Guid dimensionID = dimension.Guid;
         uint count;
-        PInvoke.GdipImageGetFrameCount(_nativeImage, &dimensionID, &count).ThrowIfFailed();
+        PInvokeGdiPlus.GdipImageGetFrameCount(_nativeImage, &dimensionID, &count).ThrowIfFailed();
         GC.KeepAlive(this);
         return (int)count;
     }
@@ -674,7 +674,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public Imaging.PropertyItem? GetPropertyItem(int propid)
     {
         uint size;
-        PInvoke.GdipGetPropertyItemSize(_nativeImage, (uint)propid, &size).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetPropertyItemSize(_nativeImage, (uint)propid, &size).ThrowIfFailed();
 
         if (size == 0)
         {
@@ -685,7 +685,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         fixed (byte* b = buffer)
         {
             GdiPlus.PropertyItem* property = (GdiPlus.PropertyItem*)b;
-            PInvoke.GdipGetPropertyItem(_nativeImage, (uint)propid, size, property).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPropertyItem(_nativeImage, (uint)propid, size, property).ThrowIfFailed();
             GC.KeepAlive(this);
             return Imaging.PropertyItem.FromNative(property);
         }
@@ -697,7 +697,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public int SelectActiveFrame(FrameDimension dimension, int frameIndex)
     {
         Guid dimensionID = dimension.Guid;
-        PInvoke.GdipImageSelectActiveFrame(_nativeImage, &dimensionID, (uint)frameIndex).ThrowIfFailed();
+        PInvokeGdiPlus.GdipImageSelectActiveFrame(_nativeImage, &dimensionID, (uint)frameIndex).ThrowIfFailed();
         GC.KeepAlive(this);
         return 0;
     }
@@ -717,14 +717,14 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
                 value = propItemValue
             };
 
-            PInvoke.GdipSetPropertyItem(_nativeImage, &native).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPropertyItem(_nativeImage, &native).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
 
     public void RotateFlip(RotateFlipType rotateFlipType)
     {
-        PInvoke.GdipImageRotateFlip(_nativeImage, (GdiPlus.RotateFlipType)rotateFlipType).ThrowIfFailed();
+        PInvokeGdiPlus.GdipImageRotateFlip(_nativeImage, (GdiPlus.RotateFlipType)rotateFlipType).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -733,7 +733,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     /// </summary>
     public void RemovePropertyItem(int propid)
     {
-        PInvoke.GdipRemovePropertyItem(_nativeImage, (uint)propid).ThrowIfFailed();
+        PInvokeGdiPlus.GdipRemovePropertyItem(_nativeImage, (uint)propid).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -745,7 +745,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         Imaging.EncoderParameters parameters;
 
         uint size;
-        PInvoke.GdipGetEncoderParameterListSize(_nativeImage, &encoder, &size).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetEncoderParameterListSize(_nativeImage, &encoder, &size).ThrowIfFailed();
 
         if (size <= 0)
         {
@@ -755,7 +755,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         using BufferScope<byte> buffer = new((int)size);
         fixed (byte* b = buffer)
         {
-            PInvoke.GdipGetEncoderParameterList(
+            PInvokeGdiPlus.GdipGetEncoderParameterList(
                 _nativeImage,
                 &encoder,
                 size,
@@ -779,7 +779,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     public static Bitmap FromHbitmap(IntPtr hbitmap, IntPtr hpalette)
     {
         GpBitmap* bitmap;
-        PInvoke.GdipCreateBitmapFromHBITMAP((HBITMAP)hbitmap, (HPALETTE)hpalette, &bitmap).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateBitmapFromHBITMAP((HBITMAP)hbitmap, (HPALETTE)hpalette, &bitmap).ThrowIfFailed();
         return new Bitmap(bitmap);
     }
 
@@ -822,7 +822,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         get
         {
             uint count;
-            PInvoke.GdipImageGetFrameDimensionsCount(_nativeImage, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipImageGetFrameDimensionsCount(_nativeImage, &count).ThrowIfFailed();
 
             Debug.Assert(count >= 0, "FrameDimensionsList returns bad count");
             if (count <= 0)
@@ -833,7 +833,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
             Guid[] guids = new Guid[count];
             fixed (Guid* g = guids)
             {
-                PInvoke.GdipImageGetFrameDimensionsList(_nativeImage, g, count).ThrowIfFailed();
+                PInvokeGdiPlus.GdipImageGetFrameDimensionsList(_nativeImage, g, count).ThrowIfFailed();
             }
 
             GC.KeepAlive(this);
@@ -854,7 +854,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     internal static Image CreateImageObject(GpImage* nativeImage)
     {
         GdiPlus.ImageType imageType = default;
-        PInvoke.GdipGetImageType(nativeImage, &imageType);
+        PInvokeGdiPlus.GdipGetImageType(nativeImage, &imageType);
         return imageType switch
         {
             GdiPlus.ImageType.ImageTypeBitmap => new Bitmap((GpBitmap*)nativeImage),
@@ -877,7 +877,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
         bool animatedGif = false;
 
         uint dimensions;
-        PInvoke.GdipImageGetFrameDimensionsCount(image._nativeImage, &dimensions).ThrowIfFailed();
+        PInvokeGdiPlus.GdipImageGetFrameDimensionsCount(image._nativeImage, &dimensions).ThrowIfFailed();
         if (dimensions <= 0)
         {
             return;
@@ -887,7 +887,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
         fixed (Guid* g = guids)
         {
-            PInvoke.GdipImageGetFrameDimensionsList(image._nativeImage, g, dimensions).ThrowIfFailed();
+            PInvokeGdiPlus.GdipImageGetFrameDimensionsList(image._nativeImage, g, dimensions).ThrowIfFailed();
         }
 
         Guid timeGuid = FrameDimension.Time.Guid;
@@ -923,7 +923,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
                 }
 
                 image._animatedGifRawData = new byte[(int)dataStream.Length];
-                dataStream.Read(image._animatedGifRawData, 0, (int)dataStream.Length);
+                dataStream.ReadExactly(image._animatedGifRawData, 0, (int)dataStream.Length);
             }
             finally
             {

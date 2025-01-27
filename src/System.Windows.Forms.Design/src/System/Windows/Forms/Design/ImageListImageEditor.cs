@@ -11,6 +11,7 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor that can perform default file searching for bitmap (.bmp) files.
 /// </summary>
+[CLSCompliant(false)]
 public class ImageListImageEditor : ImageEditor
 {
     // Metafile types are not supported in the ImageListImageEditor and should not be displayed as an option.
@@ -28,7 +29,7 @@ public class ImageListImageEditor : ImageEditor
         }
 
         ArrayList images = [];
-        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
             return images;
         }
@@ -99,7 +100,7 @@ public class ImageListImageEditor : ImageEditor
     {
         // Copy the original stream to a buffer, then wrap a memory stream around it to avoid locking the file.
         byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, (int)stream.Length);
+        stream.ReadExactly(buffer, 0, (int)stream.Length);
 
         // The created image will take over ownership of the stream.
         MemoryStream ms = new(buffer);

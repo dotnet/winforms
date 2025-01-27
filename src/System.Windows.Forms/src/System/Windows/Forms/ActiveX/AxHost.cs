@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -2597,7 +2598,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
 
                 string propName = baseProps[i].Name;
-                PropertyDescriptor? prop = null;
 
                 _propertyInfos.TryGetValue(propName, out PropertyInfo? propInfo);
 
@@ -2609,6 +2609,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 if (!_properties.TryGetValue(propName, out PropertyDescriptor? propDesc))
                 {
+                    PropertyDescriptor? prop;
                     if (propInfo is not null)
                     {
                         prop = new AxPropertyDescriptor(baseProps[i], this);
@@ -3203,13 +3204,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private unsafe void DetachAndForward(ref Message m)
     {
+        HWND handle = GetHandleNoCreate();
         DetachWindow();
-        if (IsHandleCreated)
+        if (!handle.IsNull)
         {
-            void* wndProc = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+            void* wndProc = (void*)PInvokeCore.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             m.ResultInternal = PInvokeCore.CallWindowProc(
                 (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)wndProc,
-                HWND,
+                handle,
                 (uint)m.Msg,
                 m.WParamInternal,
                 m.LParamInternal);
@@ -3526,22 +3528,20 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from a System.Drawing.Image to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object? GetIPictureFromPicture(Image? image)
-        => image is null ? null : IPicture.CreateObjectFromImage(image);
+    protected static object? GetIPictureFromPicture(Image? image) => image?.CreateIPictureRCW();
 
     /// <summary>
     ///  Maps from a System.Drawing.Cursor to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static object? GetIPictureFromCursor(Cursor? cursor)
-        => cursor is null ? null : IPicture.CreateObjectFromIcon(Icon.FromHandle(cursor.Handle), copy: true);
+        => cursor is null ? null : Icon.FromHandle(cursor.Handle).CreateIPictureRCW(copy: true);
 
     /// <summary>
     ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object? GetIPictureDispFromPicture(Image? image)
-        => image is null ? null : IPictureDisp.CreateObjectFromImage(image);
+    protected static object? GetIPictureDispFromPicture(Image? image) => image?.CreateIPictureDispRCW();
 
     /// <summary>
     ///  Maps from an OLE IPicture to a System.Drawing.Image
@@ -3626,6 +3626,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an OLE COLOR to a System.Drawing.Color
     /// </summary>
+    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static Color GetColorFromOleColor(uint color)
     {
@@ -3635,6 +3636,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an System.Drawing.Color to an OLE COLOR
     /// </summary>
+    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static uint GetOleColorFromColor(Color color)
     {

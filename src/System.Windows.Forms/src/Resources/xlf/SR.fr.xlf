@@ -292,6 +292,16 @@
         <target state="translated">La sérialisation et la désérialisation binaryFormatter sont désactivées dans cette application. Pour plus d’informations, consultez https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">BinaryFormatter n’est pas pris en charge dans les opérations de presse-papiers ou de glisser-déplacer.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">BinaryFormatter n’est pas pris en charge dans les opérations de presse-papiers ou de glisser-déplacer. Activez-la et utilisez les API 'TryGetData&lt;T&gt;' avec une fonction 'resolver' qui définit un ensemble de types autorisés pour désérialiser '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Se produit lorsque le contexte de liaison change.</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">Échec de l'opération du Presse-papiers demandée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">Un objet de type 'DataObject' va sérialiser comme vide. Utilisez les API « DataObject.SetDataAsJson » sur votre objet pour sérialiser les données au sein de votre objet, puis utilisez l’API '{0}' avec votre objet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">Le type spécifié '{0}' n’est pas compatible avec le format spécifié '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' n’est pas un type concret et peut entraîner une tentative de désérialisation non liée. Utilisez un type concret ou définissez une fonction « resolver » qui prend en charge les types que vous voulez récupérer à partir du Presse-papiers ou utilisez-la dans les opérations de glisser-déplacer.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">Nous n’avons pas pu désérialiser les données JSON.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">Type {0} introuvable. Si ce type est autorisé, vérifiez que la fonction « resolver » fournie dans les API « TryGetData&lt;T&gt; » le prend en charge.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">Utilisez les API 'TryGetData&lt;T&gt;' avec une fonction 'resolver' qui définit un ensemble de types autorisés pour désérialiser '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">La valeur DropDownWidth ne peut pas être inférieure à {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">Le champ appelé {0} n'existe pas.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">La valeur DataGridViewComboBoxCell n'est pas valide.</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">La valeur MaxDropDownItems ne peut pas être inférieure à {0} ni supérieure à {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5775,6 +5815,11 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Spécifie la prise en charge de l'initialisation traitée. </target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">L’objet de données '{0}' n’implémente pas l’interface 'ITypedDataObject' et ne peut pas être lu à l’aide des méthodes 'TryGetData&lt;T&gt;(string, out T)'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">Opération inter-threads non valide : le contrôle '{0}' a fait l'objet d'un accès à partir d'un thread autre que celui sur lequel il a été créé.</target>
@@ -7379,6 +7424,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Le type {0} à la ligne {1}, position {2}, a levé l'exception suivante lors de sa conversion : {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">Le Presse-papiers contient un élément NotSupportedException qui indique l’échec de l’opération d’écriture. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">L'icône à associer à l'info-bulle.</target>
@@ -8662,11 +8712,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">La collection est en lecture seule.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">Impossible d'inscrire le format du Presse-papiers.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">

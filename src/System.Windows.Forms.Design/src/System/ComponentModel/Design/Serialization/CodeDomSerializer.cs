@@ -293,49 +293,49 @@ public class CodeDomSerializer : CodeDomSerializerBase
     [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected CodeExpression? SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
     {
-        CodeExpression? expression = null;
-
         // First - try GetExpression
-        expression = GetExpression(manager, value);
-        // Next, we check for a named IComponent, and return a reference to it.
-        if (expression is null && value is IComponent)
+        if (GetExpression(manager, value) is { } expression)
         {
-            string? name = manager.GetName(value);
-            bool referenceName = false;
-            if (name is null)
-            {
-                IReferenceService? referenceService = manager.GetService<IReferenceService>();
-                if (referenceService is not null)
-                {
-                    name = referenceService.GetName(value);
-                    referenceName = name is not null;
-                }
-            }
+            return expression;
+        }
 
-            if (name is not null)
+        if (value is not IComponent)
+        {
+            return null;
+        }
+
+        // Next, we check for a named IComponent, and return a reference to it.
+        string? name = manager.GetName(value);
+        bool referenceName = false;
+        if (name is null)
+        {
+            IReferenceService? referenceService = manager.GetService<IReferenceService>();
+            if (referenceService is not null)
             {
-                // Check to see if this is a reference to the root component. If it is, then use "this".
-                if (manager.TryGetContext(out RootContext? root) && root.Value == value)
-                {
-                    expression = root.Expression;
-                }
-                else
-                {
-                    int dotIndex = name.IndexOf('.');
-                    if (referenceName && dotIndex != -1)
-                    {
-                        // if it's a reference name with a dot, we've actually got a property here...
-                        expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(s_thisRef, name[..dotIndex]), name[(dotIndex + 1)..]);
-                    }
-                    else
-                    {
-                        expression = new CodeFieldReferenceExpression(s_thisRef, name);
-                    }
-                }
+                name = referenceService.GetName(value);
+                referenceName = name is not null;
             }
         }
 
-        return expression;
+        if (name is null)
+        {
+            return null;
+        }
+
+        // Check to see if this is a reference to the root component. If it is, then use "this".
+        if (manager.TryGetContext(out RootContext? root) && root.Value == value)
+        {
+            return root.Expression;
+        }
+
+        // If it's a reference name with a dot, we've actually got a property.
+
+        int dotIndex = name.IndexOf('.');
+        return referenceName && dotIndex != -1
+            ? new CodePropertyReferenceExpression(
+                new CodeFieldReferenceExpression(s_thisRef, name[..dotIndex]),
+                name[(dotIndex + 1)..])
+            : new CodeFieldReferenceExpression(s_thisRef, name);
     }
 
     private static void ResetBrowsableProperties(object? instance)

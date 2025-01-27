@@ -24,8 +24,6 @@ CDM_GETSPEC
 CDRF_*
 CFE_EFFECTS
 CFM_MASK
-CFSTR_DROPDESCRIPTION
-CFSTR_INDRAGLOOP
 CHILDID_SELF
 ChildWindowFromPointEx
 CHOOSECOLOR_FLAGS
@@ -48,7 +46,6 @@ CommandStateChangeConstants
 CommDlgExtendedError
 COPYDATASTRUCT
 CoRegisterMessageFilter
-CP_ACP
 CreateAcceleratorTableW
 CreateActCtx
 CreateBrushIndirect
@@ -80,11 +77,8 @@ DISPPARAMS
 DLGC_*
 DOCHOSTUIINFO
 DocumentProperties
-DoDragDrop
 DPI_AWARENESS_CONTEXT_*
 DPI_HOSTING_BEHAVIOR
-DragAcceptFiles
-DragQueryFile
 DrawEdge
 DrawFrameControl
 DRAWITEMSTRUCT
@@ -95,17 +89,14 @@ DrawThemeBackground
 DrawThemeEdge
 DrawThemeParentBackground
 DrawThemeText
-DROPDESCRIPTION
-DROPFILES
-DROPIMAGETYPE
 DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DuplicateHandle
+DWM_WINDOW_CORNER_PREFERENCE
 DwmGetWindowAttribute
 DwmSetWindowAttribute
-DWM_WINDOW_CORNER_PREFERENCE
-DuplicateHandle
 EC_*
 ECO_*
 ECOOP_*
@@ -150,7 +141,6 @@ GetCaretBlinkTime
 GetCaretPos
 GetClassInfo
 GetClassName
-GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
@@ -199,7 +189,6 @@ GetROP2
 GetScrollInfo
 GetShortPathName
 GetStartupInfo
-GetSysColor
 GetSystemMenu
 GetSystemMetricsForDpi
 GetSystemPaletteEntries
@@ -239,7 +228,6 @@ GetViewportExtEx
 GetWindow
 GetWindowDpiAwarenessContext
 GetWindowPlacement
-GetWindowThreadProcessId
 GetWorldTransform
 GMR_*
 HC_*
@@ -259,6 +247,7 @@ HideCaret
 HitTestThemeBackground
 HT*
 HTML_HELP_COMMAND
+HtmlHelp
 HTREEITEM
 IAccessible
 IAccessibleEx
@@ -271,11 +260,9 @@ ICM_MODE
 ICON_*
 IConnectionPoint
 IConnectionPointContainer
-IDataObject
 IDC_*
 IDispatchEx
 IDropSource
-IDragSourceHelper2
 IDropSourceNotify
 IDropTarget
 IDropTargetHelper
@@ -478,7 +465,6 @@ MOUSEHOOKSTRUCT
 MoveToEx
 MSFTEDIT_CLASS
 MsgWaitForMultipleObjectsEx
-MultiByteToWideChar
 NavigateDirection
 NFR_*
 NIN_*
@@ -511,8 +497,6 @@ NOTIFY_ICON_DATA_FLAGS
 NOTIFY_ICON_INFOTIP_FLAGS
 NOTIFY_ICON_MESSAGE
 NotifyWinEvent
-NTSTATUS
-OBJECT_IDENTIFIER
 OemKeyScan
 OLECLOSE
 OLECMDEXECOPT
@@ -522,12 +506,6 @@ OLECONTF
 OleCreateFontIndirect
 OleCreatePropertyFrame
 OleCreatePropertyFrameIndirect
-OleDuplicateData
-OleFlushClipboard
-OleGetClipboard
-OleInitialize
-OleSetClipboard
-OleUninitialize
 OPEN_FILENAME_FLAGS
 OPEN_FILENAME_FLAGS_EX
 OpenInputDesktop
@@ -552,14 +530,10 @@ Rectangle
 RedrawWindow
 REGDB_E_CLASSNOTREG
 RegisterClass
-RegisterClipboardFormat
-RegisterDragDrop
 RegisterWindowMessage
 RegLoadMUIString
 ReleaseCapture
 ReleaseDC
-ReleaseStgMedium
-RevokeDragDrop
 RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE
 RoundRect
 RowOrColumnMajor
@@ -629,8 +603,6 @@ SIGDN
 SIZE_*
 START_PAGE_GENERAL
 STATIC_STYLES
-STATUS_PENDING
-STATUS_SUCCESS
 STATUSCLASSNAME
 stc4
 STGC
@@ -638,7 +610,6 @@ StgCreateDocfileOnILockBytes
 STGMEDIUM
 StgOpenStorageOnILockBytes
 STGTY
-STILL_ACTIVE
 StretchDIBits
 StructureChangeType
 SYSBUTTONSTATES
@@ -728,7 +699,6 @@ WC_STATIC
 WC_TABCONTROL
 WC_TREEVIEW
 WHEEL_DELTA
-WideCharToMultiByte
 WindowFromPoint
 WINDOWPOS
 WINEVENT_INCONTEXT

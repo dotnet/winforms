@@ -4,7 +4,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 using static System.Windows.Forms.Control;
 
 namespace System.Windows.Forms.Layout;
@@ -344,7 +343,7 @@ internal partial class DefaultLayout : LayoutEngine
     {
         // AnchorLayoutV2  only supports Control types. If the feature is disabled or
         // the element is not of Control type, use the original layout method.
-        return LocalAppContextSwitches.AnchorLayoutV2 && element is Control;
+        return AppContextSwitches.AnchorLayoutV2 && element is Control;
     }
 
     private static void LayoutAnchoredControls(IArrangedElement container)
@@ -633,7 +632,7 @@ internal partial class DefaultLayout : LayoutEngine
         }
 
         Size preferredSizeForDocking = Size.Empty;
-        Size preferredSizeForAnchoring = Size.Empty;
+        Size preferredSizeForAnchoring;
 
         if (dock)
         {
@@ -822,7 +821,7 @@ internal partial class DefaultLayout : LayoutEngine
     /// <devdoc>
     ///  This is the new behavior introduced in .NET 8.0. Refer to
     ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
-    ///  Developers may opt-out of this new behavior using switch <see cref="Primitives.LocalAppContextSwitches.AnchorLayoutV2"/>.
+    ///  Developers may opt-out of this new behavior using switch <see cref="AppContextSwitches.AnchorLayoutV2"/>.
     /// </devdoc>
     internal static void UpdateAnchorInfoV2(Control control)
     {
@@ -831,7 +830,7 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
+        Debug.Assert(AppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {AppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
         Control? parent = control.Parent;
 
         // Check if control is ready for anchors calculation.

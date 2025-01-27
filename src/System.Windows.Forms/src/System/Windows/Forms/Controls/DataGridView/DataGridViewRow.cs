@@ -1419,7 +1419,6 @@ public partial class DataGridViewRow : DataGridViewBand
         ArgumentNullException.ThrowIfNull(graphics);
 
         DataGridView dataGridView = DataGridView;
-        Rectangle updatedClipBounds = clipBounds;
         DataGridViewRow sharedRow = dataGridView.Rows.SharedRow(rowIndex);
         DataGridViewCellStyle inheritedRowStyle = new();
         BuildInheritedRowStyle(rowIndex, inheritedRowStyle);
@@ -1440,7 +1439,7 @@ public partial class DataGridViewRow : DataGridViewBand
         }
 
         DataGridViewPaintParts paintParts = dgvrprepe.PaintParts;
-        updatedClipBounds = dgvrprepe.ClipBounds;
+        Rectangle updatedClipBounds = dgvrprepe.ClipBounds;
 
         // first paint the potential row header
         PaintHeader(graphics,
@@ -1504,14 +1503,14 @@ public partial class DataGridViewRow : DataGridViewBand
         Rectangle cellBounds = rowBounds;
         int cx = (dataGridView.RowHeadersVisible ? dataGridView.RowHeadersWidth : 0);
         bool isFirstDisplayedColumn = true;
-        DataGridViewElementStates cellState = DataGridViewElementStates.None;
         DataGridViewCell cell;
         DataGridViewCellStyle inheritedCellStyle = new();
-        DataGridViewColumn? dataGridViewColumnNext = null;
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
         // first paint the potential visible frozen cells
         DataGridViewColumn? dataGridViewColumn = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+        DataGridViewElementStates cellState;
+        DataGridViewColumn? dataGridViewColumnNext;
         while (dataGridViewColumn is not null)
         {
             cell = Cells[dataGridViewColumn.Index];

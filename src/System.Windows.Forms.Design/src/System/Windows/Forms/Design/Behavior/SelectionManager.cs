@@ -257,7 +257,7 @@ internal sealed class SelectionManager : IDisposable
     /// </summary>
     private void OnBeginDrag(object? source, BehaviorDragDropEventArgs e)
     {
-        List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
+        List<IComponent> dragComps = [..e.DragComponents.Cast<IComponent>()];
         List<Glyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph g in BodyGlyphAdorner.Glyphs)
         {
@@ -412,7 +412,7 @@ internal sealed class SelectionManager : IDisposable
             SelectionGlyphAdorner.Glyphs.Clear();
             BodyGlyphAdorner.Glyphs.Clear();
 
-            List<IComponent> selComps = _selectionService.GetSelectedComponents().Cast<IComponent>().ToList();
+            List<IComponent> selComps = [.._selectionService.GetSelectedComponents().Cast<IComponent>()];
             object? primarySelection = _selectionService.PrimarySelection;
 
             // add all control glyphs to all controls on rootComp

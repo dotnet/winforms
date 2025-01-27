@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices.ComTypes;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -9,7 +10,28 @@ namespace System.Windows.Forms.Tests;
 
 public unsafe partial class DataObjectTests
 {
-    private delegate IDataObject CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
+    private delegate IDataObject CreateManagedDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
+
+    [WinFormsFact]
+    public void DataObject_WithJson_MockRoundTrip()
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        DataObject data = new();
+        data.SetDataAsJson("testData", testData);
+
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
+        ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
+        typedOutData.GetDataPresent("testData").Should().BeTrue();
+        typedOutData.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
+    }
 
     [WinFormsFact]
     public void DataObject_CustomIDataObject_MockRoundTrip()
@@ -21,10 +43,10 @@ public unsafe partial class DataObjectTests
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
 
-        // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
+        // Simulate COM call. The COM call will eventually hit CreateManagedDataObjectForOutgoingDropData.
         // Note that this will be a ComWrappers created object since data has been wrapped in our DataObject.
         var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
 
         outData.Should().BeSameAs(data);
     }
@@ -39,10 +61,10 @@ public unsafe partial class DataObjectTests
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
 
-        // Simulate COM call. The COM call will eventually hit CreateWinFormsDataObjectForOutgoingDropData.
+        // Simulate COM call. The COM call will eventually hit CreateManagedDataObjectForOutgoingDropData.
         // Note that this will not be a ComWrappers created object since IComDataObject does not get wrapped in our DataObject.
         var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
 
         outData.Should().BeSameAs(inData);
     }

@@ -3,21 +3,29 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Private.Windows.Ole;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
+using SimpleTestData = System.Windows.Forms.TestUtilities.DataObjectTestHelpers.SimpleTestData;
 
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
 public partial class DataObjectTests
 {
+#pragma warning disable WFDEV005  // Type or member is obsolete
     private static readonly string[] s_restrictedClipboardFormats =
     [
         DataFormats.CommaSeparatedValue,
@@ -362,6 +370,225 @@ public partial class DataObjectTests
         mockDataObject.Object.GetData(format).Should().BeSameAs(expectedResult);
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
     }
+
+#nullable enable
+    internal class DataObjectOverridesTryGetDataCore : DataObject
+    {
+        private readonly string _format;
+        private readonly Func<TypeName, Type>? _resolver;
+        // true is the default value for general purpose APIs (GetData).
+        private readonly bool _autoConvert;
+
+        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert) : base()
+        {
+            _format = format;
+            _resolver = resolver;
+            _autoConvert = autoConvert;
+        }
+
+        public int Count { get; private set; }
+        public static Type Resolver(TypeName _) => typeof(string);
+
+        protected override bool TryGetDataCore<T>(
+            string format,
+            Func<TypeName, Type>? resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+        {
+            format.Should().Be(_format);
+            resolver.Should().BeEquivalentTo(_resolver);
+            autoConvert.Should().Be(_autoConvert);
+            typeof(T).Should().Be<string>();
+
+            Count++;
+            // This is a mock implementation that never returns anything.
+            data = default;
+            return false;
+        }
+    }
+
+    [Fact]
+    public void TryGetData_InvokeString_CallsTryGetDataCore()
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void TryGetData_Wrapper_InvokeString_CallsTryGetDataCore()
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    public static TheoryData<string> RestrictedAndUnrestrictedFormat =>
+    [
+        DataFormats.CommaSeparatedValue,
+        "something custom"
+    ];
+
+    [Theory]
+    [MemberData(nameof(RestrictedAndUnrestrictedFormat))]
+    public void TryGetData_InvokeStringString_CallsTryGetDataCore(string format)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [MemberData(nameof(RestrictedAndUnrestrictedFormat))]
+    public void TryGetData_Wrapper_InvokeStringString_CallsTryGetDataCore(string format)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void TryGetData_InvokeStringString_ValidationFails()
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+
+        // Incompatible format and type.
+        Action tryGetData = () => dataObject.TryGetData(format, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public void TryGetData_Wrapper_InvokeStringString_ValidationFails()
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        // Incompatible format and type.
+        Action tryGetData = () => wrapper.TryGetData(format, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    public static TheoryData<string, bool> FormatAndAutoConvert => new()
+    {
+        { DataFormats.CommaSeparatedValue, true },
+        { "something custom", true },
+        { DataFormats.CommaSeparatedValue, false },
+        { "something custom", false }
+    };
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_InvokeStringBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, resolver: null, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_Wrapper_InvokeStringBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, resolver: null, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    private static Type NotSupportedResolver(TypeName typeName) => throw new NotSupportedException();
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_InvokeStringBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, NotSupportedResolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        Action tryGetData = () => dataObject.TryGetData(format, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_Wrapper_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper = new(dataObject);
+
+        wrapper.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_InvokeStringFuncBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        Action tryGetData = () => dataObject.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_Wrapper_InvokeStringFuncBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+        DataObject wrapper  = new DataObject(dataObject);
+
+        Action tryGetData = () => wrapper.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+#nullable disable
 
     [Theory]
     [MemberData(nameof(GetData_String_TheoryData))]
@@ -1011,9 +1238,61 @@ public partial class DataObjectTests
         ((Action)(() => dataObject.SetData(null))).Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 
+    public static TheoryData<string, string, bool, bool> SetData_StringObject_TheoryData()
+    {
+        TheoryData<string, string, bool, bool> theoryData = new();
+        foreach (string format in s_restrictedClipboardFormats)
+        {
+            if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            theoryData.Add(format, null, format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+            theoryData.Add(format, "input", format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+        }
+
+        theoryData.Add(typeof(Bitmap).FullName, null, false, true);
+        theoryData.Add(typeof(Bitmap).FullName, "input", false, true);
+
+        theoryData.Add("FileName", null, true, false);
+        theoryData.Add("FileName", "input", true, false);
+
+        theoryData.Add("FileNameW", null, true, false);
+        theoryData.Add("FileNameW", "input", true, false);
+
+        return theoryData;
+    }
+
     [Theory]
-    [InlineData(DataFormats.SerializableConstant, null)]
-    [InlineData(DataFormats.SerializableConstant, "input")]
+    [MemberData(nameof(SetData_StringObject_TheoryData))]
+    private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
+    {
+        DataObject dataObject = new();
+        dataObject.SetData(format, input);
+
+        dataObject.GetDataPresent(format).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
+
+        dataObject.GetData(format).Should().Be(input);
+        dataObject.GetData(format, autoConvert: false).Should().Be(input);
+        dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.ContainsAudio().Should().Be(format == DataFormats.WaveAudio);
+        dataObject.ContainsFileDropList().Should().Be(expectedContainsFileDropList);
+        dataObject.ContainsImage().Should().Be(expectedContainsImage);
+        dataObject.ContainsText().Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Text).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.UnicodeText).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Rtf).Should().Be(format == DataFormats.Rtf);
+        dataObject.ContainsText(TextDataFormat.Html).Should().Be(format == DataFormats.Html);
+        dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
+    }
+
+    [Theory]
+    [InlineData(DataFormatNames.Serializable, null)]
+    [InlineData(DataFormatNames.Serializable, "input")]
     [InlineData("something custom", null)]
     [InlineData("something custom", "input")]
     private void DataObject_SetData_InvokeStringObject_Unbounded_GetReturnsExpected(string format, string input)
@@ -1028,6 +1307,17 @@ public partial class DataObjectTests
         dataObject.GetData(format).Should().Be(input);
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        _ = dataObject.TryGetData(format, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, autoConvert: false, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, autoConvert: true, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out object _).Should().Be(input is not null);
+
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out string data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
 
         dataObject.ContainsAudio().Should().BeFalse();
         dataObject.ContainsFileDropList().Should().BeFalse();
@@ -1089,22 +1379,95 @@ public partial class DataObjectTests
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
 
+    public static TheoryData<string, bool, string, bool, bool> SetData_StringBoolObject_TheoryData()
+    {
+        TheoryData<string, bool, string, bool, bool> theoryData = new();
+
+        foreach (string format in s_restrictedClipboardFormats)
+        {
+            if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (bool autoConvert in new bool[] { true, false })
+            {
+                theoryData.Add(format, autoConvert, null, format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+                theoryData.Add(format, autoConvert, "input", format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+            }
+        }
+
+        theoryData.Add(typeof(Bitmap).FullName, false, null, false, false);
+        theoryData.Add(typeof(Bitmap).FullName, false, "input", false, false);
+        theoryData.Add(typeof(Bitmap).FullName, true, null, false, true);
+        theoryData.Add(typeof(Bitmap).FullName, true, "input", false, true);
+
+        theoryData.Add("FileName", false, null, false, false);
+        theoryData.Add("FileName", false, "input", false, false);
+        theoryData.Add("FileName", true, null, true, false);
+        theoryData.Add("FileName", true, "input", true, false);
+
+        theoryData.Add("FileNameW", false, null, false, false);
+        theoryData.Add("FileNameW", false, "input", false, false);
+        theoryData.Add("FileNameW", true, null, true, false);
+        theoryData.Add("FileNameW", true, "input", true, false);
+
+        return theoryData;
+    }
+
     [Theory]
-    [InlineData("something custom", false, "input")]
-    [InlineData("something custom", false, null)]
-    [InlineData("something custom", true, "input")]
-    [InlineData("something custom", true, null)]
-    [InlineData(DataFormats.SerializableConstant, false, "input")]
-    [InlineData(DataFormats.SerializableConstant, false, null)]
-    [InlineData(DataFormats.SerializableConstant, true, "input")]
-    [InlineData(DataFormats.SerializableConstant, true, null)]
-    private void DataObject_SetData_InvokeStringBoolObject_Unbounded_GetReturnsExpected(string format, bool autoConvert, string input)
+    [MemberData(nameof(SetData_StringBoolObject_TheoryData))]
+    private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
     {
         DataObject dataObject = new();
         dataObject.SetData(format, autoConvert, input);
 
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
+
+        dataObject.ContainsAudio().Should().Be(format == DataFormats.WaveAudio);
+        dataObject.ContainsFileDropList().Should().Be(expectedContainsFileDropList);
+        dataObject.ContainsImage().Should().Be(expectedContainsImage);
+        dataObject.ContainsText().Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Text).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.UnicodeText).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Rtf).Should().Be(format == DataFormats.Rtf);
+        dataObject.ContainsText(TextDataFormat.Html).Should().Be(format == DataFormats.Html);
+        dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
+    }
+
+    [Theory]
+    [InlineData("something custom", false, "input")]
+    [InlineData("something custom", false, null)]
+    [InlineData("something custom", true, "input")]
+    [InlineData("something custom", true, null)]
+    [InlineData(DataFormatNames.Serializable, false, "input")]
+    [InlineData(DataFormatNames.Serializable, false, null)]
+    [InlineData(DataFormatNames.Serializable, true, "input")]
+    [InlineData(DataFormatNames.Serializable, true, null)]
+    private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
+    {
+        DataObject dataObject = new();
+        dataObject.SetData(format, autoConvert, input);
+
+        dataObject.GetData(format, autoConvert: false).Should().Be(input);
+        dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.TryGetData(format, out string data).Should().Be(input is not null);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, autoConvert: false, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
 
         dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
         dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
@@ -1574,7 +1937,7 @@ public partial class DataObjectTests
 
         public int QueryGetData(ref FORMATETC format)
         {
-            // do not check the requested storage medium, we always return a metafile handle, thats what Office does
+            // do not check the requested storage medium, we always return a metafile handle, that's what Office does
 
             if (format.cfFormat != (short)CLIPBOARD_FORMAT.CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
                 return (int)HRESULT.DV_E_FORMATETC;
@@ -2423,19 +2786,46 @@ public partial class DataObjectTests
         dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
-        if (data is DataObject)
-        {
-            inData.Should().BeSameAs(data);
-        }
-        else
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        if (data is CustomDataObject)
         {
             inData.Should().NotBeSameAs(data);
         }
+        else
+        {
+            inData.Should().BeSameAs(data);
+        }
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
+    }
+
+    public static IEnumerable<object[]> DataObjectWithJsonMockRoundTripData()
+    {
+        yield return new object[] { new DataObject() };
+        yield return new object[] { new DerivedDataObject() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DataObjectWithJsonMockRoundTripData))]
+    public unsafe void DataObject_WithJson_MockRoundTrip_OutData_IsSame(DataObject data)
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        Point point = new() { X = 1, Y = 1 };
+        data.SetDataAsJson("point", point);
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+        ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
+        typedOutData.GetDataPresent("point").Should().BeTrue();
+        typedOutData.TryGetData("point", out Point deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(point);
     }
 
     [WinFormsFact]
@@ -2445,11 +2835,11 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
         outData.GetData(typeof(string)).Should().Be(testString);
     }
@@ -2461,12 +2851,12 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeAssignableTo<DataObject>();
         inData.Should().NotBeSameAs(data);
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
     }
 
@@ -2477,12 +2867,12 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
-        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
     }
 
@@ -2501,5 +2891,308 @@ public partial class DataObjectTests
         data.GetDataPresent(customFormat).Should().BeTrue();
         data.GetDataPresent("notExist").Should().BeFalse();
         data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, nameof(Bitmap), customFormat]);
+    }
+
+    [WinFormsFact]
+    public unsafe void DataObject_Native_GetData_SerializationFailure()
+    {
+        using Font value = new("Arial", 10);
+        using BinaryFormatterScope scope = new(enable: true);
+        // We are blocking managed font from being serialized as a Locale format.
+        DataObject native = new(DataFormats.Locale, value);
+
+        // Simulate receiving DataObject from native.
+        // Clipboard.SetDataObject(native, copy: true);
+        var comDataObject = ComHelpers.GetComPointer<Com.IDataObject>(native);
+        Com.FORMATETC formatetc = new()
+        {
+            tymed = (uint)TYMED.TYMED_HGLOBAL,
+            cfFormat = (ushort)CLIPBOARD_FORMAT.CF_LOCALE
+        };
+        comDataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+
+        // Validate that HGLOBAL had been freed when handling an error.
+        medium.hGlobal.IsNull.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_DataObject_Throws()
+    {
+        string format = "format";
+        DataObject dataObject = new();
+        Action action = () => dataObject.SetDataAsJson(format, new DataObject());
+        action.Should().Throw<InvalidOperationException>();
+
+        Action dataObjectSet2 = () => dataObject.SetDataAsJson(format, new DerivedDataObject());
+        dataObjectSet2.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_ReturnsExpected()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        string format = "testData";
+        dataObject.SetDataAsJson(format, testData);
+        dataObject.GetDataPresent(format).Should().BeTrue();
+        dataObject.TryGetData(format, out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_Wrapped_ReturnsExpected()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        string format = "testData";
+        dataObject.SetDataAsJson(format, testData);
+        DataObject wrapped = new(dataObject);
+        wrapped.GetDataPresent(format).Should().BeTrue();
+        wrapped.TryGetData(format, out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_MultipleData_ReturnsExpected()
+    {
+        SimpleTestData testData1 = new() { X = 1, Y = 1 };
+        SimpleTestData testData2 = new() { Y = 2, X = 2 };
+        DataObject data = new();
+        data.SetDataAsJson("testData1", testData1);
+        data.SetDataAsJson("testData2", testData2);
+        data.SetData("Mystring", "test");
+
+        data.TryGetData("testData1", out SimpleTestData deserializedTestData1).Should().BeTrue();
+        deserializedTestData1.Should().BeEquivalentTo(testData1);
+        data.TryGetData("testData2", out SimpleTestData deserializedTestData2).Should().BeTrue();
+        deserializedTestData2.Should().BeEquivalentTo(testData2);
+        data.TryGetData("Mystring", out string deserializedString).Should().BeTrue();
+        deserializedString.Should().Be("test");
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_CustomJsonConverter_ReturnsExpected()
+    {
+        // This test demonstrates one way users can achieve custom JSON serialization behavior if the
+        // default JSON serialization behavior that is used in SetDataAsJson APIs is not enough for their scenario.
+        Font font = new("Consolas", emSize: 10);
+        WeatherForecast forecast = new()
+        {
+            Date = DateTimeOffset.Now,
+            TemperatureCelsius = 25,
+            Summary = "Hot",
+            Font = font
+        };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("custom", forecast);
+        dataObject.TryGetData("custom", out WeatherForecast deserialized).Should().BeTrue();
+        string offsetFormat = "MM/dd/yyyy";
+        deserialized.Date.ToString(offsetFormat).Should().Be(forecast.Date.ToString(offsetFormat));
+        deserialized.TemperatureCelsius.Should().Be(forecast.TemperatureCelsius);
+        deserialized.Summary.Should().Be($"{forecast.Summary} custom!");
+        deserialized.Font.Should().Be(font);
+    }
+
+    [JsonConverter(typeof(WeatherForecastJsonConverter))]
+    private class WeatherForecast
+    {
+        public DateTimeOffset Date { get; set; }
+        public int TemperatureCelsius { get; set; }
+        public string Summary { get; set; }
+        public Font Font { get; set; }
+    }
+
+    private class WeatherForecastJsonConverter : JsonConverter<WeatherForecast>
+    {
+        public override WeatherForecast Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            WeatherForecast result = new();
+            string fontFamily = null;
+            int size = -1;
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    if (fontFamily is null || size == -1)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.Font = new(fontFamily, size);
+                    return result;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case nameof(WeatherForecast.Date):
+                        result.Date = DateTimeOffset.ParseExact(reader.GetString(), "MM/dd/yyyy", null);
+                        break;
+                    case nameof(WeatherForecast.TemperatureCelsius):
+                        result.TemperatureCelsius = reader.GetInt32();
+                        break;
+                    case nameof(WeatherForecast.Summary):
+                        result.Summary = reader.GetString();
+                        break;
+                    case nameof(Font.FontFamily):
+                        fontFamily = reader.GetString();
+                        break;
+                    case nameof(Font.Size):
+                        size = reader.GetInt32();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, WeatherForecast value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteString(nameof(WeatherForecast.Date), value.Date.ToString("MM/dd/yyyy"));
+            writer.WriteNumber(nameof(WeatherForecast.TemperatureCelsius), value.TemperatureCelsius);
+            writer.WriteString(nameof(WeatherForecast.Summary), $"{value.Summary} custom!");
+            writer.WriteString(nameof(Font.FontFamily), value.Font.FontFamily.Name);
+            writer.WriteNumber(nameof(Font.Size), value.Font.Size);
+            writer.WriteEndObject();
+        }
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_NullData_Throws()
+    {
+        DataObject dataObject = new();
+        Action dataObjectSet = () => dataObject.SetDataAsJson<string>(null);
+        dataObjectSet.Should().Throw<ArgumentNullException>();
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
+    public void DataObject_SetDataAsJson_RestrictedFormats_NotJsonSerialized(string format)
+    {
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson(format, 1);
+        object storedData = dataObject.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().NotBeAssignableTo<IJsonData>();
+        dataObject.GetData(format).Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void DataObject_SetDataAsJson_NonRestrictedFormat_NotJsonSerialized(string format)
+    {
+        DataObject data = new();
+        data.SetDataAsJson(format, 1);
+        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().NotBeAssignableTo<IJsonData>();
+        data.GetData(format).Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void DataObject_SetDataAsJson_NonRestrictedFormat_JsonSerialized(string format)
+    {
+        DataObject data = new();
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        data.SetDataAsJson(format, testData);
+        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().BeOfType<JsonData<SimpleTestData>>();
+
+        // We don't expose JsonData<T> in public legacy API
+        data.GetData(format).Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_WrongType_ReturnsNull()
+    {
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("test", new SimpleTestData() { X = 1, Y = 1 });
+        dataObject.TryGetData("test", out Bitmap data).Should().BeFalse();
+        data.Should().BeNull();
+    }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_DoesNotUnwrapDataStore()
+    {
+        // The inner data should not have it's data store unwrapped.
+        DataObject dataObject = new();
+        DataObject wrapped = new(dataObject);
+        wrapped.TryUnwrapUserDataObject(out IDataObject original).Should().BeTrue();
+        original.Should().BeSameAs(dataObject);
+    }
+
+    [Fact]
+    public void DataObject_CreateFromDataObject_VirtualsAreCalled()
+    {
+        Mock<DataObject> mock = new(MockBehavior.Loose);
+        DataObject wrapped = new(mock.Object);
+
+        wrapped.GetData("Foo", false);
+        mock.Verify(o => o.GetData("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData("Foo");
+        mock.Verify(o => o.GetData("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetData(typeof(string));
+        mock.Verify(o => o.GetData("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo", false);
+        mock.Verify(o => o.GetDataPresent("Foo", false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent("Foo");
+        mock.Verify(o => o.GetDataPresent("Foo", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetDataPresent(typeof(string));
+        mock.Verify(o => o.GetDataPresent("System.String", true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats(false);
+        mock.Verify(o => o.GetFormats(false), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.GetFormats();
+        mock.Verify(o => o.GetFormats(true), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Foo", "Bar");
+        mock.Verify(o => o.SetData("Foo", "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData(typeof(string), "Bar");
+        mock.Verify(o => o.SetData(typeof(string), "Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
+
+        wrapped.SetData("Bar");
+        mock.Verify(o => o.SetData("Bar"), Times.Once());
+        mock.VerifyNoOtherCalls();
+        mock.Reset();
     }
 }

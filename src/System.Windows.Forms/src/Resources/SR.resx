@@ -2367,8 +2367,8 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridViewComboBoxCell_DropDownWidthOutOfRange" xml:space="preserve">
     <value>DropDownWidth value cannot be smaller than {0}.</value>
   </data>
-  <data name="DataGridViewComboBoxCell_FieldNotFound" xml:space="preserve">
-    <value>Field called {0} does not exist.</value>
+  <data name="DataGridViewComboBoxCell_PropertyNotFound" xml:space="preserve">
+    <value>Property called {0} does not exist.</value>
   </data>
   <data name="DataGridViewComboBoxCell_InvalidValue" xml:space="preserve">
     <value>DataGridViewComboBoxCell value is not valid.</value>
@@ -5013,9 +5013,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ReadonlyControlsCollection" xml:space="preserve">
     <value>Collection is read only.</value>
   </data>
-  <data name="RegisterCFFailed" xml:space="preserve">
-    <value>Clipboard format registration did not succeed.</value>
-  </data>
   <data name="RelatedListManagerChild" xml:space="preserve">
     <value>Child list for field {0} cannot be created.</value>
   </data>
@@ -7014,5 +7011,35 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
     <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
+  </data>
+  <data name="ITypeDataObject_Not_Implemented" xml:space="preserve">
+    <value>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_TypedAPI_InvalidResolver" xml:space="preserve">
+    <value>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidType" xml:space="preserve">
+    <value>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
+    <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
+    <value>Failed to deserialize JSON data.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+    <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
+  </data>
+  <data name="NotSupportedExceptionOnClipboard">
+    <value>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</value>
   </data>
 </root>

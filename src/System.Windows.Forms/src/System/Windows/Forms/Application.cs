@@ -693,7 +693,7 @@ public sealed partial class Application
     private static unsafe BOOL SendThemeChanged(HWND hwnd)
     {
         uint processId;
-        PInvoke.GetWindowThreadProcessId(hwnd, &processId);
+        PInvokeCore.GetWindowThreadProcessId(hwnd, &processId);
         if (processId == PInvoke.GetCurrentProcessId() && PInvoke.IsWindowVisible(hwnd))
         {
             SendThemeChangedRecursive(hwnd);
@@ -1093,9 +1093,14 @@ public sealed partial class Application
             if (s_appFileVersion is null)
             {
                 Type? type = GetAppMainType();
+
+                // In a single-file, "Location" will be empty and it will fall back to ExecutablePath,
+                // which gives the desired result.
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 s_appFileVersion = type is not null && type.Assembly.Location.Length > 0
                     ? FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName)
                     : FileVersionInfo.GetVersionInfo(ExecutablePath);
+#pragma warning restore IL3000
             }
         }
 
@@ -1130,10 +1135,10 @@ public sealed partial class Application
     /// </summary>
     internal static unsafe ThreadContext GetContextForHandle<T>(T handle) where T : IHandle<HWND>
     {
-        ThreadContext? threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
+        ThreadContext? threadContext = ThreadContext.FromId(PInvokeCore.GetWindowThreadProcessId(handle.Handle, null));
         Debug.Assert(
             threadContext is not null,
-            "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
+            "No thread context for handle. This is expected if you saw a previous assert about the handle being invalid.");
 
         GC.KeepAlive(handle);
         return threadContext;

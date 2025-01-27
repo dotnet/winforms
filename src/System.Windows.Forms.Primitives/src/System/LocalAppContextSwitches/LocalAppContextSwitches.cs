@@ -25,6 +25,7 @@ internal static partial class LocalAppContextSwitches
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+    internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -37,10 +38,12 @@ internal static partial class LocalAppContextSwitches
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
+    private static int s_moveTreeViewTextLocationOnePixel;
+
     private static FrameworkName? s_targetFrameworkName;
 
     /// <summary>
-    ///  When there is no exception handler registered for a thread, rethrows the exception. The exception will
+    ///  When there is no exception handler registered for a thread, re-throws the exception. The exception will
     ///  not be presented in a dialog or swallowed when not in interactive mode. This is always opt-in and is
     ///  intended for scenarios where setting handlers for threads isn't practical.
     /// </summary>
@@ -91,48 +94,47 @@ internal static partial class LocalAppContextSwitches
         {
             cachedSwitchValue = isSwitchEnabled ? 1 /*true*/ : -1 /*false*/;
         }
+        else if (!hasSwitch)
+        {
+            AppContext.SetSwitch(switchName, isSwitchEnabled);
+        }
 
         return isSwitchEnabled;
+    }
 
-        static bool GetSwitchDefaultValue(string switchName)
+    private static bool GetSwitchDefaultValue(string switchName)
+    {
+        if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
         {
-            if (TargetFrameworkName is not { } framework)
-            {
-                return false;
-            }
+            return true;
+        }
 
-            if (switchName == NoClientNotificationsSwitchName)
-            {
-                return false;
-            }
+        if (TargetFrameworkName is not { } framework)
+        {
+            return false;
+        }
 
-            if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
+        if (framework.Version.Major >= 8)
+        {
+            // Behavior changes added in .NET 8
+
+            if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
             {
                 return true;
             }
 
-            if (framework.Version.Major >= 8)
+            if (switchName == TrackBarModernRenderingSwitchName)
             {
-                // Behavior changes added in .NET 8
-
-                if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
-                {
-                    return true;
-                }
-
-                if (switchName == TrackBarModernRenderingSwitchName)
-                {
-                    return true;
-                }
-
-                if (switchName == ServicePointManagerCheckCrlSwitchName)
-                {
-                    return true;
-                }
+                return true;
             }
 
-            return false;
+            if (switchName == ServicePointManagerCheckCrlSwitchName)
+            {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /// <summary>
@@ -218,5 +220,15 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
+    }
+
+    /// <summary>
+    ///  Indicates whether to move the text position of a TreeView node one pixel
+    ///  to the right relative to the upper-left corner of the TreeView control.
+    /// </summary>
+    public static bool MoveTreeViewTextLocationOnePixel
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
     }
 }

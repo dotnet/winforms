@@ -1113,13 +1113,13 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
         catch (Exception ex)
         {
-            Debug.Fail($"Exception thrown on LoadComplete event handler.  You should not throw here : {ex}");
+            Debug.Fail($"Exception thrown on LoadComplete event handler. You should not throw here : {ex}");
 
             // The load complete failed. Put us back in the loading state and unload.
             _state[s_stateLoading] = true;
             Unload();
 
-            List<object> errorList = errorCollection is null ? [] : errorCollection.Cast<object>().ToList();
+            List<object> errorList = errorCollection is null ? [] : [..errorCollection.Cast<object>()];
             errorList.Insert(0, ex);
 
             errorCollection = errorList;

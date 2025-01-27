@@ -151,7 +151,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         // Find our base class's serializer.
         if (!manager.TryGetSerializer(typeof(Component), out CodeDomSerializer? serializer))
         {
-            Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
+            Debug.Fail("Unable to find a CodeDom serializer for 'Component'. Has someone tampered with the serialization providers?");
 
             return null;
         }
@@ -334,45 +334,58 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
     /// <summary>
     ///  Serializes a method invocation on the control being serialized. Used to serialize Suspend/ResumeLayout pairs, etc.
     /// </summary>
-    private void SerializeMethodInvocation(IDesignerSerializationManager manager, CodeStatementCollection statements, object control, string methodName, CodeExpressionCollection? parameters, Type[] paramTypes, StatementOrdering ordering)
+    private void SerializeMethodInvocation(
+        IDesignerSerializationManager manager,
+        CodeStatementCollection statements,
+        object control,
+        string methodName,
+        CodeExpressionCollection? parameters,
+        Type[] paramTypes,
+        StatementOrdering ordering)
     {
-        string? name = manager.GetName(control);
+        // Not doing anything with the name, keeping the access for compat.
+        _ = manager.GetName(control);
 
         // Use IReflect to see if this method name exists on the control.
         paramTypes = ToTargetTypes(control, paramTypes);
-        MethodInfo? mi = TypeDescriptor.GetReflectionType(control).GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance, binder: null, paramTypes, modifiers: null);
-
-        if (mi is not null)
+        if (TypeDescriptor.GetReflectionType(control).GetMethod(
+            methodName,
+            BindingFlags.Public | BindingFlags.Instance,
+            binder: null,
+            paramTypes,
+            modifiers: null) is null)
         {
-            CodeExpression? field = SerializeToExpression(manager, control);
-            CodeMethodReferenceExpression method = new(field, methodName);
-            CodeMethodInvokeExpression methodInvoke = new()
-            {
-                Method = method
-            };
-
-            if (parameters is not null)
-            {
-                methodInvoke.Parameters.AddRange(parameters);
-            }
-
-            CodeExpressionStatement statement = new(methodInvoke);
-
-            switch (ordering)
-            {
-                case StatementOrdering.Prepend:
-                    statement.UserData["statement-ordering"] = "begin";
-                    break;
-                case StatementOrdering.Append:
-                    statement.UserData["statement-ordering"] = "end";
-                    break;
-                default:
-                    Debug.Fail($"Unsupported statement ordering: {ordering}");
-                    break;
-            }
-
-            statements.Add(statement);
+            return;
         }
+
+        CodeExpression? field = SerializeToExpression(manager, control);
+        CodeMethodReferenceExpression method = new(field, methodName);
+        CodeMethodInvokeExpression methodInvoke = new()
+        {
+            Method = method
+        };
+
+        if (parameters is not null)
+        {
+            methodInvoke.Parameters.AddRange(parameters);
+        }
+
+        CodeExpressionStatement statement = new(methodInvoke);
+
+        switch (ordering)
+        {
+            case StatementOrdering.Prepend:
+                statement.UserData["statement-ordering"] = "begin";
+                break;
+            case StatementOrdering.Append:
+                statement.UserData["statement-ordering"] = "end";
+                break;
+            default:
+                Debug.Fail($"Unsupported statement ordering: {ordering}");
+                break;
+        }
+
+        statements.Add(statement);
     }
 
     private void SerializePerformLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)

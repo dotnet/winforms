@@ -94,7 +94,7 @@ Namespace Microsoft.VisualBasic
         Private Function InternalInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer, parentWindow As IWin32Window) As String
             Using box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
                 box.ShowDialog(parentWindow)
-                InternalInputBox = box.Output
+                Return box.Output
             End Using
         End Function
 
@@ -250,7 +250,8 @@ Namespace Microsoft.VisualBasic
             'Low-order 4 bits (0x000f), legal values: 0, 1, 2, 3, 4, 5
             '     next 4 bits (0x00f0), legal values: 0, &H10, &H20, &H30, &H40
             '     next 4 bits (0x0f00), legal values: 0, &H100, &H200
-            If ((Buttons And &HFI) > MsgBoxStyle.RetryCancel) OrElse ((Buttons And &HF0I) > MsgBoxStyle.Information) _
+            If ((Buttons And &HFI) > MsgBoxStyle.RetryCancel) _
+                OrElse ((Buttons And &HF0I) > MsgBoxStyle.Information) _
                 OrElse ((Buttons And &HF00I) > MsgBoxStyle.DefaultButton3) Then
                 Buttons = MsgBoxStyle.OkOnly
             End If

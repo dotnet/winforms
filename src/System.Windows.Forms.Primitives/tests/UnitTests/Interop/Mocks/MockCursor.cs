@@ -11,13 +11,11 @@ public class MockCursor : IDisposable
 {
     private HCURSOR _handle;
     private readonly bool _ownHandle = true;
-    private readonly PCWSTR _resourceId;
 
     internal MockCursor(PCWSTR nResourceId)
     {
         // We don't delete stock cursors.
         _ownHandle = false;
-        _resourceId = nResourceId;
         _handle = PInvoke.LoadCursor(HINSTANCE.Null, nResourceId);
         if (_handle.IsNull)
         {

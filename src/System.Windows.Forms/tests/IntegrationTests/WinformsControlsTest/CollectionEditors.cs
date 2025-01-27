@@ -35,7 +35,7 @@ internal partial class CollectionEditors : Form
         _stringList.ForEach(s => comboBox1.Items.Add(s));
     }
 
-    private void control_Enter(object sender, System.EventArgs e)
+    private void control_Enter(object sender, EventArgs e)
     {
         label1.Text = sender.GetType().FullName;
         propertyGrid1.SelectedObject = sender;

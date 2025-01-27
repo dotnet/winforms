@@ -12,6 +12,7 @@ namespace System.Drawing.Design;
 /// <summary>
 ///  Provides an editor for visually picking an image.
 /// </summary>
+[CLSCompliant(false)]
 public class ImageEditor : UITypeEditor
 {
     private static readonly Type[] s_imageExtenders = [typeof(BitmapEditor), typeof(MetafileEditor)];
@@ -61,7 +62,7 @@ public class ImageEditor : UITypeEditor
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
             return value;
         }
@@ -85,6 +86,7 @@ public class ImageEditor : UITypeEditor
                     binder: null,
                     args: null,
                     culture: null);
+
                 if (editor is not null
                     && editor.GetType() is Type editorClass
                     && !myClass.Equals(editorClass)
@@ -117,7 +119,6 @@ public class ImageEditor : UITypeEditor
         return value;
     }
 
-    /// <inheritdoc />
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
     protected virtual string GetFileDialogDescription() => SR.imageFileDescription;

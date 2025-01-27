@@ -20,7 +20,9 @@ public partial class RichTextBoxTests
             using MemoryStream memoryStream = new();
             using Bitmap bitmap = new(100, 100);
             bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+#pragma warning disable WFDEV005 // Type or member is obsolete
             Clipboard.SetData("Embed Source", memoryStream);
+#pragma warning restore WFDEV005
 
             control.Text.Should().BeEmpty();
         }
@@ -52,7 +54,6 @@ public partial class RichTextBoxTests
         {
             using RichTextBox richTextBox1 = new();
 
-            Clipboard.SetText("non-empty");
             Clipboard.Clear();
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
 

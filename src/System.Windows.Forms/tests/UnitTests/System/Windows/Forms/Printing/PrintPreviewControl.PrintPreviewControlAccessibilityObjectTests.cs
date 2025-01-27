@@ -25,7 +25,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
     [WinFormsFact]
     public void PrintPreviewControlAccessibilityObject_Ctor_NullControl_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentNullException>(() => new PrintPreviewControl.PrintPreviewControlAccessibleObject(null));
+        Assert.Throws<ArgumentNullException>(() => new PrintPreviewControlAccessibleObject(null));
     }
 
     [WinFormsFact]

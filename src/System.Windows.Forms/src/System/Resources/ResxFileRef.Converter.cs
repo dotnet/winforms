@@ -43,7 +43,7 @@ public partial class ResXFileRef
                 return null;
             }
 
-            string[]? result = null;
+            string[]? result;
 
             stringValue = stringValue.Trim();
             string fileName;
@@ -120,7 +120,7 @@ public partial class ResXFileRef
             using (FileStream fileStream = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 temp = new byte[fileStream.Length];
-                fileStream.Read(temp, 0, (int)fileStream.Length);
+                fileStream.ReadExactly(temp, 0, (int)fileStream.Length);
             }
 
             if (toCreate == typeof(byte[]))

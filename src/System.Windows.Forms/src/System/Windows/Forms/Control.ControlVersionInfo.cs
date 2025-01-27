@@ -153,8 +153,7 @@ public partial class Control
         }
 
         /// <summary>
-        ///  Retrieves the FileVersionInfo associated with the main module for
-        ///  the component.
+        ///  Retrieves the FileVersionInfo associated with the main module for the component.
         /// </summary>
         [RequiresAssemblyFiles($"Throws if {nameof(_owner)} is an in-memory assembly. Check {nameof(OwnerIsInMemoryAssembly)} first")]
         private FileVersionInfo GetFileVersionInfo()
@@ -162,13 +161,15 @@ public partial class Control
             if (_versionInfo is null)
             {
                 string path = _owner.GetType().Module.FullyQualifiedName;
-
                 _versionInfo = FileVersionInfo.GetVersionInfo(path);
             }
 
             return _versionInfo;
         }
 
+        // We're deliberately checking for the empty string scenario to see if this is single-file.
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
         private bool OwnerIsInMemoryAssembly => _owner.GetType().Assembly.Location.Length == 0;
+#pragma warning restore IL3000
     }
 }

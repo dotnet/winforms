@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using System.Formats.Nrbf;
 using System.Globalization;
 using System.Reflection;
@@ -160,7 +159,7 @@ public sealed class ResXDataNode : ISerializable
         }
         set
         {
-            ArgumentException.ThrowIfNullOrEmpty(value, nameof(Name));
+            ArgumentException.ThrowIfNullOrEmpty(value);
             _name = value;
         }
     }
@@ -684,7 +683,7 @@ public sealed class ResXDataNode : ISerializable
             }
         }
 
-        return resolvedType ??= Type.GetType(typeName, throwOnError: false);
+        return resolvedType ?? Type.GetType(typeName, throwOnError: false);
     }
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)

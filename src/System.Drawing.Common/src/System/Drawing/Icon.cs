@@ -7,7 +7,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Windows.Win32.System.Ole;
 
 namespace System.Drawing;
 
@@ -66,7 +65,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         using (FileStream f = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
             _iconData = new byte[(int)f.Length];
-            f.Read(_iconData, 0, _iconData.Length);
+            f.ReadExactly(_iconData);
         }
 
         Initialize(width, height);
@@ -101,7 +100,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
             ?? throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
 
         _iconData = new byte[(int)stream.Length];
-        stream.Read(_iconData, 0, _iconData.Length);
+        stream.ReadExactly(_iconData);
         Initialize(0, 0);
     }
 
@@ -613,7 +612,11 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         // <AppContextSwitchOverrides value="Switch.System.Drawing.DontSupportPngFramesInIcons=false" />
         if (HasPngSignature() && !LocalAppContextSwitches.DontSupportPngFramesInIcons)
         {
-            return PngFrame();
+            // Return the PNG frame.
+            Debug.Assert(_iconData is not null);
+            using MemoryStream stream = new();
+            stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
+            return new Bitmap(stream);
         }
 
         return BmpFrame();
@@ -760,14 +763,6 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         return bitmap;
     }
 
-    private Bitmap PngFrame()
-    {
-        Debug.Assert(_iconData is not null);
-        using MemoryStream stream = new();
-        stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
-        return new Bitmap(stream);
-    }
-
     private bool HasPngSignature()
     {
         if (!_isBestImagePng.HasValue)
@@ -808,7 +803,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
             // converting them to DIBS and saving them into the file. But, in the interest of simplicity, we just
             // call to OLE to do it for us.
 
-            using var iPicture = IPicture.CreateFromIcon(this, copy: false);
+            using var iPicture = this.CreateIPicture(copy: false);
             using var iStream = outputStream.ToIStream(makeSeekable: true);
             iPicture.Value->SaveAsFile(iStream, (BOOL)(-1), pCbSize: null).ThrowOnFailure();
         }

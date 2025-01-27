@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CLSCompliant>true</CLSCompliant>
     <Nullable>enable</Nullable>
 
     <!--
@@ -42,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\src\IComparerHelpers.cs" Link="Common\IComparerHelpers.cs" />
     <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
   </ItemGroup>

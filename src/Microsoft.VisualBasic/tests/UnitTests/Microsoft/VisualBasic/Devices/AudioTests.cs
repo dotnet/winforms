@@ -18,12 +18,13 @@ public class AudioTests
         testCode.Should().Throw<ArgumentNullException>();
     }
 
-    [Fact]
-    public void PlayBytes_Throws()
+    [Theory]
+    [InvalidEnumData<AudioPlayMode>]
+    public void PlayBytesWithPlayMode_Throws(AudioPlayMode audioPlayMode)
     {
         Audio audio = new();
-        Action testCode = () => audio.Play((byte[])null, AudioPlayMode.Background);
-        testCode.Should().Throw<ArgumentNullException>();
+        Action testCode = () => audio.Play(([0]), audioPlayMode);
+        testCode.Should().Throw<InvalidEnumArgumentException>();
     }
 
     [Theory]
@@ -32,6 +33,15 @@ public class AudioTests
     {
         Audio audio = new();
         Action testCode = () => audio.Play(fileName);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    [Theory]
+    [NullAndEmptyStringData]
+    public void PlayEmptyFileNameAudioMode_Throws(string fileName)
+    {
+        Audio audio = new();
+        Action testCode = () => audio.Play(fileName, AudioPlayMode.Background);
         testCode.Should().Throw<ArgumentNullException>();
     }
 

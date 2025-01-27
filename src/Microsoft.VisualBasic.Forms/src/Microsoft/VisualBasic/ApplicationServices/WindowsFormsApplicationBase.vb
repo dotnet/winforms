@@ -154,11 +154,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
-                    ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Consider: Sadly, a call to:
+                    ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
-                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
+                    Dim ntIdentity As Principal.WindowsIdentity = Principal.WindowsIdentity.GetCurrent
+                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(ntIdentity)
                 Catch ex As SecurityException
                 End Try
             End If
@@ -264,29 +266,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for. When not set then the splash screen is hidden
-        '''  as soon as the main form becomes active.
-        ''' </summary>
-        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
-        ''' <remarks>
-        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
-        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
-        '''  as it is currently suggested to be used in the docs.
-        '''  First step for that is to make it hidden in IntelliSense.
-        ''' </remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Public Property MinimumSplashScreenDisplayTime() As Integer
-            Get
-                Return _minimumSplashExposure
-            End Get
-            Set(value As Integer)
-                _minimumSplashExposure = value
-            End Set
-        End Property
-
-        ''' <summary>
         '''  Informs My.Settings whether to save the settings on exit or not
         ''' </summary>
         Public Property SaveMySettingsOnExit() As Boolean
@@ -309,7 +288,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
+                    Throw New ArgumentException(message)
                 End If
 
                 _splashScreen = value
@@ -331,6 +311,29 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  The splash screen timeout specifies whether there is a minimum time that the splash
+        '''  screen should be displayed for. When not set then the splash screen is hidden
+        '''  as soon as the main form becomes active.
+        ''' </summary>
+        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
+        '''  as it is currently suggested to be used in the docs.
+        '''  First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Public Property MinimumSplashScreenDisplayTime() As Integer
+            Get
+                Return _minimumSplashExposure
+            End Get
+            Set(value As Integer)
+                _minimumSplashExposure = value
             End Set
         End Property
 
@@ -382,7 +385,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 _unhandledExceptionHandlers.Add(value)
 
-                ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
+                ' Only add the listener once so we don't fire the
+                ' UnHandledException event over and over for the same exception
                 If _unhandledExceptionHandlers.Count = 1 Then
                     AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
@@ -488,54 +492,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Event
 
         ''' <summary>
-        '''  Generates the name for the remote singleton that we use to channel multiple instances
-        '''  to the same application model thread.
-        ''' </summary>
-        ''' <param name="entry"></param>
-        ''' <returns>
-        '''  A string unique to the application that should be the same for versions of
-        '''  the application that have the same Major and Minor Version Number.
-        ''' </returns>
-        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
-        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
-
-            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
-
-            If guidAttrib IsNot Nothing Then
-
-                Dim version As Version = entry.GetName.Version
-
-                If version IsNot Nothing Then
-                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
-                Else
-                    Return guidAttrib.Value
-                End If
-            End If
-
-            Return entry.ManifestModule.ModuleVersionId.ToString()
-        End Function
-
-        ''' <summary>
-        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
-            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
-            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
-            End If
-        End Sub
-
-        ''' <summary>
         '''  Displays the splash screen. We get called here from a different thread than what the
         '''  main form is starting up on. This allows us to process events for the Splash screen so
         '''  it doesn't freeze up while the main form is getting it together.
@@ -631,7 +587,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _formLoadWaiter = New AutoResetEvent(False)
 
                 Task.Run(Async Function() As Task
-                             Await _splashScreenCompletionSource.Task.ConfigureAwait(False)
+                             Await _splashScreenCompletionSource.Task.ConfigureAwait(continueOnCapturedContext:=False)
                              _formLoadWaiter.Set()
                          End Function)
 
@@ -653,7 +609,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             If _splashTimer IsNot Nothing Then
 
-                'We only have a timer if there was a minimum timeout on the splash screen.
+                ' We only have a timer if there was a minimum timeout on the splash screen.
                 _splashTimer.Dispose()
                 _splashTimer = Nothing
             End If
@@ -725,7 +681,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
 
-            'This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
+            ' This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
             SyncLock _splashLock
 
                 ' .NET Framework 4.0 (Dev10 #590587) - we now activate the main form before calling
@@ -766,7 +722,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  variants was passed in.
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
-        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
+        ''' <returns>
+        '''  Returning <see langword="True">
+        '''   Indicates that we should continue on with the application Startup sequence.
+        '''  </see>
+        ''' </returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -824,7 +784,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
-            Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
+            Debug.Assert(dpiSetResult, "We could not set the HighDpiMode.")
 
             ' Now, let's set VisualStyles and ColorMode:
             If _enableVisualStyles Then
@@ -867,26 +827,29 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 ' When we have a splash screen that hasn't timed out before the main form is ready to paint, we want to
-                ' block the main form from painting. To do that I let the form get past the Load() event and hold it until
-                ' the splash screen goes down. Then I let the main form continue it's startup sequence. The ordering of
-                ' Form startup events for reference is: Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
+                ' block the main form from painting. To do that I let the form get past the Load() event and
+                ' hold it until the splash screen goes down. Then I let the main form continue it's startup sequence.
+                ' The ordering of Form startup events for reference is:
+                ' Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
                 AddHandler MainForm.Load, AddressOf MainFormLoadingDone
             End If
 
             ' Run() eats all exceptions (unless running under the debugger). If the user wrote an
             ' UnhandledException handler we will hook the System.Windows.Forms.Application.ThreadException event
             ' (see Public Custom Event UnhandledException) which will raise our UnhandledException Event.
-            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler for Forms.Application.Run().
+            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler
+            ' for Forms.Application.Run().
             Try
                 Application.Run(_appContext)
             Finally
 
-                ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
-                ' is restored. But we are going to dispose it so we need to disconnect the network listener so that it
+                ' When Run() returns, the context we pushed in our ctor
+                ' (which was a WindowsFormsSynchronizationContext) is restored.
+                ' But we are going to dispose it so we need to disconnect the network listener so that it
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 
-                'Restore the prior sync context.
+                ' Restore the prior sync context.
                 AsyncOperationManager.SynchronizationContext = _appSynchronizationContext
                 _appSynchronizationContext = Nothing
             End Try
@@ -914,11 +877,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
             ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
-            ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
-            ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
-            ' during the NetworkAvailabilityChanged event. This problem would just extend itself to any future
-            ' callback that involved the asyncOperationsManager so this is where we need to create objects that
-            ' have a asyncOperationsContext in them.
+            ' the callback so I delay creating the network object
+            ' (and consequently the capturing of the execution context) until the principal has been set on the thread.
+            ' This avoids the problem where My.User isn't set during the NetworkAvailabilityChanged event.
+            ' This problem would just extend itself to any future callback that involved
+            ' the asyncOperationsManager so this is where we need to create objects that have
+            ' a asyncOperationsContext in them.
             If _turnOnNetworkListener And _networkObject Is Nothing Then
 
                 ' The is-nothing-check is to avoid hooking the object more than once.
@@ -956,7 +920,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
-        ''' <returns><see langword="True"/> indicates the exception event was raised / <see langword="False"/> it was not.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> indicates the exception event was raised
+        '''  <see langword="False"/> it was not.
+        ''' </returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 
@@ -1016,6 +983,54 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
+        '''  Generates the name for the remote singleton that we use to channel multiple instances
+        '''  to the same application model thread.
+        ''' </summary>
+        ''' <param name="entry"></param>
+        ''' <returns>
+        '''  A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number.
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
+        Friend Shared Function GetApplicationInstanceID(entry As Assembly) As String
+
+            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
+
+            If guidAttrib IsNot Nothing Then
+
+                Dim version As Version = entry.GetName.Version
+
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
+
+            Return entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
+
+        ''' <summary>
+        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
+            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
+            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
+            End If
+        End Sub
+
+        ''' <summary>
         '''  Processes all windows messages currently in the message queue
         ''' </summary>
         Public Sub DoEvents()
@@ -1050,7 +1065,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Using pipeServer
                         Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
-                        WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+                        WaitForClientConnectionsAsync(
+                            pipeServer,
+                            AddressOf OnStartupNextInstanceMarshallingAdaptor,
+                            cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
                         DoApplicationModel()
                         tokenSource.Cancel()
@@ -1064,15 +1082,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token) _
-                                .ConfigureAwait(continueOnCapturedContext:=False)
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
                     End Try
                 End If
-            End If 'Single-Instance application
+            End If ' Single-Instance application
         End Sub
 
     End Class

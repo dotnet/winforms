@@ -292,6 +292,16 @@
         <target state="translated">A serialização e a desserialização de BinaryFormatter estão desabilitadas neste aplicativo. Consulte https://aka.ms/binaryformatter para obter mais informações.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
+        <target state="translated">Não há suporte para BinaryFormatter em operações de área de transferência ou de arrastar e soltar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">Não há suporte para BinaryFormatter em operações de área de transferência ou de arrastar e soltar. Habilite-o e use as APIs 'TryGetData&lt;T&gt;' com uma função 'resolver' que define um conjunto de tipos permitidos para desserializar '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Ocorre quando o contexto de associação foi alterado.</target>
@@ -955,6 +965,36 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">A operação de Área de Transferência solicitada não foi bem-sucedida.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="translated">Um objeto do tipo 'DataObject' será serializado como vazio. Use as APIs 'DataObject.SetDataAsJson' no objeto para serializar os dados em JSON no objeto e use a API de '{0}' com o objeto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="translated">O tipo especificado '{0}' não é compatível com o formato especificado '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
+        <target state="translated">'{0}' não é um tipo concreto e pode resultar em uma tentativa de desserialização não associado. Use um tipo concreto ou, como alternativa, defina uma função 'resolver' que dê suporte aos tipos que você está esperando recuperar da área de transferência ou use em operações de arrastar e soltar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="translated">Falha ao desserializar dados JSON.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
+        <target state="translated">Tipo {0} não encontrado. Se esse tipo for permitido, verifique se a função 'resolver' fornecida nas APIs 'TryGetData&lt;T&gt;' dá suporte a ela.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
+        <target state="translated">Use apIs 'TryGetData&lt;T&gt;' com uma função 'resolver' que define um conjunto de tipos permitidos para desserializar '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2482,11 +2522,6 @@
         <target state="translated">O valor de DropDownWidth não pode ser menor que {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewComboBoxCell_FieldNotFound">
-        <source>Field called {0} does not exist.</source>
-        <target state="translated">O campo denominado {0} não existe.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_InvalidValue">
         <source>DataGridViewComboBoxCell value is not valid.</source>
         <target state="translated">O valor de DataGridViewComboBoxCell não é válido.</target>
@@ -2495,6 +2530,11 @@
       <trans-unit id="DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange">
         <source>MaxDropDownItems value cannot be smaller than {0} or larger than {1}.</source>
         <target state="translated">O valor de MaxDropDownItems não pode ser menor que {0} ou maior que {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
+        <source>Property called {0} does not exist.</source>
+        <target state="new">Property called {0} does not exist.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
@@ -5775,6 +5815,11 @@ Deseja substituí-lo?</target>
         <target state="translated">Especifica o suporte para a inicialização transacionada. </target>
         <note />
       </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
+        <target state="translated">O objeto de '{0}' não implementa a interface 'ITypedDataObject' e não pode ser lido usando os métodos 'TryGetData&lt;T&gt;(string, out T)'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.</source>
         <target state="translated">Operação entre threads inválida: controle '{0}' acessado de um thread que não é aquele no qual foi criado.</target>
@@ -7379,6 +7424,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O tipo {0} na linha {1}, posição {2} apresentou a seguinte exceção durante a conversão: {3}</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotSupportedExceptionOnClipboard">
+        <source>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</source>
+        <target state="translated">A área de transferência contém uma 'NotSupportedException' que indica que a operação de gravação falhou. '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="NotifyIconBalloonTipIconDescr">
         <source>The icon to associate with the balloon ToolTip.</source>
         <target state="translated">O ícone a ser associado à ToolTip de balão.</target>
@@ -8662,11 +8712,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">A coleção é somente leitura.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RegisterCFFailed">
-        <source>Clipboard format registration did not succeed.</source>
-        <target state="translated">O registro do formato de área de transferência não teve êxito.</target>
         <note />
       </trans-unit>
       <trans-unit id="RelatedListManagerChild">
