@@ -8,7 +8,6 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
@@ -518,7 +517,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (LocalAppContextSwitches.ApplyParentFontToMenus || IsFontSet())
+            if (AppContextSwitches.ApplyParentFontToMenus || IsFontSet())
             {
                 return base.Font;
             }

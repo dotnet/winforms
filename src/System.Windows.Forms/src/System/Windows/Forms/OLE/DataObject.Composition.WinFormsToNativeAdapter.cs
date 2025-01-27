@@ -480,8 +480,12 @@ internal unsafe partial class Composition
             {
                 fixed (char* c = value)
                 {
-                    int pinvokeSize = PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, null, 0, null, null);
-                    newHandle = PInvokeCore.GlobalReAlloc(hglobal, (uint)pinvokeSize + 1, (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
+                    int pinvokeSize = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                    newHandle = PInvokeCore.GlobalReAlloc(
+                        hglobal,
+                        (uint)pinvokeSize + 1,
+                        (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
+
                     if (newHandle == 0)
                     {
                         return HRESULT.E_OUTOFMEMORY;
@@ -493,7 +497,7 @@ internal unsafe partial class Composition
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
+                    PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
 
                     // Null terminate
                     buffer[pinvokeSize] = 0;

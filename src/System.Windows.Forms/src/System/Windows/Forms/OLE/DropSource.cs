@@ -100,7 +100,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
     public unsafe HRESULT DragEnterTarget(HWND hwndTarget)
     {
         _lastHwndTarget = hwndTarget;
-        _lastHwndTargetThreadId = PInvoke.GetWindowThreadProcessId(hwndTarget, lpdwProcessId: null);
+        _lastHwndTargetThreadId = PInvokeCore.GetWindowThreadProcessId(hwndTarget, lpdwProcessId: null);
         return HRESULT.S_OK;
     }
 

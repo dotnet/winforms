@@ -10,7 +10,13 @@ public readonly ref struct BinaryFormatterInClipboardDragDropScope
     public BinaryFormatterInClipboardDragDropScope(bool enable)
     {
         Monitor.Enter(typeof(BinaryFormatterInClipboardDragDropScope));
-        _switchScope = new(AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName, GetDefaultValue, enable);
+        _switchScope = new(
+            AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
+            () => AppContextSwitchScope.GetDefaultValueForSwitchInAssembly(
+                AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
+                "System.Private.Windows.Core",
+                "System.Private.Windows.CoreAppContextSwitches"),
+            enable);
     }
 
     public void Dispose()
@@ -23,24 +29,5 @@ public readonly ref struct BinaryFormatterInClipboardDragDropScope
         {
             Monitor.Exit(typeof(BinaryFormatterInClipboardDragDropScope));
         }
-    }
-
-    internal static bool GetDefaultValue()
-    {
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        foreach (var assembly in assemblies)
-        {
-            if (assembly.FullName?.StartsWith("System.Windows.Forms.Primitives,", StringComparison.InvariantCultureIgnoreCase) == true)
-            {
-                var type = assembly.GetType("System.Windows.Forms.Primitives.LocalAppContextSwitches")
-                    ?? throw new InvalidOperationException("Could not find LocalAppContextSwitches type in System.Windows.Forms.Primitives assembly.");
-
-                bool value = type.TestAccessor().CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")
-                    (AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName);
-                return value;
-            }
-        }
-
-        throw new InvalidOperationException("Could not find System.Windows.Forms.Primitives assembly in the test process.");
     }
 }

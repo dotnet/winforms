@@ -3,8 +3,8 @@
 
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
-using System.Windows.Forms.Primitives;
 using Microsoft.Office;
+using LocalAppContextSwitches = System.Windows.Forms.Primitives.LocalAppContextSwitches;
 
 namespace System.Windows.Forms;
 
@@ -294,7 +294,7 @@ public sealed partial class Application
                     if (_oleInitialized && !_externalOleInit)
                     {
                         _oleInitialized = false;
-                        PInvoke.OleUninitialize();
+                        PInvokeCore.OleUninitialize();
                     }
                 }
             }
@@ -360,7 +360,7 @@ public sealed partial class Application
                 // It is important that we just call DestroyHandle here
                 // and do not call Dispose. Otherwise we would destroy
                 // controls that are living on the parking window.
-                uint hwndThread = PInvoke.GetWindowThreadProcessId(_parkingWindows[0], out _);
+                uint hwndThread = PInvokeCore.GetWindowThreadProcessId(_parkingWindows[0], out _);
                 uint currentThread = PInvokeCore.GetCurrentThreadId();
 
                 for (int i = 0; i < _parkingWindows.Count; i++)
@@ -570,7 +570,7 @@ public sealed partial class Application
         {
             if (!_oleInitialized)
             {
-                HRESULT hr = PInvoke.OleInitialize(pvReserved: (void*)null);
+                HRESULT hr = PInvokeCore.OleInitialize(pvReserved: (void*)null);
 
                 _oleInitialized = true;
                 if (hr == HRESULT.RPC_E_CHANGED_MODE)

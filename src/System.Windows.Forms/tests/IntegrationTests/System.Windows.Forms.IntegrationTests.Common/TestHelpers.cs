@@ -444,7 +444,7 @@ public static class TestHelpers
 
         string windowTitle = PInvokeCore.GetWindowText(foregroundWindow);
 
-        if (PInvoke.GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
+        if (PInvokeCore.GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
             processId != process.Id)
         {
             Debug.WriteLine($"ForegroundWindow doesn't belong the test process! The current window is {windowTitle}.");

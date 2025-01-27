@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -1377,7 +1376,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         SuspendAllLayout(this);
         try
         {
-            if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
+            if (AppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
             {
                 // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
                 // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both

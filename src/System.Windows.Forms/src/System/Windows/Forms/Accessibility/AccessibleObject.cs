@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
-using System.Windows.Forms.Primitives;
 
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
@@ -3214,7 +3213,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
-        => !LocalAppContextSwitches.NoClientNotifications
+        => !AppContextSwitches.NoClientNotifications
             && PInvoke.UiaRaiseNotificationEvent(
                 this,
                 notificationKind,
@@ -3233,7 +3232,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
+        if (PInvoke.UiaClientsAreListening() && !AppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationEvent(provider, eventId);
@@ -3245,7 +3244,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
     {
-        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
+        if (PInvoke.UiaClientsAreListening() && !AppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationPropertyChangedEvent(provider, propertyId, oldValue, newValue);
@@ -3265,7 +3264,7 @@ public unsafe partial class AccessibleObject :
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
+        if (PInvoke.UiaClientsAreListening() && !AppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             int length = runtimeId.Length;

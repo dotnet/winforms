@@ -16,6 +16,7 @@ internal static class Formatter
     private static readonly Type s_checkStateType = typeof(CheckState);
     private static readonly object s_parseMethodNotFound = new();
     private static readonly object s_defaultDataSourceNullValue = DBNull.Value;
+
     /// <summary>
     ///  Converts a binary value into a format suitable for display to the end user.
     ///  Used when pushing a value from a back-end data source into a data-bound property on a control.
@@ -54,7 +55,7 @@ internal static class Formatter
 
         Type oldTargetType = targetType;
 
-        targetType = NullableUnwrap(targetType);
+        targetType = targetType.UnwrapIfNullable();
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
@@ -248,8 +249,8 @@ internal static class Formatter
 
         Type oldTargetType = targetType;
 
-        sourceType = NullableUnwrap(sourceType);
-        targetType = NullableUnwrap(targetType);
+        sourceType = sourceType.UnwrapIfNullable();
+        targetType = targetType.UnwrapIfNullable();
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
@@ -522,20 +523,6 @@ internal static class Formatter
             // sources, or a null reference for 'business object' data sources).
             return dataSourceNullValue;
         }
-    }
-
-    /// <summary>
-    ///  Extract the inner type from a nullable type.
-    /// </summary>
-    public static Type NullableUnwrap(Type type)
-    {
-        if (type == s_stringType) // ...performance optimization for the most common case
-        {
-            return s_stringType;
-        }
-
-        Type? underlyingType = Nullable.GetUnderlyingType(type);
-        return underlyingType ?? type;
     }
 
     /// <summary>

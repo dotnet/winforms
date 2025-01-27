@@ -4,7 +4,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -220,7 +219,7 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        if (!LocalAppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrder || tv is null || !tv.Sorted)
+        if (!AppContextSwitches.TreeNodeCollectionAddRangeRespectsSortOrder || tv is null || !tv.Sorted)
         {
             _owner.Nodes.FixedIndex = _owner._childCount;
         }

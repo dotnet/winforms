@@ -58,7 +58,7 @@ public static class Clipboard
 
         HRESULT hr;
         int retry = retryTimes;
-        while ((hr = PInvoke.OleSetClipboard(iDataObject)).Failed)
+        while ((hr = PInvokeCore.OleSetClipboard(iDataObject)).Failed)
         {
             if (--retry < 0)
             {
@@ -71,7 +71,7 @@ public static class Clipboard
         if (copy)
         {
             retry = retryTimes;
-            while ((hr = PInvoke.OleFlushClipboard()).Failed)
+            while ((hr = PInvokeCore.OleFlushClipboard()).Failed)
             {
                 if (--retry < 0)
                 {
@@ -98,7 +98,7 @@ public static class Clipboard
         int retryTimes = 10;
         using ComScope<Com.IDataObject> proxyDataObject = new(null);
         HRESULT hr;
-        while ((hr = PInvoke.OleGetClipboard(proxyDataObject)).Failed)
+        while ((hr = PInvokeCore.OleGetClipboard(proxyDataObject)).Failed)
         {
             if (--retryTimes < 0)
             {
@@ -142,7 +142,7 @@ public static class Clipboard
 
         HRESULT hr;
         int retry = 10;
-        while ((hr = PInvoke.OleSetClipboard(null)).Failed)
+        while ((hr = PInvokeCore.OleSetClipboard(null)).Failed)
         {
             if (--retry < 0)
             {

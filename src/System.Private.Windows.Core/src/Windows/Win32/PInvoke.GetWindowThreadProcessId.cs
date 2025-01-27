@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="GetWindowThreadProcessId(HWND, uint*)"/>
     public static unsafe uint GetWindowThreadProcessId<T>(T hWnd, out uint lpdwProcessId)

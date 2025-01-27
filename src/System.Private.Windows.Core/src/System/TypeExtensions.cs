@@ -5,15 +5,13 @@ using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
-namespace System.Windows.Forms;
+namespace System;
 
 /// <summary>
 ///  Helper methods for comparing <see cref="Type"/>s and <see cref="TypeName"/>s.
 /// </summary>
 internal static class TypeExtensions
 {
-    private static readonly Type s_forwardedFromAttributeType = typeof(TypeForwardedFromAttribute);
-
     /// <summary>
     ///  Get the full assembly name this <paramref name="type"/> is forwarded from.
     /// </summary>
@@ -32,7 +30,7 @@ internal static class TypeExtensions
             attributedType = attributedType.GetElementType()!;
         }
 
-        object[] attributes = attributedType.GetCustomAttributes(s_forwardedFromAttributeType, inherit: false);
+        object[] attributes = attributedType.GetCustomAttributes(typeof(TypeForwardedFromAttribute), inherit: false);
         if (attributes.Length > 0 && attributes[0] is TypeForwardedFromAttribute attribute)
         {
             name = attribute.AssemblyFullName;
@@ -47,12 +45,8 @@ internal static class TypeExtensions
     ///  can be nullable, as the user would request a nullable type read from the clipboard payload, but the root record would
     ///  serialize a non-nullable type, thus <paramref name="typeName"/> from the root record is not nullable.
     /// </summary>
-    public static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName)
-    {
-        type = Formatter.NullableUnwrap(type);
-
-        return type.MatchLessAssemblyVersion(typeName);
-    }
+    public static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName) =>
+        type.UnwrapIfNullable().MatchLessAssemblyVersion(typeName);
 
     /// <summary>
     ///  Match namespace-qualified type names and assembly names with no version.
@@ -243,7 +237,7 @@ internal static class TypeExtensions
     public static TypeName ToTypeName(this Type type)
     {
         // Unwrap type that is matched against the root record type.
-        type = Formatter.NullableUnwrap(type);
+        type = type.UnwrapIfNullable();
         if (!type.TryGetForwardedFromName(out string? assemblyName))
         {
             assemblyName = type.Assembly.FullName;
@@ -260,6 +254,7 @@ internal static class TypeExtensions
                 for (int i = 0; i < type.GetGenericArguments().Length; i++)
                 {
                     Type generic = genericArguments[i];
+
                     // Keep Nullable wrappers for types inside generic types.
                     if (!generic.TryGetForwardedFromName(out string? name))
                     {
@@ -275,4 +270,12 @@ internal static class TypeExtensions
             return type.FullName.OrThrowIfNull();
         }
     }
+
+    /// <summary>
+    ///  If <paramref name="type"/> is a nullable type, return the underlying type; otherwise, return <paramref name="type"/>.
+    /// </summary>
+    public static Type UnwrapIfNullable(this Type type) =>
+        type.IsGenericType && !type.IsGenericTypeDefinition && type.GetGenericTypeDefinition() == typeof(Nullable<>)
+            ? type.GetGenericArguments()[0]
+            : type;
 }
