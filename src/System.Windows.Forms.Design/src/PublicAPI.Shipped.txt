@@ -2,8 +2,6 @@
 ~override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type
 ~override System.ComponentModel.Design.ArrayEditor.GetItems(object editValue) -> object[]
 ~override System.ComponentModel.Design.ArrayEditor.SetItems(object editValue, object[] value) -> object
-override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent! component) -> void
-override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary! properties) -> void
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
 ~override System.Windows.Forms.Design.ComponentTray.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -74,7 +72,6 @@ override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperti
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(params System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
-System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control!
 ~System.Windows.Forms.Design.ComponentTray.ComponentTray(System.ComponentModel.Design.IDesigner mainDesigner, System.IServiceProvider serviceProvider) -> void
 ~System.Windows.Forms.Design.ComponentTray.CreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> void
 ~System.Windows.Forms.Design.ComponentTray.DisplayError(System.Exception e) -> void
@@ -91,7 +88,6 @@ System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Wind
 ~System.Windows.Forms.Design.ParentControlDesigner.GetControl(object component) -> System.Windows.Forms.Control
 ~System.Windows.Forms.Design.ParentControlDesigner.MouseDragTool.get -> System.Drawing.Design.ToolboxItem
 ~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
-virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem! tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.CanDisplayComponent(System.ComponentModel.IComponent component) -> bool
@@ -225,6 +221,8 @@ override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string!
 override System.Windows.Forms.Design.BorderSidesEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Windows.Forms.Design.BorderSidesEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Windows.Forms.Design.ComponentDocumentDesigner.Dispose(bool disposing) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent! component) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary! properties) -> void
 override System.Windows.Forms.Design.ComponentTray.Dispose(bool disposing) -> void
 override System.Windows.Forms.Design.ComponentTray.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.Design.ControlDesigner.AssociatedComponents.get -> System.Collections.ICollection!
@@ -936,6 +934,7 @@ System.Windows.Forms.Design.ComponentActionsType.Component = 1 -> System.Windows
 System.Windows.Forms.Design.ComponentActionsType.Service = 2 -> System.Windows.Forms.Design.ComponentActionsType
 System.Windows.Forms.Design.ComponentDocumentDesigner
 System.Windows.Forms.Design.ComponentDocumentDesigner.ComponentDocumentDesigner() -> void
+System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control!
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayAutoArrange.get -> bool
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayAutoArrange.set -> void
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayLargeIcon.get -> bool
@@ -1231,6 +1230,7 @@ virtual System.Windows.Forms.Design.Behavior.Behavior.OnQueryContinueDrag(System
 virtual System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler.Invoke(object! sender, System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs! e) -> void
 virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 virtual System.Windows.Forms.Design.Behavior.Glyph.Bounds.get -> System.Drawing.Rectangle
+virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem! tool) -> bool
 virtual System.Windows.Forms.Design.ComponentTray.OnLostCapture() -> void
 virtual System.Windows.Forms.Design.ComponentTray.OnSetCursor() -> void
 virtual System.Windows.Forms.Design.ControlDesigner.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
