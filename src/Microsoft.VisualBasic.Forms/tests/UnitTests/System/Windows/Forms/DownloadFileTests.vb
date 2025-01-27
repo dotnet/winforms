@@ -641,6 +641,32 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
+        <WinFormsFact>
+        Public Sub DownloadFile_UriWithAllOptionsWhereConnectionTimeoutInvalid_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                                address:=New Uri(webListener.Address),
+                                destinationFileName,
+                                userName:=String.Empty,
+                                password:=String.Empty,
+                                showUI:=False,
+                                connectionTimeout:=-1,
+                                overwrite:=True,
+                                onUserCancel:=UICancelOption.DoNothing)
+                    End Sub
+
+                testCode.Should() _
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                VerifyFailedDownload(testDirectory, destinationFileName, listener)
+            End Using
+        End Sub
+
         <WinFormsTheory>
         <NullAndEmptyStringData>
         Public Sub DownloadFile_UriWithAllOptionsWhereDestinationFileNameInvalid_Throws(destinationFileName As String)
