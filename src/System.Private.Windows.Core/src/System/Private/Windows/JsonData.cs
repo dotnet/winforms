@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace System.Private.Windows;
 
@@ -112,6 +111,7 @@ internal struct JsonData<T> : IJsonData
 
     public readonly string InnerTypeAssemblyQualifiedName => typeof(T).ToTypeName().AssemblyQualifiedName;
 
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Deserialize<TValue>(ReadOnlySpan<Byte>, JsonSerializerOptions)")]
     public readonly object Deserialize()
     {
         object? result;
@@ -149,5 +149,6 @@ internal interface IJsonData
     ///  Deserializes the data stored in the JsonData. This is a convenience method
     ///  to deserialize the data when we are not dealing with a binary formatted record.
     /// </summary>
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Deserialize<TValue>(ReadOnlySpan<Byte>, JsonSerializerOptions)")]
     object Deserialize();
 }

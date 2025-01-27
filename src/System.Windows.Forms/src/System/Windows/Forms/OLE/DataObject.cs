@@ -159,7 +159,7 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetData)));
         }
 
-        return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
+        return IsRestrictedFormat(format) || TypeBinder.IsKnownType<T>()
             ? data
             : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
     }

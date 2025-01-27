@@ -9,7 +9,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Windows.Win32.UI.Accessibility;
@@ -87,7 +86,7 @@ public partial class DataGridView
                     AutomationNotificationProcessing.ImportantMostRecent,
                     string.Format(
                         SR.DataGridView_RowAddedNotification,
-                        NewRowIndex + (LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1)));
+                        NewRowIndex + (AppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1)));
             }
         }
     }

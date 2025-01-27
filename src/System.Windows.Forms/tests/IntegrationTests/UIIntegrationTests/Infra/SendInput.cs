@@ -86,7 +86,7 @@ public class SendInput
         if (!PInvoke.SetForegroundWindow(window))
         {
             string windowTitle = PInvokeCore.GetWindowText(window);
-            if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
+            if (PInvokeCore.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
             {
                 string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
                 throw new InvalidOperationException(message);

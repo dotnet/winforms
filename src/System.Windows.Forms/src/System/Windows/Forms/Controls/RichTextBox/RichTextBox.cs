@@ -3111,7 +3111,7 @@ public partial class RichTextBox : TextBoxBase
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETOLECALLBACK, 0, (nint)oleCallback);
         }
 
-        PInvoke.DragAcceptFiles(this, fAccept: false);
+        PInvokeCore.DragAcceptFiles(this, fAccept: false);
     }
 
     // Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
@@ -3270,7 +3270,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     fixed (char* b = buffer)
                     {
-                        uint length = PInvoke.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
+                        uint length = PInvokeCore.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
                         if (length != 0)
                         {
                             // Try to load the file as RTF.

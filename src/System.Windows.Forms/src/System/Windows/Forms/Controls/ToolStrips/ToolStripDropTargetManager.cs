@@ -172,7 +172,7 @@ internal class ToolStripDropTargetManager : IDropTarget
             }
 
             // Register
-            HRESULT hr = PInvoke.RegisterDragDrop(_owner, new DropTarget(this));
+            HRESULT hr = PInvokeCore.RegisterDragDrop(_owner, new DropTarget(this));
             if (hr.Failed && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
             {
                 throw Marshal.GetExceptionForHR((int)hr)!;

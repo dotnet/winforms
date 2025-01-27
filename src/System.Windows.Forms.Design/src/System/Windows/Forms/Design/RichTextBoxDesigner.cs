@@ -30,7 +30,7 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
 
         if (control is not null && control.Handle != IntPtr.Zero)
         {
-            PInvoke.RevokeDragDrop((HWND)control.Handle);
+            PInvokeCore.RevokeDragDrop((HWND)control.Handle);
             // DragAcceptFiles(control.Handle, false);
         }
     }
