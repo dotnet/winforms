@@ -163,13 +163,20 @@ Namespace Microsoft.VisualBasic.Devices
                     cancelToken)
 
                 If t.IsFaulted Then
-                    ' This will be true if any parameters are bad
+                    ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
-                    If t.IsFaulted OrElse t.IsCanceled Then
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
+                    If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception
@@ -237,9 +244,16 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception
@@ -304,9 +318,16 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception
@@ -385,6 +406,9 @@ Namespace Microsoft.VisualBasic.Devices
                     If t.IsFaulted Then
                         Throw t.Exception
                     End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
+                    End If
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
@@ -441,9 +465,16 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception
@@ -508,9 +539,16 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw t.Exception
                 Else
                     dialog?.ShowProgressDialog()
-                    t.Wait()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
                     If t.IsFaulted Then
                         Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
             Catch ex As Exception
