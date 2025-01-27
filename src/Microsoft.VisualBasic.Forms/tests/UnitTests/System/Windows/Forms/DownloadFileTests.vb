@@ -1537,7 +1537,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub DownloadFile_UrlWithAllOptionsWithAllOptions_Success()
+        Public Sub DownloadFile_UrlWithAllOptionsWithAllOptionsWhereShowUiFalse_Success()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(FileSizes.FileSize1MB)
@@ -1550,6 +1550,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             userName:=String.Empty,
                             password:=String.Empty,
                             showUI:=False,
+                            connectionTimeout:=TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing)
+                    End Sub
+
+                testCode.Should.NotThrow()
+                VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                    .Be(webListener.FileSize)
+            End Using
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DownloadFile_UrlWithAllOptionsWithAllOptionsWhereShowUiTrue_Success()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
+            Dim webListener As New WebListener(FileSizes.FileSize1MB)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                            address:=webListener.Address,
+                            destinationFileName,
+                            userName:=String.Empty,
+                            password:=String.Empty,
+                            showUI:=True,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True,
                             onUserCancel:=UICancelOption.DoNothing)
