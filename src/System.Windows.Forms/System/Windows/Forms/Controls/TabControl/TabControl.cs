@@ -1299,7 +1299,7 @@ public partial class TabControl : Control
         if (Application.IsDarkModeEnabled)
         {
             PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
-            PInvokeCore.EnumChildWindows(this, StyleUpDown);
+            PInvokeCore.EnumChildWindows(this, StyleChildren);
         }
 #pragma warning restore WFO5001
     }
@@ -1784,8 +1784,9 @@ public partial class TabControl : Control
         return !_padding.Equals(s_defaultPaddingPoint);
     }
 
-    private BOOL StyleUpDown(HWND handle)
-        => PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null).Succeeded;
+    private BOOL StyleChildren(HWND handle) =>
+        PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
+            .Succeeded;
 
     /// <summary>
     ///  Returns a string representation for this control.
