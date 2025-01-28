@@ -649,6 +649,11 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         bool computeErrorIconBounds,
         bool paint)
     {
+        if (DataGridView is null)
+        {
+            return Rectangle.Empty;
+        }
+
         // Parameter checking. One bit and one bit only should be turned on.
         Debug.Assert(paint || computeContentBounds || computeErrorIconBounds);
         Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);

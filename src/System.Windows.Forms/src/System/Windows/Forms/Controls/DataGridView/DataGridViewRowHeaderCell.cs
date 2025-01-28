@@ -653,6 +653,12 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         bool cellSelected = (dataGridViewElementState & DataGridViewElementStates.Selected) != 0;
 
         Debug.Assert(DataGridView is not null);
+
+        if (DataGridView is null)
+        {
+            return Rectangle.Empty;
+        }
+
         if (DataGridView.ApplyVisualStylesToHeaderCells)
         {
             if (cellStyle.Padding != Padding.Empty)
