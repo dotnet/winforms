@@ -610,6 +610,11 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
+        if (DataGridView is null)
+        {
+            return;
+        }
+
         PaintPrivate(
             graphics,
             clipBounds,
@@ -649,11 +654,6 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         bool computeErrorIconBounds,
         bool paint)
     {
-        if (DataGridView is null)
-        {
-            return Rectangle.Empty;
-        }
-
         // Parameter checking. One bit and one bit only should be turned on.
         Debug.Assert(paint || computeContentBounds || computeErrorIconBounds);
         Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);

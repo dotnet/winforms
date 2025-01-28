@@ -839,9 +839,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 e.Handled = true;
             }
 
-                NotifyMSAAClient(ColumnIndex, rowIndex);
-            }
+            NotifyMSAAClient(ColumnIndex, rowIndex);
         }
+    }
 
     protected override void OnLeave(int rowIndex, bool throughMouseClick)
     {
@@ -1007,6 +1007,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
+        if (DataGridView is null)
+        {
+            return;
+        }
+
         PaintPrivate(
             graphics,
             clipBounds,
@@ -1046,11 +1051,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         bool computeErrorIconBounds,
         bool paint)
     {
-        if(DataGridView is null)
         // Parameter checking.
-        {
-            return Rectangle.Empty;
-        }
 
         // One bit and one bit only should be turned on
         Debug.Assert(paint || computeContentBounds || computeErrorIconBounds);
