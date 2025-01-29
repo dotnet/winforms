@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 // Publicly shipped API
-
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyDown(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyUp(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)")]
@@ -232,8 +231,8 @@
 [assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.MdiClient.ShouldSerializeLocation~System.Boolean")]
 
 // Ideally these should be different exceptions, but leaving them as shipped for compatibility
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Composition.NativeToWinFormsAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Composition.NativeToRuntimeAdapter.EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Private.Windows.Ole.Composition`2.NativeToRuntimeAdapter.EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Private.Windows.Ole.Composition`2.NativeToManagedAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Clipboard.SetDataObject(System.Object,System.Boolean,System.Int32,System.Int32)")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.ComponentModel.Com2Interop.Com2TypeInfoProcessor.ProcessFunctions(Windows.Win32.System.Com.ITypeInfo*,System.Collections.Generic.IDictionary{System.String,System.Windows.Forms.ComponentModel.Com2Interop.Com2TypeInfoProcessor.PropertyInfo},System.Int32,System.Int32,System.Boolean@)")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Control.ActiveXImpl.ThrowHr(Windows.Win32.Foundation.HRESULT)")]

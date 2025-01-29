@@ -15,5 +15,5 @@ internal interface ITypeResolver
     /// </summary>
     [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
     [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    Type GetType(TypeName typeName);
+    Type BindToType(TypeName typeName);
 }

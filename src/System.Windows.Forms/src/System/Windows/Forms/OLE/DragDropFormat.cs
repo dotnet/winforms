@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
 /// <summary>
 ///  Represents a private format used for data transfer by the drag-and-drop helpers.

@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
-using System.Windows.Forms.Nrbf;
+using System.Private.Windows.Nrbf;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
@@ -29,7 +29,7 @@ public partial class Control
 
                 try
                 {
-                    SerializationRecord rootRecord = stream.Decode();
+                    SerializationRecord rootRecord = stream.DecodeNrbf();
                     success = rootRecord.TryGetPrimitiveHashtable(out _bag!);
                 }
                 catch (Exception e) when (!e.IsCriticalException())

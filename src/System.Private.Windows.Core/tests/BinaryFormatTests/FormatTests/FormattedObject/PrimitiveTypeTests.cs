@@ -1,16 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
+using System.Globalization;
+using System.Private.Windows.BinaryFormat;
+using System.Private.Windows.BinaryFormat.Serializer;
+using System.Private.Windows.Nrbf;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Private.Windows.BinaryFormat;
 using FormatTests.Common;
 using Record = System.Private.Windows.BinaryFormat.Serializer.Record;
-using System.Formats.Nrbf;
-using System.Windows.Forms.Nrbf;
-using System.Globalization;
-using System.Runtime.Serialization;
-using System.Private.Windows.BinaryFormat.Serializer;
 
 namespace FormatTests.FormattedObject;
 

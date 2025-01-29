@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Shell;
+
 namespace System.Private.Windows.Ole;
 
 internal static partial class DataFormatNames
@@ -28,10 +30,46 @@ internal static partial class DataFormatNames
     internal const string Serializable = "WindowsForms10PersistentObject";
     internal const string Xaml = "Xaml";
     internal const string XamlPackage = "XamlPackage";
-    internal const string InkSerializedFormat = "Ink Serialized Format";
-    internal const string FileNameAnsi = "FileName";
-    internal const string FileNameUnicode = "FileNameW";
+    internal const string InkSerializedFormat = PInvokeCore.INK_SERIALIZED_FORMAT;
+    internal const string FileNameAnsi = PInvokeCore.CFSTR_FILENAMEA;
+    internal const string FileNameUnicode = PInvokeCore.CFSTR_FILENAME;
     internal const string BinaryFormatBitmap = "System.Drawing.Bitmap";
+
+    /// <summary>
+    ///  A format used internally by the drag image manager.
+    /// </summary>
+    internal const string DragContext = "DragContext";
+
+    /// <summary>
+    ///  A format that contains the drag image bottom-up device-independent bitmap bits.
+    /// </summary>
+    internal const string DragImageBits = "DragImageBits";
+
+    /// <summary>
+    ///  A format that contains the value passed to <see cref="IDragSourceHelper2.Interface.SetFlags(uint)"/>
+    ///  and controls whether to allow text specified in <see cref="DROPDESCRIPTION"/> to be displayed on the drag image.
+    /// </summary>
+    internal const string DragSourceHelperFlags = "DragSourceHelperFlags";
+
+    /// <summary>
+    ///  A format used to identify an object's drag image window so that it's visual information can be updated dynamically.
+    /// </summary>
+    internal const string DragWindow = "DragWindow";
+
+    /// <summary>
+    ///  A format that is non-zero if the drop target supports drag images.
+    /// </summary>
+    internal const string IsShowingLayered = "IsShowingLayered";
+
+    /// <summary>
+    ///  A format that is non-zero if the drop target supports drop description text.
+    /// </summary>
+    internal const string IsShowingText = "IsShowingText";
+
+    /// <summary>
+    ///  A format that is non-zero if the drag image is a layered window with a size of 96x96.
+    /// </summary>
+    internal const string UsingDefaultDragImage = "UsingDefaultDragImage";
 
     /// <summary>
     ///  Adds all the "synonyms" for the specified format.
@@ -73,4 +111,46 @@ internal static partial class DataFormatNames
                 break;
         }
     }
+
+    /// <summary>
+    ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
+    ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
+    /// </summary>
+    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+        || format is Text
+            or UnicodeText
+            or Rtf
+            or Html
+            or OemText
+            or FileDrop
+            or FileNameAnsi
+            or FileNameUnicode;
+
+    /// <summary>
+    ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
+    /// </summary>
+    /// <param name="format">format name</param>
+    /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   These formats are also restricted in WPF
+    ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
+    ///  </para>
+    /// </remarks>
+    internal static bool RestrictDeserializationToSafeTypes(string format) =>
+        format is String
+            or BinaryFormatBitmap
+            or Csv
+            or Dib
+            or Dif
+            or Locale
+            or PenData
+            or Riff
+            or SymbolicLink
+            or Tiff
+            or WaveAudio
+            or Bitmap
+            or Emf
+            or Palette
+            or Wmf;
 }

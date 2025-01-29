@@ -21,6 +21,7 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using System.Windows.Forms.Nrbf;
 using RECTL = Windows.Win32.Foundation.RECTL;
 using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -1130,8 +1131,8 @@ public partial class Control
                     object? deserialized = null;
                     try
                     {
-                        SerializationRecord rootRecord = stream.Decode();
-                        success = rootRecord.TryGetResXObject(out deserialized);
+                        SerializationRecord rootRecord = stream.DecodeNrbf();
+                        success = WinFormsNrbfSerializer.TryGetObject(rootRecord, out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {

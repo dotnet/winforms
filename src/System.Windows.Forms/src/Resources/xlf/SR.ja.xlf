@@ -982,11 +982,6 @@
         <target state="translated">'{0}' は具象型ではないため、バインドされていない逆シリアル化が試行される可能性があります。具象型を使用するか、クリップボードから取得する必要のある型をサポートする 'resolver' 関数を定義するか、ドラッグ アンド ドロップ操作で使用してください。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">トークン データを逆シリアル化できませんでした。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">型 {0} が見つかりません。この型が許可されている場合は、'TryGetData&lt;T&gt;' API で指定された 'resolver' 関数でサポートされていることを確認してください。</target>

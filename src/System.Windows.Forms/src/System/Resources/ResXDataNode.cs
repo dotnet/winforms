@@ -12,6 +12,7 @@ using System.Text;
 using System.Xml;
 using System.Windows.Forms.Nrbf;
 using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Nrbf;
 
 namespace System.Resources;
 
@@ -429,8 +430,8 @@ public sealed class ResXDataNode : ISerializable
 
         try
         {
-            SerializationRecord rootRecord = stream.Decode();
-            if (rootRecord.TryGetResXObject(out object? value))
+            SerializationRecord rootRecord = stream.DecodeNrbf();
+            if (WinFormsNrbfSerializer.TryGetObject(rootRecord, out object? value))
             {
                 return value;
             }

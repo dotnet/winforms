@@ -982,11 +982,6 @@
         <target state="translated">'{0}' 구체적인 형식이 아니므로 바인딩되지 않은 역직렬화를 시도할 수 있습니다. 구체적인 형식을 사용하거나 클립보드에서 검색하거나 끌어서 놓기 작업에 사용할 형식을 지원하는 'resolver' 함수를 정의하십시오.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">JSON 데이터를 역직렬화하지 못했습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">{0} 형식을 찾을 수 없습니다. 이 형식이 허용되는 경우 'TryGetData&lt;T&gt;' API에 제공된 'resolver' 함수가 이를 지원하는지 확인하세요.</target>

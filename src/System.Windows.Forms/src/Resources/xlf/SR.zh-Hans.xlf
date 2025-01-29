@@ -982,11 +982,6 @@
         <target state="translated">'{0}' 不是具体类型，可能导致未绑定的反序列化尝试。请使用具体类型，或者定义支持希望从剪贴板检索的类型或用于拖放操作的“解析程序”函数。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">无法反序列化 JSON 数据。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">找不到类型 {0}。如果允许此类型，请确保 “TryGetData&lt;T&gt;” API 中提供的 “resolver” 函数支持它。</target>

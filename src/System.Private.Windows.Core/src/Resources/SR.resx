@@ -128,4 +128,7 @@
   <data name="RegisterCFFailed" xml:space="preserve">
     <value>Clipboard format registration did not succeed.</value>
   </data>
+  <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
+    <value>Failed to deserialize JSON data.</value>
+  </data>
 </root>

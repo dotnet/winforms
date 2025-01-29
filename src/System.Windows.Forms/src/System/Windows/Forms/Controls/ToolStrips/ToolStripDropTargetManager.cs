@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Private.Windows.Ole;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
@@ -198,7 +199,7 @@ internal class ToolStripDropTargetManager : IDropTarget
                 // tell the drag image manager you've left
                 if (e.DropImageType > DropImageType.Invalid)
                 {
-                    DragDropHelper.ClearDropDescription(e.Data);
+                    DragDropHelper.ClearDropDescription(((IDragEvent)e).DataObject);
                     DragDropHelper.DragLeave();
                 }
 

@@ -7,55 +7,31 @@ using System.Drawing;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
+using System.Text.Json;
 
-namespace System.Windows.Forms.Nrbf;
+namespace System.Private.Windows.Nrbf;
 
 internal static class SerializationRecordExtensions
 {
+    /// <inheritdoc cref="DecodeNrbf(Stream, out IReadOnlyDictionary{SerializationRecordId, SerializationRecord})"/>
+    internal static SerializationRecord DecodeNrbf(this Stream stream) => stream.DecodeNrbf(out _);
+
     /// <summary>
-    ///  Converts the given exception to a <see cref="SerializationException"/> if needed, nesting the original exception
-    ///  and assigning the original stack trace.
+    ///  Decodes a NRBF stream, converting any exceptions to <see cref="SerializationException"/>.
     /// </summary>
-    private static SerializationException ConvertToSerializationException(this Exception ex)
-        => ex is SerializationException serializationException
-            ? serializationException
-            : (SerializationException)ExceptionDispatchInfo.SetRemoteStackTrace(
-                new SerializationException(ex.Message, ex),
-                ex.StackTrace ?? string.Empty);
-
-    internal static SerializationRecord Decode(this Stream stream)
-    {
-        try
-        {
-            return NrbfDecoder.Decode(stream, leaveOpen: true);
-        }
-        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
-        {
-            // Make the exception easier to catch, but retain the original stack trace.
-            throw ex.ConvertToSerializationException();
-        }
-        catch (TargetInvocationException ex)
-        {
-            throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
-        }
-    }
-
-    internal static SerializationRecord Decode(this Stream stream, out IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap)
+    internal static SerializationRecord DecodeNrbf(this Stream stream, out IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap)
     {
         try
         {
             return NrbfDecoder.Decode(stream, out recordMap, leaveOpen: true);
         }
-        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
+        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException or TargetInvocationException)
         {
             // Make the exception easier to catch, but retain the original stack trace.
             throw ex.ConvertToSerializationException();
-        }
-        catch (TargetInvocationException ex)
-        {
-            throw ExceptionDispatchInfo.Capture(ex.InnerException!).SourceException.ConvertToSerializationException();
         }
     }
 
@@ -592,4 +568,51 @@ internal static class SerializationRecordExtensions
 
     private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord) =>
         serializationRecord.RecordType is SerializationRecordType.ArraySingleString or SerializationRecordType.ArraySinglePrimitive;
+
+    /// <summary>
+    ///  Tries to deserialize this object if it was serialized as JSON.
+    /// </summary>
+    /// <returns>
+    ///  <see langword="true"/> if the data was serialized as JSON. Otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <exception cref="SerializationException">If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly./></exception>
+    /// <exception cref="NotSupportedException">If an exception occurred while JSON deserializing.</exception>
+    [RequiresUnreferencedCode("Calls System.Private.Windows.BinaryFormat.ITypeResolver.GetType(TypeName)")]
+    public static bool TryGetObjectFromJson<T>(this SerializationRecord record, ITypeResolver resolver, out object? @object)
+    {
+        @object = null;
+
+        if (record.TypeName.AssemblyName?.FullName != IJsonData.CustomAssemblyName)
+        {
+            // The data was not serialized as JSON.
+            return false;
+        }
+
+        if (record is not ClassRecord types
+            || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
+            || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string innerTypeFullName
+            || !TypeName.TryParse(innerTypeFullName, out TypeName? serializedTypeName))
+        {
+            // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
+            throw new SerializationException();
+        }
+
+        Type serializedType = resolver.BindToType(serializedTypeName);
+        if (!serializedType.IsAssignableTo(typeof(T)))
+        {
+            // Not the type the caller asked for so @object remains null.
+            return true;
+        }
+
+        try
+        {
+            @object = JsonSerializer.Deserialize<T>(byteData.GetArray());
+        }
+        catch (Exception ex)
+        {
+            throw new NotSupportedException(SR.ClipboardOrDragDrop_JsonDeserializationFailed, ex);
+        }
+
+        return true;
+    }
 }

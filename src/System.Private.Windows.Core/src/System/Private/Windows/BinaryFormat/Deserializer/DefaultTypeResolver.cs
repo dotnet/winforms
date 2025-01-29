@@ -26,7 +26,7 @@ internal sealed class DefaultTypeResolver : ITypeResolver
     /// </summary>
     [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
     [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    Type ITypeResolver.GetType(TypeName typeName)
+    Type ITypeResolver.BindToType(TypeName typeName)
     {
         Debug.Assert(typeName.AssemblyName is not null);
 
@@ -35,7 +35,7 @@ internal sealed class DefaultTypeResolver : ITypeResolver
             return cachedType;
         }
 
-        if (_binder?.GetType(typeName) is Type binderType)
+        if (_binder?.BindToType(typeName) is Type binderType)
         {
             // BinaryFormatter is inconsistent about what caching behavior you get with binders.
             // It would always cache the last item from the binder, but wouldn't put the result

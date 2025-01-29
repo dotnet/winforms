@@ -3,20 +3,19 @@
 
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition
+internal unsafe partial class Composition<TRuntime, TDataFormat>
 {
     /// <summary>
-    ///  Maps the runtime <see cref="ComTypes.IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
+    ///  Maps the runtime <see cref="IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
     /// </summary>
-    private class RuntimeToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject, Com.IManagedWrapper<Com.IDataObject>
+    private class RuntimeToNativeAdapter : Com.IDataObject.Interface, IDataObject, Com.IManagedWrapper<Com.IDataObject>
     {
-        private readonly ComTypes.IDataObject _runtimeDataObject;
+        private readonly IDataObject _runtimeDataObject;
 
-        public RuntimeToNativeAdapter(ComTypes.IDataObject dataObject) => _runtimeDataObject = dataObject;
+        public RuntimeToNativeAdapter(IDataObject dataObject) => _runtimeDataObject = dataObject;
 
         #region ComTypes.IDataObject
         public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => _runtimeDataObject.DAdvise(ref pFormatetc, advf, adviseSink, out connection);
