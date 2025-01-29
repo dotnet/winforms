@@ -2534,7 +2534,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
         <source>Property called {0} does not exist.</source>
-        <target state="new">Property called {0} does not exist.</target>
+        <target state="translated">Die Eigenschaft mit dem Namen „{0}“ ist nicht vorhanden.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
