@@ -177,6 +177,11 @@
         <target state="translated">Carregando {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="net_webstatus_NotFound">
+        <source>The remote server returned an error: (404) Not Found.</source>
+        <target state="new">The remote server returned an error: (404) Not Found.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="net_webstatus_Timeout">
         <source>The operation has timed out.</source>
         <target state="new">The operation has timed out.</target>

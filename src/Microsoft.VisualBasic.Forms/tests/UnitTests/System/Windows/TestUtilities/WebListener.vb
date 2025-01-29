@@ -27,7 +27,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, Optional supportAnonymousLogin As Boolean = True, <CallerMemberName> Optional memberName As String = Nothing)
-            Debug.Assert(fileSize > 0)
             _fileName = $"{[Enum].GetName(GetType(FileSizes), fileSize)}.zip".Replace("FileSize", "")
             _fileSize = fileSize
             _serverConfigurationInstance = ServerConfigurationLoad()
@@ -196,6 +195,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                     Exit Try
                                 End If
                             End If
+
                             ' Simulate network traffic
                             Thread.Sleep(millisecondsTimeout:=20)
                             If _upload Then
@@ -229,6 +229,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 End If
                                 response.StatusCode = 200
                             Else
+                                If _fileSize = 0 Then
+                                    response.StatusCode = HttpStatusCode.NotFound
+                                    Exit Try
+                                End If
+
                                 Dim responseString As String = Strings.StrDup(_fileSize, "A")
                                 Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                                 response.ContentLength64 = buffer.Length
