@@ -14,7 +14,7 @@ public partial class ApplicationConfigTests
         [Fact]
         public void GetStandardValuesTest()
         {
-            var values = Enum.GetValues(typeof(GraphicsUnit));
+            var values = Enum.GetValues<GraphicsUnit>();
             Assert.Equal(7, values.Length); // The values of Graphics unit: World, Display, Pixel, Point, Inch, Document, Millimeter.
         }
 
