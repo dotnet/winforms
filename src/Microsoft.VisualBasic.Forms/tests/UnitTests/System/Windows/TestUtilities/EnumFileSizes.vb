@@ -5,6 +5,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Friend Module EnumFileSizes
         Friend Enum FileSizes As Integer
             Unknown = -1
+            FileSize0Bytes = 0 ' The file does not exist
             FileSize1Byte = 1
             FileSize1MB = 1_048_576
             FileSize100MB = 104_857_600

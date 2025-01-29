@@ -1015,6 +1015,26 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
+        <WinFormsFact>
+        Public Sub DownloadFile_UrlOnlyFileDoesNotExist_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
+            Dim webListener As New WebListener(FileSizes.FileSize0Bytes)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                            address:=webListener.Address,
+                            destinationFileName)
+                    End Sub
+
+                testCode.Should.
+                    Throw(Of WebException)().
+                    Where(Function(e) e.Message.Equals(SR.net_webstatus_NotFound))
+                VerifyFailedDownload(testDirectory, destinationFileName, listener)
+            End Using
+        End Sub
+
         <WinFormsTheory>
         <NullAndEmptyStringData>
         Public Sub DownloadFile_UrlOnlyWhereAddressInvalid_Throws(address As String)
