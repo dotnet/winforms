@@ -176,8 +176,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     End If
                 Case HttpStatusCode.NotFound
                     Throw New WebException(SR.net_webstatus_NotFound)
-                Case HttpStatusCode.Unauthorized
+                Case HttpStatusCode.Unauthorized, HttpStatusCode.NetworkAuthenticationRequired
                     Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
+                Case HttpStatusCode.RequestTimeout
+                    Throw New WebException(SR.net_webstatus_Timeout)
                 Case Else
                     Throw New WebException()
             End Select
@@ -228,8 +230,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                         response.EnsureSuccessStatusCode()
                         Select Case response.StatusCode
                             Case HttpStatusCode.OK
-                            Case HttpStatusCode.Unauthorized
+                            Case HttpStatusCode.Unauthorized, HttpStatusCode.NetworkAuthenticationRequired
                                 Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
+                            Case HttpStatusCode.RequestTimeout
+                                Throw New WebException(SR.net_webstatus_Timeout)
                             Case Else
                                 Throw New WebException()
                         End Select
