@@ -174,7 +174,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                             RemoveHandler _progressDialog.UserHitCancel, AddressOf _progressDialog_UserHitCancel
                         End If
                     End If
-
+                Case HttpStatusCode.NotFound
+                    Throw New WebException(SR.net_webstatus_NotFound)
                 Case HttpStatusCode.Unauthorized
                     Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
                 Case Else
