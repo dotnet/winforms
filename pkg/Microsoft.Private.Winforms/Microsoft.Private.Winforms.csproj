@@ -78,6 +78,11 @@
 
     <!-- Reference and Source System.Drawing.Common -->
     <ProjectReference Include="..\..\src\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\cs\src\Analyzers\System.Windows.Forms.Analyzers.CSharp.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\cs\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\vb\src\Analyzers\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\vb\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
 
     <!-- Reference and Source System.Windows.Forms -->
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
@@ -108,11 +113,6 @@
     <!--
       Analyzers
     -->
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CSharp\src\System.Windows.Forms.Analyzers.CSharp.csproj" />
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.VisualBasic\src\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CodeFixes.CSharp\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
 
   </ItemGroup>
 
