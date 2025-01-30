@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Drawing;
 using System.Private.Windows.Graphics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Shell;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Private.Windows.Ole;
@@ -328,7 +330,10 @@ internal static unsafe class DragDropHelper<TOleServices, TDataFormat>
         string messageReplacementToken)
     {
         ArgumentNullException.ThrowIfNull(dataObject);
-        SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));
+        if (dropImageType is < DROPIMAGETYPE.DROPIMAGE_INVALID or > DROPIMAGETYPE.DROPIMAGE_NOIMAGE)
+        {
+            throw new InvalidEnumArgumentException(nameof(dropImageType));
+        }
 
         if (message.Length >= (int)PInvokeCore.MAX_PATH)
         {

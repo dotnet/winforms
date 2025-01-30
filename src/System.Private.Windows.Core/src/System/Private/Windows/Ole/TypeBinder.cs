@@ -96,8 +96,6 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         return BindToType(parsed);
     }
 
-    [RequiresUnreferencedCode("Calls user-provided method that resolves types from names.")]
-    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
     public Type BindToType(TypeName typeName)
     {
         ArgumentNullException.ThrowIfNull(typeName);

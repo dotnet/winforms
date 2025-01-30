@@ -18,4 +18,18 @@ internal unsafe interface IOleServices
     ///  Called after unsuccessfully performing clipboard <see cref="TYMED.TYMED_HGLOBAL"/> serialization.
     /// </summary>
     static abstract HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
+
+    /// <summary>
+    ///  If the <typeparamref name="T"/> is a bitmap this method will attempt to extract it
+    ///  from the <paramref name="dataObject"/>.
+    /// </summary>
+    /// <returns><see langword="true"/> if a bitmap was extracted.</returns>
+    static abstract bool TryGetBitmapFromDataObject<T>(
+        IDataObject* dataObject,
+        [NotNullWhen(true)] out T data);
+
+    /// <summary>
+    ///  Allows the given <typeparamref name="T"/> to pass pre-validation without a resolver.
+    /// </summary>
+    static abstract bool AllowWithoutResolver<T>();
 }

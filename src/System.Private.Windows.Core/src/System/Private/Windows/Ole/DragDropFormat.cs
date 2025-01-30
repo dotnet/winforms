@@ -4,6 +4,7 @@
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
 
 namespace System.Private.Windows.Ole;
 

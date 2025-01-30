@@ -131,4 +131,40 @@
   <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
     <value>Failed to deserialize JSON data.</value>
   </data>
+  <data name="ExternalException" xml:space="preserve">
+    <value>External exception</value>
+  </data>
+  <data name="BinaryFormatterNotSupported" xml:space="preserve">
+    <value>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_TypedAPI_InvalidResolver" xml:space="preserve">
+    <value>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidType" xml:space="preserve">
+    <value>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
+    <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+    <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
+  </data>
+  <data name="NotSupportedExceptionOnClipboard">
+    <value>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</value>
+  </data>
+  <data name="UnexpectedClipboardType" xml:space="preserve">
+    <value>Clipboard contains an unexpected type.</value>
+  </data>
+  <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
+    <value>The specified Clipboard format is not compatible with '{0}' type.</value>
+  </data>
 </root>

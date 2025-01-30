@@ -1,9 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Runtime.Serialization;
 using System.Text;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
+using Windows.Win32.UI.Shell;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Private.Windows.Ole;
