@@ -5,9 +5,10 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
-using Utilities = System.Windows.Forms.BinaryFormatUtilities;
+using Utilities = System.Private.Windows.Ole.BinaryFormatUtilities<System.Windows.Forms.WinFormsRuntime>;
 
 namespace System.Windows.Forms.Tests;
 
@@ -25,33 +26,58 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
     private object? ReadObjectFromStream()
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
+        DataRequest request = new("test")
+        {
+            UntypedRequest = true
+        };
+
+        return Utilities.ReadObjectFromStream<object>(_stream, in request);
     }
 
     private object? ReadRestrictedObjectFromStream()
     {
         _stream.Position = 0;
-        return Utilities.ReadRestrictedObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
+        DataRequest request = new("test")
+        {
+            UntypedRequest = true
+        };
+
+        return Utilities.ReadRestrictedObjectFromStream<object>(_stream, in request);
     }
 
     private object? ReadObjectFromStream<T>(bool restrictDeserialization, Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
+        DataRequest request = new("test")
+        {
+            Resolver = resolver,
+        };
+
         return restrictDeserialization
-            ? Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false)
-            : Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+            ? Utilities.ReadRestrictedObjectFromStream<T>(_stream, in request)
+            : Utilities.ReadObjectFromStream<T>(_stream, in request);
     }
 
     private object? ReadObjectFromStream<T>(Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+        DataRequest request = new("test")
+        {
+            Resolver = resolver
+        };
+
+        return Utilities.ReadObjectFromStream<T>(_stream, in request);
     }
 
     private object? ReadRestrictedObjectFromStream<T>(Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
-        return Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false);
+        DataRequest request = new("test")
+        {
+            Resolver = resolver
+        };
+
+        return Utilities.ReadRestrictedObjectFromStream<T>(_stream, in request);
     }
 
     private object? RoundTripObject(object value)
@@ -663,15 +689,20 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         byte[] bytes = Convert.FromBase64String(font);
         using MemoryStream stream = new(bytes);
 
+        DataRequest request = new("test")
+        {
+            UntypedRequest = true
+        };
+
         // Default deserialization with the NRBF deserializer.
         using (BinaryFormatterInClipboardDragDropScope binaryFormatScope = new(enable: true))
         {
             // GetData case.
             stream.Position = 0;
+
             Action getData = () => Utilities.ReadObjectFromStream<object>(
                stream,
-               resolver: null,
-               legacyMode: true);
+               in request);
 
             getData.Should().Throw<NotSupportedException>();
 
@@ -685,8 +716,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         stream.Position = 0;
         var result = Utilities.ReadObjectFromStream<object>(
            stream,
-           resolver: null,
-           legacyMode: true).Should().BeOfType<Font>().Subject;
+           in request).Should().BeOfType<Font>().Subject;
 
         result.Name.Should().Be("Microsoft Sans Serif");
         result.Size.Should().Be(10);
@@ -697,10 +727,15 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         {
             // TryGetData<Font> case.
             stream.Position = 0;
+
+            DataRequest request = new("test")
+            {
+                Resolver = FontResolver,
+            };
+
             var result = Utilities.ReadObjectFromStream<Font>(
                 stream,
-                resolver: FontResolver,
-                legacyMode: false).Should().BeOfType<Font>().Subject;
+                in request).Should().BeOfType<Font>().Subject;
 
             result.Name.Should().Be("Microsoft Sans Serif");
             result.Size.Should().Be(10);
@@ -738,9 +773,14 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
+        DataRequest request = new("test")
+        {
+            UntypedRequest = true
+        };
+
         // legacyMode == true follows the GetData path.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, in request)
             .Should().BeEquivalentTo(value);
     }
 
@@ -753,9 +793,14 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
         WriteObjectToStream(value);
 
+        DataRequest request = new("test")
+        {
+            UntypedRequest = true
+        };
+
         // This works because GetData falls back to the BinaryFormatter deserializer, NRBF deserializer fails because it requires a resolver.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, in request)
             .Should().BeEquivalentTo(value);
     }
 

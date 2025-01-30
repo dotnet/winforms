@@ -48,7 +48,7 @@ public unsafe partial class DataObjectTests
         var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
 
-        outData.Should().BeSameAs(data);
+        outData.Should().NotBeSameAs(data);
     }
 
     [WinFormsFact]

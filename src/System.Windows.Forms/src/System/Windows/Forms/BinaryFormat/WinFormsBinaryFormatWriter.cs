@@ -51,20 +51,6 @@ internal static class WinFormsBinaryFormatWriter
         new ArraySinglePrimitive<byte>(3, data).Write(writer);
     }
 
-    public static void WriteJsonData(Stream stream, IJsonData jsonData)
-    {
-        using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(libraryId: 2, IJsonData.CustomAssemblyName).Write(writer);
-        new ClassWithMembersAndTypes(
-            new ClassInfo(1, $"{typeof(IJsonData).Namespace}.JsonData", [$"<{nameof(jsonData.JsonBytes)}>k__BackingField", $"<{nameof(jsonData.InnerTypeAssemblyQualifiedName)}>k__BackingField"]),
-            libraryId: 2,
-            new MemberTypeInfo[] { new(BinaryType.PrimitiveArray, PrimitiveType.Byte), new(BinaryType.String, null) },
-            new MemberReference(idRef: 3),
-            new BinaryObjectString(objectId: 4, jsonData.InnerTypeAssemblyQualifiedName)).Write(writer);
-
-        new ArraySinglePrimitive<byte>(objectId: 3, jsonData.JsonBytes).Write(writer);
-    }
-
     /// <summary>
     ///  Writes the given <paramref name="value"/> if supported.
     /// </summary>
@@ -86,22 +72,8 @@ internal static class WinFormsBinaryFormatWriter
                 WriteBitmap(stream, bitmap);
                 return true;
             }
-            else if (value is IJsonData jsonData)
-            {
-                WriteJsonData(stream, jsonData);
-                return true;
-            }
 
             return false;
         }
-    }
-
-    /// <summary>
-    ///  Writes the given Framework, WinForms or System.Drawing.Primitives <paramref name="value"/> if supported.
-    /// </summary>
-    public static bool TryWriteCommonObject(Stream stream, object value)
-    {
-        return TryWriteObject(stream, value)
-            || BinaryFormatWriter.TryWriteDrawingPrimitivesObject(stream, value);
     }
 }

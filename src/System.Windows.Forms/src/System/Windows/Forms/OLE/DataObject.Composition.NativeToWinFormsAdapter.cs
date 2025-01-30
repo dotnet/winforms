@@ -2,25 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using Com = Windows.Win32.System.Com;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition
+internal unsafe partial class Composition<TRuntime, TDataFormat>
 {
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
     /// </summary>
-    private unsafe class NativeToWinFormsAdapter : IDataObjectInternal, Com.IDataObject.Interface
+    private unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
-        public NativeToWinFormsAdapter(Com.IDataObject* dataObject)
+        public NativeToManagedAdapter(Com.IDataObject* dataObject)
         {
 #if DEBUG
             _nativeDataObject = new(dataObject, takeOwnership: true, trackDisposal: false);
@@ -92,9 +91,7 @@ internal unsafe partial class Composition
         /// </summary>
         private static bool TryGetDataFromHGLOBAL<T>(
             HGLOBAL hglobal,
-            string format,
-            Func<TypeName, Type>? resolver,
-            bool legacyMode,
+            ref readonly DataRequest request,
             [NotNullWhen(true)] out T? data)
         {
             data = default;
@@ -103,7 +100,7 @@ internal unsafe partial class Composition
                 return false;
             }
 
-            object? value = format switch
+            object? value = request.Format switch
             {
                 DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                     ReadStringFromHGLOBAL(hglobal, unicode: false),
@@ -112,7 +109,7 @@ internal unsafe partial class Composition
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                 DataFormatNames.FileNameAnsi => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                 DataFormatNames.FileNameUnicode => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
-                _ => ReadObjectOrStreamFromHGLOBAL(hglobal, DataObject.RestrictDeserializationToSafeTypes(format), resolver, legacyMode)
+                _ => ReadObjectOrStreamFromHGLOBAL(hglobal, in request)
             };
 
             if (value is T t)
@@ -125,16 +122,14 @@ internal unsafe partial class Composition
 
             static object? ReadObjectOrStreamFromHGLOBAL(
                 HGLOBAL hglobal,
-                bool restrictDeserialization,
-                Func<TypeName, Type>? resolver,
-                bool legacyMode)
+                ref readonly DataRequest request)
             {
                 MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
                 return !isSerializedObject
-                    ? stream
-                    : restrictDeserialization
-                        ? BinaryFormatUtilities.ReadRestrictedObjectFromStream<T>(stream, resolver, legacyMode)
-                        : BinaryFormatUtilities.ReadObjectFromStream<T>(stream, resolver, legacyMode);
+                ? stream
+                    : DataFormatNames.RestrictDeserializationToSafeTypes(request.Format)
+                        ? BinaryFormatUtilities<TRuntime>.ReadRestrictedObjectFromStream<T>(stream, in request)
+                        : BinaryFormatUtilities<TRuntime>.ReadObjectFromStream<T>(stream, in request);
             }
         }
 
@@ -250,9 +245,7 @@ internal unsafe partial class Composition
         /// <exception cref="NotSupportedException"> is deserialization failed.</exception>
         private static bool TryGetObjectFromDataObject<T>(
             Com.IDataObject* dataObject,
-            string format,
-            Func<TypeName, Type>? resolver,
-            bool legacyMode,
+            ref readonly DataRequest request,
             out bool doNotContinue,
             [NotNullWhen(true)] out T? data)
         {
@@ -264,20 +257,20 @@ internal unsafe partial class Composition
             {
                 // Try to get the data as a bitmap first.
                 if ((typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T))
-                    && TryGetBitmapData(dataObject, format, out Bitmap? bitmap))
+                    && TryGetBitmapData(dataObject, request.Format, out Bitmap? bitmap))
                 {
                     data = (T)(object)bitmap;
                     return true;
                 }
 
-                result = TryGetHGLOBALData(dataObject, format, resolver, legacyMode, out doNotContinue, out data);
+                result = TryGetHGLOBALData(dataObject, in request, out doNotContinue, out data);
                 if (!result && !doNotContinue)
                 {
                     // Lastly check to see if the data is an IStream.
-                    result = TryGetIStreamData(dataObject, format, resolver, legacyMode, out data);
+                    result = TryGetIStreamData(dataObject, in request, out data);
                 }
             }
-            catch (Exception e) when (legacyMode || e is not NotSupportedException)
+            catch (Exception e) when (request.UntypedRequest || e is not NotSupportedException)
             {
                 Debug.Fail(e.ToString());
             }
@@ -287,9 +280,7 @@ internal unsafe partial class Composition
 
         private static bool TryGetHGLOBALData<T>(
             Com.IDataObject* dataObject,
-            string format,
-            Func<TypeName, Type>? resolver,
-            bool legacyMode,
+            ref readonly DataRequest request,
             out bool doNotContinue,
             [NotNullWhen(true)] out T? data)
         {
@@ -298,7 +289,7 @@ internal unsafe partial class Composition
 
             Com.FORMATETC formatetc = new()
             {
-                cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                cfFormat = (ushort)DataFormatsCore<TDataFormat>.GetOrAddFormat(request.Format).Id,
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 tymed = (uint)Com.TYMED.TYMED_HGLOBAL
@@ -327,7 +318,7 @@ internal unsafe partial class Composition
             {
                 if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull && hr != HRESULT.COR_E_SERIALIZATION)
                 {
-                    result = TryGetDataFromHGLOBAL(medium.hGlobal, format, resolver, legacyMode, out data);
+                    result = TryGetDataFromHGLOBAL(medium.hGlobal, in request, out data);
                 }
             }
             catch (RestrictedTypeDeserializationException)
@@ -336,7 +327,7 @@ internal unsafe partial class Composition
                 data = default;
                 doNotContinue = true;
             }
-            catch (Exception ex) when (legacyMode || ex is not NotSupportedException)
+            catch (Exception ex) when (request.UntypedRequest || ex is not NotSupportedException)
             {
                 Debug.WriteLine(ex.ToString());
             }
@@ -350,15 +341,13 @@ internal unsafe partial class Composition
 
         private static unsafe bool TryGetIStreamData<T>(
             Com.IDataObject* dataObject,
-            string format,
-            Func<TypeName, Type>? resolver,
-            bool legacyMode,
+            ref readonly DataRequest request,
             [NotNullWhen(true)] out T? data)
         {
             data = default;
             Com.FORMATETC formatEtc = new()
             {
-                cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                cfFormat = (ushort)DataFormatsCore<TDataFormat>.GetOrAddFormat(request.Format).Id,
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
@@ -395,7 +384,7 @@ internal unsafe partial class Composition
                 pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
                 PInvokeCore.GlobalUnlock(hglobal);
 
-                return TryGetDataFromHGLOBAL(hglobal, format, resolver, legacyMode, out data);
+                return TryGetDataFromHGLOBAL(hglobal, in request, out data);
             }
             finally
             {
@@ -418,7 +407,7 @@ internal unsafe partial class Composition
 
             Com.FORMATETC formatEtc = new()
             {
-                cfFormat = (ushort)DataFormats.GetFormat(format).Id,
+                cfFormat = (ushort)DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id,
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 tymed = (uint)Com.TYMED.TYMED_GDI
@@ -460,7 +449,7 @@ internal unsafe partial class Composition
         private static void ThrowIfFormatAndTypeRequireResolver<T>(string format)
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
-            if (!DataObject.IsRestrictedFormat(format)
+            if (!DataFormatNames.IsRestrictedFormat(format)
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
@@ -483,25 +472,22 @@ internal unsafe partial class Composition
         }
 
         private bool TryGetDataInternal<T>(
-            string format,
-            Func<TypeName, Type>? resolver,
-            bool autoConvert,
-            bool legacyMode,
+            ref readonly DataRequest request,
             [NotNullWhen(true)] out T? data)
         {
             data = default;
-            if (!legacyMode && resolver is null)
+            if (!request.UntypedRequest && request.Resolver is null)
             {
                 // DataObject.GetData methods do not validate format string, but the typed methods do.
                 // This validation is specific to the WinForms DataObject implementation, it's not executed for
                 // overridden methods.
-                ThrowIfFormatAndTypeRequireResolver<T>(format);
+                ThrowIfFormatAndTypeRequireResolver<T>(request.Format);
             }
 
             using var nativeDataObject = _nativeDataObject.GetInterface();
 
             bool result = TryGetObjectFromDataObject(
-                nativeDataObject, format, resolver, legacyMode, out bool doNotContinue, out data);
+                nativeDataObject, in request, out bool doNotContinue, out data);
 
             if (doNotContinue)
             {
@@ -512,27 +498,32 @@ internal unsafe partial class Composition
                 return false;
             }
 
-            if (result || !autoConvert)
+            if (result || !request.AutoConvert)
             {
                 return result;
             }
 
             List<string> mappedFormats = [];
-            DataFormatNames.AddMappedFormats(format, mappedFormats);
+            DataFormatNames.AddMappedFormats(request.Format, mappedFormats);
 
             // Try to find a mapped format that works better.
             foreach (string mappedFormat in mappedFormats)
             {
-                if (format.Equals(mappedFormat))
+                if (request.Format.Equals(mappedFormat))
                 {
                     continue;
                 }
 
+                DataRequest mappedRequest = new(mappedFormat)
+                {
+                    AutoConvert = request.AutoConvert,
+                    Resolver = request.Resolver,
+                    UntypedRequest = request.UntypedRequest
+                };
+
                 result = TryGetObjectFromDataObject(
                     nativeDataObject,
-                    mappedFormat,
-                    resolver,
-                    legacyMode,
+                    in mappedRequest,
                     out doNotContinue,
                     out data);
 
@@ -554,13 +545,20 @@ internal unsafe partial class Composition
         #region IDataObject
         public object? GetData(string format, bool autoConvert)
         {
-            TryGetDataInternal(format, resolver: null, autoConvert, legacyMode: true, out object? data);
+            DataRequest request = new(format)
+            {
+                AutoConvert = autoConvert,
+                Resolver = null,
+                UntypedRequest = true
+            };
+
+            TryGetDataInternal(in request, out object? data);
             return data;
         }
 
         public object? GetData(string format) => GetData(format, autoConvert: true);
-        public object? GetData(Type format) => GetData(format.FullName!);
-        public bool GetDataPresent(Type format) => GetDataPresent(format.FullName!);
+        public object? GetData(Type format) => GetData(format.FullName.OrThrowIfNull());
+        public bool GetDataPresent(Type format) => GetDataPresent(format.FullName.OrThrowIfNull());
 
         public bool GetDataPresent(string format, bool autoConvert)
         {
@@ -609,7 +607,7 @@ internal unsafe partial class Composition
 
             while (enumFORMATETC.Value->Next(1, &formatEtc) == HRESULT.S_OK)
             {
-                string name = DataFormats.GetFormat(formatEtc.cfFormat).Name;
+                string name = DataFormatsCore<TDataFormat>.GetOrAddFormat(formatEtc.cfFormat).Name;
                 distinctFormats.Add(name);
 
                 if (autoConvert)
@@ -636,30 +634,49 @@ internal unsafe partial class Composition
             string format,
             Func<TypeName, Type> resolver,
             bool autoConvert,
-            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                TryGetDataInternal(format, resolver, autoConvert, legacyMode: false, out data);
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+        {
+            DataRequest request = new(format)
+            {
+                AutoConvert = autoConvert,
+                Resolver = resolver,
+                UntypedRequest = false
+            };
+
+            return TryGetDataInternal(in request, out data);
+        }
 
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             string format,
             bool autoConvert,
-            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                TryGetDataInternal(format, resolver: null!, autoConvert, legacyMode: false, out data);
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+        {
+            DataRequest request = new(format)
+            {
+                AutoConvert = autoConvert,
+            };
+
+            return TryGetDataInternal(in request, out data);
+        }
 
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             string format,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                TryGetDataInternal(format, resolver: null!, autoConvert: true, legacyMode: false, out data);
+                TryGetData(format, autoConvert: true, out data);
 
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                TryGetDataInternal(typeof(T).FullName!, resolver: null!, autoConvert: true, legacyMode: false, out data);
+                TryGetData(
+                    typeof(T).FullName.OrThrowIfNull(),
+                    autoConvert: true,
+                    out data);
         #endregion
 
         private bool GetDataPresentInner(string format)
         {
             Com.FORMATETC formatEtc = new()
             {
-                cfFormat = (ushort)(DataFormats.GetFormat(format).Id),
+                cfFormat = (ushort)(DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id),
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 tymed = (uint)AllowedTymeds

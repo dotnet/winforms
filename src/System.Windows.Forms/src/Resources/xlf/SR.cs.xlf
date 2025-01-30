@@ -982,11 +982,6 @@
         <target state="translated">'{0}' není konkrétní typ a může mít za následek nevázaný pokus o deserializaci. Použijte prosím konkrétní typ nebo alternativně definujte funkci resolver, která podporuje typy, které byste očekávali načíst ze schránky nebo použít při operacích přetažení myší.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Nepovedlo se deserializovat data JSON.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">Typ {0} nebyl nalezen. Pokud je tento typ povolený, ujistěte se prosím, že ji podporuje funkce resolver poskytnutá v rozhraních API TryGetData&lt;T&gt;.</target>

@@ -982,11 +982,6 @@
         <target state="translated">'{0}' ist kein konkreter Typ und kann zu einem ungebundenen Deserialisierungsversuch führen. Verwenden Sie einen konkreten Typ, oder definieren Sie alternativ eine 'Resolver'-Funktion, die Typen unterstützt, die Sie aus der Zwischenablage abrufen oder in Drag &amp;amp; Drop-Vorgängen verwenden möchten.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Fehler beim Deserialisieren von JSON-Daten.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">Der Typ {0} wurde nicht gefunden. Wenn dieser Typ zulässig ist, stellen Sie sicher, dass er von der in den APIs "TryGetData&lt;T&gt;" bereitgestellten Resolverfunktion unterstützt wird.</target>

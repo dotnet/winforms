@@ -5,7 +5,7 @@ using Windows.Win32.System.Ole;
 using static Interop.Mshtml;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using MsHtml = Windows.Win32.Web.MsHtml;
-using Ole = Windows.Win32.System.Ole;
+using OleIDropTarget = Windows.Win32.System.Ole.IDropTarget;
 
 namespace System.Windows.Forms;
 
@@ -134,7 +134,7 @@ public partial class WebBrowser
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IDocHostUIHandler.GetDropTarget(Ole.IDropTarget.Interface pDropTarget, out Ole.IDropTarget.Interface? ppDropTarget)
+        HRESULT IDocHostUIHandler.GetDropTarget(OleIDropTarget.Interface pDropTarget, out OleIDropTarget.Interface? ppDropTarget)
         {
             // Set to null no matter what we return, to prevent the marshaller
             // from having issues if the pointer points to random stuff.

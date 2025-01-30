@@ -10,6 +10,7 @@ using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using System.Private.Windows.Ole;
+using System.Windows.Forms.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -20,24 +21,28 @@ namespace System.Windows.Forms;
 public unsafe partial class DataObject :
     ITypedDataObject,
     IDataObjectInternal,
+    // Built-in COM interop chooses the first interface that implements an IID,
+    // we want the CsWin32 to be chosen over System.Runtime.InteropServices.ComTypes
+    // so it must come first.
     Com.IDataObject.Interface,
     ComTypes.IDataObject,
-    Com.IManagedWrapper<Com.IDataObject>
+    Com.IManagedWrapper<Com.IDataObject>,
+    IComVisibleDataObject
 {
-    private readonly Composition _innerData;
+    private readonly Composition<WinFormsRuntime, DataFormats.Format> _innerData;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    internal DataObject(Com.IDataObject* data) => _innerData = Composition.CreateFromNativeDataObject(data);
+    internal DataObject(Com.IDataObject* data) => _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromNativeDataObject(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() => _innerData = Composition.CreateFromManagedDataObject(new DataStore());
+    public DataObject() => _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore());
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
@@ -55,19 +60,19 @@ public unsafe partial class DataObject :
     {
         if (data is IDataObjectInternal internalDataObject)
         {
-            _innerData = Composition.CreateFromManagedDataObject(internalDataObject);
+            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(internalDataObject);
         }
         else if (data is IDataObject iDataObject)
         {
-            _innerData = Composition.CreateFromManagedDataObject(new DataObjectAdapter(iDataObject));
+            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataObjectAdapter(iDataObject));
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
-            _innerData = Composition.CreateFromRuntimeDataObject(comDataObject);
+            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromRuntimeDataObject(comDataObject);
         }
         else
         {
-            _innerData = Composition.CreateFromManagedDataObject(new DataStore());
+            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore());
             SetData(data);
         }
     }
@@ -159,52 +164,10 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetData)));
         }
 
-        return IsRestrictedFormat(format) || TypeBinder.IsKnownType<T>()
+        return DataFormatNames.IsRestrictedFormat(format) || WinFormsNrbfSerializer.IsSupportedType<T>()
             ? data
             : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
     }
-
-    /// <summary>
-    ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
-    ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
-    /// </summary>
-    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
-        || format is DataFormatNames.Text
-            or DataFormatNames.UnicodeText
-            or DataFormatNames.Rtf
-            or DataFormatNames.Html
-            or DataFormatNames.OemText
-            or DataFormatNames.FileDrop
-            or DataFormatNames.FileNameAnsi
-            or DataFormatNames.FileNameUnicode;
-
-    /// <summary>
-    ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
-    /// </summary>
-    /// <param name="format">format name</param>
-    /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
-    /// <remarks>
-    ///  <para>
-    ///   These formats are also restricted in WPF
-    ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
-    ///  </para>
-    /// </remarks>
-    internal static bool RestrictDeserializationToSafeTypes(string format) =>
-        format is DataFormatNames.String
-            or DataFormatNames.BinaryFormatBitmap
-            or DataFormatNames.Csv
-            or DataFormatNames.Dib
-            or DataFormatNames.Dif
-            or DataFormatNames.Locale
-            or DataFormatNames.PenData
-            or DataFormatNames.Riff
-            or DataFormatNames.SymbolicLink
-            or DataFormatNames.Tiff
-            or DataFormatNames.WaveAudio
-            or DataFormatNames.Bitmap
-            or DataFormatNames.Emf
-            or DataFormatNames.Palette
-            or DataFormatNames.Wmf;
 
     #region IDataObject
     [Obsolete(

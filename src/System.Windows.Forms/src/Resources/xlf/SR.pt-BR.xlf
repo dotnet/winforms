@@ -982,11 +982,6 @@
         <target state="translated">'{0}' não é um tipo concreto e pode resultar em uma tentativa de desserialização não associado. Use um tipo concreto ou, como alternativa, defina uma função 'resolver' que dê suporte aos tipos que você está esperando recuperar da área de transferência ou use em operações de arrastar e soltar.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Falha ao desserializar dados JSON.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">Tipo {0} não encontrado. Se esse tipo for permitido, verifique se a função 'resolver' fornecida nas APIs 'TryGetData&lt;T&gt;' dá suporte a ela.</target>

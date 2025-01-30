@@ -3,19 +3,16 @@
 
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
+using System.Private.Windows.Nrbf;
 using System.Reflection.Metadata;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
-using System.Windows.Forms.Nrbf;
 
-using CoreAppContextSwitches = System.Private.Windows.CoreAppContextSwitches;
+namespace System.Private.Windows.Ole;
 
-namespace System.Windows.Forms;
-
-internal static class BinaryFormatUtilities
+internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializer : INrbfSerializer
 {
     internal static void WriteObjectToStream(MemoryStream stream, object data, bool restrictSerialization)
     {
@@ -23,7 +20,7 @@ internal static class BinaryFormatUtilities
 
         try
         {
-            if (WinFormsBinaryFormatWriter.TryWriteCommonObject(stream, data))
+            if (TNrbfSerializer.TryWriteObject(stream, data))
             {
                 return;
             }
@@ -61,25 +58,22 @@ internal static class BinaryFormatUtilities
 #pragma warning restore SYSLIB0011
     }
 
-    internal static object? ReadObjectFromStream<T>(
-        MemoryStream stream,
-        Func<TypeName, Type>? resolver,
-        bool legacyMode)
+    internal static object? ReadObjectFromStream<T>(MemoryStream stream, ref readonly DataRequest request)
     {
         long startPosition = stream.Position;
         SerializationRecord? record;
-        SerializationBinder binder = new TypeBinder(typeof(T), resolver, legacyMode);
+        SerializationBinder binder = new TypeBinder<TNrbfSerializer>(typeof(T), in request);
         IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap;
 
         try
         {
-            record = stream.Decode(out recordMap);
+            record = stream.DecodeNrbf(out recordMap);
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
             // Couldn't parse for some reason, let BinaryFormatter handle the legacy invocation.
             // The typed APIs can't compare the specified type when the root record is not available.
-            if (legacyMode && CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
+            if (request.UntypedRequest && CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
             {
                 stream.Position = startPosition;
                 return ReadObjectWithBinaryFormatter<T>(stream, binder);
@@ -99,7 +93,7 @@ internal static class BinaryFormatUtilities
         // For the new TryGet APIs, ensure that the stream contains the requested type,
         // or type that can be assigned to the requested type.
         Type type = typeof(T);
-        if (!legacyMode && !type.MatchExceptAssemblyVersion(record.TypeName))
+        if (!request.UntypedRequest && !type.MatchExceptAssemblyVersion(record.TypeName))
         {
             if (record.TryGetObjectFromJson<T>((ITypeResolver)binder, out object? data))
             {
@@ -120,7 +114,7 @@ internal static class BinaryFormatUtilities
             }
         }
 
-        if (record.TryGetCommonObject(out object? value))
+        if (TNrbfSerializer.TryGetObject(record, out object? value))
         {
             return value;
         }
@@ -132,10 +126,12 @@ internal static class BinaryFormatUtilities
                 typeof(T).FullName));
         }
 
-        // NRBF deserializer fixes some known BinaryFormatter issues:
-        // 1. Doesn't allow arrays that have a non-zero base index (can't create these in C# or VB)
-        // 2. Only allows IObjectReference types that contain primitives (to avoid observable cycle
-        //    dependencies to indeterminate state)
+        // NRBF deserializer avoids some known BinaryFormatter issues:
+        //
+        //  1. Doesn't allow arrays that have a non-zero base index (can't create these in C# or VB)
+        //  2. Only allows IObjectReference types that contain primitives (to avoid observable cycle
+        //     dependencies to indeterminate state)
+        //
         // But it usually requires a resolver. Resolver is not available in the legacy mode,
         // so we will fall back to BinaryFormatter in that case.
         if (CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization)
@@ -144,7 +140,7 @@ internal static class BinaryFormatUtilities
             {
                 return record.Deserialize(recordMap, (ITypeResolver)binder);
             }
-            catch (Exception ex) when (!ex.IsCriticalException() && legacyMode)
+            catch (Exception ex) when (!ex.IsCriticalException() && request.UntypedRequest)
             {
             }
         }
@@ -155,15 +151,13 @@ internal static class BinaryFormatUtilities
 
     internal static object? ReadRestrictedObjectFromStream<T>(
         MemoryStream stream,
-        Func<TypeName, Type>? resolver,
-        bool legacyMode)
+        ref readonly DataRequest request)
     {
-        long startPosition = stream.Position;
         SerializationRecord? record;
 
         try
         {
-            record = stream.Decode();
+            record = stream.DecodeNrbf();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -173,9 +167,9 @@ internal static class BinaryFormatUtilities
         // For the new TryGet APIs, ensure that the stream contains the requested type,
         // or type that can be assigned to the requested type.
         Type type = typeof(T);
-        if (!legacyMode && !type.MatchExceptAssemblyVersion(record.TypeName))
+        if (!request.UntypedRequest && !type.MatchExceptAssemblyVersion(record.TypeName))
         {
-            if (!TypeNameIsAssignableToType(record.TypeName, type, new TypeBinder(type, resolver, legacyMode)))
+            if (!TypeNameIsAssignableToType(record.TypeName, type, new TypeBinder<TNrbfSerializer>(type, in request)))
             {
                 // If clipboard contains an exception from SetData, we will get its message and throw.
                 if (record.TypeName.FullName == typeof(NotSupportedException).FullName
@@ -189,7 +183,7 @@ internal static class BinaryFormatUtilities
             }
         }
 
-        return record.TryGetCommonObject(out object? value)
+        return TNrbfSerializer.TryGetObject(record, out object? value)
             ? value
             : throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
     }
@@ -198,7 +192,7 @@ internal static class BinaryFormatUtilities
     {
         try
         {
-            return resolver.GetType(typeName)?.IsAssignableTo(type) == true;
+            return resolver.BindToType(typeName)?.IsAssignableTo(type) == true;
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {

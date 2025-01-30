@@ -2,22 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows.Ole;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.SystemServices;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
 
 internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, IManagedWrapper<IDropSource, IDropSourceNotify>
 {
     private readonly ISupportOleDropSource _peer;
-    private readonly IComDataObject _dataObject;
+    private readonly IComVisibleDataObject _dataObject;
     private HWND _lastHwndTarget;
     private uint _lastHwndTargetThreadId;
     private GiveFeedbackEventArgs? _lastGiveFeedbackEventArgs;
 
-    public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+    public DropSource(ISupportOleDropSource peer, IComVisibleDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
     {
         _peer = peer.OrThrowIfNull();
         _dataObject = dataObject.OrThrowIfNull();
@@ -81,7 +81,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
 
         return HRESULT.S_OK;
 
-        void UpdateDragImage(GiveFeedbackEventArgs e, IComDataObject? dataObject, HWND lastHwndTarget)
+        void UpdateDragImage(GiveFeedbackEventArgs e, IComVisibleDataObject? dataObject, HWND lastHwndTarget)
         {
             if (dataObject is null)
             {

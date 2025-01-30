@@ -982,11 +982,6 @@
         <target state="translated">'{0}' somut bir tür değil ve bir unbounded deserialization girişimine neden olabilir. Lütfen somut bir tür kullanın veya alternatif olarak panodan almayı bekleyen türleri destekleyen bir 'çözümleyici' işlevi ya da sürükle ve bırak işlemleri içinde kullanın.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">JSON verileri seri durumdan çıkarılamadı.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">Tür {0} bulunamadı. Bu türe izin verilirse lütfen 'TryGetData&lt;T&gt;' API'lerinde sağlanan 'resolver' işlevinin bunu desteklediğinden emin olun.</target>
