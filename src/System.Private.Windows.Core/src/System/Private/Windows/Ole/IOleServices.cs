@@ -31,5 +31,10 @@ internal unsafe interface IOleServices
     /// <summary>
     ///  Allows the given <typeparamref name="T"/> to pass pre-validation without a resolver.
     /// </summary>
-    static abstract bool AllowWithoutResolver<T>();
+    static abstract bool AllowTypeWithoutResolver<T>();
+
+    /// <summary>
+    ///  Allows custom validation or adapting of <see cref="DataStore{TOleServices}"/> data and formats.
+    /// </summary>
+    static abstract void ValidateDataStoreData(ref string format, bool autoConvert, object? data);
 }
