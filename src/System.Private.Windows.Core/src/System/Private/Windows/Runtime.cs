@@ -26,7 +26,9 @@ internal abstract unsafe class Runtime<TDataFormat, TNrbfSerializer, TOleService
         TOleServices.GetDataHere(format, data, pformatetc, pmedium);
     static bool IOleServices.TryGetBitmapFromDataObject<T>(IDataObject* dataObject, [NotNullWhen(true)] out T data) =>
         TOleServices.TryGetBitmapFromDataObject(dataObject, out data);
-    static bool IOleServices.AllowWithoutResolver<T>() => TOleServices.AllowWithoutResolver<T>();
+    static bool IOleServices.AllowTypeWithoutResolver<T>() => TOleServices.AllowTypeWithoutResolver<T>();
+    static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) =>
+        TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
     static bool INrbfSerializer.IsSupportedType<T>() =>
         TNrbfSerializer.IsSupportedType<T>();
     static bool INrbfSerializer.TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type) =>

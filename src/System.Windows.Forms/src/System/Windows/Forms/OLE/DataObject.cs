@@ -11,6 +11,7 @@ using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using System.Private.Windows.Ole;
 using System.Windows.Forms.Nrbf;
+using System.Windows.Forms.Ole;
 
 namespace System.Windows.Forms;
 
@@ -42,7 +43,8 @@ public unsafe partial class DataObject :
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() => _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore());
+    public DataObject() =>
+        _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore<WinFormsOleServices>());
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
@@ -72,7 +74,7 @@ public unsafe partial class DataObject :
         }
         else
         {
-            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore());
+            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore<WinFormsOleServices>());
             SetData(data);
         }
     }
@@ -91,7 +93,7 @@ public unsafe partial class DataObject :
         {
             DataObject data => data,
             DataObjectAdapter adapter => adapter.DataObject,
-            DataStore => this,
+            DataStore<WinFormsOleServices> => this,
             _ => null
         };
 

@@ -139,5 +139,16 @@ internal sealed class WinFormsOleServices : IOleServices
     }
 
     // Image is a special case because we are reading Bitmaps directly from the SerializationRecord.
-    static bool IOleServices.AllowWithoutResolver<T>() => typeof(T) == typeof(Image);
+    static bool IOleServices.AllowTypeWithoutResolver<T>() => typeof(T) == typeof(Image);
+
+    static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data)
+    {
+        // We do not have proper support for Dibs, so if the user explicitly asked
+        // for Dib and provided a Bitmap object we can't convert. Instead, publish as an HBITMAP
+        // and let the system provide the conversion for us.
+        if (data is Bitmap && format.Equals(DataFormatNames.Dib))
+        {
+            format = autoConvert ? DataFormatNames.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
+        }
+    }
 }

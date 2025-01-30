@@ -3,7 +3,7 @@
 
 namespace System.Private.Windows.Ole;
 
-internal sealed partial class DataStore
+internal sealed partial class DataStore<TOleServices>
 {
     private class DataStoreEntry
     {

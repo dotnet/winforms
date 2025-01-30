@@ -401,7 +401,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
             if (!DataFormatNames.IsRestrictedFormat(format)
-                && !TRuntime.AllowWithoutResolver<T>()
+                && !TRuntime.AllowTypeWithoutResolver<T>()
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
