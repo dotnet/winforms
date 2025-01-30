@@ -107,7 +107,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Matches up to <see cref="IDispatchEx.GetMemberName(IDispatchEx*, int, BSTR*)"/>
+    ///   Matches up to <see cref="IDispatchEx.GetMemberName(int, BSTR*)"/>
     ///  </para>
     /// </remarks>
     /// <param name="name">The name, if found.</param>
@@ -135,7 +135,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// <remarks>
     ///  <para>
     ///   Matches up to
-    ///   <see cref="IDispatchEx.InvokeEx(IDispatchEx*, int, uint, ushort, DISPPARAMS*, VARIANT*, EXCEPINFO*, Com.IServiceProvider*)"/>
+    ///   <see cref="IDispatchEx.InvokeEx(int, uint, ushort, DISPPARAMS*, VARIANT*, EXCEPINFO*, Com.IServiceProvider*)"/>
     ///  </para>
     /// </remarks>
     [UnconditionalSuppressMessage(
@@ -249,7 +249,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Matches up to <see cref="IDispatchEx.GetNextDispID(IDispatchEx*, uint, int, int*)"/>
+    ///   Matches up to <see cref="IDispatchEx.GetNextDispID(uint, int, int*)"/>
     ///  </para>
     /// </remarks>
     /// <param name="nextDispId">The DISPID, if found.</param>

@@ -11,7 +11,6 @@ global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<System.W
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
-global using Windows.Win32.System.Memory;
 global using Windows.Win32.UI.Controls;
 global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;

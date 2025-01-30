@@ -577,7 +577,6 @@ internal static class SerializationRecordExtensions
     /// </returns>
     /// <exception cref="SerializationException">If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly./></exception>
     /// <exception cref="NotSupportedException">If an exception occurred while JSON deserializing.</exception>
-    [RequiresUnreferencedCode("Calls System.Private.Windows.BinaryFormat.ITypeResolver.GetType(TypeName)")]
     public static bool TryGetObjectFromJson<T>(this SerializationRecord record, ITypeResolver resolver, out object? @object)
     {
         @object = null;

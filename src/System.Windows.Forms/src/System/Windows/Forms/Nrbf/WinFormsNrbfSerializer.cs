@@ -45,8 +45,6 @@ internal sealed partial class WinFormsNrbfSerializer : INrbfSerializer
         }
 
         return s_knownTypes.TryGetValue(typeName, out type);
-
-        throw new NotImplementedException();
     }
 
     public static bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value) =>
