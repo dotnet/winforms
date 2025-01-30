@@ -29,6 +29,7 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
 {
     private readonly Func<TypeName, Type?> _resolver;
     private readonly bool _isUntypedRequest;
+    private readonly bool _hasCustomResolver;
 
     private Dictionary<FullyQualifiedTypeName, TypeName>? _cachedTypeNames;
 
@@ -44,6 +45,7 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
             "Untyped methods should not provide a resolver.");
 
         _isUntypedRequest = request.UntypedRequest;
+        _hasCustomResolver = request.Resolver is not null;
         _resolver = request.Resolver ?? CreateResolver(type);
 
         static Func<TypeName, Type?> CreateResolver(Type type)
@@ -67,9 +69,15 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         ArgumentException.ThrowIfNullOrWhiteSpace(assemblyName);
         ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
 
-        if (_isUntypedRequest
-            && !CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
+        if (_isUntypedRequest)
         {
+            if (CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
+            {
+                // With the switch enabled, we'll let the BinaryFormatter allow any type to be deserialized
+                // when coming in from the untyped APIs.
+                return null;
+            }
+
             // Should never have gotten here - should not be creating a BinaryFormatter when not enabled.
             throw new NotSupportedException(string.Format(
                 SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
@@ -96,17 +104,9 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
 
         if (!TNrbfSerializer.TryBindToType(typeName, out Type? type))
         {
-            if (_isUntypedRequest)
-            {
-                throw new NotSupportedException(string.Format(
-                    SR.ClipboardOrDragDrop_UseTypedAPI,
-                    typeName.AssemblyQualifiedName));
-            }
-
             type = _resolver(typeName) ?? throw new NotSupportedException(string.Format(
-                SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver,
+                _hasCustomResolver ? SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver : SR.ClipboardOrDragDrop_UseTypedAPI,
                 typeName.AssemblyQualifiedName));
-            ;
         }
 
         return type;
