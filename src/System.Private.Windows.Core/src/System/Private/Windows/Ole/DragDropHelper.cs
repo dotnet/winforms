@@ -332,7 +332,7 @@ internal static unsafe class DragDropHelper<TOleServices, TDataFormat>
         ArgumentNullException.ThrowIfNull(dataObject);
         if (dropImageType is < DROPIMAGETYPE.DROPIMAGE_INVALID or > DROPIMAGETYPE.DROPIMAGE_NOIMAGE)
         {
-            throw new InvalidEnumArgumentException(nameof(dropImageType));
+            throw new InvalidEnumArgumentException(nameof(dropImageType), (int)dropImageType, typeof(DROPIMAGETYPE));
         }
 
         if (message.Length >= (int)PInvokeCore.MAX_PATH)
