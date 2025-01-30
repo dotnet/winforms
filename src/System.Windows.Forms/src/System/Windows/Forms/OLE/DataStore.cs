@@ -3,11 +3,10 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
-using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
 internal sealed partial class DataStore : IDataObjectInternal
 {
@@ -92,9 +91,9 @@ internal sealed partial class DataStore : IDataObjectInternal
         // We do not have proper support for Dibs, so if the user explicitly asked
         // for Dib and provided a Bitmap object we can't convert. Instead, publish as an HBITMAP
         // and let the system provide the conversion for us.
-        if (data is Bitmap && format.Equals(DataFormats.Dib))
+        if (data is Bitmap && format.Equals(DataFormatNames.Dib))
         {
-            format = autoConvert ? DataFormats.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
+            format = autoConvert ? DataFormatNames.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
         }
 
         _mappedData[format] = new DataStoreEntry(data, autoConvert);
@@ -113,9 +112,9 @@ internal sealed partial class DataStore : IDataObjectInternal
         ArgumentNullException.ThrowIfNull(data);
 
         if (data is ISerializable
-            && !_mappedData.ContainsKey(DataFormats.Serializable))
+            && !_mappedData.ContainsKey(DataFormatNames.Serializable))
         {
-            SetData(DataFormats.Serializable, data);
+            SetData(DataFormatNames.Serializable, data);
         }
 
         SetData(data.GetType(), data);
