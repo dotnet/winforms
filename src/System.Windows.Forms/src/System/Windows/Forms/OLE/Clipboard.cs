@@ -274,7 +274,7 @@ public static class Clipboard
     /// </param>
     /// <param name="data">
     ///  <para>
-    ///   Out parameter that contains the retrieved data in the specified format, or <see lanfword="null"/> if the data is
+    ///   Out parameter that contains the retrieved data in the specified format, or <see langword="null"/> if the data is
     ///   unavailable in the specified format, or is of a wrong <see cref="Type"/>.
     ///  </para>
     /// </param>

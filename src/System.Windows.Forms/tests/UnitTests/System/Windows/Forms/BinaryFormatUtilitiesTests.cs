@@ -11,7 +11,7 @@ using Utilities = System.Windows.Forms.BinaryFormatUtilities;
 
 namespace System.Windows.Forms.Tests;
 
-public partial class BinaryFormatUtilitiesTests : IDisposable
+public sealed partial class BinaryFormatUtilitiesTests : IDisposable
 {
     private readonly MemoryStream _stream;
 
@@ -508,7 +508,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         Action read = () => ReadObjectFromStream<int?[]>(NotSupportedResolver);
 
         // nullable struct requires a custom resolver.
-        // This is either NotSupportedException of RestrictedTypeDeserializationException, depending on format.
+        // This is either NotSupportedException or RestrictedTypeDeserializationException, depending on format.
         read.Should().Throw<Exception>();
     }
 
