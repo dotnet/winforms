@@ -164,8 +164,8 @@ internal sealed class WinFormsOleServices : IOleServices
 
     static bool IOleServices.IsValidTypeForFormat(Type type, string format) => format switch
     {
-        DataFormatNames.Bitmap => type == typeof(Bitmap) || type == typeof(Image),
-        // All else should fall through.
+        DataFormatNames.Bitmap or DataFormatNames.BinaryFormatBitmap => type == typeof(Bitmap) || type == typeof(Image),
+        // All else should fall through as valid.
         _ => true
     };
 }
