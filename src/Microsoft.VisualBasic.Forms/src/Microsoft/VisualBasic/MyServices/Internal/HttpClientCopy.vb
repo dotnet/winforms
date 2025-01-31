@@ -176,8 +176,15 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     End If
                 Case HttpStatusCode.NotFound
                     Throw New WebException(SR.net_webstatus_NotFound)
-                Case HttpStatusCode.Unauthorized, HttpStatusCode.NetworkAuthenticationRequired
-                    Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
+                Case HttpStatusCode.Found,
+                     HttpStatusCode.Moved,
+                     HttpStatusCode.NotModified,
+                     HttpStatusCode.PermanentRedirect
+                    Throw New WebException()
+                Case HttpStatusCode.Forbidden,
+                     HttpStatusCode.NetworkAuthenticationRequired,
+                     HttpStatusCode.Unauthorized
+                    Throw New WebException(SR.net_webstatus_Unauthorized)
                 Case HttpStatusCode.RequestTimeout
                     Throw New WebException(SR.net_webstatus_Timeout)
                 Case Else
@@ -230,8 +237,15 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                         response.EnsureSuccessStatusCode()
                         Select Case response.StatusCode
                             Case HttpStatusCode.OK
-                            Case HttpStatusCode.Unauthorized, HttpStatusCode.NetworkAuthenticationRequired
-                                Throw New WebException(SR.net_webstatus_Unauthorized, WebExceptionStatus.ProtocolError)
+                            Case HttpStatusCode.Found,
+                                 HttpStatusCode.Moved,
+                                 HttpStatusCode.NotModified,
+                                 HttpStatusCode.PermanentRedirect
+                                Throw New WebException()
+                            Case HttpStatusCode.Forbidden,
+                                 HttpStatusCode.NetworkAuthenticationRequired,
+                                 HttpStatusCode.Unauthorized
+                                Throw New WebException(SR.net_webstatus_Unauthorized)
                             Case HttpStatusCode.RequestTimeout
                                 Throw New WebException(SR.net_webstatus_Timeout)
                             Case Else
