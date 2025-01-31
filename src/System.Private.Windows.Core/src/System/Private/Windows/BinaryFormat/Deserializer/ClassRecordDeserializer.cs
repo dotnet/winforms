@@ -29,7 +29,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
     internal static ObjectRecordDeserializer Create(ClassRecord classRecord, IDeserializer deserializer)
     {
-        Type type = deserializer.TypeResolver.GetType(classRecord.TypeName);
+        Type type = deserializer.TypeResolver.BindToType(classRecord.TypeName);
         SerializationRecordId id = classRecord.Id;
 
         ISerializationSurrogate? surrogate = deserializer.GetSurrogate(type);

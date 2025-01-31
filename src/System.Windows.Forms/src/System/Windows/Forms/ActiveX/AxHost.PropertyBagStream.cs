@@ -8,7 +8,7 @@ using System.Private.Windows.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
-using System.Windows.Forms.Nrbf;
+using System.Private.Windows.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -25,7 +25,7 @@ public abstract unsafe partial class AxHost
             long position = stream.Position;
             try
             {
-                SerializationRecord rootRecord = stream.Decode();
+                SerializationRecord rootRecord = stream.DecodeNrbf();
                 if (rootRecord.TryGetPrimitiveHashtable(out _bag!))
                 {
                     return;

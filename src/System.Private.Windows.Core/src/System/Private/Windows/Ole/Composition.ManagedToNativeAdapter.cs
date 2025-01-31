@@ -2,21 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Private.Windows.Ole;
 using System.Runtime.Serialization;
 using System.Text;
 using Windows.Win32.System.Com;
-using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
+using Windows.Win32.UI.Shell;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition
+internal unsafe partial class Composition<TRuntime, TDataFormat>
 {
     /// <summary>
-    ///  Maps <see cref="IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
+    ///  Maps <see cref="IDataObject"/> to <see cref="IDataObject.Interface"/>.
     /// </summary>
-    private unsafe class ManagedToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
+    private unsafe class ManagedToNativeAdapter : IDataObject.Interface, IManagedWrapper<IDataObject>
     {
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
@@ -45,9 +45,9 @@ internal unsafe partial class Composition
                 return HRESULT.E_POINTER;
             }
 
-            if (DragDropHelper.IsInDragLoop(_dataObject))
+            if (DragDropHelper<TRuntime, TDataFormat>.IsInDragLoop(_dataObject))
             {
-                string formatName = DataFormats.GetFormat(pformatetcIn->cfFormat).Name;
+                string formatName = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetcIn->cfFormat).Name;
                 if (!_dataObject.GetDataPresent(formatName))
                 {
                     *pmedium = default;
@@ -109,7 +109,7 @@ internal unsafe partial class Composition
                 return HRESULT.DV_E_TYMED;
             }
 
-            string format = DataFormats.GetFormat(pformatetc->cfFormat).Name;
+            string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
 
             if (!_dataObject.GetDataPresent(format))
             {
@@ -125,7 +125,11 @@ internal unsafe partial class Composition
             {
                 try
                 {
-                    return SaveDataToHGLOBAL(data, format, ref *pmedium);
+                    HRESULT result = SaveDataToHGLOBAL(data, format, ref *pmedium);
+                    if (result != HRESULT.E_UNEXPECTED)
+                    {
+                        return result;
+                    }
                 }
                 catch (NotSupportedException ex)
                 {
@@ -143,50 +147,7 @@ internal unsafe partial class Composition
                 }
             }
 
-            if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_GDI))
-            {
-                if (format.Equals(DataFormats.Bitmap) && data is Bitmap bitmap)
-                {
-                    // Save bitmap
-                    pmedium->u.hBitmap = GetCompatibleBitmap(bitmap);
-                }
-
-                return HRESULT.S_OK;
-            }
-
-            return HRESULT.DV_E_TYMED;
-
-            static HBITMAP GetCompatibleBitmap(Bitmap bitmap)
-            {
-                using var screenDC = GetDcScope.ScreenDC;
-
-                // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
-                // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.
-                HBITMAP hbitmap = bitmap.GetHBITMAP();
-
-                // Create a compatible DC to render the source bitmap.
-                using CreateDcScope sourceDC = new(screenDC);
-                using SelectObjectScope sourceBitmapSelection = new(sourceDC, hbitmap);
-
-                // Create a compatible DC and a new compatible bitmap.
-                using CreateDcScope destinationDC = new(screenDC);
-                HBITMAP compatibleBitmap = PInvokeCore.CreateCompatibleBitmap(screenDC, bitmap.Size.Width, bitmap.Size.Height);
-
-                // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-                using SelectObjectScope destinationBitmapSelection = new(destinationDC, compatibleBitmap);
-                PInvokeCore.BitBlt(
-                    destinationDC,
-                    0,
-                    0,
-                    bitmap.Size.Width,
-                    bitmap.Size.Height,
-                    sourceDC,
-                    0,
-                    0,
-                    ROP_CODE.SRCCOPY);
-
-                return compatibleBitmap;
-            }
+            return TRuntime.GetDataHere(format, data, pformatetc, pmedium);
         }
 
         public HRESULT QueryGetData(FORMATETC* pformatetc)
@@ -211,7 +172,7 @@ internal unsafe partial class Composition
                 return HRESULT.S_FALSE;
             }
 
-            if (!_dataObject.GetDataPresent(DataFormats.GetFormat(pformatetc->cfFormat).Name))
+            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name))
             {
                 return HRESULT.DV_E_FORMATETC;
             }
@@ -242,9 +203,10 @@ internal unsafe partial class Composition
                 return HRESULT.E_POINTER;
             }
 
-            if (DragDropHelper.IsInDragLoopFormat(*pformatetc) || DragDropHelper.IsInDragLoop(_dataObject))
+            if (DragDropHelper<TRuntime, TDataFormat>.IsInDragLoopFormat(*pformatetc)
+                || DragDropHelper<TRuntime, TDataFormat>.IsInDragLoop(_dataObject))
             {
-                string formatName = DataFormats.GetFormat(pformatetc->cfFormat).Name;
+                string formatName = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
                 if (_dataObject.GetDataPresent(formatName) && _dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     dragDropFormat.RefreshData(pformatetc->cfFormat, *pmedium, !fRelease);
@@ -269,7 +231,10 @@ internal unsafe partial class Composition
 
             if (dwDirection == (uint)ComTypes.DATADIR.DATADIR_GET)
             {
-                *ppenumFormatEtc = ComHelpers.GetComPointer<IEnumFORMATETC>(new FormatEnumerator(_dataObject));
+                *ppenumFormatEtc = ComHelpers.GetComPointer<IEnumFORMATETC>(new FormatEnumerator(
+                    _dataObject,
+                    (format) => DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id));
+
                 return HRESULT.S_OK;
             }
 
@@ -317,14 +282,10 @@ internal unsafe partial class Composition
                 => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: false),
             DataFormatNames.FileNameUnicode
                 => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: true),
-            DataFormatNames.Dib when data is Image
-                // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
-                // an HBITMAP and publish a Dib, we don't need to support this.
-                => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
             _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
-                => SaveObjectToHGLOBAL(ref medium.hGlobal, data, DataObject.RestrictDeserializationToSafeTypes(format)),
+                => SaveObjectToHGLOBAL(ref medium.hGlobal, data, DataFormatNames.RestrictDeserializationToSafeTypes(format)),
             _ => HRESULT.E_UNEXPECTED
         };
 
@@ -334,7 +295,7 @@ internal unsafe partial class Composition
             stream.Write(s_serializedObjectID);
 
             // Throws in case of serialization failure.
-            BinaryFormatUtilities.WriteObjectToStream(stream, data, restrictSerialization);
+            BinaryFormatUtilities<TRuntime>.WriteObjectToStream(stream, data, restrictSerialization);
 
             return SaveStreamToHGLOBAL(ref hglobal, stream);
         }

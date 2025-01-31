@@ -6,10 +6,10 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
+using System.Private.Windows.Ole;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
 
@@ -2159,7 +2159,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public unsafe DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
     {
-        if (data is not IComDataObject dataObject)
+        if (data is not IComVisibleDataObject dataObject)
         {
             DataObject? iwdata;
             if (data is IDataObject idataObject)
@@ -2216,7 +2216,7 @@ public abstract partial class ToolStripItem :
     ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
     ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
     /// </summary>
-    internal IDropSource.Interface CreateDropSource(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+    internal IDropSource.Interface CreateDropSource(IComVisibleDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         => ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null
             ? new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage)
             : new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);

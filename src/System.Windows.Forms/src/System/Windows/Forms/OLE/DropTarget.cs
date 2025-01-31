@@ -5,13 +5,14 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.SystemServices;
 using Com = Windows.Win32.System.Com;
-using Ole = Windows.Win32.System.Ole;
+using DROPEFFECT = Windows.Win32.System.Ole.DROPEFFECT;
+using OleIDropTarget = Windows.Win32.System.Ole.IDropTarget;
 
 namespace System.Windows.Forms;
 
-internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ole.IDropTarget>
+internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<OleIDropTarget>
 {
-    private IDataObject? _lastDataObject;
+    private DataObject? _lastDataObject;
     private DragDropEffects _lastEffect = DragDropEffects.None;
     private DragEventArgs? _lastDragEventArgs;
     private readonly HWND _hwndTarget;
@@ -44,23 +45,33 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
     ///  <paramref name="nativeDataObject"/> should have associated ComWrappers created wrapper that implements
     ///  <see cref="IDataObject"/> to be passed out as is. Otherwise, the data will be wrapped in a <see cref="DataObject"/>.
     /// </summary>
-    private static IDataObject? CreateManagedDataObjectForOutgoingDropData(Com.IDataObject* nativeDataObject)
+    private static DataObject? CreateManagedDataObjectForOutgoingDropData(Com.IDataObject* nativeDataObject)
     {
+        DataObject? dataObject = null;
+
         using var unknown = ComScope<IUnknown>.QueryFrom(nativeDataObject);
+
         if (ComWrappers.TryGetObject(unknown, out object? obj) && obj is IDataObject iDataObject)
         {
-            // If the original data object implemented IDataObject, we might've wrapped it. We need to give the original back out.
-            return iDataObject is DataObject dataObject && dataObject.TryUnwrapUserDataObject(out IDataObject? originalDataObject)
-                ? originalDataObject
-                : iDataObject;
+            // If the original data object implemented IDataObject, we might've wrapped it.
+            // We need to give the original back out.
+
+            dataObject = iDataObject as DataObject;
+
+            if (dataObject is not null
+                && dataObject.TryUnwrapUserDataObject(out IDataObject? originalIDataObject)
+                && originalIDataObject is DataObject originalDataObject)
+            {
+                dataObject = originalDataObject;
+            }
         }
 
-        return new DataObject(nativeDataObject);
+        return dataObject ?? new DataObject(nativeDataObject);
     }
 
-    private DragEventArgs? CreateDragEventArgs(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT pdwEffect)
+    private DragEventArgs? CreateDragEventArgs(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT pdwEffect)
     {
-        IDataObject? data;
+        DataObject? data;
 
         if (pDataObj is null)
         {
@@ -92,7 +103,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         return dragEvent;
     }
 
-    HRESULT Ole.IDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
+    HRESULT OleIDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
     {
         Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
 
@@ -104,7 +115,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
         {
             _owner.OnDragEnter(dragEvent);
-            *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
+            *pdwEffect = (DROPEFFECT)dragEvent.Effect;
             _lastEffect = dragEvent.Effect;
 
             if (dragEvent.DropImageType > DropImageType.Invalid)
@@ -115,13 +126,13 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         }
         else
         {
-            *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
+            *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
         }
 
         return HRESULT.S_OK;
     }
 
-    HRESULT Ole.IDropTarget.Interface.DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
+    HRESULT OleIDropTarget.Interface.DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
     {
         if (pdwEffect is null)
         {
@@ -131,7 +142,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         if (CreateDragEventArgs(null, grfKeyState, pt, *pdwEffect) is { } dragEvent)
         {
             _owner.OnDragOver(dragEvent);
-            *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
+            *pdwEffect = (DROPEFFECT)dragEvent.Effect;
             _lastEffect = dragEvent.Effect;
 
             if (dragEvent.DropImageType > DropImageType.Invalid)
@@ -142,13 +153,13 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         }
         else
         {
-            *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
+            *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
         }
 
         return HRESULT.S_OK;
     }
 
-    HRESULT Ole.IDropTarget.Interface.DragLeave()
+    HRESULT OleIDropTarget.Interface.DragLeave()
     {
         if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
         {
@@ -161,7 +172,7 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
         return HRESULT.S_OK;
     }
 
-    HRESULT Ole.IDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
+    HRESULT OleIDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
     {
         if (pdwEffect is null)
         {
@@ -177,11 +188,11 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
             }
 
             _owner.OnDragDrop(dragEvent);
-            *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
+            *pdwEffect = (DROPEFFECT)dragEvent.Effect;
         }
         else
         {
-            *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
+            *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
         }
 
         _lastEffect = DragDropEffects.None;

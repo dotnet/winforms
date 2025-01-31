@@ -12,6 +12,7 @@ using IStream = Windows.Win32.System.Com.IStream;
 using STGMEDIUM = System.Runtime.InteropServices.ComTypes.STGMEDIUM;
 using TYMED = System.Runtime.InteropServices.ComTypes.TYMED;
 using Com = Windows.Win32.System.Com;
+using System.Private.Windows.Ole;
 
 namespace System.Windows.Forms.Tests;
 

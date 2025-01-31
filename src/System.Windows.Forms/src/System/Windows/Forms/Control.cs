@@ -16,7 +16,6 @@ using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Com = Windows.Win32.System.Com;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
 
 namespace System.Windows.Forms;
@@ -4865,7 +4864,7 @@ public unsafe partial class Control :
         Point cursorOffset,
         bool useDefaultDragImage)
     {
-        ComTypes.IDataObject dataObject = CreateRuntimeDataObjectForDrag(data);
+        DataObject dataObject = CreateRuntimeDataObjectForDrag(data);
 
         DROPEFFECT finalEffect;
 

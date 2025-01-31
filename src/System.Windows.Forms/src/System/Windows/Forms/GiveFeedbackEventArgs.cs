@@ -2,13 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows.Graphics;
+using System.Private.Windows.Ole;
 
 namespace System.Windows.Forms;
 
 /// <summary>
 ///  Provides data for the <see cref="Control.GiveFeedback"/> event.
 /// </summary>
-public class GiveFeedbackEventArgs : EventArgs
+public class GiveFeedbackEventArgs : EventArgs, IGiveFeedbackEvent
 {
     /// <summary>
     ///  Initializes a new instance of the <see cref="GiveFeedbackEventArgs"/> class.
@@ -49,6 +51,8 @@ public class GiveFeedbackEventArgs : EventArgs
     ///  </para>
     /// </remarks>
     public Bitmap? DragImage { get; set; }
+
+    IBitmap? IGiveFeedbackEvent.DragImage => DragImage;
 
     /// <summary>
     ///  Gets or sets the drag image cursor offset.

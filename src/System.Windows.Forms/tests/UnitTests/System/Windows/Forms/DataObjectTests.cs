@@ -2798,7 +2798,15 @@ public partial class DataObjectTests
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
-        outData.Should().BeSameAs(data);
+
+        if (data is CustomDataObject)
+        {
+            outData.Should().NotBeSameAs(data);
+        }
+        else
+        {
+            outData.Should().BeSameAs(data);
+        }
     }
 
     public static IEnumerable<object[]> DataObjectWithJsonMockRoundTripData()
@@ -2857,7 +2865,7 @@ public partial class DataObjectTests
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateManagedDataObjectForOutgoingDropData>()(inDataPtr);
-        outData.Should().BeSameAs(data);
+        outData.Should().NotBeSameAs(data);
     }
 
     [WinFormsFact]

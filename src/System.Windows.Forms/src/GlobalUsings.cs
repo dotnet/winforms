@@ -6,11 +6,11 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Private.Windows;
 
 global using AppContextSwitches = System.Windows.Forms.Primitives.LocalAppContextSwitches;
+global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<System.Windows.Forms.Ole.WinFormsOleServices, System.Windows.Forms.DataFormats.Format>;
 
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
-global using Windows.Win32.System.Memory;
 global using Windows.Win32.UI.Controls;
 global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;

@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace System.Windows.Forms.Analyzers.Test;
+namespace System.Windows.Forms.Analyzers.Tests;
 
-public class AvoidPassingTaskWithoutCancellationTokenTest
+public sealed class AvoidPassingTaskWithoutCancellationTokenTest
 {
     // Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
     // That's why we need to add this Async Control. Once it's there, this test will fail.

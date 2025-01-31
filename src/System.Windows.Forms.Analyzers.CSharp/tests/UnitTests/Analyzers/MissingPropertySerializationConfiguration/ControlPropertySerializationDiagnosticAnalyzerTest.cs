@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace System.Windows.Forms.Analyzers.Test;
+namespace System.Windows.Forms.Analyzers.Tests;
 
-public class ControlPropertySerializationDiagnosticAnalyzerTest
+public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
 {
     private const string GlobalUsingCode = """
         global using System.Drawing;
