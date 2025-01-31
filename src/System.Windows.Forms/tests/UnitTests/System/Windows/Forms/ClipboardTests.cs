@@ -367,9 +367,9 @@ public class ClipboardTests
         () => Clipboard.SetAudio(Array.Empty<byte>()),
         () => Clipboard.SetAudio(new MemoryStream()),
         () => Clipboard.SetData("format", data: null!),
-        () => Clipboard.SetDataObject(null!),
-        () => Clipboard.SetDataObject(null!, copy: true),
-        () => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0),
+        () => Clipboard.SetDataObject(new DataObject()),
+        () => Clipboard.SetDataObject(new DataObject(), copy: true),
+        () => Clipboard.SetDataObject(new DataObject(), copy: true, retryTimes: 10, retryDelay: 0),
         () => Clipboard.SetFileDropList(["filePath"]),
         () => Clipboard.SetText("text"),
         () => Clipboard.SetText("text", TextDataFormat.Text)
@@ -979,6 +979,7 @@ public class ClipboardTests
         ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
         returnedDataObject.TryGetData("testDataFormat", out SimpleTestData deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(testData);
+
         // We don't expose JsonData<T> in legacy API
         var legacyResult = Clipboard.GetData("testDataFormat");
         if (copy)
