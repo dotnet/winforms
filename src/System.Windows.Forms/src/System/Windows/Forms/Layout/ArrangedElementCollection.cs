@@ -7,17 +7,17 @@ namespace System.Windows.Forms.Layout;
 
 public class ArrangedElementCollection : IList
 {
-    internal static ArrangedElementCollection Empty { get; } = new(0);
+    internal static ArrangedElementCollection Empty { get; } = new(new List<IArrangedElement>().AsReadOnly());
 
     internal ArrangedElementCollection() : this(4)
     {
     }
 
-    internal ArrangedElementCollection(List<IArrangedElement> innerList) => InnerList = innerList;
+    internal ArrangedElementCollection(IList<IArrangedElement> innerList) => InnerList = innerList;
 
     private ArrangedElementCollection(int size) => InnerList = new List<IArrangedElement>(size);
 
-    private protected List<IArrangedElement> InnerList { get; }
+    private protected IList<IArrangedElement> InnerList { get; }
 
     internal virtual IArrangedElement this[int index] => InnerList[index];
 
@@ -93,7 +93,12 @@ public class ArrangedElementCollection : IList
         InnerList[toIndex] = element;
     }
 
-    private static void Copy(ArrangedElementCollection sourceList, int sourceIndex, ArrangedElementCollection destinationList, int destinationIndex, int length)
+    private static void Copy(
+        ArrangedElementCollection sourceList,
+        int sourceIndex,
+        ArrangedElementCollection destinationList,
+        int destinationIndex,
+        int length)
     {
         if (sourceIndex < destinationIndex)
         {
