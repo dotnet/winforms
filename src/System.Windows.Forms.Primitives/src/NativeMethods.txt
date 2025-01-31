@@ -89,7 +89,6 @@ DrawThemeBackground
 DrawThemeEdge
 DrawThemeParentBackground
 DrawThemeText
-DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
@@ -261,12 +260,6 @@ ICON_*
 IConnectionPoint
 IConnectionPointContainer
 IDC_*
-IDispatchEx
-IDropSource
-IDropSourceNotify
-IDropTarget
-IDropTargetHelper
-IEnumFORMATETC
 IEnumOLEVERB
 IEnumString
 IEnumVARIANT

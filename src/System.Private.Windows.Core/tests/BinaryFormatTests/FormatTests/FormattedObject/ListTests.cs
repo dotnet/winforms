@@ -7,7 +7,7 @@ using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
 using System.Runtime.Serialization.Formatters.Binary;
 using FormatTests.Common;
-using System.Windows.Forms.Nrbf;
+using System.Private.Windows.Nrbf;
 
 namespace FormatTests.FormattedObject;
 

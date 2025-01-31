@@ -334,7 +334,7 @@ internal sealed partial class Deserializer : IDeserializer
                 // There are no remaining dependencies. Hook any finished events for this object.
                 // Doing at the end of deserialization for simplicity.
 
-                Type type = _typeResolver.GetType(classRecord.TypeName);
+                Type type = _typeResolver.BindToType(classRecord.TypeName);
                 object @object = _deserializedObjects[completedId];
 
                 OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);

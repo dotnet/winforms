@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
-using System.Drawing;
-using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
-internal sealed partial class DataStore : IDataObjectInternal
+internal sealed partial class DataStore<TOleServices> : IDataObjectInternal where TOleServices : IOleServices
 {
     private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
 
@@ -89,14 +87,7 @@ internal sealed partial class DataStore : IDataObjectInternal
             throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
         }
 
-        // We do not have proper support for Dibs, so if the user explicitly asked
-        // for Dib and provided a Bitmap object we can't convert. Instead, publish as an HBITMAP
-        // and let the system provide the conversion for us.
-        if (data is Bitmap && format.Equals(DataFormats.Dib))
-        {
-            format = autoConvert ? DataFormats.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
-        }
-
+        TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
         _mappedData[format] = new DataStoreEntry(data, autoConvert);
     }
 
@@ -105,7 +96,7 @@ internal sealed partial class DataStore : IDataObjectInternal
     public void SetData(Type format, object? data)
     {
         ArgumentNullException.ThrowIfNull(format);
-        SetData(format.FullName!, data);
+        SetData(format.FullName.OrThrowIfNull(), data);
     }
 
     public void SetData(object? data)
@@ -113,9 +104,9 @@ internal sealed partial class DataStore : IDataObjectInternal
         ArgumentNullException.ThrowIfNull(data);
 
         if (data is ISerializable
-            && !_mappedData.ContainsKey(DataFormats.Serializable))
+            && !_mappedData.ContainsKey(DataFormatNames.Serializable))
         {
-            SetData(DataFormats.Serializable, data);
+            SetData(DataFormatNames.Serializable, data);
         }
 
         SetData(data.GetType(), data);

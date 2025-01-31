@@ -12,8 +12,8 @@ namespace System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConf
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnalyzer
 {
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [CSharpDiagnosticDescriptors.s_missingPropertySerializationConfiguration];
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        [CSharpDiagnosticDescriptors.s_missingPropertySerializationConfiguration];
 
     public override void Initialize(AnalysisContext context)
     {

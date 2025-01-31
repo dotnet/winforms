@@ -6,6 +6,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
+using System.Private.Windows.Nrbf;
+using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -25,7 +27,8 @@ public class WinFormsBinaryFormattedObjectTests
     {
         SimpleTestData testData = new() { X = 1, Y = 1 };
         SerializationRecord format = testData.SerializeAndDecode();
-        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        DataRequest request = new("test");
+        ITypeResolver resolver = new TypeBinder<CoreNrbfSerializer>(typeof(SimpleTestData), in request);
         format.TryGetObjectFromJson<SimpleTestData>(resolver, out _).Should().BeFalse();
     }
 
@@ -39,13 +42,15 @@ public class WinFormsBinaryFormattedObjectTests
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
         };
 
+        DataRequest request = new("test");
+
         using MemoryStream stream = new();
-        WinFormsBinaryFormatWriter.WriteJsonData(stream, json);
+        BinaryFormatWriter.TryWriteJsonData(stream, json);
 
         stream.Position = 0;
         SerializationRecord binary = NrbfDecoder.Decode(stream);
         binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
-        ITypeResolver resolver = new TypeBinder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        ITypeResolver resolver = new TypeBinder<CoreNrbfSerializer>(typeof(SimpleTestData), in request);
         binary.TryGetObjectFromJson<int>(resolver, out _).Should().BeTrue();
         binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
         SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;
@@ -62,7 +67,7 @@ public class WinFormsBinaryFormattedObjectTests
         };
 
         using MemoryStream stream = new();
-        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
+        BinaryFormatWriter.TryWriteJsonData(stream, data);
         stream.Position = 0;
 
         using BinaryFormatterScope scope = new(enable: true);
@@ -118,7 +123,8 @@ public class WinFormsBinaryFormattedObjectTests
         root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
         ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
-        rootRecord.TryGetBitmap(out object? result).Should().BeTrue();
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);
+        success.Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
     }
@@ -133,7 +139,8 @@ public class WinFormsBinaryFormattedObjectTests
         stream.Position = 0;
         SerializationRecord rootRecord = NrbfDecoder.Decode(stream);
 
-        rootRecord.TryGetBitmap(out object? result).Should().BeTrue();
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);
+        success.Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
     }
@@ -172,7 +179,8 @@ public class WinFormsBinaryFormattedObjectTests
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
         root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();
 
-        rootRecord.TryGetImageListStreamer(out object? result).Should().BeTrue();
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
+        success.Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
         using ImageList newList = new();
         newList.ImageStream = deserialized;
@@ -194,7 +202,8 @@ public class WinFormsBinaryFormattedObjectTests
         memoryStream.Position = 0;
         SerializationRecord rootRecord = NrbfDecoder.Decode(memoryStream);
 
-        rootRecord.TryGetImageListStreamer(out object? result).Should().BeTrue();
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
+        success.Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
         using ImageList newList = new();
         newList.ImageStream = deserialized;

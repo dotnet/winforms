@@ -1,25 +1,21 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Private.Windows.Ole;
 using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
 /// <summary>
 ///  Part of IComDataObject, used to interop with OLE.
 /// </summary>
 internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC.Interface, IManagedWrapper<IEnumFORMATETC>
 {
+    // Want to keep a reference to the data object to ensure it's not collected.
     private readonly IDataObjectInternal _dataObject;
     private readonly List<ComTypes.FORMATETC> _formats = [];
     private int _current;
-
-    public FormatEnumerator(IDataObjectInternal dataObject) : this(dataObject, dataObject.GetFormats())
-    {
-    }
 
     private FormatEnumerator(FormatEnumerator source)
     {
@@ -28,12 +24,13 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         _formats.AddRange(source._formats);
     }
 
-    public FormatEnumerator(IDataObjectInternal dataObject, string[]? formats)
+    public FormatEnumerator(IDataObjectInternal dataObject, Func<string, int> getFormatId)
     {
         _dataObject = dataObject;
-
-        if (formats is null)
+        if (dataObject.GetFormats() is not string[] formats)
         {
+            // This can happen with user data objects.
+            Debug.WriteLine("IDataObject.GetFormats returned null.");
             return;
         }
 
@@ -42,11 +39,11 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
             string format = formats[i];
             ComTypes.FORMATETC temp = new()
             {
-                cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
+                cfFormat = (short)(ushort)getFormatId(format),
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 ptd = 0,
                 lindex = -1,
-                tymed = format.Equals(DataFormats.Bitmap) ? ComTypes.TYMED.TYMED_GDI : ComTypes.TYMED.TYMED_HGLOBAL
+                tymed = format.Equals(DataFormatNames.Bitmap) ? ComTypes.TYMED.TYMED_GDI : ComTypes.TYMED.TYMED_HGLOBAL
             };
 
             _formats.Add(temp);

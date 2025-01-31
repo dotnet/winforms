@@ -982,11 +982,6 @@
         <target state="translated">'{0}' 不是實體類型，可能會導致未繫結的還原串行化嘗試。請使用實體類型，或是定義 『resolver』 函式，以支援您預期要從剪貼簿擷取的類型，或是用於拖放操作。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">無法還原序列化 JSON 資料。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">找不到類型 {0}。如果允許此類型，請確定 'TryGetData&lt;T&gt;' API 中提供的 'resolver' 函式支援。</target>
@@ -2534,7 +2529,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
         <source>Property called {0} does not exist.</source>
-        <target state="new">Property called {0} does not exist.</target>
+        <target state="translated">呼叫 {0} 的屬性不存在。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">

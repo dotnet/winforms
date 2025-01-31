@@ -16,17 +16,11 @@ public partial class RichTextBox
     private unsafe class OleCallback : IRichEditOleCallback.Interface, IManagedWrapper<IRichEditOleCallback>
     {
         private readonly RichTextBox _owner;
-        private IDataObject? _lastDataObject;
+        private DataObject? _lastDataObject;
         private DragDropEffects _lastEffect;
         private DragEventArgs? _lastDragEventArgs;
 
         internal OleCallback(RichTextBox owner) => _owner = owner;
-
-        private void ClearDropDescription()
-        {
-            _lastDragEventArgs = null;
-            DragDropHelper.ClearDropDescription(_lastDataObject);
-        }
 
         public HRESULT GetNewStorage(IStorage** lplpstg)
         {
@@ -145,7 +139,7 @@ public partial class RichTextBox
 
             if (!fReally)
             {
-                // We are just querying
+                // Just querying to see if we can drop
 
                 e.DropImageType = DropImageType.Invalid;
                 e.Message = string.Empty;
@@ -168,9 +162,12 @@ public partial class RichTextBox
             }
             else
             {
+                // Actual drop
                 if (e.DropImageType > DropImageType.Invalid)
                 {
-                    ClearDropDescription();
+                    // Valid drop image type, go ahead and drop
+                    _lastDragEventArgs = null;
+                    DragDropHelper.ClearDropDescription(_lastDataObject);
                     DragDropHelper.Drop(e);
                     DragDropHelper.DragLeave();
                 }
@@ -187,7 +184,7 @@ public partial class RichTextBox
 
         public HRESULT GetClipboardData(CHARRANGE* lpchrg, uint reco, Com.IDataObject** lplpdataobj) => HRESULT.E_NOTIMPL;
 
-        public unsafe HRESULT GetDragDropEffect(BOOL fDrag, MODIFIERKEYS_FLAGS grfKeyState, DROPEFFECT* pdwEffect)
+        public HRESULT GetDragDropEffect(BOOL fDrag, MODIFIERKEYS_FLAGS grfKeyState, DROPEFFECT* pdwEffect)
         {
             if (pdwEffect is null)
             {
@@ -218,10 +215,11 @@ public partial class RichTextBox
 
                 // The below is the complete reverse of what the docs on MSDN suggest,
                 // but if we follow the docs, we would be firing OnDragDrop all the
-                // time instead of OnDragOver (see
-
-                // drag - fDrag = false, grfKeyState != 0
-                // drop - fDrag = false, grfKeyState = 0
+                // time instead of OnDragOver.
+                //
+                //   drag - fDrag = false, grfKeyState != 0
+                //   drop - fDrag = false, grfKeyState = 0
+                //
                 // We only care about the drag.
                 //
                 // When we drop, lastEffect will have the right state

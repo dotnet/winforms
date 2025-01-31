@@ -13,37 +13,37 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-preview.1.25077.19</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>10.0.0-preview.1.25077.19</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>10.0.0-preview.1.25077.19</SystemDirectoryServicesPackageVersion>
-    <SystemFormatsNrbfPackageVersion>10.0.0-preview.1.25077.19</SystemFormatsNrbfPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>10.0.0-preview.1.25077.19</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>10.0.0-preview.1.25077.19</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOHashingPackageVersion>10.0.0-preview.1.25077.19</SystemIOHashingPackageVersion>
-    <SystemIOPackagingPackageVersion>10.0.0-preview.1.25077.19</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-preview.2.25079.6</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>10.0.0-preview.2.25079.6</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>10.0.0-preview.2.25079.6</SystemDirectoryServicesPackageVersion>
+    <SystemFormatsNrbfPackageVersion>10.0.0-preview.2.25079.6</SystemFormatsNrbfPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>10.0.0-preview.2.25079.6</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>10.0.0-preview.2.25079.6</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOHashingPackageVersion>10.0.0-preview.2.25079.6</SystemIOHashingPackageVersion>
+    <SystemIOPackagingPackageVersion>10.0.0-preview.2.25079.6</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-preview.1.25077.19</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>10.0.0-preview.1.25077.19</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-preview.2.25079.6</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>10.0.0-preview.2.25079.6</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.1.25077.19</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>10.0.0-preview.1.25077.19</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.0-preview.1.25077.19</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>10.0.0-preview.1.25077.19</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.0-preview.1.25077.19</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>10.0.0-preview.1.25077.19</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>10.0.0-preview.1.25077.19</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.1.25077.19</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-preview.1.25077.19</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.1.25077.19</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.1.25077.19</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>10.0.0-preview.1.25077.19</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-preview.1.25077.19</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>10.0.0-preview.1.25077.19</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>10.0.0-preview.1.25077.19</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>10.0.0-preview.1.25077.19</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.1.25077.19</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.1.25077.19</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.1.25077.19</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.2.25079.6</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>10.0.0-preview.2.25079.6</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.0-preview.2.25079.6</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>10.0.0-preview.2.25079.6</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>10.0.0-preview.2.25079.6</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>10.0.0-preview.2.25079.6</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>10.0.0-preview.2.25079.6</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.2.25079.6</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-preview.2.25079.6</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.2.25079.6</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.2.25079.6</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>10.0.0-preview.2.25079.6</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-preview.2.25079.6</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>10.0.0-preview.2.25079.6</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>10.0.0-preview.2.25079.6</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>10.0.0-preview.2.25079.6</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.2.25079.6</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.2.25079.6</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.2.25079.6</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
@@ -94,7 +94,7 @@
     <CSharpIsNullAnalyzersVersion>0.1.495</CSharpIsNullAnalyzersVersion>
     <DotNetAnalyzersDocumentationAnalyzersVersion>1.0.0-beta.59</DotNetAnalyzersDocumentationAnalyzersVersion>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.12.0-beta1.24559.1</MicrosoftCodeAnalysisAnalyzersVersion>
-    <MicrosoftCodeAnalysisCommonPackageVersion>4.10.0-3.final</MicrosoftCodeAnalysisCommonPackageVersion>
+    <MicrosoftCodeAnalysisCommonPackageVersion>4.12.0</MicrosoftCodeAnalysisCommonPackageVersion>
     <MicrosoftCodeAnalysisCSharpPackageVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisCSharpPackageVersion>
     <MicrosoftCodeAnalysisVisualBasicPackageVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisVisualBasicPackageVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisCSharpWorkspacesVersion>

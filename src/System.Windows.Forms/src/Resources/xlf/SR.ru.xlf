@@ -982,11 +982,6 @@
         <target state="translated">'{0}' не является конкретным типом и может привести к нео привязанной попытке десериализации. Используйте конкретный тип или определите функцию "resolver", которая поддерживает типы, которые вы ожидаете получить из буфера обмена, или используйте в операциях перетаскивания.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
-        <source>Failed to deserialize JSON data.</source>
-        <target state="translated">Сбой десериализации данных JSON.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
         <target state="translated">Тип {0} не найден. Если этот тип разрешен, убедитесь, что функция "resolver", указанная в API "TryGetData&lt;T&gt;", поддерживает ее.</target>
@@ -2534,7 +2529,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewComboBoxCell_PropertyNotFound">
         <source>Property called {0} does not exist.</source>
-        <target state="new">Property called {0} does not exist.</target>
+        <target state="translated">Свойство {0} не существует.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataMemberChangedDescr">
