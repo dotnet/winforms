@@ -23,7 +23,7 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Initializes a new instance of the <see cref="CollectionEditor"/> class using the specified collection type.
     /// </summary>
-    public CollectionEditor(Type type) => CollectionType = type;
+    public CollectionEditor(Type type) => CollectionType = type.OrThrowIfNull();
 
     /// <summary>
     ///  Gets the data type of each item in the collection.
