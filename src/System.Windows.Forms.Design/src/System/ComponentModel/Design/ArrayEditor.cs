@@ -20,7 +20,11 @@ public class ArrayEditor : CollectionEditor
     ///  Gets or sets the data type this collection contains.
     /// </summary>
     protected override Type CreateCollectionItemType()
-        => CollectionType?.GetElementType()!;
+    {
+        Type? type = CollectionType.GetElementType();
+
+        return type is null ? throw new InvalidOperationException() : type;
+    }
 
     /// <summary>
     ///  Gets the items in the array.
