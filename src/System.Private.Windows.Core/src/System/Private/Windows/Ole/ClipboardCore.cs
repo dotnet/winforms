@@ -160,9 +160,9 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
 
         throw new NotSupportedException(string.Format(
-           SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
-           type.FullName,
-           format));
+            SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
+            type.FullName,
+            format));
 
         static bool IsValidPredefinedFormatTypeCombination(string format, Type type) => format switch
         {

@@ -81,13 +81,13 @@ public unsafe partial class DataObject :
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, T data)
-        => SetData(format, DataObjectCore.TryJsonSerialize(format, data));
+    public void SetDataAsJson<T>(string format, T data) =>
+        SetData(format, DataObjectCore.TryJsonSerialize(format, data));
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(T data)
-        => SetData(typeof(T), DataObjectCore.TryJsonSerialize(typeof(T).FullName.OrThrowIfNull(), data));
+    public void SetDataAsJson<T>(T data) =>
+        SetData(typeof(T), DataObjectCore.TryJsonSerialize(typeof(T).FullName.OrThrowIfNull(), data));
 
     /// <summary>
     ///  Stores the data in the specified format.
@@ -125,8 +125,8 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
-        => SetData(format, autoConvert, DataObjectCore.TryJsonSerialize(format, data));
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
+        SetData(format, autoConvert, DataObjectCore.TryJsonSerialize(format, data));
 
     #region IDataObject
     [Obsolete(
