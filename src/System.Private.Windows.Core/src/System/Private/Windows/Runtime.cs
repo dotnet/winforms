@@ -37,4 +37,6 @@ internal abstract unsafe class Runtime<TDataFormat, TNrbfSerializer, TOleService
         TNrbfSerializer.TryGetObject(record, out value);
     static bool INrbfSerializer.TryWriteObject(Stream stream, object value) =>
         TNrbfSerializer.TryWriteObject(stream, value);
+    static bool IOleServices.IsValidTypeForFormat(Type type, string format) =>
+        TOleServices.IsValidTypeForFormat(type, format);
 }

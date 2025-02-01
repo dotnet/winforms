@@ -9,7 +9,6 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
-using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
@@ -43,43 +42,15 @@ public static class Clipboard
     /// </remarks>
     public static unsafe void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
     {
-        if (Application.OleRequired() != ApartmentState.STA)
-        {
-            throw new ThreadStateException(SR.ThreadMustBeSTA);
-        }
-
         ArgumentNullException.ThrowIfNull(data);
-        ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
-        ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
         // Wrap if we're not already a DataObject
         DataObject dataObject = data as DataObject ?? new WrappingDataObject(data);
-        using var iDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy, retryTimes, retryDelay);
 
-        HRESULT hr;
-        int retry = retryTimes;
-        while ((hr = PInvokeCore.OleSetClipboard(iDataObject)).Failed)
+        if (result.Failed)
         {
-            if (--retry < 0)
-            {
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        if (copy)
-        {
-            retry = retryTimes;
-            while ((hr = PInvokeCore.OleFlushClipboard()).Failed)
-            {
-                if (--retry < 0)
-                {
-                    throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-                }
-
-                Thread.Sleep(millisecondsTimeout: retryDelay);
-            }
+            throw new ExternalException(SR.ClipboardOperationFailed, (int)result);
         }
     }
 
@@ -88,46 +59,30 @@ public static class Clipboard
     /// </summary>
     public static unsafe IDataObject? GetDataObject()
     {
-        if (Application.OleRequired() != ApartmentState.STA)
-        {
-            // Only throw if a message loop was started. This makes the case of trying to query the clipboard from the
-            // finalizer or non-UI MTA thread silently fail, instead of making the application die.
-            return Application.MessageLoop ? throw new ThreadStateException(SR.ThreadMustBeSTA) : null;
-        }
+        HRESULT result = ClipboardCore.TryGetData(
+            out ComScope<Com.IDataObject> proxyDataObject,
+            out object? originalObject);
 
-        int retryTimes = 10;
-        using ComScope<Com.IDataObject> proxyDataObject = new(null);
-        HRESULT hr;
-        while ((hr = PInvokeCore.OleGetClipboard(proxyDataObject)).Failed)
+        // Need ensure we release the ref count on the proxy object.
+        using (proxyDataObject)
         {
-            if (--retryTimes < 0)
+            if (result.Failed)
             {
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
+                Debug.Assert(proxyDataObject.IsNull);
+                throw new ExternalException(SR.ClipboardOperationFailed, (int)result);
             }
 
-            Thread.Sleep(millisecondsTimeout: 100);
+            if (originalObject is DataObject dataObject
+                && dataObject.TryUnwrapUserDataObject(out IDataObject? userObject))
+            {
+                // We have an original user object that we want to return.
+                return userObject;
+            }
+
+            // Original data given wasn't an IDataObject, give the proxy value back.
+            // (Creating the DataObject will add a reference to the proxy.)
+            return new DataObject(proxyDataObject.Value);
         }
-
-        // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
-        // without giving out the real data object. If the data placed on the clipboard is not one of our CCWs or the clipboard
-        // has been flushed, a wrapper around the proxy for us to use will be given. However, if the data placed on
-        // the clipboard is one of our own and the clipboard has not been flushed, we need to retrieve the real data object
-        // pointer in order to retrieve the original managed object via ComWrappers if an IDataObject was set on the clipboard.
-        // To do this, we must query for an interface that is not known to the proxy e.g. IComCallableWrapper.
-        // If we are able to query for IComCallableWrapper it means that the real data object is one of our CCWs and we've retrieved it successfully,
-        // otherwise it is not ours and we will use the wrapped proxy.
-        var realDataObject = proxyDataObject.TryQuery<IComCallableWrapper>(out hr);
-
-        if (hr.Succeeded
-            && ComHelpers.TryUnwrapComWrapperCCW(realDataObject.AsUnknown, out DataObject? dataObject)
-            && dataObject.TryUnwrapUserDataObject(out IDataObject? userObject))
-        {
-            // An IDataObject was given to us to place on the clipboard. We want to unwrap and return it instead of a proxy.
-            return userObject;
-        }
-
-        // Original data given wasn't an IDataObject, give the proxy value back.
-        return new DataObject(proxyDataObject.Value);
     }
 
     /// <summary>
@@ -135,23 +90,10 @@ public static class Clipboard
     /// </summary>
     public static unsafe void Clear()
     {
-        if (Application.OleRequired() != ApartmentState.STA)
+        HRESULT result = ClipboardCore.Clear();
+        if (result.Failed)
         {
-            throw new ThreadStateException(SR.ThreadMustBeSTA);
-        }
-
-        HRESULT hr;
-        int retry = 10;
-        while ((hr = PInvokeCore.OleSetClipboard(null)).Failed)
-        {
-            if (--retry < 0)
-            {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
-#pragma warning restore CA2201
-            }
-
-            Thread.Sleep(millisecondsTimeout: 100);
+            throw new ExternalException(SR.ClipboardOperationFailed, (int)result);
         }
     }
 
@@ -369,7 +311,7 @@ public static class Clipboard
     {
         data = default;
         resolver.OrThrowIfNull();
-        if (!DataObject.IsValidFormatAndType<T>(format)
+        if (!ClipboardCore.IsValidTypeForFormat(typeof(T), format)
             || GetDataObject() is not { } dataObject)
         {
             // Invalid format or no object on the clipboard at all.
@@ -385,7 +327,7 @@ public static class Clipboard
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
         data = default;
-        if (!DataObject.IsValidFormatAndType<T>(format)
+        if (!ClipboardCore.IsValidTypeForFormat(typeof(T), format)
             || GetDataObject() is not { } dataObject)
         {
             // Invalid format or no object on the clipboard at all.

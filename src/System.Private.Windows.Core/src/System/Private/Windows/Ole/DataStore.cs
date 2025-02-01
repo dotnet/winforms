@@ -48,7 +48,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
         bool TryGetData(string format, ref bool autoConvert, [NotNullWhen(true)] out T? data)
         {
-            if (_mappedData.TryGetValue(format, out DataStoreEntry? entry))
+            if (_mappedData.TryGetValue(format, out DataStoreEntry entry))
             {
                 autoConvert |= entry.AutoConvert;
 

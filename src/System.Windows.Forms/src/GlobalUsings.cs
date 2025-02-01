@@ -6,7 +6,23 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Private.Windows;
 
 global using AppContextSwitches = System.Windows.Forms.Primitives.LocalAppContextSwitches;
-global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<System.Windows.Forms.Ole.WinFormsOleServices, System.Windows.Forms.DataFormats.Format>;
+
+// Having these as global usings reduces verbiage in code and avoids accidental mismatching when defining types.
+global using ClipboardCore = System.Private.Windows.Ole.ClipboardCore<
+    System.Windows.Forms.Ole.WinFormsOleServices>;
+global using Composition = System.Private.Windows.Ole.Composition<
+    System.Windows.Forms.WinFormsRuntime,
+    System.Windows.Forms.DataFormats.Format>;
+global using DataFormatsCore = System.Private.Windows.Ole.DataFormatsCore<
+    System.Windows.Forms.DataFormats.Format>;
+global using DataObjectCore = System.Private.Windows.Ole.DataObjectCore<
+    System.Windows.Forms.WinFormsRuntime,
+    System.Windows.Forms.DataFormats.Format,
+    System.Windows.Forms.DataObject,
+    System.Windows.Forms.IDataObject>;
+global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<
+    System.Windows.Forms.Ole.WinFormsOleServices,
+    System.Windows.Forms.DataFormats.Format>;
 
 global using Windows.Win32;
 global using Windows.Win32.Foundation;

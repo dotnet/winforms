@@ -14,11 +14,20 @@ namespace System.Windows.Forms.Ole;
 /// </summary>
 internal sealed class WinFormsOleServices : IOleServices
 {
+    // Prevent instantiation
     private WinFormsOleServices() { }
 
-    static void IOleServices.EnsureThreadState()
+    public static void EnsureThreadState()
     {
-        if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != ApartmentState.STA)
+        // There were some cases historically where we would try not to throw to avoid user code crashing from
+        // attempting to call OLE code in a finalizer. There isn't a bullet proof way to know whether or not
+        // we're on the finalizer thread, this should be left to the finalizer implementers to handle (even if
+        // that might be us on behalf of the user).
+        //
+        // In one other case we were checking for Control.CheckForIllegalCrossThreadCalls, but that is also not
+        // a great idea, as it overloaded the meaning of the property. Try to keep this as simple and as consistent
+        // as possible.
+        if (Application.OleRequired() != ApartmentState.STA)
         {
             throw new ThreadStateException(SR.ThreadMustBeSTA);
         }
@@ -90,56 +99,57 @@ internal sealed class WinFormsOleServices : IOleServices
 
         data = default!;
         return false;
-    }
 
-    private static unsafe bool TryGetBitmapData(Com.IDataObject* dataObject, [NotNullWhen(true)] out Bitmap? data)
-    {
-        data = default;
-
-        FORMATETC formatEtc = new()
+        static unsafe bool TryGetBitmapData(Com.IDataObject* dataObject, [NotNullWhen(true)] out Bitmap? data)
         {
-            cfFormat = (ushort)CLIPBOARD_FORMAT.CF_BITMAP,
-            dwAspect = (uint)DVASPECT.DVASPECT_CONTENT,
-            lindex = -1,
-            tymed = (uint)TYMED.TYMED_GDI
-        };
+            data = default;
 
-        STGMEDIUM medium = default;
-
-        if (dataObject->QueryGetData(formatEtc).Succeeded)
-        {
-            HRESULT hr = dataObject->GetData(formatEtc, out medium);
-
-            // One of the ways this can happen is when we attempt to put binary formatted data onto the
-            // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
-            // The data state, however, is not good, and this error will be returned by Windows when asking to
-            // get the data out.
-            Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
-        }
-
-        try
-        {
-            // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
-            // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-            if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
-                && !medium.hGlobal.IsNull
-                && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
+            FORMATETC formatEtc = new()
             {
-                data = (Bitmap)clipboardBitmap.Clone();
-                clipboardBitmap.Dispose();
-                return true;
-            }
-        }
-        finally
-        {
-            PInvokeCore.ReleaseStgMedium(ref medium);
-        }
+                cfFormat = (ushort)CLIPBOARD_FORMAT.CF_BITMAP,
+                dwAspect = (uint)DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                tymed = (uint)TYMED.TYMED_GDI
+            };
 
-        return false;
+            STGMEDIUM medium = default;
+
+            if (dataObject->QueryGetData(formatEtc).Succeeded)
+            {
+                HRESULT hr = dataObject->GetData(formatEtc, out medium);
+
+                // One of the ways this can happen is when we attempt to put binary formatted data onto the
+                // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+                // The data state, however, is not good, and this error will be returned by Windows when asking to
+                // get the data out.
+                Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+            }
+
+            try
+            {
+                // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
+                // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
+                if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
+                    && !medium.hGlobal.IsNull
+                    && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
+                {
+                    data = (Bitmap)clipboardBitmap.Clone();
+                    clipboardBitmap.Dispose();
+                    return true;
+                }
+            }
+            finally
+            {
+                PInvokeCore.ReleaseStgMedium(ref medium);
+            }
+
+            return false;
+        }
     }
 
-    // Image is a special case because we are reading Bitmaps directly from the SerializationRecord.
-    static bool IOleServices.AllowTypeWithoutResolver<T>() => typeof(T) == typeof(Image);
+    static bool IOleServices.AllowTypeWithoutResolver<T>() =>
+        // Image is a special case because we are reading Bitmaps directly from the SerializationRecord.
+        typeof(T) == typeof(Image);
 
     static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data)
     {
@@ -151,4 +161,11 @@ internal sealed class WinFormsOleServices : IOleServices
             format = autoConvert ? DataFormatNames.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
         }
     }
+
+    static bool IOleServices.IsValidTypeForFormat(Type type, string format) => format switch
+    {
+        DataFormatNames.Bitmap or DataFormatNames.BinaryFormatBitmap => type == typeof(Bitmap) || type == typeof(Image),
+        // All else should fall through as valid.
+        _ => true
+    };
 }

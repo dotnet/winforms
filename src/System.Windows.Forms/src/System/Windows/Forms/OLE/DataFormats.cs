@@ -126,11 +126,11 @@ public static partial class DataFormats
     public static Format GetFormat(string format)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
-        return DataFormatsCore<Format>.GetOrAddFormat(format);
+        return DataFormatsCore.GetOrAddFormat(format);
     }
 
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    public static Format GetFormat(int id) => DataFormatsCore<Format>.GetOrAddFormat(id);
+    public static Format GetFormat(int id) => DataFormatsCore.GetOrAddFormat(id);
 }
