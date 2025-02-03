@@ -34,6 +34,11 @@ public unsafe partial class DataObject :
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method will add a reference to the <paramref name="data"/> pointer.
+    ///  </para>
+    /// </remarks>
     /// <inheritdoc cref="DataObject(object)"/>
     internal DataObject(Com.IDataObject* data) => _innerData = DataObjectCore.CreateComposition(data);
 

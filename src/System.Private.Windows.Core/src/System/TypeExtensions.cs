@@ -30,6 +30,13 @@ internal static class TypeExtensions
             attributedType = attributedType.GetElementType()!;
         }
 
+        if (attributedType == typeof(TimeSpan))
+        {
+            // TimeSpan doesn't have the forwarded attribute, but it is from mscorlib.
+            name = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+            return true;
+        }
+
         object[] attributes = attributedType.GetCustomAttributes(typeof(TypeForwardedFromAttribute), inherit: false);
         if (attributes.Length > 0 && attributes[0] is TypeForwardedFromAttribute attribute)
         {

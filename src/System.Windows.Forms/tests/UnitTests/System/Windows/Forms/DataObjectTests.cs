@@ -2892,8 +2892,10 @@ public partial class DataObjectTests
         native.SetImage(bitmap);
         string customFormat = "customFormat";
         native.SetData(customFormat, "custom");
+
         // Simulate receiving DataObject from native.
-        DataObject data = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject data = new(comDataObject.Value);
 
         data.GetDataPresent(typeof(Bitmap)).Should().BeTrue();
         data.GetDataPresent(customFormat).Should().BeTrue();
@@ -2906,20 +2908,24 @@ public partial class DataObjectTests
     {
         using Font value = new("Arial", 10);
         using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope formatterScope = new(enable: true);
+
         // We are blocking managed font from being serialized as a Locale format.
         DataObject native = new(DataFormats.Locale, value);
 
         // Simulate receiving DataObject from native.
         // Clipboard.SetDataObject(native, copy: true);
-        var comDataObject = ComHelpers.GetComPointer<Com.IDataObject>(native);
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
         Com.FORMATETC formatetc = new()
         {
             tymed = (uint)TYMED.TYMED_HGLOBAL,
             cfFormat = (ushort)CLIPBOARD_FORMAT.CF_LOCALE
         };
-        comDataObject->GetData(formatetc, out Com.STGMEDIUM medium);
 
-        // Validate that HGLOBAL had been freed when handling an error.
+        HRESULT result = comDataObject.Value->GetData(formatetc, out Com.STGMEDIUM medium);
+        result.Succeeded.Should().BeFalse();
+
+        // Validate that HGLOBAL has been freed.
         medium.hGlobal.IsNull.Should().BeTrue();
     }
 

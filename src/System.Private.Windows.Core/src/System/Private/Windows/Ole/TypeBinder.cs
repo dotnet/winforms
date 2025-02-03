@@ -27,7 +27,8 @@ namespace System.Private.Windows.Ole;
 internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeResolver
     where TNrbfSerializer : INrbfSerializer
 {
-    private readonly Func<TypeName, Type?> _resolver;
+    private readonly Type _rootType;
+    private Func<TypeName, Type?>? _resolver;
     private readonly bool _isUntypedRequest;
     private readonly bool _hasCustomResolver;
 
@@ -37,8 +38,8 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
     ///  Type resolver for use with <see cref="BinaryFormatter"/> and NRBF deserializers to restrict types
     ///  that can be instantiated.
     /// </summary>
-    /// <param name="type"><see cref="Type"/> that the user expects to read from the binary formatted stream.</param>
-    public TypeBinder(Type type, ref readonly DataRequest request)
+    /// <param name="rootType"><see cref="Type"/> that the user expects to read from the binary formatted stream.</param>
+    public TypeBinder(Type rootType, ref readonly DataRequest request)
     {
         Debug.Assert(
             !request.UntypedRequest || (request.UntypedRequest && request.Resolver is null),
@@ -46,21 +47,31 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
 
         _isUntypedRequest = request.UntypedRequest;
         _hasCustomResolver = request.Resolver is not null;
-        _resolver = request.Resolver ?? CreateResolver(type);
+        _rootType = rootType;
+        _resolver = request.Resolver;
+    }
 
-        static Func<TypeName, Type?> CreateResolver(Type type)
+    private Func<TypeName, Type?> Resolver
+    {
+        get
         {
-            // Resolver was not provided by the user, we will match the T using our default method:
-            //
-            //  1. If the type is a Value type and nullable, unwrap it
-            //  2. Check if the type had been forwarded from another assembly
-            //  3. Match assembly name with no version
-            //  4. Match namespace and type name
-            //
-            // Provide a custom resolver function to supports different type matching logic.
+            // Lazily create a resolver when needed to potentially avoid the cost of parsing the TypeName.
+            return _resolver ??= CreateResolver(_rootType);
 
-            TypeName knownType = type.ToTypeName();
-            return typeName => knownType.Matches(typeName) ? type : null;
+            static Func<TypeName, Type?> CreateResolver(Type type)
+            {
+                // Resolver was not provided by the user, we will match the T using our default method:
+                //
+                //  1. If the type is a Value type and nullable, unwrap it
+                //  2. Check if the type had been forwarded from another assembly
+                //  3. Match assembly name with no version
+                //  4. Match namespace and type name
+                //
+                // Provide a custom resolver function to supports different type matching logic.
+
+                TypeName knownType = type.ToTypeName();
+                return typeName => knownType.Matches(typeName) ? type : null;
+            }
         }
     }
 
@@ -71,17 +82,12 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
 
         if (_isUntypedRequest)
         {
-            if (CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
-            {
-                // With the switch enabled, we'll let the BinaryFormatter allow any type to be deserialized
-                // when coming in from the untyped APIs.
-                return null;
-            }
+            Debug.Assert(CoreAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization);
+            Debug.Assert(FeatureSwitches.EnableUnsafeBinaryFormatterSerialization);
 
-            // Should never have gotten here - should not be creating a BinaryFormatter when not enabled.
-            throw new NotSupportedException(string.Format(
-                SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
-                $"{assemblyName}.{typeName}"));
+            // With the switch enabled, we'll let the BinaryFormatter allow any type to be deserialized
+            // when coming in from the untyped APIs.
+            return null;
         }
 
         FullyQualifiedTypeName fullName = new(typeName, assemblyName);
@@ -96,17 +102,21 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         return BindToType(parsed);
     }
 
-    public Type BindToType(TypeName typeName)
+    public Type BindToType(TypeName typeName) => TryBindToType(typeName, out Type? type)
+        ? type
+        : throw new NotSupportedException(string.Format(
+            _hasCustomResolver ? SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver : SR.ClipboardOrDragDrop_UseTypedAPI,
+            typeName.AssemblyQualifiedName));
+
+    public bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
     {
         ArgumentNullException.ThrowIfNull(typeName);
 
-        if (!TNrbfSerializer.TryBindToType(typeName, out Type? type))
+        if (!TNrbfSerializer.TryBindToType(typeName, out type))
         {
-            type = _resolver(typeName) ?? throw new NotSupportedException(string.Format(
-                _hasCustomResolver ? SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver : SR.ClipboardOrDragDrop_UseTypedAPI,
-                typeName.AssemblyQualifiedName));
+            type = Resolver(typeName);
         }
 
-        return type;
+        return type is not null;
     }
 }

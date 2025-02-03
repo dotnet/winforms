@@ -44,6 +44,8 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
     public static Composition<TRuntime, TDataFormat> CreateFromManagedDataObject(IDataObjectInternal managedDataObject)
     {
         ManagedToNativeAdapter winFormsToNative = new(managedDataObject);
+
+        // The NativeToRuntimeAdapter takes ownership of the native data object.
         NativeToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<IDataObject>(winFormsToNative));
         return new(managedDataObject, winFormsToNative, nativeToRuntime);
     }
@@ -61,6 +63,8 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
     public static Composition<TRuntime, TDataFormat> CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
     {
         RuntimeToNativeAdapter runtimeToNative = new(runtimeDataObject);
+
+        // The NativeToManagedAdapter takes ownership of the native data object.
         NativeToManagedAdapter nativeToWinForms = new(ComHelpers.GetComPointer<IDataObject>(runtimeToNative));
         return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
     }
