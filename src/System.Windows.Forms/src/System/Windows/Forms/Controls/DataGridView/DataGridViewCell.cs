@@ -3671,7 +3671,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             cellStyle,
             advancedBorderStyle,
             paintParts);
-        dataGridView.OnCellPainting(dgvcpe);
+
+        dataGridView?.OnCellPainting(dgvcpe);
+
         if (dgvcpe.Handled)
         {
             return;

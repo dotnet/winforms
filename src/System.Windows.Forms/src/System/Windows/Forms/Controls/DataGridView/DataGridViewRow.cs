@@ -786,9 +786,13 @@ public partial class DataGridViewRow : DataGridViewBand
 
     private void BuildInheritedRowStyle(int rowIndex, DataGridViewCellStyle inheritedRowStyle)
     {
+        if (DataGridView is null)
+        {
+            return;
+        }
+
         Debug.Assert(inheritedRowStyle is not null);
         Debug.Assert(rowIndex >= 0);
-        Debug.Assert(DataGridView is not null);
 
         DataGridViewCellStyle? rowStyle = null;
         if (HasDefaultCellStyle)

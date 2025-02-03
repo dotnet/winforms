@@ -610,6 +610,11 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
+        if (DataGridView is null)
+        {
+            return;
+        }
+
         PaintPrivate(
             graphics,
             clipBounds,
