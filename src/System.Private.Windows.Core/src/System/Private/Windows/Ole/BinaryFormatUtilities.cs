@@ -96,14 +96,6 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
 
         if (record is not null && recordMap is not null)
         {
-            // Look for and deserialize a JSON object.
-            binder = new(typeof(T), in request);
-            var (isJsonData, isValidType) = record.TryGetObjectFromJson(binder, out @object);
-            if (isJsonData)
-            {
-                return isValidType;
-            }
-
             // Try our implicit deserialization.
             if (TNrbfSerializer.TryBindToType(record.TypeName, out Type? type)
                 && type.IsAssignableTo(typeof(T))
@@ -112,6 +104,14 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             {
                 @object = matching;
                 return true;
+            }
+
+            // Look for and deserialize a JSON object.
+            binder = new(typeof(T), in request);
+            var (isJsonData, isValidType) = record.TryGetObjectFromJson(binder, out @object);
+            if (isJsonData)
+            {
+                return isValidType;
             }
         }
 

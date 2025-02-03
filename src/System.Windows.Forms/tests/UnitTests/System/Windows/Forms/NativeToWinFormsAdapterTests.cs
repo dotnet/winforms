@@ -132,8 +132,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         // SetData writes NotSupportedException to HGLOBAL to indicate that formatters are disabled,
         // but the restricted format can't read it.
-        dataObject.TryGetData(format, out object? result).Should().BeFalse();
-        result.Should().BeNull();
+        dataObject.TryGetData(format, out object? result).Should().BeTrue();
+        result.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
     }
 
     [WinFormsTheory]

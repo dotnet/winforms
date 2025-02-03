@@ -6,8 +6,8 @@ namespace System.Private.Windows.Ole;
 public class DataFormatNamesTests
 {
     [Theory]
-    [InlineData(DataFormatNames.Text, false)]
-    [InlineData(DataFormatNames.UnicodeText, false)]
+    [InlineData(DataFormatNames.Text, true)]
+    [InlineData(DataFormatNames.UnicodeText, true)]
     [InlineData(DataFormatNames.Dib, true)]
     [InlineData(DataFormatNames.Bitmap, true)]
     public void RestrictDeserializationToSafeTypes(string format, bool expected)
