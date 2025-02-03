@@ -12,6 +12,10 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
 
+
+
+
+
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -29,6 +33,9 @@ public partial class TreeView : Control
     private const int MaxIndent = 32000;      // Maximum allowable TreeView indent
     private const string BackSlash = "\\";
     private const int DefaultTreeViewIndent = 19;
+
+    // To hold created dark mode brush for deletion
+    private HBRUSH _hBrush;
 
     private DrawTreeNodeEventHandler? _onDrawNode;
     private NodeLabelEditEventHandler? _onBeforeLabelEdit;
@@ -52,6 +59,8 @@ public partial class TreeView : Control
     private TreeNode? _prevHoveredNode;
     private bool _hoveredAlready;
     private bool _rightToLeftLayout;
+
+    private HBRUSH _hBrush;     // To hold created dark mode brush for deletion
 
     private nint _mouseDownNode = 0; // ensures we fire nodeClick on the correct node
 
@@ -2102,6 +2111,11 @@ public partial class TreeView : Control
         {
             e.Node.AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
+
+        // Delete created _hBrush if it exists
+        [DllImport("Gdi32.dll", PreserveSig = true)]
+        static extern void DeleteObject(HGDIOBJ ho);
+        DeleteObject(_hBrush);
     }
 
     /// <summary>
@@ -2551,6 +2565,38 @@ public partial class TreeView : Control
         }
     }
 
+    private enum DWMWINDOWATTRIBUTE
+    {
+        DWMWA_NCRENDERING_ENABLED = 1,
+        DWMWA_NCRENDERING_POLICY,
+        DWMWA_TRANSITIONS_FORCEDISABLED,
+        DWMWA_ALLOW_NCPAINT,
+        DWMWA_CAPTION_BUTTON_BOUNDS,
+        DWMWA_NONCLIENT_RTL_LAYOUT,
+        DWMWA_FORCE_ICONIC_REPRESENTATION,
+        DWMWA_FLIP3D_POLICY,
+        DWMWA_EXTENDED_FRAME_BOUNDS,
+        DWMWA_HAS_ICONIC_BITMAP,
+        DWMWA_DISALLOW_PEEK,
+        DWMWA_EXCLUDED_FROM_PEEK,
+        DWMWA_CLOAK,
+        DWMWA_CLOAKED,
+        DWMWA_FREEZE_REPRESENTATION,
+        DWMWA_PASSIVE_UPDATE_MODE,
+        DWMWA_USE_HOSTBACKDROPBRUSH,
+        DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 = 19,
+        DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
+        DWMWA_WINDOW_CORNER_PREFERENCE = 33,
+        DWMWA_BORDER_COLOR,
+        DWMWA_CAPTION_COLOR,
+        DWMWA_TEXT_COLOR,
+        DWMWA_VISIBLE_FRAME_BORDER_THICKNESS,
+        DWMWA_SYSTEMBACKDROP_TYPE,
+        DWMWA_LAST
+    }
+    
+
+
     private LRESULT TvnBeginLabelEdit(NMTVDISPINFOW nmtvdi)
     {
         // Check for invalid node handle
@@ -2579,8 +2625,81 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
+
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
         }
+            
+
+
+            /*
+            // Force dark mode on editing label if necessary
+            [DllImport("dwmapi.dll", PreserveSig = false)]
+            static extern void DwmSetWindowAttribute(IntPtr hwnd, int attr,
+               ref int attrValue, int attrSize);
+
+#pragma warning disable WFO5001
+            SystemColorMode thisColorMode;
+            if (Application.ColorMode == SystemColorMode.System)
+            {
+                thisColorMode = Application.SystemColorMode;
+            }
+            else
+            {
+                thisColorMode = Application.ColorMode;
+            }
+
+            if (thisColorMode == SystemColorMode.Dark)
+            {
+
+
+                    // Try different dwm attributes and values
+                    // May be a problem with WIN 10 compatibility
+
+                    //int trueVal = 1;
+
+                    //var attr = (int)DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR;
+                    //var attrVal = 0x00ff0000;
+
+                    IntPtr handle = _labelEdit.Handle;
+                    Debug.WriteLine(handle.ToString());
+
+                for (int attrVal = 0; attrVal <= 10; attrVal++)
+                    
+                {
+                    Debug.WriteLine("");
+
+                    for (int attr = 1; attr <= 50; attr++)
+                    {
+                        Debug.WriteLine("");
+                        try
+                        {
+
+                            DwmSetWindowAttribute(handle, attr, ref attrVal, Marshal.SizeOf(attrVal));
+
+
+                        }
+                        catch (Exception dwmEx)
+                        {
+                            string msg = dwmEx.Message;
+                            if (dwmEx.InnerException is not null)
+                            {
+                                msg = msg + Environment.NewLine + dwmEx.InnerException.Message;
+                            }
+
+                            Debug.WriteLine("Attribute:" + attr.ToString());
+                            Debug.WriteLine("Attr Valu:" + attrVal.ToString());
+                            Debug.WriteLine(msg);
+                        }
+                    }
+                }
+            }
+
+            // do I need to invalidate to get an update?
+        
+
+#pragma warning restore WFO5001
+            */
+        
 
         return (LRESULT)(e.CancelEdit ? 1 : 0);
     }
@@ -2782,6 +2901,7 @@ public partial class TreeView : Control
                 // when one item is selected, click and hold on another). This needs to be fixed.
                 Color riFore = renderinfo.ForeColor;
                 Color riBack = renderinfo.BackColor;
+
                 if (renderinfo is not null && !riFore.IsEmpty)
                 {
                     nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
@@ -3160,6 +3280,33 @@ public partial class TreeView : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                // Default handling of edit label colors
+                m.ResultInternal = (LRESULT)0;
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    // Make background of dark mode edit labels the correct color
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern HBRUSH CreateSolidBrush(COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetBkColor(HDC hdc, COLORREF color);
+                    [DllImport("Gdi32.dll", PreserveSig = true)]
+                    static extern COLORREF SetTextColor(HDC hdc, COLORREF color);
+
+                    Color tvColor = BackColor;
+                    Color tvTextColor = ForeColor;
+                    _hBrush = CreateSolidBrush(tvColor);
+                    HDC editHDC = (HDC)m.WParamInternal;
+                    SetBkColor(editHDC, tvColor);
+                    SetTextColor(editHDC, tvTextColor);
+                    LRESULT lrBrush = (LRESULT)(IntPtr)_hBrush;
+                    m.ResultInternal = lrBrush;
+                }
+#pragma warning restore WFO5001 
+                break;
+
             case PInvokeCore.WM_WINDOWPOSCHANGING:
             case PInvokeCore.WM_NCCALCSIZE:
             case PInvokeCore.WM_WINDOWPOSCHANGED:
