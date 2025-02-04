@@ -82,10 +82,9 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         long startPosition = stream.Position;
 
         SerializationRecord? record = null;
-        IReadOnlyDictionary<SerializationRecordId, SerializationRecord>? recordMap = null;
         try
         {
-            record = stream.DecodeNrbf(out recordMap);
+            record = stream.DecodeNrbf();
         }
         catch (NotSupportedException)
         {
@@ -94,7 +93,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
 
         TypeBinder<TNrbfSerializer>? binder = null;
 
-        if (record is not null && recordMap is not null)
+        if (record is not null)
         {
             // Try our implicit deserialization.
             if (TNrbfSerializer.TryBindToType(record.TypeName, out Type? type)
@@ -113,17 +112,17 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             {
                 return isValidType;
             }
-        }
 
-        if (!request.UntypedRequest
-            && record is not null
-            && !typeof(T).MatchExceptAssemblyVersion(record.TypeName)
-            && (TryResolve(request.Resolver, record.TypeName) is not { } resolvedType
-                || !resolvedType.MatchExceptAssemblyVersion(record.TypeName)))
-        {
-            // Typed request where the root type is not what was requested.
-            // Untyped requests are allowed to deserialize any type.
-            return false;
+            // JSON type info is nested, so this has to come after the JSON attempt.
+            if (!request.UntypedRequest
+                && !typeof(T).MatchExceptAssemblyVersion(record.TypeName)
+                && (TryResolve(request.Resolver, record.TypeName) is not { } resolvedType
+                    || !resolvedType.MatchExceptAssemblyVersion(record.TypeName)))
+            {
+                // Typed request where the root type is not what was requested.
+                // Untyped requests are allowed to deserialize any type.
+                return false;
+            }
         }
 
         if (!FeatureSwitches.EnableUnsafeBinaryFormatterSerialization)

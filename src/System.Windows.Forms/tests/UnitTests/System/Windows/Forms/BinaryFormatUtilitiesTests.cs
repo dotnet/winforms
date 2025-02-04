@@ -21,7 +21,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
     private void WriteObjectToStream(object value, bool restrictSerialization = false) =>
         Utilities.WriteObjectToStream(_stream, value, restrictSerialization ? DataFormatNames.String : "test");
 
-    private bool ReadObjectFromStream<T>(out T? @object)
+    private bool TryReadObjectFromStream<T>(out T? @object)
     {
         _stream.Position = 0;
         DataRequest request = new("test")
@@ -32,7 +32,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         return Utilities.TryReadObjectFromStream(_stream, in request, out @object);
     }
 
-    private bool ReadRestrictedObjectFromStream<T>(out T? @object)
+    private bool TryReadRestrictedObjectFromStream<T>(out T? @object)
     {
         _stream.Position = 0;
         DataRequest request = new(DataFormatNames.String)
@@ -54,7 +54,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         return Utilities.TryReadObjectFromStream(_stream, in request, out @object);
     }
 
-    private bool ReadObjectFromStream<T>(Func<TypeName, Type>? resolver, out T? @object)
+    private bool TryReadObjectFromStream<T>(Func<TypeName, Type>? resolver, out T? @object)
     {
         _stream.Position = 0;
         DataRequest request = new("test")
@@ -81,14 +81,14 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/GetData methods with unbounded formats,
         // and works with the BinaryFormat AppContext switches.
         WriteObjectToStream(value);
-        return ReadObjectFromStream(out @object);
+        return TryReadObjectFromStream(out @object);
     }
 
     private bool RoundTripObject_RestrictedFormat<T>(object value, out T? @object)
     {
         // This is equivalent to SetData/GetData methods using registered OLE formats, resolves only the known types
         WriteObjectToStream(value, restrictSerialization: true);
-        return ReadRestrictedObjectFromStream(out @object);
+        return TryReadRestrictedObjectFromStream(out @object);
     }
 
     private bool RoundTripOfType<T>(object value, out T? @object)
@@ -96,7 +96,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/TryGetData<T> methods using unbounded OLE formats,
         // and works with the BinaryFormat AppContext switches.
         WriteObjectToStream(value);
-        return ReadObjectFromStream(NotSupportedResolver, out @object);
+        return TryReadObjectFromStream(NotSupportedResolver, out @object);
     }
 
     private bool RoundTripOfType_RestrictedFormat<T>(object value, out T? @object)
@@ -112,7 +112,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/TryGetData<T> methods using unbounded formats,
         // serialization is restricted by the resolver and BinaryFormat AppContext switches.
         WriteObjectToStream(value);
-        return ReadObjectFromStream(resolver, out @object);
+        return TryReadObjectFromStream(resolver, out @object);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -404,7 +404,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
     public void RoundTrip_Unsupported(IList value)
     {
         Action writer = () => WriteObjectToStream(value);
-        Action reader = () => ReadObjectFromStream(out IList? _);
+        Action reader = () => TryReadObjectFromStream(out IList? _);
 
         writer.Should().Throw<NotSupportedException>();
 
@@ -416,7 +416,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
 
                 using BinaryFormatterInClipboardDragDropScope clipboardDragDropScope = new(enable: true);
                 WriteObjectToStream(value);
-                ReadObjectFromStream(out IList? result).Should().BeTrue();
+                TryReadObjectFromStream(out IList? result).Should().BeTrue();
                 result.Should().BeEquivalentTo(value);
             }
 
@@ -453,18 +453,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         RoundTripObject(value, out uint[,]? result).Should().BeTrue();
         result.Should().NotBeNull();
-
-        result!.Rank.Should().Be(2);
-        result.GetLength(0).Should().Be(2);
-        result.GetLength(1).Should().Be(3);
-        result.GetLowerBound(0).Should().Be(1);
-        result.GetLowerBound(1).Should().Be(2);
-        result.GetValue(1, 2).Should().Be(101u);
-        result.GetValue(1, 3).Should().Be(102u);
-        result.GetValue(1, 4).Should().Be(103u);
-        result.GetValue(2, 2).Should().Be(201u);
-        result.GetValue(2, 3).Should().Be(202u);
-        result.GetValue(2, 4).Should().Be(203u);
+        Assert.Equal(value, result);
     }
 
     [Fact]
@@ -482,12 +471,12 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
             ReadAndValidate();
         }
 
-        Action read = () => ReadObjectFromStream<List<object>>(ObjectListResolver, out _);
+        Action read = () => TryReadObjectFromStream<List<object>>(ObjectListResolver, out _);
         read.Should().Throw<NotSupportedException>();
 
         void ReadAndValidate()
         {
-            ReadObjectFromStream(ObjectListResolver, out List<object>? result).Should().BeTrue();
+            TryReadObjectFromStream(ObjectListResolver, out List<object>? result).Should().BeTrue();
             result.Should().BeOfType<List<object>>();
             result!.Count.Should().Be(1);
             result[0].Should().Be("text");
@@ -575,7 +564,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => ReadObjectFromStream<int?[]>(NotSupportedResolver, out _);
+        Action read = () => TryReadObjectFromStream<int?[]>(NotSupportedResolver, out _);
 
         // nullable struct requires a custom resolver.
         // This is either NotSupportedException or RestrictedTypeDeserializationException, depending on format.
@@ -658,7 +647,8 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
                 (typeof(TestData).FullName!, typeof(TestData)),
                 (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
                 ("System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(decimal?)),
-                ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>))
+                ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>)),
+                ("System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]", typeof(List<TimeSpan>))
             ];
 
             string fullName = typeName.FullName;
@@ -684,7 +674,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
 
         // Resolver that returns a null is blocked in our SerializationBinder wrapper.
-        Action read = () => ReadObjectFromStream<TestData>(InvalidResolver, out _);
+        Action read = () => TryReadObjectFromStream<TestData>(InvalidResolver, out _);
 
         read.Should().Throw<NotSupportedException>();
 
@@ -1027,10 +1017,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
         public List<decimal> Decimals = [1.0m, 2.0m, 3.0m];
         public List<decimal?> NullableDecimals = [null, 2.0m, 3.0m];
         public List<DateTime> DateTimes = [DateTime.Now];
-        // System.Runtime.Serialization.SerializationException : Invalid BinaryFormatter stream.
-        // System.NotSupportedException : Can't resolve System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]
-        // Even though when serialized as a root record, TimeSpan is normalized to the framework assembly.
-        // public List<TimeSpan> TimeSpans = new() { TimeSpan.FromHours(1) };
+        public List<TimeSpan> TimeSpans = [TimeSpan.FromHours(1)];
         public List<string> Strings = ["a", "b", "c"];
 
         public void Equals(TestData other, Size bitmapSize)
