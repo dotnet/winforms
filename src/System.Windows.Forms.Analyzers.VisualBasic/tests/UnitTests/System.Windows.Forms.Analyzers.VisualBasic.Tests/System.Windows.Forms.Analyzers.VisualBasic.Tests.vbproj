@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>15.5</LangVersion>
     <RootNamespace>System.Windows.Forms.Analyzers.Tests</RootNamespace>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/Data/*.vb</DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="**\Data\*.vb" />
     <Content Include="**\Data\*.vb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
