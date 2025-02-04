@@ -17,8 +17,8 @@ public class AvoidPassingTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyz
     private const string TaskString = "Task";
     private const string ValueTaskString = "ValueTask";
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken];
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        [CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken];
 
     public override void Initialize(AnalysisContext context)
     {

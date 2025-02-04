@@ -1,76 +1,16 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Collections.Immutable
 Imports System.Windows.Forms.Analyzers.Diagnostics
 Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
+Imports System.IO
 
-Public Class AvoidPassingTaskWithoutCancellationTokenTest
-    ' Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
-    ' That's why we need to add this Async Control. Once it's there, this test will fail.
-    ' We can then remove the AsyncControl and the test will pass, replace AsyncControl with
-    ' Control, and the test will pass.
-    Private Const AsyncControl As String = "
-Imports System
-Imports System.Threading
-Imports System.Threading.Tasks
-Imports System.Windows.Forms
-
-Namespace System.Windows.Forms
-    Public Class AsyncControl
-        Inherits Control
-
-        ' BEGIN ASYNC API
-        Public Function InvokeAsync(callback As Action, Optional cancellationToken As CancellationToken = Nothing) As Task
-            Dim tcs As New TaskCompletionSource()
-
-            ' Note: Code is INCORRECT, it's just here to satisfy the compiler!
-            Using cancellationToken.Register(Sub() tcs.TrySetCanceled())
-                MyBase.BeginInvoke(callback)
-            End Using
-
-            Return tcs.Task
-        End Function
-
-        Public Function InvokeAsync(Of T)(callback As Func(Of T), Optional cancellationToken As CancellationToken = Nothing) As Task(Of T)
-            Dim tcs As New TaskCompletionSource(Of T)()
-
-            ' Note: Code is INCORRECT, it's just here to satisfy the compiler!
-            Using cancellationToken.Register(Sub() tcs.TrySetCanceled())
-                MyBase.BeginInvoke(callback)
-            End Using
-
-            Return tcs.Task
-        End Function
-
-        Public Function InvokeAsync(callback As Func(Of CancellationToken, ValueTask), Optional cancellationToken As CancellationToken = Nothing) As Task
-            Dim tcs As New TaskCompletionSource()
-
-            ' Note: Code is INCORRECT, it's just here to satisfy the compiler!
-            Using cancellationToken.Register(Sub() tcs.TrySetCanceled())
-                MyBase.BeginInvoke(callback)
-            End Using
-
-            Return tcs.Task
-        End Function
-
-        Public Function InvokeAsync(Of T)(callback As Func(Of CancellationToken, ValueTask(Of T)), Optional cancellationToken As CancellationToken = Nothing) As Task(Of T)
-            Dim tcs As New TaskCompletionSource(Of T)()
-
-            ' Note: Code is INCORRECT, it's just here to satisfy the compiler!
-            Using cancellationToken.Register(Sub() tcs.TrySetCanceled())
-                MyBase.BeginInvoke(callback)
-            End Using
-
-            Return tcs.Task
-        End Function
-        ' END ASYNC API
-    End Class
-End Namespace
-"
+Public Class AvoidPassingTaskWithoutCancellationTokenTests
 
     Private Const TestCode As String = "
 Imports System
@@ -84,7 +24,7 @@ Namespace VisualBasicControls
 
         Public Sub Main()
 
-            Dim control As New AsyncControl()
+            Dim control As New Control()
 
             ' A sync Action delegate is always fine.
             Dim okAction As New Action(Sub() control.Text = ""Hello, World!"")
@@ -146,14 +86,23 @@ End Namespace
 "
 
     Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
-        Yield {ReferenceAssemblies.Net.Net90Windows}
+        Yield {
+            ReferenceAssemblies.Net.Net90.AddPackages(
+                ImmutableArray.Create(New PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0"))
+            ), ""
+        }
+        ' The latest public API surface area build from this repository.
+        Yield {CurrentReferences.NetCoreAppReferences, CurrentReferences.WinFormsRefPath}
     End Function
+
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
-        ' If the API does not exist, we need to add it to the test.
-        Dim customControlSource As String = AsyncControl
+    Public Async Function VB_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies, pathToWinFormsAssembly As String) As Task
+        Assert.NotNull(referenceAssemblies)
+        Assert.NotNull(pathToWinFormsAssembly)
+        Assert.True(pathToWinFormsAssembly = "" Or File.Exists(pathToWinFormsAssembly))
+
         Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
         Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
@@ -163,13 +112,16 @@ End Namespace
             }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
-        context.TestState.Sources.Add(customControlSource)
         context.TestState.ExpectedDiagnostics.AddRange(
-                {
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 101),
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 101),
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 25, 46, 102)
-                })
+            {
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 101),
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 101),
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 25, 46, 102)
+            })
+
+        If pathToWinFormsAssembly <> "" Then
+            context.TestState.AdditionalReferences.Add(pathToWinFormsAssembly)
+        End If
 
         Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function

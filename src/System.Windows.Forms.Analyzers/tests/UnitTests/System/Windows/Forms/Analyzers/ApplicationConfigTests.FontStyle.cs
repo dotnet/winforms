@@ -6,27 +6,24 @@ using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ApplicationConfigTests
+public class FontStyleTests
 {
-    public class FontStyleTests
+    [Fact]
+    public void GetStandardValuesTest()
     {
-        [Fact]
-        public void GetStandardValuesTest()
-        {
-            var values = Enum.GetValues(typeof(FontStyle));
-            Assert.Equal(5, values.Length); // The values of Graphics unit: Regular, Bold, Italic, Underline, Strikeout.
-        }
+        var values = Enum.GetValues(typeof(FontStyle));
+        Assert.Equal(5, values.Length); // The values of Graphics unit: Regular, Bold, Italic, Underline, Strikeout.
+    }
 
-        [Theory]
-        [InlineData("Bold", FontStyle.Bold)]
-        [InlineData("Italic", FontStyle.Italic)]
-        [InlineData("Regular", FontStyle.Regular)]
-        [InlineData("Strikeout", FontStyle.Strikeout)]
-        [InlineData("Underline", FontStyle.Underline)]
-        internal void CanConvertFrom(string input, FontStyle expected)
-        {
-            FontStyle value = Enum.Parse<FontStyle>(input);
-            Assert.Equal(expected, value);
-        }
+    [Theory]
+    [InlineData("Bold", FontStyle.Bold)]
+    [InlineData("Italic", FontStyle.Italic)]
+    [InlineData("Regular", FontStyle.Regular)]
+    [InlineData("Strikeout", FontStyle.Strikeout)]
+    [InlineData("Underline", FontStyle.Underline)]
+    internal void CanConvertFrom(string input, FontStyle expected)
+    {
+        FontStyle value = Enum.Parse<FontStyle>(input);
+        Assert.Equal(expected, value);
     }
 }

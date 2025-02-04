@@ -3,6 +3,8 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <LangVersion>15.5</LangVersion>
+    <RootNamespace>System.Windows.Forms.Analyzers.Tests</RootNamespace>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/Data/*.vb</DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,10 @@
     </PackageReference>
 
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.SourceGenerators.Testing" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" />
@@ -27,6 +33,12 @@
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\tests\UnitTests\System.Windows.Forms.Analyzers.Tests.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="**\Data\*.vb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

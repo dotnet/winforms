@@ -67,6 +67,21 @@
         <target state="translated">Configuration de sérialisation de code manquante pour le contenu de la propriété</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO1001AnalyzerDescription">
+        <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
+        <target state="new">Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerMessageFormat">
+        <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
+        <target state="new">Type `{0}` does not implement `ITypedDataObject` interface</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerTitle">
+        <source>`IDataObject` type does not implement `ITypedDataObject`</source>
+        <target state="new">`IDataObject` type does not implement `ITypedDataObject`</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">
         <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
         <target state="translated">Évitez de passer un `Func&lt;T&gt;` à `InvokeAsync` où `T` est une `Task` ou `ValueTask`, sauf si votre intention est que le délégué soit simplement lancé en tant que tâche non supervisée. Utilisez plutôt `Func&lt;CancellationToken, ValueTask&gt;` ou `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, afin que le délégué passé à ’InvokeAsync’ puisse être attendu, ce qui permet de gérer correctement les exceptions.</target>
