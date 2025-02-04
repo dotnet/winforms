@@ -3,7 +3,9 @@
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ApplicationConfigTests
+public enum SourceLanguage
 {
-    // See nested files
+    None,
+    CSharp,
+    VisualBasic
 }

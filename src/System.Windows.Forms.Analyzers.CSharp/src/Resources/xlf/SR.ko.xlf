@@ -67,6 +67,21 @@
         <target state="translated">속성 콘텐츠에 대한 코드 직렬화 구성이 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO1001AnalyzerDescription">
+        <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
+        <target state="new">Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerMessageFormat">
+        <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
+        <target state="new">Type `{0}` does not implement `ITypedDataObject` interface</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerTitle">
+        <source>`IDataObject` type does not implement `ITypedDataObject`</source>
+        <target state="new">`IDataObject` type does not implement `ITypedDataObject`</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">
         <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
         <target state="translated">대리자가 감독되지 않은 작업으로 단순히 시작되도록 의도하지 않는 한 `Func&lt;T&gt;`를 `InvokeAsync`에 전달하지 마세요(`T`는 `Task` 또는 `ValueTask`임). 대신 `Func&lt;CancellationToken, ValueTask&gt;` 또는 `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`를 사용하면 `InvokeAsync`에 전달된 대리자가 대기되어 예외가 적절하게 처리될 수 있습니다.</target>

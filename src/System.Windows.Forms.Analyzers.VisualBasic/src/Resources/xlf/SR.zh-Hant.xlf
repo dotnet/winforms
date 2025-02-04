@@ -17,6 +17,21 @@
         <target state="translated">遺失屬性內容的程式碼序列化設定</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO1001AnalyzerDescription">
+        <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
+        <target state="new">Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerMessageFormat">
+        <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
+        <target state="new">Type `{0}` does not implement `ITypedDataObject` interface</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerTitle">
+        <source>`IDataObject` type does not implement `ITypedDataObject`</source>
+        <target state="new">`IDataObject` type does not implement `ITypedDataObject`</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">
         <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
         <target state="translated">避免將 `Func&lt;T&gt;` 傳遞到 `InvokeAsync`，其中 `T` 是 'Task' 或 'ValueTask'，除非您打算讓委派只是被移除為不受監督的工作。請改用 `Func&lt;CancellationToken, ValueTask&gt;` 或 `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`，以便等待傳遞給 `InvokeAsync` 的代理人，以便正確處理例外狀況。</target>

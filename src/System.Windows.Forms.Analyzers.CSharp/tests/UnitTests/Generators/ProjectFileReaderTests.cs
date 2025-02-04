@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ProjectFileReaderTests
 {
-    private static readonly char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
+    public static readonly char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
     private static readonly dynamic s_static = typeof(ProjectFileReader).TestAccessor().Dynamic;
     private readonly ITestOutputHelper _output;
 
