@@ -773,11 +773,11 @@ public partial class DataObjectTests
 
         using Bitmap bitmap1 = new(10, 10);
         dataObject.SetData("format2", bitmap1);
-        dataObject.GetFormats().OrderBy(s => s).Should().Equal(["format1", "format2", "UnicodeText"]);
+        dataObject.GetFormats().Should().BeEquivalentTo(["format1", "format2", "UnicodeText"]);
 
         using Bitmap bitmap2 = new(10, 10);
         dataObject.SetData(bitmap2);
-        dataObject.GetFormats().OrderBy(s => s).Should().Equal(["Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject"]);
+        dataObject.GetFormats().Should().BeEquivalentTo(["Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "PersistentObject"]);
     }
 
     public static TheoryData<string[]> GetFormats_Mocked_TheoryData() => new()
@@ -847,13 +847,13 @@ public partial class DataObjectTests
 
         using Bitmap bitmap1 = new(10, 10);
         dataObject.SetData("format2", bitmap1);
-        dataObject.GetFormats(autoConvert: true).OrderBy(s => s).Should().Equal(["format1", "format2", "UnicodeText"]);
-        dataObject.GetFormats(autoConvert: false).OrderBy(s => s).Should().Equal(["format1", "format2", "UnicodeText"]);
+        dataObject.GetFormats(autoConvert: true).Should().BeEquivalentTo(["format1", "format2", "UnicodeText"]);
+        dataObject.GetFormats(autoConvert: false).Should().BeEquivalentTo(["format1", "format2", "UnicodeText"]);
 
         using Bitmap bitmap2 = new(10, 10);
         dataObject.SetData(bitmap2);
-        dataObject.GetFormats(autoConvert: true).OrderBy(s => s).Should().Equal(["Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject"]);
-        dataObject.GetFormats(autoConvert: false).OrderBy(s => s).Should().Equal(["format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "WindowsForms10PersistentObject"]);
+        dataObject.GetFormats(autoConvert: true).Should().BeEquivalentTo(["Bitmap", "format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "PersistentObject"]);
+        dataObject.GetFormats(autoConvert: false).Should().BeEquivalentTo(["format1", "format2", "System.Drawing.Bitmap", "UnicodeText", "PersistentObject"]);
     }
 
     public static TheoryData<bool, string[]> GetFormats_BoolIDataObject_TheoryData() => new()
