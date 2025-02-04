@@ -126,11 +126,13 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 ref readonly DataRequest request)
             {
                 MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
-                return !isSerializedObject
-                    ? stream
-                    : DataFormatNames.RestrictDeserializationToSafeTypes(request.Format)
-                        ? BinaryFormatUtilities<TRuntime>.ReadRestrictedObjectFromStream<T>(stream, in request)
-                        : BinaryFormatUtilities<TRuntime>.ReadObjectFromStream<T>(stream, in request);
+                if (!isSerializedObject)
+                {
+                    return stream;
+                }
+
+                BinaryFormatUtilities<TRuntime>.TryReadObjectFromStream(stream, in request, out T? data);
+                return data;
             }
         }
 
@@ -430,7 +432,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             if (!request.UntypedRequest && request.Resolver is null)
             {
                 // DataObject.GetData methods do not validate format string, but the typed methods do.
-                // This validation is specific to the WinForms DataObject implementation, it's not executed for
+                // This validation is specific to the our DataObject implementation, it's not executed for
                 // overridden methods.
                 ThrowIfFormatAndTypeRequireResolver<T>(request.Format);
             }

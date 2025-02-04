@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.Drawing;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
@@ -41,6 +42,7 @@ internal class CoreNrbfSerializer : INrbfSerializer
         typeof(UIntPtr),
         // Special type we use to report that binary formatting is disabled.
         typeof(NotSupportedException),
+
         // Lists of primitive types
         typeof(List<byte>),
         typeof(List<sbyte>),
@@ -58,6 +60,7 @@ internal class CoreNrbfSerializer : INrbfSerializer
         typeof(List<decimal>),
         typeof(List<DateTime>),
         typeof(List<TimeSpan>),
+
         // Arrays of primitive types.
         typeof(byte[]),
         typeof(sbyte[]),
@@ -84,7 +87,11 @@ internal class CoreNrbfSerializer : INrbfSerializer
         typeof(Rectangle),
         typeof(Point),
         typeof(Size),
-        typeof(Color)
+        typeof(Color),
+
+        // Hashtable and ArrayList are supported if they contain primitives and no custom comparers.
+        typeof(Hashtable),
+        typeof(ArrayList)
     ];
 
     public static bool TryWriteObject(Stream stream, object value) =>

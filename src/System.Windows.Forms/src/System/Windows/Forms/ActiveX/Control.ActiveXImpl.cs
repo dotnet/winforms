@@ -1140,7 +1140,7 @@ public partial class Control
 
                     if (!success)
                     {
-                        if (!FeatureSwitches.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!FeatureSwitches.EnableUnsafeBinaryFormatterSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }
@@ -1530,7 +1530,7 @@ public partial class Control
                     {
                         stream.SetLength(0);
 
-                        if (!FeatureSwitches.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!FeatureSwitches.EnableUnsafeBinaryFormatterSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }

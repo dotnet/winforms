@@ -266,243 +266,250 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         }
         #endregion
 
-        private HRESULT SaveDataToHGLOBAL(object data, string format, ref STGMEDIUM medium) => format switch
+        private HRESULT SaveDataToHGLOBAL(object data, string format, ref STGMEDIUM medium)
         {
-            _ when data is Stream dataStream
-                => SaveStreamToHGLOBAL(ref medium.hGlobal, dataStream),
-            DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText
-                => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: false),
-            DataFormatNames.Html
-                => SaveHtmlToHGLOBAL(medium.hGlobal, data.ToString()!),
-            DataFormatNames.UnicodeText
-                => SaveStringToHGLOBAL(medium.hGlobal, data.ToString()!, unicode: true),
-            DataFormatNames.FileDrop
-                => SaveFileListToHGLOBAL(medium.hGlobal, (string[])data),
-            DataFormatNames.FileNameAnsi
-                => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: false),
-            DataFormatNames.FileNameUnicode
-                => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: true),
+            return format switch
+            {
+                _ when data is Stream dataStream
+                    => SaveStreamToHGLOBAL(ref medium.hGlobal, dataStream),
+                DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText
+                    => SaveStringToHGLOBAL(medium.hGlobal, data.ToString() ?? "", unicode: false),
+                DataFormatNames.Html
+                    => SaveHtmlToHGLOBAL(medium.hGlobal, data.ToString() ?? ""),
+                DataFormatNames.UnicodeText
+                    => SaveStringToHGLOBAL(medium.hGlobal, data.ToString() ?? "", unicode: true),
+                DataFormatNames.FileDrop
+                    => SaveFileListToHGLOBAL(medium.hGlobal, (string[])data),
+                DataFormatNames.FileNameAnsi
+                    => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: false),
+                DataFormatNames.FileNameUnicode
+                    => SaveStringToHGLOBAL(medium.hGlobal, ((string[])data)[0], unicode: true),
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-            _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
+                _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
-                => SaveObjectToHGLOBAL(ref medium.hGlobal, data, DataFormatNames.RestrictDeserializationToSafeTypes(format)),
-            _ => HRESULT.E_UNEXPECTED
-        };
-
-        private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
-        {
-            using MemoryStream stream = new();
-            stream.Write(s_serializedObjectID);
-
-            // Throws in case of serialization failure.
-            BinaryFormatUtilities<TRuntime>.WriteObjectToStream(stream, data, restrictSerialization);
-
-            return SaveStreamToHGLOBAL(ref hglobal, stream);
-        }
-
-        private static HRESULT SaveStreamToHGLOBAL(ref HGLOBAL hglobal, Stream stream)
-        {
-            if (!hglobal.IsNull)
-            {
-                PInvokeCore.GlobalFree(hglobal);
-            }
-
-            int size = checked((int)stream.Length);
-            hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
-            if (hglobal.IsNull)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            void* buffer = PInvokeCore.GlobalLock(hglobal);
-            if (buffer is null)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            try
-            {
-                Span<byte> span = new(buffer, size);
-                stream.Position = 0;
-                stream.ReadExactly(span);
-            }
-            finally
-            {
-                PInvokeCore.GlobalUnlock(hglobal);
-            }
-
-            return HRESULT.S_OK;
-        }
-
-        /// <summary>
-        ///  Saves a list of files out to the handle in HDROP format.
-        /// </summary>
-        private HRESULT SaveFileListToHGLOBAL(HGLOBAL hglobal, string[] files)
-        {
-            if (files is null || files.Length == 0)
-            {
-                return HRESULT.S_OK;
-            }
-
-            if (hglobal == 0)
-            {
-                return HRESULT.E_INVALIDARG;
-            }
-
-            // CF_HDROP consists of a DROPFILES struct followed by an list of strings including the terminating null
-            // character. An additional null character is appended to the final string to terminate the array.
-            //
-            // E.g. if the files c:\temp1.txt and c:\temp2.txt are being transferred, the character array is:
-            // "c:\temp1.txt\0c:\temp2.txt\0\0"
-
-            // Determine the size of the data structure.
-            uint sizeInBytes = (uint)sizeof(DROPFILES);
-            foreach (string file in files)
-            {
-                sizeInBytes += (uint)(file.Length + 1) * sizeof(char);
-            }
-
-            sizeInBytes += sizeof(char);
-
-            // Allocate the Win32 memory
-            HGLOBAL newHandle = PInvokeCore.GlobalReAlloc(hglobal, sizeInBytes, (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE);
-            if (newHandle == 0)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            void* buffer = PInvokeCore.GlobalLock(newHandle);
-            if (buffer is null)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            // Write out the DROPFILES struct.
-            DROPFILES* dropFiles = (DROPFILES*)buffer;
-            *dropFiles = new DROPFILES()
-            {
-                pFiles = (uint)sizeof(DROPFILES),
-                pt = Point.Empty,
-                fNC = false,
-                fWide = true
+                    => SaveObjectToHGLOBAL(ref medium.hGlobal, data, format),
+                _ => HRESULT.E_UNEXPECTED
             };
 
-            Span<char> fileBuffer = new(
-                (char*)((byte*)buffer + dropFiles->pFiles),
-                ((int)sizeInBytes - (int)dropFiles->pFiles) / sizeof(char));
-
-            // Write out the strings.
-            foreach (string file in files)
+            static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, string format)
             {
-                file.CopyTo(fileBuffer);
-                fileBuffer[file.Length] = '\0';
-                fileBuffer = fileBuffer[(file.Length + 1)..];
+                using MemoryStream stream = new();
+                stream.Write(s_serializedObjectID);
+
+                // Throws in case of serialization failure.
+                BinaryFormatUtilities<TRuntime>.WriteObjectToStream(stream, data, format);
+
+                return SaveStreamToHGLOBAL(ref hglobal, stream);
             }
 
-            fileBuffer[0] = '\0';
-
-            PInvokeCore.GlobalUnlock(newHandle);
-            return HRESULT.S_OK;
-        }
-
-        /// <summary>
-        ///  Save string to handle. If unicode is set to true then the string is saved as Unicode, else it is saves as DBCS.
-        /// </summary>
-        private HRESULT SaveStringToHGLOBAL(HGLOBAL hglobal, string value, bool unicode)
-        {
-            if (hglobal == 0)
+            static HRESULT SaveStreamToHGLOBAL(ref HGLOBAL hglobal, Stream stream)
             {
-                return HRESULT.E_INVALIDARG;
-            }
+                if (!hglobal.IsNull)
+                {
+                    PInvokeCore.GlobalFree(hglobal);
+                }
 
-            HGLOBAL newHandle = default;
-            if (unicode)
-            {
-                uint byteSize = (uint)value.Length * sizeof(char) + sizeof(char);
-                newHandle = PInvokeCore.GlobalReAlloc(hglobal, byteSize, (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
-                if (newHandle == 0)
+                int size = checked((int)stream.Length);
+                hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
+                if (hglobal.IsNull)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                char* buffer = (char*)PInvokeCore.GlobalLock(newHandle);
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
                 if (buffer is null)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                Span<char> data = new(buffer, value.Length + 1);
-                value.AsSpan().CopyTo(data);
-
-                // Null terminate.
-                data[value.Length] = '\0';
-            }
-            else
-            {
-                fixed (char* c = value)
+                try
                 {
-                    int pinvokeSize = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                    Span<byte> span = new(buffer, size);
+                    stream.Position = 0;
+                    stream.ReadExactly(span);
+                }
+                finally
+                {
+                    PInvokeCore.GlobalUnlock(hglobal);
+                }
+
+                return HRESULT.S_OK;
+            }
+
+            // Saves a list of files out to the handle in HDROP format.
+            static HRESULT SaveFileListToHGLOBAL(HGLOBAL hglobal, string[] files)
+            {
+                if (files is null || files.Length == 0)
+                {
+                    return HRESULT.S_OK;
+                }
+
+                if (hglobal == 0)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                // CF_HDROP consists of a DROPFILES struct followed by an list of strings including the terminating null
+                // character. An additional null character is appended to the final string to terminate the array.
+                //
+                // E.g. if the files c:\temp1.txt and c:\temp2.txt are being transferred, the character array is:
+                // "c:\temp1.txt\0c:\temp2.txt\0\0"
+
+                // Determine the size of the data structure.
+                uint sizeInBytes = (uint)sizeof(DROPFILES);
+                foreach (string file in files)
+                {
+                    sizeInBytes += (uint)(file.Length + 1) * sizeof(char);
+                }
+
+                sizeInBytes += sizeof(char);
+
+                // Allocate the Win32 memory
+                HGLOBAL newHandle = PInvokeCore.GlobalReAlloc(hglobal, sizeInBytes, (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE);
+                if (newHandle == 0)
+                {
+                    return HRESULT.E_OUTOFMEMORY;
+                }
+
+                void* buffer = PInvokeCore.GlobalLock(newHandle);
+                if (buffer is null)
+                {
+                    return HRESULT.E_OUTOFMEMORY;
+                }
+
+                // Write out the DROPFILES struct.
+                DROPFILES* dropFiles = (DROPFILES*)buffer;
+                *dropFiles = new DROPFILES()
+                {
+                    pFiles = (uint)sizeof(DROPFILES),
+                    pt = Point.Empty,
+                    fNC = false,
+                    fWide = true
+                };
+
+                Span<char> fileBuffer = new(
+                    (char*)((byte*)buffer + dropFiles->pFiles),
+                    ((int)sizeInBytes - (int)dropFiles->pFiles) / sizeof(char));
+
+                // Write out the strings.
+                foreach (string file in files)
+                {
+                    file.CopyTo(fileBuffer);
+                    fileBuffer[file.Length] = '\0';
+                    fileBuffer = fileBuffer[(file.Length + 1)..];
+                }
+
+                fileBuffer[0] = '\0';
+
+                PInvokeCore.GlobalUnlock(newHandle);
+                return HRESULT.S_OK;
+            }
+
+            // Save string to handle. If unicode is set to true then the string is saved as Unicode, else it is saves as DBCS.
+            static HRESULT SaveStringToHGLOBAL(HGLOBAL hglobal, string value, bool unicode)
+            {
+                if (hglobal == 0)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                HGLOBAL newHandle = default;
+                if (unicode)
+                {
+                    uint byteSize = (uint)value.Length * sizeof(char) + sizeof(char);
                     newHandle = PInvokeCore.GlobalReAlloc(
                         hglobal,
-                        (uint)pinvokeSize + 1,
-                        (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
+                        byteSize,
+                        (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
 
                     if (newHandle == 0)
                     {
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    byte* buffer = (byte*)PInvokeCore.GlobalLock(newHandle);
+                    char* buffer = (char*)PInvokeCore.GlobalLock(newHandle);
                     if (buffer is null)
                     {
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
+                    Span<char> data = new(buffer, value.Length + 1);
+                    value.AsSpan().CopyTo(data);
+
+                    // Null terminate.
+                    data[value.Length] = '\0';
+                }
+                else
+                {
+                    fixed (char* c = value)
+                    {
+                        int pinvokeSize = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                        newHandle = PInvokeCore.GlobalReAlloc(
+                            hglobal,
+                            (uint)pinvokeSize + 1,
+                            (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
+
+                        if (newHandle == 0)
+                        {
+                            return HRESULT.E_OUTOFMEMORY;
+                        }
+
+                        byte* buffer = (byte*)PInvokeCore.GlobalLock(newHandle);
+                        if (buffer is null)
+                        {
+                            return HRESULT.E_OUTOFMEMORY;
+                        }
+
+                        PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
+
+                        // Null terminate
+                        buffer[pinvokeSize] = 0;
+                    }
+                }
+
+                PInvokeCore.GlobalUnlock(newHandle);
+                return HRESULT.S_OK;
+            }
+
+            static HRESULT SaveHtmlToHGLOBAL(HGLOBAL hglobal, string value)
+            {
+                if (hglobal == 0)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                int byteLength = Encoding.UTF8.GetByteCount(value);
+                HGLOBAL newHandle = PInvokeCore.GlobalReAlloc(
+                    hglobal,
+                    (uint)byteLength + 1,
+                    (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
+
+                if (newHandle == 0)
+                {
+                    return HRESULT.E_OUTOFMEMORY;
+                }
+
+                byte* buffer = (byte*)PInvokeCore.GlobalLock(newHandle);
+                if (buffer is null)
+                {
+                    return HRESULT.E_OUTOFMEMORY;
+                }
+
+                try
+                {
+                    Span<byte> span = new(buffer, byteLength + 1);
+                    Encoding.UTF8.GetBytes(value, span);
 
                     // Null terminate
-                    buffer[pinvokeSize] = 0;
+                    span[byteLength] = 0;
                 }
+                finally
+                {
+                    PInvokeCore.GlobalUnlock(newHandle);
+                }
+
+                return HRESULT.S_OK;
             }
-
-            PInvokeCore.GlobalUnlock(newHandle);
-            return HRESULT.S_OK;
-        }
-
-        private static HRESULT SaveHtmlToHGLOBAL(HGLOBAL hglobal, string value)
-        {
-            if (hglobal == 0)
-            {
-                return HRESULT.E_INVALIDARG;
-            }
-
-            int byteLength = Encoding.UTF8.GetByteCount(value);
-            HGLOBAL newHandle = PInvokeCore.GlobalReAlloc(hglobal, (uint)byteLength + 1, (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
-            if (newHandle == 0)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            byte* buffer = (byte*)PInvokeCore.GlobalLock(newHandle);
-            if (buffer is null)
-            {
-                return HRESULT.E_OUTOFMEMORY;
-            }
-
-            try
-            {
-                Span<byte> span = new(buffer, byteLength + 1);
-                Encoding.UTF8.GetBytes(value, span);
-
-                // Null terminate
-                span[byteLength] = 0;
-            }
-            finally
-            {
-                PInvokeCore.GlobalUnlock(newHandle);
-            }
-
-            return HRESULT.S_OK;
         }
     }
 }
