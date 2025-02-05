@@ -20,7 +20,6 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using System.Windows.Forms.Nrbf;
 using RECTL = Windows.Win32.Foundation.RECTL;
-using System.Windows.Forms.BinaryFormat;
 using System.Private.Windows.Nrbf;
 
 namespace System.Windows.Forms;
@@ -1519,7 +1518,7 @@ public partial class Control
 
                     try
                     {
-                        success = WinFormsBinaryFormatWriter.TryWriteObject(stream, sourceValue);
+                        success = WinFormsNrbfSerializer.TryWriteObject(stream, sourceValue);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
