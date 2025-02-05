@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 public sealed partial class ImageList
 {
     // Everything other than set_All, Add, and Clear will force handle creation.
-    [Editor($"System.Windows.Forms.Design.ImageCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public sealed partial class ImageCollection : IList
     {
         private readonly ImageList _owner;

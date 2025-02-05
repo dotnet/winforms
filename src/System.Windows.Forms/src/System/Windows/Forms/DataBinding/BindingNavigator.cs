@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 [DefaultProperty(nameof(BindingSource))]
 [DefaultEvent(nameof(RefreshItems))]
-[Designer($"System.Windows.Forms.Design.BindingNavigatorDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.BindingNavigatorDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionBindingNavigator))]
 public class BindingNavigator : ToolStrip, ISupportInitialize
 {

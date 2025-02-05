@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultProperty(nameof(Text))]
 [DefaultEvent(nameof(MouseDoubleClick))]
-[Designer($"System.Windows.Forms.Design.NotifyIconDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.NotifyIconDesigner, {Assemblies.SystemDesign}")]
 [ToolboxItemFilter("System.Windows.Forms")]
 [SRDescription(nameof(SR.DescriptionNotifyIcon))]
 public sealed partial class NotifyIcon : Component
@@ -79,7 +79,7 @@ public sealed partial class NotifyIcon : Component
     [Localizable(true)]
     [DefaultValue("")]
     [SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr))]
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     public string BalloonTipText
     {
         get
@@ -226,7 +226,7 @@ public sealed partial class NotifyIcon : Component
     [DefaultValue("")]
     [AllowNull]
     [SRDescription(nameof(SR.NotifyIconTextDescr))]
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     public string Text
     {
         get

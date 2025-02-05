@@ -254,7 +254,7 @@ public sealed partial class ListViewGroup : ISerializable
     /// </exception>
     [DefaultValue(-1)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("ListView.GroupImageList")]
@@ -291,7 +291,7 @@ public sealed partial class ListViewGroup : ISerializable
     /// </value>
     [DefaultValue("")]
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("ListView.GroupImageList")]

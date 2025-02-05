@@ -464,7 +464,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -498,7 +498,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -716,7 +716,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [SRDescription(nameof(SR.ListViewItemStateImageIndexDescr))]
     [SRCategory(nameof(SR.CatBehavior))]
     [RefreshProperties(RefreshProperties.Repaint)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RelatedImageList("ListView.StateImageList")]
     public int StateImageIndex
     {
@@ -769,7 +769,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [SRCategory(nameof(SR.CatData))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.ListViewItemSubItemsDescr))]
-    [Editor($"System.Windows.Forms.Design.ListViewSubItemCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListViewSubItemCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public ListViewSubItemCollection SubItems
     {
         get

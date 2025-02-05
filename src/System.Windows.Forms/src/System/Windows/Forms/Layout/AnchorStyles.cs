@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Specifies how a control anchors to the edges of its container.
 /// </summary>
-[Editor($"System.Windows.Forms.Design.AnchorEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+[Editor($"System.Windows.Forms.Design.AnchorEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
 [Flags]
 public enum AnchorStyles
 {

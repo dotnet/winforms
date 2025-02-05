@@ -7,7 +7,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, {Assemblies.SystemDesign}")]
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
 public class DataGridViewComboBoxColumn : DataGridViewColumn
@@ -133,8 +133,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue("")]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr))]
-    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
-    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {Assemblies.SystemDesign}")]
+    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MemberNotNull(nameof(ComboBoxCellTemplate))]
     [AllowNull]
     public string DisplayMember
@@ -348,7 +348,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
     }
 
-    [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnItemsDescr))]
@@ -368,8 +368,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue("")]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr))]
-    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
-    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {Assemblies.SystemDesign}")]
+    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MemberNotNull(nameof(ComboBoxCellTemplate))]
     [AllowNull]
     public string ValueMember

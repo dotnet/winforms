@@ -12,8 +12,8 @@ namespace System.Windows.Forms;
 ///  <see cref="DataGridView"/> control.
 /// </summary>
 [ListBindable(false)]
-[DesignerSerializer($"System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, {AssemblyRef.SystemDesign}",
-    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+[DesignerSerializer($"System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, {Assemblies.SystemDesign}",
+    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
 public partial class DataGridViewRowCollection : ICollection, IList
 {
 #if DEBUG

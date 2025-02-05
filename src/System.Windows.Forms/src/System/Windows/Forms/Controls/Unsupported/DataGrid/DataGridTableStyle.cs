@@ -306,7 +306,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     public static readonly DataGridTableStyle DefaultTableStyle;
 
-    [Editor($"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue("")]
     public string MappingName
     {

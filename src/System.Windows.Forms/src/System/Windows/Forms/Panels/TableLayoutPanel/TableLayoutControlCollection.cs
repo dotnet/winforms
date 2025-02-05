@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 ///  Represents a collection of controls on the TableLayoutPanel.
 /// </summary>
 [ListBindable(false)]
-[DesignerSerializer($"System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, {AssemblyRef.SystemDesign}", $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+[DesignerSerializer($"System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, {Assemblies.SystemDesign}", $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
 public class TableLayoutControlCollection : Control.ControlCollection
 {
     public TableLayoutControlCollection(TableLayoutPanel container) : base(container.OrThrowIfNull())

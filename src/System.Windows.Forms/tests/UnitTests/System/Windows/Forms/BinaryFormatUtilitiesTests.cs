@@ -645,6 +645,7 @@ public sealed partial class BinaryFormatUtilitiesTests : IDisposable
             (string name, Type type)[] allowedTypes =
             [
                 (typeof(TestData).FullName!, typeof(TestData)),
+                ("System.Windows.Forms.ImageListStreamer", typeof(ImageListStreamer)),
                 (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
                 ("System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(decimal?)),
                 ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>)),

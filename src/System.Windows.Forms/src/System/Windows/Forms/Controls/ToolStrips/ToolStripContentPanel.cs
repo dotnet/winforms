@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.ToolStripContentPanelDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolStripContentPanelDesigner, {Assemblies.SystemDesign}")]
 [DefaultEvent(nameof(Load))]
 [Docking(DockingBehavior.Never)]
 [InitializationEvent(nameof(Load))]

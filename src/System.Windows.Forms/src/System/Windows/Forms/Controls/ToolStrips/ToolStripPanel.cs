@@ -8,7 +8,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.ToolStripPanelDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolStripPanelDesigner, {Assemblies.SystemDesign}")]
 [ToolboxBitmap(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
 public partial class ToolStripPanel : ContainerControl, IArrangedElement
 {

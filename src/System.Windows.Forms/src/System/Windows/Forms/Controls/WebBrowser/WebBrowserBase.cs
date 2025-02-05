@@ -28,7 +28,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultProperty(nameof(Name))]
 [DefaultEvent(nameof(Enter))]
-[Designer($"System.Windows.Forms.Design.AxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.AxDesigner, {Assemblies.SystemDesign}")]
 public unsafe partial class WebBrowserBase : Control
 {
     private WebBrowserHelper.AXState _axState = WebBrowserHelper.AXState.Passive;

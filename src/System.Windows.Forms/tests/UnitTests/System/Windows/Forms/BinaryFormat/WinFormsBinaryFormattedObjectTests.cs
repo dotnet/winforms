@@ -126,7 +126,7 @@ public class WinFormsBinaryFormattedObjectTests
         ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeNameMatches(typeof(Bitmap)).Should().BeTrue();
         root.TypeName.FullName.Should().Be(typeof(Bitmap).FullName);
-        root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
+        root.TypeName.AssemblyName!.FullName.Should().Be(Assemblies.SystemDrawing);
         ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
         bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);

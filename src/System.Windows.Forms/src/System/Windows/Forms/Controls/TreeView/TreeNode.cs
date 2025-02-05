@@ -498,7 +498,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeNodeImageIndexDescr))]
     [TypeConverter(typeof(TreeViewImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [RelatedImageList("TreeView.ImageList")]
@@ -542,7 +542,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRDescription(nameof(SR.TreeNodeImageKeyDescr))]
     [TypeConverter(typeof(TreeViewImageKeyConverter))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("TreeView.ImageList")]
     [AllowNull]
@@ -883,7 +883,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [TypeConverter(typeof(TreeViewImageIndexConverter))]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [RefreshProperties(RefreshProperties.Repaint)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RelatedImageList("TreeView.ImageList")]
     public int SelectedImageIndex
     {
@@ -926,7 +926,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [TypeConverter(typeof(TreeViewImageKeyConverter))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [RefreshProperties(RefreshProperties.Repaint)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RelatedImageList("TreeView.ImageList")]
     [AllowNull]
     public string SelectedImageKey
@@ -982,7 +982,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRDescription(nameof(SR.TreeNodeStateImageKeyDescr))]
     [TypeConverter(typeof(ImageKeyConverter))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("TreeView.StateImageList")]
     [AllowNull]
@@ -1009,7 +1009,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeNodeStateImageIndexDescr))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("TreeView.StateImageList")]
     public int StateImageIndex

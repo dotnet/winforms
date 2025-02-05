@@ -332,7 +332,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatData))]
-    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [SRDescription(nameof(SR.ErrorProviderDataMemberDescr))]
     public string? DataMember
     {

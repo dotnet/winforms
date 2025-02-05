@@ -24,7 +24,7 @@ namespace System.Windows.Forms;
 ///  Displays a list of items in one of four views. Each item displays a caption and optionally an image.
 /// </summary>
 [Docking(DockingBehavior.Ask)]
-[Designer($"System.Windows.Forms.Design.ListViewDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ListViewDesigner, {Assemblies.SystemDesign}")]
 [DefaultProperty(nameof(Items))]
 [DefaultEvent(nameof(SelectedIndexChanged))]
 [SRDescription(nameof(SR.DescriptionListView))]
@@ -608,7 +608,7 @@ public partial class ListView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    [Editor($"System.Windows.Forms.Design.ColumnHeaderCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ColumnHeaderCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListViewColumnsDescr))]
     [Localizable(true)]
     [MergableProperty(false)]
@@ -963,7 +963,7 @@ public partial class ListView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
-    [Editor($"System.Windows.Forms.Design.ListViewGroupCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListViewGroupCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListViewGroupsDescr))]
     [MergableProperty(false)]
     public ListViewGroupCollection Groups
@@ -1132,7 +1132,7 @@ public partial class ListView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
-    [Editor($"System.Windows.Forms.Design.ListViewItemCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListViewItemCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListViewItemsDescr))]
     [MergableProperty(false)]
     public ListViewItemCollection Items

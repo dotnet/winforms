@@ -180,7 +180,7 @@ public partial class ToolStripTextBox : ToolStripControlHost
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [AllowNull]
@@ -251,7 +251,7 @@ public partial class ToolStripTextBox : ToolStripControlHost
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [Localizable(true)]
     [SRDescription(nameof(SR.TextBoxLinesDescr))]
-    [Editor($"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.StringArrayEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [AllowNull]
     public string[] Lines
     {

@@ -54,7 +54,7 @@ public partial class DomainUpDown : UpDownBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [SRDescription(nameof(SR.DomainUpDownItemsDescr))]
     [Localizable(true)]
-    [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public DomainUpDownItemCollection Items => _domainItems ??= new DomainUpDownItemCollection(this);
 
     [Browsable(false)]

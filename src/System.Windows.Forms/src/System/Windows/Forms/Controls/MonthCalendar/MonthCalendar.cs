@@ -55,7 +55,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(SelectionRange))]
 [DefaultEvent(nameof(DateChanged))]
 [DefaultBindingProperty(nameof(SelectionRange))]
-[Designer($"System.Windows.Forms.Design.MonthCalendarDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.MonthCalendarDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionMonthCalendar))]
 public partial class MonthCalendar : Control
 {

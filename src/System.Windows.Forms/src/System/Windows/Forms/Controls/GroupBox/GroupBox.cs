@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultEvent(nameof(Enter))]
 [DefaultProperty(nameof(Text))]
-[Designer($"System.Windows.Forms.Design.GroupBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.GroupBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionGroupBox))]
 public partial class GroupBox : Control
 {

@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 [Docking(DockingBehavior.Never)]
-[Designer($"System.Windows.Forms.Design.SplitterPanelDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.SplitterPanelDesigner, {Assemblies.SystemDesign}")]
 [ToolboxItem(false)]
 public sealed class SplitterPanel : Panel
 {

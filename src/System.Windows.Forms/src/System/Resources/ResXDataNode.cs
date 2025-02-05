@@ -11,7 +11,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms.Nrbf;
-using System.Windows.Forms.BinaryFormat;
 using System.Private.Windows.Nrbf;
 
 namespace System.Resources;
@@ -301,7 +300,7 @@ public sealed class ResXDataNode : ISerializable
                 bool success = false;
                 try
                 {
-                    success = WinFormsBinaryFormatWriter.TryWriteObject(stream, value);
+                    success = WinFormsNrbfSerializer.TryWriteObject(stream, value);
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
