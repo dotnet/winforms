@@ -34,7 +34,7 @@ public class FocusableLabelTests : IDisposable
 
     private class SubFocusableLabel : FocusableLabel
     {
-        public CreateParams? CreateParams => base.CreateParams;
+        public new CreateParams? CreateParams => base.CreateParams;
     }
 
     [Fact]
