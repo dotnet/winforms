@@ -21,7 +21,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(SelectedIndexChanged))]
 [DefaultProperty(nameof(Items))]
 [DefaultBindingProperty(nameof(Text))]
-[Designer($"System.Windows.Forms.Design.ComboBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ComboBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionComboBox))]
 public partial class ComboBox : ListControl
 {
@@ -210,7 +210,7 @@ public partial class ComboBox : ListControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(true)]
     [AllowNull]
     [EditorBrowsable(EditorBrowsableState.Always)]
@@ -614,7 +614,7 @@ public partial class ComboBox : ListControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ComboBoxItemsDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MergableProperty(false)]
     public ObjectCollection Items
     {

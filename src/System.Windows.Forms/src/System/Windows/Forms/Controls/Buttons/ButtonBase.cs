@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Implements the basic functionality required by a button control.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {Assemblies.SystemDesign}")]
 public abstract partial class ButtonBase : Control, ICommandBindingTargetProvider
 {
     private FlatStyle _flatStyle = FlatStyle.Standard;
@@ -446,7 +446,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     /// </summary>
     /// <inheritdoc cref="ImageKey"/>
     [TypeConverter(typeof(ImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [RefreshProperties(RefreshProperties.Repaint)]
@@ -493,7 +493,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     ///  </para>
     /// </remarks>
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [RefreshProperties(RefreshProperties.Repaint)]
@@ -654,7 +654,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     }
 
     [Editor(
-        $"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}",
+        $"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}",
         typeof(UITypeEditor)),
         SettingsBindable(true)]
     [AllowNull]

@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents a Windows text box control.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.TextBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TextBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionTextBox))]
 public partial class TextBox : TextBoxBase
 {
@@ -177,7 +177,7 @@ public partial class TextBox : TextBoxBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [AllowNull]

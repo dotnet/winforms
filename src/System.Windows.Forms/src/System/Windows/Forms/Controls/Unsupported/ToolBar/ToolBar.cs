@@ -22,7 +22,7 @@ namespace System.Windows.Forms;
 [ComVisible(true)]
 [ClassInterface(ClassInterfaceType.AutoDispatch)]
 [DefaultEvent(nameof(ButtonClick))]
-[Designer($"System.Windows.Forms.Design.ToolBarDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolBarDesigner, {Assemblies.SystemDesign}")]
 [DefaultProperty(nameof(Buttons))]
 public partial class ToolBar : Control
 {

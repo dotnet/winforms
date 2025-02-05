@@ -20,8 +20,8 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultProperty(nameof(Text))]
 [DefaultBindingProperty(nameof(Text))]
-[Designer($"System.Windows.Forms.Design.LabelDesigner, {AssemblyRef.SystemDesign}")]
-[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.LabelDesigner, {Assemblies.SystemDesign}")]
+[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionLabel))]
 // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
 public partial class Label : Control, IAutomationLiveRegion
@@ -406,7 +406,7 @@ public partial class Label : Control, IAutomationLiveRegion
     ///  Gets or sets the index value of the images displayed on the <see cref="Label"/>.
     /// </summary>
     [TypeConverter(typeof(ImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
@@ -455,7 +455,7 @@ public partial class Label : Control, IAutomationLiveRegion
     ///  from the image list to display on the <see cref="Label"/>.
     /// </summary>
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
@@ -718,7 +718,7 @@ public partial class Label : Control, IAutomationLiveRegion
     ///  Gets or sets the text in the Label. Since we can have multiline support
     ///  this property just overrides the base to pluck in the Multiline editor.
     /// </summary>
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor)), SettingsBindable(true)]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor)), SettingsBindable(true)]
     [AllowNull]
     public override string Text
     {

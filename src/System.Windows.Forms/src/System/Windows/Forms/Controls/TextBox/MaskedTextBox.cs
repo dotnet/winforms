@@ -20,7 +20,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(MaskInputRejected))]
 [DefaultBindingProperty(nameof(Text))]
 [DefaultProperty(nameof(Mask))]
-[Designer($"System.Windows.Forms.Design.MaskedTextBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.MaskedTextBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionMaskedTextBox))]
 public partial class MaskedTextBox : TextBoxBase
 {
@@ -629,7 +629,7 @@ public partial class MaskedTextBox : TextBoxBase
     [MergableProperty(false)]
     [Localizable(true)]
     [AllowNull]
-    [Editor($"System.Windows.Forms.Design.MaskPropertyEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.MaskPropertyEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public string Mask
     {
         get
@@ -1135,7 +1135,7 @@ public partial class MaskedTextBox : TextBoxBase
     ///  The Text setter validates the input char by char, raising the MaskInputRejected event for invalid chars.
     ///  The Text getter returns the formatted text according to the IncludeLiterals and IncludePrompt properties.
     /// </summary>
-    [Editor($"System.Windows.Forms.Design.MaskedTextBoxTextEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.MaskedTextBoxTextEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRCategory(nameof(SR.CatAppearance))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [Bindable(true)]

@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
-[Designer($"System.Windows.Forms.Design.ToolBarButtonDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolBarButtonDesigner, {Assemblies.SystemDesign}")]
 [DefaultProperty(nameof(Text))]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
@@ -46,7 +46,7 @@ public class ToolBarButton : Component
     }
 
     [TypeConverter(typeof(ImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(-1)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [Localizable(true)]
@@ -57,7 +57,7 @@ public class ToolBarButton : Component
     }
 
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue("")]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]

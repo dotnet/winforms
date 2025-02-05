@@ -4,7 +4,6 @@
 #nullable enable
 
 using System.Drawing;
-using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
@@ -16,10 +15,10 @@ public class TypeExtensionsTests
     {
         // int type is forwarded to mscorlib, type name with CoreLib will not match.
         { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName), false },
-        { typeof(int), TypeName.Parse($"System.Int32, {Mscorlib}"), true },
-        { typeof(int?), TypeName.Parse($"System.Int32, {Mscorlib}"), true },
-        { typeof(int?[]), TypeName.Parse($"System.Nullable`1[[System.Int32, {Mscorlib}]][], {Mscorlib}"), true},
-        { typeof(DayOfWeek), TypeName.Parse($"System.Nullable`1[[System.DayOfWeek, {Mscorlib}]], {Mscorlib}"), false },
+        { typeof(int), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), true },
+        { typeof(int?), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), true },
+        { typeof(int?[]), TypeName.Parse($"System.Nullable`1[[System.Int32, {Assemblies.Mscorlib}]][], {Assemblies.Mscorlib}"), true},
+        { typeof(DayOfWeek), TypeName.Parse($"System.Nullable`1[[System.DayOfWeek, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), false },
         { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
         // Assembly version is incorrect.
         { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
@@ -31,8 +30,8 @@ public class TypeExtensionsTests
         { typeof(Bitmap), TypeName.Parse("System.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), false },
         { typeof(Bitmap), TypeName.Parse("System.Drawing.MyBitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), false },
         { typeof(Bitmap?[]), TypeName.Parse("System.Drawing.Bitmap[], System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
-        { typeof(Dictionary<string, Bitmap>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), true },
-        { typeof(Dictionary<string, Bitmap?>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), true },
+        { typeof(Dictionary<string, Bitmap>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), true },
+        { typeof(Dictionary<string, Bitmap?>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), true },
         { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests.NonForwardedType"), false },
         // Namespace name is cased differently.
         { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionstests+NonForwardedType"), false },
@@ -54,11 +53,11 @@ public class TypeExtensionsTests
 
     public static TheoryData<TypeName, TypeName, bool> MatchesTypeNameData() => new()
     {
-        { TypeName.Parse($"System.Int32, {Mscorlib}"), TypeName.Parse($"System.Int32,  {Mscorlib}"), true },
-        { TypeName.Parse($"System.Int32, {Mscorlib}"), TypeName.Parse($"System.String, {Mscorlib}"), false },
-        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), true },
-        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), false },
-        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], mscorlib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"), false },
+        { TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), TypeName.Parse($"System.Int32,  {Assemblies.Mscorlib}"), true },
+        { TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), TypeName.Parse($"System.String, {Assemblies.Mscorlib}"), false },
+        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), true },
+        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), false },
+        { TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], mscorlib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"), false },
         { TypeName.Parse($"System.Drawing.Bitmap[], System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), TypeName.Parse($"System.Drawing.Bitmap[], System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
         { TypeName.Parse($"System.Drawing.Bitmap[], System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), TypeName.Parse($"System.Drawing.Bitmap[], System.Drawing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), false },
         { TypeName.Parse($"System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), TypeName.Parse($"System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
@@ -75,9 +74,9 @@ public class TypeExtensionsTests
     public void TryGetForwardedFromName_ReturnsTrue()
     {
         typeof(int?).TryGetForwardedFromName(out string? name).Should().BeTrue();
-        name.Should().Be(Mscorlib);
+        name.Should().Be(Assemblies.Mscorlib);
         typeof(int).TryGetForwardedFromName(out name).Should().BeTrue();
-        name.Should().Be(Mscorlib);
+        name.Should().Be(Assemblies.Mscorlib);
         typeof(ForwardedType).TryGetForwardedFromName(out name).Should().BeTrue();
         name.Should().Be("Abc");
         typeof(ForwardedType[]).TryGetForwardedFromName(out name).Should().BeTrue();
@@ -97,8 +96,6 @@ public class TypeExtensionsTests
         name.Should().BeNull();
     }
 
-    private const string Mscorlib = TypeInfo.MscorlibAssemblyName;
-
     [Fact]
     public void ForwardedTypeToTypeName()
     {
@@ -116,19 +113,19 @@ public class TypeExtensionsTests
 
         name = typeof(List<ForwardedType>).ToTypeName();
         name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType, Abc]]");
-        name.AssemblyName!.FullName.Should().Be(Mscorlib);
+        name.AssemblyName!.FullName.Should().Be(Assemblies.Mscorlib);
 
         name = typeof(List<Dictionary<int, string>>).ToTypeName();
-        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.Int32, {Mscorlib}],[System.String, {Mscorlib}]], {Mscorlib}]]");
-        name.AssemblyName!.FullName.Should().Be(Mscorlib);
+        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.Int32, {Assemblies.Mscorlib}],[System.String, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}]]");
+        name.AssemblyName!.FullName.Should().Be(Assemblies.Mscorlib);
 
         name = typeof(List<Dictionary<string, int?>>).ToTypeName();
-        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.String, {Mscorlib}],[System.Nullable`1[[System.Int32, {Mscorlib}]], {Mscorlib}]], {Mscorlib}]]");
-        name.AssemblyName!.FullName.Should().Be(Mscorlib);
+        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Nullable`1[[System.Int32, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}]]");
+        name.AssemblyName!.FullName.Should().Be(Assemblies.Mscorlib);
 
         name = typeof(List<Dictionary<int, string?>>).ToTypeName();
-        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.Int32, {Mscorlib}],[System.String, {Mscorlib}]], {Mscorlib}]]");
-        name.AssemblyName!.FullName.Should().Be(Mscorlib);
+        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.Int32, {Assemblies.Mscorlib}],[System.String, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}]]");
+        name.AssemblyName!.FullName.Should().Be(Assemblies.Mscorlib);
     }
 
     [TypeForwardedFrom("Abc")]

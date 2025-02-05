@@ -18,7 +18,7 @@ using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.PropertyGridDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.PropertyGridDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionPropertyGrid))]
 public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IPropertyNotifySink.Interface
 {

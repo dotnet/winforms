@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Image))]
 [DefaultBindingProperty(nameof(Image))]
 [Docking(DockingBehavior.Ask)]
-[Designer($"System.Windows.Forms.Design.PictureBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.PictureBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionPictureBox))]
 public partial class PictureBox : Control, ISupportInitialize
 {

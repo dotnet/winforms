@@ -36,7 +36,7 @@ public class HelpProvider : Component, IExtenderProvider
     /// </summary>
     [Localizable(true)]
     [DefaultValue(null)]
-    [Editor($"System.Windows.Forms.Design.HelpNamespaceEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.HelpNamespaceEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.HelpProviderHelpNamespaceDescr))]
     public virtual string? HelpNamespace { get; set; }
 

@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
-[Editor($"System.Windows.Forms.Design.DataGridColumnCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+[Editor($"System.Windows.Forms.Design.DataGridColumnCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
 [ListBindable(false)]
 public class GridColumnStylesCollection : BaseCollection, IList
 {

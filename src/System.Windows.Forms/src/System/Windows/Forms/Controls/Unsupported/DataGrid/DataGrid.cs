@@ -22,7 +22,7 @@ namespace System.Windows.Forms;
 [Browsable(false)]
 [ComVisible(true)]
 [ClassInterface(ClassInterfaceType.AutoDispatch)]
-[Designer($"System.Windows.Forms.Design.DataGridDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.DataGridDesigner, {Assemblies.SystemDesign}")]
 [DefaultProperty(nameof(DataSource))]
 [DefaultEvent(nameof(Navigate))]
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
@@ -175,7 +175,7 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
     }
 
     [DefaultValue(null)]
-    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public string DataMember
     {
         get => throw null;

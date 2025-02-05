@@ -8,7 +8,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.ToolStripDropDownDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolStripDropDownDesigner, {Assemblies.SystemDesign}")]
 public partial class ToolStripDropDownMenu : ToolStripDropDown
 {
     private Size _maxItemSize = Size.Empty;

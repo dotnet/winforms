@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Value))]
 [DefaultEvent(nameof(Scroll))]
 [DefaultBindingProperty(nameof(Value))]
-[Designer($"System.Windows.Forms.Design.TrackBarDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TrackBarDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionTrackBar))]
 public partial class TrackBar : Control, ISupportInitialize
 {

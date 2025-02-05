@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents a Windows control to display a list of items.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.ListBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ListBoxDesigner, {Assemblies.SystemDesign}")]
 [DefaultEvent(nameof(SelectedIndexChanged))]
 [DefaultProperty(nameof(Items))]
 [DefaultBindingProperty(nameof(SelectedValue))]
@@ -618,7 +618,7 @@ public partial class ListBox : ListControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ListBoxItemsDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MergableProperty(false)]
     public ObjectCollection Items
     {

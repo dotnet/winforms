@@ -16,8 +16,8 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Checked))]
 [DefaultEvent(nameof(CheckedChanged))]
 [DefaultBindingProperty(nameof(Checked))]
-[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
-[Designer($"System.Windows.Forms.Design.RadioButtonDesigner, {AssemblyRef.SystemDesign}")]
+[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{Assemblies.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.RadioButtonDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionRadioButton))]
 public partial class RadioButton : ButtonBase
 {

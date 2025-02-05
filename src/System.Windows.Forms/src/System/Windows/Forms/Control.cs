@@ -31,10 +31,10 @@ namespace System.Windows.Forms;
 /// </remarks>
 [DefaultProperty(nameof(Text))]
 [DefaultEvent(nameof(Click))]
-[Designer($"System.Windows.Forms.Design.ControlDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ControlDesigner, {Assemblies.SystemDesign}")]
 [DesignerSerializer(
-    $"System.Windows.Forms.Design.ControlCodeDomSerializer, {AssemblyRef.SystemDesign}",
-    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+    $"System.Windows.Forms.Design.ControlCodeDomSerializer, {Assemblies.SystemDesign}",
+    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
 [ToolboxItemFilter("System.Windows.Forms")]
 public unsafe partial class Control :
     Component,

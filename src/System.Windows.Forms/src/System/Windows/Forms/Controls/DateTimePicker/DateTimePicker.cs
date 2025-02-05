@@ -18,7 +18,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Value))]
 [DefaultEvent(nameof(ValueChanged))]
 [DefaultBindingProperty(nameof(Value))]
-[Designer($"System.Windows.Forms.Design.DateTimePickerDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.DateTimePickerDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionDateTimePicker))]
 public partial class DateTimePicker : Control
 {

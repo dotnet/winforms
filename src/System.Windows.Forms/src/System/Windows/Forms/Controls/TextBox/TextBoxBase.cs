@@ -20,7 +20,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultEvent(nameof(TextChanged))]
 [DefaultBindingProperty(nameof(Text))]
-[Designer($"System.Windows.Forms.Design.TextBoxBaseDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TextBoxBaseDesigner, {Assemblies.SystemDesign}")]
 public abstract partial class TextBoxBase : Control
 {
     // The boolean properties for this control are contained in the textBoxFlags bit
@@ -563,7 +563,7 @@ public abstract partial class TextBoxBase : Control
     [Localizable(true)]
     [AllowNull]
     [SRDescription(nameof(SR.TextBoxLinesDescr))]
-    [Editor($"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.StringArrayEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public string[] Lines
     {
         get
@@ -1058,7 +1058,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     [Localizable(true)]
     [AllowNull]
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public override string Text
     {
         get => base.Text;

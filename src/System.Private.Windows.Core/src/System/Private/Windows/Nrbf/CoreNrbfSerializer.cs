@@ -16,84 +16,6 @@ internal class CoreNrbfSerializer : INrbfSerializer
 {
     private static Dictionary<TypeName, Type>? s_knownTypes;
 
-    // These types are read from and written to serialized stream manually, accessing record field by field.
-    // Thus they are re-hydrated with no formatters and are safe. The default resolver should recognize them
-    // to resolve primitive types or fields of the specified type T.
-    private static readonly Type[] s_intrinsicTypes =
-    [
-        // Primitive types.
-        typeof(byte),
-        typeof(sbyte),
-        typeof(short),
-        typeof(ushort),
-        typeof(int),
-        typeof(uint),
-        typeof(long),
-        typeof(ulong),
-        typeof(double),
-        typeof(float),
-        typeof(char),
-        typeof(bool),
-        typeof(string),
-        typeof(decimal),
-        typeof(DateTime),
-        typeof(TimeSpan),
-        typeof(IntPtr),
-        typeof(UIntPtr),
-        // Special type we use to report that binary formatting is disabled.
-        typeof(NotSupportedException),
-
-        // Lists of primitive types
-        typeof(List<byte>),
-        typeof(List<sbyte>),
-        typeof(List<short>),
-        typeof(List<ushort>),
-        typeof(List<int>),
-        typeof(List<uint>),
-        typeof(List<long>),
-        typeof(List<ulong>),
-        typeof(List<float>),
-        typeof(List<double>),
-        typeof(List<char>),
-        typeof(List<bool>),
-        typeof(List<string>),
-        typeof(List<decimal>),
-        typeof(List<DateTime>),
-        typeof(List<TimeSpan>),
-
-        // Arrays of primitive types.
-        typeof(byte[]),
-        typeof(sbyte[]),
-        typeof(short[]),
-        typeof(ushort[]),
-        typeof(int[]),
-        typeof(uint[]),
-        typeof(long[]),
-        typeof(ulong[]),
-        typeof(float[]),
-        typeof(double[]),
-        typeof(char[]),
-        typeof(bool[]),
-        typeof(string[]),
-        typeof(decimal[]),
-        typeof(DateTime[]),
-        typeof(TimeSpan[]),
-
-        // Exchange types, they are serialized with the .NET Framework assembly name.
-        // In .NET they are located in System.Drawing.Primitives.
-        typeof(RectangleF),
-        typeof(PointF),
-        typeof(SizeF),
-        typeof(Rectangle),
-        typeof(Point),
-        typeof(Size),
-        typeof(Color),
-
-        // Hashtable and ArrayList are supported if they contain primitives and no custom comparers.
-        typeof(Hashtable),
-        typeof(ArrayList)
-    ];
-
     public static bool TryWriteObject(Stream stream, object value) =>
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value)
         || BinaryFormatWriter.TryWriteJsonData(stream, value)
@@ -106,15 +28,72 @@ internal class CoreNrbfSerializer : INrbfSerializer
 
     public static bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
     {
-        if (s_knownTypes is null)
+        s_knownTypes ??= new(60, TypeNameComparer.Default)
         {
-            s_knownTypes = new(s_intrinsicTypes.Length, TypeNameComparer.Default);
-            foreach (Type intrinsic in s_intrinsicTypes)
-            {
-                s_knownTypes.Add(intrinsic.ToTypeName(), intrinsic);
-            }
-        }
+            // Types are bound to their .NET Framework identities to facilitate interoperability
+            { Types.ToTypeName($"{Types.ByteType}, {Assemblies.Mscorlib}"), typeof(byte) },
+            { Types.ToTypeName($"{Types.SByteType}, {Assemblies.Mscorlib}"), typeof(sbyte) },
+            { Types.ToTypeName($"{Types.Int16Type}, {Assemblies.Mscorlib}"), typeof(short) },
+            { Types.ToTypeName($"{Types.UInt16Type}, {Assemblies.Mscorlib}"), typeof(ushort) },
+            { Types.ToTypeName($"{Types.Int32Type}, {Assemblies.Mscorlib}"), typeof(int) },
+            { Types.ToTypeName($"{Types.UInt32Type}, {Assemblies.Mscorlib}"), typeof(uint) },
+            { Types.ToTypeName($"{Types.Int64Type}, {Assemblies.Mscorlib}"), typeof(long) },
+            { Types.ToTypeName($"{Types.UInt64Type}, {Assemblies.Mscorlib}"), typeof(ulong) },
+            { Types.ToTypeName($"{Types.DoubleType}, {Assemblies.Mscorlib}"), typeof(double) },
+            { Types.ToTypeName($"{Types.SingleType}, {Assemblies.Mscorlib}"), typeof(float) },
+            { Types.ToTypeName($"{Types.CharType}, {Assemblies.Mscorlib}"), typeof(char) },
+            { Types.ToTypeName($"{Types.BooleanType}, {Assemblies.Mscorlib}"), typeof(bool) },
+            { Types.ToTypeName($"{Types.StringType}, {Assemblies.Mscorlib}"), typeof(string) },
+            { Types.ToTypeName($"{Types.DecimalType}, {Assemblies.Mscorlib}"), typeof(decimal) },
+            { Types.ToTypeName($"{Types.DateTimeType}, {Assemblies.Mscorlib}"), typeof(DateTime) },
+            { Types.ToTypeName($"{Types.TimeSpanType}, {Assemblies.Mscorlib}"), typeof(TimeSpan) },
+            { Types.ToTypeName($"{Types.IntPtrType}, {Assemblies.Mscorlib}"), typeof(IntPtr) },
+            { Types.ToTypeName($"{Types.UIntPtrType}, {Assemblies.Mscorlib}"), typeof(UIntPtr) },
+            { Types.ToTypeName($"{Types.NotSupportedExceptionType}, {Assemblies.Mscorlib}"), typeof(NotSupportedException) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.BooleanType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<bool>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.CharType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<char>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.StringType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<string>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.SByteType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<sbyte>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.ByteType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<byte>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int16Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<short>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt16Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<ushort>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int32Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<int>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt32Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<uint>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int64Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<long>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt64Type}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<ulong>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.SingleType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<float>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DoubleType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<double>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DecimalType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<decimal>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DateTimeType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<DateTime>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.TimeSpanType}, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), typeof(List<TimeSpan>) },
+            { Types.ToTypeName($"{Types.ByteType}[], {Assemblies.Mscorlib}"), typeof(byte[]) },
+            { Types.ToTypeName($"{Types.SByteType}[], {Assemblies.Mscorlib}"), typeof(sbyte[]) },
+            { Types.ToTypeName($"{Types.Int16Type}[], {Assemblies.Mscorlib}"), typeof(short[]) },
+            { Types.ToTypeName($"{Types.UInt16Type}[], {Assemblies.Mscorlib}"), typeof(ushort[]) },
+            { Types.ToTypeName($"{Types.Int32Type}[], {Assemblies.Mscorlib}"), typeof(int[]) },
+            { Types.ToTypeName($"{Types.UInt32Type}[], {Assemblies.Mscorlib}"), typeof(uint[]) },
+            { Types.ToTypeName($"{Types.Int64Type}[], {Assemblies.Mscorlib}"), typeof(long[]) },
+            { Types.ToTypeName($"{Types.UInt64Type}[], {Assemblies.Mscorlib}"), typeof(ulong[]) },
+            { Types.ToTypeName($"{Types.SingleType}[], {Assemblies.Mscorlib}"), typeof(float[]) },
+            { Types.ToTypeName($"{Types.DoubleType}[], {Assemblies.Mscorlib}"), typeof(double[]) },
+            { Types.ToTypeName($"{Types.CharType}[], {Assemblies.Mscorlib}"), typeof(char[]) },
+            { Types.ToTypeName($"{Types.BooleanType}[], {Assemblies.Mscorlib}"), typeof(bool[]) },
+            { Types.ToTypeName($"{Types.StringType}[], {Assemblies.Mscorlib}"), typeof(string[]) },
+            { Types.ToTypeName($"{Types.DecimalType}[], {Assemblies.Mscorlib}"), typeof(decimal[]) },
+            { Types.ToTypeName($"{Types.DateTimeType}[], {Assemblies.Mscorlib}"), typeof(DateTime[]) },
+            { Types.ToTypeName($"{Types.TimeSpanType}[], {Assemblies.Mscorlib}"), typeof(TimeSpan[]) },
+            { Types.ToTypeName($"{Types.RectangleFType}, {Assemblies.SystemDrawing}"), typeof(RectangleF) },
+            { Types.ToTypeName($"{Types.PointFType}, {Assemblies.SystemDrawing}"), typeof(PointF) },
+            { Types.ToTypeName($"{Types.SizeFType}, {Assemblies.SystemDrawing}"), typeof(SizeF) },
+            { Types.ToTypeName($"{Types.RectangleType}, {Assemblies.SystemDrawing}"), typeof(Rectangle) },
+            { Types.ToTypeName($"{Types.PointType}, {Assemblies.SystemDrawing}"), typeof(Point) },
+            { Types.ToTypeName($"{Types.SizeType}, {Assemblies.SystemDrawing}"), typeof(Size) },
+            { Types.ToTypeName($"{Types.ColorType}, {Assemblies.SystemDrawing}"), typeof(Color) },
+            { Types.ToTypeName($"{Types.HashtableType}, {Assemblies.Mscorlib}"), typeof(Hashtable) },
+            { Types.ToTypeName($"{Types.ArrayListType}, {Assemblies.Mscorlib}"), typeof(ArrayList) }
+        };
 
+        Debug.Assert(s_knownTypes.Count == 60);
         return s_knownTypes.TryGetValue(typeName, out type);
     }
 

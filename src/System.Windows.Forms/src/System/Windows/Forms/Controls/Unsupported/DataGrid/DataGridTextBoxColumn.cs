@@ -35,7 +35,7 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
     public virtual TextBox TextBox => throw null;
 
     [DefaultValue(null)]
-    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public string Format
     {
         get => throw null;

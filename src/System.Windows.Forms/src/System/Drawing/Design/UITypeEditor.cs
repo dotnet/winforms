@@ -33,30 +33,30 @@ public class UITypeEditor
         }
 
         // Our set of intrinsic editors.
-        Hashtable intrinsicEditors = new Hashtable
+        var intrinsicEditors = new Hashtable
         {
             // System.ComponentModel type Editors
-            [typeof(DateTime)] = $"System.ComponentModel.Design.DateTimeEditor, {AssemblyRef.SystemDesign}",
-            [typeof(Array)] = $"System.ComponentModel.Design.ArrayEditor, {AssemblyRef.SystemDesign}",
-            [typeof(IList)] = $"System.ComponentModel.Design.CollectionEditor, {AssemblyRef.SystemDesign}",
-            [typeof(ICollection)] = $"System.ComponentModel.Design.CollectionEditor, {AssemblyRef.SystemDesign}",
-            [typeof(byte[])] = $"System.ComponentModel.Design.BinaryEditor, {AssemblyRef.SystemDesign}",
-            [typeof(Stream)] = $"System.ComponentModel.Design.BinaryEditor, {AssemblyRef.SystemDesign}",
+            [typeof(DateTime)] = $"System.ComponentModel.Design.DateTimeEditor, {Assemblies.SystemDesign}",
+            [typeof(Array)] = $"System.ComponentModel.Design.ArrayEditor, {Assemblies.SystemDesign}",
+            [typeof(IList)] = $"System.ComponentModel.Design.CollectionEditor, {Assemblies.SystemDesign}",
+            [typeof(ICollection)] = $"System.ComponentModel.Design.CollectionEditor, {Assemblies.SystemDesign}",
+            [typeof(byte[])] = $"System.ComponentModel.Design.BinaryEditor, {Assemblies.SystemDesign}",
+            [typeof(Stream)] = $"System.ComponentModel.Design.BinaryEditor, {Assemblies.SystemDesign}",
 
             // System.Windows.Forms type Editors
-            [typeof(string[])] = $"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}",
-            [typeof(Collection<string>)] = $"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}",
-            [typeof(StringCollection)] = $"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}",
+            [typeof(string[])] = $"System.Windows.Forms.Design.StringArrayEditor, {Assemblies.SystemDesign}",
+            [typeof(Collection<string>)] = $"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}",
+            [typeof(StringCollection)] = $"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}",
 
             // System.Drawing.Design type Editors
-            [typeof(Bitmap)] = $"System.Drawing.Design.BitmapEditor, {AssemblyRef.SystemDrawingDesign}",
-            [typeof(Color)] = $"System.Drawing.Design.ColorEditor, {AssemblyRef.SystemDrawingDesign}",
-            [typeof(ContentAlignment)] = $"System.Drawing.Design.ContentAlignmentEditor, {AssemblyRef.SystemDrawingDesign}",
-            [typeof(Font)] = $"System.Drawing.Design.FontEditor, {AssemblyRef.SystemDrawingDesign}",
+            [typeof(Bitmap)] = $"System.Drawing.Design.BitmapEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Color)] = $"System.Drawing.Design.ColorEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(ContentAlignment)] = $"System.Drawing.Design.ContentAlignmentEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Font)] = $"System.Drawing.Design.FontEditor, {(Assemblies.SystemDrawingDesign)}",
             // No way to add Font.Name and associate it with FontNameEditor.
-            [typeof(Icon)] = $"System.Drawing.Design.IconEditor, {AssemblyRef.SystemDrawingDesign}",
-            [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {AssemblyRef.SystemDrawingDesign}",
-            [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {AssemblyRef.SystemDrawingDesign}",
+            [typeof(Icon)] = $"System.Drawing.Design.IconEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {(Assemblies.SystemDrawingDesign)}",
         };
 
         // Add our intrinsic editors to TypeDescriptor.

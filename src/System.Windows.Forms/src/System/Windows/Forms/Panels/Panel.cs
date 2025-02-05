@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(BorderStyle))]
 [DefaultEvent(nameof(Paint))]
 [Docking(DockingBehavior.Ask)]
-[Designer($"System.Windows.Forms.Design.PanelDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.PanelDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionPanel))]
 public partial class Panel : ScrollableControl
 {
