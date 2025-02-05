@@ -12,7 +12,7 @@ using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ProjectFileReaderTests
+public class ProjectFileReaderTests
 {
     public static readonly char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
     private static readonly dynamic s_static = typeof(ProjectFileReader).TestAccessor().Dynamic;
