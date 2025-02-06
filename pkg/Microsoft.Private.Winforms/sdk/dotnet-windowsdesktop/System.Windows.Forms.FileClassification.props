@@ -19,7 +19,7 @@
     <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
   </ItemGroup>
-        
+
   <!-- File classifications that should only be included for the ref pack. -->
   <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll" Profile="WindowsForms" />

@@ -14,7 +14,7 @@
     <PackageVersion Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageVersion Include="System.ComponentModel.TypeConverter.TestData" Version="$(SystemComponentModelTypeConverterTestDataVersion)" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
-    <PackageVersion Include="System.Data.SqlClient" Version="5.0.0-alpha.1.19618.1" />
+    <PackageVersion Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageVersion Include="System.Drawing.Common.TestData" Version="$(SystemDrawingCommonTestDataVersion)" />
     <PackageVersion Include="System.Formats.Asn1" Version="$(SystemFormatsAsn1PackageVersion)" />
     <PackageVersion Include="System.Formats.Nrbf" Version="$(SystemFormatsNrbfPackageVersion)" />
