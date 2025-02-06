@@ -1,11 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable enable
-
-using System.Reflection.Metadata;
-
-namespace System.Windows.Forms.Tests;
+namespace System.Reflection.Metadata.Tests;
 
 public class TypeNameComparerTests
 {
@@ -27,7 +23,7 @@ public class TypeNameComparerTests
     [MemberData(nameof(TypeNameComparerSuccess))]
     public void DictionaryLookupSucceeds(TypeName name, Type expected)
     {
-        Dictionary<TypeName, Type> types = new(TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(TypeNameComparer.FullyQualifiedMatch)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -52,7 +48,7 @@ public class TypeNameComparerTests
     [MemberData(nameof(TypeNameComparerFail))]
     public void DictionaryLookupVersionMismatch(TypeName name)
     {
-        Dictionary<TypeName, Type> types = new(TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(TypeNameComparer.FullyQualifiedMatch)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -66,7 +62,7 @@ public class TypeNameComparerTests
     [Fact]
     public void DictionaryLookupFails()
     {
-        Dictionary<TypeName, Type> types = new(TypeNameComparer.Default)
+        Dictionary<TypeName, Type> types = new(TypeNameComparer.FullyQualifiedMatch)
         {
             { TypeName.Parse(typeof(int).AssemblyQualifiedName), typeof(int) },
             { TypeName.Parse(typeof(int[]).AssemblyQualifiedName), typeof(int[]) },
@@ -84,7 +80,7 @@ public class TypeNameComparerTests
     [Fact]
     public void TypeNameComparer_Null()
     {
-        var comparer = TypeNameComparer.Default;
+        var comparer = TypeNameComparer.FullyQualifiedMatch;
 
         comparer.Equals(null, null).Should().BeTrue();
         comparer.Equals(null, TypeName.Parse(typeof(int).AssemblyQualifiedName)).Should().BeFalse();
@@ -97,7 +93,7 @@ public class TypeNameComparerTests
     [Fact]
     public void TypeNameComparer_GetHashCode()
     {
-        var comparer = TypeNameComparer.Default;
+        var comparer = TypeNameComparer.FullyQualifiedMatch;
 
         int hash = comparer.GetHashCode(TypeName.Parse(typeof(int).AssemblyQualifiedName));
         comparer.GetHashCode(TypeName.Parse(typeof(int).AssemblyQualifiedName)).Should().Be(hash);

@@ -3,7 +3,7 @@
 
 namespace System.Private.Windows.Ole;
 
-internal readonly ref struct ClipboardBinaryFormatterFullCompatScope : IDisposable
+public readonly ref struct ClipboardBinaryFormatterFullCompatScope : IDisposable
 {
     private readonly BinaryFormatterScope _binaryFormatterScope;
     private readonly BinaryFormatterInClipboardDragDropScope _binaryFormatterInClipboardDragDropScope;

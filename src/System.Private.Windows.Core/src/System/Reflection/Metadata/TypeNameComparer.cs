@@ -4,16 +4,30 @@
 namespace System.Reflection.Metadata;
 
 /// <summary>
-///  Match <see cref="TypeName"/>s by matching full namespace-qualified type names and full assembly names,
-///  including the version.
+///  Compares <see cref="TypeName"/>s.
 /// </summary>
 internal sealed class TypeNameComparer : IEqualityComparer<TypeName>
 {
-    private TypeNameComparer()
-    {
-    }
+    private readonly TypeNameComparison _comparison;
 
-    internal static IEqualityComparer<TypeName> Default { get; } = new TypeNameComparer();
+    private TypeNameComparer(TypeNameComparison comparison) => _comparison = comparison;
+
+    /// <summary>
+    ///  Creates a comparer that does a fully qualified type name match.
+    /// </summary>
+    internal static TypeNameComparer FullyQualifiedMatch { get; } = new(TypeNameComparison.All);
+
+    /// <summary>
+    ///  Creates a comparer that does a full type name match. Ignores the assembly.
+    /// </summary>
+    internal static TypeNameComparer FullNameMatch { get; } = new(TypeNameComparison.TypeFullName);
+
+    /// <summary>
+    ///  Creates a comparer that does a full type name and assembly name match.
+    ///  Ignores assembly version, culture, and public key token.
+    /// </summary>
+    internal static TypeNameComparer FullNameAndAssemblyNameMatch { get; } =
+        new(TypeNameComparison.TypeFullName | TypeNameComparison.AssemblyName);
 
     public bool Equals(TypeName? x, TypeName? y)
     {
@@ -27,7 +41,7 @@ internal sealed class TypeNameComparer : IEqualityComparer<TypeName>
             return false;
         }
 
-        return x.Matches(y);
+        return x.Matches(y, _comparison);
     }
 
     public int GetHashCode(TypeName obj)
@@ -57,19 +71,24 @@ internal sealed class TypeNameComparer : IEqualityComparer<TypeName>
         hashCode = obj.FullName.GetHashCode();
         if (obj.AssemblyName is AssemblyNameInfo info)
         {
-            hashCode ^= info.Name.GetHashCode();
-            if (info.Version is not null)
+            if (_comparison.HasFlag(TypeNameComparison.AssemblyName))
+            {
+                hashCode ^= info.Name.GetHashCode();
+            }
+
+            if (_comparison.HasFlag(TypeNameComparison.AssemblyVersion) && info.Version is not null)
             {
                 hashCode ^= info.Version.GetHashCode();
             }
 
-            if (info.CultureName is not null)
+            if (_comparison.HasFlag(TypeNameComparison.AssemblyCultureName) && info.CultureName is not null)
             {
                 hashCode ^= info.CultureName.GetHashCode();
             }
 
-            if (!info.PublicKeyOrToken.IsDefaultOrEmpty)
+            if (_comparison.HasFlag(TypeNameComparison.AssemblyPublicKeyToken) && !info.PublicKeyOrToken.IsDefaultOrEmpty)
             {
+                // The hash code for ImmutableArray<byte> is the instance, not the contents.
                 foreach (byte b in info.PublicKeyOrToken)
                 {
                     hashCode ^= b.GetHashCode();
