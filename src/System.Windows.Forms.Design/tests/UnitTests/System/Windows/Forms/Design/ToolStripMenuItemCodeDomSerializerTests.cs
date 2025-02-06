@@ -9,7 +9,7 @@ using System.ComponentModel.Design.Serialization;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ToolStripMenuItemCodeDomSerializerTests : IDisposable
+public class ToolStripMenuItemCodeDomSerializerTests
 {
     private readonly Mock<IDesignerSerializationManager> _mockManager;
     private readonly Mock<CodeDomSerializer> _mockBaseSerializer;
@@ -26,17 +26,11 @@ public class ToolStripMenuItemCodeDomSerializerTests : IDisposable
         _serializer = new();
     }
 
-    public void Dispose()
-    {
-        _mockManager.Reset();
-        _mockBaseSerializer.Reset();
-    }
-
     [Fact]
     public void Deserialize_CallsBaseSerializer()
     {
         object codeObject = new();
-        var result = _serializer.Deserialize(_mockManager.Object, codeObject);
+        object? result = _serializer.Deserialize(_mockManager.Object, codeObject);
 
         _mockBaseSerializer.Verify(s => s.Deserialize(_mockManager.Object, codeObject), Times.Once);
     }
@@ -52,7 +46,7 @@ public class ToolStripMenuItemCodeDomSerializerTests : IDisposable
         mockParent.Setup(p => p.Site).Returns((ISite?)null);
         dummyItem.TestAccessor().Dynamic.Parent = mockParent.Object;
 
-        var result = _serializer.Serialize(_mockManager.Object, dummyItem);
+        object? result = _serializer.Serialize(_mockManager.Object, dummyItem);
 
         result.Should().BeNull();
     }
@@ -76,7 +70,7 @@ public class ToolStripMenuItemCodeDomSerializerTests : IDisposable
         _mockBaseSerializer.Setup(s => s.Serialize(_mockManager.Object, nonDummyItem))
                            .Returns(new object());
 
-        var result = _serializer.Serialize(_mockManager.Object, nonDummyItem);
+        object? result = _serializer.Serialize(_mockManager.Object, nonDummyItem);
 
         result.Should().NotBeNull();
         _mockBaseSerializer.Verify(s => s.Serialize(_mockManager.Object, nonDummyItem), Times.Once);
