@@ -69,17 +69,17 @@
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerDescription">
         <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
-        <target state="new">Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</target>
+        <target state="translated">類型應實作 『ITypedDataObject』，以支援與數據互動的最佳做法。如果類型只實作 『IDataObject』，則無法在剪貼簿和其他數據交換案例中搭配類型化的 API 使用。</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerMessageFormat">
         <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
-        <target state="new">Type `{0}` does not implement `ITypedDataObject` interface</target>
+        <target state="translated">類型 '{0}' 未實作 'ITypedDataObject' 介面</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerTitle">
         <source>`IDataObject` type does not implement `ITypedDataObject`</source>
-        <target state="new">`IDataObject` type does not implement `ITypedDataObject`</target>
+        <target state="translated">'IDataObject' 類型未實作 'ITypedDataObject'</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">

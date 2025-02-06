@@ -19,17 +19,17 @@
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerDescription">
         <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
-        <target state="new">Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</target>
+        <target state="translated">형식은 데이터와 상호 작용할 때 모범 사례를 지원하도록 'ITypedDataObject'를 구현해야 합니다. 형식은 'IDataObject'만 구현하는 경우 클립보드 및 기타 데이터 교환 시나리오에서 형식화된 API와 작동하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerMessageFormat">
         <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
-        <target state="new">Type `{0}` does not implement `ITypedDataObject` interface</target>
+        <target state="translated">'{0}' 형식은 'ITypedDataObject' 인터페이스를 구현하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1001AnalyzerTitle">
         <source>`IDataObject` type does not implement `ITypedDataObject`</source>
-        <target state="new">`IDataObject` type does not implement `ITypedDataObject`</target>
+        <target state="translated">'IDataObject' 형식이 'ITypedDataObject'를 구현하지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">
