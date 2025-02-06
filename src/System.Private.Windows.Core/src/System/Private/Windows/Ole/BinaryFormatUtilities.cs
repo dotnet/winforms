@@ -105,12 +105,15 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
                 return true;
             }
 
-            // Look for and deserialize a JSON object.
-            binder = new(typeof(T), in request);
-            var (isJsonData, isValidType) = record.TryGetObjectFromJson(binder, out @object);
-            if (isJsonData)
+            if (type is null)
             {
-                return isValidType;
+                // Serializer didn't recognize the type, look for and deserialize a JSON object.
+                binder = new(typeof(T), in request);
+                var (isJsonData, isValidType) = record.TryGetObjectFromJson(binder, out @object);
+                if (isJsonData)
+                {
+                    return isValidType;
+                }
             }
 
             // JSON type info is nested, so this has to come after the JSON attempt.
