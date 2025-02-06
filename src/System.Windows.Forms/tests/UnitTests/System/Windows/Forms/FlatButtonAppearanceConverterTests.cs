@@ -4,7 +4,7 @@
 #nullable enable
 
 using System.ComponentModel;
-using System.Globalization;
+using Moq;
 
 namespace System.Windows.Forms.Tests;
 
@@ -15,8 +15,8 @@ public class FlatButtonAppearanceConverterTests
     [Fact]
     public void ConvertTo_NullContextOrCulture_ReturnsEmptyString()
     {
-        var resultWithNullContext = ConvertToHelper(context: null, culture: null, value: null, destinationType: typeof(string));
-        var resultWithNullCulture = ConvertToHelper(context: null, culture: null, value: null, destinationType: typeof(string));
+        string resultWithNullContext = (string)_converter.ConvertTo(context: null, culture: null, value: null, destinationType: typeof(string));
+        string resultWithNullCulture = (string)_converter.ConvertTo(context: null, culture: null, value: null, destinationType: typeof(string));
 
         resultWithNullContext.Should().Be("");
         resultWithNullCulture.Should().Be("");
@@ -25,15 +25,43 @@ public class FlatButtonAppearanceConverterTests
     [Fact]
     public void ConvertTo_InvalidDestinationType_ThrowsException()
     {
-        Action action1 = () => ConvertToHelper(context: null, culture: null, value: null, destinationType: null!);
-        Action action2 = () => ConvertToHelper(context: null, culture: null, value: null, destinationType: typeof(int));
+        Action action1 = () => _converter.ConvertTo(context: null, culture: null, value: null, destinationType: null!);
+        Action action2 = () => _converter.ConvertTo(context: null, culture: null, value: null, destinationType: typeof(int));
 
         action1.Should().Throw<ArgumentNullException>();
         action2.Should().Throw<NotSupportedException>();
     }
 
-    private object ConvertToHelper(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    [Fact]
+    public void GetsProperties_WithNullValues()
     {
-        return _converter.ConvertTo(context: context, culture: culture, value: value, destinationType: destinationType);
+        using Button button = new();
+
+        Action action = () => _converter.GetProperties(context: null, value: button, attributes: null);
+
+        action.Should().NotThrow();
+    }
+
+    [Fact]
+    public void GetProperties_ContextNull_ReturnsProperties()
+    {
+        using Button button = new();
+        var attributes = new Attribute[] { new BrowsableAttribute(true) };
+
+        PropertyDescriptorCollection properties = _converter.GetProperties(context: null, button, attributes);
+
+        properties.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void GetProperties_AttributesNull_ReturnsProperties()
+    {
+        using Button button = new();
+        Mock<ITypeDescriptorContext> contextMock = new();
+        contextMock.Setup(c => c.Instance).Returns(button);
+
+        PropertyDescriptorCollection properties = _converter.GetProperties(contextMock.Object, button, attributes: null);
+
+        properties.Should().NotBeNull();
     }
 }
