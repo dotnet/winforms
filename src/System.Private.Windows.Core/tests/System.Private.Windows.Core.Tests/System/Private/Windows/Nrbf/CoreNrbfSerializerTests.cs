@@ -49,19 +49,13 @@ public class CoreNrbfSerializerTests
 #pragma warning restore SYSLIB0011
         }
 
-        bool result = CoreNrbfSerializer.TryWriteObject(stream, input);
-        result.Should().Be(expectedResult);
-
-        if (!expectedResult)
-        {
-            stream.Position.Should().Be(0);
-            return;
-        }
-
         stream.Position = 0;
-        SerializationRecord record = NrbfDecoder.Decode(stream);
-        CoreNrbfSerializer.TryGetObject(record, out object? value).Should().BeTrue();
-        value.Should().Be(input);
+        SerializationRecord record = NrbfDecoder.Decode(stream, leaveOpen: true);
+        CoreNrbfSerializer.TryGetObject(record, out object? value).Should().Be(expectedResult);
+        if (expectedResult)
+        {
+            value.Should().Be(input);
+        }
     }
 
     public static TheoryData<string, bool, Type?> TryBindToTypeData => new()
