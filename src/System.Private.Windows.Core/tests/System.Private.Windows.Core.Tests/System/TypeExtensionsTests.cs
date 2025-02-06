@@ -1,13 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable enable
-
-using System.Drawing;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Tests;
 
 public class TypeExtensionsTests
 {
@@ -19,30 +16,25 @@ public class TypeExtensionsTests
         { typeof(int?), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), true },
         { typeof(int?[]), TypeName.Parse($"System.Nullable`1[[System.Int32, {Assemblies.Mscorlib}]][], {Assemblies.Mscorlib}"), true},
         { typeof(DayOfWeek), TypeName.Parse($"System.Nullable`1[[System.DayOfWeek, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), false },
-        { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
         // Assembly version is incorrect.
-        { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
+        { typeof(int), TypeName.Parse("System.Int32, System.Private.CoreLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"), false },
         // Public key token is incorrect.
-        { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f1AAAAAAA"), false },
+        { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace("7cec85d7bea7798e", "7cec00000ea7798e")), false },
         // Culture is incorrect.
-        { typeof(Bitmap), TypeName.Parse("System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a"), false },
+        { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace("neutral", "en-US")), false },
         // Namespace name is incorrect.
-        { typeof(Bitmap), TypeName.Parse("System.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), false },
-        { typeof(Bitmap), TypeName.Parse("System.Drawing.MyBitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), false },
-        { typeof(Bitmap?[]), TypeName.Parse("System.Drawing.Bitmap[], System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), true },
-        { typeof(Dictionary<string, Bitmap>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), true },
-        { typeof(Dictionary<string, Bitmap?>), TypeName.Parse($"System.Collections.Generic.Dictionary`2[[System.String, {Assemblies.Mscorlib}],[System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], {Assemblies.Mscorlib}"), true },
-        { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests.NonForwardedType"), false },
+        { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace("System.Int32", "Int32")), false },
+        { typeof(NonForwardedType), TypeName.Parse("System.Tests.TypeExtensionsTests.NonForwardedType"), false },
         // Namespace name is cased differently.
         { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionstests+NonForwardedType"), false },
         // Assembly information is missing.
-        { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests+NonForwardedType"), false },
-        { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests+NonForwardedType, System.Windows.Forms.Tests"), false },
+        { typeof(NonForwardedType), TypeName.Parse("System.Tests.TypeExtensionsTests+NonForwardedType"), false },
+        { typeof(NonForwardedType), TypeName.Parse("System.Tests.TypeExtensionsTests+NonForwardedType, System.Private.Windows.Core.Tests"), false },
         // Assembly name is cased differently.
-        { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests+NonForwardedType, System.windows.Forms.Tests, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"), true },
+        { typeof(NonForwardedType), TypeName.Parse("System.Tests.TypeExtensionsTests+NonForwardedType, System.private.Windows.Core.Tests, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"), true },
         // Namespace name is incorrect.
         { typeof(NonForwardedType), TypeName.Parse("System.Windows.Forms.Tests.typeExtensionsTests+NonForwardedType, System.Windows.Forms.Tests"), false },
-        { typeof(ForwardedType), TypeName.Parse("System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType, Abc"), true },
+        { typeof(ForwardedType), TypeName.Parse($"{typeof(ForwardedType).FullName}, Abc"), true },
     };
 
     [Theory]
@@ -100,19 +92,19 @@ public class TypeExtensionsTests
     public void ForwardedTypeToTypeName()
     {
         TypeName name = typeof(ForwardedType).ToTypeName();
-        name.FullName.Should().Be("System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType");
+        name.FullName.Should().Be("System.Tests.TypeExtensionsTests+ForwardedType");
         name.AssemblyName!.FullName.Should().Be("Abc");
 
         name = typeof(ForwardedType[]).ToTypeName();
-        name.FullName.Should().Be("System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType[]");
+        name.FullName.Should().Be("System.Tests.TypeExtensionsTests+ForwardedType[]");
         name.AssemblyName!.FullName.Should().Be("Abc");
 
         name = typeof(ForwardedType?[]).ToTypeName();
-        name.FullName.Should().Be("System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType[]");
+        name.FullName.Should().Be("System.Tests.TypeExtensionsTests+ForwardedType[]");
         name.AssemblyName!.FullName.Should().Be("Abc");
 
         name = typeof(List<ForwardedType>).ToTypeName();
-        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Windows.Forms.Tests.TypeExtensionsTests+ForwardedType, Abc]]");
+        name.FullName.Should().Be($"System.Collections.Generic.List`1[[System.Tests.TypeExtensionsTests+ForwardedType, Abc]]");
         name.AssemblyName!.FullName.Should().Be(Assemblies.Mscorlib);
 
         name = typeof(List<Dictionary<int, string>>).ToTypeName();

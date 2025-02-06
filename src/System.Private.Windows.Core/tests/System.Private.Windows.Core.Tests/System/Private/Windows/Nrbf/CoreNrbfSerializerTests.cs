@@ -4,6 +4,7 @@
 using System.Formats.Nrbf;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Private.Windows.Nrbf;
 
@@ -18,7 +19,7 @@ public class CoreNrbfSerializerTests
 
     [Theory]
     [MemberData(nameof(TryWriteObjectData))]
-    public void TryWriteObject_ShouldReturnExpectedResult(object input, bool expectedResult)
+    public void TryWriteObject_TryGetObject_RoundTrip(object input, bool expectedResult)
     {
         using MemoryStream stream = new();
         bool result = CoreNrbfSerializer.TryWriteObject(stream, input);
@@ -36,9 +37,39 @@ public class CoreNrbfSerializerTests
         value.Should().Be(input);
     }
 
+    [Theory]
+    [MemberData(nameof(TryWriteObjectData))]
+    public void BinaryFormatterWrite_TryGetObject_RoundTrip(object input, bool expectedResult)
+    {
+        using MemoryStream stream = new();
+        using (BinaryFormatterScope scope = new(enable: true))
+        {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+            new BinaryFormatter().Serialize(stream, input);
+#pragma warning restore SYSLIB0011
+        }
+
+        stream.Position = 0;
+        SerializationRecord record = NrbfDecoder.Decode(stream, leaveOpen: true);
+        CoreNrbfSerializer.TryGetObject(record, out object? value).Should().Be(expectedResult);
+        if (expectedResult)
+        {
+            value.Should().Be(input);
+        }
+    }
+
     public static TheoryData<string, bool, Type?> TryBindToTypeData => new()
     {
         { typeof(int).FullName!, true, typeof(int) },
+        { $"{typeof(int).FullName!}, {typeof(int).Assembly.FullName}", true, typeof(int) },
+        { $"{typeof(int).FullName!}, {Assemblies.Mscorlib}", true, typeof(int) },
+        { typeof(int[]).FullName!, true, typeof(int[]) },
+        { $"{typeof(int[]).FullName!}, {typeof(int[]).Assembly.FullName}", true, typeof(int[]) },
+        { $"{typeof(int[]).FullName!}, {Assemblies.Mscorlib}", true, typeof(int[]) },
+        { typeof(List<int>).FullName!, true, typeof(List<int>) },
+        { $"{typeof(List<int>).FullName!}, {typeof(List<int>).Assembly.FullName}", true, typeof(List<int>) },
+        { "Int32", false, null },
+        { "My.Int32", false, null },
         { "Unknown.Type", false, null }
     };
 
