@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 partial class ContainerControls2
 {

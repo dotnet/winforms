@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 partial class Menu_Toolbars_controls
 {
