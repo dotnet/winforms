@@ -1476,6 +1476,12 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="TableLayoutPanelSpanDesc" xml:space="preserve">
     <value>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</value>
   </data>
+  <data name="ToolStripItemCollectionEditorLabelNone" xml:space="preserve">
+    <value>(&amp;None)</value>
+  </data>
+  <data name="ToolStripItemCollectionEditorLabelMultipleItems" xml:space="preserve">
+    <value>(&amp;Multiple Items)</value>
+  </data>
   <data name="ImageListActionList_ChooseImagesDescription" xml:space="preserve">
     <value>Opens the Images collection editor</value>
   </data>

@@ -2332,6 +2332,16 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">DropDown İşleminde ToolStrip MenuItem Ekleme.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">&amp;Öğeleri Düzenle...</target>

@@ -81,6 +81,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TrackBarDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeViewDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.UpDownBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.UserControlDocumentDesigner))]
 

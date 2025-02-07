@@ -2332,6 +2332,16 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">DropDown 事务中的“ToolStrip 菜单项插入”。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">编辑项(&amp;E)...</target>

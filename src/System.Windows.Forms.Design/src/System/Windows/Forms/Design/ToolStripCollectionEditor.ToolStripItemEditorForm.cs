@@ -1,0 +1,1363 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Drawing;
+
+#nullable disable
+
+namespace System.Windows.Forms.Design;
+
+internal partial class ToolStripCollectionEditor
+{
+    protected class ToolStripItemEditorForm : CollectionForm
+    {
+        private readonly ToolStripCollectionEditor _editor;
+        private const int ICON_DIMENSION = 16;
+        private const int SEPARATOR_HEIGHT = 4;
+        private const int TEXT_IMAGE_SPACING = 6;
+        private const int INDENT_SPACING = 4;
+        private const int IMAGE_PADDING = 1;
+
+        private static bool s_isScalingInitialized;
+        private static int s_iconHeight = ICON_DIMENSION;
+        private static int s_iconWidth = ICON_DIMENSION;
+        private static int s_separatorHeight = SEPARATOR_HEIGHT;
+        private static int s_textImageSpacing = TEXT_IMAGE_SPACING;
+        private static int s_indentSpacing = INDENT_SPACING;
+        private static int s_imagePaddingX = IMAGE_PADDING;
+        private static int s_imagePaddingY = IMAGE_PADDING;
+
+        private ToolStripCustomTypeDescriptor _toolStripCustomTypeDescriptor;
+
+        /// <summary>
+        /// The amount of fudgespace we use when GDI+ returns us a string length.
+        /// </summary>
+        private const int GdiPlusFudge = 5;
+
+        /// <summary>
+        /// The collection we're actually editing.
+        /// </summary>
+        private ToolStripItemCollection _targetToolStripCollection;
+
+        /// <summary>
+        /// Our list of items that we're editing.
+        /// </summary>
+        private EditorItemCollection _itemList;
+
+        /// <summary>
+        /// The start index of custom items in the new toolStripDropDownItem type dropdown.
+        /// </summary>
+        private int _customItemIndex = -1;
+
+        /// <summary>
+        /// All our control instance variables.
+        /// </summary>
+        private TableLayoutPanel _tableLayoutPanel;
+        private TableLayoutPanel _addTableLayoutPanel;
+        private TableLayoutPanel _okCancelTableLayoutPanel;
+        private Button _btnCancel;
+        private Button _btnOK;
+        private Button _btnMoveUp;
+        private Button _btnMoveDown;
+        private Label _lblItems;
+        private ImageComboBox _newItemTypes;
+        private Button _btnAddNew;
+        private FilterListBox _listBoxItems;
+        private Label _selectedItemName;
+        private Button _btnRemove;
+        private VsPropertyGrid _selectedItemProps;
+        private Label _lblMembers;
+
+        private IComponentChangeService _componentChangeSvc;
+        private readonly string _originalText;
+
+        /// <summary>
+        /// Create the form and set it up.
+        /// </summary>
+        /// <param name="parent">The collection editor that spawned us.</param>
+        internal ToolStripItemEditorForm(CollectionEditor parent) : base(parent)
+        {
+            if (!s_isScalingInitialized)
+            {
+                if (ScaleHelper.IsScalingRequired)
+                {
+                    s_iconHeight = ICON_DIMENSION;
+                    s_iconWidth = ScaleHelper.ScaleToInitialSystemDpi(ICON_DIMENSION);
+                    s_separatorHeight = ScaleHelper.ScaleToInitialSystemDpi(SEPARATOR_HEIGHT);
+                    s_textImageSpacing = ScaleHelper.ScaleToInitialSystemDpi(TEXT_IMAGE_SPACING);
+                    s_indentSpacing = ScaleHelper.ScaleToInitialSystemDpi(INDENT_SPACING);
+                    s_imagePaddingX = ScaleHelper.ScaleToInitialSystemDpi(IMAGE_PADDING);
+                    s_imagePaddingY = ScaleHelper.ScaleToInitialSystemDpi(IMAGE_PADDING);
+                }
+
+                s_isScalingInitialized = true;
+            }
+
+            _editor = (ToolStripCollectionEditor)parent;
+            InitializeComponent();
+            if (ScaleHelper.IsScalingRequired)
+            {
+                ScaleButtonImageLogicalToDevice(_btnMoveUp);
+                ScaleButtonImageLogicalToDevice(_btnMoveDown);
+                ScaleButtonImageLogicalToDevice(_btnRemove);
+            }
+
+            ActiveControl = _listBoxItems;
+            _originalText = Text;
+            SetStyle(ControlStyles.ResizeRedraw, true);
+        }
+
+        /// <summary>
+        /// The collection that we're editing.  Setting this causes us to sync our contents with that collection.
+        /// </summary>
+        internal ToolStripItemCollection Collection
+        {
+            set
+            {
+                if (value != _targetToolStripCollection)
+                {
+                    // clear our existing list of items.
+                    //
+                    _itemList?.Clear();
+
+                    // add any existing items to our list.
+                    //
+                    if (value is not null)
+                    {
+                        if (Context is not null)
+                        {
+                            // create a new list around the new value.
+                            //
+                            _itemList = new EditorItemCollection(this, _listBoxItems.Items, value);
+
+                            ToolStrip realToolStrip = ToolStripFromObject(Context.Instance);
+                            _itemList.Add(realToolStrip);
+
+                            ToolStripItem itemInstance = Context.Instance as ToolStripItem;
+                            if (itemInstance is not null && itemInstance.Site is not null)
+                            {
+                                Text = _originalText + " (" + itemInstance.Site.Name + "." + Context.PropertyDescriptor.Name + ")";
+                            }
+
+                            foreach (ToolStripItem item in value)
+                            {
+                                if (item is DesignerToolStripControlHost)
+                                {
+                                    continue;
+                                }
+
+                                _itemList.Add(item);
+                            }
+
+                            IComponentChangeService changeSvc = (IComponentChangeService)Context.GetService(typeof(IComponentChangeService));
+                            if (changeSvc is not null)
+                            {
+                                changeSvc.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                            }
+
+                            _selectedItemProps.Site = new PropertyGridSite(Context, _selectedItemProps);
+                        }
+                    }
+                    else
+                    {
+                        if (_componentChangeSvc is not null)
+                        {
+                            _componentChangeSvc.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                        }
+
+                        _componentChangeSvc = null;
+                        _selectedItemProps.Site = null;
+                    }
+
+                    _targetToolStripCollection = value;
+                }
+            }
+        }
+
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(ToolStripItemEditorForm));
+            _btnCancel = new Button();
+            _btnOK = new Button();
+            _tableLayoutPanel = new TableLayoutPanel();
+            _addTableLayoutPanel = new TableLayoutPanel();
+            _btnAddNew = new Button();
+            _newItemTypes = new ImageComboBox();
+            _okCancelTableLayoutPanel = new TableLayoutPanel();
+            _lblItems = new Label();
+            _selectedItemName = new Label();
+            _selectedItemProps = new VsPropertyGrid();
+            _lblMembers = new Label();
+            _listBoxItems = new FilterListBox();
+            _btnMoveUp = new Button();
+            _btnMoveDown = new Button();
+            _btnRemove = new Button();
+            _tableLayoutPanel.SuspendLayout();
+            _addTableLayoutPanel.SuspendLayout();
+            _okCancelTableLayoutPanel.SuspendLayout();
+            SuspendLayout();
+            //
+            // btnCancel
+            //
+            resources.ApplyResources(_btnCancel, "btnCancel");
+            _btnCancel.DialogResult = DialogResult.Cancel;
+            _btnCancel.Margin = new Padding(3, 0, 0, 0);
+            _btnCancel.Name = "btnCancel";
+            //
+            // btnOK
+            //
+            resources.ApplyResources(_btnOK, "btnOK");
+            _btnOK.Margin = new Padding(0, 0, 3, 0);
+            _btnOK.Name = "btnOK";
+            //
+            // tableLayoutPanel
+            //
+            resources.ApplyResources(_tableLayoutPanel, "tableLayoutPanel");
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 274F));
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            _tableLayoutPanel.Controls.Add(_addTableLayoutPanel, 0, 1);
+            _tableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 6);
+            _tableLayoutPanel.Controls.Add(_lblItems, 0, 0);
+            _tableLayoutPanel.Controls.Add(_selectedItemName, 2, 0);
+            _tableLayoutPanel.Controls.Add(_selectedItemProps, 2, 1);
+            _tableLayoutPanel.Controls.Add(_lblMembers, 0, 2);
+            _tableLayoutPanel.Controls.Add(_listBoxItems, 0, 3);
+            _tableLayoutPanel.Controls.Add(_btnMoveUp, 1, 3);
+            _tableLayoutPanel.Controls.Add(_btnMoveDown, 1, 4);
+            _tableLayoutPanel.Controls.Add(_btnRemove, 1, 5);
+            _tableLayoutPanel.Name = "tableLayoutPanel";
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            //
+            // addTableLayoutPanel
+            //
+            resources.ApplyResources(_addTableLayoutPanel, "addTableLayoutPanel");
+            _addTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            _addTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            _addTableLayoutPanel.Controls.Add(_btnAddNew, 1, 0);
+            _addTableLayoutPanel.Controls.Add(_newItemTypes, 0, 0);
+            _addTableLayoutPanel.Margin = new Padding(0, 3, 3, 3);
+            _addTableLayoutPanel.Name = "addTableLayoutPanel";
+            _addTableLayoutPanel.AutoSize = true;
+            _addTableLayoutPanel.RowStyles.Add(new RowStyle());
+            //
+            // btnAddNew
+            //
+            resources.ApplyResources(_btnAddNew, "btnAddNew");
+            _btnAddNew.Margin = new Padding(3, 0, 0, 0);
+            _btnAddNew.Name = "btnAddNew";
+            //
+            // newItemTypes
+            //
+            resources.ApplyResources(_newItemTypes, "newItemTypes");
+            _newItemTypes.DropDownStyle = ComboBoxStyle.DropDownList;
+            _newItemTypes.FormattingEnabled = true;
+            _newItemTypes.Margin = new Padding(0, 0, 3, 0);
+            _newItemTypes.Name = "newItemTypes";
+            _newItemTypes.DrawMode = DrawMode.OwnerDrawVariable;
+
+            //
+            // okCancelTableLayoutPanel
+            //
+            resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+            _tableLayoutPanel.SetColumnSpan(_okCancelTableLayoutPanel, 3);
+            _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _okCancelTableLayoutPanel.Controls.Add(_btnOK, 0, 0);
+            _okCancelTableLayoutPanel.Controls.Add(_btnCancel, 1, 0);
+            _okCancelTableLayoutPanel.Margin = new Padding(3, 6, 0, 0);
+            _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
+            _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+            //
+            // lblItems
+            //
+            resources.ApplyResources(_lblItems, "lblItems");
+            _lblItems.Margin = new Padding(0, 3, 3, 0);
+            _lblItems.Name = "lblItems";
+            //
+            // selectedItemName
+            //
+            resources.ApplyResources(_selectedItemName, "selectedItemName");
+            _selectedItemName.Margin = new Padding(3, 3, 3, 0);
+            _selectedItemName.Name = "selectedItemName";
+            //
+            // selectedItemProps
+            //
+            _selectedItemProps.CommandsVisibleIfAvailable = false;
+            resources.ApplyResources(_selectedItemProps, "selectedItemProps");
+            _selectedItemProps.Margin = new Padding(3, 3, 0, 3);
+            _selectedItemProps.Name = "selectedItemProps";
+            _tableLayoutPanel.SetRowSpan(_selectedItemProps, 5);
+            //
+            // lblMembers
+            //
+            resources.ApplyResources(_lblMembers, "lblMembers");
+            _lblMembers.Margin = new Padding(0, 3, 3, 0);
+            _lblMembers.Name = "lblMembers";
+            //
+            // listBoxItems
+            //
+            resources.ApplyResources(_listBoxItems, "listBoxItems");
+            _listBoxItems.DrawMode = DrawMode.OwnerDrawVariable;
+            _listBoxItems.FormattingEnabled = true;
+            _listBoxItems.Margin = new Padding(0, 3, 3, 3);
+            _listBoxItems.Name = "listBoxItems";
+            _tableLayoutPanel.SetRowSpan(_listBoxItems, 3);
+            _listBoxItems.SelectionMode = SelectionMode.MultiExtended;
+            //
+            // btnMoveUp
+            //
+            resources.ApplyResources(_btnMoveUp, "btnMoveUp");
+            _btnMoveUp.Margin = new Padding(3, 3, 18, 0);
+            _btnMoveUp.Name = "btnMoveUp";
+            //
+            // btnMoveDown
+            //
+            resources.ApplyResources(_btnMoveDown, "btnMoveDown");
+            _btnMoveDown.Margin = new Padding(3, 1, 18, 3);
+            _btnMoveDown.Name = "btnMoveDown";
+            //
+            // btnRemove
+            //
+            resources.ApplyResources(_btnRemove, "btnRemove");
+            _btnRemove.Margin = new Padding(3, 3, 18, 3);
+            _btnRemove.Name = "btnRemove";
+            //
+            // ToolStripCollectionEditor
+            //
+            AutoScaleMode = AutoScaleMode.Font;
+            AcceptButton = _btnOK;
+            resources.ApplyResources(this, "$this");
+            CancelButton = _btnCancel;
+            Controls.Add(_tableLayoutPanel);
+            HelpButton = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ToolStripCollectionEditor";
+            Padding = new Padding(9);
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Show;
+            _tableLayoutPanel.ResumeLayout(false);
+            _tableLayoutPanel.PerformLayout();
+            _addTableLayoutPanel.ResumeLayout(false);
+            _addTableLayoutPanel.PerformLayout();
+            _okCancelTableLayoutPanel.ResumeLayout(false);
+            _okCancelTableLayoutPanel.PerformLayout();
+            ResumeLayout(false);
+
+            // events
+            HelpButtonClicked += new CancelEventHandler(ToolStripCollectionEditor_HelpButtonClicked);
+            _newItemTypes.DropDown += new EventHandler(OnnewItemTypes_DropDown);
+            _newItemTypes.HandleCreated += new EventHandler(OnComboHandleCreated);
+            _newItemTypes.SelectedIndexChanged += new EventHandler(OnnewItemTypes_SelectedIndexChanged);
+            _btnAddNew.Click += new EventHandler(OnnewItemTypes_SelectionChangeCommitted);
+            _btnMoveUp.Click += new EventHandler(OnbtnMoveUp_Click);
+            _btnMoveDown.Click += new EventHandler(OnbtnMoveDown_Click);
+            _btnRemove.Click += new EventHandler(OnbtnRemove_Click);
+            _btnOK.Click += new EventHandler(OnbtnOK_Click);
+            _selectedItemName.Paint += new PaintEventHandler(OnselectedItemName_Paint);
+            _listBoxItems.SelectedIndexChanged += new EventHandler(OnlistBoxItems_SelectedIndexChanged);
+            _listBoxItems.DrawItem += new DrawItemEventHandler(OnlistBoxItems_DrawItem);
+            _listBoxItems.MeasureItem += new MeasureItemEventHandler(OnlistBoxItems_MeasureItem);
+
+            _selectedItemProps.PropertyValueChanged += new PropertyValueChangedEventHandler(PropertyGrid_propertyValueChanged);
+            Load += new EventHandler(OnFormLoad);
+        }
+        #endregion
+
+        /// <summary>
+        ///  Create a new button bitmap scaled for the device units.
+        ///  Note: original image might be disposed.
+        /// </summary>
+        /// <param name="button">button with an image, image size is defined in logical units</param>
+        private static void ScaleButtonImageLogicalToDevice(Button button)
+        {
+            if (button?.Image is not Bitmap buttonBitmap)
+            {
+                return;
+            }
+
+            button.Image = ScaleHelper.ScaleToDpi(buttonBitmap, ScaleHelper.InitialSystemDpi, disposeBitmap: true);
+        }
+
+        private void OnComboHandleCreated(object sender, EventArgs e)
+        {
+            // BUGBUG: syncing the MeasureItem event forces handle creation.
+            _newItemTypes.HandleCreated -= new EventHandler(OnComboHandleCreated);
+
+            _newItemTypes.MeasureItem += new MeasureItemEventHandler(OnlistBoxItems_MeasureItem);
+            _newItemTypes.DrawItem += new DrawItemEventHandler(OnlistBoxItems_DrawItem);
+        }
+
+        /// <summary>
+        /// Add a new toolStripDropDownItem to our list.  This will add a preview toolStripDropDownItem
+        /// and a list box toolStripDropDownItem as well.
+        /// </summary>
+        /// <param name="newItem">The toolStripDropDownItem we're adding</param>
+        /// <param name="index">The index to add it at, or -1 to add it at the end.</param>
+        private void AddItem(ToolStripItem newItem, int index)
+        {
+            if (index == -1)
+            {
+                _itemList.Add(newItem);
+            }
+            else
+            {
+                // make sure we're legit.
+                //
+                if (index < 0 || index >= _itemList.Count)
+                {
+                    return;
+                }
+
+                _itemList.Insert(index, newItem);
+            }
+
+            ToolStrip ownerToolStrip = (Context is not null) ? ToolStripFromObject(Context!.Instance) : null;
+            // set the owner to be the real windows bar
+            ownerToolStrip?.Items.Add(newItem);
+
+            // clear the current selection and set a new one.
+            _listBoxItems.ClearSelected();
+            _listBoxItems.SelectedItem = newItem;
+        }
+
+        /// <summary>
+        /// Move an toolStripDropDownItem from one index to the other.
+        /// </summary>
+        private void MoveItem(int fromIndex, int toIndex)
+        {
+            _itemList.Move(fromIndex, toIndex);
+        }
+
+        private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+        {
+            if (e.Component is ToolStripItem && e.Member is PropertyDescriptor && e.Member.Name == "Name")
+            {
+                _lblItems.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Pick up the new collection value.
+        /// </summary>
+        protected override void OnEditValueChanged()
+        {
+            _selectedItemProps.SelectedObjects = null;
+            Collection = (ToolStripItemCollection)EditValue;
+        }
+
+        /// <summary>
+        /// Called when the form loads...add the types from the list into the combo box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFormLoad(object sender, EventArgs e)
+        {
+            // Set the font as appropriate.
+            _newItemTypes.ItemHeight = Math.Max(s_iconHeight, Font.Height);
+
+            Component component = Context.Instance as Component;
+            Debug.Assert(component is not null, "why isn't the editor instance a component?");
+            if (component is not null)
+            {
+                Type[] newToolStripItemTypes = ToolStripDesignerUtils.GetStandardItemTypes(component);
+
+                _newItemTypes.Items.Clear();
+                foreach (Type t in newToolStripItemTypes)
+                {
+                    _newItemTypes.Items.Add(new TypeListItem(t));
+                }
+
+                _newItemTypes.SelectedIndex = 0;
+
+                _customItemIndex = -1;
+
+                newToolStripItemTypes = ToolStripDesignerUtils.GetCustomItemTypes(component, component.Site);
+                if (newToolStripItemTypes.Length > 0)
+                {
+                    _customItemIndex = _newItemTypes.Items.Count;
+                    foreach (Type t in newToolStripItemTypes)
+                    {
+                        _newItemTypes.Items.Add(new TypeListItem(t));
+                    }
+                }
+
+                if (_listBoxItems.Items.Count > 0)
+                {
+                    _listBoxItems.SelectedIndex = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handle a click of the OK button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnbtnOK_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
+
+        private void ToolStripCollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            _editor.ShowHelp();
+        }
+
+        /// <summary>
+        /// Remove all the selected items.
+        /// </summary>
+        private void OnbtnRemove_Click(object sender, EventArgs e)
+        {
+            // Move the selected items into an array so it doesn't change as we remove from it.
+            //
+            ToolStripItem[] items = new ToolStripItem[_listBoxItems.SelectedItems.Count];
+            _listBoxItems.SelectedItems.CopyTo(items, 0);
+
+            // now remove each of the items.
+            //
+            for (int i = 0; i < items.Length; i++)
+            {
+                RemoveItem(items[i]);
+            }
+        }
+
+        /// <summary>
+        /// Move the selected toolStripDropDownItem down one notch in the list.
+        /// </summary>
+        private void OnbtnMoveDown_Click(object sender, EventArgs e)
+        {
+            ToolStripItem currentItem = (ToolStripItem)_listBoxItems.SelectedItem;
+            int currentIndex = _listBoxItems.Items.IndexOf(currentItem);
+            MoveItem(currentIndex, ++currentIndex);
+            _listBoxItems.SelectedIndex = currentIndex;
+        }
+
+        /// <summary>
+        /// Move the selected toolStripDropDownItem up one notch in the list.
+        /// </summary>
+        private void OnbtnMoveUp_Click(object sender, EventArgs e)
+        {
+            ToolStripItem currentItem = (ToolStripItem)_listBoxItems.SelectedItem;
+            int currentIndex = _listBoxItems.Items.IndexOf(currentItem);
+            if (currentIndex > 1)
+            {
+                MoveItem(currentIndex, --currentIndex);
+                _listBoxItems.SelectedIndex = currentIndex;
+            }
+        }
+
+        /// <summary>
+        /// When we drop the combo, make sure it's wide enough to show the
+        /// full text from all the items.
+        /// </summary>
+        private void OnnewItemTypes_DropDown(object sender, EventArgs e)
+        {
+            if (_newItemTypes.Tag is null || !(bool)_newItemTypes.Tag)
+            {
+                int itemWidth = _newItemTypes.ItemHeight;
+                int dropDownHeight = 0;
+
+                // walk the items and get the widest one.
+                //
+                using (Graphics g = _newItemTypes.CreateGraphics())
+                {
+                    foreach (TypeListItem item in _newItemTypes.Items)
+                    {
+                        itemWidth = (int)Math.Max(itemWidth, _newItemTypes.ItemHeight + 1 + g.MeasureString(item.Type.Name, _newItemTypes.Font).Width + GdiPlusFudge);
+                        dropDownHeight += (Font.Height + s_separatorHeight) + 2 * s_imagePaddingY;
+                    }
+                }
+
+                _newItemTypes.DropDownWidth = itemWidth;
+                _newItemTypes.DropDownHeight = dropDownHeight;
+
+                // store that we've already done this work.
+                _newItemTypes.Tag = true;
+            }
+        }
+
+        /// <summary>
+        /// When the user makes an actual selection change, add an toolStripDropDownItem to the windows bar.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        // Okay to not catch non-CLS compliant exceptions
+        private void OnnewItemTypes_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            // Get the toolStripDropDownItem type
+            if (_newItemTypes.SelectedItem is not TypeListItem typeItem)
+            {
+                return;
+            }
+
+            // Create the toolStripDropDownItem
+            ToolStripItem newItem = (ToolStripItem)CreateInstance(typeItem.Type);
+            // Set the Image property and DisplayStyle.
+            if (newItem is ToolStripButton or ToolStripSplitButton or ToolStripDropDownButton)
+            {
+                Image image;
+                try
+                {
+                    image = new Bitmap(typeof(ToolStripItemEditorForm), "blank.bmp");
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(newItem)["Image"];
+
+                if (imageProperty is not null && image is not null)
+                {
+                    imageProperty.SetValue(newItem, image);
+                }
+
+                PropertyDescriptor displayProperty = TypeDescriptor.GetProperties(newItem)["DisplayStyle"];
+                displayProperty?.SetValue(newItem, ToolStripItemDisplayStyle.Image);
+
+                PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(newItem)["ImageTransparentColor"];
+                imageTransProperty?.SetValue(newItem, Color.Magenta);
+            }
+
+            // Add it.
+            AddItem(newItem, -1);
+            _listBoxItems.Focus();
+        }
+
+        /// <summary>
+        /// Just invalidate the combo on a selection change.
+        /// </summary>
+        private void OnnewItemTypes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _newItemTypes.Invalidate();
+        }
+
+        /// <summary>
+        /// Custom measureItem for the ListBox items...
+        /// </summary>
+        private void OnlistBoxItems_MeasureItem(object sender, MeasureItemEventArgs e)
+        {
+            int separator = 0;
+            if (sender is ComboBox)
+            {
+                bool drawSeparator = e.Index == _customItemIndex;
+
+                if (e.Index >= 0 && drawSeparator)
+                {
+                    separator = s_separatorHeight;
+                }
+            }
+
+            Font measureFont = Font;
+            e.ItemHeight = Math.Max(s_iconHeight + separator, measureFont.Height + separator) + 2 * s_imagePaddingY;
+        }
+
+        /// <summary>
+        /// Custom draw the list box toolStripDropDownItem with the icon and the text.  We actually share this code b/t the list box and the combo box.
+        /// </summary>
+        private void OnlistBoxItems_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index == -1)
+            {
+                return;
+            }
+
+            // fish out the toolStripDropDownItem type.  we're so cool we can share this code
+            // with just this difference.
+            Type itemType;
+            string itemText;
+            bool indentItem = false;
+            bool drawSeparator = false;
+            bool isComboEditBox = ((e.State & DrawItemState.ComboBoxEdit) == DrawItemState.ComboBoxEdit);
+
+            if (sender is ListBox)
+            {
+                ListBox listBox = sender as ListBox;
+
+                // the list box has the items directly.
+                if (listBox.Items[e.Index] is not Component item)
+                {
+                    Debug.Fail("Unexpected list box toolStripDropDownItem painted!");
+                    return;
+                }
+
+                if (item is ToolStripItem)
+                {
+                    indentItem = true;
+                }
+
+                itemType = item.GetType();
+                itemText = (item.Site is not null) ? item.Site.Name : itemType.Name;
+            }
+            else if (sender is ComboBox box)
+            {
+                // the combo box has just the types.
+                //
+                drawSeparator = ((e.Index == _customItemIndex) && !isComboEditBox); // never draw the separator in the edit box, even if it is the selected index.
+                if (box.Items[e.Index] is not TypeListItem typeListItem)
+                {
+                    Debug.Fail("Unexpected combo box toolStripDropDownItem!");
+                    return;
+                }
+
+                itemType = typeListItem.Type;
+                itemText = typeListItem.ToString();
+            }
+            else
+            {
+                Debug.Fail("Unexpected sender calling DrawItem");
+                return;
+            }
+
+            // okay, we've got ourselves an toolStripDropDownItem type.  draw it.
+            //
+            if (itemType is not null)
+            {
+                if (drawSeparator)
+                {
+                    e.Graphics.DrawLine(SystemPens.ControlDark, e.Bounds.X + 2, e.Bounds.Y + 2, e.Bounds.Right - 2, e.Bounds.Y + 2);
+                }
+
+                // Get the toolbox bitmap, draw it, and then draw the text.  We just
+                // draw the bitmap as a square based on the height of this line toolStripDropDownItem.
+                //
+
+                // calculate the image rect
+                Rectangle imageBounds = e.Bounds;
+                imageBounds.Size = new Size(s_iconWidth, s_iconHeight);
+                int xOffset = isComboEditBox ? 0 : s_imagePaddingX * 2;
+                imageBounds.Offset(xOffset, s_imagePaddingX);
+
+                if (drawSeparator)
+                {
+                    imageBounds.Offset(0, s_separatorHeight);
+                }
+
+                if (indentItem)
+                {
+                    imageBounds.X += s_iconWidth + s_indentSpacing;
+                }
+
+                // make sure after all this we still are within bounds and are square.
+                if (!isComboEditBox)
+                {
+                    imageBounds.Intersect(e.Bounds);
+                }
+
+                // draw the image if it's there
+                Bitmap tbxBitmap = ToolStripDesignerUtils.GetToolboxBitmap(itemType);
+                if (tbxBitmap is not null)
+                {
+                    if (isComboEditBox)
+                    {
+                        // Paint the icon of the combo's textbox area.
+                        e.Graphics.DrawImage(tbxBitmap, e.Bounds.X, e.Bounds.Y, s_iconWidth, s_iconHeight);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(SystemBrushes.Window, imageBounds);
+                        e.Graphics.DrawImage(tbxBitmap, imageBounds);
+                    }
+                }
+
+                // calculate the text rect
+                Rectangle textBounds = e.Bounds;
+                textBounds.X = imageBounds.Right + s_textImageSpacing;
+                textBounds.Y = imageBounds.Top - s_imagePaddingY;
+                if (!isComboEditBox)
+                {
+                    textBounds.Y += s_imagePaddingY * 2;
+                }
+
+                textBounds.Intersect(e.Bounds);
+
+                // draw the background as necessary.
+                Rectangle fillBounds = e.Bounds;
+                fillBounds.X = textBounds.X - 2;
+
+                if (drawSeparator)
+                {
+                    fillBounds.Y += s_separatorHeight;
+                    fillBounds.Height -= s_separatorHeight;
+                }
+
+                Color textColor;
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    textColor = SystemColors.HighlightText;
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, fillBounds);
+                }
+                else
+                {
+                    textColor = SystemColors.WindowText;
+                    e.Graphics.FillRectangle(SystemBrushes.Window, fillBounds);
+                }
+
+                // render the text
+                if (!string.IsNullOrEmpty(itemText))
+                {
+                    TextFormatFlags format = TextFormatFlags.Top | TextFormatFlags.Left;
+                    TextRenderer.DrawText(e.Graphics, itemText, Font, textBounds, textColor, format);
+                }
+
+                // finally, draw the focus rect.
+                if ((e.State & DrawItemState.Focus) == DrawItemState.Focus)
+                {
+                    fillBounds.Width -= 1;
+                    ControlPaint.DrawFocusRectangle(e.Graphics, fillBounds, e.ForeColor, e.BackColor);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Push the selected items into the property grid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnlistBoxItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // push the items into the grid.
+            //
+            object[] objList = new object[_listBoxItems.SelectedItems.Count];
+            if (objList.Length > 0)
+            {
+                _listBoxItems.SelectedItems.CopyTo(objList, 0);
+            }
+
+            // ToolStrip is selected ... remove the items property
+            if (objList.Length == 1 && objList[0] is ToolStrip toolStrip)
+            {
+                ToolStrip parentStrip = toolStrip;
+                if (parentStrip is not null && parentStrip.Site is not null)
+                {
+                    _toolStripCustomTypeDescriptor ??= new ToolStripCustomTypeDescriptor(toolStrip);
+
+                    _selectedItemProps.SelectedObjects = [_toolStripCustomTypeDescriptor];
+                }
+                else
+                {
+                    // if null parentStrip or non sited then don't show the properties.
+                    _selectedItemProps.SelectedObjects = null;
+                }
+            }
+            else
+            {
+                _selectedItemProps.SelectedObjects = objList;
+            }
+
+            // enable the up/down button and the remove button based on the items.
+            //
+            _btnMoveUp.Enabled = (_listBoxItems.SelectedItems.Count == 1) && (_listBoxItems.SelectedIndex > 1);
+            _btnMoveDown.Enabled = (_listBoxItems.SelectedItems.Count == 1) && (_listBoxItems.SelectedIndex < _listBoxItems.Items.Count - 1);
+            _btnRemove.Enabled = objList.Length > 0;
+
+            // Cannot remove a Win bar thru this CollectionEditor.
+            foreach (object obj in _listBoxItems.SelectedItems)
+            {
+                if (obj is ToolStrip)
+                {
+                    _btnRemove.Enabled = _btnMoveUp.Enabled = _btnMoveDown.Enabled = false;
+                    break;
+                }
+            }
+
+            // Invalidate the list box and the label above the grid.
+            _listBoxItems.Invalidate();
+            _selectedItemName.Invalidate();
+        }
+
+        /// <summary>
+        /// Invalidate the ListBox and the SelectedItemName Label on top of the propertyGrid
+        /// </summary>
+        private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
+        {
+            // Invalidate the list box and the label above the grid.
+            _listBoxItems.Invalidate();
+            _selectedItemName.Invalidate();
+        }
+
+        /// <summary>
+        ///  Paint the name and type of the currently selected items in the label above the property grid.
+        /// </summary>
+        private void OnselectedItemName_Paint(object sender, PaintEventArgs e)
+        {
+            // make the bolded font for the type name.
+            //
+            using Font boldFont = new Font(_selectedItemName.Font, FontStyle.Bold);
+            Label label = sender as Label;
+            Rectangle bounds = label.ClientRectangle;
+            StringFormat stringFormat = null;
+
+            bool rightToLeft = (label.RightToLeft == RightToLeft.Yes);
+
+            if (rightToLeft)
+            {
+                stringFormat = new StringFormat(StringFormatFlags.DirectionRightToLeft);
+            }
+            else
+            {
+                stringFormat = new StringFormat();
+            }
+
+            stringFormat.HotkeyPrefix = Drawing.Text.HotkeyPrefix.Show;
+
+            // Based on the count, just paint the name, (Multiple Items), or (None)
+            switch (_listBoxItems.SelectedItems.Count)
+            {
+                case 1:
+                    // for a single toolStripDropDownItem, we paint it's class name in bold, then the toolStripDropDownItem name.
+                    Component selectedItem = null;
+                    if (_listBoxItems.SelectedItem is ToolStrip strip)
+                    {
+                        selectedItem = strip;
+                    }
+                    else
+                    {
+                        selectedItem = (ToolStripItem)_listBoxItems.SelectedItem;
+                    }
+
+                    string className = "&" + selectedItem.GetType().Name;
+                    if (selectedItem.Site is not null)
+                    {
+                        // Erase background
+                        e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
+                        string itemName = selectedItem.Site.Name;
+
+                        if (label is not null)
+                        {
+                            label.Text = className + itemName;
+                        }
+
+                        int classWidth = 0;
+                        classWidth = (int)e.Graphics.MeasureString(className, boldFont).Width;
+                        e.Graphics.DrawString(className, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
+                        int itemTextWidth = (int)e.Graphics.MeasureString(itemName, _selectedItemName.Font).Width;
+                        Rectangle textRect = new Rectangle(classWidth + GdiPlusFudge, 0, bounds.Width - (classWidth + GdiPlusFudge), bounds.Height);
+                        label.AutoEllipsis = itemTextWidth > textRect.Width;
+
+                        TextFormatFlags flags = TextFormatFlags.EndEllipsis;
+                        if (rightToLeft)
+                        {
+                            flags |= TextFormatFlags.RightToLeft;
+                        }
+
+                        TextRenderer.DrawText(e.Graphics, itemName, _selectedItemName.Font, textRect, SystemColors.WindowText, flags);
+                    }
+
+                    break;
+                case 0:
+                    e.Graphics.FillRectangle(SystemBrushes.Control, bounds); // erase background
+                    if (label is not null)
+                    {
+                        label.Text = SR.ToolStripItemCollectionEditorLabelNone;
+                    }
+
+                    e.Graphics.DrawString(SR.ToolStripItemCollectionEditorLabelNone, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
+                    break;
+                default:
+                    e.Graphics.FillRectangle(SystemBrushes.Control, bounds); // erase background
+                    if (label is not null)
+                    {
+                        label.Text = SR.ToolStripItemCollectionEditorLabelMultipleItems;
+                    }
+
+                    e.Graphics.DrawString(SR.ToolStripItemCollectionEditorLabelMultipleItems, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
+                    break;
+            }
+
+            stringFormat.Dispose();
+        }
+
+        /// <summary>
+        /// Removes an toolStripDropDownItem from the list and the preview windows bar
+        /// </summary>
+        /// <param name="item"></param>
+        private void RemoveItem(ToolStripItem item)
+        {
+            int index;
+            try
+            {
+                // remove the toolStripDropDownItem from the list.
+                //
+                index = _itemList.IndexOf(item);
+                _itemList.Remove(item);
+
+                // destroy the toolStripDropDownItem.  This will remove it from the designer as well.
+                //
+            }
+            finally
+            {
+                item.Dispose();
+            }
+
+            // now set up our selection
+            //
+            if (_itemList.Count > 0)
+            {
+                _listBoxItems.ClearSelected();
+                index = Math.Max(0, Math.Min(index, _listBoxItems.Items.Count - 1));
+                _listBoxItems.SelectedIndex = index;
+            }
+        }
+
+        /// <devdoc>
+        /// Fishes out the ToolStrip from the object - which can be a ToolStrip or a ToolStripDropDownItem
+        /// </devdoc>
+        internal static ToolStrip ToolStripFromObject(object instance)
+        {
+            ToolStrip currentToolStrip = null;
+
+            if (instance is not null)
+            {
+                currentToolStrip = instance is ToolStripDropDownItem toolStripDropDownItem ? toolStripDropDownItem.DropDown : instance as ToolStrip;
+            }
+
+            return currentToolStrip;
+        }
+
+        private class ImageComboBox : ComboBox
+        {
+            public ImageComboBox()
+            {
+            }
+
+            private Rectangle ImageRect
+            {
+                get
+                {
+                    // Need to add padding for RTL combo box.
+                    return RightToLeft == RightToLeft.Yes
+                        ? new Rectangle(4 + SystemInformation.HorizontalScrollBarThumbWidth, 3, s_iconWidth, s_iconHeight)
+                        : new Rectangle(3, 3, s_iconWidth, s_iconHeight);
+                }
+            }
+
+            protected override void OnDropDownClosed(EventArgs e)
+            {
+                base.OnDropDownClosed(e);
+                Invalidate(ImageRect);
+            }
+
+            protected override void OnSelectedIndexChanged(EventArgs e)
+            {
+                base.OnSelectedIndexChanged(e);
+                Invalidate(ImageRect);
+            }
+
+            protected override void WndProc(ref Message m)
+            {
+                base.WndProc(ref m);
+                switch (m.MsgInternal)
+                {
+                    case PInvokeCore.WM_SETFOCUS:
+                    case PInvokeCore.WM_KILLFOCUS:
+                        Invalidate(ImageRect);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is a magic collection.  It's job is to keep the preview windows bar and the list box in sync and manage both sets of items.
+        /// It contains a list of EditorItem objects, which whole the information for each toolStripDropDownItem, and a reference to the real ToolStripItem component,
+        /// the and the preview ToolStripItem.  The order and contents of this combo box always match that of the real collection, the list box, and the preview windows bar.
+        /// It operates generically on three ILists: the list box.Items collection, the previewToolStrip.Items collection, and the actual ToolStripItemCollection being designed.
+        /// </summary>
+        private class EditorItemCollection : CollectionBase
+        {
+            // the ListBox.Items collection
+            private readonly IList _listBoxList;
+            // the real deal target collection
+            private readonly IList _targetCollectionList;
+            // the owner form that created this collection.
+            private readonly ToolStripItemEditorForm _owner;
+
+            /// <summary>
+            ///  Setup the collection's variables.
+            /// </summary>
+            internal EditorItemCollection(ToolStripItemEditorForm owner, IList displayList, IList componentList)
+            {
+                _owner = owner;
+                _listBoxList = displayList;
+                _targetCollectionList = componentList;
+            }
+
+            /// <summary>
+            ///  Add a new win bar item.  See OnInsertComplete for the actual add operation.
+            /// </summary>
+            /// <param name="item"></param>
+            public void Add(object item)
+            {
+                List.Add(new EditorItem(item));
+            }
+
+            /// <summary>
+            /// This is a little tricky, since our list doesn't actually contain
+            /// ToolStripItems, but rather EditorItems, we have to walk those.  No bother,
+            /// this list is always pretty short.
+            /// </summary>
+            public int IndexOf(ToolStripItem item)
+            {
+                for (int i = 0; i < List.Count; i++)
+                {
+                    EditorItem editorItem = (EditorItem)List[i]!;
+                    if (editorItem.Component == item)
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+
+            /// <summary>
+            ///  Insert an toolStripDropDownItem into the list somewhere.  See OnInsertComplete for the real meaty stuff.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <param name="item"></param>
+            public void Insert(int index, ToolStripItem item)
+            {
+                List.Insert(index, new EditorItem(item));
+            }
+
+            /// <summary>
+            /// Move an toolStripDropDownItem from one array position to another.
+            /// </summary>
+            public void Move(int fromIndex, int toIndex)
+            {
+                if (toIndex == fromIndex)
+                {
+                    return;
+                }
+
+                EditorItem editorItem = (EditorItem)List[fromIndex]!;
+                if (editorItem.Host is not null)
+                {
+                    return;
+                }
+
+                try
+                {
+                    _owner.Context?.OnComponentChanging();
+
+                    // yank 'em all outate there.
+                    //
+                    _listBoxList.Remove(editorItem.Component);
+                    _targetCollectionList.Remove(editorItem.Component);
+
+                    InnerList.Remove(editorItem);
+
+                    // put 'em all back in.
+                    _listBoxList.Insert(toIndex, editorItem.Component);
+                    // since ToolStrip is also an toolStripDropDownItem of the listBoxItems
+                    // Lets decrement the counter by one.
+
+                    // ToolStrip is Always the TOP toolStripDropDownItem
+                    // so it is SAFE to assume that
+                    // the index that we want is always currentIndex - 1.
+
+                    // This is required as the _targetList doesn't contain the ToolStrip.
+                    _targetCollectionList.Insert(toIndex - 1, editorItem.Component);
+
+                    InnerList.Insert(toIndex, editorItem);
+                }
+                finally
+                {
+                    _owner.Context?.OnComponentChanged();
+                }
+            }
+
+            /// <summary>
+            ///  Clear has a different semantic than remove.  Clear simply dumps all the items
+            ///  out of the list box and the preview and zero's this collection.  Remove is more
+            ///  destructive in that it affects the target collection.
+            /// </summary>
+            protected override void OnClear()
+            {
+                _listBoxList.Clear();
+                foreach (EditorItem item in List)
+                {
+                    item.Dispose();
+                }
+
+                // We don't do sync target list here.
+                base.OnClear();
+            }
+
+            /// <summary>
+            ///  After an toolStripDropDownItem is inserted into the collection, we do the work
+            ///  to make sure that we sync up the three lists.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <param name="value"></param>
+            protected override void OnInsertComplete(int index, object value)
+            {
+                if (value is null)
+                {
+                    return;
+                }
+
+                EditorItem item = (EditorItem)value;
+                if (item.Host is not null)
+                {
+                    // Insert into the list box.
+                    _listBoxList.Insert(index, item.Host);
+                    base.OnInsertComplete(index, value);
+                    return;
+                }
+
+                // check the target collection first, if it's already there,
+                // chill.  Otherwise we need to push it in.  In the case that we're
+                // sync'ing to an existing list, we don't want to be re-adding
+                // everything.
+                //
+                if (!_targetCollectionList.Contains(item.Component))
+                {
+                    try
+                    {
+                        _owner.Context?.OnComponentChanging();
+                        _targetCollectionList.Insert(index - 1, item.Component);
+                    }
+                    finally
+                    {
+                        _owner.Context?.OnComponentChanged();
+                    }
+                }
+
+                // insert into the list box and into the preview
+                //
+                _listBoxList.Insert(index, item.Component);
+                base.OnInsertComplete(index, value);
+            }
+
+            /// <summary>
+            /// Really remove an toolStripDropDownItem from the collections.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <param name="value"></param>
+            protected override void OnRemove(int index, object value)
+            {
+                object item = List[index];
+                if (item is null)
+                {
+                    return;
+                }
+
+                EditorItem editorItem = (EditorItem)item!;
+
+                // pull it from the list box and preview
+                //
+                _listBoxList.RemoveAt(index);
+
+                // yank it from the collection.  The code that calls this
+                // collection is responsible for disposing it to destroy
+                // it in the designer.
+                //
+                try
+                {
+                    _owner.Context?.OnComponentChanging();
+                    _targetCollectionList.RemoveAt(index - 1);
+                }
+                finally
+                {
+                    _owner.Context?.OnComponentChanged();
+                }
+
+                // finally dispose the editor toolStripDropDownItem which cleanup the preview toolStripDropDownItem.
+                editorItem?.Dispose();
+                base.OnRemove(index, value);
+            }
+
+            /// <summary>
+            /// Remove an toolStripDropDownItem.  See OnRemove for the gory details.
+            /// </summary>
+            /// <param name="item"></param>
+            public void Remove(ToolStripItem item)
+            {
+                int index = IndexOf(item);
+                List.RemoveAt(index);
+            }
+
+            /// <summary>
+            /// This class keeps track of the mapping between a win bar item in the designer, in the
+            /// preview windows bar, and in the list box.
+            /// </summary>
+            private class EditorItem
+            {
+                // The real deal toolStripDropDownItem in the designer.
+                public ToolStripItem _component;
+                public ToolStrip _host;
+
+                internal EditorItem(object componentItem)
+                {
+                    if (componentItem is ToolStrip toolStrip)
+                    {
+                        _host = toolStrip;
+                    }
+                    else
+                    {
+                        _component = (ToolStripItem)componentItem;
+                    }
+                }
+
+                /// <summary>
+                /// The toolStripDropDownItem that's actually being created in the designer.
+                /// </summary>
+                public ToolStripItem Component => _component;
+
+                /// <summary>
+                /// The ToolStrip that's actually being created in the designer.
+                /// </summary>
+                public ToolStrip Host
+                {
+                    get
+                    {
+                        return _host;
+                    }
+                }
+
+                /// <summary>
+                /// Cleanup our mess.
+                /// </summary>
+                public void Dispose()
+                {
+                    GC.SuppressFinalize(this);
+                    _component = null;
+                }
+            }
+        }
+
+        private class TypeListItem
+        {
+            public readonly Type Type;
+
+            public TypeListItem(Type type)
+            {
+                Type = type;
+            }
+
+            public override string ToString()
+            {
+                return ToolStripDesignerUtils.GetToolboxDescription(Type);
+            }
+        }
+    }
+}
