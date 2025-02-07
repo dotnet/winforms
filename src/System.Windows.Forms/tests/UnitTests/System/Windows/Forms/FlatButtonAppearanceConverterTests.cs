@@ -46,7 +46,7 @@ public class FlatButtonAppearanceConverterTests
     public void GetProperties_ContextNull_ReturnsProperties()
     {
         using Button button = new();
-        var attributes = new Attribute[] { new BrowsableAttribute(true) };
+        Attribute[] attributes = [new BrowsableAttribute(true)];
 
         PropertyDescriptorCollection properties = _converter.GetProperties(context: null, button, attributes);
 
