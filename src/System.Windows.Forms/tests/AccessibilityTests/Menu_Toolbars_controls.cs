@@ -3,7 +3,7 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 public partial class Menu_Toolbars_controls : Form
 {

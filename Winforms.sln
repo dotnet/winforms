@@ -130,7 +130,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeHost.ManagedControl",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.UI.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\UIIntegrationTests\System.Windows.Forms.UI.IntegrationTests.csproj", "{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility_Core_App", "src\System.Windows.Forms\tests\AccessibilityTests\Accessibility_Core_App.csproj", "{317E131C-EA24-47A4-96EE-5A66DED10501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPassApp", "src\System.Windows.Forms\tests\AccessibilityTests\TestPassApp.csproj", "{317E131C-EA24-47A4-96EE-5A66DED10501}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxHosts", "src\System.Windows.Forms\tests\AxHosts\AxHosts.csproj", "{93651A99-C9EB-4F83-8A66-DF9D21574550}"
 EndProject

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Accessibility_Core_App</RootNamespace>
-    <AssemblyName>Accessibility_Core_App</AssemblyName>
+    <RootNamespace>TestPassApp</RootNamespace>
+    <AssemblyName>TestPassApp</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
