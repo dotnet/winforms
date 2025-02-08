@@ -616,7 +616,7 @@ internal partial class ToolStripCollectionEditor
                 Image image;
                 try
                 {
-                    image = new Bitmap(typeof(ToolStripItemEditorForm), "blank.bmp");
+                    image = new Bitmap(typeof(ToolStripItemEditorForm), "BlankToolstrip.bmp");
                 }
                 catch (Exception)
                 {
@@ -953,7 +953,7 @@ internal partial class ToolStripCollectionEditor
                         Rectangle textRect = new Rectangle(classWidth + GdiPlusFudge, 0, bounds.Width - (classWidth + GdiPlusFudge), bounds.Height);
                         label.AutoEllipsis = itemTextWidth > textRect.Width;
 
-                        TextFormatFlags flags = TextFormatFlags.EndEllipsis;
+                        TextFormatFlags flags = TextFormatFlags.EndEllipsis | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
                         if (rightToLeft)
                         {
                             flags |= TextFormatFlags.RightToLeft;
