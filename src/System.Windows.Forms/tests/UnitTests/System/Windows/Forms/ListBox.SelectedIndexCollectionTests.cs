@@ -119,4 +119,51 @@ public class ListBoxSelectedIndexCollectionTests
         IList collection = new ListBox.SelectedIndexCollection(owner);
         Assert.Throws<NotSupportedException>(() => collection.RemoveAt(index));
     }
+
+    [WinFormsFact]
+    public void CopyTo_CopiesItemsCorrectly()
+    {
+        using ListBox listBox = new()
+        {
+            Items = { "Item1", "Item2", "Item3" },
+            SelectedIndices = { 0, 2 }
+        };
+
+        int[] destination = new int[2];
+        listBox.SelectedIndices.CopyTo(destination, 0);
+
+        destination.Should().BeEquivalentTo(new int[] { 0, 2 });
+    }
+
+    [WinFormsFact]
+    public void Clear_ClearsSelectedIndices()
+    {
+        using ListBox listBox = new()
+        {
+            Items = { "Item1", "Item2", "Item3" },
+            SelectedIndices = { 0, 2 }
+        };
+
+        listBox.SelectedIndices.Clear();
+
+        listBox.SelectedIndices.Count.Should().Be(0);
+        listBox.SelectedIndices.Contains(0).Should().BeFalse();
+        listBox.SelectedIndices.Contains(2).Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void Remove_RemovesSelectedIndex()
+    {
+        using ListBox listBox = new()
+        {
+            Items = { "Item1", "Item2", "Item3" },
+            SelectedIndices = { 0, 2 }
+        };
+
+        listBox.SelectedIndices.Remove(2);
+
+        listBox.SelectedIndices.Count.Should().Be(1);
+        listBox.SelectedIndices.Contains(0).Should().BeTrue();
+        listBox.SelectedIndices.Contains(2).Should().BeFalse();
+    }
 }
