@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
+using System.Drawing;
 using static System.ComponentModel.TypeConverter;
 
 namespace System.Windows.Forms.Tests;
@@ -70,5 +72,44 @@ public class TreeViewImageIndexConverterTests
         Assert.Equal(2, result.Count);
         Assert.Equal(ImageList.Indexer.DefaultIndex, result[0]);
         Assert.Equal(ImageList.Indexer.NoneIndex, result[1]);
+    }
+
+    [Fact]
+    public void TreeViewImageIndexConverter_GetStandardValues_WithContext_ReturnsExpected()
+    {
+        using ImageList imageList = new();
+        using Bitmap image1 = new(10, 10);
+        using Bitmap image2 = new(10, 10);
+        imageList.Images.Add(image1);
+        imageList.Images.Add(image2);
+
+        using TreeView treeView = new TreeView { ImageList = imageList };
+        var propertyDescriptor = TypeDescriptor.GetProperties(treeView)["ImageList"];
+        var context = new TypeDescriptorContext(treeView, propertyDescriptor);
+
+        var converter = new TreeViewImageIndexConverter();
+        var result = converter.GetStandardValues(context);
+
+        result.Count.Should().Be(imageList.Images.Count + 2);
+        result.Cast<int>().Should().ContainInOrder(0, 1, ImageList.Indexer.DefaultIndex, -2);
+    }
+
+    private class TypeDescriptorContext : ITypeDescriptorContext
+    {
+        private readonly object _instance;
+        private readonly PropertyDescriptor _propertyDescriptor;
+
+        public TypeDescriptorContext(object instance, PropertyDescriptor propertyDescriptor)
+        {
+            _instance = instance;
+            _propertyDescriptor = propertyDescriptor;
+        }
+
+        public IContainer Container => null;
+        public object Instance => _instance;
+        public PropertyDescriptor PropertyDescriptor => _propertyDescriptor;
+        public bool OnComponentChanging() => true;
+        public void OnComponentChanged() { }
+        public object GetService(Type serviceType) => null;
     }
 }
