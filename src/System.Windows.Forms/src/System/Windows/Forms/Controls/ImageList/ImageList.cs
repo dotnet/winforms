@@ -14,12 +14,12 @@ namespace System.Windows.Forms;
 ///  Toolbar. You can add either bitmaps or Icons to the ImageList, and the
 ///  other controls will be able to use the Images as they desire.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.ImageListDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ImageListDesigner, {Assemblies.SystemDesign}")]
 [ToolboxItemFilter("System.Windows.Forms")]
 [DefaultProperty(nameof(Images))]
 [TypeConverter(typeof(ImageListConverter))]
-[DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}",
-    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+[DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {Assemblies.SystemDesign}",
+    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionImageList))]
 public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 {

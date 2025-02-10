@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Formats.Nrbf;
 using System.Private.Windows.Nrbf;
 using System.Reflection.Metadata;
@@ -15,16 +16,6 @@ internal sealed partial class WinFormsNrbfSerializer : INrbfSerializer
 {
     private static Dictionary<TypeName, Type>? s_knownTypes;
 
-    // These types are read from and written to serialized stream manually, accessing record field by field.
-    // Thus they are re-hydrated with no formatters and are safe. The default resolver should recognize them
-    // to resolve primitive types or fields of the specified type T.
-    private static readonly Type[] s_intrinsicTypes =
-    [
-        // Common WinForms types.
-        typeof(ImageListStreamer),
-        typeof(Drawing.Bitmap),
-    ];
-
     // Do not allow construction of this type.
     private WinFormsNrbfSerializer() { }
 
@@ -35,14 +26,12 @@ internal sealed partial class WinFormsNrbfSerializer : INrbfSerializer
             return true;
         }
 
-        if (s_knownTypes is null)
+        s_knownTypes ??= new(3, TypeNameComparer.FullNameAndAssemblyNameMatch)
         {
-            s_knownTypes = new(s_intrinsicTypes.Length, TypeNameComparer.Default);
-            foreach (Type intrinsic in s_intrinsicTypes)
-            {
-                s_knownTypes.Add(intrinsic.ToTypeName(), intrinsic);
-            }
-        }
+            { Types.ToTypeName($"{typeof(ImageListStreamer).FullName}, System.Windows.Forms"), typeof(ImageListStreamer) },
+            { Types.ToTypeName($"{Types.BitmapType}, System.Drawing"), typeof(Bitmap) },
+            { Types.ToTypeName($"{Types.BitmapType}, System.Drawing.Common"), typeof(Bitmap) }
+        };
 
         return s_knownTypes.TryGetValue(typeName, out type);
     }
@@ -57,6 +46,6 @@ internal sealed partial class WinFormsNrbfSerializer : INrbfSerializer
         || WinFormsBinaryFormatWriter.TryWriteObject(stream, value);
 
     public static bool IsSupportedType<T>() => CoreNrbfSerializer.IsSupportedType<T>()
-        || typeof(T) == typeof(Drawing.Bitmap)
+        || typeof(T) == typeof(Bitmap)
         || typeof(T) == typeof(ImageListStreamer);
 }

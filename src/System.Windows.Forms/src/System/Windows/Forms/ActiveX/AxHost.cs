@@ -23,7 +23,7 @@ namespace System.Windows.Forms;
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultEvent(nameof(Enter))]
-[Designer($"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.AxHostDesigner, {Assemblies.SystemDesign}")]
 public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
 {
 #if DEBUG

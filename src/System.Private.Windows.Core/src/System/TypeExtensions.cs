@@ -4,6 +4,7 @@
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace System;
 
@@ -19,7 +20,7 @@ internal static class TypeExtensions
     ///  <see langword="true"/> if the <paramref name="type"/> is forwarded from another assembly;
     ///  otherwise, <see langword="false"/>.
     /// </returns>
-    public static bool TryGetForwardedFromName(this Type type, [NotNullWhen(true)] out string? name)
+    internal static bool TryGetForwardedFromName(this Type type, [NotNullWhen(true)] out string? name)
     {
         name = default;
 
@@ -28,6 +29,13 @@ internal static class TypeExtensions
         while (attributedType.HasElementType)
         {
             attributedType = attributedType.GetElementType()!;
+        }
+
+        if (attributedType == typeof(TimeSpan))
+        {
+            // TimeSpan doesn't have the forwarded attribute, but it is from mscorlib.
+            name = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+            return true;
         }
 
         object[] attributes = attributedType.GetCustomAttributes(typeof(TypeForwardedFromAttribute), inherit: false);
@@ -45,7 +53,7 @@ internal static class TypeExtensions
     ///  can be nullable, as the user would request a nullable type read from the clipboard payload, but the root record would
     ///  serialize a non-nullable type, thus <paramref name="typeName"/> from the root record is not nullable.
     /// </summary>
-    public static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName) =>
+    internal static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName) =>
         type.UnwrapIfNullable().MatchLessAssemblyVersion(typeName);
 
     /// <summary>
@@ -58,7 +66,7 @@ internal static class TypeExtensions
     ///  </para>
     /// </remarks>
     // based on https://github.com/dotnet/runtime/blob/1474fc3fafca26b4b051be7dacdba8ac2804c56e/src/libraries/System.Formats.Nrbf/src/System/Formats/Nrbf/SerializationRecord.cs#L68
-    private static bool MatchLessAssemblyVersion(this Type type, TypeName typeName)
+    internal static bool MatchLessAssemblyVersion(this Type type, TypeName typeName)
     {
         // We don't need to check for pointers and references to arrays,
         // as it's impossible to serialize them with BinaryFormatter.
@@ -153,7 +161,7 @@ internal static class TypeExtensions
     /// <summary>
     ///  Match <see cref="TypeName"/>s using all information that had been set by the caller.
     /// </summary>
-    public static bool Matches(this TypeName x, TypeName y)
+    internal static bool Matches(this TypeName x, TypeName y, TypeNameComparison comparison = TypeNameComparison.All)
     {
         if (x.IsArray != y.IsArray
             || x.IsConstructedGenericType != y.IsConstructedGenericType
@@ -165,7 +173,8 @@ internal static class TypeExtensions
             return false;
         }
 
-        if (!AssemblyNamesMatch(x.AssemblyName, y.AssemblyName))
+        if (comparison != TypeNameComparison.TypeFullName
+            && !AssemblyNamesMatch(x.AssemblyName, y.AssemblyName, comparison))
         {
             return false;
         }
@@ -177,12 +186,12 @@ internal static class TypeExtensions
 
         if (y.IsArray)
         {
-            return Matches(x.GetElementType(), y.GetElementType());
+            return Matches(x.GetElementType(), y.GetElementType(), comparison);
         }
 
         if (x.IsConstructedGenericType)
         {
-            if (!Matches(x.GetGenericTypeDefinition(), y.GetGenericTypeDefinition()))
+            if (!Matches(x.GetGenericTypeDefinition(), y.GetGenericTypeDefinition(), comparison))
             {
                 return false;
             }
@@ -197,7 +206,7 @@ internal static class TypeExtensions
 
             for (int i = 0; i < genericNamesX.Length; i++)
             {
-                if (!Matches(genericNamesX[i], genericNamesY[i]))
+                if (!Matches(genericNamesX[i], genericNamesY[i], comparison))
                 {
                     return false;
                 }
@@ -208,7 +217,7 @@ internal static class TypeExtensions
 
         return false;
 
-        static bool AssemblyNamesMatch(AssemblyNameInfo? name1, AssemblyNameInfo? name2)
+        static bool AssemblyNamesMatch(AssemblyNameInfo? name1, AssemblyNameInfo? name2, TypeNameComparison comparison)
         {
             if (name1 is null && name2 is null)
             {
@@ -221,10 +230,12 @@ internal static class TypeExtensions
             }
 
             // Case-sensitive comparisons.
-            return name1.Name == name2.Name
-                && name1.CultureName == name2.CultureName
-                && name1.Version == name2.Version
-                && name1.PublicKeyOrToken.AsSpan().SequenceEqual(name2.PublicKeyOrToken.AsSpan());
+            return (!comparison.HasFlag(TypeNameComparison.AssemblyName) || name1.Name == name2.Name)
+                && (!comparison.HasFlag(TypeNameComparison.AssemblyCultureName) || name1.CultureName == name2.CultureName)
+                && (!comparison.HasFlag(TypeNameComparison.AssemblyVersion) || name1.Version == name2.Version)
+                && (!comparison.HasFlag(TypeNameComparison.AssemblyPublicKeyToken)
+                    // ImmutableArray equality is instance equality.
+                    || name1.PublicKeyOrToken.AsSpan().SequenceEqual(name2.PublicKeyOrToken.AsSpan()));
         }
     }
 
@@ -234,7 +245,7 @@ internal static class TypeExtensions
     ///  method removes nullability wrapper from the top level type only because <see cref="TypeName"/> in the
     ///  serialization root record is not nullable, but the generic types could be nullable.
     /// </summary>
-    public static TypeName ToTypeName(this Type type)
+    internal static TypeName ToTypeName(this Type type)
     {
         // Unwrap type that is matched against the root record type.
         type = type.UnwrapIfNullable();
@@ -243,7 +254,7 @@ internal static class TypeExtensions
             assemblyName = type.Assembly.FullName;
         }
 
-        return TypeName.Parse($"{GetTypeFullName(type)}, {assemblyName}");
+        return ToTypeName($"{GetTypeFullName(type)}, {assemblyName}");
 
         static string GetTypeFullName(Type type)
         {
@@ -274,8 +285,16 @@ internal static class TypeExtensions
     /// <summary>
     ///  If <paramref name="type"/> is a nullable type, return the underlying type; otherwise, return <paramref name="type"/>.
     /// </summary>
-    public static Type UnwrapIfNullable(this Type type) =>
+    internal static Type UnwrapIfNullable(this Type type) =>
         type.IsGenericType && !type.IsGenericTypeDefinition && type.GetGenericTypeDefinition() == typeof(Nullable<>)
             ? type.GetGenericArguments()[0]
             : type;
+
+    internal static TypeName ToTypeName(ref ValueStringBuilder builder)
+    {
+        using (builder)
+        {
+            return TypeName.Parse(builder.AsSpan());
+        }
+    }
 }

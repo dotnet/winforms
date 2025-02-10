@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Defines a base class for controls that support auto-scrolling behavior.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.ScrollableControlDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ScrollableControlDesigner, {Assemblies.SystemDesign}")]
 public partial class ScrollableControl : Control, IArrangedElement
 {
     protected const int ScrollStateAutoScrolling = 0x0001;

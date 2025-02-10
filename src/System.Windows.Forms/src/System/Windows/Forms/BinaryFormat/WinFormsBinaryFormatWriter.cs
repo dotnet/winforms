@@ -14,8 +14,6 @@ internal static class WinFormsBinaryFormatWriter
 {
     private static readonly string[] s_dataMemberName = ["Data"];
 
-    private static readonly string s_currentWinFormsFullName = typeof(WinFormsBinaryFormatWriter).Assembly.FullName!;
-
     public static void WriteBitmap(Stream stream, Bitmap bitmap)
     {
         using MemoryStream memoryStream = new();
@@ -25,7 +23,7 @@ internal static class WinFormsBinaryFormatWriter
         Debug.Assert(success);
 
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, AssemblyRef.SystemDrawing).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(Bitmap).FullName!, s_dataMemberName),
             libraryId: 2,
@@ -41,7 +39,7 @@ internal static class WinFormsBinaryFormatWriter
 
         using BinaryFormatWriterScope writer = new(stream);
 
-        new BinaryLibrary(2, s_currentWinFormsFullName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemWindowsForms).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(ImageListStreamer).FullName!, s_dataMemberName),
             libraryId: 2,
@@ -57,8 +55,7 @@ internal static class WinFormsBinaryFormatWriter
     public static bool TryWriteObject(Stream stream, object value)
     {
         // Framework types are more likely to be written, so check them first.
-        return BinaryFormatWriter.TryWriteFrameworkObject(stream, value)
-            || BinaryFormatWriter.TryWrite(Write, stream, value);
+        return BinaryFormatWriter.TryWrite(Write, stream, value);
 
         static bool Write(Stream stream, object value)
         {

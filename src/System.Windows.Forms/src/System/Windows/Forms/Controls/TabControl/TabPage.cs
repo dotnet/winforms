@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 ///  TabPage implements a single page of a tab control. It is essentially a Panel with TabItem
 ///  properties.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.TabPageDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TabPageDesigner, {Assemblies.SystemDesign}")]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
 [DefaultEvent("Click")]
@@ -218,7 +218,7 @@ public partial class TabPage : Panel
     ///  in the TabControl's associated imageList that will appear on the tab, or be -1.
     /// </summary>
     [TypeConverter(typeof(ImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [DefaultValue(-1)]
@@ -245,7 +245,7 @@ public partial class TabPage : Panel
     ///  associated imageList that will appear on the tab, or be -1.
     /// </summary>
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [DefaultValue("")]
     [RefreshProperties(RefreshProperties.Repaint)]

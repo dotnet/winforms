@@ -12,30 +12,29 @@ namespace System.Windows.Forms.Design.Tests;
 // NB: doesn't require thread affinity
 public class DesignerAttributeTests
 {
-    private const string AssemblyRef_SystemWinforms = $"System.Windows.Forms, Version={FXAssembly.Version}, Culture=neutral, PublicKeyToken={AssemblyRef.MicrosoftPublicKey}";
     private readonly ITestOutputHelper _output;
 
     private static ImmutableHashSet<string> SkipList { get; } =
     [
-        $"System.Windows.Forms.Design.AxDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.ControlBindingsConverter, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridColumnCollectionEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridViewComponentEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.StatusBarDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.ToolBarButtonDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.ToolBarDesigner, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.ToolStripCollectionEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.ToolStripImageIndexEditor, {AssemblyRef.SystemDesign}",
-        $"System.Windows.Forms.Design.WebBrowserDesigner, {AssemblyRef.SystemDesign}",
+        $"System.Windows.Forms.Design.AxDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.AxHostDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.ControlBindingsConverter, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridColumnCollectionEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridViewComponentEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.ToolBarButtonDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.ToolBarDesigner, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.ToolStripCollectionEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.ToolStripImageIndexEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.WebBrowserDesigner, {Assemblies.SystemDesign}",
     ];
 
     public DesignerAttributeTests(ITestOutputHelper output)
@@ -79,7 +78,7 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinforms, typeof(DesignerAttribute))]
+    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemWindowsForms, typeof(DesignerAttribute))]
     public void DesignerAttribute_TypeExists(Type annotatedType, DesignerAttribute attribute)
     {
         var type = Type.GetType(attribute.DesignerTypeName, throwOnError: false);
@@ -95,9 +94,9 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef.SystemDrawing, typeof(DesignerSerializerAttribute))]
-    [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinforms, typeof(DesignerSerializerAttribute))]
-    [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef.SystemDesign, typeof(DesignerSerializerAttribute))]
+    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemDrawing, typeof(DesignerSerializerAttribute))]
+    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemWindowsForms, typeof(DesignerSerializerAttribute))]
+    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemDesign, typeof(DesignerSerializerAttribute))]
     public void DesignerSerializerAttribute_TypeExists(Type annotatedType, DesignerSerializerAttribute attribute)
     {
         var type = Type.GetType(attribute.SerializerTypeName, false);
@@ -113,7 +112,7 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultPropertyAttribute))]
+    [MemberData(nameof(GetAttributeWithType_TestData), Assemblies.SystemWindowsForms, typeof(DefaultPropertyAttribute))]
     public void DefaultPropertyAttribute_PropertyExists(Type type, DefaultPropertyAttribute attribute)
     {
         string property = attribute.Name;
@@ -134,7 +133,7 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultBindingPropertyAttribute))]
+    [MemberData(nameof(GetAttributeWithType_TestData), Assemblies.SystemWindowsForms, typeof(DefaultBindingPropertyAttribute))]
     public void DefaultBindingPropertyAttribute_PropertyExists(Type type, DefaultBindingPropertyAttribute attribute)
     {
         var propertyInfo = type.GetProperty(attribute.Name);
@@ -144,7 +143,7 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultEventAttribute))]
+    [MemberData(nameof(GetAttributeWithType_TestData), Assemblies.SystemWindowsForms, typeof(DefaultEventAttribute))]
     public void DefaultEventAttribute_EventExists(Type type, DefaultEventAttribute attribute)
     {
         var eventInfo = type.GetEvent(attribute.Name);
@@ -154,8 +153,8 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef.SystemDrawing, typeof(TypeConverterAttribute))]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef_SystemWinforms, typeof(TypeConverterAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(TypeConverterAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(TypeConverterAttribute))]
     public void TypeConverterAttribute_TypeExists(string subject, TypeConverterAttribute attribute)
     {
         var type = Type.GetType(attribute.ConverterTypeName, false);
@@ -171,8 +170,8 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef.SystemDrawing, typeof(EditorAttribute))]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef_SystemWinforms, typeof(EditorAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(EditorAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(EditorAttribute))]
     public void EditorAttribute_TypeExists(string subject, EditorAttribute attribute)
     {
         var type = Type.GetType(attribute.EditorTypeName, false);

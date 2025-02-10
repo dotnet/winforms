@@ -22,7 +22,7 @@ namespace System.Windows.Forms;
 [ClassInterface(ClassInterfaceType.AutoDispatch)]
 [DefaultEvent(nameof(PanelClick))]
 [DefaultProperty(nameof(Text))]
-[Designer($"System.Windows.Forms.Design.StatusBarDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}")]
 public partial class StatusBar : Control
 {
     // Adding this constructor to suppress creation of a default one.

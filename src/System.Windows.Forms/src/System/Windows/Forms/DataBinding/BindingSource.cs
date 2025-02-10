@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(DataSource))]
 [DefaultEvent(nameof(CurrentChanged))]
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
-[Designer($"System.Windows.Forms.Design.BindingSourceDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.BindingSourceDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionBindingSource))]
 public partial class BindingSource : Component,
                              IBindingListView,
@@ -191,7 +191,7 @@ public partial class BindingSource : Component,
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue("")]
     [RefreshProperties(RefreshProperties.Repaint)]
-    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.BindingSourceDataMemberDescr))]
     [AllowNull]
     public string DataMember

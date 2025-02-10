@@ -102,8 +102,8 @@ public abstract class ListControl : Control
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue("")]
-    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
-    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {Assemblies.SystemDesign}")]
+    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlDisplayMemberDescr))]
     [AllowNull]
     public string DisplayMember
@@ -205,7 +205,7 @@ public abstract class ListControl : Control
 
     [DefaultValue("")]
     [SRDescription(nameof(SR.ListControlFormatStringDescr))]
-    [Editor($"System.Windows.Forms.Design.FormatStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.FormatStringEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MergableProperty(false)]
     public string FormatString
     {
@@ -292,7 +292,7 @@ public abstract class ListControl : Control
 
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue("")]
-    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlValueMemberDescr))]
     [AllowNull]
     public string ValueMember

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 partial class Main
 {

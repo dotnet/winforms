@@ -1,4 +1,4 @@
-﻿namespace Accessibility_Core_App;
+﻿namespace TestPassApp;
 
 partial class CommonControl2
 {
@@ -75,7 +75,7 @@ partial class CommonControl2
         // 
         // pictureBox1
         // 
-        this.pictureBox1.Image = global::Accessibility_Core_App.Properties.Resources.TestResult;
+        this.pictureBox1.Image = global::TestPassApp.Properties.Resources.TestResult;
         this.pictureBox1.Location = new System.Drawing.Point(18, 301);
         this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.pictureBox1.Name = "pictureBox1";

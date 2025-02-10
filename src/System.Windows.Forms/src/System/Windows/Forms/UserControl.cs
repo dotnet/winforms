@@ -12,8 +12,8 @@ namespace System.Windows.Forms;
 ///  Represents an empty control that can be used in the Forms Designer to create other  controls. By extending form,
 ///  UserControl inherits all of the standard positioning and mnemonic handling code that is necessary in a user control.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.UserControlDocumentDesigner, {AssemblyRef.SystemDesign}", typeof(IRootDesigner))]
-[Designer($"System.Windows.Forms.Design.ControlDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.UserControlDocumentDesigner, {Assemblies.SystemDesign}", typeof(IRootDesigner))]
+[Designer($"System.Windows.Forms.Design.ControlDesigner, {Assemblies.SystemDesign}")]
 [DesignerCategory("UserControl")]
 [DefaultEvent(nameof(Load))]
 public class UserControl : ContainerControl

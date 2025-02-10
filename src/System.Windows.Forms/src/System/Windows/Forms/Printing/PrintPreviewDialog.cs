@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents a dialog box form that contains a <see cref="Forms.PrintPreviewControl"/>.
 /// </summary>
-[Designer($"System.ComponentModel.Design.ComponentDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.ComponentModel.Design.ComponentDesigner, {Assemblies.SystemDesign}")]
 [DesignTimeVisible(true)]
 [DefaultProperty(nameof(Document))]
 [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]

@@ -86,7 +86,7 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
         remove { }
     }
 
-    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [DefaultValue("")]
     public string MappingName

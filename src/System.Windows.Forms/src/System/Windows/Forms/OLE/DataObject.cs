@@ -3,15 +3,13 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
-using System.Private.Windows.Ole;
-using System.Windows.Forms.Nrbf;
-using System.Windows.Forms.Ole;
 
 namespace System.Windows.Forms;
 
@@ -30,21 +28,25 @@ public unsafe partial class DataObject :
     Com.IManagedWrapper<Com.IDataObject>,
     IComVisibleDataObject
 {
-    private readonly Composition<WinFormsRuntime, DataFormats.Format> _innerData;
+    private readonly Composition _innerData;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
     ///  and the managed data object the raw pointer is associated with.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method will add a reference to the <paramref name="data"/> pointer.
+    ///  </para>
+    /// </remarks>
     /// <inheritdoc cref="DataObject(object)"/>
-    internal DataObject(Com.IDataObject* data) => _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromNativeDataObject(data);
+    internal DataObject(Com.IDataObject* data) => _innerData = DataObjectCore.CreateComposition(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() =>
-        _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore<WinFormsOleServices>());
+    public DataObject() => _innerData = DataObjectCore.CreateComposition();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
@@ -58,26 +60,8 @@ public unsafe partial class DataObject :
     ///   if <see cref="ITypedDataObject"/> is not implemented.
     ///  </para>
     /// </remarks>
-    public DataObject(object data)
-    {
-        if (data is IDataObjectInternal internalDataObject)
-        {
-            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(internalDataObject);
-        }
-        else if (data is IDataObject iDataObject)
-        {
-            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataObjectAdapter(iDataObject));
-        }
-        else if (data is ComTypes.IDataObject comDataObject)
-        {
-            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromRuntimeDataObject(comDataObject);
-        }
-        else
-        {
-            _innerData = Composition<WinFormsRuntime, DataFormats.Format>.CreateFromManagedDataObject(new DataStore<WinFormsOleServices>());
-            SetData(data);
-        }
-    }
+    public DataObject(object data) =>
+        _innerData = DataObjectCore.CreateComposition(data, DataObjectAdapter.Create);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data and its
@@ -93,7 +77,7 @@ public unsafe partial class DataObject :
         {
             DataObject data => data,
             DataObjectAdapter adapter => adapter.DataObject,
-            DataStore<WinFormsOleServices> => this,
+            DataStore<WinFormsRuntime> => this,
             _ => null
         };
 
@@ -102,11 +86,13 @@ public unsafe partial class DataObject :
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, T data) => SetData(format, TryJsonSerialize(format, data));
+    public void SetDataAsJson<T>(string format, T data) =>
+        SetData(format, DataObjectCore.TryJsonSerialize(format, data));
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(T data) => SetData(typeof(T), TryJsonSerialize(typeof(T).FullName!, data));
+    public void SetDataAsJson<T>(T data) =>
+        SetData(typeof(T), DataObjectCore.TryJsonSerialize(typeof(T).FullName.OrThrowIfNull(), data));
 
     /// <summary>
     ///  Stores the data in the specified format.
@@ -144,32 +130,8 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data) => SetData(format, autoConvert, TryJsonSerialize(format, data));
-
-    /// <summary>
-    ///  JSON serialize the data only if the format is not a restricted deserialization format and the data is not an intrinsic type.
-    /// </summary>
-    /// <returns>
-    ///  The passed in <paramref name="data"/> as is if the format is restricted. Otherwise the JSON serialized <paramref name="data"/>.
-    /// </returns>
-    private static object TryJsonSerialize<T>(string format, T data)
-    {
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
-        data.OrThrowIfNull(nameof(data));
-
-        if (typeof(T) == typeof(DataObject))
-        {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetData)));
-        }
-
-        return DataFormatNames.IsRestrictedFormat(format) || WinFormsNrbfSerializer.IsSupportedType<T>()
-            ? data
-            : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
-    }
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
+        SetData(format, autoConvert, DataObjectCore.TryJsonSerialize(format, data));
 
     #region IDataObject
     [Obsolete(
@@ -339,7 +301,7 @@ public unsafe partial class DataObject :
     {
         data = default;
 
-        if (!IsValidFormatAndType<T>(format))
+        if (!ClipboardCore.IsValidTypeForFormat(typeof(T), format))
         {
             // Resolver implementation is specific to the overridden TryGetDataCore method,
             // can't validate if a non-null resolver is required for unbounded types.
@@ -347,44 +309,6 @@ public unsafe partial class DataObject :
         }
 
         return TryGetDataCore(format, resolver, autoConvert, out data);
-    }
-
-    /// <summary>
-    ///  Verify if the specified format is valid and compatible with the specified type <typeparamref name="T"/>.
-    /// </summary>
-    internal static bool IsValidFormatAndType<T>(string format)
-    {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            return false;
-        }
-
-        if (IsValidPredefinedFormatTypeCombination(format))
-        {
-            return true;
-        }
-
-        throw new NotSupportedException(string.Format(
-           SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
-           typeof(T).FullName, format));
-
-        static bool IsValidPredefinedFormatTypeCombination(string format) => format switch
-        {
-            DataFormatNames.Text
-                or DataFormatNames.UnicodeText
-                or DataFormatNames.String
-                or DataFormatNames.Rtf
-                or DataFormatNames.Html
-                or DataFormatNames.OemText => typeof(string) == typeof(T),
-
-            DataFormatNames.FileDrop
-                or DataFormatNames.FileNameAnsi
-                or DataFormatNames.FileNameUnicode => typeof(string[]) == typeof(T),
-
-            DataFormatNames.Bitmap or DataFormatNames.BinaryFormatBitmap =>
-                typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T),
-            _ => true
-        };
     }
 
     private static string ConvertToDataFormats(TextDataFormat format) => format switch

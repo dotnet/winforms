@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.Drawing;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
@@ -15,78 +16,6 @@ internal class CoreNrbfSerializer : INrbfSerializer
 {
     private static Dictionary<TypeName, Type>? s_knownTypes;
 
-    // These types are read from and written to serialized stream manually, accessing record field by field.
-    // Thus they are re-hydrated with no formatters and are safe. The default resolver should recognize them
-    // to resolve primitive types or fields of the specified type T.
-    private static readonly Type[] s_intrinsicTypes =
-    [
-        // Primitive types.
-        typeof(byte),
-        typeof(sbyte),
-        typeof(short),
-        typeof(ushort),
-        typeof(int),
-        typeof(uint),
-        typeof(long),
-        typeof(ulong),
-        typeof(double),
-        typeof(float),
-        typeof(char),
-        typeof(bool),
-        typeof(string),
-        typeof(decimal),
-        typeof(DateTime),
-        typeof(TimeSpan),
-        typeof(IntPtr),
-        typeof(UIntPtr),
-        // Special type we use to report that binary formatting is disabled.
-        typeof(NotSupportedException),
-        // Lists of primitive types
-        typeof(List<byte>),
-        typeof(List<sbyte>),
-        typeof(List<short>),
-        typeof(List<ushort>),
-        typeof(List<int>),
-        typeof(List<uint>),
-        typeof(List<long>),
-        typeof(List<ulong>),
-        typeof(List<float>),
-        typeof(List<double>),
-        typeof(List<char>),
-        typeof(List<bool>),
-        typeof(List<string>),
-        typeof(List<decimal>),
-        typeof(List<DateTime>),
-        typeof(List<TimeSpan>),
-        // Arrays of primitive types.
-        typeof(byte[]),
-        typeof(sbyte[]),
-        typeof(short[]),
-        typeof(ushort[]),
-        typeof(int[]),
-        typeof(uint[]),
-        typeof(long[]),
-        typeof(ulong[]),
-        typeof(float[]),
-        typeof(double[]),
-        typeof(char[]),
-        typeof(bool[]),
-        typeof(string[]),
-        typeof(decimal[]),
-        typeof(DateTime[]),
-        typeof(TimeSpan[]),
-
-        // Exchange types, they are serialized with the .NET Framework assembly name.
-        // In .NET they are located in System.Drawing.Primitives.
-        typeof(RectangleF),
-        typeof(PointF),
-        typeof(SizeF),
-        typeof(Rectangle),
-        typeof(Point),
-        typeof(Size),
-        typeof(Color)
-    ];
-
     public static bool TryWriteObject(Stream stream, object value) =>
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value)
         || BinaryFormatWriter.TryWriteJsonData(stream, value)
@@ -99,15 +28,74 @@ internal class CoreNrbfSerializer : INrbfSerializer
 
     public static bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
     {
-        if (s_knownTypes is null)
+        // As these are all common .NET types, we'll match just by their full name and ignore assembly details.
+        // This will handle version to version changes and allow compat with .NET Framework serialization.
+        s_knownTypes ??= new(60, TypeNameComparer.FullNameMatch)
         {
-            s_knownTypes = new(s_intrinsicTypes.Length, TypeNameComparer.Default);
-            foreach (Type intrinsic in s_intrinsicTypes)
-            {
-                s_knownTypes.Add(intrinsic.ToTypeName(), intrinsic);
-            }
-        }
+            // Types are bound to their .NET Framework identities to facilitate interoperability
+            { TypeName.Parse(Types.ByteType), typeof(byte) },
+            { TypeName.Parse(Types.SByteType), typeof(sbyte) },
+            { TypeName.Parse(Types.Int16Type), typeof(short) },
+            { TypeName.Parse(Types.UInt16Type), typeof(ushort) },
+            { TypeName.Parse(Types.Int32Type), typeof(int) },
+            { TypeName.Parse(Types.UInt32Type), typeof(uint) },
+            { TypeName.Parse(Types.Int64Type), typeof(long) },
+            { TypeName.Parse(Types.UInt64Type), typeof(ulong) },
+            { TypeName.Parse(Types.DoubleType), typeof(double) },
+            { TypeName.Parse(Types.SingleType), typeof(float) },
+            { TypeName.Parse(Types.CharType), typeof(char) },
+            { TypeName.Parse(Types.BooleanType), typeof(bool) },
+            { TypeName.Parse(Types.StringType), typeof(string) },
+            { TypeName.Parse(Types.DecimalType), typeof(decimal) },
+            { TypeName.Parse(Types.DateTimeType), typeof(DateTime) },
+            { TypeName.Parse(Types.TimeSpanType), typeof(TimeSpan) },
+            { TypeName.Parse(Types.IntPtrType), typeof(IntPtr) },
+            { TypeName.Parse(Types.UIntPtrType), typeof(UIntPtr) },
+            { TypeName.Parse(Types.NotSupportedExceptionType), typeof(NotSupportedException) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.BooleanType}]]"), typeof(List<bool>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.CharType}]]"), typeof(List<char>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.StringType}]]"), typeof(List<string>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.SByteType}]]"), typeof(List<sbyte>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.ByteType}]]"), typeof(List<byte>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int16Type}]]"), typeof(List<short>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt16Type}]]"), typeof(List<ushort>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int32Type}]]"), typeof(List<int>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt32Type}]]"), typeof(List<uint>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.Int64Type}]]"), typeof(List<long>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.UInt64Type}]]"), typeof(List<ulong>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.SingleType}]]"), typeof(List<float>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DoubleType}]]"), typeof(List<double>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DecimalType}]]"), typeof(List<decimal>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.DateTimeType}]]"), typeof(List<DateTime>) },
+            { Types.ToTypeName($"{Types.ListName}[[{Types.TimeSpanType}]]"), typeof(List<TimeSpan>) },
+            { Types.ToTypeName($"{Types.ByteType}[]"), typeof(byte[]) },
+            { Types.ToTypeName($"{Types.SByteType}[]"), typeof(sbyte[]) },
+            { Types.ToTypeName($"{Types.Int16Type}[]"), typeof(short[]) },
+            { Types.ToTypeName($"{Types.UInt16Type}[]"), typeof(ushort[]) },
+            { Types.ToTypeName($"{Types.Int32Type}[]"), typeof(int[]) },
+            { Types.ToTypeName($"{Types.UInt32Type}[]"), typeof(uint[]) },
+            { Types.ToTypeName($"{Types.Int64Type}[]"), typeof(long[]) },
+            { Types.ToTypeName($"{Types.UInt64Type}[]"), typeof(ulong[]) },
+            { Types.ToTypeName($"{Types.SingleType}[]"), typeof(float[]) },
+            { Types.ToTypeName($"{Types.DoubleType}[]"), typeof(double[]) },
+            { Types.ToTypeName($"{Types.CharType}[]"), typeof(char[]) },
+            { Types.ToTypeName($"{Types.BooleanType}[]"), typeof(bool[]) },
+            { Types.ToTypeName($"{Types.StringType}[]"), typeof(string[]) },
+            { Types.ToTypeName($"{Types.DecimalType}[]"), typeof(decimal[]) },
+            { Types.ToTypeName($"{Types.DateTimeType}[]"), typeof(DateTime[]) },
+            { Types.ToTypeName($"{Types.TimeSpanType}[]"), typeof(TimeSpan[]) },
+            { Types.ToTypeName($"{Types.RectangleFType}"), typeof(RectangleF) },
+            { Types.ToTypeName($"{Types.PointFType}"), typeof(PointF) },
+            { Types.ToTypeName($"{Types.SizeFType}"), typeof(SizeF) },
+            { Types.ToTypeName($"{Types.RectangleType}"), typeof(Rectangle) },
+            { Types.ToTypeName($"{Types.PointType}"), typeof(Point) },
+            { Types.ToTypeName($"{Types.SizeType}"), typeof(Size) },
+            { Types.ToTypeName($"{Types.ColorType}"), typeof(Color) },
+            { Types.ToTypeName($"{Types.HashtableType}"), typeof(Hashtable) },
+            { Types.ToTypeName($"{Types.ArrayListType}"), typeof(ArrayList) }
+        };
 
+        Debug.Assert(s_knownTypes.Count == 60);
         return s_knownTypes.TryGetValue(typeName, out type);
     }
 

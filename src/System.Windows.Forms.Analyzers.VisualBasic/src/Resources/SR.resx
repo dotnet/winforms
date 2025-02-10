@@ -135,4 +135,13 @@
   <data name="WFO2001AnalyzerTitle" xml:space="preserve">
     <value>Task is being passed to InvokeAsync without a cancellation token</value>
   </data>
+  <data name="WFO1001AnalyzerMessageFormat" xml:space="preserve">
+    <value>Type `{0}` does not implement `ITypedDataObject` interface</value>
+  </data>
+  <data name="WFO1001AnalyzerTitle" xml:space="preserve">
+    <value>`IDataObject` type does not implement `ITypedDataObject`</value>
+  </data>
+  <data name="WFO1001AnalyzerDescription" xml:space="preserve">
+    <value>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</value>
+  </data>
 </root>

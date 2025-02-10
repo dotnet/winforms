@@ -15,9 +15,9 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  ToolStrip control.
 /// </summary>
-[DesignerSerializer($"System.Windows.Forms.Design.ToolStripCodeDomSerializer, {AssemblyRef.SystemDesign}",
-    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
-[Designer($"System.Windows.Forms.Design.ToolStripDesigner, {AssemblyRef.SystemDesign}")]
+[DesignerSerializer($"System.Windows.Forms.Design.ToolStripCodeDomSerializer, {Assemblies.SystemDesign}",
+    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolStripDesigner, {Assemblies.SystemDesign}")]
 [DefaultProperty(nameof(Items))]
 [SRDescription(nameof(SR.DescriptionToolStrip))]
 [DefaultEvent(nameof(ItemClicked))]

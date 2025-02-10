@@ -187,7 +187,7 @@ public partial class ColumnHeader : Component, ICloneable
 
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
     [TypeConverter(typeof(ImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ImageIndex
@@ -231,7 +231,7 @@ public partial class ColumnHeader : Component, ICloneable
 
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string ImageKey

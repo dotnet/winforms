@@ -28,7 +28,7 @@ internal sealed class ArraySinglePrimitive<T> :
     public ArraySinglePrimitive(Id objectId, IReadOnlyList<T> arrayObjects)
         : base(new ArrayInfo(objectId, arrayObjects.Count), arrayObjects)
     {
-        PrimitiveType = TypeInfo.GetPrimitiveType(typeof(T));
+        PrimitiveType = typeof(T).GetPrimitiveType();
     }
 
     private protected override void Write(BinaryWriter writer)

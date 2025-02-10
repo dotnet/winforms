@@ -51,7 +51,7 @@ public partial class ToolStripComboBox : ToolStripControlHost
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     public AutoCompleteStringCollection AutoCompleteCustomSource
@@ -205,7 +205,7 @@ public partial class ToolStripComboBox : ToolStripControlHost
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ComboBoxItemsDescr))]
-    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public ComboBox.ObjectCollection Items
     {
         get

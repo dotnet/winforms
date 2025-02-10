@@ -8,7 +8,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
 
-[Editor($"System.Windows.Forms.Design.StyleCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+[Editor($"System.Windows.Forms.Design.StyleCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
 public abstract class TableLayoutStyleCollection : IList
 {
     private IArrangedElement? _owner;

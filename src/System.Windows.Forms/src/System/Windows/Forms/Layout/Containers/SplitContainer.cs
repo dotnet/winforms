@@ -18,7 +18,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultEvent(nameof(SplitterMoved))]
 [Docking(DockingBehavior.AutoDock)]
-[Designer($"System.Windows.Forms.Design.SplitContainerDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.SplitContainerDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionSplitContainer))]
 public partial class SplitContainer : ContainerControl, ISupportInitialize
 {

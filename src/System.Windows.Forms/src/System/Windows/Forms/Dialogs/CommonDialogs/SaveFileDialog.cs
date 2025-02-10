@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  Represents common dialog box that allows the user to specify options for saving a
 ///  file. This class cannot be inherited.
 /// </summary>
-[Designer($"System.Windows.Forms.Design.SaveFileDialogDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.SaveFileDialogDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionSaveFileDialog))]
 public sealed partial class SaveFileDialog : FileDialog
 {

@@ -8,11 +8,11 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
 
-[Designer($"System.Windows.Forms.Design.DataGridViewDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.DataGridViewDesigner, {Assemblies.SystemDesign}")]
 [DefaultEvent(nameof(CellContentClick))]
 [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
 [Docking(DockingBehavior.Ask)]
-[Editor($"System.Windows.Forms.Design.DataGridViewComponentEditor, {AssemblyRef.SystemDesign}", typeof(ComponentEditor))]
+[Editor($"System.Windows.Forms.Design.DataGridViewComponentEditor, {Assemblies.SystemDesign}", typeof(ComponentEditor))]
 [SRDescription(nameof(SR.DescriptionDataGridView))]
 public partial class DataGridView : Control, ISupportInitialize
 {
@@ -1679,7 +1679,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    [Editor($"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [MergableProperty(false)]
     public DataGridViewColumnCollection Columns
@@ -1873,7 +1873,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [DefaultValue("")]
     [SRCategory(nameof(SR.CatData))]
-    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [SRDescription(nameof(SR.DataGridViewDataMemberDescr))]
     public string DataMember
     {

@@ -14,10 +14,10 @@ namespace System.Windows.Forms;
 [ProvideProperty("Column", typeof(Control))]
 [ProvideProperty("CellPosition", typeof(Control))]
 [DefaultProperty(nameof(ColumnCount))]
-[DesignerSerializer($"System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer, {AssemblyRef.SystemDesign}",
-    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+[DesignerSerializer($"System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer, {Assemblies.SystemDesign}",
+    $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {Assemblies.SystemDesign}")]
 [Docking(DockingBehavior.Never)]
-[Designer($"System.Windows.Forms.Design.TableLayoutPanelDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TableLayoutPanelDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionTableLayoutPanel))]
 public class TableLayoutPanel : Panel, IExtenderProvider
 {
