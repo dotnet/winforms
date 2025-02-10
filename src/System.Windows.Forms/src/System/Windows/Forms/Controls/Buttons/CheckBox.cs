@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Checked))]
 [DefaultEvent(nameof(CheckedChanged))]
 [DefaultBindingProperty(nameof(CheckState))]
-[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
+[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionCheckBox))]
 public partial class CheckBox : ButtonBase
 {

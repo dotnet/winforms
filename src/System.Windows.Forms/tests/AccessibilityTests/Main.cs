@@ -3,7 +3,7 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 public partial class Main : Form
 {

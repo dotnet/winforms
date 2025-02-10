@@ -134,7 +134,7 @@ internal static class BinaryFormatWriter
     public static void WritePoint(Stream stream, Point value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(Point).FullName!, s_pointMemberNames),
             libraryId: 2,
@@ -153,7 +153,7 @@ internal static class BinaryFormatWriter
     public static void WriteRectangle(Stream stream, Rectangle value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(Rectangle).FullName!, s_rectangleMemberNames),
             libraryId: 2,
@@ -176,7 +176,7 @@ internal static class BinaryFormatWriter
     public static void WriteSize(Stream stream, Size value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(Size).FullName!, s_sizeMemberNames),
             libraryId: 2,
@@ -195,7 +195,7 @@ internal static class BinaryFormatWriter
     public static void WritePointF(Stream stream, PointF value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(PointF).FullName!, s_pointMemberNames),
             libraryId: 2,
@@ -214,7 +214,7 @@ internal static class BinaryFormatWriter
     public static void WriteRectangleF(Stream stream, RectangleF value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(RectangleF).FullName!, s_rectangleMemberNames),
             libraryId: 2,
@@ -237,7 +237,7 @@ internal static class BinaryFormatWriter
     public static void WriteSizeF(Stream stream, SizeF value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(SizeF).FullName!, s_sizeMemberNames),
             libraryId: 2,
@@ -256,7 +256,7 @@ internal static class BinaryFormatWriter
     public static void WriteColor(Stream stream, Color value)
     {
         using BinaryFormatWriterScope writer = new(stream);
-        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new BinaryLibrary(2, Assemblies.SystemDrawing).Write(writer);
         new ClassWithMembersAndTypes(
             new ClassInfo(1, typeof(Color).FullName!, s_colorMemberNames),
             libraryId: 2,
@@ -292,7 +292,7 @@ internal static class BinaryFormatWriter
     public static void WritePrimitive(Stream stream, object primitive)
     {
         Type type = primitive.GetType();
-        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(type);
+        PrimitiveType primitiveType = type.GetPrimitiveType();
 
         if (primitiveType == default)
         {
@@ -344,7 +344,7 @@ internal static class BinaryFormatWriter
         new SystemClassWithMembersAndTypes(
             new ClassInfo(
                 1,
-                $"System.Collections.Generic.List`1[[{TypeInfo.StringType}, {TypeInfo.MscorlibAssemblyName}]]",
+                $"System.Collections.Generic.List`1[[{Types.StringType}, {Assemblies.Mscorlib}]]",
                 s_listMemberNames),
             new MemberTypeInfo[]
             {
@@ -368,7 +368,7 @@ internal static class BinaryFormatWriter
     public static void WritePrimitiveList<T>(Stream stream, List<T> list)
         where T : unmanaged
     {
-        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(typeof(T));
+        PrimitiveType primitiveType = typeof(T).GetPrimitiveType();
         if (primitiveType == default)
         {
             throw new NotSupportedException($"{nameof(T)} is not primitive.");
@@ -379,7 +379,7 @@ internal static class BinaryFormatWriter
         new SystemClassWithMembersAndTypes(
             new ClassInfo(
                 1,
-                $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {TypeInfo.MscorlibAssemblyName}]]",
+                $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {Assemblies.Mscorlib}]]",
                 s_listMemberNames),
             new MemberTypeInfo[]
             {
@@ -503,7 +503,7 @@ internal static class BinaryFormatWriter
 
         static bool Write(Stream stream, Array array)
         {
-            PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(array.GetType().GetElementType()!);
+            PrimitiveType primitiveType = array.GetType().GetElementType()!.GetPrimitiveType();
 
             if (primitiveType == default)
             {
@@ -600,7 +600,7 @@ internal static class BinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, TypeInfo.HashtableType, s_hashtableMemberNames),
+            new ClassInfo(1, Types.HashtableType, s_hashtableMemberNames),
             new MemberTypeInfo[]
             {
                 new(BinaryType.Primitive, PrimitiveType.Single),
@@ -637,13 +637,13 @@ internal static class BinaryFormatWriter
 
         // We only serialize the message to avoid binary serialization risks.
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, TypeInfo.NotSupportedExceptionType, s_notSupportedExceptionMemberNames),
+            new ClassInfo(1, Types.NotSupportedExceptionType, s_notSupportedExceptionMemberNames),
             new MemberTypeInfo[]
             {
                 new(BinaryType.String, null),
                 new(BinaryType.String, null),
-                new(BinaryType.SystemClass, TypeInfo.IDictionaryType),
-                new(BinaryType.SystemClass, TypeInfo.ExceptionType),
+                new(BinaryType.SystemClass, Types.IDictionaryType),
+                new(BinaryType.SystemClass, Types.ExceptionType),
                 new(BinaryType.String, null),
                 new(BinaryType.String, null),
                 new(BinaryType.String, null),
@@ -653,7 +653,7 @@ internal static class BinaryFormatWriter
                 new(BinaryType.String, null),
                 new(BinaryType.PrimitiveArray, PrimitiveType.Byte)
             },
-            new BinaryObjectString(2, TypeInfo.NotSupportedExceptionType),
+            new BinaryObjectString(2, Types.NotSupportedExceptionType),
             new BinaryObjectString(3, exception.Message),
             null,
             null,

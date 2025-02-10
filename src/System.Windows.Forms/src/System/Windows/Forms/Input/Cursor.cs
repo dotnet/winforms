@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 ///  what operation the mouse will have.
 /// </summary>
 [TypeConverter(typeof(CursorConverter))]
-[Editor($"System.Drawing.Design.CursorEditor, {AssemblyRef.SystemDrawingDesign}", typeof(UITypeEditor))]
+[Editor($"System.Drawing.Design.CursorEditor, {(Assemblies.SystemDrawingDesign)}", typeof(UITypeEditor))]
 public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle<HANDLE>, IHandle<HCURSOR>
 {
     private static Size s_cursorSize = Size.Empty;

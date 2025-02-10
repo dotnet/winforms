@@ -256,6 +256,7 @@
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.ListBox.NativeAdd(System.Object)~System.Int32")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.RichTextBox.Find(System.Char[],System.Int32,System.Int32)~System.Int32")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.RichTextBox.CharRangeToString(Windows.Win32.UI.Controls.RichEdit.CHARRANGE)~System.String")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Clipboard.Clear")]
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.BindingManagerBase.onCurrentChangedHandler")]
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.BindingManagerBase.onPositionChangedHandler")]
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.CurrencyManager.listposition")]

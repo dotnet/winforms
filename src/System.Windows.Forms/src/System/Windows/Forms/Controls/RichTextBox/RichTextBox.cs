@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
 ///  It supports font selection, boldface, and other type attributes.
 /// </summary>
 [Docking(DockingBehavior.Ask)]
-[Designer($"System.Windows.Forms.Design.RichTextBoxDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.RichTextBoxDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionRichTextBox))]
 public partial class RichTextBox : TextBoxBase
 {

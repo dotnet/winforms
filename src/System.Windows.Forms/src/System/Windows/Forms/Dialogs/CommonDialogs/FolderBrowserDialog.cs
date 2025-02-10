@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultEvent(nameof(HelpRequest))]
 [DefaultProperty(nameof(SelectedPath))]
-[Designer($"System.Windows.Forms.Design.FolderBrowserDialogDesigner, {AssemblyRef.SystemDesign}"),]
+[Designer($"System.Windows.Forms.Design.FolderBrowserDialogDesigner, {Assemblies.SystemDesign}"),]
 [SRDescription(nameof(SR.DescriptionFolderBrowserDialog))]
 public sealed class FolderBrowserDialog : CommonDialog
 {
@@ -159,7 +159,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     /// </summary>
     [Browsable(true)]
     [DefaultValue("")]
-    [Editor($"System.Windows.Forms.Design.SelectedPathEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.SelectedPathEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     [SRCategory(nameof(SR.CatFolderBrowsing))]
     [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]

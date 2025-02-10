@@ -27,7 +27,7 @@ internal static partial class DataFormatNames
     internal const string Rtf = "Rich Text Format";
     internal const string Csv = "Csv";
     internal const string String = "System.String";
-    internal const string Serializable = "WindowsForms10PersistentObject";
+    internal const string Serializable = "PersistentObject";
     internal const string Xaml = "Xaml";
     internal const string XamlPackage = "XamlPackage";
     internal const string InkSerializedFormat = PInvokeCore.INK_SERIALIZED_FORMAT;

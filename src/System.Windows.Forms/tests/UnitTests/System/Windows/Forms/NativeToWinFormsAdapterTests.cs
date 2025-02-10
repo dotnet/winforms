@@ -31,7 +31,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         // Primitive type is serialized by generating the record field by field.
         native.SetData(format, 1);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         // Format is compatible with `object` type, validation passed.
         // The `int` type can be assigned to an `object`, thus record type matched the requested type.
@@ -47,7 +48,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         // Primitive type is serialized by generating the record field by field.
         native.SetData(format, 1);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         Action tryGetData = () => dataObject.TryGetData(format, out object? value);
         tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
@@ -65,7 +67,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     {
         DataObject native = new();
         native.SetData(format, 1);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         // Throw when validating arguments, as these formats allow exactly strings or bitmaps only.
         Action tryGetData = () => dataObject.TryGetData(format, out object? _);
@@ -79,7 +82,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         TestData value = new(new(6, 7));
         // This code does not flush the data.
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         return (dataObject, value);
     }
@@ -128,8 +132,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         // SetData writes NotSupportedException to HGLOBAL to indicate that formatters are disabled,
         // but the restricted format can't read it.
-        dataObject.TryGetData(format, out object? result).Should().BeFalse();
-        result.Should().BeNull();
+        dataObject.TryGetData(format, out object? result).Should().BeTrue();
+        result.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
     }
 
     [WinFormsTheory]
@@ -152,7 +156,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         List<int> value = [1];
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         dataObject.TryGetData(format, out IList<int>? list).Should().BeTrue();
         list.Should().BeEquivalentTo(value);
@@ -165,7 +170,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         List<int> value = [1];
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         // Theoretically we don't require a resolver here, but this is an exception. In the more common cases resolver
         // is required to instantiate non-concrete types.
@@ -181,7 +187,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         List<int> value = [1];
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         Action tryGetData = () => dataObject.TryGetData(format, out IList<int>? _);
         tryGetData.Should().Throw<NotSupportedException>()
@@ -196,7 +203,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         List<int> value = [1];
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         dataObject.TryGetData(format, out List<int>? list).Should().BeTrue();
         list.Should().BeEquivalentTo(value);
@@ -210,7 +218,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         List<int> value = [1];
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         Action tryGetData = () => dataObject.TryGetData(format, out List<int>? _);
         tryGetData.Should().Throw<NotSupportedException>()
@@ -418,7 +427,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         NotSerializableData value = new(1);
         native.SetData(format, value);
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
 
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
@@ -436,7 +446,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         native.SetDataAsJson("test", value);
 
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
         Action a = () => dataObject.TryGetData("test", out SimpleTestDataBase? _);
         a.Should().Throw<NotSupportedException>();
         // This requires a resolver because this simulates out of process scenario with a type that is not intrinsic and not supported.
@@ -455,7 +466,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject native = new();
         native.SetDataAsJson(format, value);
 
-        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
+        DataObject dataObject = new(comDataObject.Value);
         Action a = () => dataObject.TryGetData(format, out SimpleTestDataBase? _);
 
         a.Should().Throw<NotSupportedException>()

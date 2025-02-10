@@ -15,7 +15,7 @@ namespace System.Windows.Forms;
 ///  Displays text that can contain a hyperlink.
 /// </summary>
 [DefaultEvent(nameof(LinkClicked))]
-[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
+[ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionLinkLabel))]
 public partial class LinkLabel : Label, IButtonControl
 {
@@ -155,7 +155,7 @@ public partial class LinkLabel : Label, IButtonControl
     /// <summary>
     ///  Gets or sets the range in the text that is treated as a link.
     /// </summary>
-    [Editor($"System.Windows.Forms.Design.LinkAreaEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.LinkAreaEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [Localizable(true)]
     [SRCategory(nameof(SR.CatBehavior))]

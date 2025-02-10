@@ -30,7 +30,7 @@ internal sealed class MemberPrimitiveTyped :
     /// <exception cref="ArgumentException"><paramref name="value"/> is not primitive.</exception>
     internal MemberPrimitiveTyped(object value)
     {
-        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(value.GetType());
+        PrimitiveType primitiveType = value.GetType().GetPrimitiveType();
         if (primitiveType == default)
         {
             throw new ArgumentException($"{nameof(value)} is not primitive.");

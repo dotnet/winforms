@@ -24,7 +24,7 @@ public partial class DataFormatsTests
         yield return new object[] { DataFormats.PenData, "PenData" };
         yield return new object[] { DataFormats.Riff, "RiffAudio" };
         yield return new object[] { DataFormats.Rtf, "Rich Text Format" };
-        yield return new object[] { DataFormats.Serializable, "WindowsForms10PersistentObject" };
+        yield return new object[] { DataFormats.Serializable, "PersistentObject" };
         yield return new object[] { DataFormats.StringFormat, "System.String" };
         yield return new object[] { DataFormats.SymbolicLink, "SymbolicLink" };
         yield return new object[] { DataFormats.Text, "Text" };
@@ -78,7 +78,7 @@ public partial class DataFormatsTests
         yield return new object[] { DataFormats.CommaSeparatedValue, "Csv" };
         yield return new object[] { DataFormats.Html, "HTML Format" };
         yield return new object[] { DataFormats.Rtf, "Rich Text Format" };
-        yield return new object[] { DataFormats.Serializable, "WindowsForms10PersistentObject" };
+        yield return new object[] { DataFormats.Serializable, "PersistentObject" };
         yield return new object[] { DataFormats.StringFormat, "System.String" };
         yield return new object[] { "Custom", "Custom" };
     }

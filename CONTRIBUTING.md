@@ -17,7 +17,7 @@ Whilst most .NET Core/.NET components are cross-platform Windows Forms implement
 Please do:
 
 * **DO** follow our [coding style][coding-style] (C# code-specific)<br/>
-  We strive to wrap the lines around 120 mark, and it's acceptable to stretch to no more than 150 chars (with some exceptions being URLs). [EditorGuidelines VS extension](https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines) makes it easier to visualise (see https://github.com/dotnet/winforms/pull/4836).
+  We strive to wrap the lines around 120 mark, and it's acceptable to stretch to no more than 150 chars (with some exceptions being URLs). [EditorGuidelines VS extension](https://marketplace.dev.azure.com/items?itemName=PaulHarrington.EditorGuidelines) makes it easier to visualise (see https://github.com/dotnet/winforms/pull/4836).
 * **DO** give priority to the current style of the project or file you're changing even if it diverges from the general guidelines.
 * **DO** include tests when adding new features. When fixing bugs, start with
   adding a test that highlights how the current behavior is broken.

@@ -67,6 +67,11 @@ public partial class RichTextBox
         /// <inheritdoc cref="IRichEditOleCallback.QueryAcceptData(Com.IDataObject*, ushort*, RECO_FLAGS, BOOL, HGLOBAL)"/>
         public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, HGLOBAL hMetaPict)
         {
+            if (lpdataobj is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             if (reco != RECO_FLAGS.RECO_DROP)
             {
                 return HRESULT.E_NOTIMPL;

@@ -14,7 +14,7 @@ using Com = Windows.Win32.System.Com;
 namespace System.Windows.Forms;
 
 [DesignTimeVisible(false)]
-[Designer($"System.Windows.Forms.Design.ToolStripItemDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ToolStripItemDesigner, {Assemblies.SystemDesign}")]
 [DefaultEvent(nameof(Click))]
 [ToolboxItem(false)]
 [DefaultProperty(nameof(Text))]
@@ -1107,7 +1107,7 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatBehavior))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(false)]
     [RelatedImageList("Owner.ImageList")]
     public int ImageIndex
@@ -1148,7 +1148,7 @@ public abstract partial class ToolStripItem :
     [Localizable(true)]
     [TypeConverter(typeof(ImageKeyConverter))]
     [RefreshProperties(RefreshProperties.Repaint)]
-    [Editor($"System.Windows.Forms.Design.ToolStripImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ToolStripImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(false)]
     [RelatedImageList("Owner.ImageList")]
     [AllowNull]
@@ -1951,7 +1951,7 @@ public abstract partial class ToolStripItem :
     /// </summary>
     [SRDescription(nameof(SR.ToolStripItemToolTipTextDescr))]
     [SRCategory(nameof(SR.CatBehavior))]
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [Localizable(true)]
     public string? ToolTipText
     {

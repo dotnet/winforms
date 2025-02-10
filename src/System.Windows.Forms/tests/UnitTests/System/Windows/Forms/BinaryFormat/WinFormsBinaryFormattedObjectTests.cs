@@ -26,10 +26,13 @@ public class WinFormsBinaryFormattedObjectTests
     public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
     {
         SimpleTestData testData = new() { X = 1, Y = 1 };
-        SerializationRecord format = testData.SerializeAndDecode();
+        SerializationRecord record = testData.SerializeAndDecode();
         DataRequest request = new("test");
         ITypeResolver resolver = new TypeBinder<CoreNrbfSerializer>(typeof(SimpleTestData), in request);
-        format.TryGetObjectFromJson<SimpleTestData>(resolver, out _).Should().BeFalse();
+        var (isJsonData, isValidType) = record.TryGetObjectFromJson(resolver, out SimpleTestData? result);
+        isJsonData.Should().BeFalse();
+        isValidType.Should().BeFalse();
+        result.Should().BeNull();
     }
 
     [Fact]
@@ -48,11 +51,14 @@ public class WinFormsBinaryFormattedObjectTests
         BinaryFormatWriter.TryWriteJsonData(stream, json);
 
         stream.Position = 0;
-        SerializationRecord binary = NrbfDecoder.Decode(stream);
-        binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
+        SerializationRecord record = NrbfDecoder.Decode(stream);
+        record.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
         ITypeResolver resolver = new TypeBinder<CoreNrbfSerializer>(typeof(SimpleTestData), in request);
-        binary.TryGetObjectFromJson<int>(resolver, out _).Should().BeTrue();
-        binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
+
+        var (isJsonData, isValidType) = record.TryGetObjectFromJson<int>(resolver, out _);
+
+        (isJsonData, isValidType) = record.TryGetObjectFromJson(resolver, out SimpleTestData? result);
+
         SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;
         deserialized.Should().BeEquivalentTo(testData);
     }
@@ -120,7 +126,7 @@ public class WinFormsBinaryFormattedObjectTests
         ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeNameMatches(typeof(Bitmap)).Should().BeTrue();
         root.TypeName.FullName.Should().Be(typeof(Bitmap).FullName);
-        root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
+        root.TypeName.AssemblyName!.FullName.Should().Be(Assemblies.SystemDrawing);
         ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
         bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);

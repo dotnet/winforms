@@ -29,6 +29,16 @@ internal unsafe interface IOleServices
         [NotNullWhen(true)] out T data);
 
     /// <summary>
+    ///  Returns true if the given <paramref name="type"/> is a valid type for the given <paramref name="format"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Basic predefined formats that map to <see langword="string"/> are checked before this call.
+    ///  </para>
+    /// </remarks>
+    static abstract bool IsValidTypeForFormat(Type type, string format);
+
+    /// <summary>
     ///  Allows the given <typeparamref name="T"/> to pass pre-validation without a resolver.
     /// </summary>
     static abstract bool AllowTypeWithoutResolver<T>();

@@ -15,6 +15,8 @@ internal sealed class DataObjectAdapter : IDataObjectInternal
 
     public DataObjectAdapter(IDataObject dataObject) => DataObject = dataObject;
 
+    public static IDataObjectInternal Create(IDataObject dataObject) => new DataObjectAdapter(dataObject);
+
     public object? GetData(string format, bool autoConvert) => DataObject.GetData(format, autoConvert);
     public object? GetData(string format) => DataObject.GetData(format);
     public object? GetData(Type format) => DataObject.GetData(format);

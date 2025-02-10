@@ -325,7 +325,9 @@ internal static class SerializationRecordExtensions
                 || !classInfo.HasMember("_size")
                 || classInfo.GetRawValue("_size") is not int size
                 || !classInfo.TypeName.IsConstructedGenericType
+#pragma warning disable IDE0082 // 'typeof' can be converted to 'nameof' - but not for generics, waiting for a fix - https://github.com/dotnet/roslyn/pull/76920
                 || classInfo.TypeName.GetGenericTypeDefinition().Name != typeof(List<>).Name
+#pragma warning restore IDE0082
                 || classInfo.TypeName.GetGenericArguments().Length != 1
                 || classInfo.GetRawValue("_items") is not ArrayRecord arrayRecord
                 || !IsPrimitiveArrayRecord(arrayRecord))
@@ -572,19 +574,25 @@ internal static class SerializationRecordExtensions
     /// <summary>
     ///  Tries to deserialize this object if it was serialized as JSON.
     /// </summary>
-    /// <returns>
-    ///  <see langword="true"/> if the data was serialized as JSON. Otherwise, <see langword="false"/>.
-    /// </returns>
-    /// <exception cref="SerializationException">If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly./></exception>
+    /// <param name="object">
+    ///  When <see langword="true"/> is returned, this will be the deserialized object or <see langword="default"/>
+    ///  if is was a JSON serialized type and the type did not match.
+    /// </param>
+    /// <exception cref="SerializationException">
+    ///  If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly.
+    /// </exception>
     /// <exception cref="NotSupportedException">If an exception occurred while JSON deserializing.</exception>
-    public static bool TryGetObjectFromJson<T>(this SerializationRecord record, ITypeResolver resolver, out object? @object)
+    internal static (bool isJsonData, bool isValidType) TryGetObjectFromJson<T>(
+        this SerializationRecord record,
+        ITypeResolver resolver,
+        out T? @object)
     {
-        @object = null;
+        @object = default;
 
         if (record.TypeName.AssemblyName?.FullName != IJsonData.CustomAssemblyName)
         {
             // The data was not serialized as JSON.
-            return false;
+            return (isJsonData: false, isValidType: false);
         }
 
         if (record is not ClassRecord types
@@ -593,25 +601,18 @@ internal static class SerializationRecordExtensions
             || !TypeName.TryParse(innerTypeFullName, out TypeName? serializedTypeName))
         {
             // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
-            throw new SerializationException();
+            throw new SerializationException(SR.ClipboardOrDragDrop_JsonDeserializationFailed);
         }
 
         Type serializedType = resolver.BindToType(serializedTypeName);
         if (!serializedType.IsAssignableTo(typeof(T)))
         {
-            // Not the type the caller asked for so @object remains null.
-            return true;
+            // Not the type the caller asked for.
+            return (isJsonData: true, isValidType: false);
         }
 
-        try
-        {
-            @object = JsonSerializer.Deserialize<T>(byteData.GetArray());
-        }
-        catch (Exception ex)
-        {
-            throw new NotSupportedException(SR.ClipboardOrDragDrop_JsonDeserializationFailed, ex);
-        }
-
-        return true;
+        // Let the original exception bubble up if deserialization fails.
+        @object = JsonSerializer.Deserialize<T>(byteData.GetArray());
+        return (isJsonData: true, isValidType: true);
     }
 }

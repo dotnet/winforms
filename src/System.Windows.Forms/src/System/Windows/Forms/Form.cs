@@ -21,7 +21,7 @@ namespace System.Windows.Forms;
 [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]
 [ToolboxItem(false)]
 [DesignTimeVisible(false)]
-[Designer($"System.Windows.Forms.Design.FormDocumentDesigner, {AssemblyRef.SystemDesign}", typeof(IRootDesigner))]
+[Designer($"System.Windows.Forms.Design.FormDocumentDesigner, {Assemblies.SystemDesign}", typeof(IRootDesigner))]
 [DefaultEvent(nameof(Load))]
 [InitializationEvent(nameof(Load))]
 [DesignerCategory("Form")]

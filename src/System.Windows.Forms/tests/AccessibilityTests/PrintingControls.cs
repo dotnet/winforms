@@ -4,7 +4,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App;
+namespace TestPassApp;
 
 public partial class PrintingControls : Form
 {

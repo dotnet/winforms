@@ -8,12 +8,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Formats.Nrbf;
+using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Ole;
-using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -367,9 +367,9 @@ public class ClipboardTests
         () => Clipboard.SetAudio(Array.Empty<byte>()),
         () => Clipboard.SetAudio(new MemoryStream()),
         () => Clipboard.SetData("format", data: null!),
-        () => Clipboard.SetDataObject(null!),
-        () => Clipboard.SetDataObject(null!, copy: true),
-        () => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0),
+        () => Clipboard.SetDataObject(new DataObject()),
+        () => Clipboard.SetDataObject(new DataObject(), copy: true),
+        () => Clipboard.SetDataObject(new DataObject(), copy: true, retryTimes: 10, retryDelay: 0),
         () => Clipboard.SetFileDropList(["filePath"]),
         () => Clipboard.SetText("text"),
         () => Clipboard.SetText("text", TextDataFormat.Text)
@@ -729,7 +729,7 @@ public class ClipboardTests
     {
         TestData expected = new(DateTime.Now);
         string format = "TestData";
-        using BinaryFormatterFullCompatScope scope = new();
+        using ClipboardBinaryFormatterFullCompatScope scope = new();
         Clipboard.SetData(format, expected);
 
         Clipboard.TryGetData(format, TestData.TestDataResolver, out TestData? data).Should().BeTrue();
@@ -741,6 +741,7 @@ public class ClipboardTests
         using NrbfSerializerInClipboardDragDropScope nrbfScope = new(enable: true);
         Clipboard.TryGetData(format, TestData.TestDataResolver, out TestData? testData).Should().BeTrue();
         expected.Equals(testData.Should().BeOfType<TestData>().Subject);
+
         // Resolver is required to read this type.
         Action tryGetData = () => Clipboard.TryGetData(format, out testData);
         tryGetData.Should().Throw<NotSupportedException>();
@@ -861,7 +862,7 @@ public class ClipboardTests
         value.SetValue(202u, 2, 3);
         value.SetValue(203u, 2, 4);
 
-        using BinaryFormatterFullCompatScope scope = new();
+        using ClipboardBinaryFormatterFullCompatScope scope = new();
         Clipboard.SetData("test", value);
 
         var result = Clipboard.GetData("test").Should().BeOfType<uint[,]>().Subject;
@@ -877,9 +878,10 @@ public class ClipboardTests
         result.GetValue(2, 3).Should().Be(202u);
         result.GetValue(2, 4).Should().Be(203u);
 
-        Action tryGetData = () => Clipboard.TryGetData("test", out uint[,]? data);
-        // Can't decode the root record, thus can't validate the T.
-        tryGetData.Should().Throw<NotSupportedException>();
+        Clipboard.TryGetData("test", out uint[,]? data).Should().BeTrue();
+
+        // FluentAssertions doesn't support non-zero indexed arrays.
+        Assert.Equal(data, value);
     }
 
     [WinFormsTheory]
@@ -979,6 +981,7 @@ public class ClipboardTests
         ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
         returnedDataObject.TryGetData("testDataFormat", out SimpleTestData deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(testData);
+
         // We don't expose JsonData<T> in legacy API
         var legacyResult = Clipboard.GetData("testDataFormat");
         if (copy)
@@ -1363,6 +1366,8 @@ public class ClipboardTests
         // Otherwise this is the user-implemented ITypedDataObject or the WinForms wrapper.
         if (copy || typeof(T).IsAssignableTo(typeof(ITypedDataObject)))
         {
+            // User types always should require BinaryFormatter to be enabled unless they are using TrySerializeAsJson.
+            using BinaryFormatterScope scope = new(enable: copy);
             ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
 
             received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();

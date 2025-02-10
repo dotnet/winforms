@@ -1008,7 +1008,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     [DefaultValue("")]
     [Localizable(true)]
     [SRDescription(nameof(SR.ToolTipToolTipDescr))]
-    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
+    [Editor($"System.ComponentModel.Design.MultilineStringEditor, {Assemblies.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     public string? GetToolTip(Control? control)
     {
         if (control is null)

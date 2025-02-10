@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(SplitterMoved))]
 [DefaultProperty(nameof(Dock))]
 [SRDescription(nameof(SR.DescriptionSplitter))]
-[Designer($"System.Windows.Forms.Design.SplitterDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.SplitterDesigner, {Assemblies.SystemDesign}")]
 public partial class Splitter : Control
 {
     private const int DRAW_START = 1;

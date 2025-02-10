@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  resizes. If more than one control is docked to an edge, the controls
 ///  will not be placed on top of each other.
 /// </summary>
-[Editor($"System.Windows.Forms.Design.DockEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+[Editor($"System.Windows.Forms.Design.DockEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
 public enum DockStyle
 {
     None,

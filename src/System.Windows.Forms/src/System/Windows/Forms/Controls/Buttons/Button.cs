@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 ///  Represents a Windows button.
 /// </summary>
 [SRDescription(nameof(SR.DescriptionButton))]
-[Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {Assemblies.SystemDesign}")]
 public partial class Button : ButtonBase, IButtonControl
 {
     /// <summary>

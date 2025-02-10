@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 /// </summary>
 [DefaultProperty(nameof(TabPages))]
 [DefaultEvent(nameof(SelectedIndexChanged))]
-[Designer($"System.Windows.Forms.Design.TabControlDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TabControlDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionTabControl))]
 public partial class TabControl : Control
 {
@@ -806,7 +806,7 @@ public partial class TabControl : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TabControlTabsDescr))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Editor($"System.Windows.Forms.Design.TabPageCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.TabPageCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [MergableProperty(false)]
     public TabPageCollection TabPages
     {
