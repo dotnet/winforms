@@ -65,7 +65,14 @@ internal class MockOleServices<TTestClass> : IOleServices
         dataObject->AddRef();
 
         // Don't track disposal, we depend on finalization for testing.
-        s_agileComPointer = new AgileComPointer<IDataObject>(dataObject, takeOwnership: true, trackDisposal: false);
+        s_agileComPointer = new AgileComPointer<IDataObject>(
+#if DEBUG
+            dataObject, takeOwnership: true, trackDisposal: false
+#else
+            dataObject, takeOwnership: true
+#endif
+            );
+
         return HRESULT.S_OK;
     }
 
