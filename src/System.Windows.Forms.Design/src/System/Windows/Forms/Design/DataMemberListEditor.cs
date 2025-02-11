@@ -10,45 +10,37 @@ internal class DataMemberListEditor : UITypeEditor
 {
     private DesignBindingPicker? _designBindingPicker;
 
-    public override bool IsDropDownResizable
-    {
-        get
-        {
-            return true;
-        }
-    }
+    public override bool IsDropDownResizable => true;
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (provider is not null && context is not null && context.Instance is not null)
+        if (provider is null || context is null || context.Instance is null)
         {
-            PropertyDescriptor? dataSourceProperty = TypeDescriptor.GetProperties(context.Instance)["DataSource"];
-            if (dataSourceProperty is not null)
-            {
-                object? dataSource = dataSourceProperty.GetValue(context.Instance);
-                _designBindingPicker ??= new DesignBindingPicker();
+            return value;
+        }
 
-                DesignBinding oldSelection = new DesignBinding(dataSource, value as string);
-                DesignBinding? newSelection = _designBindingPicker.Pick(context,
-                    provider,
-                    showDataSources: false,
-                    showDataMembers: true,
-                    selectListMembers: true,
-                    dataSource,
-                    string.Empty,
-                    oldSelection);
-                if (dataSource is not null && newSelection is not null)
-                {
-                    value = newSelection.DataMember;
-                }
+        if (TypeDescriptor.GetProperties(context.Instance)[nameof(ComboBox.DataSource)] is { } dataSourceProperty)
+        {
+            object? dataSource = dataSourceProperty.GetValue(context.Instance);
+            _designBindingPicker ??= new();
+
+            DesignBinding oldSelection = new(dataSource, value as string);
+            DesignBinding? newSelection = _designBindingPicker.Pick(context,
+                provider,
+                showDataSources: false,
+                showDataMembers: true,
+                selectListMembers: true,
+                dataSource,
+                string.Empty,
+                oldSelection);
+            if (dataSource is not null && newSelection is not null)
+            {
+                value = newSelection.DataMember;
             }
         }
 
         return value;
     }
 
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-    {
-        return UITypeEditorEditStyle.DropDown;
-    }
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 }
