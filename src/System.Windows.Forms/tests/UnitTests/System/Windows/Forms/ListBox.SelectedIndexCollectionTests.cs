@@ -62,8 +62,8 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(() => collection[index] = value);
     }
 
-    [WinFormsTheory]
-    [InlineData(null)]
+    [Theory]
+    [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
     public void ListBoxSelectedIndexCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value)
