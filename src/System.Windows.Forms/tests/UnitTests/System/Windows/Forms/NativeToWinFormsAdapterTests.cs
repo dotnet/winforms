@@ -231,12 +231,11 @@ public unsafe partial class NativeToWinFormsAdapterTests
     public void TryGetData_AsConcreteType_Custom_FormatterEnabled_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
-        Action tryGetData = () => dataObject.TryGetData(format, out TestData? _);
 
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: UseTryGetDataWithResolver);
+        dataObject.TryGetData(format, out TestData? _).Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -448,8 +447,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
         DataObject dataObject = new(comDataObject.Value);
-        Action a = () => dataObject.TryGetData("test", out SimpleTestDataBase? _);
-        a.Should().Throw<NotSupportedException>();
+        dataObject.TryGetData("test", out SimpleTestDataBase? _).Should().BeFalse();
+
         // This requires a resolver because this simulates out of process scenario with a type that is not intrinsic and not supported.
         dataObject.TryGetData("test", SimpleTestData.Resolver, autoConvert: false, out SimpleTestDataBase? deserialized).Should().BeTrue();
         var deserializedChecked = deserialized.Should().BeOfType<SimpleTestDataBase>().Subject;
@@ -464,14 +463,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
         SimpleTestData value = new("text", new(10, 10));
 
         DataObject native = new();
-        native.SetDataAsJson(format, value);
-
-        using var comDataObject = ComHelpers.GetComScope<Com.IDataObject>(native);
-        DataObject dataObject = new(comDataObject.Value);
-        Action a = () => dataObject.TryGetData(format, out SimpleTestDataBase? _);
-
-        a.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+        Action action = () => native.SetDataAsJson(format, value);
+        action.Should().Throw<ArgumentException>();
     }
 
     private class SimpleTestDataBase
@@ -547,7 +540,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
             public string Text;
         }
 
-        public static Type Resolver(TypeName typeName)
+        public static Type? Resolver(TypeName typeName)
         {
             (string name, Type type)[] allowedTypes =
             [
@@ -566,7 +559,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
                 }
             }
 
-            throw new NotSupportedException($"Can't resolve {fullName}");
+            return null;
         }
     }
 

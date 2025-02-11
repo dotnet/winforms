@@ -122,12 +122,15 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     /// </remarks>
     /// <inheritdoc cref="DataObjectCore{TDataObject}.TryJsonSerialize{T}(string, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T, TDataObject>(string format, bool autoConvert, T data)
-        where TDataObject : IComVisibleDataObject =>
+    public void SetDataAsJson<T, TDataObject>(T data, string? format = default, bool autoConvert = true)
+        where TDataObject : IComVisibleDataObject
+    {
+        format ??= typeof(T).FullName.OrThrowIfNull();
         SetData(
             format,
             autoConvert,
             DataObjectCore<TDataObject>.TryJsonSerialize(format, data));
+    }
 
     #region IDataObjectInternal
     public object? GetData(string format, bool autoConvert)
@@ -135,7 +138,7 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
         object? result = ManagedDataObject.GetData(format, autoConvert);
 
         // Avoid exposing our internal JsonData<T>
-        return result is IJsonData ? null : result;
+        return result is IJsonData json ? json.Deserialize() : result;
     }
 
     public object? GetData(string format) => ManagedDataObject.GetData(format);

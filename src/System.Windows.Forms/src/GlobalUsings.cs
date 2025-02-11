@@ -16,8 +16,6 @@ global using Composition = System.Private.Windows.Ole.Composition<
     System.Windows.Forms.DataFormats.Format>;
 global using DataFormatsCore = System.Private.Windows.Ole.DataFormatsCore<
     System.Windows.Forms.DataFormats.Format>;
-global using DataObjectCore = System.Private.Windows.Ole.DataObjectCore<
-    System.Windows.Forms.DataObject>;
 global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<
     System.Windows.Forms.Ole.WinFormsOleServices,
     System.Windows.Forms.DataFormats.Format>;

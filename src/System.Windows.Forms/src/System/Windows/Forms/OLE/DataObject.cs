@@ -96,18 +96,17 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, T data) =>
-        SetData(format, DataObjectCore.TryJsonSerialize(format, data));
+        _innerData.SetDataAsJson<T, DataObject>(data, format);
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(T data) =>
-        SetData(typeof(T), DataObjectCore.TryJsonSerialize(typeof(T).FullName.OrThrowIfNull(), data));
+        _innerData.SetDataAsJson<T, DataObject>(data);
 
-    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(string, bool, T)"/>
+    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string, bool)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
-        // Don't call the virtual here.
-        _innerData.SetDataAsJson<T, DataObject>(format, autoConvert, data);
+        _innerData.SetDataAsJson<T, DataObject>(data, format, autoConvert);
 
     #region IDataObject
     [Obsolete(
