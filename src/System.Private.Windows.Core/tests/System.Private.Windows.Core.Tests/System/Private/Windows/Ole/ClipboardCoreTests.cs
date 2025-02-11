@@ -51,7 +51,7 @@ public unsafe class ClipboardCoreTests
     {
         DataObject dataObject = new();
         using ComScope<IDataObject> iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
-        using AgileComPointer<IDataObject> agileComPointer = new(iDataObject.Value, takeOwnership: false, trackDisposal: false);
+        using AgileComPointer<IDataObject> agileComPointer = new(iDataObject.Value, takeOwnership: false);
         using ComScope<IDataObject> fetched = agileComPointer.GetInterface();
 
         // We don't get a proxy when in process. Faking a proxy would require not using ComWrappers as we
