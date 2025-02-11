@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.ComponentModel.Design.Serialization;
 using System.Collections;
 
@@ -8,7 +10,7 @@ namespace System.Windows.Forms.Tests;
 
 public class TreeNodeConverterTests
 {
-    [WinFormsTheory]
+    [Theory]
     [InlineData(typeof(InstanceDescriptor), true)]
     [InlineData(typeof(string), true)]
     [InlineData(typeof(int), false)]
@@ -18,7 +20,7 @@ public class TreeNodeConverterTests
         converter.CanConvertTo(null, destinationType).Should().Be(expected);
     }
 
-    [WinFormsTheory]
+    [Theory]
     [InlineData(typeof(InstanceDescriptor), true)]
     [InlineData(typeof(string), true)]
     [InlineData(typeof(int), false)]
@@ -29,19 +31,22 @@ public class TreeNodeConverterTests
 
         if (canConvert)
         {
-            object result = converter.ConvertTo(null, null, node, destinationType);
+            object? result = converter.ConvertTo(null, null, node, destinationType);
+            result.Should().NotBeNull();
+
             if (destinationType == typeof(InstanceDescriptor))
             {
-                result.Should().BeOfType<InstanceDescriptor>();
-                var descriptor = (InstanceDescriptor)result;
-                IList arguments = descriptor.Arguments as IList;
+                var descriptor = result as InstanceDescriptor;
+                descriptor.Should().NotBeNull();
+
+                var arguments = descriptor!.Arguments as IList;
                 arguments.Should().NotBeNull();
-                arguments[0].Should().Be(node.Text);
+                arguments![0].Should().Be(node.Text);
             }
             else if (destinationType == typeof(string))
             {
                 result.Should().BeOfType<string>();
-                string text = (string)result;
+                string text = (string)result!;
                 text.Should().Be("TreeNode: " + node.Text);
             }
         }
@@ -62,8 +67,8 @@ public class TreeNodeConverterTests
             SelectedImageIndex = -1
         };
 
-        object result = converter.ConvertTo(context: null, culture: null, value: node, typeof(InstanceDescriptor));
-        var descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
+        object? result = converter.ConvertTo(context: null, culture: null, value: node, typeof(InstanceDescriptor));
+        InstanceDescriptor descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
 
         // Cast Arguments to IList for indexing.
         var args = (IList)descriptor.Arguments!;
@@ -79,8 +84,8 @@ public class TreeNodeConverterTests
         parentNode.Nodes.Add("Child1");
         parentNode.Nodes.Add("Child2");
 
-        object result = converter.ConvertTo(context: null, culture: null, value: parentNode, typeof(InstanceDescriptor));
-        var descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
+        object? result = converter.ConvertTo(context: null, culture: null, value: parentNode, typeof(InstanceDescriptor));
+        InstanceDescriptor descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
 
         // Cast Arguments to IList for indexing.
         var args = (IList)descriptor.Arguments!;
@@ -89,7 +94,7 @@ public class TreeNodeConverterTests
 
         // The second argument should be an array of child nodes.
         args[1].Should().BeOfType<TreeNode[]>();
-        var childNodes = (TreeNode[])args[1];
+        var childNodes = (TreeNode[])args[1]!;
         childNodes.Should().HaveCount(2);
         childNodes.Select(n => n.Text).Should().ContainInOrder("Child1", "Child2");
     }
@@ -103,10 +108,11 @@ public class TreeNodeConverterTests
             ImageIndex = 2,
             SelectedImageIndex = 3
         };
+
         parentNode.Nodes.Add("ChildA");
 
-        object result = converter.ConvertTo(context: null, culture: null, value: parentNode, typeof(InstanceDescriptor));
-        var descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
+        object? result = converter.ConvertTo(context: null, culture: null, value: parentNode, typeof(InstanceDescriptor));
+        InstanceDescriptor descriptor = result.Should().BeOfType<InstanceDescriptor>().Subject;
 
         // Cast Arguments to IList for indexing.
         var args = (IList)descriptor.Arguments!;
@@ -117,7 +123,7 @@ public class TreeNodeConverterTests
 
         // The fourth argument should be an array of child nodes.
         args[3].Should().BeOfType<TreeNode[]>();
-        var childNodes = (TreeNode[])args[3];
+        var childNodes = (TreeNode[])args[3]!;
         childNodes.Single().Text.Should().Be("ChildA");
     }
 }
