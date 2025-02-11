@@ -8,9 +8,6 @@ namespace System.Windows.Forms.Design
 {
     internal partial class ToolStripCollectionEditor : CollectionEditor
     {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
         public ToolStripCollectionEditor() : base(typeof(ToolStripItemCollection))
         {
         }

@@ -25,10 +25,7 @@ internal class ToolStripCustomTypeDescriptor : CustomTypeDescriptor
     /// </summary>
     /// <param name="pd">PropertyDescriptor</param>
     /// <returns></returns>
-    public override object GetPropertyOwner(PropertyDescriptor? pd)
-    {
-        return _instance;
-    }
+    public override object GetPropertyOwner(PropertyDescriptor? pd) => _instance;
 
     /// <summary>
     ///  The GetProperties method returns a collection of property descriptors
