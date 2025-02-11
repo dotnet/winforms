@@ -552,10 +552,13 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    int width = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
-                    int height = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
+                    Size LogicalSmallSystemIconSize = OsVersion.IsWindows10_1607OrGreater()
+                        ? new(
+                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, 96),
+                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, 96))
+                        : new(16, 16);
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, width, height);
+                    t_defaultIcon = new Icon(defaultIcon, LogicalSmallSystemIconSize);
                 }
             }
 
