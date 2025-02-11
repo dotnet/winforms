@@ -1,13 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Collections;
 
 namespace System.Windows.Forms.Tests;
 
 public class ListBoxSelectedIndexCollectionTests
 {
-    [WinFormsFact]
+    [Fact]
     public void ListBoxSelectedIndexCollection_Ctor_ListBox()
     {
         using ListBox owner = new();
@@ -16,14 +18,14 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.True(collection.IsReadOnly);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void ListBoxSelectedIndexCollection_Ctor_NullOwner_ThrowsArgumentNullException()
     {
         using ListBox owner = new();
-        Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedIndexCollection(null));
+        Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedIndexCollection(null!));
     }
 
-    [WinFormsFact]
+    [Fact]
     public void ListBoxSelectedIndexCollection_ICollection_Properties_GetReturnsExpected()
     {
         using ListBox owner = new();
@@ -33,7 +35,7 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Same(collection, collection.SyncRoot);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void ListBoxSelectedIndexCollection_IList_Properties_GetReturnsExpected()
     {
         using ListBox owner = new();
@@ -45,10 +47,10 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Same(collection, collection.SyncRoot);
     }
 
-    [WinFormsTheory]
-    [InlineData(-1, null)]
-    [InlineData(0, null)]
-    [InlineData(1, null)]
+    [Theory]
+    [InlineData(-1, 0)]
+    [InlineData(0, 0)]
+    [InlineData(1, 0)]
     [InlineData(-1, 1)]
     [InlineData(0, 1)]
     [InlineData(1, 1)]
@@ -73,7 +75,7 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(() => collection.Add(value));
     }
 
-    [WinFormsFact]
+    [Fact]
     public void ListBoxSelectedIndexCollection_IListClear_Invoke_ThrowsNotSupportedException()
     {
         using ListBox owner = new();
@@ -81,10 +83,10 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(collection.Clear);
     }
 
-    [WinFormsTheory]
-    [InlineData(-1, null)]
-    [InlineData(0, null)]
-    [InlineData(1, null)]
+    [Theory]
+    [InlineData(-1, 0)]
+    [InlineData(0, 0)]
+    [InlineData(1, 0)]
     [InlineData(-1, 1)]
     [InlineData(0, 1)]
     [InlineData(1, 1)]
@@ -98,8 +100,8 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(() => collection.Insert(index, value));
     }
 
-    [WinFormsTheory]
-    [InlineData(null)]
+    [Theory]
+    [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
     public void ListBoxSelectedIndexCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value)
@@ -109,7 +111,7 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(() => collection.Remove(value));
     }
 
-    [WinFormsTheory]
+    [Theory]
     [InlineData(-1)]
     [InlineData(0)]
     [InlineData(1)]
@@ -120,7 +122,7 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Throws<NotSupportedException>(() => collection.RemoveAt(index));
     }
 
-    [WinFormsFact]
+    [Fact]
     public void CopyTo_CopiesItemsCorrectly()
     {
         using ListBox listBox = new()
@@ -135,7 +137,7 @@ public class ListBoxSelectedIndexCollectionTests
         destination.Should().BeEquivalentTo(new int[] { 0, 2 });
     }
 
-    [WinFormsFact]
+    [Fact]
     public void Clear_ClearsSelectedIndices()
     {
         using ListBox listBox = new()
@@ -151,7 +153,7 @@ public class ListBoxSelectedIndexCollectionTests
         listBox.SelectedIndices.Contains(2).Should().BeFalse();
     }
 
-    [WinFormsFact]
+    [Fact]
     public void Remove_RemovesSelectedIndex()
     {
         using ListBox listBox = new()
