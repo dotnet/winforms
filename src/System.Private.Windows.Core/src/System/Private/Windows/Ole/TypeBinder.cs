@@ -95,7 +95,10 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         }
 
         // Should never fall through to the BinaryFormatter from a typed API without an explicit resolver.
-        Debug.Assert(_hasCustomResolver);
+        if (!_hasCustomResolver)
+        {
+            throw new InvalidOperationException();
+        }
 
         FullyQualifiedTypeName fullName = new(typeName, assemblyName);
 

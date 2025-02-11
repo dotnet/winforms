@@ -999,7 +999,7 @@ public class ClipboardTests
         }
         else
         {
-            legacyResult.Should().BeNull();
+            legacyResult.Should().Be(testData);
         }
     }
 

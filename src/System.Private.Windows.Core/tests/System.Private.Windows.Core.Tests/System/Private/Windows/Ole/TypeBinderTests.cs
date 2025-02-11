@@ -33,7 +33,10 @@ public class TypeBinderTests
     {
         DataRequest request = new("test") { UntypedRequest = false };
         TypeBinder<AlwaysDefaultSerializer> binder = new(type, in request);
-        binder.BindToType(type.Assembly.FullName!, type.FullName!).Should().Be(type);
+
+        // You must have a resolver for typed requests when being called through the BinaryFormatter path.
+        Action action = () => binder.BindToType(type.Assembly.FullName!, type.FullName!).Should().Be(type);
+        action.Should().Throw<InvalidOperationException>();
     }
 
     [Theory]
@@ -45,7 +48,10 @@ public class TypeBinderTests
     {
         DataRequest request = new("test") { UntypedRequest = false };
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
-        binder.BindToType(type.Assembly.FullName!, type.FullName!).Should().Be(type);
+
+        // You must have a resolver for typed requests when being called through the BinaryFormatter path.
+        Action action = () => binder.BindToType(type.Assembly.FullName!, type.FullName!).Should().Be(type);
+        action.Should().Throw<InvalidOperationException>();
 
         TypeName typeName = TypeName.Parse(type.AssemblyQualifiedName);
         binder.TryBindToType(typeName, out Type? boundType).Should().Be(true);
@@ -62,7 +68,7 @@ public class TypeBinderTests
         DataRequest request = new("test") { UntypedRequest = false };
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
         Action action = () => binder.BindToType(type.Assembly.FullName!, type.FullName!);
-        action.Should().Throw<NotSupportedException>();
+        action.Should().Throw<InvalidOperationException>();
 
         TypeName typeName = TypeName.Parse(type.AssemblyQualifiedName);
         binder.TryBindToType(typeName, out Type? boundType).Should().Be(false);
