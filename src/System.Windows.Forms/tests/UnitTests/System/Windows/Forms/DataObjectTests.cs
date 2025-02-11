@@ -391,7 +391,7 @@ public partial class DataObjectTests
 
         protected override bool TryGetDataCore<T>(
             string format,
-            Func<TypeName, Type>? resolver,
+            Func<TypeName, Type?>? resolver,
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {

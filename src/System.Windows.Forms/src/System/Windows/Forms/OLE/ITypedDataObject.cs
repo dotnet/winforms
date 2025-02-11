@@ -40,7 +40,7 @@ public interface ITypedDataObject : IDataObject
     bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
 #pragma warning restore CS3001
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data);

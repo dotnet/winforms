@@ -80,7 +80,7 @@ public class ListTests : SerializationTest
     [MemberData(nameof(PrimitiveLists_TestData))]
     public void SerializationRecordExtensions_TryGetPrimitiveList(IList list)
     {
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(list));
+        SerializationRecord rootRecord = list.SerializeAndDecode();
         rootRecord.TryGetPrimitiveList(out object? deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(list);
     }

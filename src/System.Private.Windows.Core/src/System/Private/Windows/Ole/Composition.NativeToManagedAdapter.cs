@@ -11,7 +11,7 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition<TRuntime, TDataFormat>
+internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
@@ -131,7 +131,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                     return stream;
                 }
 
-                BinaryFormatUtilities<TRuntime>.TryReadObjectFromStream(stream, in request, out T? data);
+                BinaryFormatUtilities<TNrbfSerializer>.TryReadObjectFromStream(stream, in request, out T? data);
                 return data;
             }
         }
@@ -260,7 +260,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             {
                 // Try to get the data as a bitmap first.
                 if (request.Format == DataFormatNames.Bitmap
-                    && TRuntime.TryGetBitmapFromDataObject(dataObject, out data))
+                    && TOleServices.TryGetBitmapFromDataObject(dataObject, out data))
                 {
                     return true;
                 }
@@ -272,9 +272,11 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                     result = TryGetIStreamData(dataObject, in request, out data);
                 }
             }
-            catch (Exception e) when (request.UntypedRequest || e is not NotSupportedException)
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                Debug.Fail(e.ToString());
+                // NotSupported is the typical expected exception. We don't want to throw any exceptions outside
+                // of critical exceptions, to align with legacy behavior and the "Try" semantics of new APIs.
+                Debug.Assert(e is NotSupportedException, e.Message);
             }
 
             return result;
@@ -402,8 +404,8 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         private static void ThrowIfFormatAndTypeRequireResolver<T>(string format)
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
-            if (!DataFormatNames.IsRestrictedFormat(format)
-                && !TRuntime.AllowTypeWithoutResolver<T>()
+            if (!DataFormatNames.IsPredefinedFormat(format)
+                && !TOleServices.AllowTypeWithoutResolver<T>()
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
@@ -585,7 +587,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         #region ITypedDataObject
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             string format,
-            Func<TypeName, Type> resolver,
+            Func<TypeName, Type?> resolver,
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {

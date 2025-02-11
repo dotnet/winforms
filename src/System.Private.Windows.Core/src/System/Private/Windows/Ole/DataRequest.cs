@@ -24,7 +24,7 @@ internal readonly struct DataRequest
     ///  such as field types and types in the inheritance hierarchy and the code to match these types to the
     ///  <see cref="TypeName"/>s read from the deserialized stream.
     /// </summary>
-    public Func<TypeName, Type>? Resolver { get; init; } = null;
+    public Func<TypeName, Type?>? Resolver { get; init; } = null;
 
     /// <summary>
     ///  <see langword="true"/> if the user had not requested any specific type, i.e. the call originates from

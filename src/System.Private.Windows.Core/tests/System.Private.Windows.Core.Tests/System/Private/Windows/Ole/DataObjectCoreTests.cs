@@ -1,8 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace FormatTests.Common;
+namespace System.Private.Windows.Ole;
 
-public abstract class SerializationTest
+public unsafe class DataObjectCoreTests
 {
+    [Fact]
+    public void Boo()
+    {
+    }
 }

@@ -1,7 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Private.Windows.Nrbf;
 using System.Reflection.Metadata;
+using System.Text.Json;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -11,10 +13,11 @@ namespace System.Private.Windows.Ole;
 ///  Contains the logic to move between <see cref="IDataObjectInternal"/>, <see cref="IDataObject.Interface"/>,
 ///  and <see cref="ComTypes.IDataObject"/> calls.
 /// </summary>
-internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
+internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
     : IDataObjectInternal, IDataObject.Interface, ComTypes.IDataObject
     where TDataFormat : IDataFormat<TDataFormat>
-    where TRuntime : IRuntime<TDataFormat>
+    where TOleServices : IOleServices
+    where TNrbfSerializer : INrbfSerializer
 {
     private const TYMED AllowedTymeds = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
 
@@ -41,16 +44,40 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
         _runtimeDataObject = runtimeDataObject;
     }
 
-    public static Composition<TRuntime, TDataFormat> CreateFromManagedDataObject(IDataObjectInternal managedDataObject)
+    internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create() => Create(new DataStore<TOleServices>());
+
+    internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create<TDataObject, TIDataObject>(object data)
+        where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
+        where TIDataObject : class
     {
-        ManagedToNativeAdapter winFormsToNative = new(managedDataObject);
+        if (data is IDataObjectInternal internalDataObject)
+        {
+            return Create(internalDataObject);
+        }
+        else if (data is TIDataObject iDataObject)
+        {
+            return Create(TDataObject.Wrap(iDataObject));
+        }
+        else if (data is ComTypes.IDataObject comDataObject)
+        {
+            return Create(comDataObject);
+        }
+
+        var composition = Create(new DataStore<TOleServices>());
+        composition.SetData(data);
+        return composition;
+    }
+
+    internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create(IDataObjectInternal data)
+    {
+        ManagedToNativeAdapter winFormsToNative = new(data);
 
         // The NativeToRuntimeAdapter takes ownership of the native data object.
         NativeToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<IDataObject>(winFormsToNative));
-        return new(managedDataObject, winFormsToNative, nativeToRuntime);
+        return new(data, winFormsToNative, nativeToRuntime);
     }
 
-    public static Composition<TRuntime, TDataFormat> CreateFromNativeDataObject(IDataObject* nativeDataObject)
+    internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create(IDataObject* nativeDataObject)
     {
         // Add ref so each adapter can take ownership of the native data object.
         nativeDataObject->AddRef();
@@ -60,7 +87,7 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
         return new(nativeToWinForms, nativeToWinForms, nativeToRuntime);
     }
 
-    public static Composition<TRuntime, TDataFormat> CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
+    internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create(ComTypes.IDataObject runtimeDataObject)
     {
         RuntimeToNativeAdapter runtimeToNative = new(runtimeDataObject);
 
@@ -69,8 +96,48 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
         return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
     }
 
+    /// <summary>
+    ///  Stores the data in the specified format using the <see cref="JsonSerializer"/>.
+    /// </summary>
+    /// <param name="format">The format associated with the data. See DataFormats for predefined formats.</param>
+    /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
+    /// <param name="data">The data to store.</param>
+    /// <remarks>
+    ///  <para>
+    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
+    ///  </para>
+    ///  <para>
+    ///   See
+    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
+    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
+    ///   for more details on default <see cref="JsonSerializer"/> behavior.
+    ///  </para>
+    ///  <para>
+    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use SetData,
+    ///   or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
+    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
+    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
+    ///   on custom converters for JSON serialization.
+    ///  </para>
+    /// </remarks>
+    /// <inheritdoc cref="DataObjectCore{TDataObject}.TryJsonSerialize{T}(string, T)"/>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T, TDataObject>(string format, bool autoConvert, T data)
+        where TDataObject : IComVisibleDataObject =>
+        SetData(
+            format,
+            autoConvert,
+            DataObjectCore<TDataObject>.TryJsonSerialize(format, data));
+
     #region IDataObjectInternal
-    public object? GetData(string format, bool autoConvert) => ManagedDataObject.GetData(format, autoConvert);
+    public object? GetData(string format, bool autoConvert)
+    {
+        object? result = ManagedDataObject.GetData(format, autoConvert);
+
+        // Avoid exposing our internal JsonData<T>
+        return result is IJsonData ? null : result;
+    }
+
     public object? GetData(string format) => ManagedDataObject.GetData(format);
     public object? GetData(Type format) => ManagedDataObject.GetData(format);
     public bool GetDataPresent(string format, bool autoConvert) => ManagedDataObject.GetDataPresent(format, autoConvert);
@@ -87,7 +154,7 @@ internal sealed unsafe partial class Composition<TRuntime, TDataFormat>
     #region ITypedDataObject
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
             ManagedDataObject.TryGetData(format, resolver, autoConvert, out data);

@@ -11,7 +11,7 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition<TRuntime, TDataFormat>
+internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
     ///  Maps <see cref="IDataObject"/> to <see cref="IDataObject.Interface"/>.
@@ -45,7 +45,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 return HRESULT.E_POINTER;
             }
 
-            if (DragDropHelper<TRuntime, TDataFormat>.IsInDragLoop(_dataObject))
+            if (DragDropHelper<TOleServices, TDataFormat>.IsInDragLoop(_dataObject))
             {
                 string formatName = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetcIn->cfFormat).Name;
                 if (!_dataObject.GetDataPresent(formatName))
@@ -147,7 +147,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 }
             }
 
-            return TRuntime.GetDataHere(format, data, pformatetc, pmedium);
+            return TOleServices.GetDataHere(format, data, pformatetc, pmedium);
         }
 
         public HRESULT QueryGetData(FORMATETC* pformatetc)
@@ -203,8 +203,8 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 return HRESULT.E_POINTER;
             }
 
-            if (DragDropHelper<TRuntime, TDataFormat>.IsInDragLoopFormat(*pformatetc)
-                || DragDropHelper<TRuntime, TDataFormat>.IsInDragLoop(_dataObject))
+            if (DragDropHelper<TOleServices, TDataFormat>.IsInDragLoopFormat(*pformatetc)
+                || DragDropHelper<TOleServices, TDataFormat>.IsInDragLoop(_dataObject))
             {
                 string formatName = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
                 if (_dataObject.GetDataPresent(formatName) && _dataObject.GetData(formatName) is DragDropFormat dragDropFormat)
@@ -297,7 +297,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 stream.Write(s_serializedObjectID);
 
                 // Throws in case of serialization failure.
-                BinaryFormatUtilities<TRuntime>.WriteObjectToStream(stream, data, format);
+                BinaryFormatUtilities<TNrbfSerializer>.WriteObjectToStream(stream, data, format);
 
                 return SaveStreamToHGLOBAL(ref hglobal, stream);
             }

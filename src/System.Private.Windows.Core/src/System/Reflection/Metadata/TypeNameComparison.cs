@@ -34,5 +34,10 @@ internal enum TypeNameComparison
     /// <summary>
     ///  Use all parts of the fully qualified type name.
     /// </summary>
-    All = TypeFullName | AssemblyName | AssemblyCultureName | AssemblyVersion | AssemblyPublicKeyToken
+    All = TypeFullName | AssemblyName | AssemblyCultureName | AssemblyVersion | AssemblyPublicKeyToken,
+
+    /// <summary>
+    ///  Match all parts of the fully qualified type name except the assembly version.
+    /// </summary>
+    AllButAssemblyVersion = TypeFullName | AssemblyName | AssemblyCultureName | AssemblyPublicKeyToken
 }

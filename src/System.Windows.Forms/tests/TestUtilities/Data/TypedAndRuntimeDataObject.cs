@@ -26,6 +26,20 @@ internal class TypedAndRuntimeDataObject : ManagedAndRuntimeDataObject, ITypedDa
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
         throw new NotImplementedException();
-    public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format, Func<TypeName, Type> resolver, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-        throw new NotImplementedException();
+
+    public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        Func<TypeName, Type?> resolver,
+        bool autoConvert,
+        [MaybeNullWhen(false), NotNullWhen(true)] out T data)
+    {
+        data = default;
+        if (format == s_format && _data is T t)
+        {
+            data = t;
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -8,8 +8,6 @@ using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.Json;
-using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
 
@@ -59,30 +57,14 @@ public static class Clipboard
     /// </summary>
     public static unsafe IDataObject? GetDataObject()
     {
-        HRESULT result = ClipboardCore.TryGetData(
-            out ComScope<Com.IDataObject> proxyDataObject,
-            out object? originalObject);
-
-        // Need ensure we release the ref count on the proxy object.
-        using (proxyDataObject)
+        HRESULT result = ClipboardCore.GetDataObject<DataObject, IDataObject>(out IDataObject? dataObject);
+        if (result.Failed)
         {
-            if (result.Failed)
-            {
-                Debug.Assert(proxyDataObject.IsNull);
-                throw new ExternalException(SR.ClipboardOperationFailed, (int)result);
-            }
-
-            if (originalObject is DataObject dataObject
-                && dataObject.TryUnwrapUserDataObject(out IDataObject? userObject))
-            {
-                // We have an original user object that we want to return.
-                return userObject;
-            }
-
-            // Original data given wasn't an IDataObject, give the proxy value back.
-            // (Creating the DataObject will add a reference to the proxy.)
-            return new DataObject(proxyDataObject.Value);
+            Debug.Assert(dataObject is null);
+            throw new ExternalException(SR.ClipboardOperationFailed, (int)result);
         }
+
+        return dataObject;
     }
 
     /// <summary>
@@ -168,11 +150,9 @@ public static class Clipboard
         GetDataObject() is IDataObject dataObject ? dataObject.GetData(format, autoConvert) : null;
 
     /// <summary>
-    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
-    ///  This is an alternative to <see cref="GetData(string)"/> that uses <see cref="BinaryFormatter"/> only when application
-    ///  enabled the <see cref="AppContext"/> switch named "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization".
-    ///  By default the NRBF deserializer attempts to deserialize the stream. It can be disabled in favor of <see cref="BinaryFormatter"/>
-    ///  with <see cref="AppContext"/> switch named "Windows.ClipboardDragDrop.EnableNrbfSerialization".
+    ///  Retrieves data in the specified format if that data is of type <typeparamref name="T"/>. This is the only
+    ///  overload of TryGetData that has the possibility of falling back to the <see cref="BinaryFormatter"/> and
+    ///  should only be used if you need <see cref="BinaryFormatter"/> support.
     /// </summary>
     /// <param name="format">
     ///  <para>
@@ -231,6 +211,7 @@ public static class Clipboard
     ///   available at the compile time, for example do not call the <see cref="Type.GetType(string)"/> method.
     ///  </para>
     ///  <para>
+    ///   For compatibility, .NET types are usually serialized using their .NET Framework assembly names. The resolver
     ///   Some common types, for example <see cref="Bitmap"/>, are type-forwarded from .NET Framework assemblies using the
     ///   <see cref="Runtime.CompilerServices.TypeForwardedFromAttribute"/>. <see cref="BinaryFormatter"/> serializes these types
     ///   using the forwarded from assembly information. The resolver function should take this into account and either
@@ -246,6 +227,13 @@ public static class Clipboard
     ///   Arrays, generic types, and nullable value types have full element name, including its assembly name, in the
     ///   <see cref="TypeName.FullName"/> property. Resolver function should either remove or type-forward these assembly
     ///   names when matching.
+    ///  </para>
+    ///  <para>
+    ///   This API will fall back to the <see cref="BinaryFormatter"/> if the application has enabled it and taken
+    ///   the <see href="https://learn.microsoft.com/dotnet/standard/serialization/binaryformatter-migration-guide/">
+    ///   unsupported System.Runtime.Serialization.Formatters package</see>. You also must have enabled the OLE specific
+    ///   switch "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization" to allow fallback to the
+    ///   <see cref="BinaryFormatter"/>.
     ///  </para>
     /// </remarks>
     /// <exception cref="NotSupportedException">
@@ -306,7 +294,7 @@ public static class Clipboard
     [CLSCompliant(false)]
     public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
         data = default;
@@ -422,55 +410,11 @@ public static class Clipboard
         SetDataObject(new DataObject(format, data), copy: true);
     }
 
-    /// <summary>
-    ///  Saves the data onto the clipboard in the specified format.
-    ///  If the data is a non intrinsic type, the object will be serialized using JSON.
-    /// </summary>
-    /// <exception cref="ArgumentException">
-    ///  <see langword="null"/>, empty string, or whitespace was passed as the format.
-    /// </exception>
-    /// <exception cref="InvalidOperationException">
-    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
-    ///  If <see cref="DataObject"/> needs to be placed on the clipboard, use <see cref="DataObject.SetDataAsJson{T}(string, T)"/>
-    ///  to JSON serialize the data to be held in the <paramref name="data"/>, then set the <paramref name="data"/>
-    ///  onto the clipboard via <see cref="SetDataObject(object)"/>.
-    /// </exception>
-    /// <remarks>
-    ///  <para>
-    ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
-    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>,
-    ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
-    ///  </para>
-    ///  <para>
-    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
-    ///  </para>
-    ///  <para>
-    ///   See
-    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
-    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
-    ///   for more details on default <see cref="JsonSerializer"/> behavior.
-    ///  </para>
-    ///  <para>
-    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use <see cref="SetData"/>
-    ///   to save the data onto the clipboard, or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
-    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
-    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
-    ///   on custom converters for JSON serialization.
-    ///  </para>
-    /// </remarks>
-    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, bool, T)"/>
     public static void SetDataAsJson<T>(string format, T data)
     {
-        data.OrThrowIfNull(nameof(data));
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
-        if (typeof(T) == typeof(DataObject))
-        {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetDataObject)));
-        }
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentException.ThrowIfNullOrWhiteSpace(format);
 
         DataObject dataObject = new();
         dataObject.SetDataAsJson(format, data);

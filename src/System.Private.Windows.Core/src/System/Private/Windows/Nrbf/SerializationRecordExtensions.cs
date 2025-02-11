@@ -604,8 +604,7 @@ internal static class SerializationRecordExtensions
             throw new SerializationException(SR.ClipboardOrDragDrop_JsonDeserializationFailed);
         }
 
-        Type serializedType = resolver.BindToType(serializedTypeName);
-        if (!serializedType.IsAssignableTo(typeof(T)))
+        if (!resolver.BindToType(serializedTypeName).IsAssignableTo(typeof(T)))
         {
             // Not the type the caller asked for.
             return (isJsonData: true, isValidType: false);
