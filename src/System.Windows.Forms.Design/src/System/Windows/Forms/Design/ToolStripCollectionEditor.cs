@@ -22,13 +22,7 @@ namespace System.Windows.Forms.Design
         ///  Gets the help topic to display for the dialog help button or pressing F1. Override to
         ///  display a different help topic.
         /// </summary>
-        protected override string HelpTopic
-        {
-            get
-            {
-                return "net.ComponentModel.ToolStripCollectionEditor";
-            }
-        }
+        protected override string HelpTopic => "net.ComponentModel.ToolStripCollectionEditor";
 
         /// <summary>
         ///  Check the owner.
