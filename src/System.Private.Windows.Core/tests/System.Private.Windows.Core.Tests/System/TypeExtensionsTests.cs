@@ -103,7 +103,7 @@ public class TypeExtensionsTests
     public void BinaryFormatter_BinderTypes(object value, string[] expected)
     {
         using MemoryStream stream = new();
-        BinarySerialization.SerializeToStream(value, stream);
+        stream.WriteBinaryFormat(value);
         stream.Position = 0;
 
         List<string> bindings = [];

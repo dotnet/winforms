@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata;
 
 namespace System.Private.Windows.Ole;
@@ -11,10 +10,14 @@ namespace System.Private.Windows.Ole;
 /// </summary>
 internal readonly struct DataRequest
 {
-    public DataRequest(string format) => Format = format;
+    [SetsRequiredMembers]
+    public DataRequest(string format)
+    {
+        Format = format;
+        TypedRequest = false;
+    }
 
-    [Required]
-    public string Format { get; init; }
+    public required string Format { get; init; }
 
     public bool AutoConvert { get; init; } = true;
 
@@ -27,9 +30,9 @@ internal readonly struct DataRequest
     public Func<TypeName, Type?>? Resolver { get; init; } = null;
 
     /// <summary>
-    ///  <see langword="true"/> if the user had not requested any specific type, i.e. the call originates from
-    ///  <see cref="IDataObjectInternal.GetData(string)"/> API family, that returns an <see cref="object"/>. <see langword="false"/>
+    ///  <see langword="false"/> if the user had not requested any specific type, i.e. the call originates from
+    ///  <see cref="IDataObjectInternal.GetData(string)"/> API family, that returns an <see cref="object"/>. <see langword="true"/>
     ///  if the user had requested a specific type by calling <see cref="IDataObjectInternal.TryGetData{T}(out T)"/> API family.
     /// </summary>
-    public bool UntypedRequest { get; init; } = false;
+    public required bool TypedRequest { get; init; }
 }

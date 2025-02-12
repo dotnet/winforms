@@ -79,12 +79,26 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         @object = default;
         object? value;
 
+        if (typeof(T) == typeof(MemoryStream))
+        {
+            // Explicitly asked for a MemoryStream, return the stream as is.
+            @object = (T)(object)stream;
+            return true;
+        }
+
         long startPosition = stream.Position;
 
         SerializationRecord? record = null;
         try
         {
             record = stream.DecodeNrbf();
+            if (typeof(T) == typeof(SerializationRecord))
+            {
+                // If SerializationRecord was explicitly requested, return the decoded stream.
+                // This allows the caller to manually inspect and handle legacy data.
+                @object = (T)(object)record;
+                return true;
+            }
         }
         catch (NotSupportedException)
         {
@@ -125,7 +139,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             }
 
             // JSON type info is nested, so this has to come after the JSON attempt.
-            if (!request.UntypedRequest)
+            if (request.TypedRequest)
             {
                 if (!(typeof(T).Matches(record.TypeName, TypeNameComparison.AllButAssemblyVersion)
                     || (binder.TryBindToType(record.TypeName, out Type? resolvedType)
@@ -138,7 +152,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             }
         }
 
-        if (!request.UntypedRequest && request.Resolver is null)
+        if (request.TypedRequest && request.Resolver is null)
         {
             // Never allow the BinaryFormatter without an explicit resolver. This ensures users know that they
             // cannot hit the BinaryFormatter under any circumstances from other TryGet APIs when working with

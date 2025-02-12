@@ -95,7 +95,7 @@ public static class BinarySerialization
         static byte[] ToByteArray(object @object, FormatterAssemblyStyle assemblyFormat)
         {
             using MemoryStream stream = new();
-            SerializeToStream(@object, stream, assemblyFormat: assemblyFormat);
+            stream.WriteBinaryFormat(@object, assemblyFormat: assemblyFormat);
             return stream.ToArray();
         }
     }
@@ -108,9 +108,9 @@ public static class BinarySerialization
     /// <param name="assemblyFormat">The assembly format to use.</param>
     /// <param name="typeFormat">The type format to use.</param>
     /// <exception cref="ArgumentNullException">Thrown when the specified object is <see langword="null"/>.</exception>
-    public static void SerializeToStream(
+    public static void WriteBinaryFormat(
+        this Stream stream,
         object @object,
-        Stream stream,
         FormatterAssemblyStyle assemblyFormat = FormatterAssemblyStyle.Simple,
         FormatterTypeStyle typeFormat = FormatterTypeStyle.TypesAlways)
     {
@@ -167,7 +167,7 @@ public static class BinarySerialization
         out IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap)
     {
         using MemoryStream stream = new();
-        SerializeToStream(@object, stream);
+        stream.WriteBinaryFormat(@object);
         stream.Position = 0;
         return NrbfDecoder.Decode(stream, out recordMap, options: null, leaveOpen: true);
     }
