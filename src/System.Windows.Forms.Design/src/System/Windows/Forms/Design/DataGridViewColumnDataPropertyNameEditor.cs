@@ -15,50 +15,52 @@ internal class DataGridViewColumnDataPropertyNameEditor : UITypeEditor
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (provider is not null && context is not null && context.Instance is not null)
+        if (provider is null || context is null || context.Instance is null)
         {
-            DataGridView? dataGridView;
-            if (context.Instance is DataGridViewColumnCollectionDialog.ListBoxItem item)
-            {
-                dataGridView = item.DataGridViewColumn.DataGridView;
-            }
-            else
-            {
-                dataGridView = (context.Instance as DataGridViewColumn)?.DataGridView;
-            }
+            return value;
+        }
 
-            if (dataGridView is null)
-            {
-                return value;
-            }
+        DataGridView? dataGridView;
+        if (context.Instance is DataGridViewColumnCollectionDialog.ListBoxItem item)
+        {
+            dataGridView = item.DataGridViewColumn.DataGridView;
+        }
+        else
+        {
+            dataGridView = (context.Instance as DataGridViewColumn)?.DataGridView;
+        }
 
-            object? dataSource = dataGridView.DataSource;
-            string? dataMember = dataGridView.DataMember;
+        if (dataGridView is null)
+        {
+            return value;
+        }
 
-            ArgumentNullException.ThrowIfNull(value);
-            string valueString = (string)value;
-            string? selectedMember = $"{dataMember}.{valueString}";
-            if (dataSource is null)
-            {
-                dataMember = string.Empty;
-                selectedMember = valueString;
-            }
+        object? dataSource = dataGridView.DataSource;
+        string? dataMember = dataGridView.DataMember;
 
-            _designBindingPicker ??= new();
+        ArgumentNullException.ThrowIfNull(value);
+        string valueString = (string)value;
+        string? selectedMember = $"{dataMember}.{valueString}";
+        if (dataSource is null)
+        {
+            dataMember = string.Empty;
+            selectedMember = valueString;
+        }
 
-            DesignBinding oldSelection = new(dataSource, selectedMember);
-            DesignBinding? newSelection = _designBindingPicker.Pick(context,
-                provider,
-                showDataSources: false,
-                showDataMembers: true,
-                selectListMembers: false,
-                dataSource,
-                dataMember,
-                oldSelection);
-            if (dataSource is not null && newSelection is not null)
-            {
-                value = newSelection.DataField;
-            }
+        _designBindingPicker ??= new();
+
+        DesignBinding oldSelection = new(dataSource, selectedMember);
+        DesignBinding? newSelection = _designBindingPicker.Pick(context,
+            provider,
+            showDataSources: false,
+            showDataMembers: true,
+            selectListMembers: false,
+            dataSource,
+            dataMember,
+            oldSelection);
+        if (dataSource is not null && newSelection is not null)
+        {
+            value = newSelection.DataField;
         }
 
         return value;
