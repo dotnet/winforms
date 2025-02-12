@@ -14,7 +14,7 @@ public partial class ErrorProviderTest : Form
     {
         if (textBox1.TextLength < 5 || textBox1.TextLength > 10)
         {
-            errorProvider1.SetError(textBox1, "The length of the testbox is invalid!");
+            errorProvider1.SetError(textBox1, "The length of the textbox is invalid!");
         }
         else
         {
@@ -24,7 +24,7 @@ public partial class ErrorProviderTest : Form
 
         if (textBox2.TextLength < 5 || textBox2.TextLength > 20)
         {
-            errorProvider2.SetError(textBox2, "The length of the testbox is invalid!");
+            errorProvider2.SetError(textBox2, "The length of the textbox is invalid!");
         }
         else
         {
