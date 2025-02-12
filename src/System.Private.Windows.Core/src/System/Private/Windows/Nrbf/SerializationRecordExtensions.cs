@@ -604,13 +604,6 @@ internal static class SerializationRecordExtensions
             throw new SerializationException(SR.ClipboardOrDragDrop_JsonDeserializationFailed);
         }
 
-        if (resolver.TryBindToType(typeName, out Type? resolvedType)
-            && !resolvedType.IsAssignableTo(typeof(T)))
-        {
-            // Not the type the caller asked for.
-            return (isJsonData: true, isValidType: false);
-        }
-
         if (typeof(T) == typeof(object))
         {
             // Special case for deserializing to object. JsonSerializer.Deserializer<object> gives back a JsonElement.
@@ -619,21 +612,27 @@ internal static class SerializationRecordExtensions
             // to explain. Doing this also facilitates moving to the typed APIs for existing data that is JSON
             // serializable. You can simply switch to SerializeAsJson and know existing consumers will not be broken.
 
-            resolvedType = Type.GetType(
+            Type? getType = Type.GetType(
                 assemblyQualifiedTypeName,
                 throwOnError: false);
 
             // Full name didn't work, try the full
-            resolvedType ??= Type.GetType(
+            getType ??= Type.GetType(
                 typeName.FullName,
                 throwOnError: false);
 
-            if (resolvedType is not null)
+            if (getType is not null)
             {
                 Utf8JsonReader reader = new(byteData.GetArray());
-                @object = (T?)JsonSerializer.Deserialize(ref reader, resolvedType);
+                @object = (T?)JsonSerializer.Deserialize(ref reader, getType);
                 return (isJsonData: true, isValidType: @object is not null);
             }
+        }
+
+        if (!resolver.TryBindToType(typeName, out Type? resolvedType) || !resolvedType.IsAssignableTo(typeof(T)))
+        {
+            // Not the type the caller asked for.
+            return (isJsonData: true, isValidType: false);
         }
 
         // Let the original exception bubble up if deserialization fails.
