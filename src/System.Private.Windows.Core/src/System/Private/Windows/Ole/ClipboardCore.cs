@@ -146,7 +146,7 @@ internal static unsafe class ClipboardCore<TOleServices>
     }
 
     /// <summary>
-    ///  Returns the data that is currently on the clipboard as the platform specfied <typeparamref name="TIDataObject"/>.
+    ///  Returns the data that is currently on the clipboard as the platform specified <typeparamref name="TIDataObject"/>.
     /// </summary>
     internal static HRESULT GetDataObject<TDataObject, TIDataObject>(
         out TIDataObject? dataObject,
