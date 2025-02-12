@@ -31,7 +31,7 @@ internal interface INrbfSerializer
     ///   This should only return <see langword="true"/> for types that are expected to be safe to deserialize.
     ///  </para>
     ///  <para>
-    ///   <see cref="TryBindToType(TypeName, out Type?)"/> and <see cref="TryGetObject(SerializationRecord, out object?)"/>"/>
+    ///   <see cref="TryBindToType(TypeName, out Type?)"/> and <see cref="TryGetObject(SerializationRecord, out object?)"/>
     ///   can handle some types partially.
     ///  </para>
     /// </remarks>
