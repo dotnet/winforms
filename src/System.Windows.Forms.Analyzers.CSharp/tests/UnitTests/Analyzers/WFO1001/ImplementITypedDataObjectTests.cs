@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
-using System.Windows.Forms.CSharp.Analyzers.ImplementITypedDataObjectInAdditionToIDataObject;
+using System.Windows.Forms.CSharp.Analyzers.ImplementITypedDataObject;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
@@ -11,13 +11,13 @@ namespace System.Windows.Forms.Analyzers.Tests;
 
 public sealed class ImplementITypedDataObjectTests
 {
-    private const string DiagnosticId = DiagnosticIDs.ImplementITypedDataObjectInAdditionToIDataObject;
+    private const string DiagnosticId = DiagnosticIDs.ImplementITypedDataObject;
 
     [Fact]
     public async Task UntypedInterface()
     {
         // internal class UntypedInterface :IDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -31,7 +31,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task DerivedFromUntyped()
     {
         // internal class DerivedFromUntyped : UntypedInterface
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -48,7 +48,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task UntypedWithAlias()
     {
         // internal class UntypedWithAlias : IManagedDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -62,7 +62,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task UntypedWithNamespace()
     {
         // internal class UntypedWithNamespace :Forms.IDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -76,7 +76,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task UntypedUnimplemented()
     {
         // internal class UntypedUnimplemented :IDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await RaiseTheWarning(input,
             [
                 DiagnosticResult.CompilerWarning(DiagnosticId)
@@ -92,7 +92,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task TypedInterface()
     {
         // internal class TypedInterface :ITypedDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -100,7 +100,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task TypedWithNamespace()
     {
         // internal class TypedWithNamespace : Forms.ITypedDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -108,7 +108,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task TypedWithAlias()
     {
         // internal class TypedWithAlias : IManagedDataObject, System.Windows.Forms.IDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -116,7 +116,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task TwoInterfaces()
     {
         // internal class TwoInterfaces :IDataObject, ITypedDataObject
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -124,7 +124,7 @@ public sealed class ImplementITypedDataObjectTests
     public async Task UnrelatedIDataObject()
     {
         // Name collision, this analyzer is not applicable
-        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
+        string input = await TestFileLoader.GetCSAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -138,12 +138,12 @@ public sealed class ImplementITypedDataObjectTests
 
     private static async Task NoWarning(string input) => await CreateContext(input).RunAsync().ConfigureAwait(false);
 
-    private static CSharpAnalyzerTest<ImplementITypedDataObjectInAdditionToIDataObjectAnalyzer, DefaultVerifier> CreateContext(string input)
+    private static CSharpAnalyzerTest<ImplementITypedDataObjectAnalyzer, DefaultVerifier> CreateContext(string input)
     {
         Assert.NotNull(CurrentReferences.NetCoreAppReferences);
         Assert.True(File.Exists(CurrentReferences.WinFormsRefPath));
 
-        CSharpAnalyzerTest<ImplementITypedDataObjectInAdditionToIDataObjectAnalyzer, DefaultVerifier> context = new()
+        CSharpAnalyzerTest<ImplementITypedDataObjectAnalyzer, DefaultVerifier> context = new()
         {
             TestCode = input,
             TestState =

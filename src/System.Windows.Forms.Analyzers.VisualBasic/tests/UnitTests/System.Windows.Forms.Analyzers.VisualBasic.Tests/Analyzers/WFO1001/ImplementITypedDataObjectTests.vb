@@ -10,7 +10,7 @@ Imports Xunit
 
 Public NotInheritable Class ImplementITypedDataObjectTests
 
-    Private Const DiagnosticId As String = DiagnosticIDs.ImplementITypedDataObjectInAdditionToIDataObject
+    Private Const DiagnosticId As String = DiagnosticIDs.ImplementITypedDataObject
 
     <Fact>
     Public Async Function UntypedInterface() As Task

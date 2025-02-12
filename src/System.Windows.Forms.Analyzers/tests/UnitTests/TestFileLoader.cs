@@ -26,6 +26,7 @@ public static class TestFileLoader
         builder.Append(TestData);
         builder.Append(Path.DirectorySeparatorChar);
         builder.Append(testName);
+
         if (language != SourceLanguage.None)
         {
             builder.Append(language == SourceLanguage.CSharp ? ".cs" : ".vb");
@@ -49,6 +50,22 @@ public static class TestFileLoader
     }
 
     public static async Task<string> GetAnalyzerTestCodeAsync(
+        [CallerMemberName] string testName = "",
+        [CallerFilePath] string filePath = "")
+    {
+        string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
+        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
+    }
+
+    public static async Task<string> GetGeneratorTestCodeAsync(
+        [CallerMemberName] string testName = "",
+        [CallerFilePath] string filePath = "")
+    {
+        string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
+        return await LoadTestFileAsync(Path.Combine("Generators", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
+    }
+
+    public static async Task<string> GetCSAnalyzerTestCodeAsync(
         [CallerMemberName] string testName = "",
         [CallerFilePath] string filePath = "")
     {
