@@ -6,7 +6,7 @@ namespace System;
 /// <summary>
 ///  Base class for implementing <see cref="IDisposable"/> with double disposal protection.
 /// </summary>
-public abstract class DisposableBase : IDisposable
+internal abstract class DisposableBase : IDisposable
 {
     private int _disposedValue;
 

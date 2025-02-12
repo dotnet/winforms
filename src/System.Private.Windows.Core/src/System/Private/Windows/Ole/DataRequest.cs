@@ -14,7 +14,7 @@ internal readonly struct DataRequest
     public DataRequest(string format)
     {
         Format = format;
-        TypedRequest = false;
+        TypedRequest = true;
     }
 
     public required string Format { get; init; }
