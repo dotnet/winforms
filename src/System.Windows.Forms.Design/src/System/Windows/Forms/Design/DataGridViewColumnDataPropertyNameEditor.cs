@@ -18,7 +18,7 @@ internal class DataGridViewColumnDataPropertyNameEditor : UITypeEditor
         if (provider is not null && context is not null && context.Instance is not null)
         {
             DataGridView? dataGridView;
-            if (context.Instance as DataGridViewColumnCollectionDialog.ListBoxItem is { } item)
+            if (context.Instance is DataGridViewColumnCollectionDialog.ListBoxItem item)
             {
                 dataGridView = item.DataGridViewColumn.DataGridView;
             }

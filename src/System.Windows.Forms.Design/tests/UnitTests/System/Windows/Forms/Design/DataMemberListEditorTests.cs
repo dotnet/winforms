@@ -1,21 +1,21 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-using System.Reflection;
-using Castle.Core.Internal;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design.Tests;
 
 public class DataMemberListEditorTests
 {
     [Fact]
-    public void DataMemberListEditorExist()
+    public void DataMemberListEditor_GetEditStyle()
     {
-        PropertyInfo propertyInfo = typeof(DataGridView).GetProperty(nameof(DataGridView.DataMember));
+        new DataMemberListEditor().GetEditStyle().Should().Be(UITypeEditorEditStyle.DropDown);
+    }
 
-        string editorTypeName = propertyInfo.GetAttribute<EditorAttribute>().EditorTypeName;
-
-        Type.GetType(editorTypeName).Should().NotBeNull();
+    [Fact]
+    public void DataMemberListEditor_IsDropDownResizable()
+    {
+        new DataMemberListEditor().IsDropDownResizable.Should().Be(true);
     }
 }
