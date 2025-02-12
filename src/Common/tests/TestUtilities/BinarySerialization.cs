@@ -174,5 +174,5 @@ public static class BinarySerialization
 
     public static SerializationRecord SerializeAndDecode(this object @object) =>
         SerializeAndDecode(@object, out _);
-#pragma warning restore SYSLIB5005 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore SYSLIB5005
 }
