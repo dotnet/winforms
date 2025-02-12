@@ -30,7 +30,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData("MyProject", "default_boilerplate")]
     public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
-        string expected = File.ReadAllText($@"Generators\Data\{GetType().Name}.{expectedFileName}.cs");
+        string expected = File.ReadAllText($@"Generators\ApplicationConfigurationGenerator\TestData\{GetType().Name}.{expectedFileName}.cs");
 
         string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
             new ApplicationConfig(
