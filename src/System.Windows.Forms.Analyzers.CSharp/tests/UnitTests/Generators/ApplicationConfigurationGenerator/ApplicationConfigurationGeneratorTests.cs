@@ -82,7 +82,7 @@ public partial class ApplicationConfigurationGeneratorTests
     [InlineData(OutputKind.WindowsApplication)]
     public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_pass_if_supported_project_type(OutputKind projectType)
     {
-        SourceText generatedCode = await LoadFileContent("GenerateInitialize_default_boilerplate");
+        SourceText generatedCode = await LoadFileContentAsync("GenerateInitialize_default_boilerplate");
 
         var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
@@ -103,7 +103,7 @@ public partial class ApplicationConfigurationGeneratorTests
     [Fact]
     public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_default_boilerplate()
     {
-        SourceText generatedCode = await LoadFileContent("GenerateInitialize_default_boilerplate");
+        SourceText generatedCode = await LoadFileContentAsync("GenerateInitialize_default_boilerplate");
 
         var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
@@ -124,7 +124,7 @@ public partial class ApplicationConfigurationGeneratorTests
     [Fact]
     public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_user_settings_boilerplate()
     {
-        SourceText generatedCode = await LoadFileContent("GenerateInitialize_user_settings_boilerplate");
+        SourceText generatedCode = await LoadFileContentAsync("GenerateInitialize_user_settings_boilerplate");
 
         var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
@@ -162,7 +162,7 @@ public partial class ApplicationConfigurationGeneratorTests
             ApplicationConfiguration.Initialize();
             """;
 
-        SourceText generatedCode = await LoadFileContent("GenerateInitialize_default_top_level");
+        SourceText generatedCode = await LoadFileContentAsync("GenerateInitialize_default_top_level");
 
         var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
@@ -188,7 +188,7 @@ public partial class ApplicationConfigurationGeneratorTests
             ApplicationConfiguration.Initialize();
             """;
 
-        SourceText generatedCode = await LoadFileContent("GenerateInitialize_user_top_level");
+        SourceText generatedCode = await LoadFileContentAsync("GenerateInitialize_user_top_level");
 
         var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
@@ -218,9 +218,9 @@ public partial class ApplicationConfigurationGeneratorTests
         await test.RunAsync();
     }
 
-    private async Task<SourceText> LoadFileContent(string testName)
+    private async Task<SourceText> LoadFileContentAsync(string testName)
     {
-        string input = await TestFileLoader.GetGeneratorTestCodeAsync($"{GetType().Name}.{testName}.cs");
+        string input = await TestFileLoader.GetGeneratorTestCodeAsync($"{GetType().Name}.{testName}.cs").ConfigureAwait(false);
         return SourceText.From(input, Encoding.UTF8);
     }
 }
