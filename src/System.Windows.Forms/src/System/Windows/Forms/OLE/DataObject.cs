@@ -7,7 +7,7 @@ using System.Private.Windows.Ole;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text.Json;
+using System.Windows.Forms.Ole;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
 [ClassInterface(ClassInterfaceType.None)]
 public unsafe partial class DataObject :
     ITypedDataObject,
-    IDataObjectInternal,
+    IDataObjectInternal<DataObject, IDataObject>,
     // Built-in COM interop chooses the first interface that implements an IID,
     // we want the CsWin32 to be chosen over System.Runtime.InteropServices.ComTypes
     // so it must come first.
@@ -29,6 +29,13 @@ public unsafe partial class DataObject :
     IComVisibleDataObject
 {
     private readonly Composition _innerData;
+
+    static DataObject IDataObjectInternal<DataObject, IDataObject>.Create() => new();
+    static DataObject IDataObjectInternal<DataObject, IDataObject>.Create(Com.IDataObject* dataObject) => new(dataObject);
+    static DataObject IDataObjectInternal<DataObject, IDataObject>.Create(object data) => new(data);
+
+    static IDataObjectInternal IDataObjectInternal<DataObject, IDataObject>.Wrap(IDataObject data) =>
+        new DataObjectAdapter(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the raw <see cref="Com.IDataObject"/>
@@ -40,13 +47,13 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     /// <inheritdoc cref="DataObject(object)"/>
-    internal DataObject(Com.IDataObject* data) => _innerData = DataObjectCore.CreateComposition(data);
+    internal DataObject(Com.IDataObject* data) => _innerData = Composition.Create(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
     /// </summary>
     /// <inheritdoc cref="DataObject(object)"/>
-    public DataObject() => _innerData = DataObjectCore.CreateComposition();
+    public DataObject() => _innerData = Composition.Create();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
@@ -60,8 +67,7 @@ public unsafe partial class DataObject :
     ///   if <see cref="ITypedDataObject"/> is not implemented.
     ///  </para>
     /// </remarks>
-    public DataObject(object data) =>
-        _innerData = DataObjectCore.CreateComposition(data, DataObjectAdapter.Create);
+    public DataObject(object data) => _innerData = Composition.Create<DataObject, IDataObject>(data);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data and its
@@ -71,13 +77,16 @@ public unsafe partial class DataObject :
 
     internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
 
+    bool IDataObjectInternal<DataObject, IDataObject>.TryUnwrapUserDataObject([NotNullWhen(true)] out IDataObject? dataObject) =>
+        TryUnwrapUserDataObject(out dataObject);
+
     internal virtual bool TryUnwrapUserDataObject([NotNullWhen(true)] out IDataObject? dataObject)
     {
         dataObject = _innerData.ManagedDataObject switch
         {
             DataObject data => data,
             DataObjectAdapter adapter => adapter.DataObject,
-            DataStore<WinFormsRuntime> => this,
+            DataStore<WinFormsOleServices> => this,
             _ => null
         };
 
@@ -87,51 +96,17 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, T data) =>
-        SetData(format, DataObjectCore.TryJsonSerialize(format, data));
+        _innerData.SetDataAsJson<T, DataObject>(data, format);
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(T data) =>
-        SetData(typeof(T), DataObjectCore.TryJsonSerialize(typeof(T).FullName.OrThrowIfNull(), data));
+        _innerData.SetDataAsJson<T, DataObject>(data);
 
-    /// <summary>
-    ///  Stores the data in the specified format.
-    ///  If the data is a managed object and format allows for serialization of managed objects, the object will be serialized as JSON.
-    /// </summary>
-    /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
-    /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
-    /// <param name="data">The data to store.</param>
-    /// <exception cref="InvalidOperationException">
-    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
-    ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
-    ///  passing in <paramref name="data"/>.
-    /// </exception>
-    /// <remarks>
-    ///  <para>
-    ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
-    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>
-    ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
-    ///  </para>
-    ///  <para>
-    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
-    ///  </para>
-    ///  <para>
-    ///   See
-    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
-    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
-    ///   for more details on default <see cref="JsonSerializer"/> behavior.
-    ///  </para>
-    ///  <para>
-    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use <see cref="SetData(object?)"/>,
-    ///   or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
-    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
-    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
-    ///   on custom converters for JSON serialization.
-    ///  </para>
-    /// </remarks>
+    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string, bool)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
-        SetData(format, autoConvert, DataObjectCore.TryJsonSerialize(format, data));
+        _innerData.SetDataAsJson<T, DataObject>(data, format, autoConvert);
 
     #region IDataObject
     [Obsolete(
@@ -139,13 +114,7 @@ public unsafe partial class DataObject :
         error: false,
         DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format, bool autoConvert)
-    {
-        object? result = _innerData.GetData(format, autoConvert);
-
-        // Avoid exposing our internal JsonData<T>
-        return result is IJsonData ? null : result;
-    }
+    public virtual object? GetData(string format, bool autoConvert) => _innerData.GetData(format, autoConvert);
 
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,
@@ -182,10 +151,11 @@ public unsafe partial class DataObject :
     #endregion
 
     #region ITypedDataObject
+    /// <inheritdoc cref="Clipboard.TryGetData{T}(string, Func{TypeName, Type}, out T)"/>
     [CLSCompliant(false)]
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {
@@ -218,7 +188,7 @@ public unsafe partial class DataObject :
     [CLSCompliant(false)]
     protected virtual bool TryGetDataCore<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type>? resolver,
+        Func<TypeName, Type?>? resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
         // Invoke the appropriate overload so we don't fail a null check on a nested object if the resolver is null.
@@ -295,7 +265,7 @@ public unsafe partial class DataObject :
 
     private bool TryGetDataInternal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type>? resolver,
+        Func<TypeName, Type?>? resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data)
     {

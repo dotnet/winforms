@@ -406,11 +406,10 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => TryReadObjectFromStream<int?[]>(NotSupportedResolver, out _);
 
-        // nullable struct requires a custom resolver.
-        // This is either NotSupportedException or RestrictedTypeDeserializationException, depending on format.
-        read.Should().Throw<Exception>();
+        // This will return false as the type is serialized as mscorlib. When it tries to validate the type, it
+        // will attempt to resolve as it doesn't match and return false.
+        TryReadObjectFromStream<int?[]>(NotSupportedResolver, out _).Should().BeFalse();
     }
 
     [Theory]
@@ -488,6 +487,9 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
             [
                 (typeof(TestData).FullName!, typeof(TestData)),
                 (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
+                (typeof(NotSupportedException).FullName!, typeof(NotSupportedException)),
+                (typeof(int?).FullName!, typeof(int?)),
+                (typeof(DateTime?).FullName!, typeof(DateTime?)),
                 ("System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(decimal?)),
                 ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>)),
                 ("System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]", typeof(List<TimeSpan>))
@@ -503,7 +505,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
                 }
             }
 
-            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+            // To get implicit binding for supported types, return null.
+            return null!;
         }
     }
 
@@ -530,8 +533,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
 
-        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result).Should().BeTrue();
-        result.Should().BeEquivalentTo(value);
+        Action action = () => RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result);
+        action.Should().Throw<NotSupportedException>();
     }
 
     [Fact]
@@ -542,8 +545,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result).Should().BeTrue();
-        result.Should().BeEquivalentTo(value);
+        Action action = () => RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result);
+        action.Should().Throw<NotSupportedException>();
     }
 
     [Fact]
@@ -840,7 +843,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
                 }
             }
 
-            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+            // Allow implicit binding for supported types by returning null.
+            return null!;
         }
     }
 

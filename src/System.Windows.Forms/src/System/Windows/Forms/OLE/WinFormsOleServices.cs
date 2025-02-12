@@ -168,4 +168,16 @@ internal sealed class WinFormsOleServices : IOleServices
         // All else should fall through as valid.
         _ => true
     };
+
+    static IComVisibleDataObject IOleServices.CreateDataObject() =>
+        new DataObject();
+
+    static unsafe HRESULT IOleServices.OleGetClipboard(Com.IDataObject** dataObject) =>
+        PInvokeCore.OleGetClipboard(dataObject);
+
+    static unsafe HRESULT IOleServices.OleSetClipboard(Com.IDataObject* dataObject) =>
+        PInvokeCore.OleSetClipboard(dataObject);
+
+    static HRESULT IOleServices.OleFlushClipboard() =>
+        PInvokeCore.OleFlushClipboard();
 }

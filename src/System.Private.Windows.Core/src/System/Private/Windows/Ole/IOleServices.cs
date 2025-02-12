@@ -47,4 +47,18 @@ internal unsafe interface IOleServices
     ///  Allows custom validation or adapting of <see cref="DataStore{TOleServices}"/> data and formats.
     /// </summary>
     static abstract void ValidateDataStoreData(ref string format, bool autoConvert, object? data);
+
+    /// <summary>
+    ///  Creates an <see cref="IComVisibleDataObject"/> instance.
+    /// </summary>
+    static abstract IComVisibleDataObject CreateDataObject();
+
+    /// <inheritdoc cref="PInvokeCore.OleGetClipboard(IDataObject**)"/>/>
+    static abstract HRESULT OleGetClipboard(IDataObject** dataObject);
+
+    /// <inheritdoc cref="PInvokeCore.OleSetClipboard(IDataObject*)"/>
+    static abstract HRESULT OleSetClipboard(IDataObject* dataObject);
+
+    /// <inheritdoc cref="PInvokeCore.OleFlushClipboard"/>
+    static abstract HRESULT OleFlushClipboard();
 }

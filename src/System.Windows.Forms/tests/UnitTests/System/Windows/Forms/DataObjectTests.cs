@@ -391,7 +391,7 @@ public partial class DataObjectTests
 
         protected override bool TryGetDataCore<T>(
             string format,
-            Func<TypeName, Type>? resolver,
+            Func<TypeName, Type?>? resolver,
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
@@ -2935,10 +2935,10 @@ public partial class DataObjectTests
         string format = "format";
         DataObject dataObject = new();
         Action action = () => dataObject.SetDataAsJson(format, new DataObject());
-        action.Should().Throw<InvalidOperationException>();
+        action.Should().Throw<ArgumentException>();
 
         Action dataObjectSet2 = () => dataObject.SetDataAsJson(format, new DerivedDataObject());
-        dataObjectSet2.Should().NotThrow();
+        dataObjectSet2.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]
@@ -3095,24 +3095,26 @@ public partial class DataObjectTests
     [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
     [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
-    public void DataObject_SetDataAsJson_RestrictedFormats_NotJsonSerialized(string format)
+    public void DataObject_SetDataAsJson_PredefinedFormats_NotJsonSerialized(string format)
     {
         DataObject dataObject = new();
-        dataObject.SetDataAsJson(format, 1);
-        object storedData = dataObject.TestAccessor().Dynamic._innerData.GetData(format);
-        storedData.Should().NotBeAssignableTo<IJsonData>();
-        dataObject.GetData(format).Should().Be(1);
+        Action action = () => dataObject.SetDataAsJson(format, 1);
+
+        // We prevent serializing as predefined formats with JSON. (As it can't be read)
+        action.Should().Throw<ArgumentException>();
     }
 
     [WinFormsTheory]
     [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
-    public void DataObject_SetDataAsJson_NonRestrictedFormat_NotJsonSerialized(string format)
+    public void DataObject_SetDataAsJson_CustomFormat_IsJsonSerialized(string format)
     {
         DataObject data = new();
         data.SetDataAsJson(format, 1);
         object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
-        storedData.Should().NotBeAssignableTo<IJsonData>();
+        storedData.Should().BeAssignableTo<IJsonData>();
         data.GetData(format).Should().Be(1);
+        data.TryGetData(format, out int deserialized).Should().BeTrue();
+        deserialized.Should().Be(1);
     }
 
     [WinFormsTheory]
@@ -3126,7 +3128,7 @@ public partial class DataObjectTests
         storedData.Should().BeOfType<JsonData<SimpleTestData>>();
 
         // We don't expose JsonData<T> in public legacy API
-        data.GetData(format).Should().BeNull();
+        data.GetData(format).Should().Be(testData);
     }
 
     [WinFormsFact]

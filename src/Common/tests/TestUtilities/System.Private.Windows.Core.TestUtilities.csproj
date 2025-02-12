@@ -18,6 +18,7 @@
     <PackageReference Include="xunit.stafact" />
     <PackageReference Include="Microsoft.DotNet.RemoteExecutor" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />
+    <PackageReference Include="System.Formats.Nrbf" />
   </ItemGroup>
 
 </Project>

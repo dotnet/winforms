@@ -51,7 +51,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             throw new NotSupportedException(SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop);
         }
 
-        if (DataFormatNames.IsRestrictedFormat(format))
+        if (DataFormatNames.IsPredefinedFormat(format))
         {
             // Serializing is never unsafe, but matching the exception on read for convenience.
             throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
@@ -77,7 +77,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         [NotNullWhen(true)] out T? @object)
     {
         @object = default;
-        object? value = null;
+        object? value;
 
         long startPosition = stream.Position;
 
@@ -97,18 +97,26 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         {
             // Try our implicit deserialization.
             if (TNrbfSerializer.TryBindToType(record.TypeName, out Type? type)
-                && type.IsAssignableTo(typeof(T))
-                && TNrbfSerializer.TryGetObject(record, out value)
-                && value is T matching)
+                && type.IsAssignableTo(typeof(T)))
             {
-                @object = matching;
-                return true;
+                if (TNrbfSerializer.TryGetObject(record, out value))
+                {
+                    @object = (T)value;
+                    return true;
+                }
+                else if (TNrbfSerializer.IsFullySupportedType(typeof(T)))
+                {
+                    // The serializer fully supports this type, but can't deserialize it.
+                    // Don't let it fall through to the BinaryFormatter.
+                    return false;
+                }
             }
+
+            binder = new(typeof(T), in request);
 
             if (type is null)
             {
                 // Serializer didn't recognize the type, look for and deserialize a JSON object.
-                binder = new(typeof(T), in request);
                 var (isJsonData, isValidType) = record.TryGetObjectFromJson(binder, out @object);
                 if (isJsonData)
                 {
@@ -117,15 +125,25 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             }
 
             // JSON type info is nested, so this has to come after the JSON attempt.
-            if (!request.UntypedRequest
-                && !typeof(T).MatchExceptAssemblyVersion(record.TypeName)
-                && (TryResolve(request.Resolver, record.TypeName) is not { } resolvedType
-                    || !resolvedType.MatchExceptAssemblyVersion(record.TypeName)))
+            if (!request.UntypedRequest)
             {
-                // Typed request where the root type is not what was requested.
-                // Untyped requests are allowed to deserialize any type.
-                return false;
+                if (!(typeof(T).Matches(record.TypeName, TypeNameComparison.AllButAssemblyVersion)
+                    || (binder.TryBindToType(record.TypeName, out Type? resolvedType)
+                        && resolvedType.IsAssignableTo(typeof(T)))))
+                {
+                    // Typed request where the root type is not what was requested.
+                    // Untyped requests are allowed to deserialize any type.
+                    return false;
+                }
             }
+        }
+
+        if (!request.UntypedRequest && request.Resolver is null)
+        {
+            // Never allow the BinaryFormatter without an explicit resolver. This ensures users know that they
+            // cannot hit the BinaryFormatter under any circumstances from other TryGet APIs when working with
+            // primitive types or JSON serialized objects.
+            throw new NotSupportedException(string.Format(SR.ClipboardOrDragDrop_UseTypedAPI, typeof(T).FullName));
         }
 
         if (!FeatureSwitches.EnableUnsafeBinaryFormatterSerialization)
@@ -140,7 +158,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             throw new NotSupportedException(SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop);
         }
 
-        if (DataFormatNames.IsRestrictedFormat(request.Format))
+        if (DataFormatNames.IsPredefinedFormat(request.Format))
         {
             // These format should have been handled above (binary formatted primitive or array of primitives).
             // We should never let them get to the actual BinaryFormatter or do any other unbounded deserialization.
@@ -162,6 +180,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
             value = new BinaryFormatter()
             {
                 Binder = binder,
+                // Don't consider assembly versions when deserializing.
                 AssemblyFormat = FormatterAssemblyStyle.Simple
             }.Deserialize(stream);
         }
@@ -181,17 +200,5 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         }
 
         return false;
-
-        static Type? TryResolve(Func<TypeName, Type>? resolver, TypeName typeName)
-        {
-            try
-            {
-                return resolver?.Invoke(typeName);
-            }
-            catch (Exception e) when (!e.IsCriticalException())
-            {
-                return null;
-            }
-        }
     }
 }

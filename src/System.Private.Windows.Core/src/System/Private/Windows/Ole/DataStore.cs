@@ -81,12 +81,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
     public void SetData(string format, bool autoConvert, object? data)
     {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            ArgumentNullException.ThrowIfNull(format);
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
+        ArgumentException.ThrowIfNullOrWhiteSpace(format, nameof(format));
         TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
         _mappedData[format] = new DataStoreEntry(data, autoConvert);
     }
@@ -177,7 +172,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
             TryGetDataInternal(format, autoConvert, out data);

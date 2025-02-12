@@ -25,21 +25,23 @@ internal static unsafe class ClipboardCore<TOleServices>
     ///  Removes all data from the Clipboard.
     /// </summary>
     /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
-    internal static HRESULT Clear()
+    internal static HRESULT Clear(
+        int retryTimes = OleRetryCount,
+        int retryDelay = OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
         HRESULT result;
-        int retryCount = OleRetryCount;
+        int retryCount = retryTimes;
 
-        while ((result = PInvokeCore.OleSetClipboard(null)).Failed)
+        while ((result = TOleServices.OleSetClipboard(null)).Failed)
         {
             if (--retryCount < 0)
             {
                 break;
             }
 
-            Thread.Sleep(millisecondsTimeout: OleRetryDelay);
+            Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
         return result;
@@ -67,23 +69,23 @@ internal static unsafe class ClipboardCore<TOleServices>
         using var iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
 
         HRESULT result;
-        int retry = OleRetryCount;
-        while ((result = PInvokeCore.OleSetClipboard(iDataObject)).Failed)
+        int retryCount = retryTimes;
+        while ((result = TOleServices.OleSetClipboard(iDataObject)).Failed)
         {
-            if (--retry < 0)
+            if (--retryCount < 0)
             {
                 return result;
             }
 
-            Thread.Sleep(millisecondsTimeout: OleRetryDelay);
+            Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
         if (copy)
         {
-            retry = retryTimes;
-            while ((result = PInvokeCore.OleFlushClipboard()).Failed)
+            retryCount = retryTimes;
+            while ((result = TOleServices.OleFlushClipboard()).Failed)
             {
-                if (--retry < 0)
+                if (--retryCount < 0)
                 {
                     return result;
                 }
@@ -101,24 +103,28 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// <param name="proxyDataObject">The proxy data object retrieved from the Clipboard.</param>
     /// <param name="originalObject">The original object retrieved from the Clipboard, if available.</param>
     /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
-    public static HRESULT TryGetData(out ComScope<IDataObject> proxyDataObject, out object? originalObject)
+    public static HRESULT TryGetData(
+        out ComScope<IDataObject> proxyDataObject,
+        out object? originalObject,
+        int retryTimes = OleRetryCount,
+        int retryDelay = OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
         proxyDataObject = new(null);
         originalObject = null;
 
-        int retryTimes = OleRetryCount;
+        int retryCount = retryTimes;
         HRESULT result;
 
-        while ((result = PInvokeCore.OleGetClipboard(proxyDataObject)).Failed)
+        while ((result = TOleServices.OleGetClipboard(proxyDataObject)).Failed)
         {
-            if (--retryTimes < 0)
+            if (--retryCount < 0)
             {
                 return result;
             }
 
-            Thread.Sleep(millisecondsTimeout: OleRetryDelay);
+            Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
         // OleGetClipboard always returns a proxy. The proxy forwards all IDataObject method calls to the real data object,
@@ -134,6 +140,49 @@ internal static unsafe class ClipboardCore<TOleServices>
         if (wrapperResult.Succeeded)
         {
             ComHelpers.TryUnwrapComWrapperCCW(realDataObject.AsUnknown, out originalObject);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///  Returns the data that is currently on the clipboard as the platform specified <typeparamref name="TIDataObject"/>.
+    /// </summary>
+    internal static HRESULT GetDataObject<TDataObject, TIDataObject>(
+        out TIDataObject? dataObject,
+        int retryTimes = OleRetryCount,
+        int retryDelay = OleRetryDelay)
+        where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
+        where TIDataObject : class
+    {
+        dataObject = default;
+
+        HRESULT result = TryGetData(
+            out ComScope<IDataObject> proxyDataObject,
+            out object? originalObject,
+            retryTimes,
+            retryDelay);
+
+        // Need to ensure we release the ref count on the proxy object.
+        using (proxyDataObject)
+        {
+            if (result.Failed)
+            {
+                Debug.Assert(proxyDataObject.IsNull);
+                return result;
+            }
+
+            if (originalObject is TDataObject dataObjectInternal
+                && dataObjectInternal.TryUnwrapUserDataObject(out TIDataObject? userObject))
+            {
+                // We have an original user object that we want to return.
+                dataObject = userObject;
+                return result;
+            }
+
+            // Original data given wasn't an IDataObject, give the proxy value back.
+            // (Creating the DataObject will add a reference to the proxy.)
+            dataObject = TDataObject.Create(proxyDataObject.Value);
         }
 
         return result;

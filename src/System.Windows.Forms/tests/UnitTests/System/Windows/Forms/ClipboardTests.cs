@@ -743,14 +743,14 @@ public class ClipboardTests
         expected.Equals(testData.Should().BeOfType<TestData>().Subject);
 
         // Resolver is required to read this type.
-        Action tryGetData = () => Clipboard.TryGetData(format, out testData);
-        tryGetData.Should().Throw<NotSupportedException>();
+        Clipboard.TryGetData(format, out testData).Should().BeFalse();
+        testData.Should().BeNull();
 
         // This is the safe switch configuration, custom types can't be resolved
         using NrbfSerializerInClipboardDragDropScope nrbfScope2 = new(enable: false);
         using BinaryFormatterInClipboardDragDropScope binaryScope2 = new(enable: false);
-        Action tryGetDataWithResolver = () => Clipboard.TryGetData(format, TestData.TestDataResolver, out testData);
-        tryGetDataWithResolver.Should().Throw<NotSupportedException>();
+        Clipboard.TryGetData(format, TestData.TestDataResolver, out testData).Should().BeFalse();
+        testData.Should().BeNull();
     }
 
     [Serializable]
@@ -878,7 +878,15 @@ public class ClipboardTests
         result.GetValue(2, 3).Should().Be(202u);
         result.GetValue(2, 4).Should().Be(203u);
 
-        Clipboard.TryGetData("test", out uint[,]? data).Should().BeTrue();
+        Clipboard.TryGetData("test", out uint[,]? data).Should().BeFalse();
+        data.Should().BeNull();
+
+        Clipboard.TryGetData(
+            "test",
+            (typeName) => typeName.FullName == typeof(uint[,]).FullName
+                ? typeof(uint[,])
+                : throw new NotSupportedException(),
+            out data).Should().BeTrue();
 
         // FluentAssertions doesn't support non-zero indexed arrays.
         Assert.Equal(data, value);
@@ -899,9 +907,9 @@ public class ClipboardTests
     {
         string format = "format";
         Action action = () => Clipboard.SetDataAsJson(format, new DataObject());
-        action.Should().Throw<InvalidOperationException>();
+        action.Should().Throw<ArgumentException>();
         Action clipboardSet2 = () => Clipboard.SetDataAsJson(format, new DerivedDataObject());
-        clipboardSet2.Should().NotThrow();
+        clipboardSet2.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]
@@ -912,10 +920,11 @@ public class ClipboardTests
         Clipboard.SetDataAsJson(format, generic1);
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
 
-        // We do not handle List<Point>, this is a wrong API to read JSON-serialized payload.
+        // Reading a JSON-serialized payload through the untyped APIs gives the raw data.
         // This call returns an unfilled MemoryStream due to the BinaryFormatter being disabled,
         // same as it was in .NET9 for any payload.
-        dataObject.GetData(format).Should().BeOfType<MemoryStream>();
+        MemoryStream stream = dataObject.GetData(format).Should().BeOfType<MemoryStream>().Subject;
+        stream.Length.Should().NotBe(0);
 
         using (BinaryFormatterInClipboardDragDropScope scope = new(enable: true))
         using (BinaryFormatterScope scope2 = new(enable: true))
@@ -929,12 +938,12 @@ public class ClipboardTests
         Clipboard.TryGetData(format, out List<Point>? points).Should().BeTrue();
         points.Should().BeEquivalentTo(generic1);
 
-        // List of primitives is an intrinsic type, formatters are bypassed.
+        // List of primitives is an intrinsic type, ensure it is treated as JSON.
         List<int> generic2 = [];
         Clipboard.SetDataAsJson(format, generic2);
         dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-
-        dataObject.GetData(format).Should().BeEquivalentTo(generic2);
+        var result2 = dataObject.GetData(format);
+        result2.Should().BeOfType<MemoryStream>();
 
         Clipboard.TryGetData(format, out List<int>? intList).Should().BeTrue();
         intList.Should().BeEquivalentTo(generic2);
@@ -990,7 +999,7 @@ public class ClipboardTests
         }
         else
         {
-            legacyResult.Should().BeNull();
+            legacyResult.Should().Be(testData);
         }
     }
 
@@ -1032,6 +1041,7 @@ public class ClipboardTests
             lindex = -1,
             tymed = ComTypes.TYMED.TYMED_HGLOBAL
         };
+
         dataObject.GetData(ref formatetc, out ComTypes.STGMEDIUM medium);
         HGLOBAL hglobal = (HGLOBAL)medium.unionmember;
         MemoryStream? stream = null;
@@ -1062,9 +1072,8 @@ public class ClipboardTests
             string innerTypeAssemblyQualifiedName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
             TypeName.TryParse(innerTypeAssemblyQualifiedName, out TypeName? innerTypeName).Should().BeTrue();
             TypeName checkedResult = innerTypeName.Should().BeOfType<TypeName>().Subject;
-            // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
-            // which changes the assembly name.
-            typeof(SimpleTestData).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
+
+            typeof(SimpleTestData).AssemblyQualifiedName.Should().Be(checkedResult.AssemblyQualifiedName);
             typeof(SimpleTestData).ToTypeName().Matches(checkedResult).Should().BeTrue();
 
             JsonSerializer.Deserialize(byteData.GetArray(), typeof(SimpleTestData)).Should().BeEquivalentTo(testData);
@@ -1076,7 +1085,7 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void Clipboard_SurfaceJsonError()
+    public void Clipboard_JsonError_NotRethrown()
     {
         using Font font = new("Microsoft Sans Serif", emSize: 10);
         byte[] serialized = JsonSerializer.SerializeToUtf8Bytes(font);
@@ -1085,12 +1094,12 @@ public class ClipboardTests
 
         string format = "font";
         Clipboard.SetDataAsJson(format, font);
-        Action a2 = () => Clipboard.TryGetData(format, out Font? _);
-        a2.Should().Throw<NotSupportedException>();
+        Clipboard.TryGetData(format, out Font? result).Should().BeFalse();
+        result.Should().BeNull();
 
         DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
-        Action a3 = () => dataObject.TryGetData(format, out Font? _);
-        a3.Should().Throw<NotSupportedException>();
+        dataObject.TryGetData(format, out result).Should().BeFalse();
+        result.Should().BeNull();
     }
 
     [WinFormsTheory]
@@ -1340,10 +1349,19 @@ public class ClipboardTests
 
         DataObject received = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
 
-        received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
+        received.TryGetData(
+            format,
+            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            autoConvert: false,
+            out SerializableTestData? result).Should().BeTrue();
+
         result.Should().BeEquivalentTo(data);
 
-        Clipboard.TryGetData(format, out result).Should().BeTrue();
+        Clipboard.TryGetData(
+            format,
+            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            out result).Should().BeTrue();
+
         result.Should().BeEquivalentTo(data);
     }
 
@@ -1370,10 +1388,40 @@ public class ClipboardTests
             using BinaryFormatterScope scope = new(enable: copy);
             ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
 
-            received.TryGetData(format, out SerializableTestData? result).Should().BeTrue();
+            // Need an explict resolver to hit the BinaryFormatter path if the data was copied out.
+            received.TryGetData(format, out SerializableTestData? result).Should().Be(!copy);
+            if (copy)
+            {
+                result.Should().BeNull();
+            }
+            else
+            {
+                result.Should().BeEquivalentTo(data);
+            }
+
+            received.TryGetData(
+                format,
+                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                autoConvert: false,
+                out result).Should().BeTrue();
+
             result.Should().BeEquivalentTo(data);
 
-            Clipboard.TryGetData(format, out result).Should().BeTrue();
+            Clipboard.TryGetData(format, out result).Should().Be(!copy);
+            if (copy)
+            {
+                result.Should().BeNull();
+            }
+            else
+            {
+                result.Should().BeEquivalentTo(data);
+            }
+
+            Clipboard.TryGetData(
+                format,
+                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                out result).Should().BeTrue();
+
             result.Should().BeEquivalentTo(data);
         }
         else
