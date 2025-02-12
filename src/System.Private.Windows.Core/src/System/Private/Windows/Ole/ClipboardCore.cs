@@ -163,7 +163,7 @@ internal static unsafe class ClipboardCore<TOleServices>
             retryTimes,
             retryDelay);
 
-        // Need ensure we release the ref count on the proxy object.
+        // Need to ensure we release the ref count on the proxy object.
         using (proxyDataObject)
         {
             if (result.Failed)
