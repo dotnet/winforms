@@ -25,6 +25,7 @@ public class DesignerAttributeTests
         $"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {Assemblies.SystemDesign}",
+        $"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridViewComponentEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}",
