@@ -119,7 +119,7 @@ public static class BinarySerialization
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new() // CodeQL [SM04191]: Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         {
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
 
             AssemblyFormat = assemblyFormat,
             TypeFormat = typeFormat
