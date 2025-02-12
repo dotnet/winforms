@@ -30,6 +30,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeNodeCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberListEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnCollectionEditor))]
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
