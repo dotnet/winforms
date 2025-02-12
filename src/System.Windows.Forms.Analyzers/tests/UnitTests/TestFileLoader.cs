@@ -11,7 +11,8 @@ namespace System.Windows.Forms.Analyzers.Tests;
 /// </summary>
 public static class TestFileLoader
 {
-    private const string Data = nameof(Data);
+    // Name of the subfolder that contains the test input files.
+    private const string TestData = nameof(TestData);
 
     /// <summary>
     ///  Gets path to the test input file relative to the output folder where test binary is located.
@@ -22,7 +23,7 @@ public static class TestFileLoader
 
         builder.Append(toolName);
         builder.Append(Path.DirectorySeparatorChar);
-        builder.Append(Data);
+        builder.Append(TestData);
         builder.Append(Path.DirectorySeparatorChar);
         builder.Append(testName);
         if (language != SourceLanguage.None)
@@ -33,9 +34,9 @@ public static class TestFileLoader
         return builder.ToString();
     }
 
-    public static Task<string> LoadTestFileAsync(string toolName, string testName, SourceLanguage language = SourceLanguage.CSharp)
+    public static Task<string> LoadTestFileAsync(string pathSegment, string testName, SourceLanguage language = SourceLanguage.CSharp)
     {
-        string filePath = GetTestFilePath(toolName, testName, language);
+        string filePath = GetTestFilePath(pathSegment, testName, language);
 
         return LoadTestFileAsync(filePath);
     }
@@ -47,19 +48,19 @@ public static class TestFileLoader
         return await reader.ReadToEndAsync().ConfigureAwait(false);
     }
 
-    public static async Task<string> GetTestCodeAsync(
+    public static async Task<string> GetAnalyzerTestCodeAsync(
         [CallerMemberName] string testName = "",
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(toolName, testName).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName).ConfigureAwait(false);
     }
 
-    public static async Task<string> GetVBTestCodeAsync(
+    public static async Task<string> GetVBAnalyzerTestCodeAsync(
         [CallerMemberName] string testName = "",
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(toolName, testName, SourceLanguage.VisualBasic).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName, SourceLanguage.VisualBasic).ConfigureAwait(false);
     }
 }

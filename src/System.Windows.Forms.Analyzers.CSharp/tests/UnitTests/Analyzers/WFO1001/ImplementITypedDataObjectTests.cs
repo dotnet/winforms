@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTests
+public sealed class ImplementITypedDataObjectTests
 {
     private const string DiagnosticId = DiagnosticIDs.ImplementITypedDataObjectInAdditionToIDataObject;
 
@@ -17,7 +17,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task UntypedInterface()
     {
         // internal class UntypedInterface :IDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -31,7 +31,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task DerivedFromUntyped()
     {
         // internal class DerivedFromUntyped : UntypedInterface
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -48,7 +48,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task UntypedWithAlias()
     {
         // internal class UntypedWithAlias : IManagedDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -62,7 +62,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task UntypedWithNamespace()
     {
         // internal class UntypedWithNamespace :Forms.IDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await RaiseTheWarning(
             input,
             [
@@ -76,7 +76,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task UntypedUnimplemented()
     {
         // internal class UntypedUnimplemented :IDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await RaiseTheWarning(input,
             [
                 DiagnosticResult.CompilerWarning(DiagnosticId)
@@ -92,7 +92,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task TypedInterface()
     {
         // internal class TypedInterface :ITypedDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -100,7 +100,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task TypedWithNamespace()
     {
         // internal class TypedWithNamespace : Forms.ITypedDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -108,7 +108,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task TypedWithAlias()
     {
         // internal class TypedWithAlias : IManagedDataObject, System.Windows.Forms.IDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -116,7 +116,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task TwoInterfaces()
     {
         // internal class TwoInterfaces :IDataObject, ITypedDataObject
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
@@ -124,7 +124,7 @@ public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzerTest
     public async Task UnrelatedIDataObject()
     {
         // Name collision, this analyzer is not applicable
-        string input = await TestFileLoader.GetTestCodeAsync();
+        string input = await TestFileLoader.GetAnalyzerTestCodeAsync();
         await NoWarning(input);
     }
 
