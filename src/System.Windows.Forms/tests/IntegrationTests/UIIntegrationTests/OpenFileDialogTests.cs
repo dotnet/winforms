@@ -14,7 +14,7 @@ public class OpenFileDialogTests : ControlTestBase
 
     // Regression test for https://github.com/dotnet/winforms/issues/8108
     [WinFormsFact]
-    public void OpenFileDialogTests_OpenWithNonExistingInitDirectory_Success()
+    public void OpenWithNonExistingInitDirectory_Success()
     {
         using DialogHostForm dialogOwnerForm = new();
         using OpenFileDialog dialog = new();
@@ -23,7 +23,7 @@ public class OpenFileDialogTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public void OpenFileDialogTests_OpenWithExistingInitDirectory_Success()
+    public void OpenWithExistingInitDirectory_Success()
     {
         using DialogHostForm dialogOwnerForm = new();
         using OpenFileDialog dialog = new();
@@ -33,7 +33,7 @@ public class OpenFileDialogTests : ControlTestBase
 
     // Regression test for https://github.com/dotnet/winforms/issues/8414
     [WinFormsFact]
-    public void OpenFileDialogTests_ResultWithMultiselect()
+    public void ShowDialog_ResultWithMultiselect()
     {
         using var tempFile = TempFile.Create(0);
         using AcceptDialogForm dialogOwnerForm = new();

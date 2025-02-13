@@ -2286,32 +2286,34 @@ public abstract partial class ToolStripItem :
 
     internal void FireEventInteractive(EventArgs e, ToolStripItemEventType met)
     {
-        if (Enabled)
+        if (!Enabled)
         {
-            switch (met)
-            {
-                case ToolStripItemEventType.MouseMove:
-                    HandleMouseMove((MouseEventArgs)e);
-                    break;
-                case ToolStripItemEventType.MouseHover:
-                    HandleMouseHover(e);
-                    break;
-                case ToolStripItemEventType.MouseUp:
-                    HandleMouseUp((MouseEventArgs)e);
-                    break;
-                case ToolStripItemEventType.MouseDown:
-                    HandleMouseDown((MouseEventArgs)e);
-                    break;
-                case ToolStripItemEventType.Click:
-                    HandleClick(e);
-                    break;
-                case ToolStripItemEventType.DoubleClick:
-                    HandleDoubleClick(e);
-                    break;
-                default:
-                    Debug.Assert(false, "Invalid event type.");
-                    break;
-            }
+            return;
+        }
+
+        switch (met)
+        {
+            case ToolStripItemEventType.MouseMove:
+                HandleMouseMove((MouseEventArgs)e);
+                break;
+            case ToolStripItemEventType.MouseHover:
+                HandleMouseHover(e);
+                break;
+            case ToolStripItemEventType.MouseUp:
+                HandleMouseUp((MouseEventArgs)e);
+                break;
+            case ToolStripItemEventType.MouseDown:
+                HandleMouseDown((MouseEventArgs)e);
+                break;
+            case ToolStripItemEventType.Click:
+                HandleClick(e);
+                break;
+            case ToolStripItemEventType.DoubleClick:
+                HandleDoubleClick(e);
+                break;
+            default:
+                Debug.Assert(false, "Invalid event type.");
+                break;
         }
     }
 
@@ -2554,14 +2556,14 @@ public abstract partial class ToolStripItem :
 
     private void HandleMouseUp(MouseEventArgs e)
     {
-        bool fireMouseUp = (ParentInternal?.LastMouseDownedItem == this);
+        bool fireMouseUp = ParentInternal?.LastMouseDownedItem == this;
 
         if (!fireMouseUp && !MouseDownAndUpMustBeInSameItem)
         {
-            // in the case of menus, you can mouse down on one item and mouse up
-            // on another. We do need to be careful
-            // that the mouse has actually moved from when a dropdown has been opened -
-            // otherwise we may accidentally click what's underneath the mouse at the time
+            // In the case of menus, you can mouse down on one item and mouse up
+            // on another. We do need to be careful that the mouse has actually
+            // moved from when a dropdown has been opened - otherwise we may
+            // accidentally click what's underneath the mouse at the time
             // the dropdown is opened.
             fireMouseUp = ParentInternal is not null && ParentInternal.ShouldSelectItem();
         }
@@ -2579,7 +2581,7 @@ public abstract partial class ToolStripItem :
                     long deltaTicks = newTime - _lastClickTime;
                     _lastClickTime = newTime;
                     // use >= for cases where the delta is so fast DateTime cannot pick up the delta.
-                    Debug.Assert(deltaTicks >= 0, "why are deltaticks less than zero? thats some mighty fast clicking");
+                    Debug.Assert(deltaTicks >= 0, "why are delta ticks less than zero? that's some mighty fast clicking");
                     // if we've seen a mouse up less than the double click time ago, we should fire.
                     if (deltaTicks >= 0 && deltaTicks < DoubleClickTicks)
                     {
