@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using static Microsoft.CodeAnalysis.Testing.ReferenceAssemblies;
 
-namespace System.Windows.Forms.Analyzers.Tests.Verifiers;
+namespace System.Windows.Forms.Analyzers.CSharp.Tests.GeneratorTests.Verifiers;
 
 public class CSharpSourceGeneratorTest<TSourceGenerator>
     : CSharpSourceGeneratorTest<TSourceGenerator, DefaultVerifier>

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.IO.Enumeration;
-using System.Reflection;
 using System.Text;
 
 namespace Microsoft.WinForms.Test;
@@ -14,10 +13,10 @@ public static class TestFileLoader
 {
     private const string TestData = nameof(TestData);
 
-    private const string AnalyzerTestCode = nameof(TestFileType.AnalyzerTestCode);
-    private const string CodeFixTestCode = nameof(TestFileType.CodeFixTestCode);
-    private const string FixedCode = nameof(TestFileType.FixedCode);
-    private const string GlobalUsing = nameof(TestFileType.GlobalUsing);
+    internal const string AnalyzerTestCode = nameof(TestFileType.AnalyzerTestCode);
+    internal const string CodeFixTestCode = nameof(TestFileType.CodeFixTestCode);
+    internal const string FixedTestCode = nameof(TestFileType.FixedTestCode);
+    internal const string GlobalUsing = nameof(TestFileType.GlobalUsing);
 
     /// <summary>
     ///  Enumerates the test file entries in the specified base path.
@@ -27,7 +26,7 @@ public static class TestFileLoader
     /// <returns>An enumerable collection of test file entries.</returns>
     /// <exception cref="ArgumentException">Thrown when the base path is null or empty.</exception>
     public static IEnumerable<TestFileEntry> EnumerateEntries(
-           string basePath,
+           string? basePath = default,
            FileAttributes excludeAttributes = default)
     {
         if (string.IsNullOrEmpty(basePath))
@@ -42,21 +41,21 @@ public static class TestFileLoader
 
         return EnumerateEntriesInternal(basePath, enumOptions, excludeAttributes);
 
-        IEnumerable<TestFileEntry> EnumerateEntriesInternal(
+        static IEnumerable<TestFileEntry> EnumerateEntriesInternal(
             string basePath,
             EnumerationOptions enumOptions,
             FileAttributes excludeAttributes)
         {
             FileSystemEnumerable<TestFileEntry> enumeration = new FileSystemEnumerable<TestFileEntry>(
                 directory: basePath,
-                transform: (ref FileSystemEntry entry) =>
+                transform: (ref entry) =>
                 {
-                    TestFileType fileType = Path.GetFileName(basePath) switch
+                    TestFileType fileType = Path.GetFileName(entry.ToFullPath()) switch
                     {
-                        AnalyzerTestCode => TestFileType.AnalyzerTestCode,
-                        CodeFixTestCode => TestFileType.CodeFixTestCode,
-                        FixedCode => TestFileType.FixedCode,
-                        GlobalUsing => TestFileType.GlobalUsing,
+                        var filename when filename.Contains(AnalyzerTestCode) => TestFileType.AnalyzerTestCode,
+                        var filename when filename.Contains(FixedTestCode) => TestFileType.FixedTestCode,
+                        var filename when filename.Contains(CodeFixTestCode) => TestFileType.CodeFixTestCode,
+                        var filename when filename.Contains(GlobalUsing) => TestFileType.GlobalUsing,
                         _ => TestFileType.AdditionalCodeFile
                     };
 
@@ -105,53 +104,27 @@ public static class TestFileLoader
                 ?? throw new InvalidOperationException("The base path is a file, but its containing folder could not be found.");
         }
 
-        // Go up the path to the 'UnitTests' folder, and then go to the TestData folder.
-        DirectoryInfo basePathInfo = new DirectoryInfo(basePath);
+        // Now go to the TestData folder:
+        basePath = Path.Combine(basePath, TestData);
 
-        // No go up so often until we've found the UnitTests folder.
-        while (basePathInfo.Name != "UnitTests")
+        // Add the typename as the subdirectory to the basePath to get the
+        // path to the analyzer test fies:
+        string analyzerPath = Path.Combine(basePath, analyzerType.Name);
+
+        if (!Directory.Exists(analyzerPath))
         {
-            basePathInfo = basePathInfo.Parent
-                ?? throw new InvalidOperationException("Expected a folder 'UnitTest' in the hierarchy, but it could not be found.");
+            throw new InvalidOperationException($"The directory '{analyzerPath}' does not exist.");
         }
 
-        // Let's see if the class defines an AnalyzerTestPathAttribute:
-        AnalyzerTestPathAttribute? analyzerTestPathAttribute = analyzerType.GetCustomAttribute<AnalyzerTestPathAttribute>();
+        List<string> analyzerTestDataSubDirPaths;
+        analyzerTestDataSubDirPaths = [.. Directory.EnumerateDirectories(analyzerPath)];
 
-        string analyzerPath = analyzerTestPathAttribute is not null
-            ? analyzerTestPathAttribute.Path
-            : analyzerType.Name;
-
-        // Now go to the TestData folder:
-        basePath = Path.Combine(basePathInfo.FullName, TestData);
-        analyzerPath = $"{basePath}\\{analyzerPath}\\";
-
-        // Now go to the TestData folder:
-        basePath = Path.Combine(basePathInfo.FullName, TestData);
-        analyzerPath = $"{basePath}\\{analyzerPath}\\";
-
-        // Define possible variations of the analyzer path
-        string[] possiblePaths =
-        [
-            analyzerPath,
-            analyzerPath.Replace("Tests", ""),
-            analyzerPath.Replace("Test", "")
-        ];
-
-        // Find the first existing path
-        analyzerPath = possiblePaths.FirstOrDefault(Directory.Exists)
-            ?? throw new InvalidOperationException(
-                $"The directory '{analyzerPath}' could not be found.");
-
-        List<string> analyzerTestDataPaths;
-        analyzerTestDataPaths = [.. Directory.EnumerateDirectories(analyzerPath)];
-
-        if (analyzerTestDataPaths.Count == 0)
+        if (analyzerTestDataSubDirPaths.Count == 0)
         {
             // We have only one test data directory for the test, so we use the analyzer path as the test data path.
-            analyzerTestDataPaths.Add(analyzerPath);
+            analyzerTestDataSubDirPaths.Add(analyzerPath);
 
-            return analyzerTestDataPaths;
+            return analyzerTestDataSubDirPaths;
         }
 
         // If we have subdirectories AND test data files, we throw, because we decided,
@@ -160,9 +133,10 @@ public static class TestFileLoader
         foreach (var directory in Directory.EnumerateFiles(analyzerPath))
         {
             // We have files in the directory, so we throw.
-            throw new InvalidOperationException($"The directory '{analyzerPath}' contains files. It should only contain subdirectories.");
+            throw new InvalidOperationException(
+                $"The directory '{analyzerPath}' contains files. It should only contain subdirectories.");
         }
 
-        return analyzerTestDataPaths;
+        return analyzerTestDataSubDirPaths;
     }
 }

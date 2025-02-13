@@ -9,7 +9,7 @@ public static class Program
 {
     public static void Main()
     {
-        var control = new AsyncControl();
+        var control = new Control();
 
         // A sync Action delegate is always fine.
         var okAction = new Action(() => control.Text = "Hello, World!");

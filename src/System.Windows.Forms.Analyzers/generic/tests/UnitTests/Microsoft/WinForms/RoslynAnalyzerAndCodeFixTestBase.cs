@@ -86,7 +86,7 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                 case TestFileType.CodeFixTestCode:
                     testDataFileSet.CodeFixTestCode = currentDocument;
                     break;
-                case TestFileType.FixedCode:
+                case TestFileType.FixedTestCode:
                     testDataFileSet.FixedTestCode = currentDocument;
                     break;
                 case TestFileType.GlobalUsing:

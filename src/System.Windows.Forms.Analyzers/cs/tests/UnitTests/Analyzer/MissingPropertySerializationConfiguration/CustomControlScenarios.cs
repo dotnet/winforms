@@ -7,12 +7,12 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.WinForms.Test;
 using Microsoft.WinForms.Utilities.Shared;
 
-namespace System.Windows.Forms.Analyzers.Test;
+namespace System.Windows.Forms.Analyzers.CSharp.Tests.AnalyzerTests.MissingPropertySerializationConfiguration;
 
-public class MissingPropertySerializationConfigurationTests
+public class CustomControlScenarios
     : RoslynAnalyzerAndCodeFixTestBase<MissingPropertySerializationConfigurationAnalyzer, DefaultVerifier>
 {
-    public MissingPropertySerializationConfigurationTests() : base(SourceLanguage.CSharp)
+    public CustomControlScenarios() : base(SourceLanguage.CSharp)
     { }
 
     // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
