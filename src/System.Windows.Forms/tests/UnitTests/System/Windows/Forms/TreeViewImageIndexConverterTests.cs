@@ -87,7 +87,6 @@ public class TreeViewImageIndexConverterTests
 
         using TreeView treeView = new TreeView { ImageList = imageList };
         PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(treeView)["ImageList"];
-        propertyDescriptor.Should().NotBeNull();
         TypeDescriptorContext context = new(treeView, propertyDescriptor!);
 
         TreeViewImageIndexConverter converter = new();

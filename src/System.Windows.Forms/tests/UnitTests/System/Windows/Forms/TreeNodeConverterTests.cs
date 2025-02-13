@@ -46,8 +46,7 @@ public class TreeNodeConverterTests
             else if (destinationType == typeof(string))
             {
                 result.Should().BeOfType<string>();
-                string text = (string)result!;
-                text.Should().Be("TreeNode: " + node.Text);
+                result.Should().Be("TreeNode: " + node.Text);
             }
         }
         else
