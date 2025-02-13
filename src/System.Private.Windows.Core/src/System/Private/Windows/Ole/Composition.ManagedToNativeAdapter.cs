@@ -16,7 +16,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
     /// <summary>
     ///  Maps <see cref="IDataObject"/> to <see cref="IDataObject.Interface"/>.
     /// </summary>
-    private unsafe class ManagedToNativeAdapter : IDataObject.Interface, IManagedWrapper<IDataObject>
+    private sealed unsafe class ManagedToNativeAdapter : IDataObject.Interface, IManagedWrapper<IDataObject>
     {
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
@@ -271,7 +271,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             return format switch
             {
                 _ when data is Stream dataStream
-                    => SaveStreamToHGLOBAL(ref medium.hGlobal, dataStream),
+                    => dataStream.SaveStreamToHGLOBAL(ref medium.hGlobal),
                 DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText
                     => SaveStringToHGLOBAL(medium.hGlobal, data.ToString() ?? "", unicode: false),
                 DataFormatNames.Html
@@ -299,41 +299,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 // Throws in case of serialization failure.
                 BinaryFormatUtilities<TNrbfSerializer>.WriteObjectToStream(stream, data, format);
 
-                return SaveStreamToHGLOBAL(ref hglobal, stream);
-            }
-
-            static HRESULT SaveStreamToHGLOBAL(ref HGLOBAL hglobal, Stream stream)
-            {
-                if (!hglobal.IsNull)
-                {
-                    PInvokeCore.GlobalFree(hglobal);
-                }
-
-                int size = checked((int)stream.Length);
-                hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
-                if (hglobal.IsNull)
-                {
-                    return HRESULT.E_OUTOFMEMORY;
-                }
-
-                void* buffer = PInvokeCore.GlobalLock(hglobal);
-                if (buffer is null)
-                {
-                    return HRESULT.E_OUTOFMEMORY;
-                }
-
-                try
-                {
-                    Span<byte> span = new(buffer, size);
-                    stream.Position = 0;
-                    stream.ReadExactly(span);
-                }
-                finally
-                {
-                    PInvokeCore.GlobalUnlock(hglobal);
-                }
-
-                return HRESULT.S_OK;
+                return stream.SaveStreamToHGLOBAL(ref hglobal);
             }
 
             // Saves a list of files out to the handle in HDROP format.

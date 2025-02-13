@@ -16,7 +16,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
     /// </summary>
-    private unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
+    private sealed unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
@@ -147,7 +147,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 int size = (int)PInvokeCore.GlobalSize(hglobal);
-                byte[] bytes = new byte[size];
+                byte[] bytes = GC.AllocateUninitializedArray<byte>(size);
                 Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
 
@@ -331,7 +331,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 data = default;
                 doNotContinue = true;
             }
-            catch (Exception ex) when (request.UntypedRequest || ex is not NotSupportedException)
+            catch (Exception ex) when (!request.TypedRequest || ex is not NotSupportedException)
             {
                 Debug.WriteLine(ex.ToString());
             }
@@ -431,7 +431,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             [NotNullWhen(true)] out T? data)
         {
             data = default;
-            if (!request.UntypedRequest && request.Resolver is null)
+            if (request.TypedRequest && request.Resolver is null)
             {
                 // DataObject.GetData methods do not validate format string, but the typed methods do.
                 // This validation is specific to the our DataObject implementation, it's not executed for
@@ -469,11 +469,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     continue;
                 }
 
-                DataRequest mappedRequest = new(mappedFormat)
+                DataRequest mappedRequest = new()
                 {
+                    Format = mappedFormat,
                     AutoConvert = request.AutoConvert,
                     Resolver = request.Resolver,
-                    UntypedRequest = request.UntypedRequest
+                    TypedRequest = request.TypedRequest
                 };
 
                 result = TryGetObjectFromDataObject(
@@ -500,11 +501,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
         #region IDataObject
         public object? GetData(string format, bool autoConvert)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
                 Resolver = null,
-                UntypedRequest = true
+                TypedRequest = false
             };
 
             TryGetDataInternal(in request, out object? data);
@@ -591,11 +593,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
                 Resolver = resolver,
-                UntypedRequest = false
+                TypedRequest = true
             };
 
             return TryGetDataInternal(in request, out data);
@@ -606,9 +609,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
+                TypedRequest = true,
             };
 
             return TryGetDataInternal(in request, out data);

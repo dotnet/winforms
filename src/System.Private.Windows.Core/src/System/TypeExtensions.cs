@@ -22,7 +22,7 @@ internal static class TypeExtensions
     internal static bool Matches(
         this Type type,
         TypeName typeName,
-        TypeNameComparison comparison)
+        TypeNameComparison comparison = TypeNameComparison.All)
     {
         // based on https://github.com/dotnet/runtime/blob/1474fc3fafca26b4b051be7dacdba8ac2804c56e/src/libraries/System.Formats.Nrbf/src/System/Formats/Nrbf/SerializationRecord.cs#L68
 

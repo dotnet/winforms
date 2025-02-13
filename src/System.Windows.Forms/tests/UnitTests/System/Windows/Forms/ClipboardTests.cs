@@ -920,20 +920,8 @@ public class ClipboardTests
         Clipboard.SetDataAsJson(format, generic1);
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
 
-        // Reading a JSON-serialized payload through the untyped APIs gives the raw data.
-        // This call returns an unfilled MemoryStream due to the BinaryFormatter being disabled,
-        // same as it was in .NET9 for any payload.
-        MemoryStream stream = dataObject.GetData(format).Should().BeOfType<MemoryStream>().Subject;
-        stream.Length.Should().NotBe(0);
-
-        using (BinaryFormatterInClipboardDragDropScope scope = new(enable: true))
-        using (BinaryFormatterScope scope2 = new(enable: true))
-        {
-            // BinaryFormatter will not find our fake System.Private.Windows.VirtualJson assembly
-            // and will throw a SerializationException.
-            var result1 = dataObject.GetData(format);
-            result1.Should().BeOfType<MemoryStream>();
-        }
+        // Reading a JSON-serialized payload through the untyped APIs always works.
+        dataObject.GetData(format).Should().BeEquivalentTo(generic1);
 
         Clipboard.TryGetData(format, out List<Point>? points).Should().BeTrue();
         points.Should().BeEquivalentTo(generic1);
@@ -943,7 +931,7 @@ public class ClipboardTests
         Clipboard.SetDataAsJson(format, generic2);
         dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         var result2 = dataObject.GetData(format);
-        result2.Should().BeOfType<MemoryStream>();
+        result2.Should().BeEquivalentTo(generic2);
 
         Clipboard.TryGetData(format, out List<int>? intList).Should().BeTrue();
         intList.Should().BeEquivalentTo(generic2);
@@ -968,13 +956,13 @@ public class ClipboardTests
         // Note that this simulates out of process scenario.
         Clipboard.SetDataAsJson("test", testData);
 
-        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
+        Clipboard.GetData("test").Should().Be(testData);
 
         using BinaryFormatterInClipboardDragDropScope scope = new(enable: true);
-        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
+        Clipboard.GetData("test").Should().Be(testData);
 
         using BinaryFormatterScope scope2 = new(enable: true);
-        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
+        Clipboard.GetData("test").Should().Be(testData);
     }
 
     [WinFormsTheory]
@@ -991,16 +979,9 @@ public class ClipboardTests
         returnedDataObject.TryGetData("testDataFormat", out SimpleTestData deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(testData);
 
-        // We don't expose JsonData<T> in legacy API
+        // JsonData should work via legacy APIs.
         var legacyResult = Clipboard.GetData("testDataFormat");
-        if (copy)
-        {
-            legacyResult.Should().BeOfType<MemoryStream>();
-        }
-        else
-        {
-            legacyResult.Should().Be(testData);
-        }
+        legacyResult.Should().Be(testData);
     }
 
     [WinFormsTheory]

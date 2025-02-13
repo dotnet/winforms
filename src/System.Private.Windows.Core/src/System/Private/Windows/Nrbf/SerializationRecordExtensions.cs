@@ -597,14 +597,39 @@ internal static class SerializationRecordExtensions
 
         if (record is not ClassRecord types
             || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
-            || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string innerTypeFullName
-            || !TypeName.TryParse(innerTypeFullName, out TypeName? serializedTypeName))
+            || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string assemblyQualifiedTypeName
+            || !TypeName.TryParse(assemblyQualifiedTypeName, out TypeName? typeName))
         {
             // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
             throw new SerializationException(SR.ClipboardOrDragDrop_JsonDeserializationFailed);
         }
 
-        if (!resolver.BindToType(serializedTypeName).IsAssignableTo(typeof(T)))
+        if (typeof(T) == typeof(object))
+        {
+            // Special case for deserializing to object. JsonSerializer.Deserializer<object> gives back a JsonElement.
+            // We want to do this for the untyped APIs as downlevel apps would be able to read the object via
+            // GetData (via the IObjectReference behavior in BinaryFormatter). Preventing it here would be difficult
+            // to explain. Doing this also facilitates moving to the typed APIs for existing data that is JSON
+            // serializable. You can simply switch to SerializeAsJson and know existing consumers will not be broken.
+
+            Type? getType = Type.GetType(
+                assemblyQualifiedTypeName,
+                throwOnError: false);
+
+            // Full name didn't work, try the full
+            getType ??= Type.GetType(
+                typeName.FullName,
+                throwOnError: false);
+
+            if (getType is not null)
+            {
+                Utf8JsonReader reader = new(byteData.GetArray());
+                @object = (T?)JsonSerializer.Deserialize(ref reader, getType);
+                return (isJsonData: true, isValidType: @object is not null);
+            }
+        }
+
+        if (!resolver.TryBindToType(typeName, out Type? resolvedType) || !resolvedType.IsAssignableTo(typeof(T)))
         {
             // Not the type the caller asked for.
             return (isJsonData: true, isValidType: false);

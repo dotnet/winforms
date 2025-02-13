@@ -15,7 +15,7 @@ internal class MockOleServices<TTestClass> : IOleServices
 {
     private static AgileComPointer<IDataObject>? s_agileComPointer;
 
-    static bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
+    static bool IOleServices.AllowTypeWithoutResolver<T>() => true;
     static void IOleServices.EnsureThreadState() { }
     static unsafe HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => HRESULT.DV_E_TYMED;
     static bool IOleServices.IsValidTypeForFormat(Type type, string format) => true;

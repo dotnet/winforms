@@ -21,7 +21,7 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
         Func<TypeName, Type>? resolver,
         [NotNullWhen(true)] out T? @object) where T : default
     {
-        DataRequest request = new(format) { Resolver = resolver, UntypedRequest = untypedRequest };
+        DataRequest request = new(format) { Resolver = resolver, TypedRequest = !untypedRequest };
         return Utilities.TryReadObjectFromStream(stream, in request, out @object);
     }
 
@@ -154,7 +154,7 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
 
         DataRequest request = new("test")
         {
-            UntypedRequest = true
+            TypedRequest = false
         };
 
         // Default deserialization with the NRBF deserializer.

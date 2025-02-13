@@ -23,7 +23,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         Func<TypeName, Type>? resolver,
         [NotNullWhen(true)] out T? @object) where T : default
     {
-        DataRequest request = new(format) { Resolver = resolver, UntypedRequest = untypedRequest };
+        DataRequest request = new(format) { Resolver = resolver, TypedRequest = !untypedRequest };
         return Utilities.TryReadObjectFromStream(stream, in request, out @object);
     }
 
@@ -557,9 +557,10 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
-        DataRequest request = new("test")
+        DataRequest request = new()
         {
-            UntypedRequest = true
+            Format = "test",
+            TypedRequest = false
         };
 
         Stream.Position = 0;

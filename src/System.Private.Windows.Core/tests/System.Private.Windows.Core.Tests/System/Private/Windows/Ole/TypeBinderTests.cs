@@ -20,7 +20,7 @@ public class TypeBinderTests
         // Suppressing asserts. We normally don't want to be letting through SerializationBinder calls
         // without BinaryFormatting being enabled, but we don't need to turn it on for this test.
         using NoAssertContext noAsserts = new();
-        DataRequest request = new("test") { UntypedRequest = true };
+        DataRequest request = new("test") { TypedRequest = false };
         TypeBinder<AlwaysDefaultSerializer> binder = new(type, in request);
         binder.BindToType("Foo", "Bar").Should().BeNull();
     }
@@ -31,7 +31,7 @@ public class TypeBinderTests
     [InlineData(typeof(MyClass))]
     public void BindToType_NoResolver_TypedRequest_MatchesSucceed(Type type)
     {
-        DataRequest request = new("test") { UntypedRequest = false };
+        DataRequest request = new("test") { TypedRequest = true };
         TypeBinder<AlwaysDefaultSerializer> binder = new(type, in request);
 
         // You must have a resolver for typed requests when being called through the BinaryFormatter path.
@@ -46,7 +46,7 @@ public class TypeBinderTests
     [InlineData(typeof(List<string>))]
     public void BindToType_NoResolver_TypedRequest_CoreSerializer_SupportedTypesSucceed(Type type)
     {
-        DataRequest request = new("test") { UntypedRequest = false };
+        DataRequest request = new("test") { TypedRequest = true };
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
 
         // You must have a resolver for typed requests when being called through the BinaryFormatter path.
@@ -65,7 +65,7 @@ public class TypeBinderTests
     [InlineData(typeof(ArrayList))]
     public void BindToType_NoResolver_TypedRequest_CoreSerializer_UnsupportedTypesFail(Type type)
     {
-        DataRequest request = new("test") { UntypedRequest = false };
+        DataRequest request = new("test") { TypedRequest = true };
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
         Action action = () => binder.BindToType(type.Assembly.FullName!, type.FullName!);
         action.Should().Throw<InvalidOperationException>();
@@ -83,7 +83,7 @@ public class TypeBinderTests
     {
         DataRequest request = new("test")
         {
-            UntypedRequest = false,
+            TypedRequest = true,
             Resolver = (TypeName typeName) => typeof(MyClass)
         };
 
@@ -98,7 +98,7 @@ public class TypeBinderTests
     {
         DataRequest request = new("test")
         {
-            UntypedRequest = false,
+            TypedRequest = true,
             Resolver = (TypeName typeName) => throw new NotSupportedException()
         };
 
@@ -113,7 +113,7 @@ public class TypeBinderTests
     {
         DataRequest request = new("test")
         {
-            UntypedRequest = false,
+            TypedRequest = true,
             Resolver = (TypeName typeName) => null!
         };
 
