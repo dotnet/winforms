@@ -14,35 +14,28 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (provider is null)
+        IWindowsFormsEditorService? edSvc = provider?.GetService<IWindowsFormsEditorService>();
+
+        if (provider is null || edSvc is null || context?.Instance is null
+            || provider.GetService(typeof(IDesignerHost)) is not IDesignerHost host)
         {
             return value;
         }
 
-        IWindowsFormsEditorService? edSvc = provider.GetService<IWindowsFormsEditorService>();
-
-        if (edSvc is not null && context?.Instance is not null)
+        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
-            if (provider?.GetService(typeof(IDesignerHost)) is not IDesignerHost host)
+            _dataGridViewColumnCollectionDialog ??= new();
+
+            _dataGridViewColumnCollectionDialog.SetLiveDataGridView((DataGridView)context.Instance);
+
+            using DesignerTransaction trans = host.CreateTransaction(SR.DataGridViewColumnCollectionTransaction);
+            if (edSvc.ShowDialog(_dataGridViewColumnCollectionDialog) == DialogResult.OK)
             {
-                return value;
+                trans.Commit();
             }
-
-            using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            else
             {
-                _dataGridViewColumnCollectionDialog ??= new();
-
-                _dataGridViewColumnCollectionDialog.SetLiveDataGridView((DataGridView)context.Instance);
-
-                using DesignerTransaction trans = host.CreateTransaction(SR.DataGridViewColumnCollectionTransaction);
-                if (edSvc.ShowDialog(_dataGridViewColumnCollectionDialog) == DialogResult.OK)
-                {
-                    trans.Commit();
-                }
-                else
-                {
-                    trans.Cancel();
-                }
+                trans.Cancel();
             }
         }
 
