@@ -37,10 +37,8 @@ public class TreeNodeConverterTests
             if (destinationType == typeof(InstanceDescriptor))
             {
                 var descriptor = result as InstanceDescriptor;
-                descriptor.Should().NotBeNull();
 
                 var arguments = descriptor!.Arguments as IList;
-                arguments.Should().NotBeNull();
                 arguments![0].Should().Be(node.Text);
             }
             else if (destinationType == typeof(string))
