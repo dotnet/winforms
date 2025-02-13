@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.Metafiles;
 using System.Windows.Forms.VisualStyles;
 
@@ -99,10 +100,18 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         RadioButtonRenderer.DrawRadioButton(graphics, point, bounds, control.Text, SystemFonts.DefaultFont, textFormat, false, rBState);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/12935")]
     [WinFormsTheory]
     [BoolData]
     public void RadioButtonRenderer_DrawRadioButton_OverloadWithHandle(bool focus)
     {
+        // Skip verification of focus = true in X86
+        // due to the active issue https://github.com/dotnet/winforms/issues/12935
+        if (RuntimeInformation.ProcessArchitecture == Architecture.X86 && focus)
+        {
+            return;
+        }
+
         using Form form = new Form();
         using RadioButton control = (RadioButton)CreateButton();
         form.Controls.Add(control);
