@@ -42,7 +42,7 @@ public class CustomControlScenarios
 
     [Theory]
     [MemberData(nameof(GetReferenceAssemblies))]
-    public async Task TestCodeFix(ReferenceAssemblies referenceAssemblies, int numberOfFixAllIterations)
+    public async Task TestCodeFix(ReferenceAssemblies referenceAssemblies)
     {
         await EnumerateTestFilesAsync(TestMethod);
 
@@ -51,7 +51,9 @@ public class CustomControlScenarios
             var context = GetCodeFixTestContext<AddDesignerSerializationVisibilityCodeFixProvider>(
                 fileSet,
                 referenceAssemblies,
-                numberOfFixAllIterations);
+                numberOfFixAllIterations: 2);
+
+            context.NumberOfFixAllInProjectIterations = 2;
 
             await context.RunAsync().ConfigureAwait(false);
         }

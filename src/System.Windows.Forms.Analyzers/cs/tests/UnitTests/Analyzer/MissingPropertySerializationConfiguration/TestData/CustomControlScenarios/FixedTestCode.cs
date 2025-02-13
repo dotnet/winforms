@@ -14,10 +14,10 @@ public class ScalableControl : System.Windows.Forms.Control
     [System.ComponentModel.Description("Sets or gets the scaled size of some foo bar thing.")]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public SizeF ScaledSize
-    {
-        get => _scaleSize;
-        set => _scaleSize = value;
-    }
+            {
+                get => _scaleSize;
+                set => _scaleSize = value;
+            }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public float ScaleFactor { get; set; } = 1.0f;
@@ -26,5 +26,6 @@ public class ScalableControl : System.Windows.Forms.Control
     ///  Sets or gets the scaled location of some foo bar thing.
     /// </Summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public PointF ScaledLocation { get; set; }
-}
+    public PointF ScaledLocation
+{ get; set; }
+        }

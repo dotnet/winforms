@@ -295,16 +295,22 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
             NumberOfFixAllInDocumentIterations = numberOfFixAllIterations
         };
 
+        // The FixedState should use the same additional Sources than the TestState.
         if (fileSet.GlobalUsing is not null)
         {
             context.TestState.Sources.Add(fileSet.GlobalUsing);
+            context.FixedState.Sources.Add(fileSet.GlobalUsing);
         }
 
+        // The FixedState should use the same additional Sources than the TestState,
+        // which also includes any additional (support) files which just serve the
+        // purpose to make the to-test-code compile in the first place.
         if (fileSet.AdditionalCodeFiles is not null)
         {
             foreach (string contextDocument in fileSet.AdditionalCodeFiles)
             {
                 context.TestState.Sources.Add(contextDocument);
+                context.FixedState.Sources.Add(contextDocument);
             }
         }
 

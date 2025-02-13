@@ -3,11 +3,14 @@
 
 namespace CSharpControls;
 
-public class Program
+public static class Program
 {
-    var control = new ScalableControl();
+    public static void Main(string[] args)
+    {
+        var control = new ScalableControl();
 
-    control.ScaleFactor = 1.5f;
-    control.ScaledSize = new SizeF(100, 100);
-    control.ScaledLocation = new PointF(10, 10);
+        control.ScaleFactor = 1.5f;
+        control.ScaledSize = new SizeF(100, 100);
+        control.ScaledLocation = new PointF(10, 10);
+    }
 }
