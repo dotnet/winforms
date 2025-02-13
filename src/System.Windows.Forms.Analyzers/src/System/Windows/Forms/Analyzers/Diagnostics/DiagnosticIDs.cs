@@ -14,7 +14,7 @@ internal static class DiagnosticIDs
 
     // WinForms Security, number group 1000+
     public const string MissingPropertySerializationConfiguration = "WFO1000";
-    public const string ImplementITypedDataObjectInAdditionToIDataObject = "WFO1001";
+    public const string ImplementITypedDataObject = "WFO1001";
 
     // WinForms best practice, number group 2000+
     public const string DisposeModalDialog = "WFO2000";

@@ -28,9 +28,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData(" ", "default_top_level")]
     [InlineData("\t", "default_top_level")]
     [InlineData("MyProject", "default_boilerplate")]
-    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
+    public async Task ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
-        string expected = File.ReadAllText($@"Generators\ApplicationConfigurationGenerator\TestData\{GetType().Name}.{expectedFileName}.cs");
+        string expected = await TestFileLoader.GetGeneratorTestCodeAsync($"{GetType().Name}.{expectedFileName}.cs");
 
         string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
             new ApplicationConfig(
