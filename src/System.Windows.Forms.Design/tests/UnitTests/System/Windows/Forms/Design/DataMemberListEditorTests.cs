@@ -24,7 +24,6 @@ public class DataMemberListEditorTests
     [Fact]
     public void DataMemberListEditor_EditValue()
     {
-        DataGridView dataGridView = new();
         DataMemberListEditor dataMemberListEditor = new();
         object value = "123";
         dataMemberListEditor.EditValue(null, null, value).Should().Be(value);
