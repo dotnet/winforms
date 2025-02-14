@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../ToolStripItemEditorForm.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Items Collection Editor</source>
+        <target state="new">Items Collection Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddNew.Text">
+        <source>&amp;Add</source>
+        <target state="new">&amp;Add</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleDescription">
+        <source>Move the selected item down in the list</source>
+        <target state="new">Move the selected item down in the list</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleName">
+        <source>Move Down</source>
+        <target state="new">Move Down</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleDescription">
+        <source>Move the selected item up in the list</source>
+        <target state="new">Move the selected item up in the list</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleName">
+        <source>Move Up</source>
+        <target state="new">Move Up</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnOK.Text">
+        <source>OK</source>
+        <target state="new">OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleDescription">
+        <source>Remove the selected item from the list</source>
+        <target state="new">Remove the selected item from the list</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleName">
+        <source>Remove</source>
+        <target state="new">Remove</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblItems.Text">
+        <source>&amp;Select item and add to list below:</source>
+        <target state="new">&amp;Select item and add to list below:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMembers.Text">
+        <source>&amp;Members:</source>
+        <target state="new">&amp;Members:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedItemName.Text">
+        <source>toolStrip1</source>
+        <target state="new">toolStrip1</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

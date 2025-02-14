@@ -30,7 +30,6 @@ public class DesignerAttributeTests
         $"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolBarButtonDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolBarDesigner, {Assemblies.SystemDesign}",
-        $"System.Windows.Forms.Design.ToolStripCollectionEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolStripImageIndexEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.WebBrowserDesigner, {Assemblies.SystemDesign}",
     ];

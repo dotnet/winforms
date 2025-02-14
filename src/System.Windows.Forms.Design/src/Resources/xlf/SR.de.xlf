@@ -2332,6 +2332,16 @@ Drücken Sie STRG+EINGABETASTE, um Text zu übernehmen.</target>
         <target state="translated">"ToolStrip MenuItem Insert" in DropDown-Transaktion.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">Einträge &amp;bearbeiten...</target>

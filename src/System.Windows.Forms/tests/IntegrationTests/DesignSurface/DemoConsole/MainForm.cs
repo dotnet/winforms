@@ -293,11 +293,19 @@ public partial class MainForm : Form
                         rootComponent.BackColor = Color.Pink;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.6";
 
-                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 0));
+                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 60));
                         toolStripContainer.Dock = DockStyle.Fill;
 
-                        MenuStrip menuStrip1 = new();
-                        MenuStrip menuStrip2 = new();
+                        ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
+                        ToolStripButton toolStripButton1 = new("toolStripButton1");
+                        ToolStripDropDownButton toolStripDropDownButton1 = new("toolStripDropDownButton1");
+                        ToolStripTextBox toolStripTextBox= new("toolStripTextBox");
+                        toolStrip1.Items.Add(toolStripButton1);
+                        toolStrip1.Items.Add(toolStripDropDownButton1);
+                        toolStrip1.Items.Add(toolStripTextBox);
+
+                        MenuStrip menuStrip1 = surface.CreateControl<MenuStrip>(new Size(400, 50), new Point(0, 60));
+                        MenuStrip menuStrip2 = surface.CreateControl<MenuStrip>(new Size(400, 50), new Point(0, 150));
 
                         ToolStripMenuItem toolStripMenuItem1 = new("TopMenuItem1");
                         ToolStripMenuItem toolStripMenuItem2 = new("TopMenuItem2");

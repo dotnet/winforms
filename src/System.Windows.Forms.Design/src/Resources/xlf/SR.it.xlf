@@ -2332,6 +2332,16 @@ Per accettare testo premere CTRL+INVIO.</target>
         <target state="translated">Inserisci elemento MenuItem di un controllo ToolStrip in transazione DropDown</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">&amp;Modifica elementi...</target>
