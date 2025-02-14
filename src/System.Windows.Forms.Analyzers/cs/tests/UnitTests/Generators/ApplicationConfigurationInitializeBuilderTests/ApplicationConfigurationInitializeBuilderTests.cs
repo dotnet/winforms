@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
-using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
@@ -30,9 +29,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData("MyProject", "default_boilerplate")]
     public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
-        string expected = File.ReadAllText($@"Generators\MockData\{GetType().Name}.{expectedFileName}.cs");
+        string expected = File.ReadAllText($@"Generators\{GetType().Name}\MockData\{expectedFileName}.cs");
 
-        string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
+        string output = Forms.CSharp.Generators.ApplicationConfiguration.ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
             new ApplicationConfig(
                 EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
                 DefaultFont: null,
@@ -152,7 +151,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     {
         Thread.CurrentThread.CurrentCulture = culture;
 
-        string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(null, (ApplicationConfig)config);
+        string output = Forms.CSharp.Generators.ApplicationConfiguration.ApplicationConfigurationInitializeBuilder.GenerateInitialize(null, (ApplicationConfig)config);
 
         // Compare all locale tests against the same files - we expect the produced output to be the same
         return Verify(output)

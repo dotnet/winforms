@@ -51,9 +51,16 @@ public class CustomControlScenarios
             var context = GetCodeFixTestContext<AddDesignerSerializationVisibilityCodeFixProvider>(
                 fileSet,
                 referenceAssemblies,
-                numberOfFixAllIterations: 2);
 
-            context.NumberOfFixAllInProjectIterations = 2;
+                // Negative numbers states |max| positive number states absolute.
+                numberOfFixAllIterations: -2);
+
+            // In this (and probably the most cases), we do not want to
+            // take track about the Fix-iterations on a Project-
+            // let alone the Solution level.
+            context.CodeFixTestBehaviors =
+                CodeFixTestBehaviors.SkipFixAllInProjectCheck |
+                CodeFixTestBehaviors.SkipFixAllInSolutionCheck;
 
             await context.RunAsync().ConfigureAwait(false);
         }

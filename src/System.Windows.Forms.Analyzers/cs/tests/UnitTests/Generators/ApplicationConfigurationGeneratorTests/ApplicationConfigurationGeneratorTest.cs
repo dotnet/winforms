@@ -14,6 +14,9 @@ namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ApplicationConfigurationGeneratorTests
 {
+    private const string FolderPrefix = "System.Windows.Forms.Analyzers.CSharp\\" +
+        "System.Windows.Forms.CSharp.Generators.ApplicationConfiguration.ApplicationConfigurationGenerator\\";
+
     private const string SourceCompilable = """
         namespace MyProject
         {
@@ -90,10 +93,14 @@ public partial class ApplicationConfigurationGeneratorTests
             TestState =
             {
                 OutputKind = projectType,
-                Sources = { SourceCompilable },
+                Sources =
+                {
+                    SourceCompilable
+                },
+
                 GeneratedSources =
                 {
-                    (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
+                    ($"{FolderPrefix}ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
         };
@@ -114,7 +121,7 @@ public partial class ApplicationConfigurationGeneratorTests
                 Sources = { SourceCompilable },
                 GeneratedSources =
                 {
-                    (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
+                    ($"{FolderPrefix}ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
         };
@@ -147,7 +154,7 @@ public partial class ApplicationConfigurationGeneratorTests
                 },
                 GeneratedSources =
                 {
-                    (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
+                    ($"{FolderPrefix}ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
         };
@@ -173,7 +180,7 @@ public partial class ApplicationConfigurationGeneratorTests
                 Sources = { source },
                 GeneratedSources =
                 {
-                    (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
+                    ($"{FolderPrefix}ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
         };
@@ -211,7 +218,7 @@ public partial class ApplicationConfigurationGeneratorTests
                 },
                 GeneratedSources =
                 {
-                    (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
+                    ($"{FolderPrefix}ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
         };
@@ -221,6 +228,6 @@ public partial class ApplicationConfigurationGeneratorTests
 
     private SourceText LoadFileContent(string testName) =>
         SourceText.From(
-            File.ReadAllText($@"Generators\MockData\{GetType().Name}.{testName}.cs"),
+            File.ReadAllText($@"Generators\{GetType().Name}\MockData\{testName}.cs"),
             Encoding.UTF8);
 }

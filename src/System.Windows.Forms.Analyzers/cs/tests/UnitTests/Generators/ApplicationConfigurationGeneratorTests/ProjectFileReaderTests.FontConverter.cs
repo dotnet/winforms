@@ -8,7 +8,7 @@ using static System.Windows.Forms.CSharp.Generators.ApplicationConfiguration.Pro
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ProjectFileReaderTests
+public partial class ProjectFileReaderTest
 {
     public class FontConverterTest
     {

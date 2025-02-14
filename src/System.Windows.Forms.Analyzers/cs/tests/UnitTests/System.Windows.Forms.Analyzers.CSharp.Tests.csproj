@@ -28,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="GeneratorTests\ApplicationConfigurationGenerator\MockData\*.cs" />
-    <None Include="GeneratorTests\ApplicationConfigurationGenerator\MockData\*.*">
+    <Compile Remove="Generators\ApplicationConfigurationGeneratorTests\MockData\*.cs" />
+    <None Include="Generators\ApplicationConfigurationGeneratorTests\MockData\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -41,6 +41,8 @@
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <Compile Remove="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_boilerplate.cs" />
+    <Compile Remove="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_top_level.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +52,12 @@
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <None Include="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_boilerplate.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_top_level.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
