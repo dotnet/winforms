@@ -17,7 +17,7 @@ public partial class ErrorProvider
 
         public IconRegion(Icon icon)
         {
-            _icon = new Icon(icon, ScaleHelper.LogicalSmallSystemIconSize);
+            _icon = icon;
         }
 
         /// <summary>

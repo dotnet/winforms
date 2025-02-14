@@ -547,10 +547,8 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    int width = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
-                    int height = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, width, height);
+                    t_defaultIcon = new Icon(defaultIcon, ScaleHelper.LogicalSmallSystemIconSize);
                 }
             }
 
@@ -587,7 +585,15 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// <summary>
     ///  Create the icon region on demand.
     /// </summary>
-    internal IconRegion Region => _region ??= new IconRegion(Icon);
+    internal IconRegion Region
+    {
+        get
+        {
+            Icon scaledIcon = new(Icon, ScaleHelper.ScaleToDpi(DefaultIcon.Size, _parentControl!.DeviceDpi));
+            _region ??= new IconRegion(scaledIcon);
+            return _region;
+        }
+    }
 
     /// <summary>
     ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
