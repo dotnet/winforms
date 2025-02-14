@@ -28,6 +28,8 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeNodeCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberListEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor))]
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
