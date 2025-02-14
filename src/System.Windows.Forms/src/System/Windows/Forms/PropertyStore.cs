@@ -37,13 +37,14 @@ internal sealed class PropertyStore
 
     /// <summary>
     ///  Gets the current value for the given key, or the <paramref name="defaultValue"/> if the key is not found.
-    ///  Does not allow stored values of <see langword="null"/>.
     /// </summary>
     public T? GetValueOrDefault<T>(int key, T? defaultValue = default)
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
-            return foundValue.GetValue<T>();
+            return foundValue.Type == typeof(StrongBox<T>)
+                ? foundValue.GetValue<StrongBox<T>>().Value
+                : foundValue.GetValue<T>();
         }
 
         return defaultValue;
@@ -85,7 +86,10 @@ internal sealed class PropertyStore
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
-            value = foundValue.GetValue<T>();
+            value = foundValue.Type == typeof(StrongBox<T>)
+                ? foundValue.GetValue<StrongBox<T>>().Value
+                : foundValue.GetValue<T>();
+
             return value is not null;
         }
 
@@ -159,9 +163,13 @@ internal sealed class PropertyStore
         bool isDefault = (value is null && defaultValue is null)
             || (value is not null && value.Equals(defaultValue));
 
+        bool isStrongBox = foundValue.Type == typeof(StrongBox<T>);
+
         // The previous should be whatever we found or what was specified as the default.
         T? previous = found
-            ? foundValue.Type is null ? default : foundValue.GetValue<T>()
+            ? isStrongBox
+                ? foundValue.GetValue<StrongBox<T>>().Value
+                : foundValue.Type is null ? default : foundValue.GetValue<T>()
             : defaultValue;
 
         if (isDefault)
@@ -174,8 +182,8 @@ internal sealed class PropertyStore
         }
         else if (!found || !ReferenceEquals(value, previous))
         {
-            // If it wasn't found or it is the same instance we don't need set it.
-            _values[key] = new(value);
+            // If it wasn't found or it isn't the same instance we need set it.
+            AddValue(key, value);
         }
 
         return previous;
@@ -211,15 +219,14 @@ internal sealed class PropertyStore
         // Should only call this from SetValue<T> for value types that are larger than 8 bytes.
         Debug.Assert(sizeof(T) > 8);
 
-        if (_values.TryGetValue(key, out Value foundValue) && foundValue.Type == typeof(T))
+        if (_values.TryGetValue(key, out Value foundValue) && foundValue.Type == typeof(StrongBox<T>))
         {
-            object storedValue = foundValue.GetValue<object>();
-            ref T unboxed = ref Unsafe.Unbox<T>(storedValue);
-            unboxed = value;
+            StrongBox<T> storedValue = foundValue.GetValue<StrongBox<T>>();
+            storedValue.Value = value;
         }
         else
         {
-            _values[key] = Value.Create(value);
+            _values[key] = Value.Create(new StrongBox<T>(value));
         }
     }
 }
