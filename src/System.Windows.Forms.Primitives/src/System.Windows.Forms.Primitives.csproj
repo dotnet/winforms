@@ -45,7 +45,6 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" />
     <PackageReference Include="System.Resources.Extensions" />
     <PackageReference Include="System.Windows.Extensions" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup>
