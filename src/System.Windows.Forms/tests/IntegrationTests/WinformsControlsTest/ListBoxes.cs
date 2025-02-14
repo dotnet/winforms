@@ -11,6 +11,7 @@ public partial class ListBoxes : Form
     public ListBoxes()
     {
         InitializeComponent();
+        MinimumSize = new Size(Width, 900);
     }
 
     private void addButton_Click(object sender, EventArgs e)
@@ -59,5 +60,10 @@ public partial class ListBoxes : Form
         {
             e.ItemHeight += 5;
         }
+    }
+
+    private void Control_Click(object sender, EventArgs e)
+    {
+        propertyGrid.SelectedObject = sender;
     }
 }

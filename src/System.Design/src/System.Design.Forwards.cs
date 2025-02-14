@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.BindingSourceDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnTypeEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataSourceListEditor))]
