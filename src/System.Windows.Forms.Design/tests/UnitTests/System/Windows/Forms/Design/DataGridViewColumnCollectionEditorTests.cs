@@ -13,15 +13,11 @@ public class DataGridViewColumnCollectionEditorTests
 {
     [Fact]
     public void DataGridViewColumnCollectionEditor_GetEditStyle()
-    {
-        new DataGridViewColumnCollectionEditor().GetEditStyle().Should().Be(UITypeEditorEditStyle.Modal);
-    }
+        => new DataGridViewColumnCollectionEditor().GetEditStyle().Should().Be(UITypeEditorEditStyle.Modal);
 
     [Fact]
     public void DataGridViewColumnCollectionEditor_IsDropDownResizable()
-    {
-        new DataGridViewColumnCollectionEditor().IsDropDownResizable.Should().Be(false);
-    }
+        => new DataGridViewColumnCollectionEditor().IsDropDownResizable.Should().Be(false);
 
     [Fact]
     public void DataGridViewColumnCollectionEditor_EditValue()
