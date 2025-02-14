@@ -26,8 +26,6 @@ public class DesignerAttributeTests
         $"System.Windows.Forms.Design.DataGridDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridViewComponentEditor, {Assemblies.SystemDesign}",
-        $"System.Windows.Forms.Design.DataMemberFieldEditor, {Assemblies.SystemDesign}",
-        $"System.Windows.Forms.Design.DataMemberListEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolBarButtonDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolBarDesigner, {Assemblies.SystemDesign}",
