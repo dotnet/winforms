@@ -45,6 +45,36 @@ public class OpenFileDialogTests : ControlTestBase
         Assert.Equal(tempFile.Path, dialog.FileName);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/12847
+    [WinFormsFact]
+    public void ShowDialog_Twice()
+    {
+        using OpenFileDialog dialog = new();
+        using var tempFile = TempFile.Create(0);
+        dialog.Multiselect = true;
+        dialog.InitialDirectory = Path.GetDirectoryName(tempFile.Path);
+        dialog.FileName = tempFile.Path;
+
+        using RaceConditionDialogForm dialogOwnerForm = new(dialog);
+        Assert.Equal(DialogResult.OK, dialog.ShowDialog(dialogOwnerForm));
+    }
+
+    private class RaceConditionDialogForm : AcceptDialogForm
+    {
+        private readonly OpenFileDialog _dialog;
+
+        public RaceConditionDialogForm(OpenFileDialog dialog)
+        {
+            _dialog = dialog;
+        }
+
+        protected override void OnDialogIdle(HWND dialogHandle)
+        {
+            Assert.Equal(DialogResult.Cancel, _dialog.ShowDialog(this));
+            base.OnDialogIdle(dialogHandle);
+        }
+    }
+
     private class AcceptDialogForm : DialogHostForm
     {
         protected override void OnDialogIdle(HWND dialogHandle)
