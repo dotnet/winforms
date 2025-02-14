@@ -8,7 +8,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design;
 
-public class DataMemberFieldEditor : UITypeEditor
+internal class DataMemberFieldEditor : UITypeEditor
 {
     private DesignBindingPicker? _designBindingPicker;
 

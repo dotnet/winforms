@@ -1,5 +1,0 @@
-override System.Windows.Forms.Design.DataMemberFieldEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
-override System.Windows.Forms.Design.DataMemberFieldEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
-override System.Windows.Forms.Design.DataMemberFieldEditor.IsDropDownResizable.get -> bool
-System.Windows.Forms.Design.DataMemberFieldEditor
-System.Windows.Forms.Design.DataMemberFieldEditor.DataMemberFieldEditor() -> void
