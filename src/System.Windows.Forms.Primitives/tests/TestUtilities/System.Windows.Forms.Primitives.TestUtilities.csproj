@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />
   </ItemGroup>
 
