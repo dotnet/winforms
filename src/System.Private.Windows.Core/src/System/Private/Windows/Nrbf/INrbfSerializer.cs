@@ -31,7 +31,7 @@ internal interface INrbfSerializer
     ///  <para>
     ///   This should only return <see langword="true"/> for types that are expected to be safe to deserialize. It is
     ///   used to indicate that we should consider the type "corrupted" and should not make a second attempt through
-    ///   the <see cref="BinaryFormatter"/>. It is also used as the "blessed" list of types that we'll auto-bind when
+    ///   the <see cref="BinaryFormatter"/>. It is also used as the allowed list of types that we'll auto-bind when
     ///   user type resolvers return <see langword="null"/>.
     ///  </para>
     ///  <para>

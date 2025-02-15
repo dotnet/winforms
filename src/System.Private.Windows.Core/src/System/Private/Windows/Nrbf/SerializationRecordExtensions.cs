@@ -582,6 +582,11 @@ internal static class SerializationRecordExtensions
     ///  If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly.
     /// </exception>
     /// <exception cref="NotSupportedException">If an exception occurred while JSON deserializing.</exception>
+    /// <devdoc>
+    ///  We don't try to resolve all types in the graph of a type when deserializing JSON as the default options
+    ///  should not present the same risks as BinaryFormatter deserialization. JSON binding is just for the root
+    ///  type.
+    /// </devdoc>
     internal static (bool isJsonData, bool isValidType) TryGetObjectFromJson<T>(
         this SerializationRecord record,
         ITypeResolver resolver,
@@ -604,7 +609,14 @@ internal static class SerializationRecordExtensions
             throw new SerializationException(SR.ClipboardOrDragDrop_JsonDeserializationFailed);
         }
 
-        if (typeof(T) == typeof(object))
+        Type? boundType = resolver.BindToType(typeName);
+        if (!boundType.IsAssignableTo(typeof(T)))
+        {
+            // Not the type the caller asked for.
+            return (isJsonData: true, isValidType: false);
+        }
+
+        if (boundType == typeof(object))
         {
             // Special case for deserializing to object. JsonSerializer.Deserializer<object> gives back a JsonElement.
             // We want to do this for the untyped APIs as downlevel apps would be able to read the object via
@@ -612,31 +624,23 @@ internal static class SerializationRecordExtensions
             // to explain. Doing this also facilitates moving to the typed APIs for existing data that is JSON
             // serializable. You can simply switch to SerializeAsJson and know existing consumers will not be broken.
 
-            Type? getType = Type.GetType(
+            boundType = Type.GetType(
                 assemblyQualifiedTypeName,
                 throwOnError: false);
 
-            // Full name didn't work, try the full
-            getType ??= Type.GetType(
+            // Fall back to just the full name.
+            boundType ??= Type.GetType(
                 typeName.FullName,
-                throwOnError: false);
-
-            if (getType is not null)
-            {
-                Utf8JsonReader reader = new(byteData.GetArray());
-                @object = (T?)JsonSerializer.Deserialize(ref reader, getType);
-                return (isJsonData: true, isValidType: @object is not null);
-            }
-        }
-
-        if (!resolver.TryBindToType(typeName, out Type? resolvedType) || !resolvedType.IsAssignableTo(typeof(T)))
-        {
-            // Not the type the caller asked for.
-            return (isJsonData: true, isValidType: false);
+                throwOnError: true);
         }
 
         // Let the original exception bubble up if deserialization fails.
-        @object = JsonSerializer.Deserialize<T>(byteData.GetArray());
-        return (isJsonData: true, isValidType: true);
+        if (boundType is not null)
+        {
+            Utf8JsonReader reader = new(byteData.GetArray());
+            @object = (T?)JsonSerializer.Deserialize(ref reader, boundType);
+        }
+
+        return (isJsonData: true, isValidType: @object is not null);
     }
 }

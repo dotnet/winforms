@@ -44,9 +44,14 @@ public class TypeBinderTests
     [InlineData(typeof(string))]
     [InlineData(typeof(int[]))]
     [InlineData(typeof(List<string>))]
-    public void BindToType_NoResolver_TypedRequest_CoreSerializer_SupportedTypesSucceed(Type type)
+    public void BindToType_NoResolver_TypedRequest_CoreSerializer_Fails(Type type)
     {
-        DataRequest request = new("test") { TypedRequest = true };
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true
+        };
+
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
 
         // You must have a resolver for typed requests when being called through the BinaryFormatter path.
@@ -54,7 +59,33 @@ public class TypeBinderTests
         action.Should().Throw<InvalidOperationException>();
 
         TypeName typeName = TypeName.Parse(type.AssemblyQualifiedName);
-        binder.TryBindToType(typeName, out Type? boundType).Should().Be(true);
+        binder.TryBindToType(typeName, out Type? boundType).Should().BeFalse();
+        boundType.Should().BeNull();
+
+        action = () => binder.BindToType(typeName);
+        action.Should().Throw<NotSupportedException>();
+    }
+
+    [Theory]
+    [InlineData(typeof(int))]
+    [InlineData(typeof(string))]
+    [InlineData(typeof(int[]))]
+    [InlineData(typeof(List<string>))]
+    public void BindToType_Resolver_TypedRequest_CoreSerializer_SupportedTypesSucceed(Type type)
+    {
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeof(MyClass).Matches(typeName) ? typeof(MyClass) : null
+        };
+
+        TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
+
+        binder.BindToType(type.Assembly.FullName!, type.FullName!).Should().Be(type);
+
+        TypeName typeName = TypeName.Parse(type.AssemblyQualifiedName);
+        binder.TryBindToType(typeName, out Type? boundType).Should().BeTrue();
         boundType.Should().Be(type);
 
         binder.BindToType(typeName).Should().Be(type);

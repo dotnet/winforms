@@ -32,9 +32,8 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
     where TNrbfSerializer : INrbfSerializer
 {
     private readonly Type _rootType;
-    private Func<TypeName, Type?>? _resolver;
+    private readonly Func<TypeName, Type?>? _resolver;
     private readonly bool _isTypedRequest;
-    private readonly bool _hasCustomResolver;
 
     private Dictionary<FullyQualifiedTypeName, TypeName>? _cachedTypeNames;
 
@@ -45,29 +44,12 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
     /// <param name="rootType"><see cref="Type"/> that the user expects to read from the binary formatted stream.</param>
     public TypeBinder(Type rootType, ref readonly DataRequest request)
     {
-        Debug.Assert(
-            request.TypedRequest || (!request.TypedRequest && request.Resolver is null),
-            "Untyped methods should not provide a resolver.");
+        Debug.Assert(request.TypedRequest || request.Resolver is null, "Untyped methods should not provide a resolver.");
+        Debug.Assert(request.TypedRequest || rootType == typeof(object), "Untyped requests should always be asking for object");
 
         _isTypedRequest = request.TypedRequest;
-        _hasCustomResolver = request.Resolver is not null;
         _rootType = rootType;
         _resolver = request.Resolver;
-    }
-
-    private Func<TypeName, Type?> Resolver
-    {
-        get
-        {
-            // Lazily create a default resolver when needed to potentially avoid the cost of parsing the TypeName.
-            return _resolver ??= CreateDefaultResolver(_rootType);
-
-            static Func<TypeName, Type?> CreateDefaultResolver(Type type)
-            {
-                TypeName knownType = type.ToTypeName();
-                return typeName => knownType.Matches(typeName, TypeNameComparison.AllButAssemblyVersion) ? type : null;
-            }
-        }
     }
 
     public override Type? BindToType(string assemblyName, string typeName)
@@ -86,7 +68,7 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         }
 
         // Should never fall through to the BinaryFormatter from a typed API without an explicit resolver.
-        if (!_hasCustomResolver)
+        if (_resolver is null)
         {
             throw new InvalidOperationException();
         }
@@ -106,16 +88,40 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
     public Type BindToType(TypeName typeName) => TryBindToType(typeName, out Type? type)
         ? type
         : throw new NotSupportedException(string.Format(
-            _hasCustomResolver ? SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver : SR.ClipboardOrDragDrop_UseTypedAPI,
+            _resolver is null ? SR.ClipboardOrDragDrop_UseTypedAPI : SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver,
             typeName.AssemblyQualifiedName));
 
     public bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
     {
         ArgumentNullException.ThrowIfNull(typeName);
 
+        if (!_isTypedRequest)
+        {
+            type = typeof(object);
+            return true;
+        }
+
+        if (_resolver is null)
+        {
+            if (_rootType.Matches(typeName, TypeNameComparison.AllButAssemblyVersion))
+            {
+                type = _rootType;
+                return true;
+            }
+
+            // If we fall back here to the TNrbfSerializer all types would match for the root. This has the side
+            // effect of asking for `int?` and matching `int` data. We need to do `IsAssignableTo` for resolved
+            // types so we can allow resolvers to bind to derived classes- `int` is assignable to `int?`.
+            //
+            // Asking for `List<int?>` will not match `List<int>` data, even though the CoreNrbfSerializer supports
+            // `List<int>`. `List<int>` is not assignable to `List<int?>`.
+            type = null;
+            return false;
+        }
+
         try
         {
-            type = Resolver(typeName);
+            type = _resolver(typeName);
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -123,6 +129,7 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
             return false;
         }
 
+        // Explicit resolver returned null, fall back to implicit support.
         if (type is null
             && _rootType != typeof(object)
             && !_rootType.IsInterface

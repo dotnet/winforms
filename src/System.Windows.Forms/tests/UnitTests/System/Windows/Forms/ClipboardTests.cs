@@ -720,8 +720,8 @@ public class ClipboardTests
             Clipboard.SetData("TestData", expected);
         }
 
-        Clipboard.TryGetData("TestData", out int? data).Should().BeTrue();
-        data.Should().Be(expected);
+        Clipboard.TryGetData("TestData", out int? data).Should().BeFalse();
+        data.HasValue.Should().BeFalse();
     }
 
     [WinFormsFact]
