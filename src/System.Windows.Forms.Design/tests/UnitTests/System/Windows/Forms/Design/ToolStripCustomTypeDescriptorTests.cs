@@ -19,8 +19,11 @@ public class ToolStripCustomTypeDescriptorTests
     }
 
     [Fact]
-    public void Constructor_InitializesInstance() =>
-        _descriptor.GetPropertyOwner(null).Should().Be(_toolStrip);
+    public void Constructor_InitializesInstance()
+    {
+        ToolStrip instance = _descriptor.TestAccessor().Dynamic._instance;
+        instance.Should().Be(_toolStrip);
+    }
 
     [Fact]
     public void GetPropertyOwner_ReturnsInstance() =>
