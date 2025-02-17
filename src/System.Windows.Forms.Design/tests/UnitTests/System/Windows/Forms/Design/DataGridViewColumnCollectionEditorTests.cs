@@ -12,12 +12,12 @@ namespace System.Windows.Forms.Design.Tests;
 public class DataGridViewColumnCollectionEditorTests
 {
     [Fact]
-    public void DataGridViewColumnCollectionEditor_GetEditStyle()
-        => new DataGridViewColumnCollectionEditor().GetEditStyle().Should().Be(UITypeEditorEditStyle.Modal);
+    public void DataGridViewColumnCollectionEditor_GetEditStyle() =>
+        new DataGridViewColumnCollectionEditor().GetEditStyle().Should().Be(UITypeEditorEditStyle.Modal);
 
     [Fact]
-    public void DataGridViewColumnCollectionEditor_IsDropDownResizable()
-        => new DataGridViewColumnCollectionEditor().IsDropDownResizable.Should().Be(false);
+    public void DataGridViewColumnCollectionEditor_IsDropDownResizable() =>
+        new DataGridViewColumnCollectionEditor().IsDropDownResizable.Should().Be(false);
 
     [Fact]
     public void DataGridViewColumnCollectionEditor_EditValue()

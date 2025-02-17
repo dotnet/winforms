@@ -14,10 +14,10 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        IWindowsFormsEditorService? edSvc = provider?.GetService<IWindowsFormsEditorService>();
-
-        if (provider is null || edSvc is null || context?.Instance is null
-            || provider.GetService(typeof(IDesignerHost)) is not IDesignerHost host)
+        if (provider is null ||
+            provider.GetService<IWindowsFormsEditorService>() is not { } edSvc ||
+            context?.Instance is null ||
+            provider.GetService<IDesignerHost>() is not IDesignerHost host)
         {
             return value;
         }
