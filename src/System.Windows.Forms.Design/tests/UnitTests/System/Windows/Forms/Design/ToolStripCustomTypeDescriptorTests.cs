@@ -27,6 +27,26 @@ public class ToolStripCustomTypeDescriptorTests
         _descriptor.GetPropertyOwner(null).Should().Be(_toolStrip);
 
     [Fact]
+    public void GetProperties_ReturnsCachedCollection()
+    {
+        PropertyDescriptorCollection properties1 = _descriptor.GetProperties();
+        PropertyDescriptorCollection properties2 = _descriptor.GetProperties();
+
+        properties1.Should().BeSameAs(properties2);
+    }
+
+    [Fact]
+    public void GetProperties_WithAttributes_ReturnsCachedCollection()
+    {
+        Attribute[] attributes = [new BrowsableAttribute(true)];
+
+        PropertyDescriptorCollection properties1 = _descriptor.GetProperties(attributes);
+        PropertyDescriptorCollection properties2 = _descriptor.GetProperties(attributes);
+
+        properties1.Should().BeSameAs(properties2);
+    }
+
+    [Fact]
     public void GetProperties_RemovesItemsProperty() =>
         _descriptor.GetProperties().Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
 
@@ -35,6 +55,21 @@ public class ToolStripCustomTypeDescriptorTests
     {
         Attribute[] attributes = [new BrowsableAttribute(true)];
 
+        _descriptor.GetProperties(attributes).Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
+    }
+
+    [Fact]
+    public void GetProperties_RemovesItemsProperty_WhenCollectionIsNotNull()
+    {
+        _descriptor.GetProperties();
+        _descriptor.GetProperties().Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
+    }
+
+    [Fact]
+    public void GetProperties_WithAttributes_RemovesItemsProperty_WhenCollectionIsNotNull()
+    {
+        Attribute[] attributes = [new BrowsableAttribute(true)];
+        _descriptor.GetProperties(attributes);
         _descriptor.GetProperties(attributes).Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
     }
 }
