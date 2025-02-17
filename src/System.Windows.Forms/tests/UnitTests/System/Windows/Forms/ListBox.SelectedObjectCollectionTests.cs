@@ -7,29 +7,39 @@ using System.Collections;
 
 namespace System.Windows.Forms.Tests;
 
-public class ListBoxSelectedObjectCollectionTests
+public class ListBoxSelectedObjectCollectionTests : IDisposable
 {
+    private readonly ListBox _owner;
+    private readonly ListBox.SelectedObjectCollection _collection;
+
+    public ListBoxSelectedObjectCollectionTests()
+    {
+        _owner = new();
+        _collection = new(_owner);
+    }
+
+    public void Dispose()
+    {
+        _owner.Dispose();
+    }
+
     [Fact]
     public void ListBoxSelectedObjectCollection_Ctor_ListBox()
     {
-        using ListBox owner = new();
-        var collection = new ListBox.SelectedObjectCollection(owner);
-        Assert.Empty(collection);
-        Assert.True(collection.IsReadOnly);
+        Assert.Empty(_collection);
+        Assert.True(_collection.IsReadOnly);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException()
     {
-        using ListBox owner = new();
         Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedObjectCollection(null!));
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_ICollection_Properties_GetReturnsExpected()
     {
-        using ListBox owner = new();
-        ICollection collection = new ListBox.SelectedObjectCollection(owner);
+        ICollection collection = _collection;
         Assert.Empty(collection);
         Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
@@ -38,8 +48,7 @@ public class ListBoxSelectedObjectCollectionTests
     [Fact]
     public void ListBoxSelectedObjectCollection_IList_Properties_GetReturnsExpected()
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Empty(collection);
         Assert.True(collection.IsFixedSize);
         Assert.True(collection.IsReadOnly);
@@ -59,8 +68,7 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData(1, "1")]
     public void ListBoxSelectedObjectCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value)
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(() => collection[index] = value);
     }
 
@@ -70,16 +78,14 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData("1")]
     public void ListBoxSelectedObjectCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value)
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(() => collection.Add(value));
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_IListClear_Invoke_ThrowsNotSupportedException()
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(collection.Clear);
     }
 
@@ -95,8 +101,7 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData(1, "1")]
     public void ListBoxSelectedObjectCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value)
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(() => collection.Insert(index, value));
     }
 
@@ -106,8 +111,7 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData("1")]
     public void ListBoxSelectedObjectCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value)
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(() => collection.Remove(value));
     }
 
@@ -117,8 +121,7 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData(1)]
     public void ListBoxSelectedObjectCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index)
     {
-        using ListBox owner = new();
-        IList collection = new ListBox.SelectedObjectCollection(owner);
+        IList collection = _collection;
         Assert.Throws<NotSupportedException>(() => collection.RemoveAt(index));
     }
 
@@ -128,12 +131,10 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData("item2", true)]
     public void ListBoxSelectedObjectCollection_Contains_ReturnsExpected(object value, bool expected)
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Contains(value).Should().Be(expected);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.Contains(value).Should().Be(expected);
     }
 
     [Theory]
@@ -142,105 +143,87 @@ public class ListBoxSelectedObjectCollectionTests
     [InlineData("item2", 0)]
     public void ListBoxSelectedObjectCollection_IndexOf_ReturnsExpected(object value, int expected)
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.EnsureUpToDate();
-        collection.IndexOf(value).Should().Be(expected);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.EnsureUpToDate();
+        _collection.IndexOf(value).Should().Be(expected);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_CopyTo_EmptyCollection_DoesNothing()
     {
-        using ListBox owner = new();
-        ListBox.SelectedObjectCollection collection = new(owner);
         object[] destination = new object[1];
-        collection.CopyTo(destination, 0);
+        _collection.CopyTo(destination, 0);
         destination.Should().AllBeEquivalentTo<object>(null!);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_CopyTo_NonEmptyCollection_CopiesItems()
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
         object[] destination = new object[1];
-        collection.CopyTo(destination, 0);
+        _collection.CopyTo(destination, 0);
         destination[0].Should().Be("item2");
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Clear_EmptyCollection_DoesNothing()
     {
-        using ListBox owner = new();
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Clear();
-        collection.Count.Should().Be(0);
+        _collection.Clear();
+        _collection.Count.Should().Be(0);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Clear_NonEmptyCollection_ClearsItems()
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Clear();
-        collection.Count.Should().Be(0);
-        owner.SelectedItems.Count.Should().Be(0);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.Clear();
+        _collection.Count.Should().Be(0);
+        _owner.SelectedItems.Count.Should().Be(0);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Remove_EmptyCollection_DoesNothing()
     {
-        using ListBox owner = new();
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Remove("item1");
-        collection.Count.Should().Be(0);
+        _collection.Remove("item1");
+        _collection.Count.Should().Be(0);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Remove_NonEmptyCollection_RemovesItem()
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Remove("item2");
-        collection.Count.Should().Be(0);
-        owner.SelectedItems.Count.Should().Be(0);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.Remove("item2");
+        _collection.Count.Should().Be(0);
+        _owner.SelectedItems.Count.Should().Be(0);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Remove_ItemNotInCollection_DoesNothing()
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Remove("item3");
-        collection.Count.Should().Be(1);
-        owner.SelectedItems.Count.Should().Be(1);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.Remove("item3");
+        _collection.Count.Should().Be(1);
+        _owner.SelectedItems.Count.Should().Be(1);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_Remove_NullItem_DoesNothing()
     {
-        using ListBox owner = new();
-        owner.Items.Add("item1");
-        owner.Items.Add("item2");
-        owner.SelectedItems.Add("item2");
-        ListBox.SelectedObjectCollection collection = new(owner);
-        collection.Remove(null!);
-        collection.Count.Should().Be(1);
-        owner.SelectedItems.Count.Should().Be(1);
+        _owner.Items.Add("item1");
+        _owner.Items.Add("item2");
+        _owner.SelectedItems.Add("item2");
+        _collection.Remove(null!);
+        _collection.Count.Should().Be(1);
+        _owner.SelectedItems.Count.Should().Be(1);
     }
 }
