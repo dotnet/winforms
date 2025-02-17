@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Drawing.Interop;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms.VisualStyles;
@@ -59,6 +60,37 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
                 // else return false.
                 IntPtr hTheme = GetHandle("BUTTON", false); // Button is an arbitrary choice.
                 supported = hTheme != IntPtr.Zero;
+            }
+
+            return supported;
+        }
+    }
+
+    /// <summary>
+    /// <para>
+    /// Gets a value specifying whether the operating system has Dark Mode visual styles subclass and the Application can  use this subclass to draw controls with Dark Mode theme.
+    ///</para>
+    ///<para>
+    ///<return>
+    ///<para> Returns true if Visual Style Dark Mode subclass is: </para>
+    /// <para> 1) Supported by the operating system.</para>
+    /// <para> 2) Enabled in the client area.</para>
+    /// <para> 3) operating system not ruining in high contrast mode</para>
+    /// <para> Otherwise, returns false. Note that if false is returned, attempts to create/use objects of this class will throw exceptions.</para>
+    ///</return>
+    ///</para>
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static bool IsDarkModeSupported
+    {
+        get
+        {
+            bool supported = AreClientAreaVisualStylesSupported;
+
+            if (supported)
+            {
+                HTHEME hTheme = GetHandle($"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::BUTTON", false); // Button is an arbitrary choice.
+                supported = !hTheme.IsNull && !SystemInformation.HighContrast;
             }
 
             return supported;
