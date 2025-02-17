@@ -25,7 +25,7 @@ public class ToolStripCollectionEditorTests
     [Fact]
     public void ToolStripCollectionEditor_EditValue_NullProvider_ReturnsNull()
     {
-        object? result = _editor.EditValue(context: null, provider: null, value: new object());
+        object? result = _editor.EditValue(context: null, provider: null!, value: new object());
 
         result.Should().BeNull();
     }
@@ -58,8 +58,17 @@ public class ToolStripCollectionEditorTests
 
     private class MockSelectionService : ISelectionService
     {
-        public event EventHandler? SelectionChanged;
-        public event EventHandler? SelectionChanging;
+        public event EventHandler? SelectionChanged
+        {
+            add { }
+            remove { }
+        }
+
+        public event EventHandler? SelectionChanging
+        {
+            add { }
+            remove { }
+        }
 
         public ICollection GetSelectedComponents() => Array.Empty<object>();
 
@@ -80,7 +89,7 @@ public class ToolStripCollectionEditorTests
 
         public bool InTransaction => false;
 
-        public IComponent? RootComponent => null;
+        public IComponent RootComponent => null!;
 
         public string TransactionDescription => string.Empty;
 
@@ -118,13 +127,47 @@ public class ToolStripCollectionEditorTests
 
         public object? GetService(Type serviceType) => null;
 
-        public event EventHandler? Activated;
-        public event EventHandler? Deactivated;
-        public event EventHandler? LoadComplete;
-        public event DesignerTransactionCloseEventHandler? TransactionClosed;
-        public event DesignerTransactionCloseEventHandler? TransactionClosing;
-        public event EventHandler? TransactionOpened;
-        public event EventHandler? TransactionOpening;
+        public event EventHandler? Activated
+        {
+            add { }
+            remove { }
+        }
+
+        public event EventHandler? Deactivated
+        {
+            add { }
+            remove { }
+        }
+
+        public event EventHandler? LoadComplete
+        {
+            add { }
+            remove { }
+        }
+
+        public event DesignerTransactionCloseEventHandler? TransactionClosed
+        {
+            add { }
+            remove { }
+        }
+
+        public event DesignerTransactionCloseEventHandler? TransactionClosing
+        {
+            add { }
+            remove { }
+        }
+
+        public event EventHandler? TransactionOpened
+        {
+            add { }
+            remove { }
+        }
+
+        public event EventHandler? TransactionOpening
+        {
+            add { }
+            remove { }
+        }
     }
 
     private class MockTypeDescriptorContext : ITypeDescriptorContext
