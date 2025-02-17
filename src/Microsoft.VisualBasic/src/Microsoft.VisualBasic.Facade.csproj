@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic</AssemblyName>
-    <!-- Set PackageId not to the assembly name as NuGet prunes package and project references
-         for dependencies that are inbox in the framework. This is only necessary for this facade
-         project as only System.VisualBasic is inbox on .NETCoreApp. -->
+    <!-- Set PackageId to something different than the assembly name as NuGet prunes package and project
+         references for dependencies that are inbox in the framework. NuGet uses the PackageId information
+         for that. This is necessary for this facadeproject as System.VisualBasic is inbox on .NETCoreApp. -->
     <PackageId>$(MSBuildProjectName)</PackageId>
   </PropertyGroup>
 
