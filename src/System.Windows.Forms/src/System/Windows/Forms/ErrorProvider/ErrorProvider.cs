@@ -309,7 +309,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
             {
-                // Let's check if the datamember exists in the new data source
+                // Let's check if the data member exists in the new data source
                 try
                 {
                     _errorManager = _parentControl.BindingContext[value, _dataMember];
@@ -589,8 +589,20 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         get
         {
-            Icon scaledIcon = new(Icon, ScaleHelper.ScaleToDpi(DefaultIcon.Size, _parentControl!.DeviceDpi));
-            _region ??= new IconRegion(scaledIcon);
+            // Error provider uses small Icon.
+            int currentDpi = (int)PInvoke.GetDpiForSystem();
+            if (_parentControl is not null)
+            {
+                currentDpi = _parentControl.DeviceDpi;
+            }
+
+            _region = new IconRegion(new(Icon.OrThrowIfNull(),
+                OsVersion.IsWindows10_1607OrGreater()
+                    ? new(
+                        PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+                        PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
+                    : new(16, 16)));
+
             return _region;
         }
     }
