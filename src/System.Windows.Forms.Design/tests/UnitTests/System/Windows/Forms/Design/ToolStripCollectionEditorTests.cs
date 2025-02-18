@@ -12,14 +12,10 @@ namespace System.Windows.Forms.Design.Tests;
 public class ToolStripCollectionEditorTests
 {
     private readonly ToolStripCollectionEditor _editor;
-    private readonly MockServiceProvider _serviceProvider;
-    private readonly MockTypeDescriptorContext _context;
 
     public ToolStripCollectionEditorTests()
     {
         _editor = new();
-        _serviceProvider = new();
-        _context = new();
     }
 
     [Fact]
@@ -33,7 +29,7 @@ public class ToolStripCollectionEditorTests
     [Fact]
     public void ToolStripCollectionEditor_EditValue_WithProvider_ReturnsExpected()
     {
-        object? result = _editor.EditValue(_context, _serviceProvider, new object());
+        object? result = _editor.EditValue(new MockTypeDescriptorContext(), new MockServiceProvider(), new object());
 
         result.Should().NotBeNull();
     }
