@@ -11,28 +11,42 @@ using Moq;
 
 namespace System.Windows.Forms.Tests;
 
-public class ToolStripPanelDesignerTests
+public class ToolStripPanelDesignerTests : IDisposable
 {
     private readonly Mock<ISite> _mockSite = new();
     private readonly ToolStripPanelDesigner _designer;
     private readonly Mock<IDesignerHost> _mockDesignerHost = new();
     private readonly ToolStripPanel _toolStripPanel;
     private readonly Mock<ISelectionService> _mockSelectionService = new();
+    private bool _disposed;
 
     public ToolStripPanelDesignerTests()
     {
-        _designer = new ToolStripPanelDesigner();
+        _designer = new();
+        _toolStripPanel = InitializeToolStripPanel();
+    }
+
+    private ToolStripPanel InitializeToolStripPanel()
+    {
         _mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_mockSelectionService.Object);
         _mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_mockDesignerHost.Object);
-        _toolStripPanel = new ToolStripPanel { Site = _mockSite.Object };
-        _designer.Initialize(_toolStripPanel);
+
+        Mock<IComponentChangeService> mockComponentChangeService = new();
+        _mockDesignerHost.Setup(dh => dh.GetService(typeof(IComponentChangeService))).Returns(mockComponentChangeService.Object);
+
+        ToolStripPanel toolStripPanel = new() { Site = _mockSite.Object };
+
+        _designer.Initialize(toolStripPanel);
+
+        return toolStripPanel;
     }
 
     [Fact]
     public void Control_ReturnsCorrectType()
     {
-        ToolStripPanel control = _designer.Control;
+        ToolStripPanel? control = _designer?.Control;
 
+        Assert.NotNull(control);
         control.Should().BeOfType<ToolStripPanel>();
         control.Should().Be(_toolStripPanel);
     }
@@ -43,7 +57,7 @@ public class ToolStripPanelDesignerTests
         _mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_mockDesignerHost.Object);
         _mockDesignerHost.Setup(dh => dh.GetService(typeof(IComponentChangeService))).Returns(Mock.Of<IComponentChangeService>);
 
-        SelectionRules selectionRules = _designer.SelectionRules;
+        SelectionRules selectionRules = _designer?.SelectionRules ?? default;
 
         selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
@@ -51,7 +65,7 @@ public class ToolStripPanelDesignerTests
     [Fact]
     public void ToolStripPanelSelectorGlyph_ReturnsCorrectValue()
     {
-        ToolStripPanelSelectionGlyph? glyph = _designer.ToolStripPanelSelectorGlyph;
+        ToolStripPanelSelectionGlyph? glyph = _designer?.ToolStripPanelSelectorGlyph;
 
         glyph.Should().BeNull();
     }
@@ -59,8 +73,7 @@ public class ToolStripPanelDesignerTests
     [Fact]
     public void ParticipatesWithSnapLines_ReturnsFalse()
     {
-        bool participatesWithSnapLines = _designer.ParticipatesWithSnapLines;
-
+        bool participatesWithSnapLines = _designer?.ParticipatesWithSnapLines ?? false;
         participatesWithSnapLines.Should().BeFalse();
     }
 
@@ -69,7 +82,7 @@ public class ToolStripPanelDesignerTests
     {
         ToolStrip toolStrip = new();
 
-        bool canParent = _designer.CanParent(toolStrip);
+        bool canParent = _designer?.CanParent(toolStrip) ?? false;
 
         canParent.Should().BeTrue();
     }
@@ -79,7 +92,7 @@ public class ToolStripPanelDesignerTests
     {
         Label label = new();
 
-        bool canParent = _designer.CanParent(label);
+        bool canParent = _designer?.CanParent(label) ?? false;
 
         canParent.Should().BeFalse();
     }
@@ -92,9 +105,9 @@ public class ToolStripPanelDesignerTests
         Mock<IDesigner> mockDesigner = new();
         toolStripPanel.Site = _mockSite.Object;
 
-        _designer.Initialize(toolStripPanel);
+        _designer?.Initialize(toolStripPanel);
 
-        bool canBeParentedTo = _designer.CanBeParentedTo(mockDesigner.Object);
+        bool canBeParentedTo = _designer?.CanBeParentedTo(mockDesigner.Object) ?? false;
 
         canBeParentedTo.Should().BeFalse();
     }
@@ -104,7 +117,7 @@ public class ToolStripPanelDesignerTests
     {
         Mock<IDesigner> mockDesigner = new();
 
-        bool canBeParentedTo = _designer.CanBeParentedTo(mockDesigner.Object);
+        bool canBeParentedTo = _designer?.CanBeParentedTo(mockDesigner.Object) ?? false;
 
         canBeParentedTo.Should().BeTrue();
     }
@@ -117,11 +130,31 @@ public class ToolStripPanelDesignerTests
         _mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(mockDesignerHost.Object);
         mockDesignerHost.Setup(dh => dh.GetService(typeof(IComponentChangeService))).Returns(mockComponentChangeService.Object);
 
-        _designer.Initialize(_toolStripPanel);
+        _designer?.Initialize(_toolStripPanel);
 
         mockDesignerHost.Verify(dh => dh.GetService(typeof(IComponentChangeService)), Times.Exactly(2));
         _mockSelectionService.VerifyAdd(s => s.SelectionChanging += It.IsAny<EventHandler>(), Times.Once);
         _mockSelectionService.VerifyAdd(s => s.SelectionChanged += It.IsAny<EventHandler>(), Times.Once);
         mockComponentChangeService.VerifyAdd(s => s.ComponentChanged += It.IsAny<ComponentChangedEventHandler>(), Times.Once);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _toolStripPanel?.Dispose();
+                _designer?.Dispose();
+            }
+
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }
