@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ToolStripCustomTypeDescriptorTests
+public class ToolStripCustomTypeDescriptorTests : IDisposable
 {
     private readonly ToolStrip _toolStrip;
     private readonly ToolStripCustomTypeDescriptor _descriptor;
@@ -17,6 +17,8 @@ public class ToolStripCustomTypeDescriptorTests
         _toolStrip = new();
         _descriptor = new(_toolStrip);
     }
+
+    public void Dispose() => _toolStrip.Dispose();
 
     [Fact]
     public void Constructor_InitializesInstance()
