@@ -19,6 +19,7 @@ internal sealed unsafe class ComManagedStream : IStream.Interface, IManagedWrapp
             // Copy to a memory stream so we can seek
             MemoryStream memoryStream = new();
             stream.CopyTo(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
             _dataStream = memoryStream;
         }
         else
