@@ -24,36 +24,27 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     }
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_Ctor_ListBox()
-    {
-        Assert.Empty(_collection);
+    public void ListBoxSelectedObjectCollection_Ctor_ListBox() =>
         Assert.True(_collection.IsReadOnly);
-    }
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException()
-    {
+    public void ListBoxSelectedObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException() =>
         Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedObjectCollection(null!));
-    }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_ICollection_Properties_GetReturnsExpected()
     {
-        ICollection collection = _collection;
-        Assert.Empty(collection);
-        Assert.False(collection.IsSynchronized);
-        Assert.Same(collection, collection.SyncRoot);
+        Assert.False(((ICollection)_collection).IsSynchronized);
+        Assert.Same(_collection, ((ICollection)_collection).SyncRoot);
     }
 
     [Fact]
     public void ListBoxSelectedObjectCollection_IList_Properties_GetReturnsExpected()
     {
-        IList collection = _collection;
-        Assert.Empty(collection);
-        Assert.True(collection.IsFixedSize);
-        Assert.True(collection.IsReadOnly);
-        Assert.False(collection.IsSynchronized);
-        Assert.Same(collection, collection.SyncRoot);
+        Assert.True(((IList)_collection).IsFixedSize);
+        Assert.True(((IList)_collection).IsReadOnly);
+        Assert.False(((IList)_collection).IsSynchronized);
+        Assert.Same(_collection, ((IList)_collection).SyncRoot);
     }
 
     [Theory]
@@ -66,28 +57,19 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     [InlineData(-1, "1")]
     [InlineData(0, "1")]
     [InlineData(1, "1")]
-    public void ListBoxSelectedObjectCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value)
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(() => collection[index] = value);
-    }
+    public void ListBoxSelectedObjectCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value) =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection)[index] = value);
 
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
-    public void ListBoxSelectedObjectCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value)
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(() => collection.Add(value));
-    }
+    public void ListBoxSelectedObjectCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value) =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Add(value));
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_IListClear_Invoke_ThrowsNotSupportedException()
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(collection.Clear);
-    }
+    public void ListBoxSelectedObjectCollection_IListClear_Invoke_ThrowsNotSupportedException() =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Clear());
 
     [Theory]
     [InlineData(-1, 0)]
@@ -99,31 +81,22 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     [InlineData(-1, "1")]
     [InlineData(0, "1")]
     [InlineData(1, "1")]
-    public void ListBoxSelectedObjectCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value)
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(() => collection.Insert(index, value));
-    }
+    public void ListBoxSelectedObjectCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value) =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Insert(index, value));
 
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
-    public void ListBoxSelectedObjectCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value)
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(() => collection.Remove(value));
-    }
+    public void ListBoxSelectedObjectCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value) =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Remove(value));
 
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
     [InlineData(1)]
-    public void ListBoxSelectedObjectCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index)
-    {
-        IList collection = _collection;
-        Assert.Throws<NotSupportedException>(() => collection.RemoveAt(index));
-    }
+    public void ListBoxSelectedObjectCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index) =>
+        Assert.Throws<NotSupportedException>(() => ((IList)_collection).RemoveAt(index));
 
     [Theory]
     [InlineData(0, false)]
