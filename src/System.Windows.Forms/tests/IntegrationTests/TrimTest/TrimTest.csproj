@@ -46,7 +46,7 @@
     <RuntimeHostConfigurationOption Include="System.Windows.Forms.MdiWindowDialog.IsSupported"
                                     Value="false"
                                     Trim="true" />
-     <RuntimeHostConfigurationOption Include="System.Windows.Forms.ImageIndexConverter.IsSupported"
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.ImageIndexConverter.IsSupported"
                                     Value="false"
                                     Trim="true" />
     <RuntimeHostConfigurationOption Include="System.Windows.Forms.Primitives.TypeConverterHelper.UseComponentModelRegisteredTypes"

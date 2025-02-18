@@ -15,6 +15,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
 </Project>
