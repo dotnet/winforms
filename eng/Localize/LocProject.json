@@ -198,6 +198,11 @@
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
                                           },
                                           {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\ToolStripItemEditorForm.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },								  
+                                          {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\TreeNodeCollectionEditor.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
