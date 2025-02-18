@@ -589,19 +589,19 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         get
         {
-            // Error provider uses small Icon.
-            int currentDpi = (int)PInvoke.GetDpiForSystem();
+            Icon icon = new Icon(Icon.OrThrowIfNull(), Icon.Size);
             if (_parentControl is not null)
             {
-                currentDpi = _parentControl.DeviceDpi;
+                int currentDpi = _parentControl.DeviceDpi;
+                icon = new(Icon.OrThrowIfNull(),
+                    OsVersion.IsWindows10_1607OrGreater()
+                        ? new(
+                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
+                        : new(16, 16));
             }
 
-            _region = new IconRegion(new(Icon.OrThrowIfNull(),
-                OsVersion.IsWindows10_1607OrGreater()
-                    ? new(
-                        PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
-                        PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
-                    : new(16, 16)));
+            _region = new IconRegion(icon);
 
             return _region;
         }
