@@ -19,17 +19,15 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     }
 
     public void Dispose()
-    {
-        _owner.Dispose();
-    }
+        => _owner.Dispose();
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_Ctor_ListBox() =>
-        Assert.True(_collection.IsReadOnly);
+    public void ListBoxSelectedObjectCollection_Ctor_ListBox()
+        => Assert.True(_collection.IsReadOnly);
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException() =>
-        Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedObjectCollection(null!));
+    public void ListBoxSelectedObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException()
+        => Assert.Throws<ArgumentNullException>("owner", () => new ListBox.SelectedObjectCollection(null!));
 
     [Fact]
     public void ListBoxSelectedObjectCollection_ICollection_Properties_GetReturnsExpected()
@@ -57,19 +55,19 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     [InlineData(-1, "1")]
     [InlineData(0, "1")]
     [InlineData(1, "1")]
-    public void ListBoxSelectedObjectCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value) =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection)[index] = value);
+    public void ListBoxSelectedObjectCollection_IListItem_Set_ThrowsNotSupportedException(int index, object value)
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection)[index] = value);
 
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
-    public void ListBoxSelectedObjectCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value) =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Add(value));
+    public void ListBoxSelectedObjectCollection_IListAdd_Invoke_ThrowsNotSupportedException(object value)
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection).Add(value));
 
     [Fact]
-    public void ListBoxSelectedObjectCollection_IListClear_Invoke_ThrowsNotSupportedException() =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Clear());
+    public void ListBoxSelectedObjectCollection_IListClear_Invoke_ThrowsNotSupportedException()
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection).Clear());
 
     [Theory]
     [InlineData(-1, 0)]
@@ -81,22 +79,22 @@ public class ListBoxSelectedObjectCollectionTests : IDisposable
     [InlineData(-1, "1")]
     [InlineData(0, "1")]
     [InlineData(1, "1")]
-    public void ListBoxSelectedObjectCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value) =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Insert(index, value));
+    public void ListBoxSelectedObjectCollection_IListInsert_Invoke_ThrowsNotSupportedException(int index, object value)
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection).Insert(index, value));
 
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData("1")]
-    public void ListBoxSelectedObjectCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value) =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection).Remove(value));
+    public void ListBoxSelectedObjectCollection_IListRemove_Invoke_ThrowsNotSupportedException(object value)
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection).Remove(value));
 
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
     [InlineData(1)]
-    public void ListBoxSelectedObjectCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index) =>
-        Assert.Throws<NotSupportedException>(() => ((IList)_collection).RemoveAt(index));
+    public void ListBoxSelectedObjectCollection_IListRemoveAt_Invoke_ThrowsNotSupportedException(int index)
+        => Assert.Throws<NotSupportedException>(() => ((IList)_collection).RemoveAt(index));
 
     [Theory]
     [InlineData(0, false)]
