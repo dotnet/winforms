@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -4516,7 +4517,7 @@ public partial class ListView : Control
         InvalidateColumnHeaders();
     }
 
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         // don't persist flipViewToLargeIconAndSmallIcon across handle recreations...
         FlipViewToLargeIconAndSmallIcon = false;
@@ -4537,6 +4538,21 @@ public partial class ListView : Control
             // Get the ListView's ColumnHeader handle:
             HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
             PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
+
+            // Get the ListView's ToolTip handle:
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Round the corners of the ToolTip window.
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                PInvoke.DwmSetWindowAttribute(
+                    toolTipHandle,
+                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                    &roundSmall,
+                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+            }
         }
 #pragma warning restore WFO5001
 
