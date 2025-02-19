@@ -105,7 +105,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             {
                 DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                     ReadStringFromHGLOBAL(hglobal, unicode: false),
-                DataFormatNames.Html => ReadUtf8StringFromHGLOBAL(hglobal),
+                DataFormatNames.Html or DataFormatNames.Xaml => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                 DataFormatNames.FileNameAnsi => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
