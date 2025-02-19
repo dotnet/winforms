@@ -15,7 +15,7 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (provider is null ||
-            provider.GetService<IWindowsFormsEditorService>() is not { } edSvc ||
+            !provider.TryGetService(out IWindowsFormsEditorService? editorService) ||
             context?.Instance is null ||
             provider.GetService<IDesignerHost>() is not IDesignerHost host)
         {
@@ -28,14 +28,14 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
 
             _dataGridViewColumnCollectionDialog.SetLiveDataGridView((DataGridView)context.Instance);
 
-            using DesignerTransaction trans = host.CreateTransaction(SR.DataGridViewColumnCollectionTransaction);
-            if (edSvc.ShowDialog(_dataGridViewColumnCollectionDialog) == DialogResult.OK)
+            using DesignerTransaction transaction = host.CreateTransaction(SR.DataGridViewColumnCollectionTransaction);
+            if (editorService.ShowDialog(_dataGridViewColumnCollectionDialog) == DialogResult.OK)
             {
-                trans.Commit();
+                transaction.Commit();
             }
             else
             {
-                trans.Cancel();
+                transaction.Cancel();
             }
         }
 
