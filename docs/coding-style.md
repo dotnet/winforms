@@ -31,7 +31,7 @@ Enabling viewing white space will make conforming to these rules easier. In Visu
 ### Line Breaks
 
 1. Lines should be less than 120 characters long to limit horizontal scrolling in development tools. If it improves clarity, they can be slightly over, but they never should be longer than 150. Statements should not be broken into multiple lines when they fall under the 120 character limit.
-1. When using expression body definitions (`=>`) they should be on the same line if they fit, otherwise they should be broken after the `=>` and indented once on the next line.
+1. When using expression body definitions (`=>`) they should be on the same line if they fit, otherwise they can be broken before or after the `=>` and indented once on the next line.
 1. When breaking arguments to a method, all arguments should be indented on individual lines at one indent in.
 1. When breaking logical statements, all logical operators (`&&`, `||`, etc.) at a given parenthetical scope should be indented on individual lines at one indent in.
 1. When breaking ternary operators (`?:`), they should be broken into two singly indented lines, starting with `?` and `:`.
