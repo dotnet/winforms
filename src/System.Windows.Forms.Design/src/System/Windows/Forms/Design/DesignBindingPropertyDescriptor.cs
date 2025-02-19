@@ -11,16 +11,16 @@ namespace System.Windows.Forms.Design;
 /// </devdoc>
 internal class DesignBindingPropertyDescriptor : PropertyDescriptor
 {
-    private static TypeConverter designBindingConverter = new DesignBindingConverter();
-    private PropertyDescriptor property;
-    private bool readOnly;
+    private static TypeConverter s_designBindingConverter = new DesignBindingConverter();
+    private PropertyDescriptor _property;
+    private bool _readOnly;
 
     // base.AttributeArray ends up calling the virtual FillAttributes, but we do not override it, so we should be okay.
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
     internal DesignBindingPropertyDescriptor(PropertyDescriptor property, Attribute[] attrs, bool readOnly) : base(property.Name, attrs)
     {
-        this.property = property;
-        this.readOnly = readOnly;
+        _property = property;
+        _readOnly = readOnly;
 
         if (base.AttributeArray is not null && base.AttributeArray.Length > 0)
         {
@@ -32,7 +32,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
         }
         else
         {
-            base.AttributeArray = new Attribute[] { NotifyParentPropertyAttribute.Yes, RefreshPropertiesAttribute.Repaint };
+            base.AttributeArray = [NotifyParentPropertyAttribute.Yes, RefreshPropertiesAttribute.Repaint];
         }
     }
 
@@ -56,7 +56,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     {
         get
         {
-            return designBindingConverter;
+            return s_designBindingConverter;
         }
     }
 
@@ -68,7 +68,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     {
         get
         {
-            return readOnly;
+            return _readOnly;
         }
     }
 
@@ -91,7 +91,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     /// </devdoc>
     public override bool CanResetValue(object component)
     {
-        return !GetBinding((ControlBindingsCollection)component, property).IsNull;
+        return !GetBinding((ControlBindingsCollection)component, _property).IsNull;
     }
 
     /// <include file='doc\DesignBindingPropertyDescriptor.uex' path='docs/doc[@for="DesignBindingPropertyDescriptor.GetValue"]/*' />
@@ -100,7 +100,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     /// </devdoc>
     public override object GetValue(object component)
     {
-        return GetBinding((ControlBindingsCollection)component, property);
+        return GetBinding((ControlBindingsCollection)component, _property);
     }
 
     /// <include file='doc\DesignBindingPropertyDescriptor.uex' path='docs/doc[@for="DesignBindingPropertyDescriptor.ResetValue"]/*' />
@@ -109,7 +109,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     /// </devdoc>
     public override void ResetValue(object component)
     {
-        SetBinding((ControlBindingsCollection)component, property, DesignBinding.Null);
+        SetBinding((ControlBindingsCollection)component, _property, DesignBinding.Null);
     }
 
     /// <include file='doc\DesignBindingPropertyDescriptor.uex' path='docs/doc[@for="DesignBindingPropertyDescriptor.SetValue"]/*' />
@@ -118,7 +118,7 @@ internal class DesignBindingPropertyDescriptor : PropertyDescriptor
     /// </devdoc>
     public override void SetValue(object component, object value)
     {
-        SetBinding((ControlBindingsCollection)component, property, (DesignBinding)value);
+        SetBinding((ControlBindingsCollection)component, _property, (DesignBinding)value);
         OnValueChanged(component, EventArgs.Empty);
     }
 

@@ -12,9 +12,9 @@ namespace System.Windows.Forms.Design;
 internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
 {
 
-    internal static AdvancedBindingEditor advancedBindingEditor = new AdvancedBindingEditor();
-    internal static AdvancedBindingTypeConverter advancedBindingTypeConverter = new AdvancedBindingTypeConverter();
-    internal AdvancedBindingPropertyDescriptor() : base(SR.GetString(SR.AdvancedBindingPropertyDescName), null)
+    internal static AdvancedBindingEditor s_advancedBindingEditor = new AdvancedBindingEditor();
+    internal static AdvancedBindingTypeConverter s_advancedBindingTypeConverter = new AdvancedBindingTypeConverter();
+    internal AdvancedBindingPropertyDescriptor() : base(SR.AdvancedBindingPropertyDescName, null)
     {
     }
 
@@ -34,9 +34,9 @@ internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
     {
         get
         {
-            return new AttributeCollection(new Attribute[]{new SRDescriptionAttribute(SR.AdvancedBindingPropertyDescriptorDesc),
+            return new AttributeCollection([new SRDescriptionAttribute(SR.AdvancedBindingPropertyDescriptorDesc),
                                                                NotifyParentPropertyAttribute.Yes,
-                                                               new MergablePropertyAttribute(false)});
+                                                               new MergablePropertyAttribute(false)]);
         }
     }
 
@@ -72,12 +72,12 @@ internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
     {
         get
         {
-            if (advancedBindingTypeConverter is null)
+            if (s_advancedBindingTypeConverter is null)
             {
-                advancedBindingTypeConverter = new AdvancedBindingTypeConverter();
+                s_advancedBindingTypeConverter = new AdvancedBindingTypeConverter();
             }
 
-            return advancedBindingTypeConverter;
+            return s_advancedBindingTypeConverter;
         }
     }
 
@@ -89,8 +89,9 @@ internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
     {
         if (type == typeof(System.Drawing.Design.UITypeEditor))
         {
-            return advancedBindingEditor;
+            return s_advancedBindingEditor;
         }
+
         return base.GetEditor(type);
     }
 
@@ -123,7 +124,7 @@ internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
     /// </devdoc>
     public override object GetValue(object component)
     {
-        System.Diagnostics.Debug.Assert(component is ControlBindingsCollection, "we only deal w/ bindings collection");
+        Debug.Assert(component is ControlBindingsCollection, "we only deal w/ bindings collection");
         return component;
     }
 
@@ -158,7 +159,7 @@ internal class AdvancedBindingPropertyDescriptor : PropertyDescriptor
     {
         public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
         {
-            System.Diagnostics.Debug.Assert(value is ControlBindingsCollection, "we only deal w/ bindings collection");
+            Debug.Assert(value is ControlBindingsCollection, "we only deal w/ bindings collection");
             if (destinationType == typeof(String))
             {
                 return String.Empty;

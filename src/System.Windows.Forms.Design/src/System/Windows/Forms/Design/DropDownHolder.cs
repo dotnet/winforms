@@ -8,25 +8,25 @@ namespace System.Windows.Forms.Design;
 
 internal class DropDownHolder : Form
 {
-    private Control parent;
-    private Control currentControl = null;
+    private Control _parent;
+    private Control _currentControl = null;
     private const int BORDER = 1;
 
     [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
     public DropDownHolder(Control parent)
     : base()
     {
-        this.parent = parent;
-        this.ShowInTaskbar = false;
-        this.ControlBox = false;
-        this.MinimizeBox = false;
-        this.MaximizeBox = false;
-        this.Text = "";
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-        this.StartPosition = FormStartPosition.Manual;
-        this.Font = parent.Font;
+        parent = parent;
+        ShowInTaskbar = false;
+        ControlBox = false;
+        MinimizeBox = false;
+        MaximizeBox = false;
+        Text = "";
+        FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        StartPosition = FormStartPosition.Manual;
+        Font = parent.Font;
         Visible = false;
-        this.BackColor = SystemColors.Window;
+        BackColor = SystemColors.Window;
     }
 
     protected override CreateParams CreateParams
@@ -36,10 +36,11 @@ internal class DropDownHolder : Form
             CreateParams cp = base.CreateParams;
             cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
             cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
-            if (this.parent != null)
+            if (_parent is not null)
             {
-                cp.Parent = this.parent.Handle;
+                cp.Parent = _parent.Handle;
             }
+
             return cp;
         }
     }
@@ -49,7 +50,7 @@ internal class DropDownHolder : Form
     public void DoModalLoop()
     {
 
-        while (this.Visible)
+        while (Visible)
         {
             Application.DoEvents();
             UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
@@ -60,13 +61,13 @@ internal class DropDownHolder : Form
     {
         get
         {
-            return currentControl;
+            return _currentControl;
         }
     }
 
     public virtual bool GetUsed()
     {
-        return (currentControl != null);
+        return (_currentControl is not null);
     }
 
     protected override void OnMouseDown(MouseEventArgs me)
@@ -75,6 +76,7 @@ internal class DropDownHolder : Form
         {
             Visible = false;
         }
+
         base.OnMouseDown(me);
     }
 
@@ -95,17 +97,19 @@ internal class DropDownHolder : Form
             {
                 return false;
             }
-            if (hWnd == this.Handle)
+
+            if (hWnd == Handle)
             {
                 return true;
             }
         }
+
         return false;
     }
 
     /*
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
-        if (currentControl != null) {
+        if (currentControl is not null) {
             currentControl.SetBounds(0, 0, width - 2 * BORDER, height - 2 * BORDER);
             width = currentControl.Width;
             height = currentControl.Height;
@@ -121,21 +125,21 @@ internal class DropDownHolder : Form
 
     public virtual void FocusComponent()
     {
-        if (currentControl != null && Visible)
+        if (_currentControl is not null && Visible)
         {
             //currentControl.FocusInternal();
-            currentControl.Focus();
+            _currentControl.Focus();
         }
     }
 
     private void OnCurrentControlResize(object o, EventArgs e)
     {
-        if (currentControl != null)
+        if (_currentControl is not null)
         {
-            int oldWidth = this.Width;
+            int oldWidth = Width;
             UpdateSize();
-            currentControl.Location = new Point(BORDER, BORDER);
-            this.Left -= (this.Width - oldWidth);
+            _currentControl.Location = new Point(BORDER, BORDER);
+            Left -= (Width - oldWidth);
         }
     }
 
@@ -167,26 +171,28 @@ internal class DropDownHolder : Form
     public virtual void SetComponent(Control ctl)
     {
 
-        if (currentControl != null)
+        if (_currentControl is not null)
         {
-            Controls.Remove(currentControl);
-            currentControl = null;
+            Controls.Remove(_currentControl);
+            _currentControl = null;
         }
-        if (ctl != null)
+
+        if (ctl is not null)
         {
             Controls.Add(ctl);
             ctl.Location = new Point(BORDER, BORDER);
             ctl.Visible = true;
-            currentControl = ctl;
+            _currentControl = ctl;
             UpdateSize();
-            currentControl.Resize += new EventHandler(this.OnCurrentControlResize);
+            _currentControl.Resize += new EventHandler(OnCurrentControlResize);
         }
-        Enabled = currentControl != null;
+
+        Enabled = _currentControl is not null;
     }
 
     private void UpdateSize()
     {
-        Size = new Size(2 * BORDER + currentControl.Width + 2, 2 * BORDER + currentControl.Height + 2);
+        Size = new Size(2 * BORDER + _currentControl.Width + 2, 2 * BORDER + _currentControl.Height + 2);
     }
 
     protected override void WndProc(ref Message m)
@@ -195,7 +201,7 @@ internal class DropDownHolder : Form
         if (m.Msg == NativeMethods.WM_ACTIVATE &&
             Visible &&
             NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == NativeMethods.WA_INACTIVE &&
-            !this.OwnsWindow((IntPtr)m.LParam))
+            !OwnsWindow((IntPtr)m.LParam))
         {
 
             Visible = false;

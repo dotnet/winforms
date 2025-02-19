@@ -14,49 +14,49 @@ namespace System.Windows.Forms.Design;
 
 internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsFormsEditorService, IServiceProvider, ITypeDescriptorContext
 {
-    ITypeDescriptorContext context = null;
+    private ITypeDescriptorContext _context = null;
 
-    DropDownHolder dropDownHolder;
-    DropDownButton button;
-    EventHandler propertyValueChanged;
+    private DropDownHolder _dropDownHolder;
+    private DropDownButton _button;
+    private EventHandler _propertyValueChanged;
 
-    Binding binding = null;
-    IComponent ownerComponent;
-    DataSourceUpdateMode defaultDataSourceUpdateMode = DataSourceUpdateMode.OnValidation;
-    DesignBindingPicker designBindingPicker;
-    string propertyName = string.Empty;
+    private Binding _binding;
+    private IComponent _ownerComponent;
+    private DataSourceUpdateMode _defaultDataSourceUpdateMode = DataSourceUpdateMode.OnValidation;
+    private DesignBindingPicker _designBindingPicker;
+    private string _propertyName = string.Empty;
 
-    bool expanded = false;
+    private bool _expanded = false;
 
     public BindingFormattingWindowsFormsEditorService()
     {
-        this.BackColor = SystemColors.Window;
-        this.Text = SR.GetString(SR.DataGridNoneString);
+        BackColor = SystemColors.Window;
+        Text = SR.DataGridNoneString;
         SetStyle(ControlStyles.UserPaint, true);
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.UseTextForAccessibility, true);
-        this.AccessibleRole = AccessibleRole.ComboBox;
-        this.TabStop = true;
-        this.Click += BindingFormattingWindowsFormsEditorService_Click;
-        this.AccessibleName = SR.GetString(SR.BindingFormattingDialogBindingPickerAccName);
+        AccessibleRole = AccessibleRole.ComboBox;
+        TabStop = true;
+        Click += BindingFormattingWindowsFormsEditorService_Click;
+        AccessibleName = SR.BindingFormattingDialogBindingPickerAccName;
 
-        button = new DropDownButton(this);
-        button.FlatStyle = FlatStyle.Popup;
-        button.Image = CreateDownArrow();
-        button.Padding = new System.Windows.Forms.Padding(0);
-        button.BackColor = SystemColors.Control;
-        button.ForeColor = SystemColors.ControlText;
-        button.Click += new EventHandler(this.button_Click);
-        button.Size = new Drawing.Size(SystemInformation.VerticalScrollBarArrowHeight, (int)this.Font.Height + 2);
-        button.AccessibleName = SR.GetString(SR.BindingFormattingDialogDataSourcePickerDropDownAccName);
+        _button = new DropDownButton(this);
+        _button.FlatStyle = FlatStyle.Popup;
+        _button.Image = CreateDownArrow();
+        _button.Padding = new System.Windows.Forms.Padding(0);
+        _button.BackColor = SystemColors.Control;
+        _button.ForeColor = SystemColors.ControlText;
+        _button.Click += new EventHandler(button_Click);
+        _button.Size = new Drawing.Size(SystemInformation.VerticalScrollBarArrowHeight, (int)Font.Height + 2);
+        _button.AccessibleName = SR.BindingFormattingDialogDataSourcePickerDropDownAccName;
         // button.Dock = DockStyle.Right;
 
-        this.Controls.Add(button);
+        Controls.Add(_button);
     }
 
     private void BindingFormattingWindowsFormsEditorService_Click(object sender, EventArgs e)
     {
-        if (!expanded)
+        if (!_expanded)
         {
             ExpandDropDown();
         }
@@ -88,20 +88,20 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        base.SetBoundsCore(x, y, width, this.PreferredHeight, specified);
+        base.SetBoundsCore(x, y, width, PreferredHeight, specified);
 
-        int buttonHeight = this.Height - 2;
+        int buttonHeight = Height - 2;
         int buttonWidth = SystemInformation.HorizontalScrollBarThumbWidth;
 
-        int buttonLeft = this.Width - buttonWidth - 2;
+        int buttonLeft = Width - buttonWidth - 2;
         int buttonTop = 1;
-        if (this.RightToLeft == RightToLeft.No)
+        if (RightToLeft == RightToLeft.No)
         {
-            this.button.Bounds = new Rectangle(buttonTop, buttonLeft, buttonWidth, buttonHeight);
+            _button.Bounds = new Rectangle(buttonTop, buttonLeft, buttonWidth, buttonHeight);
         }
         else
         {
-            this.button.Bounds = new Rectangle(buttonTop, 2, buttonWidth, buttonHeight);
+            _button.Bounds = new Rectangle(buttonTop, 2, buttonWidth, buttonHeight);
         }
     }
 
@@ -110,7 +110,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         get
         {
-            Drawing.Size textSize = System.Windows.Forms.TextRenderer.MeasureText("j^", this.Font, new Drawing.Size(Int16.MaxValue, (int)(FontHeight * 1.25)));
+            Size textSize = TextRenderer.MeasureText("j^", Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)));
             return textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height;
         }
     }
@@ -118,7 +118,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     /*
     public override Size GetPreferredSize(Size proposedSize) {
         Size newSize = proposedSize;
-        Size textSize = TextRenderer.MeasureText("j^", this.Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)));
+        Size textSize = TextRenderer.MeasureText("j^", Font, new Size(Int16.MaxValue, (int)(FontHeight * 1.25)));
         newSize.Height = (short)(textSize.Height + SystemInformation.BorderSize.Height*8 + Padding.Size.Height);
 
         return base.GetPreferredSize(newSize);
@@ -129,7 +129,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         set
         {
-            this.context = value;
+            _context = value;
         }
     }
 
@@ -138,16 +138,17 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         get
         {
-            if (this.ownerComponent == null)
+            if (_ownerComponent is null)
             {
                 return null;
             }
 
-            ISite site = ownerComponent.Site;
-            if (site == null)
+            ISite site = _ownerComponent.Site;
+            if (site is null)
             {
                 return null;
             }
+
             return site.Container;
         }
     }
@@ -156,7 +157,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         get
         {
-            return this.ownerComponent;
+            return _ownerComponent;
         }
     }
 
@@ -170,17 +171,17 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
     void ITypeDescriptorContext.OnComponentChanged()
     {
-        if (this.context != null)
+        if (_context is not null)
         {
-            this.context.OnComponentChanged();
+            _context.OnComponentChanged();
         }
     }
 
     bool ITypeDescriptorContext.OnComponentChanging()
     {
-        if (this.context != null)
+        if (_context is not null)
         {
-            return this.context.OnComponentChanging();
+            return _context.OnComponentChanging();
         }
         else
         {
@@ -197,9 +198,9 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         {
             return this;
         }
-        else if (this.context != null)
+        else if (_context is not null)
         {
-            return this.context.GetService(type);
+            return _context.GetService(type);
         }
         else
         {
@@ -210,38 +211,38 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     // IWindowsFormsEditorService
     void IWindowsFormsEditorService.CloseDropDown()
     {
-        dropDownHolder.SetComponent(null);
-        dropDownHolder.Visible = false;
+        _dropDownHolder.SetComponent(null);
+        _dropDownHolder.Visible = false;
     }
 
     void IWindowsFormsEditorService.DropDownControl(Control ctl)
     {
-        if (this.dropDownHolder == null)
+        if (_dropDownHolder is null)
         {
-            this.dropDownHolder = new DropDownHolder(this);
+            _dropDownHolder = new DropDownHolder(this);
         }
 
-        this.dropDownHolder.SetComponent(ctl);
+        _dropDownHolder.SetComponent(ctl);
 
-        this.dropDownHolder.Location = PointToScreen(new Drawing.Point(0, this.Height));
+        _dropDownHolder.Location = PointToScreen(new Drawing.Point(0, Height));
 
         try
         {
-            this.dropDownHolder.Visible = true;
+            _dropDownHolder.Visible = true;
 
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this.dropDownHolder, this.dropDownHolder.Handle),
+            UnsafeNativeMethods.SetWindowLong(new HandleRef(_dropDownHolder, _dropDownHolder.Handle),
                                               NativeMethods.GWL_HWNDPARENT,
-                                              new HandleRef(this, this.Handle));
+                                              new HandleRef(this, Handle));
 
-            this.dropDownHolder.FocusComponent();
-            this.dropDownHolder.DoModalLoop();
+            _dropDownHolder.FocusComponent();
+            _dropDownHolder.DoModalLoop();
         }
         finally
         {
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this.dropDownHolder, this.dropDownHolder.Handle),
+            UnsafeNativeMethods.SetWindowLong(new HandleRef(_dropDownHolder, _dropDownHolder.Handle),
                                               NativeMethods.GWL_HWNDPARENT,
                                               new HandleRef(null, IntPtr.Zero));
-            this.Focus();
+            Focus();
         }
     }
 
@@ -256,24 +257,24 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         get
         {
-            return this.binding;
+            return _binding;
         }
         set
         {
-            if (this.binding == value)
+            if (_binding == value)
             {
                 return;
             }
 
-            this.binding = value;
+            _binding = value;
             // update the text
-            if (this.binding != null)
+            if (_binding is not null)
             {
-                this.Text = ConstructDisplayTextFromBinding(this.binding);
+                Text = ConstructDisplayTextFromBinding(_binding);
             }
             else
             {
-                this.Text = SR.GetString(SR.DataGridNoneString);
+                Text = SR.DataGridNoneString;
             }
 
             Invalidate();
@@ -285,12 +286,12 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         /* Omit this until someone needs to call it (avoids FxCop warning)...
         get
         {
-            return this.defaultDataSourceUpdateMode;
+            return defaultDataSourceUpdateMode;
         }
         */
         set
         {
-            this.defaultDataSourceUpdateMode = value;
+            _defaultDataSourceUpdateMode = value;
         }
     }
 
@@ -298,7 +299,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         set
         {
-            this.ownerComponent = value;
+            _ownerComponent = value;
         }
     }
 
@@ -306,41 +307,43 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     {
         set
         {
-            this.propertyName = value;
+            _propertyName = value;
         }
     }
+
+    private DropDownButton Button { get => _button; set => _button = value; }
 
     public event EventHandler PropertyValueChanged
     {
         add
         {
-            this.propertyValueChanged += value;
+            _propertyValueChanged += value;
         }
         remove
         {
-            this.propertyValueChanged -= value;
+            _propertyValueChanged -= value;
         }
     }
 
     private void button_Click(object sender, EventArgs e)
     {
-        Debug.Assert(!String.IsNullOrEmpty(this.propertyName), "this dialog should be enabled only when the user picked a property from the properties tree view");
+        Debug.Assert(!String.IsNullOrEmpty(_propertyName), "this dialog should be enabled only when the user picked a property from the properties tree view");
         DropDownPicker();
     }
 
     private static string ConstructDisplayTextFromBinding(Binding binding)
     {
         string result;
-        if (binding.DataSource == null)
+        if (binding.DataSource is null)
         {
-            result = SR.GetString(SR.DataGridNoneString);
+            result = SR.DataGridNoneString;
         }
         else
         {
             if (binding.DataSource is IComponent)
             {
                 IComponent comp = binding.DataSource as IComponent;
-                if (comp.Site != null)
+                if (comp.Site is not null)
                 {
                     result = comp.Site.Name;
                 }
@@ -351,15 +354,15 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
             }
             else if (binding.DataSource is IListSource || binding.DataSource is IList || binding.DataSource is Array)
             {
-                result = SR.GetString(SR.BindingFormattingDialogList);
+                result = SR.BindingFormattingDialogList;
             }
             else
             {
-                string typeName = TypeDescriptor.GetClassName(binding.DataSource);
-                int lastDot = typeName.LastIndexOf(".");
+                string? typeName = TypeDescriptor.GetClassName(binding.DataSource);
+                int lastDot = typeName.LastIndexOf('.');
                 if (lastDot != -1)
                 {
-                    typeName = typeName.Substring(lastDot + 1);
+                    typeName = typeName[(lastDot + 1)..];
                 }
 
                 result = string.Format(CultureInfo.CurrentCulture, "({0})", typeName);
@@ -374,22 +377,22 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     private void DropDownPicker()
     {
         // drop the design binding picker
-        if (this.designBindingPicker == null)
+        if (_designBindingPicker is null)
         {
-            this.designBindingPicker = new DesignBindingPicker();
-            this.designBindingPicker.Width = this.Width;
+            _designBindingPicker = new DesignBindingPicker();
+            _designBindingPicker.Width = Width;
         }
 
         DesignBinding initialDesignBinding = null;
 
-        if (this.binding != null)
+        if (_binding is not null)
         {
-            initialDesignBinding = new DesignBinding(this.binding.DataSource, this.binding.BindingMemberInfo.BindingMember);
+            initialDesignBinding = new DesignBinding(_binding.DataSource, _binding.BindingMemberInfo.BindingMember);
         }
 
-        expanded = true;
+        _expanded = true;
 
-        DesignBinding designBinding = this.designBindingPicker.Pick(this, /*ITypeDescriptorService*/
+        DesignBinding designBinding = _designBindingPicker.Pick(this, /*ITypeDescriptorService*/
                                                                     this, /*IServiceProvider*/
                                                                     true, /*showDataSources*/
                                                                     true, /*showDataMembers*/
@@ -398,27 +401,27 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                                                                     String.Empty,
                                                                     initialDesignBinding);
 
-        expanded = false;
+        _expanded = false;
 
         // the user did not make any change
-        if (designBinding == null)
+        if (designBinding is null)
         {
             return;
         }
 
         // construct the new binding from the designBindingPicker and compare to the oldBinding
         //
-        Binding oldBinding = this.binding;
+        Binding oldBinding = _binding;
         Binding newBinding = null;
 
-        string formatString = oldBinding != null ? oldBinding.FormatString : String.Empty;
-        IFormatProvider formatInfo = oldBinding != null ? oldBinding.FormatInfo : null;
-        object nullValue = oldBinding != null ? oldBinding.NullValue : null;
-        DataSourceUpdateMode updateMode = oldBinding != null ? oldBinding.DataSourceUpdateMode : this.defaultDataSourceUpdateMode;
+        string formatString = oldBinding is not null ? oldBinding.FormatString : String.Empty;
+        IFormatProvider formatInfo = oldBinding is not null ? oldBinding.FormatInfo : null;
+        object nullValue = oldBinding is not null ? oldBinding.NullValue : null;
+        DataSourceUpdateMode updateMode = oldBinding is not null ? oldBinding.DataSourceUpdateMode : _defaultDataSourceUpdateMode;
 
-        if (designBinding.DataSource != null && !String.IsNullOrEmpty(designBinding.DataMember))
+        if (designBinding.DataSource is not null && !String.IsNullOrEmpty(designBinding.DataMember))
         {
-            newBinding = new Binding(this.propertyName,
+            newBinding = new Binding(_propertyName,
                                      designBinding.DataSource,
                                      designBinding.DataMember,
                                      true, /*formattingEnabled*/
@@ -429,11 +432,11 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         }
 
         // this is the new binding
-        this.Binding = newBinding;
+        Binding = newBinding;
 
-        bool bindingChanged = (newBinding == null || oldBinding != null);
-        bindingChanged = bindingChanged || (newBinding != null && oldBinding == null);
-        bindingChanged = bindingChanged || (newBinding != null && oldBinding != null &&
+        bool bindingChanged = (newBinding is null || oldBinding is not null);
+        bindingChanged = bindingChanged || (newBinding is not null && oldBinding is null);
+        bindingChanged = bindingChanged || (newBinding is not null && oldBinding is not null &&
                          (newBinding.DataSource != oldBinding.DataSource || !newBinding.BindingMemberInfo.Equals(oldBinding.BindingMemberInfo)));
 
         if (bindingChanged)
@@ -445,28 +448,28 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
     protected override void OnGotFocus(EventArgs e)
     {
         base.OnGotFocus(e);
-        this.Invalidate();
+        Invalidate();
     }
 
     protected override void OnLostFocus(EventArgs e)
     {
         base.OnLostFocus(e);
-        this.Invalidate();
+        Invalidate();
     }
 
     protected override void OnPaint(PaintEventArgs p)
     {
         base.OnPaint(p);
 
-        string text = this.Text;
+        string text = Text;
         if (ComboBoxRenderer.IsSupported)
         {
-            Rectangle rect = new Rectangle(this.ClientRectangle.X, this.ClientRectangle.Y, this.ClientRectangle.Width, this.ClientRectangle.Height);
+            Rectangle rect = new Rectangle(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
             ComboBoxState state;
             SolidBrush foreBrush;
             SolidBrush backBrush;
 
-            bool enabled = this.Enabled;
+            bool enabled = Enabled;
 
             if (!enabled)
             {
@@ -474,7 +477,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 backBrush = (SolidBrush)SystemBrushes.Control;
                 state = ComboBoxState.Disabled;
             }
-            else if (this.ContainsFocus)
+            else if (ContainsFocus)
             {
                 foreBrush = (SolidBrush)SystemBrushes.HighlightText;
                 backBrush = (SolidBrush)SystemBrushes.Highlight;
@@ -487,27 +490,27 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 state = ComboBoxState.Normal;
             }
 
-            ComboBoxRenderer.DrawTextBox(p.Graphics, rect, String.Empty, this.Font, state);
+            ComboBoxRenderer.DrawTextBox(p.Graphics, rect, String.Empty, Font, state);
 
             Graphics g = p.Graphics;
 
             rect.Inflate(-2, -2);
 
-            System.Windows.Forms.ControlPaint.DrawBorder(g, rect, backBrush.Color, ButtonBorderStyle.None);
+            ControlPaint.DrawBorder(g, rect, backBrush.Color, ButtonBorderStyle.None);
 
             rect.Inflate(-1, -1);
 
-            if (this.RightToLeft == RightToLeft.Yes)
+            if (RightToLeft == RightToLeft.Yes)
             {
-                rect.X += this.button.Width;
+                rect.X += _button.Width;
             }
 
-            rect.Width -= this.button.Width;
+            rect.Width -= _button.Width;
 
             g.FillRectangle(backBrush, rect);
 
             TextFormatFlags flags = TextFormatFlags.VerticalCenter;
-            if (this.RightToLeft == RightToLeft.No)
+            if (RightToLeft == RightToLeft.No)
             {
                 flags |= TextFormatFlags.Left;
             }
@@ -516,12 +519,12 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 flags |= TextFormatFlags.Right;
             }
 
-            if (this.ContainsFocus)
+            if (ContainsFocus)
             {
-                System.Windows.Forms.ControlPaint.DrawFocusRectangle(g, rect, Color.Empty, backBrush.Color);
+                ControlPaint.DrawFocusRectangle(g, rect, Color.Empty, backBrush.Color);
             }
 
-            TextRenderer.DrawText(g, text, this.Font, rect, foreBrush.Color, flags);
+            TextRenderer.DrawText(g, text, Font, rect, foreBrush.Color, flags);
 
         }
         else
@@ -532,17 +535,18 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 stringFormat.Alignment = StringAlignment.Near;
                 stringFormat.LineAlignment = StringAlignment.Near;
 
-                Rectangle clientRect = this.ClientRectangle;
+                Rectangle clientRect = ClientRectangle;
                 Rectangle textRect = new Rectangle(clientRect.X, clientRect.Y, clientRect.Width, clientRect.Height);
 
-                if (this.RightToLeft == RightToLeft.Yes)
+                if (RightToLeft == RightToLeft.Yes)
                 {
-                    textRect.X += this.button.Width;
+                    textRect.X += _button.Width;
                 }
-                textRect.Width -= this.button.Width;
+
+                textRect.Width -= _button.Width;
 
                 TextFormatFlags flags = TextFormatFlags.VerticalCenter;
-                if (this.RightToLeft == RightToLeft.No)
+                if (RightToLeft == RightToLeft.No)
                 {
                     flags |= TextFormatFlags.Left;
                 }
@@ -551,7 +555,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                     flags |= TextFormatFlags.Right;
                 }
 
-                TextRenderer.DrawText(p.Graphics, text, this.Font, textRect, this.ForeColor, flags);
+                TextRenderer.DrawText(p.Graphics, text, Font, textRect, ForeColor, flags);
 
                 stringFormat.Dispose();
             }
@@ -561,15 +565,15 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
     protected void OnPropertyValueChanged(EventArgs e)
     {
-        if (this.propertyValueChanged != null)
+        if (_propertyValueChanged is not null)
         {
-            this.propertyValueChanged(this, e);
+            _propertyValueChanged(this, e);
         }
     }
 
     protected override bool ProcessDialogKey(Keys keyData)
     {
-        Keys modifiers = System.Windows.Forms.Control.ModifierKeys;
+        Keys modifiers = Control.ModifierKeys;
         if (((modifiers & Keys.Alt) == Keys.Alt && (keyData & Keys.KeyCode) == Keys.Down) || keyData == Keys.F4)
         {
             DropDownPicker();
@@ -578,14 +582,15 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
         return base.ProcessDialogKey(keyData);
     }
+
     private void ExpandDropDown()
     {
-        this.BeginInvoke(new Action(this.DropDownPicker));
+        BeginInvoke(new Action(DropDownPicker));
     }
 
     private void CollapseDropDown()
     {
-        this.Focus();
+        Focus();
     }
 
     protected override void WndProc(ref Message m)
@@ -596,6 +601,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 m.Result = AutomationInteropProvider.ReturnRawElementProvider(Handle, m.WParam, m.LParam, (IRawElementProviderSimple)(new BindingFormattingWindowsFormsEditorServiceUiaProvider(this)));
                 return;
         }
+
         base.WndProc(ref m);
     }
 
@@ -634,7 +640,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         {
             get
             {
-                return this.Service.Text;
+                return Service.Text;
             }
         }
 
@@ -646,13 +652,13 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         {
             get
             {
-                return Service.expanded ? ExpandCollapseState.Expanded : ExpandCollapseState.Collapsed;
+                return Service._expanded ? ExpandCollapseState.Expanded : ExpandCollapseState.Collapsed;
             }
         }
 
         public void Collapse()
         {
-            if (Service.expanded)
+            if (Service._expanded)
             {
                 Service.CollapseDropDown();
             }
@@ -660,7 +666,7 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
         public void Expand()
         {
-            if (!Service.expanded)
+            if (!Service._expanded)
             {
                 Service.ExpandDropDown();
             }
@@ -671,35 +677,35 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
     private class DropDownButton : Button
     {
-        private bool mouseIsDown = false;
-        private bool mouseIsOver = false;
-        private BindingFormattingWindowsFormsEditorService owner = null;
+        private bool _mouseIsDown;
+        private bool _mouseIsOver;
+        private BindingFormattingWindowsFormsEditorService? _owner;
 
         public DropDownButton(BindingFormattingWindowsFormsEditorService owner) : base()
         {
-            this.owner = owner;
-            this.TabStop = false;
+            _owner = owner;
+            TabStop = false;
         }
 
-        protected override Drawing.Size DefaultSize
+        protected override Size DefaultSize
         {
             get
             {
-                return new Drawing.Size(17, 19);
+                return new Size(17, 19);
             }
         }
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // DANIELHE: we are trying to do something similar to anchoring
-            height = Math.Min(height, this.owner.Height - 2);
+            height = Math.Min(height, _owner.Height - 2);
             width = SystemInformation.HorizontalScrollBarThumbWidth;
             y = 1;
-            if (this.Parent != null)
+            if (Parent is not null)
             {
-                if (this.Parent.RightToLeft == RightToLeft.No)
+                if (Parent.RightToLeft == RightToLeft.No)
                 {
-                    x = this.Parent.Width - width - 1;
+                    x = Parent.Width - width - 1;
                 }
                 else
                 {
@@ -713,10 +719,10 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
-            if (!this.Enabled)
+            if (!Enabled)
             {
-                this.mouseIsDown = false;
-                this.mouseIsOver = false;
+                _mouseIsDown = false;
+                _mouseIsOver = false;
             }
         }
 
@@ -726,46 +732,46 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
             if (kevent.KeyData == Keys.Space)
             {
-                this.mouseIsDown = true;
-                this.Invalidate();
+                _mouseIsDown = true;
+                Invalidate();
             }
         }
 
         protected override void OnKeyUp(KeyEventArgs kevent)
         {
             base.OnKeyUp(kevent);
-            if (this.mouseIsDown)
+            if (_mouseIsDown)
             {
-                this.mouseIsDown = false;
-                this.Invalidate();
+                _mouseIsDown = false;
+                Invalidate();
             }
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
-            this.mouseIsDown = false;
-            this.Invalidate();
+            _mouseIsDown = false;
+            Invalidate();
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            if (!this.mouseIsOver)
+            if (!_mouseIsOver)
             {
-                this.mouseIsOver = true;
-                this.Invalidate();
+                _mouseIsOver = true;
+                Invalidate();
             }
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            if (this.mouseIsOver || this.mouseIsDown)
+            if (_mouseIsOver || _mouseIsDown)
             {
-                this.mouseIsOver = false;
-                this.mouseIsDown = false;
-                this.Invalidate();
+                _mouseIsOver = false;
+                _mouseIsDown = false;
+                Invalidate();
             }
         }
 
@@ -774,8 +780,8 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
             base.OnMouseDown(mevent);
             if (mevent.Button == MouseButtons.Left)
             {
-                this.mouseIsDown = true;
-                this.Invalidate();
+                _mouseIsDown = true;
+                Invalidate();
             }
         }
 
@@ -785,21 +791,21 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
 
             if (mevent.Button != MouseButtons.None)
             {
-                Rectangle r = this.ClientRectangle;
+                Rectangle r = ClientRectangle;
                 if (!r.Contains(mevent.X, mevent.Y))
                 {
-                    if (this.mouseIsDown)
+                    if (_mouseIsDown)
                     {
-                        this.mouseIsDown = false;
-                        this.Invalidate();
+                        _mouseIsDown = false;
+                        Invalidate();
                     }
                 }
                 else
                 {
-                    if (!this.mouseIsDown)
+                    if (!_mouseIsDown)
                     {
-                        this.mouseIsDown = true;
-                        this.Invalidate();
+                        _mouseIsDown = true;
+                        Invalidate();
                     }
                 }
             }
@@ -809,10 +815,10 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
         {
             base.OnMouseUp(mevent);
 
-            if (this.mouseIsDown)
+            if (_mouseIsDown)
             {
-                this.mouseIsDown = false;
-                this.Invalidate();
+                _mouseIsDown = false;
+                Invalidate();
             }
         }
 
@@ -824,15 +830,15 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
             {
                 ComboBoxState cbState = ComboBoxState.Normal;
 
-                if (!this.Enabled)
+                if (!Enabled)
                 {
                     cbState = ComboBoxState.Disabled;
                 }
-                if (this.mouseIsDown && this.mouseIsOver)
+                if (_mouseIsDown && _mouseIsOver)
                 {
                     cbState = ComboBoxState.Pressed;
                 }
-                else if (this.mouseIsOver)
+                else if (_mouseIsOver)
                 {
                     cbState = ComboBoxState.Hot;
                 }
@@ -848,8 +854,8 @@ internal class BindingFormattingWindowsFormsEditorService : Panel, IWindowsForms
                 case NativeMethods.WM_KILLFOCUS:
                 case NativeMethods.WM_CANCELMODE:
                 case NativeMethods.WM_CAPTURECHANGED:
-                    this.mouseIsDown = false;
-                    this.Invalidate();
+                    _mouseIsDown = false;
+                    Invalidate();
                     base.WndProc(ref m);
                     break;
                 default:
