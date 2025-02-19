@@ -19,6 +19,20 @@ public class ToolStripCollectionEditorTests
     }
 
     [Fact]
+    public void ToolStripCollectionEditor_CreateCollectionForm_DoesNotThrowException()
+    {
+        Action act = () => _editor.TestAccessor().Dynamic.CreateCollectionForm();
+        act.Should().NotThrow();
+    }
+
+    [Fact]
+    public void ToolStripCollectionEditor_HelpTopic_ReturnsExpectedValue()
+    {
+        string helpTopic = _editor.TestAccessor().Dynamic.HelpTopic;
+        helpTopic.Should().Be("net.ComponentModel.ToolStripCollectionEditor");
+    }
+
+    [Fact]
     public void ToolStripCollectionEditor_EditValue_NullProvider_ReturnsNull()
     {
         object? result = _editor.EditValue(context: null, provider: null!, value: new object());
