@@ -267,7 +267,7 @@ internal static class DesignerUtils
         using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Draw our rect no-resize handle
-        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+        PInvokeCore.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
     }
 
     /// <summary>
@@ -291,7 +291,7 @@ internal static class DesignerUtils
 
         // Lower rect - its fillbrush depends on the primary selection
         PInvokeCore.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
+        PInvokeCore.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
     }
 
     /// <summary>
