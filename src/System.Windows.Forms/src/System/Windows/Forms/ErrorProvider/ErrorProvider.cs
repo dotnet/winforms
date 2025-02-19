@@ -549,7 +549,6 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 {
                     // Error provider uses small Icon.
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    // t_defaultIcon = new(defaultIcon, ScaleHelper.SystemIconSize);
                     int currentDpi = (int)PInvoke.GetDpiForSystem();
                     t_defaultIcon = new(defaultIcon,
                         OsVersion.IsWindows10_1607OrGreater()
