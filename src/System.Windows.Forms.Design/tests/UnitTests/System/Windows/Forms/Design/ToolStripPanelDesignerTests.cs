@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
-using System.Windows.Forms.Design.Behavior;
 using Moq;
 
 namespace System.Windows.Forms.Tests;
@@ -18,7 +17,6 @@ public class ToolStripPanelDesignerTests : IDisposable
     private readonly Mock<IDesignerHost> _mockDesignerHost = new();
     private readonly ToolStripPanel _toolStripPanel;
     private readonly Mock<ISelectionService> _mockSelectionService = new();
-    private bool _disposed;
 
     public ToolStripPanelDesignerTests()
     {
@@ -44,11 +42,8 @@ public class ToolStripPanelDesignerTests : IDisposable
     [Fact]
     public void Control_ReturnsCorrectType()
     {
-        ToolStripPanel? control = _designer?.Control;
-
-        Assert.NotNull(control);
-        control.Should().BeOfType<ToolStripPanel>();
-        control.Should().Be(_toolStripPanel);
+        _toolStripPanel.Should().NotBeNull();
+        _toolStripPanel.Should().BeOfType<ToolStripPanel>();
     }
 
     [Fact]
@@ -63,53 +58,33 @@ public class ToolStripPanelDesignerTests : IDisposable
     }
 
     [Fact]
-    public void ToolStripPanelSelectorGlyph_ReturnsCorrectValue()
-    {
-        ToolStripPanelSelectionGlyph? glyph = _designer?.ToolStripPanelSelectorGlyph;
-
-        glyph.Should().BeNull();
-    }
+    public void ToolStripPanelSelectorGlyph_ReturnsCorrectValue() => _designer?.ToolStripPanelSelectorGlyph.Should().BeNull();
 
     [Fact]
-    public void ParticipatesWithSnapLines_ReturnsFalse()
-    {
-        bool participatesWithSnapLines = _designer?.ParticipatesWithSnapLines ?? false;
-        participatesWithSnapLines.Should().BeFalse();
-    }
+    public void ParticipatesWithSnapLines_ReturnsFalse() => _designer?.ParticipatesWithSnapLines.Should().BeFalse();
 
     [Fact]
-    public void CanParent_ReturnsTrue_WhenControlIsToolStrip()
-    {
-        ToolStrip toolStrip = new();
-
-        bool canParent = _designer?.CanParent(toolStrip) ?? false;
-
-        canParent.Should().BeTrue();
-    }
+    public void CanParent_ReturnsTrue_WhenControlIsToolStrip() => _designer?.CanParent(new ToolStrip()).Should().BeTrue();
 
     [Fact]
     public void CanParent_ReturnsFalse_WhenControlIsNotToolStrip()
     {
-        Label label = new();
+        using Label label = new();
 
-        bool canParent = _designer?.CanParent(label) ?? false;
-
-        canParent.Should().BeFalse();
+        _designer?.CanParent(label).Should().BeFalse();
     }
 
     [Fact]
     public void CanBeParentedTo_ReturnsFalse_WhenParentIsToolStripContainer()
     {
-        ToolStripContainer toolStripContainer = new();
+        using ToolStripContainer toolStripContainer = new();
         ToolStripPanel toolStripPanel = toolStripContainer.TopToolStripPanel;
         Mock<IDesigner> mockDesigner = new();
         toolStripPanel.Site = _mockSite.Object;
 
         _designer?.Initialize(toolStripPanel);
 
-        bool canBeParentedTo = _designer?.CanBeParentedTo(mockDesigner.Object) ?? false;
-
-        canBeParentedTo.Should().BeFalse();
+        _designer?.CanBeParentedTo(mockDesigner.Object).Should().BeFalse();
     }
 
     [Fact]
@@ -117,9 +92,7 @@ public class ToolStripPanelDesignerTests : IDisposable
     {
         Mock<IDesigner> mockDesigner = new();
 
-        bool canBeParentedTo = _designer?.CanBeParentedTo(mockDesigner.Object) ?? false;
-
-        canBeParentedTo.Should().BeTrue();
+        _designer?.CanBeParentedTo(mockDesigner.Object).Should().BeTrue();
     }
 
     [Fact]
@@ -138,23 +111,9 @@ public class ToolStripPanelDesignerTests : IDisposable
         mockComponentChangeService.VerifyAdd(s => s.ComponentChanged += It.IsAny<ComponentChangedEventHandler>(), Times.Once);
     }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _toolStripPanel?.Dispose();
-                _designer?.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
-
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        _toolStripPanel?.Dispose();
+        _designer?.Dispose();
     }
 }
