@@ -1,7 +1,4 @@
 #nullable enable
-override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type!
-override System.ComponentModel.Design.ArrayEditor.GetItems(object? editValue) -> object![]!
-override System.ComponentModel.Design.ArrayEditor.SetItems(object? editValue, object![]? value) -> object?
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
 ~override System.Windows.Forms.Design.ComponentTray.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -31,7 +28,6 @@ override System.ComponentModel.Design.ArrayEditor.SetItems(object? editValue, ob
 ~override System.Windows.Forms.Design.ParentControlDesigner.SnapLines.get -> System.Collections.IList
 ~override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection options) -> void
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
-System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type! type) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category) -> void
@@ -136,6 +132,9 @@ abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.ValidatingType.get -> System.Type?
+override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type!
+override System.ComponentModel.Design.ArrayEditor.GetItems(object? editValue) -> object![]!
+override System.ComponentModel.Design.ArrayEditor.SetItems(object? editValue, object![]? value) -> object?
 override System.ComponentModel.Design.BinaryEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.ComponentModel.Design.BinaryEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
@@ -333,6 +332,7 @@ System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get 
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface?
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
 System.ComponentModel.Design.ArrayEditor
+System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type! type) -> void
 System.ComponentModel.Design.BinaryEditor
 System.ComponentModel.Design.BinaryEditor.BinaryEditor() -> void
 System.ComponentModel.Design.ByteViewer
