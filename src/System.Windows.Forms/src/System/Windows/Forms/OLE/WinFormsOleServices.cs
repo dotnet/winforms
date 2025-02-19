@@ -46,46 +46,15 @@ internal sealed class WinFormsOleServices : IOleServices
         {
             if (format.Equals(DataFormatNames.Bitmap) && data is Bitmap bitmap)
             {
-                // Save bitmap
-                pmedium->u.hBitmap = GetCompatibleBitmap(bitmap);
+                // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
+                // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.
+                pmedium->u.hBitmap = bitmap.GetHBITMAP().CreateCompatibleBitmap(bitmap.Width, bitmap.Height);
             }
 
             return HRESULT.S_OK;
         }
 
         return HRESULT.DV_E_TYMED;
-
-        static HBITMAP GetCompatibleBitmap(Bitmap bitmap)
-        {
-            using var screenDC = GetDcScope.ScreenDC;
-
-            // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
-            // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.
-            HBITMAP hbitmap = bitmap.GetHBITMAP();
-
-            // Create a compatible DC to render the source bitmap.
-            using CreateDcScope sourceDC = new(screenDC);
-            using SelectObjectScope sourceBitmapSelection = new(sourceDC, hbitmap);
-
-            // Create a compatible DC and a new compatible bitmap.
-            using CreateDcScope destinationDC = new(screenDC);
-            HBITMAP compatibleBitmap = PInvokeCore.CreateCompatibleBitmap(screenDC, bitmap.Size.Width, bitmap.Size.Height);
-
-            // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            using SelectObjectScope destinationBitmapSelection = new(destinationDC, compatibleBitmap);
-            PInvokeCore.BitBlt(
-                destinationDC,
-                0,
-                0,
-                bitmap.Size.Width,
-                bitmap.Size.Height,
-                sourceDC,
-                0,
-                0,
-                ROP_CODE.SRCCOPY);
-
-            return compatibleBitmap;
-        }
     }
 
     static unsafe bool IOleServices.TryGetBitmapFromDataObject<T>(Com.IDataObject* dataObject, [NotNullWhen(true)] out T data)
