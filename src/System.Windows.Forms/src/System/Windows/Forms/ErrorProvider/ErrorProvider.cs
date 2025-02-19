@@ -24,6 +24,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 {
     private readonly Dictionary<Control, ControlItem> _items = [];
     private readonly Dictionary<Control, ErrorWindow> _windows = [];
+    private bool _initialLoad = true;
     private Icon _icon = DefaultIcon;
     private IconRegion? _region;
     private int _itemIdCounter;
@@ -548,7 +549,14 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 {
                     // Error provider uses small Icon.
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, ScaleHelper.LogicalSmallSystemIconSize);
+                    // t_defaultIcon = new(defaultIcon, ScaleHelper.SystemIconSize);
+                    int currentDpi = (int)PInvoke.GetDpiForSystem();
+                    t_defaultIcon = new(defaultIcon,
+                        OsVersion.IsWindows10_1607OrGreater()
+                            ? new(
+                                PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+                                PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
+                            : new(16, 16));
                 }
             }
 
@@ -589,22 +597,20 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         get
         {
-            Icon icon = new Icon(Icon.OrThrowIfNull(), Icon.Size);
-            if (_parentControl is not null)
-            {
-                int currentDpi = _parentControl.DeviceDpi;
-                icon = new(Icon.OrThrowIfNull(),
-                    OsVersion.IsWindows10_1607OrGreater()
-                        ? new(
-                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
-                            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
-                        : new(16, 16));
-            }
-
-            _region = new IconRegion(icon);
-
-            return _region;
+            int currentDpi = _parentControl?.DeviceDpi ?? (int)PInvoke.GetDpiForSystem();
+            Icon icon = _initialLoad || _parentControl is not null ? ScaleIcon(currentDpi) : new Icon(Icon.OrThrowIfNull(), Icon.Size);
+            return _region = new IconRegion(icon);
         }
+    }
+
+    private Icon ScaleIcon(int dpi)
+    {
+        return new(Icon,
+            OsVersion.IsWindows10_1607OrGreater()
+                ? new Size(
+                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi),
+                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi))
+                : new Size(16, 16));
     }
 
     /// <summary>
@@ -716,6 +722,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     private void DisposeRegion()
     {
+        _initialLoad = false;
         if (_region is not null)
         {
             _region.Dispose();
