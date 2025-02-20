@@ -325,9 +325,7 @@ internal static class SerializationRecordExtensions
                 || !classInfo.HasMember("_size")
                 || classInfo.GetRawValue("_size") is not int size
                 || !classInfo.TypeName.IsConstructedGenericType
-#pragma warning disable IDE0082 // 'typeof' can be converted to 'nameof' - but not for generics, waiting for a fix - https://github.com/dotnet/roslyn/pull/76920
                 || classInfo.TypeName.GetGenericTypeDefinition().Name != typeof(List<>).Name
-#pragma warning restore IDE0082
                 || classInfo.TypeName.GetGenericArguments().Length != 1
                 || classInfo.GetRawValue("_items") is not ArrayRecord arrayRecord
                 || !IsPrimitiveArrayRecord(arrayRecord))
