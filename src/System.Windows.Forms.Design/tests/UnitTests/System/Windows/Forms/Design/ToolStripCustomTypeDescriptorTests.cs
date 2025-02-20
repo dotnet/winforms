@@ -18,8 +18,7 @@ public class ToolStripCustomTypeDescriptorTests : IDisposable
         _descriptor = new(_toolStrip);
     }
 
-    public void Dispose()
-        => _toolStrip.Dispose();
+    public void Dispose() => _toolStrip.Dispose();
 
     [Fact]
     public void Constructor_InitializesInstance()
@@ -29,8 +28,8 @@ public class ToolStripCustomTypeDescriptorTests : IDisposable
     }
 
     [Fact]
-    public void GetPropertyOwner_ReturnsInstance()
-        => _descriptor.GetPropertyOwner(null).Should().Be(_toolStrip);
+    public void GetPropertyOwner_ReturnsInstance() =>
+        _descriptor.GetPropertyOwner(null).Should().Be(_toolStrip);
 
     [Fact]
     public void GetProperties_ReturnsCachedCollection()
@@ -53,8 +52,8 @@ public class ToolStripCustomTypeDescriptorTests : IDisposable
     }
 
     [Fact]
-    public void GetProperties_RemovesItemsProperty()
-        => _descriptor.GetProperties().Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
+    public void GetProperties_RemovesItemsProperty() =>
+        _descriptor.GetProperties().Cast<PropertyDescriptor>().Should().NotContain(p => p.Name == "Items");
 
     [Fact]
     public void GetProperties_WithAttributes_RemovesItemsProperty()
