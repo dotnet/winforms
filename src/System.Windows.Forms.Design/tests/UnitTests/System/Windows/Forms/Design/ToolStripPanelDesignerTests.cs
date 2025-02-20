@@ -64,7 +64,12 @@ public class ToolStripPanelDesignerTests : IDisposable
     public void ParticipatesWithSnapLines_ReturnsFalse() => _designer?.ParticipatesWithSnapLines.Should().BeFalse();
 
     [Fact]
-    public void CanParent_ReturnsTrue_WhenControlIsToolStrip() => _designer?.CanParent(new ToolStrip()).Should().BeTrue();
+    public void CanParent_ReturnsTrue_WhenControlIsToolStrip()
+    {
+        using ToolStrip toolStrip = new();
+
+        _designer?.CanParent(toolStrip).Should().BeTrue();
+    }
 
     [Fact]
     public void CanParent_ReturnsFalse_WhenControlIsNotToolStrip()
