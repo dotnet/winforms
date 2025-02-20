@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel.Design.Serialization;
-using System.ComponentModel;
-
 // - NameCreationServiceImp - Implementing INameCreationService
 // - The INameCreationService interface is used to supply a name to the control just created
 // - In the CreateName() we use the same naming algorithm used by Visual Studio: just
