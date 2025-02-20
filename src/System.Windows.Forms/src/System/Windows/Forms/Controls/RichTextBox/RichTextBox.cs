@@ -2403,7 +2403,7 @@ public partial class RichTextBox : TextBoxBase
 
         // Use parent's accessible object because RichTextBox doesn't support UIA Providers, and its
         // AccessibilityObject doesn't get created even when assistive tech (e.g. Narrator) is used
-        if (Parent?.IsAccessibilityObjectCreated == true)
+        if (AppContextSwitches.NotifyUIAProviderTheText && Parent?.IsAccessibilityObjectCreated == true)
         {
             Parent.AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,

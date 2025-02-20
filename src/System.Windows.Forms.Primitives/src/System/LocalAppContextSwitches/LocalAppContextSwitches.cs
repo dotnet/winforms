@@ -26,6 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
+    internal const string NotifyUIAProviderTheTextSwitchName = "System.Windows.Forms.RichTextBox.NotifyUIAProviderTheText";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -37,8 +38,8 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
-
     private static int s_moveTreeViewTextLocationOnePixel;
+    private static int s_notifyUIAProviderTheText;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -230,5 +231,14 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
+    }
+
+    /// <summary>
+    ///  Indicates whether the text of the RichTextBox is sent to the UIA provider.
+    /// </summary>
+    public static bool NotifyUIAProviderTheText
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(NotifyUIAProviderTheTextSwitchName, ref s_notifyUIAProviderTheText);
     }
 }
