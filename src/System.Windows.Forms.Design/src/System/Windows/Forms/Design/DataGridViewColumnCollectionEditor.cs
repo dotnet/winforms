@@ -17,14 +17,14 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
         if (provider is null ||
             !provider.TryGetService(out IWindowsFormsEditorService? editorService) ||
             context?.Instance is null ||
-            provider.GetService<IDesignerHost>() is not IDesignerHost host)
+            !provider.TryGetService(out IDesignerHost? host))
         {
             return value;
         }
 
         using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
-            _dataGridViewColumnCollectionDialog ??= new();
+            _dataGridViewColumnCollectionDialog ??= new(provider);
 
             _dataGridViewColumnCollectionDialog.SetLiveDataGridView((DataGridView)context.Instance);
 
