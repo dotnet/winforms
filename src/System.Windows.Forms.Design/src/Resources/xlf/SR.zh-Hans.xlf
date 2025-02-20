@@ -2334,12 +2334,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
         <source>(&amp;Multiple Items)</source>
-        <target state="new">(&amp;Multiple Items)</target>
+        <target state="translated">(多个项)(&amp;M)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelNone">
         <source>(&amp;None)</source>
-        <target state="new">(&amp;None)</target>
+        <target state="translated">(无)(&amp;N)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">

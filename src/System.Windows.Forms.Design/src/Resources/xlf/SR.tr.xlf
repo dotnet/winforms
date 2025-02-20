@@ -2334,12 +2334,12 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
         <source>(&amp;Multiple Items)</source>
-        <target state="new">(&amp;Multiple Items)</target>
+        <target state="translated">(&amp;Birden Çok Öğe)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelNone">
         <source>(&amp;None)</source>
-        <target state="new">(&amp;None)</target>
+        <target state="translated">(&amp;Yok)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">

@@ -4,67 +4,67 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Items Collection Editor</source>
-        <target state="new">Items Collection Editor</target>
+        <target state="translated">Редактор коллекции элементов</target>
         <note />
       </trans-unit>
       <trans-unit id="btnAddNew.Text">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">&amp;Добавить</target>
         <note />
       </trans-unit>
       <trans-unit id="btnCancel.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Отмена</target>
         <note />
       </trans-unit>
       <trans-unit id="btnMoveDown.AccessibleDescription">
         <source>Move the selected item down in the list</source>
-        <target state="new">Move the selected item down in the list</target>
+        <target state="translated">Переместить выбранные элемент вниз по списку</target>
         <note />
       </trans-unit>
       <trans-unit id="btnMoveDown.AccessibleName">
         <source>Move Down</source>
-        <target state="new">Move Down</target>
+        <target state="translated">Переместить вниз</target>
         <note />
       </trans-unit>
       <trans-unit id="btnMoveUp.AccessibleDescription">
         <source>Move the selected item up in the list</source>
-        <target state="new">Move the selected item up in the list</target>
+        <target state="translated">Переместить выбранные элемент вверх по списку</target>
         <note />
       </trans-unit>
       <trans-unit id="btnMoveUp.AccessibleName">
         <source>Move Up</source>
-        <target state="new">Move Up</target>
+        <target state="translated">Переместить вверх</target>
         <note />
       </trans-unit>
       <trans-unit id="btnOK.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">ОК</target>
         <note />
       </trans-unit>
       <trans-unit id="btnRemove.AccessibleDescription">
         <source>Remove the selected item from the list</source>
-        <target state="new">Remove the selected item from the list</target>
+        <target state="translated">Удалить выбранный элемент из списка</target>
         <note />
       </trans-unit>
       <trans-unit id="btnRemove.AccessibleName">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Удалить</target>
         <note />
       </trans-unit>
       <trans-unit id="lblItems.Text">
         <source>&amp;Select item and add to list below:</source>
-        <target state="new">&amp;Select item and add to list below:</target>
+        <target state="translated">&amp;Выбрать элемент и добавить в список ниже:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblMembers.Text">
         <source>&amp;Members:</source>
-        <target state="new">&amp;Members:</target>
+        <target state="translated">&amp;Элементы:</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedItemName.Text">
         <source>toolStrip1</source>
-        <target state="new">toolStrip1</target>
+        <target state="translated">toolStrip1</target>
         <note />
       </trans-unit>
     </body>

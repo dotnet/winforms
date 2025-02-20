@@ -2334,12 +2334,12 @@ Drücken Sie STRG+EINGABETASTE, um Text zu übernehmen.</target>
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
         <source>(&amp;Multiple Items)</source>
-        <target state="new">(&amp;Multiple Items)</target>
+        <target state="translated">(&amp;Mehrere Elemente)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelNone">
         <source>(&amp;None)</source>
-        <target state="new">(&amp;None)</target>
+        <target state="translated">(&amp;Keine)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">

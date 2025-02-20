@@ -2334,12 +2334,12 @@ Presione Ctrl+Entrar para aceptar el texto.</target>
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
         <source>(&amp;Multiple Items)</source>
-        <target state="new">(&amp;Multiple Items)</target>
+        <target state="translated">(&amp;Varios elementos)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorLabelNone">
         <source>(&amp;None)</source>
-        <target state="new">(&amp;None)</target>
+        <target state="translated">(&amp;Ninguno)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
