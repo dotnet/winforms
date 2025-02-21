@@ -24,6 +24,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 {
     private readonly Dictionary<Control, ControlItem> _items = [];
     private readonly Dictionary<Control, ErrorWindow> _windows = [];
+    private bool _initialLoad = true;
     private Icon _icon = DefaultIcon;
     private IconRegion? _region;
     private int _itemIdCounter;
@@ -309,7 +310,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
             {
-                // Let's check if the datamember exists in the new data source
+                // Let's check if the data member exists in the new data source
                 try
                 {
                     _errorManager = _parentControl.BindingContext[value, _dataMember];
@@ -547,10 +548,11 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    int width = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
-                    int height = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, width, height);
+                    int currentDpi = (int)PInvoke.GetDpiForSystem();
+                    t_defaultIcon = new(defaultIcon,
+                        PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+                        PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi));
                 }
             }
 
@@ -587,7 +589,22 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// <summary>
     ///  Create the icon region on demand.
     /// </summary>
-    internal IconRegion Region => _region ??= new IconRegion(Icon);
+    internal IconRegion Region
+    {
+        get
+        {
+            int currentDpi = _parentControl?.DeviceDpi ?? (int)PInvoke.GetDpiForSystem();
+            Icon icon = _initialLoad || _parentControl is not null ? ScaleIcon(currentDpi) : new Icon(Icon.OrThrowIfNull(), Icon.Size);
+            return _region = new IconRegion(icon);
+        }
+    }
+
+    private Icon ScaleIcon(int currentDpi)
+    {
+        return new(Icon,
+            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi));
+    }
 
     /// <summary>
     ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
@@ -698,6 +715,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     private void DisposeRegion()
     {
+        _initialLoad = false;
         if (_region is not null)
         {
             _region.Dispose();
