@@ -2435,7 +2435,7 @@ public partial class ComboBox : ListControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        // for fix https://github.com/dotnet/winforms/issues/12941
+        // For fix https://github.com/dotnet/winforms/issues/12941
         char input = (char)e.KeyValue;
         if ((AutoCompleteMode == AutoCompleteMode.Suggest || AutoCompleteMode == AutoCompleteMode.SuggestAppend) &&
             !char.IsControl(input))
