@@ -479,12 +479,9 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
     private protected override string? GetDefaultToolTipText()
     {
-        if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
-        {
-            return SR.DefaultDataGridViewLinkCellTollTipText;
-        }
-
-        return null;
+        return string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull
+            ? SR.DefaultDataGridViewLinkCellToolTipText
+            : null;
     }
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)

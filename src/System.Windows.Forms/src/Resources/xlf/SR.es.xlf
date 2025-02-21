@@ -4389,12 +4389,12 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">No se encuentra el archivo de manifiesto predeterminado necesario para habilitar los estilos visuales.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+      <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
         <target state="translated">Botón</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
         <target state="translated">Cuadro combinado</target>
         <note />
@@ -4404,12 +4404,12 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Imagen</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+      <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
         <target state="translated">Vínculo</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
         <target state="translated">Editar</target>
         <note />
@@ -8702,6 +8702,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Tiene lugar cuando el valor de la propiedad TextAlign cambia</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ReadOnlyDataGridViewTextBoxCellToolTipText">
+        <source>Edit, Read-Only</source>
+        <target state="new">Edit, Read-Only</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

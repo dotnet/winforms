@@ -4389,12 +4389,12 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">未找到启用视觉样式所需的默认清单文件。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+      <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
         <target state="translated">按钮</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
         <target state="translated">组合框</target>
         <note />
@@ -4404,12 +4404,12 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">图像</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+      <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
         <target state="translated">链接</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
         <target state="translated">编辑</target>
         <note />
@@ -8702,6 +8702,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">TextAlign 属性值更改时发生</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ReadOnlyDataGridViewTextBoxCellToolTipText">
+        <source>Edit, Read-Only</source>
+        <target state="new">Edit, Read-Only</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
