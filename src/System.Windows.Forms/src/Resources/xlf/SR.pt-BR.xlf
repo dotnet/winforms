@@ -4389,12 +4389,12 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">Não foi possível encontrar o arquivo de manifesto padrão, necessário para habilitar estilos visuais.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+      <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
         <target state="translated">Botão</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
         <target state="translated">ComboBox</target>
         <note />
@@ -4404,12 +4404,12 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">Imagem</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+      <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
         <target state="translated">Link</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
         <target state="translated">Editar</target>
         <note />
@@ -8702,6 +8702,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Ocorre quando o valor da propriedade TextAlign é alterado</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ReadOnlyDataGridViewTextBoxCellToolTipText">
+        <source>Edit, Read-Only</source>
+        <target state="new">Edit, Read-Only</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

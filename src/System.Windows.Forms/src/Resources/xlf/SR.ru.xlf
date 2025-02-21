@@ -4389,12 +4389,12 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Не найден файл манифеста по умолчанию, необходимый для подключения визуальных стилей.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+      <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
         <target state="translated">Кнопка</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
         <target state="translated">Поле со списком</target>
         <note />
@@ -4404,12 +4404,12 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Изображение</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+      <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
         <target state="translated">Связь</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+      <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
         <target state="translated">Изменить</target>
         <note />
@@ -8703,6 +8703,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Происходит при изменении значения свойства TextBoxTextAlign.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ReadOnlyDataGridViewTextBoxCellToolTipText">
+        <source>Edit, Read-Only</source>
+        <target state="new">Edit, Read-Only</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

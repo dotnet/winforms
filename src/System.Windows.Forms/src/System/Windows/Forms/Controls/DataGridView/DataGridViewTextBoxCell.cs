@@ -316,7 +316,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     private protected override string? GetDefaultToolTipText()
     {
         return string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull
-            ? ReadOnly ? SR.ReadOnlyDataGridViewTextBoxCellTollTipText : SR.DefaultDataGridViewTextBoxCellTollTipText
+            ? ReadOnly ? SR.ReadOnlyDataGridViewTextBoxCellToolTipText : SR.DefaultDataGridViewTextBoxCellToolTipText
             : null;
     }
 

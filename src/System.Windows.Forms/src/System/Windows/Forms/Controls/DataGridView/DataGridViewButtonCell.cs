@@ -206,12 +206,9 @@ public partial class DataGridViewButtonCell : DataGridViewCell
 
     private protected override string? GetDefaultToolTipText()
     {
-        if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
-        {
-            return SR.DefaultDataGridViewButtonCellTollTipText;
-        }
-
-        return null;
+        return string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull
+            ? SR.DefaultDataGridViewButtonCellToolTipText
+            : null;
     }
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
