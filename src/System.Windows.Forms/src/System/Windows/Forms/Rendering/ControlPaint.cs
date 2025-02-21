@@ -1381,7 +1381,6 @@ public static unsafe partial class ControlPaint
 
             rectangle.X += 1;
             DrawImageColorized(graphics, t_checkImage, rectangle, foreground);
-            rectangle.X -= 1;
         }
 
         // Surrounding border. We inset this by one pixel so we match how the 3D checkbox is drawn.
