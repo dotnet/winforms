@@ -551,11 +551,8 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
                     int currentDpi = (int)PInvoke.GetDpiForSystem();
                     t_defaultIcon = new(defaultIcon,
-                        OsVersion.IsWindows10_1607OrGreater()
-                            ? new(
-                                PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
-                                PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi))
-                            : new(16, 16));
+                        PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+                        PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi));
                 }
             }
 
@@ -602,14 +599,11 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
     }
 
-    private Icon ScaleIcon(int dpi)
+    private Icon ScaleIcon(int currentDpi)
     {
         return new(Icon,
-            OsVersion.IsWindows10_1607OrGreater()
-                ? new Size(
-                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi),
-                    PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi))
-                : new Size(16, 16));
+            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
+            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi));
     }
 
     /// <summary>
