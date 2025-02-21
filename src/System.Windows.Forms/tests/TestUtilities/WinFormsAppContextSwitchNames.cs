@@ -50,4 +50,10 @@ public static class WinFormsAppContextSwitchNames
     /// </summary>
     public const string TreeNodeCollectionAddRangeRespectsSortOrder
         = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+
+    /// <summary>
+    ///  The switch that controls whether the text of the <see cref="Windows.Forms.RichTextBox" /> is sent to the UIA provider.
+    /// </summary>
+    public const string NotifyUIAProviderTheText
+        = "System.Windows.Forms.RichTextBox.NotifyUIAProviderTheText";
 }

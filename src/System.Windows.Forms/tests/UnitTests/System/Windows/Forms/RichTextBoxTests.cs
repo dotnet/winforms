@@ -10594,6 +10594,7 @@ public partial class RichTextBoxTests
     [NewAndDefaultData<EventArgs>]
     public void RichTextBox_OnGotFocus_RaisesAutomationNotification_WithText(EventArgs eventArgs)
     {
+        using NotifyUIAProviderTheRichTextContent scope = new(enable: true);
         Mock<Control> mockParent = new() { CallBase = true };
         Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockParent.Object);
         mockAccessibleObject
