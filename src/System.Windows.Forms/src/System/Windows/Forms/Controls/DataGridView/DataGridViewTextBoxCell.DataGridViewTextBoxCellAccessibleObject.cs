@@ -19,7 +19,7 @@ public partial class DataGridViewTextBoxCell
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

@@ -5013,6 +5013,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ReadonlyControlsCollection" xml:space="preserve">
     <value>Collection is read only.</value>
   </data>
+  <data name="ReadOnlyDataGridViewTextBoxCellTollTipText" xml:space="preserve">
+    <value>Edit, Read-Only</value>
+  </data>
   <data name="RelatedListManagerChild" xml:space="preserve">
     <value>Child list for field {0} cannot be created.</value>
   </data>

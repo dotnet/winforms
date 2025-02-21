@@ -315,12 +315,9 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private protected override string? GetDefaultToolTipText()
     {
-        if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
-        {
-            return SR.DefaultDataGridViewTextBoxCellTollTipText;
-        }
-
-        return null;
+        return string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull
+            ? ReadOnly ? SR.ReadOnlyDataGridViewTextBoxCellTollTipText : SR.DefaultDataGridViewTextBoxCellTollTipText
+            : null;
     }
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
