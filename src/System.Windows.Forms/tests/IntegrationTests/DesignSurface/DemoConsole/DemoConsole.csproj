@@ -16,23 +16,26 @@
     <PackageProjectUrl>https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
     <SuppressLicenseValidation>true</SuppressLicenseValidation>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
 
     <!-- Do not build this project when doing a .NET product build. -->
     <!-- The files for this project have been removed from the .NET product due to licensing issues. -->
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
     <IsTestUtilityProject>true</IsTestUtilityProject>
+    <TargetFrameworks>$(NetCurrent)-windows;net481</TargetFrameworks>
+    <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
+    <TargetFramework />
+
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCurrent)-windows'">
     <PackageReference Include="System.Runtime.Serialization.Formatters" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
-    <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.csproj" />
-    <ProjectReference Include="..\..\..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
-    <ProjectReference Include="..\DesignSurfaceExt\DesignSurfaceExt.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,10 +43,31 @@
     <Compile Update="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx" DesignTime="True" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCurrent)-windows'">
+    <ProjectReference Include="..\..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
+    <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DesignSurfaceExt\DesignSurfaceExt.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <Reference Include='System.Windows.Forms'/>
+    <Reference Include='System.Drawing'/>
+    <Reference Include='System.Design'/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0"/>
+  </ItemGroup>
+
   <ItemGroup>
     <None Update="painter.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

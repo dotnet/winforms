@@ -7,6 +7,7 @@
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
     <ApplicationIcon>dll.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <NoWarn>$(NoWarn),SA1633</NoWarn>
     <Copyright>Copyright © Paolo Foti 2008</Copyright>
@@ -21,14 +22,29 @@
     <!-- The files for this project have been removed from the .NET product due to licensing issues. -->
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
     <IsTestUtilityProject>true</IsTestUtilityProject>
+    <TargetFrameworks>$(NetCurrent)-windows;net481</TargetFrameworks>
+    <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
+    <TargetFramework />
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCurrent)-windows'">
     <ProjectReference Include="..\..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" VersionOverride="9.0.2" />
+  </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Design" />
+  </ItemGroup>
 </Project>
