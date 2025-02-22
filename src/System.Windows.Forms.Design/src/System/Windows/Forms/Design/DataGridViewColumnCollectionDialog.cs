@@ -49,6 +49,8 @@ internal class DataGridViewColumnCollectionDialog : Form
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
     private readonly HashSet<DataGridViewColumn> _userAddedColumns = [];
 
+    private readonly IServiceProvider? _serviceProvider;
+
     internal DataGridViewColumnCollectionDialog()
     {
         // Required for Windows Form Designer support
@@ -67,6 +69,11 @@ internal class DataGridViewColumnCollectionDialog : Form
         _dataGridViewPrivateCopy = new DataGridView();
         _columnsPrivateCopy = _dataGridViewPrivateCopy.Columns;
         _columnsPrivateCopy.CollectionChanged += columnsPrivateCopy_CollectionChanged;
+    }
+
+    internal DataGridViewColumnCollectionDialog(IServiceProvider provider): this()
+    {
+        _serviceProvider = provider;
     }
 
     private static Bitmap SelectedColumnsItemBitmap
@@ -478,7 +485,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _addRemoveTableLayoutPanel = new TableLayoutPanel();
         _selectedColumnsLabel = new Label();
         _propertyGridLabel = new Label();
-        _propertyGrid1 = new VsPropertyGrid();
+        _propertyGrid1 = new VsPropertyGrid(_serviceProvider);
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _cancelButton = new Button();
         _okButton = new Button();
