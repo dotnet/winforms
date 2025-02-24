@@ -27,7 +27,7 @@ public class ControlCodeDomSerializerTests
         _serializerMock = new();
         _controlCodeDomSerializer = new();
         _testControl = new();
-        _codeStatementCollection = new();
+        _codeStatementCollection = [];
 
         _managerMock.Setup(m => m.GetService(typeof(IDesignerHost))).Returns(_hostMock.Object);
         _managerMock.Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer))).Returns(_serializerMock.Object);
