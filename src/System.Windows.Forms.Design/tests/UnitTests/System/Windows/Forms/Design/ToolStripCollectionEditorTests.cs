@@ -3,9 +3,8 @@
 
 #nullable enable
 
-using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
+using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -43,155 +42,10 @@ public class ToolStripCollectionEditorTests
     [Fact]
     public void ToolStripCollectionEditor_EditValue_WithProvider_ReturnsExpected()
     {
-        object? result = _editor.EditValue(new MockTypeDescriptorContext(), new MockServiceProvider(), new object());
+        Mock<ITypeDescriptorContext> mockTypeDescriptorContext = new();
+        Mock<IServiceProvider> mockServiceProvider = new();
+        object? result = _editor.EditValue(mockTypeDescriptorContext.Object, mockServiceProvider.Object, new object());
 
         result.Should().NotBeNull();
-    }
-
-    private class MockServiceProvider : IServiceProvider
-    {
-        public object? GetService(Type serviceType)
-        {
-            if (serviceType == typeof(ISelectionService))
-            {
-                return new MockSelectionService();
-            }
-
-            if (serviceType == typeof(IDesignerHost))
-            {
-                return new MockDesignerHost();
-            }
-
-            return null;
-        }
-    }
-
-    private class MockSelectionService : ISelectionService
-    {
-        public event EventHandler? SelectionChanged
-        {
-            add { }
-            remove { }
-        }
-
-        public event EventHandler? SelectionChanging
-        {
-            add { }
-            remove { }
-        }
-
-        public ICollection GetSelectedComponents() => Array.Empty<object>();
-
-        public bool GetComponentSelected(object component) => false;
-
-        public object? PrimarySelection => null;
-
-        public int SelectionCount => 0;
-
-        public void SetSelectedComponents(ICollection? components) { }
-
-        public void SetSelectedComponents(ICollection? components, SelectionTypes selectionType) { }
-    }
-
-    private class MockDesignerHost : IDesignerHost
-    {
-        public IContainer Container => new Container();
-
-        public bool InTransaction => false;
-
-        public IComponent RootComponent => null!;
-
-        public string TransactionDescription => string.Empty;
-
-        public bool Loading => false;
-
-        public string RootComponentClassName => string.Empty;
-
-        public void Activate() { }
-
-        public IComponent CreateComponent(Type componentClass) => throw new NotImplementedException();
-
-        public IComponent CreateComponent(Type componentClass, string name) => throw new NotImplementedException();
-
-        public DesignerTransaction CreateTransaction() => throw new NotImplementedException();
-
-        public DesignerTransaction CreateTransaction(string description) => throw new NotImplementedException();
-
-        public void DestroyComponent(IComponent component) { }
-
-        public IDesigner? GetDesigner(IComponent component) => null;
-
-        public Type GetType(string typeName) => throw new NotImplementedException();
-
-        public void AddService(Type serviceType, ServiceCreatorCallback callback) { }
-
-        public void AddService(Type serviceType, ServiceCreatorCallback callback, bool promote) { }
-
-        public void AddService(Type serviceType, object serviceInstance) { }
-
-        public void AddService(Type serviceType, object serviceInstance, bool promote) { }
-
-        public void RemoveService(Type serviceType) { }
-
-        public void RemoveService(Type serviceType, bool promote) { }
-
-        public object? GetService(Type serviceType) => null;
-
-        public event EventHandler? Activated
-        {
-            add { }
-            remove { }
-        }
-
-        public event EventHandler? Deactivated
-        {
-            add { }
-            remove { }
-        }
-
-        public event EventHandler? LoadComplete
-        {
-            add { }
-            remove { }
-        }
-
-        public event DesignerTransactionCloseEventHandler? TransactionClosed
-        {
-            add { }
-            remove { }
-        }
-
-        public event DesignerTransactionCloseEventHandler? TransactionClosing
-        {
-            add { }
-            remove { }
-        }
-
-        public event EventHandler? TransactionOpened
-        {
-            add { }
-            remove { }
-        }
-
-        public event EventHandler? TransactionOpening
-        {
-            add { }
-            remove { }
-        }
-    }
-
-    private class MockTypeDescriptorContext : ITypeDescriptorContext
-    {
-        public IContainer? Container => null;
-
-        public object? Instance => null;
-
-        public PropertyDescriptor? PropertyDescriptor => null;
-
-        public bool OnComponentChanging() => true;
-
-        public void OnComponentChanged() { }
-
-        public object? GetService(Type serviceType) => null;
     }
 }
