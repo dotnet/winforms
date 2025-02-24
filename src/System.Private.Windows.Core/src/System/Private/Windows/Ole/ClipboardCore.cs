@@ -233,26 +233,8 @@ internal static unsafe class ClipboardCore<TOleServices>
 
     internal static void SetFileDropList(StringCollection filePaths)
     {
-        if (filePaths.OrThrowIfNull().Count == 0)
-        {
-            throw new ArgumentException(SR.CollectionEmptyException);
-        }
-
-        // Validate the paths to make sure they don't contain invalid characters
-        string[] filePathsArray = new string[filePaths.Count];
-        filePaths.CopyTo(filePathsArray, 0);
-
-        foreach (string path in filePathsArray)
-        {
-            // These are the only error states for Path.GetFullPath
-            if (string.IsNullOrEmpty(path) || path.Contains('\0'))
-            {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path ?? "<null>", nameof(filePaths)));
-            }
-        }
-
         IComVisibleDataObject dataObject = TOleServices.CreateDataObject();
-        dataObject.SetData(DataFormatNames.FileDrop, autoConvert: true, filePathsArray);
+        dataObject.SetFileDropList(filePaths);
         SetData(dataObject, copy: true);
     }
 }
