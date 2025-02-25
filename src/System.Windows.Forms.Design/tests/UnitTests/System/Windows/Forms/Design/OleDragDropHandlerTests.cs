@@ -124,7 +124,7 @@ public class OleDragDropHandlerTests : IDisposable
     [Fact]
     public void DoOleDragEnter_ShouldSetEffectToNone_WhenCannotModifyComponents()
     {
-        var dragEventArgs = new DragEventArgs(new DataObject(), 0, 0, 0, DragDropEffects.Move, DragDropEffects.None);
+        DragEventArgs dragEventArgs = new(new DataObject(), 0, 0, 0, DragDropEffects.Move, DragDropEffects.None);
         _clientMock.Setup(client => client.CanModifyComponents).Returns(false);
 
         _oleDragDropHandler.DoOleDragEnter(dragEventArgs);
