@@ -66,6 +66,50 @@ public class ApplicationTests
         }).Dispose();
     }
 
+    [STAThread]
+    [WinFormsFact]
+    public void Application_CurrentMainForm_Get()
+    {
+        Application.EnableVisualStyles();
+        var form1 = new Form();
+        var form2 = new Form();
+        var event1 = new ManualResetEventSlim();
+        var event2 = new ManualResetEventSlim();
+        Form mainForm1 = default, mainForm2 = default, mainForm3 = default, mainForm4 = default;
+        form1.Load += (s, e) =>
+        {
+            mainForm1 = Application.CurrentMainForm;
+            form1.Close();
+            event1.Set();
+        };
+        form2.Load += (s, e) =>
+        {
+            mainForm2 = Application.CurrentMainForm;
+            form2.Close();
+            event2.Set();
+        };
+        var thread1 = new Thread(() => Application.Run(form1));
+        var thread2 = new Thread(() => Application.Run(form2));
+        var thread3 = new Thread(() => mainForm3 = Application.CurrentMainForm);
+        var thread4 = new Thread(() => mainForm4 = Application.CurrentMainForm);
+        thread1.SetApartmentState(ApartmentState.STA);
+        thread2.SetApartmentState(ApartmentState.STA);
+        thread3.SetApartmentState(ApartmentState.STA);
+        thread1.Start();
+        thread2.Start();
+        thread3.Start();
+        thread4.Start();
+        event1.Wait();
+        event2.Wait();
+        Assert.NotNull(mainForm1);
+        Assert.NotNull(mainForm2);
+        Assert.Null(mainForm3);
+        Assert.Null(mainForm4);
+        Assert.NotSame(mainForm1, mainForm2);
+        Assert.Same(form1, mainForm1);
+        Assert.Same(form2, mainForm2);
+    }
+
     [WinFormsFact]
     public void Application_CurrentCulture_SetNull_ThrowsArgumentNullException()
     {

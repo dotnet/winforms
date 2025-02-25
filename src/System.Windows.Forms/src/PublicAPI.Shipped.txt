@@ -2647,6 +2647,7 @@ static System.Windows.Forms.Application.ProductVersion.get -> string!
 static System.Windows.Forms.Application.RaiseIdle(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.RegisterMessageLoop(System.Windows.Forms.Application.MessageLoopCallback? callback) -> void
 static System.Windows.Forms.Application.RemoveMessageFilter(System.Windows.Forms.IMessageFilter! value) -> void
+static System.Windows.Forms.Application.CurrentMainForm.get -> System.Windows.Forms.Form?
 static System.Windows.Forms.Application.RenderWithVisualStyles.get -> bool
 static System.Windows.Forms.Application.Restart() -> void
 static System.Windows.Forms.Application.Run() -> void
