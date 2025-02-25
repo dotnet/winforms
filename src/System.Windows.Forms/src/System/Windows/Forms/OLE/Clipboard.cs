@@ -428,10 +428,8 @@ public static class Clipboard
     /// </remarks>
     public static void SetData(string format, object data)
     {
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(format);
+        ArgumentNullException.ThrowIfNull(data);
 
         // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
         SetDataObject(new DataObject(format, data), copy: true);
