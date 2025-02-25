@@ -859,7 +859,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         // to scale in Dpi mode (during WM_DPICHANGED event).
         // This may require scaling/relayout of the form. AutoScaleFactor will take
         // AutoScaleMode into account while scaling the controls.
-        if (AutoScaleMode != AutoScaleMode.None && IsHandleCreated)
+        if ((AutoScaleMode != AutoScaleMode.None && IsHandleCreated) || AutoScaleMode is AutoScaleMode.Font or AutoScaleMode.Inherit)
         {
             _currentAutoScaleDimensions = SizeF.Empty;
 
