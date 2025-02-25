@@ -170,4 +170,10 @@
   <data name="UnexpectedTypeForClipboardFormat" xml:space="preserve">
     <value>The specified Clipboard format is not compatible with '{0}' type.</value>
   </data>
+  <data name="CollectionEmptyException" xml:space="preserve">
+    <value>Cannot operate with an empty collection.</value>
+  </data>
+  <data name="Clipboard_InvalidPath" xml:space="preserve">
+    <value>Path "{0}" in the argument "{1}" is not valid.</value>
+  </data>
 </root>

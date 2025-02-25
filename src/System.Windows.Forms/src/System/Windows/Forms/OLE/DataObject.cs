@@ -246,7 +246,7 @@ public unsafe partial class DataObject :
     {
         string[] strings = new string[filePaths.OrThrowIfNull().Count];
         filePaths.CopyTo(strings, 0);
-        SetData(DataFormatNames.FileDrop, true, strings);
+        SetData(DataFormatNames.FileDrop, autoConvert: true, strings);
     }
 
     public virtual void SetImage(Image image) => SetData(DataFormatNames.Bitmap, true, image.OrThrowIfNull());
