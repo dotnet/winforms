@@ -11,7 +11,7 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ControlCodeDomSerializerTests
+public class ControlCodeDomSerializerTests : IDisposable
 {
     private readonly Mock<IDesignerSerializationManager> _managerMock;
     private readonly Mock<IDesignerHost> _hostMock;
@@ -19,6 +19,7 @@ public class ControlCodeDomSerializerTests
     private readonly ControlCodeDomSerializer _controlCodeDomSerializer;
     private readonly TestControl _testControl;
     private readonly CodeStatementCollection _codeStatementCollection;
+    private bool _disposed;
 
     public ControlCodeDomSerializerTests()
     {
@@ -31,6 +32,25 @@ public class ControlCodeDomSerializerTests
 
         _managerMock.Setup(m => m.GetService(typeof(IDesignerHost))).Returns(_hostMock.Object);
         _managerMock.Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer))).Returns(_serializerMock.Object);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _testControl?.Dispose();
+            }
+
+            _disposed = true;
+        }
     }
 
     [Fact]
@@ -52,7 +72,7 @@ public class ControlCodeDomSerializerTests
     {
         _serializerMock.Setup(s => s.Serialize(_managerMock.Object, _testControl)).Returns(_codeStatementCollection);
 
-        var result = _controlCodeDomSerializer.Serialize(_managerMock.Object, _testControl);
+        CodeStatementCollection? result = _controlCodeDomSerializer.Serialize(_managerMock.Object, _testControl) as CodeStatementCollection;
 
         result.Should().NotBeNull();
         result.Should().BeOfType<CodeStatementCollection>();
