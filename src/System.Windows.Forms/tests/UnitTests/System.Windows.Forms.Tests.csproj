@@ -99,4 +99,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <NativeProjectReference Include="..\InteropTests\NativeTests\CMakeLists.txt" CMakeProject="..\InteropTests\NativeTests\NativeTests.proj" BuildNative="true" />
+  </ItemGroup>
+
+  <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
+    <ItemGroup>
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.manifest" />
+    </ItemGroup>
+  </Target>
 </Project>
