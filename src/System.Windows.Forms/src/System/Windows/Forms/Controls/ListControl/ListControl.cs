@@ -42,6 +42,7 @@ public abstract class ListControl : Control
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
     [RefreshProperties(RefreshProperties.Repaint)]
+    [TypeConverter($"System.Windows.Forms.Design.DataSourceConverter, {Assemblies.SystemDesign}")]
     [AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.ListControlDataSourceDescr))]
     public object? DataSource

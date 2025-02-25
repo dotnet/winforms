@@ -28,11 +28,6 @@ internal class DataMemberFieldEditor : UITypeEditor
 
         object? dataSource = property.GetValue(instance);
 
-        if (dataSource is null )
-        {
-            return value;
-        }
-
         _designBindingPicker ??= new();
 
         DesignBinding oldSelection = new DesignBinding(dataSource, (string?)value);
