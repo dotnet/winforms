@@ -51,8 +51,9 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private readonly IServiceProvider? _serviceProvider;
 
-    internal DataGridViewColumnCollectionDialog()
+    internal DataGridViewColumnCollectionDialog(IServiceProvider? provider)
     {
+        _serviceProvider = provider;
         // Required for Windows Form Designer support
         InitializeComponent();
 
@@ -69,11 +70,6 @@ internal class DataGridViewColumnCollectionDialog : Form
         _dataGridViewPrivateCopy = new DataGridView();
         _columnsPrivateCopy = _dataGridViewPrivateCopy.Columns;
         _columnsPrivateCopy.CollectionChanged += columnsPrivateCopy_CollectionChanged;
-    }
-
-    internal DataGridViewColumnCollectionDialog(IServiceProvider provider): this()
-    {
-        _serviceProvider = provider;
     }
 
     private static Bitmap SelectedColumnsItemBitmap
