@@ -166,7 +166,7 @@ stages:
         ${{ else }}:
           ${{ if eq(parameters.is1ESPipeline, true) }}:        
             name: $(DncEngInternalBuildPool)
-            image: 1es-windows-2022
+            image: windows.vs2022preview.amd64
             os: windows
           ${{ else }}:
             name: $(DncEngInternalBuildPool)
@@ -230,7 +230,7 @@ stages:
         ${{ else }}:
           ${{ if eq(parameters.is1ESPipeline, true) }}:          
             name: $(DncEngInternalBuildPool)
-            image: 1es-windows-2022
+            image: windows.vs2022preview.amd64
             os: windows
           ${{ else }}:
             name: $(DncEngInternalBuildPool)
