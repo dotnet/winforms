@@ -17,6 +17,7 @@ public class SelectionUIHandlerTests : IDisposable
     private readonly Control _control;
     private readonly IComponent _component;
     private readonly Mock<IDesignerHost> _designerHostMock;
+    private readonly Mock<IComponentChangeService> _changedServiceMock;
 
     public SelectionUIHandlerTests()
     {
@@ -24,6 +25,7 @@ public class SelectionUIHandlerTests : IDisposable
         _control = new();
         _component = new Mock<IComponent>().Object;
         _designerHostMock = new();
+        _changedServiceMock = new();
 
         _selectionUIHandlerMock.Protected().Setup<IComponent>("GetComponent").Returns(_component);
         _selectionUIHandlerMock.Protected().Setup<Control>("GetControl").Returns(_control);
@@ -31,6 +33,7 @@ public class SelectionUIHandlerTests : IDisposable
         _selectionUIHandlerMock.Protected().Setup<Size>("GetCurrentSnapSize").Returns(new Size(10, 10));
         _selectionUIHandlerMock.Protected().Setup<bool>("GetShouldSnapToGrid").Returns(true);
         _selectionUIHandlerMock.Protected().Setup<object>("GetService", typeof(IDesignerHost)).Returns(_designerHostMock.Object);
+        _selectionUIHandlerMock.Protected().Setup<object>("GetService", typeof(IComponentChangeService)).Returns(_changedServiceMock.Object);
     }
 
     public void Dispose()
@@ -47,8 +50,7 @@ public class SelectionUIHandlerTests : IDisposable
 
         result.Should().BeTrue();
 
-        var accessor = _selectionUIHandlerMock.Object.TestAccessor();
-        Control[] dragControls = accessor.Dynamic._dragControls;
+        Control[] dragControls = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragControls;
 
         dragControls.Should().NotBeNull();
         dragControls.Should().HaveCount(1);
@@ -66,8 +68,7 @@ public class SelectionUIHandlerTests : IDisposable
 
         _selectionUIHandlerMock.Object.DragMoved(components, offset);
 
-        var accessor = _selectionUIHandlerMock.Object.TestAccessor();
-        Rectangle dragOffset = accessor.Dynamic._dragOffset;
+        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragOffset;
 
         dragOffset.Should().Be(offset);
     }
@@ -82,14 +83,35 @@ public class SelectionUIHandlerTests : IDisposable
 
         _selectionUIHandlerMock.Object.EndDrag(components, cancel: false);
 
-        var accessor = _selectionUIHandlerMock.Object.TestAccessor();
-        Control[]? dragControls = accessor.Dynamic._dragControls;
-        object? originalCoordinates = accessor.Dynamic._originalCoordinates;
-        Rectangle dragOffset = accessor.Dynamic._dragOffset;
+        Control[]? dragControls = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragControls;
+        object? originalCoordinates = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._originalCoordinates;
+        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragOffset;
 
         dragControls.Should().BeNull();
         originalCoordinates.Should().BeNull();
         dragOffset.Should().Be(Rectangle.Empty);
+    }
+
+    [Fact]
+    public void QueryBeginDrag_ShouldReturnFalse_WhenCheckoutExceptionIsThrown()
+    {
+        _changedServiceMock.Setup(cs => cs.OnComponentChanging(It.IsAny<object>(), It.IsAny<PropertyDescriptor>())).Throws(CheckoutException.Canceled);
+
+        object[] components = [_component];
+        bool result = _selectionUIHandlerMock.Object.QueryBeginDrag(components);
+
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void QueryBeginDrag_ShouldReturnFalse_WhenInvalidOperationExceptionIsThrown()
+    {
+        _changedServiceMock.Setup(cs => cs.OnComponentChanging(It.IsAny<object>(), It.IsAny<PropertyDescriptor>())).Throws<InvalidOperationException>();
+
+        object[] components = [_component];
+        bool result = _selectionUIHandlerMock.Object.QueryBeginDrag(components);
+
+        result.Should().BeFalse();
     }
 
     [Fact]
