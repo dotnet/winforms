@@ -10,13 +10,14 @@ using Moq;
 using Moq.Protected;
 
 namespace System.Windows.Forms.Design.Tests;
-public class TableLayoutPanelDesignerTest : IDisposable
+
+public class TableLayoutPanelDesignerTests : IDisposable
 {
     private readonly TableLayoutPanelDesigner _designer;
     private readonly TableLayoutPanel _tableLayoutPanel;
     private readonly TableLayoutPanelDesigner.DesignerTableLayoutControlCollection _collection;
 
-    public TableLayoutPanelDesignerTest()
+    public TableLayoutPanelDesignerTests()
     {
         _designer = new();
         _tableLayoutPanel = new();
