@@ -457,6 +457,8 @@ public partial class ErrorProvider
             double factor = ((double)currentDpi) / _parent._deviceDpi;
             using Icon icon = _provider.Icon;
             _provider.Icon = new Icon(icon, (int)(icon.Width * factor), (int)(icon.Height * factor));
+            _provider.DisposeRegion();
+            _provider._currentDpi = currentDpi;
         }
     }
 }
