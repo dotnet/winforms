@@ -34,24 +34,7 @@ public class ControlCodeDomSerializerTests : IDisposable
         _managerMock.Setup(m => m.GetSerializer(typeof(Component), typeof(CodeDomSerializer))).Returns(_serializerMock.Object);
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _testControl?.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
+    public void Dispose() => _testControl.Dispose();
 
     [Fact]
     public void Deserialize_SuspendsAndResumesLayout()
