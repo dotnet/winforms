@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design;
 
 internal class DataSourceConverter : ReferenceConverter
 {
-    private readonly ReferenceConverter _listConverter = new ReferenceConverter(typeof(IList));
+    private readonly ReferenceConverter _listConverter = new(typeof(IList));
 
     public DataSourceConverter() : base(typeof(IListSource))
     {
@@ -18,12 +18,12 @@ internal class DataSourceConverter : ReferenceConverter
 
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
-        ArrayList listSources = new ArrayList(base.GetStandardValues(context));
+        ArrayList listSources = new(base.GetStandardValues(context));
         StandardValuesCollection lists = _listConverter.GetStandardValues(context);
 
         ArrayList listsList = [];
 
-        BindingSource? bs = context?.Instance as BindingSource;
+        BindingSource? bindingSource = context?.Instance as BindingSource;
 
         foreach (object listSource in listSources)
         {
@@ -37,7 +37,7 @@ internal class DataSourceConverter : ReferenceConverter
                 }
 
                 // Prevent user from being able to connect a BindingSource to itself
-                if (bs is not null && bs == listSource)
+                if (bindingSource is not null && bindingSource == listSource)
                 {
                     continue;
                 }
@@ -77,7 +77,7 @@ internal class DataSourceConverter : ReferenceConverter
                 }
 
                 // Prevent user from being able to connect a BindingSource to itself
-                if (bs is not null && bs == list)
+                if (bindingSource is not null && bindingSource == list)
                 {
                     continue;
                 }
