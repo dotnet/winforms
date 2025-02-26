@@ -802,7 +802,7 @@ internal partial class ToolStripCollectionEditor
         private void OnListBoxItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Push the items into the grid.
-            object[] selectedItems = [_listBoxItems.SelectedItems.Count];
+            object[] selectedItems = new object[_listBoxItems.SelectedItems.Count];
             if (selectedItems.Length > 0)
             {
                 _listBoxItems.SelectedItems.CopyTo(selectedItems, 0);
