@@ -822,7 +822,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 nameof(DataSource),
                 SR.DataGridViewChooseDataSource)
             {
-                RelatedComponent = _owner.Component
+                RelatedComponent = _owner.HasComponent ? _owner.Component : null
             };
 
             items.Add(chooseDataSource);
