@@ -33,14 +33,14 @@ public class TableLayoutPanelDesignerTests : IDisposable
 
     private (Mock<IDesignerHost> hostMock, Mock<IComponentChangeService> compChangeServiceMock, Mock<IServiceProvider> serviceProviderMock, Mock<TableLayoutPanelDesigner> designerMock, TableLayoutPanelDesigner designer) SetupMocks()
     {
-        Mock<IDesignerHost> hostMock = new Mock<IDesignerHost>();
-        Mock<IComponentChangeService> compChangeServiceMock = new Mock<IComponentChangeService>();
+        Mock<IDesignerHost> hostMock = new();
+        Mock<IComponentChangeService> compChangeServiceMock = new();
 
         hostMock.Setup(h => h.GetService(typeof(IComponentChangeService)))
                 .Returns(compChangeServiceMock.Object);
         hostMock.SetupAdd(h => h.TransactionClosing += It.IsAny<DesignerTransactionCloseEventHandler>());
 
-        Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
+        Mock<IServiceProvider> serviceProviderMock = new();
         serviceProviderMock.Setup(sp => sp.GetService(typeof(IDesignerHost)))
                            .Returns(hostMock.Object);
 
@@ -173,7 +173,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void InitializeNewComponent_Should_CreateEmptyTable()
     {
-        Dictionary<string, object> defaultValues = new Dictionary<string, object>();
+        Dictionary<string, object> defaultValues = new();
 
         _designer.InitializeNewComponent(defaultValues);
 
@@ -207,7 +207,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_Add_Should_Add_Control_To_RealCollection()
     {
-        Button button = new Button();
+        using Button button = new();
         _collection.Add(button);
         _tableLayoutPanel.Controls.Contains(button).Should().BeTrue();
     }
@@ -215,9 +215,9 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_AddRange_Should_Add_Controls_To_RealCollection()
     {
-        Button button1 = new Button();
-        Button button2 = new Button();
-        Control[] controls = { button1, button2 };
+        using Button button1 = new();
+        using Button button2 = new();
+        Control[] controls = [button1, button2];
 
         _collection.AddRange(controls);
 
@@ -228,8 +228,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_CopyTo_Should_Copy_Controls_To_Array()
     {
-        Button button1 = new Button();
-        Button button2 = new Button();
+        using Button button1 = new();
+        using Button button2 = new();
         _collection.Add(button1);
         _collection.Add(button2);
 
@@ -247,7 +247,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         TableLayoutPanelDesigner.DesignerTableLayoutControlCollection collection2 = new(_tableLayoutPanel);
         TableLayoutPanel anotherTableLayoutPanel = new();
         TableLayoutPanelDesigner.DesignerTableLayoutControlCollection collection3 = new(anotherTableLayoutPanel);
-        object nonCollectionObject = new object();
+        object nonCollectionObject = new();
 
         collection1.Equals(collection1).Should().BeTrue();
 
@@ -263,16 +263,16 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_GetEnumerator_Tests()
     {
-        Button button1 = new();
-        Button button2 = new();
-        Button button3 = new();
+        using Button button1 = new();
+        using Button button2 = new();
+        using Button button3 = new();
 
         _collection.Add(button1);
         _collection.Add(button2);
         _collection.Add(button3);
 
-        var enumerator = _collection.GetEnumerator();
-        var controls = new List<Control>();
+        IEnumerator enumerator = _collection.GetEnumerator();
+        List<Control> controls = new();
 
         while (enumerator.MoveNext())
         {
@@ -291,9 +291,9 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_Add_Control_To_Specific_Cell()
     {
-        Button button = new();
+        using Button button = new();
         _collection.Add(button, 1, 1);
-        var position = _tableLayoutPanel.GetPositionFromControl(button);
+        TableLayoutPanelCellPosition position = _tableLayoutPanel.GetPositionFromControl(button);
         position.Column.Should().Be(1);
         position.Row.Should().Be(1);
     }
@@ -301,8 +301,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_GetChildIndex_Should_Return_Correct_Index()
     {
-        Button button1 = new();
-        Button button2 = new();
+        using Button button1 = new();
+        using Button button2 = new();
         _collection.Add(button1);
         _collection.Add(button2);
         _collection.GetChildIndex(button2).Should().Be(1);
@@ -311,8 +311,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_SetChildIndex_Should_Update_Index()
     {
-        Button button1 = new();
-        Button button2 = new();
+        using Button button1 = new();
+        using Button button2 = new();
         _collection.Add(button1);
         _collection.Add(button2);
         _collection.SetChildIndex(button1, 1);
