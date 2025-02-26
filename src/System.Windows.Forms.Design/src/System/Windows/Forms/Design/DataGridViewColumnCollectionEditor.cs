@@ -24,7 +24,7 @@ internal class DataGridViewColumnCollectionEditor : UITypeEditor
 
         using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
         {
-            _dataGridViewColumnCollectionDialog ??= new(provider);
+            _dataGridViewColumnCollectionDialog ??= new();
 
             _dataGridViewColumnCollectionDialog.SetLiveDataGridView((DataGridView)context.Instance);
 

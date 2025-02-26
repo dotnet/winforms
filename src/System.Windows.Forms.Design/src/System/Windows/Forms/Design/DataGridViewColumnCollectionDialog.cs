@@ -49,11 +49,8 @@ internal class DataGridViewColumnCollectionDialog : Form
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
     private readonly HashSet<DataGridViewColumn> _userAddedColumns = [];
 
-    private readonly IServiceProvider? _serviceProvider;
-
-    internal DataGridViewColumnCollectionDialog(IServiceProvider? provider)
+    internal DataGridViewColumnCollectionDialog()
     {
-        _serviceProvider = provider;
         // Required for Windows Form Designer support
         InitializeComponent();
 
@@ -481,7 +478,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _addRemoveTableLayoutPanel = new TableLayoutPanel();
         _selectedColumnsLabel = new Label();
         _propertyGridLabel = new Label();
-        _propertyGrid1 = new VsPropertyGrid(_serviceProvider);
+        _propertyGrid1 = new VsPropertyGrid();
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _cancelButton = new Button();
         _okButton = new Button();

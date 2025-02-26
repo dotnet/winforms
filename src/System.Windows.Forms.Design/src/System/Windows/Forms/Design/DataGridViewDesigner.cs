@@ -743,7 +743,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // child modal dialog -launching in System Aware mode
         DataGridViewColumnCollectionDialog dialog = ScaleHelper.InvokeInSystemAwareContext(
-            () => new DataGridViewColumnCollectionDialog(null));
+            () => new DataGridViewColumnCollectionDialog());
         dialog.SetLiveDataGridView(Control);
         DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;

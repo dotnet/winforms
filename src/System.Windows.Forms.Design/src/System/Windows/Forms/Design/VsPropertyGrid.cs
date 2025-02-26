@@ -13,11 +13,6 @@ internal class VsPropertyGrid : PropertyGrid
     {
     }
 
-    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "to seek parity with InProc code")]
-    public VsPropertyGrid(IServiceProvider? serviceProvider) : base()
-    {
-    }
-
     protected override Bitmap SortByPropertyImage => GetBitmap("PBAlpha");
 
     protected override Bitmap SortByCategoryImage => GetBitmap("PBCategory");
