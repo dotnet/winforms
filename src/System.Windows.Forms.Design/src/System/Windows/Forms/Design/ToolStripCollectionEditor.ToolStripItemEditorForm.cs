@@ -816,7 +816,7 @@ internal partial class ToolStripCollectionEditor
                 {
                     _toolStripCustomTypeDescriptor ??= new(toolStrip);
 
-                    _selectedItemProps.SelectedObjects = new[] { _toolStripCustomTypeDescriptor };
+                    _selectedItemProps.SelectedObjects = [_toolStripCustomTypeDescriptor];
                 }
                 else
                 {

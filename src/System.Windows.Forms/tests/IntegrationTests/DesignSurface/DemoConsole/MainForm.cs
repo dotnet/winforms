@@ -306,7 +306,7 @@ public partial class MainForm : Form
                         ToolStripMenuItem bottomMenuItem1 = surface.CreateComponent<ToolStripMenuItem>();
                         bottomMenuItem1.Text = "BottomMenuItem1";
                         ToolStripMenuItem bottomMenuItem2 = surface.CreateComponent<ToolStripMenuItem>();
-                        bottomMenuItem2.Text = "BottomMenuItem1";
+                        bottomMenuItem2.Text = "BottomMenuItem2";
 
                         menuStrip1.Items.Add(topMenuItem1);
                         menuStrip1.Items.Add(topMenuItem2);
