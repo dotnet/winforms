@@ -19,7 +19,6 @@ public class ControlCodeDomSerializerTests : IDisposable
     private readonly ControlCodeDomSerializer _controlCodeDomSerializer;
     private readonly TestControl _testControl;
     private readonly CodeStatementCollection _codeStatementCollection;
-    private bool _disposed;
 
     public ControlCodeDomSerializerTests()
     {
