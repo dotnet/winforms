@@ -30,7 +30,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     private int _blinkRate;
     private ErrorBlinkStyle _blinkStyle;
     private ErrorProviderStates _state = ErrorProviderStates.ShowIcon;
-    private int _currentDpi = (int)PInvoke.GetDpiForSystem();
+    private int _currentDpi;
     private bool ShowIcon
     {
         get => _state.HasFlag(ErrorProviderStates.ShowIcon);
@@ -82,7 +82,6 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         : this()
     {
         ArgumentNullException.ThrowIfNull(container);
-
         container.Add(this);
     }
 
@@ -584,9 +583,32 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     }
 
     /// <summary>
+    ///  Gets or sets the DPI at which the current error is displayed.
+    ///  If currentDpi is not set, it defaults to _parentControl.DeviceDpi
+    ///  or the system DPI.
+    /// </summary>
+    private int CurrentDpi
+    {
+        get
+        {
+            if (_currentDpi != 0)
+            {
+                return _currentDpi;
+            }
+
+            _currentDpi = _parentControl?.DeviceDpi ?? (int)PInvoke.GetDpiForSystem();
+            return _currentDpi;
+        }
+        set
+        {
+            _currentDpi = value;
+        }
+    }
+
+    /// <summary>
     ///  Create the icon region on demand.
     /// </summary>
-    internal IconRegion Region => _region ??= new IconRegion(Icon, _currentDpi);
+    internal IconRegion Region => _region ??= new IconRegion(Icon, CurrentDpi);
 
     /// <summary>
     ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
