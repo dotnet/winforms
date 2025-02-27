@@ -144,6 +144,7 @@ public class EnsureEditorsTests
     [InlineData(typeof(TreeView), "ImageKey", typeof(ImageIndexEditor))]
     [InlineData(typeof(TreeView), "SelectedImageIndex", typeof(ImageIndexEditor))]
     [InlineData(typeof(TreeView), "SelectedImageKey", typeof(ImageIndexEditor))]
+    [InlineData(typeof(DataGridView), "Columns", typeof(DataGridViewColumnCollectionEditor))]
     public void EnsureUITypeEditorForProperty(Type type, string propertyName, Type expectedEditorType)
     {
         PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(type);
