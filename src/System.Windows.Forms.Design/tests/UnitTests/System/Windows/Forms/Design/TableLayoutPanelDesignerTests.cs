@@ -44,7 +44,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         serviceProviderMock.Setup(sp => sp.GetService(typeof(IDesignerHost)))
                            .Returns(hostMock.Object);
 
-        Mock<TableLayoutPanelDesigner> designerMock = new Mock<TableLayoutPanelDesigner> { CallBase = true };
+        Mock<TableLayoutPanelDesigner> designerMock = new() { CallBase = true };
         designerMock.Protected()
             .Setup<object>("GetService", ItExpr.IsAny<Type>())
             .Returns((Type serviceType) =>
@@ -97,11 +97,12 @@ public class TableLayoutPanelDesignerTests : IDisposable
         verbs.Should().NotBeNull();
         verbs.Should().HaveCount(5);
 
-        verbs.Select(v => v.Text).Should().Contain(SR.TableLayoutPanelDesignerAddColumn);
-        verbs.Select(v => v.Text).Should().Contain(SR.TableLayoutPanelDesignerAddRow);
-        verbs.Select(v => v.Text).Should().Contain(SR.TableLayoutPanelDesignerRemoveColumn);
-        verbs.Select(v => v.Text).Should().Contain(SR.TableLayoutPanelDesignerRemoveRow);
-        verbs.Select(v => v.Text).Should().Contain(SR.TableLayoutPanelDesignerEditRowAndCol);
+        verbs.Select(v => v.Text).Should()
+            .Contain(SR.TableLayoutPanelDesignerAddColumn)
+            .And.Contain(SR.TableLayoutPanelDesignerAddRow)
+            .And.Contain(SR.TableLayoutPanelDesignerRemoveColumn)
+            .And.Contain(SR.TableLayoutPanelDesignerRemoveRow)
+            .And.Contain(SR.TableLayoutPanelDesignerEditRowAndCol);
     }
 
     [Fact]
@@ -142,7 +143,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void Initialize_Should_Setup_Correctly()
     {
-        var (hostMock, compChangeServiceMock, serviceProviderMock, designerMock, designer) = SetupMocks();
+        (Mock<IDesignerHost> hostMock, Mock<IComponentChangeService> compChangeServiceMock, Mock<IServiceProvider> serviceProviderMock, Mock<TableLayoutPanelDesigner> designerMock, TableLayoutPanelDesigner designer) = SetupMocks();
 
         designer.Initialize(_tableLayoutPanel);
 
@@ -194,7 +195,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void DesignerTableLayoutControlCollection_Count_Should_Return_RealCollection_Count()
     {
-        _tableLayoutPanel.Controls.Add(new Button());
+        using Button button = new();
+        _tableLayoutPanel.Controls.Add(button);
         _collection.Count.Should().Be(1);
     }
 
@@ -217,7 +219,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     {
         using Button button1 = new();
         using Button button2 = new();
-        Control[] controls = [button1, button2];
+
+        Control[] controls = new[] { button1, button2 };
 
         _collection.AddRange(controls);
 
