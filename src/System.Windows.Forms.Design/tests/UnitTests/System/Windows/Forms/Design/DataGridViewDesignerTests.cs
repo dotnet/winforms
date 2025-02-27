@@ -94,20 +94,13 @@ public class DataGridViewDesignerTests : IDisposable
     }
 
     [Fact]
-    public void Initialize_SetsAutoGenerateColumnsCorrectly()
-    {
-        using DataGridViewDesigner designer = new();
-        designer.Initialize(_dataGridView);
-
+    public void Initialize_SetsAutoGenerateColumnsCorrectly() =>
         _dataGridView.AutoGenerateColumns.Should().BeTrue();
-    }
 
     [Fact]
     public void InitializeNewComponent_SetsColumnHeadersHeightSizeModeToAutoSize()
     {
-        using DataGridViewDesigner designer = new();
-        designer.Initialize(_dataGridView);
-        designer.InitializeNewComponent(null);
+        _designer.InitializeNewComponent(null);
 
         _dataGridView.ColumnHeadersHeightSizeMode.Should().Be(DataGridViewColumnHeadersHeightSizeMode.AutoSize);
     }
@@ -135,16 +128,13 @@ public class DataGridViewDesignerTests : IDisposable
     [Fact]
     public void PreFilterProperties_ShadowsPropertiesCorrectly()
     {
-        using DataGridViewDesigner designer = new();
-        designer.Initialize(_dataGridView);
-
         Dictionary<string, PropertyDescriptor> properties = new()
         {
             { "AutoSizeColumnsMode", TypeDescriptor.GetProperties(typeof(DataGridView))["AutoSizeColumnsMode"]!},
             { "DataSource", TypeDescriptor.GetProperties(typeof(DataGridView))["DataSource"]!}
         };
 
-        designer.TestAccessor().Dynamic.PreFilterProperties(properties);
+        _designer.TestAccessor().Dynamic.PreFilterProperties(properties);
 
         properties["AutoSizeColumnsMode"].ComponentType.Should().Be(typeof(DataGridViewDesigner));
         properties["DataSource"].ComponentType.Should().Be(typeof(DataGridViewDesigner));
