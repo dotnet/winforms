@@ -15,11 +15,9 @@ public partial class ErrorProvider
         private Region? _region;
         private readonly Icon _icon;
 
-        public IconRegion(int currentDpi, Icon icon)
+        public IconRegion(Icon icon, int currentDpi)
         {
-            _icon = new(icon,
-                PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi),
-                PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)currentDpi));
+            _icon = ScaleHelper.ScaleSmallIconToDpi(icon, currentDpi);
         }
 
         /// <summary>
