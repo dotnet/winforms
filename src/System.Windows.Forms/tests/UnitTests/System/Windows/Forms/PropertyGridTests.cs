@@ -3967,12 +3967,38 @@ public partial class PropertyGridTests
         propertyGrid.Site = new MySite();
         MyClass myClass = new();
         propertyGrid.SelectedObject = myClass;
-        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
         GridEntry entry = propertyGridView.SelectedGridEntry;
         var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
 
         descriptor.SetPropertyTextValue("123");
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
+    }
+
+    [WinFormsFact]
+    public void ShortcutKeys_GridEntry_OnMouseWheel()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/12982
+        ToolStripMenuItem menuItem = new();
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.SelectedObject = menuItem;
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
+        var categories = propertyGridView.TopLevelGridEntries;
+        PropertyDescriptorGridEntry shortcutKeyEntry = categories
+            .FirstOrDefault(category => category.PropertyName == "Misc")?
+            .GridItems
+            .OfType<PropertyDescriptorGridEntry>()
+            .FirstOrDefault(entry => entry.PropertyName == "ShortcutKeys");
+
+        shortcutKeyEntry.Should().NotBeNull();
+        shortcutKeyEntry.Enumerable.Should().BeFalse();
+        shortcutKeyEntry.PropertyDescriptor.GetValue(menuItem).Should().Be(Keys.None);
+
+        propertyGrid.SelectedGridItem = shortcutKeyEntry;
+        var gridViewAccessor = propertyGridView.TestAccessor();
+        gridViewAccessor.Dynamic.OnMouseWheel(new MouseEventArgs(MouseButtons.Middle, clicks: 0, location: default, delta: 5));
     }
 
     [WinFormsFact]

@@ -354,6 +354,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [Localizable(true)]
     [DefaultValue(Keys.None)]
     [SRDescription(nameof(SR.MenuItemShortCutDescr))]
+    [TypeConverter(typeof(ShortcutKeysConverter))]
     public Keys ShortcutKeys
     {
         get => Properties.GetValueOrDefault(s_propShortcutKeys, Keys.None);
@@ -398,7 +399,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             {
                 if (GetCurrentParentDropDown() is ToolStripDropDownMenu parent)
                 {
-                    LayoutTransaction.DoLayout(ParentInternal, this, "ShortcutKeys");
+                    LayoutTransaction.DoLayout(ParentInternal, this, nameof(ShortcutKeys));
                     parent.AdjustSize();
                 }
             }

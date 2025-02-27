@@ -9,7 +9,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests;
 public class PropertyGridView_DropDownHolderTests
 {
     [WinFormsFact]
-    public void DropDownHolder_AccessibilityObject_Constructor_initializes_correctly()
+    public void DropDownHolder_Constructor_initializes_correctly()
     {
         using PropertyGridView propertyGridView = new(null, null);
         propertyGridView.BackColor = Color.Green;

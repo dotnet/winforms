@@ -3131,7 +3131,10 @@ internal sealed partial class PropertyGridView :
 
         // Should this only work if the Edit has focus?
         // We use the mouse wheel to change the values in the dropdown if it's an enumerable value.
-        if (_selectedGridEntry is not null && _selectedGridEntry.Enumerable && EditTextBox.Focused && _selectedGridEntry.IsValueEditable)
+        if (_selectedGridEntry is not null
+            && _selectedGridEntry.Enumerable
+            && EditTextBox.Focused
+            && _selectedGridEntry.IsValueEditable)
         {
             int index = GetCurrentValueIndex(_selectedGridEntry);
             if (index != -1)
