@@ -30,6 +30,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     private int _blinkRate;
     private ErrorBlinkStyle _blinkStyle;
     private ErrorProviderStates _state = ErrorProviderStates.ShowIcon;
+    private int _currentDpi;
     private bool ShowIcon
     {
         get => _state.HasFlag(ErrorProviderStates.ShowIcon);
@@ -81,7 +82,6 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         : this()
     {
         ArgumentNullException.ThrowIfNull(container);
-
         container.Add(this);
     }
 
@@ -309,7 +309,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
             {
-                // Let's check if the datamember exists in the new data source
+                // Let's check if the data member exists in the new data source
                 try
                 {
                     _errorManager = _parentControl.BindingContext[value, _dataMember];
@@ -547,10 +547,8 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    int width = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
-                    int height = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
                     using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, width, height);
+                    t_defaultIcon = ScaleHelper.ScaleSmallIconToDpi(defaultIcon, (int)PInvoke.GetDpiForSystem());
                 }
             }
 
@@ -585,9 +583,32 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     }
 
     /// <summary>
+    ///  Gets or sets the DPI at which the current error is displayed.
+    ///  If currentDpi is not set, it defaults to _parentControl.DeviceDpi
+    ///  or the system DPI.
+    /// </summary>
+    private int CurrentDpi
+    {
+        get
+        {
+            if (_currentDpi != 0)
+            {
+                return _currentDpi;
+            }
+
+            _currentDpi = _parentControl?.DeviceDpi ?? (int)PInvoke.GetDpiForSystem();
+            return _currentDpi;
+        }
+        set
+        {
+            _currentDpi = value;
+        }
+    }
+
+    /// <summary>
     ///  Create the icon region on demand.
     /// </summary>
-    internal IconRegion Region => _region ??= new IconRegion(Icon);
+    internal IconRegion Region => _region ??= new IconRegion(Icon, CurrentDpi);
 
     /// <summary>
     ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
