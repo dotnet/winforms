@@ -4423,20 +4423,14 @@ public unsafe partial class Control :
     ///  should not call base.CreateAccessibilityObject.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual AccessibleObject CreateAccessibilityInstance()
-    {
-        return new ControlAccessibleObject(this);
-    }
+    protected virtual AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
 
     /// <summary>
     ///  Constructs the new instance of the Controls collection objects. Subclasses
     ///  should not call base.CreateControlsInstance.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual ControlCollection CreateControlsInstance()
-    {
-        return new ControlCollection(this);
-    }
+    protected virtual ControlCollection CreateControlsInstance() => new ControlCollection(this);
 
     /// <summary>
     ///  Creates a Graphics for this control. The control's brush, font, foreground

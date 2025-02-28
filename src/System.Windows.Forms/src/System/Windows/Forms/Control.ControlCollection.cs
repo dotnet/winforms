@@ -10,10 +10,10 @@ namespace System.Windows.Forms;
 public partial class Control
 {
     /// <summary>
-    ///  Collection of controls...
+    ///  Collection of controls.
     /// </summary>
     [ListBindable(false)]
-    public partial class ControlCollection : ArrangedElementCollection, IList, ICloneable
+    public partial class ControlCollection : ArrangedElementCollection, IList, IEnumerable<Control>, ICloneable
     {
         ///  A caching mechanism for key accessor
         ///  We use an index here rather than control so that we don't have lifetime
@@ -29,10 +29,7 @@ public partial class Control
         /// <summary>
         ///  Returns true if the collection contains an item with the specified key, false otherwise.
         /// </summary>
-        public virtual bool ContainsKey(string? key)
-        {
-            return IsValidIndex(IndexOfKey(key));
-        }
+        public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
         /// <summary>
         ///  Adds a child control to this control. The control becomes the last control in
@@ -156,11 +153,23 @@ public partial class Control
         {
             // Use CreateControlInstance so we get the same type of ControlCollection, but whack the
             // owner so adding controls to this new collection does not affect the control we cloned from.
-            ControlCollection ccOther = Owner.CreateControlsInstance();
+            ControlCollection clone = Owner.CreateControlsInstance();
 
             // We add using InnerList to prevent unnecessary parent cycle checks, etc.
-            ccOther.InnerList.AddRange(InnerList);
-            return ccOther;
+            if (clone.InnerList is List<IArrangedElement> list)
+            {
+                list.AddRange(InnerList);
+            }
+            else
+            {
+                Debug.Fail("Unexpected InnerList type");
+                foreach (Control c in this)
+                {
+                    clone.Add(c);
+                }
+            }
+
+            return clone;
         }
 
         public bool Contains(Control? control) => ((IList)InnerList).Contains(control);
@@ -224,10 +233,7 @@ public partial class Control
             }
         }
 
-        public override IEnumerator GetEnumerator()
-        {
-            return new ControlCollectionEnumerator(this);
-        }
+        public override IEnumerator GetEnumerator() => new ControlCollectionEnumerator(this);
 
         public int IndexOf(Control? control) => ((IList)InnerList).IndexOf(control);
 
@@ -269,10 +275,7 @@ public partial class Control
         /// <summary>
         ///  Determines if the index is valid for the collection.
         /// </summary>
-        private bool IsValidIndex(int index)
-        {
-            return ((index >= 0) && (index < Count));
-        }
+        private bool IsValidIndex(int index) => (index >= 0) && (index < Count);
 
         /// <summary>
         ///  Who owns this control collection.
@@ -285,10 +288,9 @@ public partial class Control
         /// </summary>
         public virtual void Remove(Control? value)
         {
-            // Sanity check parameter
             if (value is null)
             {
-                return;     // Don't do anything
+                return;
             }
 
             if (value.ParentInternal == Owner)
@@ -317,10 +319,7 @@ public partial class Control
             }
         }
 
-        public void RemoveAt(int index)
-        {
-            Remove(this[index]);
-        }
+        public void RemoveAt(int index) => Remove(this[index]);
 
         /// <summary>
         ///  Removes the child control with the specified key.
@@ -394,7 +393,7 @@ public partial class Control
         ///  Retrieves the index of the specified child control in this array. An ArgumentException
         ///  is thrown if child is not parented to this Control.
         /// </summary>
-        public int GetChildIndex(Control child) => GetChildIndex(child, true);
+        public int GetChildIndex(Control child) => GetChildIndex(child, throwException: true);
 
         /// <summary>
         ///  Retrieves the index of the specified child control in this array. An ArgumentException
@@ -444,5 +443,13 @@ public partial class Control
         /// </summary>
         public virtual void SetChildIndex(Control child, int newIndex) =>
             SetChildIndexInternal(child, newIndex);
+
+        IEnumerator<Control> IEnumerable<Control>.GetEnumerator()
+        {
+            foreach (Control control in InnerList)
+            {
+                yield return control;
+            }
+        }
     }
 }
