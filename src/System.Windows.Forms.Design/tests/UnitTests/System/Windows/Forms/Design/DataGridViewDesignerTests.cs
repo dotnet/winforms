@@ -59,8 +59,24 @@ public class DataGridViewDesignerTests : IDisposable
 
         _designer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-        mockChangeService.Verify(s => s.OnComponentChanging(It.IsAny<object>(), It.IsAny<PropertyDescriptor>()), Times.Exactly(_dataGridView.Columns.Count));
-        mockChangeService.Verify(s => s.OnComponentChanged(It.IsAny<object>(), It.IsAny<PropertyDescriptor>(), It.IsAny<object>(), It.IsAny<object>()), Times.Exactly(_dataGridView.Columns.Count));
+        mockChangeService.Verify(
+            s => s.OnComponentChanging(
+                It.IsAny<object>(),
+                It.IsAny<PropertyDescriptor>()
+            ),
+            Times.Exactly(_dataGridView.Columns.Count)
+            );
+
+        mockChangeService.Verify(
+            s => s.OnComponentChanged(
+                It.IsAny<object>(),
+                It.IsAny<PropertyDescriptor>(),
+                It.IsAny<object>(),
+                It.IsAny<object>()
+            ),
+            Times.Exactly(_dataGridView.Columns.Count)
+        );
+
         _dataGridView.AutoSizeColumnsMode.Should().Be(DataGridViewAutoSizeColumnsMode.Fill);
     }
 
