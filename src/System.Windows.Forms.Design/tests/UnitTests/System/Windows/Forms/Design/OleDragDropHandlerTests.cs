@@ -23,7 +23,7 @@ public class OleDragDropHandlerTests : IDisposable
         _selectionHandlerMock = new() { CallBase = true };
         _serviceProviderMock = new();
         _clientMock = new();
-        _component = new Mock<IComponent>().Object;
+        _component = new Component();
         _oleDragDropHandler = new(_selectionHandlerMock.Object, _serviceProviderMock.Object, _clientMock.Object);
     }
 
@@ -69,7 +69,7 @@ public class OleDragDropHandlerTests : IDisposable
         _serviceProviderMock.Setup(sp => sp.GetService(typeof(IDesignerHost))).Returns((IDesignerHost?)null);
         _serviceProviderMock.Setup(sp => sp.GetService(typeof(IToolboxService))).Returns((IToolboxService?)null);
 
-        var result = _oleDragDropHandler.CreateTool(toolboxItem, null, 0, 0, 0, 0, false, false);
+        var result = _oleDragDropHandler.CreateTool(toolboxItem, null, 0, 0, 0, 0, true, true);
 
         result.Should().BeEmpty();
     }
@@ -174,9 +174,7 @@ public class OleDragDropHandlerTests : IDisposable
     [Fact]
     public void GetDraggingObjects_ShouldReturnNull_WhenDataObjectIsNull()
     {
-        object[]? result = OleDragDropHandler.GetDraggingObjects((IDataObject?)null);
-
-        result.Should().BeNull();
+        OleDragDropHandler.GetDraggingObjects((IDataObject?)null).Should().BeNull();
     }
 
     [Fact]
@@ -184,8 +182,6 @@ public class OleDragDropHandlerTests : IDisposable
     {
         DragEventArgs dragEventArgs = new(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
 
-        object[]? result = OleDragDropHandler.GetDraggingObjects(dragEventArgs);
-
-        result.Should().BeNull();
+        OleDragDropHandler.GetDraggingObjects(dragEventArgs).Should().BeNull();
     }
 }
