@@ -85,24 +85,26 @@ internal sealed class WinFormsOleServices : IOleServices
                 tymed = (uint)TYMED.TYMED_GDI
             };
 
-            STGMEDIUM medium = default;
-
-            if (dataObject->QueryGetData(formatEtc).Succeeded)
+            HRESULT result = dataObject->QueryGetData(formatEtc);
+            if (result.Failed)
             {
-                HRESULT hr = dataObject->GetData(formatEtc, out medium);
-
-                // One of the ways this can happen is when we attempt to put binary formatted data onto the
-                // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
-                // The data state, however, is not good, and this error will be returned by Windows when asking to
-                // get the data out.
-                Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+                return false;
             }
+
+            result = dataObject->GetData(formatEtc, out STGMEDIUM medium);
+
+            // One of the ways this can happen is when we attempt to put binary formatted data onto the
+            // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+            // The data state, however, is not good, and this error will be returned by Windows when asking to
+            // get the data out.
+            Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
 
             try
             {
                 // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
                 // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-                if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
+                if (result.Succeeded
+                    && (uint)medium.tymed == (uint)TYMED.TYMED_GDI
                     && !medium.hGlobal.IsNull
                     && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
                 {
