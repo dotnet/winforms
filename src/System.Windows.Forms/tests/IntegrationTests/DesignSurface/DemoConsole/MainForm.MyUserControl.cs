@@ -40,7 +40,7 @@ public partial class MainForm
                 Size = new(30, 30)
             };
 
-            Controls.AddRange(textBox2, textBox1, textBox);
+            Controls.AddRange([textBox2, textBox1, textBox]);
         }
     }
 }
