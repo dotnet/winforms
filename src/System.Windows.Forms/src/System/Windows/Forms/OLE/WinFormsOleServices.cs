@@ -57,9 +57,13 @@ internal sealed class WinFormsOleServices : IOleServices
         return HRESULT.DV_E_TYMED;
     }
 
-    static unsafe bool IOleServices.TryGetBitmapFromDataObject<T>(Com.IDataObject* dataObject, [NotNullWhen(true)] out T data)
+    static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(
+        Com.IDataObject* dataObject,
+        string requestedFormat,
+        [NotNullWhen(true)] out T data)
     {
-        if ((typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T))
+        if (requestedFormat == DataFormatNames.Bitmap
+            && (typeof(Bitmap) == typeof(T) || typeof(Image) == typeof(T))
             && TryGetBitmapData(dataObject, out Bitmap? bitmap))
         {
             data = (T)(object)bitmap!;

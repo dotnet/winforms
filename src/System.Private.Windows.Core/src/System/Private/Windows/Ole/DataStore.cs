@@ -94,12 +94,17 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         SetData(format.FullName.OrThrowIfNull(), data);
     }
 
+    /// <inheritdoc cref="IDataObjectInternal.SetData(object?)"/>
+    /// <remarks>
+    ///  <para>
+    ///   This is the only method that has special behavior for <see cref="ISerializable"/> objects.
+    ///  </para>
+    /// </remarks>
     public void SetData(object? data)
     {
         ArgumentNullException.ThrowIfNull(data);
 
-        if (data is ISerializable
-            && !_mappedData.ContainsKey(DataFormatNames.Serializable))
+        if (data is ISerializable && !_mappedData.ContainsKey(DataFormatNames.Serializable))
         {
             SetData(DataFormatNames.Serializable, data);
         }
@@ -120,20 +125,18 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         {
             return _mappedData.ContainsKey(format);
         }
-        else
+
+        string[] formats = GetFormats(autoConvert);
+
+        for (int i = 0; i < formats.Length; i++)
         {
-            string[] formats = GetFormats(autoConvert);
-
-            for (int i = 0; i < formats.Length; i++)
+            if (format.Equals(formats[i]))
             {
-                if (format.Equals(formats[i]))
-                {
-                    return true;
-                }
+                return true;
             }
-
-            return false;
         }
+
+        return false;
     }
 
     public bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);

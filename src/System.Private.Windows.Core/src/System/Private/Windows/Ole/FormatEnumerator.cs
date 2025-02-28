@@ -43,7 +43,9 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 ptd = 0,
                 lindex = -1,
-                tymed = format.Equals(DataFormatNames.Bitmap) ? ComTypes.TYMED.TYMED_GDI : ComTypes.TYMED.TYMED_HGLOBAL
+                tymed = format == DataFormatNames.Bitmap
+                    ? ComTypes.TYMED.TYMED_GDI
+                    : format == DataFormatNames.Emf ? ComTypes.TYMED.TYMED_ENHMF : ComTypes.TYMED.TYMED_HGLOBAL
             };
 
             _formats.Add(temp);

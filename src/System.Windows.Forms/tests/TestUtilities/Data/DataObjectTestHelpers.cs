@@ -42,7 +42,6 @@ public static class DataObjectTestHelpers
         DataFormats.Tiff,
         DataFormats.WaveAudio,
         DataFormats.SymbolicLink,
-        DataFormats.EnhancedMetafile,
         DataFormats.MetafilePict,
         DataFormats.Palette
     ];
