@@ -42,7 +42,7 @@ public unsafe class ClipboardCoreTests
         static HRESULT IOleServices.OleFlushClipboard() => throw new NotImplementedException();
         static unsafe HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject) => throw new NotImplementedException();
         static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => throw new NotImplementedException();
-        static unsafe bool IOleServices.TryGetBitmapFromDataObject<T>(IDataObject* dataObject, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
+        static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
         static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) => throw new NotImplementedException();
     }
 

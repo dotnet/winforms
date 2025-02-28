@@ -258,9 +258,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             try
             {
-                // Try to get the data as a bitmap first.
-                if (request.Format == DataFormatNames.Bitmap
-                    && TOleServices.TryGetBitmapFromDataObject(dataObject, out data))
+                // Try to get platform specific data first.
+                if (TOleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
                 {
                     return true;
                 }

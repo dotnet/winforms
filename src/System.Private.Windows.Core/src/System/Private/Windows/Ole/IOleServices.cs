@@ -20,12 +20,18 @@ internal unsafe interface IOleServices
     static abstract HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
 
     /// <summary>
-    ///  If the <typeparamref name="T"/> is a bitmap this method will attempt to extract it
+    ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
     ///  from the <paramref name="dataObject"/>.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is intended for platform specific logic, notably for bitmaps and metafiles.
+    ///  </para>
+    /// </remarks>
     /// <returns><see langword="true"/> if a bitmap was extracted.</returns>
-    static abstract bool TryGetBitmapFromDataObject<T>(
+    static abstract bool TryGetObjectFromDataObject<T>(
         IDataObject* dataObject,
+        string requestedFormat,
         [NotNullWhen(true)] out T data);
 
     /// <summary>
