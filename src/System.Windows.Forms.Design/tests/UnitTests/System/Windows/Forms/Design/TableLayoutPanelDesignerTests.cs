@@ -220,7 +220,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         using Button button1 = new();
         using Button button2 = new();
 
-        Control[] controls = new[] { button1, button2 };
+        Control[] controls = [button1, button2];
 
         _collection.AddRange(controls);
 
