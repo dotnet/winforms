@@ -688,7 +688,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewColumnCollectionTransaction">
         <source>DataGridView ColumnCollection Edit</source>
-        <target state="new">DataGridView ColumnCollection Edit</target>
+        <target state="translated">Editar DataGridView ColumnCollection</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
