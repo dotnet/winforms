@@ -2,8 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -68,7 +66,7 @@ Namespace Microsoft.VisualBasic.Devices
             showUI As Boolean) As ProgressDialog
 
             If InteractiveEnvironment(showUI) Then
-                'Construct the local file. This will validate the full name and path
+                ' Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                     path:=destinationFileName,
                     paramName:=NameOf(destinationFileName))
@@ -95,7 +93,7 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 Return New Uri(address)
             Catch ex As UriFormatException
-                'Throw an exception with an error message more appropriate to our API
+                ' Throw an exception with an error message more appropriate to our API
                 Throw GetArgumentExceptionWithArgName(
                     argumentName:=NameOf(address),
                     resourceKey:=SR.Network_InvalidUriString,
