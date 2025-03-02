@@ -2,8 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils

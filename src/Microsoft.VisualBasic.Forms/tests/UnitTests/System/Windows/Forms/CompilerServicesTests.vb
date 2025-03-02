@@ -2,8 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Option Strict Off
-
-Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Xunit
 
