@@ -32,7 +32,23 @@ set to `DesignerSerializationVisibility.Content` or `DesignerSerializationVisibi
 
 |Item|Value|
 |-|-|
-| Category | ApplicationConfiguration |
+| Category | WinForms Security |
+| Enabled | True |
+| Severity | Warning |
+| CodeFix | False |
+---
+
+## `ImplementITypedDataObject`
+
+`ImplementITypedDataObject` checks custom implementations of the managed `IDataObject` interface and suggests to also implement the `ITypedDataObject` interface.
+
+### [WFO1001](https://aka.ms/winforms-warnings/WFO1001): `IDataObject` type does not implement `ITypedDataObject`.
+
+Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.
+
+|Item|Value|
+|-|-|
+| Category | WinForms Security |
 | Enabled | True |
 | Severity | Warning |
 | CodeFix | False |

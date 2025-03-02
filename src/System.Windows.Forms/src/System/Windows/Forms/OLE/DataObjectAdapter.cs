@@ -15,8 +15,6 @@ internal sealed class DataObjectAdapter : IDataObjectInternal
 
     public DataObjectAdapter(IDataObject dataObject) => DataObject = dataObject;
 
-    public static IDataObjectInternal Create(IDataObject dataObject) => new DataObjectAdapter(dataObject);
-
     public object? GetData(string format, bool autoConvert) => DataObject.GetData(format, autoConvert);
     public object? GetData(string format) => DataObject.GetData(format);
     public object? GetData(Type format) => DataObject.GetData(format);
@@ -40,7 +38,7 @@ internal sealed class DataObjectAdapter : IDataObjectInternal
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) => DataObject.TryGetData(format, autoConvert, out data);
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         bool autoConvert,
         [MaybeNullWhen(false), NotNullWhen(true)] out T data) => DataObject.TryGetData(format, resolver, autoConvert, out data);
 }

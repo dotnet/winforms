@@ -527,8 +527,6 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         VisualStyleElement splitButtonDropDownPart = rightToLeft ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
         VisualStyleElement splitButtonPart = rightToLeft ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
 
-        Rectangle bounds = new(Point.Empty, splitButton.Size);
-
         if (ToolStripManager.VisualStylesEnabled
             && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)
             && VisualStyleRenderer.IsElementDefined(splitButtonPart))
@@ -582,7 +580,6 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                 (state == ToolBarState.Hot || state == ToolBarState.Pressed || state == ToolBarState.Checked))
             {
                 var clientBounds = item.ClientBounds;
-                bounds.Height -= 1;
                 ControlPaint.DrawBorderSimple(g, clientBounds, SystemColors.Highlight);
                 using var brush = SystemColors.Highlight.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, item.SplitterBounds);
@@ -595,6 +592,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
             if (splitButton.BackgroundImage is not null)
             {
+                Rectangle bounds = new(Point.Empty, splitButton.Size);
+
                 // fill in the background image
                 Rectangle fillRect = splitButton.Selected ? splitButton.ContentRectangle : bounds;
                 if (splitButton.BackgroundImage is not null)

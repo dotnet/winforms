@@ -5,7 +5,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Reflection.Metadata;
-using Utilities = System.Private.Windows.Ole.BinaryFormatUtilities<System.Private.Windows.Nrbf.CoreNrbfSerializer>;
+using BinaryFormatUtilities = System.Private.Windows.Ole.BinaryFormatUtilities<System.Private.Windows.Nrbf.CoreNrbfSerializer>;
 
 namespace System.Private.Windows.Ole.Tests;
 
@@ -13,7 +13,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 {
     protected override void WriteObjectToStream(MemoryStream stream, object data, string format)
     {
-        Utilities.WriteObjectToStream(stream, data, format);
+        BinaryFormatUtilities.WriteObjectToStream(stream, data, format);
     }
 
     protected override bool TryReadObjectFromStream<T>(
@@ -23,8 +23,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         Func<TypeName, Type>? resolver,
         [NotNullWhen(true)] out T? @object) where T : default
     {
-        DataRequest request = new(format) { Resolver = resolver, UntypedRequest = untypedRequest };
-        return Utilities.TryReadObjectFromStream(stream, in request, out @object);
+        DataRequest request = new(format) { Resolver = resolver, TypedRequest = !untypedRequest };
+        return BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out @object);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -172,9 +172,9 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     [Theory]
     [MemberData(nameof(PrimitiveObjects_TheoryData))]
     [MemberData(nameof(KnownObjects_TheoryData))]
-    public void RoundTrip_RestrictedFormat_Simple(object value)
+    public void RoundTrip_PredefinedFormat_Simple(object value)
     {
-        RoundTripObject_RestrictedFormat(value, out object? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().Be(value);
     }
 
@@ -182,15 +182,15 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     [MemberData(nameof(NotSupportedException_TestData))]
     public void RoundTrip_NotSupportedException(NotSupportedException value)
     {
-        RoundTripObject(value, out NotSupportedException? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
     [Theory]
     [MemberData(nameof(NotSupportedException_TestData))]
-    public void RoundTrip_RestrictedFormat_NotSupportedException(NotSupportedException value)
+    public void RoundTrip_PredefinedFormat_NotSupportedException(NotSupportedException value)
     {
-        RoundTripObject_RestrictedFormat(value, out NotSupportedException? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
@@ -198,15 +198,15 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     public void RoundTrip_NotSupportedException_DataLoss()
     {
         NotSupportedException value = new("Error message", new ArgumentException());
-        RoundTripObject(value, out NotSupportedException? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
     }
 
     [Fact]
-    public void RoundTrip_RestrictedFormat_NotSupportedException_DataLoss()
+    public void RoundTrip_PredefinedFormat_NotSupportedException_DataLoss()
     {
         NotSupportedException value = new("Error message", new ArgumentException());
-        RoundTripObject_RestrictedFormat(value, out NotSupportedException? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
     }
 
@@ -214,39 +214,116 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     [MemberData(nameof(PrimitiveListObjects_TheoryData))]
     public void RoundTrip_PrimitiveList(IList value)
     {
-        RoundTripObject(value, out IList? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
     [Theory]
     [MemberData(nameof(PrimitiveListObjects_TheoryData))]
-    public void RoundTrip_RestrictedFormat_PrimitiveList(IList value)
+    public void RoundTrip_PredefinedFormat_PrimitiveList(IList value)
     {
-        RoundTripObject_RestrictedFormat(value, out IList? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayObjects_TheoryData))]
-    public void RoundTrip_PrimitiveArray(Array value)
+    public void TryReadObjectFromStream_Primitives_BaseResolver(Array value)
     {
-        RoundTripObject(value, out Array? result).Should().BeTrue();
+        using MemoryStream stream = new();
+        BinaryFormatUtilities.WriteObjectToStream(stream, value, "test");
+        stream.Position = 0;
+
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => Type.GetType(typeName.FullName)
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out Array? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
+    }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_IntArray_TypedToBaseFails(DataType dataType)
+    {
+        int[] array = [];
+        using MemoryStream stream = CreateStream(dataType, array);
+
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out Array? _);
+        action.Should().Throw<NotSupportedException>();
+
+        action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out IEnumerable? _);
+        action.Should().Throw<NotSupportedException>();
+
+        action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out object? result3);
+        action.Should().Throw<NotSupportedException>();
+    }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_IntArray_UntypedSucceeds(DataType dataType)
+    {
+        int[] array = [];
+        using MemoryStream stream = CreateStream(dataType, array);
+
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = false
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out object? result).Should().BeTrue();
+        result.Should().BeEquivalentTo(array);
+    }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_IntArray_TypedToBaseSucceeds(DataType dataType)
+    {
+        int[] array = [];
+        using MemoryStream stream = CreateStream(dataType, array);
+
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeof(int[]).Matches(typeName, TypeNameComparison.TypeFullName)
+                ? typeof(int[])
+                : throw new NotSupportedException()
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out Array? result).Should().BeTrue();
+        result.Should().BeEquivalentTo(array);
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out IEnumerable? result2).Should().BeTrue();
+        result2.Should().BeEquivalentTo(array);
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out object? result3).Should().BeTrue();
+        result3.Should().BeEquivalentTo(array);
     }
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayListObjects_TheoryData))]
     public void RoundTrip_PrimitiveArrayList(ArrayList value)
     {
-        RoundTripObject(value, out ArrayList? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayListObjects_TheoryData))]
-    public void RoundTrip_RestrictedFormat_PrimitiveArrayList(ArrayList value)
+    public void RoundTrip_PredefinedFormat_PrimitiveArrayList(ArrayList value)
     {
-        RoundTripObject_RestrictedFormat(value, out ArrayList? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
@@ -254,15 +331,15 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
     public void RoundTrip_PrimitiveHashtable(Hashtable value)
     {
-        RoundTripObject(value, out Hashtable? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
     [Theory]
     [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
-    public void RoundTrip_RestrictedFormat_PrimitiveHashtable(Hashtable value)
+    public void RoundTrip_PredefinedFormat_PrimitiveHashtable(Hashtable value)
     {
-        RoundTripObject_RestrictedFormat(value, out Hashtable? result).Should().BeTrue();
+        RoundTripObject_PredefinedFormat(value, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
     }
 
@@ -271,7 +348,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     public void RoundTrip_Unsupported(IList value)
     {
         Action writer = () => WriteObjectToStream(value);
-        Action reader = () => TryReadObjectFromStream(out IList? _);
+        Action reader = () => TryReadObjectFromStream(out object? _);
 
         writer.Should().Throw<NotSupportedException>();
 
@@ -283,7 +360,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
                 using BinaryFormatterInClipboardDragDropScope clipboardDragDropScope = new(enable: true);
                 WriteObjectToStream(value);
-                TryReadObjectFromStream(out IList? result).Should().BeTrue();
+                TryReadObjectFromStream(out object? result).Should().BeTrue();
                 result.Should().BeEquivalentTo(value);
             }
 
@@ -296,7 +373,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
-    public void RoundTrip_RestrictedFormat_Unsupported(IList value)
+    public void RoundTrip_PredefinedFormat_Unsupported(IList value)
     {
         Action writer = () => WriteObjectToStream(value, restrictSerialization: true);
         writer.Should().Throw<NotSupportedException>();
@@ -318,7 +395,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
         // Can read offset array with the BinaryFormatter.
         using ClipboardBinaryFormatterFullCompatScope scope = new();
-        RoundTripObject(value, out uint[,]? result).Should().BeTrue();
+        RoundTripObject(value, out object? result).Should().BeTrue();
         result.Should().NotBeNull();
         Assert.Equal(value, result);
     }
@@ -371,31 +448,209 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         }
     }
 
-    [Fact]
-    public void RoundTripOfType_intNullable()
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_TypeDoesNotMatch(DataType dataType)
     {
-        RoundTripOfType(101, NotSupportedResolver, out int? result).Should().BeTrue();
+        List<int> value = [1, 2, 3];
+        using MemoryStream stream = CreateStream(dataType, value);
+
+        // Typed with no resolver
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out BaseClass? _);
+        action.Should().Throw<NotSupportedException>();
+    }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_Class_DerivedAsBase(DataType dataType)
+    {
+        using BinaryFormatterScope scope = new(enable: dataType == DataType.BinaryFormat);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: dataType == DataType.BinaryFormat);
+
+        using MemoryStream stream = CreateStream(dataType, new DerivedClass());
+
+        // Typed with no resolver
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out BaseClass? result);
+        action.Should().Throw<NotSupportedException>();
+
+        // Typed with resolver
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeName.FullName == typeof(DerivedClass).FullName
+                ? typeof(DerivedClass)
+                : throw new NotSupportedException()
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out BaseClass? result).Should().BeTrue();
+        result.Should().NotBeNull();
+    }
+
+    [Serializable]
+    public class BaseClass { }
+
+    [Serializable]
+    public class DerivedClass : BaseClass { }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_Struct_AsNullable(DataType dataType)
+    {
+        using BinaryFormatterScope scope = new(enable: dataType == DataType.BinaryFormat);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: dataType == DataType.BinaryFormat);
+
+        using MemoryStream stream = CreateStream(dataType, default(MyStruct));
+
+        // Typed with no resolver
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out MyStruct? result);
+        action.Should().Throw<NotSupportedException>();
+
+        // Typed with resolver
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeName.FullName == typeof(MyStruct).FullName
+                ? typeof(MyStruct?)
+                : throw new NotSupportedException()
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out MyStruct? result).Should().BeTrue();
+        result.Should().NotBeNull();
+    }
+
+    [Serializable]
+    public struct MyStruct { }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_Int_AsNullableInt(DataType dataType)
+    {
+        using MemoryStream stream = CreateStream(dataType, 101);
+
+        // No resolver does not succeed
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out int? result).Should().BeTrue();
+        action.Should().Throw<NotSupportedException>();
+
+        stream.Position.Should().Be(0);
+
+        // If we say no, we mean no.
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = NotSupportedResolver
+        };
+
+        // Auto rebinding from int to int? adds signficant logic complexity with little real value.
+        action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out int? result);
+        action.Should().Throw<NotSupportedException>();
+
+        stream.Position.Should().Be(0);
+
+        // Let's redirect.
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeName.FullName == typeof(int).FullName
+                ? typeof(int?)
+                : throw new NotSupportedException()
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out int? result).Should().BeTrue();
         result.Should().Be(101);
+
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = false
+        };
+    }
+
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_Int_AsFloat(DataType dataType)
+    {
+        using MemoryStream stream = CreateStream(dataType, 101);
+
+        // If we say no, we mean no.
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = NotSupportedResolver
+        };
+
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out float result);
+        action.Should().Throw<NotSupportedException>();
+
+        stream.Position.Should().Be(0);
+
+        // Let's redirect.
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) => typeName.FullName == typeof(int).FullName
+                ? typeof(float)
+                : throw new NotSupportedException()
+        };
+
+        action = () =>
+        {
+            BinaryFormatUtilities.TryReadObjectFromStream(stream, ref request, out float result).Should().BeTrue();
+            result.Should().Be(101);
+        };
+
+        if (dataType == DataType.BinaryFormat)
+        {
+            action.Should().Throw<InvalidCastException>();
+        }
+        else
+        {
+            // This is one of the side-effects of using JSON. The data is very basic. A 101 value can be converted to
+            // float without a problem.
+            action.Should().NotThrow();
+        }
     }
 
     [Fact]
-    public void RoundTripOfType_RestrictedFormat_intNullable()
-    {
-        RoundTripOfType_RestrictedFormat(101, out int? result).Should().BeTrue();
-        result.Should().Be(101);
-    }
-
-    [Fact]
-    public void RoundTripOfType_RestrictedFormat_intNullableArray_NotSupportedResolver()
+    public void RoundTripOfType_PredefinedFormat_intNullableArray_NotSupportedResolver()
     {
         int?[] value = [101, null, 303];
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => ReadRestrictedObjectFromStream<int?[]>(NotSupportedResolver, out _);
+        Action read = () => ReadPredefinedObjectFromStream<int?[]>(NotSupportedResolver, out _);
 
         // nullable struct requires a custom resolver.
-        // RestrictedTypeDeserializationException
+        // PredefinedTypeDeserializationException
         read.Should().Throw<Exception>();
     }
 
@@ -406,11 +661,9 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => TryReadObjectFromStream<int?[]>(NotSupportedResolver, out _);
 
-        // nullable struct requires a custom resolver.
-        // This is either NotSupportedException or RestrictedTypeDeserializationException, depending on format.
-        read.Should().Throw<Exception>();
+        Action action = () => TryReadObjectFromStream<int?[]>(NotSupportedResolver, out _);
+        action.Should().Throw<NotSupportedException>();
     }
 
     [Theory]
@@ -488,6 +741,9 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
             [
                 (typeof(TestData).FullName!, typeof(TestData)),
                 (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
+                (typeof(NotSupportedException).FullName!, typeof(NotSupportedException)),
+                (typeof(int?).FullName!, typeof(int?)),
+                (typeof(DateTime?).FullName!, typeof(DateTime?)),
                 ("System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(decimal?)),
                 ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>)),
                 ("System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]", typeof(List<TimeSpan>))
@@ -503,7 +759,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
                 }
             }
 
-            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+            // To get implicit binding for supported types, return null.
+            return null!;
         }
     }
 
@@ -530,8 +787,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
 
         using ClipboardBinaryFormatterFullCompatScope scope = new();
 
-        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result).Should().BeTrue();
-        result.Should().BeEquivalentTo(value);
+        Action action = () => RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result);
+        action.Should().Throw<NotSupportedException>();
     }
 
     [Fact]
@@ -542,41 +799,70 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result).Should().BeTrue();
-        result.Should().BeEquivalentTo(value);
+        Action action = () => RoundTripOfType<TestDataBase.InnerData>(value, resolver: null, out var result);
+        action.Should().Throw<NotSupportedException>();
     }
 
-    [Fact]
-    public void Sample_GetData_UseBinaryFormatter()
+    [Theory]
+    [EnumData<DataType>]
+    public void TryReadObjectFromStream_MyClass(DataType dataType)
     {
+        using BinaryFormatterScope scope = new(enable: dataType == DataType.BinaryFormat);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: dataType == DataType.BinaryFormat);
+
         MyClass1 value = new(value: 1);
+        using MemoryStream stream = CreateStream(dataType, value);
 
-        using ClipboardBinaryFormatterFullCompatScope scope = new();
-        WriteObjectToStream(value);
-
-        DataRequest request = new("test")
+        DataRequest request = new()
         {
-            UntypedRequest = true
+            Format = "test",
+            TypedRequest = false
         };
 
-        Stream.Position = 0;
-        Utilities.TryReadObjectFromStream<MyClass1>(Stream, in request, out var result).Should().BeTrue();
+        // Untyped requests must be object
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out object? result).Should().BeTrue();
         result.Should().BeEquivalentTo(value);
-    }
 
-    [Fact]
-    public void Sample_GetData_UseNrbfDeserialize()
-    {
-        MyClass1 value = new(value: 1);
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true
+        };
 
-        using BinaryFormatterScope scope = new(enable: true);
-        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
-        WriteObjectToStream(value);
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out MyClass1? result);
 
-        // This works because GetData falls back to the BinaryFormatter deserializer, NRBF deserializer fails because it requires a resolver.
-        Stream.Position = 0;
-        TryReadObjectFromStream(Stream, untypedRequest: true, "test", resolver: null, out MyClass1? result).Should().BeTrue();
-        result.Should().BeEquivalentTo(value);
+        if (dataType == DataType.BinaryFormat)
+        {
+            action.Should().Throw<NotSupportedException>();
+        }
+        else
+        {
+            action.Should().NotThrow();
+        }
+
+        request = new()
+        {
+            Format = "test",
+            TypedRequest = true,
+            Resolver = (TypeName typeName) =>
+            {
+                if (typeof(MyClass1).Matches(typeName))
+                {
+                    return typeof(MyClass1);
+                }
+
+                if (typeof(MyClass2).Matches(typeName))
+                {
+                    return typeof(MyClass2);
+                }
+
+                // Let implicit handling work for other types.
+                return null;
+            }
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out MyClass1? result2).Should().BeTrue();
+        result2.Should().BeEquivalentTo(value);
     }
 
     [Theory]
@@ -588,8 +874,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         using ClipboardBinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
-        // RestrictedTypeDeserializationException will be swallowed up the call stack, when reading HGLOBAL.
-        // Fails to resolve MyClass2 or both MyClass1 and MyClass2 in the case of restricted formats.
+        // PredefinedTypeDeserializationException will be swallowed up the call stack, when reading HGLOBAL.
+        // Fails to resolve MyClass2 or both MyClass1 and MyClass2 in the case of Predefined formats.
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization, resolver: null, out _);
         read.Should().Throw<Exception>();
     }
@@ -621,7 +907,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     }
 
     [Fact]
-    public void Sample_TryGetData_RestrictedFormat_UseBinaryFormatter()
+    public void Sample_TryGetData_PredefinedFormat_UseBinaryFormatter()
     {
         MyClass1 value = new(value: 1);
 
@@ -633,7 +919,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
     }
 
     [Fact]
-    public void Sample_TryGetData_RestrictedFormat_UseNrbfDeserializer()
+    public void Sample_TryGetData_PredefinedFormat_UseNrbfDeserializer()
     {
         MyClass1 value = new(value: 1);
 
@@ -840,7 +1126,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
                 }
             }
 
-            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+            // Allow implicit binding for supported types by returning null.
+            return null!;
         }
     }
 

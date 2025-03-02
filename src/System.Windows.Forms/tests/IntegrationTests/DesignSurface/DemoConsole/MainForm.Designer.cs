@@ -1,6 +1,4 @@
-﻿using DesignSurfaceExt;
-
-namespace TestConsole;
+﻿namespace TestConsole;
 
 partial class MainForm
 {

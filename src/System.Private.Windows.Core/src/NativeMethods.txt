@@ -9,6 +9,7 @@ CFSTR_FILENAMEA
 CFSTR_INDRAGLOOP
 CLIPBOARD_FORMAT
 CLIPBRD_E_BAD_DATA
+CloseEnhMetaFile
 CLR_*
 CoCreateInstance
 CombineRgn
@@ -19,6 +20,7 @@ CreateCompatibleBitmap
 CreateCompatibleDC
 CreateDC
 CreateDIBSection
+CreateEnhMetaFileW
 CreateFontIndirect
 CreateICW
 CreatePen
@@ -27,6 +29,7 @@ CreateSolidBrush
 DATA_S_SAMEFORMATETC
 DefWindowProc
 DeleteDC
+DeleteEnhMetaFile
 DeleteObject
 DestroyIcon
 DEVMODEW
@@ -80,6 +83,7 @@ EM_*
 EndPaint
 EnumChildWindows
 EnumDisplayMonitors
+EnumEnhMetaFile
 EnumThreadWindows
 EnumWindows
 FACILITY_CODE
@@ -95,6 +99,7 @@ GetDC
 GetDCEx
 GetDesktopWindow
 GetDeviceCaps
+GetEnhMetaFileBits
 GetForegroundWindow
 GetGuiResources
 GetIconInfo
@@ -203,6 +208,7 @@ PropVariantClear
 PWSTR
 RealizePalette
 RECT
+Rectangle
 REGDB_E_CLASSNOTREG
 RegisterClipboardFormat
 RegisterDragDrop

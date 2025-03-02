@@ -14,7 +14,7 @@ public class OpenFileDialogTests : ControlTestBase
 
     // Regression test for https://github.com/dotnet/winforms/issues/8108
     [WinFormsFact]
-    public void OpenFileDialogTests_OpenWithNonExistingInitDirectory_Success()
+    public void OpenWithNonExistingInitDirectory_Success()
     {
         using DialogHostForm dialogOwnerForm = new();
         using OpenFileDialog dialog = new();
@@ -23,7 +23,7 @@ public class OpenFileDialogTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public void OpenFileDialogTests_OpenWithExistingInitDirectory_Success()
+    public void OpenWithExistingInitDirectory_Success()
     {
         using DialogHostForm dialogOwnerForm = new();
         using OpenFileDialog dialog = new();
@@ -33,7 +33,7 @@ public class OpenFileDialogTests : ControlTestBase
 
     // Regression test for https://github.com/dotnet/winforms/issues/8414
     [WinFormsFact]
-    public void OpenFileDialogTests_ResultWithMultiselect()
+    public void ShowDialog_ResultWithMultiselect()
     {
         using var tempFile = TempFile.Create(0);
         using AcceptDialogForm dialogOwnerForm = new();
@@ -43,6 +43,36 @@ public class OpenFileDialogTests : ControlTestBase
         dialog.FileName = tempFile.Path;
         Assert.Equal(DialogResult.OK, dialog.ShowDialog(dialogOwnerForm));
         Assert.Equal(tempFile.Path, dialog.FileName);
+    }
+
+    // Regression test for https://github.com/dotnet/winforms/issues/12847
+    [WinFormsFact]
+    public void ShowDialog_Twice()
+    {
+        using OpenFileDialog dialog = new();
+        using var tempFile = TempFile.Create(0);
+        dialog.Multiselect = true;
+        dialog.InitialDirectory = Path.GetDirectoryName(tempFile.Path);
+        dialog.FileName = tempFile.Path;
+
+        using RaceConditionDialogForm dialogOwnerForm = new(dialog);
+        Assert.Equal(DialogResult.OK, dialog.ShowDialog(dialogOwnerForm));
+    }
+
+    private class RaceConditionDialogForm : AcceptDialogForm
+    {
+        private readonly OpenFileDialog _dialog;
+
+        public RaceConditionDialogForm(OpenFileDialog dialog)
+        {
+            _dialog = dialog;
+        }
+
+        protected override void OnDialogIdle(HWND dialogHandle)
+        {
+            Assert.Equal(DialogResult.Cancel, _dialog.ShowDialog(this));
+            base.OnDialogIdle(dialogHandle);
+        }
     }
 
     private class AcceptDialogForm : DialogHostForm

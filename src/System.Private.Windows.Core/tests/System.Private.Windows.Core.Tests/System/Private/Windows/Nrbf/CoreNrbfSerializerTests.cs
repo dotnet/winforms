@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Formats.Nrbf;
-using System.Reflection;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -93,8 +92,6 @@ public class CoreNrbfSerializerTests
     [MemberData(nameof(IsSupportedTypeData))]
     public void IsSupportedType_ShouldReturnExpectedResult(Type type, bool expectedResult)
     {
-        MethodInfo method = typeof(CoreNrbfSerializer).GetMethod("IsSupportedType")!.MakeGenericMethod(type);
-        bool result = (bool)method.Invoke(null, null)!;
-        result.Should().Be(expectedResult);
+        CoreNrbfSerializer.IsFullySupportedType(type).Should().Be(expectedResult);
     }
 }

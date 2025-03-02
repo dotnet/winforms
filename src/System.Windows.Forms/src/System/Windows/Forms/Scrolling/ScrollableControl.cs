@@ -286,13 +286,7 @@ public partial class ScrollableControl : Control, IArrangedElement
             needLayout = SetVisibleScrollbars(false, false);
         }
 
-        if (!displayScrollbars)
-        {
-            Rectangle client = ClientRectangle;
-            display.Width = client.Width;
-            display.Height = client.Height;
-        }
-        else
+        if (displayScrollbars)
         {
             needLayout |= ApplyScrollbarChanges(display);
         }

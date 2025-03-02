@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="it" original="../ToolStripItemEditorForm.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Items Collection Editor</source>
+        <target state="translated">Editor della raccolta Items</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddNew.Text">
+        <source>&amp;Add</source>
+        <target state="translated">&amp;Aggiungi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="translated">Annulla</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleDescription">
+        <source>Move the selected item down in the list</source>
+        <target state="translated">Sposta l'elemento selezionato verso il basso nell'elenco</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleName">
+        <source>Move Down</source>
+        <target state="translated">Sposta giù</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleDescription">
+        <source>Move the selected item up in the list</source>
+        <target state="translated">Sposta l'elemento selezionato verso l'alto nell'elenco</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleName">
+        <source>Move Up</source>
+        <target state="translated">Sposta su</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnOK.Text">
+        <source>OK</source>
+        <target state="translated">OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleDescription">
+        <source>Remove the selected item from the list</source>
+        <target state="translated">Rimuove dall'elenco l'elemento selezionato</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleName">
+        <source>Remove</source>
+        <target state="translated">Rimuovi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblItems.Text">
+        <source>&amp;Select item and add to list below:</source>
+        <target state="translated">&amp;Selezionare un elemento e aggiungerlo all'elenco sottostante:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMembers.Text">
+        <source>&amp;Members:</source>
+        <target state="translated">&amp;Membri:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedItemName.Text">
+        <source>toolStrip1</source>
+        <target state="translated">toolStrip1</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

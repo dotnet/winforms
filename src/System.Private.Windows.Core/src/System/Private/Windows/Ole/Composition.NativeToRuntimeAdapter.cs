@@ -8,12 +8,12 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition<TRuntime, TDataFormat>
+internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to the .NET Runtime <see cref="IDataObject"/>.
     /// </summary>
-    private class NativeToRuntimeAdapter : IDataObject
+    private sealed class NativeToRuntimeAdapter : IDataObject
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 

@@ -1,14 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
-using System.Windows.Forms;
-using System.ComponentModel.Design;
-
-using DesignSurfaceExt;
-using Timer = System.Windows.Forms.Timer;
-using System.ComponentModel;
-
 namespace TestConsole;
 
 public partial class MainForm : Form
@@ -293,24 +285,36 @@ public partial class MainForm : Form
                         rootComponent.BackColor = Color.Pink;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.6";
 
-                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 0));
+                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 60));
                         toolStripContainer.Dock = DockStyle.Fill;
 
-                        MenuStrip menuStrip1 = new();
-                        MenuStrip menuStrip2 = new();
+                        ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
+                        ToolStripButton toolStripButton1 = surface.CreateComponent<ToolStripButton>();
+                        ToolStripDropDownButton toolStripDropDownButton1 = surface.CreateComponent<ToolStripDropDownButton>();
+                        ToolStripTextBox toolStripTextBox = surface.CreateComponent<ToolStripTextBox>();
+                        toolStrip1.Items.Add(toolStripButton1);
+                        toolStrip1.Items.Add(toolStripDropDownButton1);
+                        toolStrip1.Items.Add(toolStripTextBox);
 
-                        ToolStripMenuItem toolStripMenuItem1 = new("TopMenuItem1");
-                        ToolStripMenuItem toolStripMenuItem2 = new("TopMenuItem2");
-                        ToolStripMenuItem menu1 = new("BottomMenuItem1");
-                        ToolStripMenuItem menuNew1 = new("BottomMenuItem2");
+                        MenuStrip menuStrip1 = surface.CreateControl<MenuStrip>(new Size(400, 50), new Point(0, 60));
+                        MenuStrip menuStrip2 = surface.CreateControl<MenuStrip>(new Size(400, 50), new Point(0, 150));
 
-                        menuStrip1.Items.Add(toolStripMenuItem1);
-                        menuStrip1.Items.Add(toolStripMenuItem2);
-                        menuStrip2.Items.Add(menu1);
-                        menuStrip2.Items.Add(menuNew1);
+                        ToolStripMenuItem topMenuItem1 = surface.CreateComponent<ToolStripMenuItem>();
+                        topMenuItem1.Text = "TopMenuItem1";
+                        ToolStripMenuItem topMenuItem2 = surface.CreateComponent<ToolStripMenuItem>();
+                        topMenuItem2.Text = "TopMenuItem2";
+                        ToolStripMenuItem bottomMenuItem1 = surface.CreateComponent<ToolStripMenuItem>();
+                        bottomMenuItem1.Text = "BottomMenuItem1";
+                        ToolStripMenuItem bottomMenuItem2 = surface.CreateComponent<ToolStripMenuItem>();
+                        bottomMenuItem2.Text = "BottomMenuItem2";
 
-                        toolStripMenuItem1.DropDownItems.Add("DropDownItem1");
-                        toolStripMenuItem2.DropDownItems.Add("DropDownItem12");
+                        menuStrip1.Items.Add(topMenuItem1);
+                        menuStrip1.Items.Add(topMenuItem2);
+                        menuStrip2.Items.Add(bottomMenuItem1);
+                        menuStrip2.Items.Add(bottomMenuItem2);
+
+                        topMenuItem1.DropDownItems.Add("DropDownItem1");
+                        topMenuItem2.DropDownItems.Add("DropDownItem12");
 
                         ToolStripPanel topToolStripPanel = surface.CreateControl<ToolStripPanel>(new(50, 50), new(0, 0));
                         topToolStripPanel = toolStripContainer.TopToolStripPanel;

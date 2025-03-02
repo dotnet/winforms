@@ -2,12 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
 
 namespace System.Private.Windows.Ole.Tests;
 
 public abstract class BinaryFormatUtilitesTestsBase : IDisposable
 {
+    public enum DataType
+    {
+        Json,
+        BinaryFormat
+    }
+
+    public MemoryStream CreateStream<T>(DataType dataType, T data) where T : notnull
+    {
+        MemoryStream stream = new();
+        if (dataType == DataType.Json)
+        {
+            BinaryFormatWriter.TryWriteJsonData(stream, IJsonData.Create(data));
+        }
+        else
+        {
+            WriteObjectToStream(stream, data, "test");
+        }
+
+        stream.Position = 0;
+        return stream;
+    }
+
     protected MemoryStream Stream { get; }
 
     public BinaryFormatUtilitesTestsBase() => Stream = new();
@@ -32,7 +55,7 @@ public abstract class BinaryFormatUtilitesTestsBase : IDisposable
         return TryReadObjectFromStream(Stream, untypedRequest: true, "test", resolver: null, out @object);
     }
 
-    protected bool TryReadRestrictedObjectFromStream<T>(out T? @object)
+    protected bool TryReadPredefinedObjectFromStream<T>(out T? @object)
     {
         Stream.Position = 0;
         return TryReadObjectFromStream(Stream, untypedRequest: true, DataFormatNames.String, resolver: null, out @object);
@@ -56,7 +79,7 @@ public abstract class BinaryFormatUtilitesTestsBase : IDisposable
         return TryReadObjectFromStream(Stream, untypedRequest: false, "test", resolver, out @object);
     }
 
-    protected bool ReadRestrictedObjectFromStream<T>(Func<TypeName, Type>? resolver, out T? @object)
+    protected bool ReadPredefinedObjectFromStream<T>(Func<TypeName, Type>? resolver, out T? @object)
     {
         return TryReadObjectFromStream(Stream, untypedRequest: false, DataFormatNames.String, resolver, out @object);
     }
@@ -69,11 +92,11 @@ public abstract class BinaryFormatUtilitesTestsBase : IDisposable
         return TryReadObjectFromStream(out @object);
     }
 
-    protected bool RoundTripObject_RestrictedFormat<T>(object value, out T? @object)
+    protected bool RoundTripObject_PredefinedFormat<T>(object value, out T? @object)
     {
         // This is equivalent to SetData/GetData methods using registered OLE formats, resolves only the known types
         WriteObjectToStream(value, restrictSerialization: true);
-        return TryReadRestrictedObjectFromStream(out @object);
+        return TryReadPredefinedObjectFromStream(out @object);
     }
 
     protected bool RoundTripOfType<T>(object value, out T? @object)
@@ -84,19 +107,19 @@ public abstract class BinaryFormatUtilitesTestsBase : IDisposable
         return TryReadObjectFromStream(NotSupportedResolver, out @object);
     }
 
-    protected bool RoundTripOfType_RestrictedFormat<T>(object value, out T? @object)
+    protected bool RoundTripOfType_PredefinedFormat<T>(object value, out T? @object)
     {
-        // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is restricted
+        // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is Predefined
         // to known types.
         WriteObjectToStream(value, restrictSerialization: true);
         Stream.Position = 0;
-        return ReadRestrictedObjectFromStream(NotSupportedResolver, out @object);
+        return ReadPredefinedObjectFromStream(NotSupportedResolver, out @object);
     }
 
     protected bool RoundTripOfType<T>(object value, Func<TypeName, Type>? resolver, out T? @object)
     {
         // This is equivalent to SetData/TryGetData<T> methods using unbounded formats,
-        // serialization is restricted by the resolver and BinaryFormat AppContext switches.
+        // serialization is Predefined by the resolver and BinaryFormat AppContext switches.
         WriteObjectToStream(value);
         return TryReadObjectFromStream(resolver, out @object);
     }

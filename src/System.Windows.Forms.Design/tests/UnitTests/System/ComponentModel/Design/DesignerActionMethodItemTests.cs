@@ -209,6 +209,7 @@ public class DesignerActionMethodItemTests
     }
 
     [Theory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData("NoSuchMember")]
     [InlineData(nameof(SubDesignerActionList.StaticMethod))]
@@ -217,14 +218,6 @@ public class DesignerActionMethodItemTests
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, memberName, "displayName", "category", "description");
         Assert.Throws<InvalidOperationException>(item.Invoke);
-    }
-
-    [Fact]
-    public void Invoke_NullMemberName_ThrowsArgumentNullException()
-    {
-        SubDesignerActionList list = new();
-        DesignerActionMethodItem item = new(list, null, "displayName", "category", "description");
-        Assert.Throws<ArgumentNullException>("name", item.Invoke);
     }
 
     [Fact]

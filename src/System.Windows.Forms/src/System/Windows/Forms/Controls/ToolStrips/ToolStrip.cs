@@ -3285,7 +3285,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         base.OnLostFocus(e);
         ClearAllSelections();
-        ToolTip.Hide(this);
+        ToolTip.RemoveAll();
     }
 
     protected internal override void OnLeave(EventArgs e)
@@ -4578,6 +4578,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (m.MsgInternal == PInvokeCore.WM_SETFOCUS)
         {
             SnapFocus((HWND)(nint)m.WParamInternal);
+
+            // For fix https://github.com/dotnet/winforms/issues/12916
+            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
         }
 
         if (!AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE)

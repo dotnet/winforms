@@ -81,12 +81,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
     public void SetData(string format, bool autoConvert, object? data)
     {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            ArgumentNullException.ThrowIfNull(format);
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
-
+        ArgumentException.ThrowIfNullOrWhiteSpace(format, nameof(format));
         TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
         _mappedData[format] = new DataStoreEntry(data, autoConvert);
     }
@@ -99,12 +94,17 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         SetData(format.FullName.OrThrowIfNull(), data);
     }
 
+    /// <inheritdoc cref="IDataObjectInternal.SetData(object?)"/>
+    /// <remarks>
+    ///  <para>
+    ///   This is the only method that has special behavior for <see cref="ISerializable"/> objects.
+    ///  </para>
+    /// </remarks>
     public void SetData(object? data)
     {
         ArgumentNullException.ThrowIfNull(data);
 
-        if (data is ISerializable
-            && !_mappedData.ContainsKey(DataFormatNames.Serializable))
+        if (data is ISerializable && !_mappedData.ContainsKey(DataFormatNames.Serializable))
         {
             SetData(DataFormatNames.Serializable, data);
         }
@@ -125,20 +125,18 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         {
             return _mappedData.ContainsKey(format);
         }
-        else
+
+        string[] formats = GetFormats(autoConvert);
+
+        for (int i = 0; i < formats.Length; i++)
         {
-            string[] formats = GetFormats(autoConvert);
-
-            for (int i = 0; i < formats.Length; i++)
+            if (format.Equals(formats[i]))
             {
-                if (format.Equals(formats[i]))
-                {
-                    return true;
-                }
+                return true;
             }
-
-            return false;
         }
+
+        return false;
     }
 
     public bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
@@ -177,7 +175,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
             TryGetDataInternal(format, autoConvert, out data);

@@ -251,7 +251,7 @@ public class DataObjectExtensionsTests
             return false;
         }
 
-        public bool TryGetData<T>(string format, Func<TypeName, Type> resolver, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data)
+        public bool TryGetData<T>(string format, Func<TypeName, Type?> resolver, bool autoConvert, [MaybeNullWhen(false), NotNullWhen(true)] out T data)
         {
             _tryGetDataStringFuncBoolCalledCount++;
             data = default;

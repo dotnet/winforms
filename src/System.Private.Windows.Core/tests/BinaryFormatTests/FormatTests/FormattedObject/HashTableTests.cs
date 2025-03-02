@@ -68,7 +68,7 @@ public class HashtableTests : SerializationTest
             { "This", "That" }
         };
 
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(hashtable));
+        SerializationRecord rootRecord = hashtable.SerializeAndDecode();
         rootRecord.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeFalse();
         deserialized.Should().BeNull();
     }
@@ -126,7 +126,7 @@ public class HashtableTests : SerializationTest
     [MemberData(nameof(Hashtables_TestData))]
     public void BinaryFormattedObjectExtensions_TryGetPrimitiveHashtable(Hashtable hashtable)
     {
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(hashtable));
+        SerializationRecord rootRecord = hashtable.SerializeAndDecode();
         rootRecord.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
 
         deserialized!.Count.Should().Be(hashtable.Count);
