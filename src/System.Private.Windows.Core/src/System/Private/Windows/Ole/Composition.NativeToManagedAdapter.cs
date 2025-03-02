@@ -11,12 +11,12 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition<TRuntime, TDataFormat>
+internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
     /// </summary>
-    private unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
+    private sealed unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
@@ -105,7 +105,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             {
                 DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
                     ReadStringFromHGLOBAL(hglobal, unicode: false),
-                DataFormatNames.Html => ReadUtf8StringFromHGLOBAL(hglobal),
+                DataFormatNames.Html or DataFormatNames.Xaml => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                 DataFormatNames.FileNameAnsi => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
@@ -131,7 +131,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                     return stream;
                 }
 
-                BinaryFormatUtilities<TRuntime>.TryReadObjectFromStream(stream, in request, out T? data);
+                BinaryFormatUtilities<TNrbfSerializer>.TryReadObjectFromStream(stream, in request, out T? data);
                 return data;
             }
         }
@@ -147,7 +147,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             try
             {
                 int size = (int)PInvokeCore.GlobalSize(hglobal);
-                byte[] bytes = new byte[size];
+                byte[] bytes = GC.AllocateUninitializedArray<byte>(size);
                 Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
 
@@ -258,9 +258,8 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
 
             try
             {
-                // Try to get the data as a bitmap first.
-                if (request.Format == DataFormatNames.Bitmap
-                    && TRuntime.TryGetBitmapFromDataObject(dataObject, out data))
+                // Try to get platform specific data first.
+                if (TOleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
                 {
                     return true;
                 }
@@ -272,9 +271,11 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                     result = TryGetIStreamData(dataObject, in request, out data);
                 }
             }
-            catch (Exception e) when (request.UntypedRequest || e is not NotSupportedException)
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                Debug.Fail(e.ToString());
+                // NotSupported is the typical expected exception. We don't want to throw any exceptions outside
+                // of critical exceptions, to align with legacy behavior and the "Try" semantics of new APIs.
+                Debug.Assert(e is NotSupportedException, e.Message);
             }
 
             return result;
@@ -329,7 +330,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                 data = default;
                 doNotContinue = true;
             }
-            catch (Exception ex) when (request.UntypedRequest || ex is not NotSupportedException)
+            catch (Exception ex) when (!request.TypedRequest || ex is not NotSupportedException)
             {
                 Debug.WriteLine(ex.ToString());
             }
@@ -402,8 +403,8 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         private static void ThrowIfFormatAndTypeRequireResolver<T>(string format)
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
-            if (!DataFormatNames.IsRestrictedFormat(format)
-                && !TRuntime.AllowTypeWithoutResolver<T>()
+            if (!DataFormatNames.IsPredefinedFormat(format)
+                && !TOleServices.AllowTypeWithoutResolver<T>()
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
@@ -429,7 +430,7 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             [NotNullWhen(true)] out T? data)
         {
             data = default;
-            if (!request.UntypedRequest && request.Resolver is null)
+            if (request.TypedRequest && request.Resolver is null)
             {
                 // DataObject.GetData methods do not validate format string, but the typed methods do.
                 // This validation is specific to the our DataObject implementation, it's not executed for
@@ -467,11 +468,12 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
                     continue;
                 }
 
-                DataRequest mappedRequest = new(mappedFormat)
+                DataRequest mappedRequest = new()
                 {
+                    Format = mappedFormat,
                     AutoConvert = request.AutoConvert,
                     Resolver = request.Resolver,
-                    UntypedRequest = request.UntypedRequest
+                    TypedRequest = request.TypedRequest
                 };
 
                 result = TryGetObjectFromDataObject(
@@ -498,11 +500,12 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         #region IDataObject
         public object? GetData(string format, bool autoConvert)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
                 Resolver = null,
-                UntypedRequest = true
+                TypedRequest = false
             };
 
             TryGetDataInternal(in request, out object? data);
@@ -585,15 +588,16 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
         #region ITypedDataObject
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             string format,
-            Func<TypeName, Type> resolver,
+            Func<TypeName, Type?> resolver,
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
                 Resolver = resolver,
-                UntypedRequest = false
+                TypedRequest = true
             };
 
             return TryGetDataInternal(in request, out data);
@@ -604,9 +608,11 @@ internal unsafe partial class Composition<TRuntime, TDataFormat>
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
-            DataRequest request = new(format)
+            DataRequest request = new()
             {
+                Format = format,
                 AutoConvert = autoConvert,
+                TypedRequest = true,
             };
 
             return TryGetDataInternal(in request, out data);

@@ -38,9 +38,9 @@ set to `DesignerSerializationVisibility.Content` or `DesignerSerializationVisibi
 | CodeFix | False |
 ---
 
-## `ImplementITypedDataObjectInAdditionToIDataObject`
+## `ImplementITypedDataObject`
 
-`ImplementITypedDataObjectInAdditionToIDataObject` checks custom implementations of the managed `IDataObject` interface and suggests to also implement the `ITypedDataObject` interface.
+`ImplementITypedDataObject` checks custom implementations of the managed `IDataObject` interface and suggests to also implement the `ITypedDataObject` interface.
 
 ### [WFO1001](https://aka.ms/winforms-warnings/WFO1001): `IDataObject` type does not implement `ITypedDataObject`.
 

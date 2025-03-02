@@ -11,15 +11,11 @@ global using AppContextSwitches = System.Windows.Forms.Primitives.LocalAppContex
 global using ClipboardCore = System.Private.Windows.Ole.ClipboardCore<
     System.Windows.Forms.Ole.WinFormsOleServices>;
 global using Composition = System.Private.Windows.Ole.Composition<
-    System.Windows.Forms.WinFormsRuntime,
+    System.Windows.Forms.Ole.WinFormsOleServices,
+    System.Windows.Forms.Nrbf.WinFormsNrbfSerializer,
     System.Windows.Forms.DataFormats.Format>;
 global using DataFormatsCore = System.Private.Windows.Ole.DataFormatsCore<
     System.Windows.Forms.DataFormats.Format>;
-global using DataObjectCore = System.Private.Windows.Ole.DataObjectCore<
-    System.Windows.Forms.WinFormsRuntime,
-    System.Windows.Forms.DataFormats.Format,
-    System.Windows.Forms.DataObject,
-    System.Windows.Forms.IDataObject>;
 global using DragDropHelper = System.Private.Windows.Ole.DragDropHelper<
     System.Windows.Forms.Ole.WinFormsOleServices,
     System.Windows.Forms.DataFormats.Format>;

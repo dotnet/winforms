@@ -34,6 +34,7 @@ internal static partial class DataFormatNames
     internal const string FileNameAnsi = PInvokeCore.CFSTR_FILENAMEA;
     internal const string FileNameUnicode = PInvokeCore.CFSTR_FILENAME;
     internal const string BinaryFormatBitmap = "System.Drawing.Bitmap";
+    internal const string BinaryFormatMetafile = "System.Drawing.Imaging.Metafile";
 
     /// <summary>
     ///  A format used internally by the drag image manager.
@@ -109,48 +110,40 @@ internal static partial class DataFormatNames
             case BinaryFormatBitmap:
                 formats.Add(Bitmap);
                 break;
+            case Emf:
+                formats.Add(BinaryFormatMetafile);
+                break;
+            case BinaryFormatMetafile:
+                formats.Add(Emf);
+                break;
         }
     }
 
     /// <summary>
-    ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
+    ///  Check if the <paramref name="format"/> is one of the predefined formats, which formats that
     ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
     /// </summary>
-    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
-        || format is Text
-            or UnicodeText
-            or Rtf
-            or Html
-            or OemText
-            or FileDrop
-            or FileNameAnsi
-            or FileNameUnicode;
-
-    /// <summary>
-    ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
-    /// </summary>
-    /// <param name="format">format name</param>
-    /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
-    /// <remarks>
-    ///  <para>
-    ///   These formats are also restricted in WPF
-    ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
-    ///  </para>
-    /// </remarks>
-    internal static bool RestrictDeserializationToSafeTypes(string format) =>
-        format is String
-            or BinaryFormatBitmap
-            or Csv
-            or Dib
-            or Dif
-            or Locale
-            or PenData
-            or Riff
-            or SymbolicLink
-            or Tiff
-            or WaveAudio
-            or Bitmap
-            or Emf
-            or Palette
-            or Wmf;
+    internal static bool IsPredefinedFormat(string format) => format is Text
+        or UnicodeText
+        or Rtf
+        or Html
+        or OemText
+        or FileDrop
+        or FileNameAnsi
+        or FileNameUnicode
+        or String
+        or BinaryFormatBitmap
+        or Csv
+        or Dib
+        or Dif
+        or Locale
+        or PenData
+        or Riff
+        or SymbolicLink
+        or Tiff
+        or WaveAudio
+        or Bitmap
+        or Emf
+        or Palette
+        or Wmf;
 }

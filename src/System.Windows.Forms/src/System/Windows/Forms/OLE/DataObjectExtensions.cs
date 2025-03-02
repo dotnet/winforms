@@ -56,7 +56,7 @@ public static class DataObjectExtensions
     public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         this IDataObject dataObject,
         string format,
-        Func<Reflection.Metadata.TypeName, Type> resolver,
+        Func<Reflection.Metadata.TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
             GetTypedDataObjectOrThrow(dataObject).TryGetData(format, resolver, autoConvert, out data);

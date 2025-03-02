@@ -17,7 +17,7 @@ Friend Module VisualBasicDiagnosticDescriptors
             description:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerDescription), SR.ResourceManager, GetType(SR)))
 
     Public ReadOnly s_implementITypedDataObjectInAdditionToIDataObject As New DiagnosticDescriptor(
-            id:=DiagnosticIDs.ImplementITypedDataObjectInAdditionToIDataObject,
+            id:=DiagnosticIDs.ImplementITypedDataObject,
             title:=New LocalizableResourceString(NameOf(SR.WFO1001AnalyzerTitle), SR.ResourceManager, GetType(SR)),
             messageFormat:=New LocalizableResourceString(NameOf(SR.WFO1001AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
             category:=DiagnosticCategories.WinFormsSecurity,

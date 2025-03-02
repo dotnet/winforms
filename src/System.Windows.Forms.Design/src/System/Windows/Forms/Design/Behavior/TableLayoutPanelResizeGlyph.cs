@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -17,7 +15,12 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     /// <summary>
     ///  This constructor caches our necessary state and determine what 'type' it is.
     /// </summary>
-    internal TableLayoutPanelResizeGlyph(Rectangle controlBounds, TableLayoutStyle style, Cursor hitTestCursor, Behavior behavior) : base(behavior)
+    internal TableLayoutPanelResizeGlyph(
+        Rectangle controlBounds,
+        TableLayoutStyle style,
+        Cursor hitTestCursor,
+        Behavior behavior)
+        : base(behavior)
     {
         _bounds = controlBounds;
         _hitTestCursor = hitTestCursor;
@@ -45,7 +48,7 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     /// <summary>
     ///  Simply returns the proper cursor if the mouse pointer is within our cached bounds.
     /// </summary>
-    public override Cursor GetHitTest(Point p)
+    public override Cursor? GetHitTest(Point p)
     {
         if (_bounds.Contains(p))
         {

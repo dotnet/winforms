@@ -8,10 +8,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.Windows.Forms.CSharp.Analyzers.ImplementITypedDataObjectInAdditionToIDataObject;
+namespace System.Windows.Forms.CSharp.Analyzers.ImplementITypedDataObject;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public sealed class ImplementITypedDataObjectInAdditionToIDataObjectAnalyzer : DiagnosticAnalyzer
+public sealed class ImplementITypedDataObjectAnalyzer : DiagnosticAnalyzer
 {
     private const string Namespace = "System.Windows.Forms";
 

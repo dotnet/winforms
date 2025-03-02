@@ -6,12 +6,12 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal unsafe partial class Composition<TRuntime, TDataFormat>
+internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
     ///  Maps the runtime <see cref="IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
     /// </summary>
-    private class RuntimeToNativeAdapter : Com.IDataObject.Interface, IDataObject, Com.IManagedWrapper<Com.IDataObject>
+    private sealed class RuntimeToNativeAdapter : Com.IDataObject.Interface, IDataObject, Com.IManagedWrapper<Com.IDataObject>
     {
         private readonly IDataObject _runtimeDataObject;
 

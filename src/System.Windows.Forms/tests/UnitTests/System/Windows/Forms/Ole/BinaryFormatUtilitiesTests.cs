@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Private.Windows.Ole;
 using System.Private.Windows.Ole.Tests;
 using System.Reflection.Metadata;
-using Utilities = System.Private.Windows.Ole.BinaryFormatUtilities<System.Windows.Forms.Nrbf.WinFormsNrbfSerializer>;
+using BinaryFormatUtilities = System.Private.Windows.Ole.BinaryFormatUtilities<System.Windows.Forms.Nrbf.WinFormsNrbfSerializer>;
 
 namespace System.Windows.Forms.Ole;
 
@@ -21,13 +21,13 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
         Func<TypeName, Type>? resolver,
         [NotNullWhen(true)] out T? @object) where T : default
     {
-        DataRequest request = new(format) { Resolver = resolver, UntypedRequest = untypedRequest };
-        return Utilities.TryReadObjectFromStream(stream, in request, out @object);
+        DataRequest request = new(format) { Resolver = resolver, TypedRequest = !untypedRequest };
+        return BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out @object);
     }
 
     protected override void WriteObjectToStream(MemoryStream stream, object data, string format)
     {
-        Utilities.WriteObjectToStream(stream, data, format);
+        BinaryFormatUtilities.WriteObjectToStream(stream, data, format);
     }
 
     [Fact]
@@ -38,22 +38,15 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
         sourceList.Images.Add(image);
         using ImageListStreamer value = sourceList.ImageStream!;
 
-        RoundTripObject(value, out ImageListStreamer? result).Should().BeTrue();
-        result.Should().BeOfType<ImageListStreamer>();
-        using ImageList newList = new();
-        newList.ImageStream = result;
-        newList.Images.Count.Should().Be(1);
-    }
+        using MemoryStream stream = CreateStream(DataType.BinaryFormat, value);
 
-    [Fact]
-    public void RoundTrip_RestrictedFormat_ImageList()
-    {
-        using ImageList sourceList = new();
-        using Bitmap image = new(10, 10);
-        sourceList.Images.Add(image);
-        using ImageListStreamer value = sourceList.ImageStream!;
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true
+        };
 
-        RoundTripObject_RestrictedFormat(value, out ImageListStreamer? result).Should().BeTrue();
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out ImageListStreamer? result).Should().BeTrue();
         using ImageList newList = new();
         newList.ImageStream = result;
         newList.Images.Count.Should().Be(1);
@@ -63,42 +56,16 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
     public void RoundTrip_Bitmap()
     {
         using Bitmap value = new(10, 10);
-        RoundTripObject(value, out Bitmap? result).Should().BeTrue();
+        using MemoryStream stream = CreateStream(DataType.BinaryFormat, value);
+
+        DataRequest request = new()
+        {
+            Format = "test",
+            TypedRequest = true
+        };
+
+        BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out Bitmap? result).Should().BeTrue();
         result.Should().BeOfType<Bitmap>().Which.Size.Should().Be(value.Size);
-    }
-
-    [Fact]
-    public void RoundTrip_RestrictedFormat_Bitmap()
-    {
-        using Bitmap value = new(10, 10);
-        RoundTripObject_RestrictedFormat(value, out Bitmap? result).Should().BeTrue();
-        result.Should().BeOfType<Bitmap>().Which.Size.Should().Be(value.Size);
-    }
-
-    [Fact]
-    public void RoundTripOfType_AsUnmatchingType_Simple()
-    {
-        List<int> value = [1, 2, 3];
-        RoundTripOfType(value, out Control? result).Should().BeFalse();
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void RoundTripOfType_RestrictedFormat_AsUnmatchingType_Simple()
-    {
-        Rectangle value = new(1, 1, 2, 2);
-
-        // We are setting up an invalid content scenario, Rectangle type can't be read as a restricted format,
-        // but in this case requested type will not match the payload type.
-        WriteObjectToStream(value);
-        Stream.Position = 0;
-        ReadRestrictedObjectFromStream(NotSupportedResolver, out Control? result).Should().BeFalse();
-        result.Should().BeNull();
-
-        using ClipboardBinaryFormatterFullCompatScope scope = new();
-        Stream.Position = 0;
-        ReadRestrictedObjectFromStream(NotSupportedResolver, out Control? result2).Should().BeFalse();
-        result2.Should().BeNull();
     }
 
     private static Type FontResolver(TypeName typeName)
@@ -141,7 +108,7 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
         // Clipboard.SetData("TestData", new Font("Microsoft Sans Serif", 10));
         // And the resulting stream was saved as a string
         // string text = Convert.ToBase64String(stream.ToArray());
-        string font =
+        string fontData =
             "AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJl"
             + "PW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0ZW0uRHJhd2luZy5G"
             + "b250BAAAAAROYW1lBFNpemUFU3R5bGUEVW5pdAEABAQLGFN5c3RlbS5EcmF3aW5nLkZvbnRTdHlsZQIAAAAb"
@@ -149,65 +116,52 @@ public sealed class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTestsBase
             + "IEEF/P///xhTeXN0ZW0uRHJhd2luZy5Gb250U3R5bGUBAAAAB3ZhbHVlX18ACAIAAAAAAAAABfv///8bU3lz"
             + "dGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAwAAAAs=";
 
-        byte[] bytes = Convert.FromBase64String(font);
+        byte[] bytes = Convert.FromBase64String(fontData);
         using MemoryStream stream = new(bytes);
+        stream.Position = 0;
 
-        DataRequest request = new("test")
+        DataRequest request = new()
         {
-            UntypedRequest = true
+            Format = "test",
+            TypedRequest = false
         };
 
-        // Default deserialization with the NRBF deserializer.
-        using (BinaryFormatterInClipboardDragDropScope binaryFormatScope = new(enable: true))
-        {
-            // GetData case.
-            stream.Position = 0;
+        // Untyped BinaryFormatter disabled
+        Action action = () => BinaryFormatUtilities.TryReadObjectFromStream(
+            stream,
+            in request,
+            out object? _);
 
-            Action getData = () => Utilities.TryReadObjectFromStream<object>(
-               stream,
-               in request,
-               out _);
+        action.Should().Throw<NotSupportedException>();
 
-            getData.Should().Throw<NotSupportedException>();
-
-            Action tryGetData = () => TryGetData(stream);
-            tryGetData.Should().Throw<NotSupportedException>();
-        }
-
-        // Deserialize using the binary formatter.
+        // Untyped BinaryFormatter enabled
         using ClipboardBinaryFormatterFullCompatScope scope = new();
 
-        // GetData case.
-        stream.Position = 0;
-        Utilities.TryReadObjectFromStream(
+        BinaryFormatUtilities.TryReadObjectFromStream(
            stream,
            in request,
-           out Font? result).Should().BeTrue();
+           out object? result).Should().BeTrue();
 
         result.Should().NotBeNull();
-        result!.Name.Should().Be("Microsoft Sans Serif");
-        result.Size.Should().Be(10);
+        Font? font = result.Should().BeOfType<Font>().Subject;
+        font.Name.Should().Be("Microsoft Sans Serif");
+        font.Size.Should().Be(10);
 
-        TryGetData(stream);
-
-        static void TryGetData(MemoryStream stream)
+        // Typed with resolver
+        request = new()
         {
-            // TryGetData<Font> case.
-            stream.Position = 0;
+            Format = "test",
+            Resolver = FontResolver,
+            TypedRequest = true
+        };
 
-            DataRequest request = new("test")
-            {
-                Resolver = FontResolver,
-            };
+        BinaryFormatUtilities.TryReadObjectFromStream(
+            stream,
+            in request,
+            out font).Should().BeTrue();
 
-            Utilities.TryReadObjectFromStream(
-                stream,
-                in request,
-                out Font? result).Should().BeTrue();
-
-            result.Should().NotBeNull();
-            result!.Name.Should().Be("Microsoft Sans Serif");
-            result.Size.Should().Be(10);
-        }
+        font.Should().NotBeNull();
+        font!.Name.Should().Be("Microsoft Sans Serif");
+        font.Size.Should().Be(10);
     }
 }

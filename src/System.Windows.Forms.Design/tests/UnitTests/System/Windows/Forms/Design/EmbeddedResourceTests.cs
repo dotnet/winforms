@@ -123,6 +123,8 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.ShortcutKeysEditor.resources
             System.Windows.Forms.Design.StringCollectionEditor.resources
             System.Windows.Forms.Design.StyleCollectionEditor.resources
+            System.Windows.Forms.Design.ToolStripItemEditorForm.resources
+            System.Windows.Forms.Design.BlankToolstrip.bmp
             """;
 
     [Fact]

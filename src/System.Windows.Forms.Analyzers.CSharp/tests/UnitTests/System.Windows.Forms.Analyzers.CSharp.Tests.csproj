@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/Data/*.cs</DefaultItemExcludesInProjectFolder>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/TestData/*.cs</DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,9 +33,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="**\Data\*.*">
+    <Content Include="**\TestData\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Analyzers\WFO1001\TestData\DerivedFromUntyped.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TwoInterfaces.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedInterface.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedWithAlias.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedWithNamespace.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UnrelatedIDataObject.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedInterface.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedUnimplemented.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedWithAlias.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedWithNamespace.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_default_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_default_top_level.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_user_settings_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_user_top_level.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationInitializeBuilderTests.default_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationInitializeBuilderTests.default_top_level.cs" />
   </ItemGroup>
 
 </Project>

@@ -43,7 +43,7 @@ internal static class CSharpDiagnosticDescriptors
             description: new LocalizableResourceString(nameof(SR.WFO1000AnalyzerDescription), SR.ResourceManager, typeof(SR)));
 
     public static readonly DiagnosticDescriptor s_implementITypedDataObjectInAdditionToIDataObject =
-        new(id: DiagnosticIDs.ImplementITypedDataObjectInAdditionToIDataObject,
+        new(id: DiagnosticIDs.ImplementITypedDataObject,
             title: new LocalizableResourceString(nameof(SR.WFO1001AnalyzerTitle), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFO1001AnalyzerMessageFormat), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsSecurity,

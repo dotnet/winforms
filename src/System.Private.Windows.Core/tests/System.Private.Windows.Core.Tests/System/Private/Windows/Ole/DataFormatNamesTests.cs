@@ -12,7 +12,7 @@ public class DataFormatNamesTests
     [InlineData(DataFormatNames.Bitmap, true)]
     public void RestrictDeserializationToSafeTypes(string format, bool expected)
     {
-        Assert.Equal(expected, DataFormatNames.IsRestrictedFormat(format));
+        Assert.Equal(expected, DataFormatNames.IsPredefinedFormat(format));
     }
 
     [Theory]
@@ -21,6 +21,6 @@ public class DataFormatNamesTests
     [InlineData(DataFormatNames.UnicodeText, true)]
     public void IsRestrictedFormat(string format, bool expected)
     {
-        Assert.Equal(expected, DataFormatNames.IsRestrictedFormat(format));
+        Assert.Equal(expected, DataFormatNames.IsPredefinedFormat(format));
     }
 }

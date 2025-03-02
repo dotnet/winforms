@@ -151,4 +151,7 @@ internal interface IJsonData
     /// </summary>
     [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.Deserialize<TValue>(ReadOnlySpan<Byte>, JsonSerializerOptions)")]
     object Deserialize();
+
+    [RequiresUnreferencedCode("Calls System.Text.Json.JsonSerializer.SerializeToUtf8Bytes<TValue>(TValue, JsonSerializerOptions)")]
+    internal static IJsonData Create<T>(T data) => new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
 }

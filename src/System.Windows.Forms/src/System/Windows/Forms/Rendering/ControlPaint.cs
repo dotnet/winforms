@@ -1381,7 +1381,6 @@ public static unsafe partial class ControlPaint
 
             rectangle.X += 1;
             DrawImageColorized(graphics, t_checkImage, rectangle, foreground);
-            rectangle.X -= 1;
         }
 
         // Surrounding border. We inset this by one pixel so we match how the 3D checkbox is drawn.
@@ -1815,7 +1814,7 @@ public static unsafe partial class ControlPaint
         using SelectObjectScope penSelection = new(desktopDC, pen);
 
         PInvokeCore.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
-        PInvoke.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+        PInvokeCore.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
     }
 
     /// <summary>

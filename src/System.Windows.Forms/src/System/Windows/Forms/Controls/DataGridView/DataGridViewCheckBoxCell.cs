@@ -967,9 +967,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyMSAAClient(int columnIndex, int rowIndex)
     {
-        Debug.Assert(DataGridView is not null);
-        Debug.Assert((columnIndex >= 0) && (columnIndex < DataGridView.Columns.Count));
-        Debug.Assert((rowIndex >= 0) && (rowIndex < DataGridView.Rows.Count));
+        if (DataGridView is null ||
+            columnIndex < 0 || columnIndex >= DataGridView.Columns.Count ||
+            rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
+        {
+            return;
+        }
 
         int visibleRowIndex = DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, rowIndex);
         int visibleColumnIndex = DataGridView.Columns.ColumnIndexToActualDisplayIndex(columnIndex, DataGridViewElementStates.Visible);
@@ -1003,6 +1006,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         DataGridViewPaintParts paintParts)
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
+
+        if (DataGridView is null)
+        {
+            return;
+        }
 
         PaintPrivate(
             graphics,
