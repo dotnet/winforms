@@ -100,7 +100,6 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     ///  Stores the data in the specified format using the <see cref="JsonSerializer"/>.
     /// </summary>
     /// <param name="format">The format associated with the data. See DataFormats for predefined formats.</param>
-    /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
     /// <param name="data">The data to store.</param>
     /// <remarks>
     ///  <para>
@@ -122,13 +121,13 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     /// </remarks>
     /// <inheritdoc cref="DataObjectCore{TDataObject}.TryJsonSerialize{T}(string, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T, TDataObject>(T data, string? format = default, bool autoConvert = true)
+    public void SetDataAsJson<T, TDataObject>(T data, string? format = default)
         where TDataObject : IComVisibleDataObject
     {
         format ??= typeof(T).FullName.OrThrowIfNull();
         SetData(
             format,
-            autoConvert,
+            autoConvert: false,
             DataObjectCore<TDataObject>.TryJsonSerialize(format, data));
     }
 

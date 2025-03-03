@@ -435,7 +435,7 @@ public static class Clipboard
         SetDataObject(new DataObject(format, data), copy: true);
     }
 
-    /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, T)"/>
     public static void SetDataAsJson<T>(string format, T data)
     {
         ArgumentNullException.ThrowIfNull(data);

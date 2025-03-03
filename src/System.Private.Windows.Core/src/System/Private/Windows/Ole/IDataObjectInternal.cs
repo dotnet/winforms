@@ -166,5 +166,30 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
     static abstract TDataObject Create(object data);
     static abstract IDataObjectInternal Wrap(TIDataObject data);
 
+    /// <summary>
+    ///  Unwraps the user IDataObject instance when applicable.
+    /// </summary>
+    /// <param name="dataObject">
+    ///  <para>
+    ///   This is used to return the "original" IDataObject instance when getting data back from OLE. Providing the
+    ///   original instance back allows casting to the original type, which historically happened through "magic"
+    ///   casting support for built-in COM interop.
+    ///  </para>
+    ///  <para>
+    ///   Now that we use ComWrappers, we can't rely on the "magic" casting support. Instead, we provide the original
+    ///   object back when we're able to unwrap it. The unfortunate caveat is that the behavior of calling through
+    ///   the OLE IDataObject proxy results in different behavior than calling through the original object. This
+    ///   primarily happens through `autoConvert` scenarios, where no such concept exists in the COM interfaces. As
+    ///   such, when calling through the COM interface, "autoConvert" is always considered to be <see langword="true"/>.
+    ///   To mitigate the COM caveat, we do not give back the original DataObject if we created it implicitly via
+    ///   Clipboard.SetData. This allows the calls to go through the proxy, which gets the expected "autoConvert"
+    ///   behavior.
+    ///  </para>
+    ///  <para>
+    ///   One potential alternative would be to wrap the created IDataObject in an adapter that mimics the
+    ///   "autoConvert" behavior. This would avoid BinaryFormat serialization when in process and not copying.
+    ///  </para>
+    /// </param>
+    /// <returns>true when a data object was returned.</returns>
     bool TryUnwrapUserDataObject([NotNullWhen(true)] out TIDataObject? dataObject);
 }
