@@ -826,8 +826,8 @@ public class MaskedTextBoxTests : IDisposable
 
         if (_maskedTextBox.MaskedTextProvider is not null)
         {
-            _maskedTextBox.PasswordChar.Should().Be('?');
-            _maskedTextBox.MaskedTextProvider.PasswordChar.Should().Be('?');
+            _maskedTextBox.PasswordChar.Should().Be('●');
+            _maskedTextBox.MaskedTextProvider.PasswordChar.Should().Be('●');
         }
     }
 }

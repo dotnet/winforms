@@ -64,7 +64,7 @@ public class ResXFileRef_Converter
     public void ConvertFrom_ReadsFileAsStringUsingEncodingFromRefString()
     {
         string resxFileRefString = @"TestResources\Files\text.utf8.txt;System.String;utf-8";
-        string expected = "??????";
+        string expected = "Привет";
         ResXFileRef.Converter converter = new();
 
         string result = (string)converter.ConvertFrom(null, null, resxFileRefString);

@@ -35,7 +35,7 @@ public class ResXResourceSetTests
     [InlineData("TestResources.resx", "SomeDataTest1", "Some text for Data 1 node")]
     [InlineData("TestResources.resx", "SomeDataTest2", "Some text for Data 2 node")]
     [InlineData("TestResources.resx", "text.ansi", "Text")]
-    [InlineData("TestResources.resx", "text.utf8", "??????")]
+    [InlineData("TestResources.resx", "text.utf8", "Привет")]
     public void ResXResourceSet_TestStream(string resxFileName, string resourceName, string expected)
     {
         Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
