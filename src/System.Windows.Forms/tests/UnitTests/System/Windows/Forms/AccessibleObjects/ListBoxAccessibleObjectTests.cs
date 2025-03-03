@@ -19,7 +19,7 @@ public class ListBoxAccessibleObjectTests
 
         for (int i = 0; i < childCount; i++)
         {
-            var child = listBox.AccessibilityObject.GetChild(i);
+            AccessibleObject child = listBox.AccessibilityObject.GetChild(i)!;
             Assert.True(child.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId));
         }
     }
@@ -121,10 +121,10 @@ public class ListBoxAccessibleObjectTests
     {
         using ListBox listBox = InitializeListBoxWithItems();
         ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
-        ItemArray.Entry item = listBox.Items.InnerArray.Entries[0];
+        ItemArray.Entry? item = listBox.Items.InnerArray.Entries[0];
         Assert.True(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
 
-        listBox.Items.Remove(item);
+        listBox.Items.Remove(item!);
 
         Assert.False(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
     }
@@ -208,7 +208,7 @@ public class ListBoxAccessibleObjectTests
         listBox.SetSelected(2, value: true);
 
         var listBoxAccessibleObject = listBox.AccessibilityObject;
-        ISelectionItemProvider.Interface provider = listBoxAccessibleObject.GetChild(0);
+        ISelectionItemProvider.Interface provider = listBoxAccessibleObject.GetChild(0)!;
         provider.RemoveFromSelection();
 
         var indices = listBox.SelectedIndices;
@@ -247,8 +247,6 @@ public class ListBoxAccessibleObjectTests
 
         return accessibilityObject;
     }
-
-#nullable enable
 
     [WinFormsFact]
     public void ListBoxAccessibleObject_ShouldCorrectlyHandleChildrenAndSelection()

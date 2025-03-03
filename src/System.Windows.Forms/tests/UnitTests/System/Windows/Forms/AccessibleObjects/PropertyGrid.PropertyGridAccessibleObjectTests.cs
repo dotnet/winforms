@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.UI.Accessibility;
 
@@ -29,8 +30,8 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new();
         using ComboBox comboBox = new();
         propertyGrid.SelectedObject = comboBox;
-        GridEntry defaultGridEntry = propertyGrid.GetDefaultGridEntry();
-        GridEntry parentGridEntry = defaultGridEntry.ParentGridEntry; // Category which has item pattern.
+        GridEntry defaultGridEntry = propertyGrid.GetDefaultGridEntry()!;
+        GridEntry parentGridEntry = defaultGridEntry.ParentGridEntry!; // Category which has item pattern.
         AccessibleObject accessibleObject = parentGridEntry.AccessibilityObject;
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)pattern));
     }
@@ -48,10 +49,10 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
             new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
 
         // First child should be PropertyGrid toolbox.
-        AccessibleObject firstChild = (AccessibleObject)propertyGridAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        AccessibleObject firstChild = (AccessibleObject)propertyGridAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild)!;
 
         // Second child entry should be PropertyGridView.
-        AccessibleObject gridViewChild = (AccessibleObject)firstChild.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject gridViewChild = (AccessibleObject)firstChild.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling)!;
 
         Assert.True(gridViewChild.IsPatternSupported((UIA_PATTERN_ID)pattern));
     }
@@ -190,7 +191,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     {
         private class MenuCommandService : IMenuCommandService
         {
-            public DesignerVerbCollection Verbs { get; } = new([new DesignerVerb("", null)]);
+            public DesignerVerbCollection Verbs { get; } = new([new DesignerVerb("", null!)]);
 
             public void AddCommand(MenuCommand command) => throw new NotImplementedException();
 
@@ -207,15 +208,16 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
             public void ShowContextMenu(CommandID menuID, int x, int y) => throw new NotImplementedException();
         }
 
+        [AllowNull]
         public IComponent Component { get; }
 
-        public IContainer Container { get; }
+        public IContainer? Container { get; }
 
         public bool DesignMode => false;
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             return serviceType == typeof(IMenuCommandService) ? new MenuCommandService() : null;
         }

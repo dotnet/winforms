@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable disable
+
 using System.Drawing;
 using System.Text;
 
@@ -62,7 +64,7 @@ public class ResXFileRef_Converter
     public void ConvertFrom_ReadsFileAsStringUsingEncodingFromRefString()
     {
         string resxFileRefString = @"TestResources\Files\text.utf8.txt;System.String;utf-8";
-        string expected = "Привет";
+        string expected = "??????";
         ResXFileRef.Converter converter = new();
 
         string result = (string)converter.ConvertFrom(null, null, resxFileRefString);

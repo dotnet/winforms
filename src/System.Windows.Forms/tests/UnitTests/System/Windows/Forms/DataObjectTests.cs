@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests;
 public partial class DataObjectTests
 {
 #pragma warning disable WFDEV005  // Type or member is obsolete
-    private static readonly string[] s_restrictedClipboardFormats =
+    private static readonly string?[] s_restrictedClipboardFormats =
     [
         DataFormats.CommaSeparatedValue,
         DataFormats.Dib,
@@ -207,9 +207,9 @@ public partial class DataObjectTests
         dataObject.GetAudioStream().Should().BeNull();
     }
 
-    public static TheoryData<object, Stream> GetAudioStream_TheoryData()
+    public static TheoryData<object?, Stream?> GetAudioStream_TheoryData()
     {
-        TheoryData<object, Stream> theoryData = new()
+        TheoryData<object?, Stream?> theoryData = new()
         {
             { null, null },
             { new(), null }
@@ -222,7 +222,7 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetAudioStream_TheoryData))]
-    public void GetAudioStream_InvokeWithData_ReturnsExpected(object result, Stream expected)
+    public void GetAudioStream_InvokeWithData_ReturnsExpected(object? result, Stream? expected)
     {
         DataObject dataObject = new();
         dataObject.SetData(DataFormats.WaveAudio, result);
@@ -231,7 +231,7 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetAudioStream_TheoryData))]
-    public void GetAudioStream_InvokeMocked_ReturnsExpected(object result, Stream expected)
+    public void GetAudioStream_InvokeMocked_ReturnsExpected(object? result, Stream? expected)
     {
         Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
@@ -245,23 +245,23 @@ public partial class DataObjectTests
         mockDataObject.Verify(o => o.GetData(DataFormats.WaveAudio, false), Times.Once());
     }
 
-    public static TheoryData<string> GetData_String_TheoryData() => s_restrictedClipboardFormats.ToTheoryData();
+    public static TheoryData<string?> GetData_String_TheoryData() => s_restrictedClipboardFormats.ToTheoryData();
 
     public static TheoryData<string> GetData_String_UnboundedFormat_TheoryData() => s_unboundedClipboardFormats.ToTheoryData();
 
     [Theory]
     [MemberData(nameof(GetData_String_TheoryData))]
     [MemberData(nameof(GetData_String_UnboundedFormat_TheoryData))]
-    public void GetData_InvokeStringDefault_ReturnsNull(string format)
+    public void GetData_InvokeStringDefault_ReturnsNull(string? format)
     {
         DataObject dataObject = new();
-        dataObject.GetData(format).Should().BeNull();
+        dataObject.GetData(format!).Should().BeNull();
     }
 
-    public static TheoryData<string, object> GetData_InvokeStringMocked_TheoryData()
+    public static TheoryData<string?, object?> GetData_InvokeStringMocked_TheoryData()
     {
-        TheoryData<string, object> theoryData = [];
-        foreach (object result in new object[] { new(), null })
+        TheoryData<string?, object?> theoryData = [];
+        foreach (object result in new object[] { new(), null! })
         {
             theoryData.Add("format", result);
             theoryData.Add("  ", result);
@@ -274,40 +274,40 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetData_InvokeStringMocked_TheoryData))]
-    public void GetData_InvokeStringMocked_CallsGetData(string format, object result)
+    public void GetData_InvokeStringMocked_CallsGetData(string? format, object? result)
     {
         Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetData(format))
+            .Setup(o => o.GetData(format!))
             .CallBase();
         mockDataObject
-            .Setup(o => o.GetData(format, true))
+            .Setup(o => o.GetData(format!, true))
             .Returns(result)
             .Verifiable();
-        mockDataObject.Object.GetData(format).Should().BeSameAs(result);
-        mockDataObject.Verify(o => o.GetData(format, true), Times.Once());
+        mockDataObject.Object.GetData(format!).Should().BeSameAs(result);
+        mockDataObject.Verify(o => o.GetData(format!, true), Times.Once());
     }
 
     [Theory]
     [MemberData(nameof(GetData_InvokeStringMocked_TheoryData))]
-    public void GetData_InvokeStringIReturnsExpected(string format, object result)
+    public void GetData_InvokeStringIReturnsExpected(string? format, object? result)
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetData(format, true))
+            .Setup(o => o.GetData(format!, true))
             .Returns(result)
             .Verifiable();
         DataObject dataObject = new(mockDataObject.Object);
-        dataObject.GetData(format).Should().BeSameAs(result);
-        mockDataObject.Verify(o => o.GetData(format, true), Times.Once());
+        dataObject.GetData(format!).Should().BeSameAs(result);
+        mockDataObject.Verify(o => o.GetData(format!, true), Times.Once());
     }
 
-    public static TheoryData<string, bool, object> GetData_StringBoolITheoryData()
+    public static TheoryData<string?, bool, object?> GetData_StringBoolITheoryData()
     {
-        TheoryData<string, bool, object> theoryData = [];
+        TheoryData<string?, bool, object?> theoryData = [];
         foreach (bool autoConvert in new bool[] { true, false })
         {
-            foreach (object result in new object[] { new(), null })
+            foreach (object result in new object[] { new(), null! })
             {
                 theoryData.Add("format", autoConvert, result);
                 theoryData.Add("  ", autoConvert, result);
@@ -321,31 +321,31 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetData_StringBoolITheoryData))]
-    public void GetData_InvokeStringBoolIReturnsExpected(string format, bool autoConvert, object result)
+    public void GetData_InvokeStringBoolIReturnsExpected(string? format, bool autoConvert, object? result)
     {
         Mock<IDataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
-            .Setup(o => o.GetData(format, autoConvert))
+            .Setup(o => o.GetData(format!, autoConvert))
             .Returns(result)
             .Verifiable();
         DataObject dataObject = new(mockDataObject.Object);
-        dataObject.GetData(format, autoConvert).Should().BeSameAs(result);
-        mockDataObject.Verify(o => o.GetData(format, autoConvert), Times.Once());
+        dataObject.GetData(format!, autoConvert).Should().BeSameAs(result);
+        mockDataObject.Verify(o => o.GetData(format!, autoConvert), Times.Once());
     }
 
     [Theory]
     [InlineData(typeof(int))]
     [InlineData(null)]
-    public void GetData_InvokeTypeDefault_ReturnsNull(Type format)
+    public void GetData_InvokeTypeDefault_ReturnsNull(Type? format)
     {
         DataObject dataObject = new();
-        dataObject.GetData(format).Should().BeNull();
+        dataObject.GetData(format!).Should().BeNull();
     }
 
-    public static TheoryData<Type, object, int, object> GetData_InvokeTypeMocked_TheoryData()
+    public static TheoryData<Type?, object, int, object?> GetData_InvokeTypeMocked_TheoryData()
     {
-        TheoryData<Type, object, int, object> theoryData = new();
-        foreach (object result in new object[] { new(), null })
+        TheoryData<Type?, object, int, object?> theoryData = new();
+        foreach (object result in new object[] { new(), null! })
         {
             theoryData.Add(typeof(int), result, 1, result);
             theoryData.Add(null, result, 0, null);
@@ -356,7 +356,7 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetData_InvokeTypeMocked_TheoryData))]
-    public void GetData_InvokeTypeMocked_CallsGetData(Type format, object result, int expectedCallCount, object expectedResult)
+    public void GetData_InvokeTypeMocked_CallsGetData(Type? format, object result, int expectedCallCount, object? expectedResult)
     {
         Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
         mockDataObject
@@ -367,11 +367,10 @@ public partial class DataObjectTests
             .Setup(o => o.GetData(formatName))
             .Returns(result)
             .Verifiable();
-        mockDataObject.Object.GetData(format).Should().BeSameAs(expectedResult);
+        mockDataObject.Object.GetData(format!).Should().BeSameAs(expectedResult);
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
     }
 
-#nullable enable
     internal class DataObjectOverridesTryGetDataCore : DataObject
     {
         private readonly string _format;

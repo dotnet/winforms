@@ -108,8 +108,8 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
             linkLabel.Links.Add(new());
         }
 
-        LinkAccessibleObject expected = linkLabel.Links[childIndex].AccessibleObject;
-        var actual = (LinkAccessibleObject)linkLabel.AccessibilityObject.GetChild(childIndex);
+        LinkAccessibleObject expected = linkLabel.Links[childIndex].AccessibleObject!;
+        var actual = (LinkAccessibleObject)linkLabel.AccessibilityObject.GetChild(childIndex)!;
 
         Assert.Equal(expected, actual);
         Assert.False(linkLabel.IsHandleCreated);
