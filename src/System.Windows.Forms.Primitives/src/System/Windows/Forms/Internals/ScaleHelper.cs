@@ -426,9 +426,10 @@ internal static partial class ScaleHelper
     /// </summary>
     internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi)
     {
-        return new(icon,
-            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi),
-            PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi));
+        int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
+
+        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
     }
 
     /// <summary>
