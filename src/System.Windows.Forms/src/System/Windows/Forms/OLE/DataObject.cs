@@ -94,20 +94,15 @@ public unsafe partial class DataObject :
         return dataObject is not null;
     }
 
-    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, T data) =>
         _innerData.SetDataAsJson<T, DataObject>(data, format);
 
-    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="SetDataAsJson{T}(T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(T data) =>
         _innerData.SetDataAsJson<T, DataObject>(data);
-
-    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string, bool)"/>
-    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
-        _innerData.SetDataAsJson<T, DataObject>(data, format, autoConvert);
 
     #region IDataObject
     [Obsolete(

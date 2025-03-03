@@ -6492,7 +6492,6 @@ System.Windows.Forms.DataObject
 System.Windows.Forms.DataObject.DataObject() -> void
 System.Windows.Forms.DataObject.DataObject(object! data) -> void
 System.Windows.Forms.DataObject.DataObject(string! format, object! data) -> void
-System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, bool autoConvert, T data) -> void
 System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, T data) -> void
 System.Windows.Forms.DataObject.SetDataAsJson<T>(T data) -> void
 System.Windows.Forms.DataObject.TryGetData<T>(out T data) -> bool
