@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design;
@@ -12,7 +10,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 public class WindowsFormsDesignerOptionService : DesignerOptionService
 {
-    private DesignerOptions _options;
+    private DesignerOptions? _options;
 
     public virtual DesignerOptions CompatibilityOptions => _options ??= new DesignerOptions();
 
@@ -27,10 +25,6 @@ public class WindowsFormsDesignerOptionService : DesignerOptionService
             return;
         }
 
-        DesignerOptions designerOptions = CompatibilityOptions;
-        if (designerOptions is not null)
-        {
-            CreateOptionCollection(options, "DesignerOptions", designerOptions);
-        }
+        CreateOptionCollection(options, "DesignerOptions", CompatibilityOptions);
     }
 }

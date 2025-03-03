@@ -26,7 +26,7 @@
 ~override System.Windows.Forms.Design.ParentControlDesigner.OnPaintAdornments(System.Windows.Forms.PaintEventArgs pe) -> void
 ~override System.Windows.Forms.Design.ParentControlDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~override System.Windows.Forms.Design.ParentControlDesigner.SnapLines.get -> System.Collections.IList
-~override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection options) -> void
+override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection! options) -> void
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
 System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName) -> void
 System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, bool includeAsDesignerVerb) -> void
@@ -95,7 +95,7 @@ virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> 
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.CanParent(System.Windows.Forms.Design.ControlDesigner controlDesigner) -> bool
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.CreateToolCore(System.Drawing.Design.ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize) -> System.ComponentModel.IComponent[]
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.GetParentForComponent(System.ComponentModel.IComponent component) -> System.Windows.Forms.Control
-~virtual System.Windows.Forms.Design.WindowsFormsDesignerOptionService.CompatibilityOptions.get -> System.Windows.Forms.Design.DesignerOptions
+virtual System.Windows.Forms.Design.WindowsFormsDesignerOptionService.CompatibilityOptions.get -> System.Windows.Forms.Design.DesignerOptions!
 abstract System.ComponentModel.Design.CollectionEditor.CollectionForm.OnEditValueChanged() -> void
 abstract System.ComponentModel.Design.DataSourceDescriptor.Image.get -> System.Drawing.Bitmap!
 abstract System.ComponentModel.Design.DataSourceDescriptor.IsDesignable.get -> bool
