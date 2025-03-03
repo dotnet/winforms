@@ -5992,8 +5992,8 @@ public partial class ListView : Control
                     case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                         {
                             using Graphics g = nmcd->hdc.CreateGraphics();
-                            Color foreColor = Color.FromArgb((int)PInvoke.GetTextColor(nmcd->hdc).Value);
-                            Color backColor = Color.FromArgb((int)PInvoke.GetBkColor(nmcd->hdc).Value);
+                            Color foreColor = PInvoke.GetTextColor(nmcd->hdc);
+                            Color backColor = PInvoke.GetBkColor(nmcd->hdc);
                             Font font = GetListHeaderFont();
                             DrawListViewColumnHeaderEventArgs e = new(
                                 g,
