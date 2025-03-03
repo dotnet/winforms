@@ -65,7 +65,7 @@ public class DataGridViewDesignerTests : IDisposable
                 It.IsAny<PropertyDescriptor>()
             ),
             Times.Exactly(_dataGridView.Columns.Count)
-            );
+        );
 
         mockChangeService.Verify(
             s => s.OnComponentChanged(
