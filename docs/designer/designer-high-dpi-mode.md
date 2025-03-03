@@ -33,4 +33,5 @@ In Visual Studio 2022 Version 17.8, we are introducing a new [configuration]((ht
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
   </PropertyGroup>
+ </Project>
 ```
