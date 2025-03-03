@@ -10,12 +10,13 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ToolStripAdornerWindowServiceTests
+public class ToolStripAdornerWindowServiceTests : IDisposable
 {
     private readonly Mock<IServiceProvider> _serviceProviderMock;
     private readonly Mock<IOverlayService> _overlayServiceMock;
     private readonly BehaviorService _behaviorService;
     private readonly ToolStripAdornerWindowService _service;
+    private bool _serviceDisposed;
 
     public ToolStripAdornerWindowServiceTests()
     {
@@ -31,6 +32,18 @@ public class ToolStripAdornerWindowServiceTests
 
         using Control control = new();
         _service = new(_serviceProviderMock.Object, control);
+
+        _behaviorService.Adorners.Add(_service.DropDownAdorner);
+    }
+
+    public void Dispose()
+    {
+        _behaviorService.Dispose();
+
+        if (!_serviceDisposed)
+        {
+            _service.Dispose();
+        }
     }
 
     private void RunInStaThread(Action action)
@@ -58,7 +71,7 @@ public class ToolStripAdornerWindowServiceTests
 
     private TestControl CreateTestControlWithGraphics()
     {
-        Bitmap bitmap = new(100, 100);
+        using Bitmap bitmap = new(100, 100);
         Graphics graphics = Graphics.FromImage(bitmap);
         return new TestControl(graphics);
     }
@@ -75,11 +88,11 @@ public class ToolStripAdornerWindowServiceTests
     }
 
     [Fact]
-    public void DropDownAdorner_ReturnsAdornerObject() => RunInStaThread(() =>
+    public void DropDownAdorner_ReturnsAdornerObject()
     {
         Adorner adorner = _service.DropDownAdorner;
         adorner.Should().NotBeNull();
-    });
+    }
 
     [Fact]
     public void ToolStripAdornerWindowGraphics_ReturnsGraphicsObject() => RunInStaThread(() =>
@@ -89,32 +102,41 @@ public class ToolStripAdornerWindowServiceTests
     });
 
     [Fact]
-    public void Dispose_DisposesResourcesCorrectly() => RunInStaThread(() =>
+    public void Dispose_DisposesResourcesCorrectly()
     {
-        _behaviorService.Adorners.Add(_service.DropDownAdorner);
-
         _service.Dispose();
 
         _overlayServiceMock.Verify(o => o.RemoveOverlay(It.IsAny<Control>()), Times.Once);
         _serviceProviderMock.Verify(sp => sp.GetService(typeof(BehaviorService)), Times.Once);
         _serviceProviderMock.Verify(sp => sp.GetService(typeof(IOverlayService)), Times.Exactly(2));
         _behaviorService.Adorners.Cast<Adorner>().Should().NotContain(_service.DropDownAdorner);
-    });
+
+        if (_service.DropDownAdorner is null)
+        {
+            _serviceDisposed = true;
+        }
+    }
 
     [Fact]
-    public void Invalidate_InvokesInvalidateOnAdornerWindow() => RunInStaThread(_service.Invalidate);
+    public void Invalidate_InvokesInvalidateOnAdornerWindow()
+    {
+        Action action = _service.Invalidate;
+        action.Should().NotThrow();
+    }
 
     [Fact]
-    public void InvalidateRegion_InvokesInvalidateOnAdornerWindow() => RunInStaThread(() =>
+    public void InvalidateRegion_InvokesInvalidateOnAdornerWindow()
     {
         Region region = new(new Rectangle(10, 10, 50, 50));
-        _service.Invalidate(region);
-    });
+
+        Action action = () => _service.Invalidate(region);
+        action.Should().NotThrow();
+    }
 
     [Fact]
     public void AdornerWindowPointToScreen_TranslatesPointCorrectly() => RunInStaThread(() =>
     {
-        TestControl testControl = CreateTestControlWithGraphics();
+        using TestControl testControl = CreateTestControlWithGraphics();
         Point point = new(10, 20);
 
         Point screenPoint = _service.AdornerWindowPointToScreen(point);
@@ -126,7 +148,8 @@ public class ToolStripAdornerWindowServiceTests
     [Fact]
     public void AdornerWindowToScreen_ReturnsCorrectScreenCoordinates() => RunInStaThread(() =>
     {
-        TestControl control = new TestControl(Graphics.FromImage(new Bitmap(100, 100)));
+        using Bitmap image = new(100, 100);
+        using TestControl control = new TestControl(Graphics.FromImage(image));
 
         Point screenPoint = _service.AdornerWindowToScreen();
 
@@ -147,9 +170,11 @@ public class ToolStripAdornerWindowServiceTests
     });
 
     [Fact]
-    public void ProcessPaintMessage_InvokesInvalidateOnAdornerWindow() => RunInStaThread(() =>
+    public void ProcessPaintMessage_InvokesInvalidateOnAdornerWindow()
     {
         Rectangle paintRect = new Rectangle(10, 10, 50, 50);
-        _service.ProcessPaintMessage(paintRect);
-    });
+
+        Action action = () => _service.ProcessPaintMessage(paintRect);
+        action.Should().NotThrow();
+    }
 }
