@@ -303,6 +303,10 @@ public partial class MainForm : Form
                         topMenuItem1.Text = "TopMenuItem1";
                         ToolStripMenuItem topMenuItem2 = surface.CreateComponent<ToolStripMenuItem>();
                         topMenuItem2.Text = "TopMenuItem2";
+                        ToolStripMenuItem dropDownItem1 = surface.CreateComponent<ToolStripMenuItem>();
+                        dropDownItem1.Text = "DropDownItem1";
+                        ToolStripMenuItem dropDownItem2 = surface.CreateComponent<ToolStripMenuItem>();
+                        dropDownItem2.Text = "DropDownItem2";
                         ToolStripMenuItem bottomMenuItem1 = surface.CreateComponent<ToolStripMenuItem>();
                         bottomMenuItem1.Text = "BottomMenuItem1";
                         ToolStripMenuItem bottomMenuItem2 = surface.CreateComponent<ToolStripMenuItem>();
@@ -313,8 +317,8 @@ public partial class MainForm : Form
                         menuStrip2.Items.Add(bottomMenuItem1);
                         menuStrip2.Items.Add(bottomMenuItem2);
 
-                        topMenuItem1.DropDownItems.Add("DropDownItem1");
-                        topMenuItem2.DropDownItems.Add("DropDownItem12");
+                        topMenuItem1.DropDownItems.Add(dropDownItem1);
+                        topMenuItem2.DropDownItems.Add(dropDownItem2);
 
                         ToolStripPanel topToolStripPanel = surface.CreateControl<ToolStripPanel>(new(50, 50), new(0, 0));
                         topToolStripPanel = toolStripContainer.TopToolStripPanel;
