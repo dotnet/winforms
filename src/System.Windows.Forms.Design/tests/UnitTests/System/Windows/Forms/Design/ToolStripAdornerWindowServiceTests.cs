@@ -69,13 +69,6 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         }
     }
 
-    private TestControl CreateTestControlWithGraphics()
-    {
-        using Bitmap bitmap = new(100, 100);
-        Graphics graphics = Graphics.FromImage(bitmap);
-        return new TestControl(graphics);
-    }
-
     private class TestControl : Control
     {
         private readonly Graphics _graphics;
@@ -136,7 +129,6 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     [Fact]
     public void AdornerWindowPointToScreen_TranslatesPointCorrectly() => RunInStaThread(() =>
     {
-        using TestControl testControl = CreateTestControlWithGraphics();
         Point point = new(10, 20);
 
         Point screenPoint = _service.AdornerWindowPointToScreen(point);
