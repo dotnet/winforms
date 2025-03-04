@@ -18,8 +18,8 @@ public class AxHostVisualBasic6Tests
         }
 
         using Form form = new();
-        form.Shown += (object sender, EventArgs e) => form.Close();
-        using DynamicAxHost control = new(ComClasses.VisualBasicSimpleControl);
+        form.Shown += (object? sender, EventArgs e) => form.Close();
+        using DynamicAxHost control = new(ComClasses.VisualBasicSimpleControl!);
         ((ISupportInitialize)control).BeginInit();
         form.Controls.Add(control);
         ((ISupportInitialize)control).EndInit();

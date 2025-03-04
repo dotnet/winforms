@@ -32,10 +32,9 @@ public class AutoCompleteStringCollectionTests
     public void AutoCompleteStringCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
         AutoCompleteStringCollection collection = [];
-        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null));
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange(null!));
     }
 
-#nullable enable
     [WinFormsFact]
     public void AutoCompleteStringCollection_AddRange_NullValues_Nop()
     {
@@ -196,7 +195,6 @@ public class AutoCompleteStringCollectionTests
         Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "value"));
     }
 
-#nullable enable
     [WinFormsFact]
     public void AutoCompleteStringCollection_IListInsert_NullItem_Nop()
     {

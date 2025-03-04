@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable enable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
@@ -16,10 +14,10 @@ public partial class DataObjectTests
     #pragma warning disable WFDEV005 // Type or member is obsolete
     public class ClipboardTests
     {
-        public static TheoryData<string, bool> GetData_StringBool_TheoryData()
+        public static TheoryData<string?, bool> GetData_StringBool_TheoryData()
         {
-            TheoryData<string, bool> theoryData = [];
-            foreach (string format in s_restrictedClipboardFormats)
+            TheoryData<string?, bool> theoryData = [];
+            foreach (string? format in s_restrictedClipboardFormats)
             {
                 theoryData.Add(format, false);
                 theoryData.Add(format, true);
@@ -43,18 +41,18 @@ public partial class DataObjectTests
         [Theory]
         [MemberData(nameof(GetData_StringBool_TheoryData))]
         [MemberData(nameof(GetData_StringBool_Unbounded_TheoryData))]
-        public void DataObject_GetData_InvokeStringBoolDefault_ReturnsNull(string format, bool autoConvert)
+        public void DataObject_GetData_InvokeStringBoolDefault_ReturnsNull(string? format, bool autoConvert)
         {
             DataObject dataObject = new();
-            dataObject.GetData(format, autoConvert).Should().BeNull();
+            dataObject.GetData(format!, autoConvert).Should().BeNull();
         }
 
-        public static TheoryData<string, bool> GetDataPresent_StringBool_TheoryData()
+        public static TheoryData<string?, bool> GetDataPresent_StringBool_TheoryData()
         {
-            TheoryData<string, bool> theoryData = [];
+            TheoryData<string?, bool> theoryData = [];
             foreach (bool autoConvert in new bool[] { true, false })
             {
-                foreach (string format in s_restrictedClipboardFormats)
+                foreach (string? format in s_restrictedClipboardFormats)
                 {
                     theoryData.Add(format, autoConvert);
                 }
@@ -70,16 +68,16 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(GetDataPresent_StringBool_TheoryData))]
-        public void DataObject_GetDataPresent_InvokeStringBoolDefault_ReturnsFalse(string format, bool autoConvert)
+        public void DataObject_GetDataPresent_InvokeStringBoolDefault_ReturnsFalse(string? format, bool autoConvert)
         {
             DataObject dataObject = new();
-            dataObject.GetDataPresent(format, autoConvert).Should().BeFalse();
+            dataObject.GetDataPresent(format!, autoConvert).Should().BeFalse();
         }
 
         public static TheoryData<string, string?, bool, bool> SetData_StringObject_TheoryData()
         {
             TheoryData<string, string?, bool, bool> theoryData = [];
-            foreach (string format in s_restrictedClipboardFormats)
+            foreach (string? format in s_restrictedClipboardFormats)
             {
                 if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
                 {
@@ -132,7 +130,7 @@ public partial class DataObjectTests
         {
             TheoryData<string, bool, string?, bool, bool> theoryData = [];
 
-            foreach (string format in s_restrictedClipboardFormats)
+            foreach (string? format in s_restrictedClipboardFormats)
             {
                 if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
                 {

@@ -63,7 +63,7 @@ public class VScrollBar_ScrollBarFirstPageButtonAccessibleObjectTests
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
         ScrollBarFirstPageButtonAccessibleObject accessibleObject = GetFirstPageButton(scrollBar);
 
-        Assert.NotEmpty(accessibleObject.DefaultAction);
+        Assert.NotEmpty(accessibleObject.DefaultAction!);
         Assert.True(scrollBar.IsHandleCreated);
     }
 
@@ -85,7 +85,7 @@ public class VScrollBar_ScrollBarFirstPageButtonAccessibleObjectTests
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
         ScrollBarFirstPageButtonAccessibleObject accessibleObject = GetFirstPageButton(scrollBar);
 
-        Assert.NotEmpty(accessibleObject.Description);
+        Assert.NotEmpty(accessibleObject.Description!);
         Assert.True(scrollBar.IsHandleCreated);
     }
 
@@ -107,7 +107,7 @@ public class VScrollBar_ScrollBarFirstPageButtonAccessibleObjectTests
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
         ScrollBarFirstPageButtonAccessibleObject accessibleObject = GetFirstPageButton(scrollBar);
 
-        Assert.NotEmpty(accessibleObject.Name);
+        Assert.NotEmpty(accessibleObject.Name!);
         Assert.True(scrollBar.IsHandleCreated);
     }
 
@@ -161,11 +161,11 @@ public class VScrollBar_ScrollBarFirstPageButtonAccessibleObjectTests
     public void VScrollBarFirstPageButtonAccessibleObject_FragmentNavigate_ReturnsExpected_ButtonIsDisplayed(RightToLeft rightToLeft, int minimum, int maximum, int value)
     {
         using VScrollBar scrollBar = GetVScrollBar(createControl: true, rightToLeft, minimum, maximum, value);
-        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+        var scrollBarAccessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject!;
         ScrollBarFirstPageButtonAccessibleObject accessibleObject = GetFirstPageButton(scrollBar);
 
-        AccessibleObject thumb = scrollBarAccessibleObject.ThumbAccessibleObject;
-        AccessibleObject lineButton = scrollBarAccessibleObject.FirstLineButtonAccessibleObject;
+        AccessibleObject? thumb = scrollBarAccessibleObject.ThumbAccessibleObject;
+        AccessibleObject? lineButton = scrollBarAccessibleObject.FirstLineButtonAccessibleObject;
         Assert.Equal(scrollBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.Equal(thumb, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Equal(lineButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
@@ -376,6 +376,6 @@ public class VScrollBar_ScrollBarFirstPageButtonAccessibleObjectTests
     private ScrollBarFirstPageButtonAccessibleObject GetFirstPageButton(ScrollBar scrollBar)
     {
         var accessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
-        return accessibleObject.FirstPageButtonAccessibleObject;
+        return accessibleObject.FirstPageButtonAccessibleObject!;
     }
 }
