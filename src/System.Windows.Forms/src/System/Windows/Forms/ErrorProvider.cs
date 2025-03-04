@@ -25,7 +25,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 {
     private readonly Dictionary<Control, ControlItem> _items = new();
     private readonly Dictionary<Control, ErrorWindow> _windows = new();
-    private Icon _icon;
+    private Icon? _icon;
     private IconRegion? _region;
     private int _itemIdCounter;
     private int _blinkRate;
