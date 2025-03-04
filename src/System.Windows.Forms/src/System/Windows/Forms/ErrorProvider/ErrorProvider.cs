@@ -547,7 +547,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
+                    Icon defaultIcon = new(typeof(ErrorProvider), "Error");
                     t_defaultIcon = ScaleHelper.ScaleSmallIconToDpi(defaultIcon, ScaleHelper.InitialSystemDpi);
                 }
             }
