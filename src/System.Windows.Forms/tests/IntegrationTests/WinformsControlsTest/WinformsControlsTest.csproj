@@ -125,11 +125,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers.CSharp\src\System.Windows.Forms.Analyzers.CSharp.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="AxInterop.WMPLib">
       <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
     </Reference>

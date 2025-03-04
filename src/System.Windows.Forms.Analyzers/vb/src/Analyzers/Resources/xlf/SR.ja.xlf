@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja" original="../SR.resx">
+    <body>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">プロパティは、DesignerSerializationVisibilityAttribute メソッド、DefaultValueAttribute メソッド、または ShouldSerializeProperty メソッドを使用してプロパティ コンテンツのシリアル化を決定する必要があります。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">プロパティ '{0}' は、プロパティ コンテンツのコード シリアル化を構成しません</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">プロパティ コンテンツのコード シリアル化構成がありません</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">デリゲートを単に監視なしのタスクとして開始する意図がない限り、`T` が `Task` または `ValueTask` の `Func&lt;T&gt;` を `InvokeAsync` に渡すことは避けてください。代わりに、`Func&lt;CancellationToken, ValueTask&gt;` または `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;` を使用して、`InvokeAsync` に渡されるデリゲートを待機できるようにし、例外が適切に処理できるようにしてください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">タスクがキャンセル トークンなしで InvokeAsync に渡されています</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">タスクがキャンセル トークンなしで InvokeAsync に渡されています</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

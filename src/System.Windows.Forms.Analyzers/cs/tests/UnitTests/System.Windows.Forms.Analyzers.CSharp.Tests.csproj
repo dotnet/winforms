@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
+    <PackageReference Include="Verify.Xunit" Version="$(VerifyXunitVersion)" />
+    <PackageReference Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
+    <PackageReference Include="System.Formats.Asn1" Version="$(SystemFormatsAsn1PackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\System.Windows.Forms.Primitives\tests\TestUtilities.Tests\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj" />
+    <ProjectReference Include="..\..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\..\generic\tests\UnitTests\System.Windows.Forms.Analyzers.Tests.csproj" />
+    <ProjectReference Include="..\..\src\Analyzers\System.Windows.Forms.Analyzers.CSharp.csproj" />
+    <ProjectReference Include="..\..\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Generators\ApplicationConfigurationGeneratorTests\MockData\*.cs" />
+    <None Include="Generators\ApplicationConfigurationGeneratorTests\MockData\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <Compile Remove="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_boilerplate.cs" />
+    <Compile Remove="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_top_level.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <None Include="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_boilerplate.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\ApplicationConfigurationInitializeBuilderTests\MockData\Default_top_level.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
