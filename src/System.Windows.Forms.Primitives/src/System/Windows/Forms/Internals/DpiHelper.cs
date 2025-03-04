@@ -354,6 +354,17 @@ internal static partial class DpiHelper
     }
 
     /// <summary>
+    ///  Get X, Y metrics at DPI, IF icon is not already that size, create and return a new one.
+    /// </summary>
+    internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi)
+    {
+        int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
+
+        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
+    }
+
+    /// <summary>
     ///  Indicates whether the first (Parking)Window has been created. From that moment on,
     ///  we will not be able nor allowed to change the Process' DpiMode.
     /// </summary>
