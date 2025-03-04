@@ -9,7 +9,7 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class DataGridViewColumnTypePickerTests
+public class DataGridViewColumnTypePickerTests : IDisposable
 {
     private readonly DataGridViewColumnTypePicker _picker;
 
@@ -17,6 +17,8 @@ public class DataGridViewColumnTypePickerTests
     {
         _picker = new();
     }
+
+    public void Dispose() => _picker.Dispose();
 
     [Fact]
     public void Constructor_ShouldInitializeListBoxCorrectly()
