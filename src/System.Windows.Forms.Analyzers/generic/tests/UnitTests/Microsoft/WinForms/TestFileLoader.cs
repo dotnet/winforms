@@ -48,24 +48,26 @@ public static class TestFileLoader
         {
             FileSystemEnumerable<TestFileEntry> enumeration = new FileSystemEnumerable<TestFileEntry>(
                 directory: basePath,
-                transform: (ref entry) =>
-                {
-                    TestFileType fileType = Path.GetFileName(entry.ToFullPath()) switch
-                    {
-                        var filename when filename.Contains(AnalyzerTestCode) => TestFileType.AnalyzerTestCode,
-                        var filename when filename.Contains(FixedTestCode) => TestFileType.FixedTestCode,
-                        var filename when filename.Contains(CodeFixTestCode) => TestFileType.CodeFixTestCode,
-                        var filename when filename.Contains(GlobalUsing) => TestFileType.GlobalUsing,
-                        _ => TestFileType.AdditionalCodeFile
-                    };
-
-                    return new TestFileEntry(entry.ToFullPath(), fileType);
-                },
+                transform: TestFileTransform,
                 options: enumOptions);
 
             foreach (var fileEntry in enumeration)
             {
                 yield return fileEntry;
+            }
+
+            static TestFileEntry TestFileTransform(ref FileSystemEntry entry)
+            {
+                TestFileType fileType = Path.GetFileName(entry.ToFullPath()) switch
+                {
+                    var filename when filename.Contains(AnalyzerTestCode) => TestFileType.AnalyzerTestCode,
+                    var filename when filename.Contains(FixedTestCode) => TestFileType.FixedTestCode,
+                    var filename when filename.Contains(CodeFixTestCode) => TestFileType.CodeFixTestCode,
+                    var filename when filename.Contains(GlobalUsing) => TestFileType.GlobalUsing,
+                    _ => TestFileType.AdditionalCodeFile
+                };
+
+                return new TestFileEntry(entry.ToFullPath(), fileType);
             }
         }
     }
