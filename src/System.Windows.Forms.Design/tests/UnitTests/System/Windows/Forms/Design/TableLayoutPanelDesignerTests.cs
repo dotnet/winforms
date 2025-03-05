@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable enable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -29,34 +27,6 @@ public class TableLayoutPanelDesignerTests : IDisposable
     {
         _designer.Dispose();
         _tableLayoutPanel.Dispose();
-    }
-
-    private (Mock<IDesignerHost> hostMock, Mock<IComponentChangeService> compChangeServiceMock, Mock<IServiceProvider> serviceProviderMock, Mock<TableLayoutPanelDesigner> designerMock, TableLayoutPanelDesigner designer) SetupMocks()
-    {
-        Mock<IDesignerHost> hostMock = new();
-        Mock<IComponentChangeService> compChangeServiceMock = new();
-
-        hostMock.Setup(h => h.GetService(typeof(IComponentChangeService)))
-                .Returns(compChangeServiceMock.Object);
-        hostMock.SetupAdd(h => h.TransactionClosing += It.IsAny<DesignerTransactionCloseEventHandler>());
-
-        Mock<IServiceProvider> serviceProviderMock = new();
-        serviceProviderMock.Setup(sp => sp.GetService(typeof(IDesignerHost)))
-                           .Returns(hostMock.Object);
-
-        Mock<TableLayoutPanelDesigner> designerMock = new() { CallBase = true };
-        designerMock.Protected()
-            .Setup<object>("GetService", ItExpr.IsAny<Type>())
-            .Returns((Type serviceType) =>
-            {
-                if (serviceType == typeof(IDesignerHost))
-                    return hostMock.Object;
-                return null!;
-            });
-
-        TableLayoutPanelDesigner designer = designerMock.Object;
-
-        return (hostMock, compChangeServiceMock, serviceProviderMock, designerMock, designer);
     }
 
     [Fact]
@@ -143,8 +113,28 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void Initialize_Should_Setup_Correctly()
     {
-        (Mock<IDesignerHost> hostMock, Mock<IComponentChangeService> compChangeServiceMock, Mock<IServiceProvider> serviceProviderMock, Mock<TableLayoutPanelDesigner> designerMock, TableLayoutPanelDesigner designer) = SetupMocks();
+        Mock<IDesignerHost> hostMock = new();
+        Mock<IComponentChangeService> compChangeServiceMock = new();
 
+        hostMock.Setup(h => h.GetService(typeof(IComponentChangeService)))
+                .Returns(compChangeServiceMock.Object);
+        hostMock.SetupAdd(h => h.TransactionClosing += It.IsAny<DesignerTransactionCloseEventHandler>());
+
+        Mock<IServiceProvider> serviceProviderMock = new();
+        serviceProviderMock.Setup(sp => sp.GetService(typeof(IDesignerHost)))
+                           .Returns(hostMock.Object);
+
+        Mock<TableLayoutPanelDesigner> designerMock = new() { CallBase = true };
+        designerMock.Protected()
+            .Setup<object>("GetService", ItExpr.IsAny<Type>())
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == typeof(IDesignerHost))
+                    return hostMock.Object;
+                return null!;
+            });
+
+        TableLayoutPanelDesigner designer = designerMock.Object;
         designer.Initialize(_tableLayoutPanel);
 
         hostMock.VerifyAdd(h => h.TransactionClosing += It.IsAny<DesignerTransactionCloseEventHandler>(), Times.Once);
