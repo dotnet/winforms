@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -128,7 +129,15 @@ public abstract partial class AxHost
             object? ambient = _host.GetAmbientProperty(dispId);
             if (ambient is not null)
             {
-                Marshal.GetNativeVariantForObject(ambient, (nint)result);
+                if (ComHelpers.BuiltInComSupported)
+                {
+                    Marshal.GetNativeVariantForObject(ambient, (nint)result);
+                }
+                else
+                {
+                    *(ComVariant*)result = ComVariantMarshaller.ConvertToUnmanaged(ambient);
+                }
+
                 return HRESULT.S_OK;
             }
 

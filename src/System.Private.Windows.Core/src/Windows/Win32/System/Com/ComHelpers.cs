@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using Windows.Win32.System.Com;
 
 namespace Windows.Win32;
@@ -98,15 +99,29 @@ internal static unsafe partial class ComHelpers
         }
         else
         {
-            // Fall back to COM interop if possible. Note that this will use the globally registered ComWrappers
-            // if that exists (so it won't always fall into legacy COM interop).
-            try
+            if (BuiltInComSupported)
             {
-                ccw = (IUnknown*)Marshal.GetIUnknownForObject(@object);
+                // Fall back to COM interop if possible. Note that this will use the globally registered ComWrappers
+                // if that exists (so it won't always fall into legacy COM interop).
+                try
+                {
+                    ccw = (IUnknown*)Marshal.GetIUnknownForObject(@object);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Did not find IUnknown for {@object.GetType().Name}. {ex.Message}");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine($"Did not find IUnknown for {@object.GetType().Name}. {ex.Message}");
+                try
+                {
+                    ccw = (IUnknown*)ComInterfaceMarshaller<object>.ConvertToUnmanaged(@object);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Did not find IUnknown for {@object.GetType().Name}. {ex.Message}");
+                }
             }
         }
 
