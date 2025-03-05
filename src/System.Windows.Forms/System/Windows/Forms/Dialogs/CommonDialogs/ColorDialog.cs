@@ -164,6 +164,10 @@ public class ColorDialog : CommonDialog
             flags &= ~CHOOSECOLOR_FLAGS.CC_FULLOPEN;
         }
 
+        // We have to copy the custom colors so we can ignore changes if the user cancels the dialog.
+        Span<COLORREF> customColors = stackalloc COLORREF[16];
+        _customColors.CopyTo(customColors);
+
         CHOOSECOLORW cc = new()
         {
             lStructSize = (uint)sizeof(CHOOSECOLORW),
@@ -174,18 +178,20 @@ public class ColorDialog : CommonDialog
             lpfnHook = HookProcFunctionPointer
         };
 
-        fixed (COLORREF* customColors = _customColors)
+        fixed (COLORREF* c = customColors)
         {
-            cc.lpCustColors = customColors;
+            cc.lpCustColors = c;
 
             if (!PInvoke.ChooseColor(&cc))
             {
                 return false;
             }
 
+            customColors.CopyTo(_customColors);
             _color = cc.rgbResult;
-            return true;
         }
+
+        return true;
     }
 
     /// <summary>
