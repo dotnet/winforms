@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "System.Windows.Forms.Analyzers": {
-      "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\..\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\WinformsControlsTest.csproj"
-    }
-  }
-}
