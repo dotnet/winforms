@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Design.Tests, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Primitives.Tests, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Primitives.TestUtilities, PublicKey={PublicKeys.Ecma}")]
-[assembly: InternalsVisibleTo($"System.Windows.Forms.Tests, PublicKey={PublicKeys.Ecma}")]
+[assembly: InternalsVisibleTo($"System.Windows.Forms.Tests, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"System.Private.Windows.Core.Tests, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"BinaryFormatTests, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Forms.TestUtilities, PublicKey={PublicKeys.Ecma}")]
