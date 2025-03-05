@@ -10679,7 +10679,7 @@ public partial class RichTextBoxTests
 
         string fileName = "SaveRichTextBox.rtf";
         string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
-        string filePath = $"{projectDirectory}/src/System.Windows.Forms/tests/UnitTests/TestResources/Files/{fileName}";
+        string filePath = $"{projectDirectory}/src/test/unit/System.Windows.Forms/TestResources/Files/{fileName}";
 
         try
         {
@@ -10708,8 +10708,8 @@ public partial class RichTextBoxTests
     {
         using RichTextBox richTextBox1 = new();
 
-        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
-        string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
+        string projectDirectory = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
+        string filePath = Path.Join(projectDirectory, "/src/test/unit/System.Windows.Forms/TestResources/Files/Test");
 
         try
         {
