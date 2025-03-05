@@ -24,8 +24,9 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 {
     private readonly Dictionary<Control, ControlItem> _items = [];
     private readonly Dictionary<Control, ErrorWindow> _windows = [];
-    private Icon _icon = DefaultIcon;
+    private Icon? _icon;
     private IconRegion? _region;
+    private int _currentDpi;
     private int _itemIdCounter;
     private int _blinkRate;
     private ErrorBlinkStyle _blinkStyle;
@@ -80,7 +81,6 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         : this()
     {
         ArgumentNullException.ThrowIfNull(container);
-
         container.Add(this);
     }
 
@@ -308,7 +308,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
             {
-                // Let's check if the datamember exists in the new data source
+                // Let's check if the data member exists in the new data source
                 try
                 {
                     _errorManager = _parentControl.BindingContext[value, _dataMember];
@@ -546,10 +546,8 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 if (t_defaultIcon is null)
                 {
                     // Error provider uses small Icon.
-                    int width = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
-                    int height = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
-                    using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
-                    t_defaultIcon = new Icon(defaultIcon, width, height);
+                    Icon defaultIcon = new(typeof(ErrorProvider), "Error");
+                    t_defaultIcon = ScaleHelper.ScaleSmallIconToDpi(defaultIcon, ScaleHelper.InitialSystemDpi);
                 }
             }
 
@@ -567,10 +565,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     [SRDescription(nameof(SR.ErrorProviderIconDescr))]
     public Icon Icon
     {
-        get
-        {
-            return _icon;
-        }
+        get => _icon ??= DefaultIcon;
         set
         {
             _icon = value.OrThrowIfNull();
@@ -584,9 +579,20 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     }
 
     /// <summary>
+    ///  Gets or sets the DPI at which the current error is displayed.
+    ///  If currentDpi is not set, it defaults to _parentControl.DeviceDpi
+    ///  or the system DPI.
+    /// </summary>
+    private int CurrentDpi
+    {
+        get => _currentDpi != 0 ? _currentDpi : _parentControl?.DeviceDpi ?? ScaleHelper.InitialSystemDpi;
+        set => _currentDpi = value;
+    }
+
+    /// <summary>
     ///  Create the icon region on demand.
     /// </summary>
-    internal IconRegion Region => _region ??= new IconRegion(Icon);
+    internal IconRegion Region => _region ??= new IconRegion(Icon, CurrentDpi);
 
     /// <summary>
     ///  Begin bulk member initialization - deferring binding to data source until EndInit is reached
@@ -761,7 +767,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     [SRDescription(nameof(SR.ErrorProviderIconPaddingDescr))]
     public int GetIconPadding(Control control) => EnsureControlItem(control).IconPadding;
 
-    private void ResetIcon() => Icon = DefaultIcon;
+    private void ResetIcon() => _icon = null;
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnRightToLeftChanged(EventArgs e)
@@ -814,5 +820,5 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         EnsureControlItem(control).IconPadding = padding;
     }
 
-    private bool ShouldSerializeIcon() => Icon != DefaultIcon;
+    private bool ShouldSerializeIcon() => _icon is not null && _icon != DefaultIcon;
 }
