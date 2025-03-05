@@ -80,7 +80,7 @@
     <ProjectReference Include="..\..\src\System.Drawing.Common\src\System.Drawing.Common.csproj" />
 
     <!-- Reference and Source System.Windows.Forms -->
-    <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms\System.Windows.Forms.csproj" />
 
     <!-- Reference and Source System.Private.Windows.Core -->
     <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
