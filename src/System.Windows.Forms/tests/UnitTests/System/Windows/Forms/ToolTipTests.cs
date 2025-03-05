@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
 using Moq.Protected;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms.Tests;
 
@@ -783,6 +784,44 @@ public class ToolTipTests
         using ToolTip toolTip = new();
         Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
     }
+
+#pragma warning disable WFO5001
+    [WinFormsTheory]
+    [BoolData]
+    public unsafe void ToolTip_DarkMode_GetCornerPreference_ReturnsExpected(bool value)
+    {
+        if (!OsVersion.IsWindows11_OrGreater())
+        {
+            return;
+        }
+
+        if (SystemInformation.HighContrast)
+        {
+            // We don't run this test in HighContrast mode.
+            return;
+        }
+
+        using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
+        using SubToolTip toolTip = new()
+        {
+            IsBalloon = value,
+        };
+
+        toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
+
+        DWM_WINDOW_CORNER_PREFERENCE cornerPreference;
+        PInvoke.DwmGetWindowAttribute(
+            toolTip.HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+            &cornerPreference,
+            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+
+        cornerPreference.Should().Be(
+            toolTip.IsBalloon
+                ? DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT
+                : DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL);
+    }
+#pragma warning restore WFO5001
 
     [WinFormsFact]
     public void ToolTip_SetToolTipToControl_Invokes_SetToolTip_OfControl()

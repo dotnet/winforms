@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -714,10 +715,30 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
             _window.CreateHandle(cp);
 
+#pragma warning disable WFO5001
             if (SystemInformation.HighContrast)
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
+            else if (Application.IsDarkModeEnabled)
+            {
+                if (!_isBalloon && OsVersion.IsWindows11_OrGreater())
+                {
+                    DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                    PInvoke.DwmSetWindowAttribute(
+                        HWND,
+                        DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                        &roundSmall,
+                        sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+                }
+
+                PInvokeCore.SendMessage(
+                   HWND,
+                   PInvoke.TTM_SETWINDOWTHEME,
+                   default,
+                   $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}");
+            }
+#pragma warning restore WFO5001
         }
 
         // If in OwnerDraw mode, we don't want the default border.
