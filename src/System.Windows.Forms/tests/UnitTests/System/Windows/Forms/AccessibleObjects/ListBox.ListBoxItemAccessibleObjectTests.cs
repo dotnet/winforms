@@ -36,7 +36,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         for (int i = 0; i < persons.Count; i++)
         {
             Person person = persons[i];
-            AccessibleObject itemAccessibleObject = accessibleObject.GetChild(i);
+            AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(i);
 
             Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
             Assert.Equal(person.Name, itemAccessibleObject.Name);
@@ -51,7 +51,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
-        AccessibleObject itemAccessibleObject = accessibleObject.GetChild(0);
+        AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(0);
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
@@ -74,7 +74,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
-        AccessibleObject itemAccessibleObject = accessibleObject.GetChild(0);
+        AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(0);
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
@@ -90,12 +90,12 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
-        AccessibleObject itemAccessibleObject = accessibleObject.GetChild(0);
+        AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(0);
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
         using VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        double[] actualArray = (double[])actual.ToObject();
+        double[] actualArray = (double[])actual.ToObject()!;
         Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
         Assert.Equal(itemAccessibleObject.BoundingRectangle, actualRectangle);
         Assert.False(listBox.IsHandleCreated);
@@ -107,7 +107,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
-        AccessibleObject itemAccessibleObject = accessibleObject.GetChild(0);
+        AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(0);
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
@@ -123,7 +123,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
-        AccessibleObject itemAccessibleObject = accessibleObject.GetChild(0);
+        AccessibleObject? itemAccessibleObject = accessibleObject.GetChild(0);
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
@@ -154,13 +154,11 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new(listBox);
-        ListBox.ListBoxItemAccessibleObject accessibleObject = (ListBox.ListBoxItemAccessibleObject)listBoxAccessibleObject.GetChild(0);
+        ListBox.ListBoxItemAccessibleObject accessibleObject = (ListBox.ListBoxItemAccessibleObject)listBoxAccessibleObject.GetChild(0)!;
         VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(listBox.IsHandleCreated);
     }
-
-#nullable enable
 
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_VerifyProperties()
@@ -197,6 +195,4 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         action.Should().NotThrow();
     }
-
-#nullable disable
 }

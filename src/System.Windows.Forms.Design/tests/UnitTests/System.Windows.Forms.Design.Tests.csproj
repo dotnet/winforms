@@ -6,6 +6,7 @@
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NoWarn>$(NoWarn);SYSLIB0050;SYSLIB0051;SYSLIB0011</NoWarn>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

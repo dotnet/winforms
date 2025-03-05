@@ -21,7 +21,7 @@ internal class MockOleServices<TTestClass> : IOleServices
     static bool IOleServices.IsValidTypeForFormat(Type type, string format) => true;
     static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) { }
 
-    static unsafe bool IOleServices.TryGetBitmapFromDataObject<T>(IDataObject* dataObject, [NotNullWhen(true)] out T data)
+    static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data)
     {
         data = default!;
         return false;

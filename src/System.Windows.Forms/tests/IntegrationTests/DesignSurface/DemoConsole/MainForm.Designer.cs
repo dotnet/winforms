@@ -291,7 +291,7 @@ partial class MainForm
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(824, 530);
+        this.ClientSize = new System.Drawing.Size(1500, 915);
         this.Controls.Add(this.splitContainer);
         this.Controls.Add(this.menuStrip1);
         this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -428,16 +428,14 @@ public static class Clipboard
     /// </remarks>
     public static void SetData(string format, object data)
     {
-        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
-        {
-            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(format);
+        ArgumentNullException.ThrowIfNull(data);
 
         // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
         SetDataObject(new DataObject(format, data), copy: true);
     }
 
-    /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, T)"/>
     public static void SetDataAsJson<T>(string format, T data)
     {
         ArgumentNullException.ThrowIfNull(data);
@@ -451,28 +449,8 @@ public static class Clipboard
     /// <summary>
     ///  Clears the Clipboard and then adds a collection of file names in the <see cref="DataFormats.FileDrop"/> format.
     /// </summary>
-    public static void SetFileDropList(StringCollection filePaths)
-    {
-        if (filePaths.OrThrowIfNull().Count == 0)
-        {
-            throw new ArgumentException(SR.CollectionEmptyException);
-        }
-
-        // Validate the paths to make sure they don't contain invalid characters
-        string[] filePathsArray = new string[filePaths.Count];
-        filePaths.CopyTo(filePathsArray, 0);
-
-        foreach (string path in filePathsArray)
-        {
-            // These are the only error states for Path.GetFullPath
-            if (string.IsNullOrEmpty(path) || path.Contains('\0'))
-            {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, nameof(filePaths)));
-            }
-        }
-
-        SetDataObject(new DataObject(DataFormatNames.FileDrop, autoConvert: true, filePathsArray), copy: true);
-    }
+    public static void SetFileDropList(StringCollection filePaths) =>
+        ClipboardCore.SetFileDropList(filePaths);
 
     /// <summary>
     ///  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Specialized;
 using Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
@@ -35,6 +36,32 @@ internal static unsafe class ClipboardCore<TOleServices>
         int retryCount = retryTimes;
 
         while ((result = TOleServices.OleSetClipboard(null)).Failed)
+        {
+            if (--retryCount < 0)
+            {
+                break;
+            }
+
+            Thread.Sleep(millisecondsTimeout: retryDelay);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///  Flushes data to the Clipboard.
+    /// </summary>
+    /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
+    internal static HRESULT Flush(
+        int retryTimes = OleRetryCount,
+        int retryDelay = OleRetryDelay)
+    {
+        TOleServices.EnsureThreadState();
+
+        HRESULT result;
+        int retryCount = retryTimes;
+
+        while ((result = TOleServices.OleFlushClipboard()).Failed)
         {
             if (--retryCount < 0)
             {
@@ -103,7 +130,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// <param name="proxyDataObject">The proxy data object retrieved from the Clipboard.</param>
     /// <param name="originalObject">The original object retrieved from the Clipboard, if available.</param>
     /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
-    public static HRESULT TryGetData(
+    /// <inheritdoc cref="SetData(IComVisibleDataObject, bool, int, int)"/>
+    internal static HRESULT TryGetData(
         out ComScope<IDataObject> proxyDataObject,
         out object? originalObject,
         int retryTimes = OleRetryCount,
@@ -143,6 +171,38 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
 
         return result;
+    }
+
+    /// <summary>
+    ///  Returns true if the given <paramref name="object"/> is currently on the Clipboard.
+    /// </summary>
+    /// <remarks>
+    ///  <para>This is meant to emulate the OleIsCurrentClipboard API.</para>
+    /// </remarks>
+    /// <param name="object">The object to check.</param>
+    /// <returns>'true' if <paramref name="object"/> is currently on the Clipboard.</returns>
+    /// <inheritdoc cref="SetData(IComVisibleDataObject, bool, int, int)"/>
+    internal static bool IsObjectOnClipboard(
+        object @object,
+        int retryTimes = OleRetryCount,
+        int retryDelay = OleRetryDelay)
+    {
+        if (@object is null)
+        {
+            return false;
+        }
+
+        HRESULT result = TryGetData(
+            out ComScope<IDataObject> proxyDataObject,
+            out object? originalObject,
+            retryTimes,
+            retryDelay);
+
+        // Need to ensure we release the ref count on the proxy object.
+        using (proxyDataObject)
+        {
+            return result.Succeeded && @object == originalObject;
+        }
     }
 
     /// <summary>
@@ -228,5 +288,12 @@ internal static unsafe class ClipboardCore<TOleServices>
 
             _ => TOleServices.IsValidTypeForFormat(type, format)
         };
+    }
+
+    internal static void SetFileDropList(StringCollection filePaths)
+    {
+        IComVisibleDataObject dataObject = TOleServices.CreateDataObject();
+        dataObject.SetFileDropList(filePaths);
+        SetData(dataObject, copy: true);
     }
 }

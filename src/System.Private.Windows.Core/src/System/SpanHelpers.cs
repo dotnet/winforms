@@ -22,9 +22,7 @@ internal static class SpanHelpers
         source.CopyTo(destination);
 
         // Null terminate the string
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
         destination[source.Length] = '\0';
-#pragma warning restore IDE0059
     }
 
     /// <summary>

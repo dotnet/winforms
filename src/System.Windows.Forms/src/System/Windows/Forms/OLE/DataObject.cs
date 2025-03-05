@@ -73,9 +73,10 @@ public unsafe partial class DataObject :
     ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data and its
     ///  associated format.
     /// </summary>
-    public DataObject(string format, object data) : this() => SetData(format, data);
+    public DataObject(string format, object data) : this() => SetData(format, data.OrThrowIfNull());
 
-    internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
+    internal DataObject(string format, bool autoConvert, object data) : this() =>
+        SetData(format, autoConvert, data.OrThrowIfNull());
 
     bool IDataObjectInternal<DataObject, IDataObject>.TryUnwrapUserDataObject([NotNullWhen(true)] out IDataObject? dataObject) =>
         TryUnwrapUserDataObject(out dataObject);
@@ -93,20 +94,15 @@ public unsafe partial class DataObject :
         return dataObject is not null;
     }
 
-    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, T data) =>
         _innerData.SetDataAsJson<T, DataObject>(data, format);
 
-    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    /// <inheritdoc cref="SetDataAsJson{T}(T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(T data) =>
         _innerData.SetDataAsJson<T, DataObject>(data);
-
-    /// <inheritdoc cref="Composition.SetDataAsJson{T, TDataObject}(T, string, bool)"/>
-    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data) =>
-        _innerData.SetDataAsJson<T, DataObject>(data, format, autoConvert);
 
     #region IDataObject
     [Obsolete(
@@ -246,7 +242,7 @@ public unsafe partial class DataObject :
     {
         string[] strings = new string[filePaths.OrThrowIfNull().Count];
         filePaths.CopyTo(strings, 0);
-        SetData(DataFormatNames.FileDrop, true, strings);
+        SetData(DataFormatNames.FileDrop, autoConvert: true, strings);
     }
 
     public virtual void SetImage(Image image) => SetData(DataFormatNames.Bitmap, true, image.OrThrowIfNull());

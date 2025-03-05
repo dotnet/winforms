@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable disable
+
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -24,7 +26,6 @@ public class DesignerAttributeTests
         $"System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridDesigner, {Assemblies.SystemDesign}",
-        $"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.DataGridViewComponentEditor, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.StatusBarDesigner, {Assemblies.SystemDesign}",
         $"System.Windows.Forms.Design.ToolBarButtonDesigner, {Assemblies.SystemDesign}",
