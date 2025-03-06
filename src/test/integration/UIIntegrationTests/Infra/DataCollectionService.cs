@@ -234,13 +234,13 @@ internal static class DataCollectionService
             string sanitizedTestName = new(testName.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
             string sanitizedErrorId = new(errorId.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
 
-            return Path.Combine(Path.GetFullPath(logDirectory), $"{timestamp:HH.mm.ss}-{testName}-{errorId}{logId}.{extension}");
+            return Path.Join(Path.GetFullPath(logDirectory), $"{timestamp:HH.mm.ss}-{testName}-{errorId}{logId}.{extension}");
         }
     }
 
     internal static string GetLogDirectory()
     {
-        return Path.Combine(GetBaseLogDirectory(), "Screenshots");
+        return Path.Join(GetBaseLogDirectory(), "Screenshots");
     }
 
     private static string GetBaseLogDirectory()
@@ -258,10 +258,10 @@ internal static class DataCollectionService
         if (binPathSeparator > 0)
         {
             string configuration = Path.GetFileName(Path.GetDirectoryName(assemblyDirectory))!;
-            return Path.Combine(assemblyDirectory[..binPathSeparator], "log", configuration);
+            return Path.Join(assemblyDirectory[..binPathSeparator], "log", configuration);
         }
 
-        return Path.Combine(assemblyDirectory, "xUnitResults");
+        return Path.Join(assemblyDirectory, "xUnitResults");
     }
 
     private static string GetAssemblyDirectory()

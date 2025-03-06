@@ -382,7 +382,7 @@ public partial class DragDrop : Form
 
     private void OpenCats()
     {
-        string dragDropDataDirectory = Path.Combine(
+        string dragDropDataDirectory = Path.Join(
             Directory.GetCurrentDirectory(),
             DragDropDataDirectory);
 
@@ -400,7 +400,7 @@ public partial class DragDrop : Form
 
     private string ReadAsciiText()
     {
-        string nyanCatAsciiPath = Path.Combine(
+        string nyanCatAsciiPath = Path.Join(
             Directory.GetCurrentDirectory(),
             DragDropDataDirectory,
             NyanCatAsciiTxt);
@@ -537,7 +537,7 @@ public partial class DragDrop : Form
             DataObject data = new(DataFormats.FileDrop,
                 new string[]
                 {
-                    Path.Combine(Directory.GetCurrentDirectory(),
+                    Path.Join(Directory.GetCurrentDirectory(),
                         DragDropDataDirectory,
                         DragAcceptRtf)
                 });

@@ -36,7 +36,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertFrom_ByteArray_ReturnsExpected()
     {
         CursorConverter converter = new();
-        byte[] data = File.ReadAllBytes(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        byte[] data = File.ReadAllBytes(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         using Cursor cursor = Assert.IsType<Cursor>(converter.ConvertFrom(data));
         Assert.NotEqual(IntPtr.Zero, cursor.Handle);
         Assert.Equal(new Point(5, 8), cursor.HotSpot);
@@ -126,7 +126,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertTo_StreamToByteArray_ReturnsExpected()
     {
         CursorConverter converter = new();
-        byte[] data = File.ReadAllBytes(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        byte[] data = File.ReadAllBytes(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         using MemoryStream stream = new(data);
         using Cursor sourceCursor = new(stream);
         Assert.Equal(data, converter.ConvertTo(sourceCursor, typeof(byte[])));
@@ -136,7 +136,7 @@ public class CursorConverterTests
     public void CursorConverter_ConvertTo_FileToByteArray_ReturnsExpected()
     {
         CursorConverter converter = new();
-        string fileName = Path.Combine("bitmaps", "10x16_one_entry_32bit.ico");
+        string fileName = Path.Join("bitmaps", "10x16_one_entry_32bit.ico");
         byte[] data = File.ReadAllBytes(fileName);
         using Cursor sourceCursor = new(fileName);
         Assert.Equal(data, converter.ConvertTo(sourceCursor, typeof(byte[])));

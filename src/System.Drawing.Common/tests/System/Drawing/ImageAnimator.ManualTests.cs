@@ -7,7 +7,7 @@ namespace System.Drawing.Tests;
 
 public class ImageAnimatorManualTests
 {
-    public static string OutputFolder { get; } = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+    public static string OutputFolder { get; } = Path.Join(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
 
     [Fact(Skip = "Manual Test")]
     public void AnimateAndCaptureFrames()
@@ -44,7 +44,7 @@ public class ImageAnimatorManualTests
 
         foreach (string imageName in images)
         {
-            string testOutputFolder = Path.Combine(OutputFolder, Path.GetFileNameWithoutExtension(imageName));
+            string testOutputFolder = Path.Join(OutputFolder, Path.GetFileNameWithoutExtension(imageName));
             Directory.CreateDirectory(testOutputFolder);
             frameIndexes[imageName] = 0;
 
@@ -57,7 +57,7 @@ public class ImageAnimatorManualTests
                 // a) The images don't get saved as animated gifs again, and just a single frame is saved
                 // b) Saving pngs in this test on Linux was leading to sporadic GDI+ errors; Jpeg is more reliable
                 string timestamp = stopwatch.ElapsedMilliseconds.ToString("000000");
-                animation.Save(Path.Combine(testOutputFolder, $"{++frameIndexes[imageName]}_{timestamp}.jpg"), ImageFormat.Jpeg);
+                animation.Save(Path.Join(testOutputFolder, $"{++frameIndexes[imageName]}_{timestamp}.jpg"), ImageFormat.Jpeg);
             }));
 
             bitmaps[imageName] = new Bitmap(Helpers.GetTestBitmapPath(imageName));

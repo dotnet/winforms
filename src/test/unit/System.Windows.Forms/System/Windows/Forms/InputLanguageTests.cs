@@ -214,7 +214,7 @@ public class InputLanguageTests
 
     private static void InstallUserLanguage(string languageTag)
     {
-        string file = Path.Combine(Path.GetTempPath(), $"install-language-{languageTag}.ps1");
+        string file = Path.Join(Path.GetTempPath(), $"install-language-{languageTag}.ps1");
         string script = $$"""
             $list = Get-WinUserLanguageList
             $list.Add("{{languageTag}}")
@@ -227,7 +227,7 @@ public class InputLanguageTests
 
     private static void UninstallUserLanguage(string languageTag)
     {
-        string file = Path.Combine(Path.GetTempPath(), $"uninstall-language-{languageTag}.ps1");
+        string file = Path.Join(Path.GetTempPath(), $"uninstall-language-{languageTag}.ps1");
         string script = $$"""
             $list = Get-WinUserLanguageList
             $item = $list | Where-Object {$_.LanguageTag -like "{{languageTag}}"}

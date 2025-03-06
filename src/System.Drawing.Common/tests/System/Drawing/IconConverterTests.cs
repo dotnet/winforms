@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Imaging;
@@ -18,7 +18,7 @@ public class IconConverterTest
 
     public IconConverterTest()
     {
-        _icon = new Icon(Path.Combine("bitmaps", "TestIcon.ico"));
+        _icon = new Icon(Path.Join("bitmaps", "TestIcon.ico"));
         _iconStr = _icon.ToString();
 
         using (MemoryStream destStream = new())

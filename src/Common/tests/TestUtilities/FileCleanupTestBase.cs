@@ -16,7 +16,7 @@ public abstract class FileCleanupTestBase : IDisposable
         {
             if (_testDirectory is null)
             {
-                _testDirectory = Path.Combine(Path.GetTempPath(), GetUniqueName());
+                _testDirectory = Path.Join(Path.GetTempPath(), GetUniqueName());
                 Directory.CreateDirectory(_testDirectory);
             }
 
@@ -43,7 +43,7 @@ public abstract class FileCleanupTestBase : IDisposable
         }
     }
 
-    public string GetTestFilePath() => Path.Combine(TestDirectory, GetTestFileName());
+    public string GetTestFilePath() => Path.Join(TestDirectory, GetTestFileName());
 
     public static string GetTestFileName() => GetUniqueName();
 

@@ -55,7 +55,7 @@ public static class TestHelpers
             throw new ArgumentNullException(nameof(projectName));
 
         string repoRoot = GetRepoRoot();
-        string exePath = Path.Combine(
+        string exePath = Path.Join(
             repoRoot,
             $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
@@ -182,7 +182,7 @@ public static class TestHelpers
         string repoRoot = GetRepoRoot();
 
         // make sure there's a global.json
-        string jsonFile = Path.Combine(repoRoot, "global.json");
+        string jsonFile = Path.Join(repoRoot, "global.json");
         if (!File.Exists(jsonFile))
             throw new FileNotFoundException("global.json does not exist");
 
@@ -205,7 +205,7 @@ public static class TestHelpers
         // Check to see if the matching version is installed
         // The default install location is C:\Program Files\dotnet\sdk
         string defaultSdkRoot = @"C:\Program Files\dotnet\sdk";
-        string sdkPath = Path.Combine(defaultSdkRoot, dotnetVersion);
+        string sdkPath = Path.Join(defaultSdkRoot, dotnetVersion);
         if (!Directory.Exists(sdkPath))
             throw new DirectoryNotFoundException($"dotnet sdk {dotnetVersion} is not installed globally");
 
@@ -247,7 +247,7 @@ public static class TestHelpers
         {
             if (Directory.GetDirectories(currentDirectory, seek, SearchOption.TopDirectoryOnly).Length == 1)
             {
-                string ret = Path.Combine(currentDirectory, seek);
+                string ret = Path.Join(currentDirectory, seek);
                 return ret;
             }
 

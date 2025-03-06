@@ -13,7 +13,7 @@ public partial class CommonControl2 : Form
 
         string executable = Environment.ProcessPath;
         string executablePath = Path.GetDirectoryName(executable);
-        string page = Path.Combine(executablePath, "HTMLPage1.html");
+        string page = Path.Join(executablePath, "HTMLPage1.html");
         webBrowser1.Url = new Uri($"file://{page}", UriKind.Absolute);
     }
 }
