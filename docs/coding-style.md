@@ -102,7 +102,7 @@ internal bool SingleVerticalBorderAdded
 ### Namespace Usings
 
 1. Namespace `using`s should be specified at the top of the file, before `namespace` declarations, and should be sorted alphabetically, with the exception of `System.*` namespaces, which are to be placed on top of all others.
-1. Global usings go should in a file called `globalusings.cs`.
+1. Global `using`s go should in a file called `globalusings.cs`.
 
 ### Namespaces
 
