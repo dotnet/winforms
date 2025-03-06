@@ -30,7 +30,7 @@ public partial class MaskedTextBox : TextBoxBase
     // menu behavior will be a bit different (for instance Copy option is enabled when PasswordChar is set).
     // To provide Undo functionality and make the context menu behave like the Edit control, we would have
     // to implement our own. For more info about how to do this, see:
-    // https://docs.microsoft.com/en-us/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
+    // https://docs.microsoft.com/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
 
     private const bool Forward = true;
     private const bool Backward = false;

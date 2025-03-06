@@ -89,7 +89,7 @@ public class ApplicationTests
     public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
     {
         // This is not a recommended scenario per
-        // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
+        // https://docs.microsoft.com/dotnet/api/system.windows.forms.application.enablevisualstyles
         // EnableVisualStyles should be executed before any control-related code is.
         RemoteExecutor.Invoke(() =>
         {
