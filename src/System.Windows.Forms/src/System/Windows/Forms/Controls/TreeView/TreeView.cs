@@ -22,7 +22,7 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Nodes))]
 [DefaultEvent(nameof(AfterSelect))]
 [Docking(DockingBehavior.Ask)]
-[Designer($"System.Windows.Forms.Design.TreeViewDesigner, {AssemblyRef.SystemDesign}")]
+[Designer($"System.Windows.Forms.Design.TreeViewDesigner, {Assemblies.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionTreeView))]
 public partial class TreeView : Control
 {
@@ -528,7 +528,7 @@ public partial class TreeView : Control
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.TreeViewImageIndexDescr))]
     [RelatedImageList("ImageList")]
     public int ImageIndex
@@ -577,7 +577,7 @@ public partial class TreeView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRDescription(nameof(SR.TreeViewImageKeyDescr))]
@@ -999,7 +999,7 @@ public partial class TreeView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
     [Localizable(true)]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.TreeViewSelectedImageIndexDescr))]
     [RelatedImageList("ImageList")]
     public int SelectedImageIndex
@@ -1048,7 +1048,7 @@ public partial class TreeView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
     [TypeConverter(typeof(ImageKeyConverter))]
-    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(ImageList.Indexer.DefaultKey)]
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRDescription(nameof(SR.TreeViewSelectedImageKeyDescr))]
