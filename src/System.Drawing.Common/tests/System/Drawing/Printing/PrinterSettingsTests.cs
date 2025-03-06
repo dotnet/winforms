@@ -415,7 +415,7 @@ public class PrinterSettingsTests
     public void SupportsColor_ReturnsExpected()
     {
         // XPS and PDF printers support color.
-        // docs.microsoft.com/en-us/windows-hardware/drivers/print/improved-color-printing
+        // docs.microsoft.com/windows-hardware/drivers/print/improved-color-printing
         PrinterSettings printerSettings = new() { PrinterName = GetNameOfTestPrinterSuitableForDevModeTesting() };
         Assert.True(printerSettings.SupportsColor);
     }

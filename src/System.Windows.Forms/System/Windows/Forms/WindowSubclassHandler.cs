@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 ///   window is destroyed.
 /// </para>
 /// <para>
-///   See https://docs.microsoft.com/en-us/windows/desktop/winmsg/about-window-procedures#instance-subclassing
+///   See https://docs.microsoft.com/windows/desktop/winmsg/about-window-procedures#instance-subclassing
 ///   for more information about subclassing.
 /// </para>
 /// </remarks>

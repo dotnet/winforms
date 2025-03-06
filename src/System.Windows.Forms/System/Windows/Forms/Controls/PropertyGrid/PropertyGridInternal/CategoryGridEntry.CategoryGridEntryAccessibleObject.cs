@@ -89,7 +89,7 @@ internal partial class CategoryGridEntry
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
             // To announce expanded collapsed state control type should be appropriate:
-            // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+            // https://docs.microsoft.com/windows/win32/winauto/uiauto-controlpatternmapping
             UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
             UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => (VARIANT)SR.CategoryPropertyGridLocalizedControlType,
             _ => base.GetPropertyValue(propertyID),
