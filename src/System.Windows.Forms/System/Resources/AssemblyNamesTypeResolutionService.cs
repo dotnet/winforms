@@ -13,8 +13,9 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
     private ConcurrentDictionary<AssemblyName, Assembly>? _cachedAssemblies;
     private ConcurrentDictionary<string, Type>? _cachedTypes;
 
-    private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ?? string.Empty, "dotnet\\shared");
-    private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? string.Empty, "dotnet\\shared");
+    private static readonly string s_dotNetPath = Path.Join(
+        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+        @"dotnet\shared\");
 
     internal AssemblyNamesTypeResolutionService(AssemblyName[]? names) => _names = names;
 
@@ -155,12 +156,12 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
             throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
         }
 
-        if (result is not null)
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+        if (result?.Assembly?.Location is { } location)
         {
             // Only cache types from the shared framework because they don't need to update.
             // For simplicity, don't cache custom types
-#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
-            if (IsDotNetAssembly(result.Assembly.Location))
+            if (location.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase))
             {
                 _cachedTypes[name] = result;
             }
@@ -169,14 +170,6 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
         return result;
     }
-
-    /// <summary>
-    ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
-    /// </summary>
-    private static bool IsDotNetAssembly(string assemblyPath)
-        => assemblyPath is not null
-        && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase)
-        || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
 
     public void ReferenceAssembly(AssemblyName name) => throw new NotSupportedException();
 }

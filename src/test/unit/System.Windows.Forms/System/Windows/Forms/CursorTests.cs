@@ -57,8 +57,8 @@ public class CursorTests
 
     public static IEnumerable<object[]> Ctor_ValidFile_TestData()
     {
-        yield return new object[] { Path.Combine("bitmaps", "cursor.cur"), Point.Empty };
-        yield return new object[] { Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"), new Point(5, 8) };
+        yield return new object[] { Path.Join("bitmaps", "cursor.cur"), Point.Empty };
+        yield return new object[] { Path.Join("bitmaps", "10x16_one_entry_32bit.ico"), new Point(5, 8) };
     }
 
     [Theory]
@@ -76,7 +76,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_Stream_NonStartPosition()
     {
-        using MemoryStream stream = new(File.ReadAllBytes(Path.Combine("bitmaps", "cursor.cur")));
+        using MemoryStream stream = new(File.ReadAllBytes(Path.Join("bitmaps", "cursor.cur")));
         stream.Position = 5;
         using Cursor cursor = new(stream);
         Assert.NotNull(cursor);
@@ -96,13 +96,13 @@ public class CursorTests
 
     public static IEnumerable<object[]> Ctor_InvalidFile_TestData()
     {
-        yield return new object[] { Path.Combine("bitmaps", "nature24bits.jpg") };
-        yield return new object[] { Path.Combine("bitmaps", "nature24bits.gif") };
-        yield return new object[] { Path.Combine("bitmaps", "1bit.png") };
-        yield return new object[] { Path.Combine("bitmaps", "almogaver24bits.bmp") };
-        yield return new object[] { Path.Combine("bitmaps", "telescope_01.wmf") };
-        yield return new object[] { Path.Combine("bitmaps", "milkmateya01.emf") };
-        yield return new object[] { Path.Combine("bitmaps", "EmptyFile") };
+        yield return new object[] { Path.Join("bitmaps", "nature24bits.jpg") };
+        yield return new object[] { Path.Join("bitmaps", "nature24bits.gif") };
+        yield return new object[] { Path.Join("bitmaps", "1bit.png") };
+        yield return new object[] { Path.Join("bitmaps", "almogaver24bits.bmp") };
+        yield return new object[] { Path.Join("bitmaps", "telescope_01.wmf") };
+        yield return new object[] { Path.Join("bitmaps", "milkmateya01.emf") };
+        yield return new object[] { Path.Join("bitmaps", "EmptyFile") };
     }
 
     [Theory]
@@ -326,7 +326,7 @@ public class CursorTests
     [Fact]
     public void Cursor_CopyHandle_Invoke_Success()
     {
-        using Cursor sourceCursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor sourceCursor = new(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         IntPtr handle = sourceCursor.CopyHandle();
         Assert.NotEqual(IntPtr.Zero, handle);
         Assert.NotEqual(sourceCursor.Handle, handle);
@@ -341,7 +341,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Dispose_InvokeOwned_Success()
     {
-        Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        Cursor cursor = new(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         cursor.Dispose();
         Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
         Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
@@ -377,7 +377,7 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_Draw_InvokeValidCursor_Success(Rectangle rectangle)
     {
-        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor cursor = new(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.Draw(graphics, rectangle);
@@ -414,7 +414,7 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_DrawStretched_InvokeValidCursor_Success(Rectangle rectangle)
     {
-        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor cursor = new(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.DrawStretched(graphics, rectangle);
@@ -499,7 +499,7 @@ public class CursorTests
     [Fact]
     public void Cursor_ToString_CursorFromFile_ReturnsExpected()
     {
-        using Cursor cursor = new(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
+        using Cursor cursor = new(Path.Join("bitmaps", "10x16_one_entry_32bit.ico"));
         Assert.Equal("[Cursor: System.Windows.Forms.Cursor]", cursor.ToString());
     }
 

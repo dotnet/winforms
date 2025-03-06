@@ -10678,7 +10678,7 @@ public partial class RichTextBoxTests
         using RichTextBox richTextBox2 = new();
 
         string fileName = "SaveRichTextBox.rtf";
-        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
+        string projectDirectory = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = $"{projectDirectory}/src/test/unit/System.Windows.Forms/TestResources/Files/{fileName}";
 
         try

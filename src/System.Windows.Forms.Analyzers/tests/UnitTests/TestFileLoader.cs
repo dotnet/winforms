@@ -54,7 +54,7 @@ public static class TestFileLoader
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Join("Analyzers", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
     }
 
     public static async Task<string> GetGeneratorTestCodeAsync(
@@ -62,7 +62,7 @@ public static class TestFileLoader
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(Path.Combine("Generators", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Join("Generators", toolName), testName, SourceLanguage.None).ConfigureAwait(false);
     }
 
     public static async Task<string> GetCSAnalyzerTestCodeAsync(
@@ -70,7 +70,7 @@ public static class TestFileLoader
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Join("Analyzers", toolName), testName).ConfigureAwait(false);
     }
 
     public static async Task<string> GetVBAnalyzerTestCodeAsync(
@@ -78,6 +78,6 @@ public static class TestFileLoader
         [CallerFilePath] string filePath = "")
     {
         string toolName = Path.GetFileName(Path.GetDirectoryName(filePath))!;
-        return await LoadTestFileAsync(Path.Combine("Analyzers", toolName), testName, SourceLanguage.VisualBasic).ConfigureAwait(false);
+        return await LoadTestFileAsync(Path.Join("Analyzers", toolName), testName, SourceLanguage.VisualBasic).ConfigureAwait(false);
     }
 }

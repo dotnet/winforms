@@ -1768,8 +1768,8 @@ public class ToolStripItemTests
     {
         yield return new object[] { null };
         yield return new object[] { new Bitmap(10, 10) };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")) };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")) };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")) };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")) };
     }
 
     [WinFormsTheory]
@@ -1864,8 +1864,8 @@ public class ToolStripItemTests
     {
         yield return new object[] { null, 0 };
         yield return new object[] { new Bitmap(10, 10), 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
     }
 
     [WinFormsTheory]
@@ -3784,8 +3784,8 @@ public class ToolStripItemTests
         {
             yield return new object[] { imageTransparentColor, null };
             yield return new object[] { imageTransparentColor, new Bitmap(10, 10) };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")) };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")) };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")) };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")) };
         }
     }
 
@@ -3814,8 +3814,8 @@ public class ToolStripItemTests
         {
             yield return new object[] { imageTransparentColor, null, 1 };
             yield return new object[] { imageTransparentColor, new Bitmap(10, 10), -1 };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), -1 };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), -1 };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), -1 };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), -1 };
         }
     }
 
@@ -3888,8 +3888,8 @@ public class ToolStripItemTests
         {
             yield return new object[] { imageTransparentColor, null, 0 };
             yield return new object[] { imageTransparentColor, new Bitmap(10, 10), 1 };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), 1 };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), 1 };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
         }
     }
 
@@ -5602,8 +5602,8 @@ public class ToolStripItemTests
         {
             yield return new object[] { null, color };
             yield return new object[] { new Bitmap(10, 10), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
+            yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), color };
+            yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), color };
         }
     }
 
@@ -5669,10 +5669,10 @@ public class ToolStripItemTests
         yield return new object[] { null, Color.Red, 0 };
         yield return new object[] { new Bitmap(10, 10), Color.Empty, 0 };
         yield return new object[] { new Bitmap(10, 10), Color.Red, 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Red, 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), Color.Red, 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
     }
 
     [WinFormsTheory]
@@ -5736,10 +5736,10 @@ public class ToolStripItemTests
         yield return new object[] { null, Color.Red, 1 };
         yield return new object[] { new Bitmap(10, 10), Color.Empty, 0 };
         yield return new object[] { new Bitmap(10, 10), Color.Red, 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Red, 1 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), Color.Red, 1 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
     }
 
     [WinFormsTheory]

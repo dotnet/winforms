@@ -131,7 +131,7 @@ public sealed class ResXDataNode : ISerializable
             if (fileRefDetails is not null && fileRefDetails.Length > 1)
             {
                 _fileRefFullPath = !Path.IsPathRooted(fileRefDetails[0]) && basePath is not null
-                    ? Path.Combine(basePath, fileRefDetails[0])
+                    ? Path.Join(basePath, fileRefDetails[0])
                     : fileRefDetails[0];
 
                 _fileRefType = fileRefDetails[1];

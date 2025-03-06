@@ -128,7 +128,7 @@ public class DragDropTests : ControlTestBase
         await RunTestAsync(dragDropForm =>
         {
             string dragAcceptRtfDestPath = string.Empty;
-            string dragDropDirectory = Path.Combine(Directory.GetCurrentDirectory(), DragDrop);
+            string dragDropDirectory = Path.Join(Directory.GetCurrentDirectory(), DragDrop);
             RunTest();
 
             unsafe void RunTest()
@@ -138,14 +138,14 @@ public class DragDropTests : ControlTestBase
 
                 try
                 {
-                    string dragAcceptRtfSourcePath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+                    string dragAcceptRtfSourcePath = Path.Join(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
 
                     if (!Directory.Exists(dragDropDirectory))
                     {
                         Directory.CreateDirectory(dragDropDirectory);
                     }
 
-                    dragAcceptRtfDestPath = Path.Combine(dragDropDirectory, DragAcceptRtf);
+                    dragAcceptRtfDestPath = Path.Join(dragDropDirectory, DragAcceptRtf);
 
                     if (!File.Exists(dragAcceptRtfDestPath))
                     {
@@ -423,7 +423,7 @@ public class DragDropTests : ControlTestBase
     {
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
-            string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            string dragAcceptRtfPath = Path.Join(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             using RichTextBox richTextBox = new();
             richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
             string dragAcceptRtfContent = richTextBox.Rtf;
@@ -453,7 +453,7 @@ public class DragDropTests : ControlTestBase
     {
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
-            string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            string dragAcceptRtfPath = Path.Join(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             using RichTextBox richTextBox = new();
             richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
             string dragAcceptRtfContent = richTextBox.Rtf;
@@ -1082,7 +1082,7 @@ public class DragDropTests : ControlTestBase
                 return;
             }
 
-            string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            string dragAcceptRtf = Path.Join(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             if (File.Exists(dragAcceptRtf))
             {
                 string[] dropFiles = [dragAcceptRtf];
@@ -1142,7 +1142,7 @@ public class DragDropTests : ControlTestBase
         {
             _testOutputHelper.WriteLine($"Mouse down on drag source at position ({e.X},{e.Y}).");
 
-            string dragAcceptRtf = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+            string dragAcceptRtf = Path.Join(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             if (File.Exists(dragAcceptRtf))
             {
                 string[] dropFiles = [dragAcceptRtf];

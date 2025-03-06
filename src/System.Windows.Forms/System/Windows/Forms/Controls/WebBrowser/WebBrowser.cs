@@ -612,7 +612,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            string mshtmlPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "mshtml.dll");
+            string mshtmlPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.System), "mshtml.dll");
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(mshtmlPath);
             return new Version(fvi.FileMajorPart, fvi.FileMinorPart, fvi.FileBuildPart, fvi.FilePrivatePart);
         }

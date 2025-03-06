@@ -399,8 +399,8 @@ public class ToolStripControlHostTests
     {
         yield return new object[] { null };
         yield return new object[] { new Bitmap(10, 10) };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")) };
-        yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")) };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")) };
+        yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")) };
     }
 
     [WinFormsTheory]
@@ -1210,8 +1210,8 @@ public class ToolStripControlHostTests
         {
             yield return new object[] { imageTransparentColor, null };
             yield return new object[] { imageTransparentColor, new Bitmap(10, 10) };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")) };
-            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")) };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")) };
+            yield return new object[] { imageTransparentColor, Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")) };
         }
     }
 
@@ -1336,8 +1336,8 @@ public class ToolStripControlHostTests
         {
             yield return new object[] { null, color };
             yield return new object[] { new Bitmap(10, 10), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), color };
-            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), color };
+            yield return new object[] { Image.FromFile(Path.Join("bitmaps", "nature24bits.gif")), color };
+            yield return new object[] { Image.FromFile(Path.Join("bitmaps", "10x16_one_entry_32bit.ico")), color };
         }
     }
 

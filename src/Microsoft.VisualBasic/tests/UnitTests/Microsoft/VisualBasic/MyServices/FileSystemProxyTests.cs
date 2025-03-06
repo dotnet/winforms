@@ -37,7 +37,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     {
         var TestDirInfo = new DirectoryInfo(TestDirectory);
         string Root = TestDirInfo.Root.Name;
-        Assert.Equal(_fileSystem.CombinePath(Root, "Test2"), Path.Combine(Root, "Test2"));
+        Assert.Equal(_fileSystem.CombinePath(Root, "Test2"), Path.Join(Root, "Test2"));
     }
 
     [Fact]
@@ -45,20 +45,20 @@ public class FileSystemProxyTests : FileCleanupTestBase
     {
         Assert.Equal(_fileSystem.CombinePath(TestDirectory, null), TestDirectory);
         Assert.Equal(_fileSystem.CombinePath(TestDirectory, ""), TestDirectory);
-        Assert.Equal(_fileSystem.CombinePath(TestDirectory, "Test"), Path.Combine(TestDirectory, "Test"));
+        Assert.Equal(_fileSystem.CombinePath(TestDirectory, "Test"), Path.Join(TestDirectory, "Test"));
     }
 
     [Fact]
     public void CopyDirectory_SourceDirectoryName_DestinationDirectoryName()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         for (int i = 0; i < 6; i++)
         {
             CreateTestFile(SourceData, PathFromBase: "SourceDirectory", TestFileName: $"NewFile{i}");
         }
 
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         _fileSystem.CopyDirectory(FullPathToSourceDirectory, FullPathToTargetDirectory);
         Assert.Equal(Directory.GetFiles(FullPathToSourceDirectory).Length, Directory.GetFiles(FullPathToTargetDirectory).Length);
         foreach (string CurrentFile in Directory.GetFiles(FullPathToTargetDirectory))
@@ -76,8 +76,8 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void CopyDirectory_SourceDirectoryName_DestinationDirectoryName_OverwriteFalse()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         for (int i = 0; i < 6; i++)
         {
@@ -106,8 +106,8 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void CopyDirectory_SourceDirectoryName_DestinationDirectoryName_OverwriteTrue()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         Directory.CreateDirectory(FullPathToTargetDirectory);
         for (int i = 0; i < 6; i++)
@@ -179,7 +179,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void CreateDirectory_Directory()
     {
-        string FullPathToNewDirectory = Path.Combine(TestDirectory, "NewDirectory");
+        string FullPathToNewDirectory = Path.Join(TestDirectory, "NewDirectory");
         Assert.False(Directory.Exists(FullPathToNewDirectory));
         _fileSystem.CreateDirectory(FullPathToNewDirectory);
         Assert.True(Directory.Exists(FullPathToNewDirectory));
@@ -205,7 +205,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void DeleteDirectory_Directory_DeleteAllContents()
     {
-        string FullPathToNewDirectory = Path.Combine(TestDirectory, "NewDirectory");
+        string FullPathToNewDirectory = Path.Join(TestDirectory, "NewDirectory");
         Directory.CreateDirectory(FullPathToNewDirectory);
         Assert.True(Directory.Exists(FullPathToNewDirectory));
         string testFileSource = CreateTestFile(SourceData, PathFromBase: "NewDirectory", TestFileName: "TestFile");
@@ -217,7 +217,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void DeleteDirectory_Directory_ThrowIfDirectoryNonEmpty()
     {
-        string FullPathToNewDirectory = Path.Combine(TestDirectory, "NewDirectory");
+        string FullPathToNewDirectory = Path.Join(TestDirectory, "NewDirectory");
         _fileSystem.CreateDirectory(FullPathToNewDirectory);
         Assert.True(Directory.Exists(FullPathToNewDirectory));
         string testFileSource = CreateTestFile(SourceData, PathFromBase: "NewDirectory", TestFileName: "TestFile");
@@ -242,7 +242,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void DirectoryExists_Directory()
     {
         Assert.True(_fileSystem.DirectoryExists(TestDirectory));
-        Assert.False(_fileSystem.DirectoryExists(Path.Combine(TestDirectory, "NewDirectory")));
+        Assert.False(_fileSystem.DirectoryExists(Path.Join(TestDirectory, "NewDirectory")));
     }
 
     // Not tested:
@@ -269,17 +269,17 @@ public class FileSystemProxyTests : FileCleanupTestBase
         Assert.Empty(DirectoryList);
         for (int i = 0; i < 6; i++)
         {
-            Directory.CreateDirectory(Path.Combine(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory{i}"));
+            Directory.CreateDirectory(Path.Join(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory{i}"));
         }
 
         DirectoryList = _fileSystem.GetDirectories(TestDirectory);
         Assert.Equal(6, DirectoryList.Count);
         for (int i = 0; i < 6; i++)
         {
-            Assert.Contains(Path.Combine(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory{i}"), DirectoryList);
+            Assert.Contains(Path.Join(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory{i}"), DirectoryList);
         }
 
-        Directory.CreateDirectory(Path.Combine(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory0", $"NewSubSubDirectory"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, $"GetDirectories_DirectoryNewSubDirectory0", $"NewSubSubDirectory"));
         DirectoryList = _fileSystem.GetDirectories(TestDirectory);
         Assert.Equal(6, DirectoryList.Count);
     }
@@ -291,17 +291,17 @@ public class FileSystemProxyTests : FileCleanupTestBase
         Assert.Empty(DirectoryList);
         for (int i = 0; i < 6; i++)
         {
-            Directory.CreateDirectory(Path.Combine(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory{i}"));
+            Directory.CreateDirectory(Path.Join(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory{i}"));
         }
 
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchTopLevelOnly);
         Assert.Equal(6, DirectoryList.Count);
         for (int i = 0; i < 6; i++)
         {
-            Assert.Contains(Path.Combine(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory{i}"), DirectoryList);
+            Assert.Contains(Path.Join(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory{i}"), DirectoryList);
         }
 
-        Directory.CreateDirectory(Path.Combine(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory0", $"NewSubSubDirectory"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, $"GetDirectories_Directory_SearchOptionNewSubDirectory0", $"NewSubSubDirectory"));
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchTopLevelOnly);
         Assert.Equal(6, DirectoryList.Count);
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchAllSubDirectories);
@@ -316,18 +316,18 @@ public class FileSystemProxyTests : FileCleanupTestBase
         List<string> CreatedDirectories = [];
         for (int i = 0; i < 6; i++)
         {
-            CreatedDirectories.Add(Directory.CreateDirectory(Path.Combine(TestDirectory, $"NewSubDirectory00{i}")).Name);
+            CreatedDirectories.Add(Directory.CreateDirectory(Path.Join(TestDirectory, $"NewSubDirectory00{i}")).Name);
         }
 
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchTopLevelOnly, "*000", "*001");
         Assert.Equal(2, DirectoryList.Count);
         for (int i = 0; i < 2; i++)
         {
-            string DirectoryName = Path.Combine(TestDirectory, $"NewSubDirectory00{i}");
+            string DirectoryName = Path.Join(TestDirectory, $"NewSubDirectory00{i}");
             Assert.Contains(DirectoryName, DirectoryList);
         }
 
-        Directory.CreateDirectory(Path.Combine(TestDirectory, $"NewSubDirectory000", $"NewSubSubDirectory000"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, $"NewSubDirectory000", $"NewSubSubDirectory000"));
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchTopLevelOnly, "*000");
         Assert.Single(DirectoryList);
         DirectoryList = _fileSystem.GetDirectories(TestDirectory, SearchOption.SearchAllSubDirectories, "*000");
@@ -339,10 +339,10 @@ public class FileSystemProxyTests : FileCleanupTestBase
     {
         for (int i = 0; i < 6; i++)
         {
-            Directory.CreateDirectory(Path.Combine(TestDirectory, $"NewSubDirectory{i}"));
+            Directory.CreateDirectory(Path.Join(TestDirectory, $"NewSubDirectory{i}"));
         }
 
-        Directory.CreateDirectory(Path.Combine(TestDirectory, $"NewSubDirectory0", $"NewSubSubDirectory"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, $"NewSubDirectory0", $"NewSubSubDirectory"));
         var info = _fileSystem.GetDirectoryInfo(TestDirectory);
         var infoFromIO = new DirectoryInfo(TestDirectory);
         Assert.Equal(info.CreationTime, infoFromIO.CreationTime);
@@ -400,10 +400,10 @@ public class FileSystemProxyTests : FileCleanupTestBase
         Assert.Equal(6, FileList.Count);
         for (int i = 0; i < 6; i++)
         {
-            Assert.Contains(Path.Combine(TestDirectory, $"NewFile{i}"), FileList);
+            Assert.Contains(Path.Join(TestDirectory, $"NewFile{i}"), FileList);
         }
 
-        Directory.CreateDirectory(Path.Combine(TestDirectory, "GetFiles_DirectoryNewSubDirectory"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, "GetFiles_DirectoryNewSubDirectory"));
         CreateTestFile(SourceData, PathFromBase: "GetFiles_DirectoryNewSubDirectory", TestFileName: "NewFile");
         FileList = _fileSystem.GetFiles(TestDirectory);
         Assert.Equal(6, FileList.Count);
@@ -412,7 +412,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void GetFiles_Directory_SearchOption()
     {
-        string NewSubDirectoryPath = Path.Combine(TestDirectory, "GetFiles_Directory_SearchOptionNewSubDirectory");
+        string NewSubDirectoryPath = Path.Join(TestDirectory, "GetFiles_Directory_SearchOptionNewSubDirectory");
         Directory.CreateDirectory(NewSubDirectoryPath);
         CreateTestFile(SourceData, PathFromBase: "GetFiles_Directory_SearchOptionNewSubDirectory", TestFileName: "NewFile");
         var FileList = _fileSystem.GetFiles(TestDirectory);
@@ -427,7 +427,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
         Assert.Equal(6, FileList.Count);
         for (int i = 0; i < 6; i++)
         {
-            Assert.Contains(Path.Combine(TestDirectory, $"NewFile{i}"), FileList);
+            Assert.Contains(Path.Join(TestDirectory, $"NewFile{i}"), FileList);
         }
 
         FileList = _fileSystem.GetFiles(TestDirectory, SearchOption.SearchAllSubDirectories);
@@ -456,7 +456,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
             Assert.Contains(FileList[i], TestFileList);
         }
 
-        string NewSubDirectoryPath = Path.Combine(TestDirectory, "GetFiles_Directory_SearchOption_WildcardsNewSubDirectory");
+        string NewSubDirectoryPath = Path.Join(TestDirectory, "GetFiles_Directory_SearchOption_WildcardsNewSubDirectory");
         Directory.CreateDirectory(NewSubDirectoryPath);
         TestFileList.Add(CreateTestFile(SourceData, PathFromBase: "GetFiles_Directory_SearchOption_WildcardsNewSubDirectory", TestFileName: "NewFile.cs"));
         FileList = _fileSystem.GetFiles(TestDirectory, SearchOption.SearchAllSubDirectories, "*.cs");
@@ -488,8 +488,8 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void MoveDirectory_SourceDirectoryName_DestinationDirectoryName()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         for (int i = 0; i < 6; i++)
         {
@@ -514,8 +514,8 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void MoveDirectory_SourceDirectoryName_DestinationDirectoryName_OverwriteFalse()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         for (int i = 0; i < 6; i++)
         {
@@ -552,8 +552,8 @@ public class FileSystemProxyTests : FileCleanupTestBase
     [Fact]
     public void MoveDirectory_SourceDirectoryName_DestinationDirectoryName_OverwriteTrue()
     {
-        string FullPathToSourceDirectory = Path.Combine(TestDirectory, "SourceDirectory");
-        string FullPathToTargetDirectory = Path.Combine(TestDirectory, "TargetDirectory");
+        string FullPathToSourceDirectory = Path.Join(TestDirectory, "SourceDirectory");
+        string FullPathToTargetDirectory = Path.Join(TestDirectory, "TargetDirectory");
         Directory.CreateDirectory(FullPathToSourceDirectory);
         Directory.CreateDirectory(FullPathToTargetDirectory);
         for (int i = 0; i < 6; i++)
@@ -575,7 +575,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void MoveFile_SourceFileName_DestinationFileName()
     {
         string SourceFileNameWithPath = CreateTestFile(SourceData, TestFileName: GetTestFileName());
-        string DestinationFileNameWithPath = Path.Combine(TestDirectory, "NewName");
+        string DestinationFileNameWithPath = Path.Join(TestDirectory, "NewName");
         _fileSystem.MoveFile(SourceFileNameWithPath, DestinationFileNameWithPath);
         Assert.False(File.Exists(SourceFileNameWithPath));
         Assert.True(File.Exists(DestinationFileNameWithPath));
@@ -593,7 +593,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void MoveFile_SourceFileName_DestinationFileName_OverwriteFalse()
     {
         string SourceFileNameWithPath = CreateTestFile(SourceData, TestFileName: GetTestFileName());
-        string DestinationFileNameWithPath = Path.Combine(TestDirectory, "NewName");
+        string DestinationFileNameWithPath = Path.Join(TestDirectory, "NewName");
         _fileSystem.MoveFile(SourceFileNameWithPath, DestinationFileNameWithPath, overwrite: false);
         Assert.False(File.Exists(SourceFileNameWithPath));
         Assert.True(File.Exists(DestinationFileNameWithPath));
@@ -610,7 +610,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void MoveFile_SourceFileName_DestinationFileName_OverwriteTrue()
     {
         string SourceFileNameWithPath = CreateTestFile(SourceData, TestFileName: GetTestFileName());
-        string DestinationFileNameWithPath = Path.Combine(TestDirectory, "NewName");
+        string DestinationFileNameWithPath = Path.Join(TestDirectory, "NewName");
         _fileSystem.MoveFile(SourceFileNameWithPath, DestinationFileNameWithPath, overwrite: true);
         Assert.False(File.Exists(SourceFileNameWithPath));
         Assert.True(File.Exists(DestinationFileNameWithPath));
@@ -638,16 +638,16 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void RenameDirectory_Directory_NewName()
     {
         // <exception cref="IO.FileNotFoundException">If directory does not point to an existing directory.</exception>
-        Assert.Throws<DirectoryNotFoundException>(() => _fileSystem.RenameDirectory(Path.Combine(TestDirectory, "DoesNotExistDirectory"), "NewDirectory"));
-        string OrigDirectoryWithPath = Path.Combine(TestDirectory, "OriginalDirectory");
+        Assert.Throws<DirectoryNotFoundException>(() => _fileSystem.RenameDirectory(Path.Join(TestDirectory, "DoesNotExistDirectory"), "NewDirectory"));
+        string OrigDirectoryWithPath = Path.Join(TestDirectory, "OriginalDirectory");
         Directory.CreateDirectory(OrigDirectoryWithPath);
         // <exception cref="System.ArgumentException">If newName is null or Empty String.</exception>
         Assert.Throws<ArgumentNullException>(() => _fileSystem.RenameDirectory(OrigDirectoryWithPath, ""));
-        string DirectoryNameWithPath = Path.Combine(TestDirectory, "DoesNotExist");
+        string DirectoryNameWithPath = Path.Join(TestDirectory, "DoesNotExist");
         // <exception cref="System.ArgumentException">If contains path information.</exception>
         Assert.Throws<ArgumentException>(() => _fileSystem.RenameDirectory(OrigDirectoryWithPath, DirectoryNameWithPath));
         _fileSystem.RenameDirectory(OrigDirectoryWithPath, "NewFDirectory");
-        string NewFDirectoryPath = Path.Combine(TestDirectory, "NewFDirectory");
+        string NewFDirectoryPath = Path.Join(TestDirectory, "NewFDirectory");
         Assert.True(Directory.Exists(NewFDirectoryPath));
         Assert.False(Directory.Exists(OrigDirectoryWithPath));
         // <exception cref="IO.IOException">
@@ -662,7 +662,7 @@ public class FileSystemProxyTests : FileCleanupTestBase
     public void RenameFile_File_NewName()
     {
         // <exception cref="IO.FileNotFoundException">If file does not point to an existing file.</exception>
-        Assert.Throws<FileNotFoundException>(() => _fileSystem.RenameFile(Path.Combine(TestDirectory, "DoesNotExistFile"), "NewFile"));
+        Assert.Throws<FileNotFoundException>(() => _fileSystem.RenameFile(Path.Join(TestDirectory, "DoesNotExistFile"), "NewFile"));
         string OrigFileWithPath = CreateTestFile(SourceData, TestFileName: GetTestFileName());
         string ExistingFileWithPath = CreateTestFile(DestData, TestFileName: GetTestFileName());
         // <exception cref="System.ArgumentException">If newName is null or Empty String.</exception>
@@ -670,12 +670,12 @@ public class FileSystemProxyTests : FileCleanupTestBase
         // <exception cref="System.ArgumentException">If contains path information.</exception>
         Assert.Throws<ArgumentException>(() => _fileSystem.RenameFile(OrigFileWithPath, ExistingFileWithPath));
         _fileSystem.RenameFile(OrigFileWithPath, "NewFile");
-        string NewFileWithPath = Path.Combine(TestDirectory, "NewFile");
+        string NewFileWithPath = Path.Join(TestDirectory, "NewFile");
         Assert.True(File.Exists(NewFileWithPath));
         Assert.False(File.Exists(OrigFileWithPath));
         // <exception cref="IO.IOException">If there's an existing directory or an existing file with the same name.</exception>
         Assert.Throws<IOException>(() => _fileSystem.RenameFile(NewFileWithPath, "NewFile"));
-        Directory.CreateDirectory(Path.Combine(TestDirectory, "NewFDirectory"));
+        Directory.CreateDirectory(Path.Join(TestDirectory, "NewFDirectory"));
         Assert.Throws<IOException>(() => _fileSystem.RenameFile(NewFileWithPath, "NewFDirectory"));
     }
 
@@ -698,10 +698,10 @@ public class FileSystemProxyTests : FileCleanupTestBase
         string TempFileNameWithPath = TestDirectory;
         if (!string.IsNullOrEmpty(PathFromBase))
         {
-            TempFileNameWithPath = Path.Combine(TempFileNameWithPath, PathFromBase);
+            TempFileNameWithPath = Path.Join(TempFileNameWithPath, PathFromBase);
         }
 
-        TempFileNameWithPath = Path.Combine(TempFileNameWithPath, TestFileName);
+        TempFileNameWithPath = Path.Join(TempFileNameWithPath, TestFileName);
         Assert.False(File.Exists(TempFileNameWithPath), $"File {TempFileNameWithPath} should not exist!");
         WriteFile(TempFileNameWithPath, TestData);
         return TempFileNameWithPath;
