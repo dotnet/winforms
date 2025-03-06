@@ -23,9 +23,9 @@ public class DataGridViewColumnTypePickerTests : IDisposable
     {
         _picker.Controls.Count.Should().Be(1);
         _picker.Controls[0].Should().BeOfType<ListBox>().Which.Should().Match<ListBox>(listBox =>
-            listBox.Dock == DockStyle.Fill &&
-            listBox.Sorted &&
-            listBox.HorizontalScrollbar);
+            listBox.Dock == DockStyle.Fill
+            && listBox.Sorted
+            && listBox.HorizontalScrollbar);
     }
 
     [Fact]
