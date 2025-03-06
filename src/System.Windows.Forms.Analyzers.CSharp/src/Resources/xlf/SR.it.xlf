@@ -88,13 +88,13 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
+        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
+        <target state="needs-review-translation">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
+        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
+        <target state="needs-review-translation">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
         <note />
       </trans-unit>
     </body>
