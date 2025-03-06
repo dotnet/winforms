@@ -48,36 +48,6 @@ internal abstract class SelectionUIHandler
             Debug.Assert(_dragControls[i] is not null, "Everyone must have a control");
         }
 
-        // allow the cliprect to go just beyond the window by one grid. This helps with round off
-        // problems. We can only do this if the container itself is not in the selection. Also,
-        // if the container is a form and it has autoscroll turned on, we allow a drag beyond the
-        // container boundary on the width and height, but not top and left.
-        //
-        bool containerSelected = false;
-        IComponent container = GetComponent();
-        for (int i = 0; i < components.Length; i++)
-        {
-            if (components[i] == container)
-            {
-                containerSelected = true;
-                break;
-            }
-        }
-
-        if (!containerSelected)
-        {
-            Control containerControl = GetControl();
-            Size snapSize = GetCurrentSnapSize();
-            Rectangle containerRect = containerControl.RectangleToScreen(containerControl.ClientRectangle);
-            containerRect.Inflate(snapSize.Width, snapSize.Height);
-            if (GetControl() is ScrollableControl sc && sc.AutoScroll)
-            {
-                Rectangle screen = SystemInformation.VirtualScreen;
-                containerRect.Width = screen.Width;
-                containerRect.Height = screen.Height;
-            }
-        }
-
         return true;
     }
 

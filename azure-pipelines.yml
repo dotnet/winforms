@@ -44,7 +44,7 @@ variables:
 - group: DotNet-Winforms-SDLValidation-Params
 - group: AzureDevOps-Artifact-Feeds-Pats
 - name: _InternalRuntimeDownloadArgs
-  value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal
+  value: /p:DotNetRuntimeSourceFeed=https://ci.dot.net/internal
           /p:DotNetRuntimeSourceFeedKey=$(dotnetbuilds-internal-container-read-token-base64)
 
 # Set up non-PR build from internal project
@@ -88,7 +88,8 @@ extends:
         name: NetCore1ESPool-Svc-Internal
       ${{ else }}:
         name: NetCore1ESPool-Internal
-      image: 1es-windows-2022
+# image is described here - https://helix.dot.net/#1ESHostedPoolImagesWestUS-rg-Internal
+      image: windows.vs2022preview.amd64
       os: windows
     customBuildTags:
     - ES365AIMigrationTooling
@@ -125,7 +126,7 @@ extends:
             binlogPath: msbuild.binlog
             pool:
               name: $(DncEngInternalBuildPool)
-              demands: ImageOverride -equals 1es-windows-2022
+              demands: ImageOverride -equals windows.vs2022preview.amd64
 
     - ${{ if eq(variables['EnableLoc'], 'true') }}:
       - stage: OneLocBuild

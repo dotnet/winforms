@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Windows.Forms;
+namespace System.Private.Windows.Ole;
 
 /// <summary>
 ///  This exception is used to indicate that clipboard contains a serialized

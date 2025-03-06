@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection.Metadata;
+using Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
@@ -118,8 +119,7 @@ internal interface IDataObjectInternal
     ///  Retrieves typed data associated with the specified data format.
     /// </summary>
     /// <param name="resolver">
-    ///  A user-provided function that defines a closure of <see cref="Type"/>s that can be retrieved from
-    ///  the exchange medium.
+    ///  A user-provided function that maps <see cref="TypeName"/> to <see cref="Type"/>.
     /// </param>
     /// <param name="format">
     ///  A string that specifies what format to retrieve the data as. See the DataFormats class for
@@ -130,24 +130,66 @@ internal interface IDataObjectInternal
     ///  <see langword="false"/> for no data format conversion.
     /// </param>
     /// <param name="data">
-    ///  A data object with the data in the specified format, or <see langword="null"/> if the data is not available
+    ///  A data object with the data in the specified format, or <see langword="default"/> if the data is not available
     ///  in the specified format or is of a wrong type.
     /// </param>
     /// <returns>
-    ///  <see langword="true"/> if the data of this format is present and the value is
-    ///  of a matching type and that value can be successfully retrieved, or <see langword="false"/>
-    ///  if the format is not present or the value is not of the right type.
+    ///  <see langword="true"/> if the data of this format is present and the value is of a matching type and that
+    ///  value can be successfully retrieved.
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///   Implement this method for backward compatibility with binary formatted data when binary formatters are enabled.
+    ///   The <paramref name="resolver"/> should throw <see cref="NotSupportedException"/> for types it does not
+    ///   want loaded. The consuming method should honor this and not load the requested type. The resolver can also
+    ///   return <see langword="null"/> to indicate that it wants default handling, which may also result in a
+    ///   resolution failure.
     ///  </para>
     /// </remarks>
     bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
-        Func<TypeName, Type> resolver,
+        Func<TypeName, Type?> resolver,
 #pragma warning restore CS3001
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data);
+}
+
+/// <summary>
+///  Platform typed data object interface. Provides methods to construct and unwrap platform specific data objects.
+/// </summary>
+internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IDataObjectInternal
+    where TDataObject : class, TIDataObject
+    where TIDataObject : class
+{
+    static abstract TDataObject Create();
+    static abstract TDataObject Create(IDataObject* dataObject);
+    static abstract TDataObject Create(object data);
+    static abstract IDataObjectInternal Wrap(TIDataObject data);
+
+    /// <summary>
+    ///  Unwraps the user IDataObject instance when applicable.
+    /// </summary>
+    /// <param name="dataObject">
+    ///  <para>
+    ///   This is used to return the "original" IDataObject instance when getting data back from OLE. Providing the
+    ///   original instance back allows casting to the original type, which historically happened through "magic"
+    ///   casting support for built-in COM interop.
+    ///  </para>
+    ///  <para>
+    ///   Now that we use ComWrappers, we can't rely on the "magic" casting support. Instead, we provide the original
+    ///   object back when we're able to unwrap it. The unfortunate caveat is that the behavior of calling through
+    ///   the OLE IDataObject proxy results in different behavior than calling through the original object. This
+    ///   primarily happens through `autoConvert` scenarios, where no such concept exists in the COM interfaces. As
+    ///   such, when calling through the COM interface, "autoConvert" is always considered to be <see langword="true"/>.
+    ///   To mitigate the COM caveat, we do not give back the original DataObject if we created it implicitly via
+    ///   Clipboard.SetData. This allows the calls to go through the proxy, which gets the expected "autoConvert"
+    ///   behavior.
+    ///  </para>
+    ///  <para>
+    ///   One potential alternative would be to wrap the created IDataObject in an adapter that mimics the
+    ///   "autoConvert" behavior. This would avoid BinaryFormat serialization when in process and not copying.
+    ///  </para>
+    /// </param>
+    /// <returns>true when a data object was returned.</returns>
+    bool TryUnwrapUserDataObject([NotNullWhen(true)] out TIDataObject? dataObject);
 }

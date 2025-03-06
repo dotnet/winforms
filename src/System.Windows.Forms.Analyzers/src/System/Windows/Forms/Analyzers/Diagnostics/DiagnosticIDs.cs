@@ -12,8 +12,9 @@ internal static class DiagnosticIDs
     public const string PropertyCantBeSetToValue = "WFO0002";
     public const string MigrateHighDpiSettings = "WFO0003";
 
-    // Security, number group 1000+
+    // WinForms Security, number group 1000+
     public const string MissingPropertySerializationConfiguration = "WFO1000";
+    public const string ImplementITypedDataObject = "WFO1001";
 
     // WinForms best practice, number group 2000+
     public const string DisposeModalDialog = "WFO2000";

@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\test\integration\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\test\unit\System.Windows.Forms\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
 	ProjectSection(ProjectDependencies) = postProject
 		{607E02DD-4256-4E73-B9A4-4CE2673B3703} = {607E02DD-4256-4E73-B9A4-4CE2673B3703}
 	EndProjectSection
@@ -28,6 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DF68A171-D27B-4E6A-8A7E-63A651622355}"
+	ProjectSection(SolutionItems) = preProject
+		src\test\.editorconfig = src\test\.editorconfig
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "facade", "facade", "{434C00C3-E498-4BA7-9764-9F0FC8CFE457}"
 EndProject
@@ -46,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibil
 		src\Accessibility\readme.md = src\Accessibility\readme.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\test\integration\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{C029199F-7D5C-417C-AA52-913A214E3285}"
 	ProjectSection(SolutionItems) = preProject
@@ -86,9 +89,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives.TestUtilities", "src\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj", "{73B0857A-966B-4E7D-8A83-FECFE0281AB9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.TestUtilities", "src\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj", "{86418F0B-39DC-4B5A-8145-6D607E6150AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.TestUtilities", "src\test\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj", "{86418F0B-39DC-4B5A-8145-6D607E6150AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Interop.Tests", "src\System.Windows.Forms\tests\InteropTests\System.Windows.Forms.Interop.Tests.csproj", "{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Interop.Tests", "src\test\unit\interop\System.Windows.Forms.Interop.Tests.csproj", "{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.PrivateSourceGenerators", "src\System.Windows.Forms.PrivateSourceGenerators\src\System.Windows.Forms.PrivateSourceGenerators.csproj", "{3BB220A9-7BC9-4D45-9DC7-B5A1D659B478}"
 EndProject
@@ -100,12 +103,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "interop", "interop", "{A31B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesignSurface", "DesignSurface", "{43E46506-7DF8-4E7A-A579-996CA43041EB}"
 	ProjectSection(SolutionItems) = preProject
-		src\System.Windows.Forms\tests\IntegrationTests\DesignSurface\.editorconfig = src\System.Windows.Forms\tests\IntegrationTests\DesignSurface\.editorconfig
+		src\test\integration\DesignSurface\.editorconfig = src\test\integration\DesignSurface\.editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoConsole", "src\System.Windows.Forms\tests\IntegrationTests\DesignSurface\DemoConsole\DemoConsole.csproj", "{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoConsole", "src\test\integration\DesignSurface\DemoConsole\DemoConsole.csproj", "{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignSurfaceExt", "src\System.Windows.Forms\tests\IntegrationTests\DesignSurface\DesignSurfaceExt\DesignSurfaceExt.csproj", "{E96C74BA-9F74-4289-BF72-45CAD472D3D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignSurfaceExt", "src\test\integration\DesignSurface\DesignSurfaceExt\DesignSurfaceExt.csproj", "{E96C74BA-9F74-4289-BF72-45CAD472D3D2}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Microsoft.VisualBasic.Forms.Tests", "src\Microsoft.VisualBasic.Forms\tests\UnitTests\Microsoft.VisualBasic.Forms.Tests.vbproj", "{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D}"
 EndProject
@@ -117,24 +120,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Analyz
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{E4C6C5F5-46E9-4C63-9628-26752B4D9C11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Analyzers.CSharp", "src\System.Windows.Forms.Analyzers.CSharp\src\System.Windows.Forms.Analyzers.CSharp.csproj", "{5025D7FF-EB6D-4250-B9C5-887ADFBBD952}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Analyzers.CSharp.Tests", "src\System.Windows.Forms.Analyzers.CSharp\tests\UnitTests\System.Windows.Forms.Analyzers.CSharp.Tests.csproj", "{714EC82C-D4E0-4E14-9C34-4F270774D384}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeHost", "src\System.Windows.Forms\tests\IntegrationTests\NativeHost\NativeHost.vcxproj", "{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeHost", "src\test\integration\NativeHost\NativeHost.vcxproj", "{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {3129970B-A4EB-46AC-B163-18A5557B11BD}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeHost.ManagedControl", "src\System.Windows.Forms\tests\IntegrationTests\NativeHost.ManagedControl\NativeHost.ManagedControl.csproj", "{3129970B-A4EB-46AC-B163-18A5557B11BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeHost.ManagedControl", "src\test\integration\NativeHost.ManagedControl\NativeHost.ManagedControl.csproj", "{3129970B-A4EB-46AC-B163-18A5557B11BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.UI.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\UIIntegrationTests\System.Windows.Forms.UI.IntegrationTests.csproj", "{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.UI.IntegrationTests", "src\test\integration\UIIntegrationTests\System.Windows.Forms.UI.IntegrationTests.csproj", "{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility_Core_App", "src\System.Windows.Forms\tests\AccessibilityTests\Accessibility_Core_App.csproj", "{317E131C-EA24-47A4-96EE-5A66DED10501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPassApp", "src\test\unit\accessibility\TestPassApp\TestPassApp.csproj", "{317E131C-EA24-47A4-96EE-5A66DED10501}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxHosts", "src\System.Windows.Forms\tests\AxHosts\AxHosts.csproj", "{93651A99-C9EB-4F83-8A66-DF9D21574550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxHosts", "src\test\unit\.NET Framework\AxHosts\AxHosts.csproj", "{93651A99-C9EB-4F83-8A66-DF9D21574550}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildAssist", "BuildAssist", "{B3CE7FA8-21C5-4CE8-970E-8210D1D89251}"
 EndProject
@@ -144,9 +145,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Common", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Common.Tests", "src\System.Drawing.Common\tests\System.Drawing.Common.Tests.csproj", "{7650F24E-7132-42CF-ADCE-830C8DB26EE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProject", "src\System.Windows.Forms\tests\IntegrationTests\ScratchProject\ScratchProject.csproj", "{194D9B0B-421B-4485-B67E-B5A448388D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProject", "src\test\integration\ScratchProject\ScratchProject.csproj", "{194D9B0B-421B-4485-B67E-B5A448388D39}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTest", "src\System.Windows.Forms\tests\IntegrationTests\TrimTest\TrimTest.csproj", "{BA61D5A8-29E9-41AA-A3FA-B7F0A7F9A191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTest", "src\test\integration\TrimTest\TrimTest.csproj", "{BA61D5A8-29E9-41AA-A3FA-B7F0A7F9A191}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core", "src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj", "{61376D2A-4AD5-48F4-BF99-2BB630E21945}"
 EndProject
@@ -164,11 +165,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C
 		eng\Versions.props = eng\Versions.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProjectWithInternals", "src\System.Windows.Forms\tests\IntegrationTests\ScratchProjectWithInternals\ScratchProjectWithInternals.csproj", "{522EBAB3-E4D2-45F3-ACBD-B25FC457BF78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProjectWithInternals", "src\test\integration\ScratchProjectWithInternals\ScratchProjectWithInternals.csproj", "{522EBAB3-E4D2-45F3-ACBD-B25FC457BF78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComDisabled.Tests", "src\System.Windows.Forms\tests\ComDisabledTests\ComDisabled.Tests.csproj", "{55F3174F-C1FE-4C8F-AF71-2512630088F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComDisabled.Tests", "src\test\unit\System.Windows.Forms\ComDisabled\ComDisabled.Tests.csproj", "{55F3174F-C1FE-4C8F-AF71-2512630088F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTestBinaryDeserialization", "src\System.Windows.Forms\tests\IntegrationTests\TrimTestBinaryDeserialization\TrimTestBinaryDeserialization.csproj", "{CFBCC732-C988-4FE7-A21B-98A142365374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTestBinaryDeserialization", "src\test\integration\TrimTestBinaryDeserialization\TrimTestBinaryDeserialization.csproj", "{CFBCC732-C988-4FE7-A21B-98A142365374}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryFormatTests", "src\System.Private.Windows.Core\tests\BinaryFormatTests\BinaryFormatTests.csproj", "{57EC5288-9513-46CF-8FB7-626199690D90}"
 EndProject
@@ -182,7 +183,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "System.Windows.Forms.Analyz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core.Tests", "src\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj", "{B653C860-9B52-4597-9921-24DA79A4E6B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsupportedTypes", "src\System.Windows.Forms\tests\UnsupportedTypes\UnsupportedTypes.csproj", "{607E02DD-4256-4E73-B9A4-4CE2673B3703}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsupportedTypes", "src\test\unit\.NET Framework\UnsupportedTypes\UnsupportedTypes.csproj", "{607E02DD-4256-4E73-B9A4-4CE2673B3703}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{656C66A4-59CD-4E14-8AE4-1F5BCEECB553}"
 	ProjectSection(SolutionItems) = preProject
@@ -1166,11 +1167,10 @@ Global
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{05FD23CE-60AE-44A8-8DD6-1688F04BE385} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{3596BDE6-B211-4BE7-810D-DC7A4315E296} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
-		{E742382E-5D34-481D-A3FC-7B6B9C5033E2} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
+		{E742382E-5D34-481D-A3FC-7B6B9C5033E2} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{E4C6C5F5-46E9-4C63-9628-26752B4D9C11} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
-		{D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{5025D7FF-EB6D-4250-B9C5-887ADFBBD952} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
-		{714EC82C-D4E0-4E14-9C34-4F270774D384} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
+		{714EC82C-D4E0-4E14-9C34-4F270774D384} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
@@ -1188,12 +1188,12 @@ Global
 		{FF211812-FCCC-4B6B-B536-C4D754195750} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
 		{1F836B14-D13D-42E0-BEAF-A821DD75DE49} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
 		{C4C031D5-F79A-44B6-811E-0797E7D5C1C1} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
-		{0FD53580-3175-4F8F-8372-BE46C9122EE0} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
+		{0FD53580-3175-4F8F-8372-BE46C9122EE0} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{B653C860-9B52-4597-9921-24DA79A4E6B1} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{656C66A4-59CD-4E14-8AE4-1F5BCEECB553} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{442C867C-51C0-8CE5-F067-DF065008E3DA} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
-		{607E02DD-4256-4E73-B9A4-4CE2673B3703} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

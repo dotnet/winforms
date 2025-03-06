@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Windows.Forms.Design;
 using Moq;
@@ -455,7 +457,7 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(CanRemoveInstance_TestData))]
     public void CollectionForm_CanRemoveInstance_Invoke_ReturnsExpected(object value)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         SubCollectionForm form = new(editor);
         Assert.True(form.CanRemoveInstance(value));
     }
@@ -475,7 +477,7 @@ public class CollectionFormTests : CollectionEditor
     {
         using Component component = new();
         TypeDescriptor.AddAttributes(component, attribute);
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         SubCollectionForm form = new(editor);
         Assert.Equal(expected, form.CanRemoveInstance(component));
     }
@@ -483,7 +485,7 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_CanSelectMultipleInstances_Invoke_ReturnsFalse()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         SubCollectionForm form = new(editor);
         Assert.True(form.CanSelectMultipleInstances());
     }
@@ -697,7 +699,7 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_CreateInstance_InvokeWithoutContext_ReturnsExpected()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         SubCollectionForm form = new(editor);
         Assert.Equal(0, form.CreateInstance(typeof(int)));
     }
@@ -705,7 +707,7 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_CreateInstance_NullItemType_ThrowsArgumentNullException()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         SubCollectionForm form = new(editor);
         Assert.Throws<ArgumentNullException>("itemType", () => form.CreateInstance(null));
     }
@@ -791,13 +793,12 @@ public class CollectionFormTests : CollectionEditor
         Assert.Same(result, form.GetService(serviceType));
     }
 
-    [Theory]
-    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
-    public void CollectionForm_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
+    [Fact]
+    public void CollectionForm_GetService_InvokeWithoutContext_ReturnsNull()
     {
-        SubCollectionEditor editor = new(serviceType);
+        SubCollectionEditor editor = new(typeof(int));
         SubCollectionForm form = new(editor);
-        Assert.Null(form.GetService(serviceType));
+        Assert.Null(form.GetService(typeof(int)));
     }
 
     [Fact]

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/TestData/*.cs</DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,8 +10,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    
+
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" />
@@ -28,10 +33,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Generators\MockData\*.cs" />
-    <None Include="Generators\MockData\*.*">
+    <Content Include="**\TestData\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Analyzers\WFO1001\TestData\DerivedFromUntyped.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TwoInterfaces.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedInterface.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedWithAlias.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\TypedWithNamespace.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UnrelatedIDataObject.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedInterface.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedUnimplemented.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedWithAlias.cs" />
+    <Content Include="Analyzers\WFO1001\TestData\UntypedWithNamespace.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_default_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_default_top_level.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_user_settings_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationGeneratorTests.GenerateInitialize_user_top_level.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationInitializeBuilderTests.default_boilerplate.cs" />
+    <Content Include="Generators\ApplicationConfigurationGenerator\TestData\ApplicationConfigurationInitializeBuilderTests.default_top_level.cs" />
   </ItemGroup>
 
 </Project>

@@ -24,6 +24,9 @@
 //
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace System.Drawing.Imaging.Tests;
 
@@ -1013,5 +1016,43 @@ public class MetafileTests
         Assert.Equal(1737, header.WmfHeader.Size);
         Assert.Equal((int)MetafileType.Wmf, header.WmfHeader.Type);
         Assert.Equal(0x300, header.WmfHeader.Version);
+    }
+
+    [Fact]
+    public unsafe void CreateFromNativeHandle_Success()
+    {
+        // Create a memory metafile from the screen DC
+        HDC hdc = PInvokeCore.CreateEnhMetaFile(HDC.Null, default, null, default(PCWSTR));
+        using CreatePenScope pen = new(Color.Blue);
+        using CreateBrushScope brush = new(Color.Green);
+        using SelectObjectScope penScope = new(hdc, pen);
+        using SelectObjectScope brushScope = new(hdc, brush);
+        PInvokeCore.Rectangle(hdc, 10, 10, 100, 100);
+        HENHMETAFILE hemf = PInvokeCore.CloseEnhMetaFile(hdc);
+
+        Metafile metafile = new(henhmetafile: (nint)hemf.Value, deleteEmf: true);
+        metafile.Size.Should().Be(new Size(90, 90));
+
+        List<EmfPlusRecordType> recordTypes = [];
+        using Graphics graphics = Graphics.FromHwnd(0);
+        graphics.EnumerateMetafile(
+            metafile,
+            default(Point),
+            (recordType, flags, dataSize, data, _) =>
+            {
+                recordTypes.Add(recordType);
+                return true;
+            });
+
+        recordTypes.Should().BeEquivalentTo(
+            [
+                EmfPlusRecordType.EmfHeader,
+                EmfPlusRecordType.EmfCreatePen,
+                EmfPlusRecordType.EmfSelectObject,
+                EmfPlusRecordType.EmfCreateBrushIndirect,
+                EmfPlusRecordType.EmfSelectObject,
+                EmfPlusRecordType.EmfRectangle,
+                EmfPlusRecordType.EmfEof
+            ]);
     }
 }

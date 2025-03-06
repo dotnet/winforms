@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Collections;
 using System.Drawing.Design;
@@ -11,17 +13,8 @@ namespace System.ComponentModel.Design.Tests;
 public class ArrayEditorTests
 {
     [Theory]
-    [InlineData(typeof(object), null)]
-    [InlineData(typeof(string), null)]
+    [InlineData(typeof(string[]), typeof(string))]
     [InlineData(typeof(int[]), typeof(int))]
-    [InlineData(typeof(IList<int>), null)]
-    [InlineData(typeof(IList), null)]
-    [InlineData(typeof(ClassWithItem), null)]
-    [InlineData(typeof(ClassWithPrivateItem), null)]
-    [InlineData(typeof(ClassWithStaticItem), null)]
-    [InlineData(typeof(ClassWithItems), null)]
-    [InlineData(typeof(ClassWithPrivateItems), null)]
-    [InlineData(typeof(ClassWithStaticItems), null)]
     public void ArrayEditor_Ctor_Type(Type type, Type expectedItemType)
     {
         SubArrayEditor editor = new(type);
@@ -34,16 +27,27 @@ public class ArrayEditorTests
         Assert.Equal([expectedItemType], editor.NewItemTypes);
     }
 
-    [Fact]
-    public void ArrayEditor_Ctor_NullType()
+    [Theory]
+    [InlineData(typeof(object))]
+    [InlineData(typeof(string))]
+    [InlineData(typeof(IList<int>))]
+    [InlineData(typeof(IList))]
+    [InlineData(typeof(ClassWithItem))]
+    [InlineData(typeof(ClassWithPrivateItem))]
+    [InlineData(typeof(ClassWithStaticItem))]
+    [InlineData(typeof(ClassWithItems))]
+    [InlineData(typeof(ClassWithPrivateItems))]
+    [InlineData(typeof(ClassWithStaticItems))]
+    public void ArrayEditor_Ctor_Invalid_Type(Type type)
     {
-        SubArrayEditor editor = new(null);
-        Assert.Null(editor.CollectionItemType);
-        Assert.Null(editor.CollectionType);
-        Assert.Null(editor.Context);
-        Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
-        Assert.False(editor.IsDropDownResizable);
-        Assert.Equal([null], editor.NewItemTypes);
+        SubArrayEditor editor = new(type);
+        Assert.Throws<InvalidOperationException>(() => editor.CollectionItemType);
+    }
+
+    [Fact]
+    public void ArrayEditor_Ctor_NullType_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => new SubArrayEditor(null));
     }
 
     public static IEnumerable<object[]> CanRemoveInstance_TestData()
@@ -58,7 +62,7 @@ public class ArrayEditorTests
     [MemberData(nameof(CanRemoveInstance_TestData))]
     public void ArrayEditor_CanRemoveInstance_Invoke_ReturnsExpected(object value)
     {
-        SubArrayEditor editor = new(null);
+        SubArrayEditor editor = new(typeof(string[]));
         Assert.True(editor.CanRemoveInstance(value));
     }
 
@@ -77,29 +81,19 @@ public class ArrayEditorTests
     {
         using Component component = new();
         TypeDescriptor.AddAttributes(component, attribute);
-        SubArrayEditor editor = new(null);
+        SubArrayEditor editor = new(typeof(string[]));
         Assert.Equal(expected, editor.CanRemoveInstance(component));
     }
 
     [Fact]
     public void ArrayEditor_CanSelectMultipleInstances_Invoke_ReturnsFalse()
     {
-        SubArrayEditor editor = new(null);
+        SubArrayEditor editor = new(typeof(string[]));
         Assert.True(editor.CanSelectMultipleInstances());
     }
 
     public static IEnumerable<object[]> GetDisplayText_TestData()
     {
-        yield return new object[] { null, null, string.Empty };
-        yield return new object[] { null, string.Empty, "String" };
-        yield return new object[] { null, "string", "string" };
-
-        yield return new object[] { null, new ClassWithStringName { Name = "CustomName" }, "CustomName" };
-        yield return new object[] { null, new ClassWithStringName { Name = string.Empty }, "ClassWithStringName" };
-        yield return new object[] { null, new ClassWithStringName { Name = null }, "ClassWithStringName" };
-        yield return new object[] { null, new ClassWithNonStringName { Name = 1 }, "ClassWithNonStringName" };
-        yield return new object[] { null, new ClassWithNullToString(), "ClassWithNullToString" };
-
         yield return new object[] { typeof(int), null, string.Empty };
         yield return new object[] { typeof(int), "", "String" };
         yield return new object[] { typeof(int), "value", "value" };
@@ -135,7 +129,7 @@ public class ArrayEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ArrayEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        ArrayEditor editor = new(null);
+        ArrayEditor editor = new(typeof(string[]));
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -151,7 +145,7 @@ public class ArrayEditorTests
     [MemberData(nameof(GetItems_TestData))]
     public void ArrayEditor_GetItems_Invoke_ReturnsExpected(object editValue, object[] expected)
     {
-        SubArrayEditor editor = new(null);
+        SubArrayEditor editor = new(typeof(string[]));
         object[] items = editor.GetItems(editValue);
         Assert.Equal(expected, items);
         Assert.IsType(expected.GetType(), items);
@@ -162,7 +156,7 @@ public class ArrayEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ArrayEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        ArrayEditor editor = new(null);
+        ArrayEditor editor = new(typeof(string[]));
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
@@ -200,17 +194,6 @@ public class ArrayEditorTests
     {
         SubArrayEditor editor = new(typeof(int[]));
         Assert.Same(expected, editor.SetItems(editValue, value));
-    }
-
-    [Theory]
-    [InlineData(typeof(object))]
-    [InlineData(null)]
-    public void ArrayEditor_SetItems_NullCollectionItemType_ThrowsArgumentNullException(Type type)
-    {
-        SubArrayEditor editor = new(type);
-        Assert.Null(editor.CollectionItemType);
-        Assert.Throws<ArgumentNullException>("elementType", () => editor.SetItems(null, Array.Empty<object>()));
-        Assert.Throws<ArgumentNullException>("elementType", () => editor.SetItems(Array.Empty<object>(), Array.Empty<object>()));
     }
 
     private class SubArrayEditor : ArrayEditor

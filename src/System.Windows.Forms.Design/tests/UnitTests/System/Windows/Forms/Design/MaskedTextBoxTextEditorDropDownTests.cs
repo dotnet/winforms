@@ -1,7 +1,5 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
-#nullable enable
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -43,13 +41,13 @@ public class MaskedTextBoxTextEditorDropDownTests
     [Fact]
     public void MaskInputRejected_SetsError_WhenInputRejected()
     {
-        using MaskedTextBox maskedTextBox = new("00：00");
+        using MaskedTextBox maskedTextBox = new("00:00");
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
         using ErrorProvider errorProvider = dropDown.TestAccessor().Dynamic._errorProvider;
 
         // No error when setting a correct format value.
         using MaskedTextBox dropDownMaskedTextBox = dropDown.TestAccessor().Dynamic._cloneMtb;
-        dropDownMaskedTextBox.Text = "12：20";
+        dropDownMaskedTextBox.Text = "12:20";
         errorProvider.GetError(dropDownMaskedTextBox).Should().Be(string.Empty);
 
         // Incorrectly formatted values will result in the error "Error at position 0: expected number".
