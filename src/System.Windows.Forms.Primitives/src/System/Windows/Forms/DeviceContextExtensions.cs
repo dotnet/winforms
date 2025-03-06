@@ -34,7 +34,7 @@ internal static partial class DeviceContextExtensions
         using SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
         using SelectObjectScope brushScope = new(hdc, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
-        PInvoke.Rectangle(hdc, left, top, right, bottom);
+        PInvokeCore.Rectangle(hdc, left, top, right, bottom);
     }
 
     internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HBRUSH hbrush) =>

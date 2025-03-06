@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic</AssemblyName>
+    <!-- Set PackageId to something different than the assembly name as NuGet prunes package and project
+         references for dependencies that are inbox in the framework. NuGet uses the PackageId information
+         for that. This is necessary for this facadeproject as Microsoft.VisualBasic is inbox on .NETCoreApp. -->
+    <PackageId>$(MSBuildProjectName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
-    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
   </ItemGroup>
 
 </Project>

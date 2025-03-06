@@ -271,11 +271,14 @@ Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText(format As System.Windows
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioBytes As Byte()) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioStream As System.IO.Stream) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetData(format As String, data As Object) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataAsJson(Of T)(format As String, data As T) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataObject(data As System.Windows.Forms.DataObject) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetFileDropList(filePaths As System.Collections.Specialized.StringCollection) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetImage(image As System.Drawing.Image) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String, format As System.Windows.Forms.TextDataFormat) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, ByRef data As T) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, resolver As System.Func(Of System.Reflection.Metadata.TypeName, System.Type), ByRef data As T) -> Boolean
 Microsoft.VisualBasic.MyServices.FileSystemProxy
 Microsoft.VisualBasic.MyServices.FileSystemProxy.CombinePath(baseDirectory As String, relativePath As String) -> String
 Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String) -> Void

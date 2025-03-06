@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Collections;
 using System.Drawing.Design;
@@ -38,21 +40,15 @@ public class CollectionEditorTests
     }
 
     [Fact]
-    public void CollectionEditor_Ctor_NullType()
+    public void CollectionEditor_Ctor_NullType_ThrowsArgumentNullException()
     {
-        SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", () => editor.CollectionItemType);
-        Assert.Null(editor.CollectionType);
-        Assert.Null(editor.Context);
-        Assert.Equal("net.ComponentModel.CollectionEditor", editor.HelpTopic);
-        Assert.False(editor.IsDropDownResizable);
-        Assert.Throws<ArgumentNullException>("type", () => editor.NewItemTypes);
+        Assert.Throws<ArgumentNullException>(() => new SubCollectionEditor(null));
     }
 
     [Fact]
     public void CollectionEditor_CollectionEditor_CancelChanges_Invoke_Nop()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         editor.CancelChanges();
     }
 
@@ -68,7 +64,7 @@ public class CollectionEditorTests
     [MemberData(nameof(CanRemoveInstance_TestData))]
     public void CollectionEditor_CanRemoveInstance_Invoke_ReturnsExpected(object value)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.True(editor.CanRemoveInstance(value));
     }
 
@@ -87,14 +83,14 @@ public class CollectionEditorTests
     {
         using Component component = new();
         TypeDescriptor.AddAttributes(component, attribute);
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.Equal(expected, editor.CanRemoveInstance(component));
     }
 
     [Fact]
     public void CollectionEditor_CanSelectMultipleInstances_Invoke_ReturnsFalse()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.True(editor.CanSelectMultipleInstances());
     }
 
@@ -104,13 +100,6 @@ public class CollectionEditorTests
         SubCollectionEditor editor = new(typeof(List<int>));
         Form form = editor.CreateCollectionForm();
         Assert.NotSame(form, editor.CreateCollectionForm());
-    }
-
-    [Fact]
-    public void CollectionEditor_CreateCollectionForm_NullCollectionType_ThrowsArgumentNullException()
-    {
-        SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", editor.CreateCollectionForm);
     }
 
     [Theory]
@@ -129,13 +118,6 @@ public class CollectionEditorTests
         Type itemType = editor.CreateCollectionItemType();
         Assert.Equal(expected, itemType);
         Assert.Same(itemType, editor.CreateCollectionItemType());
-    }
-
-    [Fact]
-    public void CollectionEditor_CreateCollectionItemType_NullType_ThrowsArgumentNullException()
-    {
-        SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", editor.CreateCollectionItemType);
     }
 
     public static IEnumerable<object[]> InvalidDesignerHost_TestData()
@@ -350,14 +332,14 @@ public class CollectionEditorTests
     [MemberData(nameof(CreateInstance_InvokeWithoutContext_TestData))]
     public void CollectionEditor_CreateInstance_InvokeWithoutContext_ReturnsExpected(Type type, object expected)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.Equal(expected, editor.CreateInstance(type));
     }
 
     [Fact]
     public void CollectionEditor_CreateInstance_NullItemType_ThrowsArgumentNullException()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.Throws<ArgumentNullException>("itemType", () => editor.CreateInstance(null));
     }
 
@@ -379,13 +361,6 @@ public class CollectionEditorTests
         Assert.NotSame(itemTypes, editor.CreateNewItemTypes());
     }
 
-    [Fact]
-    public void CollectionEditor_CreateNewItemTypes_NullType_ThrowsArgumentNullException()
-    {
-        SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", editor.CreateNewItemTypes);
-    }
-
     public static IEnumerable<object[]> DestroyInstance_NormalObject_TestData()
     {
         yield return new object[] { null };
@@ -396,7 +371,7 @@ public class CollectionEditorTests
     [MemberData(nameof(DestroyInstance_NormalObject_TestData))]
     public void CollectionEditor_DestroyInstance_NormalObject_Nop(object instance)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         editor.DestroyInstance(instance);
     }
 
@@ -496,7 +471,7 @@ public class CollectionEditorTests
             .Setup(c => c.Dispose())
             .Verifiable();
 
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         editor.DestroyInstance(mockComponent.Object);
         mockComponent.Verify(c => c.Dispose(), Times.Once());
     }
@@ -509,7 +484,7 @@ public class CollectionEditorTests
             .Setup(d => d.Dispose())
             .Verifiable();
 
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         editor.DestroyInstance(mockDisposable.Object);
         mockDisposable.Verify(d => d.Dispose(), Times.Once());
     }
@@ -724,32 +699,11 @@ public class CollectionEditorTests
         mockEditorService.Verify(s => s.ShowDialog(It.IsAny<Form>()), Times.Once());
     }
 
-    [Fact]
-    public void CollectionEditor_EditValue_NullType_ThrowsArgumentNullException()
-    {
-        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
-        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
-        mockServiceProvider
-            .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-            .Returns(mockEditorService.Object);
-        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
-        mockContext
-            .Setup(c => c.GetService(typeof(IDesignerHost)))
-            .Returns((IDesignerHost)null);
-        mockContext
-            .Setup(c => c.GetService(typeof(AmbientProperties)))
-            .Returns(null);
-
-        SubCollectionEditor editor = new(null);
-        object value = new();
-        Assert.Throws<ArgumentNullException>("type", () => editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
-    }
-
     [Theory]
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.Same(value, editor.EditValue(null, provider, value));
         Assert.Null(editor.Context);
     }
@@ -758,7 +712,7 @@ public class CollectionEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        CollectionEditor editor = new(null);
+        CollectionEditor editor = new(typeof(string));
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -766,22 +720,12 @@ public class CollectionEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void CollectionEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        CollectionEditor editor = new(null);
+        CollectionEditor editor = new(typeof(string));
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
     public static IEnumerable<object[]> GetDisplayText_TestData()
     {
-        yield return new object[] { null, null, string.Empty };
-        yield return new object[] { null, string.Empty, "String" };
-        yield return new object[] { null, "string", "string" };
-
-        yield return new object[] { null, new ClassWithStringName { Name = "CustomName" }, "CustomName" };
-        yield return new object[] { null, new ClassWithStringName { Name = string.Empty }, "ClassWithStringName" };
-        yield return new object[] { null, new ClassWithStringName { Name = null }, "ClassWithStringName" };
-        yield return new object[] { null, new ClassWithNonStringName { Name = 1 }, "ClassWithNonStringName" };
-        yield return new object[] { null, new ClassWithNullToString(), "ClassWithNullToString" };
-
         yield return new object[] { typeof(int), null, string.Empty };
         yield return new object[] { typeof(int), "", "String" };
         yield return new object[] { typeof(int), "value", "value" };
@@ -825,7 +769,7 @@ public class CollectionEditorTests
     [MemberData(nameof(GetItems_TestData))]
     public void CollectionEditor_GetItems_Invoke_ReturnsExpected(object editValue, object[] expected)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         object[] items = editor.GetItems(editValue);
         Assert.Equal(expected, items);
         Assert.IsType(expected.GetType(), items);
@@ -869,12 +813,11 @@ public class CollectionEditorTests
         Assert.Same(result, editor.GetService(serviceType));
     }
 
-    [Theory]
-    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
-    public void CollectionEditor_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
+    [Fact]
+    public void CollectionEditor_GetService_InvokeWithoutContext_ReturnsNull()
     {
-        SubCollectionEditor editor = new(serviceType);
-        Assert.Null(editor.GetService(serviceType));
+        SubCollectionEditor editor = new(typeof(int));
+        Assert.Null(editor.GetService(typeof(int)));
     }
 
     public static IEnumerable<object[]> GetObjectsFromInstance_TestData()
@@ -887,7 +830,7 @@ public class CollectionEditorTests
     [MemberData(nameof(GetObjectsFromInstance_TestData))]
     public void CollectionEditor_GetObjectsFromInstance_Invoke_ReturnsExpected(object instance)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         IList objects = editor.GetObjectsFromInstance(instance);
         Assert.Equal(new object[] { instance }, objects);
         Assert.IsType<ArrayList>(objects);
@@ -917,7 +860,7 @@ public class CollectionEditorTests
     [MemberData(nameof(SetItems_TestData))]
     public void CollectionEditor_SetItems_Invoke_ReturnsExpected(object editValue, object[] value, object expected)
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         object items = editor.SetItems(editValue, value);
         Assert.Equal(expected, items);
         Assert.Same(editValue, items);
@@ -926,7 +869,7 @@ public class CollectionEditorTests
     [Fact]
     public void CollectionEditor_SetItems_InvokeArray_ThrowsNotSupportedException()
     {
-        SubCollectionEditor editor = new(null);
+        SubCollectionEditor editor = new(typeof(string));
         Assert.Throws<NotSupportedException>(() => editor.SetItems(new object[1], new object[1]));
     }
 

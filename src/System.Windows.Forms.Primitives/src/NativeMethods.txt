@@ -34,7 +34,6 @@ ClientToScreen
 CLIPBRD_E_BAD_DATA
 ClipCursor
 CloseDesktop
-CloseEnhMetaFile
 CloseHandle
 CloseThemeData
 CLSCTX
@@ -49,7 +48,6 @@ CoRegisterMessageFilter
 CreateAcceleratorTableW
 CreateActCtx
 CreateBrushIndirect
-CreateEnhMetaFileW
 CreateHalftonePalette
 CreateILockBytesOnHGlobal
 CreateMenu
@@ -64,7 +62,6 @@ DATETIMEPICK_CLASS
 DeactivateActCtx
 DefFrameProc
 DefMDIChildProc
-DeleteEnhMetaFile
 DESKTOP_ACCESS_FLAGS
 DestroyAcceleratorTable
 DestroyCursor
@@ -89,7 +86,6 @@ DrawThemeBackground
 DrawThemeEdge
 DrawThemeParentBackground
 DrawThemeText
-DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
@@ -109,7 +105,6 @@ EnableWindow
 EndDialog
 ENM_*
 EnumDisplaySettings
-EnumEnhMetaFile
 ES_*
 EVENTMSG
 ExpandCollapseState
@@ -261,12 +256,6 @@ ICON_*
 IConnectionPoint
 IConnectionPointContainer
 IDC_*
-IDispatchEx
-IDropSource
-IDropSourceNotify
-IDropTarget
-IDropTargetHelper
-IEnumFORMATETC
 IEnumOLEVERB
 IEnumString
 IEnumVARIANT
@@ -526,7 +515,6 @@ PROPERTYKEY
 ProviderOptions
 ReadClassStg
 READYSTATE
-Rectangle
 RedrawWindow
 REGDB_E_CLASSNOTREG
 RegisterClass

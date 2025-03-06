@@ -11,9 +11,12 @@ namespace System.Private.Windows.BinaryFormat;
 internal interface ITypeResolver
 {
     /// <summary>
-    ///  Resolves the given type name against the specified library.
+    ///  Resolves the given type name against the specified library. Throws if the type cannot be resolved.
     /// </summary>
-    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
-    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    Type GetType(TypeName typeName);
+    Type BindToType(TypeName typeName);
+
+    /// <summary>
+    ///  Tries to resolve the given type name against the specified library.
+    /// </summary>
+    bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type);
 }

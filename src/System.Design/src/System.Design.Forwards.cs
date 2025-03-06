@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.BindingSourceDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnTypeEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataSourceListEditor))]
@@ -28,6 +29,9 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeNodeCollectionEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberListEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnCollectionEditor))]
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
@@ -81,6 +85,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TrackBarDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TreeViewDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.UpDownBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.UserControlDocumentDesigner))]
 

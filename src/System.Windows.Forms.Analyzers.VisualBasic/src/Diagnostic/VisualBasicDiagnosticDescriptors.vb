@@ -16,6 +16,15 @@ Friend Module VisualBasicDiagnosticDescriptors
             isEnabledByDefault:=True,
             description:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerDescription), SR.ResourceManager, GetType(SR)))
 
+    Public ReadOnly s_implementITypedDataObjectInAdditionToIDataObject As New DiagnosticDescriptor(
+            id:=DiagnosticIDs.ImplementITypedDataObject,
+            title:=New LocalizableResourceString(NameOf(SR.WFO1001AnalyzerTitle), SR.ResourceManager, GetType(SR)),
+            messageFormat:=New LocalizableResourceString(NameOf(SR.WFO1001AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
+            category:=DiagnosticCategories.WinFormsSecurity,
+            defaultSeverity:=DiagnosticSeverity.Warning,
+            isEnabledByDefault:=True,
+            description:=New LocalizableResourceString(NameOf(SR.WFO1001AnalyzerDescription), SR.ResourceManager, GetType(SR)))
+
     Public ReadOnly s_avoidFuncReturningTaskWithoutCancellationToken As New DiagnosticDescriptor(
             id:=DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken,
             title:=New LocalizableResourceString(NameOf(SR.WFO2001AnalyzerTitle), SR.ResourceManager, GetType(SR)),

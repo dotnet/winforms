@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="cs" original="../ToolStripItemEditorForm.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Items Collection Editor</source>
+        <target state="translated">Editor kolekce položek</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddNew.Text">
+        <source>&amp;Add</source>
+        <target state="translated">&amp;Přidat</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="translated">Zrušit</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleDescription">
+        <source>Move the selected item down in the list</source>
+        <target state="translated">Posunout vybranou položku dolů v seznamu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleName">
+        <source>Move Down</source>
+        <target state="translated">Přesunout dolů</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleDescription">
+        <source>Move the selected item up in the list</source>
+        <target state="translated">Posunout vybranou položku nahoru v seznamu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleName">
+        <source>Move Up</source>
+        <target state="translated">Přesunout nahoru</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnOK.Text">
+        <source>OK</source>
+        <target state="translated">OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleDescription">
+        <source>Remove the selected item from the list</source>
+        <target state="translated">Odebrat vybranou položku ze seznamu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleName">
+        <source>Remove</source>
+        <target state="translated">Odebrat</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblItems.Text">
+        <source>&amp;Select item and add to list below:</source>
+        <target state="translated">&amp;Vyberte položku a přidejte ji do následujícího seznamu:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMembers.Text">
+        <source>&amp;Members:</source>
+        <target state="translated">&amp;Členové:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedItemName.Text">
+        <source>toolStrip1</source>
+        <target state="translated">toolStrip1</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

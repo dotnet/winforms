@@ -2,8 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Immutable;
+using System.Reflection;
 using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace System;
 
@@ -13,53 +14,20 @@ namespace System;
 internal static class TypeExtensions
 {
     /// <summary>
-    ///  Get the full assembly name this <paramref name="type"/> is forwarded from.
+    ///  Match type <paramref name="type"/> against <paramref name="typeName"/>.
     /// </summary>
-    /// <returns>
-    ///  <see langword="true"/> if the <paramref name="type"/> is forwarded from another assembly;
-    ///  otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool TryGetForwardedFromName(this Type type, [NotNullWhen(true)] out string? name)
+    /// <param name="type">The type to match.</param>
+    /// <param name="typeName">The type name to match against.</param>
+    /// <param name="comparison">Comparison options.</param>
+    internal static bool Matches(
+        this Type type,
+        TypeName typeName,
+        TypeNameComparison comparison = TypeNameComparison.All)
     {
-        name = default;
+        // based on https://github.com/dotnet/runtime/blob/1474fc3fafca26b4b051be7dacdba8ac2804c56e/src/libraries/System.Formats.Nrbf/src/System/Formats/Nrbf/SerializationRecord.cs#L68
 
-        // Special case types like arrays.
-        Type attributedType = type;
-        while (attributedType.HasElementType)
-        {
-            attributedType = attributedType.GetElementType()!;
-        }
+        Debug.Assert(type is not null);
 
-        object[] attributes = attributedType.GetCustomAttributes(typeof(TypeForwardedFromAttribute), inherit: false);
-        if (attributes.Length > 0 && attributes[0] is TypeForwardedFromAttribute attribute)
-        {
-            name = attribute.AssemblyFullName;
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    ///  The entry point for matching <paramref name="type"/> to <paramref name="typeName"/>. The top level <see cref="Type"/>
-    ///  can be nullable, as the user would request a nullable type read from the clipboard payload, but the root record would
-    ///  serialize a non-nullable type, thus <paramref name="typeName"/> from the root record is not nullable.
-    /// </summary>
-    public static bool MatchExceptAssemblyVersion(this Type type, TypeName typeName) =>
-        type.UnwrapIfNullable().MatchLessAssemblyVersion(typeName);
-
-    /// <summary>
-    ///  Match namespace-qualified type names and assembly names with no version.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///  Read the <see cref="TypeForwardedFromAttribute"/> from the <paramref name="type"/> to match the unified assembly names,
-    ///  because <paramref name="typeName"/> had been serialized with the forwarded from assembly name by our serializers.
-    ///  </para>
-    /// </remarks>
-    // based on https://github.com/dotnet/runtime/blob/1474fc3fafca26b4b051be7dacdba8ac2804c56e/src/libraries/System.Formats.Nrbf/src/System/Formats/Nrbf/SerializationRecord.cs#L68
-    private static bool MatchLessAssemblyVersion(this Type type, TypeName typeName)
-    {
         // We don't need to check for pointers and references to arrays,
         // as it's impossible to serialize them with BinaryFormatter.
         if (type is null || type.IsPointer || type.IsByRef)
@@ -78,12 +46,7 @@ internal static class TypeExtensions
             return false;
         }
 
-        if (!type.TryGetForwardedFromName(out string? name))
-        {
-            name = type.Assembly.FullName;
-        }
-
-        if (!AssemblyNamesLessVersionMatch(name, typeName.AssemblyName))
+        if (!AssemblyNamesMatch(type, typeName.AssemblyName, comparison))
         {
             return false;
         }
@@ -95,12 +58,12 @@ internal static class TypeExtensions
 
         if (typeName.IsArray)
         {
-            return MatchLessAssemblyVersion(type.GetElementType()!, typeName.GetElementType());
+            return Matches(type.GetElementType()!, typeName.GetElementType(), comparison);
         }
 
         if (type.IsConstructedGenericType)
         {
-            if (!MatchLessAssemblyVersion(type.GetGenericTypeDefinition(), typeName.GetGenericTypeDefinition()))
+            if (!Matches(type.GetGenericTypeDefinition(), typeName.GetGenericTypeDefinition(), comparison))
             {
                 return false;
             }
@@ -115,7 +78,7 @@ internal static class TypeExtensions
 
             for (int i = 0; i < genericTypes.Length; i++)
             {
-                if (!MatchLessAssemblyVersion(genericTypes[i], genericNames[i]))
+                if (!Matches(genericTypes[i], genericNames[i], comparison))
                 {
                     return false;
                 }
@@ -125,35 +88,13 @@ internal static class TypeExtensions
         }
 
         return false;
-
-        static bool AssemblyNamesLessVersionMatch(string? fullName, AssemblyNameInfo? nameInfo)
-        {
-            if (string.Equals(fullName, nameInfo?.FullName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return true;
-            }
-
-            if (fullName is null || nameInfo is null)
-            {
-                return false;
-            }
-
-            if (!AssemblyNameInfo.TryParse(fullName, out AssemblyNameInfo? nameInfo1))
-            {
-                return false;
-            }
-
-            // Match everything except for the versions.
-            return nameInfo.Name == nameInfo1.Name
-                && ((nameInfo.CultureName ?? string.Empty) == nameInfo1.CultureName)
-                && nameInfo.PublicKeyOrToken.AsSpan().SequenceEqual(nameInfo1.PublicKeyOrToken.AsSpan());
-        }
     }
 
     /// <summary>
-    ///  Match <see cref="TypeName"/>s using all information that had been set by the caller.
+    ///  Matches type name <paramref name="x"/> against <paramref name="y"/>.
     /// </summary>
-    public static bool Matches(this TypeName x, TypeName y)
+    /// <inheritdoc cref="Matches(Type, TypeName, TypeNameComparison)"/>
+    internal static bool Matches(this TypeName x, TypeName y, TypeNameComparison comparison = TypeNameComparison.All)
     {
         if (x.IsArray != y.IsArray
             || x.IsConstructedGenericType != y.IsConstructedGenericType
@@ -165,7 +106,7 @@ internal static class TypeExtensions
             return false;
         }
 
-        if (!AssemblyNamesMatch(x.AssemblyName, y.AssemblyName))
+        if (!AssemblyNamesMatch(x.AssemblyName, y.AssemblyName, comparison))
         {
             return false;
         }
@@ -177,12 +118,12 @@ internal static class TypeExtensions
 
         if (y.IsArray)
         {
-            return Matches(x.GetElementType(), y.GetElementType());
+            return Matches(x.GetElementType(), y.GetElementType(), comparison);
         }
 
         if (x.IsConstructedGenericType)
         {
-            if (!Matches(x.GetGenericTypeDefinition(), y.GetGenericTypeDefinition()))
+            if (!Matches(x.GetGenericTypeDefinition(), y.GetGenericTypeDefinition(), comparison))
             {
                 return false;
             }
@@ -197,7 +138,7 @@ internal static class TypeExtensions
 
             for (int i = 0; i < genericNamesX.Length; i++)
             {
-                if (!Matches(genericNamesX[i], genericNamesY[i]))
+                if (!Matches(genericNamesX[i], genericNamesY[i], comparison))
                 {
                     return false;
                 }
@@ -207,25 +148,70 @@ internal static class TypeExtensions
         }
 
         return false;
+    }
 
-        static bool AssemblyNamesMatch(AssemblyNameInfo? name1, AssemblyNameInfo? name2)
+    /// <summary>
+    ///  Matches the given type's assembly name against the given <paramref name="assemblyNameInfo"/>.
+    /// </summary>
+    /// <param name="type">A type to match assembly info against.</param>
+    /// <param name="assemblyNameInfo">Assembly name info to match against.</param>
+    /// <param name="comparison">Comparison options.</param>
+    /// <returns><see langword="true"/> if the assembly names meet the specified criteria.</returns>
+    private static bool AssemblyNamesMatch(Type type, AssemblyNameInfo? assemblyNameInfo, TypeNameComparison comparison)
+    {
+        if (comparison == TypeNameComparison.TypeFullName)
         {
-            if (name1 is null && name2 is null)
-            {
-                return true;
-            }
-
-            if (name1 is null || name2 is null)
-            {
-                return false;
-            }
-
-            // Case-sensitive comparisons.
-            return name1.Name == name2.Name
-                && name1.CultureName == name2.CultureName
-                && name1.Version == name2.Version
-                && name1.PublicKeyOrToken.AsSpan().SequenceEqual(name2.PublicKeyOrToken.AsSpan());
+            // No assembly name comparison is requested.
+            return true;
         }
+
+        if (assemblyNameInfo is null)
+        {
+            return false;
+        }
+
+        AssemblyName assemblyName = type.Assembly.GetName();
+
+        // Type names are case sensitive and ordinal.
+        return (!comparison.HasFlag(TypeNameComparison.AssemblyName) || assemblyName.Name == assemblyNameInfo.Name)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyCultureName) || assemblyName.CultureName == assemblyNameInfo.CultureName)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyVersion) || assemblyName.Version == assemblyNameInfo.Version)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyPublicKeyToken)
+                // ImmutableArray equality is instance equality.
+                || ComparePublicKeys(assemblyName.GetPublicKeyToken().AsSpan(), assemblyNameInfo.PublicKeyOrToken.AsSpan()));
+    }
+
+    /// <summary>
+    ///  Matches the given assembly names against each other.
+    /// </summary>
+    /// <param name="name1">The first assembly name to match.</param>
+    /// <param name="name2">The second assembly name to match.</param>
+    /// <inheritdoc cref="AssemblyNamesMatch(Type, AssemblyNameInfo?, TypeNameComparison)"/>
+    private static bool AssemblyNamesMatch(AssemblyNameInfo? name1, AssemblyNameInfo? name2, TypeNameComparison comparison)
+    {
+        if (comparison == TypeNameComparison.TypeFullName)
+        {
+            // No assembly name comparison is requested.
+            return true;
+        }
+
+        if (name1 is null && name2 is null)
+        {
+            return true;
+        }
+
+        if (name1 is null || name2 is null)
+        {
+            return false;
+        }
+
+        // Type names are case sensitive and ordinal.
+        return (!comparison.HasFlag(TypeNameComparison.AssemblyName) || name1.Name == name2.Name)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyCultureName) || name1.CultureName == name2.CultureName)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyVersion) || name1.Version == name2.Version)
+            && (!comparison.HasFlag(TypeNameComparison.AssemblyPublicKeyToken)
+                // ImmutableArray equality is instance equality.
+                || ComparePublicKeys(name1.PublicKeyOrToken.AsSpan(), name2.PublicKeyOrToken.AsSpan()));
     }
 
     /// <summary>
@@ -234,48 +220,67 @@ internal static class TypeExtensions
     ///  method removes nullability wrapper from the top level type only because <see cref="TypeName"/> in the
     ///  serialization root record is not nullable, but the generic types could be nullable.
     /// </summary>
-    public static TypeName ToTypeName(this Type type)
+    internal static TypeName ToTypeName(this Type type)
     {
         // Unwrap type that is matched against the root record type.
         type = type.UnwrapIfNullable();
-        if (!type.TryGetForwardedFromName(out string? assemblyName))
-        {
-            assemblyName = type.Assembly.FullName;
-        }
-
-        return TypeName.Parse($"{GetTypeFullName(type)}, {assemblyName}");
-
-        static string GetTypeFullName(Type type)
-        {
-            if (type.IsConstructedGenericType)
-            {
-                Type[] genericArguments = type.GetGenericArguments();
-                string[] genericTypeNames = new string[genericArguments.Length];
-                for (int i = 0; i < type.GetGenericArguments().Length; i++)
-                {
-                    Type generic = genericArguments[i];
-
-                    // Keep Nullable wrappers for types inside generic types.
-                    if (!generic.TryGetForwardedFromName(out string? name))
-                    {
-                        name = generic.Assembly.FullName;
-                    }
-
-                    genericTypeNames[i] = $"[{GetTypeFullName(generic)}, {name}]";
-                }
-
-                return $"{type.Namespace}.{type.Name}[{string.Join(",", genericTypeNames)}]";
-            }
-
-            return type.FullName.OrThrowIfNull();
-        }
+        return TypeName.Parse(type.AssemblyQualifiedName ?? type.FullName);
     }
 
     /// <summary>
     ///  If <paramref name="type"/> is a nullable type, return the underlying type; otherwise, return <paramref name="type"/>.
     /// </summary>
-    public static Type UnwrapIfNullable(this Type type) =>
+    internal static Type UnwrapIfNullable(this Type type) =>
         type.IsGenericType && !type.IsGenericTypeDefinition && type.GetGenericTypeDefinition() == typeof(Nullable<>)
             ? type.GetGenericArguments()[0]
             : type;
+
+    /// <summary>
+    ///  Helper method that allows non-allocating conversion of a interpolated string to a <see cref="TypeName"/>.
+    /// </summary>
+    internal static TypeName ToTypeName(ref ValueStringBuilder builder)
+    {
+        using (builder)
+        {
+            return TypeName.Parse(builder.AsSpan());
+        }
+    }
+
+    /// <summary>
+    ///  Compares two public keys by their token value. Handles comparing public key tokens to full public keys.
+    /// </summary>
+    private static bool ComparePublicKeys(ReadOnlySpan<byte> publicKey1, ReadOnlySpan<byte> publicKey2)
+    {
+        if (publicKey1.Length == publicKey2.Length)
+        {
+            return publicKey1.SequenceEqual(publicKey2);
+        }
+
+        if (publicKey1.Length == 0 || publicKey2.Length == 0)
+        {
+            return false;
+        }
+
+        const int PublicKeyTokenLength = 8;
+
+        return publicKey1.Length == PublicKeyTokenLength
+            ? TryComparePublicKeyTokenToKey(publicKey1, publicKey2)
+            : TryComparePublicKeyTokenToKey(publicKey2, publicKey1);
+
+        static bool TryComparePublicKeyTokenToKey(ReadOnlySpan<byte> publicKeyToken, ReadOnlySpan<byte> publicKey)
+        {
+            try
+            {
+                AssemblyName name = new();
+                name.SetPublicKey(publicKey.ToArray());
+                return publicKeyToken.SequenceEqual(name.GetPublicKeyToken());
+            }
+            catch (Exception e) when (!e.IsCriticalException())
+            {
+                // Generating the public key token validates the public key, and it will throw if invalid.
+                Debug.Fail(e.Message);
+                return false;
+            }
+        }
+    }
 }
