@@ -449,8 +449,6 @@ internal class ToolStripDesigner : ControlDesigner
         }
     }
 
-    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetRequiredService<IComponentChangeService>();
-
     /// <summary>
     ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems
     ///  are component we have to manage Adding and Deleting the glyphs ourSelves.
