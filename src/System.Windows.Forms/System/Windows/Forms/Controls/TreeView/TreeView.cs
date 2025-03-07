@@ -2579,7 +2579,26 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
+            IntPtr editHandle = PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL);
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
+
+            BeginInvoke((MethodInvoker)(() =>
+            {
+                if (e.Node is not null)
+                {
+                    float dpiScale = (float)DeviceDpi / ScaleHelper.OneHundredPercentLogicalDpi;
+
+                    PInvoke.SetWindowPos((HWND)editHandle,
+                     HWND.Null,
+                     e.Node.Bounds.X,
+                     e.Node.Bounds.Y,
+                     e.Node.Bounds.Width + (int)(dpiScale * 10),
+                     e.Node.Bounds.Height + 2,
+                     SET_WINDOW_POS_FLAGS.SWP_NOZORDER |
+                     SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED |
+                     SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
+                }
+            }));
         }
 
         return (LRESULT)(e.CancelEdit ? 1 : 0);
