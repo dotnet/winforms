@@ -39,8 +39,8 @@ public sealed class ToolStripEditorManagerTests : IDisposable
 
         _editorControl = new();
         _bounds = new(10, 20, 100, 200);
-        _toolStripEditorControlType = typeof(ToolStripEditorManager).GetNestedType("ToolStripEditorControl", BindingFlags.NonPublic);
-        _constructor = _toolStripEditorControlType.GetConstructor([typeof(Control), typeof(Rectangle)]);
+        _toolStripEditorControlType = typeof(ToolStripEditorManager).GetNestedType("ToolStripEditorControl", BindingFlags.NonPublic)!;
+        _constructor = _toolStripEditorControlType.GetConstructor([typeof(Control), typeof(Rectangle)])!;
         _toolStripEditorControl = _constructor.Invoke([_editorControl, _bounds]);
     }
 
@@ -71,11 +71,11 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     [Fact]
     public void ToolStripEditorControl_Constructor_InitializesProperties()
     {
-        PropertyInfo boundsProperty = _toolStripEditorControlType.GetProperty("Bounds1");
-        PropertyInfo locationProperty = _toolStripEditorControlType.GetProperty("Location");
-        PropertyInfo textProperty = _toolStripEditorControlType.GetProperty("Text");
-        PropertyInfo controlsProperty = _toolStripEditorControlType.GetProperty("Controls");
-        PropertyInfo sizeProperty = _toolStripEditorControlType.GetProperty("Size");
+        PropertyInfo boundsProperty = _toolStripEditorControlType.GetProperty("Bounds1")!;
+        PropertyInfo locationProperty = _toolStripEditorControlType.GetProperty("Location")!;
+        PropertyInfo textProperty = _toolStripEditorControlType.GetProperty("Text")!;
+        PropertyInfo controlsProperty = _toolStripEditorControlType.GetProperty("Controls")!;
+        PropertyInfo sizeProperty = _toolStripEditorControlType.GetProperty("Size")!;
 
         boundsProperty.GetValue(_toolStripEditorControl).Should().Be(_bounds);
         locationProperty.GetValue(_toolStripEditorControl).Should().Be(new Point(_bounds.X, _bounds.Y));
@@ -88,9 +88,9 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     public void ToolStripEditorControl_Bounds1_Setter_UpdatesBounds()
     {
         Rectangle newBounds = new(30, 40, 150, 250);
-        _toolStripEditorControlType.GetProperty("Bounds1").SetValue(_toolStripEditorControl, newBounds);
+        _toolStripEditorControlType.GetProperty("Bounds1")!.SetValue(_toolStripEditorControl, newBounds);
 
-        Rectangle actualBounds = (Rectangle)_toolStripEditorControlType.GetProperty("Bounds1").GetValue(_toolStripEditorControl);
+        Rectangle actualBounds = (Rectangle)_toolStripEditorControlType.GetProperty("Bounds1")!.GetValue(_toolStripEditorControl)!;
         actualBounds.Should().Be(newBounds);
     }
 
