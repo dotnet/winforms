@@ -1156,8 +1156,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
-        <source>Horizontal Splitter Orientation.</source>
-        <target state="translated">Yatay Bölümlendirici Yönü.</target>
+        <source>Horizontal Splitter Orientation</source>
+        <target state="needs-review-translation">Yatay Bölümlendirici Yönü.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">
