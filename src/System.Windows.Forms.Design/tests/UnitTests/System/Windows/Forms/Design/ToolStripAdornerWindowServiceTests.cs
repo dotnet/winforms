@@ -47,7 +47,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
 
     private void RunInStaThread(Action action)
     {
-        Exception exception = null;
+        Exception exception = null!;
         Thread thread = new(() =>
         {
             try
