@@ -41,12 +41,13 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         if (!_serviceDisposed)
         {
             _service.Dispose();
+            _serviceDisposed = true;
         }
     }
 
     private void RunInStaThread(Action action)
     {
-        Exception? exception = null;
+        Exception exception = null;
         Thread thread = new(() =>
         {
             try
@@ -58,7 +59,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
                 exception = ex;
             }
         });
-        thread.SetApartmentState(ApartmentState.STA);
+        thread.SetApartmentState(ApartmentState.STA); // These tests must run on a STA thread because they register drag and drop
         thread.Start();
         thread.Join();
         if (exception is not null)
@@ -78,21 +79,21 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         public new Point PointToScreen(Point point) => new Point(point.X + 8, point.Y + 31);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DropDownAdorner_ReturnsAdornerObject()
     {
         Adorner adorner = _service.DropDownAdorner;
         adorner.Should().NotBeNull();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ToolStripAdornerWindowGraphics_ReturnsGraphicsObject() => RunInStaThread(() =>
     {
-        using Graphics graphics = _service.ToolStripAdornerWindowGraphics;
+        Graphics graphics = _service.ToolStripAdornerWindowGraphics;
         graphics.Should().NotBeNull();
     });
 
-    [Fact]
+    [WinFormsFact]
     public void Dispose_DisposesResourcesCorrectly()
     {
         _service.Dispose();
@@ -102,20 +103,22 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         _serviceProviderMock.Verify(sp => sp.GetService(typeof(IOverlayService)), Times.Exactly(2));
         _behaviorService.Adorners.Cast<Adorner>().Should().NotContain(_service.DropDownAdorner);
 
+        // DropDownAdorner should be null after _service is disposed
+        // If DropDownAdorner is not null, it indicates that the Dispose method did not clean up resources correctly
         if (_service.DropDownAdorner is null)
         {
             _serviceDisposed = true;
         }
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Invalidate_InvokesInvalidateOnAdornerWindow()
     {
         Action action = _service.Invalidate;
         action.Should().NotThrow();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void InvalidateRegion_InvokesInvalidateOnAdornerWindow()
     {
         Region region = new(new Rectangle(10, 10, 50, 50));
@@ -124,7 +127,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         action.Should().NotThrow();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void AdornerWindowPointToScreen_TranslatesPointCorrectly() => RunInStaThread(() =>
     {
         Point point = new(10, 20);
@@ -135,7 +138,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         screenPoint.Should().Be(expectedScreenPoint);
     });
 
-    [Fact]
+    [WinFormsFact]
     public void AdornerWindowToScreen_ReturnsCorrectScreenCoordinates() => RunInStaThread(() =>
     {
         using Bitmap image = new(100, 100);
@@ -147,7 +150,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         screenPoint.Should().Be(expectedScreenPoint);
     });
 
-    [Fact]
+    [WinFormsFact]
     public void ControlToAdornerWindow_TranslatesPointCorrectly() => RunInStaThread(() =>
     {
         Control parentControl = new Control { Left = 10, Top = 20 };
@@ -159,7 +162,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         adornerWindowPoint.Should().Be(expectedPoint);
     });
 
-    [Fact]
+    [WinFormsFact]
     public void ProcessPaintMessage_InvokesInvalidateOnAdornerWindow()
     {
         Rectangle paintRect = new Rectangle(10, 10, 50, 50);
