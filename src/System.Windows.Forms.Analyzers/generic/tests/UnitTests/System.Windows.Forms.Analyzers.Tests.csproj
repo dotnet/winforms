@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageReference Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
-    <PackageReference Include="Verify.XUnit" Version="$(VerifyXunitVersion)"/>
+    <PackageReference Include="Verify.XUnit" Version="$(VerifyXunitVersion)" />
     <PackageReference Include="System.Formats.Asn1" Version="$(SystemFormatsAsn1PackageVersion)" />
   </ItemGroup>
 
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="System\Windows\Forms\Analyzers\MockData\*.*">
+    <None Update="Analyzers\TestData\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

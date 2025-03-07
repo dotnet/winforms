@@ -145,8 +145,8 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     protected CSharpAnalyzerTest<TAnalyzer, TVerifier> GetFixedTestContext(
         TestDataFileSet fileSet,
         ReferenceAssemblies referenceAssemblies,
-        [CallerMemberName] string? memberName = default)
-            => GetTestContext(
+        [CallerMemberName] string? memberName = default) =>
+            GetTestContext(
                 fileSet.FixedTestCode,
                 fileSet.GlobalUsing,
                 fileSet.AdditionalCodeFiles,
@@ -173,8 +173,8 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     protected CSharpAnalyzerTest<TAnalyzer, TVerifier> GetAnalyzerTestContext(
         TestDataFileSet fileSet,
         ReferenceAssemblies referenceAssemblies,
-        [CallerMemberName] string? memberName = default)
-            => GetTestContext(
+        [CallerMemberName] string? memberName = default) =>
+            GetTestContext(
                 fileSet.AnalyzerTestCode,
                 fileSet.GlobalUsing,
                 fileSet.AdditionalCodeFiles,
@@ -233,12 +233,14 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
             context.TestState.Sources.Add(globalUsing);
         }
 
-        if (contextDocuments is not null)
+        if (contextDocuments is null)
         {
-            foreach (string contextDocument in contextDocuments)
-            {
-                context.TestState.Sources.Add(contextDocument);
-            }
+            return context;
+        }
+
+        foreach (string contextDocument in contextDocuments)
+        {
+            context.TestState.Sources.Add(contextDocument);
         }
 
         return context;

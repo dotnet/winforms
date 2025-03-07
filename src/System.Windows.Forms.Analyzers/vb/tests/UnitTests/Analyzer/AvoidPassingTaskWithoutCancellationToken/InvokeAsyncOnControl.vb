@@ -142,7 +142,6 @@ Namespace VisualBasicControls
     End Module
 
 End Namespace
-
 "
 
     Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
