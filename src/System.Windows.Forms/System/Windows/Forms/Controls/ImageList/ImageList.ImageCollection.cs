@@ -19,9 +19,9 @@ public sealed partial class ImageList
         private readonly ImageList _owner;
         private readonly List<ImageInfo> _imageInfoCollection = [];
 
-        ///  A caching mechanism for key accessor
-        ///  We use an index here rather than control so that we don't have lifetime
-        ///  issues by holding on to extra references.
+        /// A caching mechanism for key accessor
+        /// We use an index here rather than control so that we don't have lifetime
+        /// issues by holding on to extra references.
         private int _lastAccessedIndex = -1;
 
         // Indicates whether images are added in a batch.

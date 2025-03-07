@@ -7,8 +7,8 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Describes the list of actions that can be performed in the MaskedTextBox control from the
-/// Chrome pannel.
+///  Describes the list of actions that can be performed in the MaskedTextBox control from the
+///  Chrome pannel.
 /// </summary>
 internal class MaskedTextBoxDesignerActionList : DesignerActionList
 {
@@ -18,9 +18,9 @@ internal class MaskedTextBoxDesignerActionList : DesignerActionList
     private readonly IHelpService? _helpService;
 
     /// <summary>
-    /// Constructor receiving a MaskedTextBox control the action list applies to. The ITypeDiscoveryService
-    /// service provider is used to populate the canned mask list control in the MaskDesignerDialog dialog and
-    /// the IUIService provider is used to display the MaskDesignerDialog within VS.
+    ///  Constructor receiving a MaskedTextBox control the action list applies to. The ITypeDiscoveryService
+    ///  service provider is used to populate the canned mask list control in the MaskDesignerDialog dialog and
+    ///  the IUIService provider is used to display the MaskDesignerDialog within VS.
     /// </summary>
     public MaskedTextBoxDesignerActionList(MaskedTextBoxDesigner designer)
         : base(designer.Component)
@@ -37,7 +37,7 @@ internal class MaskedTextBoxDesignerActionList : DesignerActionList
     }
 
     /// <summary>
-    /// Pops up the Mask design dialog for the user to set the control's mask.
+    ///  Pops up the Mask design dialog for the user to set the control's mask.
     /// </summary>
     public void SetMask()
     {
@@ -53,7 +53,7 @@ internal class MaskedTextBoxDesignerActionList : DesignerActionList
     }
 
     /// <summary>
-    /// Returns the control's action list items.
+    ///  Returns the control's action list items.
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {

@@ -49,29 +49,29 @@ internal static class DataCollectionService
     ///  Register a custom logger to collect data in the event of a test failure.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
-    ///  other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
-    ///  include:
-    /// </para>
+    ///  <para>
+    ///   The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
+    ///   other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
+    ///   include:
+    ///  </para>
     ///
-    /// <list type="table">
+    ///  <list type="table">
     ///   <listheader>
-    ///     <description><strong>Log ID</strong></description>
-    ///     <description><strong>Extension</strong></description>
-    ///     <description><strong>Purpose</strong></description>
+    ///    <description><strong>Log ID</strong></description>
+    ///    <description><strong>Extension</strong></description>
+    ///    <description><strong>Purpose</strong></description>
     ///   </listheader>
     ///   <item>
-    ///     <description>None</description>
-    ///     <description><c>log</c></description>
-    ///     <description>Exception details</description>
+    ///    <description>None</description>
+    ///    <description><c>log</c></description>
+    ///    <description>Exception details</description>
     ///   </item>
     ///   <item>
-    ///     <description>None</description>
-    ///     <description><c>png</c></description>
-    ///     <description>Screenshot</description>
+    ///    <description>None</description>
+    ///    <description><c>png</c></description>
+    ///    <description>Screenshot</description>
     ///   </item>
-    /// </list>
+    ///  </list>
     /// </remarks>
     /// <param name="callback">The callback to invoke to collect log information. The argument to the callback is
     ///  the fully-qualified file path where the log data should be written.

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Metafiles;
 ///  Record that represents an index.
 /// </summary>
 /// <devdoc>
-///   Not an actual Win32 define, encapsulates:
+///  Not an actual Win32 define, encapsulates:
 ///
 ///   - EMRSELECTOBJECT
 ///   - EMRDELETEOBJECT

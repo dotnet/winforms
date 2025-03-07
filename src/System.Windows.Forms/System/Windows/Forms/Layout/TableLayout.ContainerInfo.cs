@@ -86,7 +86,7 @@ internal partial class TableLayout
         }
 
         ///
-        ///  list of ints that represent the sizes of individual rows
+        /// list of ints that represent the sizes of individual rows
         ///
         public Strip[] Rows
         {
@@ -136,7 +136,7 @@ internal partial class TableLayout
             }
         }
 
-        ///  Cached information
+        /// Cached information
         public int MinRowsAndColumns
         {
             get
@@ -146,7 +146,7 @@ internal partial class TableLayout
             }
         }
 
-        ///  Cached information
+        /// Cached information
         public int MinColumns
         {
             get
@@ -156,7 +156,7 @@ internal partial class TableLayout
             }
         }
 
-        ///  Cached information
+        /// Cached information
         public int MinRows
         {
             get

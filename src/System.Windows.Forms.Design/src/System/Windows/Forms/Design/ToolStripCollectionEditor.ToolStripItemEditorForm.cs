@@ -41,7 +41,7 @@ internal partial class ToolStripCollectionEditor
         private const int GdiPlusExtraSpace = 5;
 
         /// <summary>
-        /// The collection we're actually editing.
+        ///  The collection we're actually editing.
         /// </summary>
         private ToolStripItemCollection _targetToolStripCollection;
 
@@ -966,7 +966,7 @@ internal partial class ToolStripCollectionEditor
         }
 
         /// <devdoc>
-        /// Fishes out the ToolStrip from the object - which can be a ToolStrip or a <see cref="ToolStripDropDownItem" />
+        ///  Fishes out the ToolStrip from the object - which can be a ToolStrip or a <see cref="ToolStripDropDownItem" />
         /// </devdoc>
         internal static ToolStrip ToolStripFromObject(object instance)
         {
@@ -1057,9 +1057,9 @@ internal partial class ToolStripCollectionEditor
             }
 
             /// <summary>
-            /// This is a little tricky, since our list doesn't actually contain
-            /// ToolStripItems, but rather EditorItems, we have to walk those.  No bother,
-            /// this list is always pretty short.
+            ///  This is a little tricky, since our list doesn't actually contain
+            ///  ToolStripItems, but rather EditorItems, we have to walk those.  No bother,
+            ///  this list is always pretty short.
             /// </summary>
             public int IndexOf(ToolStripItem item)
             {

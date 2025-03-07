@@ -9,8 +9,8 @@ namespace Windows.Win32.Graphics.Gdi;
 /// </summary>
 /// <remarks>
 ///  <para>
-///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
+///   Use in a <see langword="using" /> statement. If you must pass this around, always pass
+///   by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
 ///  </para>
 /// </remarks>
 #if DEBUG

@@ -10,10 +10,10 @@ public sealed partial class HtmlElement
 {
     /// <summary>
     ///  HtmlElementShim - this is the glue between the DOM eventing mechanisms
-    ///          and our CLR callbacks.
+    ///  and our CLR callbacks.
     ///
     ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-    ///              on our an instance of HTMLElementEvents2. The HTMLElementEvents2 class then fires the event.
+    ///  on our an instance of HTMLElementEvents2. The HTMLElementEvents2 class then fires the event.
     ///
     /// </summary>
     internal unsafe class HtmlElementShim : HtmlShim
@@ -69,7 +69,7 @@ public sealed partial class HtmlElement
 
         internal HtmlElement Element => _htmlElement;
 
-        ///  Support IHTMLElement2.AttachEventHandler
+        /// Support IHTMLElement2.AttachEventHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
@@ -103,7 +103,7 @@ public sealed partial class HtmlElement
             }
         }
 
-        ///  Support IHTMLElement2.DetachHandler
+        /// Support IHTMLElement2.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);

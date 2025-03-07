@@ -8,8 +8,6 @@ namespace System.Windows.Forms;
 
 public partial class ListView
 {
-    ///new class for comparing and sorting Icons ....
-    // subhag
     internal class IconComparer : IComparer
     {
         private SortOrder _sortOrder;
@@ -29,7 +27,6 @@ public partial class ListView
 
         public int Compare(object? obj1, object? obj2)
         {
-            // subhag
             ListViewItem? currentItem = (ListViewItem?)obj1;
             ListViewItem? nextItem = (ListViewItem?)obj2;
             if (_sortOrder == SortOrder.Ascending)
@@ -42,6 +39,4 @@ public partial class ListView
             }
         }
     }
-
-    // end subhag
 }

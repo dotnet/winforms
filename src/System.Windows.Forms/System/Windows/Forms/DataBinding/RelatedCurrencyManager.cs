@@ -102,7 +102,7 @@ internal class RelatedCurrencyManager : CurrencyManager
     }
 
     /// <summary>
-    ///    Gets the name of the list.
+    ///  Gets the name of the list.
     /// </summary>
     internal override string GetListName()
     {

@@ -665,7 +665,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  The GDI brush for our background color.
     ///  Whidbey Note: Made this internal, since we need to use this in ButtonStandardAdapter. Also, renamed
-    ///         from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
+    ///  from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
     /// </summary>
     internal HBRUSH BackColorBrush
     {
@@ -4798,8 +4798,8 @@ public unsafe partial class Control :
     /// </exception>
     /// <remarks>
     ///  <para>
-    ///  The data will be stored as JSON if the data is not an intrinsically handled type. Otherwise, it will be stored
-    ///  the same as <see cref="DoDragDrop(object, DragDropEffects)"/>.
+    ///   The data will be stored as JSON if the data is not an intrinsically handled type. Otherwise, it will be stored
+    ///   the same as <see cref="DoDragDrop(object, DragDropEffects)"/>.
     ///  </para>
     /// </remarks>
     public DragDropEffects DoDragDropAsJson<T>(
@@ -12691,7 +12691,7 @@ public unsafe partial class Control :
     internal virtual bool SupportsUiaProviders => false;
 
     ///
-    ///  Explicit support of DropTarget
+    /// Explicit support of DropTarget
     ///
     void IDropTarget.OnDragEnter(DragEventArgs drgEvent) => OnDragEnter(drgEvent);
 
@@ -12702,7 +12702,7 @@ public unsafe partial class Control :
     void IDropTarget.OnDragDrop(DragEventArgs drgEvent) => OnDragDrop(drgEvent);
 
     ///
-    ///  Explicit support of DropSource
+    /// Explicit support of DropSource
     ///
     void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs) => OnGiveFeedback(giveFeedbackEventArgs);
 

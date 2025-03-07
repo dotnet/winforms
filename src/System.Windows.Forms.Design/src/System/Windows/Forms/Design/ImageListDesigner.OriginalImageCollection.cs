@@ -79,10 +79,8 @@ internal partial class ImageListDesigner
         }
 
         /// <summary>
-        /// Add the given image to the ImageList.
+        ///  Add the given image to the ImageList.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public int Add(ImageListImage value)
         {
             _items.Add(value);
@@ -125,7 +123,7 @@ internal partial class ImageListDesigner
         }
 
         /// <summary>
-        /// Remove all images and masks from the ImageList.
+        ///  Remove all images and masks from the ImageList.
         /// </summary>
         public void Clear()
         {

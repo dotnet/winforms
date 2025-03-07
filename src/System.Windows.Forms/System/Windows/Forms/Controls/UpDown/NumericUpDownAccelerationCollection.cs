@@ -101,7 +101,7 @@ public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollecti
         return ((IEnumerable)_items).GetEnumerator();
     }
 
-    ///  NumericUpDownAccelerationCollection methods.
+    /// NumericUpDownAccelerationCollection methods.
 
     /// <summary>
     ///  Class constructor.

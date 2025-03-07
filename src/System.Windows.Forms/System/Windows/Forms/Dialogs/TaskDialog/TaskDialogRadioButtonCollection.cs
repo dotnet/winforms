@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a collection of <see cref="TaskDialogRadioButton"/> objects.
+///  Represents a collection of <see cref="TaskDialogRadioButton"/> objects.
 /// </summary>
 public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 {
@@ -14,7 +14,7 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
     private readonly HashSet<TaskDialogRadioButton> _itemSet = [];
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
     /// </summary>
     public TaskDialogRadioButtonCollection()
     {
@@ -23,12 +23,12 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
     internal TaskDialogPage? BoundPage { get; set; }
 
     /// <summary>
-    ///   Creates and adds a <see cref="TaskDialogRadioButton"/> to the collection.
+    ///  Creates and adds a <see cref="TaskDialogRadioButton"/> to the collection.
     /// </summary>
     /// <param name="text">The text of the radio button.</param>
     /// <returns>The created <see cref="TaskDialogRadioButton"/>.</returns>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     public TaskDialogRadioButton Add(string? text)
     {
@@ -43,15 +43,15 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="item"/> is <see langword="null"/>.
+    ///  <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="item"/> has already been added to the collection.
+    ///  <paramref name="item"/> has already been added to the collection.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   <paramref name="item"/> is already a part of a different collection.
-    ///   - or -
-    ///   This collection is currently bound to a task dialog.
+    ///  <paramref name="item"/> is already a part of a different collection.
+    ///  - or -
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void SetItem(int index, TaskDialogRadioButton item)
     {
@@ -83,15 +83,15 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="item"/> is <see langword="null"/>.
+    ///  <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="item"/> has already been added to the collection.
+    ///  <paramref name="item"/> has already been added to the collection.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   <paramref name="item"/> is already a part of a different collection.
-    ///   - or -
-    ///   This collection is currently bound to a task dialog.
+    ///  <paramref name="item"/> is already a part of a different collection.
+    ///  - or -
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void InsertItem(int index, TaskDialogRadioButton item)
     {
@@ -113,7 +113,7 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void RemoveItem(int index)
     {
@@ -129,7 +129,7 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void ClearItems()
     {

@@ -9,8 +9,8 @@ namespace System.Diagnostics.CodeAnalysis;
 /// </summary>
 /// <remarks>
 ///  <para>
-///  This allows tools to understand which methods are unsafe to call when removing unreferenced
-///  code from an application.
+///   This allows tools to understand which methods are unsafe to call when removing unreferenced
+///   code from an application.
 ///  </para>
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Class, Inherited = false)]
@@ -22,11 +22,11 @@ internal
     sealed class RequiresUnreferencedCodeAttribute : Attribute
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RequiresUnreferencedCodeAttribute"/> class
-    /// with the specified message.
+    ///  Initializes a new instance of the <see cref="RequiresUnreferencedCodeAttribute"/> class
+    ///  with the specified message.
     /// </summary>
     /// <param name="message">
-    /// A message that contains information about the usage of unreferenced code.
+    ///  A message that contains information about the usage of unreferenced code.
     /// </param>
     public RequiresUnreferencedCodeAttribute(string message)
     {
@@ -34,13 +34,13 @@ internal
     }
 
     /// <summary>
-    /// Gets a message that contains information about the usage of unreferenced code.
+    ///  Gets a message that contains information about the usage of unreferenced code.
     /// </summary>
     public string Message { get; }
 
     /// <summary>
-    /// Gets or sets an optional URL that contains more information about the method,
-    /// why it requires unreferenced code, and what options a consumer has to deal with it.
+    ///  Gets or sets an optional URL that contains more information about the method,
+    ///  why it requires unreferenced code, and what options a consumer has to deal with it.
     /// </summary>
     public string? Url { get; set; }
 }

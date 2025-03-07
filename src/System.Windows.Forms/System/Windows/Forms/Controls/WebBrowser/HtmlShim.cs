@@ -6,13 +6,13 @@ using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-///  This is essentially a proxy object between the native
-///  html objects and our managed ones. We want the managed
-///  HtmlDocument, HtmlWindow and HtmlElement to be super-lightweight,
-///  which means that we shouldn't have things that tie up their lifetimes
-///  contained within them. The "Shim" is essentially the object that
-///  manages events coming out of the HtmlDocument, HtmlElement and HtmlWindow
-///  and serves them back up to the user.
+/// This is essentially a proxy object between the native
+/// html objects and our managed ones. We want the managed
+/// HtmlDocument, HtmlWindow and HtmlElement to be super-lightweight,
+/// which means that we shouldn't have things that tie up their lifetimes
+/// contained within them. The "Shim" is essentially the object that
+/// manages events coming out of the HtmlDocument, HtmlElement and HtmlWindow
+/// and serves them back up to the user.
 
 internal abstract class HtmlShim : IDisposable
 {
@@ -27,7 +27,7 @@ internal abstract class HtmlShim : IDisposable
     private EventHandlerList Events =>
         _events ??= new EventHandlerList();
 
-    ///  Support IHtml*3.AttachHandler
+    /// Support IHtml*3.AttachHandler
     public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
 
     public void AddHandler(object key, Delegate? value)
@@ -48,14 +48,14 @@ internal abstract class HtmlShim : IDisposable
 
     public abstract IHTMLWindow2.Interface? AssociatedWindow { get; }
 
-    ///  create connectionpoint cookie
+    /// create connectionpoint cookie
     public abstract void ConnectToEvents();
 
-    ///  Support IHtml*3.DetachEventHandler
+    /// Support IHtml*3.DetachEventHandler
     public abstract void DetachEventHandler(string eventName, EventHandler eventHandler);
 
-    ///  disconnect from connectionpoint cookie
-    ///  inheriting classes should override to disconnect from ConnectionPoint and call base.
+    /// disconnect from connectionpoint cookie
+    /// inheriting classes should override to disconnect from ConnectionPoint and call base.
     public virtual void DisconnectFromEvents()
     {
         if (_attachedEventList is not null)
@@ -71,7 +71,7 @@ internal abstract class HtmlShim : IDisposable
         }
     }
 
-    ///  return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
+    /// return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
     protected abstract object GetEventSender();
 
     public void Dispose()

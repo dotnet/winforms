@@ -110,7 +110,7 @@ internal static class DisplayInformation
     }
 
     /// <summary>
-    ///event handler for change in display setting
+    ///  Event handler for change in display setting
     /// </summary>
     private static void DisplaySettingsChanging(object? obj, EventArgs ea)
     {
@@ -121,7 +121,7 @@ internal static class DisplayInformation
     }
 
     /// <summary>
-    ///event handler for change in user preference
+    ///  Event handler for change in user preference
     /// </summary>
     private static void UserPreferenceChanging(object obj, UserPreferenceChangingEventArgs e)
     {

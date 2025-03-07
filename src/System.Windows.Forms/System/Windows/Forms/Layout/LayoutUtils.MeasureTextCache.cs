@@ -7,8 +7,8 @@ namespace System.Windows.Forms.Layout;
 
 internal static partial class LayoutUtils
 {
-    ///  MeasureTextCache
-    ///  3000 character strings take 9 seconds to load the form
+    /// MeasureTextCache
+    /// 3000 character strings take 9 seconds to load the form
     public sealed class MeasureTextCache
     {
         // the number of preferred sizes to store
@@ -21,11 +21,11 @@ internal static partial class LayoutUtils
         private PreferredSizeCache[]? _sizeCacheList;
         private Size _unconstrainedPreferredSize = s_invalidSize;
 
-        ///  GetTextSize
-        ///  Given constraints, format flags a font and text, determine the size of the string
-        ///  employs an MRU of the last several constraints passed in via a ring-buffer of size MaxCacheSize.
-        ///  Assumes Text and TextFormatFlags are the same, if either were to change, a call to
-        ///  InvalidateCache should be made
+        /// GetTextSize
+        /// Given constraints, format flags a font and text, determine the size of the string
+        /// employs an MRU of the last several constraints passed in via a ring-buffer of size MaxCacheSize.
+        /// Assumes Text and TextFormatFlags are the same, if either were to change, a call to
+        /// InvalidateCache should be made
         public Size GetTextSize(string? text, Font? font, Size proposedConstraints, TextFormatFlags flags)
         {
             if (!TextRequiresWordBreak(text, font, proposedConstraints, flags))
@@ -83,19 +83,19 @@ internal static partial class LayoutUtils
             }
         }
 
-        ///  InvalidateCache
-        ///  Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
+        /// InvalidateCache
+        /// Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
         public void InvalidateCache()
         {
             _unconstrainedPreferredSize = s_invalidSize;
             _sizeCacheList = null;
         }
 
-        ///  TextRequiresWordBreak
-        ///  If you give the text all the space in the world it wants, then there should be no reason
-        ///  for it to break on a word. So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
-        ///  for a string - eg. 35, 13. If the size passed in has a larger width than 35, then we know that
-        ///  the WordBreak flag is not necessary.
+        /// TextRequiresWordBreak
+        /// If you give the text all the space in the world it wants, then there should be no reason
+        /// for it to break on a word. So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
+        /// for a string - eg. 35, 13. If the size passed in has a larger width than 35, then we know that
+        /// the WordBreak flag is not necessary.
         public bool TextRequiresWordBreak(string? text, Font? font, Size size, TextFormatFlags flags)
         {
             // if the unconstrained size of the string is larger than the proposed width
@@ -103,8 +103,8 @@ internal static partial class LayoutUtils
             return GetUnconstrainedSize(text, font, flags).Width > size.Width;
         }
 
-        ///  GetUnconstrainedSize
-        ///  Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
+        /// GetUnconstrainedSize
+        /// Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
         private Size GetUnconstrainedSize(string? text, Font? font, TextFormatFlags flags)
         {
             if (_unconstrainedPreferredSize == s_invalidSize)

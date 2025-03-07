@@ -249,7 +249,7 @@ public enum AccessibleEvents
     Destroy = 0x8001,               // hwnd + ID + idChild is destroyed item
 
     /// <summary>
-    /// <c>EVENT_OBJECT_SHOW</c>
+    ///  <c>EVENT_OBJECT_SHOW</c>
     ///  Sent when a hidden object is shown.
     ///  The system sends this event for the following user interface elements:
     ///  caret, cursor, and window object. Server applications send this event for their accessible objects.
@@ -259,7 +259,7 @@ public enum AccessibleEvents
     Show = 0x8002,                  // hwnd + ID + idChild is shown item
 
     /// <summary>
-    /// <c>EVENT_OBJECT_HIDE</c>
+    ///  <c>EVENT_OBJECT_HIDE</c>
     ///  Sent when an object is hidden.
     ///  The system sends this event for the following user interface elements: caret and cursor.
     ///  Server applications send this event for their accessible objects.
@@ -269,7 +269,7 @@ public enum AccessibleEvents
     Hide = 0x8003,                  // hwnd + ID + idChild is hidden item
 
     /// <summary>
-    /// <c>EVENT_OBJECT_REORDER</c>
+    ///  <c>EVENT_OBJECT_REORDER</c>
     ///  Sent when a container object has added, removed, or reordered its children.
     ///  The system sends this event for the following user interface elements:
     ///  header control, list-view control, toolbar control, and window object.

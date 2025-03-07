@@ -4,8 +4,8 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents an expander button and the associated expanded area
-///   of a task dialog.
+///  Represents an expander button and the associated expanded area
+///  of a task dialog.
 /// </summary>
 public sealed class TaskDialogExpander : TaskDialogControl
 {
@@ -17,28 +17,28 @@ public sealed class TaskDialogExpander : TaskDialogControl
     private bool _updateTextOnInitialization;
 
     /// <summary>
-    ///   Occurs when the value of the <see cref="Expanded"/> property changes while
-    ///   this control is shown in a task dialog.
+    ///  Occurs when the value of the <see cref="Expanded"/> property changes while
+    ///  this control is shown in a task dialog.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This event will only occur when the expanded state is changed by the user,
     ///   because it isn't possible to programmatically change the <see cref="Expanded"/>
     ///   property while this control is shown in a task dialog.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public event EventHandler? ExpandedChanged;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogExpander"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogExpander"/> class.
     /// </summary>
     public TaskDialogExpander()
     {
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogExpander"/> class
-    ///   using the given text.
+    ///  Initializes a new instance of the <see cref="TaskDialogExpander"/> class
+    ///  using the given text.
     /// </summary>
     /// <param name="text">The text to be displayed in the dialog's expanded area.</param>
     public TaskDialogExpander(string? text)
@@ -48,26 +48,26 @@ public sealed class TaskDialogExpander : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the text to be displayed in the dialog's expanded area.
+    ///  Gets or sets the text to be displayed in the dialog's expanded area.
     /// </summary>
     /// <value>
-    ///   The text to be displayed in the dialog's expanded area. The default value is
-    ///   <see langword="null"/>.
+    ///  The text to be displayed in the dialog's expanded area. The default value is
+    ///  <see langword="null"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This control will only be shown if this property is not <see langword="null"/> or an empty string.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.</para>
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">
+    ///  </remarks>
+    ///  <exception cref="InvalidOperationException">
     ///   The property is set on an expander instance that is currently bound to a task dialog, but it's not visible as its initial
     ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
     ///   - or -
     ///   The property is set on an expander instance that is currently bound to a task dialog, but the dialog
     ///   has just started navigating to a different page.
-    /// </exception>
+    ///  </exception>
     public string? Text
     {
         get => _text;
@@ -96,16 +96,16 @@ public sealed class TaskDialogExpander : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the text to be displayed in the expander button when it
-    ///   is in the expanded state.
+    ///  Gets or sets the text to be displayed in the expander button when it
+    ///  is in the expanded state.
     /// </summary>
     /// <value>
-    ///   The text that is to be displayed in the expander button when it
-    ///   is in the expanded state, or <see langword="null"/> or an empty string to use a
-    ///   text provided by the operating system. The default value is <see langword="null"/>.
+    ///  The text that is to be displayed in the expander button when it
+    ///  is in the expanded state, or <see langword="null"/> or an empty string to use a
+    ///  text provided by the operating system. The default value is <see langword="null"/>.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this expander instance is currently bound to a task dialog.
+    ///  The property is set and this expander instance is currently bound to a task dialog.
     /// </exception>
     public string? ExpandedButtonText
     {
@@ -119,16 +119,16 @@ public sealed class TaskDialogExpander : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the text to be displayed in the expander button when it
-    ///   is in the collapsed state.
+    ///  Gets or sets the text to be displayed in the expander button when it
+    ///  is in the collapsed state.
     /// </summary>
     /// <value>
-    ///   The text that is to be displayed in the expander button when it
-    ///   is in the collapsed state, or <see langword="null"/> or an empty string to use a
-    ///   text provided by the operating system. The default value is <see langword="null"/>.
+    ///  The text that is to be displayed in the expander button when it
+    ///  is in the collapsed state, or <see langword="null"/> or an empty string to use a
+    ///  text provided by the operating system. The default value is <see langword="null"/>.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this expander instance is currently bound to a task dialog.
+    ///  The property is set and this expander instance is currently bound to a task dialog.
     /// </exception>
     public string? CollapsedButtonText
     {
@@ -142,15 +142,15 @@ public sealed class TaskDialogExpander : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates whether the expander button is in the
-    ///   expanded state (so that the dialog's expanded area is visible).
+    ///  Gets or sets a value that indicates whether the expander button is in the
+    ///  expanded state (so that the dialog's expanded area is visible).
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> if the expander button is in the expanded state; <see langword="false"/> if
-    ///   it's in the collapsed state. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> if the expander button is in the expanded state; <see langword="false"/> if
+    ///  it's in the collapsed state. The default value is <see langword="false"/>.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this expander instance is currently bound to a task dialog.
+    ///  The property is set and this expander instance is currently bound to a task dialog.
     /// </exception>
     public bool Expanded
     {
@@ -169,16 +169,16 @@ public sealed class TaskDialogExpander : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the <see cref="TaskDialogExpanderPosition"/> that specifies where
-    ///   the expanded area of the task dialog is to be displayed.
+    ///  Gets or sets the <see cref="TaskDialogExpanderPosition"/> that specifies where
+    ///  the expanded area of the task dialog is to be displayed.
     /// </summary>
     /// <value>
-    ///   The <see cref="TaskDialogExpanderPosition"/> that specifies where the expanded area
-    ///   of the task dialog is to be displayed. The default is
-    ///   <see cref="TaskDialogExpanderPosition.AfterText"/>.
+    ///  The <see cref="TaskDialogExpanderPosition"/> that specifies where the expanded area
+    ///  of the task dialog is to be displayed. The default is
+    ///  <see cref="TaskDialogExpanderPosition.AfterText"/>.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this expander instance is currently bound to a task dialog.
+    ///  The property is set and this expander instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogExpanderPosition Position
     {
@@ -196,7 +196,7 @@ public sealed class TaskDialogExpander : TaskDialogControl
     internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
     /// <summary>
-    ///   Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
+    ///  Returns a string that represents the current <see cref="TaskDialogExpander"/> control.
     /// </summary>
     /// <returns>A string that contains the control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;

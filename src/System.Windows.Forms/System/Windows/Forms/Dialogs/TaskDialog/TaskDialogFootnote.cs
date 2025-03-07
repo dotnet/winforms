@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents the footnote area of a task dialog.
+///  Represents the footnote area of a task dialog.
 /// </summary>
 public sealed class TaskDialogFootnote : TaskDialogControl
 {
@@ -14,15 +14,15 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     private bool _updateTextOnInitialization;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogFootnote"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogFootnote"/> class.
     /// </summary>
     public TaskDialogFootnote()
     {
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogFootnote"/> class
-    ///   using the given <paramref name="text"/>.
+    ///  Initializes a new instance of the <see cref="TaskDialogFootnote"/> class
+    ///  using the given <paramref name="text"/>.
     /// </summary>
     /// <param name="text">The text to be displayed in the dialog's footnote area.</param>
     public TaskDialogFootnote(string? text)
@@ -35,25 +35,25 @@ public sealed class TaskDialogFootnote : TaskDialogControl
         => new(footnoteText);
 
     /// <summary>
-    ///   Gets or sets the text to be displayed in the dialog's footnote area.
+    ///  Gets or sets the text to be displayed in the dialog's footnote area.
     /// </summary>
     /// <value>
-    ///   The text to be displayed in the dialog's footnote area. The default value is <see langword="null"/>.
+    ///  The text to be displayed in the dialog's footnote area. The default value is <see langword="null"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This control will only be shown if this property is not <see langword="null"/> or an empty string.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
-    ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
-    ///   - or -
-    ///   The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
+    ///  <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+    ///  - or -
+    ///  The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public string? Text
     {
@@ -83,25 +83,25 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the footnote icon.
+    ///  Gets or sets the footnote icon.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown (but in that case, it
     ///   cannot be switched between instances created from an
     ///   <see cref="Drawing.Icon"/> (or from a handle pointer)
     ///   and standard icon instances).
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
-    ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
-    ///   - or -
-    ///   The property is set and the task dialog has started navigating to a new page containing this footnote instance, but the
-    ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
-    ///   - or -
-    ///   The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
+    ///  <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+    ///  - or -
+    ///  The property is set and the task dialog has started navigating to a new page containing this footnote instance, but the
+    ///  <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///  - or -
+    ///  The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public unsafe TaskDialogIcon? Icon
     {
@@ -139,7 +139,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
     /// <summary>
-    ///   Returns a string that represents the current <see cref="TaskDialogFootnote"/> control.
+    ///  Returns a string that represents the current <see cref="TaskDialogFootnote"/> control.
     /// </summary>
     /// <returns>A string that contains the control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;

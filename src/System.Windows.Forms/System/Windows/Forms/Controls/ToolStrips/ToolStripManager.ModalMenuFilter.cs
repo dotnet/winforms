@@ -5,26 +5,26 @@ namespace System.Windows.Forms;
 
 public static partial class ToolStripManager
 {
-    ///  <remarks>
-    ///   <para>
-    ///    This installs a message filter when a dropdown becomes active. The filter:
-    ///   </para>
-    ///   <list type="bullet">
-    ///    <item>
-    ///     <description>
-    ///      Eats WM_MOUSEMOVEs so that the window underneath doesn't get highlight processing/tooltips.
-    ///     </description>
-    ///    </item>
-    ///    <item><description>Dismisses the menu if clicked outside the dropdown.</description></item>
-    ///    <item><description>Dismisses all dropdowns if the active window changes.</description></item>
-    ///    <item><description>Redirects keyboard messages to the active dropdown.</description></item>
-    ///   </list>
-    ///   <para>
-    ///    There should be one Message Filter per thread and it should be uninstalled once the last dropdown has gone away.
-    ///    This is not part of <see cref="ToolStripManager"/> because it is DropDown specific and
-    ///    we don't want to publicly expose this message filter.
-    ///   </para>
-    ///  </remarks>
+    /// <remarks>
+    ///  <para>
+    ///   This installs a message filter when a dropdown becomes active. The filter:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>
+    ///     Eats WM_MOUSEMOVEs so that the window underneath doesn't get highlight processing/tooltips.
+    ///    </description>
+    ///   </item>
+    ///   <item><description>Dismisses the menu if clicked outside the dropdown.</description></item>
+    ///   <item><description>Dismisses all dropdowns if the active window changes.</description></item>
+    ///   <item><description>Redirects keyboard messages to the active dropdown.</description></item>
+    ///  </list>
+    ///  <para>
+    ///   There should be one Message Filter per thread and it should be uninstalled once the last dropdown has gone away.
+    ///   This is not part of <see cref="ToolStripManager"/> because it is DropDown specific and
+    ///   we don't want to publicly expose this message filter.
+    ///  </para>
+    /// </remarks>
     internal partial class ModalMenuFilter : IMessageModifyAndFilter
     {
         // The window that was active when we showed the dropdown

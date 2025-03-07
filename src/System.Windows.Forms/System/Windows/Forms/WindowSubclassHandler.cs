@@ -8,18 +8,18 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Allows to subclass individual windows.
+///  Allows to subclass individual windows.
 /// </summary>
 /// <remarks>
-/// <para>
+///  <para>
 ///   To actually subclass the window, call <see cref="Open"/>. To ensure the
 ///   subclassing is correctly undone, you must call <see cref="Dispose()"/> before the
 ///   window is destroyed.
-/// </para>
-/// <para>
+///  </para>
+///  <para>
 ///   See https://docs.microsoft.com/windows/desktop/winmsg/about-window-procedures#instance-subclassing
 ///   for more information about subclassing.
-/// </para>
+///  </para>
 /// </remarks>
 internal class WindowSubclassHandler : IDisposable
 {
@@ -29,15 +29,15 @@ internal class WindowSubclassHandler : IDisposable
     private unsafe void* _originalWindowProc;
 
     /// <summary>
-    ///   The delegate for <see cref="WndProc(ref Message)"/>
-    ///   which is marshaled as native callback.
+    ///  The delegate for <see cref="WndProc(ref Message)"/>
+    ///  which is marshaled as native callback.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   We must store this delegate (and prevent it from being garbage-collected)
     ///   to ensure the function pointer doesn't become invalid.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   Note: We create a new delegate (and native function pointer) for each
     ///   instance because even though creation will be slower (and requires a
     ///   bit of memory to store the native code) it will be faster when the window
@@ -45,7 +45,7 @@ internal class WindowSubclassHandler : IDisposable
     ///   to map the hWnd to the instance, as the window procedure doesn't allow
     ///   to store reference data. However, creating a new delegate for each instance
     ///   is also the way that the <see cref="NativeWindow"/> class does it.
-    /// </para>
+    ///  </para>
     /// </remarks>
     private readonly WNDPROC _windowProcDelegate;
 
@@ -76,9 +76,9 @@ internal class WindowSubclassHandler : IDisposable
     ///  Subclasses the window.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  You must call <see cref="Dispose()"/> to undo the subclassing before the window is destroyed.
-    /// </para>
+    ///  <para>
+    ///   You must call <see cref="Dispose()"/> to undo the subclassing before the window is destroyed.
+    ///  </para>
     /// </remarks>
     /// <exception cref="Win32Exception">The window could not be subclassed.</exception>
     /// <exception cref="InvalidOperationException"><see cref="Open"/> was already called.</exception>
@@ -110,19 +110,19 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    ///   Releases all resources used by the <see cref="WindowSubclassHandler"/>.
+    ///  Releases all resources used by the <see cref="WindowSubclassHandler"/>.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This method undoes the subclassing that was initiated by calling <see cref="Open"/>.
     ///   You must call this method before the window that was subclassed is destroyed.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   If undoing the subclassing fails, this method will throw an exception. In that case,
     ///   you should call <see cref="KeepCallbackDelegateAlive"/> after the window is destroyed
     ///   to ensure the managed callback delegate is kept alive until the window procedure will
     ///   no longer be called.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="Win32Exception">The subclassing could not be undone.</exception>
     /// <exception cref="InvalidOperationException">
@@ -135,23 +135,23 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    ///   Keeps the managed callback delegate alive from which the native function pointer
-    ///   for the window procedure is created.
+    ///  Keeps the managed callback delegate alive from which the native function pointer
+    ///  for the window procedure is created.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   When subclassing a window, a native function pointer is created from a managed
     ///   callback delegate which is then set as the window procedure. The callback is
     ///   automatically kept alive until <see cref="Dispose()"/> is called to undo the
     ///   subclassing.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   However, if <see cref="Dispose()"/> fails (indicated by throwing an exception),
     ///   e.g. because the current window procedure pointer is not the expected one,
     ///   you should call this method after the window is actually destroyed, to ensure
     ///   the callback delegate is kept alive up to that time. Failing to do this might
     ///   result in undefined behavior.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public void KeepCallbackDelegateAlive()
     {
@@ -217,7 +217,7 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    ///   Processes Windows messages for the subclassed window.
+    ///  Processes Windows messages for the subclassed window.
     /// </summary>
     /// <param name="m">The message to process.</param>
     protected virtual unsafe void WndProc(ref Message m)
@@ -235,9 +235,9 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    ///   Determines if the specified <paramref name="exception"/> that was thrown
-    ///   by <see cref="WndProc(ref Message)"/> shall be caught and passed to
-    ///   <see cref="HandleWndProcException(Exception)"/>.
+    ///  Determines if the specified <paramref name="exception"/> that was thrown
+    ///  by <see cref="WndProc(ref Message)"/> shall be caught and passed to
+    ///  <see cref="HandleWndProcException(Exception)"/>.
     /// </summary>
     /// <param name="exception"></param>
     /// <returns>
@@ -250,7 +250,7 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    ///   Called when an exception thrown by <see cref="WndProc(ref Message)"/> was caught.
+    ///  Called when an exception thrown by <see cref="WndProc(ref Message)"/> was caught.
     /// </summary>
     /// <param name="exception">The <see cref="Exception"/> that was caught.</param>
     protected virtual void HandleWndProcException(Exception exception)

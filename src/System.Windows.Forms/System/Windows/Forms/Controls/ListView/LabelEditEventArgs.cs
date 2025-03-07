@@ -41,7 +41,7 @@ public class LabelEditEventArgs : EventArgs
 
     /// <summary>
     ///  Gets or sets a value indicating whether changes made to the label of the
-    /// <see cref="ListViewItem"/> should be canceled.
+    ///  <see cref="ListViewItem"/> should be canceled.
     /// </summary>
     public bool CancelEdit { get; set; }
 }

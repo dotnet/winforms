@@ -88,10 +88,10 @@ public abstract partial class ToolStripItem
 
         /// <remarks>
         ///  <para>
-        ///    First item should be <see cref="PInvoke.UiaAppendRuntimeId" /> since this is not a top-level
-        ///    element of the fragment. Second item can be anything, but here it is the owner hash code.
-        ///    For <see cref="ToolStrip" /> hash code is unique even with child controls.
-        ///    <see cref="Control.Handle" /> is not.
+        ///   First item should be <see cref="PInvoke.UiaAppendRuntimeId" /> since this is not a top-level
+        ///   element of the fragment. Second item can be anything, but here it is the owner hash code.
+        ///   For <see cref="ToolStrip" /> hash code is unique even with child controls.
+        ///   <see cref="Control.Handle" /> is not.
         ///  </para>
         /// </remarks>
         /// <inheritdoc cref="AccessibleObject.RuntimeId" />

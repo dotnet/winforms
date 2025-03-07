@@ -2568,8 +2568,8 @@ public partial class ListView : Control
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///    If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
-    ///    events and let the user do the drawing.
+    ///   If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
+    ///   events and let the user do the drawing.
     ///  </para>
     /// </remarks>
     private unsafe void CustomDraw(ref Message m)

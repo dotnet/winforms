@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a collection of <see cref="TaskDialogButton"/> objects.
+///  Represents a collection of <see cref="TaskDialogButton"/> objects.
 /// </summary>
 public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 {
@@ -14,7 +14,7 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
     private readonly HashSet<TaskDialogButton> _itemSet = [];
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogButtonCollection"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogButtonCollection"/> class.
     /// </summary>
     public TaskDialogButtonCollection()
     {
@@ -23,16 +23,16 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
     internal TaskDialogPage? BoundPage { get; set; }
 
     /// <summary>
-    ///   Creates and adds a <see cref="TaskDialogButton"/> to the collection.
+    ///  Creates and adds a <see cref="TaskDialogButton"/> to the collection.
     /// </summary>
     /// <param name="text">The text of the custom button.</param>
     /// <param name="enabled">A value indicating whether the button can respond to user interaction.</param>
     /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
-    ///   when this button is clicked.
+    ///  when this button is clicked.
     /// </param>
     /// <returns>The created <see cref="TaskDialogButton"/>.</returns>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     public TaskDialogButton Add(string? text, bool enabled = true, bool allowCloseDialog = true)
     {
@@ -44,15 +44,15 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="item"/> is <see langword="null"/>.
+    ///  <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="item"/> has already been added to the collection.
+    ///  <paramref name="item"/> has already been added to the collection.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   <paramref name="item"/> is already a part of a different collection.
-    ///   - or -
-    ///   This collection is currently bound to a task dialog.
+    ///  <paramref name="item"/> is already a part of a different collection.
+    ///  - or -
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void SetItem(int index, TaskDialogButton item)
     {
@@ -84,15 +84,15 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="item"/> is <see langword="null"/>.
+    ///  <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="item"/> has already been added to the collection.
+    ///  <paramref name="item"/> has already been added to the collection.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   <paramref name="item"/> is already a part of a different collection.
-    ///   - or -
-    ///   This collection is currently bound to a task dialog.
+    ///  <paramref name="item"/> is already a part of a different collection.
+    ///  - or -
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void InsertItem(int index, TaskDialogButton item)
     {
@@ -114,7 +114,7 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void RemoveItem(int index)
     {
@@ -130,7 +130,7 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException">
-    ///   This collection is currently bound to a task dialog.
+    ///  This collection is currently bound to a task dialog.
     /// </exception>
     protected override void ClearItems()
     {

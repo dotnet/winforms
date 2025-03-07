@@ -54,11 +54,11 @@ internal interface ICommandBindingTargetProvider
 
     /// <summary>
     ///  Method which should be called by a class implementing this interface in the setter of the
-    /// <see cref="Command"/> property.
+    ///  <see cref="Command"/> property.
     /// </summary>
     /// <param name="commandComponent">Instance of the class implementing this interface.</param>
     /// <param name="newCommand">The new value of the <see cref="Command"/>
-    ///  which should be assigned to the property.</param>
+    /// which should be assigned to the property.</param>
     /// <param name="commandBackingField">
     ///  The backing field for the <see cref="Command"/> property.
     /// </param>
@@ -70,7 +70,7 @@ internal interface ICommandBindingTargetProvider
 
     /// <summary>
     ///  Method which should be called by the class implementing this interface, when the assigned
-    /// <see cref="Command"/> should be executed.
+    ///  <see cref="Command"/> should be executed.
     /// </summary>
     /// <remarks>
     ///  <para>

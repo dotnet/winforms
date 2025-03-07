@@ -126,7 +126,7 @@ public sealed class ColorMatrix
     }
 
     /// <summary>
-    ///   Represents the element at the 1st row and 1st column of this <see cref='ColorMatrix'/>.
+    ///  Represents the element at the 1st row and 1st column of this <see cref='ColorMatrix'/>.
     /// </summary>
     public float Matrix11
     {

@@ -11,9 +11,9 @@ internal static class ScreenshotService
     private static readonly Lock s_lock = new();
 
     /// <summary>
-    /// Takes a picture of the screen and saves it to the location specified by
-    /// <paramref name="fullPath"/>. Files are always saved in PNG format, regardless of the
-    /// file extension.
+    ///  Takes a picture of the screen and saves it to the location specified by
+    ///  <paramref name="fullPath"/>. Files are always saved in PNG format, regardless of the
+    ///  file extension.
     /// </summary>
     public static void TakeScreenshot(string fullPath)
     {
@@ -38,11 +38,11 @@ internal static class ScreenshotService
     }
 
     /// <summary>
-    /// Captures the full screen to a <see cref="Bitmap"/>.
+    ///  Captures the full screen to a <see cref="Bitmap"/>.
     /// </summary>
     /// <returns>
-    /// A <see cref="Bitmap"/> containing the screen capture of the desktop, or <see langword="null"/> if a screen
-    /// capture can't be created.
+    ///  A <see cref="Bitmap"/> containing the screen capture of the desktop, or <see langword="null"/> if a screen
+    ///  capture can't be created.
     /// </returns>
     internal static Bitmap? TryCaptureFullScreen()
     {

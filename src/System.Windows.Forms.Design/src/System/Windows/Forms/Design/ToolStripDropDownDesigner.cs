@@ -602,7 +602,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Restores the ToolStripDropDown AllowDrop to be the value set in the property grid.
+    ///  Restores the ToolStripDropDown AllowDrop to be the value set in the property grid.
     /// </summary>
     private void RestoreAllowDrop()
     {
@@ -610,7 +610,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripDropDown RightToLeft to be the default RightToLeft
+    ///  Resets the ToolStripDropDown RightToLeft to be the default RightToLeft
     /// </summary>
     private void ResetRightToLeft()
     {
@@ -713,17 +713,17 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         && SettingsKey is not null;
 
     /// <summary>
-    /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
+    ///  Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeAutoClose() => (!(bool)ShadowProperties[nameof(AutoClose)]);
 
     /// <summary>
-    /// Since we're shadowing ToolStripDropDown AllowDrop, we get called here to determine whether or not to serialize
+    ///  Since we're shadowing ToolStripDropDown AllowDrop, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeAllowDrop() => AllowDrop;
 
     /// <summary>
-    /// Since we're shadowing ToolStripDropDown RightToLeft, we get called here to determine whether or not to serialize
+    ///  Since we're shadowing ToolStripDropDown RightToLeft, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeRightToLeft() => RightToLeft != RightToLeft.No;
 

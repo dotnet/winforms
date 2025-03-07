@@ -8,11 +8,11 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
 
-///  this class is a container for toolstrips on a rafting row.
-///  you can set layout styles on this container all day long and not
-///  affect the underlying toolstrip's properties.... so if its
-///  removed from a rafting container its still got its defaults
-///  set up for it.
+/// this class is a container for toolstrips on a rafting row.
+/// you can set layout styles on this container all day long and not
+/// affect the underlying toolstrip's properties.... so if its
+/// removed from a rafting container its still got its defaults
+/// set up for it.
 internal sealed class ToolStripPanelCell : ArrangedElement
 {
     private ToolStrip _wrappedToolStrip;

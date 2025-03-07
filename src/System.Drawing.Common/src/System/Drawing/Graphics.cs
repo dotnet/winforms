@@ -48,8 +48,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public delegate bool DrawImageAbort(IntPtr callbackdata);
 
     /// <summary>
-    /// Callback for EnumerateMetafile methods.
-    /// This method can then call Metafile.PlayRecord to play the record that was just enumerated.
+    ///  Callback for EnumerateMetafile methods.
+    ///  This method can then call Metafile.PlayRecord to play the record that was just enumerated.
     /// </summary>
     /// <param name="recordType">if >= MinRecordType, it's an EMF+ record</param>
     /// <param name="flags">always 0 for EMF records</param>
@@ -218,7 +218,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <summary>
-    /// Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
+    ///  Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
     /// </summary>
     public Drawing2D.CompositingMode CompositingMode
     {
@@ -275,7 +275,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <summary>
-    /// Gets or sets the interpolation mode associated with this Graphics.
+    ///  Gets or sets the interpolation mode associated with this Graphics.
     /// </summary>
     public Drawing2D.InterpolationMode InterpolationMode
     {
@@ -667,7 +667,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         DrawArc(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
         => DrawArc(pen, (float)x, y, width, height, startAngle, sweepAngle);
@@ -3590,7 +3590,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///   The <paramref name="cachedBitmap"/> is not compatible with the <see cref="Graphics"/> device state.
     ///  </para>
     ///  <para>
-    ///  - or -
+    ///   - or -
     ///  </para>
     ///  <para>
     ///   The <see cref="Graphics"/> object has a transform applied other than a translation.

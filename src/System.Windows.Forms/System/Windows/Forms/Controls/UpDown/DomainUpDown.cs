@@ -179,10 +179,6 @@ public partial class DomainUpDown : UpDownBase
     [SRDescription(nameof(SR.DomainUpDownWrapDescr))]
     public bool Wrap { get; set; }
 
-    //////////////////////////////////////////////////////////////
-    // Methods
-    //
-    //////////////////////////////////////////////////////////////
     /// <summary>
     ///  Occurs when the <see cref="SelectedItem"/> property has
     ///  been changed.

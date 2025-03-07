@@ -12,15 +12,15 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 ///  <para>
-///  Specifying the high DPI mode is dependent on the OS version of the machine you're running your application on.
-///  Setting the high DPI mode will work on machines running Windows 10 Creators Update (version 1703) or later versions.
+///   Specifying the high DPI mode is dependent on the OS version of the machine you're running your application on.
+///   Setting the high DPI mode will work on machines running Windows 10 Creators Update (version 1703) or later versions.
 ///  </para>
 ///  <para>
-///  Changing the DPI mode while the application is running doesn't impact scaling if you're using the `PerMonitor` value.
-///  If there is more than one monitor attached and their DPI settings are different, the DPI may change when the window
-///  is moved from one monitor to the other.
-///  In this case, the application rescales according to the new monitor's DPI settings.
-///  Alternatively, the DPI of a window can be changed when the OS scaling setting is changed for the monitor the window is on.
+///   Changing the DPI mode while the application is running doesn't impact scaling if you're using the `PerMonitor` value.
+///   If there is more than one monitor attached and their DPI settings are different, the DPI may change when the window
+///   is moved from one monitor to the other.
+///   In this case, the application rescales according to the new monitor's DPI settings.
+///   Alternatively, the DPI of a window can be changed when the OS scaling setting is changed for the monitor the window is on.
 ///  </para>
 /// </remarks>
 public enum HighDpiMode

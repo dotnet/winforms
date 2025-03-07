@@ -32,7 +32,7 @@ public class HelpProvider : Component, IExtenderProvider
 
     /// <summary>
     ///  Gets or sets a string indicating the name of the Help file associated with this
-    /// <see cref="HelpProvider"/> object.
+    ///  <see cref="HelpProvider"/> object.
     /// </summary>
     [Localizable(true)]
     [DefaultValue(null)]

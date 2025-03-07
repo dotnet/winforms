@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 ///  Translates between WinForms text-based <see cref="Clipboard"/>
 ///  formats and Win32 32-bit signed integer-based clipboard
 ///  formats. Provides <see langword="static"/> methods to create new
-/// <see cref="Clipboard"/> formats and add them to the Windows Registry.
+///  <see cref="Clipboard"/> formats and add them to the Windows Registry.
 /// </summary>
 public static partial class DataFormats
 {

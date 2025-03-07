@@ -100,7 +100,7 @@ public enum AccessibleStates
     /// <summary>
     ///  The object has a rapidly or constantly changing appearance. Graphics
     ///  that are occasionally animated, but not always, should be defined as
-    /// <see cref="AccessibleRole.Graphic"/>|<see cref="Animated"/>.
+    ///  <see cref="AccessibleRole.Graphic"/>|<see cref="Animated"/>.
     ///  This state should not be used to indicate that the object's location
     ///  is changing.
     /// </summary>
@@ -170,8 +170,8 @@ public enum AccessibleStates
     ///  combining this flag with <see cref="AccessibleSelection.AddSelection"/>
     ///  or <see cref="AccessibleSelection.RemoveSelection"/>. This flag does
     ///  not change the focus or the selection anchor unless it is combined with
-    /// <see cref="AccessibleSelection.TakeFocus"/>. The behavior of
-    /// <see cref="ExtSelectable"/>|<see cref="AccessibleSelection.TakeFocus"/>
+    ///  <see cref="AccessibleSelection.TakeFocus"/>. The behavior of
+    ///  <see cref="ExtSelectable"/>|<see cref="AccessibleSelection.TakeFocus"/>
     ///  is equivalent to adding an item to a selection manually by holding down
     ///  the SHIFT key and clicking an unselected object.
     ///  This flag may not be combined with <see cref="AccessibleSelection.TakeSelection"/>.

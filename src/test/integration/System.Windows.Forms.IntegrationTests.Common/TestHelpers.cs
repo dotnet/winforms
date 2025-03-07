@@ -27,7 +27,7 @@ public static class TestHelpers
     }
 
     /// <summary>
-    /// Should always match the TargetFramework in the .csproj
+    ///  Should always match the TargetFramework in the .csproj
     /// </summary>
     private static string TargetFramework
     {
@@ -122,7 +122,7 @@ public static class TestHelpers
     }
 
     /// <summary>
-    /// End the process.
+    ///  End the process.
     /// </summary>
     /// <returns>The process ExitCode</returns>
     public static int EndProcess(Process process, int timeout = Timeout.Infinite)

@@ -4,22 +4,22 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a command link button control of a task dialog.
+///  Represents a command link button control of a task dialog.
 /// </summary>
 public sealed class TaskDialogCommandLinkButton : TaskDialogButton
 {
     private string? _descriptionText;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogButton"/> class.
     /// </summary>
     public TaskDialogCommandLinkButton()
     {
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class
-    ///   using the given text and, optionally, a description text.
+    ///  Initializes a new instance of the <see cref="TaskDialogButton"/> class
+    ///  using the given text and, optionally, a description text.
     /// </summary>
     /// <param name="text">The text of the control.</param>
     /// <param name="descriptionText">
@@ -41,11 +41,11 @@ public sealed class TaskDialogCommandLinkButton : TaskDialogButton
     }
 
     /// <summary>
-    ///   Gets or sets an additional description text that will be displayed in a separate
-    ///   line.
+    ///  Gets or sets an additional description text that will be displayed in a separate
+    ///  line.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this button instance is currently bound to a task dialog.
+    ///  The property is set and this button instance is currently bound to a task dialog.
     /// </exception>
     public string? DescriptionText
     {

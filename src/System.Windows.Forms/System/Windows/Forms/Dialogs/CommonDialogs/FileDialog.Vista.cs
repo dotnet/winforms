@@ -260,7 +260,7 @@ public partial class FileDialog
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///  Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.
+    ///   Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.
     ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatBehavior))]

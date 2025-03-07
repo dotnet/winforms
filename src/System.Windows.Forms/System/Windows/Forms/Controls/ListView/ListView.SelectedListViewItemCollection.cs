@@ -13,12 +13,11 @@ public partial class ListView
     {
         private readonly ListView _owner;
 
-        ///  A caching mechanism for key accessor
-        ///  We use an index here rather than control so that we don't have lifetime
-        ///  issues by holding on to extra references.
+        /// A caching mechanism for key accessor
+        /// We use an index here rather than control so that we don't have lifetime
+        /// issues by holding on to extra references.
         private int _lastAccessedIndex = -1;
 
-        /* C#r: protected */
         public SelectedListViewItemCollection(ListView owner)
         {
             _owner = owner.OrThrowIfNull();

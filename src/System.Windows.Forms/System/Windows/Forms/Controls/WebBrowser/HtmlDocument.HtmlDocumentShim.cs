@@ -9,16 +9,16 @@ public sealed unsafe partial class HtmlDocument
 {
     /// <summary>
     ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
-    ///          and our CLR callbacks.
+    ///  and our CLR callbacks.
     ///
     ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
     ///  HTMLDocumentEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-    ///              on our an instance of HTMLDocumentEvents2. The HTMLDocumentEvents2 class then fires the event.
+    ///  on our an instance of HTMLDocumentEvents2. The HTMLDocumentEvents2 class then fires the event.
     ///
     ///  IHTMLDocument3.AttachHandler: MSHTML calls back on an HtmlToClrEventProxy that we've created, looking
-    ///                       for a method named DISPID=0. For each event that's subscribed, we create
-    ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-    ///                       CLR event.
+    ///  for a method named DISPID=0. For each event that's subscribed, we create
+    ///  a new HtmlToClrEventProxy, detect the callback and fire the corresponding
+    ///  CLR event.
     /// </summary>
     internal class HtmlDocumentShim : HtmlShim
     {
@@ -44,7 +44,7 @@ public sealed unsafe partial class HtmlDocument
 
         internal HtmlDocument Document => _htmlDocument;
 
-        ///  Support IHtmlDocument3.AttachHandler
+        /// Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
@@ -79,7 +79,7 @@ public sealed unsafe partial class HtmlDocument
             }
         }
 
-        ///  Support IHtmlDocument3.DetachHandler
+        /// Support IHtmlDocument3.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);

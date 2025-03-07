@@ -638,7 +638,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     ///  the user's version of OnRenderItem would not get called when he upgraded his framework. Hence
     ///  everyone should just call this private shared method. Users need to override each item they want
     ///  to change the look and feel of.
-    ///  </summary>
+    /// </summary>
     private static void RenderItemInternal(ToolStripItemRenderEventArgs e)
     {
         ToolStripItem item = e.Item;
@@ -684,7 +684,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  </summary>
+    /// </summary>
     private static void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
     {
         VisualStyleElement separator = (vertical)

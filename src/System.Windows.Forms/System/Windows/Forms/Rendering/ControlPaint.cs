@@ -141,9 +141,6 @@ public static unsafe partial class ControlPaint
 
     /// <summary>
     ///  Creates a 16-bit color bitmap.
-    ///  Sadly, this must be public for the designer to get at it.
-    ///  From MSDN:
-    ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
     /// </summary>
     public static unsafe IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
     {

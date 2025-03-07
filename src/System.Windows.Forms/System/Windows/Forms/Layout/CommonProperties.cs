@@ -562,9 +562,9 @@ internal partial class CommonProperties
         return result;
     }
 
-    ///  xGetDock
-    ///  Do not use this. Use DefaultLayout.GetDock.
-    ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
+    /// xGetDock
+    /// Do not use this. Use DefaultLayout.GetDock.
+    /// Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static DockStyle xGetDock(IArrangedElement element)
     {
         BitVector32 state = GetLayoutState(element);
@@ -581,9 +581,9 @@ internal partial class CommonProperties
         return value;
     }
 
-    ///  xSetAnchor -
-    ///  Do not use this. Use DefaultLayout.SetAnchor.
-    ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
+    /// xSetAnchor -
+    /// Do not use this. Use DefaultLayout.SetAnchor.
+    /// Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static void xSetAnchor(IArrangedElement element, AnchorStyles value)
     {
         Debug.Assert(value != xGetAnchor(element), "PERF: Caller should guard against setting Anchor to original value.");
@@ -600,9 +600,9 @@ internal partial class CommonProperties
             "xSetAnchor did not set mode to Anchor.");
     }
 
-    ///  xSetDock
-    ///  Do not use this. Use DefaultLayout.SetDock.
-    ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
+    /// xSetDock
+    /// Do not use this. Use DefaultLayout.SetDock.
+    /// Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static void xSetDock(IArrangedElement element, DockStyle value)
     {
         Debug.Assert(value != xGetDock(element), "PERF: Caller should guard against setting Dock to original value.");
@@ -644,9 +644,9 @@ internal partial class CommonProperties
         return value == 1;
     }
 
-    ///  SetFlowBreak
-    ///  Use FlowLayoutSettings.SetFlowBreak instead.
-    ///  See GetFlowBreak.
+    /// SetFlowBreak
+    /// Use FlowLayoutSettings.SetFlowBreak instead.
+    /// See GetFlowBreak.
     internal static void SetFlowBreak(IArrangedElement element, bool value)
     {
         Debug.Assert(value != GetFlowBreak(element), "PERF: Caller should guard against setting FlowBreak to original value.");

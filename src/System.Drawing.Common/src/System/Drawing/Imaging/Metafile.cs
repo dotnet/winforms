@@ -419,7 +419,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {

@@ -16,7 +16,7 @@ public enum StringAlignment
     Near = GdiPlus.StringAlignment.StringAlignmentNear,
 
     /// <summary>
-    /// Specifies that text is aligned in the center of the layout rectangle.
+    ///  Specifies that text is aligned in the center of the layout rectangle.
     /// </summary>
     Center = GdiPlus.StringAlignment.StringAlignmentCenter,
 
