@@ -1369,7 +1369,7 @@ Press Ctrl+Enter to accept Text.</value>
     <value>Vertical Splitter Orientation.</value>
   </data>
   <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
-    <value>Horizontal Splitter Orientation.</value>
+    <value>Horizontal Splitter Orientation</value>
   </data>
   <data name="TabControlAdd" xml:space="preserve">
     <value>Add Tab</value>

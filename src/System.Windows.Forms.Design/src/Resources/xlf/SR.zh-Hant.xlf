@@ -1156,8 +1156,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
-        <source>Horizontal Splitter Orientation.</source>
-        <target state="translated">水平的分隔器方向。</target>
+        <source>Horizontal Splitter Orientation</source>
+        <target state="needs-review-translation">水平的分隔器方向。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">

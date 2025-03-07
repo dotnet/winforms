@@ -1156,8 +1156,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
-        <source>Horizontal Splitter Orientation.</source>
-        <target state="translated">Orientace vodorovného rozdělovače.</target>
+        <source>Horizontal Splitter Orientation</source>
+        <target state="needs-review-translation">Orientace vodorovného rozdělovače.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">
