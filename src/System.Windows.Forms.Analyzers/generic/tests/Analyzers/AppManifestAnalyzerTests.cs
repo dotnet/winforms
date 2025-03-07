@@ -11,6 +11,8 @@ namespace System.Windows.Forms.Analyzers.Tests;
 
 public class AppManifestAnalyzerTests
 {
+    private const string TestDataPath = @"Analyzers\TestData";
+
     private const string CSharpCode =
         """
         namespace ConsoleApplication1
@@ -44,7 +46,7 @@ public class AppManifestAnalyzerTests
     public async Task AppManifestAnalyzer_no_op_if_manifest_file_has_no_dpi_info()
     {
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\nodpi.manifest"));
+            File.ReadAllText($"{TestDataPath}\\nodpi.manifest"));
 
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
@@ -60,7 +62,7 @@ public class AppManifestAnalyzerTests
     public async Task AppManifestAnalyzer_noop_if_manifest_file_corrupt()
     {
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\invalid.manifest"));
+            File.ReadAllText($"{TestDataPath}\\invalid.manifest"));
 
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
@@ -78,7 +80,7 @@ public class AppManifestAnalyzerTests
         const string manifestFilePath = @"C:\temp\app.manifest";
 
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+            File.ReadAllText($"{TestDataPath}\\dpi.manifest"));
 
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
@@ -101,7 +103,7 @@ public class AppManifestAnalyzerTests
         const string manifestFilePath = @"C:\temp\app.manifest";
 
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+            File.ReadAllText($"{TestDataPath}\\dpi.manifest"));
 
         await new VisualBasicAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
@@ -124,7 +126,7 @@ public class AppManifestAnalyzerTests
         const string manifestFilePath = @"C:\temp\app.manifest";
 
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+            File.ReadAllText($"{TestDataPath}\\dpi.manifest"));
 
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
@@ -143,7 +145,7 @@ public class AppManifestAnalyzerTests
         const string manifestFilePath = @"C:\temp\app.manifest";
 
         SourceText manifestFile = SourceText.From(
-            File.ReadAllText(@"System\Windows\Forms\Analyzers\MockData\dpi.manifest"));
+            File.ReadAllText($"{TestDataPath}\\dpi.manifest"));
 
         await new VisualBasicAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {

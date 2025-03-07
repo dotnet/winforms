@@ -6,7 +6,7 @@ using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ApplicationConfigurationInitializeBuilderTests
+public partial class AppConfigBuilder
 {
     private static readonly string[] s_locales =
     [
@@ -29,7 +29,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData("MyProject", "default_boilerplate")]
     public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
-        string expected = File.ReadAllText($@"Generators\{GetType().Name}\MockData\{expectedFileName}.cs");
+        string expected = File.ReadAllText($@"Generators\{GetType().Name}\TestData\{expectedFileName}.cs");
 
         string output = Forms.CSharp.Generators.ApplicationConfiguration.ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
             new ApplicationConfig(

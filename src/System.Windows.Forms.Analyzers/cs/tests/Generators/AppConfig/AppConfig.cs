@@ -12,7 +12,7 @@ using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-public partial class ApplicationConfigurationGeneratorTests
+public partial class AppConfig
 {
     private const string FolderPrefix = "System.Windows.Forms.Analyzers.CSharp\\" +
         "System.Windows.Forms.CSharp.Generators.ApplicationConfiguration.ApplicationConfigurationGenerator\\";
@@ -228,6 +228,6 @@ public partial class ApplicationConfigurationGeneratorTests
 
     private SourceText LoadFileContent(string testName) =>
         SourceText.From(
-            File.ReadAllText($@"Generators\{GetType().Name}\MockData\{testName}.cs"),
+            File.ReadAllText($@"Generators\{GetType().Name}\TestData\{testName}.cs"),
             Encoding.UTF8);
 }
