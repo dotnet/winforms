@@ -7,8 +7,8 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|--------------------
-WFAC001 | ApplicationConfiguration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac001)
-WFAC002 | ApplicationConfiguration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac002)
+WFAC001 | ApplicationConfiguration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfac001)
+WFAC002 | ApplicationConfiguration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfac002)
 
 ## Release 9.0.0
 
@@ -16,17 +16,17 @@ WFAC002 | ApplicationConfiguration | Error | ApplicationConfigurationGenerator, 
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO0001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac001)
-WFO0002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac002)
-WFO1000 | WinForms Security | Error | CSharpDiagnosticDescriptors, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/compiler-messages/wfo1000)
-WFO2001 | WinForms Usage | Warning | CSharpDiagnosticDescriptors, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/compiler-messages/wfo2001)
+WFO0001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfo0001)
+WFO0002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfo0002)
+WFO1000 | WinForms Security | Error | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/wfo1000)
+WFO2001 | WinForms Usage | Warning | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/wfo2001)
 
 ### Removed Rules
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|--------------------
-WFAC001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac001)
-WFAC002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac002)
+WFAC001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfac001)
+WFAC002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/wfac002)
 
 ## Release 10.0.0
 
@@ -34,4 +34,4 @@ WFAC002 | Application Configuration | Error | ApplicationConfigurationGenerator,
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO1001 | WinForms Security | Warning | CSharpDiagnosticDescriptors, [Documentation](https://github.com/dotnet/winforms/blob/main/docs/analyzers/WinFormsCSharpAnalyzers.Help.md#implementitypeddataobject)
+WFO1001 | WinForms Security | Warning | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/wfo1001)

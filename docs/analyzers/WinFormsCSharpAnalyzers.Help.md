@@ -8,7 +8,7 @@ are automatically referenced for Window Forms .NET applications.
 `MissingPropertySerializationConfiguration` checks for missing `DesignerSerializationVisibilityAttribute` on properties of classes which are
 derived from `Control` and could potentially serialize design-time data by the designer without the user being aware of it.
 
-### [WFO1000](https://learn.microsoft.com/dotnet/desktop/winforms/compiler-messages/wfo1000): Missing property serialization configuration.
+### [WFO1000](https://aka.ms/winforms-warnings/wfo1000): Missing property serialization configuration.
 
 Properties of classes derived from `Control` should have `DesignerSerializationVisibilityAttribute` 
 set to `DesignerSerializationVisibility.Content` or `DesignerSerializationVisibility.Visible`.
@@ -27,7 +27,7 @@ set to `DesignerSerializationVisibility.Content` or `DesignerSerializationVisibi
 
 `AvoidPassingFuncReturningTaskWithoutCancellationToken` checks parameters passed to `Control.InvokeAsync`. It suggests to use a cancellation token when passing a task to these methods.
 
-### [WFO2001](https://learn.microsoft.com/dotnet/desktop/winforms/compiler-messages/wfo2001): Task is being passed to InvokeAsync without a cancellation token.
+### [WFO2001](https://aka.ms/winforms-warnings/wfo2001): Task is being passed to InvokeAsync without a cancellation token.
 
 Avoid passing a `Func<T>` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func<CancellationToken, ValueTask>` or `Func<CancellationToken, ValueTask<T>>`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled. 
 
@@ -45,7 +45,7 @@ Avoid passing a `Func<T>` to `InvokeAsync` where `T` is a `Task` or `ValueTask`,
 
 `ImplementITypedDataObject` checks custom implementations of the managed `IDataObject` interface and suggests to also implement the `ITypedDataObject` interface.
 
-### [WFO1001](https://github.com/dotnet/winforms/blob/main/docs/analyzers/WinFormsCSharpAnalyzers.Help.md#implementitypeddataobject): `IDataObject` type does not implement `ITypedDataObject`.
+### [WFO1001](https://aka.ms/winforms-warnings/wfo1001): `IDataObject` type does not implement `ITypedDataObject`.
 
 Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.
 

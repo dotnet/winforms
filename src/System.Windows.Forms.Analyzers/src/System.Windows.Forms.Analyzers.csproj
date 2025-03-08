@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\..\docs\analyzers\akams.txt" Link="docs\akams.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
       <Namespace>System.Windows.Forms.Analyzers.Resources</Namespace>

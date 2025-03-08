@@ -7,7 +7,7 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|--------------------
-WFAC010 | ApplicationConfiguration | Warning | AppManifestAnalyzer, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfac010)
+WFAC010 | ApplicationConfiguration | Warning | AppManifestAnalyzer, [Documentation](https://aka.ms/winforms-warnings/wfac010)
 
 ## Release 9.0.0
 
@@ -15,7 +15,7 @@ WFAC010 | ApplicationConfiguration | Warning | AppManifestAnalyzer, [Documentati
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO0003 | Application Configuration | Warning | SharedDiagnosticDescriptors, [Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/compiler-messages/wfo0003)
+WFO0003 | Application Configuration | Warning | SharedDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/wfo0003)
 
 ### Removed Rules
 
