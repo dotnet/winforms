@@ -122,8 +122,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Milliseconds.
         Friend Const MinimumSplashExposureDefault As Integer = 2000
 
-        Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
-
         ' Used to marshal a call to Dispose on the Splash Screen.
         Private Delegate Sub DisposeDelegate()
 
@@ -196,7 +194,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <value>
         '''  The <see cref="SystemColorMode"/> that the application is running in.
         ''' </value>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WinFormsExperimentalUrl)>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=DiagnosticIDs.UrlFormat)>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property ColorMode As SystemColorMode
             Get
