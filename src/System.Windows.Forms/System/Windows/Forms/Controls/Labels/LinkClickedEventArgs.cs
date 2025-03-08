@@ -21,9 +21,9 @@ public class LinkClickedEventArgs : EventArgs
     /// <param name="linkStart">The start of the link span being clicked.</param>
     /// <param name="linkLength">The length of the link span being clicked.</param>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// <para>The value for <paramref name="linkStart"/> or <paramref name="linkLength"/> is negative.</para>
-    /// <para>-or-</para>
-    /// <para>The values for <paramref name="linkStart"/> and <paramref name="linkLength"/> would overflow addition.</para>
+    ///  <para>The value for <paramref name="linkStart"/> or <paramref name="linkLength"/> is negative.</para>
+    ///  <para>-or-</para>
+    ///  <para>The values for <paramref name="linkStart"/> and <paramref name="linkLength"/> would overflow addition.</para>
     /// </exception>
     public LinkClickedEventArgs(string? linkText, int linkStart, int linkLength)
     {

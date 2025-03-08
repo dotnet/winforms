@@ -4927,11 +4927,9 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_userDeletingRowEvent, value);
     }
 
-    ////////////////////////
-    //                    //
-    // ISupportInitialize //
-    //                    //
-    ////////////////////////
+    //
+    // ISupportInitialize
+    //
     void ISupportInitialize.BeginInit()
     {
         if (_dataGridViewState2[State2_Initializing])

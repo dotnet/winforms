@@ -180,7 +180,7 @@ public partial class ListViewItem
                 : Rectangle.Empty;
 
         /// <devdoc>
-        /// .Caller should ensure that the current OS is Windows 8 or greater.
+        ///  Caller should ensure that the current OS is Windows 8 or greater.
         /// </devdoc>
         internal override void ReleaseChildUiaProviders()
         {

@@ -14,12 +14,12 @@ internal class FormOwnerTestForm : Form
     }
 
     /// <summary>
-    /// This method runs a loop to open and close a parent form.
-    /// The parent form opens a child form.show(IWin32Window) overload.
-    /// The parent form is then closed, which also closes the child.
-    /// The output shows how much memory was used in the process and
-    /// can be used to check if a memory leak is present.
-    /// This is used to test the bug: https://github.com/dotnet/winforms/issues/530
+    ///  This method runs a loop to open and close a parent form.
+    ///  The parent form opens a child form.show(IWin32Window) overload.
+    ///  The parent form is then closed, which also closes the child.
+    ///  The output shows how much memory was used in the process and
+    ///  can be used to check if a memory leak is present.
+    ///  This is used to test the bug: https://github.com/dotnet/winforms/issues/530
     /// </summary>
     private void RunFormOwnerMemoryLeakTest()
     {

@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Design;
 
 /// <summary>
 ///  Provides a base class for editors that support any type of
-/// <see cref="IComponent"/> objects.
+///  <see cref="IComponent"/> objects.
 /// </summary>
 public abstract class WindowsFormsComponentEditor : ComponentEditor
 {

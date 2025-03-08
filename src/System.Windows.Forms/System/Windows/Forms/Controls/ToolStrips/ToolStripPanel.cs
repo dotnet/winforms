@@ -103,7 +103,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         set => base.AutoSize = value;
     }
 
-    ///  Override base AutoSizeChanged to we can change visibility/browsability attributes
+    /// Override base AutoSizeChanged to we can change visibility/browsability attributes
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     public new event EventHandler? AutoSizeChanged

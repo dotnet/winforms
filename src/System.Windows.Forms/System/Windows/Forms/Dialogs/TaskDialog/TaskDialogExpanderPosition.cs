@@ -4,20 +4,20 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Specifies where the expanded area of the
-///   task dialog is to be displayed.
+///  Specifies where the expanded area of the
+///  task dialog is to be displayed.
 /// </summary>
 public enum TaskDialogExpanderPosition : int
 {
     /// <summary>
-    ///   The expanded area is to be displayed immediately after the
-    ///   dialog's text.
+    ///  The expanded area is to be displayed immediately after the
+    ///  dialog's text.
     /// </summary>
     AfterText = 0,
 
     /// <summary>
-    ///   The expanded area is to be displayed at the bottom of the dialog's
-    ///   footnote area.
+    ///  The expanded area is to be displayed at the bottom of the dialog's
+    ///  footnote area.
     /// </summary>
     AfterFootnote = 1
 }

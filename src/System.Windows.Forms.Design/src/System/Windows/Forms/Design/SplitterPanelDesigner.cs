@@ -215,7 +215,7 @@ internal class SplitterPanelDesigner : PanelDesigner
     }
 
     /// <summary>
-    /// Remove some basic properties that are not supported by the SplitterPanel.
+    ///  Remove some basic properties that are not supported by the SplitterPanel.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

@@ -27,17 +27,17 @@ public class PaintValueEventArgs : EventArgs
     }
 
     /// <summary>
-    /// <see cref="Rectangle"/> outlining the area in which the painting should be done.
+    ///  <see cref="Rectangle"/> outlining the area in which the painting should be done.
     /// </summary>
     public Rectangle Bounds { get; }
 
     /// <summary>
-    /// <see cref="ITypeDescriptorContext"/> object for additional information about the context this value appears in.
+    ///  <see cref="ITypeDescriptorContext"/> object for additional information about the context this value appears in.
     /// </summary>
     public ITypeDescriptorContext? Context { get; }
 
     /// <summary>
-    /// <see cref="Drawing.Graphics"/> object with which painting should be done.
+    ///  <see cref="Drawing.Graphics"/> object with which painting should be done.
     /// </summary>
     public Graphics Graphics { get; }
 

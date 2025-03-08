@@ -9,7 +9,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Provides design-time functionality for ImageList.
+///  Provides design-time functionality for ImageList.
 /// </summary>
 internal partial class ImageListDesigner : ComponentDesigner
 {
@@ -19,8 +19,8 @@ internal partial class ImageListDesigner : ComponentDesigner
     private DesignerActionListCollection? _actionLists;
 
     /// <summary>
-    /// Accessor method for the ColorDepth property on ImageList.
-    /// We shadow this property at design time.
+    ///  Accessor method for the ColorDepth property on ImageList.
+    ///  We shadow this property at design time.
     /// </summary>
     private ColorDepth ColorDepth
     {
@@ -36,8 +36,8 @@ internal partial class ImageListDesigner : ComponentDesigner
     private bool ShouldSerializeColorDepth() => Images.Count == 0;
 
     /// <summary>
-    /// Accessor method for the Images property on ImageList.
-    /// We shadow this property at design time.
+    ///  Accessor method for the Images property on ImageList.
+    ///  We shadow this property at design time.
     /// </summary>
     private OriginalImageCollection Images
     {
@@ -51,8 +51,8 @@ internal partial class ImageListDesigner : ComponentDesigner
     internal ImageList ImageList => (ImageList)Component;
 
     /// <summary>
-    /// Accessor method for the ImageSize property on ImageList.
-    /// We shadow this property at design time.
+    ///  Accessor method for the ImageSize property on ImageList.
+    ///  We shadow this property at design time.
     /// </summary>
     private Size ImageSize
     {
@@ -81,8 +81,8 @@ internal partial class ImageListDesigner : ComponentDesigner
     private bool ShouldSerializeTransparentColor() => !TransparentColor.Equals(Color.LightGray);
 
     /// <summary>
-    /// Accessor method for the ImageStream property on ImageList.
-    /// We shadow this property at design time.
+    ///  Accessor method for the ImageStream property on ImageList.
+    ///  We shadow this property at design time.
     /// </summary>
     private ImageListStreamer? ImageStream
     {
@@ -95,7 +95,7 @@ internal partial class ImageListDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Provides an opportunity for the designer to filter the properties.
+    ///  Provides an opportunity for the designer to filter the properties.
     /// </summary>
     /// <param name="properties"></param>
     protected override void PreFilterProperties(IDictionary properties)

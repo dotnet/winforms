@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a radio button control of a task dialog.
+///  Represents a radio button control of a task dialog.
 /// </summary>
 public sealed class TaskDialogRadioButton : TaskDialogControl
 {
@@ -16,21 +16,21 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     private bool _ignoreRadioButtonClickedNotification;
 
     /// <summary>
-    ///   Occurs when the value of the <see cref="Checked"/> property changes
-    ///   while this control is shown in a task dialog.
+    ///  Occurs when the value of the <see cref="Checked"/> property changes
+    ///  while this control is shown in a task dialog.
     /// </summary>
     public event EventHandler? CheckedChanged;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class.
     /// </summary>
     public TaskDialogRadioButton()
     {
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class
-    ///   using the given <paramref name="text"/>.
+    ///  Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class
+    ///  using the given <paramref name="text"/>.
     /// </summary>
     public TaskDialogRadioButton(string? text)
         : this()
@@ -39,20 +39,20 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the button can respond to user interaction.
+    ///  Gets or sets a value indicating whether the button can respond to user interaction.
     /// </summary>
     /// <value>
-    /// <see langword="true"/> if the button can respond to user interaction; otherwise,
-    /// <see langword="false"/>. The default value is <see langword="true"/>.
+    ///  <see langword="true"/> if the button can respond to user interaction; otherwise,
+    ///  <see langword="false"/>. The default value is <see langword="true"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a radio button that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a radio button that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public bool Enabled
     {
@@ -69,19 +69,19 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the text associated with this control.
+    ///  Gets or sets the text associated with this control.
     /// </summary>
     /// <value>
-    ///   The text associated with this control. The default value is <see langword="null"/>.
+    ///  The text associated with this control. The default value is <see langword="null"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property must not be <see langword="null"/> or an empty string when showing or navigating
     ///   the dialog; otherwise the operation will fail.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this radio button instance is currently bound to a task dialog.
+    ///  The property is set and this radio button instance is currently bound to a task dialog.
     /// </exception>
     public string? Text
     {
@@ -95,31 +95,31 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or set a value indicating whether the <see cref="TaskDialogRadioButton"/> is
-    ///   in the checked state.
+    ///  Gets or set a value indicating whether the <see cref="TaskDialogRadioButton"/> is
+    ///  in the checked state.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> if the <see cref="TaskDialogRadioButton"/> is in the checked state;
-    ///   otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> if the <see cref="TaskDialogRadioButton"/> is in the checked state;
+    ///  otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   While the dialog is shown, this property can only be set to <see langword="true"/> and you cannot
     ///   set it from within the <see cref="CheckedChanged"/> event.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and the task dialog has started navigating to a new page containing this radio button instance,
-    ///   but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
-    ///   - or -
-    ///   The property is set on a radio button instance that is currently bound to a task dialog,
-    ///   but the value to be set is <see langword="false"/>.
-    ///   - or -
-    ///   The property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the
-    ///   currently bound task dialog.
-    ///   - or -
-    ///   The property is set on a radio button instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set and the task dialog has started navigating to a new page containing this radio button instance,
+    ///  but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///  - or -
+    ///  The property is set on a radio button instance that is currently bound to a task dialog,
+    ///  but the value to be set is <see langword="false"/>.
+    ///  - or -
+    ///  The property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the
+    ///  currently bound task dialog.
+    ///  - or -
+    ///  The property is set on a radio button instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public bool Checked
     {
@@ -258,7 +258,7 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
+    ///  Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
     /// </summary>
     /// <returns>A string that contains the control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;

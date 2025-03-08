@@ -10,7 +10,7 @@ public enum PictureBoxSizeMode
 {
     /// <summary>
     ///  The image is placed in the top-left corner of the
-    /// <see cref="PictureBox"/>. The image is clipped
+    ///  <see cref="PictureBox"/>. The image is clipped
     ///  if the <see cref="PictureBox"/> is to small.
     /// </summary>
     Normal = 0,
@@ -29,10 +29,10 @@ public enum PictureBoxSizeMode
 
     /// <summary>
     ///  The image is displayed in the center if the
-    /// <see cref="PictureBox"/> is larger than the
+    ///  <see cref="PictureBox"/> is larger than the
     ///  image. If the image is larger than the <see cref="PictureBox"/>,
     ///  the center of the picture is placed in the center of the
-    /// <see cref="PictureBox"/> and the outside edges are
+    ///  <see cref="PictureBox"/> and the outside edges are
     ///  clipped.
     /// </summary>
     CenterImage = 3,

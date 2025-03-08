@@ -30,8 +30,6 @@ internal partial class OleDragDropHandler
             Deserialize(info, context);
         }
 
-        /// <summary>
-        /// </summary>
         public void SetDisplayName()
         {
             if (!_displayNameSet)
@@ -42,8 +40,7 @@ internal partial class OleDragDropHandler
         }
 
         /// <summary>
-        /// <para>Saves the state of this <see cref="ToolboxItem"/> to
-        ///  the specified serialization info.</para>
+        ///  Saves the state of this <see cref="ToolboxItem"/> to the specified serialization info.
         /// </summary>
         protected override void Serialize(SerializationInfo info, StreamingContext context)
         {
@@ -55,8 +52,7 @@ internal partial class OleDragDropHandler
         }
 
         /// <summary>
-        /// <para>Loads the state of this <see cref="ToolboxItem"/>
-        /// from the stream.</para>
+        ///  Loads the state of this <see cref="ToolboxItem"/> from the stream.
         /// </summary>
         protected override void Deserialize(SerializationInfo info, StreamingContext context)
         {

@@ -5,7 +5,7 @@ namespace System.Windows.Forms;
 
 /// <summary>
 ///  Provides data for the <see cref="Control.MouseUp"/>, <see cref="Control.MouseDown"/> and
-/// <see cref="Control.MouseMove"/> events.
+///  <see cref="Control.MouseMove"/> events.
 /// </summary>
 public class MouseEventArgs : EventArgs
 {

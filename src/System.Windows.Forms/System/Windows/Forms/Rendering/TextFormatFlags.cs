@@ -46,13 +46,13 @@ public enum TextFormatFlags
     WordBreak                           = (int)DRAW_TEXT_FORMAT.DT_WORDBREAK,
     WordEllipsis                        = (int)DRAW_TEXT_FORMAT.DT_WORD_ELLIPSIS,
 
-    ///  The following flags are exclusive of TextRenderer (no Windows native flags)
-    ///  and apply to methods receiving a Graphics as the IDeviceContext object, and
-    ///  specify whether to reapply clipping and coordinate transformations to the hdc
-    ///  obtained from the Graphics object, which returns a clean hdc.
+    /// The following flags are exclusive of TextRenderer (no Windows native flags)
+    /// and apply to methods receiving a Graphics as the IDeviceContext object, and
+    /// specify whether to reapply clipping and coordinate transformations to the hdc
+    /// obtained from the Graphics object, which returns a clean hdc.
     ///
-    ///  These get stripped off by TextExtensions before we call DrawText or MeasureText
-    ///  (see: GdiUnsupportedFlagMask).
+    /// These get stripped off by TextExtensions before we call DrawText or MeasureText
+    /// (see: GdiUnsupportedFlagMask).
 
     PreserveGraphicsClipping            = 0x0100_0000,
     PreserveGraphicsTranslateTransform  = 0x0200_0000,

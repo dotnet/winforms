@@ -51,9 +51,9 @@ public partial class MonthCalendar
 
         /// <remarks>
         ///  <para>
-        ///    This value wasn't saved to a field as in the rest calendar accessible objects
-        ///    because GetChildId requires <see cref="_monthCalendarAccessibleObject" /> existing
-        ///    but it will be <see langword="null"/> because an inherited constructor is not called yet.
+        ///   This value wasn't saved to a field as in the rest calendar accessible objects
+        ///   because GetChildId requires <see cref="_monthCalendarAccessibleObject" /> existing
+        ///   but it will be <see langword="null"/> because an inherited constructor is not called yet.
         ///  </para>
         /// </remarks>
         /// <inheritdoc cref="AccessibleObject.RuntimeId" />

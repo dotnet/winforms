@@ -11,16 +11,16 @@ public sealed partial class HtmlWindow
 {
     /// <summary>
     ///  HtmlWindowShim - this is the glue between the DOM eventing mechanisms
-    ///        and our CLR callbacks.
+    ///  and our CLR callbacks.
     ///
     ///  There are two kinds of events: HTMLWindowEvents2 and IHtmlWindow3.AttachHandler style
     ///  HTMLWindowEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-    ///              on an instance of HTMLWindowEvents2. The HTMLWindowEvents2 class then fires the event.
+    ///  on an instance of HTMLWindowEvents2. The HTMLWindowEvents2 class then fires the event.
     ///
     ///  IHTMLWindow3.AttachHandler: MSHTML calls back on an HtmlToClrEventProxy that we've created, looking
-    ///                       for a method named DISPID=0. For each event that's subscribed, we create
-    ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
-    ///                       CLR event.
+    ///  for a method named DISPID=0. For each event that's subscribed, we create
+    ///  a new HtmlToClrEventProxy, detect the callback and fire the corresponding
+    ///  CLR event.
     /// </summary>
     internal unsafe class HtmlWindowShim : HtmlShim
     {
@@ -36,7 +36,7 @@ public sealed partial class HtmlWindow
 
         public IHTMLWindow2.Interface NativeHtmlWindow => (IHTMLWindow2.Interface)_htmlWindow.NativeHtmlWindow.GetManagedObject();
 
-        ///  Support IHtmlDocument3.AttachHandler
+        /// Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
@@ -52,7 +52,7 @@ public sealed partial class HtmlWindow
             Debug.Assert(result, "failed to add event");
         }
 
-        ///  Support HTMLWindowEvents2
+        /// Support HTMLWindowEvents2
         public override void ConnectToEvents()
         {
             if (_cookie is null || !_cookie.Connected)
@@ -69,7 +69,7 @@ public sealed partial class HtmlWindow
             }
         }
 
-        ///  Support IHTMLWindow3.DetachHandler
+        /// Support IHTMLWindow3.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);

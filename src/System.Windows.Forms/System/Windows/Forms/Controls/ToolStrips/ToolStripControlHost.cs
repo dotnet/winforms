@@ -477,8 +477,8 @@ public partial class ToolStripControlHost : ToolStripItem
             : base.GetPreferredSize(constrainingSize);
     }
 
-    ///  Handle* wrappers:
-    ///  We sync the event from the hosted control and call resurface it on ToolStripItem.
+    /// Handle* wrappers:
+    /// We sync the event from the hosted control and call resurface it on ToolStripItem.
     private void HandleClick(object? sender, EventArgs e) => OnClick(e);
 
     private void HandleBackColorChanged(object? sender, EventArgs e) => OnBackColorChanged(e);
@@ -885,10 +885,10 @@ public partial class ToolStripControlHost : ToolStripItem
     }
 
     /// <summary>
-    ///     Constructs the new instance of the accessibility object for this ToolStripControlHost ToolStrip item.
+    ///  Constructs the new instance of the accessibility object for this ToolStripControlHost ToolStrip item.
     /// </summary>
     /// <returns>
-    ///     The new instance of the accessibility object for this ToolStripControlHost ToolStrip item
+    ///  The new instance of the accessibility object for this ToolStripControlHost ToolStrip item
     /// </returns>
     protected override AccessibleObject CreateAccessibilityInstance()
         => new ToolStripControlHostAccessibleObject(this);

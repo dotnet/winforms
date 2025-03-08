@@ -2332,7 +2332,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         return base.ProcessDialogKey(keyData);
     }
 
-    ///  /// <summary>
+    /// <summary>
     ///  This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
     ///  to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
     /// </summary>

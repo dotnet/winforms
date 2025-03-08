@@ -51,8 +51,6 @@ public partial class MaskedTextBox : TextBoxBase
     private const byte ImeConversionUpdate = 1;     // the char being composed has been updated but not converted yet.
     private const byte ImeConversionCompleted = 2;  // the char being composed has been fully converted.
 
-    /////////  Instance fields
-
     // Used for keeping selection when prompt is hidden on leave (text changes).
     private int _lastSelLength;
 
@@ -93,7 +91,7 @@ public partial class MaskedTextBox : TextBoxBase
     private static readonly int s_cutCopyIncludePrompt = BitVector32.CreateMask(s_insertToggled);
     private static readonly int s_cutCopyIncludeLiterals = BitVector32.CreateMask(s_cutCopyIncludePrompt);
 
-    /////////  Properties backend fields. See corresponding property comments for more info.
+    /// //////  Properties backend fields. See corresponding property comments for more info.
 
     private char _passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
     private Type? _validatingType;
@@ -174,7 +172,7 @@ public partial class MaskedTextBox : TextBoxBase
         _caretTestPos = 0;
     }
 
-    ///////////////////  Properties
+    /// ////////////////  Properties
     ///
     /// <summary>
     ///  Unsupported method/property.
@@ -1465,7 +1463,7 @@ public partial class MaskedTextBox : TextBoxBase
         set { }
     }
 
-    //////////////  Methods
+    /// ///////////  Methods
 
     /// <summary>
     ///  Clears information about the most recent operation from the undo buffer of the control.

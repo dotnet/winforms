@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a verification checkbox control of a task dialog.
+///  Represents a verification checkbox control of a task dialog.
 /// </summary>
 public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
 {
@@ -12,25 +12,25 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     private bool _checked;
 
     /// <summary>
-    ///   Occurs when the value of the <see cref="Checked"/> property changes while
-    ///   this control is shown in a task dialog.
+    ///  Occurs when the value of the <see cref="Checked"/> property changes while
+    ///  this control is shown in a task dialog.
     /// </summary>
     public event EventHandler? CheckedChanged;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogVerificationCheckBox"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogVerificationCheckBox"/> class.
     /// </summary>
     public TaskDialogVerificationCheckBox()
     {
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogVerificationCheckBox"/> class with
-    ///   the given text.
+    ///  Initializes a new instance of the <see cref="TaskDialogVerificationCheckBox"/> class with
+    ///  the given text.
     /// </summary>
     /// <param name="text">A text associated with this control.</param>
     /// <param name="isChecked">A value indicating whether the <see cref="TaskDialogVerificationCheckBox"/> is in
-    ///   the checked state.</param>
+    /// the checked state.</param>
     public TaskDialogVerificationCheckBox(string? text, bool isChecked = false)
         : this()
     {
@@ -42,18 +42,18 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
         => new(verificationText);
 
     /// <summary>
-    ///   Gets or sets the text associated with this control.
+    ///  Gets or sets the text associated with this control.
     /// </summary>
     /// <value>
-    ///   The text associated with this control. The default value is <see langword="null"/>.
+    ///  The text associated with this control. The default value is <see langword="null"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This control is only shown if this property is not <see langword="null"/> or an empty string.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this verification checkbox instance is currently bound to a task dialog.
+    ///  The property is set and this verification checkbox instance is currently bound to a task dialog.
     /// </exception>
     public string? Text
     {
@@ -67,28 +67,28 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or set a value indicating whether the <see cref="TaskDialogVerificationCheckBox"/> is in
-    ///   the checked state.
+    ///  Gets or set a value indicating whether the <see cref="TaskDialogVerificationCheckBox"/> is in
+    ///  the checked state.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> if the <see cref="TaskDialogVerificationCheckBox"/> is in the checked state;
-    ///   otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> if the <see cref="TaskDialogVerificationCheckBox"/> is in the checked state;
+    ///  otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog,
-    ///   but it's not visible as its initial <see cref="Text"/> property value was
-    ///   <see langword="null"/> or an empty string.
-    ///   - or -
-    ///   The property is set and the task dialog has started navigating to a new page containing this
-    ///   verification checkbox instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
-    ///   - or -
-    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog,
-    ///   but the dialog has just started navigating to a different page.
+    ///  The property is set on a verification checkbox instance that is currently bound to a task dialog,
+    ///  but it's not visible as its initial <see cref="Text"/> property value was
+    ///  <see langword="null"/> or an empty string.
+    ///  - or -
+    ///  The property is set and the task dialog has started navigating to a new page containing this
+    ///  verification checkbox instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///  - or -
+    ///  The property is set on a verification checkbox instance that is currently bound to a task dialog,
+    ///  but the dialog has just started navigating to a different page.
     /// </exception>
     public bool Checked
     {
@@ -115,7 +115,7 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
     /// <summary>
-    ///   Sets input focus to the control.
+    ///  Sets input focus to the control.
     /// </summary>
     internal void Focus()
     {
@@ -126,7 +126,7 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     }
 
     /// <summary>
-    ///   Returns a string that represents the current <see cref="TaskDialogVerificationCheckBox"/> control.
+    ///  Returns a string that represents the current <see cref="TaskDialogVerificationCheckBox"/> control.
     /// </summary>
     /// <returns>The control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;

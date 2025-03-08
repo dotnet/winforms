@@ -4,19 +4,19 @@
 namespace System.Drawing;
 
 /// <summary>
-/// Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
+///  Helper class for scaling coordinates and images according to current DPI scaling set in Windows for the primary screen.
 /// </summary>
 internal static class DpiHelper
 {
     private const double LogicalDpi = 96.0;
     private static bool s_isInitialized;
     /// <summary>
-    /// The primary screen's (device) current horizontal DPI
+    ///  The primary screen's (device) current horizontal DPI
     /// </summary>
     private static double s_deviceDpiX = LogicalDpi;
 
     /// <summary>
-    /// The primary screen's (device) current vertical DPI
+    ///  The primary screen's (device) current vertical DPI
     /// </summary>
     private static double s_deviceDpiY = LogicalDpi;
 
@@ -133,8 +133,8 @@ internal static class DpiHelper
     }
 
     /// <summary>
-    /// Returns whether scaling is required when converting between logical-device units,
-    /// if the application opted in the automatic scaling in the .config file.
+    ///  Returns whether scaling is required when converting between logical-device units,
+    ///  if the application opted in the automatic scaling in the .config file.
     /// </summary>
     public static bool IsScalingRequired
     {
@@ -146,9 +146,9 @@ internal static class DpiHelper
     }
 
     /// <summary>
-    /// Transforms a horizontal integer coordinate from logical to device units
-    /// by scaling it up  for current DPI and rounding to nearest integer value
-    /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
+    ///  Transforms a horizontal integer coordinate from logical to device units
+    ///  by scaling it up  for current DPI and rounding to nearest integer value
+    ///  Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="value">The horizontal value in logical units</param>
     /// <returns>The horizontal value in device units</returns>
@@ -156,9 +156,9 @@ internal static class DpiHelper
         (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * value);
 
     /// <summary>
-    /// Transforms a vertical integer coordinate from logical to device units
-    /// by scaling it up  for current DPI and rounding to nearest integer value
-    /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
+    ///  Transforms a vertical integer coordinate from logical to device units
+    ///  by scaling it up  for current DPI and rounding to nearest integer value
+    ///  Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="value">The vertical value in logical units</param>
     /// <returns>The vertical value in device units</returns>
@@ -166,9 +166,9 @@ internal static class DpiHelper
         (int)Math.Round(LogicalToDeviceUnitsScalingFactorY * value);
 
     /// <summary>
-    /// Returns a new Size with the input's
-    /// dimensions converted from logical units to device units.
-    /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
+    ///  Returns a new Size with the input's
+    ///  dimensions converted from logical units to device units.
+    ///  Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="logicalSize">Size in logical units</param>
     /// <returns>Size in device units</returns>
@@ -176,8 +176,8 @@ internal static class DpiHelper
         new Size(LogicalToDeviceUnitsX(logicalSize.Width), ScaleToInitialSystemDpi(logicalSize.Height));
 
     /// <summary>
-    /// Create and return a new bitmap scaled to the specified size.
-    /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
+    ///  Create and return a new bitmap scaled to the specified size.
+    ///  Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="logicalImage">The image to scale from logical units to device units</param>
     /// <param name="targetImageSize">The size to scale image to</param>
@@ -193,9 +193,9 @@ internal static class DpiHelper
     }
 
     /// <summary>
-    /// Create a new bitmap scaled for the device units.
-    /// When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
-    /// Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
+    ///  Create a new bitmap scaled for the device units.
+    ///  When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
+    ///  Note: this method should be called only inside an if (DpiHelper.IsScalingRequired) clause
     /// </summary>
     /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
     public static void ScaleBitmapLogicalToDevice([NotNullIfNotNull(nameof(logicalBitmap))] ref Bitmap? logicalBitmap)

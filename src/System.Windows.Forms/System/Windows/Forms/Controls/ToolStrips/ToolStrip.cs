@@ -2424,10 +2424,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return this;
     }
 
-    ///  In the case of a
-    ///  toolstrip -> toolstrip
-    ///  contextmenustrip -> the control that is showing it
-    ///  toolstripdropdown -> top most toolstrip
+    /// In the case of a
+    /// toolstrip -> toolstrip
+    /// contextmenustrip -> the control that is showing it
+    /// toolstripdropdown -> top most toolstrip
     internal virtual Control GetOwnerControl()
     {
         return this;

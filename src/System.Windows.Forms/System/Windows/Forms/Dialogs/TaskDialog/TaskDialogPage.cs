@@ -6,36 +6,36 @@ using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._An
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a page of content of a task dialog.
+///  Represents a page of content of a task dialog.
 /// </summary>
 /// <remarks>
-/// <para>
+///  <para>
 ///   It is possible to navigate a task dialog while it is shown by invoking the
 ///   <see cref="Navigate(TaskDialogPage)"/> method with a target <see cref="TaskDialogPage"/>
 ///   instance.
-/// </para>
+///  </para>
 /// </remarks>
 public class TaskDialogPage
 {
     /// <summary>
-    ///   The start ID for custom buttons.
+    ///  The start ID for custom buttons.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   We need to ensure we don't use a ID that is already used for a
     ///   standard button (TaskDialogResult), so we start with 100 to be safe
     ///   (100 is also used as first ID in MSDN examples for the task dialog).
-    /// </para>
+    ///  </para>
     /// </remarks>
     private const int CustomButtonStartID = 100;
 
     /// <summary>
-    ///   The start ID for radio buttons.
+    ///  The start ID for radio buttons.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This must be at least 1 because 0 already stands for "no button".
-    /// </para>
+    ///  </para>
     /// </remarks>
     private const int RadioButtonStartID = 1;
 
@@ -61,44 +61,44 @@ public class TaskDialogPage
     private bool _updateTextOnInitialization;
 
     /// <summary>
-    ///   Occurs after this instance is bound to a task dialog and the task dialog
-    ///   has created the GUI elements represented by this <see cref="TaskDialogPage"/> instance.
+    ///  Occurs after this instance is bound to a task dialog and the task dialog
+    ///  has created the GUI elements represented by this <see cref="TaskDialogPage"/> instance.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This will happen after showing or navigating the dialog.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   When this event occurs, the <see cref="BoundDialog"/> property will return
     ///   the <see cref="TaskDialog"/> instance which this page is bound to.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public event EventHandler? Created;
 
     /// <summary>
-    ///   Occurs when the task dialog is about to destroy the GUI elements represented
-    ///   by this <see cref="TaskDialogPage"/> instance and it is about to be
-    ///   unbound from the task dialog.
+    ///  Occurs when the task dialog is about to destroy the GUI elements represented
+    ///  by this <see cref="TaskDialogPage"/> instance and it is about to be
+    ///  unbound from the task dialog.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This will happen when closing or navigating the dialog.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   After this event occurs, the <see cref="BoundDialog"/> property will return
     ///   <see langword="null"/>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public event EventHandler? Destroyed;
 
     /// <summary>
-    ///   Occurs when the user presses F1 while the task dialog has focus, or when the
-    ///   user clicks the <see cref="TaskDialogButton.Help"/> button.
+    ///  Occurs when the user presses F1 while the task dialog has focus, or when the
+    ///  user clicks the <see cref="TaskDialogButton.Help"/> button.
     /// </summary>
     public event EventHandler? HelpRequest;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogPage"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogPage"/> class.
     /// </summary>
     public TaskDialogPage()
     {
@@ -113,14 +113,14 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the collection of push buttons
-    ///   to be shown in this page.
+    ///  Gets or sets the collection of push buttons
+    ///  to be shown in this page.
     /// </summary>
     /// <value>
-    ///   The collection of custom buttons to be shown in this page.
+    ///  The collection of custom buttons to be shown in this page.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogButtonCollection Buttons
     {
@@ -136,22 +136,22 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the default button in the task dialog.
+    ///  Gets or sets the default button in the task dialog.
     /// </summary>
     /// <value>
-    ///   The default button in the task dialog.
+    ///  The default button in the task dialog.
     /// </value>
     public TaskDialogButton? DefaultButton { get; set; }
 
     /// <summary>
-    ///   Gets or sets the collection of radio buttons
-    ///   to be shown in this page.
+    ///  Gets or sets the collection of radio buttons
+    ///  to be shown in this page.
     /// </summary>
     /// <value>
-    ///   The collection of radio buttons to be shown in this page.
+    ///  The collection of radio buttons to be shown in this page.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogRadioButtonCollection RadioButtons
     {
@@ -167,16 +167,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the verification checkbox to be shown in this page.
+    ///  Gets or sets the verification checkbox to be shown in this page.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   The verification checkbox will only be shown if its <see cref="TaskDialogVerificationCheckBox.Text"/>
     ///   property is not <see langword="null"/> or an empty string.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogVerificationCheckBox? Verification
     {
@@ -192,16 +192,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the dialog expander to be shown in this page.
+    ///  Gets or sets the dialog expander to be shown in this page.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   The expander button (and the expanded area) will only be shown if its
     ///   <see cref="TaskDialogExpander.Text"/> property is not <see langword="null"/> or an empty string.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogExpander? Expander
     {
@@ -217,16 +217,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the footnote to be shown in this page.
+    ///  Gets or sets the footnote to be shown in this page.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   The footnote will only be shown if its <see cref="TaskDialogFootnote.Text"/> property
     ///   is not <see langword="null"/> or an empty string.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogFootnote? Footnote
     {
@@ -242,16 +242,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the progress bar to be shown in this page.
+    ///  Gets or sets the progress bar to be shown in this page.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   The progress bar will only be shown if its <see cref="TaskDialogProgressBar.State"/>
     ///   property is not <see cref="TaskDialogProgressBarState.None"/>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public TaskDialogProgressBar? ProgressBar
     {
@@ -267,19 +267,19 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the text to display in the title bar of the task dialog.
+    ///  Gets or sets the text to display in the title bar of the task dialog.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and the task dialog has started navigating to this page instance,
-    ///   but the <see cref="Created"/> event has not been raised yet.
-    ///   - or -
-    ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set and the task dialog has started navigating to this page instance,
+    ///  but the <see cref="Created"/> event has not been raised yet.
+    ///  - or -
+    ///  The property is set on a page instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public string? Caption
     {
@@ -297,16 +297,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the heading (main instruction).
+    ///  Gets or sets the heading (main instruction).
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a page instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public string? Heading
     {
@@ -333,16 +333,16 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the dialog's primary text content.
+    ///  Gets or sets the dialog's primary text content.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a page instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public string? Text
     {
@@ -366,22 +366,22 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets the main icon.
+    ///  Gets or sets the main icon.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown, however, it
     ///   cannot be switched between instances created from an
     ///   <see cref="Drawing.Icon"/> (or from a handle pointer)
     ///   and standard icon instances.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and the task dialog has started navigating to this page instance,
-    ///   but the <see cref="Created"/> event has not been raised yet.
-    ///   - or -
-    ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set and the task dialog has started navigating to this page instance,
+    ///  but the <see cref="Created"/> event has not been raised yet.
+    ///  - or -
+    ///  The property is set on a page instance that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public unsafe TaskDialogIcon? Icon
     {
@@ -421,24 +421,24 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates whether the task dialog can be closed with
-    ///   <see cref="TaskDialogButton.Cancel"/> as resulting button by pressing ESC or Alt+F4
-    ///   or by clicking the title bar's close button, even if a <see cref="TaskDialogButton.Cancel"/>
-    ///   button isn't added to the <see cref="Buttons"/> collection.
+    ///  Gets or sets a value that indicates whether the task dialog can be closed with
+    ///  <see cref="TaskDialogButton.Cancel"/> as resulting button by pressing ESC or Alt+F4
+    ///  or by clicking the title bar's close button, even if a <see cref="TaskDialogButton.Cancel"/>
+    ///  button isn't added to the <see cref="Buttons"/> collection.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
-    ///   the title bar's close button; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
+    ///  the title bar's close button; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   You can intercept cancellation of the dialog without displaying a "Cancel"
     ///   button by adding the <see cref="TaskDialogButton.Cancel"/> button that has its
     ///   <see cref="TaskDialogButton.Visible"/> property set to <see langword="false"/>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public bool AllowCancel
     {
@@ -447,23 +447,23 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates whether text and controls are displayed
-    ///   reading right to left.
+    ///  Gets or sets a value that indicates whether text and controls are displayed
+    ///  reading right to left.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>
-    ///   to display controls reading left to right. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>
+    ///  to display controls reading left to right. The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   Note that once a task dialog has been opened with or has navigated to a
     ///   <see cref="TaskDialogPage"/> where this flag is set, it will keep on
     ///   subsequent navigations to a new <see cref="TaskDialogPage"/> even when
     ///   it doesn't have this flag set.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public bool RightToLeftLayout
     {
@@ -472,21 +472,21 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates whether the task dialog can be minimized
-    ///   when it is shown modeless.
+    ///  Gets or sets a value that indicates whether the task dialog can be minimized
+    ///  when it is shown modeless.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to specify that the task dialog can be minimized; otherwise, <see langword="false"/>.
-    ///   The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to specify that the task dialog can be minimized; otherwise, <see langword="false"/>.
+    ///  The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   When setting this property to <see langword="true"/>, <see cref="AllowCancel"/> is
     ///   automatically implied.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public bool AllowMinimize
     {
@@ -495,15 +495,15 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Indicates that the width of the task dialog is determined by the width
-    ///   of its content area (similar to Message Box sizing behavior).
+    ///  Indicates that the width of the task dialog is determined by the width
+    ///  of its content area (similar to Message Box sizing behavior).
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to determine the width of the task dialog by the width of
-    ///   its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to determine the width of the task dialog by the width of
+    ///  its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
     /// </value>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this page instance is currently bound to a task dialog.
+    ///  The property is set and this page instance is currently bound to a task dialog.
     /// </exception>
     public bool SizeToContent
     {
@@ -512,7 +512,7 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    /// <para>
+    ///  <para>
     ///   Gets or sets a value that specifies whether the task dialog should
     ///   interpret strings in the form <c>&lt;a href="target"&gt;link Text&lt;/a&gt;</c>
     ///   as hyperlink when specified in the <see cref="Text"/>,
@@ -520,100 +520,100 @@ public class TaskDialogPage
     ///   or <see cref="TaskDialogFootnote.Text"/> properties.
     ///   When the user clicks on such a link, the <see cref="LinkClicked"/>
     ///   event is raised, containing the value of the <c>target</c> attribute.
-    /// </para>
+    ///  </para>
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to enable links; otherwise, <see langword="false"/>.
-    ///   The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to enable links; otherwise, <see langword="false"/>.
+    ///  The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   The Task Dialog will not actually execute any links.
     ///   Link execution must be handled in the <see cref="LinkClicked"/> event.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   Note: Enabling this setting causes the <c>"&amp;"</c> character to be
     ///   interpreted as a prefix for an access key character (mnemonic) if at least
     ///   one link is used. To show a literal <c>"&amp;"</c> character, it must be escaped
     ///   as <c>"&amp;&amp;"</c>.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   When you enable this setting and you want to display text
     ///   without interpreting links, you must replace the strings <c>"&lt;a"</c>
     ///   and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public bool EnableLinks { get; set; }
 
     /// <summary>
-    ///   Occurs when the user has clicked on a link.
+    ///  Occurs when the user has clicked on a link.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This event will only be raised if <see cref="EnableLinks"/> is set to <see langword="true"/>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public event EventHandler<TaskDialogLinkClickedEventArgs>? LinkClicked;
 
     /// <summary>
-    ///   Gets the <see cref="TaskDialog"/> instance which this page
-    ///   is currently bound to.
+    ///  Gets the <see cref="TaskDialog"/> instance which this page
+    ///  is currently bound to.
     /// </summary>
     /// <value>
-    ///   The <see cref="TaskDialog"/> instance which this page is bound to, or <see langword="null"/>
-    ///   if this page is not currently bound.
+    ///  The <see cref="TaskDialog"/> instance which this page is bound to, or <see langword="null"/>
+    ///  if this page is not currently bound.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   A page will be bound while it is being displayed, which is indicated by the events
     ///   <see cref="Created"/> and <see cref="Destroyed"/>.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   While a page is bound to a task dialog, you cannot show that page instance using a
     ///   different <see cref="TaskDialog"/> instance at the same time.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public TaskDialog? BoundDialog { get; private set; }
 
     /// <summary>
-    ///   Gets a value that indicates if the <see cref="BoundDialog"/>
-    ///   started navigation to this page but navigation did not yet complete
-    ///   (in which case we cannot modify the dialog even though we are bound).
+    ///  Gets a value that indicates if the <see cref="BoundDialog"/>
+    ///  started navigation to this page but navigation did not yet complete
+    ///  (in which case we cannot modify the dialog even though we are bound).
     /// </summary>
     internal bool WaitingForInitialization => BoundDialog is not null && !_appliedInitialization;
 
     /// <summary>
     ///  Shows the new content in the current task dialog.
-    /// <paramref name="page"/>.
+    ///  <paramref name="page"/>.
     /// </summary>
     /// <param name="page">
-    ///   The page instance that contains the contents which this task dialog will display.
+    ///  The page instance that contains the contents which this task dialog will display.
     /// </param>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   During the navigation the dialog will recreate the dialog from the specified
     ///   <paramref name="page"/> and its controls, and unbind and destroy the currently shown page.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   You can't manipulate the page or its controls
     ///   immediately after navigating the dialog (except for calling
     ///   <see cref="TaskDialog.Close"/> or navigating the dialog again).
     ///   You will need to wait for the <see cref="Created"/>
     ///   event to occur before you can manipulate the page or its controls.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="page"/> is <see langword="null"/>.
+    ///  <paramref name="page"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   The page instance is not currently bound to a dialog, <see cref="BoundDialog"/> is <see langword="null"/>.
-    ///   - or -
-    ///   This page instance contains an invalid configuration.
-    ///   - or -
-    ///   This method is called from within the <see cref="TaskDialogRadioButton.CheckedChanged"/> event
-    ///   of one of the radio buttons of the current task dialog.
-    ///   - or -
-    ///   The task dialog has already been closed.
+    ///  The page instance is not currently bound to a dialog, <see cref="BoundDialog"/> is <see langword="null"/>.
+    ///  - or -
+    ///  This page instance contains an invalid configuration.
+    ///  - or -
+    ///  This method is called from within the <see cref="TaskDialogRadioButton.CheckedChanged"/> event
+    ///  of one of the radio buttons of the current task dialog.
+    ///  - or -
+    ///  The task dialog has already been closed.
     /// </exception>
     public void Navigate(TaskDialogPage page)
     {
@@ -1037,25 +1037,25 @@ public class TaskDialogPage
     }
 
     /// <summary>
-    ///   Raises the <see cref="Created"/> event.
+    ///  Raises the <see cref="Created"/> event.
     /// </summary>
     /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
     protected internal void OnCreated(EventArgs e) => Created?.Invoke(this, e);
 
     /// <summary>
-    ///   Raises the <see cref="Destroyed"/> event.
+    ///  Raises the <see cref="Destroyed"/> event.
     /// </summary>
     /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
     protected internal void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
 
     /// <summary>
-    ///   Raises the <see cref="HelpRequest"/> event.
+    ///  Raises the <see cref="HelpRequest"/> event.
     /// </summary>
     /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
     protected internal void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
 
     /// <summary>
-    ///   Raises the <see cref="LinkClicked"/> event.
+    ///  Raises the <see cref="LinkClicked"/> event.
     /// </summary>
     /// <param name="e">A <see cref="TaskDialogLinkClickedEventArgs"/> that contains the event data.</param>
     protected internal void OnLinkClicked(TaskDialogLinkClickedEventArgs e) => LinkClicked?.Invoke(this, e);

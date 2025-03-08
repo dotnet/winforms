@@ -1400,11 +1400,11 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     /// <internalonly/>
     /// <summary>
-    /// The list of technologies that this designer can support
-    /// for its view. Examples of different technologies are
-    /// WinForms and Web Forms. Other object models can be
-    /// supported at design time, but they most be able to
-    /// provide a view in one of the supported technologies.
+    ///  The list of technologies that this designer can support
+    ///  for its view. Examples of different technologies are
+    ///  WinForms and Web Forms. Other object models can be
+    ///  supported at design time, but they most be able to
+    ///  provide a view in one of the supported technologies.
     /// </summary>
     ViewTechnology[] IRootDesigner.SupportedTechnologies
     {
@@ -1437,7 +1437,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     /// <internalonly/>
     /// <summary>
-    /// <para>Selects the specified tool.</para>
+    ///  <para>Selects the specified tool.</para>
     /// </summary>
     void IToolboxUser.ToolPicked(ToolboxItem tool)
     {

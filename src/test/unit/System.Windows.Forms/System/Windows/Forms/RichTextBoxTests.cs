@@ -11027,7 +11027,7 @@ public partial class RichTextBoxTests
     }
 
     /// <summary>
-    /// Represents RichEdit 1.0 control.
+    ///  Represents RichEdit 1.0 control.
     /// </summary>
     private class RichEdit : RichEditWithVersion
     {
@@ -11036,7 +11036,7 @@ public partial class RichTextBoxTests
     }
 
     /// <summary>
-    /// Represents RichEdit 2.0 control.
+    ///  Represents RichEdit 2.0 control.
     /// </summary>
     private class RichEdit20W : RichEditWithVersion
     {

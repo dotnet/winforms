@@ -10,7 +10,7 @@ namespace WinFormsControlsTest;
 public partial class Dialogs
 {
     /// <summary>
-    /// Provides a predefined set of GUIDs to chose from in order to configure <see cref="ExposedClientGuidMetadata.ClientGuid"/>.
+    ///  Provides a predefined set of GUIDs to chose from in order to configure <see cref="ExposedClientGuidMetadata.ClientGuid"/>.
     /// </summary>
     private sealed class ClientGuidConverter : GuidConverter
     {

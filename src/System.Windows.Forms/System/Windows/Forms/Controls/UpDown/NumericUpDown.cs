@@ -25,10 +25,6 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     private const bool DefaultHexadecimal = false;
     private const int InvalidValue = -1;
 
-    //////////////////////////////////////////////////////////////
-    // Member variables
-    //
-    //////////////////////////////////////////////////////////////
     /// <summary>
     ///  The number of decimal places to display.
     /// </summary>

@@ -12,9 +12,9 @@ public class TreeNodeCollection : IList
 {
     private readonly TreeNode _owner;
 
-    ///  A caching mechanism for key accessor
-    ///  We use an index here rather than control so that we don't have lifetime
-    ///  issues by holding on to extra references.
+    /// A caching mechanism for key accessor
+    /// We use an index here rather than control so that we don't have lifetime
+    /// issues by holding on to extra references.
     private int _lastAccessedIndex = -1;
 
     internal TreeNodeCollection(TreeNode owner)

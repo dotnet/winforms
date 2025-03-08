@@ -291,7 +291,7 @@ public partial class ToolStripDropDown : ToolStrip
         set => base.Dock = value;
     }
 
-    ///  changed the browsable attribute
+    /// changed the browsable attribute
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     public new event EventHandler? DockChanged
@@ -813,8 +813,8 @@ public partial class ToolStripDropDown : ToolStrip
     //    it's not robust enough for our needs
     // }
 
-    ///  Override base TabIndex property in order to avoid serialization
-    ///  (since a dropdown shouldn't participate in the taborder...)
+    /// Override base TabIndex property in order to avoid serialization
+    /// (since a dropdown shouldn't participate in the taborder...)
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [Browsable(false)]
@@ -850,7 +850,7 @@ public partial class ToolStripDropDown : ToolStrip
         remove => base.Validating -= value;
     }
 
-    ///  Override base Visible property in order to control serialization by setting default value
+    /// Override base Visible property in order to control serialization by setting default value
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
     [SRDescription(nameof(SR.ControlVisibleDescr))]
@@ -1283,7 +1283,7 @@ public partial class ToolStripDropDown : ToolStrip
     ///  this is where we handle navigation between the File,Edit,View dropdowns
     ///  if you have one of these dropdowns showing and you hit the arrow key
     ///  and it's not processed by the menu item
-    ///  </summary>
+    /// </summary>
     internal override bool ProcessArrowKey(Keys keyCode)
     {
         ToolStripMenuItem.MenuTimer.Cancel();
@@ -1449,7 +1449,7 @@ public partial class ToolStripDropDown : ToolStrip
     }
 
     /// <summary>
-    ///     VERY similar to Form.ScaleCore
+    ///  VERY similar to Form.ScaleCore
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override void ScaleCore(float dx, float dy)

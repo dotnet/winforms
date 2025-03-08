@@ -11,10 +11,10 @@ namespace System.Drawing.Design;
 /// </summary>
 public interface IPropertyValueUIService
 {
-    ///  <summary>
-    ///   Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list
-    ///   of <see cref="PropertyValueUIItem"/> is modified.
-    ///  </summary>
+    /// <summary>
+    ///  Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list
+    ///  of <see cref="PropertyValueUIItem"/> is modified.
+    /// </summary>
     event EventHandler? PropertyUIValueItemsChanged;
 
     /// <summary>

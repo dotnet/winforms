@@ -7,9 +7,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend ButtonBase.</para>
+/// Provides a designer that can design components that extend ButtonBase.
 /// </summary>
 internal class RadioButtonDesigner : ButtonBaseDesigner
 {

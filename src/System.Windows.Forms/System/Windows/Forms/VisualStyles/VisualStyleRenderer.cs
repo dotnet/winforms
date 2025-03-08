@@ -167,7 +167,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     ///   happens, the user should requery this property to get the correct handle. To know when the
     ///   theme changed, hook on to SystemEvents.UserPreferenceChanged and look for ThemeChanged.
     ///   category.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public IntPtr Handle
         => !IsSupported

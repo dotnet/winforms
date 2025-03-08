@@ -15,10 +15,10 @@ public partial class Control
     [ListBindable(false)]
     public partial class ControlCollection : ArrangedElementCollection, IList, ICloneable
     {
-        ///  A caching mechanism for key accessor
-        ///  We use an index here rather than control so that we don't have lifetime
-        ///  issues by holding on to extra references.
-        ///  Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
+        /// A caching mechanism for key accessor
+        /// We use an index here rather than control so that we don't have lifetime
+        /// issues by holding on to extra references.
+        /// Note this is not Thread Safe - but WinForms has to be run in a STA anyways.
         private int _lastAccessedIndex = -1;
 
         public ControlCollection(Control owner)

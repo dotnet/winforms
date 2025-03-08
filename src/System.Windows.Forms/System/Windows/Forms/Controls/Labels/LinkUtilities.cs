@@ -110,7 +110,7 @@ internal static class LinkUtilities
         }
     }
 
-    ///  Produces a color for visited links using SystemColors
+    /// Produces a color for visited links using SystemColors
     public static Color GetVisitedLinkColor()
     {
         int r = (SystemColors.Window.R + SystemColors.WindowText.R + 1) / 2;

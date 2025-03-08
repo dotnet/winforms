@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Provides a format-independent mechanism for transferring data.
 /// </summary>
-///  <remarks>
+/// <remarks>
 ///  <para>
 ///   When implementing a <see cref="IDataObject"/>, consider implementing <see cref="ITypedDataObject"/>
 ///   interface instead. This interface will ensure that only data of a specified <see cref="Type"/>
@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 ///   in the clipboard or drag and drop scenarios, the APIs that specify a <see cref="Type"/>,
 ///   such as <see cref="Clipboard.TryGetData{T}(string, out T)"/>, will throw a <see cref="NotSupportedException"/>.
 ///  </para>
-///  </remarks>
+/// </remarks>
 public interface IDataObject
 {
     /// <inheritdoc cref="IDataObjectInternal.GetData(string, bool)" />

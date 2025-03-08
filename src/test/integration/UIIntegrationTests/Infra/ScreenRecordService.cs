@@ -52,7 +52,7 @@ internal class ScreenRecordService : IDisposable
     private enum PngCompressionMethod : byte
     {
         /// <summary>
-        /// <see href="https://www.w3.org/TR/png/#dfn-deflate">deflate</see>
+        ///  <see href="https://www.w3.org/TR/png/#dfn-deflate">deflate</see>
         ///  compression with a sliding window of at most 32768 bytes.
         /// </summary>
         Deflate = 0,

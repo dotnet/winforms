@@ -298,8 +298,7 @@ public abstract class ToolStripRenderer
     }
 
     #region EventHandlerSecurity
-    ///  -----------------------------------------------------------------------------
-    ///
+
     private void AddHandler(object key, Delegate value)
     {
         Events.AddHandler(key, value);

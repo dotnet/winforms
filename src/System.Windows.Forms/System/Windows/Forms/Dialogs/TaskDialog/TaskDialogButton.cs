@@ -4,27 +4,27 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///   Represents a button control of a task dialog.
+///  Represents a button control of a task dialog.
 /// </summary>
 /// <remarks>
-/// <para>
+///  <para>
 ///   A button can either be a standard button (whose text is provided by the OS), or
 ///   a custom button (or command link) where you can provide your own text.
-/// </para>
-/// <para>
+///  </para>
+///  <para>
 ///   <see cref="TaskDialogButton"/> instances retrieved by static getters like <see cref="OK"/> are
 ///   standard buttons. Their <see cref="Text"/> property cannot be set as the OS will provide the
 ///   localized text for the buttons when showing them in the dialog.
-/// </para>
-/// <para>
+///  </para>
+///  <para>
 ///   Button instances created with one of the constructors are custom buttons, which allow you to provide
 ///   your own text as button label.
-/// </para>
-/// <para>
+///  </para>
+///  <para>
 ///   Note: It's not possible to show both custom buttons and command links (<see cref="TaskDialogCommandLinkButton"/> instances)
 ///   at the same time - it's only one or the other. In either case, you can combine them with
 ///   standard buttons.
-/// </para>
+///  </para>
 /// </remarks>
 public class TaskDialogButton : TaskDialogControl
 {
@@ -36,23 +36,23 @@ public class TaskDialogButton : TaskDialogControl
     private int _customButtonID;
 
     /// <summary>
-    ///   Occurs when the button is clicked.
+    ///  Occurs when the button is clicked.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   By default, the dialog will be closed after the event handler returns
     ///   (except for the <see cref="Help"/> button, which instead will raise the
     ///   <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   To prevent the dialog from closing when this button is clicked, set the
     ///   <see cref="AllowCloseDialog"/> property to <see langword="false"/>.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public event EventHandler? Click;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogButton"/> class.
     /// </summary>
     // TODO: Find a way to avoid making the class inheritable
     public TaskDialogButton()
@@ -60,13 +60,13 @@ public class TaskDialogButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class
-    ///   using the given text and, optionally, a description text.
+    ///  Initializes a new instance of the <see cref="TaskDialogButton"/> class
+    ///  using the given text and, optionally, a description text.
     /// </summary>
     /// <param name="text">The text of the control.</param>
     /// <param name="enabled">A value that indicates if the button should be enabled.</param>
     /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
-    ///   when this button is clicked.
+    ///  when this button is clicked.
     /// </param>
     public TaskDialogButton(string? text, bool enabled = true, bool allowCloseDialog = true) : this()
     {
@@ -92,12 +92,12 @@ public class TaskDialogButton : TaskDialogControl
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the "Cancel" button.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   Note: Adding a Cancel button will automatically add a close button
     ///   to the task dialog's title bar and will allow to close the dialog by
     ///   pressing ESC or Alt+F4 (just as if you enabled
     ///   <see cref="TaskDialogPage.AllowCancel"/>).
-    /// </para>
+    ///  </para>
     /// </remarks>
     public static TaskDialogButton Cancel => new(TaskDialogResult.Cancel);
 
@@ -135,10 +135,10 @@ public class TaskDialogButton : TaskDialogControl
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the "Help" button.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   Note: Clicking this button will not close the dialog, but will raise the
     ///   <see cref="TaskDialogPage.HelpRequest"/> event.
-    /// </para>
+    ///  </para>
     /// </remarks>
     public static TaskDialogButton Help => new(TaskDialogResult.Help);
 
@@ -153,32 +153,32 @@ public class TaskDialogButton : TaskDialogControl
     public static TaskDialogButton Continue => new(TaskDialogResult.Continue);
 
     /// <summary>
-    ///   Gets or sets a value that indicates whether the task dialog should close
-    ///   when this button is clicked. Or, if this button is the
-    ///   <see cref="Help"/> button, indicates whether the
-    ///   <see cref="TaskDialogPage.HelpRequest"/> should be raised.
+    ///  Gets or sets a value that indicates whether the task dialog should close
+    ///  when this button is clicked. Or, if this button is the
+    ///  <see cref="Help"/> button, indicates whether the
+    ///  <see cref="TaskDialogPage.HelpRequest"/> should be raised.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> if the task dialog should close when
-    ///   this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
+    ///  <see langword="true"/> if the task dialog should close when
+    ///  this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
     /// </value>
     public bool AllowCloseDialog { get; set; } = true;
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the button can respond to user interaction.
+    ///  Gets or sets a value indicating whether the button can respond to user interaction.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> if the button can respond to user interaction; otherwise,
-    ///   <see langword="false"/>. The default value is <see langword="true"/>.
+    ///  <see langword="true"/> if the button can respond to user interaction; otherwise,
+    ///  <see langword="false"/>. The default value is <see langword="true"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a button that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a button that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public bool Enabled
     {
@@ -195,22 +195,22 @@ public class TaskDialogButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates if the User Account Control (UAC) shield icon
-    ///   should be shown near the button; that is, whether the action invoked by the button
-    ///   requires elevation.
+    ///  Gets or sets a value that indicates if the User Account Control (UAC) shield icon
+    ///  should be shown near the button; that is, whether the action invoked by the button
+    ///  requires elevation.
     /// </summary>
     /// <value>
-    ///   <see langword="true"/> to show the UAC shield icon; otherwise, <see langword="false"/>.
-    ///   The default value is <see langword="false"/>.
+    ///  <see langword="true"/> to show the UAC shield icon; otherwise, <see langword="false"/>.
+    ///  The default value is <see langword="false"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   This property can be set while the dialog is shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a button that is currently bound to a task dialog, but the dialog
-    ///   has just started navigating to a different page.
+    ///  The property is set on a button that is currently bound to a task dialog, but the dialog
+    ///  has just started navigating to a different page.
     /// </exception>
     public bool ShowShieldIcon
     {
@@ -227,22 +227,22 @@ public class TaskDialogButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets a value that indicates if this
-    ///   <see cref="TaskDialogButton"/> should be shown when displaying
-    ///   the task dialog.
+    ///  Gets or sets a value that indicates if this
+    ///  <see cref="TaskDialogButton"/> should be shown when displaying
+    ///  the task dialog.
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   Setting this property to <see langword="false"/> allows you to still receive the
     ///   <see cref="Click"/> event (e.g. for the
     ///   <see cref="Cancel"/> button when
     ///   <see cref="TaskDialogPage.AllowCancel"/> is set), or to call the
     ///   <see cref="PerformClick"/> method even if the button
     ///   is not shown.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this button instance is currently bound to a task dialog.
+    ///  The property is set and this button instance is currently bound to a task dialog.
     /// </exception>
     public bool Visible
     {
@@ -256,24 +256,24 @@ public class TaskDialogButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Gets or sets the text associated with this control.
+    ///  Gets or sets the text associated with this control.
     /// </summary>
     /// <value>
-    ///   The text associated with this control. The default value is <see langword="null"/>.
+    ///  The text associated with this control. The default value is <see langword="null"/>.
     /// </value>
     /// <remarks>
-    /// <para>
+    ///  <para>
     ///   You cannot set this property if this button is a standard button, as its text will be provided by the OS.
-    /// </para>
-    /// <para>
+    ///  </para>
+    ///  <para>
     ///   This property must not be <see langword="null"/> or an empty string when showing or navigating
     ///   the dialog; otherwise, the operation will fail.
-    /// </para>
+    ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set and this button instance is a standard button, for which the text is provided by the OS.
-    ///   - or -
-    ///   The property is set and this button instance is currently bound to a task dialog.
+    ///  The property is set and this button instance is a standard button, for which the text is provided by the OS.
+    ///  - or -
+    ///  The property is set and this button instance is currently bound to a task dialog.
     /// </exception>
     public string? Text
     {
@@ -328,15 +328,15 @@ public class TaskDialogButton : TaskDialogControl
     };
 
     /// <summary>
-    ///   Simulates a click on this button.
+    ///  Simulates a click on this button.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    ///   This button instance is not currently bound to a task dialog.
-    ///   - or -
-    ///   The task dialog has started navigating to a new page containing this button instance,
-    ///   but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
-    ///   - or -
-    ///   This button is currently bound to a task dialog, but the dialog has just started navigating to a different page.
+    ///  This button instance is not currently bound to a task dialog.
+    ///  - or -
+    ///  The task dialog has started navigating to a new page containing this button instance,
+    ///  but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///  - or -
+    ///  This button is currently bound to a task dialog, but the dialog has just started navigating to a different page.
     /// </exception>
     public void PerformClick()
     {
@@ -369,7 +369,7 @@ public class TaskDialogButton : TaskDialogControl
     }
 
     /// <summary>
-    ///   Returns a string that represents the current <see cref="TaskDialogButton"/> control.
+    ///  Returns a string that represents the current <see cref="TaskDialogButton"/> control.
     /// </summary>
     /// <returns>A string that contains the control text.</returns>
     public override string ToString() => _text ?? base.ToString() ?? string.Empty;

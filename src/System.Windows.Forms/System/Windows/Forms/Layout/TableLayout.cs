@@ -126,7 +126,7 @@ internal partial class TableLayout : LayoutEngine
     ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
     ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesn't have to be - eg. ToolStrip)
     ///  ProposedConstraints: the suggested size that the table layout should fit into. If either argument is 0,
-    ///             TableLayout pretends it's unconstrained for performance reasons.
+    ///  TableLayout pretends it's unconstrained for performance reasons.
     ///
     ///  Summary of Algorithm:
     ///  Similar to LayoutCore. Row/Column assignments are NOT cached. TableLayout uses AGGRESSIVE

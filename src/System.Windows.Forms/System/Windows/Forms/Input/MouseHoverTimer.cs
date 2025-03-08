@@ -30,7 +30,7 @@ internal class MouseHoverTimer : IDisposable
     }
 
     /// <summary>
-    /// Cancels if and only if this <paramref name="item"/> was the one that requested the timer.
+    ///  Cancels if and only if this <paramref name="item"/> was the one that requested the timer.
     /// </summary>
     public void Cancel(ToolStripItem? item)
     {

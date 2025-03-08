@@ -6,7 +6,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// The predefined mask descriptors to be shown in the mask designer dialog.
+///  The predefined mask descriptors to be shown in the mask designer dialog.
 /// </summary>
 internal class MaskDescriptorTemplate : MaskDescriptor
 {
@@ -46,7 +46,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
     public override CultureInfo Culture { get; }
 
     /// <summary>
-    /// Get the canned mask descriptors according to the specified culture.
+    ///  Get the canned mask descriptors according to the specified culture.
     /// </summary>
     public static List<MaskDescriptor> GetLocalizedMaskDescriptors(CultureInfo culture)
     {
@@ -294,12 +294,12 @@ internal class MaskDescriptorTemplate : MaskDescriptor
     }
 
     /// <summary>
-    /// This class is a List wrapper which accepts only valid MaskDescriptor objects.
+    ///  This class is a List wrapper which accepts only valid MaskDescriptor objects.
     /// </summary>
     private class ValidMaskDescriptorList
     {
         /// <summary>
-        /// Adds the specified MaskDescriptorTemplate object provided it is a valid one.
+        ///  Adds the specified MaskDescriptorTemplate object provided it is a valid one.
         /// </summary>
         public void Add(MaskDescriptorTemplate maskDescriptorTemplate)
         {
@@ -310,7 +310,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
         }
 
         /// <summary>
-        /// Returns a reference to the internal List object.
+        ///  Returns a reference to the internal List object.
         /// </summary>
         public List<MaskDescriptor> List { get; } = [];
     }

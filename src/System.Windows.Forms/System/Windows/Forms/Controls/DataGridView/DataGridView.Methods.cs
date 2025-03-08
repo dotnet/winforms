@@ -3335,11 +3335,9 @@ public partial class DataGridView
             return true;
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                             //
-        // FROM HERE DOWN THE DATA CONNECTION DETERMINES IF THE DATAGRIDVIEW SHOULD VALIDATE THE CELL. //
-        //                                                                                             //
-        /////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        // FROM HERE DOWN THE DATA CONNECTION DETERMINES IF THE DATAGRIDVIEW SHOULD VALIDATE THE CELL.
+        //
         if (DataConnection.ProcessingMetaDataChanges)
         {
             // don't validate a cell in a data bound column while the property descriptors change under us

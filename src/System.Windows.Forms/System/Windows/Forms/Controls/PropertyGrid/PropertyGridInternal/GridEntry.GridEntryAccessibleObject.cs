@@ -197,8 +197,8 @@ internal abstract partial class GridEntry
 
         /// <remarks>
         ///  <para>
-        ///    For <see cref="GridEntry" /> the item hash code to make the ID unique. Grid items are not controls,
-        ///    they don't have windows - we use <see cref="HWND" /> of <see cref="PropertyGridView" />.
+        ///   For <see cref="GridEntry" /> the item hash code to make the ID unique. Grid items are not controls,
+        ///   they don't have windows - we use <see cref="HWND" /> of <see cref="PropertyGridView" />.
         ///  </para>
         /// </remarks>
         /// <inheritdoc cref="AccessibleObject.RuntimeId" />

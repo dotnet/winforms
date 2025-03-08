@@ -68,10 +68,10 @@ public class GiveFeedbackEventArgs : EventArgs, IGiveFeedbackEvent
     ///  Gets or sets a value indicating whether a layered window drag image is used.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  Specify <see langword="true"/> for <see cref="UseDefaultDragImage"/> to use a layered window drag image with a size of 96x96;
-    ///  otherwise <see langword="false"/>.
-    /// </para>
+    ///  <para>
+    ///   Specify <see langword="true"/> for <see cref="UseDefaultDragImage"/> to use a layered window drag image with a size of 96x96;
+    ///   otherwise <see langword="false"/>.
+    ///  </para>
     /// </remarks>
     public bool UseDefaultDragImage { get; set; }
 

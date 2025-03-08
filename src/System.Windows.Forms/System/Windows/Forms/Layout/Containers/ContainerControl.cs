@@ -16,7 +16,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     private Control? _activeControl;
 
     /// <summary>
-    ///   The current focused control. Do not directly edit this value.
+    ///  The current focused control. Do not directly edit this value.
     /// </summary>
     private Control? _focusedControl;
 
@@ -77,8 +77,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     /// <summary>
     ///  Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
-    /// <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
-    /// <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
+    ///  <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
+    ///  <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
     /// </summary>
     internal SizeF _currentAutoScaleFactor = new(1F, 1F);
 
@@ -940,20 +940,20 @@ public class ContainerControl : ScrollableControl, IContainerControl
     ///  Performs scaling of this control. Scaling works by scaling all children of this control.
     ///  PerformAutoScale is automatically called during OnLayout. The parameters to
     ///  PerformAutoScale are passed as follows:
-    ///   1. If AutoScaleDimensions are set, includedBounds is set to true.
-    ///   2. If a font change occurred, excludedBounds is set to true.
+    ///  1. If AutoScaleDimensions are set, includedBounds is set to true.
+    ///  2. If a font change occurred, excludedBounds is set to true.
     /// </summary>
     /// <param name="includedBounds">If includedBounds is true those controls whose bounds have changed since
     ///  they were last scaled will be auto scaled.</param>
-    /// <param name="excludedBounds">
-    ///  If excludedBounds is true those controls whose bounds have not changed
-    ///  since they were last scaled will be auto scaled.
-    /// </param>
-    /// <param name="causedByFontChanged">
-    ///  Helps to distinguish the scaling by ResumeLayout or <see cref="OnFontChanged(EventArgs)"/> event.
-    ///  Scaling by <see cref="OnFontChanged(EventArgs)"/> event does not need to scale child container control as
-    ///  they receive their own <see cref="OnFontChanged(EventArgs)"/> event.
-    /// </param>
+    ///  <param name="excludedBounds">
+    ///   If excludedBounds is true those controls whose bounds have not changed
+    ///   since they were last scaled will be auto scaled.
+    ///  </param>
+    ///  <param name="causedByFontChanged">
+    ///   Helps to distinguish the scaling by ResumeLayout or <see cref="OnFontChanged(EventArgs)"/> event.
+    ///   Scaling by <see cref="OnFontChanged(EventArgs)"/> event does not need to scale child container control as
+    ///   they receive their own <see cref="OnFontChanged(EventArgs)"/> event.
+    ///  </param>
     private void PerformAutoScale(bool includedBounds, bool excludedBounds, bool causedByFontChanged = false)
     {
         bool suspended = false;

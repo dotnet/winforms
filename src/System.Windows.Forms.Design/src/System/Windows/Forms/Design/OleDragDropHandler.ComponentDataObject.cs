@@ -75,7 +75,7 @@ internal partial class OleDragDropHandler
         }
 
         /// <summary>
-        /// computes the IDataObject which constitutes this whole toolboxitem for storage in the toolbox.
+        ///  Computes the IDataObject which constitutes this whole toolboxitem for storage in the toolbox.
         /// </summary>
         private CfCodeToolboxItem NestedToolboxItem => _toolboxItemData ??= new CfCodeToolboxItem(GetData(DataFormat));
 
