@@ -34,7 +34,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Setting this property inside the event handler determines the
         '''  <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=DiagnosticIDs.UrlFormat)>
         Public Property ColorMode As SystemColorMode
 
         ''' <summary>

@@ -29,7 +29,9 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
         ```xml
         <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
         ```
-5. **Associate the corresponding `aka.ms` link** with our repo's local help file in the `docs` folder, that describes your analyzer until the `learn` site docs are completed.
+5. **Create the new `aka.ms` link**
+    - Point it to repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed in the [redirection manager](https://akalinkmanager.trafficmanager.net/am/redirection/home)
+    - Set security group to the team alias
 6. **Apply the `:book: documentation: breaking` label** to the PR that introduces the obsoletion.
 7. **Document the breaking change**
     - In the breaking-change issue filed in [dotnet/docs](https://github.com/dotnet/docs), specifically mention that this breaking change is an obsoletion with a `WFDEV` diagnostic ID.
@@ -42,11 +44,11 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 
 | Diagnostic ID | Introduced | Description |
 | :-------------| :--------- | :---------- |
-| `WFDEV001`    | NET?.0     | Casting to/from IntPtr is unsafe, use `WParamInternal`. |
-| `WFDEV001`    | NET?.0     | Casting to/from IntPtr is unsafe, use `LParamInternal`. |
-| `WFDEV001`    | NET?.0     | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
-| `WFDEV002`    | NET?.0     | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
-| `WFDEV003`    | NET?.0     | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
+| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `WParamInternal`. |
+| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `LParamInternal`. |
+| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
+| `WFDEV002`    | NET8.0     | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
+| `WFDEV003`    | NET8.0     | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
 | `WFDEV004`    | NET10.0    | `Form.OnClosing`, `Form.OnClosed` and the corresponding events are obsolete. Use `Form.OnFormClosing`, `Form.OnFormClosed`, `Form.FormClosing` and `Form.FormClosed` instead. |
 | `WFDEV005`    | NET10.0    | `Clipboard.GetData(string)` method is obsolete. Use `Clipboard.TryGetData<T>` methods instead. |
 | `WFDEV005`    | NET10.0    | `DataObject.GetData` methods are obsolete. Use the corresponding `DataObject.TryGetData<T>` instead. |
@@ -62,16 +64,12 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 
 ### When adding a new analyzer
 
-1. **Add the diagnostics ID to the table below**.
-    - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). A complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
-    - Starting in NET9.0, we are using `WFO####` format for code analyzer diagnostics IDs.
-2. **Create a new Descriptor** in the analyzer code.
-    - C# [CSharpDiagnosticDescriptors.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/src/System/Windows/Forms/CSharp/Analyzers/Diagnostics/CSharpDiagnosticDescriptors.cs#L10)
-    - VB
-3. **Associate the corresponding `aka.ms` link** with our repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed.
-    - C#
-    - VB
-4. **Follow [documentation steps described for obsoletions](#apply-the-book-documentation-breaking-label-to-the-pr-that-introduces-the-obsoletion)** above.
+1. **Add the diagnostic ID to the table below**.
+    - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). Complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
+    - Starting in NET9.0, we are using `WFO####` format for code analyzer diagnostic IDs.
+2. **Create a new Descriptor** in the analyzer code using [DiagnosticDescriptorHelper.Create](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/src/System/Windows/Forms/CSharp/Analyzers/Diagnostics/DiagnosticDescriptorHelper.cs#L10)
+    - this method will generate the help link in https://aka.ms/winforms-warnings/WFO#### format.
+3. **Follow [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
 
 | Diagnostic ID | Introduced | Description |
 | :-------------| :--------- | :---------- |
@@ -90,21 +88,19 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 ## Experimental Feature compiler errors
 
 See [Preview APIs - .NET | Microsoft Learn](https://learn.microsoft.com/dotnet/fundamentals/apicompat/preview-apis) for more information.
+Documentation for experimental features is available in the [Experimental Help](https://github.com/dotnet/winforms/blob/main/docs/analyzers/Experimental.Help.md) file.
 
-1. **Add the diagnostics ID to the table below**.
-    - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). A complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
-2. **Add a `Experimental` attribute** to your API.
-    - C#
-    - VB
-3. **Associate the corresponding `aka.ms` link** with our repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed.
-    - C#
-    - VB
-4. **Follow [documentation steps described for obsoletions](#apply-the-book-documentation-breaking-label-to-the-pr-that-introduces-the-obsoletion)** above.
-
+1. **Add the diagnostic ID to the table below**.
+        - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). Complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
+2. **Add an `[Experimental](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute)` attribute** to your API.
+    - Example:
+    ```c#
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    ```
+3. **Follow [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
 
 | Diagnostic ID | Introduced | Removed | Description |
 | :------------ | :--------- | :------ | :---------- |
 | `WFO5001`     | NET9.0     |         | `System.Windows.Forms.Application.SetColorMode`(System.Windows.Forms.SystemColorMode) is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
 | `WFO5001`     | NET9.0     |         | `System.Windows.Forms.SystemColorMode` is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
 | `WFO5002`     | NET9.0     |         | `System.Windows.Forms.Form.ShowAsync` is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
-
