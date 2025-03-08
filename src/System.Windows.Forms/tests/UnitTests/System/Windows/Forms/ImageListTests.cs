@@ -665,9 +665,9 @@ public class ImageListTests
 
     public static IEnumerable<object[]> TransparentColor_Set_TestData()
     {
-        foreach (object[] testData in CommonTestHelper.GetColorWithEmptyTheoryData())
+        foreach (Color testData in CommonTestHelper.GetColorWithEmptyTheoryData())
         {
-            yield return testData;
+            yield return new object[] { testData };
         }
 
         yield return new object[] { Color.LightGray };
