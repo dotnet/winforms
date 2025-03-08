@@ -5,7 +5,6 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static class DiagnosticIDs
 {
-    // Vanity URLs are used with the experimental feature errors only.
     public const string UrlFormat = "https://aka.ms/winforms-warnings/{0}";
 
     // Application Configuration, number group 0001+

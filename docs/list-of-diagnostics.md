@@ -66,7 +66,7 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
     - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). A complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
     - Starting in NET9.0, we are using `WFO####` format for code analyzer diagnostics IDs.
 2. **Create a new Descriptor** in the analyzer code.
-    - C#
+    - C# [CSharpDiagnosticDescriptors.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/src/System/Windows/Forms/CSharp/Analyzers/Diagnostics/CSharpDiagnosticDescriptors.cs#L10)
     - VB
 3. **Associate the corresponding `aka.ms` link** with our repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed.
     - C#

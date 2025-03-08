@@ -8,19 +8,21 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static partial class SharedDiagnosticDescriptors
 {
+    // WFO0003
     internal static readonly DiagnosticDescriptor s_cSharpMigrateHighDpiSettings =
-        new(id: DiagnosticIDs.MigrateHighDpiSettings,
+        DiagnosticDescriptorHelper.Create(
+            id: DiagnosticIDs.MigrateHighDpiSettings,
             title: new LocalizableResourceString(nameof(SR.WFO0003Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFO0003Message_CS), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.ApplicationConfiguration,
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+            defaultSeverity: DiagnosticSeverity.Warning);
 
+    // WFO0003
     internal static readonly DiagnosticDescriptor s_visualBasicMigrateHighDpiSettings =
-        new(id: DiagnosticIDs.MigrateHighDpiSettings,
+        DiagnosticDescriptorHelper.Create(
+            id: DiagnosticIDs.MigrateHighDpiSettings,
             title: new LocalizableResourceString(nameof(SR.WFO0003Title), SR.ResourceManager, typeof(SR)),
             messageFormat: new LocalizableResourceString(nameof(SR.WFO0003Message_VB), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.ApplicationConfiguration,
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+            defaultSeverity: DiagnosticSeverity.Warning);
 }
