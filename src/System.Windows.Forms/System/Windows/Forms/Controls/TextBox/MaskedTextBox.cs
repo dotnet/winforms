@@ -91,7 +91,7 @@ public partial class MaskedTextBox : TextBoxBase
     private static readonly int s_cutCopyIncludePrompt = BitVector32.CreateMask(s_insertToggled);
     private static readonly int s_cutCopyIncludeLiterals = BitVector32.CreateMask(s_cutCopyIncludePrompt);
 
-    /// //////  Properties backend fields. See corresponding property comments for more info.
+    // Properties backend fields. See corresponding property comments for more info.
 
     private char _passwordChar; // control's pwd char, it could be different from the one displayed if using system password.
     private Type? _validatingType;
@@ -172,8 +172,6 @@ public partial class MaskedTextBox : TextBoxBase
         _caretTestPos = 0;
     }
 
-    /// ////////////////  Properties
-    ///
     /// <summary>
     ///  Unsupported method/property.
     /// </summary>
@@ -1462,8 +1460,6 @@ public partial class MaskedTextBox : TextBoxBase
         get { return false; }
         set { }
     }
-
-    /// ///////////  Methods
 
     /// <summary>
     ///  Clears information about the most recent operation from the undo buffer of the control.
