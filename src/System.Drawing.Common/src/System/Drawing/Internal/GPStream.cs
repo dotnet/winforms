@@ -20,6 +20,7 @@ internal sealed partial class GPStream : Ole32.IStream
             // Copy to a memory stream so we can seek
             MemoryStream memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
+            memoryStream.Position = 0;
             _dataStream = memoryStream;
         }
         else
