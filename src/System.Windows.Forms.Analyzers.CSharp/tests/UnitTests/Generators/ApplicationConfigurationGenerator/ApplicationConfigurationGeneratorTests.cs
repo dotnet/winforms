@@ -72,6 +72,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     DiagnosticResult.CompilerError(DiagnosticIDs.UnsupportedProjectType).WithArguments("WindowsApplication"),
                 }
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
@@ -95,6 +96,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
@@ -116,6 +118,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
@@ -149,6 +152,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
@@ -175,6 +179,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
@@ -213,6 +218,7 @@ public partial class ApplicationConfigurationGeneratorTests
                     (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
                 },
             },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
         };
 
         await test.RunAsync();
