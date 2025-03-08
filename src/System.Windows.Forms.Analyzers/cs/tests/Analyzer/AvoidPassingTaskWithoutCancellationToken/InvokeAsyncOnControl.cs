@@ -1,42 +1,43 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Immutable;
+using System.Windows.Forms.Analyzers.Diagnostics;
+using System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 using Microsoft.CodeAnalysis.Testing;
+using Microsoft.WinForms.Test;
+using Microsoft.WinForms.Utilities.Shared;
 
 namespace System.Windows.Forms.Analyzers.CSharp.Tests.AnalyzerTests.AvoidPassingTaskWithoutCancellationToken;
 
 public class InvokeAsyncOnControl
+    : RoslynAnalyzerAndCodeFixTestBase<AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier>
 {
+    public InvokeAsyncOnControl()
+        : base(SourceLanguage.CSharp) { }
+
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net90Windows];
+        var net9Identity = new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.100");
+        ReferenceAssemblies temp = new ReferenceAssemblies("net9")
+            .AddPackages(ImmutableArray.Create(net9Identity));
+
+        yield return new object[] { temp };
     }
 
-    // [Theory]
-    // [MemberData(nameof(GetReferenceAssemblies))]
-    // public async Task AvoidPassingTaskWithoutCancellationAnalyzer(ReferenceAssemblies referenceAssemblies)
-    // {
-    //    string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
-    //
-    //    var context = new CSharpAnalyzerTest
-    //        <AvoidPassingTaskWithoutCancellationTokenAnalyzer,
-    //         DefaultVerifier>
-    //    {
-    //        TestCode = TestCode,
-    //        TestState =
-    //            {
-    //                OutputKind = OutputKind.WindowsApplication,
-    //                Sources = { customControlSource },
-    //                ExpectedDiagnostics =
-    //                {
-    //                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97),
-    //                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97),
-    //                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98),
-    //                },
-    //            },
-    //        ReferenceAssemblies = referenceAssemblies
-    //    };
-    //
-    //    await context.RunAsync();
-    // }
+    [Theory]
+    [CodeTestData(nameof(GetReferenceAssemblies))]
+    public async Task AvoidPassingTaskWithoutCancellationAnalyzer(
+        ReferenceAssemblies referenceAssemblies,
+        TestDataFileSet fileSet)
+    {
+        string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
+
+        var context = GetAnalyzerTestContext(fileSet, referenceAssemblies);
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98));
+
+        await context.RunAsync();
+    }
 }

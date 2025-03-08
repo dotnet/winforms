@@ -7,22 +7,60 @@ using System.Text;
 namespace Microsoft.WinForms.Test;
 
 /// <summary>
-///  Utility that handles loading of test files from a folder called 'TestData'.
+///  Provides methods to load and enumerate test files used for analysis and code fix testing.
 /// </summary>
+/// <remarks>
+///  <para>
+///   The TestFileLoader class offers functionality to:
+///   - Enumerate test file entries in a given directory with filtering based on file attributes.
+///   - Load the content of a specific test file.
+///   - Retrieve test file paths based on the analyzer type provided.
+///  </para>
+///  <para>
+///   It assists in organizing test data by identifying files such as AnalyzerTestCode, CodeFixTestCode,
+///   FixedTestCode, GlobalUsing, and AdditionalCodeFile. This clear segregation aids analyzer and code-fix
+///   tests to operate with the appropriate test file.
+///  </para>
+/// </remarks>
 public static class TestFileLoader
 {
     private const string TestData = nameof(TestData);
 
-    internal const string AnalyzerTestCode = nameof(TestFileType.AnalyzerTestCode);
-    internal const string CodeFixTestCode = nameof(TestFileType.CodeFixTestCode);
-    internal const string FixedTestCode = nameof(TestFileType.FixedTestCode);
-    internal const string GlobalUsing = nameof(TestFileType.GlobalUsing);
+    /// <summary>
+    ///  Represents the filename string for analyzer test code files.
+    /// </summary>
+    public const string AnalyzerTestCode = nameof(TestFileType.AnalyzerTestCode);
+
+    /// <summary>
+    ///  Represents the filename string for code fix test code files.
+    /// </summary>
+    public const string CodeFixTestCode = nameof(TestFileType.CodeFixTestCode);
+
+    /// <summary>
+    ///  Represents the filename string for fixed test code files.
+    /// </summary>
+    public const string FixedTestCode = nameof(TestFileType.FixedTestCode);
+
+    /// <summary>
+    ///  Represents the filename string for global using files.
+    /// </summary>
+    public const string GlobalUsing = nameof(TestFileType.GlobalUsing);
 
     /// <summary>
     ///  Enumerates the test file entries in the specified base path.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Scans the provided base directory to locate and classify files used in analyzer and code fix tests.
+    ///   Based on the file name, the file is assigned a corresponding TestFileType.
+    ///  </para>
+    ///  <para>
+    ///   This method throws an ArgumentException if the basePath is null or empty, ensuring that a valid
+    ///   path is provided.
+    ///  </para>
+    /// </remarks>
     /// <param name="basePath">The base path to enumerate.</param>
-    /// <param name="excludeAttributes">The file attributes to exclude.</param>
+    /// <param name="excludeAttributes">File attributes to be excluded from enumeration.</param>
     /// <returns>An enumerable collection of test file entries.</returns>
     /// <exception cref="ArgumentException">Thrown when the base path is null or empty.</exception>
     public static IEnumerable<TestFileEntry> EnumerateEntries(
@@ -73,23 +111,44 @@ public static class TestFileLoader
     }
 
     /// <summary>
-    ///  Asynchronously loads the content of a test file.
+    ///  Loads the content of a test file.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Opens the specified test file using UTF-8 encoding and reads its entire content as a string.
+    ///   This method is typically used to retrieve the source code or data required for testing analyzers
+    ///   and code fixes.
+    ///  </para>
+    /// </remarks>
     /// <param name="testFilePath">The path of the test file to load.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the content of the test file.</returns>
-    public static async Task<string> LoadTestFileAsync(string testFilePath)
+    /// <returns>A string containing the content of the test file.</returns>
+    public static string LoadTestFile(string testFilePath)
     {
         using var reader = new StreamReader(testFilePath, Encoding.UTF8);
-
-        return await reader.ReadToEndAsync().ConfigureAwait(false);
+        return reader.ReadToEnd();
     }
 
     /// <summary>
     ///  Gets the test file paths for the specified analyzer type.
     /// </summary>
-    /// <param name="analyzerType">The type of the analyzer.</param>
-    /// <param name="basePath">The additional path to include in the test file path.</param>
-    /// <returns>The test file path.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   Constructs the path to the test data directory based on the provided analyzer type and base path.
+    ///   If the base path is a file, its parent directory is used. The method then determines the correct
+    ///   subdirectory or directories that hold the test files.
+    ///  </para>
+    ///  <para>
+    ///   It throws an InvalidOperationException if the constructed analyzer test file directory does not exist
+    ///   or if the directory structure is not as expected (e.g., contains both files and subdirectories).
+    ///  </para>
+    /// </remarks>
+    /// <param name="analyzerType">The type of the analyzer used for determining file paths.</param>
+    /// <param name="basePath">The additional base path to include in the test file path.</param>
+    /// <returns>An enumerable collection of test file paths.</returns>
+    /// <exception cref="ArgumentException">Thrown when the base path is null, empty, or whitespace.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if the analyzer test file directory does not exist or the directory structure is invalid.
+    /// </exception>
     public static IEnumerable<string> GetTestFilePaths(
         Type analyzerType,
         string basePath)
@@ -99,7 +158,7 @@ public static class TestFileLoader
             throw new ArgumentException("The base path must be a valid directory.", nameof(basePath));
         }
 
-        // If this is a file, let's get it's parent folder.
+        // If this is a file, let's get its parent folder.
         if (File.Exists(basePath))
         {
             basePath = Path.GetDirectoryName(basePath)
@@ -118,14 +177,13 @@ public static class TestFileLoader
             throw new InvalidOperationException($"The directory '{analyzerPath}' does not exist.");
         }
 
-        List<string> analyzerTestDataSubDirPaths;
-        analyzerTestDataSubDirPaths = [.. Directory.EnumerateDirectories(analyzerPath)];
+        List<string> analyzerTestDataSubDirPaths = new List<string>(Directory.EnumerateDirectories(analyzerPath));
 
         if (analyzerTestDataSubDirPaths.Count == 0)
         {
-            // We have only one test data directory for the test, so we use the analyzer path as the test data path.
+            // We have only one test data directory for the test, so we use the analyzer path
+            // as the test data path.
             analyzerTestDataSubDirPaths.Add(analyzerPath);
-
             return analyzerTestDataSubDirPaths;
         }
 

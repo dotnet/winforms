@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
@@ -60,6 +61,9 @@
 
   <ItemGroup>
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -9,60 +9,109 @@ using Microsoft.WinForms.Utilities.Shared;
 
 namespace System.Windows.Forms.Analyzers.CSharp.Tests.AnalyzerTests.MissingPropertySerializationConfiguration;
 
+/// <summary>
+///  Represents a set of test scenarios for custom controls to verify
+///  property serialization behavior.
+/// </summary>
+/// <remarks>
+///  <para>
+///   This class is derived from <see cref="RoslynAnalyzerAndCodeFixTestBase{TAnalyzer, TVerifier}"/>"/>
+///   and is intended to validate how properties are serialized in custom controls during
+///   analyzer and code-fix operations.
+///  </para>
+///  <para>
+///   Use the provided methods to test scenarios such as missing property serialization and to
+///   confirm that the code fix provider can correct those issues.
+///  </para>
+/// </remarks>
 public class CustomControlScenarios
     : RoslynAnalyzerAndCodeFixTestBase<MissingPropertySerializationConfigurationAnalyzer, DefaultVerifier>
 {
-    public CustomControlScenarios() : base(SourceLanguage.CSharp)
-    { }
+    /// <summary>
+    ///  Initializes a new instance of the <see cref="CustomControlScenarios"/> class.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Calls the base constructor with the C# source language to set up the
+    ///   environment for analyzer tests.
+    ///  </para>
+    /// </remarks>
+    public CustomControlScenarios()
+        : base(SourceLanguage.CSharp)
+    {
+    }
 
-    // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
+    /// <summary>
+    ///  Retrieves a collection of reference assemblies for test scenarios.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This returns .NET 9.0 reference assemblies to ensure that the
+    ///   analyzer uses APIs introduced in .NET 9.0 and above.
+    ///  </para>
+    /// </remarks>
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        // yield return [ReferenceAssemblies.Net.Net60Windows];
-        // yield return [ReferenceAssemblies.Net.Net70Windows];
-        // yield return [ReferenceAssemblies.Net.Net80Windows];
         yield return [ReferenceAssemblies.Net.Net90Windows];
     }
 
+    /// <summary>
+    ///  Tests the diagnostics produced by
+    ///  <see cref="MissingPropertySerializationConfigurationAnalyzer"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   First, it verifies that the initial diagnostics match the
+    ///   expected results. Then, it re-runs the test context to confirm
+    ///   that any corrections remain consistent.
+    ///  </para>
+    ///  <para>
+    ///   This method depends on the provided file set and reference
+    ///   assemblies to generate the appropriate environment for analysis.
+    ///  </para>
+    /// </remarks>
     [Theory]
-    [MemberData(nameof(GetReferenceAssemblies))]
-    public async Task TestDiagnostics(ReferenceAssemblies referenceAssemblies)
+    [CodeTestData(nameof(GetReferenceAssemblies))]
+    public async Task TestDiagnostics(
+        ReferenceAssemblies referenceAssemblies,
+        TestDataFileSet fileSet)
     {
-        await EnumerateTestFilesAsync(TestMethod);
+        var context = GetAnalyzerTestContext(fileSet, referenceAssemblies);
+        await context.RunAsync();
 
-        async Task TestMethod(TestDataFileSet fileSet)
-        {
-            var context = GetAnalyzerTestContext(fileSet, referenceAssemblies);
-            await context.RunAsync().ConfigureAwait(false);
-
-            context = GetFixedTestContext(fileSet, referenceAssemblies);
-            await context.RunAsync().ConfigureAwait(false);
-        }
+        context = GetFixedTestContext(fileSet, referenceAssemblies);
+        await context.RunAsync();
     }
 
+    /// <summary>
+    ///  Tests the code-fix provider to ensure it correctly applies designer serialization attributes.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This uses the <see cref="AddDesignerSerializationVisibilityCodeFixProvider"/>
+    ///   to verify that the fix properly addresses missing or invalid property serialization attributes.
+    ///  </para>
+    ///  <para>
+    ///   It also configures the code-fix test behavior to skip fix-all
+    ///   checks at the project and solution level, focusing on the
+    ///   document-level fix itself.
+    ///  </para>
+    /// </remarks>
     [Theory]
-    [MemberData(nameof(GetReferenceAssemblies))]
-    public async Task TestCodeFix(ReferenceAssemblies referenceAssemblies)
+    [CodeTestData(nameof(GetReferenceAssemblies))]
+    public async Task TestCodeFix(
+        ReferenceAssemblies referenceAssemblies,
+        TestDataFileSet fileSet)
     {
-        await EnumerateTestFilesAsync(TestMethod);
+        var context = GetCodeFixTestContext<AddDesignerSerializationVisibilityCodeFixProvider>(
+            fileSet,
+            referenceAssemblies,
+            numberOfFixAllIterations: -2);
 
-        async Task TestMethod(TestDataFileSet fileSet)
-        {
-            var context = GetCodeFixTestContext<AddDesignerSerializationVisibilityCodeFixProvider>(
-                fileSet,
-                referenceAssemblies,
+        context.CodeFixTestBehaviors =
+            CodeFixTestBehaviors.SkipFixAllInProjectCheck |
+            CodeFixTestBehaviors.SkipFixAllInSolutionCheck;
 
-                // Negative numbers states |max| positive number states absolute.
-                numberOfFixAllIterations: -2);
-
-            // In this (and probably the most cases), we do not want to
-            // take track about the Fix-iterations on a Project-
-            // let alone the Solution level.
-            context.CodeFixTestBehaviors =
-                CodeFixTestBehaviors.SkipFixAllInProjectCheck |
-                CodeFixTestBehaviors.SkipFixAllInSolutionCheck;
-
-            await context.RunAsync().ConfigureAwait(false);
-        }
+        await context.RunAsync();
     }
 }

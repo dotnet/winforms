@@ -16,82 +16,118 @@ namespace Microsoft.WinForms.Test;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   This class is responsible for discovering test files likewise used by Roslyn analyzer tests
-///   and automatically fetching them into the test context. Its methods handle reading content
-///   from physical files, grouping them, and preparing them for valid test scenarios.
+///   This class discovers test files used by Roslyn analyzer tests by automatically
+///   fetching them into the test context. It handles reading file content, grouping related
+///   files, and preparing them for valid test scenarios. The class integrates with 
+///   CSharpAnalyzerTest{TAnalyzer,TVerifier} and CSharpCodeFixTest{TAnalyzer,TCodeFix,TVerifier}
+///   to simplify test setup and verification.
 ///  </para>
-///  <para>Usage:</para>
-///  <list type="bullet">
-///   <item><description>Inherit from this base class, specifying the analyzer and verifier types.</description></item>
-///   <item><description>Call or override provided methods to customize how the test data is used in your test scenarios.</description></item>
-///   <item><description>
-///    The class seamlessly integrates with <see cref="CSharpAnalyzerTest{TAnalyzer,TVerifier}"/>
-///    and <see cref="CSharpCodeFixTest{TAnalyzer,TCodeFix,TVerifier}"/> to configure test expectations and references.
-///   </description></item>
-///  </list>
+///  <para>
+///   Inherit from this class specifying the analyzer and verifier types (and optionally a 
+///   code fix provider when testing code fixes). Override or call the provided methods to customize
+///   the test data usage for various scenarios. 
+///  </para>
 /// </remarks>
-/// <typeparam name="TAnalyzer">The analyzer under test.</typeparam>
-/// <typeparam name="TVerifier">The type that verifies the analyzer's output.</typeparam>
+/// <typeparam name="TAnalyzer">
+///  The analyzer under test.
+/// </typeparam>
+/// <typeparam name="TVerifier">
+///  The type used to verify the analyzer's output.
+/// </typeparam>
 public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerifier>
     where TAnalyzer : DiagnosticAnalyzer, new()
     where TVerifier : IVerifier, new()
 {
-    private readonly IEnumerable<string> _analyzerTestFilePaths;
+    /// <summary>
+    ///  Holds the file paths for the analyzer test files discovered from the test base path.
+    /// </summary>
+    private static IEnumerable<string> s_analyzerTestFilePaths = null!;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="RoslynAnalyzerAndCodeFixTestBase{TAnalyzer, TVerifier}"/> class.
+    ///  Initializes a new instance of the 
+    ///  RoslynAnalyzerAndCodeFixTestBase{TAnalyzer, TVerifier} class.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   The constructor extracts all valid test file paths from the specified <paramref name="testBasePath"/>.
+    ///   The constructor extracts all valid test file paths from the specified test base path.
+    ///   The test base path is automatically populated using the caller file path.
     ///  </para>
     ///  <para>
-    ///   This path is automatically populated using the caller file path.
-    ///   Ensure that test files follow the naming and directory conventions so they can be discovered accurately.
+    ///   Ensure that test files adhere to naming and directory conventions to be discovered accurately.
     ///  </para>
     /// </remarks>
-    /// <param name="testBasePath">The path containing the analyzer/fixture test files.</param>
+    /// <param name="language">
+    ///  The source language of the test files.
+    /// </param>
+    /// <param name="testBasePath">
+    ///  The file path used as the base location to load test files. This parameter is automatically 
+    ///  populated by the CallerFilePath attribute.
+    /// </param>
     protected RoslynAnalyzerAndCodeFixTestBase(SourceLanguage language, [CallerFilePath] string? testBasePath = null)
     {
-        ArgumentNullException.ThrowIfNull(testBasePath);
-        _analyzerTestFilePaths = TestFileLoader.GetTestFilePaths(GetType(), testBasePath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(testBasePath, nameof(testBasePath));
+        s_analyzerTestFilePaths = TestFileLoader.GetTestFilePaths(GetType(), testBasePath);
     }
 
+    private RoslynAnalyzerAndCodeFixTestBase() { }
+
     /// <summary>
-    ///  Loads a matching set of test file content from a specified location.
+    ///  Retrieves file sets as an enumerable of object arrays used for data-driven tests.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This method scans the target path for analyzer test files, code-fix files, and any necessary
-    ///   additional documents, then bundles them into a <see cref="TestDataFileSet"/>. This combination
-    ///   of files can be used by the test context to run analyzer or code-fix tests thoroughly.
+    ///   This method transforms test file paths into an enumerable format suitable for
+    ///   theory data or other forms of parameterized testing.
     ///  </para>
     /// </remarks>
-    /// <param name="path">The path to search for test files.</param>
-    /// <returns>A <see cref="TestDataFileSet"/> holding the contents of all discovered files.</returns>
-    public async Task<TestDataFileSet> GetTestDataFileSetAsync(string path)
+    /// <returns>
+    ///  An enumerable of object arrays, each containing a test file path.
+    /// </returns>
+    public static IEnumerable<object> GetFileSets() =>
+        GetTestFiles(s_analyzerTestFilePaths);
+
+    /// <summary>
+    ///  Loads a matching set of test file contents from a specified location.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Scans the target path for analyzer tests, code-fix tests, and other necessary documents,
+    ///   bundling them into a TestDataFileSet. This set is used by the test context to run analyzer
+    ///   and code-fix tests comprehensively.
+    ///  </para>
+    /// </remarks>
+    /// <param name="path">
+    ///  The directory path in which to search for test files.
+    /// </param>
+    /// <returns>
+    ///  A TestDataFileSet containing the content of all discovered test files.
+    /// </returns>
+    public static TestDataFileSet GetTestDataFileSet(string path)
     {
         TestDataFileSet testDataFileSet = new();
 
         foreach (var fileItem in TestFileLoader.EnumerateEntries(path))
         {
-            string currentDocument = await TestFileLoader.LoadTestFileAsync(fileItem.FilePath)
-                .ConfigureAwait(false);
+            string currentDocument = TestFileLoader.LoadTestFile(fileItem.FilePath);
 
             switch (fileItem.FileType)
             {
                 case TestFileType.AnalyzerTestCode:
                     testDataFileSet.AnalyzerTestCode = currentDocument;
                     break;
+
                 case TestFileType.CodeFixTestCode:
                     testDataFileSet.CodeFixTestCode = currentDocument;
                     break;
+
                 case TestFileType.FixedTestCode:
                     testDataFileSet.FixedTestCode = currentDocument;
                     break;
+
                 case TestFileType.GlobalUsing:
                     testDataFileSet.GlobalUsing = currentDocument;
                     break;
+
                 case TestFileType.AdditionalCodeFile:
                     testDataFileSet.AdditionalCodeFiles.Add(currentDocument);
                     break;
@@ -102,46 +138,57 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     }
 
     /// <summary>
-    ///  Asynchronously enumerates all discovered test files and executes the specified test delegate.
+    ///  Retrieves test file sets for a given test type.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This method is a convenient way to apply the same test logic over multiple sets of test data.
-    ///   It loops over the discovered file paths, obtains a <see cref="TestDataFileSet"/> for each,
-    ///   and invokes your specified <paramref name="testMethod"/> with it.
+    ///   Loads the test file paths using the provided test base path and groups them into a collection 
+    ///   of TestDataFileSet instances.
     ///  </para>
     /// </remarks>
-    /// <param name="testMethod">The test method accepting test file data that will be evaluated.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    protected Task EnumerateTestFilesAsync(Func<TestDataFileSet, Task> testMethod)
+    /// <returns>
+    ///  An enumerable of TestDataFileSet instances representing grouped test files.
+    /// </returns>
+    protected static IEnumerable<TestDataFileSet> GetTestFiles(IEnumerable<string> testFilePaths)
     {
-        return Task.WhenAll(_analyzerTestFilePaths.Select(async path =>
-        {
-            TestDataFileSet testDataFileSet = await GetTestDataFileSetAsync(path)
-                .ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(testFilePaths);
 
-            await testMethod.Invoke(testDataFileSet)
-                .ConfigureAwait(false);
-        }));
+        List<TestDataFileSet> testDataFileSets = new();
+
+        foreach (string analyzerTestFilePath in testFilePaths)
+        {
+            TestDataFileSet testDataFileSet = GetTestDataFileSet(analyzerTestFilePath);
+            testDataFileSets.Add(testDataFileSet);
+        }
+
+        return testDataFileSets;
     }
 
     /// <summary>
     ///  Creates a test context configured with the expected fixed solution for code-fix tests.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  This method is intended to provide a ready-to-run <see cref="CSharpAnalyzerTest{TAnalyzer,TVerifier}"/>
-    ///  instance containing the changes specified in the 'FixedTestCode'.
-    /// </para>
-    /// <para>
-    ///  Use it in situations where you need to verify that a code fix successfully transforms
-    ///  the original test code into the desired corrected form.
-    /// </para>
+    ///  <para>
+    ///   Provides a ready-to-run CSharpAnalyzerTest instance containing the 'FixedTestCode'. 
+    ///   This context is used to verify that applying the code fix transforms the source code as 
+    ///   expected.
+    ///  </para>
+    ///  <para>
+    ///   Use this method in scenarios where the code fix should result in a specific final code output.
+    ///  </para>
     /// </remarks>
-    /// <param name="fileSet">Holds various file contents used for the test.</param>
-    /// <param name="referenceAssemblies">References needed by the test code's compilation.</param>
-    /// <param name="memberName">Optional caller member name for diagnostic context.</param>
-    /// <returns>A test context prepared with the fixed code, references, and state.</returns>
+    /// <param name="fileSet">
+    ///  The set of test files containing various code fragments for the fix.
+    /// </param>
+    /// <param name="referenceAssemblies">
+    ///  The reference assemblies needed by the test code's compilation.
+    /// </param>
+    /// <param name="memberName">
+    ///  Optional. The caller member name for diagnostic or logging context.
+    /// </param>
+    /// <returns>
+    ///  A test context prepared with fixed code, references, and state.
+    /// </returns>
     protected CSharpAnalyzerTest<TAnalyzer, TVerifier> GetFixedTestContext(
         TestDataFileSet fileSet,
         ReferenceAssemblies referenceAssemblies,
@@ -154,22 +201,29 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                 memberName);
 
     /// <summary>
-    ///  Creates a test context for the analyzer scenario using unaltered test code.
+    ///  Creates a test context for analyzer scenarios using unaltered test code.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This method sets up a <see cref="CSharpAnalyzerTest{TAnalyzer,TVerifier}"/> that includes
-    ///   the 'AnalyzerTestCode' content. It does not include any fixed code.
+    ///   Sets up a CSharpAnalyzerTest instance that utilizes the 'AnalyzerTestCode'. This context 
+    ///   is useful for initial diagnostics verification before any code fix is applied.
     ///  </para>
     ///  <para>
-    ///   This is useful for discovering which diagnostics might appear in the given file set
-    ///   before any code-fix is applied.
+    ///   It excludes fixed code, focusing purely on analyzer diagnostics in the provided file set.
     ///  </para>
     /// </remarks>
-    /// <param name="fileSet">Holds various file contents used for the test.</param>
-    /// <param name="referenceAssemblies">References needed by the test code's compilation.</param>
-    /// <param name="memberName">Optional caller member name for diagnostic context.</param>
-    /// <returns>A test context that can verify diagnostics raised by the analyzer.</returns>
+    /// <param name="fileSet">
+    ///  The set of test files containing source code for diagnostics analysis.
+    /// </param>
+    /// <param name="referenceAssemblies">
+    ///  The reference assemblies needed for compiling the test code.
+    /// </param>
+    /// <param name="memberName">
+    ///  Optional. The caller member name for diagnostic context.
+    /// </param>
+    /// <returns>
+    ///  A test context that verifies diagnostics produced by the analyzer.
+    /// </returns>
     protected CSharpAnalyzerTest<TAnalyzer, TVerifier> GetAnalyzerTestContext(
         TestDataFileSet fileSet,
         ReferenceAssemblies referenceAssemblies,
@@ -182,27 +236,38 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                 memberName);
 
     /// <summary>
-    ///  Generates a basic <see cref="CSharpAnalyzerTest{TAnalyzer,TVerifier}"/>
-    ///  using the provided test code and references.
+    ///  Generates a basic test context for analyzer testing using the provided source code and references.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This helper method creates a base test context and configures the
-    ///   output kind to be a Windows application.
+    ///   Creates a base CSharpAnalyzerTest instance configured with the test code and output kind
+    ///   set to WindowsApplication. It adds any global using directives and additional source documents.
     ///  </para>
     ///  <para>
-    ///   It automatically adds the specified <paramref name="globalUsing"/> statements and any additional
-    ///   context documents. Helpful for verifying code diagnostics in multiple scenarios without rewriting test scaffolding.
+    ///   This helper method serves as the foundation for both analyzer tests and code-fix tests,
+    ///   ensuring that the test environment is properly set up.
     ///  </para>
     /// </remarks>
-    /// <param name="fileContent">The main source content to analyze.</param>
-    /// <param name="globalUsing">Global using directives to include in the test environment.</param>
-    /// <param name="contextDocuments">Additional source documents relevant to the test scenario.</param>
-    /// <param name="referenceAssemblies">References needed by the test code's compilation.</param>
-    /// <param name="memberName">Optional caller member name for context or logging.</param>
-    /// <returns>A configured <see cref="CSharpAnalyzerTest{TAnalyzer,TVerifier}"/> instance.</returns>
+    /// <param name="fileContent">
+    ///  The primary source code to be analyzed.
+    /// </param>
+    /// <param name="globalUsing">
+    ///  Global using directives to include in the test environment.
+    /// </param>
+    /// <param name="contextDocuments">
+    ///  Additional source documents relevant to the test scenario.
+    /// </param>
+    /// <param name="referenceAssemblies">
+    ///  The reference assemblies required by the test code.
+    /// </param>
+    /// <param name="memberName">
+    ///  Optional. The caller member name for context or logging.
+    /// </param>
+    /// <returns>
+    ///  A configured CSharpAnalyzerTest instance.
+    /// </returns>
     /// <exception cref="ArgumentException">
-    ///  Thrown if the main <paramref name="fileContent"/> is null or empty.
+    ///  Thrown if the main test file content is null or empty.
     /// </exception>
     protected CSharpAnalyzerTest<TAnalyzer, TVerifier> GetTestContext(
         string fileContent,
@@ -223,7 +288,7 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                 TestCode = fileContent,
                 TestState =
                 {
-                        OutputKind = OutputKind.WindowsApplication,
+                    OutputKind = OutputKind.WindowsApplication,
                 },
                 ReferenceAssemblies = referenceAssemblies
             };
@@ -233,41 +298,49 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
             context.TestState.Sources.Add(globalUsing);
         }
 
-        if (contextDocuments is null)
+        if (contextDocuments is not null)
         {
-            return context;
-        }
-
-        foreach (string contextDocument in contextDocuments)
-        {
-            context.TestState.Sources.Add(contextDocument);
+            foreach (string contextDocument in contextDocuments)
+            {
+                context.TestState.Sources.Add(contextDocument);
+            }
         }
 
         return context;
     }
 
     /// <summary>
-    ///  Creates a code-fix test context for applying a <typeparamref name="TCodeFix"/>
-    ///  to the original and verifying the transformed result.
+    ///  Creates a code-fix test context for applying a code fix and verifying the transformation.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This method provides the scaffolding to test how <typeparamref name="TCodeFix"/> modifies
-    ///   the source code. It loads the initial test code (which includes expected diagnostic spans)
-    ///   and sets the 'FixedCode' property to compare against the desired result. It also configures
-    ///   the number of 'Fix All' iterations allowed in one document.
+    ///   Provides scaffolding to test how a code fix provider modifies the source code. It sets the
+    ///   initial test code (with expected diagnostic spans) and the fixed code to compare against.
+    ///  </para>
+    ///  <para>
+    ///   The method also configures the number of 'Fix All' iterations permitted in a single document.
     ///  </para>
     /// </remarks>
-    /// <typeparam name="TCodeFix">The code fix provider to test.</typeparam>
-    /// <param name="fileSet">Holds various file contents used for the test scenario.</param>
-    /// <param name="referenceAssemblies">References needed by the test code's compilation.</param>
-    /// <param name="numberOfFixAllIterations">The number of 'Fix All' operations to apply for the test.</param>
-    /// <param name="memberName">Optional caller member name for context or logging.</param>
+    /// <typeparam name="TCodeFix">
+    ///  The code fix provider to be tested.
+    /// </typeparam>
+    /// <param name="fileSet">
+    ///  The set of test files containing the code fix test input and expected outputs.
+    /// </param>
+    /// <param name="referenceAssemblies">
+    ///  The reference assemblies needed by the test code.
+    /// </param>
+    /// <param name="numberOfFixAllIterations">
+    ///  The number of allowed 'Fix All' iterations for the document.
+    /// </param>
+    /// <param name="memberName">
+    ///  Optional. The caller member name for context or logging.
+    /// </param>
     /// <returns>
-    ///  A <see cref="CSharpCodeFixTest{TAnalyzer,TCodeFix,TVerifier}"/> initialized for code-fix testing.
+    ///  A CSharpCodeFixTest instance configured for code-fix testing.
     /// </returns>
     /// <exception cref="ArgumentException">
-    ///  Thrown if the expected 'CodeFixTestCode' or 'FixedTestCode' cannot be found in the <paramref name="fileSet"/>.
+    ///  Thrown if the expected CodeFixTestCode or FixedTestCode cannot be found in the file set.
     /// </exception>
     protected CSharpCodeFixTest<TAnalyzer, TCodeFix, TVerifier> GetCodeFixTestContext<TCodeFix>(
         TestDataFileSet fileSet,
@@ -289,24 +362,22 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                     $"'FixedTestCode.cs' which could not be found."),
 
             TestState =
-                {
-                    OutputKind = OutputKind.WindowsApplication,
-                },
+            {
+                OutputKind = OutputKind.WindowsApplication,
+            },
 
             ReferenceAssemblies = referenceAssemblies,
             NumberOfFixAllInDocumentIterations = numberOfFixAllIterations
         };
 
-        // The FixedState should use the same additional Sources than the TestState.
+        // Include global using directives in both TestState and FixedState.
         if (fileSet.GlobalUsing is not null)
         {
             context.TestState.Sources.Add(fileSet.GlobalUsing);
             context.FixedState.Sources.Add(fileSet.GlobalUsing);
         }
 
-        // The FixedState should use the same additional Sources than the TestState,
-        // which also includes any additional (support) files which just serve the
-        // purpose to make the to-test-code compile in the first place.
+        // Include additional code files in both TestState and FixedState.
         if (fileSet.AdditionalCodeFiles is not null)
         {
             foreach (string contextDocument in fileSet.AdditionalCodeFiles)
