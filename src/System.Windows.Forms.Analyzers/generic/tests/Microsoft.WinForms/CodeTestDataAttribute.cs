@@ -76,8 +76,19 @@ public sealed partial class CodeTestDataAttribute : MemberDataAttributeBase
         var baseType = memberType.BaseType
             ?? throw new InvalidOperationException($"The type '{memberType}' does not have a base type.");
 
+#if !NET9_0 && NET9_0_OR_GREATER
+        // This conditional looks weird, but is a trick to get around a mismatch
+        // in compiler versions between VS-current and Arcade for the 9.0-Rel branch.
+        // Problem: Open generics do not work in earlier versions than .NET 10.
+        // (And no, I came up with it, and had to convince GPT 4.5 this will do, not
+        //  the other way around.)
+        string getFilesMethodName = nameof(RoslynAnalyzerAndCodeFixTestBase<,>.GetFileSets);
+#else
+        string getFilesMethodName = "GetFileSets";
+#endif
+
         MethodInfo? getFileSetsMethod = baseType.GetMethod(
-            nameof(RoslynAnalyzerAndCodeFixTestBase<,>.GetFileSets),
+            getFilesMethodName,
             BindingFlags.Public | BindingFlags.Static)
                 ?? throw new InvalidOperationException(
                     $"The type '{baseType}' does not contain a static public method named 'GetFileSets'.");
