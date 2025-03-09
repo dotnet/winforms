@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms;
 using System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConfiguration;
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis.Testing;
@@ -41,18 +42,21 @@ public class CustomControlScenarios
     {
     }
 
-    /// <summary>
-    ///  Retrieves a collection of reference assemblies for test scenarios.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This returns .NET 9.0 reference assemblies to ensure that the
-    ///   analyzer uses APIs introduced in .NET 9.0 and above.
-    ///  </para>
-    /// </remarks>
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net90Windows];
+        NetVersion[] tfms =
+        [
+            NetVersion.Net6_0,
+            NetVersion.Net7_0,
+            NetVersion.Net8_0,
+            NetVersion.Net9_0,
+            NetVersion.Net10_0_Preview1,
+        ];
+
+        foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))
+        {
+            yield return new object[] { refAssembly };
+        }
     }
 
     /// <summary>
