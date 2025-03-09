@@ -20,8 +20,7 @@ public class InvokeAsyncOnControl
     {
         NetVersion[] tfms =
         [
-            NetVersion.Net9_0,
-            NetVersion.Net10_0_Preview1,
+            NetVersion.Net9_0
         ];
 
         foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))

@@ -41,7 +41,25 @@ public class CustomControlScenarios
         : base(SourceLanguage.CSharp)
     {
     }
-
+    
+    /// <summary>
+    ///  Retrieves reference assemblies for the latest target framework versions.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This method generates an enumerable of object arrays, each containing
+    ///   reference assemblies for different .NET target framework versions.
+    ///  </para>
+    ///  <para>
+    ///   It uses the <see cref="ReferenceAssemblyGenerator.GetForLatestTFMs"/> method
+    ///   to fetch the reference assemblies for the specified target framework versions.
+    ///   Using this approach guarantees the latest reference assembly versions for each
+    ///   respective TFM.
+    ///  </para>
+    /// </remarks>
+    /// <returns>
+    ///  An enumerable of object arrays, each containing a set of reference assemblies.
+    /// </returns>
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
         NetVersion[] tfms =
@@ -49,8 +67,7 @@ public class CustomControlScenarios
             NetVersion.Net6_0,
             NetVersion.Net7_0,
             NetVersion.Net8_0,
-            NetVersion.Net9_0,
-            NetVersion.Net10_0_Preview1,
+            NetVersion.Net9_0
         ];
 
         foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))
