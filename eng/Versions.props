@@ -13,7 +13,7 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-preview.3.25157.12</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-preview.3.25158.4</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>10.0.0-preview.3.25155.12</SystemDiagnosticsEventLogPackageVersion>
     <SystemDirectoryServicesPackageVersion>10.0.0-preview.3.25155.12</SystemDirectoryServicesPackageVersion>
     <SystemFormatsNrbfPackageVersion>10.0.0-preview.3.25155.12</SystemFormatsNrbfPackageVersion>
@@ -33,7 +33,7 @@
     <SystemThreadingAccessControlPackageVersion>10.0.0-preview.3.25155.12</SystemThreadingAccessControlPackageVersion>
     <MicrosoftWin32RegistryAccessControlPackageVersion>10.0.0-preview.3.25155.12</MicrosoftWin32RegistryAccessControlPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.3.25155.12</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-preview.3.25157.12</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-preview.3.25158.4</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
     <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.3.25155.12</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.3.25155.12</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>10.0.0-preview.3.25155.12</SystemCodeDomPackageVersion>
@@ -42,7 +42,7 @@
     <SystemSecurityPermissionsPackageVersion>10.0.0-preview.3.25155.12</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>10.0.0-preview.3.25155.12</SystemWindowsExtensionsPackageVersion>
     <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.3.25155.12</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.3.25157.12</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.3.25158.4</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.3.25155.12</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
