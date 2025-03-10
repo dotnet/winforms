@@ -4,4 +4,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Analyzers.CSharp.Tests, PublicKey={PublicKeys.MicrosoftShared}")]
-// [assembly: InternalsVisibleTo($"System.Windows.Forms.Analyzers.VisualBasic.Tests, PublicKey={PublicKeys.MicrosoftShared}")]
+[assembly: InternalsVisibleTo($"System.Windows.Forms.Analyzers.VisualBasic.Tests, PublicKey={PublicKeys.MicrosoftShared}")]

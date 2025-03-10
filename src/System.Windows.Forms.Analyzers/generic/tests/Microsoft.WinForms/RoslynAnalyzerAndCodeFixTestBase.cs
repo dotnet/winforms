@@ -44,6 +44,11 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     private static IEnumerable<string> s_analyzerTestFilePaths = null!;
 
     /// <summary>
+    ///  The source language to use for the tests.
+    /// </summary>
+    public SourceLanguage Language { get; }
+
+    /// <summary>
     ///  Initializes a new instance of the 
     ///  RoslynAnalyzerAndCodeFixTestBase{TAnalyzer, TVerifier} class.
     /// </summary>
@@ -67,6 +72,7 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(testBasePath, nameof(testBasePath));
         s_analyzerTestFilePaths = TestFileLoader.GetTestFilePaths(GetType(), testBasePath);
+        Language = language;
     }
 
     private RoslynAnalyzerAndCodeFixTestBase() { }
