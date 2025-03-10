@@ -32,6 +32,7 @@
   <ItemGroup>
     <Folder Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\CustomControlScenarios\" />
     <Folder Include="AI-Guidance\" />
+    <Folder Include="Analyzer\MissingPropertySerializationConfiguration\" />
   </ItemGroup>
 
 </Project>
