@@ -103,12 +103,8 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         _serviceProviderMock.Verify(sp => sp.GetService(typeof(IOverlayService)), Times.Exactly(2));
         _behaviorService.Adorners.Cast<Adorner>().Should().NotContain(_service.DropDownAdorner);
 
-        // DropDownAdorner should be null after _service is disposed
-        // If DropDownAdorner is not null, it indicates that the Dispose method did not clean up resources correctly
-        if (_service.DropDownAdorner is null)
-        {
-            _serviceDisposed = true;
-        }
+        _service.DropDownAdorner.Should().BeNull();
+        _serviceDisposed = true;
     }
 
     [WinFormsFact]
