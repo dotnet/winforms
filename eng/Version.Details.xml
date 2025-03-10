@@ -7,9 +7,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.10.0" Version="10.0.0-preview.3.25158.5">
+    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.10.0" Version="10.0.0-preview.3.25160.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>d17420560540e4184a78f431de8341f747068c4f</Sha>
+      <Sha>d737b226536cfa5e7a8db08fa3412cda9466aedc</Sha>
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="10.0.0-preview.3.25155.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -31,9 +31,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>7dd74fc403dda02fdccc541b306b8267c9a22aa9</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="10.0.0-preview.3.25158.5">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="10.0.0-preview.3.25160.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>d17420560540e4184a78f431de8341f747068c4f</Sha>
+      <Sha>d737b226536cfa5e7a8db08fa3412cda9466aedc</Sha>
     </Dependency>
     <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="10.0.0-preview.3.25155.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -59,9 +59,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>7dd74fc403dda02fdccc541b306b8267c9a22aa9</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="10.0.0-preview.3.25158.5">
+    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="10.0.0-preview.3.25160.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>d17420560540e4184a78f431de8341f747068c4f</Sha>
+      <Sha>d737b226536cfa5e7a8db08fa3412cda9466aedc</Sha>
     </Dependency>
     <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="10.0.0-preview.3.25155.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
