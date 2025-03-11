@@ -1,0 +1,151 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" />
+    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="NuGet.Packaging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.Primitives\tests\TestUtilities.Tests\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj" />
+    <ProjectReference Include="..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\generic\tests\System.Windows.Forms.Analyzers.Tests.csproj" />
+    <ProjectReference Include="..\src\Analyzers\System.Windows.Forms.Analyzers.CSharp.csproj" />
+    <ProjectReference Include="..\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Generators\ApplicationConfiguration\TestData\*.cs" />
+    <None Include="Generators\ApplicationConfiguration\TestData\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <Compile Remove="Generators\AppConfigBuilder\TestData\Default_boilerplate.cs" />
+    <Compile Remove="Generators\AppConfigBuilder\TestData\Default_top_level.cs" />
+    <Compile Remove="Generators\AppConfig\TestData\GenerateInitialize_default_boilerplate.cs" />
+    <Compile Remove="Generators\AppConfig\TestData\GenerateInitialize_default_top_level.cs" />
+    <Compile Remove="Generators\AppConfig\TestData\GenerateInitialize_user_settings_boilerplate.cs" />
+    <Compile Remove="Generators\AppConfig\TestData\GenerateInitialize_user_top_level.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Generators\AppConfigBuilder\ApplicationConfigurationInitializeBuilderTests.GenerateInitialize_DefaultFont=default.verified.txt" />
+    <None Remove="Generators\AppConfigBuilder\ApplicationConfigurationInitializeBuilderTests.GenerateInitialize_DefaultFont=null.verified.txt" />
+    <None Remove="Generators\AppConfigBuilder\ApplicationConfigurationInitializeBuilderTests.GenerateInitialize_DefaultFont=SansSerif.verified.txt" />
+    <None Remove="Generators\AppConfigBuilder\ApplicationConfigurationInitializeBuilderTests.GenerateInitialize_DefaultFont=Tahoma.verified.txt" />
+    <None Remove="Generators\AppConfigBuilder\ApplicationConfigurationInitializeBuilderTests.GenerateInitialize_UseCompTextRendering=true.verified.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=default.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=null.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=SansSerif.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=Tahoma.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_UseCompTextRendering=true.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Include="Generators\AppConfigBuilder\TestData\Default_boilerplate.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfigBuilder\TestData\Default_top_level.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfig\TestData\GenerateInitialize_default_boilerplate.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfig\TestData\GenerateInitialize_default_top_level.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfig\TestData\GenerateInitialize_user_settings_boilerplate.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Generators\AppConfig\TestData\GenerateInitialize_user_top_level.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=default.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=null.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=SansSerif.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=Tahoma.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_EnableVisualStyles=false.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_EnableVisualStyles=false.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_EnableVisualStyles=true.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_EnableVisualStyles=true.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_UseCompTextRendering=false.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_UseCompTextRendering=false.verified.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+    <None Update="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_UseCompTextRendering=true.received.txt">
+      <DependentUpon>AppConfigBuilder.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+</Project>

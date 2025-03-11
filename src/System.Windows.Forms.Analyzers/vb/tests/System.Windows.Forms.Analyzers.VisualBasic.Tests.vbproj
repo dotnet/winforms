@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
+    <RootNamespace></RootNamespace>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.vb" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.vb" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.vb" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.vb" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.SourceGenerators.Testing.XUnit" />
+    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="NuGet.Packaging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.Primitives\tests\TestUtilities.Tests\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj" />
+    <ProjectReference Include="..\..\generic\tests\System.Windows.Forms.Analyzers.Tests.csproj" />
+    <ProjectReference Include="..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\src\Analyzers\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
+    <ProjectReference Include="..\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System.Reflection" />
+    <Import Include="System.Runtime" />
+    <Import Include="System.Threading" />
+    <Import Include="System.XUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.vb" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.vb" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.vb" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.vb" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.vb" />
+  </ItemGroup>
+
+</Project>
