@@ -14,18 +14,18 @@ public sealed class ImageFormat
 {
     // Format IDs
     // private static ImageFormat undefined = new ImageFormat(new Guid("{b96b3ca9-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_memoryBMP = new(PInvokeGdiPlus.ImageFormatMemoryBMP);
-    private static readonly ImageFormat s_bmp = new(PInvokeGdiPlus.ImageFormatBMP);
-    private static readonly ImageFormat s_emf = new(PInvokeGdiPlus.ImageFormatEMF);
-    private static readonly ImageFormat s_wmf = new(PInvokeGdiPlus.ImageFormatWMF);
-    private static readonly ImageFormat s_jpeg = new(PInvokeGdiPlus.ImageFormatJPEG);
-    private static readonly ImageFormat s_png = new(PInvokeGdiPlus.ImageFormatPNG);
-    private static readonly ImageFormat s_gif = new(PInvokeGdiPlus.ImageFormatGIF);
-    private static readonly ImageFormat s_tiff = new(PInvokeGdiPlus.ImageFormatTIFF);
-    private static readonly ImageFormat s_exif = new(PInvokeGdiPlus.ImageFormatEXIF);
-    private static readonly ImageFormat s_icon = new(PInvokeGdiPlus.ImageFormatIcon);
-    private static readonly ImageFormat s_heif = new(PInvokeGdiPlus.ImageFormatHEIF);
-    private static readonly ImageFormat s_webp = new(PInvokeGdiPlus.ImageFormatWEBP);
+    private static readonly ImageFormat s_memoryBMP = new(PInvokeCore.ImageFormatMemoryBMP);
+    private static readonly ImageFormat s_bmp = new(PInvokeCore.ImageFormatBMP);
+    private static readonly ImageFormat s_emf = new(PInvokeCore.ImageFormatEMF);
+    private static readonly ImageFormat s_wmf = new(PInvokeCore.ImageFormatWMF);
+    private static readonly ImageFormat s_jpeg = new(PInvokeCore.ImageFormatJPEG);
+    private static readonly ImageFormat s_png = new(PInvokeCore.ImageFormatPNG);
+    private static readonly ImageFormat s_gif = new(PInvokeCore.ImageFormatGIF);
+    private static readonly ImageFormat s_tiff = new(PInvokeCore.ImageFormatTIFF);
+    private static readonly ImageFormat s_exif = new(PInvokeCore.ImageFormatEXIF);
+    private static readonly ImageFormat s_icon = new(PInvokeCore.ImageFormatIcon);
+    private static readonly ImageFormat s_heif = new(PInvokeCore.ImageFormatHEIF);
+    private static readonly ImageFormat s_webp = new(PInvokeCore.ImageFormatWEBP);
 
     private readonly Guid _guid;
 
@@ -128,62 +128,62 @@ public sealed class ImageFormat
     /// </summary>
     public override string ToString()
     {
-        if (Guid == PInvokeGdiPlus.ImageFormatMemoryBMP)
+        if (Guid == PInvokeCore.ImageFormatMemoryBMP)
         {
             return "MemoryBMP";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatBMP)
+        if (Guid == PInvokeCore.ImageFormatBMP)
         {
             return "Bmp";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatEMF)
+        if (Guid == PInvokeCore.ImageFormatEMF)
         {
             return "Emf";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatWMF)
+        if (Guid == PInvokeCore.ImageFormatWMF)
         {
             return "Wmf";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatGIF)
+        if (Guid == PInvokeCore.ImageFormatGIF)
         {
             return "Gif";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatJPEG)
+        if (Guid == PInvokeCore.ImageFormatJPEG)
         {
             return "Jpeg";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatPNG)
+        if (Guid == PInvokeCore.ImageFormatPNG)
         {
             return "Png";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatTIFF)
+        if (Guid == PInvokeCore.ImageFormatTIFF)
         {
             return "Tiff";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatEXIF)
+        if (Guid == PInvokeCore.ImageFormatEXIF)
         {
             return "Exif";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatIcon)
+        if (Guid == PInvokeCore.ImageFormatIcon)
         {
             return "Icon";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatHEIF)
+        if (Guid == PInvokeCore.ImageFormatHEIF)
         {
             return "Heif";
         }
 
-        if (Guid == PInvokeGdiPlus.ImageFormatWEBP)
+        if (Guid == PInvokeCore.ImageFormatWEBP)
         {
             return "Webp";
         }

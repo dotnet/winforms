@@ -19,7 +19,7 @@ internal static partial class GdiPlusInitialization
 
         nuint token;
         GdiplusStartupInputEx startup = GdiplusStartupInputEx.GetDefault();
-        PInvokeGdiPlus.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null).ThrowIfFailed();
+        PInvokeCore.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null).ThrowIfFailed();
         return token;
     }
 
