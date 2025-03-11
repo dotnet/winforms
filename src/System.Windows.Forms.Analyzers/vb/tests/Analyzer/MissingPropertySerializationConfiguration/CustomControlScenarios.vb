@@ -61,8 +61,7 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.Missing
         '''  An enumerable of object arrays, each containing a set of reference assemblies.
         ''' </returns>
         Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
-            Dim tfms As NetVersion() =
-            {
+            Dim tfms As NetVersion() = {
                 NetVersion.Net6_0,
                 NetVersion.Net7_0,
                 NetVersion.Net8_0,
@@ -92,9 +91,8 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.Missing
         <Theory>
         <CodeTestData(NameOf(GetReferenceAssemblies))>
         Public Async Function TestDiagnostics(
-            referenceAssemblies As ReferenceAssemblies,
-            fileSet As TestDataFileSet) As Task
-
+                referenceAssemblies As ReferenceAssemblies,
+                fileSet As TestDataFileSet) As Task
             Dim context = GetVisualBasicAnalyzerTestContext(fileSet, referenceAssemblies)
             Await context.RunAsync()
 
@@ -119,9 +117,8 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.Missing
         <Theory>
         <CodeTestData(NameOf(GetReferenceAssemblies))>
         Public Async Function TestCodeFix(
-            referenceAssemblies As ReferenceAssemblies,
-            fileSet As TestDataFileSet) As Task
-
+                referenceAssemblies As ReferenceAssemblies,
+                fileSet As TestDataFileSet) As Task
             Dim context = GetVisualBasicCodeFixTestContext(Of AddDesignerSerializationVisibilityCodeFixProvider)(
                 fileSet,
                 referenceAssemblies,

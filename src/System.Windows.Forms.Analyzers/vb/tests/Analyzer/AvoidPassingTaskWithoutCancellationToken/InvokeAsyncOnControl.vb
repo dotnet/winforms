@@ -19,8 +19,7 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
         End Sub
 
         Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
-            Dim tfms As NetVersion() =
-            {
+            Dim tfms As NetVersion() = {
                 NetVersion.Net9_0
             }
 
@@ -32,9 +31,8 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
         <Theory>
         <CodeTestData(NameOf(GetReferenceAssemblies))>
         Public Async Function AvoidPassingTaskWithoutCancellationAnalyzer(
-            referenceAssemblies As ReferenceAssemblies,
-            fileSet As TestDataFileSet) As Task
-
+                referenceAssemblies As ReferenceAssemblies,
+                fileSet As TestDataFileSet) As Task
             ' Make sure, we can resolve the assembly we're testing against:
             ' Always pass `String.Empty` for the language here to keep it generic.
             Dim referenceAssembly = Await referenceAssemblies.ResolveAsync(
@@ -44,9 +42,9 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
             Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
             Dim context = GetVisualBasicAnalyzerTestContext(fileSet, referenceAssemblies)
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97))
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97))
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(37, 25, 37, 84))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 84))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 85))
 
             Await context.RunAsync()
         End Function

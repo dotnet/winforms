@@ -24,17 +24,14 @@ Namespace VisualBasicControls
             End Set
         End Property
 
-        <DefaultValue(1.0F)>
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaleFactor As Single = 1.0F
 
         ''' <summary>
         '''  Sets or gets the scaled location of some foo bar thing.
         ''' </summary>
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaledLocation As PointF
-
-        Private Function ShouldSerializeScaledLocation() As Boolean
-            Return False
-        End Function
     End Class
 
 End Namespace

@@ -14,8 +14,7 @@ Namespace VisualBasicControls
         '''  Sets or gets the scaled size of some foo bar thing.
         ''' </summary>
         <System.ComponentModel.Description("Sets or gets the scaled size of some foo bar thing.")>
-        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-        Public Property ScaledSize As SizeF
+        Public Property [|ScaledSize|] As SizeF
             Get
                 Return _scaleSize
             End Get
@@ -24,17 +23,12 @@ Namespace VisualBasicControls
             End Set
         End Property
 
-        <DefaultValue(1.0F)>
-        Public Property ScaleFactor As Single = 1.0F
+        Public Property [|ScaleFactor|] As Single = 1.0F
 
         ''' <summary>
         '''  Sets or gets the scaled location of some foo bar thing.
         ''' </summary>
-        Public Property ScaledLocation As PointF
-
-        Private Function ShouldSerializeScaledLocation() As Boolean
-            Return False
-        End Function
+        Public Property [|ScaledLocation|] As PointF
     End Class
 
 End Namespace
