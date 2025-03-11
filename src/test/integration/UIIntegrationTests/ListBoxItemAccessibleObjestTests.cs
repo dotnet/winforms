@@ -27,8 +27,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             var boundsAfterHandleCreation = itemAccessibleObject.Bounds;
             boundsAfterHandleCreation.Should().NotBe(Rectangle.Empty);
-            boundsAfterHandleCreation.Width.Should().BeLessOrEqualTo(listBox.Width);
-            boundsAfterHandleCreation.Height.Should().BeLessOrEqualTo(listBox.Height);
+            boundsAfterHandleCreation.Width.Should().BeLessThanOrEqualTo(listBox.Width);
+            boundsAfterHandleCreation.Height.Should().BeLessThanOrEqualTo(listBox.Height);
         }
 
         [WinFormsFact]

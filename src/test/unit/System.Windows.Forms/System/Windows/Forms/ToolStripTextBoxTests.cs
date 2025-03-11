@@ -789,7 +789,7 @@ public partial class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.SelectionStart = _toolStripTextBox.Text.Length;
         _toolStripTextBox.ScrollToCaret();
         Point position = _toolStripTextBox.GetPositionFromCharIndex(_toolStripTextBox.SelectionStart);
-        position.Y.Should().BeLessOrEqualTo(_toolStripTextBox.Height);
+        position.Y.Should().BeLessThanOrEqualTo(_toolStripTextBox.Height);
     }
 
     [WinFormsFact]
