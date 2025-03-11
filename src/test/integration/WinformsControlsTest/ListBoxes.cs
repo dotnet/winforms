@@ -44,8 +44,11 @@ public partial class ListBoxes : Form
             customBrush = Brushes.Red;
         }
 
-        e.Graphics.DrawString(listBox.Items[e.Index].ToString(),
-            e.Font, customBrush, e.Bounds, StringFormat.GenericDefault);
+        if (listBox.Items.Count > 0)
+        {
+            e.Graphics.DrawString(listBox.Items[e.Index].ToString(),
+                e.Font, customBrush, e.Bounds, StringFormat.GenericDefault);
+        }
 
         e.DrawFocusRectangle();
     }
