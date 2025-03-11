@@ -81,7 +81,7 @@
     <SystemComponentModelTypeConverterTestDataVersion>10.0.0-beta.24568.1</SystemComponentModelTypeConverterTestDataVersion>
     <SystemDrawingCommonTestDataVersion>10.0.0-beta.24568.1</SystemDrawingCommonTestDataVersion>
     <SystemWindowsExtensionsTestDataVersion>10.0.0-beta.24568.1</SystemWindowsExtensionsTestDataVersion>
-    <VerifyXunitVersion>25.0.1</VerifyXunitVersion>
+    <VerifyXunitVersion>28.8.1</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
@@ -103,7 +103,7 @@
     <MicrosoftCodeAnalysisPublicApiAnalyzersVersion>$(MicrosoftCodeAnalysisAnalyzersVersion)</MicrosoftCodeAnalysisPublicApiAnalyzersVersion>
     <MicrosoftCodeAnalysisNetAnalyzersVersion>10.0.0-preview.24559.1</MicrosoftCodeAnalysisNetAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.2.0-beta.556</StyleCopAnalyzersVersion>
-    <NugetPackagingVersion>6.12.1</NugetPackagingVersion>
+    <NugetPackagingVersion>6.13.2</NugetPackagingVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
@@ -112,6 +112,6 @@
     <NewtonsoftJsonVersion>13.0.3</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
     <!-- Pin transitive dependency to avoid vulnerable 8.0.0 version. -->
-    <SystemFormatsAsn1PackageVersion>8.0.1</SystemFormatsAsn1PackageVersion>
+    <SystemFormatsAsn1PackageVersion>9.0.2</SystemFormatsAsn1PackageVersion>
   </PropertyGroup>
 </Project>

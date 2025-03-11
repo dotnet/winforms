@@ -55,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" Link="System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Analyzers\generic\src\Analyzers\Diagnostics\DiagnosticIDs.cs" Link="DiagnosticIDs.cs" />
   </ItemGroup>
 
 </Project>
