@@ -16,7 +16,7 @@ namespace System.Drawing;
 [TypeConverter(typeof(FontConverter))]
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
+public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IPointer<GpFont>
 {
     [NonSerialized]
     private GpFont* _nativeFont;
@@ -29,9 +29,10 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     private string _systemFontName = string.Empty;
     private string? _originalFontName;
 
-    // Return value is in Unit (the unit the font was created in)
+    nint IPointer<GpFont>.Pointer => (nint)_nativeFont;
+
     /// <summary>
-    ///  Gets the size of this <see cref='Font'/>.
+    ///  Gets the em-size of this <see cref="Font"/> measured in the units specified by the <see cref="Unit"/> property.
     /// </summary>
     public float Size => _fontSize;
 

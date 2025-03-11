@@ -9,39 +9,39 @@ internal enum PixelFormat
     ///  Specifies that pixel data contains color indexed values which means they are an index to colors in the
     ///  system color table, as opposed to individual color values.
     /// </summary>
-    Indexed = (int)PInvokeGdiPlus.PixelFormatIndexed,
+    Indexed = (int)PInvokeCore.PixelFormatIndexed,
 
     /// <summary>
     ///  Specifies that pixel data contains GDI colors.
     /// </summary>
-    Gdi = (int)PInvokeGdiPlus.PixelFormatGDI,
+    Gdi = (int)PInvokeCore.PixelFormatGDI,
 
     /// <summary>
     ///  Specifies that pixel data contains alpha values that are not pre-multiplied.
     /// </summary>
-    Alpha = (int)PInvokeGdiPlus.PixelFormatAlpha,
+    Alpha = (int)PInvokeCore.PixelFormatAlpha,
 
     /// <summary>
     ///  Specifies that pixel format contains pre-multiplied alpha values.
     /// </summary>
-    PAlpha = (int)PInvokeGdiPlus.PixelFormatPAlpha,
+    PAlpha = (int)PInvokeCore.PixelFormatPAlpha,
 
     /// <summary>
     ///  Specifies that pixel format contains extended color values of 16 bits per channel.
     /// </summary>
-    Extended = (int)PInvokeGdiPlus.PixelFormatExtended,
+    Extended = (int)PInvokeCore.PixelFormatExtended,
 
-    Canonical = (int)PInvokeGdiPlus.PixelFormatCanonical,
+    Canonical = (int)PInvokeCore.PixelFormatCanonical,
 
     /// <summary>
     ///  Specifies that pixel format is undefined.
     /// </summary>
-    Undefined = (int)PInvokeGdiPlus.PixelFormatUndefined,
+    Undefined = (int)PInvokeCore.PixelFormatUndefined,
 
     /// <summary>
     ///  Specifies that pixel format doesn't matter.
     /// </summary>
-    DontCare = (int)PInvokeGdiPlus.PixelFormatDontCare,
+    DontCare = (int)PInvokeCore.PixelFormatDontCare,
 
     /// <summary>
     ///  Specifies that pixel format is 1 bit per pixel indexed color. The color table therefore has two colors in it.

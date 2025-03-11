@@ -90,6 +90,8 @@ FACILITY_CODE
 fdex*
 FDEX_PROP_FLAGS
 FILETIME
+GdiplusStartup
+GdiplusStartupInputEx
 GET_CLASS_LONG_INDEX
 GetClientRect
 GetClipboardFormatName
@@ -126,6 +128,12 @@ GlobalLock
 GlobalReAlloc
 GlobalSize
 GlobalUnlock
+GpBitmap
+GpFont
+GpGraphics
+GpImage
+GpMetafile
+GpRegion
 HBITMAP
 HBMMENU_*
 HBRUSH
@@ -152,6 +160,7 @@ IDropTargetHelper
 IEnumFORMATETC
 IEnumUnknown
 IGlobalInterfaceTable
+ImageFormat*
 ImageLockMode
 INK_SERIALIZED_FORMAT
 INPLACE_E_NOTOOLSPACE
@@ -201,6 +210,7 @@ OleInitialize
 OleSetClipboard
 OleUninitialize
 PeekMessage
+PixelFormat*
 POINTS
 PostMessage
 PRINTDLGEX_FLAGS
