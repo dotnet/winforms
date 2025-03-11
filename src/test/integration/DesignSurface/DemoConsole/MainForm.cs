@@ -349,7 +349,7 @@ public partial class MainForm : Form
                         splitterPanel1.Controls.Add(richTextBox);
                         splitterPanel2.Controls.Add(scrollableControl);
 
-                        toolStripContainer.ContentPanel.Controls.AddRange(splitContainer);
+                        toolStripContainer.ContentPanel.Controls.Add(splitContainer);
 
                         Component component = surface.CreateComponent<Component>();
 
