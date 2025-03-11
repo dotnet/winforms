@@ -212,7 +212,7 @@
                                               "SourceFile":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\TreeViewTest.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
-                                          },
+                                          }
                                       ],
                          "LanguageSet":  "VS_Main_Languages"
                      },
