@@ -737,7 +737,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         _toolStripTextBox.Text = "Hello";
         int result = _toolStripTextBox.GetCharIndexFromPosition(new Point(1, 1));
-        result.Should().BeGreaterOrEqualTo(0);
+        result.Should().BeGreaterThanOrEqualTo(0);
     }
 
     [WinFormsFact]
