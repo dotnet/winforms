@@ -203,7 +203,6 @@
                                               "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
                                           },
                                           {
-
                                               "SourceFile":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\Panels.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
