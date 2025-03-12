@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -143,7 +143,8 @@ public class ToolStripMenuItemTests
         Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
     }
 
-    [WinFormsTheory]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/13117")]
+    [WinFormsTheory(Skip = "Localization tests, see: https://github.com/dotnet/winforms/issues/13117")]
     [MemberData(nameof(CultureInfo_Shortcut_TestData))]
     public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo threadCulture, CultureInfo threadUICulture, string expectedShortcutText)
     {
