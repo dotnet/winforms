@@ -590,8 +590,8 @@ internal partial class ToolStripCollectionEditor
                 {
                     if (ex.IsCriticalException())
                     {
-                    throw;
-                }
+                        throw;
+                    }
                 }
 
                 PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(newItem)[nameof(Image)];
@@ -885,32 +885,29 @@ internal partial class ToolStripCollectionEditor
                     selectedItem = _listBoxItems.SelectedItem is ToolStrip strip ? strip : (ToolStripItem)_listBoxItems.SelectedItem;
 
                     string className = "&" + selectedItem.GetType().Name;
-                    if (selectedItem.Site is not null)
+                    // Erase background
+                    e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
+                    string itemName = selectedItem.Site?.Name ?? string.Empty;
+
+                    if (label is not null)
                     {
-                        // Erase background
-                        e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
-                        string itemName = selectedItem.Site.Name;
-
-                        if (label is not null)
-                        {
-                            label.Text = className + itemName;
-                        }
-
-                        int classWidth = 0;
-                        classWidth = (int)e.Graphics.MeasureString(className, boldFont).Width;
-                        e.Graphics.DrawString(className, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
-                        int itemTextWidth = (int)e.Graphics.MeasureString(itemName, _selectedItemName.Font).Width;
-                        Rectangle textRect = new(classWidth + GdiPlusExtraSpace, 0, bounds.Width - (classWidth + GdiPlusExtraSpace), bounds.Height);
-                        label.AutoEllipsis = itemTextWidth > textRect.Width;
-
-                        TextFormatFlags flags = TextFormatFlags.EndEllipsis | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
-                        if (rightToLeft)
-                        {
-                            flags |= TextFormatFlags.RightToLeft;
-                        }
-
-                        TextRenderer.DrawText(e.Graphics, itemName, _selectedItemName.Font, textRect, SystemColors.WindowText, flags);
+                        label.Text = className + itemName;
                     }
+
+                    int classWidth = 0;
+                    classWidth = (int)e.Graphics.MeasureString(className, boldFont).Width;
+                    e.Graphics.DrawString(className, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
+                    int itemTextWidth = (int)e.Graphics.MeasureString(itemName, _selectedItemName.Font).Width;
+                    Rectangle textRect = new(classWidth + GdiPlusExtraSpace, 0, bounds.Width - (classWidth + GdiPlusExtraSpace), bounds.Height);
+                    label.AutoEllipsis = itemTextWidth > textRect.Width;
+
+                    TextFormatFlags flags = TextFormatFlags.EndEllipsis | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
+                    if (rightToLeft)
+                    {
+                        flags |= TextFormatFlags.RightToLeft;
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, itemName, _selectedItemName.Font, textRect, SystemColors.WindowText, flags);
 
                     break;
                 case 0:
