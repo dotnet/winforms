@@ -171,7 +171,7 @@ public class DesignerAttributeTests
     [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(EditorAttribute))]
     public void EditorAttribute_TypeExists(string subject, EditorAttribute attribute)
     {
-        var type = Type.GetType(attribute.EditorTypeName, false);
+        var type = Type.GetType(attribute.EditorTypeName, throwOnError: false);
         _output.WriteLine($"{subject}: {attribute.EditorTypeName} --> {type?.Name}");
 
         if (SkipList.Contains(attribute.EditorTypeName))
