@@ -2584,19 +2584,26 @@ public partial class TreeView : Control
 
             BeginInvoke((MethodInvoker)(() =>
             {
+                // Use BeginInvoke to queue the operation for later execution:
+                // 1. Deferred Execution: Ensures that the logic runs after the TreeView control's edit control is fully initialized.
+                // 2. Thread Switching: Windows Forms controls can only be accessed on the thread they were created on.
+                // BeginInvoke ensures this code runs on the UI thread to avoid cross-thread access exceptions.
+                //
+                // This code adjusts the position and size of the edit control to accommodate the DPI scaling for high-resolution displays.
                 if (e.Node is not null)
                 {
                     float dpiScale = (float)DeviceDpi / ScaleHelper.OneHundredPercentLogicalDpi;
 
-                    PInvoke.SetWindowPos((HWND)editHandle,
-                     HWND.Null,
-                     e.Node.Bounds.X,
-                     e.Node.Bounds.Y,
-                     e.Node.Bounds.Width + (int)(dpiScale * 10),
-                     e.Node.Bounds.Height + 2,
-                     SET_WINDOW_POS_FLAGS.SWP_NOZORDER |
-                     SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED |
-                     SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
+                    PInvoke.SetWindowPos(
+                        (HWND)editHandle,
+                        HWND.Null,
+                        e.Node.Bounds.X,
+                        e.Node.Bounds.Y,
+                        e.Node.Bounds.Width + (int)(dpiScale * 10),
+                        e.Node.Bounds.Height + 2,
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER |
+                        SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED |
+                        SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
                 }
             }));
         }
