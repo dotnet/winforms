@@ -1,6 +1,6 @@
 # List of Diagnostics Produced by Windows Forms .NET
 
-We have 3 kinds of diagnostic messages: obsoletions, code analyzer diagnostics, and experimental feature compiler errors.
+We have three kinds of diagnostic messages: obsoletions, code analyzer diagnostics, and experimental feature compiler errors.
 
 ## Obsoletions
 
@@ -11,12 +11,12 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 ### Acceptance Criteria for Adding an Obsoletion
 
 1. **Add the obsoletion to the table below**, claiming the next diagnostic ID.
-    - Ensure the description is meaningful within the context of this table, and without requiring the context of the calling code.
+    - Ensure the description is meaningful within the context of this table and without requiring the context of the calling code.
 2. **Add new constants to `src\Common\src\Obsoletions.cs`**, following the existing conventions:
     - A `...Message` const using the same description added to the table below.
     - A `...DiagnosticId` const for the `WFDEV###` ID.
-3. **If adding `<Obsolete>` attribute to Microsoft.VisualBasic.Forms assembly**, edit `src\Microsoft.VisualBasic.Forms\src\Obsoletions.vb` file.
-4. **Annotate `src` files by referring to the constants defined from `Obsoletions.cs`**:
+3. **If adding the `<Obsolete>` attribute to the Microsoft.VisualBasic.Forms assembly**, edit the `src\Microsoft.VisualBasic.Forms\src\Obsoletions.vb` file.
+4. **Annotate `src` files by referring to the constants defined in `Obsoletions.cs`**:
     - Specify the `UrlFormat = Obsoletions.SharedUrlFormat`.
     - Example:
         ```C#
@@ -30,15 +30,15 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
         <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
         ```
 5. **Create the new `aka.ms` link**
-    - Point it to repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed in the [redirection manager](https://akalinkmanager.trafficmanager.net/am/redirection/home)
-    - Set security group to the team alias
+    - Point it to the repo's `.md` file in the `docs` folder that describes your analyzer until the `learn` site docs are completed in the [redirection manager](https://akalinkmanager.trafficmanager.net/am/redirection/home)
+    - Set the security group to the team alias
 6. **Apply the `:book: documentation: breaking` label** to the PR that introduces the obsoletion.
 7. **Document the breaking change**
     - In the breaking-change issue filed in [dotnet/docs](https://github.com/dotnet/docs), specifically mention that this breaking change is an obsoletion with a `WFDEV` diagnostic ID.
-    - Create another issue to add documentation to the `learn` web site [in dotnet/docs-desktop repo](https://github.com/dotnet/docs-desktop/issues/new?template=diagnostic-compiler.yml)
-    - The documentation team will produce a PR that adds the warning or error documentation to the ["learn" site](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfdev003) page and we will review it.
-    - Once the docs PR is published, get the newly created link to the doc and associate it with the corresponding `aka.ms` name in [redirection manager](https://akalinkmanager.trafficmanager.net/am/redirection/home?options=host:aka.ms )
-    - Connect with `@gewarren`, `@adegeo` or `@merriemcgaw` with any questions.
+    - Create another issue to add documentation to the `learn` website in the [dotnet/docs-desktop repo](https://github.com/dotnet/docs-desktop/issues/new?template=diagnostic-compiler.yml)
+    - The documentation team will produce a PR that adds the warning or error documentation to the [`learn` site](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfdev003) page, and we will review it.
+    - Once the docs PR is published, get the newly created link to the doc and associate it with the corresponding `aka.ms` name in the [redirection manager](https://akalinkmanager.trafficmanager.net/am/redirection/home?options=host:aka.ms)
+    - Connect with `@gewarren`, `@adegeo`, or `@merriemcgaw` with any questions.
 
 ### Obsoletion Diagnostics (`WFDEV001` - `WFDEV999`)
 
@@ -60,16 +60,16 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 | `WFDEV006`    | NET10.0    | `StatusBar` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `StatusStrip` instead. |
 | `WFDEV006`    | NET10.0    | `ToolBar` is provided for binary compatibility with .NET Framework and is not intended to be used directly from your code. Use `ToolStrip` instead. |
 
-## Analyzer Diagnostics.
+## Analyzer Diagnostics
 
 ### When adding a new analyzer
 
 1. **Add the diagnostic ID to the table below**.
-    - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). Complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
-    - Starting in NET9.0, we are using `WFO####` format for code analyzer diagnostic IDs.
-2. **Create a new Descriptor** in the analyzer code using [DiagnosticDescriptorHelper.Create](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/src/System/Windows/Forms/CSharp/Analyzers/Diagnostics/DiagnosticDescriptorHelper.cs#L10)
-    - this method will generate the help link in https://aka.ms/winforms-warnings/WFO#### format.
-3. **Follow [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
+    - The current IDs for C#, VB, and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). A complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
+    - Starting in NET9.0, we are using the `WFO####` format for code analyzer diagnostic IDs.
+2. **Create a new Descriptor** in the analyzer code by calling [DiagnosticDescriptorHelper.Create](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/src/System/Windows/Forms/CSharp/Analyzers/Diagnostics/DiagnosticDescriptorHelper.cs#L10)
+    - This method will generate the help link in the https://aka.ms/winforms-warnings/WFO#### format.
+3. **Follow the [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
 
 | Diagnostic ID | Introduced | Description |
 | :-------------| :--------- | :---------- |
@@ -85,19 +85,19 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 | `WFO2001`     | NET9.0     | Task is being passed to `InvokeAsync` without a cancellation token |
 | `WFO1001`     | NET10.0    | Type `{0}` does not implement `ITypedDataObject` interface |
 
-## Experimental Feature compiler errors
+## Experimental Feature Compiler Errors
 
 See [Preview APIs - .NET | Microsoft Learn](https://learn.microsoft.com/dotnet/fundamentals/apicompat/preview-apis) for more information.
 Documentation for experimental features is available in the [Experimental Help](https://github.com/dotnet/winforms/blob/main/docs/analyzers/Experimental.Help.md) file.
 
 1. **Add the diagnostic ID to the table below**.
-        - The current IDs for C#, VB and language-agnostic analyzers are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs). Complete list of IDs, including those that were shipped and then replaced, is available in the `AnalyzerReleases.Shipped.md` and `AnalyzerReleases.Unshipped.md` files.
+    - The current IDs are defined in [DiagnosticIDs.cs](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/src/System/Windows/Forms/Analyzers/Diagnostics/DiagnosticIDs.cs).
 2. **Add an `[Experimental](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute)` attribute** to your API.
     - Example:
     ```c#
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     ```
-3. **Follow [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
+3. **Follow the [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
 
 | Diagnostic ID | Introduced | Removed | Description |
 | :------------ | :--------- | :------ | :---------- |
