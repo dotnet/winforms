@@ -1419,7 +1419,7 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public unsafe void SetData_ProxyBehavior()
+    public unsafe void OleGetClipboard_ProxyBehavior()
     {
         DataObject dataObject = new("MyFormat", "My Data");
         using var iDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
@@ -1433,7 +1433,7 @@ public class ClipboardTests
         using ComScope<Com.IDataObject> receivedIDataObject = default;
         PInvokeCore.OleGetClipboard(receivedIDataObject).Should().Be(HRESULT.S_OK);
 
-        // Should have the proxy pointer here
+        // Should have the proxy pointer here (CClipDataObject)
         ((nint)iDataObject.Value).Should().NotBe((nint)receivedIDataObject.Value);
 
         using ComScope<IUnknown> unknown = receivedIDataObject.Query<IUnknown>();
