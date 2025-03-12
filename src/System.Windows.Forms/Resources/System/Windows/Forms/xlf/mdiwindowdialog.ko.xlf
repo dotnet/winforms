@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Select Window</source>
-        <target state="translated">창 선택</target>
+        <target state="new">Select Window</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">취소</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="translated">확인</target>
+        <target state="new">OK</target>
         <note />
       </trans-unit>
     </body>
