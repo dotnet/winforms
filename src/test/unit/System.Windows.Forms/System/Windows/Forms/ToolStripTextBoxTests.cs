@@ -737,7 +737,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         _toolStripTextBox.Text = "Hello";
         int result = _toolStripTextBox.GetCharIndexFromPosition(new Point(1, 1));
-        result.Should().BeGreaterOrEqualTo(0);
+        result.Should().BeGreaterThanOrEqualTo(0);
     }
 
     [WinFormsFact]
@@ -789,7 +789,7 @@ public partial class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.SelectionStart = _toolStripTextBox.Text.Length;
         _toolStripTextBox.ScrollToCaret();
         Point position = _toolStripTextBox.GetPositionFromCharIndex(_toolStripTextBox.SelectionStart);
-        position.Y.Should().BeLessOrEqualTo(_toolStripTextBox.Height);
+        position.Y.Should().BeLessThanOrEqualTo(_toolStripTextBox.Height);
     }
 
     [WinFormsFact]

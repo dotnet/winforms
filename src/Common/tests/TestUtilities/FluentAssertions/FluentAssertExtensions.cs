@@ -106,7 +106,7 @@ public static class FluentAssertExtensions
     /// </summary>
     public static AndConstraint<ObjectAssertions> BeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        AssertionChain.GetOrCreate()
             .ForCondition(assertions.Subject is Rectangle rect && rect.IsEmpty)
             .BecauseOf(because, becauseArgs)
             .FailWith($"Expected {{context:rectangle}} to be empty{{reason}}, but found {assertions.Subject}.");
@@ -119,7 +119,7 @@ public static class FluentAssertExtensions
     /// </summary>
     public static AndConstraint<ObjectAssertions> NotBeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        AssertionChain.GetOrCreate()
             .ForCondition(assertions.Subject is Rectangle rect && !rect.IsEmpty)
             .BecauseOf(because, becauseArgs)
             .FailWith($"Expected {{context:rectangle}} not to be empty{{reason}}, but found {assertions.Subject}.");

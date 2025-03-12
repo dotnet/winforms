@@ -60,8 +60,8 @@ public class DataGridViewColumnTypePickerTests : IDisposable
         var accessor = _picker.TestAccessor().Dynamic;
         accessor.SetBoundsCore(0, 0, 50, 50, BoundsSpecified.All);
 
-        _picker.Width.Should().BeGreaterOrEqualTo(100);
-        _picker.Height.Should().BeGreaterOrEqualTo(90);
+        _picker.Width.Should().BeGreaterThanOrEqualTo(100);
+        _picker.Height.Should().BeGreaterThanOrEqualTo(90);
     }
 
     [Fact]
