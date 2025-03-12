@@ -76,7 +76,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
 
         public Graphics TestGraphics => _graphics;
 
-        public new Point PointToScreen(Point point) => new Point(point.X + 8, point.Y + 31);
+        public new Point PointToScreen(Point point) => new(point.X + 8, point.Y + 31);
     }
 
     [WinFormsFact]
@@ -137,9 +137,6 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     [WinFormsFact]
     public void AdornerWindowToScreen_ReturnsCorrectScreenCoordinates() => RunInStaThread(() =>
     {
-        using Bitmap image = new(100, 100);
-        using TestControl control = new TestControl(Graphics.FromImage(image));
-
         Point screenPoint = _service.AdornerWindowToScreen();
 
         Point expectedScreenPoint = new(8, 31);
@@ -149,8 +146,8 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     [WinFormsFact]
     public void ControlToAdornerWindow_TranslatesPointCorrectly() => RunInStaThread(() =>
     {
-        Control parentControl = new Control { Left = 10, Top = 20 };
-        Control control = new Control { Parent = parentControl, Left = 30, Top = 40 };
+        Control parentControl = new() { Left = 10, Top = 20 };
+        Control control = new() { Parent = parentControl, Left = 30, Top = 40 };
 
         Point adornerWindowPoint = _service.ControlToAdornerWindow(control);
 
@@ -161,7 +158,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     [WinFormsFact]
     public void ProcessPaintMessage_InvokesInvalidateOnAdornerWindow()
     {
-        Rectangle paintRect = new Rectangle(10, 10, 50, 50);
+        Rectangle paintRect = new(10, 10, 50, 50);
 
         Action action = () => _service.ProcessPaintMessage(paintRect);
         action.Should().NotThrow();
