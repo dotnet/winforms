@@ -16,16 +16,6 @@ public class DataSourceListEditorTests
         _dataSourceListEditor = new();
     }
 
-    private class TestDesignBindingPicker : DesignBindingPicker
-    {
-        public Func<ITypeDescriptorContext?, IServiceProvider, bool, bool, bool, object?, string, DesignBinding, DesignBinding?>? PickFunc { get; set; }
-
-        public DesignBinding? PickWrapper(ITypeDescriptorContext? context, IServiceProvider provider, bool showDataSources, bool showDataMembers, bool selectListMembers, object? rootDataSource, string rootDataMember, DesignBinding initialSelectedItem)
-        {
-            return PickFunc?.Invoke(context, provider, showDataSources, showDataMembers, selectListMembers, rootDataSource, rootDataMember, initialSelectedItem);
-        }
-    }
-
     [Fact]
     public void IsDropDownResizable_ReturnsTrue() =>
         _dataSourceListEditor.IsDropDownResizable.Should().BeTrue();
@@ -77,4 +67,14 @@ public class DataSourceListEditorTests
     [Fact]
     public void GetEditStyle_ReturnsDropDown() =>
      _dataSourceListEditor.GetEditStyle(null).Should().Be(UITypeEditorEditStyle.DropDown);
+
+    private class TestDesignBindingPicker : DesignBindingPicker
+    {
+        public Func<ITypeDescriptorContext?, IServiceProvider, bool, bool, bool, object?, string, DesignBinding, DesignBinding?>? PickFunc { get; set; }
+
+        public DesignBinding? PickWrapper(ITypeDescriptorContext? context, IServiceProvider provider, bool showDataSources, bool showDataMembers, bool selectListMembers, object? rootDataSource, string rootDataMember, DesignBinding initialSelectedItem)
+        {
+            return PickFunc?.Invoke(context, provider, showDataSources, showDataMembers, selectListMembers, rootDataSource, rootDataMember, initialSelectedItem);
+        }
+    }
 }
