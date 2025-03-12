@@ -91,7 +91,7 @@ public class StatusCommandUITests
     }
 
     [Fact]
-    public void SetStatusInformation_WithComponentWithoutBoundsAndLocation_ShouldInvokeWithEmptyRectangle()
+    public void SetStatusInformation_WithComponentHavingLocationButNoBounds_ShouldInvokeWithEmptyRectangle()
     {
         using Component component = new();
         Point location = new(50, 60);
