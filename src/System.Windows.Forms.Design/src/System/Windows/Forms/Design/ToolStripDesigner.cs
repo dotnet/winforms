@@ -138,13 +138,13 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
+    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy operations.
     /// </summary>
     public override ICollection AssociatedComponents
     {
         get
         {
-            ArrayList items = new ArrayList();
+            ArrayList items = [];
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is not DesignerToolStripControlHost)
@@ -299,7 +299,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown
+    ///  Since the Item glyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown
     ///  while the item Drag-Drop operation.
     /// </summary>
     public int IndexOfItemUnderMouseToDrag
@@ -315,12 +315,9 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited))
-            {
-                return InheritanceAttribute.InheritedReadOnly;
-            }
-
-            return base.InheritanceAttribute;
+            return base.InheritanceAttribute == InheritanceAttribute.Inherited
+                ? InheritanceAttribute.InheritedReadOnly
+                : base.InheritanceAttribute;
         }
     }
 
@@ -337,10 +334,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  Checks if there is a selection of the ToolStrip or one of it's items.
     /// </summary>
-    private bool IsToolStripOrItemSelected
-    {
-        get => _toolStripSelected;
-    }
+    private bool IsToolStripOrItemSelected => _toolStripSelected;
 
     /// <summary>
     ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting
@@ -352,7 +346,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            _items ??= new ArrayList();
+            _items ??= [];
 
             return _items;
         }
@@ -375,14 +369,7 @@ internal class ToolStripDesigner : ControlDesigner
         get
         {
             Rectangle rect = default;
-            if (ToolStrip.OverflowButton.Visible)
-            {
-                return ToolStrip.OverflowButton.Bounds;
-            }
-            else
-            {
-                return rect;
-            }
+            return ToolStrip.OverflowButton.Visible ? ToolStrip.OverflowButton.Bounds : rect;
         }
     }
 
@@ -391,18 +378,9 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     internal ISelectionService SelectionService => _selectionService ??= GetService<ISelectionService>();
 
-    public bool SupportEditing
-    {
-        get
-        {
-            if (GetService(typeof(DesignerOptionService)) is WindowsFormsDesignerOptionService dos)
-            {
-                return dos.CompatibilityOptions.EnableInSituEditing;
-            }
-
-            return true;
-        }
-    }
+    public bool SupportEditing =>
+        GetService<DesignerOptionService>() is not WindowsFormsDesignerOptionService dos ||
+        dos.CompatibilityOptions.EnableInSituEditing;
 
     /// <summary>
     ///  Handy way of getting our ToolStrip
@@ -1156,8 +1134,8 @@ internal class ToolStripDesigner : ControlDesigner
 
             if (_undoEngine is not null)
             {
-                _undoEngine.Undoing -= new EventHandler(OnUndoing);
-                _undoEngine.Undone -= new EventHandler(OnUndone);
+                _undoEngine.Undoing -= OnUndoing;
+                _undoEngine.Undone -= OnUndone;
             }
 
             if (_componentChangeService is not null)
@@ -1382,7 +1360,7 @@ internal class ToolStripDesigner : ControlDesigner
     public override GlyphCollection GetGlyphs(GlyphSelectionType selType)
     {
         // get the default glyphs for this component.
-        GlyphCollection glyphs = new();
+        GlyphCollection glyphs = [];
         ICollection selComponents = SelectionService.GetSelectedComponents();
         foreach (object comp in selComponents)
         {
@@ -2125,7 +2103,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  In Order to Draw the Selection Glyphs we need to reforce painting on the AdornerWindow. This method forces the repaint
+    ///  In Order to Draw the Selection Glyphs we need to force repainting on the AdornerWindow.
+    ///  This method forces the repaint.
     /// </summary>
     private void OnOverFlowDropDownPaint(object sender, PaintEventArgs e)
     {
@@ -2466,10 +2445,6 @@ internal class ToolStripDesigner : ControlDesigner
                         FireSyncSelection = originalSyncSelection;
                     }
                 }
-
-                // Required for the refresh of glyphs.
-                _ = SelectionService.PrimarySelection as ToolStripItem ??
-                    KeyboardHandlingService?.SelectedDesignerControl as ToolStripItem;
 
                 _toolStripSelected = true;
             }
