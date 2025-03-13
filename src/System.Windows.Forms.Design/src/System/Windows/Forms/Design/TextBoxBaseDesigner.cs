@@ -8,8 +8,8 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Provides a designer that can design components
-/// that extend TextBoxBase.
+///  Provides a designer that can design components
+///  that extend TextBoxBase.
 /// </summary>
 internal class TextBoxBaseDesigner : ControlDesigner
 {
@@ -19,8 +19,8 @@ internal class TextBoxBaseDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// Adds a baseline SnapLine to the list of SnapLines related
-    /// to this control.
+    ///  Adds a baseline SnapLine to the list of SnapLines related
+    ///  to this control.
     /// </summary>
     public override IList SnapLines
     {
@@ -83,7 +83,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// We override this so we can clear the text field set by controldesigner.
+    ///  We override this so we can clear the text field set by controldesigner.
     /// </summary>
     /// <param name="defaultValues">The default values.</param>
     public override void InitializeNewComponent(IDictionary? defaultValues)
@@ -117,9 +117,9 @@ internal class TextBoxBaseDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// Retrieves a set of rules concerning the movement capabilities of a component.
-    /// This should be one or more flags from the SelectionRules class. If no designer
-    /// provides rules for a component, the component will not get any UI services.
+    ///  Retrieves a set of rules concerning the movement capabilities of a component.
+    ///  This should be one or more flags from the SelectionRules class. If no designer
+    ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules
     {

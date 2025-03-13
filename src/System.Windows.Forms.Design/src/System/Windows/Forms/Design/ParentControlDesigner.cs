@@ -908,9 +908,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     }
 
     /// <summary>
-    /// Computes the next default location for a control. It tries to find a spot
-    /// where no other controls are being obscured and the new control has 2 corners
-    /// that don't have other controls under them.
+    ///  Computes the next default location for a control. It tries to find a spot
+    ///  where no other controls are being obscured and the new control has 2 corners
+    ///  that don't have other controls under them.
     /// </summary>
     private Rectangle GetControlStackLocation(Rectangle centeredLocation)
     {
@@ -1066,9 +1066,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     }
 
     /// <summary>
-    /// This method return the ParentControlDesigner of the parenting control,
-    /// it is used for inheriting the grid size, snap to grid, and draw grid
-    /// of parenting controls.
+    ///  This method return the ParentControlDesigner of the parenting control,
+    ///  it is used for inheriting the grid size, snap to grid, and draw grid
+    ///  of parenting controls.
     /// </summary>
     private ParentControlDesigner GetParentControlDesignerOfParent()
     {
@@ -2301,8 +2301,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
     /// <internalonly/>
     /// <summary>
-    /// Retrieves the control view instance for the designer that
-    /// is hosting the drag.
+    ///  Retrieves the control view instance for the designer that
+    ///  is hosting the drag.
     /// </summary>
     bool IOleDragClient.AddComponent(IComponent component, string name, bool firstAdd)
     {
@@ -2453,8 +2453,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
     /// <internalonly/>
     /// <summary>
-    /// Checks if the client is read only. That is, if components can
-    /// be added or removed from the designer.
+    ///  Checks if the client is read only. That is, if components can
+    ///  be added or removed from the designer.
     /// </summary>
     bool IOleDragClient.CanModifyComponents
     {
@@ -2466,7 +2466,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
     /// <internalonly/>
     /// <summary>
-    /// Checks if it is valid to drop this type of a component on this client.
+    ///  Checks if it is valid to drop this type of a component on this client.
     /// </summary>
     bool IOleDragClient.IsDropOk(IComponent component)
     {
@@ -2525,8 +2525,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
     /// <internalonly/>
     /// <summary>
-    /// Retrieves the control view instance for the designer that
-    /// is hosting the drag.
+    ///  Retrieves the control view instance for the designer that
+    ///  is hosting the drag.
     /// </summary>
     Control IOleDragClient.GetDesignerControl()
     {
@@ -2535,8 +2535,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
     /// <internalonly/>
     /// <summary>
-    /// Retrieves the control view instance for the given component.
-    /// For Win32 designer, this will often be the component itself.
+    ///  Retrieves the control view instance for the given component.
+    ///  For Win32 designer, this will often be the component itself.
     /// </summary>
     Control IOleDragClient.GetControlForComponent(object component)
     {

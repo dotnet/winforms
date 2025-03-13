@@ -8,8 +8,8 @@ internal partial class CommandSet
     protected partial class CommandSetItem
     {
         /// <summary>
-        /// This class saves the state for a given command. It keeps track of the results
-        /// of the last status handler invocation and what "selection version" that happened on.
+        ///  This class saves the state for a given command. It keeps track of the results
+        ///  of the last status handler invocation and what "selection version" that happened on.
         /// </summary>
         private class StatusState
         {
@@ -31,13 +31,10 @@ internal partial class CommandSet
             // We use a simple ref count to make sure the CommandSetItem can be properly removed.
             internal int _refCount;
 
-            /// <summary>
-            /// Just what it says...
-            /// </summary>
             public int SelectionVersion { get; private set; }
 
             /// <summary>
-            /// Pushes the state stored in this object into the given command item.
+            ///  Pushes the state stored in this object into the given command item.
             /// </summary>
             internal void ApplyState(CommandSetItem item)
             {
@@ -50,8 +47,8 @@ internal partial class CommandSet
             }
 
             /// <summary>
-            /// Updates this status object with the state from the given item,
-            /// and saves the selection version.
+            ///  Updates this status object with the state from the given item,
+            ///  and saves the selection version.
             /// </summary>
             internal void SaveState(CommandSetItem item, int version)
             {

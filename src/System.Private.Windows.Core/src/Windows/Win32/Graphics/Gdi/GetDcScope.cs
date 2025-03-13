@@ -47,10 +47,10 @@ internal readonly ref struct GetDcScope
     ///  Creates a DC scope for the primary monitor (not the entire desktop).
     /// </summary>
     /// <remarks>
-    ///   <para>
-    ///    <see cref="PInvokeCore.CreateDCW(PCWSTR, PCWSTR, PCWSTR, DEVMODEW*)" /> is the
-    ///    API to get the DC for the entire desktop.
-    ///   </para>
+    ///  <para>
+    ///   <see cref="PInvokeCore.CreateDCW(PCWSTR, PCWSTR, PCWSTR, DEVMODEW*)" /> is the
+    ///   API to get the DC for the entire desktop.
+    ///  </para>
     /// </remarks>
     public static GetDcScope ScreenDC => new(HWND.Null);
 

@@ -18,8 +18,8 @@ internal static class WMExtensions
         => message.IsBetween(PInvokeCore.WM_KEYFIRST, PInvokeCore.WM_KEYLAST);
 
     /// <summary>
-    /// Returns true if the message is between <paramref name="firstMessage"/> and
-    /// <paramref name="secondMessage"/>, inclusive.
+    ///  Returns true if the message is between <paramref name="firstMessage"/> and
+    ///  <paramref name="secondMessage"/>, inclusive.
     /// </summary>
     public static bool IsBetween(
         this ref Message message,
@@ -28,8 +28,8 @@ internal static class WMExtensions
         => message.Msg >= (int)firstMessage && message.Msg <= (int)secondMessage;
 
     /// <summary>
-    /// Returns true if the message is between <paramref name="firstMessage"/> and
-    /// <paramref name="secondMessage"/>, inclusive.
+    ///  Returns true if the message is between <paramref name="firstMessage"/> and
+    ///  <paramref name="secondMessage"/>, inclusive.
     /// </summary>
     public static bool IsBetween(
         this ref MSG message,

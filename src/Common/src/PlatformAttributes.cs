@@ -4,7 +4,7 @@
 namespace System.Runtime.Versioning;
 
 /// <summary>
-/// Base type for all platform-specific API attributes.
+///  Base type for all platform-specific API attributes.
 /// </summary>
 #if SYSTEM_PRIVATE_CORELIB
 public
@@ -22,7 +22,7 @@ internal
 }
 
 /// <summary>
-/// Records the platform that the project targeted.
+///  Records the platform that the project targeted.
 /// </summary>
 [AttributeUsage(AttributeTargets.Assembly,
                 AllowMultiple = false, Inherited = false)]
@@ -39,8 +39,8 @@ internal
 }
 
 /// <summary>
-/// Records the operating system (and minimum version) that supports an API. Multiple attributes can be
-/// applied to indicate support on multiple operating systems.
+///  Records the operating system (and minimum version) that supports an API. Multiple attributes can be
+///  applied to indicate support on multiple operating systems.
 /// </summary>
 /// <remarks>
 ///  <para>

@@ -81,6 +81,6 @@ public sealed class TempFile : IDisposable
     private static string GetFilePath(string? memberName, int lineNumber)
     {
         string file = $"{IO.Path.GetRandomFileName()}_{memberName}_{lineNumber}";
-        return IO.Path.Combine(IO.Path.GetTempPath(), file);
+        return IO.Path.Join(IO.Path.GetTempPath(), file);
     }
 }

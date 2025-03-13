@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

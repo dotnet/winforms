@@ -13,7 +13,7 @@ public sealed class FrameDimension
     private readonly Guid _guid;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='FrameDimension'/> class with the specified GUID.
+    ///  Initializes a new instance of the <see cref='FrameDimension'/> class with the specified GUID.
     /// </summary>
     public FrameDimension(Guid guid)
     {
@@ -21,7 +21,7 @@ public sealed class FrameDimension
     }
 
     /// <summary>
-    /// Specifies a global unique identifier (GUID) that represents this <see cref='FrameDimension'/>.
+    ///  Specifies a global unique identifier (GUID) that represents this <see cref='FrameDimension'/>.
     /// </summary>
     public Guid Guid
     {
@@ -29,7 +29,7 @@ public sealed class FrameDimension
     }
 
     /// <summary>
-    /// The time dimension.
+    ///  The time dimension.
     /// </summary>
     public static FrameDimension Time
     {
@@ -37,7 +37,7 @@ public sealed class FrameDimension
     }
 
     /// <summary>
-    /// The resolution dimension.
+    ///  The resolution dimension.
     /// </summary>
     public static FrameDimension Resolution
     {
@@ -45,13 +45,13 @@ public sealed class FrameDimension
     }
 
     /// <summary>
-    /// The page dimension.
+    ///  The page dimension.
     /// </summary>
     public static FrameDimension Page => s_page;
 
     /// <summary>
-    /// Returns a value indicating whether the specified object is an <see cref='FrameDimension'/> equivalent to
-    /// this <see cref='FrameDimension'/>.
+    ///  Returns a value indicating whether the specified object is an <see cref='FrameDimension'/> equivalent to
+    ///  this <see cref='FrameDimension'/>.
     /// </summary>
     public override bool Equals([NotNullWhen(true)] object? o) => o is FrameDimension format && _guid == format._guid;
 

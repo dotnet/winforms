@@ -16,20 +16,20 @@ namespace System.Windows.Forms.Design;
 internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
 {
     /// <summary>
-    /// We implement this for the abstract method on CodeDomSerializer.
+    ///  We implement this for the abstract method on CodeDomSerializer.
     /// </summary>
     public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
         => GetBaseSerializer(manager).Deserialize(manager, codeObject);
 
     /// <summary>
-    /// This is a small helper method that returns the serializer for base Class
+    ///  This is a small helper method that returns the serializer for base Class
     /// </summary>
     private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
         => manager.GetSerializer<CodeDomSerializer>(typeof(Component))!;
 
     /// <summary>
-    /// We implement this for the abstract method on CodeDomSerializer. This method
-    /// takes an object graph, and serializes the object into CodeDom elements.
+    ///  We implement this for the abstract method on CodeDomSerializer. This method
+    ///  takes an object graph, and serializes the object into CodeDom elements.
     /// </summary>
     public override object? Serialize(IDesignerSerializationManager manager, object value)
     {

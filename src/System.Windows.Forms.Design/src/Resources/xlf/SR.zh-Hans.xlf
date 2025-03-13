@@ -688,7 +688,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewColumnCollectionTransaction">
         <source>DataGridView ColumnCollection Edit</source>
-        <target state="new">DataGridView ColumnCollection Edit</target>
+        <target state="translated">DataGridView ColumnCollection 编辑</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
@@ -1156,8 +1156,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
-        <source>Horizontal Splitter Orientation.</source>
-        <target state="translated">水平拆分器方向。</target>
+        <source>Horizontal Splitter Orientation</source>
+        <target state="new">Horizontal Splitter Orientation</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">

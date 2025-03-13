@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <Nullable>enable</Nullable>
+    <OutputType>WinExe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- These are needed to suppress the localization step picked up from Arcade targets -->
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
+  </PropertyGroup>
+
+  <!-- <PropertyGroup>
+    <PublishTrimmed>true</PublishTrimmed>
+    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+    <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn> 
+
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
+
+    <_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -x desc.xml</_ExtraTrimmerArgs>
+  </PropertyGroup> -->
+
+  <!-- These normally come from $(UseWindowsForms) when $(ImplicitUsings) is enabled -->
+  <ItemGroup>
+    <Using Include="System.Drawing" />
+    <Using Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

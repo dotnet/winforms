@@ -21,10 +21,8 @@ internal class ListViewDesigner : ControlDesigner
     private bool _inShowErrorDialog;
 
     /// <summary>
-    ///  <para>
-    ///  Retrieves a list of associated components.
-    ///  These are components that should be included in a cut or copy operation on this component.
-    ///  </para>
+    ///  Retrieves a list of associated components. These are components that should be included
+    ///  in a cut or copy operation on this component.
     /// </summary>
     public override ICollection AssociatedComponents
     {

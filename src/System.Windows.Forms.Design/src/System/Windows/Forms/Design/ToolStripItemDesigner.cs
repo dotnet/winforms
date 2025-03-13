@@ -1073,7 +1073,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripItemAutoSize to be the default autosize
+    ///  Resets the ToolStripItemAutoSize to be the default autosize
     /// </summary>
     private void ResetAutoSize() => ShadowProperties[nameof(AutoSize)] = false;
 
@@ -1083,7 +1083,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties[nameof(AutoSize)];
 
     /// <summary>
-    /// Resets the ToolStrip Visible to be the default value
+    ///  Resets the ToolStrip Visible to be the default value
     /// </summary>
     private void ResetVisible() => Visible = true;
 
@@ -1186,17 +1186,17 @@ internal class ToolStripItemDesigner : ComponentDesigner
     private bool ShouldSerializeVisible() => !Visible;
 
     /// <summary>
-    /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+    ///  Since we're shadowing autosize, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains(nameof(AutoSize)));
 
     /// <summary>
-    /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+    ///  Since we're shadowing autosize, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeAccessibleName() => (ShadowProperties[nameof(AccessibleName)] is not null);
 
     /// <summary>
-    /// Since we're Overflow Size, we get called here to determine whether or not to serialize
+    ///  Since we're Overflow Size, we get called here to determine whether or not to serialize
     /// </summary>
     private bool ShouldSerializeOverflow() => (ShadowProperties[nameof(Overflow)] is not null);
 

@@ -37,10 +37,10 @@ internal interface IDragEvent
     ///  Gets or sets the drop description text such as "Move to %1".
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
-    ///  if used by specifying %1 in <see cref="Message"/>.
-    /// </para>
+    ///  <para>
+    ///   UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
+    ///   if used by specifying %1 in <see cref="Message"/>.
+    ///  </para>
     /// </remarks>
     string? Message { get; set; }
 
@@ -48,10 +48,10 @@ internal interface IDragEvent
     ///  Gets or sets the drop description text such as "Documents" when %1 is specified in <see cref="Message"/>.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///  UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
-    ///  if used by specifying %1 in <see cref="Message"/>.
-    /// </para>
+    ///  <para>
+    ///   UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
+    ///   if used by specifying %1 in <see cref="Message"/>.
+    ///  </para>
     /// </remarks>
     string? MessageReplacementToken { get; set; }
 }

@@ -22,7 +22,7 @@ internal class DataGridViewComponentPropertyGridSite : ISite
     public IComponent Component { get; }
 
     /// <summary>
-    /// When implemented by a class, gets the container associated with the <see cref="ISite"/>.
+    ///  When implemented by a class, gets the container associated with the <see cref="ISite"/>.
     /// </summary>
     public IContainer? Container => null;
 

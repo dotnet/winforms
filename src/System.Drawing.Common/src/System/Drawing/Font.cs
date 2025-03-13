@@ -9,14 +9,14 @@ using System.Drawing.Interop;
 namespace System.Drawing;
 
 /// <summary>
-/// Defines a particular format for text, including font face, size, and style attributes.
+///  Defines a particular format for text, including font face, size, and style attributes.
 /// </summary>
 [Editor($"System.Drawing.Design.FontEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [TypeConverter(typeof(FontConverter))]
 [Serializable]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
+public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable, IPointer<GpFont>
 {
     [NonSerialized]
     private GpFont* _nativeFont;
@@ -29,50 +29,51 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     private string _systemFontName = string.Empty;
     private string? _originalFontName;
 
-    // Return value is in Unit (the unit the font was created in)
+    nint IPointer<GpFont>.Pointer => (nint)_nativeFont;
+
     /// <summary>
-    /// Gets the size of this <see cref='Font'/>.
+    ///  Gets the em-size of this <see cref="Font"/> measured in the units specified by the <see cref="Unit"/> property.
     /// </summary>
     public float Size => _fontSize;
 
     /// <summary>
-    /// Gets style information for this <see cref='Font'/>.
+    ///  Gets style information for this <see cref='Font'/>.
     /// </summary>
     [Browsable(false)]
     public FontStyle Style => _fontStyle;
 
     /// <summary>
-    /// Gets a value indicating whether this <see cref='Font'/> is bold.
+    ///  Gets a value indicating whether this <see cref='Font'/> is bold.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Bold => (Style & FontStyle.Bold) != 0;
 
     /// <summary>
-    /// Gets a value indicating whether this <see cref='Font'/> is Italic.
+    ///  Gets a value indicating whether this <see cref='Font'/> is Italic.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Italic => (Style & FontStyle.Italic) != 0;
 
     /// <summary>
-    /// Gets a value indicating whether this <see cref='Font'/> is strikeout (has a line through it).
+    ///  Gets a value indicating whether this <see cref='Font'/> is strikeout (has a line through it).
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Strikeout => (Style & FontStyle.Strikeout) != 0;
 
     /// <summary>
-    /// Gets a value indicating whether this <see cref='Font'/> is underlined.
+    ///  Gets a value indicating whether this <see cref='Font'/> is underlined.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Underline => (Style & FontStyle.Underline) != 0;
 
     /// <summary>
-    /// Gets the <see cref='Drawing.FontFamily'/> of this <see cref='Font'/>.
+    ///  Gets the <see cref='Drawing.FontFamily'/> of this <see cref='Font'/>.
     /// </summary>
     [Browsable(false)]
     public FontFamily FontFamily => _fontFamily;
 
     /// <summary>
-    /// Gets the face name of this <see cref='Font'/> .
+    ///  Gets the face name of this <see cref='Font'/> .
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [Editor($"System.Drawing.Design.FontNameEditor, {AssemblyRef.SystemDrawingDesign}",
@@ -81,51 +82,51 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public string Name => FontFamily.Name;
 
     /// <summary>
-    /// Gets the unit of measure for this <see cref='Font'/>.
+    ///  Gets the unit of measure for this <see cref='Font'/>.
     /// </summary>
     [TypeConverter(typeof(FontConverter.FontUnitConverter))]
     public GraphicsUnit Unit => _fontUnit;
 
     /// <summary>
-    /// Returns the GDI char set for this instance of a font. This will only
-    /// be valid if this font was created from a classic GDI font definition,
-    /// like a LOGFONT or HFONT, or it was passed into the constructor.
+    ///  Returns the GDI char set for this instance of a font. This will only
+    ///  be valid if this font was created from a classic GDI font definition,
+    ///  like a LOGFONT or HFONT, or it was passed into the constructor.
     ///
-    /// This is here for compatibility with native Win32 intrinsic controls
-    /// on non-Unicode platforms.
+    ///  This is here for compatibility with native Win32 intrinsic controls
+    ///  on non-Unicode platforms.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public byte GdiCharSet => _gdiCharSet;
 
     /// <summary>
-    /// Determines if this font was created to represent a GDI vertical font. This will only be valid if this font
-    /// was created from a classic GDIfont definition, like a LOGFONT or HFONT, or it was passed into the constructor.
+    ///  Determines if this font was created to represent a GDI vertical font. This will only be valid if this font
+    ///  was created from a classic GDIfont definition, like a LOGFONT or HFONT, or it was passed into the constructor.
     ///
-    /// This is here for compatibility with native Win32 intrinsic controls on non-Unicode platforms.
+    ///  This is here for compatibility with native Win32 intrinsic controls on non-Unicode platforms.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GdiVerticalFont => _gdiVerticalFont;
 
     /// <summary>
-    /// This property is required by the framework and not intended to be used directly.
+    ///  This property is required by the framework and not intended to be used directly.
     /// </summary>
     [Browsable(false)]
     public string? OriginalFontName => _originalFontName;
 
     /// <summary>
-    /// Gets the name of this <see cref='Font'/>.
+    ///  Gets the name of this <see cref='Font'/>.
     /// </summary>
     [Browsable(false)]
     public string SystemFontName => _systemFontName;
 
     /// <summary>
-    /// Returns true if this <see cref='Font'/> is a SystemFont.
+    ///  Returns true if this <see cref='Font'/> is a SystemFont.
     /// </summary>
     [Browsable(false)]
     public bool IsSystemFont => !string.IsNullOrEmpty(_systemFontName);
 
     /// <summary>
-    /// Gets the height of this <see cref='Font'/>.
+    ///  Gets the height of this <see cref='Font'/>.
     /// </summary>
     [Browsable(false)]
     public int Height => (int)Math.Ceiling(GetHeight());
@@ -136,7 +137,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     internal GpFont* NativeFont => _nativeFont;
 
     /// <summary>
-    /// Cleans up Windows resources for this <see cref='Font'/>.
+    ///  Cleans up Windows resources for this <see cref='Font'/>.
     /// </summary>
     ~Font() => Dispose(false);
 
@@ -162,7 +163,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     private static bool IsVerticalName(string familyName) => familyName?.Length > 0 && familyName[0] == '@';
 
     /// <summary>
-    /// Cleans up Windows resources for this <see cref='Font'/>.
+    ///  Cleans up Windows resources for this <see cref='Font'/>.
     /// </summary>
     public void Dispose()
     {
@@ -221,8 +222,8 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Returns a value indicating whether the specified object is a <see cref='Font'/> equivalent to this
-    /// <see cref='Font'/>.
+    ///  Returns a value indicating whether the specified object is a <see cref='Font'/> equivalent to this
+    ///  <see cref='Font'/>.
     /// </summary>
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
@@ -357,8 +358,8 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class from the specified existing <see cref='Font'/>
-    /// and <see cref='FontStyle'/>.
+    ///  Initializes a new instance of the <see cref='Font'/> class from the specified existing <see cref='Font'/>
+    ///  and <see cref='FontStyle'/>.
     /// </summary>
     public Font(Font prototype, FontStyle newStyle)
     {
@@ -368,7 +369,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize, FontStyle style, GraphicsUnit unit)
     {
@@ -376,7 +377,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet)
     {
@@ -384,7 +385,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
     {
@@ -392,7 +393,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet)
     {
@@ -400,7 +401,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
     {
@@ -413,7 +414,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize, FontStyle style)
     {
@@ -421,7 +422,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize, GraphicsUnit unit)
     {
@@ -429,7 +430,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(FontFamily family, float emSize)
     {
@@ -437,7 +438,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize, FontStyle style, GraphicsUnit unit)
     {
@@ -445,7 +446,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize, FontStyle style)
     {
@@ -453,7 +454,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize, GraphicsUnit unit)
     {
@@ -461,7 +462,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
+    ///  Initializes a new instance of the <see cref='Font'/> class with the specified attributes.
     /// </summary>
     public Font(string familyName, float emSize)
     {
@@ -469,7 +470,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Constructor to initialize fields from an existing native GDI+ object reference. Used by ToLogFont.
+    ///  Constructor to initialize fields from an existing native GDI+ object reference. Used by ToLogFont.
     /// </summary>
     private Font(GpFont* nativeFont, byte gdiCharSet, bool gdiVerticalFont)
     {
@@ -543,7 +544,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Creates a <see cref='Font'/> from the specified Windows handle.
+    ///  Creates a <see cref='Font'/> from the specified Windows handle.
     /// </summary>
     public static Font FromHfont(IntPtr hfont)
     {
@@ -554,7 +555,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Creates a <see cref="Font"/> from the given LOGFONT using the screen device context.
+    ///  Creates a <see cref="Font"/> from the given LOGFONT using the screen device context.
     /// </summary>
     /// <param name="lf">A boxed LOGFONT.</param>
     /// <returns>The newly created <see cref="Font"/>.</returns>
@@ -647,7 +648,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Creates a <see cref="Font"/> from the specified handle to a device context (HDC).
+    ///  Creates a <see cref="Font"/> from the specified handle to a device context (HDC).
     /// </summary>
     /// <returns>The newly created <see cref="Font"/>.</returns>
     public static Font FromHdc(IntPtr hdc)
@@ -727,7 +728,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     }
 
     /// <summary>
-    /// Gets the size, in points, of this <see cref='Font'/>.
+    ///  Gets the size, in points, of this <see cref='Font'/>.
     /// </summary>
     [Browsable(false)]
     public float SizeInPoints

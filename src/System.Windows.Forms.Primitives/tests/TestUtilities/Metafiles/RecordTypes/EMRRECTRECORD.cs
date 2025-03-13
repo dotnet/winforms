@@ -11,15 +11,15 @@ namespace System.Windows.Forms.Metafiles;
 ///  Record that just has a single <see cref="RECT"/> value.
 /// </summary>
 /// <devdoc>
-///   Not an actual Win32 define, encapsulates:
+///  Not an actual Win32 define, encapsulates:
 ///
-///    - EMRFILLPATH
-///    - EMRSTROKEANDFILLPATH
-///    - EMRSTROKEPATH
-///    - EMREXCLUDECLIPRECT
-///    - EMRINTERSECTCLIPRECT
-///    - EMRELLIPSE
-///    - EMRRECTANGLE
+///   - EMRFILLPATH
+///   - EMRSTROKEANDFILLPATH
+///   - EMRSTROKEPATH
+///   - EMREXCLUDECLIPRECT
+///   - EMRINTERSECTCLIPRECT
+///   - EMRELLIPSE
+///   - EMRRECTANGLE
 /// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRRECTRECORD

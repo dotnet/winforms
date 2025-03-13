@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overridden to reaction our editor form instead of the standard collection editor form.
+        ///  Overridden to reaction our editor form instead of the standard collection editor form.
         /// </summary>
         /// <returns>An instance of a ToolStripItemEditorForm</returns>
         protected override CollectionForm CreateCollectionForm() => new ToolStripItemEditorForm(this);
