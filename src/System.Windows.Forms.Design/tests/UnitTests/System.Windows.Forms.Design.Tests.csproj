@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Design.Facade\$(Configuration)\$(SourceTargetFramework)\System.Design.dll" />
+    <Reference Include="$(ArtifactsBinDir)\System.Design.Facade\$(Configuration)\$(SourceTargetFramework)\System.Design.dll" />
   </ItemGroup>
 
   <ItemGroup>

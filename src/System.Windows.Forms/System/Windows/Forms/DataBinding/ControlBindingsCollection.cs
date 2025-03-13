@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 ///  Represents the collection of data bindings for a control.
 /// </summary>
 [DefaultEvent(nameof(CollectionChanged))]
-[Editor($"System.Drawing.Design.UITypeEditor, {(Assemblies.SystemDrawing)}", typeof(UITypeEditor))]
+[Editor($"System.Drawing.Design.UITypeEditor, {Assemblies.SystemDrawing}", typeof(UITypeEditor))]
 [TypeConverter($"System.Windows.Forms.Design.ControlBindingsConverter, {Assemblies.SystemDesign}")]
 public class ControlBindingsCollection : BindingsCollection
 {

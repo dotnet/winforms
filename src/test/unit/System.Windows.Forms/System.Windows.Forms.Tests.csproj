@@ -31,6 +31,8 @@
     <ProjectReference Include="..\..\..\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <!-- This facade assembly is required to resolve UITypeEditor type from NETFX that is referenced in EditorAttributes -->
+    <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
     <ProjectReference Include="..\..\integration\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
     <ProjectReference Include="..\..\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
@@ -38,7 +40,7 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
+    <Reference Include="$(ArtifactsBinDir)\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
   </ItemGroup>
 
   <ItemGroup>
