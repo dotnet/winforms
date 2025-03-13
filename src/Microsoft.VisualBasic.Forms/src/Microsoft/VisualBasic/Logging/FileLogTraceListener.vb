@@ -5,7 +5,6 @@ Imports System.ComponentModel
 Imports System.Globalization
 Imports System.IO
 Imports System.Text
-Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
