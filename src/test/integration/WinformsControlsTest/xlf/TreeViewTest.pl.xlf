@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="$this.Text">
         <source>TreeView</source>
-        <target state="new">TreeView</target>
+        <target state="translated">Widok drzewa</target>
         <note />
       </trans-unit>
     </body>

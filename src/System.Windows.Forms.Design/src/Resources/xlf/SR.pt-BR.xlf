@@ -1157,7 +1157,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation</source>
-        <target state="new">Horizontal Splitter Orientation</target>
+        <target state="translated">Orientação Horizontal do Separador</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">
