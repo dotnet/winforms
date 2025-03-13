@@ -2584,12 +2584,10 @@ public partial class TreeView : Control
 
             BeginInvoke((MethodInvoker)(() =>
             {
-                // Use BeginInvoke to queue the operation for later execution:
-                // 1. Deferred Execution: Ensures that the logic runs after the TreeView control's edit control is fully initialized.
-                // 2. Thread Switching: Windows Forms controls can only be accessed on the thread they were created on.
-                // BeginInvoke ensures this code runs on the UI thread to avoid cross-thread access exceptions.
-                //
-                // This code adjusts the position and size of the edit control to accommodate the DPI scaling for high-resolution displays.
+                // Use BeginInvoke to queue the operation for later execution,
+                // Ensures that the logic runs after the TreeView control's edit control is fully initialized.
+                // And this code adjusts the position and size of the edit control
+                // to accommodate the DPI scaling for high-resolution displays.
                 if (e.Node is not null)
                 {
                     float dpiScale = (float)DeviceDpi / ScaleHelper.OneHundredPercentLogicalDpi;
@@ -2601,9 +2599,9 @@ public partial class TreeView : Control
                         e.Node.Bounds.Y,
                         e.Node.Bounds.Width + (int)(dpiScale * 10),
                         e.Node.Bounds.Height + 2,
-                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER |
-                        SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED |
-                        SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                        | SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
+                        | SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
                 }
             }));
         }
@@ -2760,6 +2758,9 @@ public partial class TreeView : Control
                 // as background color.
                 if (_drawMode == TreeViewDrawMode.OwnerDrawText)
                 {
+                    // When the node is being edited,
+                    // set the text color and background color to the same color so that the text is hidden
+                    // goto default to ensure the default drawing behavior is executed instead of a custom drawing.
                     if (node is { IsEditing: true })
                     {
                         nmtvcd->clrText = ColorTranslator.ToWin32(BackColor);
@@ -2883,7 +2884,7 @@ public partial class TreeView : Control
                             int invertedX = Width - bounds.X - textSize.Width - borderWidth * 2;
 
                             // Subtract the scroll bar width when the scroll bar appears.
-                            if (Height - borderWidth * 2 < PreferredHeight)
+                            if (Height - borderWidth * 2 < CalculatePreferredHeight())
                             {
                                 float dpiScale = (float)DeviceDpi / (float)ScaleHelper.InitialSystemDpi;
                                 invertedX -= (int)(SystemInformation.VerticalScrollBarWidth * Math.Round(dpiScale, 2));
@@ -2936,33 +2937,37 @@ public partial class TreeView : Control
         }
     }
 
-    private int PreferredHeight
+    /// <summary>
+    ///  Calculate the preferred height of the entire tree.
+    /// </summary>
+    private int CalculatePreferredHeight()
     {
-        get
+        // Nested method to recursively calculate the height of each node and its child nodes.
+        static int CountExpandedNodes(TreeNode node)
         {
-            int height = 0;
-            foreach (TreeNode node in Nodes)
+            int count = 1; // Count the current node
+
+            // If the node is expanded, recursively calculate count its child nodes.
+            if (node.IsExpanded)
             {
-                height += GetNodeHeight(node);
+                foreach (TreeNode childNode in node.Nodes)
+                {
+                    count += CountExpandedNodes(childNode);
+                }
             }
 
-            return height;
+            return count;
         }
-    }
 
-    private int GetNodeHeight(TreeNode node)
-    {
-        int height = ItemHeight;
-
-        if (node.IsExpanded)
+        int expandedNodeCount = 0;
+        // Iterate through all top-level nodes to count the total number of expanded nodes.
+        foreach (TreeNode node in Nodes)
         {
-            foreach (TreeNode childNode in node.Nodes)
-            {
-                height += GetNodeHeight(childNode);
-            }
+            expandedNodeCount += CountExpandedNodes(node);
         }
 
-        return height;
+        // Calculate the total height based on the number of expanded nodes.
+        return expandedNodeCount * ItemHeight;
     }
 
     /// <summary>
