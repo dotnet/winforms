@@ -25,7 +25,7 @@ public static unsafe class Helpers
     public static string GetTestFontPath(string fileName) => GetTestPath("fonts", fileName);
     public static string GetTestColorProfilePath(string fileName) => GetTestPath("colorProfiles", fileName);
 
-    private static string GetTestPath(string directoryName, string fileName) => Path.Combine(AppContext.BaseDirectory, directoryName, fileName);
+    private static string GetTestPath(string directoryName, string fileName) => Path.Join(AppContext.BaseDirectory, directoryName, fileName);
 
     public static void VerifyBitmap(Bitmap bitmap, Color[][] colors)
     {

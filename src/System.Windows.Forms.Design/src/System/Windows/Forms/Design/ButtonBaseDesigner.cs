@@ -9,10 +9,8 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend ButtonBase.</para>
-/// </summary>
+///  Provides a designer that can design components that extend ButtonBase.
+///  </summary>
 internal class ButtonBaseDesigner : ControlDesigner
 {
     public ButtonBaseDesigner()

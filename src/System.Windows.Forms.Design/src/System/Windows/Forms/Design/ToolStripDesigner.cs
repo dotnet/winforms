@@ -186,8 +186,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl
-    /// is dragged on the design surface. This is true by default.
+    ///  This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl
+    ///  is dragged on the design surface. This is true by default.
     /// </summary>
     internal override bool ControlSupportsSnaplines => ToolStrip.Parent is not ToolStripPanel;
 
@@ -812,7 +812,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// This is called ToolStripItemGlyph to commit the TemplateNode Edition on the Parent ToolStrip.
+    ///  This is called ToolStripItemGlyph to commit the TemplateNode Edition on the Parent ToolStrip.
     /// </summary>
     internal bool Commit()
     {
@@ -2249,7 +2249,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// Called from the ToolStripItemGlyph to roll back the TemplateNode Edition on the Parent ToolStrip.
+    ///  Called from the ToolStripItemGlyph to roll back the TemplateNode Edition on the Parent ToolStrip.
     /// </summary>
     internal void RollBack()
     {

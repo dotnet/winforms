@@ -13,7 +13,7 @@ namespace System.Private.Windows.Ole;
 /// <typeparam name="TTestClass">Used to get an instance for each test class so test classes can run asynchronously.</typeparam>
 internal class MockOleServices<TTestClass> : IOleServices
 {
-    private static AgileComPointer<IDataObject>? s_agileComPointer;
+    private static DataObjectProxy? s_dataObjectProxy;
 
     static bool IOleServices.AllowTypeWithoutResolver<T>() => true;
     static void IOleServices.EnsureThreadState() { }
@@ -21,7 +21,10 @@ internal class MockOleServices<TTestClass> : IOleServices
     static bool IOleServices.IsValidTypeForFormat(Type type, string format) => true;
     static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) { }
 
-    static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data)
+    static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(
+        IDataObject* dataObject,
+        string requestedFormat,
+        [NotNullWhen(true)] out T data)
     {
         data = default!;
         return false;
@@ -40,13 +43,14 @@ internal class MockOleServices<TTestClass> : IOleServices
             return HRESULT.E_POINTER;
         }
 
-        if (s_agileComPointer is null)
+        if (s_dataObjectProxy is null)
         {
             *dataObject = null;
             return HRESULT.CLIPBRD_E_BAD_DATA;
         }
 
-        *dataObject = s_agileComPointer.GetInterface().Value;
+        *dataObject = s_dataObjectProxy.Proxy;
+        s_dataObjectProxy.Proxy->AddRef();
         return HRESULT.S_OK;
     }
 
@@ -55,23 +59,16 @@ internal class MockOleServices<TTestClass> : IOleServices
         if (dataObject is null)
         {
             // Clears the clipboard
-            s_agileComPointer?.Dispose();
-            s_agileComPointer = null;
+            s_dataObjectProxy?.Dispose();
+            s_dataObjectProxy = null;
             return HRESULT.S_OK;
         }
 
-        s_agileComPointer?.Dispose();
+        s_dataObjectProxy?.Dispose();
 
         dataObject->AddRef();
 
-        // Don't track disposal, we depend on finalization for testing.
-        s_agileComPointer = new AgileComPointer<IDataObject>(
-#if DEBUG
-            dataObject, takeOwnership: true, trackDisposal: false
-#else
-            dataObject, takeOwnership: true
-#endif
-            );
+        s_dataObjectProxy = new DataObjectProxy(dataObject);
 
         return HRESULT.S_OK;
     }

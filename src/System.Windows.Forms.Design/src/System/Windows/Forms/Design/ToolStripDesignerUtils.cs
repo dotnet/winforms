@@ -605,7 +605,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///test to see if we are under terminal server mode
+        ///  Test to see if we are under terminal server mode
         /// </summary>
         public static bool TerminalServer
         {
@@ -623,7 +623,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///event handler for change in display setting
+        ///  Event handler for change in display setting
         /// </summary>
         private static void DisplaySettingChanged(object obj, EventArgs ea)
         {
@@ -634,7 +634,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///event handler for change in user preference
+        ///  Event handler for change in user preference
         /// </summary>
         private static void UserPreferenceChanged(object obj, UserPreferenceChangedEventArgs ea)
         {

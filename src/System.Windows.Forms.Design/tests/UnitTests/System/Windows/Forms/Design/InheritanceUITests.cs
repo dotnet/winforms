@@ -58,7 +58,7 @@ public sealed class InheritanceUITests : IDisposable
         }
 
         ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
-        string text = toolTip.GetToolTip(trayControl);
+        string? text = toolTip.GetToolTip(trayControl);
         text.Should().Be(expectedText);
     }
 
@@ -83,11 +83,9 @@ public sealed class InheritanceUITests : IDisposable
         _inheritanceUI.RemoveInheritedControl(trayControl);
 
         ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
-        string text = toolTip.GetToolTip(trayControl);
+        string? text = toolTip.GetToolTip(trayControl);
         text.Should().BeEmpty();
     }
-
-#nullable enable
 
     [Fact]
     public void InheritanceGlyph_And_InheritanceGlyphRectangle_ShouldReturnExpectedValues()

@@ -168,7 +168,7 @@ internal static partial class DeviceContextExtensions
     /// <remarks>
     ///  <para>
     ///   Do NOT dispose of the <see cref="Graphics"/> object. If it was created, the object creating it owns it.
-    ///   </para>
+    ///  </para>
     /// </remarks>
     internal static Graphics? TryGetGraphics(this IDeviceContext deviceContext, bool create = false) => deviceContext switch
     {

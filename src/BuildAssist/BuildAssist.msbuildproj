@@ -8,19 +8,19 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'System.Windows.Forms', 'tests', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
+    <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'test', 'unit', '.NET Framework', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
     <_ProjectArgs>/p:BuildWithNetFrameworkHostedCompiler=false /p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
   </PropertyGroup>
 
   <Target Name="BuildAxHosts" BeforeTargets="AfterBuild" DependsOnTargets="FindFrameworkMsbuild">
     <Exec
-      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /v:m"
+      Command='msbuild.exe "$(_AxHostsPath)" $(_ProjectArgs) /v:m'
       WorkingDirectory="$(_MSBuildCurrentPath)"/>
   </Target>
 
   <Target Name="CleanAxHosts" BeforeTargets="AfterClean" DependsOnTargets="FindFrameworkMsbuild">
     <Exec
-      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean /v:m"
+      Command='msbuild.exe "$(_AxHostsPath)" $(_ProjectArgs) /t:Clean /v:m'
       WorkingDirectory="$(_MSBuildCurrentPath)"/>
   </Target>
 

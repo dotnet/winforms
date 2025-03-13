@@ -8,9 +8,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend UpDownBase.</para>
+///  Provides a designer that can design components that extend UpDownBase.
 /// </summary>
 internal class UpDownBaseDesigner : ControlDesigner
 {

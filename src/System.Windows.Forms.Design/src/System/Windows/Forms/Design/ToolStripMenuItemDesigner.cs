@@ -2282,27 +2282,27 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    /// Resets the ToolStripMenuItem DoubleClickEnabled to be the default visible
+    ///  Resets the ToolStripMenuItem DoubleClickEnabled to be the default visible
     /// </summary>
     private void ResetDoubleClickEnabled() => DoubleClickEnabled = false;
 
     /// <summary>
-    /// Resets the ToolStripMenuItem CheckOnClick to be the default visible
+    ///  Resets the ToolStripMenuItem CheckOnClick to be the default visible
     /// </summary>
     private void ResetCheckOnClick() => CheckOnClick = false;
 
     /// <summary>
-    /// Resets the ToolStripMenuItem CheckOnClick to be the default visible
+    ///  Resets the ToolStripMenuItem CheckOnClick to be the default visible
     /// </summary>
     private void ResetDropDown() => DropDown = null;
 
     /// <summary>
-    /// Resets the ToolStripMenuItem Visible to be the default visible
+    ///  Resets the ToolStripMenuItem Visible to be the default visible
     /// </summary>
     private void ResetVisible() => Visible = true;
 
     /// <summary>
-    /// Restores the ToolStripMenuItem Visible to be the value set in the property grid.
+    ///  Restores the ToolStripMenuItem Visible to be the value set in the property grid.
     /// </summary>
     private void RestoreVisible() => MenuItem.Visible = Visible;
 

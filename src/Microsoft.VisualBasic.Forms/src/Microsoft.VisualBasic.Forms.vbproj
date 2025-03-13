@@ -19,11 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Microsoft\VisualBasic\MyServices\Internal\WebClientCopy.vb" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

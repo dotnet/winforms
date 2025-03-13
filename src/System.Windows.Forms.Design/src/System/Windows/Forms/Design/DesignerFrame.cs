@@ -13,12 +13,12 @@ namespace System.Windows.Forms.Design;
 ///  This class implements our design time document. This is the outer window that encompasses a designer.
 ///  It maintains a control hierarchy that looks like this:
 ///
-///     - DesignerFrame
-///         - ScrollableControl
-///             - Designer
-///         - Splitter
-///         - ScrollableControl
-///             - Component Tray
+///  - DesignerFrame
+///  - ScrollableControl
+///  - Designer
+///  - Splitter
+///  - ScrollableControl
+///  - Component Tray
 ///
 ///  The splitter and second scrollable control are created on demand when a tray is added.
 /// </summary>

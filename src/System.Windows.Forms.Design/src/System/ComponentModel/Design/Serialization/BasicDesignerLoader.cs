@@ -431,7 +431,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    /// This method can be used to Enable or Disable component notification by the DesignerLoader.
+    ///  This method can be used to Enable or Disable component notification by the DesignerLoader.
     /// </summary>
     protected virtual bool EnableComponentNotification(bool enable)
     {

@@ -2200,7 +2200,7 @@ end_of_line = crlf
 # Test specific
 # -------------
 
-[**/tests/**/*.{cs,vb}]
+[**/{tests,test}/**/*.{cs,vb}]
 
 # This collides with TheoryData usage
 dotnet_style_prefer_collection_expression = true:silent

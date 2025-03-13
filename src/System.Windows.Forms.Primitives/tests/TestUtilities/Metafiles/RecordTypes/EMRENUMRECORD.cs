@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Metafiles;
 ///  Record that has just a single enum value.
 /// </summary>
 /// <devdoc>
-///   Not an actual Win32 define, encapsulates:
+///  Not an actual Win32 define, encapsulates:
 ///
 ///   - EMRSELECTCLIPPATH
 ///   - EMRSETBKMODE

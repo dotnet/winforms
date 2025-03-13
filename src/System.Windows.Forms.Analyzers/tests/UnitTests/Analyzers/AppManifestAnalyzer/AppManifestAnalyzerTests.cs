@@ -35,6 +35,7 @@ public class AppManifestAnalyzerTests
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = CSharpCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                 AdditionalFiles = { }
@@ -50,6 +51,7 @@ public class AppManifestAnalyzerTests
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = CSharpCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                  AdditionalFiles = { (@"C:\temp\app.manifest", manifestFile) }
@@ -66,6 +68,7 @@ public class AppManifestAnalyzerTests
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = CSharpCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                  AdditionalFiles = { (@"C:\temp\app.manifest", manifestFile) }
@@ -84,6 +87,7 @@ public class AppManifestAnalyzerTests
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = CSharpCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                  AdditionalFiles = { (manifestFilePath, manifestFile) }
@@ -107,6 +111,7 @@ public class AppManifestAnalyzerTests
         await new VisualBasicAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = VbCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                  AdditionalFiles = { (manifestFilePath, manifestFile) }
@@ -130,6 +135,7 @@ public class AppManifestAnalyzerTests
         await new CSharpAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = CSharpCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
@@ -149,6 +155,7 @@ public class AppManifestAnalyzerTests
         await new VisualBasicAnalyzerTest<AppManifestAnalyzer, DefaultVerifier>()
         {
             TestCode = VbCode,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90Windows,
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },

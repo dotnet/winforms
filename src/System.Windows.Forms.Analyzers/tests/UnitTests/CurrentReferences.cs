@@ -56,11 +56,11 @@ public static class CurrentReferences
             "Release";
 #endif
 
-        WinFormsRefPath = Path.Combine(RepoRootPath, "artifacts", "obj", "System.Windows.Forms", configuration, tfm, "ref", "System.Windows.Forms.dll");
+        WinFormsRefPath = Path.Join(RepoRootPath, "artifacts", "obj", "System.Windows.Forms", configuration, tfm, "ref", "System.Windows.Forms.dll");
 
         // Specify absolute path to the reference assemblies because this version is not necessarily available in the nuget packages cache.
-        string netCoreAppRefPath = Path.Combine(RepoRootPath, ".dotnet", "packs", RefPackageName);
-        if (!Directory.Exists(Path.Combine(netCoreAppRefPath, netCoreRefsVersion)))
+        string netCoreAppRefPath = Path.Join(RepoRootPath, ".dotnet", "packs", RefPackageName);
+        if (!Directory.Exists(Path.Join(netCoreAppRefPath, netCoreRefsVersion)))
         {
             netCoreRefsVersion = GetAvailableVersion(netCoreAppRefPath, $"{netCoreRefsVersion.Split('.')[0]}.");
         }
@@ -71,8 +71,8 @@ public static class CurrentReferences
         NetCoreAppReferences = new ReferenceAssemblies(
             tfm,
             new PackageIdentity(RefPackageName, netCoreRefsVersion),
-            Path.Combine("ref", tfm))
-               .WithNuGetConfigFilePath(Path.Combine(RepoRootPath, "NuGet.Config"));
+            Path.Join("ref", tfm))
+               .WithNuGetConfigFilePath(Path.Join(RepoRootPath, "NuGet.Config"));
     }
 
     private static string GetAvailableVersion(string netCoreAppRefPath, string major)
@@ -98,7 +98,7 @@ public static class CurrentReferences
         }
 
         // First, try to use the local .NET SDK if it's there.
-        string sdkFolderPath = Path.Combine(rootFolderPath, ".dotnet", "sdk", version);
+        string sdkFolderPath = Path.Join(rootFolderPath, ".dotnet", "sdk", version);
         if (!Directory.Exists(sdkFolderPath))
         {
             return false;
@@ -120,7 +120,7 @@ public static class CurrentReferences
 
         while (currentFolderPath is not null)
         {
-            string globalJsonPath = Path.Combine(currentFolderPath, "global.json");
+            string globalJsonPath = Path.Join(currentFolderPath, "global.json");
             if (File.Exists(globalJsonPath))
             {
                 // We've found the repo root.
@@ -137,7 +137,7 @@ public static class CurrentReferences
 
     private static bool TryGetSdkVersion(string rootFolderPath, [NotNullWhen(true)] out string? version)
     {
-        string globalJsonPath = Path.Combine(rootFolderPath, "global.json");
+        string globalJsonPath = Path.Join(rootFolderPath, "global.json");
         string globalJsonString = File.ReadAllText(globalJsonPath);
         JsonObject? jsonObject = JsonNode.Parse(globalJsonString)?.AsObject();
         version = (string?)jsonObject?["sdk"]?["version"];
@@ -150,7 +150,7 @@ public static class CurrentReferences
         [NotNullWhen(true)] out string? tfm,
         [NotNullWhen(true)] out string? version)
     {
-        string configJsonPath = Path.Combine(sdkFolderPath, "dotnet.runtimeconfig.json");
+        string configJsonPath = Path.Join(sdkFolderPath, "dotnet.runtimeconfig.json");
         string configJsonString = File.ReadAllText(configJsonPath);
         JsonObject? jsonObject = JsonNode.Parse(configJsonString)?.AsObject();
         JsonNode? runtimeOptions = jsonObject?["runtimeOptions"];

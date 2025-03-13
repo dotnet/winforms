@@ -312,7 +312,7 @@ internal ref partial struct ValueStringBuilder
     /// <summary>
     ///  Resize the internal buffer either by doubling current buffer size or
     ///  by adding <paramref name="additionalCapacityBeyondPos"/> to
-    /// <see cref="_pos"/> whichever is greater.
+    ///  <see cref="_pos"/> whichever is greater.
     /// </summary>
     /// <param name="additionalCapacityBeyondPos">
     ///  Number of chars requested beyond current position.

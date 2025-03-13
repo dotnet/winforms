@@ -286,15 +286,15 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Tests whether the specified string contains the specified substring
-    /// and throws an exception if the substring does not occur within the
-    /// test string or if either string or substring is null.
+    ///  Tests whether the specified string contains the specified substring
+    ///  and throws an exception if the substring does not occur within the
+    ///  test string or if either string or substring is null.
     /// </summary>
     /// <param name="value">
-    /// The string that is expected to contain <paramref name="substring"/>.
+    ///  The string that is expected to contain <paramref name="substring"/>.
     /// </param>
     /// <param name="substring">
-    /// The string expected to occur within <paramref name="value"/>.
+    ///  The string expected to occur within <paramref name="value"/>.
     /// </param>
     public static void Contains(string value, string substring)
     {
@@ -304,7 +304,7 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validate that a given value is greater than another value.
+    ///  Validate that a given value is greater than another value.
     /// </summary>
     /// <param name="actual">The value that should be greater than <paramref name="greaterThan"/>.</param>
     /// <param name="greaterThan">The value that <paramref name="actual"/> should be greater than.</param>
@@ -321,7 +321,7 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validate that a given value is less than another value.
+    ///  Validate that a given value is less than another value.
     /// </summary>
     /// <param name="actual">The value that should be less than <paramref name="lessThan"/>.</param>
     /// <param name="lessThan">The value that <paramref name="actual"/> should be less than.</param>
@@ -345,7 +345,7 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validate that a given value is less than or equal to another value.
+    ///  Validate that a given value is less than or equal to another value.
     /// </summary>
     /// <param name="actual">The value that should be less than or equal to <paramref name="lessThanOrEqualTo"/></param>
     /// <param name="lessThanOrEqualTo">The value that <paramref name="actual"/> should be less than or equal to.</param>
@@ -360,7 +360,7 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validate that a given value is greater than or equal to another value.
+    ///  Validate that a given value is greater than or equal to another value.
     /// </summary>
     /// <param name="actual">The value that should be greater than or equal to <paramref name="greaterThanOrEqualTo"/></param>
     /// <param name="greaterThanOrEqualTo">The value that <paramref name="actual"/> should be greater than or equal to.</param>
@@ -388,8 +388,8 @@ public static class AssertExtensions
     // NOTE: Consider using SequenceEqual below instead, as it will give more useful information about what
     // the actual differences are, especially for large arrays/spans.
     /// <summary>
-    /// Validates that the actual array is equal to the expected array. XUnit only displays the first 5 values
-    /// of each collection if the test fails. This doesn't display at what point or how the equality assertion failed.
+    ///  Validates that the actual array is equal to the expected array. XUnit only displays the first 5 values
+    ///  of each collection if the test fails. This doesn't display at what point or how the equality assertion failed.
     /// </summary>
     /// <param name="expected">The array that <paramref name="actual"/> should be equal to.</param>
     /// <param name="actual"></param>
@@ -415,9 +415,9 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validates that the actual collection contains same items as expected collection. If the test fails, this will display:
-    /// 1. Count if two collection count are different;
-    /// 2. Missed expected collection item when found
+    ///  Validates that the actual collection contains same items as expected collection. If the test fails, this will display:
+    ///  1. Count if two collection count are different;
+    ///  2. Missed expected collection item when found
     /// </summary>
     /// <param name="expected">The collection that <paramref name="actual"/> should contain same items as</param>
     /// <param name="actual"></param>
@@ -467,8 +467,8 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validates that the actual span is equal to the expected span.
-    /// If this fails, determine where the differences are and create an exception with that information.
+    ///  Validates that the actual span is equal to the expected span.
+    ///  If this fails, determine where the differences are and create an exception with that information.
     /// </summary>
     /// <param name="expected">The array that <paramref name="actual"/> should be equal to.</param>
     /// <param name="actual"></param>
@@ -534,7 +534,7 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Compares two strings, logs entire content if they are not equal.
+    ///  Compares two strings, logs entire content if they are not equal.
     /// </summary>
     public static void Equal(string expected, string actual)
     {

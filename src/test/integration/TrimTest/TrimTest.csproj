@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <Nullable>enable</Nullable>
+    <OutputType>WinExe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- These are needed to suppress the localization step picked up from Arcade targets -->
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+  <!-- These normally come from $(UseWindowsForms) when $(ImplicitUsings) is enabled -->
+  <ItemGroup>
+    <Using Include="System.Drawing" />
+    <Using Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <!-- feature switches for trimming-->
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.ComponentModel.Design.IDesignerHost.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Binding.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.ComponentModel.DefaultValueAttribute.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Drawing.Design.UITypeEditor.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.ActiveXImpl.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Control.AreDesignTimeFeaturesSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.MdiWindowDialog.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.ImageIndexConverter.IsSupported" Value="false" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Primitives.TypeConverterHelper.UseComponentModelRegisteredTypes" Value="true" Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Control.UseComponentModelRegisteredTypes" Value="true" Trim="true" />
+  </ItemGroup>
+
+</Project>

@@ -9,9 +9,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend ComboBox.</para>
+///  Provides a designer that can design components that extend ComboBox.
 /// </summary>
 internal class ComboBoxDesigner : ControlDesigner
 {

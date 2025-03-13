@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Shared ReadOnly s_deserializerOptions As New JsonSerializerOptions() With {
             .TypeInfoResolver = New PrivateSetterContractResolver()}
 
-        Private Shared ReadOnly s_jsonFilePathBase As String = Path.Combine(
+        Private Shared ReadOnly s_jsonFilePathBase As String = Path.Join(
             My.Application.Info.DirectoryPath,
             "System\Windows\TestUtilities\TestData")
 
@@ -164,7 +164,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If String.IsNullOrWhiteSpace(jsonFilePathBase) Then
                 jsonFilePathBase = s_jsonFilePathBase
             End If
-            Return Path.Combine(jsonFilePathBase, jsonFileName)
+            Return Path.Join(jsonFilePathBase, jsonFileName)
         End Function
 
         Friend Function GetAcceptsAnonymousLogin(uploading As Boolean) As Boolean

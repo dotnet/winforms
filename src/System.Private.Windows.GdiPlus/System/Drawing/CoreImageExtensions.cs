@@ -18,7 +18,7 @@ internal static unsafe class CoreImageExtensions
             throw new ArgumentNullException(nameof(encoder));
         }
 
-        if (format == PInvokeGdiPlus.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
+        if (format == PInvokeCore.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
         {
             stream.Write(rawData);
             return;
@@ -37,9 +37,9 @@ internal static unsafe class CoreImageExtensions
 
         // Jpeg loses data, so we don't want to use it to serialize. We'll use PNG instead.
         // If we don't find an Encoder (for things like Icon), we just switch back to PNG.
-        if (format == PInvokeGdiPlus.ImageFormatJPEG || encoder == Guid.Empty)
+        if (format == PInvokeCore.ImageFormatJPEG || encoder == Guid.Empty)
         {
-            format = PInvokeGdiPlus.ImageFormatPNG;
+            format = PInvokeCore.ImageFormatPNG;
             encoder = ImageCodecInfoHelper.GetEncoderClsid(format);
         }
 

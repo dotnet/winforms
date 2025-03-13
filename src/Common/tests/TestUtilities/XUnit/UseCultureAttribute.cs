@@ -49,7 +49,7 @@ public class UseCultureAttribute : BeforeAfterTestAttribute
     }
 
     /// <summary>
-    /// Gets the culture.
+    ///  Gets the culture.
     /// </summary>
     public CultureInfo Culture => _culture.Value;
 
@@ -59,14 +59,14 @@ public class UseCultureAttribute : BeforeAfterTestAttribute
     public bool SetUnmanagedUiThreadCulture { get; set; }
 
     /// <summary>
-    /// Gets the UI culture.
+    ///  Gets the UI culture.
     /// </summary>
     public CultureInfo UICulture => _uiCulture.Value;
 
     /// <summary>
-    /// Stores the current <see cref="Thread.CurrentPrincipal" />
-    /// <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" />
-    /// and replaces them with the new cultures defined in the constructor.
+    ///  Stores the current <see cref="Thread.CurrentPrincipal" />
+    ///  <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" />
+    ///  and replaces them with the new cultures defined in the constructor.
     /// </summary>
     /// <param name="methodUnderTest">The method under test</param>
     public override unsafe void Before(MethodInfo methodUnderTest)
@@ -89,8 +89,8 @@ public class UseCultureAttribute : BeforeAfterTestAttribute
     }
 
     /// <summary>
-    /// Restores the original <see cref="CultureInfo.CurrentCulture" /> and
-    /// <see cref="CultureInfo.CurrentUICulture" /> to <see cref="Thread.CurrentPrincipal" />
+    ///  Restores the original <see cref="CultureInfo.CurrentCulture" /> and
+    ///  <see cref="CultureInfo.CurrentUICulture" /> to <see cref="Thread.CurrentPrincipal" />
     /// </summary>
     /// <param name="methodUnderTest">The method under test</param>
     public override void After(MethodInfo methodUnderTest)

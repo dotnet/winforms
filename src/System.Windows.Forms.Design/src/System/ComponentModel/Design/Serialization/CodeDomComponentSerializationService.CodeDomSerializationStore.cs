@@ -16,15 +16,15 @@ public sealed partial class CodeDomComponentSerializationService
     ///  Once the store is closed it can be serialized or deserialized in memory.
     /// </summary>
     /// <para>
-    ///   On .NET Framework, once the store is closed it can be saved to a stream. A serialization store can be deserialized
-    ///   at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
-    ///   cannot be saved to a stream or loaded from a stream.
+    ///  On .NET Framework, once the store is closed it can be saved to a stream. A serialization store can be deserialized
+    ///  at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
+    ///  cannot be saved to a stream or loaded from a stream.
     /// </para>
     /// <para>
-    ///   <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
-    ///   that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
-    ///   <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
-    ///   The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    ///  <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
+    ///  that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
+    ///  <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
+    ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </para>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {

@@ -71,7 +71,7 @@ internal unsafe partial struct SAFEARRAY
     public T GetValue<T>(Span<int> indices)
     {
         // SAFEARRAY is laid out in column-major order.
-        // See https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/array-manipulation-functions
+        // See https://docs.microsoft.com/previous-versions/windows/desktop/automat/array-manipulation-functions
         int indicesIndex = 0;
         int c1 = indices[indicesIndex++];
         uint dimensionSize = 1;

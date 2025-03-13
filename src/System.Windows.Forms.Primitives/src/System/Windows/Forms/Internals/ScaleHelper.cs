@@ -422,6 +422,17 @@ internal static partial class ScaleHelper
     }
 
     /// <summary>
+    ///  Get X, Y metrics at DPI, IF icon is not already that size, create and return a new one.
+    /// </summary>
+    internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi)
+    {
+        int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
+
+        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
+    }
+
+    /// <summary>
     ///  Sets the requested DPI mode. If the current OS does not support the requested mode,
     /// </summary>
     /// <returns><see langword="true"/> if the mode was successfully set.</returns>
