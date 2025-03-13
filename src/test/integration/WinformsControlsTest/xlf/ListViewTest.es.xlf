@@ -4,12 +4,12 @@
     <body>
       <trans-unit id="columnHeader1.Text">
         <source>ColumnHeader1</source>
-        <target state="new">ColumnHeader1</target>
+        <target state="translated">encabezadoDeColumna1</target>
         <note />
       </trans-unit>
       <trans-unit id="columnHeader2.Text">
         <source>ColumnHeader2</source>
-        <target state="new">ColumnHeader2</target>
+        <target state="translated">encabezadoDeColumna2</target>
         <note />
       </trans-unit>
     </body>
