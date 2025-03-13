@@ -35,7 +35,7 @@ public class StatusCommandUITests
     [Fact]
     public void SetStatusInformation_WithNullComponent_ShouldNotInvokeCommand()
     {
-        _statusCommandUI.SetStatusInformation(null);
+        _statusCommandUI.SetStatusInformation(selectedComponent: null);
         _mockMenuCommand.Verify(mc => mc.Invoke(It.IsAny<Rectangle>()), Times.Never);
     }
 
@@ -44,6 +44,7 @@ public class StatusCommandUITests
     {
         using Control control = new() { Bounds = new(10, 20, 30, 40) };
         TestSetStatusInformation(() => _statusCommandUI.SetStatusInformation(control), new(10, 20, 30, 40));
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [Fact]
@@ -123,10 +124,10 @@ public class StatusCommandUITests
     private void VerifyInvoke(Rectangle expectedRectangle)
     {
         _mockMenuCommand.Verify(mc => mc.Invoke(It.Is<Rectangle>(r =>
-            r.X == expectedRectangle.X &&
-            r.Y == expectedRectangle.Y &&
-            r.Width == expectedRectangle.Width &&
-            r.Height == expectedRectangle.Height)), Times.Once);
+              r.X == expectedRectangle.X
+           && r.Y == expectedRectangle.Y
+           && r.Width == expectedRectangle.Width
+           && r.Height == expectedRectangle.Height)), Times.Once);
     }
 
     private class CustomComponent : Component
