@@ -812,12 +812,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private protected override string? GetDefaultToolTipText()
     {
-        if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
-        {
-            return SR.DefaultDataGridViewComboBoxCellTollTipText;
-        }
-
-        return null;
+        return string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull
+            ? SR.DefaultDataGridViewComboBoxCellToolTipText
+            : null;
     }
 
     private int GetDropDownButtonHeight(Graphics graphics, DataGridViewCellStyle cellStyle)
