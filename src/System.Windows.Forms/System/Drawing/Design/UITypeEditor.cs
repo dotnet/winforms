@@ -49,14 +49,14 @@ public class UITypeEditor
             [typeof(StringCollection)] = $"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}",
 
             // System.Drawing.Design type Editors
-            [typeof(Bitmap)] = $"System.Drawing.Design.BitmapEditor, {(Assemblies.SystemDrawingDesign)}",
-            [typeof(Color)] = $"System.Drawing.Design.ColorEditor, {(Assemblies.SystemDrawingDesign)}",
-            [typeof(ContentAlignment)] = $"System.Drawing.Design.ContentAlignmentEditor, {(Assemblies.SystemDrawingDesign)}",
-            [typeof(Font)] = $"System.Drawing.Design.FontEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Bitmap)] = $"System.Drawing.Design.BitmapEditor, {Assemblies.SystemDrawingDesign}",
+            [typeof(Color)] = $"System.Drawing.Design.ColorEditor, {Assemblies.SystemDrawingDesign}",
+            [typeof(ContentAlignment)] = $"System.Drawing.Design.ContentAlignmentEditor, {Assemblies.SystemDrawingDesign}",
+            [typeof(Font)] = $"System.Drawing.Design.FontEditor, {Assemblies.SystemDrawingDesign}",
             // No way to add Font.Name and associate it with FontNameEditor.
-            [typeof(Icon)] = $"System.Drawing.Design.IconEditor, {(Assemblies.SystemDrawingDesign)}",
-            [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {(Assemblies.SystemDrawingDesign)}",
-            [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {(Assemblies.SystemDrawingDesign)}",
+            [typeof(Icon)] = $"System.Drawing.Design.IconEditor, {Assemblies.SystemDrawingDesign}",
+            [typeof(Image)] = $"System.Drawing.Design.ImageEditor, {Assemblies.SystemDrawingDesign}",
+            [typeof(Metafile)] = $"System.Drawing.Design.MetafileEditor, {Assemblies.SystemDrawingDesign}",
         };
 
         // Add our intrinsic editors to TypeDescriptor.
