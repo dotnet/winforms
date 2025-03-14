@@ -30,8 +30,6 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
                 _targetProperty = prop;
             }
         }
-
-        Debug.Assert(_targetProperty is not null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
     }
 
     internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop, string newVerbText) : this(designer, prop)
