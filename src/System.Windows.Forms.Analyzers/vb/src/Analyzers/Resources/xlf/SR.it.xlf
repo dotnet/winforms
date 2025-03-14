@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="it" original="../SR.resx">
+    <body>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">Una proprietà deve determinare la serializzazione del proprio contenuto con il metodo DesignerSerializationVisibilityAttribute, DefaultValueAttribute o ShouldSerializeProperty.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">La proprietà '{0}' non configura la serializzazione del codice per il relativo contenuto della proprietà</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">Configurazione di serializzazione del codice mancante per il contenuto della proprietà</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">Evitare di passare l'elemento `Func&lt;T&gt;` a `InvokeAsync` dove `T` è un `Task` o `ValueTask`, a meno che non si intenda semplicemente avviare il delegato come un'attività non supervisionata. In alternativa, usare `Func&lt;CancellationToken, ValueTask&gt;` o `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, in modo che il delegato passato a `InvokeAsync` possa essere atteso, consentendo la corretta gestione delle eccezioni.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">L'attività viene passata a InvokeAsync senza un token di annullamento</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
