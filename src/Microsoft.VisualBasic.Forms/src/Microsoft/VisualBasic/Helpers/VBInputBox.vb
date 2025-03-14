@@ -4,6 +4,7 @@
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Globalization
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.CompilerServices
 

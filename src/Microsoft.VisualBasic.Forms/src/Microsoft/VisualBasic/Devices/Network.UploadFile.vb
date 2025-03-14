@@ -4,6 +4,7 @@
 Imports System.Net
 Imports System.Net.Http
 Imports System.Threading
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal

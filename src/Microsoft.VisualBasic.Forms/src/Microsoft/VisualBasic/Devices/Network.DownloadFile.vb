@@ -5,6 +5,7 @@ Imports System.Net
 Imports System.Threading
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
+Imports System.Windows.Forms
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 

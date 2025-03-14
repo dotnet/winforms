@@ -2,8 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Collections.Immutable
-Imports System.Runtime.InteropServices.ComTypes
-Imports System.Windows.Forms.Analyzers
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Diagnostics
 Imports Microsoft.CodeAnalysis.VisualBasic

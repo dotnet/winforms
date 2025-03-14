@@ -3,6 +3,7 @@
 
 Imports System.Collections.Specialized
 Imports System.IO
+Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Xunit
 

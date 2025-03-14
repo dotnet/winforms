@@ -5,6 +5,7 @@ Option Strict Off
 
 Imports System.IO
 Imports System.Text
+Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.Logging
 Imports Xunit

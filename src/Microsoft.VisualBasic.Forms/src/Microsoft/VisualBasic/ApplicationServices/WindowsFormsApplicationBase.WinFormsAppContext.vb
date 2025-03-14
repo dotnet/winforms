@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Security
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
