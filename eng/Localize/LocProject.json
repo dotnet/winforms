@@ -113,24 +113,24 @@
                                                       "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\common\\src\\Resources\\xlf\\"
                                                   },
                                                   {
-                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\CodeFixes\\Resources\\xlf\\SR.xlf",
-                                                      "CopyOption":  "LangIDOnName",
-                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\CodeFixes\\Resources\\xlf\\"
-                                                  },
-                                                  {
-                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\CodeFixes\\Resources\\xlf\\SR.xlf",
-                                                      "CopyOption":  "LangIDOnName",
-                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\CodeFixes\\Resources\\xlf\\"
-                                                  },
-                                                  {
                                                       "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\Analyzers\\Resources\\xlf\\SR.xlf",
                                                       "CopyOption":  "LangIDOnName",
                                                       "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\Analyzers\\Resources\\xlf\\"
                                                   },
                                                   {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\CodeFixes\\Resources\\xlf\\SR.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\CodeFixes\\Resources\\xlf\\"
+                                                  },
+                                                  {
                                                       "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\Analyzers\\Resources\\xlf\\SR.xlf",
                                                       "CopyOption":  "LangIDOnName",
                                                       "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\Analyzers\\Resources\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\CodeFixes\\Resources\\xlf\\SR.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\vb\\src\\CodeFixes\\Resources\\xlf\\"
                                                   },
                                                   {
                                                       "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\System\\ComponentModel\\Design\\xlf\\BinaryEditor.xlf",
@@ -181,31 +181,37 @@
                                                       "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewAddColumnDialog.xlf",
                                                       "CopyOption":  "LangIDOnName",
                                                       "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewCellStyleBuilder.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewColumnCollectionDialog.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\StyleCollectionEditor.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\TreeNodeCollectionEditor.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"
-                                          }
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewCellStyleBuilder.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewColumnCollectionDialog.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\StyleCollectionEditor.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\ToolStripItemEditorForm.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\TreeNodeCollectionEditor.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                                  },
+                                                  {
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
+                                                      "CopyOption":  "LangIDOnName",
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"
+                                                  }
                                       ],
                          "LanguageSet":  "VS_Main_Languages"
                      },

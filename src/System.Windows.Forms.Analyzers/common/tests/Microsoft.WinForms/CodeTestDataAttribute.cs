@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Globalization;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Xunit.Sdk;
@@ -39,7 +38,7 @@ public sealed partial class CodeTestDataAttribute : MemberDataAttributeBase
     /// </remarks>
     /// <param name="memberName">The name of the public static member on the test class that will provide the test data</param>
     public CodeTestDataAttribute(string memberName)
-        : base(memberName, null) { }
+        : base(memberName, parameters: null) { }
 
     /// <summary>
     ///  Retrieves the test data for the specified test method.
@@ -78,10 +77,8 @@ public sealed partial class CodeTestDataAttribute : MemberDataAttributeBase
 
 #if !NET9_0 && NET9_0_OR_GREATER
         // This conditional looks weird, but is a trick to get around a mismatch
-        // in compiler versions between VS-current and Arcade for the 9.0-Rel branch.
+        // in compiler versions between VS-current and Arcade for the release\9.0 branch.
         // Problem: Open generics do not work in earlier versions than .NET 10.
-        // (And no, I came up with it, and had to convince GPT 4.5 this will do, not
-        //  the other way around.)
         string getFilesMethodName = nameof(RoslynAnalyzerAndCodeFixTestBase<,>.GetFileSets);
 #else
         string getFilesMethodName = "GetFileSets";
@@ -103,23 +100,15 @@ public sealed partial class CodeTestDataAttribute : MemberDataAttributeBase
         // Use LINQ to create the cross product more efficiently
         return baseData
             .SelectMany(referenceAssembly => fileSets.Select(fileSet =>
-                new object[] { referenceAssembly[0], fileSet }))
-            .ToArray();
+                new object[] { referenceAssembly[0], fileSet }));
     }
 
-    /// <inheritdoc/>
     protected override object[]? ConvertDataItem(MethodInfo testMethod, object item)
     {
         if (item is not object[] array)
         {
             throw new ArgumentException(
-                string.Format(
-                    CultureInfo.CurrentCulture,
-                    "Property {0} on {1} yielded an item that is not an object[]",
-                    MemberName,
-                    MemberType ?? testMethod.DeclaringType
-                )
-            );
+                $"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object array.");
         }
 
         return array;
