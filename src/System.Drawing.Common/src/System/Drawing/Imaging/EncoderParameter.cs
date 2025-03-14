@@ -214,12 +214,9 @@ public sealed unsafe class EncoderParameter : IDisposable
         _parameterValue = Marshal.AllocHGlobal(checked(_numberOfValues * sizeof(int)));
 
         int* dest = (int*)_parameterValue;
-        fixed (long* source = value)
+        for (int i = 0; i < value.Length; i++)
         {
-            for (int i = 0; i < value.Length; i++)
-            {
-                dest[i] = (int)source[i];
-            }
+            dest[i] = (int)value[i];
         }
 
         GC.KeepAlive(this);
