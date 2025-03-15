@@ -4391,12 +4391,12 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="translated">Botón</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
@@ -4406,12 +4406,12 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Vínculo</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Editar</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
