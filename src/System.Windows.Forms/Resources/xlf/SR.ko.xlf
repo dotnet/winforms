@@ -2124,7 +2124,7 @@
       </trans-unit>
       <trans-unit id="ControlTabStopDescr">
         <source>Indicates whether the user can use the TAB key to give focus to the control.</source>
-        <target state="new">Indicates whether the user can use the TAB key to give focus to the control.</target>
+        <target state="translated">Tab 키를 사용하여 컨트롤의 포커스를 이동할 수 있는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlTagDescr">
@@ -4391,12 +4391,12 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="translated">버튼</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
@@ -4406,12 +4406,12 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">링크</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">편집</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
@@ -5317,7 +5317,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
         <source>The accept button of the form. If this is set, the button is 'clicked' whenever the user presses the 'ENTER' key.</source>
-        <target state="new">The accept button of the form. If this is set, the button is 'clicked' whenever the user presses the 'ENTER' key.</target>
+        <target state="translated">양식의 수락 단추입니다. 설정하면 Enter 키를 누를 때마다 단추가 '클릭'됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormActiveMDIChildDescr">
@@ -5367,7 +5367,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCancelButtonDescr">
         <source>The cancel button of the form. If this property is set, the button is 'clicked' whenever the user presses the 'ESC' key.</source>
-        <target state="new">The cancel button of the form. If this property is set, the button is 'clicked' whenever the user presses the 'ESC' key.</target>
+        <target state="translated">양식의 취소 단추입니다. 이 속성을 설정하면 Esc 키를 누를 때마다 단추가 '클릭'됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionBackColorChangedDescr">
@@ -6246,7 +6246,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListBoxDrawModeDescr">
         <source>Controls list box painting. Either the system [NORMAL] or the user [OWNERDRAW] paints each item.</source>
-        <target state="new">Controls list box painting. Either the system [NORMAL] or the user [OWNERDRAW] paints each item.</target>
+        <target state="translated">목록 상자 그리기를 제어합니다. 시스템[NORMAL] 또는 사용자[OWNERDRAW]가 각 항목을 그립니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListBoxHorizontalExtentDescr">
@@ -8971,7 +8971,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ScrollBarLargeChangeDescr">
         <source>The amount by which the scroll box position changes when the user clicks in the scroll bar or presses the PAGE UP or PAGE DOWN keys.</source>
-        <target state="new">The amount by which the scroll box position changes when the user clicks in the scroll bar or presses the PAGE UP or PAGE DOWN keys.</target>
+        <target state="translated">스크롤 막대를 클릭하거나 Page Up 또는 Page Down 키를 누를 때 스크롤 상자 위치가 변경되는 정도입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollBarMaximumDescr">
@@ -9816,7 +9816,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderDescr">
         <source>Allows the items to be reordered when the ALT key is pressed.</source>
-        <target state="new">Allows the items to be reordered when the ALT key is pressed.</target>
+        <target state="translated">ALT 키를 누르면 항목을 다시 정렬할 수 있습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowMergeDescr">
@@ -10721,7 +10721,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TrackBarLargeChangeDescr">
         <source>The number of positions the slider moves in response to mouse clicks or the PAGE UP and PAGE DOWN keys.</source>
-        <target state="new">The number of positions the slider moves in response to mouse clicks or the PAGE UP and PAGE DOWN keys.</target>
+        <target state="translated">마우스 클릭이나 Page Up 및 Page Down 키에 대한 응답으로 슬라이더 위치가 이동되는 값입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarLargeChangeError">
@@ -11171,7 +11171,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="UpDownBaseInterceptArrowKeysDescr">
         <source>Indicates whether the up-down control will increment and decrement the value when the UP ARROW and DOWN ARROW keys are pressed.</source>
-        <target state="new">Indicates whether the up-down control will increment and decrement the value when the UP ARROW and DOWN ARROW keys are pressed.</target>
+        <target state="translated">위쪽 화살표 및 아래쪽 화살표 키를 눌렀을 때 up-down 컨트롤 값이 증가하고 감소하는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="UpDownBasePreferredHeightDescr">
