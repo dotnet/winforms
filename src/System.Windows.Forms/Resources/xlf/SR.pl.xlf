@@ -4391,12 +4391,12 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="translated">Przycisk</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
@@ -4406,12 +4406,12 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Link</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
