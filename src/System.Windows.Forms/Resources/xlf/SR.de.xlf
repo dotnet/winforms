@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">BinaryFormatter wird in der Zwischenablage oder bei Drag &amp;amp; Drop-Vorgängen nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">BinaryFormatter wird in der Zwischenablage oder bei Drag &amp;amp; Drop-Vorgängen nicht unterstützt. Aktivieren Sie es, und verwenden Sie die APIs „TryGetData&lt;T&gt;“ mit einer „Resolver“-Funktion, die eine Reihe zulässiger Typen definiert, um „{0}“ zu deserialisieren.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -829,7 +829,7 @@
       </trans-unit>
       <trans-unit id="CatDragDrop">
         <source>Drag Drop</source>
-        <target state="new">Drag Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="CatFocus">
@@ -979,7 +979,7 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">„{0}“ ist kein konkreter Typ und kann zu einem ungebundenen Deserialisierungsversuch führen. Verwenden Sie einen konkreten Typ, oder definieren Sie alternativ eine „Resolver“-Funktion, die Typen unterstützt, die Sie aus der Zwischenablage abrufen oder in Drag &amp;amp; Drop-Vorgängen verwenden möchten.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
@@ -1804,7 +1804,7 @@
       </trans-unit>
       <trans-unit id="ControlOnDragDropDescr">
         <source>Occurs when a drag-and-drop operation is completed.</source>
-        <target state="new">Occurs when a drag-and-drop operation is completed.</target>
+        <target state="translated">Tritt auf, wenn ein Drag &amp;amp; Drop-Vorgang abgeschlossen wurde.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnDragEnterDescr">
@@ -1984,7 +1984,7 @@
       </trans-unit>
       <trans-unit id="ControlOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="new">Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnResizeBeginDescr">
@@ -4391,12 +4391,12 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="translated">Schaltfläche</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
@@ -4406,12 +4406,12 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Link</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
@@ -8911,7 +8911,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="RichTextBox_IDDragDrop">
         <source>Drag and Drop</source>
-        <target state="new">Drag and Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBox_IDPaste">
@@ -10286,7 +10286,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripItemOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="new">Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnRightToLeftChangedDescr">

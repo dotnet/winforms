@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">BinaryFormatter nie jest obsługiwany w operacjach przeciągania i upuszczania w schowku.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">BinaryFormatter nie jest obsługiwany w operacjach przeciągania i upuszczania w schowku. Włącz go i użyj interfejsów API „TryGetData&lt;T&gt;” z funkcją „resolver”, która definiuje zestaw dozwolonych typów do deserializacji „{0}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -969,27 +969,27 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
         <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
-        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <target state="translated">Obiekt typu „DataObject” będzie serializować jako pusty. Użyj interfejsów API „DataObject.SetDataAsJson” w obiekcie, aby serializować dane w obiekcie przy użyciu formatu JSON, a następnie użyj interfejsu API „{0}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
-        <target state="new">The specified type '{0}' is not compatible with the specified format '{1}'.</target>
+        <target state="translated">Określony typ „{0}” jest niezgodny z określonym formatem „{1}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">„{0}” nie jest konkretnym typem i może spowodować niepowiązaną próbę deserializacji. Użyj konkretnego typu lub alternatywnie zdefiniuj funkcję „resolver”, która obsługuje typy, które mają zostać pobrane ze schowka, lub użyj jej w operacjach przeciągania i upuszczania.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="new">Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</target>
+        <target state="translated">Nie znaleziono typu {0}. Jeśli ten typ jest dozwolony, upewnij się, że funkcja „resolver” podana w interfejsach API „TryGetData&lt;T&gt;” obsługuje tę funkcję.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
         <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">Użyj interfejsów API „TryGetData&lt;T&gt;” z funkcją „resolver”, która definiuje zestaw dozwolonych typów do deserializacji „{0}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -2409,7 +2409,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="new">False</target>
+        <target state="translated">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2419,7 +2419,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="new">True</target>
+        <target state="translated">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -4391,12 +4391,12 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellToolTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="translated">Przycisk</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewComboBoxCellToolTipText">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
@@ -4406,12 +4406,12 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="DefaultDataGridViewLinkCellToolTipText">
         <source>Link</source>
-        <target state="new">Link</target>
+        <target state="translated">Link</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewTextBoxCellToolTipText">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
