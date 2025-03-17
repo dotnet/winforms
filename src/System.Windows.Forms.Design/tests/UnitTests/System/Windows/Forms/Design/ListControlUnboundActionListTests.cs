@@ -41,9 +41,26 @@ public sealed class ListControlUnboundActionListTests : IDisposable
     }
 
     [Fact]
-    public void InvokeItemsDialog_ShouldThrowException()
+    public void InvokeItemsDialog_EditValueInvoked_NoException()
     {
-        Action action = _actionList.InvokeItemsDialog;
-        action.Should().Throw<NullReferenceException>();
+        using ListView listView = new();
+        using ListViewDesigner listViewDesigner = new();
+        listViewDesigner.Initialize(listView);
+        var actionList = new ListControlUnboundActionList(listViewDesigner);
+        var task = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.Text.Contains("ListViewItem"))
+                {
+                    form.Invoke(new Action(() => form.Dispose()));
+                    break;
+                }
+            }
+        });
+
+        Action action = actionList.InvokeItemsDialog;
+        action.Should().NotThrow();
     }
 }
