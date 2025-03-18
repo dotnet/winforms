@@ -40,7 +40,7 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         methodItem.Description.Should().Be(SR.ListControlUnboundActionListEditItemsDescription);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void InvokeItemsDialog_EditValueInvoked_NoException()
     {
         using ListView listView = new();
@@ -49,12 +49,12 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         var actionList = new ListControlUnboundActionList(listViewDesigner);
         var task = Task.Run(async () =>
         {
-            await Task.Delay(1000);
+            await Task.Delay(1000).ConfigureAwait(false);
             foreach (Form form in Application.OpenForms)
             {
                 if (form.Text.Contains("ListViewItem"))
                 {
-                    form.Invoke(new Action(() => form.Dispose()));
+                    await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(false);
                     break;
                 }
             }
