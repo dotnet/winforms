@@ -1,6 +1,0 @@
-{
-  "configProperties": {
-    "TestSwitch.LocalAppContext.DisableCaching": "true",
-    "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": "false"
-  }
-}

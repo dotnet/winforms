@@ -1,1 +1,0 @@
-This project is meant as a scenario for testing and adding trimming support.

@@ -1,9 +1,0 @@
-﻿<Project>
-  <Import Project="..\..\Directory.Build.props" />
-  <PropertyGroup>
-    <StrongNameKeyId>Open</StrongNameKeyId>
-    <SupportedOSPlatforms>windows</SupportedOSPlatforms>
-    <UsingToolXliff>false</UsingToolXliff>
-    <EnableDefaultItems>false</EnableDefaultItems>
-  </PropertyGroup>
-</Project>

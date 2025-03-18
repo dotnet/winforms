@@ -1,5 +1,0 @@
-﻿{
-  "maxParallelThreads": 1,
-  "parallelizeTestCollections": false,
-  "re-run-failed-tests": 1
-}

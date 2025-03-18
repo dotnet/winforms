@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project>
-  <PropertyGroup>
-    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
-    <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
-    <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
-  </PropertyGroup>
-</Project>
