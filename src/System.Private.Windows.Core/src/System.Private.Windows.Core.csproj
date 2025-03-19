@@ -14,9 +14,8 @@
       cross that bridge when we hit it (if ever).
     -->
     <NoWarn>$(NoWarn);CS8981</NoWarn>
-    <!-- Reenable IDE0059 when VRM SDK version contains the fix for "reference-like" types -->
-    <!-- Reenable IDE0082 when VRM SDK version contains the fix for typeof/nameof support for generics -->
-    <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0059;IDE0082</NoWarn>
+    <!-- Reenable when VRM SDK version contains fis for "reference-like" types -->
+    <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0059</NoWarn>
     <!--
       CS3016: We don't care about CLS compliance since everything here is internal and we want to match native types.
       SYSLIB5005: System.Formats.Nrbf is experimental
