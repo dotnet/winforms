@@ -143,8 +143,7 @@ public class ToolStripMenuItemTests
         Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/13117")]
-    [WinFormsTheory(Skip = "Localization tests, see: https://github.com/dotnet/winforms/issues/13117")]
+    [WinFormsTheory]
     [MemberData(nameof(CultureInfo_Shortcut_TestData))]
     public void ToolStripMenuItem_SetShortcutKeys_ReturnExpectedShortcutText(CultureInfo threadCulture, CultureInfo threadUICulture, string expectedShortcutText)
     {
