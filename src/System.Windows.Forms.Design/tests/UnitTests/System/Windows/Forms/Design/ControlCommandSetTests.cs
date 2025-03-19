@@ -27,7 +27,7 @@ public class ControlCommandSetTests : IDisposable
         _eventHandlerServiceMock = new();
         _selectionServiceMock = new();
         _dictionaryServiceMock = new();
-        _baseControl = new Control();
+        _baseControl = new();
 
         _siteMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
         _siteMock.Setup(s => s.GetService(typeof(IMenuCommandService))).Returns(_menuServiceMock.Object);
@@ -36,7 +36,7 @@ public class ControlCommandSetTests : IDisposable
         _siteMock.Setup(s => s.GetService(typeof(IDictionaryService))).Returns(_dictionaryServiceMock.Object);
         _designerHostMock.Setup(h => h.RootComponent).Returns(_baseControl);
 
-        _controlCommandSet = new ControlCommandSet(_siteMock.Object);
+        _controlCommandSet = new(_siteMock.Object);
     }
 
     public void Dispose()
@@ -49,6 +49,16 @@ public class ControlCommandSetTests : IDisposable
     public void Constructor_ShouldInitializeCommandSet()
     {
         _controlCommandSet.Should().NotBeNull();
+
+        StatusCommandUI statusCommandUI = _controlCommandSet.TestAccessor().Dynamic._statusCommandUI;
+        statusCommandUI.Should().NotBeNull();
+
+        MenuCommand[] commandSet = _controlCommandSet.TestAccessor().Dynamic._commandSet;
+        commandSet.Should().NotBeNull();
+        commandSet.Should().NotBeEmpty();
+
+        TabOrder tabOrder = _controlCommandSet.TestAccessor().Dynamic._tabOrder;
+        tabOrder.Should().BeNull();
     }
 
     [Fact]
@@ -69,7 +79,12 @@ public class ControlCommandSetTests : IDisposable
 
         _designerHostMock.Setup(h => h.RootComponent).Returns(_baseControl);
 
-        _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(_designerHostMock.Object, component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
+        Mock<IDesigner> designerMock = new();
+        designerMock.Setup(d => d.Component).Returns(component);
+        _designerHostMock.Setup(h => h.GetDesigner(component)).Returns(designerMock.Object);
+
+        _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(
+            _designerHostMock.Object, component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
 
         snapComponent.Should().Be(_baseControl);
         snapProperty.Should().BeNull();
