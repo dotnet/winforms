@@ -133,7 +133,6 @@ public class InputLanguageTests
     public static IEnumerable<object[]> SupplementalInputLanguages_TestData()
     {
         // N’Ko input test failed in Windows 11 version 21H2.
-        // This condition should be removed once https://github.com/dotnet/winforms/issues/10150 is resolved.
         if (OsVersion.IsWindows11_22H2OrGreater())
         {
             yield return new object[] { "got-Goth", "000C0C00", "Gothic" };
