@@ -376,6 +376,15 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
     private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
     {
+        // fix https://github.com/microsoft/winforms-designer/issues/6292
+        if (DesignMode &&
+            RightToLeft == RightToLeft.Yes &&
+            dropDownDirection == ToolStripDropDownDirection.Left &&
+            (Parent is ToolStripOverflow || Parent is ToolStripDropDownMenu))
+        {
+            dropDownDirection = ToolStripDropDownDirection.Right;
+        }
+
         Rectangle dropDownBounds = new(Point.Empty, DropDown.GetSuggestedSize());
         // calculate the offset from the upper left hand corner of the item.
         dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
