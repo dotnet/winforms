@@ -374,33 +374,13 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         base.Dispose(disposing);
     }
 
-    private static bool FromToolStripOverflow(ToolStripDropDownItem? toolStripDropDownItem)
-    {
-        if (toolStripDropDownItem is null)
-        {
-            return false;
-        }
-
-        if (toolStripDropDownItem.Parent is ToolStripOverflow)
-        {
-            return true;
-        }
-
-        if (toolStripDropDownItem.Parent is ToolStripDropDownMenu toolStripDropDownMenu)
-        {
-            return FromToolStripOverflow(toolStripDropDownMenu.OwnerItem as ToolStripDropDownItem);
-        }
-
-        return false;
-    }
-
     private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
     {
         // fix https://github.com/microsoft/winforms-designer/issues/6292
         if (DesignMode &&
             RightToLeft == RightToLeft.Yes &&
             dropDownDirection == ToolStripDropDownDirection.Left &&
-            FromToolStripOverflow(this))
+            (Parent is ToolStripOverflow || Parent is ToolStripDropDownMenu))
         {
             dropDownDirection = ToolStripDropDownDirection.Right;
         }
