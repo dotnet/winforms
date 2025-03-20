@@ -2579,7 +2579,31 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
+            IntPtr editHandle = PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL);
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
+
+            BeginInvoke((MethodInvoker)(() =>
+            {
+                // Use BeginInvoke to queue the operation for later execution,
+                // Ensures that the logic runs after the TreeView control's edit control is fully initialized.
+                // And this code adjusts the position and size of the edit control
+                // to accommodate the DPI scaling for high-resolution displays.
+                if (e.Node is not null)
+                {
+                    float dpiScale = (float)DeviceDpi / ScaleHelper.OneHundredPercentLogicalDpi;
+
+                    PInvoke.SetWindowPos(
+                        (HWND)editHandle,
+                        HWND.Null,
+                        e.Node.Bounds.X,
+                        e.Node.Bounds.Y,
+                        e.Node.Bounds.Width + (int)(dpiScale * 10),
+                        e.Node.Bounds.Height + 2,
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                        | SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
+                        | SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
+                }
+            }));
         }
 
         return (LRESULT)(e.CancelEdit ? 1 : 0);
@@ -2734,6 +2758,16 @@ public partial class TreeView : Control
                 // as background color.
                 if (_drawMode == TreeViewDrawMode.OwnerDrawText)
                 {
+                    // When the node is being edited,
+                    // set the text color and background color to the same color so that the text is hidden
+                    // goto default to ensure the default drawing behavior is executed instead of a custom drawing.
+                    if (node is { IsEditing: true })
+                    {
+                        nmtvcd->clrText = ColorTranslator.ToWin32(BackColor);
+                        nmtvcd->clrTextBk = ColorTranslator.ToWin32(BackColor);
+                        goto default;
+                    }
+
                     nmtvcd->clrText = nmtvcd->clrTextBk;
                     m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT);
                     return;
@@ -2792,6 +2826,11 @@ public partial class TreeView : Control
                     nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
                 }
 
+                if (node is { IsEditing: true })
+                {
+                    nmtvcd->clrTextBk = ColorTranslator.ToWin32(BackColor);
+                }
+
                 if (renderinfo is not null && renderinfo.Font is not null)
                 {
                     // Mess with the DC directly...
@@ -2826,8 +2865,36 @@ public partial class TreeView : Control
                     {
                         Rectangle bounds = node.Bounds;
                         Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
-                        Point textLoc = new(AppContextSwitches.MoveTreeViewTextLocationOnePixel ? bounds.X : bounds.X - 1, bounds.Y);
-                        bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
+                        Point textLocation = new(AppContextSwitches.MoveTreeViewTextLocationOnePixel ? bounds.X : bounds.X - 1, bounds.Y);
+                        bounds = new Rectangle(textLocation, new Size(textSize.Width, bounds.Height));
+
+                        Rectangle fillRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+                        Rectangle focusRectangle = new Rectangle(textLocation, new(textSize.Width, bounds.Height));
+
+                        if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
+                        {
+                            int borderWidth = BorderStyle switch
+                            {
+                                BorderStyle.FixedSingle => 1,
+                                BorderStyle.Fixed3D => 2,
+                                _ => 0
+                            };
+
+                            // Reverse the X-axis drawing coordinates of the rectangle.
+                            int invertedX = Width - bounds.X - textSize.Width - borderWidth * 2;
+
+                            // Subtract the scroll bar width when the scroll bar appears.
+                            if (Height - borderWidth * 2 < CalculatePreferredHeight())
+                            {
+                                float dpiScale = (float)DeviceDpi / (float)ScaleHelper.InitialSystemDpi;
+                                invertedX -= (int)(SystemInformation.VerticalScrollBarWidth * Math.Round(dpiScale, 2));
+                            }
+
+                            // To ensure that the right side of the fillRectangle does not
+                            // touch the left edge of the node prefix symbol, 1 pixel is subtracted here.
+                            fillRectangle = new Rectangle(new Point(invertedX - 1, bounds.Y), new(textSize.Width, bounds.Height));
+                            focusRectangle = new Rectangle(new Point(invertedX, bounds.Y), new(textSize.Width, bounds.Height));
+                        }
 
                         DrawTreeNodeEventArgs e = new(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
                         OnDrawNode(e);
@@ -2843,14 +2910,14 @@ public partial class TreeView : Control
                             // Draw the actual node.
                             if ((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected)
                             {
-                                g.FillRectangle(SystemBrushes.Highlight, bounds);
-                                ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
+                                g.FillRectangle(SystemBrushes.Highlight, fillRectangle);
+                                ControlPaint.DrawFocusRectangle(g, focusRectangle, color, SystemColors.Highlight);
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
-                                g.FillRectangle(brush, bounds);
+                                g.FillRectangle(brush, fillRectangle);
 
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
@@ -2868,6 +2935,39 @@ public partial class TreeView : Control
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                 return;
         }
+    }
+
+    /// <summary>
+    ///  Calculate the preferred height of the entire tree.
+    /// </summary>
+    private int CalculatePreferredHeight()
+    {
+        // Nested method to recursively calculate the height of each node and its child nodes.
+        static int CountExpandedNodes(TreeNode node)
+        {
+            int count = 1; // Count the current node
+
+            // If the node is expanded, recursively calculate count its child nodes.
+            if (node.IsExpanded)
+            {
+                foreach (TreeNode childNode in node.Nodes)
+                {
+                    count += CountExpandedNodes(childNode);
+                }
+            }
+
+            return count;
+        }
+
+        int expandedNodeCount = 0;
+        // Iterate through all top-level nodes to count the total number of expanded nodes.
+        foreach (TreeNode node in Nodes)
+        {
+            expandedNodeCount += CountExpandedNodes(node);
+        }
+
+        // Calculate the total height based on the number of expanded nodes.
+        return expandedNodeCount * ItemHeight;
     }
 
     /// <summary>
