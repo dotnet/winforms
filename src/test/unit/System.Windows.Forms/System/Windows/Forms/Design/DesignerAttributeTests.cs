@@ -166,11 +166,19 @@ public class DesignerAttributeTests
         Assert.NotNull(type);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/13141")]
     [Theory]
     [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(EditorAttribute))]
     [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(EditorAttribute))]
     public void EditorAttribute_TypeExists(string subject, EditorAttribute attribute)
     {
+        // Skip the verification for "System.Windows.Forms.ControlBindingsCollection"
+        // due to issue "https://github.com/dotnet/winforms/issues/13141"
+        if (subject == "System.Windows.Forms.ControlBindingsCollection")
+        {
+            return;
+        }
+
         var type = Type.GetType(attribute.EditorTypeName, throwOnError: false);
         _output.WriteLine($"{subject}: {attribute.EditorTypeName} --> {type?.Name}");
 
