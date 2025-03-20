@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -40,10 +40,27 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         methodItem.Description.Should().Be(SR.ListControlUnboundActionListEditItemsDescription);
     }
 
-    [Fact]
-    public void InvokeItemsDialog_ShouldThrowException()
+    [WinFormsFact]
+    public void InvokeItemsDialog_EditValueInvoked_NoException()
     {
-        Action action = _actionList.InvokeItemsDialog;
-        action.Should().Throw<Exception>();
+        using ListView listView = new();
+        using ListViewDesigner listViewDesigner = new();
+        listViewDesigner.Initialize(listView);
+        var actionList = new ListControlUnboundActionList(listViewDesigner);
+        var task = Task.Run(async () =>
+        {
+            await Task.Delay(1000).ConfigureAwait(false);
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.Text.Contains("ListViewItem"))
+                {
+                    await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(false);
+                    break;
+                }
+            }
+        });
+
+        Action action = actionList.InvokeItemsDialog;
+        action.Should().NotThrow();
     }
 }
