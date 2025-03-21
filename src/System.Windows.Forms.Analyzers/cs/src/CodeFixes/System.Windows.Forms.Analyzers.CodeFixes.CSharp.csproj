@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\..\common\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
   
   <ItemGroup>

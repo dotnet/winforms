@@ -36,8 +36,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\System.Windows.Forms.Primitives\tests\TestUtilities.Tests\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj" />
-    <ProjectReference Include="..\..\generic\tests\System.Windows.Forms.Analyzers.Tests.csproj" />
-    <ProjectReference Include="..\..\generic\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\common\tests\System.Windows.Forms.Analyzers.Tests.csproj" />
+    <ProjectReference Include="..\..\common\src\System.Windows.Forms.Analyzers.csproj" />
     <ProjectReference Include="..\src\Analyzers\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
     <ProjectReference Include="..\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
   </ItemGroup>

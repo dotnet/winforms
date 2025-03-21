@@ -108,9 +108,9 @@
                                                       "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
                                                   },
                                                   {
-                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\generic\\src\\Resources\\xlf\\SR.xlf",
+                                                      "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\common\\src\\Resources\\xlf\\SR.xlf",
                                                       "CopyOption":  "LangIDOnName",
-                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\generic\\src\\Resources\\xlf\\"
+                                                      "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\common\\src\\Resources\\xlf\\"
                                                   },
                                                   {
                                                       "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\cs\\src\\CodeFixes\\Resources\\xlf\\SR.xlf",

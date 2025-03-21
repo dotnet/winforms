@@ -168,7 +168,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTestBinaryDeserializati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryFormatTests", "src\System.Private.Windows.Core\tests\BinaryFormatTests\BinaryFormatTests.csproj", "{57EC5288-9513-46CF-8FB7-626199690D90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers", "src\System.Windows.Forms.Analyzers\generic\src\System.Windows.Forms.Analyzers.csproj", "{8B7F075F-11C9-8D19-9161-785A0959C807}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers", "src\System.Windows.Forms.Analyzers\common\src\System.Windows.Forms.Analyzers.csproj", "{8B7F075F-11C9-8D19-9161-785A0959C807}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers.CSharp", "src\System.Windows.Forms.Analyzers\cs\src\Analyzers\System.Windows.Forms.Analyzers.CSharp.csproj", "{367B97BC-9A1F-B101-6B8E-0E66373F2BFF}"
 EndProject
@@ -182,7 +182,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzer", "Analyzer", "{02
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers.CSharp.Tests", "src\System.Windows.Forms.Analyzers\cs\tests\System.Windows.Forms.Analyzers.CSharp.Tests.csproj", "{6D3F4979-A444-778A-B6ED-6AA1786DADA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers.Tests", "src\System.Windows.Forms.Analyzers\generic\tests\System.Windows.Forms.Analyzers.Tests.csproj", "{1D7A95BF-545D-8D63-3CD1-75619B80A2A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers.Tests", "src\System.Windows.Forms.Analyzers\common\tests\System.Windows.Forms.Analyzers.Tests.csproj", "{1D7A95BF-545D-8D63-3CD1-75619B80A2A0}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "System.Windows.Forms.Analyzers.VisualBasic.Tests", "src\System.Windows.Forms.Analyzers\vb\tests\System.Windows.Forms.Analyzers.VisualBasic.Tests.vbproj", "{ACF7ACC1-5163-8728-DEA7-7758DF20738E}"
 EndProject

@@ -128,7 +128,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\cs\src\Analyzers\System.Windows.Forms.Analyzers.CSharp.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\cs\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\generic\src\System.Windows.Forms.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\common\src\System.Windows.Forms.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\vb\src\Analyzers\System.Windows.Forms.Analyzers.VisualBasic.vbproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\vb\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
