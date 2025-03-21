@@ -70,28 +70,6 @@ public class ControlCommandSetTests : IDisposable
     }
 
     [Fact]
-    public void GetSnapInformation_ShouldRetrieveSnapInformation()
-    {
-        using Control component = new();
-        Mock<IContainer> containerMock = new();
-        _siteMock.Setup(s => s.Container).Returns(containerMock.Object);
-        component.Site = _siteMock.Object;
-
-        _designerHostMock.Setup(h => h.RootComponent).Returns(_baseControl);
-
-        Mock<IDesigner> designerMock = new();
-        designerMock.Setup(d => d.Component).Returns(component);
-        _designerHostMock.Setup(h => h.GetDesigner(component)).Returns(designerMock.Object);
-
-        _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(
-            _designerHostMock.Object, component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
-
-        snapComponent.Should().Be(_baseControl);
-        snapProperty.Should().BeNull();
-        snapSize.Should().Be(Size.Empty);
-    }
-
-    [Fact]
     public void OnMenuLockControls_ShouldToggleLockControls()
     {
         using Control component = new();
@@ -108,5 +86,103 @@ public class ControlCommandSetTests : IDisposable
         _controlCommandSet.TestAccessor().Dynamic.OnMenuLockControls(menuCommand, EventArgs.Empty);
 
         menuCommand.Checked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GetSnapInformation_WithSnapToGridPropertyInParent_ShouldReturnThatProperty()
+    {
+        using Control childComponent = new();
+        using Control parentComponent = new();
+
+        childComponent.Parent = parentComponent;
+
+        Mock<IContainer> containerMock = new();
+        _siteMock.Setup(s => s.Container).Returns(containerMock.Object);
+        childComponent.Site = _siteMock.Object;
+        parentComponent.Site = _siteMock.Object;
+
+        _designerHostMock.Setup(h => h.RootComponent).Returns(_baseControl);
+
+        Mock<IDesigner> designerMock = new();
+        designerMock.Setup(d => d.Component).Returns(childComponent);
+        _designerHostMock.Setup(h => h.GetDesigner(childComponent)).Returns(designerMock.Object);
+
+        Mock<PropertyDescriptor> snapPropertyDescriptorMock = new("SnapToGrid", Array.Empty<Attribute>());
+        snapPropertyDescriptorMock.Setup(p => p.PropertyType).Returns(typeof(bool));
+        snapPropertyDescriptorMock.Setup(p => p.ComponentType).Returns(typeof(Control));
+        snapPropertyDescriptorMock.Setup(p => p.Name).Returns("SnapToGrid");
+
+        var originalProvider = TypeDescriptor.GetProvider(parentComponent);
+        var mockProvider = new MockTypeDescriptionProvider(originalProvider, snapPropertyDescriptorMock.Object);
+        TypeDescriptor.AddProvider(mockProvider, parentComponent);
+
+        try
+        {
+            _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(
+                _designerHostMock.Object, childComponent, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
+
+            snapComponent.Should().Be(parentComponent);
+            snapProperty.Should().NotBeNull();
+            snapProperty.Name.Should().Be("SnapToGrid");
+            snapSize.Should().Be(Size.Empty);
+        }
+        finally
+        {
+            TypeDescriptor.RemoveProvider(mockProvider, parentComponent);
+        }
+    }
+
+    /// <summary>
+    /// Helper class to provide mock property descriptors
+    /// </summary>
+    private class MockTypeDescriptionProvider : TypeDescriptionProvider
+    {
+        private readonly TypeDescriptionProvider _baseProvider;
+        private readonly PropertyDescriptor _snapToGridProperty;
+
+        public MockTypeDescriptionProvider(TypeDescriptionProvider baseProvider, PropertyDescriptor snapToGridProperty)
+        {
+            _baseProvider = baseProvider;
+            _snapToGridProperty = snapToGridProperty;
+        }
+
+        public override ICustomTypeDescriptor? GetTypeDescriptor(Type objectType, object? instance)
+        {
+            var baseDescriptor = _baseProvider.GetTypeDescriptor(objectType, instance);
+            return baseDescriptor is not null ? new MockCustomTypeDescriptor(baseDescriptor, _snapToGridProperty) : null;
+        }
+    }
+
+    private class MockCustomTypeDescriptor : CustomTypeDescriptor
+    {
+        private readonly PropertyDescriptor _snapToGridProperty;
+
+        public MockCustomTypeDescriptor(ICustomTypeDescriptor parent, PropertyDescriptor snapToGridProperty)
+            : base(parent)
+        {
+            _snapToGridProperty = snapToGridProperty;
+        }
+
+        public override PropertyDescriptorCollection GetProperties()
+        {
+            PropertyDescriptorCollection baseProperties = base.GetProperties();
+
+            PropertyDescriptor[] allProperties = new PropertyDescriptor[baseProperties.Count + 1];
+            baseProperties.CopyTo(allProperties, 0);
+            allProperties[baseProperties.Count] = _snapToGridProperty;
+
+            return new PropertyDescriptorCollection(allProperties);
+        }
+
+        public override PropertyDescriptorCollection GetProperties(Attribute[]? attributes)
+        {
+            PropertyDescriptorCollection baseProperties = base.GetProperties(attributes);
+
+            PropertyDescriptor[] allProperties = new PropertyDescriptor[baseProperties.Count + 1];
+            baseProperties.CopyTo(allProperties, 0);
+            allProperties[baseProperties.Count] = _snapToGridProperty;
+
+            return new PropertyDescriptorCollection(allProperties);
+        }
     }
 }
