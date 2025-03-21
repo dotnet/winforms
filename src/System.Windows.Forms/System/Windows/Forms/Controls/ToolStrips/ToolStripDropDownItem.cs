@@ -379,8 +379,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         // fix https://github.com/microsoft/winforms-designer/issues/6292
         if (DesignMode &&
             RightToLeft == RightToLeft.Yes &&
-            dropDownDirection == ToolStripDropDownDirection.Left &&
-            (Parent is ToolStripOverflow || Parent is ToolStripDropDownMenu))
+            dropDownDirection == ToolStripDropDownDirection.Left)
         {
             dropDownDirection = ToolStripDropDownDirection.Right;
         }
