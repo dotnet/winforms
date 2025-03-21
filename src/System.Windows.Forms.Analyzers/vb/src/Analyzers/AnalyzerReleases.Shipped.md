@@ -6,5 +6,6 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO1000 | WinForms Security | Error | VisualBasicDiagnosticDescriptors
-WFO2001 | WinForms Security | Warning | VisualBasicDiagnosticDescriptors
+WFO1000 | WinForms Security | Error | VisualBasicDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO1000)
+WFO5001 | WinForms Security | Warning | VisualBasicDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO5001)
+WFO5002 | WinForms Security | Warning | VisualBasicDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO5002)

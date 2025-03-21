@@ -15,7 +15,7 @@ WFAC010 | ApplicationConfiguration | Warning | AppManifestAnalyzer, [Documentati
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO0003 | Application Configuration | Warning | SharedDiagnosticDescriptors
+WFO0003 | Application Configuration | Warning | SharedDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO0003)
 
 ### Removed Rules
 
