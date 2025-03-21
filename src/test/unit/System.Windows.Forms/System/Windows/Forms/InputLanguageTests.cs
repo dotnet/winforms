@@ -134,20 +134,19 @@ public class InputLanguageTests
     {
         yield return new object[] { "got-Goth", "000C0C00", "Gothic" };
         yield return new object[] { "jv-Java", "00110C00", "Javanese" };
-        yield return new object[] { "nqo", "00090C00", "N’Ko" };
         yield return new object[] { "zgh-Tfng", "0000105F", "Tifinagh (Basic)" };
+
+        // N’Ko input test failed in Windows 11 version 21H2.
+        if (OsVersion.IsWindows11_22H2OrGreater())
+        {
+            yield return new object[] { "nqo", "00090C00", "N’Ko" };
+        }
     }
 
     [Theory]
     [MemberData(nameof(SupplementalInputLanguages_TestData))]
     public void InputLanguage_FromCulture_SupplementalInputLanguages_Expected(string languageTag, string layoutId, string layoutName)
     {
-        // This condition should be removed once https://github.com/dotnet/winforms/issues/10150 is resolved.
-        if (languageTag == "nqo" && !OsVersion.IsWindows11_22H2OrGreater())
-        {
-            return;
-        }
-
         // Also installs default keyboard layout for this language
         // https://learn.microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
         InstallUserLanguage(languageTag);
