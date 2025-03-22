@@ -19,8 +19,7 @@ Rule ID | Category | Severity | Notes
 WFO0001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/WFO0001)
 WFO0002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://aka.ms/winforms-warnings/WFO0002)
 WFO1000 | WinForms Security | Error | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO1000)
-WFO5001 | WinForms Security | Warning | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO5001)
-WFO5002 | WinForms Security | Warning | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO5002)
+WFO2001 | WinForms Usage | Warning | CSharpDiagnosticDescriptors, [Documentation](https://aka.ms/winforms-warnings/WFO2001)
 
 ### Removed Rules
 
