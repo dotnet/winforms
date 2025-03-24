@@ -172,7 +172,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     public IComponent Component => _component ?? throw new InvalidOperationException("Designer is not initialized");
 
     /// <summary>
-    /// Internal utility used primarily to dispose instances
+    ///  Internal utility used primarily to dispose instances
     /// </summary>
     [MemberNotNullWhen(true, nameof(_component))]
     private protected bool HasComponent => _component is not null;

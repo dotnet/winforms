@@ -12,14 +12,14 @@ namespace System.Windows.Forms.Metafiles;
 ///  Record that just has a single point value.
 /// </summary>
 /// <devdoc>
-///   Not an actual Win32 define, encapsulates:
+///  Not an actual Win32 define, encapsulates:
 ///
-///    - EMRLINETO
-///    - EMRMOVETOEX
-///    - EMROFFSETCLIPRGN
-///    - EMRSETVIEWPORTORGEX
-///    - EMRSETWINDOWORGEX
-///    - EMRSETBRUSHORGEX
+///   - EMRLINETO
+///   - EMRMOVETOEX
+///   - EMROFFSETCLIPRGN
+///   - EMRSETVIEWPORTORGEX
+///   - EMRSETWINDOWORGEX
+///   - EMRSETBRUSHORGEX
 /// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRPOINTRECORD

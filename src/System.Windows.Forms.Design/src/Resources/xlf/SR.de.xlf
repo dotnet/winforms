@@ -686,6 +686,11 @@
         <target state="translated">{0} DataSource geändert</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewColumnCollectionTransaction">
+        <source>DataGridView ColumnCollection Edit</source>
+        <target state="translated">Bearbeitung: DataGridView ColumnCollection</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
         <source>The DataGridViewColumn type.</source>
         <target state="translated">Der DataGridViewColumn-Typ.</target>
@@ -1151,8 +1156,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
-        <source>Horizontal Splitter Orientation.</source>
-        <target state="translated">Horizontale Teilungsausrichtung.</target>
+        <source>Horizontal Splitter Orientation</source>
+        <target state="translated">Horizontale Teilungsausrichtung</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">
@@ -2330,6 +2335,16 @@ Drücken Sie STRG+EINGABETASTE, um Text zu übernehmen.</target>
       <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
         <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
         <target state="translated">"ToolStrip MenuItem Insert" in DropDown-Transaktion.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="translated">(&amp;Mehrere Elemente)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="translated">(&amp;Keine)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">

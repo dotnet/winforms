@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Imaging.Effects;
 #endif
 using System.IO;
+using System.Private.Windows.Graphics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
@@ -16,7 +17,7 @@ namespace System.Drawing;
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [Serializable]
 [TypeForwardedFrom(AssemblyRef.SystemDrawing)]
-public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
+public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>, IBitmap
 {
     private static readonly Color s_defaultTransparentColor = Color.LightGray;
 
@@ -151,6 +152,8 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IntPtr GetHbitmap() => GetHbitmap(Color.LightGray);
+
+    HBITMAP IBitmap.GetHbitmap() => (HBITMAP)GetHbitmap();
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IntPtr GetHbitmap(Color background)

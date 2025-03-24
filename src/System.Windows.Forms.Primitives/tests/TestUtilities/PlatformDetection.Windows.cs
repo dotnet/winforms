@@ -52,7 +52,7 @@ public static partial class PlatformDetection
 
     // Windows OneCoreUAP SKU doesn't have httpapi.dll
     public static bool IsNotOneCoreUAP =>
-        File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
+        File.Exists(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
 
     public static bool IsWindowsIoTCore => GetWindowsProductType() is PRODUCT_IOTUAPCOMMERCIAL or PRODUCT_IOTUAP;
 

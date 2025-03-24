@@ -4,17 +4,22 @@
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>$(NoWarn);618</NoWarn>
+    <!--
+      SYSLIB5005: System.Formats.Nrbf is experimental
+    -->
+    <NoWarn>$(NoWarn);SYSLIB5005</NoWarn>
     <Nullable>enable</Nullable>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>
 

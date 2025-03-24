@@ -35,13 +35,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\test\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>
 

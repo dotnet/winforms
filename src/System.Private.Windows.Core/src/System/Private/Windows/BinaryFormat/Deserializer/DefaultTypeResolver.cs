@@ -21,21 +21,27 @@ internal sealed class DefaultTypeResolver : ITypeResolver
         _binder = options.TypeResolver;
     }
 
-    /// <summary>
-    ///  Resolves the given type name against the specified library.
-    /// </summary>
-    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String)")]
-    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    Type ITypeResolver.GetType(TypeName typeName)
+    Type ITypeResolver.BindToType(TypeName typeName)
+    {
+        if (TryBindToType(typeName, out Type? type))
+        {
+            return type;
+        }
+
+        throw new SerializationException(string.Format(SR.Serialization_MissingType, typeName.AssemblyQualifiedName));
+    }
+
+    public bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
     {
         Debug.Assert(typeName.AssemblyName is not null);
 
         if (_types.TryGetValue(typeName.AssemblyQualifiedName, out Type? cachedType))
         {
-            return cachedType;
+            type = cachedType;
+            return true;
         }
 
-        if (_binder?.GetType(typeName) is Type binderType)
+        if (_binder?.BindToType(typeName) is Type binderType)
         {
             // BinaryFormatter is inconsistent about what caching behavior you get with binders.
             // It would always cache the last item from the binder, but wouldn't put the result
@@ -44,7 +50,8 @@ internal sealed class DefaultTypeResolver : ITypeResolver
             // for performance.
 
             _types[typeName.AssemblyQualifiedName] = binderType;
-            return binderType;
+            type = binderType;
+            return true;
         }
 
         if (!_assemblies.TryGetValue(typeName.AssemblyName.FullName, out Assembly? assembly))
@@ -67,17 +74,19 @@ internal sealed class DefaultTypeResolver : ITypeResolver
             _assemblies.Add(typeName.AssemblyName.FullName, assembly);
         }
 
-        Type? type = _simpleAssemblyMatching
+        type = _simpleAssemblyMatching
             ? GetSimplyNamedTypeFromAssembly(assembly, typeName)
             : assembly.GetType(typeName.FullName);
 
-        _types[typeName.AssemblyQualifiedName] = type
-            ?? throw new SerializationException(string.Format(SR.Serialization_MissingType, typeName.AssemblyQualifiedName));
+        if (type is not null)
+        {
+            _types[typeName.AssemblyQualifiedName] = type;
+            return true;
+        }
 
-        return type;
+        return false;
     }
 
-    [RequiresUnreferencedCode("Calls System.Reflection.Assembly.GetType(String, Boolean, Boolean)")]
     private static Type? GetSimplyNamedTypeFromAssembly(Assembly assembly, TypeName typeName)
     {
         // Catching any exceptions that could be thrown from a failure on assembly load
@@ -93,7 +102,11 @@ internal sealed class DefaultTypeResolver : ITypeResolver
         catch (FileLoadException) { }
         catch (BadImageFormatException) { }
 
-        return Type.GetType(typeName.FullName, ResolveSimpleAssemblyName, new TopLevelAssemblyTypeResolver(assembly).ResolveType, throwOnError: false);
+        return Type.GetType(
+            typeName.FullName,
+            ResolveSimpleAssemblyName,
+            new TopLevelAssemblyTypeResolver(assembly).ResolveType,
+            throwOnError: false);
 
         static Assembly? ResolveSimpleAssemblyName(AssemblyName assemblyName)
         {

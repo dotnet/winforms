@@ -1,0 +1,64 @@
+[*.{cs,vb}]
+# This collides with TheoryData usage
+dotnet_style_prefer_collection_expression = true:silent
+
+# This should be fixed https://github.com/dotnet/winforms/issues/11041
+# xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
+dotnet_diagnostic.xUnit1042.severity = none
+
+# xUnit1044: Avoid using TheoryData type arguments that are not serializable
+dotnet_diagnostic.xUnit1044.severity = none
+
+# xUnit1045: Avoid using TheoryData type arguments that might not be serializable
+dotnet_diagnostic.xUnit1045.severity = none
+
+# CA1416: Validate platform compatibility
+dotnet_diagnostic.CA1416.severity = none
+
+# CA1507: CA1507: Use nameof in place of string - many false positives
+dotnet_diagnostic.CA1507.severity = none
+
+# CA1815: Override equals and operator equals on value types
+dotnet_diagnostic.CA1815.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = suggestion
+
+# CA1852: Seal internal types
+dotnet_diagnostic.CA1852.severity = suggestion
+
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = none
+
+# CA1861: Avoid constant arrays as arguments - expected to be in-line for test readability (4000 hits)
+dotnet_diagnostic.CA1861.severity = silent
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = suggestion
+
+# CA2300: Do not use insecure deserializer BinaryFormatter
+dotnet_diagnostic.CA2300.severity = none
+
+# CA2301: Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
+dotnet_diagnostic.CA2301.severity = none
+
+# CA2302: Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
+dotnet_diagnostic.CA2302.severity = none
+
+# CA5394: Do not use insecure randomness
+dotnet_diagnostic.CA5394.severity = none
+
+# IL2026: Members attributed with RequiresUnreferencedCode may break when trimming
+dotnet_diagnostic.IL2026.severity = none
+
+# IL2072: 'target parameter' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to 'target method'
+dotnet_diagnostic.IL2072.severity = none
+
+# IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to 'target method'
+dotnet_diagnostic.IL2075.severity = none
+
+# IL3000: Avoid using accessing Assembly file path when publishing as a single-file
+dotnet_diagnostic.IL3000.severity = none
+
+# SA1115: Parameter should begin on the line after the previous parameter
+dotnet_diagnostic.SA1115.severity = none

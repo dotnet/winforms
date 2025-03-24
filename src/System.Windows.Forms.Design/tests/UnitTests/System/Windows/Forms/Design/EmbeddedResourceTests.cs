@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Drawing;
 using System.Reflection;
@@ -123,6 +125,8 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.ShortcutKeysEditor.resources
             System.Windows.Forms.Design.StringCollectionEditor.resources
             System.Windows.Forms.Design.StyleCollectionEditor.resources
+            System.Windows.Forms.Design.ToolStripItemEditorForm.resources
+            System.Windows.Forms.Design.BlankToolstrip.bmp
             """;
 
     [Fact]

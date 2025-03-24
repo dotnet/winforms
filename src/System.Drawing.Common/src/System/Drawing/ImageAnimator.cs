@@ -7,27 +7,27 @@ using System.Threading;
 namespace System.Drawing;
 
 /// <summary>
-///     Animates one or more images that have time-based frames.
-///     See the ImageInfo.cs file for the helper nested ImageInfo class.
+///  Animates one or more images that have time-based frames.
+///  See the ImageInfo.cs file for the helper nested ImageInfo class.
 ///
-///     A common pattern for using this class is as follows (See PictureBox control):
-///     1. The WinForms app (user's code) calls ImageAnimator.Animate() from the main thread.
-///     2. Animate() spawns the animating (worker) thread in the background, which will update the image
-///        frames and raise the OnFrameChanged event, which handler will be executed in the main thread.
-///     3. The main thread triggers a paint event (Invalidate()) from the OnFrameChanged handler.
-///     4. From the OnPaint event, the main thread calls ImageAnimator.UpdateFrames() and then paints the
-///        image (updated frame).
-///     5. The main thread calls ImageAnimator.StopAnimate() when needed. This does not kill the worker thread.
+///  A common pattern for using this class is as follows (See PictureBox control):
+///  1. The WinForms app (user's code) calls ImageAnimator.Animate() from the main thread.
+///  2. Animate() spawns the animating (worker) thread in the background, which will update the image
+///  frames and raise the OnFrameChanged event, which handler will be executed in the main thread.
+///  3. The main thread triggers a paint event (Invalidate()) from the OnFrameChanged handler.
+///  4. From the OnPaint event, the main thread calls ImageAnimator.UpdateFrames() and then paints the
+///  image (updated frame).
+///  5. The main thread calls ImageAnimator.StopAnimate() when needed. This does not kill the worker thread.
 ///
-///     Comment on locking the image ref:
-///     We need to synchronize access to sections of code that modify the image(s), but we don't want to block
-///     animation of one image when modifying a different one; for this, we use the image ref for locking the
-///     critical section (lock(image)).
+///  Comment on locking the image ref:
+///  We need to synchronize access to sections of code that modify the image(s), but we don't want to block
+///  animation of one image when modifying a different one; for this, we use the image ref for locking the
+///  critical section (lock(image)).
 ///
-///     This class is safe for multi-threading but Image is not; multithreaded applications must use a critical
-///     section lock using the image ref the image access is not from the same thread that executes ImageAnimator
-///     code. If the user code locks on the image ref forever a deadlock will happen preventing the animation
-///     from occurring.
+///  This class is safe for multi-threading but Image is not; multithreaded applications must use a critical
+///  section lock using the image ref the image access is not from the same thread that executes ImageAnimator
+///  code. If the user code locks on the image ref forever a deadlock will happen preventing the animation
+///  from occurring.
 /// </summary>
 public sealed partial class ImageAnimator
 {

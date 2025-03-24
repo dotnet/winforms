@@ -29,7 +29,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     private const int BufferBusyDisposing = 2; // The graphics buffer is busy disposing.
 
     /// <summary>
-    /// Basic constructor.
+    ///  Basic constructor.
     /// </summary>
     public BufferedGraphicsContext()
     {
@@ -68,7 +68,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     ~BufferedGraphicsContext() => Dispose(false);
 
     /// <summary>
-    /// Returns a BufferedGraphics that is matched for the specified target Graphics object.
+    ///  Returns a BufferedGraphics that is matched for the specified target Graphics object.
     /// </summary>
     public BufferedGraphics Allocate(Graphics targetGraphics, Rectangle targetRectangle)
     {
@@ -81,7 +81,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Returns a BufferedGraphics that is matched for the specified target HDC object.
+    ///  Returns a BufferedGraphics that is matched for the specified target HDC object.
     /// </summary>
     public BufferedGraphics Allocate(IntPtr targetDC, Rectangle targetRectangle)
     {
@@ -94,7 +94,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Returns a BufferedGraphics that is matched for the specified target HDC object.
+    ///  Returns a BufferedGraphics that is matched for the specified target HDC object.
     /// </summary>
     private BufferedGraphics AllocBuffer(Graphics? targetGraphics, HDC targetDC, Rectangle targetRectangle)
     {
@@ -143,7 +143,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Returns a BufferedGraphics that is matched for the specified target HDC object.
+    ///  Returns a BufferedGraphics that is matched for the specified target HDC object.
     /// </summary>
     private static BufferedGraphics AllocBufferInTempManager(Graphics? targetGraphics, HDC targetDC, Rectangle targetRectangle)
     {
@@ -174,11 +174,11 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// This routine allows us to control the point were we start using throw away
-    /// managers for painting. Since the buffer manager stays around (by default)
-    /// for the life of the app, we don't want to consume too much memory
-    /// in the buffer. However, re-allocating the buffer for small things (like
-    /// buttons, labels, etc) will hit us on runtime performance.
+    ///  This routine allows us to control the point were we start using throw away
+    ///  managers for painting. Since the buffer manager stays around (by default)
+    ///  for the life of the app, we don't want to consume too much memory
+    ///  in the buffer. However, re-allocating the buffer for small things (like
+    ///  buttons, labels, etc) will hit us on runtime performance.
     /// </summary>
     private bool ShouldUseTempManager(Rectangle targetBounds)
     {
@@ -336,17 +336,17 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Create a DIB section with an optimal format w.r.t. the specified hdc.
+    ///  Create a DIB section with an optimal format w.r.t. the specified hdc.
     ///
-    /// If DIB &lt;= 8bpp, then the DIB color table is initialized based on the
-    /// specified palette. If the palette handle is NULL, then the system
-    /// palette is used.
+    ///  If DIB &lt;= 8bpp, then the DIB color table is initialized based on the
+    ///  specified palette. If the palette handle is NULL, then the system
+    ///  palette is used.
     ///
-    /// Note: The hdc must be a direct DC (not an info or memory DC).
+    ///  Note: The hdc must be a direct DC (not an info or memory DC).
     ///
-    /// Note: On palettized displays, if the system palette changes the
-    ///       UpdateDIBColorTable function should be called to maintain
-    ///       the identity palette mapping between the DIB and the display.
+    ///  Note: On palettized displays, if the system palette changes the
+    ///  UpdateDIBColorTable function should be called to maintain
+    ///  the identity palette mapping between the DIB and the display.
     /// </summary>
     /// <returns>A valid bitmap handle if successful, IntPtr.Zero otherwise.</returns>
     private HBITMAP CreateCompatibleDIB(HDC hdc, HPALETTE hpalette, int ulWidth, int ulHeight)
@@ -453,7 +453,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Disposes of the Graphics buffer.
+    ///  Disposes of the Graphics buffer.
     /// </summary>
     private void Dispose(bool disposing)
     {
@@ -489,7 +489,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Invalidates the cached graphics buffer.
+    ///  Invalidates the cached graphics buffer.
     /// </summary>
     public void Invalidate()
     {
@@ -509,7 +509,7 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Returns a Graphics object representing a buffer.
+    ///  Returns a Graphics object representing a buffer.
     /// </summary>
     internal void ReleaseBuffer()
     {

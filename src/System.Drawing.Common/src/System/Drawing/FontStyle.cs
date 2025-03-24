@@ -4,30 +4,30 @@
 namespace System.Drawing;
 
 /// <summary>
-/// Specifies style information applied to text.
+///  Specifies style information applied to text.
 /// </summary>
 [Flags]
 [Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public enum FontStyle
 {
     /// <summary>
-    /// Normal text.
+    ///  Normal text.
     /// </summary>
     Regular = 0,
     /// <summary>
-    /// Bold text.
+    ///  Bold text.
     /// </summary>
     Bold = 1,
     /// <summary>
-    /// Italic text.
+    ///  Italic text.
     /// </summary>
     Italic = 2,
     /// <summary>
-    /// Underlined text.
+    ///  Underlined text.
     /// </summary>
     Underline = 4,
     /// <summary>
-    /// Text with a line through the middle.
+    ///  Text with a line through the middle.
     /// </summary>
     Strikeout = 8,
 }

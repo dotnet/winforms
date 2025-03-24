@@ -58,7 +58,7 @@ public enum DitherType
     DualSpiral4x4 = GdiPlus.DitherType.DitherTypeDualSpiral4x4,
 
     /// <summary>
-    /// Dithering is performed using the colors in one of the standard fixed palettes.
+    ///  Dithering is performed using the colors in one of the standard fixed palettes.
     /// </summary>
     DualSpiral8x8 = GdiPlus.DitherType.DitherTypeDualSpiral8x8,
 

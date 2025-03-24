@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\test\integration\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
     <ProjectReference Include="..\..\..\src\Microsoft.VisualBasic.Facade.csproj" />
-    <ProjectReference Include="..\..\..\..\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
     <ProjectReference Include="..\VisualBasicRuntimeTest\VisualBasicRuntimeTest.csproj" />
   </ItemGroup>
 

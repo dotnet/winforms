@@ -166,7 +166,7 @@ Namespace Microsoft.VisualBasic.Logging
                         Debug.Fail("Unrecognized LogFileCreationSchedule")
                 End Select
 
-                Return Path.Combine(basePath, fileName)
+                Return Path.Join(basePath, fileName)
             End Get
         End Property
 

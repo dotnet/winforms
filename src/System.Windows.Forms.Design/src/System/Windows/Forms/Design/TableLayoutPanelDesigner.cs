@@ -667,8 +667,8 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    /// Returns true if an empty subset of size subsetColumns x subsetRows exists in the cells
-    /// array. cells[c,r] == true if the corresponding cell contains a control
+    ///  Returns true if an empty subset of size subsetColumns x subsetRows exists in the cells
+    ///  array. cells[c,r] == true if the corresponding cell contains a control
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="columns"></param>

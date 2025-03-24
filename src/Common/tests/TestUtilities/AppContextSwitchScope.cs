@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Reflection;
-
 namespace System;
 
 /// <summary>
@@ -62,17 +60,9 @@ public readonly ref struct AppContextSwitchScope
     /// </summary>
     public static bool GetDefaultValueForSwitchInAssembly(string switchName, string assemblyName, string typeName)
     {
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-        {
-            if (assembly.GetName().Name == assemblyName)
-            {
-                Type type = assembly.GetType(typeName)
-                    ?? throw new InvalidOperationException($"Could not find {typeName} type in {assemblyName} assembly.");
+        Type type = Type.GetType($"{typeName}, {assemblyName}")
+            ?? throw new InvalidOperationException($"Could not find {typeName} type in {assemblyName} assembly.");
 
-                return type.TestAccessor().Dynamic.GetSwitchDefaultValue(switchName);
-            }
-        }
-
-        throw new InvalidOperationException($"Could not find {assemblyName} assembly in the test process.");
+        return type.TestAccessor().Dynamic.GetSwitchDefaultValue(switchName);
     }
 }

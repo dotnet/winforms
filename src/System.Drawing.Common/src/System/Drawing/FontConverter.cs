@@ -33,10 +33,10 @@ public class FontConverter : TypeConverter
                 culture ??= CultureInfo.CurrentCulture;
 
                 ValueStringBuilder sb = default;
-                sb.Append(font.Name);
+                sb.AppendLiteral(font.Name);
                 sb.Append(culture.TextInfo.ListSeparator[0]);
                 sb.Append(' ');
-                sb.Append(font.Size.ToString(culture.NumberFormat));
+                sb.AppendLiteral(font.Size.ToString(culture.NumberFormat));
 
                 switch (font.Unit)
                 {
@@ -44,39 +44,39 @@ public class FontConverter : TypeConverter
                     // to GraphicsUnit.Display
                     // Don't know what to append for GraphicsUnit.Display
                     case GraphicsUnit.Display:
-                        sb.Append("display");
+                        sb.AppendLiteral("display");
                         break;
 
                     case GraphicsUnit.Document:
-                        sb.Append("doc");
+                        sb.AppendLiteral("doc");
                         break;
 
                     case GraphicsUnit.Point:
-                        sb.Append("pt");
+                        sb.AppendLiteral("pt");
                         break;
 
                     case GraphicsUnit.Inch:
-                        sb.Append("in");
+                        sb.AppendLiteral("in");
                         break;
 
                     case GraphicsUnit.Millimeter:
-                        sb.Append("mm");
+                        sb.AppendLiteral("mm");
                         break;
 
                     case GraphicsUnit.Pixel:
-                        sb.Append("px");
+                        sb.AppendLiteral("px");
                         break;
 
                     case GraphicsUnit.World:
-                        sb.Append("world");
+                        sb.AppendLiteral("world");
                         break;
                 }
 
                 if (font.Style != FontStyle.Regular)
                 {
                     sb.Append(culture.TextInfo.ListSeparator[0]);
-                    sb.Append(" style=");
-                    sb.Append(font.Style.ToString());
+                    sb.AppendLiteral(" style=");
+                    sb.AppendLiteral(font.Style.ToString());
                 }
 
                 return sb.ToString();

@@ -194,7 +194,7 @@ configuration:
               isRegex: False
       then:
       - addMilestone:
-          milestone: 10.0 Preview1
+          milestone: 10.0 Preview4
       description: Apply milestone to PRs on the main branch
       triggerOnOwnActions: true
     - if:

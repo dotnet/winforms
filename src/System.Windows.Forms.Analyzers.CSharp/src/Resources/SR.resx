@@ -157,12 +157,21 @@
     <value>Add DesignerSerializationVisibilityAttribute to property</value>
   </data>
   <data name="WFO2001AnalyzerTitle" xml:space="preserve">
-    <value>Task is being passed to InvokeAsync without a cancellation token</value>
+    <value>Task is being passed to `InvokeAsync` without a cancellation token</value>
   </data>
   <data name="WFO2001AnalyzerDescription" xml:space="preserve">
     <value>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</value>
   </data>
   <data name="WFO2001AnalyzerMessageFormat" xml:space="preserve">
-    <value>Task is being passed to InvokeAsync without a cancellation token</value>
+    <value>Task is being passed to `InvokeAsync` without a cancellation token</value>
+  </data>
+  <data name="WFO1001AnalyzerMessageFormat" xml:space="preserve">
+    <value>Type `{0}` does not implement `ITypedDataObject` interface</value>
+  </data>
+  <data name="WFO1001AnalyzerTitle" xml:space="preserve">
+    <value>`IDataObject` type does not implement `ITypedDataObject`</value>
+  </data>
+  <data name="WFO1001AnalyzerDescription" xml:space="preserve">
+    <value>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</value>
   </data>
 </root>

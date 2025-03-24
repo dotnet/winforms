@@ -24,9 +24,9 @@ Windows Forms requires the following workloads and components be selected when i
   ```
   
 * Useful Visual Studio extensions:  
-  * [Editor guidelines](https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines), see https://github.com/dotnet/winforms/pull/4836 for more information
-  * [VS Color Output](https://marketplace.visualstudio.com/items?itemName=MikeWard-AnnArbor.VSColorOutput64)
-  * [Productivity Power Tools](https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2022)
+  * [Editor guidelines](https://marketplace.dev.azure.com/items?itemName=PaulHarrington.EditorGuidelines), see https://github.com/dotnet/winforms/pull/4836 for more information
+  * [VS Color Output](https://marketplace.dev.azure.com/items?itemName=MikeWard-AnnArbor.VSColorOutput64)
+  * [Productivity Power Tools](https://marketplace.dev.azure.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2022)
 
 ## Workflow
 

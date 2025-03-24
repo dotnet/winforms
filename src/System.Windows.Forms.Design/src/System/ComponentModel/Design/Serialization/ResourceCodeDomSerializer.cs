@@ -9,16 +9,16 @@ using System.Resources;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-/// Code model serializer for resource managers.
-/// This is called in one of two ways.
-/// On Deserialization, we are associated with a ResourceManager object.
-/// Instead of creating a ResourceManager, however, we create an object called a SerializationResourceManager.
-/// This class inherits from ResourceManager, but overrides all of the methods.
-/// Instead of letting resource manager maintain resource sets, it uses the designer host's IResourceService for this purpose.
-/// During serialization, this class will also create a SerializationResourceManager.
-/// This will be added to the serialization manager as a service so other resource serializers can get at it.
-/// SerializationResourceManager has additional methods on it to support writing data into
-/// the resource streams for various cultures.
+///  Code model serializer for resource managers.
+///  This is called in one of two ways.
+///  On Deserialization, we are associated with a ResourceManager object.
+///  Instead of creating a ResourceManager, however, we create an object called a SerializationResourceManager.
+///  This class inherits from ResourceManager, but overrides all of the methods.
+///  Instead of letting resource manager maintain resource sets, it uses the designer host's IResourceService for this purpose.
+///  During serialization, this class will also create a SerializationResourceManager.
+///  This will be added to the serialization manager as a service so other resource serializers can get at it.
+///  SerializationResourceManager has additional methods on it to support writing data into
+///  the resource streams for various cultures.
 /// </summary>
 internal partial class ResourceCodeDomSerializer : CodeDomSerializer
 {

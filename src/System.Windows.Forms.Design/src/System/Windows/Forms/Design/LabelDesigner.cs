@@ -10,9 +10,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend TextBoxBase.</para>
+///  Provides a designer that can design components that extend TextBoxBase.
 /// </summary>
 internal class LabelDesigner : ControlDesigner
 {

@@ -7,88 +7,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace System.Windows.Forms.Analyzers.Test;
+namespace System.Windows.Forms.Analyzers.Tests;
 
-public class AvoidPassingTaskWithoutCancellationTokenTest
+public sealed class AvoidPassingTaskWithoutCancellationTokenTests
 {
-    // Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
-    // That's why we need to add this Async Control. Once it's there, this test will fail.
-    // We can then remove the AsyncControl and the test will pass, replace AsyncControl with
-    // Control, and the test will pass.
-    private const string AsyncControl = """
-        using System;
-        using System.Threading;
-        using System.Threading.Tasks;
-        using System.Windows.Forms;
-
-        namespace System.Windows.Forms
-        {
-            public class AsyncControl : Control
-            {
-                // BEGIN ASYNC API
-                public Task InvokeAsync(
-                    Action callback,
-                    CancellationToken cancellationToken = default)
-                {
-                    var tcs = new TaskCompletionSource();
-
-                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
-                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-                    {
-                        base.BeginInvoke(callback);
-                    }
-
-                    return tcs.Task;
-                }
-
-                public Task InvokeAsync<T>(
-                    Func<T> callback,
-                    CancellationToken cancellationToken = default)
-                {
-                    var tcs = new TaskCompletionSource<T>();
-
-                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
-                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-                    {
-                        base.BeginInvoke(callback);
-                    }
-
-                    return tcs.Task;
-                }
-
-                public Task InvokeAsync(
-                    Func<CancellationToken, ValueTask> callback,
-                    CancellationToken cancellationToken = default)
-                {
-                    var tcs = new TaskCompletionSource();
-
-                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
-                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-                    {
-                        base.BeginInvoke(callback);
-                    }
-
-                    return tcs.Task;
-                }
-
-                public Task<T> InvokeAsync<T>(
-                    Func<CancellationToken, ValueTask<T>> callback,
-                    CancellationToken cancellationToken = default)
-                {
-                    var tcs = new TaskCompletionSource<T>();
-                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
-                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-                    {
-                        base.BeginInvoke(callback);
-                    }
-                    return tcs.Task;
-                }
-                // END ASYNC API
-            }
-        }
-        
-        """;
-
     private const string TestCode = """
         using System;
         using System.Threading;
@@ -101,7 +23,7 @@ public class AvoidPassingTaskWithoutCancellationTokenTest
         {
             public static void Main()
             {
-                var control = new AsyncControl();
+                var control = new Control();
         
                 // A sync Action delegate is always fine.
                 var okAction = new Action(() => control.Text = "Hello, World!");
@@ -162,17 +84,23 @@ public class AvoidPassingTaskWithoutCancellationTokenTest
                 
         """;
 
-    public static IEnumerable<object[]> GetReferenceAssemblies()
+    public static IEnumerable<object?[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net90Windows];
+        yield return [ReferenceAssemblies.Net.Net90.AddPackages(
+            [new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0")]), ""];
+
+        // The latest public API surface area build from this repository.
+        yield return [CurrentReferences.NetCoreAppReferences, CurrentReferences.WinFormsRefPath];
     }
 
     [Theory]
     [MemberData(nameof(GetReferenceAssemblies))]
-    public async Task CS_AvoidPassingTaskWithoutCancellationAnalyzer(ReferenceAssemblies referenceAssemblies)
+    public async Task CS_AvoidPassingTaskWithoutCancellationAnalyzer(ReferenceAssemblies? referenceAssemblies, string? pathToWinFormsAssembly)
     {
-        // If the API does not exist, we need to add it to the test.
-        string customControlSource = AsyncControl;
+        Assert.NotNull(referenceAssemblies);
+        Assert.NotNull(pathToWinFormsAssembly);
+        Assert.True(pathToWinFormsAssembly == "" || File.Exists(pathToWinFormsAssembly));
+
         string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
 
         var context = new CSharpAnalyzerTest
@@ -183,16 +111,20 @@ public class AvoidPassingTaskWithoutCancellationTokenTest
             TestState =
                 {
                     OutputKind = OutputKind.WindowsApplication,
-                    Sources = { customControlSource },
                     ExpectedDiagnostics =
                     {
                         DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97),
                         DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97),
                         DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98),
-                    },
+                    }
                 },
             ReferenceAssemblies = referenceAssemblies
         };
+
+        if (pathToWinFormsAssembly != "")
+        {
+            context.TestState.AdditionalReferences.Add(pathToWinFormsAssembly);
+        }
 
         await context.RunAsync();
     }

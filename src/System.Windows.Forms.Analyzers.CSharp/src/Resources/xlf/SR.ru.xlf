@@ -67,19 +67,34 @@
         <target state="translated">Отсутствует конфигурация сериализации кода для содержимого свойства</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO1001AnalyzerDescription">
+        <source>Types should implement `ITypedDataObject` to support best practices when interacting with data. Types will not work with typed APIs in Clipboard and other data exchange scenarios if they only implement `IDataObject`.</source>
+        <target state="translated">Типы должны реализовывать "ITypedDataObject" для поддержки рекомендаций при взаимодействии с данными. Типы не будут работать с типными API в буфере обмена и других сценариях обмена данными, если они реализуют только "IDataObject".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerMessageFormat">
+        <source>Type `{0}` does not implement `ITypedDataObject` interface</source>
+        <target state="translated">Тип '{0}' не реализует интерфейс "ITypedDataObject"</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1001AnalyzerTitle">
+        <source>`IDataObject` type does not implement `ITypedDataObject`</source>
+        <target state="translated">Тип "IDataObject" не реализует "ITypedDataObject"</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WFO2001AnalyzerDescription">
         <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
         <target state="translated">Избегайте передачи "Func&lt;T&gt;" в "InvokeAsync", где "T" является "Task" или "ValueTask", если вы не хотите, чтобы делегат был просто отброшен как неконтролируемая задача. Вместо этого используйте "Func&lt;CancellationToken, ValueTask&gt;" или "Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;", чтобы можно было ожидать делегата, переданного в "InvokeAsync". Это позволяет правильно обрабатывать исключения.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">Задача передается в InvokeAsync без маркера отмены</target>
+        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
+        <target state="translated">Задача передается в "InvokeAsync" без маркера отмены</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">Задача передается в InvokeAsync без маркера отмены</target>
+        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
+        <target state="translated">Задача передается в "InvokeAsync" без маркера отмены</target>
         <note />
       </trans-unit>
     </body>

@@ -131,12 +131,12 @@ public class ClipboardProxyTests
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
         // This test assembly does not reference the OOB package, we will write the NotSupportedException to the clipboard.
         clipboard.SetData(format, data);
+
         // Both methods return false.
-        Action tryGetData = () => clipboard.TryGetData(format, DataWithObjectField.Resolver, out DataWithObjectField? actual);
-        string actual = tryGetData.Should().Throw<NotSupportedException>().Which.Message;
-        Action tryGetData1 = () => System.Windows.Forms.Clipboard.TryGetData(format, DataWithObjectField.Resolver, out DataWithObjectField? expected);
-        string expected = tryGetData1.Should().Throw<NotSupportedException>().Which.Message;
-        actual.Should().BeEquivalentTo(expected);
+        clipboard.TryGetData(format, DataWithObjectField.Resolver, out DataWithObjectField? actual).Should().BeFalse();
+        actual.Should().BeNull();
+        System.Windows.Forms.Clipboard.TryGetData(format, DataWithObjectField.Resolver, out DataWithObjectField? expected).Should().BeFalse();
+        expected.Should().BeNull();
     }
 
     [Serializable]

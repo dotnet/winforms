@@ -9,7 +9,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Designer class for the MaskedTextBox control.
+///  Designer class for the MaskedTextBox control.
 /// </summary>
 internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 {
@@ -21,7 +21,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     protected override bool SetTextualDefaultProperty => false;
 
     /// <summary>
-    /// MaskedTextBox designer action list property. Gets the design-time supported actions on the control.
+    ///  MaskedTextBox designer action list property. Gets the design-time supported actions on the control.
     /// </summary>
     public override DesignerActionListCollection ActionLists
     {
@@ -38,7 +38,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    /// A utility method to get a design time masked text box based on the masked text box being designed.
+    ///  A utility method to get a design time masked text box based on the masked text box being designed.
     /// </summary>
     /// <param name="maskedTextBox">The masked text box.</param>
     /// <returns></returns>
@@ -131,8 +131,8 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    /// Obsolete ComponentDesigner method which sets component default properties. Overridden to avoid setting
-    /// the Mask improperly.
+    ///  Obsolete ComponentDesigner method which sets component default properties. Overridden to avoid setting
+    ///  the Mask improperly.
     /// </summary>
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     public override void OnSetComponentDefaults()

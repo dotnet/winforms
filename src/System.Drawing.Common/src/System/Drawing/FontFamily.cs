@@ -161,7 +161,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     internal GpFontFamily* NativeFamily => _nativeFamily;
 
     /// <summary>
-    /// Converts this <see cref='FontFamily'/> to a human-readable string.
+    ///  Converts this <see cref='FontFamily'/> to a human-readable string.
     /// </summary>
     public override string ToString() => $"[{nameof(FontFamily)}: Name={Name}]";
 

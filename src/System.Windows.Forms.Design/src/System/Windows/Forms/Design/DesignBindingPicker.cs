@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Label control that renders its text with both word wrapping, end ellipsis and partial line clipping.
+        ///  Label control that renders its text with both word wrapping, end ellipsis and partial line clipping.
         /// </summary>
         internal class HelpTextLabel : Label
         {

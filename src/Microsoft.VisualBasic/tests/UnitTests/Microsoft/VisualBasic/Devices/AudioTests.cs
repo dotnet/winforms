@@ -49,7 +49,7 @@ public class AudioTests
     [InvalidEnumData<AudioPlayMode>]
     public void PlayModeInvalid_Throws(AudioPlayMode audioPlayMode)
     {
-        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        string location = Path.Join(Path.GetTempPath(), GetUniqueName());
         Audio audio = new();
         Action testCode = () => audio.Play(location, audioPlayMode);
         testCode.Should().Throw<InvalidEnumArgumentException>();
