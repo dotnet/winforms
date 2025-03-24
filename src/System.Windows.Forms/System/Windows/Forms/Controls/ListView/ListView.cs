@@ -4551,7 +4551,7 @@ public partial class ListView : Control
         // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
         // However, if the customer paints the items w/ a color different from the list view's back color
         // then when the user changes selection the native list view will not invalidate the entire list view item area.
-        // PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvokeCore.CLR_NONE);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvokeCore.CLR_NONE);
 
         // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
         // we have to set this style after the list view was created and before we position the native list view items.
