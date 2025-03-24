@@ -11506,7 +11506,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
-        <target state="translated">(aucun)</target>
+        <target state="translated">(aucune)</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageDown">

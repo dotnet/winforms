@@ -26,7 +26,7 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData("fr-FR", "(aucun)", Keys.None)]
+    [InlineData("fr-FR", "(aucune)", Keys.None)]
     [InlineData("nb-NO", "None", Keys.None)]
     [InlineData("de-DE", "Ende", Keys.End)]
     public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
@@ -72,7 +72,7 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData("fr-FR", Keys.None, "(aucun)")]
+    [InlineData("fr-FR", Keys.None, "(aucune)")]
     [InlineData("de-DE", Keys.End, "Ende")]
     public void ConvertToString_ShouldConvertKeys_Localization(string cultureName, Keys key, string expectedLocalizedKeyName)
     {
