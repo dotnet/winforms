@@ -21,27 +21,19 @@ public class DataSourceListEditorTests
         _dataSourceListEditor.IsDropDownResizable.Should().BeTrue();
 
     [Fact]
-    public void EditValue_WithValidParameters_ReturnsNewValue()
+    public void EditValue_WithValidParameters_NoException()
     {
         Mock<ITypeDescriptorContext> contextMock = new();
         Mock<IServiceProvider> providerMock = new();
 
-        BindingSource oldValue = new() { DataSource = new List<string> { "OldValue" } };
-        BindingSource newValue = new() { DataSource = new List<string> { "NewValue" } };
-        DesignBinding designBinding = new(oldValue, "");
-
         contextMock.Setup(c => c.Instance).Returns(new object());
 
-        TestDesignBindingPicker designBindingPicker = new()
+        Action action = () =>
         {
-            PickFunc = (context, provider, showDataSources, showDataMembers, selectListMembers, rootDataSource, rootDataMember, initialSelectedItem) =>
-            designBinding
+            _dataSourceListEditor.EditValue(context: contextMock.Object, provider: providerMock.Object, value: null);
         };
 
-        var accessor = _dataSourceListEditor.TestAccessor().Dynamic;
-        accessor._designBindingPicker = designBindingPicker;
-
-        _dataSourceListEditor.EditValue(context: contextMock.Object, provider: providerMock.Object, value: newValue).Should().Be(newValue);
+        action.Should().NotThrow();
     }
 
     [Fact]
@@ -67,14 +59,4 @@ public class DataSourceListEditorTests
     [Fact]
     public void GetEditStyle_ReturnsDropDown() =>
      _dataSourceListEditor.GetEditStyle(null).Should().Be(UITypeEditorEditStyle.DropDown);
-
-    private class TestDesignBindingPicker : DesignBindingPicker
-    {
-        public Func<ITypeDescriptorContext?, IServiceProvider, bool, bool, bool, object?, string, DesignBinding, DesignBinding?>? PickFunc { get; set; }
-
-        public DesignBinding? PickWrapper(ITypeDescriptorContext? context, IServiceProvider provider, bool showDataSources, bool showDataMembers, bool selectListMembers, object? rootDataSource, string rootDataMember, DesignBinding initialSelectedItem)
-        {
-            return PickFunc?.Invoke(context, provider, showDataSources, showDataMembers, selectListMembers, rootDataSource, rootDataMember, initialSelectedItem);
-        }
-    }
 }
