@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
+    <body>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">屬性應使用 DesignerSerializationVisibilityAttribute、DefaultValueAttribute 或 ShouldSerializeProperty 方法判斷其屬性內容序列化。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">屬性 '{0}' 未設定其屬性內容的程式碼序列化</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">遺失屬性內容的程式碼序列化設定</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">避免將 `Func&lt;T&gt;` 傳遞到 `InvokeAsync`，其中 `T` 是 'Task' 或 'ValueTask'，除非您打算讓委派只是被移除為不受監督的工作。請改用 `Func&lt;CancellationToken, ValueTask&gt;` 或 `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`，以便等待傳遞給 `InvokeAsync` 的代理人，以便正確處理例外狀況。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">工作正傳遞至 InvokeAsync 而沒有取消權杖</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">工作正傳遞至 InvokeAsync 而沒有取消權杖</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
