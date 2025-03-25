@@ -377,9 +377,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
     private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
     {
         // fix https://github.com/microsoft/winforms-designer/issues/6292
-        if (DesignMode &&
-            RightToLeft == RightToLeft.Yes &&
-            dropDownDirection == ToolStripDropDownDirection.Left)
+        if (DesignMode && RightToLeft == RightToLeft.Yes && dropDownDirection == ToolStripDropDownDirection.Left)
         {
             dropDownDirection = ToolStripDropDownDirection.Right;
         }
