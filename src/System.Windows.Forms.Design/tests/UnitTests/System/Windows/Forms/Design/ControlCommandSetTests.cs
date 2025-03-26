@@ -133,7 +133,7 @@ public class ControlCommandSetTests : IDisposable
     }
 
     /// <summary>
-    /// Helper class to provide mock property descriptors
+    ///  Helper class to provide mock property descriptors.
     /// </summary>
     private class MockTypeDescriptionProvider : TypeDescriptionProvider
     {
