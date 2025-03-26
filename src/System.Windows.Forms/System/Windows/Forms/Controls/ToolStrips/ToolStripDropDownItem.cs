@@ -374,14 +374,33 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         base.Dispose(disposing);
     }
 
-    private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
+    private static Form? GetParentForm(Component? component)
     {
-        // fix https://github.com/microsoft/winforms-designer/issues/6292
-        if (DesignMode && RightToLeft == RightToLeft.Yes && dropDownDirection == ToolStripDropDownDirection.Left)
+        if (component is null)
         {
-            dropDownDirection = ToolStripDropDownDirection.Right;
+            return null;
         }
 
+        if (component is Form form)
+        {
+            return form;
+        }
+
+        if (component is ToolStripDropDown toolStripDropDown)
+        {
+            return GetParentForm(toolStripDropDown.OwnerToolStrip);
+        }
+
+        if (component is Control control)
+        {
+            return GetParentForm(control.Parent);
+        }
+
+        return null;
+    }
+
+    private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
+    {
         Rectangle dropDownBounds = new(Point.Empty, DropDown.GetSuggestedSize());
         // calculate the offset from the upper left hand corner of the item.
         dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
@@ -403,6 +422,20 @@ public abstract class ToolStripDropDownItem : ToolStripItem
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Width > 1)
             {
                 dropDownBounds = DropDownDirectionToDropDownBounds(!rtl ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right, dropDownBounds);
+            }
+        }
+
+        // fix https://github.com/microsoft/winforms-designer/issues/6292
+        if (DesignMode && RightToLeft == RightToLeft.Yes)
+        {
+            Form? form = GetParentForm(Owner);
+            if (form is not null)
+            {
+                Point formScreenPoint = form.PointToScreen(form.Location);
+                if (formScreenPoint.X > dropDownBounds.X)
+                {
+                    dropDownBounds.X += dropDownBounds.Width;
+                }
             }
         }
 
