@@ -26,16 +26,21 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData("fr-FR", "(aucune)", Keys.None)]
-    [InlineData("nb-NO", "None", Keys.None)]
-    [InlineData("de-DE", "Ende", Keys.End)]
-    public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
+    [InlineData("fr-FR", "toStringNone", Keys.None)]
+    [InlineData("zh-CN", "toStringNone", Keys.None)]
+    [InlineData("nb-NO", "toStringNone", Keys.None)]
+    [InlineData("de-DE", "toStringEnd", Keys.End)]
+    public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string resourceKey, Keys expectedKey)
     {
         CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-        KeysConverter converter = new();
+        SR.Culture = culture;
 
-        // The 'localizedKeyName' is converted into the corresponding key value according to the specified culture.
-        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedKeyName);
+        // Using the SR resource name to retrieve the localized string.
+        string localizedString = SR.GetResourceString(resourceKey);
+
+        KeysConverter converter = new();
+        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedString);
+
         Assert.Equal(expectedKey, resultFromSpecificCulture);
 
         // Record original UI culture.
@@ -45,8 +50,8 @@ public class KeysConverterTests
         {
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // When the culture is empty, the 'localizedKeyName' is converted to the corresponding key value based on CurrentUICulture.
-            var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedKeyName);
+            // When the culture is empty, the 'localizedString' is converted to the corresponding key value based on CurrentUICulture.
+            var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedString);
             Assert.Equal(expectedKey, resultFromUICulture);
         }
         finally
