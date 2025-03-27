@@ -119,7 +119,11 @@ public class ControlCommandSetTests : IDisposable
         try
         {
             _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(
-                _designerHostMock.Object, childComponent, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
+                _designerHostMock.Object,
+                childComponent,
+                out Size snapSize,
+                out IComponent snapComponent,
+                out PropertyDescriptor snapProperty);
 
             snapComponent.Should().Be(parentComponent);
             snapProperty.Should().NotBeNull();
