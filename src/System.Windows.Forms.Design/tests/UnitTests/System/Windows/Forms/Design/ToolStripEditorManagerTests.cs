@@ -58,12 +58,13 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     {
         _behaviorService.Dispose();
         _editorControl.Dispose();
+        _toolStripItem.Dispose();
     }
 
     [Fact]
     public void Constructor_InitializesBehaviorServiceAndDesignerHost()
     {
-        _editorManager.Should().NotBeNull();
+        _editorManager.Should().BeOfType<ToolStripEditorManager>();
 
         BehaviorService? behaviorService = _editorManager.TestAccessor().Dynamic._behaviorService;
         behaviorService.Should().Be(_behaviorService);
