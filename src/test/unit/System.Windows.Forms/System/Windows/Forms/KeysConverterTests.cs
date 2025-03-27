@@ -38,9 +38,8 @@ public class KeysConverterTests
 
         try
         {
+            // Use the SR resource key to retrieve the localized string corresponding to SR.Culture.
             SR.Culture = culture;
-
-            // Using the SR resource name to retrieve the localized string.
             string localizedString = SR.GetResourceString(resourceKey);
 
             KeysConverter converter = new();
@@ -50,7 +49,8 @@ public class KeysConverterTests
 
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // When the culture is empty, the 'localizedString' is converted to the corresponding key value based on CurrentUICulture.
+            // When the culture is empty, the 'localizedString' is converted
+            // to the corresponding key value based on CurrentUICulture.
             var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedString);
             Assert.Equal(expectedKey, resultFromUICulture);
         }
