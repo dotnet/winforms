@@ -11,10 +11,7 @@ public class DataSourceListEditorTests
 {
     private readonly DataSourceListEditor _dataSourceListEditor;
 
-    public DataSourceListEditorTests()
-    {
-        _dataSourceListEditor = new();
-    }
+    public DataSourceListEditorTests() => _dataSourceListEditor = new();
 
     [Fact]
     public void IsDropDownResizable_ReturnsTrue() =>
