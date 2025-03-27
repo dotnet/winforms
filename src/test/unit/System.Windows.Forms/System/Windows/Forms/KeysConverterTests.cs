@@ -32,22 +32,22 @@ public class KeysConverterTests
     [InlineData("de-DE", "toStringEnd", Keys.End)]
     public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string resourceKey, Keys expectedKey)
     {
-        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-        SR.Culture = culture;
-
-        // Using the SR resource name to retrieve the localized string.
-        string localizedString = SR.GetResourceString(resourceKey);
-
-        KeysConverter converter = new();
-        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedString);
-
-        Assert.Equal(expectedKey, resultFromSpecificCulture);
-
         // Record original UI culture.
         CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
+        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
 
         try
         {
+            SR.Culture = culture;
+
+            // Using the SR resource name to retrieve the localized string.
+            string localizedString = SR.GetResourceString(resourceKey);
+
+            KeysConverter converter = new();
+            var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedString);
+
+            Assert.Equal(expectedKey, resultFromSpecificCulture);
+
             Thread.CurrentThread.CurrentUICulture = culture;
 
             // When the culture is empty, the 'localizedString' is converted to the corresponding key value based on CurrentUICulture.
@@ -57,6 +57,7 @@ public class KeysConverterTests
         finally
         {
             Thread.CurrentThread.CurrentUICulture = originalUICulture;
+            SR.Culture = originalUICulture;
         }
     }
 
