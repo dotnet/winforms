@@ -666,7 +666,22 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     internal Behavior.Behavior MoveBehavior
-        => _moveBehavior ??= new ContainerSelectorBehavior(Control, Component.Site);
+    {
+        get
+        {
+            if (_moveBehavior is null)
+            {
+                if (Component.Site is not ISite site)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                _moveBehavior = new ContainerSelectorBehavior(Control, site);
+            }
+
+            return _moveBehavior;
+        }
+    }
 
     /// <summary>
     ///  Returns a 'BodyGlyph' representing the bounds of this control. The BodyGlyph is responsible for hit
