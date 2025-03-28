@@ -45,29 +45,6 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         }
     }
 
-    private void RunInStaThread(Action action)
-    {
-        Exception exception = null!;
-        Thread thread = new(() =>
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-        });
-        thread.SetApartmentState(ApartmentState.STA); // These tests must run on a STA thread because they register drag and drop
-        thread.Start();
-        thread.Join();
-        if (exception is not null)
-        {
-            throw exception;
-        }
-    }
-
     private class TestControl : Control
     {
         private readonly Graphics _graphics;
@@ -87,11 +64,11 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ToolStripAdornerWindowGraphics_ReturnsGraphicsObject() => RunInStaThread(() =>
+    public void ToolStripAdornerWindowGraphics_ReturnsGraphicsObject()
     {
         Graphics graphics = _service.ToolStripAdornerWindowGraphics;
         graphics.Should().NotBeNull();
-    });
+    }
 
     [WinFormsFact]
     public void Dispose_DisposesResourcesCorrectly()
@@ -118,49 +95,47 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     public void InvalidateRegion_InvokesInvalidateOnAdornerWindow()
     {
         Region region = new(new Rectangle(10, 10, 50, 50));
-
         Action action = () => _service.Invalidate(region);
+
         action.Should().NotThrow();
     }
 
     [WinFormsFact]
-    public void AdornerWindowPointToScreen_TranslatesPointCorrectly() => RunInStaThread(() =>
+    public void AdornerWindowPointToScreen_TranslatesPointCorrectly()
     {
         Point point = new(10, 20);
-
         Point screenPoint = _service.AdornerWindowPointToScreen(point);
-
         Point expectedScreenPoint = new(18, 51);
+
         screenPoint.Should().Be(expectedScreenPoint);
-    });
+    }
 
     [WinFormsFact]
-    public void AdornerWindowToScreen_ReturnsCorrectScreenCoordinates() => RunInStaThread(() =>
+    public void AdornerWindowToScreen_ReturnsCorrectScreenCoordinates()
     {
         Point screenPoint = _service.AdornerWindowToScreen();
-
         Point expectedScreenPoint = new(8, 31);
+
         screenPoint.Should().Be(expectedScreenPoint);
-    });
+    }
 
     [WinFormsFact]
-    public void ControlToAdornerWindow_TranslatesPointCorrectly() => RunInStaThread(() =>
+    public void ControlToAdornerWindow_TranslatesPointCorrectly()
     {
         Control parentControl = new() { Left = 10, Top = 20 };
         Control control = new() { Parent = parentControl, Left = 30, Top = 40 };
-
         Point adornerWindowPoint = _service.ControlToAdornerWindow(control);
-
         Point expectedPoint = new(40, 60);
+
         adornerWindowPoint.Should().Be(expectedPoint);
-    });
+    }
 
     [WinFormsFact]
     public void ProcessPaintMessage_InvokesInvalidateOnAdornerWindow()
     {
         Rectangle paintRect = new(10, 10, 50, 50);
-
         Action action = () => _service.ProcessPaintMessage(paintRect);
+
         action.Should().NotThrow();
     }
 }
