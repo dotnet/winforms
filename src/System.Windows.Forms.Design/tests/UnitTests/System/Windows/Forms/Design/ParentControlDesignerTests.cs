@@ -23,7 +23,10 @@ public class ParentControlDesignerTests : IDisposable
     public void Dispose()
     {
         _designer.Dispose();
-        _control.Dispose();
+        if (_control is not null && _control.Site is not null)
+        {
+            _control.Dispose();
+        }
     }
 
     [Fact]
@@ -67,36 +70,32 @@ public class ParentControlDesignerTests : IDisposable
         Mock<IServiceProvider> mockServiceProvider = new();
         Mock<ISite> mockSite = new();
         Mock<IDesignerHost> mockDesignerHost = new();
-        using Control control = new()
-        {
-            Site = mockSite.Object
-        };
+        Mock<IComponentChangeService> mockChangeService = new();
+        _control.Site = mockSite.Object;
         mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(mockDesignerHost.Object);
+        mockSite.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
 
         Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
+        mockServiceProvider.Setup(sp => sp.GetService(typeof(BehaviorService))).Returns(() => behaviorService);
         mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
 
-        ParentControlDesigner designer = new();
-        designer.Initialize(control);
-        designer.TestAccessor().Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor().Dynamic._host = mockDesignerHost.Object;
+        _designer.TestAccessor().Dynamic._changeService = mockChangeService.Object;
 
         GlyphSelectionType selectionType = GlyphSelectionType.Selected;
 
-        GlyphCollection glyphs = designer.GetGlyphs(selectionType);
+        GlyphCollection glyphs = _designer.GetGlyphs(selectionType);
 
-        glyphs.Should().NotBeNull();
+        glyphs.Should().BeOfType<GlyphCollection>();
         glyphs.OfType<ContainerSelectorGlyph>().Count().Should().Be(1);
     }
 
     [Fact]
     public void InitializeNewComponent_WithNullDefaultValues_DoesNotThrow()
     {
-        ParentControlDesigner designer = new();
-        using Control control = new();
-        designer.Initialize(control);
-
-        designer.Invoking(d => d.InitializeNewComponent(null)).Should().NotThrow();
+        _designer.Invoking(d => d.InitializeNewComponent(null)).Should().NotThrow();
     }
 
     [Fact]
@@ -108,19 +107,21 @@ public class ParentControlDesignerTests : IDisposable
         Mock<IServiceProvider> mockServiceProvider = new();
         Mock<ISite> mockSite = new();
         Mock<ISelectionService> mockSelectionService = new();
+        Mock<IComponentChangeService> mockChangeService = new();
 
         using TestControl testComponent = new();
         using TestControl parentComponent = new();
-        ParentControlDesigner parentControlDesigner = new();
 
         mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(mockDesignerHost.Object);
         mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(mockSelectionService.Object);
+        mockSite.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
         testComponent.Site = mockSite.Object;
         parentComponent.Site = mockSite.Object;
 
-        mockDesignerHost.Setup(h => h.GetDesigner(mockParentComponent.Object)).Returns(parentControlDesigner);
+        mockDesignerHost.Setup(h => h.GetDesigner(mockParentComponent.Object)).Returns(_designer);
 
-        parentControlDesigner.Initialize(testComponent);
+        _designer.Initialize(testComponent);
+        _designer.TestAccessor().Dynamic._changeService = mockChangeService.Object;
 
         Dictionary<string, object> defaultValues = new()
         {
@@ -132,7 +133,7 @@ public class ParentControlDesignerTests : IDisposable
         DisableDragDrop(testComponent);
         DisableDragDrop(parentComponent);
 
-        parentControlDesigner.InitializeNewComponent(defaultValues);
+        _designer.InitializeNewComponent(defaultValues);
 
         mockDesignerHost.Verify(h => h.GetDesigner(mockParentComponent.Object), Times.AtMost(2));
     }
