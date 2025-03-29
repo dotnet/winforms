@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
-public class KeysConverterTests
+public partial class KeysConverterTests
 {
     [Theory]
     [UseDefaultXunitCulture]
@@ -26,36 +26,6 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData("fr-FR", "(aucune)", Keys.None)]
-    [InlineData("nb-NO", "None", Keys.None)]
-    [InlineData("de-DE", "Ende", Keys.End)]
-    public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
-    {
-        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-        KeysConverter converter = new();
-
-        // The 'localizedKeyName' is converted into the corresponding key value according to the specified culture.
-        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedKeyName);
-        Assert.Equal(expectedKey, resultFromSpecificCulture);
-
-        // Record original UI culture.
-        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
-
-        try
-        {
-            Thread.CurrentThread.CurrentUICulture = culture;
-
-            // When the culture is empty, the 'localizedKeyName' is converted to the corresponding key value based on CurrentUICulture.
-            var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedKeyName);
-            Assert.Equal(expectedKey, resultFromUICulture);
-        }
-        finally
-        {
-            Thread.CurrentThread.CurrentUICulture = originalUICulture;
-        }
-    }
-
-    [Theory]
     [InlineData(Keys.None, "(none)")]
     [InlineData(Keys.S, "S")]
     [InlineData(Keys.Control | Keys.C, "Ctrl+C")]
@@ -69,19 +39,6 @@ public class KeysConverterTests
         KeysConverter converter = new();
         string result = converter.ConvertToString(null, CultureInfo.InvariantCulture, keys);
         Assert.Equal(expectedResult, result);
-    }
-
-    [Theory]
-    [InlineData("fr-FR", Keys.None, "(aucune)")]
-    [InlineData("de-DE", Keys.End, "Ende")]
-    public void ConvertToString_ShouldConvertKeys_Localization(string cultureName, Keys key, string expectedLocalizedKeyName)
-    {
-        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-
-        KeysConverter converter = new();
-        string result = converter.ConvertToString(null, culture, key);
-
-        Assert.Equal(expectedLocalizedKeyName, result);
     }
 
     public static IEnumerable<object[]> ConvertToEnumArray_ShouldConvertKeys_TestData()
