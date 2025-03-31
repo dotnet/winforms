@@ -379,8 +379,8 @@ internal class ToolStripDesigner : ControlDesigner
     internal ISelectionService SelectionService => _selectionService ??= GetService<ISelectionService>();
 
     public bool SupportEditing =>
-        GetService<DesignerOptionService>() is not WindowsFormsDesignerOptionService dos ||
-        dos.CompatibilityOptions.EnableInSituEditing;
+        GetService<DesignerOptionService>() is not WindowsFormsDesignerOptionService dos
+            || dos.CompatibilityOptions.EnableInSituEditing;
 
     /// <summary>
     ///  Handy way of getting our ToolStrip
