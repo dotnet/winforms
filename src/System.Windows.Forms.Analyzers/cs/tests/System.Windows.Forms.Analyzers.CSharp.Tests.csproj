@@ -62,22 +62,22 @@
   <ItemGroup>
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\CodeFixTestCode.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=default.verified.txt">
       <DependentUpon>AppConfigBuilder.cs</DependentUpon>
