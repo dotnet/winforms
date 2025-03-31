@@ -55,5 +55,5 @@ public class DataSourceListEditorTests
 
     [Fact]
     public void GetEditStyle_ReturnsDropDown() =>
-     _dataSourceListEditor.GetEditStyle(null).Should().Be(UITypeEditorEditStyle.DropDown);
+         _dataSourceListEditor.GetEditStyle(null).Should().Be(UITypeEditorEditStyle.DropDown);
 }
