@@ -39,9 +39,22 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
+        // Skip static properties since they are not serialized by the designer
+        if (propertySymbol.IsStatic)
+        {
+            return;
+        }
+
         // Is the property read/write and at least internal?
         if (propertySymbol.SetMethod is null
             || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
+        {
+            return;
+        }
+
+        // Skip overridden properties since the base property should already have the appropriate serialization configuration
+        // TODO: Does just this cover all the cases, particularly for legacy code where the dev doesn't own the source?
+        if (propertySymbol.IsOverride)
         {
             return;
         }
