@@ -27,12 +27,14 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
         // We analyze only properties.
         var propertySymbol = (IPropertySymbol)context.Symbol;
 
-        // Does the property belong to a class which derives from Component?
+        // Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
         if (propertySymbol.ContainingType is null
             || !propertySymbol
                 .ContainingType
                 .AllInterfaces
-                .Any(i => i.Name == nameof(IComponent)))
+                .Any(i => i.Name == nameof(IComponent) &&
+                          i.ContainingNamespace is not null &&
+                          i.ContainingNamespace.ToString() == "System.ComponentModel"))
         {
             return;
         }
