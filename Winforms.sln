@@ -190,7 +190,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{
 	ProjectSection(SolutionItems) = preProject
 		eng\pipelines\azure-pipelines-codeql.yml = eng\pipelines\azure-pipelines-codeql.yml
 		azure-pipelines-PR.yml = azure-pipelines-PR.yml
-		azure-pipelines-richnav.yml = azure-pipelines-richnav.yml
 		azure-pipelines.yml = azure-pipelines.yml
 		eng\pipelines\build-PR.yml = eng\pipelines\build-PR.yml
 		eng\pipelines\build.yml = eng\pipelines\build.yml
