@@ -40,9 +40,6 @@ jobs:
       clean: all
 
     steps:
-    - checkout: self
-      clean: true
-
     - template: /eng/common/templates/steps/enable-internal-sources.yml
     - template: /eng/common/templates/steps/enable-internal-runtimes.yml
 
