@@ -24,12 +24,6 @@ public class TabOrderTests : IDisposable
     public Mock<IComponent> ComponentMock { get; }
     public Mock<Control> ControlMock { get; }
 
-    public void Dispose()
-    {
-        _dialogFont.Dispose();
-        _tabOrder.Dispose();
-    }
-
     public TabOrderTests()
     {
         _mockHost = new();
@@ -56,7 +50,13 @@ public class TabOrderTests : IDisposable
         ControlMock = new();
     }
 
-    [Fact]
+    public void Dispose()
+    {
+        _dialogFont.Dispose();
+        _tabOrder.Dispose();
+    }
+
+    [WinFormsFact]
     public void TabOrder_Constructor_InitializesFieldsCorrectly()
     {
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
@@ -77,15 +77,26 @@ public class TabOrderTests : IDisposable
         _mockComponentChangeService.VerifyAdd(cs => cs.ComponentAdded += It.IsAny<ComponentEventHandler>(), Times.Once);
         _mockComponentChangeService.VerifyAdd(cs => cs.ComponentRemoved += It.IsAny<ComponentEventHandler>(), Times.Once);
         _mockComponentChangeService.VerifyAdd(cs => cs.ComponentChanged += It.IsAny<ComponentChangedEventHandler>(), Times.Once);
+
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
     }
 
-    [Fact]
-    public void OnMouseDoubleClick_DoesNotThrowException() =>
-        Record.Exception(() => _tabOrder.OnMouseDoubleClick(ComponentMock.Object)).Should().BeNull();
+    [WinFormsFact]
+    public void OnMouseDoubleClick_DoesNotThrowException()
+    {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
 
-    [Fact]
+        Record.Exception(() => _tabOrder.OnMouseDoubleClick(ComponentMock.Object)).Should().BeNull();
+    }
+
+    [WinFormsFact]
     public void OnMouseDown_SetsNextTabIndex_WhenCtlHoverIsNotNull()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
         accessor._ctlHover = ControlMock.Object;
 
@@ -95,14 +106,22 @@ public class TabOrderTests : IDisposable
         accessor.SetNextTabIndex(ControlMock.Object);
     }
 
-    [Fact]
-    public void OnMouseHover_DoesNotThrowException() =>
-        Record.Exception(() => _tabOrder.OnMouseHover(ComponentMock.Object)).Should().BeNull();
+    [WinFormsFact]
+    public void OnMouseHover_DoesNotThrowException()
+    {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
 
-    [Fact]
+        Record.Exception(() => _tabOrder.OnMouseHover(ComponentMock.Object)).Should().BeNull();
+    }
+
+    [WinFormsFact]
     public void OnMouseMove_SetsNewHoverControl()
     {
-        List<Control> tabControls = new() {ControlMock.Object};
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
+        List<Control> tabControls = new() { ControlMock.Object };
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
         accessor._tabControls = tabControls;
 
@@ -111,17 +130,30 @@ public class TabOrderTests : IDisposable
         ((object)accessor._ctlHover).Should().Be(ControlMock.Object.ToString());
     }
 
-    [Fact]
-    public void OnMouseUp_DoesNotThrowException() =>
+    [WinFormsFact]
+    public void OnMouseUp_DoesNotThrowException()
+    {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         Record.Exception(() => _tabOrder.OnMouseUp(ComponentMock.Object, MouseButtons.Left)).Should().BeNull();
+    }
 
-    [Fact]
-    public void OnSetCursor_DoesNotThrowException() =>
+    [WinFormsFact]
+    public void OnSetCursor_DoesNotThrowException()
+    {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         Record.Exception(() => _tabOrder.OnSetCursor(ComponentMock.Object)).Should().BeNull();
+    }
 
-    [Fact]
+    [WinFormsFact]
     public void OnSetCursor_SetsAppropriateCursor()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
 
         _tabOrder.OnSetCursor(ComponentMock.Object);
@@ -133,9 +165,12 @@ public class TabOrderTests : IDisposable
         Cursor.Current.Should().Be(Cursors.Cross);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OverrideInvoke_CommandExists_InvokesCommandAndReturnsTrue()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         CommandID commandID = new(Guid.NewGuid(), 1);
         MenuCommand menuCommand = new((sender, e) => { }, commandID);
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
@@ -148,9 +183,12 @@ public class TabOrderTests : IDisposable
         menuCommand.Invoke();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OverrideInvoke_CommandDoesNotExist_ReturnsFalse()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         CommandID commandID = new(Guid.NewGuid(), 1);
         Mock<MenuCommand> mockCommand = new(null!, commandID);
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
@@ -163,9 +201,12 @@ public class TabOrderTests : IDisposable
         mockCommand.Verify(c => c.Invoke(), Times.Never);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OverrideStatus_CommandDoesNotExist_DisablesCommandAndReturnsTrue()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         CommandID commandID = new(Guid.NewGuid(), 1);
         Mock<MenuCommand> mockCommand = new(null!, commandID);
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
@@ -178,9 +219,12 @@ public class TabOrderTests : IDisposable
         mockCommand.Object.Enabled.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OverrideStatus_TabOrderCommand_DisablesCommandAndReturnsTrue()
     {
+        _tabOrder.CreateControl();
+        _tabOrder.IsHandleCreated.Should().BeTrue();
+
         CommandID commandID = StandardCommands.TabOrder;
         Mock<MenuCommand> mockCommand = new(null!, commandID);
         dynamic accessor = _tabOrder.TestAccessor().Dynamic;
