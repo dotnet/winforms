@@ -45,9 +45,6 @@ jobs:
         publishLocation: Container
         artifactName: ${{ coalesce(parameters.enablePublishBuildArtifacts.artifactName, '$(Agent.Os)_$(Agent.JobName)' ) }}
   steps:
-  - checkout: self
-    clean: true
-
   - template: /eng/common/templates-official/steps/enable-internal-sources.yml
   - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
 
