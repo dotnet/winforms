@@ -43,6 +43,9 @@
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\FixedTestCode.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\GlobalUsing.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\GlobalUsing.cs" />
+    <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\Program.cs" />
     <Compile Remove="Generators\AppConfigBuilder\TestData\Default_boilerplate.cs" />
     <Compile Remove="Generators\AppConfigBuilder\TestData\Default_top_level.cs" />
     <Compile Remove="Generators\AppConfig\TestData\GenerateInitialize_default_boilerplate.cs" />
@@ -79,6 +82,9 @@
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\GlobalUsing.cs" />
+    <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\Program.cs" />
     <None Include="Generators\AppConfigBuilder\AppConfigBuilder.GenerateInitialize_DefaultFont=default.verified.txt">
       <DependentUpon>AppConfigBuilder.cs</DependentUpon>
     </None>

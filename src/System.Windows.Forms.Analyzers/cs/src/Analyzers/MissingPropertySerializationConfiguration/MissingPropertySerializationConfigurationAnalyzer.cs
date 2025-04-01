@@ -25,7 +25,26 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
     {
         // We analyze only properties.
-        var propertySymbol = (IPropertySymbol)context.Symbol;
+        IPropertySymbol? propertySymbol = (IPropertySymbol)context.Symbol;
+
+        // We never flag a property named Site of type of ISite
+        if (propertySymbol is null)
+        {
+            return;
+        }
+
+        // A property of System.ComponentModel.ISite we never flag.
+        if (propertySymbol.Type.Name == nameof(ISite)
+            && propertySymbol.Type.ContainingNamespace.ToString() == "System.ComponentModel")
+        {
+            return;
+        }
+
+        // If the property is part of any interface named IComponent, we're out.
+        if (propertySymbol.ContainingType.Name == nameof(IComponent))
+        {
+            return;
+        }
 
         // Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
         if (propertySymbol.ContainingType is null
@@ -45,8 +64,9 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
-        // Is the property read/write and at least internal?
-        if (propertySymbol.SetMethod is null
+        // Is the property read/write and at least internal and doesn't have a private setter?
+        if (propertySymbol.SetMethod is not IMethodSymbol propertySetter
+            || propertySetter.DeclaredAccessibility == Accessibility.Private
             || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
         {
             return;

@@ -189,6 +189,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyz
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "System.Windows.Forms.Analyzers.VisualBasic.Tests", "src\System.Windows.Forms.Analyzers\vb\tests\System.Windows.Forms.Analyzers.VisualBasic.Tests.vbproj", "{ACF7ACC1-5163-8728-DEA7-7758DF20738E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prompting", "Prompting", "{681B7522-35D1-4D58-8956-6E5E26D461B2}"
+	ProjectSection(SolutionItems) = preProject
+		src\System.Windows.Forms.Analyzers\prompting\AnalyzerTests-Copilot-Instructions.md = src\System.Windows.Forms.Analyzers\prompting\AnalyzerTests-Copilot-Instructions.md
+		src\System.Windows.Forms.Analyzers\prompting\SamplePrompt for AnalyzerTests.md = src\System.Windows.Forms.Analyzers\prompting\SamplePrompt for AnalyzerTests.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1124,6 +1130,7 @@ Global
 		{6D3F4979-A444-778A-B6ED-6AA1786DADA0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1D7A95BF-545D-8D63-3CD1-75619B80A2A0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{ACF7ACC1-5163-8728-DEA7-7758DF20738E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{681B7522-35D1-4D58-8956-6E5E26D461B2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
