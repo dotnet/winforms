@@ -78,8 +78,9 @@ public class ToolStripMenuItemCodeDomSerializerTests
     [Fact]
     public void Serialize_SerializesDropDownItemsCorrectly()
     {
-        _mockManager.Setup(m => m.GetSerializer(typeof(ToolStripMenuItem), typeof(CodeDomSerializer)))
-                    .Returns(_mockBaseSerializer.Object);
+        _mockManager
+            .Setup(m => m.GetSerializer(typeof(ToolStripMenuItem), typeof(CodeDomSerializer)))
+            .Returns(_mockBaseSerializer.Object);
 
         using ToolStripMenuItem parentItem = new() { Text = "Edit" };
         using ToolStripMenuItem childItem = new() { Text = "Undo" };
@@ -138,7 +139,7 @@ public class ToolStripMenuItemCodeDomSerializerTests
         _mockManager.Setup(m => m.GetSerializer(typeof(ToolStripMenuItem), typeof(CodeDomSerializer)))
                     .Returns(_mockBaseSerializer.Object);
 
-        Image testImage = new Bitmap(1, 1);
+        using Image testImage = new Bitmap(1, 1);
         using ToolStripMenuItem item = new() { Image = testImage };
 
         _mockBaseSerializer.Setup(s => s.Serialize(_mockManager.Object, item))
