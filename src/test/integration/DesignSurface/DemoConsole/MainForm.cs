@@ -362,6 +362,7 @@ public partial class MainForm : Form
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
 
+#if NETCOREAPP
                         BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
 
                         BindingSource bindingSource = new()
@@ -375,6 +376,7 @@ public partial class MainForm : Form
                         richTextBox.DataBindings.Add(new Binding("Text", bindingSource, "Text", true, DataSourceUpdateMode.OnPropertyChanged));
 
                         panel.Controls.Add(bindingNavigator);
+#endif
                     }
 
                     break;
