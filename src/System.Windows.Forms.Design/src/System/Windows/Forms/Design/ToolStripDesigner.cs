@@ -176,13 +176,9 @@ internal class ToolStripDesigner : ControlDesigner
         get
         {
             // Make sure the component is not being inherited -- we can't delete these!
-            InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(ToolStrip)[typeof(InheritanceAttribute)];
-            if (ia is null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
-            {
-                return true;
-            }
-
-            return false;
+            InheritanceAttribute inheritanceAttribute =
+                (InheritanceAttribute)TypeDescriptor.GetAttributes(ToolStrip)[typeof(InheritanceAttribute)];
+            return inheritanceAttribute is null || inheritanceAttribute.InheritanceLevel == InheritanceLevel.NotInherited;
         }
     }
 
@@ -220,7 +216,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown"
+    ///  Since the Item glyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown"
     ///  while the item Drag-Drop operation.
     /// </summary>
     public Rectangle DragBoxFromMouseDown
@@ -250,7 +246,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  EditManager for the ToolStrip Designer. This EditorManager controls the Insitu Editing.
+    ///  EditManager for the ToolStrip Designer. This EditorManager controls the InSitu Editing.
     /// </summary>
     public ToolStripEditorManager EditManager
     {
@@ -463,11 +459,11 @@ internal class ToolStripDesigner : ControlDesigner
                 Rectangle bounds = dropDownItemDesigner.GetGlyphBounds();
                 Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
                 // Initialize Glyph
-                ToolStripItemGlyph bodyGlyphForddItem = new(item, dropDownItemDesigner, bounds, toolStripBehavior);
+                ToolStripItemGlyph bodyGlyphDropDownItem = new(item, dropDownItemDesigner, bounds, toolStripBehavior);
                 // Set the glyph for the item .. so that we can remove it later....
-                dropDownItemDesigner._bodyGlyph = bodyGlyphForddItem;
+                dropDownItemDesigner._bodyGlyph = bodyGlyphDropDownItem;
                 // Add ItemGlyph to the Collection
-                _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(bodyGlyphForddItem);
+                _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(bodyGlyphDropDownItem);
             }
         }
     }
@@ -565,7 +561,7 @@ internal class ToolStripDesigner : ControlDesigner
             item = component as ToolStripItem;
             if (item is not null)
             {
-                PropertyDescriptor textProperty = TypeDescriptor.GetProperties(item)["Text"];
+                PropertyDescriptor textProperty = TypeDescriptor.GetProperties(item)[nameof(Text)];
                 Debug.Assert(textProperty is not null, "Could not find 'Text' property in ToolStripItem.");
                 if (textProperty is not null && !string.IsNullOrEmpty(text))
                 {
@@ -584,16 +580,16 @@ internal class ToolStripDesigner : ControlDesigner
                     {
                     }
 
-                    PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
+                    PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)[nameof(Image)];
                     Debug.Assert(imageProperty is not null, "Could not find 'Image' property in ToolStripItem.");
                     if (imageProperty is not null && image is not null)
                     {
                         imageProperty.SetValue(item, image);
                     }
 
-                    PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
-                    Debug.Assert(dispProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    dispProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
+                    PropertyDescriptor displayProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
+                    Debug.Assert(displayProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    displayProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
 
                     PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(item)["ImageTransparentColor"];
                     Debug.Assert(imageTransProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
@@ -618,7 +614,7 @@ internal class ToolStripDesigner : ControlDesigner
                 }
                 else
                 {
-                    // put the templateNode into nonselection mode && select the existing Item
+                    // Put the templateNode into non-selection mode && select the existing Item.
                     KeyboardHandlingService.SelectedDesignerControl = null;
                     SelectionService.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Replace);
                     _editorNode.RefreshSelectionGlyph();
@@ -892,7 +888,7 @@ internal class ToolStripDesigner : ControlDesigner
                     // notify the designer what's changed.
                     try
                     {
-                        RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                        RaiseComponentChanging(TypeDescriptor.GetProperties(Component)[nameof(Items)]);
                         if (SelectionService.PrimarySelection is ToolStripItem selectedItem)
                         {
                             // ADD at the current Selection ...
@@ -914,7 +910,7 @@ internal class ToolStripDesigner : ControlDesigner
                     }
                     finally
                     {
-                        RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                        RaiseComponentChanged(TypeDescriptor.GetProperties(Component)[nameof(Items)], null, null);
                     }
                 }
             }
@@ -1026,7 +1022,7 @@ internal class ToolStripDesigner : ControlDesigner
                 if (itemIndex != -1)
                 {
                     ToolStrip.Items.Remove(item);
-                    RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                    RaiseComponentChanged(TypeDescriptor.GetProperties(Component)[nameof(Items)], null, null);
                 }
             }
             finally
@@ -1101,7 +1097,7 @@ internal class ToolStripDesigner : ControlDesigner
             try
             {
                 _pendingTransaction = _host.CreateTransaction(SR.ToolStripDesignerTransactionRemovingItem);
-                RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                RaiseComponentChanging(TypeDescriptor.GetProperties(Component)[nameof(Items)]);
                 if (e.Component is ToolStripDropDownItem dropDownItem)
                 {
                     dropDownItem.HideDropDown();
@@ -1381,7 +1377,7 @@ internal class ToolStripDesigner : ControlDesigner
 
         if ((SelectionRules & SelectionRules.Moveable) != 0 && InheritanceAttribute != InheritanceAttribute.InheritedReadOnly && (selType != GlyphSelectionType.NotSelected))
         {
-            // get the adornerwindow-relative coords for the container control
+            // Get the adorner window-relative coordinates for the container control
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
             Rectangle translatedBounds = new(loc, ((Control)Component).Size);
             int glyphOffset = (int)(DesignerUtils.s_containerGrabHandleSize * .5);
@@ -1404,7 +1400,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     protected override bool GetHitTest(Point point)
     {
-        // convert to client coords.
+        // Convert to client coordinates.
         point = Control.PointToClient(point);
 
         if (_miniToolStrip is not null && _miniToolStrip.Visible && AddItemRect.Contains(point))
@@ -1423,7 +1419,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  Get the designer set up to run.
     /// </summary>
-    // EditorServiceContext is newed up to add Edit Items verb.
+    // EditorServiceContext updated to add Edit Items verb.
     public override void Initialize(IComponent component)
     {
         base.Initialize(component);
@@ -1431,14 +1427,11 @@ internal class ToolStripDesigner : ControlDesigner
         _host = GetRequiredService<IDesignerHost>();
         _componentChangeService = _host.GetService<IComponentChangeService>();
 
-        if (_undoEngine is null)
+        _undoEngine ??= GetService<UndoEngine>();
+        if (_undoEngine is not null)
         {
-            _undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
-            if (_undoEngine is not null)
-            {
-                _undoEngine.Undoing += OnUndoing;
-                _undoEngine.Undone += OnUndone;
-            }
+            _undoEngine.Undoing += OnUndoing;
+            _undoEngine.Undone += OnUndone;
         }
 
         // initialize new Manager For Editing ToolStrips
@@ -1481,7 +1474,7 @@ internal class ToolStripDesigner : ControlDesigner
         // Init the verb.
         if (CanAddItems)
         {
-            new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)["Items"], SR.ToolStripItemCollectionEditorVerb);
+            new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)[nameof(Items)], SR.ToolStripItemCollectionEditorVerb);
 
             // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
             if (GetService<ToolStripKeyboardHandlingService>() is null)
@@ -1489,7 +1482,7 @@ internal class ToolStripDesigner : ControlDesigner
                 new ToolStripKeyboardHandlingService(Component.Site);
             }
 
-            // Add the InsituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
+            // Add the InSituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
             if (GetService<ISupportInSituService>() is null)
             {
                 new ToolStripInSituService(Component.Site);
@@ -1547,7 +1540,7 @@ internal class ToolStripDesigner : ControlDesigner
 
         if (parentFormDesigner is not null)
         {
-            // Add MenuBack.
+            // Add MenuStrip back.
             if (parentMenu is MenuStrip menuStrip)
             {
                 parentForm.Controls.Add(menuStrip);
@@ -1914,7 +1907,7 @@ internal class ToolStripDesigner : ControlDesigner
         {
             if (TryGetService(out IComponentChangeService changeService))
             {
-                changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
             }
 
             IReadOnlyList<IComponent> components;
@@ -1977,15 +1970,15 @@ internal class ToolStripDesigner : ControlDesigner
                 SelectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
             }
 
-            changeService?.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+            changeService?.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
 
             // Fire extra changing/changed events so that the order is "restored" after undo/redo
             if (copy)
             {
                 if (changeService is not null)
                 {
-                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
+                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
                 }
             }
 
@@ -2338,14 +2331,9 @@ internal class ToolStripDesigner : ControlDesigner
     {
         if (de.Data is ToolStripItemDataObject data)
         {
-            if (data.Owner != ToolStrip)
-            {
-                de.Effect = DragDropEffects.None;
-            }
-            else
-            {
-                de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
-            }
+            de.Effect = data.Owner != ToolStrip
+                ? DragDropEffects.None
+                : (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
         }
     }
 
