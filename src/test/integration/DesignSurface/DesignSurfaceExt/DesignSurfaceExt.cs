@@ -211,7 +211,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
             if (designer is IComponentInitializer initializer)
             {
-                initializer.InitializeNewComponent(new Dictionary<object,object>());
+                initializer.InitializeNewComponent(new Dictionary<object, object>());
             }
 
             return (TComponent)newComp;
