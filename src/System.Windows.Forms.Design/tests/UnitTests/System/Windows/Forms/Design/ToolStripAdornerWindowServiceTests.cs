@@ -14,6 +14,7 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
     private readonly Mock<IOverlayService> _overlayServiceMock;
     private readonly BehaviorService _behaviorService;
     private readonly ToolStripAdornerWindowService _service;
+    private readonly Control _control;
     private bool _serviceDisposed;
 
     public ToolStripAdornerWindowServiceTests()
@@ -28,32 +29,22 @@ public class ToolStripAdornerWindowServiceTests : IDisposable
         _serviceProviderMock.Setup(sp => sp.GetService(typeof(IOverlayService))).Returns(_overlayServiceMock.Object);
         _serviceProviderMock.Setup(sp => sp.GetService(typeof(BehaviorService))).Returns(_behaviorService);
 
-        using Control control = new();
-        _service = new(_serviceProviderMock.Object, control);
+        _control = new();
+        _service = new(_serviceProviderMock.Object, _control);
 
         _behaviorService.Adorners.Add(_service.DropDownAdorner);
     }
 
     public void Dispose()
     {
-        _behaviorService.Dispose();
+        _behaviorService?.Dispose();
+        _control?.Dispose();
 
         if (!_serviceDisposed)
         {
             _service.Dispose();
             _serviceDisposed = true;
         }
-    }
-
-    private class TestControl : Control
-    {
-        private readonly Graphics _graphics;
-
-        public TestControl(Graphics graphics) => _graphics = graphics;
-
-        public Graphics TestGraphics => _graphics;
-
-        public new Point PointToScreen(Point point) => new(point.X + 8, point.Y + 31);
     }
 
     [WinFormsFact]
