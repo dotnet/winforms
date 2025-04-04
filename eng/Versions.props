@@ -53,7 +53,7 @@
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>
-    <MicrosoftPrivateIntellisenseVersion>9.0.0-preview-20240830.1</MicrosoftPrivateIntellisenseVersion>
+    <MicrosoftPrivateIntellisenseVersion>9.0.0-preview-20241010.1</MicrosoftPrivateIntellisenseVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
@@ -65,7 +65,7 @@
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <XUnitVersion>2.9.0</XUnitVersion>
+    <XUnitVersion>2.9.2</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitRunnerVisualStudioVersion>2.8.1</XUnitRunnerVisualStudioVersion>
@@ -74,15 +74,15 @@
   </PropertyGroup>
   <!-- Test related -->
   <PropertyGroup>
-    <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
+    <MicrosoftVisualStudioThreadingVersion>17.12.19</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
     <MicrosoftWindowsCompatibilityVersion>7.0.0</MicrosoftWindowsCompatibilityVersion>
-    <MoqPackageVersion>4.10.0</MoqPackageVersion>
-    <FluentAssertionsVersion>6.11.0</FluentAssertionsVersion>
+    <MoqPackageVersion>4.20.70</MoqPackageVersion>
+    <FluentAssertionsVersion>6.12.0</FluentAssertionsVersion>
     <SystemComponentModelTypeConverterTestDataVersion>8.0.0-beta.23107.1</SystemComponentModelTypeConverterTestDataVersion>
     <SystemDrawingCommonTestDataVersion>8.0.0-beta.23107.1</SystemDrawingCommonTestDataVersion>
     <SystemWindowsExtensionsTestDataVersion>8.0.0-beta.23107.1</SystemWindowsExtensionsTestDataVersion>
-    <VerifyXunitVersion>25.0.1</VerifyXunitVersion>
+    <VerifyXunitVersion>28.8.1</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
@@ -95,7 +95,7 @@
     <CSharpIsNullAnalyzersVersion>0.1.495</CSharpIsNullAnalyzersVersion>
     <DotNetAnalyzersDocumentationAnalyzersVersion>1.0.0-beta.59</DotNetAnalyzersDocumentationAnalyzersVersion>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.11.0-beta1.24219.2</MicrosoftCodeAnalysisAnalyzersVersion>
-    <MicrosoftCodeAnalysisCommonPackageVersion>4.10.0-3.final</MicrosoftCodeAnalysisCommonPackageVersion>
+    <MicrosoftCodeAnalysisCommonPackageVersion>4.12.0</MicrosoftCodeAnalysisCommonPackageVersion>
     <MicrosoftCodeAnalysisCSharpPackageVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisCSharpPackageVersion>
     <MicrosoftCodeAnalysisVisualBasicPackageVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisVisualBasicPackageVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>$(MicrosoftCodeAnalysisCommonPackageVersion)</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
@@ -112,5 +112,7 @@
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
+    <!-- Pin transitive, compatible dependency to avoid vulnerable 8.0.0 version. -->
+    <SystemFormatsAsn1PackageVersion>9.0.2</SystemFormatsAsn1PackageVersion>
   </PropertyGroup>
 </Project>
