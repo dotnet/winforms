@@ -14,9 +14,11 @@
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
     <IsTestUtilityProject>true</IsTestUtilityProject>
     <TargetFrameworks>$(NetCurrent)-windows;net481</TargetFrameworks>
-    <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
+    <!-- Unset TargetFramework as this property gets set in the repo's root. This is necessary to avoid over-building. -->
     <TargetFramework />
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -37,10 +39,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Design" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
-    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0"/>
   </ItemGroup>
 
 </Project>

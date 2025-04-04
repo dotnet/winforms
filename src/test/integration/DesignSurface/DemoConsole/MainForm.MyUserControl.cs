@@ -5,6 +5,7 @@ namespace TestConsole;
 
 public partial class MainForm
 {
+    [DesignerCategory("Default")]
     internal class MyUserControl : UserControl
     {
         public MyUserControl()

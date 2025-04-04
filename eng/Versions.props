@@ -117,6 +117,7 @@
     
   <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
     <PackageReference Include="System.Collections.Immutable" VersionOverride="9.0.2" />
+    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0"/>
   </ItemGroup>
 
 </Project>

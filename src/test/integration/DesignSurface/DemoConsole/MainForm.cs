@@ -3,6 +3,7 @@
 
 namespace TestConsole;
 
+[DesignerCategory("Default")]
 public partial class MainForm : Form
 {
     private ISelectionService _selectionService;
