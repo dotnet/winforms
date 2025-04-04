@@ -265,6 +265,7 @@ public partial class MainForm : Form
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
+                        // See https://github.com/microsoft/winforms-designer/issues/2508
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                         surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
                         surface.CreateComponent<NotifyIcon>();
@@ -291,6 +292,7 @@ public partial class MainForm : Form
 
                         ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
                         ToolStripButton toolStripButton1 = surface.CreateComponent<ToolStripButton>();
+                        https://github.com/dotnet/winforms/issues/13040 
                         ToolStripDropDownButton toolStripDropDownButton1 = surface.CreateComponent<ToolStripDropDownButton>();
                         ToolStripTextBox toolStripTextBox = surface.CreateComponent<ToolStripTextBox>();
                         toolStrip1.Items.Add(toolStripButton1);
