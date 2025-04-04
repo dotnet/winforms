@@ -59,9 +59,11 @@ public class ImplicitInvokeAsyncOnControl
         var context = GetAnalyzerTestContext(fileSet, referenceAssemblies);
         
         // Explicitly specify where diagnostics are expected
-        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(31, 13, 31, 89));
-        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 13, 46, 89));
-        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(74, 13, 74, 89));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(16, 15, 16, 61));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(17, 15, 17, 74));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(30, 19, 30, 65));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(64, 15, 64, 60));
+        context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(70, 15, 70, 65));
 
         await context.RunAsync();
     }

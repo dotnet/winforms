@@ -1,52 +1,67 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System
+Option Strict On
+Option Explicit On
+
+Imports System.Windows.Forms
 Imports System.Threading
 Imports System.Threading.Tasks
-Imports System.Windows.Forms
 
 Namespace TestNamespace
-
     Public Class MyForm
         Inherits Form
 
-        Private Async Function DoWorkWithoutMe() As Task
-            ' Case 1: Using InvokeAsync without 'Me' in a synchronous context
-            ' This should be detected by the analyzer
-            Await InvokeAsync(Function() DoSomethingAsync())
+        Friend Async Function DoWorkWithoutThis() As Task
+            ' Make sure, both get flagged, because they would 
+            ' not be awaited internally and became a fire-and-forget.
+            Await InvokeAsync(Async Function() As Task
+                                  Await Task.Delay(100)
+                              End Function)
 
-            ' Case 2: Using a variable instead of 'Me', but not triggering the analyzer
-            Dim token As CancellationToken = New CancellationToken()
-            Await Me.InvokeAsync(Function(ct) DoSomethingWithToken(ct), token)
-
+            Await Me.InvokeAsync(Async Function() As Task
+                                     Await DoWorkInNestedContext()
+                                 End Function)
         End Function
 
         Private Async Function DoWorkInNestedContext() As Task
-            Await FunctionAsync()
+
+            Await NestedFunction()
+
+            Await InvokeAsync(
+                Function(ct) New ValueTask(
+                    DoSomethingWithTokenAsync(ct)),
+                CancellationToken.None)
+
         End Function
 
-        Private Async Function FunctionAsync() As Task
-            ' Case 3: Using InvokeAsync without 'Me' in a nested function
-            ' This should be detected by the analyzer
-            Await InvokeAsync(
-                New ValueTask(DoSomethingIntAsync),
-                CancellationToken.None)
+        Private Async Function NestedFunction() As Task
+
+            ' Make sure we detect this inside of a nested function.
+            Await InvokeAsync(Async Function()
+                                  Await Task.Delay(100)
+                              End Function)
         End Function
 
         ' Helper methods for the test cases
-        Private Async Function DoSomethingAsync() As Task(Of Boolean)
-            Await Task.Delay(100)
-            Return True
+        Private Async Function DoSomethingAsync(token As CancellationToken) As Task
+            Await Task.Delay(42 + 73, token)
         End Function
 
-        Private Function DoSomethingWithToken(token As CancellationToken) As ValueTask
-            Return New ValueTask(Task.CompletedTask)
+        Private Async Function DoSomethingWithTokenAsync(token As CancellationToken) As Task(Of Boolean)
+            ' VB cannot await ValueTask directly, so convert to Task
+            Await DoSomethingAsync(token)
+            Dim meaningOfLife As Integer = 21 + 21
+
+            Return meaningOfLife = Await GoRateotuAsync(token)
         End Function
 
-        Private Function DoSomethingIntAsync(token As CancellationToken) As ValueTask(Of Integer)
-            Dim someTask = Task.Delay(100, token)
-            Return New ValueTask(someTask)
+        Private Async Function GoRateotuAsync(token As CancellationToken) As Task(Of Integer)
+            Dim derivedForm As New DerivedForm()
+            Await derivedForm.DoWorkInDerivedClassAsync()
+
+            Await Task.Delay(100, token)
+            Return 42
         End Function
     End Class
 
@@ -54,10 +69,19 @@ Namespace TestNamespace
     Public Class DerivedForm
         Inherits Form
 
-        Private Async Function DoWorkInDerivedClass() As Task
-            ' Case 4: Using InvokeAsync without 'Me' in a derived class
-            ' This should be detected by the analyzer
-            Await InvokeAsync(Function(ct) New ValueTask(Of String)(DoSomethingStringAsync(ct)), CancellationToken.None)
+        Friend Async Function DoWorkInDerivedClassAsync() As Task
+            Await InvokeAsync(Async Function()
+                                  Await Task.Delay(99)
+                              End Function)
+
+            ' ValueTask handling in VB needs conversion to Task
+            Await InvokeAsync(Function(ct) New ValueTask(Of String)(
+                DoSomethingStringAsync(ct)),
+                CancellationToken.None)
+
+            Await Me.InvokeAsync(Async Function()
+                                     Await Task.Delay(99)
+                                 End Function)
         End Function
 
         Private Async Function DoSomethingStringAsync(token As CancellationToken) As Task(Of String)
@@ -65,5 +89,4 @@ Namespace TestNamespace
             Return "test"
         End Function
     End Class
-
 End Namespace

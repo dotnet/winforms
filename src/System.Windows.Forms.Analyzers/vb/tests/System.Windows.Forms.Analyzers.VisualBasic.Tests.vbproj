@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\AnalyzerTestCode.vb" />
     <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\Program.vb" />
     <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.vb" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.vb" />
@@ -53,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\AnalyzerTestCode.vb" />
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\Program.vb" />
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.vb" />
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.vb" />
@@ -62,5 +64,6 @@
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\AnalyzerTestCode.vb" />
     <None Include="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\Program.vb" />
   </ItemGroup>
+
 
 </Project>

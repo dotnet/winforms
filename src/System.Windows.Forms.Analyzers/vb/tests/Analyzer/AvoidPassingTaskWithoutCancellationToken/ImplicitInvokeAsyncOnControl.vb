@@ -58,9 +58,11 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
             Dim context = GetVisualBasicAnalyzerTestContext(fileSet, referenceAssemblies)
 
             ' Explicitly specify where diagnostics are expected
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(27, 13, 27, 95))
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(42, 17, 42, 99))
-            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(71, 13, 71, 95))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(18, 19, 20, 44))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(22, 19, 24, 47))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 19, 43, 44))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(73, 19, 75, 44))
+            context.ExpectedDiagnostics.Add(DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(82, 19, 84, 47))
 
             Await context.RunAsync()
         End Function
