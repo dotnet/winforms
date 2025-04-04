@@ -1,4 +1,9 @@
-﻿/// <summary>
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+namespace DesignSurfaceExt;
+
+/// <summary>
 /// Implements <see cref="INameCreationService"/> to provide names for newly created controls.
 /// </summary>
 /// <remarks>
@@ -6,9 +11,6 @@
 /// The <c>CreateName</c> method follows the same naming algorithm used by Visual Studio:
 /// it increments an integer counter until it finds a unique name that is not already in use.</para>
 /// </remarks>
-
-namespace DesignSurfaceExt;
-
 internal sealed class NameCreationServiceImp : INameCreationService
 {
     public NameCreationServiceImp() { }
