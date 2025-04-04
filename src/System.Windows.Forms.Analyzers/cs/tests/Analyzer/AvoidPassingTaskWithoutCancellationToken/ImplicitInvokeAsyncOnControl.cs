@@ -30,7 +30,7 @@ public class ImplicitInvokeAsyncOnControl
     {
         NetVersion[] tfms =
         [
-            NetVersion.Net9_0
+            NetVersion.WinFormsBuild
         ];
 
         foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))

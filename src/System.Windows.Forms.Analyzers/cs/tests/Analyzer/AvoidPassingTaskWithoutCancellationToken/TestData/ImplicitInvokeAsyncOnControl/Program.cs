@@ -3,14 +3,13 @@
 
 namespace CSharpControls;
 
+using System.Windows.Forms;
+
 public static class Program
 {
     public static void Main(string[] args)
     {
-        var control = new ScalableControl();
-
-        control.ScaleFactor = 1.5f;
-        control.ScaledSize = new SizeF(100, 100);
-        control.ScaledLocation = new PointF(10, 10);
+        var form = new TestNamespace.MyForm();
+        Application.Run(form);
     }
 }
