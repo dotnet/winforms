@@ -36,6 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\Program.cs" />
     <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
     <Compile Remove="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\AnalyzerTestCode.cs" />
@@ -63,6 +65,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\AnalyzerTestCode.cs" />
+    <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\ImplicitInvokeAsyncOnControl\Program.cs" />
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\AnalyzerTestCode.cs" />
     <None Include="Analyzer\AvoidPassingTaskWithoutCancellationToken\TestData\InvokeAsyncOnControl\GlobalUsing.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

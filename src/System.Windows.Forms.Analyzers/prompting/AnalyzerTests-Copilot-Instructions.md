@@ -96,7 +96,31 @@ We currently have 3 different test projects in the solution:
    ```
 
 ### For Visual Basic Tests
-Equivalent imports and program files in VB syntax as needed.
+* No equivalent to `GlobalUsings.cs` exists in Visual Basic, so, `Imports` need to be 
+  added directly in the test files.
+* We also need a `Program.vb` file that serves as the entry point for the application. 
+  It can be looking like this, for the cases, where we need to setup
+* Please note and take into account, that Visual Basic does not support local functions.
+
+```VB
+Imports System
+Imports System.Windows.Forms
+
+Namespace MyApplication
+    Friend NotInheritable Class Program
+        ''' <summary>
+        ''' The main entry point for the application.
+        ''' </summary>
+        <STAThread()> _
+        Shared Sub Main()
+            Application.EnableVisualStyles()
+            Application.SetCompatibleTextRenderingDefault(False)
+            Application.SetHighDpiMode(HighDpiMode.SystemAware)
+            Application.Run(New Form1())
+        End Sub
+    End Class
+End Namespace
+```
 
 ## Test File Structure
 
