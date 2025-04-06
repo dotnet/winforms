@@ -11,6 +11,8 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
+using Drawing2DCoordinateSpace = System.Drawing.Drawing2D.CoordinateSpace;
+
 namespace System.Drawing;
 
 /// <summary>
@@ -46,8 +48,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public delegate bool DrawImageAbort(IntPtr callbackdata);
 
     /// <summary>
-    /// Callback for EnumerateMetafile methods.
-    /// This method can then call Metafile.PlayRecord to play the record that was just enumerated.
+    ///  Callback for EnumerateMetafile methods.
+    ///  This method can then call Metafile.PlayRecord to play the record that was just enumerated.
     /// </summary>
     /// <param name="recordType">if >= MinRecordType, it's an EMF+ record</param>
     /// <param name="flags">always 0 for EMF records</param>
@@ -216,7 +218,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <summary>
-    /// Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
+    ///  Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
     /// </summary>
     public Drawing2D.CompositingMode CompositingMode
     {
@@ -273,7 +275,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     }
 
     /// <summary>
-    /// Gets or sets the interpolation mode associated with this Graphics.
+    ///  Gets or sets the interpolation mode associated with this Graphics.
     /// </summary>
     public Drawing2D.InterpolationMode InterpolationMode
     {
@@ -665,7 +667,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         DrawArc(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
         => DrawArc(pen, (float)x, y, width, height, startAngle, sweepAngle);
@@ -1190,7 +1192,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void Clear(Color color) => CheckStatus(PInvokeGdiPlus.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
 
 #if NET9_0_OR_GREATER
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
     public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
         FillRoundedRectangle(brush, (RectangleF)rect, radius);
 
@@ -2580,19 +2582,19 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="destSpace">The destination coordinate space.</param>
     /// <param name="srcSpace">The source coordinate space.</param>
     /// <param name="pts">The points to transform.</param>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params PointF[] pts)
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
     {
         fixed (PointF* p = pts)
         {
@@ -2605,20 +2607,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         }
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params Point[] pts)
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
     {
         fixed (Point* p = pts)
         {
@@ -3588,7 +3590,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///   The <paramref name="cachedBitmap"/> is not compatible with the <see cref="Graphics"/> device state.
     ///  </para>
     ///  <para>
-    ///  - or -
+    ///   - or -
     ///  </para>
     ///  <para>
     ///   The <see cref="Graphics"/> object has a transform applied other than a translation.

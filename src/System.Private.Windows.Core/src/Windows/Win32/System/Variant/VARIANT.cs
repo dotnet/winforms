@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Private.Windows.Core.Resources;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -418,7 +417,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 // CLR arrays are laid out in row-major order.
                 // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
                 // However, SAFEARRAYs are laid out in column-major order.
-                // See https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/array-manipulation-functions
+                // See https://docs.microsoft.com/previous-versions/windows/desktop/automat/array-manipulation-functions
                 // Therefore, we need to transpose data.
                 TransposeArray(psa, array, arrayType);
             }

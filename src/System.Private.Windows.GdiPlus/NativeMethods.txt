@@ -360,8 +360,6 @@ GdipLoadImageFromFile
 GdipLoadImageFromFileICM
 GdipLoadImageFromStream
 GdipLoadImageFromStreamICM
-GdiplusStartup
-GdiplusStartupInputEx
 GdipMeasureCharacterRanges
 GdipMeasureString
 GdipMultiplyLineTransform
@@ -527,9 +525,3 @@ GdipVectorTransformMatrixPoints
 GdipVectorTransformMatrixPointsI
 GdipWarpPath
 GdipWidenPath
-GpBitmap
-GpGraphics
-GpImage
-GpRegion
-ImageFormat*
-PixelFormat*

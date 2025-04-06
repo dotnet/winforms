@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DirectoryIsAccessibleWithNonexistentPath()
-            Dim directoryPath As String = Path.Combine(CreateTempDirectory(), GetUniqueFileName)
+            Dim directoryPath As String = Path.Join(CreateTempDirectory(), GetUniqueFileName)
             DirectoryIsAccessible(directoryPath).Should.BeFalse()
         End Sub
 

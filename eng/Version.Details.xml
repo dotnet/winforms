@@ -1,219 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
-Dependencies registered here by Name and Uri will be updated by Maestro via darc update-dependencies 
-  They will be updated either in eng/Versions.props (most) or in global.json (for example: Microsoft.DotNet.Arcade.Sdk) 
-Note: if the Uri is a new place, you will need to add a subscription from that place to us in the appropriate channel 
-  And you can check these with "darc get-dependencies <dash dash>target-repo "winforms" 
+Dependencies registered here by Name and Uri will be updated by Maestro via darc update-dependencies
+  They will be updated either in eng/Versions.props (most) or in global.json (for example: Microsoft.DotNet.Arcade.Sdk)
+Note: if the Uri is a new place, you will need to add a subscription from that place to us in the appropriate channel
+  And you can check these with "darc get-dependencies <dash dash>target-repo "winforms"
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.10.0" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.10.0" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Resources.Extensions" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Resources.Extensions" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Windows.Extensions" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Reflection.MetadataLoadContext" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Reflection.MetadataLoadContext" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Text.Encodings.Web" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Text.Encodings.Web" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Text.Json" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Text.Json" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Ref" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NETCore.App.Ref" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Runtime.Serialization.Formatters" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Runtime.Serialization.Formatters" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
     <!-- These dependencies are required by windowsdesktop for coherency. -->
-    <Dependency Name="Microsoft.Win32.Registry.AccessControl" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.Win32.Registry.AccessControl" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.CodeDom" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.ComponentModel.Composition" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.ComponentModel.Composition" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Data.Odbc" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Data.Odbc" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Data.OleDb" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Data.OleDb" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Diagnostics.EventLog" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Diagnostics.EventLog" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Diagnostics.PerformanceCounter" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Diagnostics.PerformanceCounter" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.DirectoryServices.AccountManagement" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.DirectoryServices.AccountManagement" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.DirectoryServices.Protocols" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.DirectoryServices.Protocols" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.DirectoryServices" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.DirectoryServices" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Formats.Nrbf" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Formats.Nrbf" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.IO.Hashing" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.IO.Hashing" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.IO.Packaging" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.IO.Packaging" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.IO.Ports" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.IO.Ports" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Management" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Management" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Reflection.Context" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Reflection.Context" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Runtime.Caching" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Runtime.Caching" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Pkcs" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Security.Cryptography.Pkcs" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.ProtectedData" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Security.Cryptography.ProtectedData" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Xml" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Security.Cryptography.Xml" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Security.Permissions" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.ServiceModel.Syndication" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.ServiceModel.Syndication" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.ServiceProcess.ServiceController" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.ServiceProcess.ServiceController" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Speech" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Speech" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Text.Encoding.CodePages" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Text.Encoding.CodePages" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.Threading.AccessControl" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.Threading.AccessControl" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
-    <Dependency Name="System.ComponentModel.Composition.Registration" Version="10.0.0-alpha.1.25062.3">
+    <Dependency Name="System.ComponentModel.Composition.Registration" Version="10.0.0-preview.4.25205.3">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>010e61a4f46d6d9b544cde169dc034417de7223a</Sha>
+      <Sha>a2e1d21bb4faf914363968b812c990329ba92d8e</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="10.0.0-beta.25061.1">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="10.0.0-beta.25204.12">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>98b4ae348fa01b99dc6fbfc8f601efd9b90090db</Sha>
+      <Sha>25bd3926321ea9b6ca66c772e03a76e7a5010227</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

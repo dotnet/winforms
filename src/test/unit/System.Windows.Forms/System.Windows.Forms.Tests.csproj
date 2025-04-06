@@ -1,0 +1,105 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
+    <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <RootNamespace />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <Nullable>enable</Nullable>
+    <DefaultItemExcludes>$(DefaultItemExcludes);ComDisabled\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      SYSLIB0050: Formatter-based serialization is obsolete and should not be used
+      SYSLIB0051: This API supports obsolete formatter-based serialization
+      SYSLIB5005: System.Formats.Nrbf is experimental
+    -->
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051,SYSLIB5005</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildAssist\BuildAssist.msbuildproj" />
+    <ProjectReference Include="..\..\..\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <!-- This facade assembly is required to resolve UITypeEditor type from NETFX that is referenced in EditorAttributes -->
+    <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\integration\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
+    <ProjectReference Include="..\..\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
+    <Reference Include="$(ArtifactsBinDir)\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.SystemMonitor">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.SystemMonitor.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.SystemMonitor">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.SystemMonitor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.SHDocVw">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.SHDocVw.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.SHDocVw">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnsupportedTypes">
+      <HintPath>$(ArtifactsBinDir)\UnsupportedTypes\$(Configuration)\net472\UnsupportedTypes.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestResources\Files\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bitmaps\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\.NET Framework\AxHosts\AxHosts.resx" Link="Resources\AxHosts.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
+      <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="TestResources.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestResources\VB6\SimpleControl.vb6">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

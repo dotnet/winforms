@@ -78,34 +78,19 @@
                                               "OutputPath":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\xlf\\"
                                           },
                                           {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\mdiwindowdialog.xlf",
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\Resources\\System\\Windows\\Forms\\xlf\\mdiwindowdialog.xlf",
                                               "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\"
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\Resources\\System\\Windows\\Forms\\xlf\\"
                                           },
                                           {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\PrintPreviewDialog.xlf",
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\Resources\\System\\Windows\\Forms\\xlf\\PrintPreviewDialog.xlf",
                                               "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\System\\Windows\\Forms\\xlf\\"
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\Resources\\System\\Windows\\Forms\\xlf\\"
                                           },
                                           {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\src\\Resources\\xlf\\SR.xlf",
+                                              "SourceFile":  ".\\src\\System.Windows.Forms\\Resources\\xlf\\SR.xlf",
                                               "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\src\\Resources\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\ListViewTest.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\Panels.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
-                                          },
-                                          {
-                                              "SourceFile":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\TreeViewTest.xlf",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\src\\System.Windows.Forms\\tests\\IntegrationTests\\WinformsControlsTest\\xlf\\"
+                                              "OutputPath":  ".\\src\\System.Windows.Forms\\Resources\\xlf\\"
                                           },
                                           {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers\\src\\Resources\\xlf\\SR.xlf",
@@ -198,6 +183,11 @@
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
                                           },
                                           {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\ToolStripItemEditorForm.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },
+                                          {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\TreeNodeCollectionEditor.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
@@ -206,6 +196,21 @@
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\ListViewTest.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\Panels.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\TreeViewTest.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\test\\integration\\WinformsControlsTest\\xlf\\"
                                           }
                                       ],
                          "LanguageSet":  "VS_Main_Languages"

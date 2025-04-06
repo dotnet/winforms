@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Analyzers;
 internal static class AnalyzerConfigOptionsProviderExtensions
 {
     /// <summary>
-    /// Attempts to read a value for the requested MSBuild property.
+    ///  Attempts to read a value for the requested MSBuild property.
     /// </summary>
     /// <param name="analyzerConfigOptions">The global options.</param>
     /// <param name="name">The name of the property to read the value for.</param>

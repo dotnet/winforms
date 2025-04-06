@@ -516,7 +516,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (e.Control.IsHandleCreated)
         {
             Application.OleRequired();
-            PInvoke.RevokeDragDrop(e.Control);
+            PInvokeCore.RevokeDragDrop(e.Control);
 
             // We only hook the control's children if there was no designer. We leave it up to the designer
             // to hook its own children.
@@ -666,7 +666,22 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     internal Behavior.Behavior MoveBehavior
-        => _moveBehavior ??= new ContainerSelectorBehavior(Control, Component.Site);
+    {
+        get
+        {
+            if (_moveBehavior is null)
+            {
+                if (Component.Site is not ISite site)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                _moveBehavior = new ContainerSelectorBehavior(Control, site);
+            }
+
+            return _moveBehavior;
+        }
+    }
 
     /// <summary>
     ///  Returns a 'BodyGlyph' representing the bounds of this control. The BodyGlyph is responsible for hit
@@ -877,7 +892,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (child.IsHandleCreated)
             {
                 Application.OleRequired();
-                PInvoke.RevokeDragDrop(child);
+                PInvokeCore.RevokeDragDrop(child);
                 HookChildHandles((HWND)child.Handle);
             }
             else
@@ -1219,7 +1234,7 @@ public partial class ControlDesigner : ComponentDesigner
         OnHandleChange();
         if (_revokeDragDrop)
         {
-            PInvoke.RevokeDragDrop(Control);
+            PInvokeCore.RevokeDragDrop(Control);
         }
     }
 
@@ -2407,7 +2422,7 @@ public partial class ControlDesigner : ComponentDesigner
                     // have a Windows Forms control associated with them, we have to RevokeDragDrop()
                     // for them so that the ParentControlDesigner()'s drag-drop support can work
                     // correctly.
-                    PInvoke.RevokeDragDrop(hwndChild);
+                    PInvokeCore.RevokeDragDrop(hwndChild);
                     new ChildSubClass(this, hwndChild);
                     SubclassedChildWindows[hwndChild] = true;
                 }
@@ -2428,7 +2443,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     private static bool IsWindowInCurrentProcess(HWND hwnd)
     {
-        PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
+        PInvokeCore.GetWindowThreadProcessId(hwnd, out uint pid);
         return pid == CurrentProcessId;
     }
 

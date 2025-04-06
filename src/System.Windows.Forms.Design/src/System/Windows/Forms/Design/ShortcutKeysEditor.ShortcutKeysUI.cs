@@ -286,7 +286,7 @@ public partial class ShortcutKeysEditor
                 case Keys.Right:
                     if ((keyModifiers & (Keys.Control | Keys.Alt)) == 0)
                     {
-                        if (_shiftCheckBox.Focused)
+                        if (_altCheckBox.Focused)
                         {
                             _keyComboBox.Focus();
                             return true;

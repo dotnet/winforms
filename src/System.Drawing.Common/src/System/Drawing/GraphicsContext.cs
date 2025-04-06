@@ -6,7 +6,7 @@ using System.Numerics;
 namespace System.Drawing;
 
 /// <summary>
-/// Contains information about the context of a Graphics object.
+///  Contains information about the context of a Graphics object.
 /// </summary>
 internal sealed class GraphicsContext : IDisposable
 {
@@ -17,7 +17,7 @@ internal sealed class GraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Disposes this and all contexts up the stack.
+    ///  Disposes this and all contexts up the stack.
     /// </summary>
     public void Dispose()
     {
@@ -32,36 +32,36 @@ internal sealed class GraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// The state id representing the GraphicsContext.
+    ///  The state id representing the GraphicsContext.
     /// </summary>
     public int State { get; set; }
 
     /// <summary>
-    /// The translate transform in the GraphicsContext.
+    ///  The translate transform in the GraphicsContext.
     /// </summary>
     public Vector2 TransformOffset { get; private set; }
 
     /// <summary>
-    /// The clipping region the GraphicsContext.
+    ///  The clipping region the GraphicsContext.
     /// </summary>
     public Region? Clip { get; private set; }
 
     /// <summary>
-    /// The next GraphicsContext object in the stack.
+    ///  The next GraphicsContext object in the stack.
     /// </summary>
     public GraphicsContext? Next { get; set; }
 
     /// <summary>
-    /// The previous GraphicsContext object in the stack.
+    ///  The previous GraphicsContext object in the stack.
     /// </summary>
     public GraphicsContext? Previous { get; set; }
 
     /// <summary>
-    /// Flag that determines whether the context was created for a Graphics.Save() operation.
-    /// This kind of contexts are cumulative across subsequent Save() calls so the top context
-    /// info is cumulative. This is not the same for contexts created for a Graphics.BeginContainer()
-    /// operation, in this case the new context information is reset. See Graphics.BeginContainer()
-    /// and Graphics.Save() for more information.
+    ///  Flag that determines whether the context was created for a Graphics.Save() operation.
+    ///  This kind of contexts are cumulative across subsequent Save() calls so the top context
+    ///  info is cumulative. This is not the same for contexts created for a Graphics.BeginContainer()
+    ///  operation, in this case the new context information is reset. See Graphics.BeginContainer()
+    ///  and Graphics.Save() for more information.
     /// </summary>
     public bool IsCumulative { get; set; }
 }

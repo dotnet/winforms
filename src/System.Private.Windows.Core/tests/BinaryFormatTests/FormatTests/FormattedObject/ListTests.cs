@@ -4,10 +4,10 @@
 using System.Collections;
 using System.Drawing;
 using System.Formats.Nrbf;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using System.Runtime.Serialization.Formatters.Binary;
 using FormatTests.Common;
-using System.Windows.Forms.Nrbf;
+using System.Private.Windows.Nrbf;
 
 namespace FormatTests.FormattedObject;
 
@@ -80,7 +80,7 @@ public class ListTests : SerializationTest
     [MemberData(nameof(PrimitiveLists_TestData))]
     public void SerializationRecordExtensions_TryGetPrimitiveList(IList list)
     {
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(list));
+        SerializationRecord rootRecord = list.SerializeAndDecode();
         rootRecord.TryGetPrimitiveList(out object? deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(list);
     }

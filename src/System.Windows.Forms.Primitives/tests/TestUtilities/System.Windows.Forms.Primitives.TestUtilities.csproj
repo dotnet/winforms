@@ -11,14 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="System.Collections.Concurrent" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives.csproj" />
   </ItemGroup>
 

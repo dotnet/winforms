@@ -68,7 +68,7 @@ internal sealed partial class SelectionUIService
         private SelectionRules _selectionRules;
         private readonly ISelectionUIHandler? _handler; // the components selection UI handler (can be null)
 
-        ///  Its ok to call virtual method as this is a private class.
+        /// Its ok to call virtual method as this is a private class.
         public SelectionUIItem(SelectionUIService selUIsvc, object component)
         {
             _selUIsvc = selUIsvc;

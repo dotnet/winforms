@@ -83,7 +83,7 @@ internal class ListBoxDesigner : ControlDesigner
         if (disposing)
         {
             // Now, hook the component rename event so we can update the text in the list box.
-            if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
+            if (TryGetService(out IComponentChangeService? componentChangeService))
             {
                 componentChangeService.ComponentRename -= OnComponentRename;
                 componentChangeService.ComponentChanged -= OnComponentChanged;

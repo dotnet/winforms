@@ -17,7 +17,7 @@ internal static class TypeConverterHelper
 #pragma warning restore IDE0075
 
     /// <summary>
-    /// Converts the given text to list of objects, using the specified context and culture information.
+    ///  Converts the given text to list of objects, using the specified context and culture information.
     /// </summary>
     /// <param name="context">An ITypeDescriptorContext that provides a format context.</param>
     /// <param name="culture">A CultureInfo. If null is passed, the current culture is assumed.</param>

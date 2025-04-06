@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
@@ -9,9 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\System.Private.Windows.Core\src\PublicKeys.cs" Link="System\PublicKeys.cs" />
     <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\Analyzers\HighDpiMode.cs" />
-    <None Include="..\..\..\docs\analyzers\AppManifestAnalyzer.Help.md" Link="AppManifestAnalyzer.Help.md" />
-    <None Include="..\..\..\docs\analyzers\Experimental.Help.md" Link="Experimental.Help.md" />
+    <None Include="..\..\..\docs\analyzers\AppManifestAnalyzer.Help.md" Link="docs\AppManifestAnalyzer.Help.md" />
+    <None Include="..\..\..\docs\analyzers\Experimental.Help.md" Link="docs\Experimental.Help.md" />
     <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 
@@ -21,10 +23,6 @@
 
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\..\..\docs\analyzers\akams.txt" Link="akams.txt" />
   </ItemGroup>
 
   <ItemGroup>

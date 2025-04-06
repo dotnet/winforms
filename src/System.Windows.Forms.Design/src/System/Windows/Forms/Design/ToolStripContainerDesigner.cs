@@ -63,8 +63,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    /// Shadow the <see cref="ToolStripContainer.RightToolStripPanelVisible"/> property at design-time
-    /// so that we only set the visibility at design time if the user sets it directly.
+    ///  Shadow the <see cref="ToolStripContainer.RightToolStripPanelVisible"/> property at design-time
+    ///  so that we only set the visibility at design time if the user sets it directly.
     /// </summary>
     private bool RightToolStripPanelVisible
     {
@@ -77,8 +77,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    /// Shadow the <see cref="ToolStripContainer.BottomToolStripPanelVisible"/> property at design-time
-    /// so that we only set the visibility at design time if the user sets it directly.
+    ///  Shadow the <see cref="ToolStripContainer.BottomToolStripPanelVisible"/> property at design-time
+    ///  so that we only set the visibility at design time if the user sets it directly.
     /// </summary>
     private bool BottomToolStripPanelVisible
     {
@@ -108,8 +108,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    /// The ToolStripContainerDesigner will re-parent any controls that are within it's lasso at
-    /// creation time.
+    ///  The ToolStripContainerDesigner will re-parent any controls that are within it's lasso at
+    ///  creation time.
     /// </summary>
     protected override bool AllowControlLasso => false;
 

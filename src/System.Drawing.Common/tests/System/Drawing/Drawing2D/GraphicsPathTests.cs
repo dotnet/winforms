@@ -2066,11 +2066,6 @@ public class GraphicsPathTests
         Assert.Equal(0, gp.PointCount);
     }
 
-    private static void AssertEqual(float expexted, float actual, float tollerance)
-    {
-        AssertExtensions.LessThanOrEqualTo(Math.Abs(expexted - actual), tollerance);
-    }
-
     private static void AssertLine(GraphicsPath path)
     {
         PointF[] expectedPoints =

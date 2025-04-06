@@ -4,8 +4,8 @@
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Implements the manual sorting of items by columns in the mask descriptor table.
-/// Used by the MaskDesignerDialog to sort the items in the mask descriptors list.
+///  Implements the manual sorting of items by columns in the mask descriptor table.
+///  Used by the MaskDesignerDialog to sort the items in the mask descriptors list.
 /// </summary>
 internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
 {

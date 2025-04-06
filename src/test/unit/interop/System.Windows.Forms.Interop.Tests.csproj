@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
+    <AssemblyName>System.Windows.Forms.Interop.Tests</AssemblyName>
+    <Platforms>x86;x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Native tests do not build in VMR - https://github.com/dotnet/winforms/issues/13186 -->
+    <ExcludeFromBuild Condition="'$(DotNetBuild)' == 'true'">true</ExcludeFromBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <NativeProjectReference Include="NativeTests\CMakeLists.txt" CMakeProject="NativeTests\NativeTests.proj" BuildNative="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyTlbProjectFiles" BeforeTargets="CopyNativeProjectBinaries">
+    <ItemGroup>
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.tlb" />
+      <NativeProjectBinaries Include="$(NativeProjectOutputFolder)\*.manifest" />
+    </ItemGroup>
+  </Target>
+
+</Project>

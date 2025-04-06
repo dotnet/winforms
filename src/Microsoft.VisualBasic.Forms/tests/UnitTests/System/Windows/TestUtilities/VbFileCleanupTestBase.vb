@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public MustInherit Class VbFileCleanupTestBase
         Implements IDisposable
 
-        Private Shared ReadOnly s_baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
+        Private Shared ReadOnly s_baseTempPath As String = Path.Join(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
         Friend Const DefaultFileName As String = "Testing.Txt"
         Friend ReadOnly _testDirectories As New HashSet(Of String)
 
@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
         Friend Shared Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = DefaultFileName, Optional size As Integer = -1) As String
-            Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
+            Dim filenameWithPath As String = Path.Join(sourceDirectoryName, filename)
 
             If size >= 0 Then
                 Using destinationStream As FileStream = File.Create(filenameWithPath)
@@ -68,7 +68,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 If Not info.Exists Then
                     Return False
                 End If
-                Dim path As String = IO.Path.Combine(directoryPath, GetUniqueFileName())
+                Dim path As String = IO.Path.Join(directoryPath, GetUniqueFileName())
                 Using stream As FileStream = File.Create(path)
                     stream.Close()
                 End Using
@@ -82,7 +82,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
         Friend Shared Function GetUniqueFileNameWithPath(testDirectory As String) As String
-            Return Path.Combine(testDirectory, GetUniqueFileName())
+            Return Path.Join(testDirectory, GetUniqueFileName())
         End Function
 
         ''' <summary>
@@ -96,9 +96,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Friend Function CreateTempDirectory(<CallerMemberName> Optional memberName As String = Nothing, Optional lineNumber As Integer = -1) As String
             Dim folder As String
             If lineNumber > 0 Then
-                folder = Path.Combine(BaseTempPath, $"{memberName}{lineNumber}")
+                folder = Path.Join(BaseTempPath, $"{memberName}{lineNumber}")
             Else
-                folder = Path.Combine(BaseTempPath, memberName)
+                folder = Path.Join(BaseTempPath, memberName)
             End If
 
             If _testDirectories.Add(folder) Then

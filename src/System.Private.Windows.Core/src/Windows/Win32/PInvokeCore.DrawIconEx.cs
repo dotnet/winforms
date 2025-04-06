@@ -5,7 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvokeCore
 {
-    /// <inheritdoc cref="DrawIconEx(HDC, int, int, HICON, int, int, uint, HBRUSH, DI_FLAGS)"/>/>
+    /// <inheritdoc cref="DrawIconEx(HDC, int, int, HICON, int, int, uint, HBRUSH, DI_FLAGS)"/>
     public static BOOL DrawIconEx<T>(
         HDC hDC,
         int xLeft,

@@ -11,10 +11,16 @@
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dotnet/winforms</PackageProjectUrl>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+    <!-- There is no need to validate packages while iterating inside VS. -->
+    <EnablePackageValidation>false</EnablePackageValidation>
   </PropertyGroup>
 
   <!--

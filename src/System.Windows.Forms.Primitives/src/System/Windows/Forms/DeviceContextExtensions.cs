@@ -34,7 +34,7 @@ internal static partial class DeviceContextExtensions
         using SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
         using SelectObjectScope brushScope = new(hdc, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
-        PInvoke.Rectangle(hdc, left, top, right, bottom);
+        PInvokeCore.Rectangle(hdc, left, top, right, bottom);
     }
 
     internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HBRUSH hbrush) =>
@@ -168,7 +168,7 @@ internal static partial class DeviceContextExtensions
     /// <remarks>
     ///  <para>
     ///   Do NOT dispose of the <see cref="Graphics"/> object. If it was created, the object creating it owns it.
-    ///   </para>
+    ///  </para>
     /// </remarks>
     internal static Graphics? TryGetGraphics(this IDeviceContext deviceContext, bool create = false) => deviceContext switch
     {

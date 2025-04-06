@@ -37,7 +37,7 @@ internal class ApplicationConfigurationGenerator : IIncrementalGenerator
         if (outputKind is not OutputKind.WindowsApplication
             // Starting in the 5.0.100 version of the .NET SDK, when OutputType is set to Exe, it is automatically changed to WinExe
             // for WPF and Windows Forms apps that target any framework version, including .NET Framework.
-            // https://docs.microsoft.com/en-us/dotnet/core/compatibility/sdk/5.0/automatically-infer-winexe-output-type
+            // https://docs.microsoft.com/dotnet/core/compatibility/sdk/5.0/automatically-infer-winexe-output-type
             and not OutputKind.ConsoleApplication)
         {
             context.ReportDiagnostic(Diagnostic.Create(

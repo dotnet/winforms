@@ -14,6 +14,8 @@
       cross that bridge when we hit it (if ever).
     -->
     <NoWarn>$(NoWarn);CS8981</NoWarn>
+    <!-- Reenable when VRM SDK version contains fis for "reference-like" types -->
+    <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0059</NoWarn>
     <!--
       CS3016: We don't care about CLS compliance since everything here is internal and we want to match native types.
       SYSLIB5005: System.Formats.Nrbf is experimental
@@ -30,7 +32,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.CsWin32" PrivateAssets="all" />
     <PackageReference Include="System.Formats.Nrbf" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup>

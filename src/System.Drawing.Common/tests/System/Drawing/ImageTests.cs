@@ -5,6 +5,9 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.DotNet.XUnitExtensions;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace System.Drawing.Tests;
@@ -662,5 +665,72 @@ public class ImageTests
         using Bitmap bitmap = new(1, 1);
         string badTarget = Path.Join("NoSuchDirectory", "NoSuchFile");
         AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");
+    }
+
+    [Fact]
+    public unsafe void FromStream_NativeMetafile()
+    {
+        // Create a memory metafile from the screen DC
+        HDC hdc = PInvokeCore.CreateEnhMetaFile(HDC.Null, default, null, default(PCWSTR));
+        using CreatePenScope pen = new(Color.Red);
+        using SelectObjectScope penScope = new(hdc, pen);
+        PInvokeCore.Rectangle(hdc, 10, 10, 100, 100);
+        HENHMETAFILE hemf = PInvokeCore.CloseEnhMetaFile(hdc);
+
+        uint length = PInvokeCore.GetEnhMetaFileBits(hemf, 0, null);
+        byte[] buffer = new byte[length];
+        length = PInvokeCore.GetEnhMetaFileBits(hemf, buffer);
+        PInvokeCore.DeleteEnhMetaFile(hemf);
+
+        MemoryStream stream = new(buffer);
+        using Image image = Image.FromStream(stream);
+        image.Size.Should().Be(new Size(90, 90));
+
+        // The stream must be at the beginning for WMF/EMF
+        stream.Position = 10;
+        Action action = () => Image.FromStream(stream);
+        action.Should().Throw<ArgumentException>();
+
+        // https://github.com/dotnet/winforms/issues/12951
+        stream.Position = 0;
+        using Image image2 = Image.FromStream(new NonSeekableStreamWrapper(stream));
+    }
+
+    public class NonSeekableStreamWrapper : Stream
+    {
+        private readonly Stream _innerStream;
+
+        public NonSeekableStreamWrapper(Stream innerStream) =>
+            _innerStream = innerStream ?? throw new ArgumentNullException(nameof(innerStream));
+
+        public override bool CanRead => _innerStream.CanRead;
+        public override bool CanSeek => false;
+        public override bool CanWrite => _innerStream.CanWrite;
+        public override long Length => throw new NotSupportedException("This stream does not support seeking.");
+        public override long Position
+        {
+            get => throw new NotSupportedException("This stream does not support seeking.");
+            set => throw new NotSupportedException("This stream does not support seeking.");
+        }
+
+        public override void Flush() => _innerStream.Flush();
+
+        public override int Read(byte[] buffer, int offset, int count) => _innerStream.Read(buffer, offset, count);
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException("This stream does not support seeking.");
+
+        public override void SetLength(long value) => _innerStream.SetLength(value);
+
+        public override void Write(byte[] buffer, int offset, int count) => _innerStream.Write(buffer, offset, count);
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _innerStream.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

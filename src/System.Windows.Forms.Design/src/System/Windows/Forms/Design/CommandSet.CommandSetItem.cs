@@ -116,7 +116,7 @@ internal partial class CommandSet
         }
 
         /// <summary>
-        /// Checks if the status for this command is valid, meaning we don't need to call the status handler.
+        ///  Checks if the status for this command is valid, meaning we don't need to call the status handler.
         /// </summary>
         private bool CommandStatusValid
         {
@@ -137,7 +137,7 @@ internal partial class CommandSet
         }
 
         /// <summary>
-        /// Applies the cached status to this item.
+        ///  Applies the cached status to this item.
         /// </summary>
         private void ApplyCachedStatus()
         {
@@ -191,9 +191,9 @@ internal partial class CommandSet
             }
         }
 
-        ///<summary>
-        /// Only pass this down to the base when we're not doing the cached update.
-        ///</summary>
+        /// <summary>
+        ///  Only pass this down to the base when we're not doing the cached update.
+        /// </summary>
         protected override void OnCommandChanged(EventArgs e)
         {
             if (!_updatingCommand)
@@ -202,10 +202,10 @@ internal partial class CommandSet
             }
         }
 
-        ///<summary>
-        /// Saves the status for this command to the statusstate that's stored in the dictionary
-        /// based on our status handler delegate.
-        ///</summary>
+        /// <summary>
+        ///  Saves the status for this command to the statusstate that's stored in the dictionary
+        ///  based on our status handler delegate.
+        /// </summary>
         private void SaveCommandStatus()
         {
             if (_commandSet is not null)
@@ -265,7 +265,7 @@ internal partial class CommandSet
         }
 
         /// <summary>
-        /// Remove this command item from the static dictionary to avoid leaking this object.
+        ///  Remove this command item from the static dictionary to avoid leaking this object.
         /// </summary>
         public virtual void Dispose()
         {

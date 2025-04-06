@@ -6,6 +6,7 @@
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NoWarn>$(NoWarn);SYSLIB0050;SYSLIB0051;SYSLIB0011</NoWarn>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,13 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\test\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
@@ -27,7 +28,7 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Design.Facade\$(Configuration)\$(SourceTargetFramework)\System.Design.dll" />
+    <Reference Include="$(ArtifactsBinDir)\System.Design.Facade\$(Configuration)\$(SourceTargetFramework)\System.Design.dll" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ public class ConsoleApplicationBaseTests
     public void CommandLineArgs()
     {
         ConsoleApplicationBase app = new();
-        string[] expected = System.Environment.GetCommandLineArgs().Skip(1).ToArray();
+        string[] expected = Environment.GetCommandLineArgs().Skip(1).ToArray();
         Assert.Equal(expected, app.CommandLineArgs);
     }
 }

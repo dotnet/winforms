@@ -71,10 +71,10 @@ public class ImageFormatTests
     {
         get
         {
-            yield return new object[] { Path.Combine("bitmaps", "nature24bits.gif"), "Gif" };
-            yield return new object[] { Path.Combine("bitmaps", "nature24bits.jpg"), "Jpeg" };
-            yield return new object[] { Path.Combine("bitmaps", "VisualPng.ico"), "Icon" };
-            yield return new object[] { Path.Combine("bitmaps", "almogaver32bits.tif"), "Tiff" };
+            yield return new object[] { Path.Join("bitmaps", "nature24bits.gif"), "Gif" };
+            yield return new object[] { Path.Join("bitmaps", "nature24bits.jpg"), "Jpeg" };
+            yield return new object[] { Path.Join("bitmaps", "VisualPng.ico"), "Icon" };
+            yield return new object[] { Path.Join("bitmaps", "almogaver32bits.tif"), "Tiff" };
         }
     }
 

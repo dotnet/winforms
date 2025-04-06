@@ -5,10 +5,10 @@ using System.Collections;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat;
 using FormatTests.Common;
 using System.Formats.Nrbf;
-using System.Windows.Forms.Nrbf;
+using System.Private.Windows.Nrbf;
 
 namespace FormatTests.FormattedObject;
 
@@ -68,7 +68,7 @@ public class HashtableTests : SerializationTest
             { "This", "That" }
         };
 
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(hashtable));
+        SerializationRecord rootRecord = hashtable.SerializeAndDecode();
         rootRecord.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeFalse();
         deserialized.Should().BeNull();
     }
@@ -126,7 +126,7 @@ public class HashtableTests : SerializationTest
     [MemberData(nameof(Hashtables_TestData))]
     public void BinaryFormattedObjectExtensions_TryGetPrimitiveHashtable(Hashtable hashtable)
     {
-        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(hashtable));
+        SerializationRecord rootRecord = hashtable.SerializeAndDecode();
         rootRecord.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
 
         deserialized!.Count.Should().Be(hashtable.Count);

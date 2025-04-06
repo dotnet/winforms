@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>System.Windows.Forms.Analyzers</RootNamespace>
+    <RootNamespace/>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\docs\analyzers\ApplicationConfigurationGenerator.Help.md" Link="ApplicationConfigurationGenerator.Help.md" />
-    <None Include="..\..\..\docs\analyzers\WinFormsCSharpAnalyzers.Help.md" Link="WinFormsCSharpAnalyzers.Help.md" />
+    <None Include="..\..\..\docs\analyzers\ApplicationConfigurationGenerator.Help.md" Link="docs\ApplicationConfigurationGenerator.Help.md" />
+    <None Include="..\..\..\docs\analyzers\WinFormsCSharpAnalyzers.Help.md" Link="docs\WinFormsCSharpAnalyzers.Help.md" />
     <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 

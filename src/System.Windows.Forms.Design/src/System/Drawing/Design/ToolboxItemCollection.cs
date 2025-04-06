@@ -32,8 +32,8 @@ public sealed class ToolboxItemCollection : ReadOnlyCollectionBase
     public ToolboxItem this[int index] => (ToolboxItem)InnerList[index]!;
 
     /// <summary>
-    ///  Gets a value indicating whether the
-    /// <see cref="ToolboxItemCollection"/> contains the specified <see cref="ToolboxItem"/>.
+    ///  Gets a value indicating whether the <see cref="ToolboxItemCollection"/>
+    ///  contains the specified <see cref="ToolboxItem"/>.
     /// </summary>
     public bool Contains(ToolboxItem value) => InnerList.Contains(value);
 

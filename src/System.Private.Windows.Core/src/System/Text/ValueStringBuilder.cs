@@ -12,11 +12,24 @@ namespace System.Text;
 /// <summary>
 ///  String builder struct that allows using stack space for small strings.
 /// </summary>
+[InterpolatedStringHandler]
 internal ref partial struct ValueStringBuilder
 {
+    private const int GuessedLengthPerHole = 11;
+    private const int MinimumArrayPoolLength = 256;
+
     private char[]? _arrayToReturnToPool;
+
     private Span<char> _chars;
     private int _pos;
+
+    public ValueStringBuilder(int literalLength, int formattedCount)
+    {
+        _arrayToReturnToPool = null;
+        _chars = ArrayPool<char>.Shared.Rent(
+            Math.Min(MinimumArrayPoolLength, literalLength + (GuessedLengthPerHole * formattedCount)));
+        _pos = 0;
+    }
 
     public ValueStringBuilder(Span<char> initialBuffer)
     {
@@ -90,9 +103,11 @@ internal ref partial struct ValueStringBuilder
         }
     }
 
-    public override string ToString()
+    public override readonly string ToString() => _chars[.._pos].ToString();
+
+    public string ToStringAndClear()
     {
-        string s = _chars[.._pos].ToString();
+        string s = ToString();
         Dispose();
         return s;
     }
@@ -185,8 +200,14 @@ internal ref partial struct ValueStringBuilder
         }
     }
 
+    /// <summary>
+    ///  Append a string to the builder. If the string is <see langword="null"/>, this method does nothing.
+    /// </summary>
+    /// <devdoc>
+    ///  Name must be AppendLiteral to work with interpolated strings.
+    /// </devdoc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Append(string? s)
+    public void AppendLiteral(string? s)
     {
         if (s is null)
         {
@@ -217,6 +238,24 @@ internal ref partial struct ValueStringBuilder
         s.CopyTo(_chars[pos..]);
         _pos += s.Length;
     }
+
+    public void AppendFormatted<TFormattable>(TFormattable value) where TFormattable : ISpanFormattable
+    {
+        int charsWritten;
+
+        // This must be cast inline to avoid boxing.
+        while (!((ISpanFormattable)value).TryFormat(_chars[_pos..], out charsWritten, format: default, provider: default))
+        {
+            Grow(1);
+        }
+
+        _pos += charsWritten;
+        return;
+    }
+
+    public void AppendFormatted(string? value) => Append(value.AsSpan());
+
+    public void AppendFormatted(object? value) => AppendLiteral(value?.ToString());
 
     public void Append(char c, int count)
     {
@@ -263,19 +302,6 @@ internal ref partial struct ValueStringBuilder
         _pos += value.Length;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Span<char> AppendSpan(int length)
-    {
-        int origPos = _pos;
-        if (origPos > _chars.Length - length)
-        {
-            Grow(length);
-        }
-
-        _pos = origPos + length;
-        return _chars.Slice(origPos, length);
-    }
-
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void GrowAndAppend(char c)
     {
@@ -286,7 +312,7 @@ internal ref partial struct ValueStringBuilder
     /// <summary>
     ///  Resize the internal buffer either by doubling current buffer size or
     ///  by adding <paramref name="additionalCapacityBeyondPos"/> to
-    /// <see cref="_pos"/> whichever is greater.
+    ///  <see cref="_pos"/> whichever is greater.
     /// </summary>
     /// <param name="additionalCapacityBeyondPos">
     ///  Number of chars requested beyond current position.

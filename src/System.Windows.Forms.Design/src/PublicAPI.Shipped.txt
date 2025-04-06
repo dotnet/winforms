@@ -1,9 +1,4 @@
 #nullable enable
-~override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type
-~override System.ComponentModel.Design.ArrayEditor.GetItems(object editValue) -> object[]
-~override System.ComponentModel.Design.ArrayEditor.SetItems(object editValue, object[] value) -> object
-~override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
-~override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
 ~override System.Windows.Forms.Design.ComponentTray.OnDragDrop(System.Windows.Forms.DragEventArgs de) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnDragEnter(System.Windows.Forms.DragEventArgs de) -> void
@@ -33,15 +28,6 @@
 ~override System.Windows.Forms.Design.ParentControlDesigner.SnapLines.get -> System.Collections.IList
 ~override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection options) -> void
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
-~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, bool includeAsDesignerVerb) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, string description) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb) -> void
-~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.get -> System.ComponentModel.IComponent
-~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.set -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) -> void
 ~System.Drawing.Design.IToolboxService.AddLinkedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem, string category, System.ComponentModel.Design.IDesignerHost host) -> void
@@ -74,7 +60,6 @@
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(params System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
-~System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.Design.ComponentTray.ComponentTray(System.ComponentModel.Design.IDesigner mainDesigner, System.IServiceProvider serviceProvider) -> void
 ~System.Windows.Forms.Design.ComponentTray.CreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> void
 ~System.Windows.Forms.Design.ComponentTray.DisplayError(System.Exception e) -> void
@@ -90,8 +75,6 @@
 ~System.Windows.Forms.Design.ParentControlDesigner.CreateTool(System.Drawing.Design.ToolboxItem tool, System.Drawing.Rectangle bounds) -> void
 ~System.Windows.Forms.Design.ParentControlDesigner.GetControl(object component) -> System.Windows.Forms.Control
 ~System.Windows.Forms.Design.ParentControlDesigner.MouseDragTool.get -> System.Drawing.Design.ToolboxItem
-~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
-~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.CanDisplayComponent(System.ComponentModel.IComponent component) -> bool
@@ -140,6 +123,9 @@ abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.ValidatingType.get -> System.Type?
+override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type!
+override System.ComponentModel.Design.ArrayEditor.GetItems(object? editValue) -> object![]!
+override System.ComponentModel.Design.ArrayEditor.SetItems(object? editValue, object![]? value) -> object?
 override System.ComponentModel.Design.BinaryEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.ComponentModel.Design.BinaryEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
@@ -225,6 +211,8 @@ override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string!
 override System.Windows.Forms.Design.BorderSidesEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Windows.Forms.Design.BorderSidesEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Windows.Forms.Design.ComponentDocumentDesigner.Dispose(bool disposing) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent! component) -> void
+override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary! properties) -> void
 override System.Windows.Forms.Design.ComponentTray.Dispose(bool disposing) -> void
 override System.Windows.Forms.Design.ComponentTray.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.Design.ControlDesigner.AssociatedComponents.get -> System.Collections.ICollection!
@@ -335,6 +323,7 @@ System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get 
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface?
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
 System.ComponentModel.Design.ArrayEditor
+System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type! type) -> void
 System.ComponentModel.Design.BinaryEditor
 System.ComponentModel.Design.BinaryEditor.BinaryEditor() -> void
 System.ComponentModel.Design.ByteViewer
@@ -447,6 +436,14 @@ System.ComponentModel.Design.DesignerActionListsChangedType
 System.ComponentModel.Design.DesignerActionListsChangedType.ActionListsAdded = 0 -> System.ComponentModel.Design.DesignerActionListsChangedType
 System.ComponentModel.Design.DesignerActionListsChangedType.ActionListsRemoved = 1 -> System.ComponentModel.Design.DesignerActionListsChangedType
 System.ComponentModel.Design.DesignerActionMethodItem
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, bool includeAsDesignerVerb) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, string? category) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, string? category, bool includeAsDesignerVerb) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, string? category, string? description) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList? actionList, string? memberName, string? displayName, string? category, string? description, bool includeAsDesignerVerb) -> void
+System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.get -> System.ComponentModel.IComponent?
+System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.set -> void
 System.ComponentModel.Design.DesignerActionPropertyItem
 System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string? displayName) -> void
 System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string? displayName, string? category) -> void
@@ -936,6 +933,7 @@ System.Windows.Forms.Design.ComponentActionsType.Component = 1 -> System.Windows
 System.Windows.Forms.Design.ComponentActionsType.Service = 2 -> System.Windows.Forms.Design.ComponentActionsType
 System.Windows.Forms.Design.ComponentDocumentDesigner
 System.Windows.Forms.Design.ComponentDocumentDesigner.ComponentDocumentDesigner() -> void
+System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control!
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayAutoArrange.get -> bool
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayAutoArrange.set -> void
 System.Windows.Forms.Design.ComponentDocumentDesigner.TrayLargeIcon.get -> bool
@@ -1104,6 +1102,7 @@ virtual System.ComponentModel.Design.DesignerActionList.GetSortedActionItems() -
 virtual System.ComponentModel.Design.DesignerActionListsChangedEventHandler.Invoke(object! sender, System.ComponentModel.Design.DesignerActionListsChangedEventArgs! e) -> void
 virtual System.ComponentModel.Design.DesignerActionMethodItem.IncludeAsDesignerVerb.get -> bool
 virtual System.ComponentModel.Design.DesignerActionMethodItem.Invoke() -> void
+virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string?
 virtual System.ComponentModel.Design.DesignerActionService.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent! component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection!
 virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent! component, System.ComponentModel.Design.DesignerActionListCollection! actionLists) -> void
@@ -1231,6 +1230,7 @@ virtual System.Windows.Forms.Design.Behavior.Behavior.OnQueryContinueDrag(System
 virtual System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler.Invoke(object! sender, System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs! e) -> void
 virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 virtual System.Windows.Forms.Design.Behavior.Glyph.Bounds.get -> System.Drawing.Rectangle
+virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem! tool) -> bool
 virtual System.Windows.Forms.Design.ComponentTray.OnLostCapture() -> void
 virtual System.Windows.Forms.Design.ComponentTray.OnSetCursor() -> void
 virtual System.Windows.Forms.Design.ControlDesigner.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!

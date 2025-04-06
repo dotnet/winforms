@@ -46,11 +46,13 @@ What would not make the bar:
 * Functionality, which would "stretch" a Windows Desktop App to be a mobile, Multi-Media or IoT app.
 * Domain-specific custom controls, which are already provided by the vast variety of third party control vendors
 
+**A note about Visual Basic**: Visual Basic .NET developers make up about 20% of WinForms developers. We welcome changes that are specific to VB if they address a bug in a customer-facing scenario. Issues and PRs should describe the customer-facing scenario and, if possible, include images showing the problem before and after the proposed changes. Due to limited bandwidth, we cannot prioritize VB-specific changes that are solely for correctness or code cleanliness. However, VB remains important to us, and we aim to fix any critical issues that arise.
+
 ## Please note
 
 :warning: This repository contains only implementations for Windows Forms for [.NET platform](https://github.com/dotnet/core).<br />
 It does not contain either:
-* The .NET Framework variant of Windows Forms. Issues with .NET Framework, including Windows Forms, should be filed on the [Developer Community](https://developercommunity.visualstudio.com/spaces/61/index.html) or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) websites. They should not be filed on this repository.
+* The .NET Framework variant of Windows Forms. Issues with .NET Framework, including Windows Forms, should be filed on the [Developer Community](https://developercommunity.visualstudio.com/spaces/61/index.html) or [Product Support](https://support.microsoft.com/contactus?ws=support) websites. They should not be filed on this repository.
 * The Windows Forms Designer implementations. Issues with the Designer can be filed via VS Feedback tool (top right-hand side icon in Visual Studio) or be filed in this repo using the Windows Forms out-of-process designer issue template.
 
 # How can I contribute?

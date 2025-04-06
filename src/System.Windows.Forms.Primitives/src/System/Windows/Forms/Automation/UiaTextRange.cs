@@ -29,9 +29,11 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     ///  A caret position after the last character from a text range, not an index of an item.
     /// </param>
     /// <remarks>
-    ///  <para>If there is a range "Test string", then start = 0, end = 11.
-    ///  If start = 2 and end = 9, the range is "et stri".
-    ///  If start=end, that points a caret position only, there is no any text range.</para>
+    ///  <para>
+    ///   If there is a range "Test string", then start = 0, end = 11.
+    ///   If start = 2 and end = 9, the range is "et stri".
+    ///   If start=end, that points a caret position only, there is no any text range.
+    ///  </para>
     /// </remarks>
     public UiaTextRange(IRawElementProviderSimple.Interface enclosingElement, UiaTextProvider provider, int start, int end)
     {
@@ -871,7 +873,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
     }
 
-    private static int GetBackgroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
+    private static int GetBackgroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
     private static int GetCapStyle(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None);
@@ -889,7 +891,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     private static int GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
 
-    private static int GetForegroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+    private static int GetForegroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
     private static int GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_CENTER) != 0

@@ -156,8 +156,8 @@ internal class FormatStringDialog : Form
     }
 
     /// <summary>
-    /// Required method for Designer support - do not modify
-    /// the contents of this method with the code editor.
+    ///  Required method for Designer support - do not modify
+    ///  the contents of this method with the code editor.
     /// </summary>
     [MemberNotNull(nameof(_cancelButton))]
     [MemberNotNull(nameof(_okButton))]

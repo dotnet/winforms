@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -46,15 +44,18 @@ internal sealed class ContainerSelectorBehavior : Behavior
         _setInitialDragPoint = setInitialDragPoint;
     }
 
+    [MemberNotNull(nameof(_containerControl))]
+    [MemberNotNull(nameof(_serviceProvider))]
+    [MemberNotNull(nameof(_behaviorService))]
     private void Init(Control containerControl, IServiceProvider serviceProvider)
     {
-        _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
-        if (_behaviorService is null)
+        if (!serviceProvider.TryGetService(out BehaviorService? behaviorService))
         {
             Debug.Fail("Could not get the BehaviorService from ContainerSelectorBehavior!");
             return;
         }
 
+        _behaviorService = behaviorService;
         _containerControl = containerControl;
         _serviceProvider = serviceProvider;
         _initialDragPoint = Point.Empty;
@@ -86,15 +87,16 @@ internal sealed class ContainerSelectorBehavior : Behavior
     /// <summary>
     ///  If the user selects the ContainerGlyph - select our related component.
     /// </summary>
-    public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
+    public override bool OnMouseDown(Glyph? g, MouseButtons button, Point mouseLoc)
     {
         if (button == MouseButtons.Left)
         {
-            // select our component
-            ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-            if (selSvc is not null && !_containerControl.Equals(selSvc.PrimarySelection as Control))
+            // Select our component.
+            if (_serviceProvider.TryGetService(out ISelectionService? selSvc)
+                && !_containerControl.Equals(selSvc.PrimarySelection as Control))
             {
                 selSvc.SetSelectedComponents(new object[] { _containerControl }, SelectionTypes.Primary | SelectionTypes.Toggle);
+
                 // Setting the selected component will create a new glyph, so this instance of the glyph won't receive
                 // any more mouse messages. So we need to tell the new glyph what the initialDragPoint and okToMove are.
                 if (g is not ContainerSelectorGlyph selOld)
@@ -165,7 +167,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
     ///  We will compare the mouse loc to the initial point (set in OnMouseDown) and if we're far enough,
     ///  we'll create a <see cref="DropSourceBehavior"/> object and start out drag operation!
     /// </summary>
-    public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
+    public override bool OnMouseMove(Glyph? g, MouseButtons button, Point mouseLoc)
     {
         if (button == MouseButtons.Left && OkToMove)
         {
@@ -190,7 +192,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
     /// <summary>
     ///  Simply clear the initial drag point, so we can start again on the next mouse down.
     /// </summary>
-    public override bool OnMouseUp(Glyph g, MouseButtons button)
+    public override bool OnMouseUp(Glyph? g, MouseButtons button)
     {
         InitialDragPoint = Point.Empty;
         OkToMove = false;
@@ -202,17 +204,16 @@ internal sealed class ContainerSelectorBehavior : Behavior
     /// </summary>
     private void StartDragOperation(Point initialMouseLocation)
     {
-        // need to grab a hold of some services
-        ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-        IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-        if (selSvc is null || host is null)
+        // Need to grab a hold of some services.
+        if (!_serviceProvider.TryGetService(out ISelectionService? selSvc)
+            || !_serviceProvider.TryGetService(out IDesignerHost? host))
         {
             Debug.Fail("Can't drag this Container! Either SelectionService is null or DesignerHost is null");
             return;
         }
 
         // must identify a required parent to avoid dragging mixes of children
-        Control requiredParent = _containerControl.Parent;
+        Control? requiredParent = _containerControl.Parent;
         List<IComponent> dragControls = [];
         ICollection selComps = selSvc.GetSelectedComponents();
         // create our list of controls-to-drag

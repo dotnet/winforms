@@ -6,7 +6,7 @@ using System.Numerics;
 namespace System.Drawing;
 
 /// <summary>
-/// Helpers to allow using System.Numerics types like the System.Drawing equivalents.
+///  Helpers to allow using System.Numerics types like the System.Drawing equivalents.
 /// </summary>
 internal static class NumericsExtensions
 {

@@ -143,8 +143,7 @@ public partial class DocumentDesigner
         }
 
         /// <summary>
-        /// <para>Loads the state of this 'AxToolboxItem'
-        /// from the stream.</para>
+        ///  Loads the state of this 'AxToolboxItem' from the stream.
         /// </summary>
         [MemberNotNull(nameof(_clsid))]
         protected override void Deserialize(SerializationInfo info, StreamingContext context)
@@ -154,9 +153,9 @@ public partial class DocumentDesigner
         }
 
         /// <summary>
-        /// <para>Gets hold of the DTE Reference object and from there, opens the assembly of the
-        /// ActiveX control we want to create. It then walks through all AxHost derived classes
-        /// in that assembly, and returns the type that matches our control's CLSID.</para>
+        ///  Gets hold of the DTE Reference object and from there, opens the assembly of the ActiveX control we want
+        ///  to create. It then walks through all AxHost derived classes in that assembly, and returns the type that
+        ///  matches our control's CLSID.
         /// </summary>
         private Type? GetAxTypeFromReference(object reference, IDesignerHost host)
         {
@@ -182,8 +181,8 @@ public partial class DocumentDesigner
         }
 
         /// <summary>
-        /// <para>Walks through all AxHost derived classes in the given assembly,
-        /// and returns the type that matches our control's CLSID.</para>
+        ///  Walks through all AxHost derived classes in the given assembly,
+        ///  and returns the type that matches our control's CLSID.
         /// </summary>
         private Type? GetAxTypeFromAssembly(Assembly a)
         {
@@ -211,11 +210,7 @@ public partial class DocumentDesigner
         }
 
         /// <summary>
-        /// <para>Gets the References collection object from the designer host. The steps are:
-        ///  Get the ProjectItem from the IDesignerHost.
-        ///  Get the Containing Project of the ProjectItem.
-        ///  Get the VSProject of the Containing Project.
-        ///  Get the References property of the VSProject.</para>
+        ///  Gets the References collection object from the designer host.
         /// </summary>
         private static object? GetReferences(IDesignerHost host)
         {

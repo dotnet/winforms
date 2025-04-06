@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design;
 internal class ColumnHeaderCollectionEditor : CollectionEditor
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
+    ///  Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
     /// </summary>
     public ColumnHeaderCollectionEditor(Type type)
         : base(type)
@@ -17,7 +17,7 @@ internal class ColumnHeaderCollectionEditor : CollectionEditor
     }
 
     /// <summary>
-    /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+    ///  Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
     /// </summary>
     protected override string HelpTopic
     {
@@ -25,7 +25,7 @@ internal class ColumnHeaderCollectionEditor : CollectionEditor
     }
 
     /// <summary>
-    /// Sets the specified collection to have the specified array of items.
+    ///  Sets the specified collection to have the specified array of items.
     /// </summary>
     protected override object? SetItems(object? editValue, object[]? value)
     {

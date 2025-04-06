@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Versioning;
 
 namespace System.Windows.Forms.Primitives;
@@ -26,8 +25,7 @@ internal static partial class LocalAppContextSwitches
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
-    internal const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName = "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
-    internal const string ClipboardDragDropEnableNrbfSerializationSwitchName = "Windows.ClipboardDragDrop.EnableNrbfSerialization";
+    internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -39,8 +37,8 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
-    private static int s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization;
-    private static int s_clipboardDragDropEnableNrbfSerialization;
+
+    private static int s_moveTreeViewTextLocationOnePixel;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -107,11 +105,6 @@ internal static partial class LocalAppContextSwitches
     private static bool GetSwitchDefaultValue(string switchName)
     {
         if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
-        {
-            return true;
-        }
-
-        if (switchName == ClipboardDragDropEnableNrbfSerializationSwitchName)
         {
             return true;
         }
@@ -230,34 +223,12 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  If <see langword="true"/>, then Clipboard and DataObject Get and Set methods will attempts to serialize or deserialize
-    ///  binary formatted content using either <see cref="BinaryFormatter"/> or System.Windows.Forms.BinaryFormat.Deserializer.
-    ///  To use <see cref="BinaryFormatter"/>, application should also opt in into the
-    ///  "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization" option and reference the out-of-band
-    ///  "System.Runtime.Serialization.Formatters" NuGet package and opt out from using the System.Windows.Forms.BinaryFormat.Deserializer
-    ///  by setting "Windows.ClipboardDragDrop.EnableNrbfSerialization" to <see langword="true"/>
+    ///  Indicates whether to move the text position of a TreeView node one pixel
+    ///  to the right relative to the upper-left corner of the TreeView control.
     /// </summary>
-    public static bool ClipboardDragDropEnableUnsafeBinaryFormatterSerialization
+    public static bool MoveTreeViewTextLocationOnePixel
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
-            ref s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization);
-    }
-
-    /// <summary>
-    ///  If <see langword="true"/>, then Clipboard Get methods will prefer System.Windows.Forms.BinaryFormat.Deserializer
-    ///  to deserialize the payload, if needed. If <see langword="false"/>, then <see cref="BinaryFormatter"/> is used
-    ///  to get full compatibility with the downlevel versions of .NET.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This switch has no effect if "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization"
-    ///   is set to <see langword="false"/>.
-    ///  </para>
-    /// </remarks>
-    public static bool ClipboardDragDropEnableNrbfSerialization
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(ClipboardDragDropEnableNrbfSerializationSwitchName, ref s_clipboardDragDropEnableNrbfSerialization);
+        get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
     }
 }

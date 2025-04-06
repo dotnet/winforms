@@ -52,6 +52,10 @@
     <EmbeddedResource Update="Resources\System\ComponentModel\Design\BinaryEditor.resx">
       <Namespace>System.ComponentModel.Design</Namespace>
     </EmbeddedResource>
+    <EmbeddedResource Update="System\Windows\Forms\Design\ToolStripItemEditorForm.resx">
+      <DependentUpon>ToolStripCollectionEditor.ToolStripItemEditorForm.cs</DependentUpon>
+      <Namespace>System.Windows.Forms.Design</Namespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\colordlg.data">
       <Link>colordlg.data</Link>
     </EmbeddedResource>
@@ -67,13 +71,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
   </ItemGroup>
-  
+
   <!-- Embedded Resources are globbed based on their location. -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\*.ico">
@@ -92,7 +96,7 @@
       <LogicalName>System.Windows.Forms.Design.Behavior.%(FileName)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Resources\MaskDesignerDialog.Designer.cs">
       <DesignTime>True</DesignTime>

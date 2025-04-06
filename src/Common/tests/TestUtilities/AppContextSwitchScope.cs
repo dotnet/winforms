@@ -18,7 +18,7 @@ public readonly ref struct AppContextSwitchScope
     private readonly bool _originalState;
 
     public AppContextSwitchScope(string switchName, bool enable)
-        : this (switchName, getDefaultValue: null, enable)
+        : this(switchName, getDefaultValue: null, enable)
     {
     }
 
@@ -31,6 +31,7 @@ public readonly ref struct AppContextSwitchScope
             throw new InvalidOperationException("LocalAppContext switch caching is not disabled.");
         }
 
+        // AppContext won't have any switch value until it is explicitly set.
         if (!AppContext.TryGetSwitch(switchName, out _originalState))
         {
             _originalState = getDefaultValue is not null && getDefaultValue();
@@ -52,5 +53,16 @@ public readonly ref struct AppContextSwitchScope
         {
             throw new InvalidOperationException($"Could not reset {_switchName} to {_originalState}.");
         }
+    }
+
+    /// <summary>
+    ///  Gets the default value for a switch via reflection.
+    /// </summary>
+    public static bool GetDefaultValueForSwitchInAssembly(string switchName, string assemblyName, string typeName)
+    {
+        Type type = Type.GetType($"{typeName}, {assemblyName}")
+            ?? throw new InvalidOperationException($"Could not find {typeName} type in {assemblyName} assembly.");
+
+        return type.TestAccessor().Dynamic.GetSwitchDefaultValue(switchName);
     }
 }

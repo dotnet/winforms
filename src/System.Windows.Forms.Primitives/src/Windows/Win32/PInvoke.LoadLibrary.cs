@@ -33,8 +33,8 @@ internal static partial class PInvoke
     }
 
     /// <summary>
-    /// Loads the requested <paramref name="libraryName"/> from the default system path.
-    /// If the module is already loaded, return the handle to it.
+    ///  Loads the requested <paramref name="libraryName"/> from the default system path.
+    ///  If the module is already loaded, return the handle to it.
     /// </summary>
     /// <param name="libraryName">The assembly name to load.</param>
     /// <returns>A handle to the loaded module, if successful; <see cref="IntPtr.Zero"/> otherwise.</returns>
