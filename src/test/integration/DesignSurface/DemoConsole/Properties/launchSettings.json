@@ -1,7 +1,8 @@
-"profiles": {
-  "YourProjectName": {
-    "commandName": "Project",
-    "nativeDebugging": true
+{
+  "profiles": {
+    "DemoConsole": {
+      "commandName": "Project",
+      "nativeDebugging": "true"
+    }
   }
 }
-
