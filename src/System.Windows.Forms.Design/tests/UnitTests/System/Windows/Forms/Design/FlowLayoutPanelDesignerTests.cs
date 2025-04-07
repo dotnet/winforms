@@ -19,9 +19,9 @@ public class FlowLayoutPanelDesignerTests : IDisposable
 
     public FlowLayoutPanelDesignerTests()
     {
-        _serviceProviderMock = new Mock<IServiceProvider>();
-        _designerHostMock = new Mock<IDesignerHost>();
-        _selectionServiceMock = new Mock<ISelectionService>();
+        _serviceProviderMock = new();
+        _designerHostMock = new();
+        _selectionServiceMock = new();
 
         _serviceProviderMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
         _serviceProviderMock.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_selectionServiceMock.Object);
@@ -31,7 +31,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             Site = new Mock<ISite>().Object
         };
 
-        _designer = new FlowLayoutPanelDesigner();
+        _designer = new();
         _designer.Initialize(_flowLayoutPanel);
     }
 
