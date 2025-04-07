@@ -164,7 +164,7 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     [WinFormsFact]
     public void OnEditorResize_ShouldInvalidateAndUpdateBounds()
     {
-        _editorManager.TestAccessor().Dynamic._editor = _toolStripEditorControl!;
+        _editorManager.TestAccessor().Dynamic._editor = _toolStripEditorControl;
         _editorManager.TestAccessor().Dynamic.OnEditorResize(_editorManager, EventArgs.Empty);
 
         Rectangle _editorManagerBounds = _editorManager.TestAccessor().Dynamic._lastKnownEditorBounds;
@@ -184,8 +184,9 @@ public sealed class ToolStripEditorManagerTests : IDisposable
 
     private void VerifyProperty<T>(string propertyName, object targetObject, T expectedValue)
     {
-        var propertyValue = _toolStripEditorControlType?.GetProperty(propertyName)?.GetValue(targetObject);
-        propertyValue.Should().Be(expectedValue);
+        PropertyInfo? propertyInfo = targetObject.TestAccessor().Dynamic.GetType().GetProperty(propertyName);
+        object? propertyValue = propertyInfo?.GetValue(targetObject);
+        propertyValue?.Should().Be(expectedValue);
     }
 
     [WinFormsFact]
