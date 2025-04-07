@@ -292,7 +292,7 @@ public partial class MainForm : Form
 
                         ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
                         ToolStripButton toolStripButton1 = surface.CreateComponent<ToolStripButton>();
-                        // See https://github.com/dotnet/winforms/issues/13040 
+                        // See https://github.com/dotnet/winforms/issues/13040
                         ToolStripDropDownButton toolStripDropDownButton1 = surface.CreateComponent<ToolStripDropDownButton>();
                         ToolStripTextBox toolStripTextBox = surface.CreateComponent<ToolStripTextBox>();
                         toolStrip1.Items.Add(toolStripButton1);
