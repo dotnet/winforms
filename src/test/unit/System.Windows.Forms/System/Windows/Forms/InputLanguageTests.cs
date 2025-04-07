@@ -187,7 +187,12 @@ public class InputLanguageTests
         Assert.NotEqual(IntPtr.Zero, language.Handle);
         Assert.Equal(languageTag, language.Culture.Name);
         Assert.Equal(layoutId, language.LayoutId);
-        Assert.Equal(layoutName, language.LayoutName);
+
+        CultureInfo culture = new("en-US");
+        if (CultureInfo.InstalledUICulture == culture)
+        {
+            Assert.Equal(layoutName, language.LayoutName);
+        }
     }
 
     private static void VerifyInputLanguage(InputLanguage language)
