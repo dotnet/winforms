@@ -32,7 +32,7 @@ public class StandardCommandToolStripMenuItemTests : IDisposable
 
     public void Dispose() => _item.Dispose();
 
-    [Fact]
+    [WinFormsFact]
     public void Constructor_InitializesPropertiesCorrectly()
     {
         _item.MenuService?.FindCommand(_commandID)?.CommandID.Should().Be(_commandID);
@@ -42,7 +42,7 @@ public class StandardCommandToolStripMenuItemTests : IDisposable
         name.Should().BeSameAs("TestImage");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void RefreshItem_UpdatesProperties()
     {
         _menuCommand.Visible = false;
@@ -56,7 +56,7 @@ public class StandardCommandToolStripMenuItemTests : IDisposable
         _item.Checked.Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void MenuService_RetrievesMenuCommandService()
     {
         IMenuCommandService? menuService = _item.MenuService;
@@ -64,12 +64,33 @@ public class StandardCommandToolStripMenuItemTests : IDisposable
         menuService.Should().Be(_menuCommandServiceMock.Object);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Image_ReturnsCachedImageOnSubsequentAccesses()
     {
         Image? firstAccessImage = _item.Image;
         Image? secondAccessImage = _item.Image;
 
         firstAccessImage.Should().BeSameAs(secondAccessImage);
+    }
+
+    [WinFormsFact]
+    public void Item_OnClick_WithNullMenuCommand()
+    {
+        Action action = _item.PerformClick;
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void OnClick_InvokesGlobalCommand_WhenMenuCommandIsNull()
+    {
+        _menuCommandServiceMock.Setup(mcs => mcs.FindCommand(_commandID))
+            .Returns((MenuCommand?)null);
+        _menuCommandServiceMock.Setup(mcs => mcs.GlobalInvoke(_commandID))
+            .Returns(true);
+
+        StandardCommandToolStripMenuItem item = new(_commandID, "Test Text", "TestImage", _serviceProviderMock.Object);
+        item.PerformClick();
+
+        _menuCommandServiceMock.Verify(mcs => mcs.GlobalInvoke(_commandID), Times.Once);
     }
 }
