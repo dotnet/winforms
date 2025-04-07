@@ -9,26 +9,48 @@ namespace System.Windows.Forms.UITests;
 public class ListControlUnboundActionListTests
 {
     [WinFormsFact]
-    public void InvokeItemsDialog_EditValueInvoked_NoException()
+    public async Task InvokeItemsDialog_EditValueInvoked_NoExceptionAsync()
     {
         using ListView listView = new();
         using ListViewDesigner listViewDesigner = new();
         listViewDesigner.Initialize(listView);
         var actionList = new ListControlUnboundActionList(listViewDesigner);
-        var task = Task.Run(async () =>
+        bool formClosed = false;
+        int retryCount = 3;
+        int retryDelay = 100;
+        var disposeTask = Task.Run(async () =>
         {
-            await Task.Delay(1000).ConfigureAwait(false);
-            foreach (Form form in Application.OpenForms)
+            for (int i = 0; i < retryCount; i++)
             {
-                if (form.Text.Contains("ListViewItem"))
+                await Task.Delay(500).ConfigureAwait(false);
+                foreach (Form form in Application.OpenForms)
                 {
-                    await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(false);
+                    if (form.Text.Contains("ListViewItem"))
+                    {
+                        await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(false);
+                        formClosed = true;
+                        break;
+                    }
+                }
+
+                if (formClosed)
+                {
                     break;
+                }
+                else if (i < retryCount - 1)
+                {
+                    await Task.Delay(retryDelay).ConfigureAwait(false);
                 }
             }
         });
 
         Action action = actionList.InvokeItemsDialog;
-        action.Should().NotThrow();
+        action();
+
+        // Await the task before validating.
+        await disposeTask.ConfigureAwait(false);
+
+        // Assert the form was found and closed.
+        formClosed.Should().BeTrue();
     }
 }
