@@ -4,6 +4,8 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Drawing.Design;
+using System.Reflection;
 using System.Windows.Forms.Design.Behavior;
 using Moq;
 
@@ -22,11 +24,8 @@ public class ParentControlDesignerTests : IDisposable
 
     public void Dispose()
     {
+        _control.Dispose();
         _designer.Dispose();
-        if (_control is not null && _control.Site is not null)
-        {
-            _control.Dispose();
-        }
     }
 
     [Fact]
@@ -102,9 +101,6 @@ public class ParentControlDesignerTests : IDisposable
     public void InitializeNewComponent_ShouldReparentControls_WhenAllowControlLassoIsTrue()
     {
         Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<TestControl> mockComponent = new();
-        Mock<TestControl> mockParentComponent = new();
-        Mock<IServiceProvider> mockServiceProvider = new();
         Mock<ISite> mockSite = new();
         Mock<ISelectionService> mockSelectionService = new();
         Mock<IComponentChangeService> mockChangeService = new();
@@ -118,7 +114,7 @@ public class ParentControlDesignerTests : IDisposable
         testComponent.Site = mockSite.Object;
         parentComponent.Site = mockSite.Object;
 
-        mockDesignerHost.Setup(h => h.GetDesigner(mockParentComponent.Object)).Returns(_designer);
+        mockDesignerHost.Setup(h => h.GetDesigner(parentComponent)).Returns(_designer);
 
         _designer.Initialize(testComponent);
         _designer.TestAccessor().Dynamic._changeService = mockChangeService.Object;
@@ -127,7 +123,7 @@ public class ParentControlDesignerTests : IDisposable
         {
             { "Size", new Size(100, 100) },
             { "Location", new Point(10, 10) },
-            { "Parent", mockParentComponent.Object }
+            { "Parent", parentComponent }
         };
 
         DisableDragDrop(testComponent);
@@ -135,7 +131,7 @@ public class ParentControlDesignerTests : IDisposable
 
         _designer.InitializeNewComponent(defaultValues);
 
-        mockDesignerHost.Verify(h => h.GetDesigner(mockParentComponent.Object), Times.AtMost(2));
+        mockDesignerHost.Verify(h => h.GetDesigner(parentComponent), Times.AtMost(2));
     }
 
     public class TestControl : Control
@@ -160,5 +156,79 @@ public class ParentControlDesignerTests : IDisposable
         {
             DisableDragDrop(child);
         }
+    }
+
+    [Fact]
+    public void AllowSetChildIndexOnDrop_ReturnsTrue()
+    {
+        _designer.AllowSetChildIndexOnDrop.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanAddComponent_ReturnsTrue()
+    {
+        Mock<IComponent> mockComponent = new();
+        _designer.CanAddComponent(mockComponent.Object).Should().BeTrue();
+    }
+
+    [Fact]
+    public void EnableDragRect_ReturnsTrue()
+    {
+        bool enableDragRect = _designer.TestAccessor().Dynamic.EnableDragRect;
+        enableDragRect.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GridSize_DefaultValue_ReturnsExpected()
+    {
+        Size gridSize = _designer.TestAccessor().Dynamic.GridSize;
+        gridSize.Should().Be(new Size(8, 8));
+    }
+
+    [Fact]
+    public void GridSize_SetValue_UpdatesGridSize()
+    {
+        Size newSize = new Size(10, 10);
+        _designer.TestAccessor().Dynamic.GridSize = newSize;
+        Size gridSize = _designer.TestAccessor().Dynamic.GridSize;
+        gridSize.Should().Be(newSize);
+    }
+
+    [Fact]
+    public void GridSize_SetValue_InvalidSize_ThrowsArgumentException()
+    {
+        Action action = () => _designer.TestAccessor().Dynamic.GridSize = new Size(1, 1);
+        action.Should().Throw<TargetInvocationException>()
+            .WithInnerException<ArgumentException>()
+            .WithMessage("*'GridSize'*");
+
+        action = () => _designer.TestAccessor().Dynamic.GridSize = new Size(201, 201);
+        action.Should().Throw<TargetInvocationException>()
+            .WithInnerException<ArgumentException>()
+            .WithMessage("*'GridSize'*");
+    }
+
+    [Fact]
+    public void MouseDragTool_DefaultValue_ReturnsNull()
+    {
+        ToolboxItem mouseDragTool = _designer.TestAccessor().Dynamic.MouseDragTool;
+        mouseDragTool.Should().BeNull();
+    }
+
+    [Fact]
+    public void MouseDragTool_SetValue_ReturnsExpected()
+    {
+        ToolboxItem toolboxItem = new(typeof(Button));
+        _designer.TestAccessor().Dynamic._mouseDragTool = toolboxItem;
+        ToolboxItem mouseDragTool = _designer.TestAccessor().Dynamic.MouseDragTool;
+        mouseDragTool.Should().Be(toolboxItem);
+    }
+
+    [Fact]
+    public void GetParentForComponent_ReturnsControl()
+    {
+        Mock<IComponent> mockComponent = new();
+        Control parentControl = _designer.TestAccessor().Dynamic.GetParentForComponent(mockComponent.Object);
+        parentControl.Should().Be(_control);
     }
 }
