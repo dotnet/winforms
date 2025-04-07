@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 internal class MaskedTextBoxTextEditorDropDown : UserControl
@@ -57,7 +55,7 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
         PerformLayout();
     }
 
-    public string Value
+    public string? Value
     {
         get
         {
@@ -82,12 +80,12 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
         return base.ProcessDialogKey(keyData);
     }
 
-    private void maskedTextBox_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+    private void maskedTextBox_MaskInputRejected(object? sender, MaskInputRejectedEventArgs e)
     {
         _errorProvider.SetError(_cloneMtb, MaskedTextBoxDesigner.GetMaskInputRejectedErrorMessage(e));
     }
 
-    private void maskedTextBox_KeyDown(object sender, KeyEventArgs e)
+    private void maskedTextBox_KeyDown(object? sender, KeyEventArgs e)
     {
         _errorProvider.Clear();
     }
