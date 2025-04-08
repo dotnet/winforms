@@ -21,6 +21,9 @@
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
     <NoWarn>$(NoWarn);CS3016;SYSLIB5005</NoWarn>
+    <!-- Reenable when SDK and dotnet Preview 4 versions flow into this repo and we are in sync with VMR. -->
+    <!-- tracking https://github.com/dotnet/winforms/issues/13261 -->
+    <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0031</NoWarn>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
