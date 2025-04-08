@@ -153,8 +153,8 @@ public sealed class ToolStripContainerActionListTests : IDisposable
     {
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                .Select(i => i.DisplayName)
-                                .ToList();
+                                         .Select(i => i.DisplayName ?? string.Empty)
+                                         .ToList();
 
         displayNames.Should().ContainSingle(name => name == "Top");
         displayNames.Should().ContainSingle(name => name == "Bottom");
@@ -171,7 +171,7 @@ public sealed class ToolStripContainerActionListTests : IDisposable
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                .Select(i => i.DisplayName)
+                                .Select(i => i.DisplayName ?? string.Empty)
                                 .ToList();
 
         displayNames.Should().ContainSingle(name => name == "Top");
@@ -194,7 +194,7 @@ public sealed class ToolStripContainerActionListTests : IDisposable
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                .Select(i => i.DisplayName)
+                                .Select(i => i.DisplayName ?? string.Empty)
                                 .ToList();
 
         displayNames.Should().ContainSingle(name => name == "Top");
