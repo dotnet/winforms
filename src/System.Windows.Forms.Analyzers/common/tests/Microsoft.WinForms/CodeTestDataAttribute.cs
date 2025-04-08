@@ -90,14 +90,12 @@ public sealed partial class CodeTestDataAttribute : MemberDataAttributeBase
                 ?? throw new InvalidOperationException(
                     $"The type '{baseType}' does not contain a static public method named 'GetFileSets'.");
 
-        // Invoke that method to get the object array:
         IEnumerable<object> fileSets = (IEnumerable<object>) (getFileSetsMethod.Invoke(null, null)
             ?? throw new InvalidOperationException("GetFileSets method returned null or a value that couldn't be cast to IEnumerable<object[]>."));
 
         // This is the data, which the test class directs itself to get. 
         var baseData = base.GetData(testMethod).ToList();
 
-        // Use LINQ to create the cross product more efficiently
         return baseData
             .SelectMany(referenceAssembly => fileSets.Select(fileSet =>
                 new object[] { referenceAssembly[0], fileSet }));

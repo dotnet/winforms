@@ -1,6 +1,9 @@
 ﻿Imports System.ComponentModel
 Imports System.Drawing
 
+Option Strict On
+Option Explicit On
+
 Namespace VisualBasicControls
 
     ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,

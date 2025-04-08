@@ -31,21 +31,23 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
 
         Private Sub AnalyzeInvocation(context As SyntaxNodeAnalysisContext)
             Dim invocationExpr = DirectCast(context.Node, InvocationExpressionSyntax)
+            Dim methodSymbol As IMethodSymbol = Nothing
 
-            If Not (TypeOf invocationExpr.Expression Is MemberAccessExpressionSyntax) Then
-                Return
+            ' Handle both explicit member access (Me.InvokeAsync) and implicit method calls (InvokeAsync)
+            If TypeOf invocationExpr.Expression Is MemberAccessExpressionSyntax Then
+                Dim memberAccessExpr = DirectCast(invocationExpr.Expression, MemberAccessExpressionSyntax)
+                methodSymbol = TryCast(context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol, IMethodSymbol)
+            ElseIf TypeOf invocationExpr.Expression Is IdentifierNameSyntax Then
+                Dim identifierNameSyntax = DirectCast(invocationExpr.Expression, IdentifierNameSyntax)
+                methodSymbol = TryCast(context.SemanticModel.GetSymbolInfo(identifierNameSyntax).Symbol, IMethodSymbol)
             End If
-
-            Dim memberAccessExpr = DirectCast(invocationExpr.Expression, MemberAccessExpressionSyntax)
-            Dim methodSymbol = TryCast(context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol, IMethodSymbol)
 
             If methodSymbol Is Nothing OrElse methodSymbol.Name <> InvokeAsyncString OrElse methodSymbol.Parameters.Length <> 2 Then
                 Return
             End If
 
-            ' Get the symbol of the method's instance:
-            Dim objectTypeInfo As TypeInfo = context.SemanticModel.GetTypeInfo(memberAccessExpr.Expression)
             Dim funcParameter As IParameterSymbol = methodSymbol.Parameters(0)
+            Dim containingType As INamedTypeSymbol = methodSymbol.ContainingType
 
             ' If the function delegate has a parameter (which makes then 2 type arguments),
             ' we can safely assume it's a CancellationToken, otherwise the compiler would have
@@ -62,15 +64,25 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
             End If
 
             ' Let's make absolute clear, we're dealing with InvokeAsync of Control.
-            ' (Not merging If statements to make it easier to read.)
-            If Not (TypeOf objectTypeInfo.Type Is INamedTypeSymbol) Then
-                Return
-            End If
+            ' For implicit calls, we check the containing type of the method itself.
+            If containingType Is Nothing OrElse Not IsAncestorOrSelfOfType(containingType, "System.Windows.Forms.Control") Then
+                ' For explicit calls, we need to check the instance type (from before)
+                If TypeOf invocationExpr.Expression Is MemberAccessExpressionSyntax Then
+                    Dim memberAccess = DirectCast(invocationExpr.Expression, MemberAccessExpressionSyntax)
+                    Dim objectTypeInfo As TypeInfo = context.SemanticModel.GetTypeInfo(memberAccess.Expression)
 
-            Dim objectType = DirectCast(objectTypeInfo.Type, INamedTypeSymbol)
+                    If Not (TypeOf objectTypeInfo.Type Is INamedTypeSymbol) Then
+                        Return
+                    End If
 
-            If Not IsAncestorOrSelfOfType(objectType, "System.Windows.Forms.Control") Then
-                Return
+                    Dim objectType = DirectCast(objectTypeInfo.Type, INamedTypeSymbol)
+
+                    If Not IsAncestorOrSelfOfType(objectType, "System.Windows.Forms.Control") Then
+                        Return
+                    End If
+                Else
+                    Return
+                End If
             End If
 
             ' And finally, let's check if the return type is Task or ValueTask, because those
@@ -91,8 +103,8 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
         ' Helper method to check if a type is of a certain type or a derived type.
         Private Shared Function IsAncestorOrSelfOfType(type As INamedTypeSymbol, typeName As String) As Boolean
             Return type IsNot Nothing AndAlso
-                type.ToString() = typeName OrElse
-                IsAncestorOrSelfOfType(type.BaseType, typeName)
+                (type.ToString() = typeName OrElse
+                IsAncestorOrSelfOfType(type.BaseType, typeName))
         End Function
     End Class
 End Namespace
