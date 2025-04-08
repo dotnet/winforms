@@ -14,7 +14,7 @@ public class ListControlUnboundActionListTests
         using ListView listView = new();
         using ListViewDesigner listViewDesigner = new();
         listViewDesigner.Initialize(listView);
-        var actionList = new ListControlUnboundActionList(listViewDesigner);
+        ListControlUnboundActionList actionList = new(listViewDesigner);
         bool formClosed = false;
         int retryCount = 3;
         int retryDelay = 100;
@@ -22,12 +22,12 @@ public class ListControlUnboundActionListTests
         {
             for (int i = 0; i < retryCount; i++)
             {
-                await Task.Delay(500).ConfigureAwait(false);
+                await Task.Delay(500).ConfigureAwait(true);
                 foreach (Form form in Application.OpenForms)
                 {
-                    if (form.Text.Contains("ListViewItem"))
+                    if (form.Text.Contains(nameof(ListViewItem)))
                     {
-                        await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(false);
+                        await form.InvokeAsync(new Action(() => form.Dispose())).ConfigureAwait(true);
                         formClosed = true;
                         break;
                     }
@@ -39,16 +39,15 @@ public class ListControlUnboundActionListTests
                 }
                 else if (i < retryCount - 1)
                 {
-                    await Task.Delay(retryDelay).ConfigureAwait(false);
+                    await Task.Delay(retryDelay).ConfigureAwait(true);
                 }
             }
         });
 
-        Action action = actionList.InvokeItemsDialog;
-        action();
+        actionList.InvokeItemsDialog();
 
-        // Await the task before validating.
-        await disposeTask.ConfigureAwait(false);
+        // Await the disposeTask before validating.
+        await disposeTask.ConfigureAwait(true);
 
         // Assert the form was found and closed.
         formClosed.Should().BeTrue();
