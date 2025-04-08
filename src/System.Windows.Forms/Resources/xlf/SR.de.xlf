@@ -849,7 +849,7 @@
       </trans-unit>
       <trans-unit id="CatKey">
         <source>Key</source>
-        <target state="translated">Schlüssel</target>
+        <target state="translated">Taste</target>
         <note />
       </trans-unit>
       <trans-unit id="CatLayout">
