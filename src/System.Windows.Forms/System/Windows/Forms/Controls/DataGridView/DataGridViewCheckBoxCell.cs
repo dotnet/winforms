@@ -26,7 +26,6 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     private static readonly VisualStyleElement s_checkBoxElement = Application.IsDarkModeEnabled ? s_darkCheckBoxElement : s_lightCheckBoxElement;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-
     private static readonly int s_propButtonCellState = PropertyStore.CreateKey();
     private static readonly int s_propTrueValue = PropertyStore.CreateKey();
     private static readonly int s_propFalseValue = PropertyStore.CreateKey();

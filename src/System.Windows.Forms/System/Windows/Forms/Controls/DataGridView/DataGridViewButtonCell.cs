@@ -23,7 +23,6 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     private static readonly VisualStyleElement s_buttonElement = Application.IsDarkModeEnabled ? s_darkButtonElement : s_lightButtonElement;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-
     private const byte DATAGRIDVIEWBUTTONCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
     private const byte DATAGRIDVIEWBUTTONCELL_horizontalTextMargin = 2;
     private const byte DATAGRIDVIEWBUTTONCELL_verticalTextMargin = 1;
