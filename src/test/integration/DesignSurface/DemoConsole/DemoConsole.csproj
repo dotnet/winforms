@@ -14,7 +14,7 @@
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
     <NoWarn>$(NoWarn)CS8002;CA1824</NoWarn>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

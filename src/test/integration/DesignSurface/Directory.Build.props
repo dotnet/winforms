@@ -13,12 +13,12 @@
     <!-- The files for this project have been removed from the .NET product due to licensing issues. -->
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
     <IsTestUtilityProject>true</IsTestUtilityProject>
-    <TargetFrameworks>$(NetCurrent)-windows;net481</TargetFrameworks>
+    <TargetFrameworks>$(NetCurrent)-windows;net472</TargetFrameworks>
     <!-- Unset TargetFramework as this property gets set in the repo's root. This is necessary to avoid over-building. -->
     <TargetFramework />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -35,7 +35,7 @@
     <ProjectReference Include="..\..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Design" />

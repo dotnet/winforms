@@ -2,7 +2,7 @@
   "profiles": {
     "DemoConsole": {
       "commandName": "Project",
-      "nativeDebugging": "true"
+      "nativeDebugging": false
     }
   }
 }
