@@ -97,7 +97,7 @@ public class ParentControlDesignerTests : IDisposable
         _designer.Invoking(d => d.InitializeNewComponent(null)).Should().NotThrow();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void InitializeNewComponent_ShouldReparentControls_WhenAllowControlLassoIsTrue()
     {
         Mock<IDesignerHost> mockDesignerHost = new();
