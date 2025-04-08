@@ -15,7 +15,8 @@
     <NoWarn>$(NoWarn);IL2026;IL2046;IL2057;IL2067;IL2070;IL2072;IL2075;IL2094;IL2111</NoWarn>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
-    <!-- Reenable when fixes are made for IDE0031 warnings that VMR treats as errors. -->
+    <!-- Reenable when IDE0031 analyzer in this repo supports null-conditional assignment as it does in the VMR. -->
+    <!-- tracking https://github.com/dotnet/winforms/issues/13261 -->
     <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0031</NoWarn>
   </PropertyGroup>
 
