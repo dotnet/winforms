@@ -152,7 +152,7 @@ public sealed class ToolStripContainerActionListTests : IDisposable
     public void GetSortedActionItems_ReturnsCorrectItems_WhenDockNotFilled()
     {
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        var displayNames = items.Cast<DesignerActionItem>()
+        List<string> displayNames = items.Cast<DesignerActionItem>()
                                 .Select(i => i.DisplayName)
                                 .ToList();
 
@@ -170,7 +170,7 @@ public sealed class ToolStripContainerActionListTests : IDisposable
         dockProp.SetValue(_toolStripContainer, DockStyle.Fill);
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        var displayNames = items.Cast<DesignerActionItem>()
+        List<string> displayNames = items.Cast<DesignerActionItem>()
                                 .Select(i => i.DisplayName)
                                 .ToList();
 
@@ -193,7 +193,7 @@ public sealed class ToolStripContainerActionListTests : IDisposable
         TypeDescriptor.GetProperties(_toolStripContainer)["Dock"]?.SetValue(_toolStripContainer, DockStyle.Fill);
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        var displayNames = items.Cast<DesignerActionItem>()
+        List<string> displayNames = items.Cast<DesignerActionItem>()
                                 .Select(i => i.DisplayName)
                                 .ToList();
 
