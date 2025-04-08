@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Threading
-Imports System.Threading.Tasks
 Imports System.Windows.Forms.Analyzers.Diagnostics
 Imports System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms
 Imports System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
@@ -63,7 +61,6 @@ Namespace Global.System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.
 
             Dim context = GetVisualBasicAnalyzerTestContext(fileSet, referenceAssemblies)
 
-            ' We expect no diagnostics for most edge cases
             context.ExpectedDiagnostics.Clear()
 
             ' Only expect diagnostic on the one property that should be flagged

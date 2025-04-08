@@ -33,6 +33,7 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
         Public Async Function AvoidPassingTaskWithoutCancellationAnalyzer(
                 referenceAssemblies As ReferenceAssemblies,
                 fileSet As TestDataFileSet) As Task
+
             ' Make sure, we can resolve the assembly we're testing against:
             ' Always pass `String.Empty` for the language here to keep it generic.
             Dim referenceAssembly = Await referenceAssemblies.ResolveAsync(

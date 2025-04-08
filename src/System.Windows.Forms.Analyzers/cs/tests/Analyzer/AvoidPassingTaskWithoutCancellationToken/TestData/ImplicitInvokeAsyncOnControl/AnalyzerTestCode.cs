@@ -43,10 +43,10 @@ public class MyForm : Form
         bool flag = await DoSomethingAsync(token);
         var meaningOfLife = 21 + 21;
 
-        return (meaningOfLife == await GoRateotuAsync(token)) && flag;
+        return (meaningOfLife == await GetMeaningOfLifeAsync(token)) && flag;
     }
 
-    private async Task<int> GoRateotuAsync(CancellationToken token)
+    private async Task<int> GetMeaningOfLifeAsync(CancellationToken token)
     {
         DerivedForm derivedForm = new();
         await derivedForm.DoWorkInDerivedClassAsync();

@@ -20,6 +20,7 @@
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\CustomControlScenarios\Program.vb" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\AnalyzerTestCode.vb" />
     <Compile Remove="Analyzer\MissingPropertySerializationConfiguration\TestData\EdgeCaseScenarios\Program.vb" />
+    <Compile Remove="D:\git\winforms\eng\CodeAnalysisSource.vb" />
   </ItemGroup>
 
   <ItemGroup>

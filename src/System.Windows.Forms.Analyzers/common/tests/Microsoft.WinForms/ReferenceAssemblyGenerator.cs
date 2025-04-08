@@ -27,6 +27,12 @@ internal static partial class ReferenceAssemblyGenerator
 
     private static readonly Dictionary<NetVersion, (string tfm, string exactVersion)> s_exactNetVersionLookup = new()
     {
+        // These are the runtime versions of .net, we're current support.
+        // Note that these versions are pulled in at test time into the AdHoc workspace,
+        // so they do not impose any versioning mismatch to the test assemblies.
+        // We cannot reliably use what's offered through Microsoft.CodeAnalysis.Testing,
+        // because _compatible_ version of that package might not provide the runtime/
+        // desktop packages we need.
         [NetVersion.Net6_0] = ("net6.0", "6.0.36"),
         [NetVersion.Net7_0] = ("net7.0", "7.0.20"),
         [NetVersion.Net8_0] = ("net8.0", "8.0.13"),
@@ -58,9 +64,6 @@ internal static partial class ReferenceAssemblyGenerator
         var winFormsAssembliesBuilder =
             ImmutableArray.CreateBuilder<string>(s_winFormsAssemblies.Count);
 
-        // Microsoft.VisualBasic.Forms is at the top of the reference chain,
-        // so it has all the references we need. But we assert all the assemblies
-        // we need in addition to that.
         string fullAssemblyPath = Path.Join(
             WinFormsReferencesFactory.RepoRootPath,
             "artifacts\\bin");
@@ -103,7 +106,7 @@ internal static partial class ReferenceAssemblyGenerator
                 if (File.Exists(assemblyPath))
                 {
                     foundAssembliesBuilder.Add(assemblyPath);
-                    break; // Found the assembly, no need to check other folders
+                    break;
                 }
             }
         }

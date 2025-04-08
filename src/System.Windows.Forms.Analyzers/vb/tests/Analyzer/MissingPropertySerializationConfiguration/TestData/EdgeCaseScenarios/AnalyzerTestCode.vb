@@ -4,6 +4,9 @@
 Imports System
 Imports System.ComponentModel
 
+Option Strict On
+Option Explicit On
+
 Namespace Test
 
     ' Custom IComponent interface in a different namespace

@@ -21,7 +21,8 @@ internal enum NetVersion
     WinFormsBuild = 0x01000000,
 
     /// <summary>
-    ///  If this is OR'ed in, we're taking the specified version, and the WinForms runtime for this repo.
+    ///  If this is OR'ed in, we're taking the specified runtime version,
+    ///  and the WinForms runtime for this repo.
     /// </summary>
     BuildOutput = 0x10000000
 }

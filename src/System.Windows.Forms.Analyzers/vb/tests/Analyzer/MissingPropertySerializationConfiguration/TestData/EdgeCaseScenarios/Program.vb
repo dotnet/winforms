@@ -3,6 +3,9 @@
 
 Imports System
 
+Option Strict On
+Option Explicit On
+
 Namespace Test
     Friend NotInheritable Class Program
         ''' <summary>

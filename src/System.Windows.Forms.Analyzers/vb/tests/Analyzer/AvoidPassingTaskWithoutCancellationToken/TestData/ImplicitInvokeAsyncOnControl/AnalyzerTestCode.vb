@@ -53,10 +53,10 @@ Namespace TestNamespace
             Await DoSomethingAsync(token)
             Dim meaningOfLife As Integer = 21 + 21
 
-            Return meaningOfLife = Await GoRateotuAsync(token)
+            Return meaningOfLife = Await GetMeaningOfLifeAsync(token)
         End Function
 
-        Private Async Function GoRateotuAsync(token As CancellationToken) As Task(Of Integer)
+        Private Async Function GetMeaningOfLifeAsync(token As CancellationToken) As Task(Of Integer)
             Dim derivedForm As New DerivedForm()
             Await derivedForm.DoWorkInDerivedClassAsync()
 
@@ -88,5 +88,6 @@ Namespace TestNamespace
             Await Task.Delay(100, token)
             Return "test"
         End Function
+
     End Class
 End Namespace
