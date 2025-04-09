@@ -4643,7 +4643,7 @@ internal sealed partial class PropertyGridView :
             {
                 InPropertySet = true;
 
-                // If this propentry is enumerable, then once a value is selected from the editor,
+                // If this entry is enumerable, then once a value is selected from the editor,
                 // we'll want to close the drop down (like true/false). Otherwise, if we're
                 // working with Anchor for ex., then we should be able to select different values
                 // from the editor, without having it close every time.
