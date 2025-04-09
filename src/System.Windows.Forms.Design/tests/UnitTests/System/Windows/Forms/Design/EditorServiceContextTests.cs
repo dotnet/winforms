@@ -7,6 +7,7 @@ using System.Drawing.Design;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
+
 public class EditorServiceContextTests : IDisposable
 {
     private readonly TestComponent _component;
