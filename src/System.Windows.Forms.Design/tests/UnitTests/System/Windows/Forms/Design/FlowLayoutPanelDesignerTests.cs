@@ -26,11 +26,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
         _serviceProviderMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
         _serviceProviderMock.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_selectionServiceMock.Object);
 
-        _flowLayoutPanel = new()
-        {
-            Site = new Mock<ISite>().Object
-        };
-
+        _flowLayoutPanel = new() { Site = new Mock<ISite>().Object };
         _designer = new();
         _designer.Initialize(_flowLayoutPanel);
     }
@@ -82,10 +78,8 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     }
 
     [Fact]
-    public void AllowSetChildIndexOnDrop_ShouldReturnFalse()
-    {
+    public void AllowSetChildIndexOnDrop_ShouldReturnFalse() =>
         _designer.AllowSetChildIndexOnDrop.Should().BeFalse();
-    }
 
     [Fact]
     public void AllowGenericDragBox_ShouldReturnFalse()
@@ -150,5 +144,77 @@ public class FlowLayoutPanelDesignerTests : IDisposable
         Rectangle result = _designer.TestAccessor().Dynamic.GetMarginBounds(control);
 
         result.Should().Be(new Rectangle(5, 14, 42, 54));
+    }
+
+    [Fact]
+    public void OnDragEnter_ShouldInitializeDragState()
+    {
+        _designer.Initialize(_flowLayoutPanel);
+        DragEventArgs dragEventArgs = new(
+            new DataObject(),
+            0,
+            0,
+            0,
+            DragDropEffects.Copy,
+            DragDropEffects.Copy);
+
+        _designer.TestAccessor().Dynamic.OnDragEnter(dragEventArgs);
+
+        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        insertionIndex.Should().Be(-1);
+
+        Point lastMouseLocation = _designer.TestAccessor().Dynamic._lastMouseLocation;
+        lastMouseLocation.Should().Be(Point.Empty);
+    }
+
+    [Fact]
+    public void OnDragLeave_ShouldClearDragState()
+    {
+        _designer.Initialize(_flowLayoutPanel);
+
+        _designer.TestAccessor().Dynamic.OnDragLeave(EventArgs.Empty);
+
+        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        insertionIndex.Should().Be(-1);
+    }
+
+    [Fact]
+    public void OnDragOver_ShouldUpdateInsertionIndex()
+    {
+        _designer.Initialize(_flowLayoutPanel);
+        DragEventArgs dragEventArgs = new(
+            new DataObject(),
+            0,
+            10,
+            10,
+            DragDropEffects.Copy,
+            DragDropEffects.Copy);
+
+        _designer.TestAccessor().Dynamic.OnDragOver(dragEventArgs);
+
+        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        insertionIndex.Should().Be(-1);
+    }
+
+    [Fact]
+    public void OnDragDrop_ShouldReorderControls()
+    {
+        using Control control1 = new();
+        using Control control2 = new();
+        _flowLayoutPanel.Controls.Add(control1);
+        _flowLayoutPanel.Controls.Add(control2);
+        _designer.Initialize(_flowLayoutPanel);
+        DragEventArgs dragEventArgs = new(
+            new DataObject(),
+            0,
+            0,
+            0,
+            DragDropEffects.Move,
+            DragDropEffects.Move);
+
+        _designer.TestAccessor().Dynamic.OnDragDrop(dragEventArgs);
+
+        _flowLayoutPanel.Controls[0].Should().Be(control1);
+        _flowLayoutPanel.Controls[1].Should().Be(control2);
     }
 }
