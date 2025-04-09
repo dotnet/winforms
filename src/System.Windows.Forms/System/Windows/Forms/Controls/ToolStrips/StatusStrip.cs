@@ -118,7 +118,7 @@ public partial class StatusStrip : ToolStrip
         set => base.LayoutStyle = value;
     }
 
-    // we do some custom stuff with padding to accomodate size grip.
+    // we do some custom stuff with padding to accommodate size grip.
     // changing this is not supported at DT
     [Browsable(false)]
     public new Padding Padding

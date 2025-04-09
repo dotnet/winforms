@@ -766,9 +766,10 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
     {
-        if (Application.RenderWithVisualStyles)
+        if (!Application.IsDarkModeEnabled && Application.RenderWithVisualStyles)
         {
             VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
             vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
@@ -782,6 +783,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
         }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private static void RenderLabelInternal(ToolStripItemRenderEventArgs e)
     {
