@@ -183,11 +183,20 @@ public class InputLanguageTests
 
     private static void VerifyInputLanguage(InputLanguage language, string languageTag, string layoutId, string layoutName)
     {
-        Assert.NotNull(language);
-        Assert.NotEqual(IntPtr.Zero, language.Handle);
-        Assert.Equal(languageTag, language.Culture.Name);
-        Assert.Equal(layoutId, language.LayoutId);
-        Assert.Equal(layoutName, language.LayoutName);
+        language.Should().NotBeNull();
+        language.Handle.Should().NotBe(IntPtr.Zero);
+        language.Culture.Name.Should().Be(languageTag);
+        language.LayoutId.Should().Be(layoutId);
+
+        if (CultureInfo.InstalledUICulture.Name.StartsWith("en-", StringComparison.OrdinalIgnoreCase))
+        {
+            language.LayoutName.Should().Be(layoutName);
+        }
+        else
+        {
+            language.LayoutName.Should().NotBeNullOrEmpty();
+            language.LayoutName.Should().NotBeEquivalentTo(SR.UnknownInputLanguageLayout);
+        }
     }
 
     private static void VerifyInputLanguage(InputLanguage language)
