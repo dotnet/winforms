@@ -17,13 +17,6 @@ internal sealed class WrappingDataObject : DataObject
         _originalIsIDataObject = data is IDataObject;
     }
 
-    public WrappingDataObject(string format, object data) : base(format, data)
-    {
-        // Don't wrap existing DataObject instances.
-        Debug.Assert(data is not DataObject);
-        _originalIsIDataObject = data is IDataObject;
-    }
-
     internal override bool TryUnwrapUserDataObject([NotNullWhen(true)] out IDataObject? dataObject)
     {
         // We only want to unwrap IDataObject instances from users.
@@ -32,9 +25,9 @@ internal sealed class WrappingDataObject : DataObject
             return base.TryUnwrapUserDataObject(out dataObject);
         }
 
-        // When we hand back our wrapper we're emulating what would happen through via the native IDataObject
-        // proxy. As the native interface has no concept of "autoConvert", we need to always consider it "true"
-        // as out native IDataObject implementation would.
+        // When we hand back our wrapper we're emulating what would happen via the native IDataObject proxy.
+        // As the native interface has no concept of "autoConvert", we need to always consider it "true"
+        // as our native IDataObject implementation would.
         dataObject = this;
         return true;
     }

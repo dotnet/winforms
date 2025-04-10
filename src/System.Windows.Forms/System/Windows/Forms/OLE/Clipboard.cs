@@ -436,7 +436,7 @@ public static class Clipboard
         ArgumentNullException.ThrowIfNull(data);
 
         // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
-        SetDataObject(new WrappingDataObject(format, data), copy: true);
+        SetDataObject(new DataObject(format, data), copy: true);
     }
 
     /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, T)"/>

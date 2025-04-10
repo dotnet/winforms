@@ -1322,11 +1322,11 @@ public class ClipboardTests
         string format = typeof(SerializableTestData).FullName!;
 
         // Opt-in into access to the binary formatted stream.
-        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
 
         // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
         // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
-        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterScope scope = new(enable: copy);
 
         Clipboard.SetDataObject(data, copy);
 
@@ -1334,7 +1334,7 @@ public class ClipboardTests
 
         received.TryGetData(
             format,
-            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
             autoConvert: false,
             out SerializableTestData? result).Should().BeTrue();
 
