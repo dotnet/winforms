@@ -276,7 +276,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -303,7 +303,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -332,7 +332,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -1193,7 +1193,7 @@ public class ClipboardTests
         formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
         formats = dataObject.GetFormats(autoConvert: false);
-        formats.Should().BeEquivalentTo(["Text"]);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
         // CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.
         Clipboard.GetText().Should().BeEmpty();
@@ -1256,10 +1256,8 @@ public class ClipboardTests
 
         Clipboard.GetData("System.String").Should().Be(expected);
 
-        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
-        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
-        byte[] array = stream.ToArray();
-        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
+        string result = Clipboard.GetData("TEXT").Should().BeOfType<string>().Subject;
+        result.Should().Be(expected);
     }
 
     [WinFormsFact]
@@ -1325,13 +1323,14 @@ public class ClipboardTests
 
         // Opt-in into access to the binary formatted stream.
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
         // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
         // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
         using BinaryFormatterScope scope = new(enable: true);
 
         Clipboard.SetDataObject(data, copy);
 
-        DataObject received = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
 
         received.TryGetData(
             format,
@@ -1449,5 +1448,28 @@ public class ClipboardTests
 
         using ComScope<IUnknown> wrapperUnknown = wrapper.Query<IUnknown>();
         ((nint)wrapperUnknown.Value).Should().Be((nint)originalUnknown.Value);
+    }
+
+    [WinFormsFact]
+    public void SetDataObject_SerializableObject_CopyFalse_DoesNotUseBinaryFormatter()
+    {
+        // This test ensures that the SerializableObject does not use BinaryFormatter when running in process.
+        // This only works when copy is not set to true as that is the only case where we are able to extract
+        // the original DataObject we created for the user data.
+
+        SerializablePerson person = new() { Name = "John Doe", Age = 30 };
+        Clipboard.SetDataObject(person);
+
+        bool result = Clipboard.TryGetData(out SerializablePerson? data);
+        result.Should().BeTrue();
+        data.Should().NotBeNull();
+        data.Should().BeSameAs(person);
+    }
+
+    [Serializable]
+    internal class SerializablePerson
+    {
+        public string Name { get; set; } = "DefaultName";
+        public int Age { get; set; }
     }
 }
