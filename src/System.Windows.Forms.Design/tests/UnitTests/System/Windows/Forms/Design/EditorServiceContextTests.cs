@@ -35,8 +35,8 @@ public class EditorServiceContextTests : IDisposable
 
     public void Dispose()
     {
-        _component.Dispose();
         _designer.Dispose();
+        _component.Dispose();
         _mockDialog.Object.Dispose();
     }
 
@@ -98,7 +98,7 @@ public class EditorServiceContextTests : IDisposable
     {
         EditorServiceContext context = new(_designer, _mockPropertyDescriptor.Object);
 
-        IContainer? container = ((ITypeDescriptorContext)context).Container;
+        using IContainer? container = ((ITypeDescriptorContext)context).Container;
 
         container.Should().BeNull();
     }
@@ -111,7 +111,7 @@ public class EditorServiceContextTests : IDisposable
 
         EditorServiceContext context = new(_designer, _mockPropertyDescriptor.Object);
 
-        IContainer? container = ((ITypeDescriptorContext)context).Container;
+        using IContainer? container = ((ITypeDescriptorContext)context).Container;
 
         container.Should().BeSameAs(_mockContainer.Object);
     }
@@ -167,7 +167,7 @@ public class EditorServiceContextTests : IDisposable
     [Fact]
     public void ShowDialog_ShouldFallbackToFormShowDialog_WhenIUIServiceNotAvailable()
     {
-        _mockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(Array.Empty<Attribute>());
+        _mockSite.Setup(s => s.GetService(typeof(IUIService))).Returns((object?)null);
         _component.Site = _mockSite.Object;
 
         EditorServiceContext context = new(_designer, _mockPropertyDescriptor.Object);
