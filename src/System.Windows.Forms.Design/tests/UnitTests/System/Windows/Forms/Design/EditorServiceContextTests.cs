@@ -52,8 +52,9 @@ public class EditorServiceContextTests : IDisposable
         _mockPropertyDescriptor.Setup(p => p.Name).Returns("Items");
         _mockPropertyDescriptor.Setup(p => p.Attributes).Returns(new AttributeCollection(null));
 
-        _mockEditor.Setup(e => e.EditValue(It.IsAny<ITypeDescriptorContext>(), It.IsAny<IServiceProvider>(), oldValue))
-                   .Returns(newValue);
+        _mockEditor
+            .Setup(e => e.EditValue(It.IsAny<ITypeDescriptorContext>(), It.IsAny<IServiceProvider>(), oldValue))
+            .Returns(newValue);
 
         _mockPropertyDescriptor
             .Setup(p => p.GetEditor(typeof(UITypeEditor)))
