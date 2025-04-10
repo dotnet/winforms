@@ -11,10 +11,8 @@ public class ListViewGroupCollectionEditorTests
 {
     private readonly Mock<ListViewGroupCollectionEditor> _mockEditor;
 
-    public ListViewGroupCollectionEditorTests()
-    {
-        _mockEditor = new(typeof(ListViewGroup)) { CallBase = true };
-    }
+    public ListViewGroupCollectionEditorTests() =>
+      _mockEditor = new(typeof(ListViewGroup)) { CallBase = true };
 
     [Fact]
     public void Constructor_InitializesCollectionType()
@@ -28,7 +26,7 @@ public class ListViewGroupCollectionEditorTests
         actualType.Should().Be(expectedType);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void EditValue_SetsAndResetsEditValue()
     {
         Mock<ITypeDescriptorContext> mockContext = new();
@@ -53,7 +51,7 @@ public class ListViewGroupCollectionEditorTests
 
         ListViewGroup? result = _mockEditor.Object.TestAccessor().Dynamic.CreateInstance(typeof(ListViewGroup)) as ListViewGroup;
 
-        result?.Name.Should().NotBeNull();
+        result?.Name.Should().BeOfType<string>();
         result?.Name.Should().StartWith("ListViewGroup");
         result?.GetType().Should().Be(typeof(ListViewGroup));
     }
