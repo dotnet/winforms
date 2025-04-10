@@ -5650,10 +5650,12 @@ public partial class ListView : Control
                 exStyle |= PInvoke.LVS_EX_FULLROWSELECT;
             }
 
-            if (GridLines)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (GridLines && !Application.IsDarkModeEnabled)
             {
                 exStyle |= PInvoke.LVS_EX_GRIDLINES;
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             if (HoverSelection)
             {
@@ -7069,6 +7071,11 @@ public partial class ListView : Control
 
             case PInvokeCore.WM_PAINT:
                 base.WndProc(ref m);
+
+                if (Application.IsDarkModeEnabled)
+                {
+
+                }
 
                 // win32 ListView
                 BeginInvoke(new MethodInvoker(CleanPreviousBackgroundImageFiles));
