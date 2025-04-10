@@ -3,14 +3,14 @@
 
 namespace DesignSurfaceExt;
 
-internal abstract class DesignerOptionServiceExtBase : DesignerOptionService
+internal class DesignerOptionServiceBase : DesignerOptionService
 {
     private readonly Size _gridSize;
     private readonly bool _useSnapLines;
     private readonly bool _snapToGrid;
     private readonly bool _showGrid;
 
-    protected DesignerOptionServiceExtBase(Size gridSize, bool useSnapLines, bool snapToGrid, bool showGrid)
+    protected DesignerOptionServiceBase(Size gridSize, bool useSnapLines, bool snapToGrid, bool showGrid)
     {
         _gridSize = gridSize;
         _useSnapLines = useSnapLines;
@@ -38,26 +38,26 @@ internal abstract class DesignerOptionServiceExtBase : DesignerOptionService
     }
 }
 
-internal sealed class DesignerOptionServiceExt4SnapLines : DesignerOptionServiceExtBase
+internal sealed class DesignerOptionService4SnapLinesExtension : DesignerOptionServiceBase
 {
-    public DesignerOptionServiceExt4SnapLines()
+    public DesignerOptionService4SnapLinesExtension()
         : base(new Size(0, 0), snapToGrid: true, useSnapLines: false, showGrid: false) { }
 }
 
-internal sealed class DesignerOptionServiceExt4Grid : DesignerOptionServiceExtBase
+internal sealed class DesignerOptionService4GridExtension : DesignerOptionServiceBase
 {
-    public DesignerOptionServiceExt4Grid(Size gridSize)
+    public DesignerOptionService4GridExtension(Size gridSize)
         : base(gridSize, useSnapLines: false, snapToGrid: true, showGrid: true) { }
 }
 
-internal sealed class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionServiceExtBase
+internal sealed class DesignerOptionService4GridWithoutSnappingExtension : DesignerOptionServiceBase
 {
-    public DesignerOptionServiceExt4GridWithoutSnapping(Size gridSize)
+    public DesignerOptionService4GridWithoutSnappingExtension(Size gridSize)
         : base(gridSize, useSnapLines: false, snapToGrid: false, showGrid: true) { }
 }
 
-internal sealed class DesignerOptionServiceExt4NoGuides : DesignerOptionServiceExtBase
+internal sealed class DesignerOptionService4NoGuidesExtension : DesignerOptionServiceBase
 {
-    public DesignerOptionServiceExt4NoGuides()
+    public DesignerOptionService4NoGuidesExtension ()
         : base(new Size(8, 8), useSnapLines: false, snapToGrid: false, showGrid: false) { }
 }
