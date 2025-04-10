@@ -3969,12 +3969,46 @@ public partial class PropertyGridTests
         propertyGrid.Site = new MySite();
         MyClass myClass = new();
         propertyGrid.SelectedObject = myClass;
-        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
         GridEntry entry = propertyGridView.SelectedGridEntry;
         var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
 
         descriptor.SetPropertyTextValue("123");
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
+    }
+
+    [WinFormsFact]
+    public void ShortcutKeys_GridEntry_ProcessInput()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/12982
+        ToolStripMenuItem menuItem = new();
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.SelectedObject = menuItem;
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
+        var categories = propertyGridView.TopLevelGridEntries;
+        categories.Should().NotBeNull();
+        PropertyDescriptorGridEntry shortcutKeyEntry = categories
+            .FirstOrDefault(category => category.PropertyName == "Misc")?
+            .GridItems
+            .OfType<PropertyDescriptorGridEntry>()
+            .FirstOrDefault(entry => entry.PropertyName == nameof(ToolStripMenuItem.ShortcutKeys));
+
+        shortcutKeyEntry.Should().NotBeNull();
+        shortcutKeyEntry.PropertyDescriptor.GetValue(menuItem).Should().Be(Keys.None);
+
+        propertyGrid.SelectedGridItem = shortcutKeyEntry;
+        var gridViewAccessor = propertyGridView.TestAccessor();
+
+        bool result = gridViewAccessor.Dynamic.ProcessEnumUpAndDown(shortcutKeyEntry, Keys.Down, closeDropDown: true);
+        // Current value indicates the shortcut property is not set, thus up/down keys are ignored.
+        result.Should().BeFalse();
+
+        // Simulate mouse wheel scroll.
+        int index = gridViewAccessor.Dynamic.GetCurrentValueIndex(shortcutKeyEntry);
+        // Current value is not an allowed value.
+        index.Should().Be(-1);
     }
 
     [WinFormsFact]
