@@ -3,109 +3,61 @@
 
 namespace DesignSurfaceExt;
 
-internal sealed class DesignerOptionsBuilder : DesignerOptionService
-{
-    private readonly DesignerOptions _options;
-
-    public DesignerOptionsBuilder(DesignerOptions baseOptions = null)
-    {
-        _options = baseOptions ?? new DesignerOptions();
-        _options.UseSmartTags = true;
-        _options.ObjectBoundSmartTagAutoShow = false;
-    }
-
-    public DesignerOptionsBuilder WithSnapLines(bool value)
-    {
-        _options.UseSnapLines = value;
-        return this;
-    }
-
-    public DesignerOptionsBuilder WithGrid(Size gridSize, bool snapToGrid, bool showGrid)
-    {
-        _options.GridSize = gridSize;
-        _options.SnapToGrid = snapToGrid;
-        _options.ShowGrid = showGrid;
-        return this;
-    }
-
-    public DesignerOptions Build() => _options;
-}
-
-internal sealed class DesignerOptionServiceExt4SnapLines : DesignerOptionService
-{
-    public DesignerOptionServiceExt4SnapLines() : base() { }
-
-    protected override void PopulateOptionCollection(DesignerOptionCollection options)
-    {
-        if (options.Parent is not null)
-            return;
-
-        DesignerOptions ops = new DesignerOptionsBuilder()
-            .WithSnapLines(true)
-            .Build();
-
-        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-        CreateOptionCollection(wfd, "General", ops);
-    }
-}
-
-internal sealed class DesignerOptionServiceExt4Grid : DesignerOptionService
+internal abstract class DesignerOptionServiceExtBase : DesignerOptionService
 {
     private readonly Size _gridSize;
+    private readonly bool _useSnapLines;
+    private readonly bool _snapToGrid;
+    private readonly bool _showGrid;
 
-    public DesignerOptionServiceExt4Grid(Size gridSize) : base() { _gridSize = gridSize; }
+    protected DesignerOptionServiceExtBase(Size gridSize, bool useSnapLines, bool snapToGrid, bool showGrid)
+    {
+        _gridSize = gridSize;
+        _useSnapLines = useSnapLines;
+        _snapToGrid = snapToGrid;
+        _showGrid = showGrid;
+    }
 
     protected override void PopulateOptionCollection(DesignerOptionCollection options)
     {
         if (options.Parent is not null)
             return;
 
-        DesignerOptions ops = new DesignerOptionsBuilder()
-            .WithSnapLines(false)
-            .WithGrid(_gridSize, snapToGrid: true, showGrid: true)
-            .Build();
+        DesignerOptions ops = new()
+        {
+            GridSize = _gridSize,
+            UseSnapLines = _useSnapLines,
+            SnapToGrid = _snapToGrid,
+            ShowGrid = _showGrid,
+            UseSmartTags = true,
+            ObjectBoundSmartTagAutoShow = false
+        };
 
         DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
         CreateOptionCollection(wfd, "General", ops);
     }
 }
 
-internal sealed class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4SnapLines : DesignerOptionServiceExtBase
 {
-    private readonly Size _gridSize;
-
-    public DesignerOptionServiceExt4GridWithoutSnapping(Size gridSize) : base() { _gridSize = gridSize; }
-
-    protected override void PopulateOptionCollection(DesignerOptionCollection options)
-    {
-        if (options.Parent is not null)
-            return;
-
-        DesignerOptions ops = new DesignerOptionsBuilder()
-            .WithSnapLines(false)
-            .WithGrid(_gridSize, snapToGrid: false, showGrid: true)
-            .Build();
-
-        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-        CreateOptionCollection(wfd, "General", ops);
-    }
+    public DesignerOptionServiceExt4SnapLines()
+        : base(new Size(0, 0), snapToGrid: true, useSnapLines: false, showGrid: false) { }
 }
 
-internal sealed class DesignerOptionServiceExt4NoGuides : DesignerOptionService
+internal sealed class DesignerOptionServiceExt4Grid : DesignerOptionServiceExtBase
 {
-    public DesignerOptionServiceExt4NoGuides() : base() { }
+    public DesignerOptionServiceExt4Grid(Size gridSize)
+        : base(gridSize, useSnapLines: false, snapToGrid: true, showGrid: true) { }
+}
 
-    protected override void PopulateOptionCollection(DesignerOptionCollection options)
-    {
-        if (options.Parent is not null)
-            return;
+internal sealed class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionServiceExtBase
+{
+    public DesignerOptionServiceExt4GridWithoutSnapping(Size gridSize)
+        : base(gridSize, useSnapLines: false, snapToGrid: false, showGrid: true) { }
+}
 
-        DesignerOptions ops = new DesignerOptionsBuilder()
-            .WithSnapLines(false)
-            .WithGrid(new Size(8, 8), snapToGrid: false, showGrid: false)
-            .Build();
-
-        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-        CreateOptionCollection(wfd, "General", ops);
-    }
+internal sealed class DesignerOptionServiceExt4NoGuides : DesignerOptionServiceExtBase
+{
+    public DesignerOptionServiceExt4NoGuides()
+        : base(new Size(8, 8), useSnapLines: false, snapToGrid: false, showGrid: false) { }
 }
