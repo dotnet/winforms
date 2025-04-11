@@ -116,6 +116,26 @@ internal static partial class DataFormatNames
             case BinaryFormatMetafile:
                 formats.Add(Emf);
                 break;
+            default:
+                // The formats aren't case sensitive, notably when they are looked up via the OLE IDataObject
+                // proxy. We're most likely to see "TEXT", so we'll handle text cases.
+                if (string.Equals(format, Text, StringComparison.OrdinalIgnoreCase))
+                {
+                    formats.Add(String);
+                    formats.Add(UnicodeText);
+                }
+                else if (string.Equals(format, UnicodeText, StringComparison.OrdinalIgnoreCase))
+                {
+                    formats.Add(String);
+                    formats.Add(Text);
+                }
+                else if (string.Equals(format, String, StringComparison.OrdinalIgnoreCase))
+                {
+                    formats.Add(Text);
+                    formats.Add(UnicodeText);
+                }
+
+                break;
         }
     }
 

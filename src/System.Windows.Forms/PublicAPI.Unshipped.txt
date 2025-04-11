@@ -1,0 +1,1 @@
+static System.Windows.Forms.Clipboard.TryGetData<T>(out T data) -> bool

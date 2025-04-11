@@ -130,7 +130,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
 
         for (int i = 0; i < formats.Length; i++)
         {
-            if (format.Equals(formats[i]))
+            if (format.Equals(formats[i], StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

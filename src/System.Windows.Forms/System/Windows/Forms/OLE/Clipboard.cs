@@ -352,6 +352,10 @@ public static class Clipboard
         return dataObject.TryGetData(format, out data);
     }
 
+    /// <inheritdoc cref="TryGetData{T}(string, out T)"/>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data) => TryGetData(typeof(T).FullName!, out data);
+
     /// <summary>
     ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.
     /// </summary>
