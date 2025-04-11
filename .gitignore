@@ -308,6 +308,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+# ClaudiaIDE extension
+.claudiaideconfig
+
 # CodeRush
 .cr/
 

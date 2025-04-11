@@ -5,6 +5,7 @@ namespace TestConsole;
 
 public partial class MainForm
 {
+    [DesignerCategory("Default")]
     internal class MyUserControl : UserControl
     {
         public MyUserControl()
@@ -40,7 +41,7 @@ public partial class MainForm
                 Size = new(30, 30)
             };
 
-            Controls.AddRange(textBox2, textBox1, textBox);
+            Controls.AddRange([textBox2, textBox1, textBox]);
         }
     }
 }
