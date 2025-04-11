@@ -5,6 +5,7 @@
   <PropertyGroup>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 
     <SuppressLicenseValidation>true</SuppressLicenseValidation>
     <NoWarn>$(NoWarn);SA1633</NoWarn>
