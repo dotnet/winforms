@@ -12,7 +12,7 @@ public class ListViewGroupCollectionEditorTests
     private readonly Mock<ListViewGroupCollectionEditor> _mockEditor;
 
     public ListViewGroupCollectionEditorTests() =>
-      _mockEditor = new(typeof(ListViewGroup)) { CallBase = true };
+        _mockEditor = new(typeof(ListViewGroup)) { CallBase = true };
 
     [Fact]
     public void Constructor_InitializesCollectionType()
@@ -51,6 +51,7 @@ public class ListViewGroupCollectionEditorTests
 
         ListViewGroup? result = _mockEditor.Object.TestAccessor().Dynamic.CreateInstance(typeof(ListViewGroup)) as ListViewGroup;
 
+        result.Should().NotBeNull();
         result?.Name.Should().BeOfType<string>();
         result?.Name.Should().StartWith("ListViewGroup");
         result?.GetType().Should().Be(typeof(ListViewGroup));
