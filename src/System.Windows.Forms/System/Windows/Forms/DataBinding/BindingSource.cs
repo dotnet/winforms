@@ -981,11 +981,11 @@ public partial class BindingSource : Component,
             // Handle ASC and DESC
             int length = current.Length;
             bool ascending = true;
-            if (current.EndsWith(" ASC", StringComparison.InvariantCulture))
+            if (current.EndsWith(" ASC", StringComparison.InvariantCultureIgnoreCase))
             {
                 current = current[..(length - 4)].Trim();
             }
-            else if (current.EndsWith(" DESC", StringComparison.InvariantCulture))
+            else if (current.EndsWith(" DESC", StringComparison.InvariantCultureIgnoreCase))
             {
                 ascending = false;
                 current = current[..(length - 5)].Trim();
