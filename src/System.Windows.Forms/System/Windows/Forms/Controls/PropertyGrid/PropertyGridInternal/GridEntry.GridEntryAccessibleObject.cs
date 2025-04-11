@@ -410,7 +410,10 @@ internal abstract partial class GridEntry
 
             base.SetFocus();
 
-            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            if (!PropertyGridView.InPropertySet && !PropertyGridView.EditMouseDown)
+            {
+                RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            }
         }
     }
 }
