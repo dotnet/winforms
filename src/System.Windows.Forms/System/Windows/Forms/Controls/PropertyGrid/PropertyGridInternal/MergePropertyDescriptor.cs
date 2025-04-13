@@ -275,10 +275,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     {
         try
         {
-            if (_collection is not null)
-            {
-                _collection.Locked = true;
-            }
+            _collection?.Locked = true;
 
             // Now we have to copy the value into each property.
             object[] values = new object[listValue.Count];
@@ -301,10 +298,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         }
         finally
         {
-            if (_collection is not null)
-            {
-                _collection.Locked = false;
-            }
+            _collection?.Locked = false;
         }
     }
 

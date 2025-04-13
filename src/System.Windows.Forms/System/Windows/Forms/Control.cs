@@ -6976,10 +6976,7 @@ public unsafe partial class Control :
         }
         finally
         {
-            if (container is not null)
-            {
-                container.IsDpiChangeScalingRequired = false;
-            }
+            container?.IsDpiChangeScalingRequired = false;
         }
     }
 
@@ -7590,10 +7587,7 @@ public unsafe partial class Control :
 
             // Mark the event as handled so that the event isn't raised for the
             // control's parent.
-            if (hevent is not null)
-            {
-                hevent.Handled = true;
-            }
+            hevent?.Handled = true;
         }
 
         if (hevent is not null && !hevent.Handled)
@@ -9855,10 +9849,7 @@ public unsafe partial class Control :
     {
         IContainerControl? c = GetContainerControl();
 
-        if (c is not null)
-        {
-            c.ActiveControl = this;
-        }
+        c?.ActiveControl = this;
     }
 
     /// <summary>
@@ -11502,10 +11493,7 @@ public unsafe partial class Control :
 
             // Mark the container as needing to rescale when its parent is scaled.
             // This flag is reset when scaling is done on Container in "OnParentFontChanged".
-            if (container is not null)
-            {
-                container.IsDpiChangeScalingRequired = true;
-            }
+            container?.IsDpiChangeScalingRequired = true;
 
             RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
         }

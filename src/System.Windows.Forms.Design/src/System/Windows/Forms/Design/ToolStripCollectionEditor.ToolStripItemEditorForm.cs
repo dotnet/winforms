@@ -889,10 +889,7 @@ internal partial class ToolStripCollectionEditor
                     e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
                     string itemName = selectedItem.Site?.Name ?? string.Empty;
 
-                    if (label is not null)
-                    {
-                        label.Text = className + itemName;
-                    }
+                    label?.Text = className + itemName;
 
                     int classWidth = 0;
                     classWidth = (int)e.Graphics.MeasureString(className, boldFont).Width;
@@ -913,20 +910,14 @@ internal partial class ToolStripCollectionEditor
                 case 0:
                     // Erase background.
                     e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
-                    if (label is not null)
-                    {
-                        label.Text = SR.ToolStripItemCollectionEditorLabelNone;
-                    }
+                    label?.Text = SR.ToolStripItemCollectionEditorLabelNone;
 
                     e.Graphics.DrawString(SR.ToolStripItemCollectionEditorLabelNone, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
                     break;
                 default:
                     // Erase background.
                     e.Graphics.FillRectangle(SystemBrushes.Control, bounds);
-                    if (label is not null)
-                    {
-                        label.Text = SR.ToolStripItemCollectionEditorLabelMultipleItems;
-                    }
+                    label?.Text = SR.ToolStripItemCollectionEditorLabelMultipleItems;
 
                     e.Graphics.DrawString(SR.ToolStripItemCollectionEditorLabelMultipleItems, boldFont, SystemBrushes.WindowText, bounds, stringFormat);
                     break;

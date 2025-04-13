@@ -21,18 +21,12 @@ internal partial class Com2PropertyDescriptor
             // Should never be null- but we can't easily express this with null annotation as it is a post
             // initialization association.
             Debug.Assert(properties is not null);
-            if (Properties is not null)
-            {
-                Properties.AlwaysValid = Properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is not null;
-            }
+            Properties?.AlwaysValid = Properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is not null;
         }
 
         public void Dispose()
         {
-            if (Properties is not null)
-            {
-                Properties.AlwaysValid = false;
-            }
+            Properties?.AlwaysValid = false;
         }
     }
 }

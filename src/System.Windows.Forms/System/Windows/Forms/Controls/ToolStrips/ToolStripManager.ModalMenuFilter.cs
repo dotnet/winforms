@@ -184,12 +184,9 @@ public static partial class ToolStripManager
 
             try
             {
-                if (_messageHook is not null)
-                {
-                    // Message filter isn't going to help as we don't own the message pump
-                    // Switch over to a MessageHook
-                    _messageHook.HookMessages = false;
-                }
+                // Message filter isn't going to help as we don't own the message pump
+                // Switch over to a MessageHook
+                _messageHook?.HookMessages = false;
 
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
                 Application.ThreadContext.FromCurrent().TrackInput(false);

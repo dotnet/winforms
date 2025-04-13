@@ -4276,10 +4276,7 @@ internal sealed partial class PropertyGridView :
         UpdateHelpAttributes(_selectedGridEntry, gridEntry);
 
         // Tell the old selection it's not focused any more.
-        if (_selectedGridEntry is not null)
-        {
-            _selectedGridEntry.HasFocus = false;
-        }
+        _selectedGridEntry?.HasFocus = false;
 
         // Selection not visible.
         if (row < 0 || row >= _visibleRows)
@@ -4386,10 +4383,7 @@ internal sealed partial class PropertyGridView :
         OwnerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
 
         // Tell the new focused item that it now has focus
-        if (_selectedGridEntry is not null)
-        {
-            _selectedGridEntry.HasFocus = FocusInside;
-        }
+        _selectedGridEntry?.HasFocus = FocusInside;
 
         if (!_flags.HasFlag(Flags.IsNewSelection) && !_flags.HasFlag(Flags.InPropertySet))
         {
@@ -5191,10 +5185,7 @@ internal sealed partial class PropertyGridView :
         if (TotalProperties > 0 && TryGetService(out IMenuCommandService? menuCommandService))
         {
             MenuCommand? reset = menuCommandService.FindCommand(PropertyGridCommands.Reset);
-            if (reset is not null)
-            {
-                reset.Enabled = gridEntry is not null && gridEntry.CanResetPropertyValue();
-            }
+            reset?.Enabled = gridEntry is not null && gridEntry.CanResetPropertyValue();
         }
     }
 

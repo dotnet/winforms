@@ -77,10 +77,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         set
         {
             ContainerControl c = Control as ContainerControl;
-            if (c is not null)
-            {
-                c.AutoScaleDimensions = value;
-            }
+            c?.AutoScaleDimensions = value;
         }
     }
 
@@ -199,10 +196,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         set
         {
             _trayAutoArrange = value;
-            if (_componentTray is not null)
-            {
-                _componentTray.AutoArrange = _trayAutoArrange;
-            }
+            _componentTray?.AutoArrange = _trayAutoArrange;
         }
     }
 
@@ -213,10 +207,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         set
         {
             _trayLargeIcon = value;
-            if (_componentTray is not null)
-            {
-                _componentTray.ShowLargeIcons = _trayLargeIcon;
-            }
+            _componentTray?.ShowLargeIcons = _trayLargeIcon;
         }
     }
 
@@ -227,10 +218,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         set
         {
             _trayHeight = value;
-            if (_componentTray is not null)
-            {
-                _componentTray.Height = _trayHeight;
-            }
+            _componentTray?.Height = _trayHeight;
         }
     }
 

@@ -63,10 +63,7 @@ public partial class LinkLabel
                     if ((State & (LinkState.Hover | LinkState.Active)) != 0)
                     {
                         State &= ~(LinkState.Hover | LinkState.Active);
-                        if (Owner is not null)
-                        {
-                            Owner.OverrideCursor = null;
-                        }
+                        Owner?.OverrideCursor = null;
                     }
 
                     Owner?.InvalidateLink(this);

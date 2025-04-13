@@ -728,10 +728,7 @@ public sealed partial class Application
                 ApplicationContext = context;
                 ApplicationContext!.ThreadExit += OnAppThreadExit;
 
-                if (ApplicationContext.MainForm is not null)
-                {
-                    ApplicationContext.MainForm.Visible = true;
-                }
+                ApplicationContext.MainForm?.Visible = true;
             }
 
             Form? oldForm = CurrentForm;

@@ -93,9 +93,6 @@ public partial class MdiChild : Form
 
     private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
     {
-        if (MyParent.MainMenuStrip is not null)
-        {
-            MyParent.MainMenuStrip.RightToLeft = chkRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
-        }
+        MyParent.MainMenuStrip?.RightToLeft = chkRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
     }
 }

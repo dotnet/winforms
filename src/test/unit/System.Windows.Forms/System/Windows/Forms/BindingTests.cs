@@ -479,10 +479,7 @@ public class BindingTests
         };
 
         binding.Format += handler;
-        if (eventArgs is not null)
-        {
-            eventArgs.Value = oldValue;
-        }
+        eventArgs?.Value = oldValue;
 
         binding.OnFormat(eventArgs);
         Assert.Equal(expectedValue, eventArgs?.Value);
@@ -490,10 +487,7 @@ public class BindingTests
 
         // Should not call if the handler is removed.
         binding.Format -= handler;
-        if (eventArgs is not null)
-        {
-            eventArgs.Value = oldValue;
-        }
+        eventArgs?.Value = oldValue;
 
         binding.OnFormat(eventArgs);
         Assert.Equal(expectedValue, eventArgs?.Value);
@@ -524,10 +518,7 @@ public class BindingTests
         };
 
         binding.Parse += handler;
-        if (eventArgs is not null)
-        {
-            eventArgs.Value = oldValue;
-        }
+        eventArgs?.Value = oldValue;
 
         binding.OnParse(eventArgs);
         Assert.Equal(expectedValue, eventArgs?.Value);
@@ -535,10 +526,7 @@ public class BindingTests
 
         // Should not call if the handler is removed.
         binding.Parse -= handler;
-        if (eventArgs is not null)
-        {
-            eventArgs.Value = oldValue;
-        }
+        eventArgs?.Value = oldValue;
 
         binding.OnParse(eventArgs);
         Assert.Equal(expectedValue, eventArgs?.Value);

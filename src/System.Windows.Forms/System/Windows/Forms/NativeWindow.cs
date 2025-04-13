@@ -623,10 +623,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                         if (gcHandle.IsAllocated)
                         {
                             NativeWindow? w = (NativeWindow?)gcHandle.Target;
-                            if (w is not null)
-                            {
-                                w.HWND = HWND.Null;
-                            }
+                            w?.HWND = HWND.Null;
                         }
                     }
                 }
@@ -713,11 +710,8 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                 return;
             }
 
-            if (window.PreviousWindow is not null)
-            {
-                // Connect the prior window directly to the next window (if any)
-                window.PreviousWindow._nextWindow = window._nextWindow;
-            }
+            // Connect the prior window directly to the next window (if any)
+            window.PreviousWindow?._nextWindow = window._nextWindow;
 
             if (window._nextWindow is not null)
             {

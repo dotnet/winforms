@@ -77,10 +77,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
         set
         {
             _webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-            if (_webBrowserEvent is not null)
-            {
-                _webBrowserEvent.AllowNavigation = value;
-            }
+            _webBrowserEvent?.AllowNavigation = value;
         }
     }
 

@@ -494,10 +494,7 @@ internal class ToolStripDesigner : ControlDesigner
             }
             finally
             {
-                if (designer is not null)
-                {
-                    designer.InternalCreate = false;
-                }
+                designer?.InternalCreate = false;
 
                 // Resume the Layout as we are about to add Item to the ToolStrip
                 ToolStrip.ResumeLayout();
@@ -1069,10 +1066,7 @@ internal class ToolStripDesigner : ControlDesigner
                 {
                     if (targetSelection is DesignerToolStripControlHost)
                     {
-                        if (KeyboardHandlingService is not null)
-                        {
-                            KeyboardHandlingService.SelectedDesignerControl = targetSelection;
-                        }
+                        KeyboardHandlingService?.SelectedDesignerControl = targetSelection;
 
                         SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                     }
@@ -1921,16 +1915,10 @@ internal class ToolStripDesigner : ControlDesigner
                     primaryIndex = dragComponents.IndexOf(primaryItem);
                 }
 
-                if (KeyboardHandlingService is not null)
-                {
-                    KeyboardHandlingService.CopyInProgress = true;
-                }
+                KeyboardHandlingService?.CopyInProgress = true;
 
                 components = DesignerUtils.CopyDragObjects(dragComponents, Component.Site);
-                if (KeyboardHandlingService is not null)
-                {
-                    KeyboardHandlingService.CopyInProgress = false;
-                }
+                KeyboardHandlingService?.CopyInProgress = false;
 
                 if (primaryIndex != -1)
                 {
@@ -2368,10 +2356,7 @@ internal class ToolStripDesigner : ControlDesigner
             }
 
             // Always Hide the EditorNode if the ToolStrip Is Not Selected...
-            if (_editorNode is not null)
-            {
-                _editorNode.Visible = false;
-            }
+            _editorNode?.Visible = false;
 
             // Show Hide Items...
             ShowHideToolStripItems(false);

@@ -91,10 +91,7 @@ internal partial class DesignerExtenders
         public static void SetName(IComponent comp, string newName)
         {
             ISite? site = comp.Site;
-            if (site is not null)
-            {
-                site.Name = newName;
-            }
+            site?.Name = newName;
         }
     }
 }

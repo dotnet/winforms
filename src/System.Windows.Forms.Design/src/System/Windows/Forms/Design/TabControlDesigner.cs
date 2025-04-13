@@ -101,10 +101,8 @@ internal class TabControlDesigner : ParentControlDesigner
         RaiseComponentChanged(member, null, null);
 
         TabControl tc = (TabControl)Component;
-        if (tc is not null)
-        { // always Select the First Tab on Initializing the component...
-            tc.SelectedIndex = 0;
-        }
+        // Always select the first tab on initializing the component.
+        tc?.SelectedIndex = 0;
     }
 
     // If the TabControl already contains the control we are dropping then don't allow the drop.
@@ -113,10 +111,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
     private void CheckVerbStatus()
     {
-        if (_removeVerb is not null)
-        {
-            _removeVerb.Enabled = Control.Controls.Count > 0;
-        }
+        _removeVerb?.Enabled = Control.Controls.Count > 0;
     }
 
     protected override IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)

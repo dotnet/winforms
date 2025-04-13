@@ -820,10 +820,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         // If someone has beaten us to the punch by arrowing around, cancel the current menu timer.
         MenuTimer.Cancel(this);
-        if (ParentInternal is not null)
-        {
-            ParentInternal.MenuAutoExpand = true;
-        }
+        ParentInternal?.MenuAutoExpand = true;
 
         base.OnDropDownShow(e);
     }

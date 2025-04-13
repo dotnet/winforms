@@ -284,10 +284,7 @@ public partial class ColumnHeader : Component, ICloneable
                 _name = value;
             }
 
-            if (Site is not null)
-            {
-                Site.Name = value;
-            }
+            Site?.Name = value;
         }
     }
 

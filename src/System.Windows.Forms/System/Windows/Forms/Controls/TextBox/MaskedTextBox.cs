@@ -2356,10 +2356,7 @@ public partial class MaskedTextBox : TextBoxBase
             TypeValidationEventArgs tve = new(_validatingType, isValidInput, parseRetVal, message);
             OnTypeValidationCompleted(tve);
 
-            if (e is not null)
-            {
-                e.Cancel = tve.Cancel;
-            }
+            e?.Cancel = tve.Cancel;
         }
 
         return parseRetVal;
