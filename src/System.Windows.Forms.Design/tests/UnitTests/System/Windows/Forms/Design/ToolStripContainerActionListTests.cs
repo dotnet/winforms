@@ -153,14 +153,10 @@ public sealed class ToolStripContainerActionListTests : IDisposable
     {
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                         .Select(i => i.DisplayName ?? string.Empty)
-                                         .ToList();
+            .Select(i => i.DisplayName ?? string.Empty)
+            .ToList();
 
-        displayNames.Should().ContainSingle(name => name == "Top");
-        displayNames.Should().ContainSingle(name => name == "Bottom");
-        displayNames.Should().ContainSingle(name => name == "Left");
-        displayNames.Should().ContainSingle(name => name == "Right");
-        displayNames.Should().ContainSingle(name => name == "Dock Fill in Form");
+         displayNames.Should().Contain(new[] { SR.ToolStripContainerActionList_Top, SR.ToolStripContainerActionList_Bottom, SR.ToolStripContainerActionList_Left, SR.ToolStripContainerActionList_Right, SR.DesignerShortcutDockInForm });
     }
 
     [Fact]
@@ -171,14 +167,10 @@ public sealed class ToolStripContainerActionListTests : IDisposable
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                .Select(i => i.DisplayName ?? string.Empty)
-                                .ToList();
+            .Select(i => i.DisplayName ?? string.Empty)
+            .ToList();
 
-        displayNames.Should().ContainSingle(name => name == "Top");
-        displayNames.Should().ContainSingle(name => name == "Bottom");
-        displayNames.Should().ContainSingle(name => name == "Left");
-        displayNames.Should().ContainSingle(name => name == "Right");
-        displayNames.Should().NotContain(name => name == "Dock in Form");
+        displayNames.Should().Contain(new[] { SR.ToolStripContainerActionList_Top, SR.ToolStripContainerActionList_Bottom, SR.ToolStripContainerActionList_Left, SR.ToolStripContainerActionList_Right });
     }
 
     [Fact]
@@ -194,13 +186,9 @@ public sealed class ToolStripContainerActionListTests : IDisposable
 
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<string> displayNames = items.Cast<DesignerActionItem>()
-                                .Select(i => i.DisplayName ?? string.Empty)
-                                .ToList();
+            .Select(i => i.DisplayName ?? string.Empty)
+            .ToList();
 
-        displayNames.Should().ContainSingle(name => name == "Top");
-        displayNames.Should().ContainSingle(name => name == "Bottom");
-        displayNames.Should().ContainSingle(name => name == "Left");
-        displayNames.Should().ContainSingle(name => name == "Right");
-        displayNames.Should().ContainSingle(name => name == "Re-parent Controls");
+        displayNames.Should().Contain(new[] { SR.ToolStripContainerActionList_Top, SR.ToolStripContainerActionList_Bottom, SR.ToolStripContainerActionList_Left, SR.ToolStripContainerActionList_Right, SR.DesignerShortcutReparentControls });
     }
 }
