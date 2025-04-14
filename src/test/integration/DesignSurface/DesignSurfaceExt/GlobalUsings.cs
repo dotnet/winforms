@@ -10,3 +10,4 @@ global using System.Windows.Forms.Design;
 global using System.Reflection;
 global using System.Collections;
 global using System.Collections.Concurrent;
+global using System.Collections.Immutable;

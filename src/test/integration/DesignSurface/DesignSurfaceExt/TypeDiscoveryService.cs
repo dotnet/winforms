@@ -11,7 +11,7 @@ internal sealed class TypeDiscoveryService : ITypeDiscoveryService
 {
     public TypeDiscoveryService() { }
 
-    private readonly ConcurrentDictionary<Type, Type[]> _discoveredTypesCache = new();
+    private readonly ConcurrentDictionary<Type, ImmutableArray<Type>> _discoveredTypesCache = new();
 
     public ICollection GetTypes(Type baseType, bool excludeGlobalTypes)
     {
@@ -19,9 +19,9 @@ internal sealed class TypeDiscoveryService : ITypeDiscoveryService
             ? throw new ArgumentNullException(nameof(baseType))
             : (ICollection)_discoveredTypesCache.GetOrAdd(baseType, type => FindTypes(type, AppDomain.CurrentDomain.GetAssemblies()));
 
-        static Type[] FindTypes(Type baseType, Assembly[] assemblies)
+        static ImmutableArray<Type> FindTypes(Type baseType, Assembly[] assemblies)
         {
-            var typesList = new List<Type>();
+            var builder = ImmutableArray.CreateBuilder<Type>();
 
             foreach (var assembly in assemblies)
             {
@@ -39,12 +39,12 @@ internal sealed class TypeDiscoveryService : ITypeDiscoveryService
                 {
                     if (baseType.IsAssignableFrom(type))
                     {
-                        typesList.Add(type);
+                        builder.Add(type);
                     }
                 }
             }
 
-            return typesList.ToArray();
+            return builder.ToImmutable();
         }
     }
 }
