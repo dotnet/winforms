@@ -33,8 +33,8 @@ public class FlowLayoutPanelDesignerTests : IDisposable
 
     public void Dispose()
     {
-        _flowLayoutPanel.Dispose();
         _designer.Dispose();
+        _flowLayoutPanel.Dispose();
     }
 
     [Fact]
@@ -45,10 +45,8 @@ public class FlowLayoutPanelDesignerTests : IDisposable
 
         TypeDescriptor.AddAttributes(childControl, InheritanceAttribute.InheritedReadOnly);
 
-        _designer.Initialize(_flowLayoutPanel);
-
         TypeDescriptor.GetAttributes(childControl)[typeof(InheritanceAttribute)]
-                .Should().BeEquivalentTo(InheritanceAttribute.InheritedReadOnly);
+            .Should().BeEquivalentTo(InheritanceAttribute.InheritedReadOnly);
     }
 
     [Fact]
@@ -57,10 +55,8 @@ public class FlowLayoutPanelDesignerTests : IDisposable
         using Control childControl = new() { Site = new Mock<ISite>().Object };
         _flowLayoutPanel.Controls.Add(childControl);
 
-        _designer.Initialize(_flowLayoutPanel);
-
         TypeDescriptor.GetAttributes(childControl)[typeof(InheritanceAttribute)]
-                .Should().NotBeEquivalentTo(InheritanceAttribute.InheritedReadOnly);
+            .Should().NotBeEquivalentTo(InheritanceAttribute.InheritedReadOnly);
     }
 
     [Fact]
@@ -68,13 +64,13 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     {
         Hashtable properties = new()
         {
-            { "FlowDirection", TypeDescriptor.CreateProperty(typeof(FlowLayoutPanel), "FlowDirection", typeof(FlowDirection)) }
+            { nameof(FlowLayoutPanel.FlowDirection), TypeDescriptor.CreateProperty(typeof(FlowLayoutPanel), nameof(FlowLayoutPanel.FlowDirection), typeof(FlowDirection)) }
         };
 
         _designer.TestAccessor().Dynamic.PreFilterProperties(properties);
 
-        properties["FlowDirection"].Should().NotBeNull();
-        properties["FlowDirection"].Should().BeAssignableTo<PropertyDescriptor>();
+        properties[nameof(FlowLayoutPanel.FlowDirection)].Should().NotBeNull();
+        properties[nameof(FlowLayoutPanel.FlowDirection)].Should().BeAssignableTo<PropertyDescriptor>();
     }
 
     [Fact]
@@ -97,7 +93,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     public void HorizontalFlow_ShouldReturnCorrectValueBasedOnFlowDirection(FlowDirection flowDirection, bool expected)
     {
         _flowLayoutPanel.FlowDirection = flowDirection;
-        _designer.Initialize(_flowLayoutPanel);
 
         bool result = _designer.TestAccessor().Dynamic.HorizontalFlow;
 
@@ -112,7 +107,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     public void RTLTranslateFlowDirection_ShouldTranslateCorrectly(FlowDirection input, FlowDirection expected)
     {
         _flowLayoutPanel.RightToLeft = RightToLeft.Yes;
-        _designer.Initialize(_flowLayoutPanel);
 
         FlowDirection result = _designer.TestAccessor().Dynamic.RTLTranslateFlowDirection(input);
 
@@ -125,7 +119,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     public void IsRtl_ShouldReturnCorrectValueBasedOnRightToLeft(RightToLeft rightToLeft, bool expected)
     {
         _flowLayoutPanel.RightToLeft = rightToLeft;
-        _designer.Initialize(_flowLayoutPanel);
 
         bool result = _designer.TestAccessor().Dynamic.IsRtl;
 
@@ -149,7 +142,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void OnDragEnter_ShouldInitializeDragState()
     {
-        _designer.Initialize(_flowLayoutPanel);
         DragEventArgs dragEventArgs = new(
             new DataObject(),
             0,
@@ -170,8 +162,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void OnDragLeave_ShouldClearDragState()
     {
-        _designer.Initialize(_flowLayoutPanel);
-
         _designer.TestAccessor().Dynamic.OnDragLeave(EventArgs.Empty);
 
         int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
@@ -181,7 +171,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void OnDragOver_ShouldUpdateInsertionIndex()
     {
-        _designer.Initialize(_flowLayoutPanel);
         DragEventArgs dragEventArgs = new(
             new DataObject(),
             0,
@@ -203,7 +192,6 @@ public class FlowLayoutPanelDesignerTests : IDisposable
         using Control control2 = new();
         _flowLayoutPanel.Controls.Add(control1);
         _flowLayoutPanel.Controls.Add(control2);
-        _designer.Initialize(_flowLayoutPanel);
         DragEventArgs dragEventArgs = new(
             new DataObject(),
             0,
