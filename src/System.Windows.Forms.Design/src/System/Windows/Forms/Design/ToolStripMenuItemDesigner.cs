@@ -2345,10 +2345,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             int index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
             Debug.Assert(index != -1, "Invalid Index");
             ToolStripDropDownItem editedItem = (ToolStripDropDownItem)MenuItem.DropDownItems[index + 1];
-            if (editedItem is not null)
-            {
-                editedItem.Visible = true;
-            }
+            editedItem?.Visible = true;
 
             MenuItem.DropDown.Items.Remove(_commitedEditorNode);
             if (_commitedTemplateNode is not null)
@@ -2728,17 +2725,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                             }
 
                             ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)primaryItem.Site.GetService(typeof(ToolStripKeyboardHandlingService));
-                            if (keyboardHandlingService is not null)
-                            {
-                                keyboardHandlingService.CopyInProgress = true;
-                            }
+                            keyboardHandlingService?.CopyInProgress = true;
 
                             components = DesignerUtils.CopyDragObjects(dragComponents, primaryItem.Site);
 
-                            if (keyboardHandlingService is not null)
-                            {
-                                keyboardHandlingService.CopyInProgress = false;
-                            }
+                            keyboardHandlingService?.CopyInProgress = false;
 
                             if (primaryIndex != -1)
                             {

@@ -879,10 +879,7 @@ public abstract partial class UpDownBase : ContainerControl
         }
 
         // Apply locations
-        if (_upDownEdit is not null)
-        {
-            _upDownEdit.Bounds = upDownEditBounds;
-        }
+        _upDownEdit?.Bounds = upDownEditBounds;
 
         if (_upDownButtons is not null)
         {

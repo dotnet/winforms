@@ -909,10 +909,7 @@ public partial class ToolStripDropDown : ToolStrip
     private void CancelAutoExpand()
     {
         ToolStrip? toplevelOwnerToolStrip = GetToplevelOwnerToolStrip();
-        if (toplevelOwnerToolStrip is not null)
-        {
-            toplevelOwnerToolStrip.MenuAutoExpand = false;
-        }
+        toplevelOwnerToolStrip?.MenuAutoExpand = false;
     }
 
     internal override bool CanProcessMnemonic() =>

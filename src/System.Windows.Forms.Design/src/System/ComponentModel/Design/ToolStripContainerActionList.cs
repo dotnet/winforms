@@ -58,10 +58,7 @@ internal class ToolStripContainerActionList : DesignerActionList
 
             if (!(bool)value)
             {
-                if (panel is not null)
-                {
-                    panel.Padding = new Padding(0);
-                }
+                panel?.Padding = new Padding(0);
 
                 if (panelDesigner?.ToolStripPanelSelectorGlyph is not null)
                 {

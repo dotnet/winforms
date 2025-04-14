@@ -617,10 +617,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             Site? site = component.Site as Site;
             RemoveWithoutUnsiting(component);
             RemoveFromContainerPostProcess(component);
-            if (site is not null)
-            {
-                site.Disposed = true;
-            }
+            site?.Disposed = true;
         }
     }
 

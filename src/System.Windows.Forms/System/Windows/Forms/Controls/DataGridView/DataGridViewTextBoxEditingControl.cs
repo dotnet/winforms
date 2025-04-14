@@ -102,10 +102,7 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
             Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
             BackColor = opaqueBackColor;
 
-            if (_dataGridView is not null)
-            {
-                _dataGridView.EditingPanel.BackColor = opaqueBackColor;
-            }
+            _dataGridView?.EditingPanel.BackColor = opaqueBackColor;
         }
         else
         {

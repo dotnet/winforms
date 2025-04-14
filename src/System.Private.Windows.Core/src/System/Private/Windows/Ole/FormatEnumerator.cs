@@ -56,10 +56,7 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
     {
         if (_current >= _formats.Count || celt <= 0)
         {
-            if (pceltFetched is not null)
-            {
-                pceltFetched[0] = 0;
-            }
+            pceltFetched?[0] = 0;
 
             return (int)HRESULT.S_FALSE;
         }
@@ -74,10 +71,7 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
             lindex = -1
         };
 
-        if (pceltFetched is not null)
-        {
-            pceltFetched[0] = 1;
-        }
+        pceltFetched?[0] = 1;
 
         _current++;
         return (int)HRESULT.S_OK;
