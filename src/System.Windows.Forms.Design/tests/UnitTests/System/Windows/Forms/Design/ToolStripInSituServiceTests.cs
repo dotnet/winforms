@@ -172,61 +172,6 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         result.Should().BeTrue();
     }
 
-    // TODO: Uncomment when internalsVisibleTo is working again
-    /*
-    [Fact]
-    public void IgnoreMessages_WhenComponentIsToolStripDropDown_ReturnsTrue()
-    {
-        Mock<ToolStripDropDown> toolStripDropDownMock = new();
-        var toolStripDropDownDesignerMock = new Mock<ToolStripDropDownDesigner>();
-        _mockSelectionService.Setup(ss => ss.PrimarySelection).Returns(toolStripDropDownMock.Object);
-        _mockDesignerHost.Setup(dh => dh.GetDesigner(toolStripDropDownMock.Object)).Returns(toolStripDropDownDesignerMock.Object);
-        object toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
-        toolItemDesignerValue = _mockToolStripItemDesigner.Object;
-
-toolStripDropDownDesignerMock.Setup(tdd => tdd.DesignerMenuItem).Returns(new ToolStripMenuItem());
-        bool result = _inSituService.IgnoreMessages;
-        result.Should().BeTrue();
-    }
-
-    private class SubToolStripDropDownDesigner : ToolStripDropDownDesigner
-    {
-        public SubToolStripDropDownDesigner(ToolStripDropDown dropDown) : base()
-        {
-        }
-
-        public new ToolStripMenuItem DesignerMenuItem => new();
-    }
-
-    [Fact]
-    public void IgnoreMessages_WhenPrimarySelectionIsComponentAndIsDesignerToolStripControlHost_ReturnsTrue()
-    {
-        Mock<ToolStripDropDown> toolStripDropDownMock = new();
-        Mock<ToolStrip> toolStripMock = new();
-        Mock<SubDesignerToolStripControlHost> designerToolStripControlHostMock = new(toolStripDropDownMock.Object);
-        _mockSelectionService.Setup(ss => ss.PrimarySelection).Returns(designerToolStripControlHostMock.Object);
-        _inSituService.TestAccessor().Dynamic._toolDesigner = _mockToolStripDesigner.Object;
-        object toolStripKeyBoardService = _inSituService.TestAccessor().Dynamic.ToolStripKeyBoardService;
-        bool result = _inSituService.IgnoreMessages;
-        result.Should().BeTrue();
-    }
-
-    internal class SubDesignerToolStripControlHost : DesignerToolStripControlHost
-    {
-        private readonly Control _parent;
-
-        public SubDesignerToolStripControlHost(Control c) : base(c)
-        {
-            _parent = c;
-        }
-
-        public new Control GetCurrentParent()
-        {
-            return _parent;
-        }
-    }
-    */
-
     [Fact]
     public void HandleKeyChar_WhenToolItemDesignerIsNotMenuDesigner_CallsShowEditNode()
     {
@@ -236,33 +181,4 @@ toolStripDropDownDesignerMock.Setup(tdd => tdd.DesignerMenuItem).Returns(new Too
 
         _mockToolStripItemDesigner.Verify(d => d.ShowEditNode(false), Times.Once);
     }
-
-
-    // TODO: Ditto
-    /* 
-    [Fact]
-    public void HandleKeyChar_WhenSelectionIsNull_UsesSelectedDesignerControl()
-    {
-        Mock<ToolStripMenuItemDesigner> mockMenuDesigner = new();
-        _inSituService.TestAccessor().Dynamic._toolDesigner = null;
-        _inSituService.TestAccessor().Dynamic._toolItemDesigner = mockMenuDesigner.Object;
-
-        using ToolStripItem toolstrip = new ToolStripMenuItem();
-        using ToolStripDropDown dropDown = new();
-        dropDown.CreateControl();
-        DesignerToolStripControlHost selectedControl = new(dropDown);
-        _mockToolStripDesigner.Object.Items.Add(selectedControl);
-_mockToolStripDesigner.Object.Initialize(selectedControl);
-
-        _inSituService.TestAccessor().Dynamic.ToolStripKeyBoardService.SelectedDesignerControl = selectedControl;
-
-        _mockSelectionService.Setup(s => s.PrimarySelection).Returns(null);
-
-        _inSituService.HandleKeyChar();
-
-        mockMenuDesigner.Verify(d => d.EditTemplateNode(false), Times.Once);
-
-        _inSituService.TestAccessor().Dynamic.ToolStripKeyBoardService.SelectedDesignerControl = null;
-    }
-    */
 }
