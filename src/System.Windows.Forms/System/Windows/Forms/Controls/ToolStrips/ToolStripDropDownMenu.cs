@@ -843,4 +843,42 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         UpScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, minY);
         DownScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, maxY);
     }
+
+    protected override void OnMouseWheel(MouseEventArgs e)
+    {
+        base.OnMouseWheel(e);
+
+        if (e.Delta == 0 || Items.Count == 0)
+        {
+            return;
+        }
+
+        Rectangle firstItemBounds = Items[0].Bounds;
+        Rectangle lastItemBounds = Items[Items.Count - 1].Bounds;
+
+        if (firstItemBounds.Top == DisplayRectangle.Top &&
+            lastItemBounds.Bottom == DisplayRectangle.Bottom)
+        {
+            return;
+        }
+
+        int delta = firstItemBounds.Height * SystemInformation.MouseWheelScrollLines * -Math.Sign(e.Delta);
+
+        if (delta < 0)
+        {
+            delta = Math.Max(delta, firstItemBounds.Top - DisplayRectangle.Top);
+        }
+        else if (delta > 0)
+        {
+            delta = Math.Min(delta, lastItemBounds.Bottom - DisplayRectangle.Bottom);
+        }
+
+        if (delta == 0)
+        {
+            return;
+        }
+
+        ScrollInternal(delta);
+        UpdateScrollButtonLocations();
+    }
 }
