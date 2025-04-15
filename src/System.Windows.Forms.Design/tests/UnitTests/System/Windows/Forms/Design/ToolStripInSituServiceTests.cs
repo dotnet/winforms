@@ -51,30 +51,39 @@ public sealed class ToolStripInSituServiceTests : IDisposable
     [Fact]
     public void Dispose_DisposesToolDesigner()
     {
+        object toolDesignerValue = _inSituService.TestAccessor().Dynamic._toolDesigner;
+        toolDesignerValue.Should().NotBeNull();
+
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        object toolDesignerValue = _inSituService.TestAccessor().Dynamic._toolDesigner;
+        toolDesignerValue = _inSituService.TestAccessor().Dynamic._toolDesigner;
         toolDesignerValue.Should().BeNull();
     }
 
     [Fact]
     public void Dispose_DisposesToolItemDesigner()
     {
+        object toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
+        toolItemDesignerValue.Should().NotBeNull();
+
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        object toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
+        toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
         toolItemDesignerValue.Should().BeNull();
     }
 
     [Fact]
     public void Dispose_UnsubscribesFromComponentChangeService()
     {
+        object componentChangeServiceValue = _inSituService.TestAccessor().Dynamic._componentChangeService;
+        componentChangeServiceValue.Should().NotBeNull();
+
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        object componentChangeServiceValue = _inSituService.TestAccessor().Dynamic._componentChangeService;
+        componentChangeServiceValue = _inSituService.TestAccessor().Dynamic._componentChangeService;
         componentChangeServiceValue.Should().BeNull();
     }
 
@@ -83,25 +92,8 @@ public sealed class ToolStripInSituServiceTests : IDisposable
     {
         object toolStripKeyBoardService = _inSituService.TestAccessor().Dynamic.ToolStripKeyBoardService;
 
-        toolStripKeyBoardService.Should().NotBeNull();
         toolStripKeyBoardService.Should().BeAssignableTo<ToolStripKeyboardHandlingService>();
         toolStripKeyBoardService.Should().Be(_mockToolStripKeyboardHandlingService.Object);
-    }
-
-    [Fact]
-    public void IgnoreMessages_ReturnsFalse_WhenSelectionServiceIsNull()
-    {
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISelectionService))).Returns(null!);
-        bool result = _inSituService.IgnoreMessages;
-        result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IgnoreMessages_ReturnsFalse_WhenDesignerHostIsNull()
-    {
-        _mockServiceProvider.Setup(sp => sp.GetService(typeof(IDesignerHost))).Returns(null!);
-        bool result = _inSituService.IgnoreMessages;
-        result.Should().BeFalse();
     }
 
     [Fact]
@@ -121,7 +113,8 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         _mockDesignerHost.Setup(dh => dh.Container).Returns(mockContainer.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISupportInSituService))).Returns(_inSituService);
 
-        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(new Component()));
+        using Component component = new();
+        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
 
         _mockDesignerHost.Verify(dh => dh.RemoveService(typeof(ISupportInSituService)), Times.Once);
     }
@@ -137,9 +130,26 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         _mockDesignerHost.Setup(dh => dh.Container).Returns(mockContainer.Object);
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISupportInSituService))).Returns(_inSituService);
 
-        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(new Component()));
+        using Component component = new();
+        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
 
         _mockDesignerHost.Verify(dh => dh.RemoveService(typeof(ISupportInSituService)), Times.Never);
+    }
+
+    [Fact]
+    public void IgnoreMessages_ReturnsFalse_WhenSelectionServiceIsNull()
+    {
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISelectionService))).Returns(null!);
+        bool result = _inSituService.IgnoreMessages;
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IgnoreMessages_ReturnsFalse_WhenDesignerHostIsNull()
+    {
+        _mockServiceProvider.Setup(sp => sp.GetService(typeof(IDesignerHost))).Returns(null!);
+        bool result = _inSituService.IgnoreMessages;
+        result.Should().BeFalse();
     }
 
     [Fact]
