@@ -4309,10 +4309,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             }
 
             ToolStripOverflow? overflow = GetOverflow();
-            if (overflow is not null)
-            {
-                overflow.LayoutRequired = true;
-            }
+            overflow?.LayoutRequired = true;
 
             if (OverflowItems.Count == 0)
             {

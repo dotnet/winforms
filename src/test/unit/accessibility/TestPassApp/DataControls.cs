@@ -36,8 +36,7 @@ public partial class DataControls : Form
         dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
         dataGridView1.BeginEdit(false);
         DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
-        if (cbox is not null)
-            cbox.DroppedDown = true;
+        cbox?.DroppedDown = true;
     }
 
     private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)

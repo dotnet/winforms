@@ -152,10 +152,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         get => _parent?.BrowsableAttributes;
         set
         {
-            if (_parent is not null)
-            {
-                _parent.BrowsableAttributes = value;
-            }
+            _parent?.BrowsableAttributes = value;
         }
     }
 
@@ -248,10 +245,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         get => _parent?.DesignerHost;
         set
         {
-            if (_parent is not null)
-            {
-                _parent.DesignerHost = value;
-            }
+            _parent?.DesignerHost = value;
         }
     }
 

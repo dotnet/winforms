@@ -546,10 +546,7 @@ public sealed partial class BehaviorService : IDisposable
             {
                 MenuCommand? menuCommand = menuService.FindCommand(commandID);
 
-                if (menuCommand is not null)
-                {
-                    menuCommand.Enabled = false;
-                }
+                menuCommand?.Enabled = false;
 
                 return menuCommand;
             }

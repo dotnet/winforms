@@ -182,9 +182,9 @@ internal sealed partial class DesignerActionPanel
                             // If it's a toolstrip dropdown let it know that we have a specific close reason.
                             dropDown.Close();
                         }
-                        else if (toplevel is not null)
+                        else
                         {
-                            toplevel.Visible = false;
+                            toplevel?.Visible = false;
                         }
                     }
 

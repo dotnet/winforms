@@ -15,8 +15,6 @@
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
     <NoWarn>$(NoWarn);SYSLIB5005</NoWarn>
-    <!-- Reenable when fixes are made for IDE0031 warnings that VMR treats as errors. -->
-    <NoWarn Condition="'$(DotNetBuild)' == 'true'">$(NoWarn);IDE0031</NoWarn>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>

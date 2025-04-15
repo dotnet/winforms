@@ -30,7 +30,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             serviceProvider.RemoveService(typeof(DesignerOptionService));
         }
 
-        DesignerOptionService opsService2 = new DesignerOptionServiceExt4SnapLines();
+        DesignerOptionService opsService2 = new DesignerOptionService4SnapLinesExtension();
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 
@@ -43,7 +43,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             serviceProvider.RemoveService(typeof(DesignerOptionService));
         }
 
-        DesignerOptionService opsService2 = new DesignerOptionServiceExt4Grid(gridSize);
+        DesignerOptionService opsService2 = new DesignerOptionService4GridExtension(gridSize);
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 
@@ -56,7 +56,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             serviceProvider.RemoveService(typeof(DesignerOptionService));
         }
 
-        DesignerOptionService opsService2 = new DesignerOptionServiceExt4GridWithoutSnapping(gridSize);
+        DesignerOptionService opsService2 = new DesignerOptionService4GridWithoutSnappingExtension(gridSize);
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 
@@ -69,7 +69,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             serviceProvider.RemoveService(typeof(DesignerOptionService));
         }
 
-        DesignerOptionService opsService2 = new DesignerOptionServiceExt4NoGuides();
+        DesignerOptionService opsService2 = new DesignerOptionService4NoGuidesExtension();
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 

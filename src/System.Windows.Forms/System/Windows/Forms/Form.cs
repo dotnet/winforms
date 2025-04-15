@@ -2788,10 +2788,7 @@ public partial class Form : ContainerControl
 
         // Don't believe we ever hit this with non-null, but leaving it intact in
         // case removing it would cause a problem.
-        if (activeMdiChild is not null)
-        {
-            activeMdiChild.Active = false;
-        }
+        activeMdiChild?.Active = false;
 
         activeMdiChild = form;
         ActiveMdiChildInternal = form;
@@ -5063,10 +5060,7 @@ public partial class Form : ContainerControl
         else
         {
             Form? form = ParentForm;
-            if (form is not null)
-            {
-                form.ActiveControl = this;
-            }
+            form?.ActiveControl = this;
         }
     }
 

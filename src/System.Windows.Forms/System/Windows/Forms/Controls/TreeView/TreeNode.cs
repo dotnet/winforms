@@ -1329,10 +1329,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         finally
         {
-            if (tv is not null)
-            {
-                tv._nodesCollectionClear = false;
-            }
+            tv?._nodesCollectionClear = false;
 
             _nodesCleared = true;
         }

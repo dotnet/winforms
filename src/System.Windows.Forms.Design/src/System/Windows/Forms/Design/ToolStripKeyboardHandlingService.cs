@@ -853,10 +853,7 @@ internal class ToolStripKeyboardHandlingService
                                 if (!itemDesigner.IsEditorActive)
                                 {
                                     itemDesigner.EditTemplateNode(true);
-                                    if (ActiveTemplateNode is not null)
-                                    {
-                                        ActiveTemplateNode._ignoreFirstKeyUp = true;
-                                    }
+                                    ActiveTemplateNode?._ignoreFirstKeyUp = true;
                                 }
                             }
                         }
@@ -865,10 +862,7 @@ internal class ToolStripKeyboardHandlingService
                             if (host.GetDesigner(typeHereNode.Owner) is ToolStripDesigner tooldesigner)
                             {
                                 tooldesigner.ShowEditNode(true);
-                                if (ActiveTemplateNode is not null)
-                                {
-                                    ActiveTemplateNode._ignoreFirstKeyUp = true;
-                                }
+                                ActiveTemplateNode?._ignoreFirstKeyUp = true;
                             }
                         }
                     }
@@ -888,10 +882,7 @@ internal class ToolStripKeyboardHandlingService
                         else
                         {
                             tooldesigner.ShowEditNode(false);
-                            if (ActiveTemplateNode is not null)
-                            {
-                                ActiveTemplateNode._ignoreFirstKeyUp = true;
-                            }
+                            ActiveTemplateNode?._ignoreFirstKeyUp = true;
                         }
                     }
                     else if (designer is not null)

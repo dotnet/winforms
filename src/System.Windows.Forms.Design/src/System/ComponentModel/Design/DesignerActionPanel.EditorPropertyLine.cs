@@ -129,10 +129,7 @@ internal sealed partial class DesignerActionPanel
 
         private void CloseDropDown()
         {
-            if (_dropDownHolder is not null)
-            {
-                _dropDownHolder.Visible = false;
-            }
+            _dropDownHolder?.Visible = false;
         }
 
         protected override int GetTextBoxLeftPadding(int textBoxHeight)

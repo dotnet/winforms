@@ -4049,17 +4049,11 @@ public partial class DataGridView : Control, ISupportInitialize
         {
             if (_topLeftHeaderCell != value)
             {
-                if (_topLeftHeaderCell is not null)
-                {
-                    // Detach existing header cell
-                    _topLeftHeaderCell.DataGridView = null;
-                }
+                // Detach existing header cell
+                _topLeftHeaderCell?.DataGridView = null;
 
                 _topLeftHeaderCell = value;
-                if (_topLeftHeaderCell is not null)
-                {
-                    _topLeftHeaderCell.DataGridView = this;
-                }
+                _topLeftHeaderCell?.DataGridView = this;
 
                 if (ColumnHeadersVisible && RowHeadersVisible)
                 {
