@@ -25,6 +25,9 @@ public class WindowsFormsDesignerOptionService : DesignerOptionService
             return;
         }
 
-        CreateOptionCollection(options, "DesignerOptions", CompatibilityOptions);
+        if (CompatibilityOptions is not null)
+        {
+            CreateOptionCollection(options, "DesignerOptions", CompatibilityOptions);
+        }
     }
 }
