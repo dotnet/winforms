@@ -1,12 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// - NameCreationServiceImp - Implementing INameCreationService
-// - The INameCreationService interface is used to supply a name to the control just created
-// - In the CreateName() we use the same naming algorithm used by Visual Studio: just
-// - increment an integer counter until we find a name that isn't already in use.
 namespace DesignSurfaceExt;
 
+/// <summary>
+/// Implements <see cref="INameCreationService"/> to provide names for newly created controls.
+/// </summary>
+/// <remarks>
+/// <para>The <see cref="INameCreationService"/> interface is used to generate names for newly created controls.
+/// The <c>CreateName</c> method follows the same naming algorithm used by Visual Studio:
+/// it increments an integer counter until it finds a unique name that is not already in use.</para>
+/// </remarks>
 internal sealed class NameCreationServiceImp : INameCreationService
 {
     public NameCreationServiceImp() { }
@@ -32,7 +36,12 @@ internal sealed class NameCreationServiceImp : INameCreationService
                     count++;
                     try
                     {
-                        int value = int.Parse(name[type.Name.Length..]);
+                        int value;
+#if NETFRAMEWORK
+                        value = int.Parse(name.Substring(type.Name.Length));
+#elif NETCOREAPP
+                        value = int.Parse(name[type.Name.Length..]);
+#endif
                         if (value < min)
                             min = value;
                         if (value > max)
@@ -72,7 +81,7 @@ internal sealed class NameCreationServiceImp : INameCreationService
             return false;
 
         // - then don't allow a leading underscore
-        if (name.StartsWith('_'))
+        if (name[0] == '_')
             return false;
 
         // - ok, it's a valid name
