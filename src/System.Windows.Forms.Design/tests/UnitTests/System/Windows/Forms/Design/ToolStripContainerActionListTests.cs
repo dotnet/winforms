@@ -156,12 +156,14 @@ public sealed class ToolStripContainerActionListTests : IDisposable
             .Select(i => i.DisplayName ?? string.Empty)
             .ToList();
 
-         displayNames.Should().Contain(new[] {
-             SR.ToolStripContainerActionList_Top, 
-             SR.ToolStripContainerActionList_Bottom, 
-             SR.ToolStripContainerActionList_Left, 
-             SR.ToolStripContainerActionList_Right, 
-             SR.DesignerShortcutDockInForm });
+        displayNames.Should().Contain(new[]
+        {
+             SR.ToolStripContainerActionList_Top,
+             SR.ToolStripContainerActionList_Bottom,
+             SR.ToolStripContainerActionList_Left,
+             SR.ToolStripContainerActionList_Right,
+             SR.DesignerShortcutDockInForm
+        });
     }
 
     [Fact]
@@ -175,11 +177,13 @@ public sealed class ToolStripContainerActionListTests : IDisposable
             .Select(i => i.DisplayName ?? string.Empty)
             .ToList();
 
-        displayNames.Should().Contain(new[] { 
+        displayNames.Should().Contain(new[]
+        {
             SR.ToolStripContainerActionList_Top,
             SR.ToolStripContainerActionList_Bottom,
             SR.ToolStripContainerActionList_Left,
-            SR.ToolStripContainerActionList_Right });
+            SR.ToolStripContainerActionList_Right
+        });
     }
 
     [Fact]
@@ -198,11 +202,13 @@ public sealed class ToolStripContainerActionListTests : IDisposable
             .Select(i => i.DisplayName ?? string.Empty)
             .ToList();
 
-        displayNames.Should().Contain(new[] {
+        displayNames.Should().Contain(new[]
+        {
             SR.ToolStripContainerActionList_Top,
             SR.ToolStripContainerActionList_Bottom,
             SR.ToolStripContainerActionList_Left,
             SR.ToolStripContainerActionList_Right,
-            SR.DesignerShortcutReparentControls });
+            SR.DesignerShortcutReparentControls
+        });
     }
 }
