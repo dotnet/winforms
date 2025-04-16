@@ -2476,11 +2476,11 @@ public class PictureBoxTests
 
     public static IEnumerable<object[]> OnPaint_Image_TestData()
     {
-        foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
+        foreach (PaintEventArgs testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
         {
             foreach (PictureBoxSizeMode sizeMode in Enum.GetValues(typeof(PictureBoxSizeMode)))
             {
-                yield return new object[] { sizeMode, testData[0] };
+                yield return new object[] { sizeMode, testData };
             }
         }
     }
@@ -2521,10 +2521,10 @@ public class PictureBoxTests
 
     public static IEnumerable<object[]> OnPaint_NullOrEmptyImageLocation_TestData()
     {
-        foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
+        foreach (PaintEventArgs testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
         {
-            yield return new object[] { string.Empty, testData[0] };
-            yield return new object[] { null, testData[0] };
+            yield return new object[] { string.Empty, testData };
+            yield return new object[] { null, testData };
         }
     }
 
@@ -2547,12 +2547,12 @@ public class PictureBoxTests
 
     public static IEnumerable<object[]> OnPaint_InvalidImageLocation_TestData()
     {
-        foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
+        foreach (PaintEventArgs testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
         {
             foreach (PictureBoxSizeMode sizeMode in Enum.GetValues(typeof(PictureBoxSizeMode)))
             {
-                yield return new object[] { sizeMode, "NoSuchImage", testData[0] };
-                yield return new object[] { sizeMode, "  ", testData[0] };
+                yield return new object[] { sizeMode, "NoSuchImage", testData };
+                yield return new object[] { sizeMode, "  ", testData };
             }
         }
     }
