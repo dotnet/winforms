@@ -8,7 +8,7 @@ using System.Reflection.Metadata;
 
 namespace System.Windows.Forms.TestUtilities;
 
-internal class TypedDataObject : ManagedDataObject, ITypedDataObject
+internal class TypedDataObject : UntypedDataObject, ITypedDataObject
 {
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>([MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
         throw new NotImplementedException();

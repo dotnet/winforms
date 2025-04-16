@@ -5,7 +5,7 @@
 
 namespace System.Windows.Forms.TestUtilities;
 
-internal class ManagedDataObject : IDataObject
+internal class UntypedDataObject : IDataObject
 {
     public static string s_format = nameof(SerializableTestData);
     protected SerializableTestData? _data;

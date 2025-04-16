@@ -566,13 +566,13 @@ public class ClipboardTests
         PInvokeCore.OleGetClipboard(proxy).Succeeded.Should().BeTrue();
         ((nint)proxy.Value).Should().NotBe((nint)dataScope.Value);
 
-        using var dataUnknown = dataScope.Query<Com.IUnknown>();
-        using var proxyUnknown = proxy.Query<Com.IUnknown>();
+        using var dataUnknown = dataScope.Query<IUnknown>();
+        using var proxyUnknown = proxy.Query<IUnknown>();
         ((nint)proxyUnknown.Value).Should().NotBe((nint)dataUnknown.Value);
 
         // The proxy does not know about this interface, it should give back the real pointer.
-        using var realDataPointer = proxy.Query<Com.IComCallableWrapper>();
-        using var realDataPointerUnknown = realDataPointer.Query<Com.IUnknown>();
+        using var realDataPointer = proxy.Query<IComCallableWrapper>();
+        using var realDataPointerUnknown = realDataPointer.Query<IUnknown>();
         ((nint)proxyUnknown.Value).Should().NotBe((nint)realDataPointerUnknown.Value);
         ((nint)dataUnknown.Value).Should().Be((nint)realDataPointerUnknown.Value);
     }
@@ -1311,52 +1311,19 @@ public class ClipboardTests
 
     [WinFormsTheory]
     [BoolData]
-    public void RoundTrip_ManagedDataObject_SupportsTypedInterface(bool copy) =>
-        CustomDataObject_RoundTrip_SupportsTypedInterface<ManagedDataObject>(copy);
-
-    [WinFormsTheory]
-    [BoolData]
-    public void RoundTrip_Object_SupportsTypedInterface(bool copy)
-    {
-        SerializableTestData data = new();
-        string format = typeof(SerializableTestData).FullName!;
-
-        // Opt-in into access to the binary formatted stream.
-        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
-
-        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
-        // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
-        using BinaryFormatterScope scope = new(enable: copy);
-
-        Clipboard.SetDataObject(data, copy);
-
-        DataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
-
-        received.TryGetData(
-            format,
-            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-            autoConvert: false,
-            out SerializableTestData? result).Should().BeTrue();
-
-        result.Should().BeEquivalentTo(data);
-
-        Clipboard.TryGetData(
-            format,
-            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-            out result).Should().BeTrue();
-
-        result.Should().BeEquivalentTo(data);
-    }
+    public void RoundTrip_UntypedDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<UntypedDataObject>(copy);
 
     private static void CustomDataObject_RoundTrip_SupportsTypedInterface<T>(bool copy) where T : IDataObject, new()
     {
         SerializableTestData data = new();
         T testDataObject = new();
-        string format = ManagedDataObject.s_format;
+        string format = UntypedDataObject.s_format;
         testDataObject.SetData(format, data);
 
         // Opt-in into access the binary formatted stream.
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
+
         // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
         using (BinaryFormatterScope scope = new(enable: copy))
         {
@@ -1371,7 +1338,7 @@ public class ClipboardTests
             using BinaryFormatterScope scope = new(enable: copy);
             ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
 
-            // Need an explict resolver to hit the BinaryFormatter path if the data was copied out.
+            // Need an explicit resolver to hit the BinaryFormatter path if the data was copied out.
             received.TryGetData(format, out SerializableTestData? result).Should().Be(!copy);
             if (copy)
             {
@@ -1384,7 +1351,7 @@ public class ClipboardTests
 
             received.TryGetData(
                 format,
-                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
                 autoConvert: false,
                 out result).Should().BeTrue();
 
@@ -1402,7 +1369,7 @@ public class ClipboardTests
 
             Clipboard.TryGetData(
                 format,
-                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
                 out result).Should().BeTrue();
 
             result.Should().BeEquivalentTo(data);
@@ -1411,10 +1378,45 @@ public class ClipboardTests
         {
             T received = Clipboard.GetDataObject().Should().BeOfType<T>().Subject;
             received.Should().Be(testDataObject);
-            // When we are not flushing the data to the HGLOBAL, we are reading from our DataStore or the managed test data object.
+            // When we are not flushing the data to the HGLOBAL, we are reading from our managed test data object,
+            // which might not support the types interface.
             Action tryGetData = () => received.TryGetData(format, out SerializableTestData? result);
-            tryGetData.Should().Throw<NotSupportedException>();
+            tryGetData.Should().Throw<NotSupportedException>()
+                .WithMessage(expectedWildcardPattern: ResourceStrings.TypedInterfaceNotImplemented);
         }
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void RoundTrip_Object_SupportsTypedInterface(bool copy)
+    {
+        SerializableTestData data = new();
+        string format = typeof(SerializableTestData).FullName!;
+
+        // Opt-in into access to the binary formatted stream.
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
+
+        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
+        using BinaryFormatterScope scope = new(enable: copy);
+
+        Clipboard.SetDataObject(data, copy);
+
+        DataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
+
+        received.TryGetData(
+            format,
+            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            autoConvert: false,
+            out SerializableTestData? result).Should().BeTrue();
+
+        result.Should().BeEquivalentTo(data);
+
+        Clipboard.TryGetData(
+            format,
+            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            out result).Should().BeTrue();
+
+        result.Should().BeEquivalentTo(data);
     }
 
     [WinFormsFact]
