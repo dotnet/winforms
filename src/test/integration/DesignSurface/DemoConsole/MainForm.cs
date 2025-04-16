@@ -365,7 +365,7 @@ public partial class MainForm : Form
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
 
-#if NETCOREAPP
+#if NETCOREAPP // A nested host is required for .NET Framework. See #11866 and https://github.com/dotnet/winforms/issues/13248#issuecomment-2803589449
                         BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
 
                         BindingSource bindingSource = new()
