@@ -15,6 +15,7 @@ public class ListViewDesignerTests : IDisposable
     {
         _listViewDesigner = new();
         _listView = new();
+        _listViewDesigner.Initialize(_listView);
     }
 
     public void Dispose()
@@ -26,8 +27,6 @@ public class ListViewDesignerTests : IDisposable
     [WinFormsFact]
     public void ListViewDesigner_AssociatedComponentsTest()
     {
-        _listViewDesigner.Initialize(_listView);
-
         _listView.Columns.Add("123");
         _listView.Columns.Add("abc");
 
@@ -38,7 +37,6 @@ public class ListViewDesignerTests : IDisposable
     public void ListViewDesigner_GetHitTest_ReturnsFalse_WhenViewIsNotDetails()
     {
         _listView.View = View.LargeIcon;
-        _listViewDesigner.Initialize(_listView);
 
         bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(new Point(10, 10));
 
@@ -50,7 +48,6 @@ public class ListViewDesignerTests : IDisposable
     {
         _listView.View = View.Details;
         _listView.Columns.Add("Column1");
-        _listViewDesigner.Initialize(_listView);
 
         bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(new Point(10, 10));
 
@@ -62,7 +59,6 @@ public class ListViewDesignerTests : IDisposable
     {
         _listView.View = View.Details;
         _listView.Columns.Add("Column1");
-        _listViewDesigner.Initialize(_listView);
 
         Point point = new(10, 5);
         bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(point);
@@ -75,7 +71,6 @@ public class ListViewDesignerTests : IDisposable
     {
         _listView.View = View.Details;
         _listView.Columns.Add("Column1");
-        _listViewDesigner.Initialize(_listView);
 
         Point outsidePoint = new(-10, -10);
         bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(outsidePoint);
@@ -84,33 +79,19 @@ public class ListViewDesignerTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ListViewDesigner_Initialize_SetsOwnerDrawToFalse()
-    {
-        _listView.OwnerDraw = true;
-
-        _listViewDesigner.Initialize(_listView);
-
-        _listView.OwnerDraw.Should().BeFalse();
-    }
+    public void ListViewDesigner_Initialize_SetsOwnerDrawToFalse() =>
+    _listView.OwnerDraw.Should().BeFalse();
 
     [WinFormsFact]
-    public void ListViewDesigner_Initialize_SetsUseCompatibleStateImageBehaviorToFalse()
-    {
-        _listView.UseCompatibleStateImageBehavior = true;
-
-        _listViewDesigner.Initialize(_listView);
-
+    public void ListViewDesigner_Initialize_SetsUseCompatibleStateImageBehaviorToFalse() =>
         _listView.UseCompatibleStateImageBehavior.Should().BeFalse();
-    }
 
     [WinFormsFact]
     public void ListViewDesigner_Initialize_HooksChildHandles_WhenViewIsDetails()
     {
         _listView.View = View.Details;
 
-        _listViewDesigner.Initialize(_listView);
-
-        _listViewDesigner.Should().NotBeNull();
+        _listViewDesigner.Should().BeOfType<ListViewDesigner>();
     }
 
     [WinFormsFact]
@@ -118,27 +99,21 @@ public class ListViewDesignerTests : IDisposable
     {
         _listView.View = View.LargeIcon;
 
-        _listViewDesigner.Initialize(_listView);
-
-        _listViewDesigner.Should().NotBeNull();
+        _listViewDesigner.Should().BeOfType<ListViewDesigner>();
     }
 
     [WinFormsFact]
     public void ListViewDesigner_ActionLists_ReturnsNonNullCollection()
     {
-        _listViewDesigner.Initialize(_listView);
-
         DesignerActionListCollection actionLists = _listViewDesigner.ActionLists;
 
-        actionLists.Should().NotBeNull();
+        actionLists.Should().BeOfType<DesignerActionListCollection>();
         actionLists[0].Should().BeOfType<ListViewActionList>();
     }
 
     [WinFormsFact]
     public void ListViewDesigner_ActionLists_ReturnsSameInstanceOnSubsequentCalls()
     {
-        _listViewDesigner.Initialize(_listView);
-
         DesignerActionListCollection firstCall = _listViewDesigner.ActionLists;
         DesignerActionListCollection secondCall = _listViewDesigner.ActionLists;
 
@@ -148,8 +123,6 @@ public class ListViewDesignerTests : IDisposable
     [WinFormsFact]
     public void ListViewDesigner_ActionLists_ThreadSafeInitialization()
     {
-        _listViewDesigner.Initialize(_listView);
-
         DesignerActionListCollection[] results = new DesignerActionListCollection[2];
         Parallel.Invoke(
             () => results[0] = _listViewDesigner.ActionLists,
