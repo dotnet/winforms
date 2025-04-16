@@ -38,4 +38,11 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\README.md">
+      <Link>..\README.md</Link>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
