@@ -710,6 +710,40 @@ public class BindingSourceTests
         Assert.Equal(2, callCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("Name asc")]
+    [InlineData("Name DESC")]
+    [InlineData("IDate ASC, Name desc")]
+    public void Sort_SetValidValue_UpdatesSortProperty(string sortValue)
+    {
+        SimpleBindingList<Journal> list = new(
+        [
+            new Journal { IDate = DateTime.Now, Name = "A" },
+            new Journal { IDate = DateTime.Now.AddDays(-2), Name = "B" }
+        ]);
+
+        using var source = new BindingSource { DataSource = list };
+        if (sortValue is not null)
+        {
+            source.Sort = sortValue;
+            Assert.Equal(sortValue, source.Sort);
+        }
+        else
+        {
+            Assert.Throws<NotImplementedException>(() => source.Sort = sortValue);
+        }
+    }
+
+    [WinFormsFact]
+    public void Sort_SetNullValue_ResetsSortProperty()
+    {
+        using BindingSource source = [];
+        source.Sort = null;
+        Assert.Null(source.Sort);
+    }
+
     private class FixedSizeList<T> : VirtualList<T>
     {
         public override bool IsFixedSize => true;
@@ -915,4 +949,22 @@ public class BindingSourceTests
             Initialized(this, null);
         }
     }
+}
+
+public class Journal
+{
+    public DateTime IDate { get; set; }
+    public string Name { get; set; }
+}
+
+public class SimpleBindingList<T> : BindingList<T>, IBindingListView
+{
+    public SimpleBindingList(List<T> list) : base(list) { }
+    public string Filter { get; set; }
+    public ListSortDescriptionCollection SortDescriptions => new ListSortDescriptionCollection();
+    public bool SupportsAdvancedSorting => true;
+    public bool SupportsFiltering => true;
+    public void ApplySort(ListSortDescriptionCollection sorts) { }
+    public void RemoveFilter() { }
+    public void RemoveSort() => throw new NotImplementedException();
 }
