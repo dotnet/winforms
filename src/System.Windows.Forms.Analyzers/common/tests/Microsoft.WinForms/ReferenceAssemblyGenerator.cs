@@ -26,10 +26,10 @@ internal static class ReferenceAssemblyGenerator
 
     private static readonly Dictionary<NetVersion, (string tfm, string exactVersion)> s_exactNetVersionLookup = new()
     {
-        [NetVersion.Net6_0] = ("net6.0", "6.0.36"),
-        [NetVersion.Net7_0] = ("net7.0", "7.0.20"),
-        [NetVersion.Net8_0] = ("net8.0", "8.0.13"),
-        [NetVersion.Net9_0] = ("net9.0", "9.0.2")
+        [NetVersion.Net6_0] = ("net6.0", "6.0.0"),
+        [NetVersion.Net7_0] = ("net7.0", "7.0.0"),
+        [NetVersion.Net8_0] = ("net8.0", "8.0.0"),
+        [NetVersion.Net9_0] = ("net9.0", "9.0.0")
     };
 
     /// <summary>
