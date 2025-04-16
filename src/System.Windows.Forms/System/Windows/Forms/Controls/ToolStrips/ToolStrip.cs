@@ -4502,6 +4502,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (_currentlyActiveTooltipItem is not null && !GetToolStripState(STATE_DRAGGING) && Cursor.Current is { } currentCursor)
         {
             Point cursorLocation = Cursor.Position;
+            // This prevents ToolStrip tooltips from appearing directly under the cursor HotSpot. Thus, the user can click the ToolStripItem.
+            cursorLocation.X += currentCursor.HotSpot.X + 1;
             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
 
             cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, s_onePixel)).Location;
