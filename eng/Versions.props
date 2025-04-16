@@ -61,7 +61,8 @@
     <MicrosoftDotNetXUnitExtensionsPackageVersion>10.0.0-beta.25209.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
-  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
+  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via
+  Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
     <XUnitVersion>2.9.2</XUnitVersion>
@@ -114,10 +115,10 @@
     <!-- Pin transitive dependency to avoid vulnerable 8.0.0 version. -->
     <SystemFormatsAsn1PackageVersion>8.0.1</SystemFormatsAsn1PackageVersion>
   </PropertyGroup>
-    
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
     <PackageReference Include="System.Collections.Immutable" VersionOverride="9.0.2" />
-    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0"/>
+    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0" />
   </ItemGroup>
 
 </Project>

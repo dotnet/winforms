@@ -9,10 +9,11 @@
     <Company />
     <Authors>Paolo Foti</Authors>
     <PackageLicenseExpression>CPOL</PackageLicenseExpression>
-    <PackageProjectUrl>https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
+    <PackageProjectUrl>
+      https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
     <SignAssembly>true</SignAssembly>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
