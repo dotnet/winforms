@@ -179,9 +179,6 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "System.Windows.Forms.Analyzers.CodeFixes.VisualBasic", "src\System.Windows.Forms.Analyzers\vb\src\CodeFixes\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj", "{D9F59D9B-1A9E-D12E-9FEA-480FDCF3F6D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzer", "Analyzer", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		AnalyzerTests-Copilot-Instructions.md = AnalyzerTests-Copilot-Instructions.md
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Forms.Analyzers.CSharp.Tests", "src\System.Windows.Forms.Analyzers\cs\tests\System.Windows.Forms.Analyzers.CSharp.Tests.csproj", "{6D3F4979-A444-778A-B6ED-6AA1786DADA0}"
 EndProject
