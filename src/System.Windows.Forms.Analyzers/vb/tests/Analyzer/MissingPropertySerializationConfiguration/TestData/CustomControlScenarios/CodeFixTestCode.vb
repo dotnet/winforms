@@ -1,4 +1,7 @@
-﻿Imports System.ComponentModel
+﻿Option Strict On
+Option Explicit On
+
+Imports System.ComponentModel
 Imports System.Drawing
 
 Namespace VisualBasicControls

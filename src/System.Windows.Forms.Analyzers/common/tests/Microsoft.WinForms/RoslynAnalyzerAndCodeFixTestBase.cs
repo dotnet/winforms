@@ -297,7 +297,15 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
                     OutputKind = OutputKind.WindowsApplication,
                 },
                 ReferenceAssemblies = referenceAssemblies
-            };
+           };
+
+        if (referenceAssemblies.Assemblies.Length > 0)
+        {
+            foreach (var assembly in referenceAssemblies.Assemblies)
+            {
+                context.TestState.AdditionalReferences.Add(assembly);
+            }
+        }
 
         if (globalUsing is not null)
         {
@@ -375,6 +383,14 @@ public abstract partial class RoslynAnalyzerAndCodeFixTestBase<TAnalyzer, TVerif
             ReferenceAssemblies = referenceAssemblies,
             NumberOfFixAllInDocumentIterations = numberOfFixAllIterations
         };
+
+        if (referenceAssemblies.Assemblies.Length > 0)
+        {
+            foreach (var assembly in referenceAssemblies.Assemblies)
+            {
+                context.TestState.AdditionalReferences.Add(assembly);
+            }
+        }
 
         // Include global using directives in both TestState and FixedState.
         if (fileSet.GlobalUsing is not null)
