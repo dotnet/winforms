@@ -6,8 +6,6 @@
     <AssemblyName>System.Windows.Forms.Interop.Tests</AssemblyName>
     <Platforms>x86;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!-- Native tests do not build in VMR - https://github.com/dotnet/winforms/issues/13186 -->
-    <ExcludeFromBuild Condition="'$(DotNetBuild)' == 'true'">true</ExcludeFromBuild>
   </PropertyGroup>
 
   <ItemGroup>
