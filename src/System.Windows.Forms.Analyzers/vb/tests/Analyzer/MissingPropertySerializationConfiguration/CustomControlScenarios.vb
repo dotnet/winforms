@@ -1,7 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms
 Imports System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
 Imports System.Windows.Forms.VisualBasic.CodeFixes.AddDesignerSerializationVisibility
 Imports Microsoft.CodeAnalysis.Testing
@@ -50,27 +49,15 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.Missing
         '''   This method generates an enumerable of object arrays, each containing
         '''   reference assemblies for different .NET target framework versions.
         '''  </para>
-        '''  <para>
-        '''   It uses the <see cref="ReferenceAssemblyGenerator.GetForLatestTFMs"/> method
-        '''   to fetch the reference assemblies for the specified target framework versions.
-        '''   Using this approach guarantees the latest reference assembly versions for each
-        '''   respective TFM.
-        '''  </para>
         ''' </remarks>
         ''' <returns>
         '''  An enumerable of object arrays, each containing a set of reference assemblies.
         ''' </returns>
         Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
-            Dim tfms As NetVersion() = {
-                NetVersion.Net6_0,
-                NetVersion.Net7_0,
-                NetVersion.Net8_0,
-                NetVersion.Net9_0
-            }
-
-            For Each refAssembly In ReferenceAssemblyGenerator.GetForLatestTFMs(tfms)
-                Yield New Object() {refAssembly}
-            Next
+            Yield New Object() {ReferenceAssemblies.Net.Net60Windows}
+            Yield New Object() {ReferenceAssemblies.Net.Net70Windows}
+            Yield New Object() {ReferenceAssemblies.Net.Net80Windows}
+            Yield New Object() {ReferenceAssemblies.Net.Net90Windows}
         End Function
 
         ''' <summary>

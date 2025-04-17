@@ -1,8 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Collections.Immutable
 Imports System.Windows.Forms.Analyzers.Diagnostics
-Imports System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms
 Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.WinForms.Test
@@ -19,13 +19,8 @@ Namespace System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.AvoidPa
         End Sub
 
         Public Shared Iterator Function GetReferenceAssemblies() As IEnumerable(Of Object())
-            Dim tfms As NetVersion() = {
-                NetVersion.Net9_0
-            }
-
-            For Each refAssembly In ReferenceAssemblyGenerator.GetForLatestTFMs(tfms)
-                Yield New Object() {refAssembly}
-            Next
+            Yield New Object() {ReferenceAssemblies.Net.Net90.WithPackages(
+                ImmutableArray.Create(New PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0")))}
         End Function
 
         <Theory>

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
-using System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms;
 using System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.WinForms.Test;
@@ -18,15 +17,10 @@ public class InvokeAsyncOnControl
 
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        NetVersion[] tfms =
-        [
-            NetVersion.Net9_0
-        ];
-
-        foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))
-        {
-            yield return new object[] { refAssembly };
-        }
+        yield return new object[]
+            {
+                ReferenceAssemblies.Net.Net90.WithPackages([new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0")])
+            };
     }
 
     [Theory]
@@ -35,12 +29,6 @@ public class InvokeAsyncOnControl
         ReferenceAssemblies referenceAssemblies,
         TestDataFileSet fileSet)
     {
-        // Make sure, we can resolve the assembly we're testing against:
-        // Always pass `string.empty` for the language here to keep it generic.
-        var referenceAssembly = await referenceAssemblies.ResolveAsync(
-            language: string.Empty,
-            cancellationToken: CancellationToken.None);
-
         string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
 
         var context = GetAnalyzerTestContext(fileSet, referenceAssemblies);

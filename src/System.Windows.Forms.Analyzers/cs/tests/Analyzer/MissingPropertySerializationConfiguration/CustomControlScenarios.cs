@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms.Analyzers.Tests.Microsoft.WinForms;
 using System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConfiguration;
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis.Testing;
@@ -41,39 +40,13 @@ public class CustomControlScenarios
         : base(SourceLanguage.CSharp)
     {
     }
-    
-    /// <summary>
-    ///  Retrieves reference assemblies for the latest target framework versions.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This method generates an enumerable of object arrays, each containing
-    ///   reference assemblies for different .NET target framework versions.
-    ///  </para>
-    ///  <para>
-    ///   It uses the <see cref="ReferenceAssemblyGenerator.GetForLatestTFMs"/> method
-    ///   to fetch the reference assemblies for the specified target framework versions.
-    ///   Using this approach guarantees the latest reference assembly versions for each
-    ///   respective TFM.
-    ///  </para>
-    /// </remarks>
-    /// <returns>
-    ///  An enumerable of object arrays, each containing a set of reference assemblies.
-    /// </returns>
+
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        NetVersion[] tfms =
-        [
-            NetVersion.Net6_0,
-            NetVersion.Net7_0,
-            NetVersion.Net8_0,
-            NetVersion.Net9_0
-        ];
-
-        foreach (ReferenceAssemblies refAssembly in ReferenceAssemblyGenerator.GetForLatestTFMs(tfms))
-        {
-            yield return new object[] { refAssembly };
-        }
+        yield return new object[] { ReferenceAssemblies.Net.Net60Windows };
+        yield return new object[] { ReferenceAssemblies.Net.Net70Windows };
+        yield return new object[] { ReferenceAssemblies.Net.Net80Windows };
+        yield return new object[] { ReferenceAssemblies.Net.Net90Windows };
     }
 
     /// <summary>
