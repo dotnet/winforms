@@ -345,6 +345,7 @@ public partial class DataGridView : Control, ISupportInitialize
     private int _inBulkPaintCount;
     private int _inBulkLayoutCount;
     private int _inPerformLayoutCount;
+    private bool _isReleasingDataSource;
 
     private int _keyboardResizeStep;
     private Rectangle _resizeClipRectangle;
@@ -1921,7 +1922,17 @@ public partial class DataGridView : Control, ISupportInitialize
                     newDataSource.Disposed += OnDataSourceDisposed;
                 }
 
-                CurrentCell = null;
+                _isReleasingDataSource = true;
+
+                try
+                {
+                    CurrentCell = null;
+                }
+                finally
+                {
+                    _isReleasingDataSource = false;
+                }
+
                 if (DataConnection is null)
                 {
                     DataConnection = new DataGridViewDataConnection(this);
