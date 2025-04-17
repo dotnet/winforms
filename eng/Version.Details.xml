@@ -98,7 +98,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Diagnostics.EventLog" Version="8.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>9e47be69725f0fae92a957c273337c22a70f4cbd</Sha>
+      <Sha>50c4cb9fc31c47f03eac865d7bc518af173b74b7</Sha>
     </Dependency>
     <Dependency Name="System.Diagnostics.PerformanceCounter" Version="8.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
@@ -110,7 +110,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.DirectoryServices.Protocols" Version="8.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>9e47be69725f0fae92a957c273337c22a70f4cbd</Sha>
+      <Sha>50c4cb9fc31c47f03eac865d7bc518af173b74b7</Sha>
     </Dependency>
     <Dependency Name="System.DirectoryServices" Version="8.0.0">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
