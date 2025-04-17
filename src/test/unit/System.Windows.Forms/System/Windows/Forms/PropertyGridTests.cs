@@ -4124,6 +4124,63 @@ public partial class PropertyGridTests
         eventArgs.NewSelection.Should().Be(gridItem);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/13071
+    [WinFormsFact]
+    public void PropertyGrid_FullRefreshShouldTriggerTypeConverterGetProperties()
+    {
+        using PropertyGrid propertyGrid = new()
+        {
+            SelectedObject = new SelectedObject()
+        };
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView;
+
+        MyTypeConverter.GetPropertiesInvokeCount = 0;
+        propertyGridView.Refresh(true);
+
+        int getPropertiesInvokeCount2 = MyTypeConverter.GetPropertiesInvokeCount;
+        getPropertiesInvokeCount2.Should().Be(1);
+    }
+
+    #region classes used for PropertyGrid_FullRefreshShouldTriggerTypeConverterGetProperties
+    [TypeConverter(typeof(MyTypeConverter))]
+    private class SelectedObject
+    {
+        private string _a;
+        private string _b;
+
+        [RefreshProperties(RefreshProperties.All)]
+        public string A
+        {
+            get { return _a; }
+            set { _a = value; }
+        }
+
+        public string B
+        {
+            get { return _b; }
+            set { _b = value; }
+        }
+    }
+
+    private class MyTypeConverter : TypeConverter
+    {
+        public static int GetPropertiesInvokeCount { get; set; }
+        public MyTypeConverter()
+            : base() { }
+
+        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        {
+            GetPropertiesInvokeCount++;
+            return base.GetProperties(context, value, attributes) ?? TypeDescriptor.GetProperties(value, attributes);
+        }
+    }
+    #endregion
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }
