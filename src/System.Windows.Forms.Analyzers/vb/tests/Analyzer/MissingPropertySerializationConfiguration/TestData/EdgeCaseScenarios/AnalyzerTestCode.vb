@@ -1,11 +1,10 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
+Option Strict On
+Option Explicit On
 
 Imports System
 Imports System.ComponentModel
-
-Option Strict On
-Option Explicit On
 
 Namespace Test
 

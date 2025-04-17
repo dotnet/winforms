@@ -65,7 +65,7 @@ Namespace Global.System.Windows.Forms.Analyzers.VisualBasic.Tests.AnalyzerTests.
 
             ' Only expect diagnostic on the one property that should be flagged
             context.ExpectedDiagnostics.Add(
-                DiagnosticResult.CompilerError(diagnosticId).WithSpan(110, 25, 110, 40))
+                DiagnosticResult.CompilerError(diagnosticId).WithSpan(112, 25, 112, 40))
 
             Await context.RunAsync()
         End Function
