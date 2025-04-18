@@ -2566,44 +2566,59 @@ internal sealed partial class PropertyGridView :
         InvokeLostFocus(this, EventArgs.Empty);
     }
 
+    internal bool EditMouseDown
+    {
+        get => _flags.HasFlag(Flags.EditMouseDown);
+        private set => SetFlag(Flags.EditMouseDown, value);
+    }
+
     private void OnEditMouseDown(object? sender, MouseEventArgs e)
     {
-        if (!FocusInside)
+        try
         {
-            SelectGridEntry(_selectedGridEntry, pageIn: false);
-        }
+            EditMouseDown = true;
 
-        if (e.Clicks % 2 == 0)
-        {
-            DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-            EditTextBox.SelectAll();
-        }
+            if (!FocusInside)
+            {
+                SelectGridEntry(_selectedGridEntry, pageIn: false);
+            }
 
-        if (_rowSelectTime == 0)
-        {
-            return;
-        }
-
-        // Check if the click happened within the double click time since the row was selected.
-        // This allows the edits to be selected with two clicks instead of 3 (select row, double click).
-        long timeStamp = DateTime.Now.Ticks;
-        int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milliseconds
-
-        if (delta < SystemInformation.DoubleClickTime)
-        {
-            Point screenPoint = EditTextBox.PointToScreen(e.Location);
-
-            if (Math.Abs(screenPoint.X - _rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
-                Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
+            if (e.Clicks % 2 == 0)
             {
                 DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                PInvokeCore.SendMessage(EditTextBox, PInvokeCore.WM_LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
                 EditTextBox.SelectAll();
             }
 
-            _rowSelectPos = Point.Empty;
+            if (_rowSelectTime == 0)
+            {
+                return;
+            }
 
-            _rowSelectTime = 0;
+            // Check if the click happened within the double click time since the row was selected.
+            // This allows the edits to be selected with two clicks instead of 3 (select row, double click).
+            long timeStamp = DateTime.Now.Ticks;
+            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milliseconds
+
+            if (delta < SystemInformation.DoubleClickTime)
+            {
+                Point screenPoint = EditTextBox.PointToScreen(e.Location);
+
+                if (Math.Abs(screenPoint.X - _rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
+                    Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
+                {
+                    DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
+                    PInvokeCore.SendMessage(EditTextBox, PInvokeCore.WM_LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
+                    EditTextBox.SelectAll();
+                }
+
+                _rowSelectPos = Point.Empty;
+
+                _rowSelectTime = 0;
+            }
+        }
+        finally
+        {
+            EditMouseDown = false;
         }
     }
 
@@ -3992,7 +4007,7 @@ internal sealed partial class PropertyGridView :
             startRow = 0;
         }
 
-        if (OwnerGrid.HavePropertyEntriesChanged())
+        if (fullRefresh || OwnerGrid.HavePropertyEntriesChanged())
         {
             if (HasEntries && !InPropertySet && !CommitEditTextBox())
             {

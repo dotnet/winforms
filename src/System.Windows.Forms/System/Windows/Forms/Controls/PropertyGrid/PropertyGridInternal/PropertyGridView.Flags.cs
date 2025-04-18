@@ -22,6 +22,7 @@ internal sealed partial class PropertyGridView
         /// </summary>
         ButtonLaunchedEditor    = 0x0100,
         NoDefault               = 0x0200,
-        ResizableDropDown       = 0x0400
+        ResizableDropDown       = 0x0400,
+        EditMouseDown           = 0x0800
     }
 }
