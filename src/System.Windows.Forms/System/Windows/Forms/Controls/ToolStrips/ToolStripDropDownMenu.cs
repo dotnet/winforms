@@ -848,19 +848,13 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         base.OnMouseWheel(e);
 
-        if (e.Delta == 0 || Items.Count == 0)
+        if (e.Delta == 0 || Items.Count == 0 || !RequiresScrollButtons)
         {
             return;
         }
 
         Rectangle firstItemBounds = Items[0].Bounds;
         Rectangle lastItemBounds = Items[Items.Count - 1].Bounds;
-
-        if (firstItemBounds.Top == DisplayRectangle.Top &&
-            lastItemBounds.Bottom == DisplayRectangle.Bottom)
-        {
-            return;
-        }
 
         int delta = firstItemBounds.Height * SystemInformation.MouseWheelScrollLines * -Math.Sign(e.Delta);
 
