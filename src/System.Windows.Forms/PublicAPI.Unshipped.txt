@@ -1,1 +1,2 @@
+override System.Windows.Forms.ToolStripDropDownMenu.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 static System.Windows.Forms.Clipboard.TryGetData<T>(out T data) -> bool
