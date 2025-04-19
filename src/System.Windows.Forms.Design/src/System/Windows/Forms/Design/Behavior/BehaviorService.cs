@@ -799,7 +799,7 @@ public sealed partial class BehaviorService : IDisposable
 
             if (host.GetDesigner(comp) is ControlDesigner designer)
             {
-                foreach (SnapLine line in designer.SnapLinesInternal)
+                foreach (SnapLine line in designer.SnapLines)
                 {
                     snapLineInfo.Append($"{line}\tAssociated Control = {designer.Control.Name}:::");
                 }
