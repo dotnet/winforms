@@ -193,7 +193,7 @@ internal sealed partial class DragAssistanceManager
     /// </summary>
     private void AddSnapLines(ControlDesigner controlDesigner, List<SnapLine> horizontalList, List<SnapLine> verticalList, bool isTarget, bool validTarget)
     {
-        IList<SnapLine> snapLines = controlDesigner.SnapLinesInternal;
+        IList snapLines = controlDesigner.SnapLines;
         // Used for padding snaplines
         Rectangle controlRect = controlDesigner.Control.ClientRectangle;
         // Used for all others
