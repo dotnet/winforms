@@ -27018,7 +27018,7 @@ public partial class DataGridView
                 if (oldCurrentCellX >= 0
                     && !_dataGridViewState1[State1_TemporarilyResetCurrentCell]
                     && !_dataGridViewOper[OperationInDispose]
-                    && !_isReleasingDataSource)
+                    && !_dataGridViewOper[OperationInReleasingDataSource])
                 {
                     DataGridViewCell currentCell = CurrentCellInternal;
                     if (!EndEdit(
