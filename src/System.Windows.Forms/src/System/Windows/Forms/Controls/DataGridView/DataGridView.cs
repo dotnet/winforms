@@ -346,7 +346,6 @@ public partial class DataGridView : Control, ISupportInitialize
     private int _inBulkPaintCount;
     private int _inBulkLayoutCount;
     private int _inPerformLayoutCount;
-    private bool _isReleasingDataSource;
 
     private int _keyboardResizeStep;
     private Rectangle _resizeClipRectangle;
