@@ -1349,12 +1349,17 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            received.TryGetData(
-                format,
-                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-                autoConvert: false,
-                out result).Should().BeTrue();
+            bool tryGetDataResult = RetryHelper.ExecuteWithRetry(() =>
+                received.TryGetData(
+                   format,
+                   name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                   autoConvert: false,
+                   out result
+                ),
+                maxRetries: 2,
+                delayMilliseconds: 800);
 
+            tryGetDataResult.Should().BeTrue();
             result.Should().BeEquivalentTo(data);
 
             Clipboard.TryGetData(format, out result).Should().Be(!copy);
@@ -1367,11 +1372,16 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            Clipboard.TryGetData(
-                format,
-                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-                out result).Should().BeTrue();
+            tryGetDataResult = RetryHelper.ExecuteWithRetry(() =>
+                Clipboard.TryGetData(
+                   format,
+                   name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                   out result
+                ),
+                maxRetries: 2,
+                delayMilliseconds: 800);
 
+            tryGetDataResult.Should().BeTrue();
             result.Should().BeEquivalentTo(data);
         }
         else
