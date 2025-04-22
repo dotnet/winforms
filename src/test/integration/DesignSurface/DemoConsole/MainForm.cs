@@ -383,25 +383,6 @@ public partial class MainForm : Form
 
                         panel.Controls.Add(bindingNavigator);
 #endif
-
-#if NETFRAMEWORK
-                        IDesignerHost designerHost = surface.GetIDesignerHost();
-                        DesignerActionService designerActionService = (DesignerActionService)designerHost.GetService(typeof(DesignerActionService));
-
-                        DesignerActionListCollection dataGridViewActionLists = designerActionService.GetComponentActions(toolStripContainer);
-
-                        foreach (DesignerActionList actionList in dataGridViewActionLists)
-                        {
-                            actionList.AutoShow = false;
-                        }
-
-                        DesignerActionListCollection toolStripContainerActionLists = designerActionService.GetComponentActions(toolStripContainer);
-
-                        foreach (DesignerActionList actionList in toolStripContainerActionLists)
-                        {
-                            actionList.AutoShow = false;
-                        }
-#endif
                     }
 
                     break;
