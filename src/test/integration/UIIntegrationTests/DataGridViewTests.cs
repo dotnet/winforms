@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using Xunit.Abstractions;
@@ -39,6 +40,84 @@ public class DataGridViewTests : ControlTestBase
             dataTable.AcceptChanges();
         });
     }
+
+    [WinFormsFact]
+    private async Task DataGridView_withBindingSource()
+    {
+        await RunSingleControlTestAsync(
+            testDriverAsync: async (form1, button) =>
+            {
+                form1.Text = "Form1";
+
+                await OpenFormWithDataGridViewAsync();
+                Assert.Equal(form1, Form.ActiveForm);
+
+                form1.Close();
+            },
+            createControl: () =>
+            {
+                Button control = new();
+                return control;
+            },
+            createForm: () =>
+            {
+                return new()
+                {
+                    Size = new(500, 300),
+                };
+            });
+    }
+
+    public async Task OpenFormWithDataGridViewAsync()
+    {
+        await RunTestAsync(async (form2, dataGridView) =>
+        {
+            form2.Text = "Form2";
+            DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn = new()
+            {
+                HeaderText = "Name",
+                DataPropertyName = "Name"
+            };
+            DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn = new()
+            {
+                HeaderText = "Age",
+                DataPropertyName = "Age"
+            };
+
+            dataGridView.Columns.AddRange([nameDataGridViewTextBoxColumn, ageDataGridViewTextBoxColumn]);
+
+            DataRecordList dataRecordList = new DataRecordList
+            {
+                 new DataRecord { Name = "Alice", Age = 30 }
+            };
+
+            IContainer components = new Container();
+            using BindingSource bindingSource1 = new(components)
+            {
+                DataSource = dataRecordList
+            };
+            dataGridView.DataSource = bindingSource1;
+            Rectangle cellRectangle = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false);
+            Point cellCenter = GetCenter(cellRectangle);
+            Point targetPoint1 = ToVirtualPoint(dataGridView.PointToScreen(cellCenter));
+
+            await InputSimulator.SendAsync(
+                form2,
+                inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint1.X, targetPoint1.Y));
+
+            SendKeys.SendWait("{F2}");
+            SendKeys.SendWait("%{F4}");
+            // form2.Close();
+        });
+    }
+
+    public class DataRecord
+    {
+        public string Name { get; set; } = "";
+        public int Age { get; set; }
+    }
+
+    public class DataRecordList : BindingList<DataRecord> { };
 
     [WinFormsTheory]
     [InlineData("short value", false)]
