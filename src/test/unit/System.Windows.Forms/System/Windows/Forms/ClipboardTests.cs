@@ -1349,7 +1349,7 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            bool tryGetDataResult = RetryHelper.ExecuteWithRetry(() =>
+            bool tryGetDataResult = ExecuteWithRetry(() =>
                 received.TryGetData(
                    format,
                    name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
@@ -1372,7 +1372,7 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            tryGetDataResult = RetryHelper.ExecuteWithRetry(() =>
+            tryGetDataResult = ExecuteWithRetry(() =>
                 Clipboard.TryGetData(
                    format,
                    name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
@@ -1483,5 +1483,22 @@ public class ClipboardTests
     {
         public string Name { get; set; } = "DefaultName";
         public int Age { get; set; }
+    }
+
+    private static bool ExecuteWithRetry(Func<bool> action, int maxRetries, int delayMilliseconds)
+    {
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
+        {
+            if (action())
+            {
+                return true;
+            }
+            else
+            {
+                Thread.Sleep(delayMilliseconds);
+            }
+        }
+
+        return false;
     }
 }
