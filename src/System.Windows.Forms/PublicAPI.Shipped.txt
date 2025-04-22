@@ -2734,6 +2734,7 @@ static System.Windows.Forms.Clipboard.SetFileDropList(System.Collections.Special
 static System.Windows.Forms.Clipboard.SetImage(System.Drawing.Image! image) -> void
 static System.Windows.Forms.Clipboard.SetText(string! text) -> void
 static System.Windows.Forms.Clipboard.SetText(string! text, System.Windows.Forms.TextDataFormat format) -> void
+static System.Windows.Forms.Clipboard.TryGetData<T>(out T data) -> bool
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, out T data) -> bool
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type?>! resolver, out T data) -> bool
 static System.Windows.Forms.ComboBoxRenderer.DrawDropDownButton(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
