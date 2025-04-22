@@ -24,11 +24,9 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
     {
-        // We analyze only properties.
-        IPropertySymbol? propertySymbol = (IPropertySymbol)context.Symbol;
-
-        // We never flag a property named Site of type of ISite
-        if (propertySymbol is null)
+        // We only care about properties, and don't care about static properties.
+        if (context.Symbol is not IPropertySymbol propertySymbol
+            || propertySymbol.IsStatic)
         {
             return;
         }
@@ -58,12 +56,6 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
-        // Skip static properties since they are not serialized by the designer
-        if (propertySymbol.IsStatic)
-        {
-            return;
-        }
-
         // Is the property read/write and at least internal and doesn't have a private setter?
         if (propertySymbol.SetMethod is not IMethodSymbol propertySetter
             || propertySetter.DeclaredAccessibility == Accessibility.Private
@@ -73,7 +65,6 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
         }
 
         // Skip overridden properties since the base property should already have the appropriate serialization configuration
-        // TODO: Does just this cover all the cases, particularly for legacy code where the dev doesn't own the source?
         if (propertySymbol.IsOverride)
         {
             return;
