@@ -24,22 +24,48 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
     {
-        // We analyze only properties.
-        var propertySymbol = (IPropertySymbol)context.Symbol;
-
-        // Does the property belong to a class which derives from Component?
-        if (propertySymbol.ContainingType is null
-            || !propertySymbol
-                .ContainingType
-                .AllInterfaces
-                .Any(i => i.Name == nameof(IComponent)))
+        // We never flag a property named Site of type of ISite
+        if (context.Symbol is not IPropertySymbol propertySymbol
+            || propertySymbol.IsStatic)
         {
             return;
         }
 
-        // Is the property read/write and at least internal?
-        if (propertySymbol.SetMethod is null
+        // A property of System.ComponentModel.ISite we never flag.
+        if (propertySymbol.Type.Name == nameof(ISite)
+            && propertySymbol.Type.ContainingNamespace.ToString() == "System.ComponentModel")
+        {
+            return;
+        }
+
+        // If the property is part of any interface named IComponent, we're out.
+        if (propertySymbol.ContainingType.Name == nameof(IComponent))
+        {
+            return;
+        }
+
+        // Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
+        if (propertySymbol.ContainingType is null
+            || !propertySymbol
+                .ContainingType
+                .AllInterfaces
+                .Any(i => i.Name == nameof(IComponent) &&
+                          i.ContainingNamespace is not null &&
+                          i.ContainingNamespace.ToString() == "System.ComponentModel"))
+        {
+            return;
+        }
+
+        // Is the property read/write and at least internal and doesn't have a private setter?
+        if (propertySymbol.SetMethod is not IMethodSymbol propertySetter
+            || propertySetter.DeclaredAccessibility == Accessibility.Private
             || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
+        {
+            return;
+        }
+
+        // Skip overridden properties since the base property should already have the appropriate serialization configuration
+        if (propertySymbol.IsOverride)
         {
             return;
         }
