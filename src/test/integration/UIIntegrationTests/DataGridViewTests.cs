@@ -97,17 +97,10 @@ public class DataGridViewTests : ControlTestBase
                 DataSource = dataRecordList
             };
             dataGridView.DataSource = bindingSource1;
-            Rectangle cellRectangle = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false);
-            Point cellCenter = GetCenter(cellRectangle);
-            Point targetPoint1 = ToVirtualPoint(dataGridView.PointToScreen(cellCenter));
-
-            await InputSimulator.SendAsync(
-                form2,
-                inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint1.X, targetPoint1.Y));
+            await MoveMouseToControlAsync(dataGridView);
 
             SendKeys.SendWait("{F2}");
             SendKeys.SendWait("%{F4}");
-            // form2.Close();
         });
     }
 
