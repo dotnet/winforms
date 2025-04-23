@@ -13,6 +13,10 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+#if !NETCOREAPP
+        Text = "Tiny Form Designer - .NET Framework";
+#endif
     }
 
     private void InitFormDesigner()

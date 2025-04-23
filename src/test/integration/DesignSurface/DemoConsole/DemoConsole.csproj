@@ -24,8 +24,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator"
       LastGenOutput="Resources.Designer.cs" />
-    <Compile Update="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx"
-      DesignTime="True" />
+    <Compile Update="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx" DesignTime="True" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,13 +35,6 @@
     <None Update="painter.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\README.md">
-      <Link>..\README.md</Link>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

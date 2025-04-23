@@ -19,20 +19,12 @@
     avoid over-building. -->
     <TargetFramework />
 
-    <DefaultItemExcludes Condition="'$(TargetFramework)' != 'net481'">
-      $(DefaultItemExcludes);**/Framework/*</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'net481'">
-    <!-- Include the Framework specific items as none so we can see them easily in the Solution
-    Explorer. -->
-    <None Include="**/Framework/*" />
-  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(NetCurrent)-windows'">
     <PackageReference Include="System.Runtime.Serialization.Formatters" />

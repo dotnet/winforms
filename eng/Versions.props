@@ -61,8 +61,7 @@
     <MicrosoftDotNetXUnitExtensionsPackageVersion>10.0.0-beta.25209.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
-  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via
-  Maestro -->
+  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
     <XUnitVersion>2.9.2</XUnitVersion>

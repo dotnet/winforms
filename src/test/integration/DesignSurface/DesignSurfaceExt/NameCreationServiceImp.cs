@@ -7,14 +7,14 @@ namespace DesignSurfaceExt;
 /// Implements <see cref="INameCreationService"/> to provide names for newly created controls.
 /// </summary>
 /// <remarks>
-/// <para>The <see cref="INameCreationService"/> interface is used to generate names for newly created controls.
-/// The <c>CreateName</c> method follows the same naming algorithm used by Visual Studio:
-/// it increments an integer counter until it finds a unique name that is not already in use.</para>
+///  <para>
+///   The <see cref="INameCreationService"/> interface is used to generate names for newly created controls.
+///   The <c>CreateName</c> method follows the same naming algorithm used by Visual Studio:
+///   it increments an integer counter until it finds a unique name that is not already in use.
+///  </para>
 /// </remarks>
 internal sealed class NameCreationServiceImp : INameCreationService
 {
-    public NameCreationServiceImp() { }
-
     public string CreateName(IContainer container, Type type)
     {
         if (container is null)
@@ -77,7 +77,7 @@ internal sealed class NameCreationServiceImp : INameCreationService
             return false;
 
         // - then the first character must be a letter
-        if (!(char.IsLetter(name, 0)))
+        if (!char.IsLetter(name, 0))
             return false;
 
         // - then don't allow a leading underscore
@@ -91,7 +91,7 @@ internal sealed class NameCreationServiceImp : INameCreationService
     public void ValidateName(string name)
     {
         // -  Use our existing method to check, if it's invalid throw an exception
-        if (!(IsValidName(name)))
+        if (!IsValidName(name))
             throw new ArgumentException($"Invalid name: {name}");
     }
 }
