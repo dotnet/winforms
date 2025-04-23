@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests;
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
 // Try up to 3 times before failing.
-[UISettings(MaxAttempts = 3)]
+[UISettings(MaxAttempts = 4)]
 public class ClipboardTests
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
@@ -1349,17 +1349,12 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            bool tryGetDataResult = ExecuteWithRetry(() =>
-                received.TryGetData(
-                   format,
-                   name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-                   autoConvert: false,
-                   out result
-                ),
-                maxRetries: 2,
-                delayMilliseconds: 800);
+            received.TryGetData(
+                format,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                autoConvert: false,
+                out result).Should().BeTrue();
 
-            tryGetDataResult.Should().BeTrue();
             result.Should().BeEquivalentTo(data);
 
             Clipboard.TryGetData(format, out result).Should().Be(!copy);
@@ -1372,16 +1367,11 @@ public class ClipboardTests
                 result.Should().BeEquivalentTo(data);
             }
 
-            tryGetDataResult = ExecuteWithRetry(() =>
-                Clipboard.TryGetData(
-                   format,
-                   name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-                   out result
-                ),
-                maxRetries: 2,
-                delayMilliseconds: 800);
+            Clipboard.TryGetData(
+                format,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                out result).Should().BeTrue();
 
-            tryGetDataResult.Should().BeTrue();
             result.Should().BeEquivalentTo(data);
         }
         else
@@ -1483,22 +1473,5 @@ public class ClipboardTests
     {
         public string Name { get; set; } = "DefaultName";
         public int Age { get; set; }
-    }
-
-    private static bool ExecuteWithRetry(Func<bool> action, int maxRetries, int delayMilliseconds)
-    {
-        for (int attempt = 1; attempt <= maxRetries; attempt++)
-        {
-            if (action())
-            {
-                return true;
-            }
-            else
-            {
-                Thread.Sleep(delayMilliseconds);
-            }
-        }
-
-        return false;
     }
 }
