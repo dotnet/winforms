@@ -573,7 +573,15 @@ public abstract partial class ToolStripItem :
     ///  Determines whether or not the item can be selected.
     /// </summary>
     [Browsable(false)]
-    public virtual bool CanSelect => Enabled;
+    public virtual bool CanSelect
+    {
+        get
+        {
+            File.AppendAllText($"E:/myLog.txt", $"{DateTime.Now}  {new StackTrace(true)} \n");
+
+            return true;
+        }
+    }
 
     /// <remarks>
     ///  <para>Usually the same as can select, but things like the control box in an MDI window are exceptions</para>
@@ -3158,7 +3166,7 @@ public abstract partial class ToolStripItem :
             forceRaiseAccessibilityFocusChanged = true;
         }
 
-        if (forceRaiseAccessibilityFocusChanged)
+        if (forceRaiseAccessibilityFocusChanged && Enabled)
         {
             bool accessibilityIsOn = IsAccessibilityObjectCreated ||
                 // When ToolStripItem is selected automatically for the first time
