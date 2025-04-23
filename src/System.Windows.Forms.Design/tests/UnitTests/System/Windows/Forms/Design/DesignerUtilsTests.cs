@@ -6,27 +6,41 @@ using System.Drawing.Imaging;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class DesignerUtilsTests
+public class DesignerUtilsTests :IDisposable
 {
-    public static Image BoxImage => DesignerUtils.BoxImage;
-    public static Brush HoverBrush => DesignerUtils.HoverBrush;
+    private readonly Bitmap _bitmap;
+    private readonly Graphics _graphics;
+    private readonly Rectangle _bounds;
 
-    [Fact]
-    public void BoxImage_ShouldReturnNonNullImage() =>
-        BoxImage.Should().NotBeNull();
-
-    [Fact]
-    public void BoxImage_ShouldHaveExpectedDimensions()
+    public DesignerUtilsTests()
     {
-        BoxImage.Width.Should().Be(DesignerUtils.s_boxImageSize);
-        BoxImage.Height.Should().Be(DesignerUtils.s_boxImageSize);
+        _bitmap = new(20, 20);
+        _graphics = Graphics.FromImage(_bitmap);
+        _bounds = new(5, 5, 20, 20);
     }
 
-    [Fact]
-    public void BoxImage_ShouldHaveExpectedPixelFormat() =>
-        ((Bitmap)BoxImage).PixelFormat.Should().Be(PixelFormat.Format32bppPArgb);
+    public void Dispose()
+    {
+        _graphics.Dispose();
+        _bitmap.Dispose();
+    }
 
-    [Fact]
+    [WinFormsFact]
+    public void BoxImage_ShouldReturnNonNullImage() =>
+        DesignerUtils.BoxImage.Should().BeOfType<Bitmap>();
+
+    [WinFormsFact]
+    public void BoxImage_ShouldHaveExpectedDimensions()
+    {
+        DesignerUtils.BoxImage.Width.Should().Be(DesignerUtils.s_boxImageSize);
+        DesignerUtils.BoxImage.Height.Should().Be(DesignerUtils.s_boxImageSize);
+    }
+
+    [WinFormsFact]
+    public void BoxImage_ShouldHaveExpectedPixelFormat() =>
+        ((Bitmap)DesignerUtils.BoxImage).PixelFormat.Should().Be(PixelFormat.Format32bppPArgb);
+
+    [WinFormsFact]
     public void BoxImage_ShouldBeCached()
     {
         Image firstCall = DesignerUtils.BoxImage;
@@ -35,16 +49,12 @@ public class DesignerUtilsTests
     }
 
     [Fact]
-    public void HoverBrush_ShouldReturnNonNullBrush() =>
-        HoverBrush.Should().NotBeNull();
-
-    [Fact]
     public void HoverBrush_ShouldBeSolidBrush() =>
-        HoverBrush.Should().BeOfType<SolidBrush>();
+        DesignerUtils.HoverBrush.Should().BeOfType<SolidBrush>();
 
     [Fact]
     public void HoverBrush_ShouldHaveExpectedColor() =>
-        ((SolidBrush)HoverBrush).Color.Should().Be(Color.FromArgb(50, SystemColors.Highlight));
+        ((SolidBrush)DesignerUtils.HoverBrush).Color.Should().Be(Color.FromArgb(50, SystemColors.Highlight));
 
     [Fact]
     public void MinDragSize_ShouldReturnNonEmptySize()
@@ -61,102 +71,77 @@ public class DesignerUtilsTests
         firstCall.Should().Be(secondCall);
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(ResizeBorderTestData))]
-    public void DrawResizeBorder_ShouldUseCorrectBrushBasedOnBackColor(int width, int height, Color backColor, Color expectedColor)
+    public void DrawResizeBorder_ShouldUseCorrectBrushBasedOnBackColor(Color backColor, Color expectedColor)
     {
-        using Bitmap bitmap = new(width, height);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        using Region region = new(new Rectangle(0, 0, width, height));
-        DesignerUtils.DrawResizeBorder(graphics, region, backColor);
-        Color pixelColor = bitmap.GetPixel(width / 2, height / 2);
+        using Region region = new(new Rectangle(0, 0, _bounds.Width, _bounds.Height));
+        DesignerUtils.DrawResizeBorder(_graphics, region, backColor);
+        Color pixelColor = _bitmap.GetPixel(_bounds.Width / 2, _bounds.Height / 2);
         pixelColor.ToArgb().Should().Be(expectedColor.ToArgb());
     }
 
-    public static TheoryData<int, int, Color, Color> ResizeBorderTestData => new()
+    public static TheoryData<Color, Color> ResizeBorderTestData => new()
     {
-        { 10, 10, Color.White, SystemColors.ControlDarkDark },
-        { 10, 10, Color.Black, SystemColors.ControlLight }
+        { Color.White, SystemColors.ControlDarkDark },
+        { Color.Black, SystemColors.ControlLight }
     };
 
-    [Fact]
+    [WinFormsFact]
     public void DrawGrabHandle_ShouldNotThrow_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap = new(10, 10);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(2, 2, 6, 6);
-        Exception exception = Record.Exception(() => DesignerUtils.DrawGrabHandle(graphics, bounds, isPrimary: true));
+        Exception exception = Record.Exception(() => DesignerUtils.DrawGrabHandle(_graphics, _bounds, isPrimary: true));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [BoolData]
     public void DrawGrabHandle_ShouldDrawHandle_BasedOnSelectionType(bool isPrimary)
     {
-        using Bitmap bitmap = new(10, 10);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(2, 2, 6, 6);
+        DesignerUtils.DrawGrabHandle(_graphics, _bounds, isPrimary);
 
-        DesignerUtils.DrawGrabHandle(graphics, bounds, isPrimary);
-
-        Color pixelColor = bitmap.GetPixel(3, 3);
+        Color pixelColor = _bitmap.GetPixel(6, 6);
         pixelColor.ToArgb().Should().NotBe(Color.Empty.ToArgb());
     }
 
-    [Theory]
+    [WinFormsTheory]
     [BoolData]
     public void DrawLockedHandle_ShouldDrawHandle_BasedOnSelectionType(bool isPrimary)
     {
-        using Bitmap bitmap = new(20, 20);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(5, 5, 10, 10);
+        DesignerUtils.DrawLockedHandle(_graphics, _bounds, isPrimary);
 
-        DesignerUtils.DrawLockedHandle(graphics, bounds, isPrimary);
-
-        Color pixelColor = bitmap.GetPixel(6, 6);
+        Color pixelColor = _bitmap.GetPixel(6, 6);
         pixelColor.ToArgb().Should().NotBe(Color.Empty.ToArgb());
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DrawLockedHandle_ShouldDrawUpperRect_WhenCalledWithPrimarySelection()
     {
-        using Bitmap bitmap = new(20, 20);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(5, 5, 10, 10);
-        DesignerUtils.DrawLockedHandle(graphics, bounds, isPrimary: true);
-        Color pixelColor = bitmap.GetPixel(bounds.Left + 1, bounds.Top + 1);
+        DesignerUtils.DrawLockedHandle(_graphics, _bounds, isPrimary: true);
+        Color pixelColor = _bitmap.GetPixel(_bounds.Left + 1, _bounds.Top + 1);
         pixelColor.ToArgb().Should().NotBe(Color.Empty.ToArgb());
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DrawLockedHandle_ShouldDrawLowerRect_WhenCalledWithNonPrimarySelection()
     {
-        using Bitmap bitmap = new(20, 20);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(5, 5, 10, 10);
-        DesignerUtils.DrawLockedHandle(graphics, bounds, isPrimary: false);
-        Color pixelColor = bitmap.GetPixel(bounds.Left + 1, bounds.Top + DesignerUtils.s_lockedHandleLowerOffset + 1);
+        DesignerUtils.DrawLockedHandle(_graphics, _bounds, isPrimary: false);
+        Color pixelColor = _bitmap.GetPixel(_bounds.Left + 1, _bounds.Top + DesignerUtils.s_lockedHandleLowerOffset + 1);
         pixelColor.ToArgb().Should().NotBe(Color.Empty.ToArgb());
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DrawSelectionBorder_ShouldNotThrow_WhenCalledWithValidParameters()
     {
-        using Bitmap bitmap = new(20, 20);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(5, 5, 10, 10);
-        Exception exception = Record.Exception(() => DesignerUtils.DrawSelectionBorder(graphics, bounds));
+        Exception exception = Record.Exception(() => DesignerUtils.DrawSelectionBorder(_graphics, _bounds));
         exception.Should().BeNull();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DrawSelectionBorder_ShouldFillRectangle_WhenCalled()
     {
-        using Bitmap bitmap = new(20, 20);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        Rectangle bounds = new(5, 5, 10, 10);
-        DesignerUtils.DrawSelectionBorder(graphics, bounds);
-        Color pixelColor = bitmap.GetPixel(6, 6);
+        DesignerUtils.DrawSelectionBorder(_graphics, _bounds);
+        Color pixelColor = _bitmap.GetPixel(6, 6);
         pixelColor.ToArgb().Should().NotBe(Color.Empty.ToArgb());
     }
 }
