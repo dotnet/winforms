@@ -14910,7 +14910,19 @@ public partial class DataGridView
     /// <summary>
     ///  Refresh items when the DataSource is disposed.
     /// </summary>
-    private void OnDataSourceDisposed(object? sender, EventArgs e) => DataSource = null;
+    private void OnDataSourceDisposed(object? sender, EventArgs e)
+    {
+        try
+        {
+            _dataGridViewOper[OperationInReleasingDataSource] = true;
+            DataSource = null;
+            CurrentCell = null;
+        }
+        finally
+        {
+            _dataGridViewOper[OperationInReleasingDataSource] = false;
+        }
+    }
 
     protected virtual void OnDefaultCellStyleChanged(EventArgs e)
     {

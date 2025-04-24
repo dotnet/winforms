@@ -1922,17 +1922,6 @@ public partial class DataGridView : Control, ISupportInitialize
                     newDataSource.Disposed += OnDataSourceDisposed;
                 }
 
-                _dataGridViewOper[OperationInReleasingDataSource] = true;
-
-                try
-                {
-                    CurrentCell = null;
-                }
-                finally
-                {
-                    _dataGridViewOper[OperationInReleasingDataSource] = false;
-                }
-
                 if (DataConnection is null)
                 {
                     DataConnection = new DataGridViewDataConnection(this);
