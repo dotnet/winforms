@@ -211,7 +211,9 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
             if (designer is IComponentInitializer initializer)
             {
-                initializer.InitializeNewComponent(null);
+                // This is to address a difference in nullability annotations between the .NET and NETFX
+                // See https://github.com/dotnet/winforms/pull/12996/#issuecomment-2765302289
+                initializer.InitializeNewComponent(new Dictionary<object, object>());
             }
 
             return (TComponent)newComp;

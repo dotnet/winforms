@@ -17,8 +17,8 @@ public class AvoidPassingTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyz
     private const string TaskString = "Task";
     private const string ValueTaskString = "ValueTask";
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-        [CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken];
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+        => [CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -30,17 +30,25 @@ public class AvoidPassingTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyz
     private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
     {
         var invocationExpr = (InvocationExpressionSyntax)context.Node;
+        IMethodSymbol? methodSymbol = null;
 
-        if (invocationExpr.Expression is not MemberAccessExpressionSyntax memberAccessExpr
-            || context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol is not IMethodSymbol methodSymbol
-            || methodSymbol.Name != InvokeAsyncString || methodSymbol.Parameters.Length != 2)
+        // Handle both explicit member access (this.InvokeAsync) and implicit method calls (InvokeAsync)
+        if (invocationExpr.Expression is MemberAccessExpressionSyntax memberAccessExpr)
+        {
+            methodSymbol = context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol as IMethodSymbol;
+        }
+        else if (invocationExpr.Expression is IdentifierNameSyntax identifierNameSyntax)
+        {
+            methodSymbol = context.SemanticModel.GetSymbolInfo(identifierNameSyntax).Symbol as IMethodSymbol;
+        }
+
+        if (methodSymbol is null || methodSymbol.Name != InvokeAsyncString || methodSymbol.Parameters.Length != 2)
         {
             return;
         }
 
-        // Get the symbol of the method's instance:
-        TypeInfo objectTypeInfo = context.SemanticModel.GetTypeInfo(memberAccessExpr.Expression);
         IParameterSymbol funcParameter = methodSymbol.Parameters[0];
+        INamedTypeSymbol? containingType = methodSymbol.ContainingType;
 
         // If the function delegate has a parameter (which makes then 2 type arguments),
         // we can safely assume it's a CancellationToken, otherwise the compiler would have
@@ -54,11 +62,23 @@ public class AvoidPassingTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyz
         }
 
         // Let's make absolute clear, we're dealing with InvokeAsync of Control.
-        // (Not merging If statements to make it easier to read.)
-        if (objectTypeInfo.Type is not INamedTypeSymbol objectType
-            || !IsAncestorOrSelfOfType(objectType, "System.Windows.Forms.Control"))
+        // For implicit calls, we check the containing type of the method itself.
+        if (containingType is null || !IsAncestorOrSelfOfType(containingType, "System.Windows.Forms.Control"))
         {
-            return;
+            // For explicit calls, we need to check the instance type (from before)
+            if (invocationExpr.Expression is MemberAccessExpressionSyntax memberAccess)
+            {
+                TypeInfo objectTypeInfo = context.SemanticModel.GetTypeInfo(memberAccess.Expression);
+                if (objectTypeInfo.Type is not INamedTypeSymbol objectType
+                    || !IsAncestorOrSelfOfType(objectType, "System.Windows.Forms.Control"))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
         }
 
         // And finally, let's check if the return type is Task or ValueTask, because those
