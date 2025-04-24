@@ -14914,9 +14914,12 @@ public partial class DataGridView
     {
         try
         {
+            // 1. Modify the state of the current operation to avoid unnecessary operations
+            // when setting DataSource and CurrentCell.
+            // 2. Setting CurrentCell to null then release DataSource.
             _dataGridViewOper[OperationInReleasingDataSource] = true;
-            DataSource = null;
             CurrentCell = null;
+            DataSource = null;
         }
         finally
         {

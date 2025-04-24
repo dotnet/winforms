@@ -1922,6 +1922,11 @@ public partial class DataGridView : Control, ISupportInitialize
                     newDataSource.Disposed += OnDataSourceDisposed;
                 }
 
+                if (CurrentCell is not null)
+                {
+                    CurrentCell = null;
+                }
+
                 if (DataConnection is null)
                 {
                     DataConnection = new DataGridViewDataConnection(this);
