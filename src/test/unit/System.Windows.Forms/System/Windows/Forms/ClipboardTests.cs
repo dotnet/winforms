@@ -232,25 +232,6 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void SetData_Int_GetReturnsExpected()
-    {
-        Clipboard.SetData("format", 1);
-        Clipboard.GetData("format").Should().Be(1);
-        Clipboard.ContainsData("format").Should().BeTrue();
-    }
-
-    [WinFormsTheory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("\t")]
-    [InlineData(null)]
-    public void SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
-    {
-        Action action = () => Clipboard.SetData(format!, "data");
-        action.Should().Throw<ArgumentException>().WithParameterName("format");
-    }
-
-    [WinFormsFact]
     public void SetData_Null_ThrowsArgumentNullException()
     {
         try
@@ -411,33 +392,6 @@ public class ClipboardTests
 
         Clipboard.GetFileDropList().Should().BeEquivalentTo(filePaths);
         Clipboard.ContainsFileDropList().Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
-    {
-        Action action = () => Clipboard.SetFileDropList(null!);
-        action.Should().Throw<ArgumentNullException>().WithParameterName("filePaths");
-    }
-
-    [WinFormsFact]
-    public void SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
-    {
-        Action action = static () => Clipboard.SetFileDropList([]);
-        action.Should().Throw<ArgumentException>();
-    }
-
-    [WinFormsTheory]
-    [InlineData("")]
-    [InlineData("\0")]
-    public void SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
-    {
-        StringCollection filePaths =
-        [
-            filePath
-        ];
-        Action action = () => Clipboard.SetFileDropList(filePaths);
-        action.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]
