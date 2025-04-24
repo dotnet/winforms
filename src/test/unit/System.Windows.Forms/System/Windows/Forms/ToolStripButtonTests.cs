@@ -1058,7 +1058,7 @@ public partial class ToolStripButtonTests
 
     [WinFormsTheory]
     [InlineData(true, AccessibleStates.Focused | AccessibleStates.HotTracked | AccessibleStates.Focusable)]
-    [InlineData(false, AccessibleStates.None)]
+    [InlineData(false, AccessibleStates.Unavailable | AccessibleStates.Focused)]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeSelected_ReturnsExpected(bool enabled, AccessibleStates expectedState)
     {
         using SubToolStripButton item = new()
