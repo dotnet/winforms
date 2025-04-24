@@ -1040,8 +1040,8 @@ public partial class ToolStripButtonTests
     [WinFormsTheory]
     [InlineData(true, CheckState.Checked, AccessibleStates.Focusable | AccessibleStates.Checked)]
     [InlineData(true, CheckState.Indeterminate, AccessibleStates.Focusable | AccessibleStates.Checked)]
-    [InlineData(false, CheckState.Checked, AccessibleStates.None)]
-    [InlineData(false, CheckState.Indeterminate, AccessibleStates.None)]
+    [InlineData(false, CheckState.Checked, AccessibleStates.Unavailable)]
+    [InlineData(false, CheckState.Indeterminate, AccessibleStates.Unavailable)]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeChecked_ReturnsExpected(bool enabled, CheckState checkState, AccessibleStates expectedState)
     {
         using SubToolStripButton item = new()
