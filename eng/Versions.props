@@ -10,22 +10,6 @@
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
     <DotNetFinalVersionKind Condition="'$(StabilizePackageVersion)' == 'true'">release</DotNetFinalVersionKind>
-    <MicrosoftNETSdkILVersion>10.0.0-preview.4.25223.119</MicrosoftNETSdkILVersion>
-    <MicrosoftInternalRuntimeWindowsDesktopTransportVersion>10.0.0-preview.4.25223.119</MicrosoftInternalRuntimeWindowsDesktopTransportVersion>
-    <SystemComponentModelCompositionVersion>10.0.0-preview.4.25223.119</SystemComponentModelCompositionVersion>
-    <SystemDataOdbcVersion>10.0.0-preview.4.25223.119</SystemDataOdbcVersion>
-    <SystemDataOleDbVersion>10.0.0-preview.4.25223.119</SystemDataOleDbVersion>
-    <SystemDirectoryServicesAccountManagementVersion>10.0.0-preview.4.25223.119</SystemDirectoryServicesAccountManagementVersion>
-    <SystemDirectoryServicesProtocolsVersion>10.0.0-preview.4.25223.119</SystemDirectoryServicesProtocolsVersion>
-    <SystemIOPortsVersion>10.0.0-preview.4.25223.119</SystemIOPortsVersion>
-    <SystemManagementVersion>10.0.0-preview.4.25223.119</SystemManagementVersion>
-    <SystemReflectionContextVersion>10.0.0-preview.4.25223.119</SystemReflectionContextVersion>
-    <SystemRuntimeCachingVersion>10.0.0-preview.4.25223.119</SystemRuntimeCachingVersion>
-    <SystemServiceModelSyndicationVersion>10.0.0-preview.4.25223.119</SystemServiceModelSyndicationVersion>
-    <SystemServiceProcessServiceControllerVersion>10.0.0-preview.4.25223.119</SystemServiceProcessServiceControllerVersion>
-    <SystemSpeechVersion>10.0.0-preview.4.25223.119</SystemSpeechVersion>
-    <SystemTextEncodingCodePagesVersion>10.0.0-preview.4.25223.119</SystemTextEncodingCodePagesVersion>
-    <SystemComponentModelCompositionRegistrationVersion>10.0.0-preview.4.25223.119</SystemComponentModelCompositionRegistrationVersion>
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
@@ -60,6 +44,22 @@
     <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.4.25223.119</MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.4.25223.119</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.4.25223.119</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftInternalRuntimeWindowsDesktopTransportVersion>10.0.0-preview.4.25223.119</MicrosoftInternalRuntimeWindowsDesktopTransportVersion>
+    <SystemComponentModelCompositionVersion>10.0.0-preview.4.25223.119</SystemComponentModelCompositionVersion>
+    <SystemDataOdbcVersion>10.0.0-preview.4.25223.119</SystemDataOdbcVersion>
+    <SystemDataOleDbVersion>10.0.0-preview.4.25223.119</SystemDataOleDbVersion>
+    <SystemDirectoryServicesAccountManagementVersion>10.0.0-preview.4.25223.119</SystemDirectoryServicesAccountManagementVersion>
+    <SystemDirectoryServicesProtocolsVersion>10.0.0-preview.4.25223.119</SystemDirectoryServicesProtocolsVersion>
+    <SystemIOPortsVersion>10.0.0-preview.4.25223.119</SystemIOPortsVersion>
+    <SystemManagementVersion>10.0.0-preview.4.25223.119</SystemManagementVersion>
+    <SystemReflectionContextVersion>10.0.0-preview.4.25223.119</SystemReflectionContextVersion>
+    <SystemRuntimeCachingVersion>10.0.0-preview.4.25223.119</SystemRuntimeCachingVersion>
+    <SystemServiceModelSyndicationVersion>10.0.0-preview.4.25223.119</SystemServiceModelSyndicationVersion>
+    <SystemServiceProcessServiceControllerVersion>10.0.0-preview.4.25223.119</SystemServiceProcessServiceControllerVersion>
+    <SystemSpeechVersion>10.0.0-preview.4.25223.119</SystemSpeechVersion>
+    <SystemTextEncodingCodePagesVersion>10.0.0-preview.4.25223.119</SystemTextEncodingCodePagesVersion>
+    <SystemComponentModelCompositionRegistrationVersion>10.0.0-preview.4.25223.119</SystemComponentModelCompositionRegistrationVersion>
+    <MicrosoftNETSdkILVersion>10.0.0-preview.4.25223.119</MicrosoftNETSdkILVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
