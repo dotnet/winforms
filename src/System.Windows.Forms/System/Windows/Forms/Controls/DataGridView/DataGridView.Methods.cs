@@ -14910,22 +14910,7 @@ public partial class DataGridView
     /// <summary>
     ///  Refresh items when the DataSource is disposed.
     /// </summary>
-    private void OnDataSourceDisposed(object? sender, EventArgs e)
-    {
-        try
-        {
-            // 1. Modify the state of the current operation to avoid unnecessary operations
-            // when setting DataSource and CurrentCell.
-            // 2. Setting CurrentCell to null then release DataSource.
-            _dataGridViewOper[OperationInReleasingDataSource] = true;
-            CurrentCell = null;
-            DataSource = null;
-        }
-        finally
-        {
-            _dataGridViewOper[OperationInReleasingDataSource] = false;
-        }
-    }
+    private void OnDataSourceDisposed(object? sender, EventArgs e) => DataSource = null;
 
     protected virtual void OnDefaultCellStyleChanged(EventArgs e)
     {
@@ -27032,11 +27017,10 @@ public partial class DataGridView
                 int oldCurrentCellY = _ptCurrentCell.Y;
                 if (oldCurrentCellX >= 0
                     && !_dataGridViewState1[State1_TemporarilyResetCurrentCell]
-                    && !_dataGridViewOper[OperationInDispose]
-                    && !_dataGridViewOper[OperationInReleasingDataSource])
+                    && !_dataGridViewOper[OperationInDispose])
                 {
                     DataGridViewCell currentCell = CurrentCellInternal;
-                    if (!EndEdit(
+                    if (IsHandleCreated && !EndEdit(
                         DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.CurrentCellChange,
                         validateCurrentCell ? DataGridViewValidateCellInternal.Always : DataGridViewValidateCellInternal.Never,
                         fireCellLeave: validateCurrentCell,
