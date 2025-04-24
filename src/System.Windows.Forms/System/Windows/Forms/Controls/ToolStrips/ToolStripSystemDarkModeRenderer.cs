@@ -43,7 +43,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <returns>A color suitable for dark mode.</returns>
     private static Color GetDarkModeColor(Color color) =>
         color switch
-        {
+    {
             Color c when c == SystemColors.Control => Color.FromArgb(45, 45, 45),
             Color c when c == SystemColors.ControlLight => Color.FromArgb(60, 60, 60),
             Color c when c == SystemColors.ControlDark => Color.FromArgb(30, 30, 30),
@@ -62,6 +62,16 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             _ when color.GetBrightness() > 0.5 => ControlPaint.Dark(color, 0.2f),
             _ => color
         };
+
+        // For any other colors, darken them if they're bright
+        if (color.GetBrightness() > 0.5)
+        {
+            // Create a darker version for light colors
+            return ControlPaint.Dark(color, 0.2f);
+        }
+
+        return color;
+    }
 
     /// <summary>
     ///  Creates a dark mode compatible brush. Always use 'using var brush = GetDarkModeBrush(color)'.
@@ -86,6 +96,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <returns>true if the background should be painted; otherwise, false.</returns>
     private static bool ShouldPaintBackground(ToolStrip toolStrip) =>
         toolStrip?.BackgroundImage is null;
+
+        if (toolStrip.BackgroundImage is not null)
+            return false;
+
+        return true;
+    }
 
     /// <summary>
     ///  Fills the background with the specified color.
@@ -129,20 +145,21 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
         }
 
-        if (toolStrip.IsDropDown)
-        {
-            // Dark mode dropdown background
-            FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
-        }
-        else if (toolStrip is MenuStrip)
-        {
-            // Dark mode menu background
-            FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
-        }
-        else
-        {
-            // Standard ToolStrip background
-            FillBackground(g, bounds, GetDarkModeColor(e.BackColor));
+            if (toolStrip.IsDropDown)
+            {
+                // Dark mode dropdown background
+                FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
+            }
+            else if (toolStrip is MenuStrip)
+            {
+                // Dark mode menu background
+                FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
+            }
+            else
+            {
+                // Standard ToolStrip background
+                FillBackground(g, bounds, GetDarkModeColor(e.BackColor));
+            }
         }
     }
 
@@ -179,6 +196,9 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
             return;
         }
+        else if (toolStrip is ToolStripDropDown)
+        {
+            ToolStripDropDown? toolStripDropDown = toolStrip as ToolStripDropDown;
 
         if (toolStrip is ToolStripDropDown toolStripDropDown)
         {
@@ -187,17 +207,20 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 bounds.Width -= 1;
                 bounds.Height -= 1;
 
+                using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
             else
             {
+                using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
 
             return;
         }
 
-        g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
+            g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
+        }
     }
 
     /// <summary>
@@ -224,6 +247,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
         Rectangle bounds = new(Point.Empty, e.Item.Size);
 
+        // For items on dropdowns, adjust the bounds
         if (e.Item.IsOnDropDown)
         {
             bounds.X += 2;
@@ -239,10 +263,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
         }
 
-        // Render background image if available
-        if (e.Item.BackgroundImage is not null)
-        {
-            ControlPaint.DrawBackgroundImage(
+            // Render background image if available
+            if (e.Item.BackgroundImage is not null)
+            {
+                ControlPaint.DrawBackgroundImage(
                 g: e.Graphics,
                 backgroundImage: e.Item.BackgroundImage,
                 backColor: GetDarkModeColor(e.Item.BackColor),
@@ -251,12 +275,13 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 clipRect: bounds);
 
             return;
-        }
+            }
 
         if (e.Item.BackColor != Color.Transparent && e.Item.BackColor != Color.Empty)
-        {
-            // Custom background color (apply dark mode transformation)
-            FillBackground(e.Graphics, bounds, e.Item.BackColor);
+            {
+                // Custom background color (apply dark mode transformation)
+                FillBackground(e.Graphics, bounds, e.Item.BackColor);
+            }
         }
     }
 
@@ -299,6 +324,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
     {
+        // Reuse button background drawing for dropdown buttons
         OnRenderButtonBackground(e);
     }
 
@@ -363,6 +389,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
         }
 
+        Color foreColor = GetDarkModeColor(SystemColors.ControlDark);
+
         bool rightToLeft = e.Item.RightToLeft == RightToLeft.Yes;
 
         if (isVertical)
@@ -370,7 +398,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             int startX = bounds.Width / 2;
 
             if (rightToLeft)
-            {
+        {
                 using var leftPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
                 g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
 
@@ -382,13 +410,13 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             else
             {
                 using var leftPen = GetDarkModeColor(SystemColors.ButtonShadow).GetCachedPenScope();
-                g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
+            g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
 
-                startX++;
+            startX++;
 
                 using var rightPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
-                g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
-            }
+            g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
+        }
         }
         else
         {
@@ -432,9 +460,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 ? GetDarkModeColor(SystemColors.ControlDark).GetCachedSolidBrushScope()
                 : GetDarkModeColor(SystemColors.Highlight).GetCachedSolidBrushScope();
 
+            using Brush fillBrush = new SolidBrush(fillColor);
             e.Graphics.FillRectangle(fillBrush, bounds);
         }
 
+        // Draw the overflow arrow
         Rectangle arrowRect = item.ContentRectangle;
 
         Point middle = new(
@@ -499,6 +529,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         };
 
         // Draw the arrow
+        using Brush arrowBrush = new SolidBrush(arrowColor);
         e.Graphics.FillPolygon(arrowBrush, arrow);
     }
 
@@ -595,6 +626,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 ? GetDarkModeColor(SystemColors.GrayText)
                 : GetDarkModeColor(e.TextColor);
 
+        // Draw the text
         TextRenderer.DrawText(
             dc: e.Graphics,
             text: e.Text,
