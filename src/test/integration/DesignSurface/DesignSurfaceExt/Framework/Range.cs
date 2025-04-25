@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Numerics.Hashing;
 #endif
 
-namespace DesignSurfaceExt.Framework.System;
+namespace System;
 
 internal readonly struct Range : IEquatable<Range>
 {
@@ -94,17 +94,15 @@ internal readonly struct Range : IEquatable<Range>
     /// <summary>Create a Range object starting from first element to the end.</summary>
     public static Range All => new(Index.Start, Index.End);
 
-    /**
-    <summary>Calculate the start offset and length of range object using a collection length.</summary>
-    <param name="length">The length of the collection that the range will be used with. length has to be a positive value.</param>
-    <remarks>
-    <para>
-    For performance reason, we don't validate the input length parameter against negative values.
-    It is expected Range will be used with collections which always have non negative length/count.
-    We validate the range is inside the length scope though.
-    </para>
-    </remarks>
-    */
+    /// <summary>Calculate the start offset and length of range object using a collection length.</summary>
+    /// <param name="length">The length of the collection that the range will be used with. length has to be a positive value.</param>
+    /// <remarks>
+    ///  <para>
+    ///   For performance reason, we don't validate the input length parameter against negative values.
+    ///   It is expected Range will be used with collections which always have non negative length/count.
+    ///   We validate the range is inside the length scope though.
+    ///  </para>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public (int Offset, int Length) GetOffsetAndLength(int length)
     {

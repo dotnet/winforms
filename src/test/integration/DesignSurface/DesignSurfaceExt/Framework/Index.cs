@@ -93,18 +93,16 @@ internal readonly struct Index : IEquatable<Index>
     /// <summary>Indicates whether the index is from the start or the end.</summary>
     public bool IsFromEnd => _value < 0;
 
-    /**
-    <summary>Calculate the offset from the start using the giving collection length.</summary>
-    <param name="length">The length of the collection that the Index will be used with. length has to be a positive value</param>
-    <remarks>
-    <para>
-    For performance reason, we don't validate the input length parameter and the returned offset value against negative values.
-    we don't validate either the returned offset is greater than the input length.
-    It is expected Index will be used with collections which always have non negative length/count. If the returned offset is negative and
-    then used to index a collection will get out of range exception which will be same affect as the validation.
-    </para>
-    </remarks>
-    */
+    /// <summary>Calculate the offset from the start using the giving collection length.</summary>
+    /// <param name="length">The length of the collection that the Index will be used with. length has to be a positive value</param>
+    /// <remarks>
+    ///  <para>
+    ///   For performance reason, we don't validate the input length parameter and the returned offset value against negative values.
+    ///   We don't validate either the returned offset is greater than the input length.
+    ///   It is expected Index will be used with collections which always have non-negative length/count. If the returned offset is negative and
+    ///   then used to index a collection will get out of range exception which will be the same effect as the validation.
+    ///  </para>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int GetOffset(int length)
     {
