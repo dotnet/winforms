@@ -48,4 +48,10 @@
     <Reference Include="System.Design" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'net481'">
+    <!-- Include framework-specific items as 'None' to facilitate their visibility in the Solution
+    Explorer -->
+    <None Include="**/Framework/*" />
+  </ItemGroup>
+
 </Project>
