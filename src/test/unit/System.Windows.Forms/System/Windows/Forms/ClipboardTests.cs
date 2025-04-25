@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests;
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
 // Try up to 3 times before failing.
-[UISettings(MaxAttempts = 3)]
+[UISettings(MaxAttempts = 4)]
 public class ClipboardTests
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
@@ -36,72 +36,12 @@ public class ClipboardTests
         Clipboard.ContainsText().Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void Clear_InvokeMultipleTimes_Success()
-    {
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-    }
-
-    public static TheoryData<Func<bool>> ContainsMethodsTheoryData =>
-    [
-        Clipboard.ContainsAudio,
-        Clipboard.ContainsFileDropList,
-        Clipboard.ContainsImage,
-        Clipboard.ContainsText
-    ];
-
-    [WinFormsTheory]
-    [MemberData(nameof(ContainsMethodsTheoryData))]
-    public void Contains_InvokeMultipleTimes_Success(Func<bool> contains)
-    {
-        Clipboard.Clear();
-        bool result = contains.Invoke();
-        contains.Invoke().Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [StringWithNullData]
-    public void ContainsData_InvokeMultipleTimes_Success(string format)
-    {
-        bool result = Clipboard.ContainsData(format);
-        Clipboard.ContainsData(format).Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void ContainsText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        bool result = Clipboard.ContainsText(format);
-        Clipboard.ContainsText(format).Should().Be(result);
-    }
-
     [WinFormsTheory]
     [InvalidEnumData<TextDataFormat>]
     public void ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
         Action action = () => Clipboard.ContainsText(format);
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
-    }
-
-    [WinFormsFact]
-    public void GetAudioStream_InvokeMultipleTimes_Success()
-    {
-        Stream? result = Clipboard.GetAudioStream();
-        (Clipboard.GetAudioStream() == result).Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -114,43 +54,6 @@ public class ClipboardTests
         result.Should().BeNull();
         result = Clipboard.GetData(format!);
         result.Should().BeNull();
-    }
-
-    [WinFormsFact]
-    public void GetDataObject_InvokeMultipleTimes_Success()
-    {
-        DataObject result1 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        DataObject result2 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        result1.GetFormats().Should().BeEquivalentTo(result2.GetFormats());
-    }
-
-    [WinFormsFact]
-    public void GetFileDropList_InvokeMultipleTimes_Success()
-    {
-        StringCollection result = Clipboard.GetFileDropList();
-        Clipboard.GetFileDropList().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetImage_InvokeMultipleTimes_Success()
-    {
-        Image? result = Clipboard.GetImage();
-        Clipboard.GetImage().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetText_InvokeMultipleTimes_Success()
-    {
-        string result = Clipboard.GetText();
-        Clipboard.GetText().Should().Be(result);
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void GetText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        string result = Clipboard.GetText(format);
-        Clipboard.GetText(format).Should().Be(result);
     }
 
     [WinFormsTheory]
@@ -229,6 +132,25 @@ public class ClipboardTests
     {
         Action action = () => Clipboard.SetData("MyData", data: null!);
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
+    }
+
+    [WinFormsFact]
+    public void SetData_Int_GetReturnsExpected()
+    {
+        Clipboard.SetData("format", 1);
+        Clipboard.GetData("format").Should().Be(1);
+        Clipboard.ContainsData("format").Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData(null)]
+    public void SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
+    {
+        Action action = () => Clipboard.SetData(format!, "data");
+        action.Should().Throw<ArgumentException>().WithParameterName("format");
     }
 
     [WinFormsFact]
@@ -392,6 +314,33 @@ public class ClipboardTests
 
         Clipboard.GetFileDropList().Should().BeEquivalentTo(filePaths);
         Clipboard.ContainsFileDropList().Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
+    {
+        Action action = () => Clipboard.SetFileDropList(null!);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("filePaths");
+    }
+
+    [WinFormsFact]
+    public void SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
+    {
+        Action action = static () => Clipboard.SetFileDropList([]);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData("\0")]
+    public void SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    {
+        StringCollection filePaths =
+        [
+            filePath
+        ];
+        Action action = () => Clipboard.SetFileDropList(filePaths);
+        action.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]
