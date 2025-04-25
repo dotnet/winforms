@@ -3,11 +3,11 @@
 
 #nullable enable
 
-using DesignSurfaceExt.Framework.System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 #if NETSTANDARD2_0 || NETFRAMEWORK
-using DesignSurfaceExt.Framework.System.Numerics.Hashing;
+using System.Numerics.Hashing;
 #endif
 
 namespace DesignSurfaceExt.Framework.System;
