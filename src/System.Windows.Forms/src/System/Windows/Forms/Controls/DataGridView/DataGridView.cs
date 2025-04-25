@@ -1922,7 +1922,6 @@ public partial class DataGridView : Control, ISupportInitialize
                 }
 
                 CurrentCell = null;
-
                 if (DataConnection is null)
                 {
                     DataConnection = new DataGridViewDataConnection(this);
