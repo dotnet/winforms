@@ -3,6 +3,7 @@
 
 namespace TestConsole;
 
+[DesignerCategory("Default")]
 public partial class MainForm : Form
 {
     private ISelectionService _selectionService;
@@ -12,6 +13,10 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+#if !NETCOREAPP
+        Text = "Tiny Form Designer - .NET Framework";
+#endif
     }
 
     private void InitFormDesigner()
@@ -264,6 +269,7 @@ public partial class MainForm : Form
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
+                        // See https://github.com/microsoft/winforms-designer/issues/2508
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                         surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
                         surface.CreateComponent<NotifyIcon>();
@@ -290,6 +296,7 @@ public partial class MainForm : Form
 
                         ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
                         ToolStripButton toolStripButton1 = surface.CreateComponent<ToolStripButton>();
+                        // See https://github.com/dotnet/winforms/issues/13040
                         ToolStripDropDownButton toolStripDropDownButton1 = surface.CreateComponent<ToolStripDropDownButton>();
                         ToolStripTextBox toolStripTextBox = surface.CreateComponent<ToolStripTextBox>();
                         toolStrip1.Items.Add(toolStripButton1);
@@ -349,7 +356,7 @@ public partial class MainForm : Form
                         splitterPanel1.Controls.Add(richTextBox);
                         splitterPanel2.Controls.Add(scrollableControl);
 
-                        toolStripContainer.ContentPanel.Controls.AddRange(splitContainer);
+                        toolStripContainer.ContentPanel.Controls.Add(splitContainer);
 
                         Component component = surface.CreateComponent<Component>();
 
@@ -362,6 +369,10 @@ public partial class MainForm : Form
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
 
+                        // A nested host is required for .NET Framework.
+                        // See https://github.com/dotnet/winforms/issues/11866#issuecomment-2673266564
+                        // and https://github.com/dotnet/winforms/issues/13248#issuecomment-2803589449
+#if NETCOREAPP
                         BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
 
                         BindingSource bindingSource = new()
@@ -375,6 +386,7 @@ public partial class MainForm : Form
                         richTextBox.DataBindings.Add(new Binding("Text", bindingSource, "Text", true, DataSourceUpdateMode.OnPropertyChanged));
 
                         panel.Controls.Add(bindingNavigator);
+#endif
                     }
 
                     break;

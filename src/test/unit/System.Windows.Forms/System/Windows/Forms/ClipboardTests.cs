@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests;
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
 // Try up to 3 times before failing.
-[UISettings(MaxAttempts = 3)]
+[UISettings(MaxAttempts = 4)]
 public class ClipboardTests
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
