@@ -3,10 +3,10 @@
 
 #nullable enable
 
-using DemoConsole.Framework.System.Diagnostics.CodeAnalysis;
+using DesignSurfaceExt.Framework.System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace DemoConsole.Framework.System;
+namespace DesignSurfaceExt.Framework.System;
 
 /// <summary>Represent a type can be used to index a collection either from the start or the end.</summary>
 /// <remarks>

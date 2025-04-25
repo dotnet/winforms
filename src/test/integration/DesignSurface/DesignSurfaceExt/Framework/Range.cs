@@ -3,14 +3,14 @@
 
 #nullable enable
 
-using DemoConsole.Framework.System.Diagnostics.CodeAnalysis;
+using DesignSurfaceExt.Framework.System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 #if NETSTANDARD2_0 || NETFRAMEWORK
-using DemoConsole.Framework.System.Numerics.Hashing;
+using DesignSurfaceExt.Framework.System.Numerics.Hashing;
 #endif
 
-namespace DemoConsole.Framework.System;
+namespace DesignSurfaceExt.Framework.System;
 
 internal readonly struct Range : IEquatable<Range>
 {

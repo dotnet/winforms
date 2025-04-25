@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DemoConsole.Framework.System.Numerics.Hashing;
+namespace DesignSurfaceExt.Framework.System.Numerics.Hashing;
 
 internal static class HashHelpers
 {
