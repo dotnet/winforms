@@ -19,6 +19,8 @@
     avoid over-building. -->
     <TargetFramework />
 
+    <DefaultItemExcludes Condition="'$(TargetFramework)' != 'net481'">
+      $(DefaultItemExcludes);**/Framework/*</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
