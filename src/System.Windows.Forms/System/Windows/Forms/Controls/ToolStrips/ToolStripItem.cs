@@ -578,7 +578,7 @@ public abstract partial class ToolStripItem :
     /// <remarks>
     ///  <para>Usually the same as can select, but things like the control box in an MDI window are exceptions</para>
     /// </remarks>
-    internal virtual bool CanKeyboardSelect => CanSelect;
+    internal virtual bool CanKeyboardSelect => CanSelect && Enabled;
 
     /// <summary>
     ///  Occurs when the control is clicked.
