@@ -104,7 +104,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "interop", "interop", "{A31B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesignSurface", "DesignSurface", "{43E46506-7DF8-4E7A-A579-996CA43041EB}"
 	ProjectSection(SolutionItems) = preProject
-		src\test\integration\DesignSurface\.editorconfig = src\test\integration\DesignSurface\.editorconfig
+		src\test\integration\DesignSurface\README.md = src\test\integration\DesignSurface\README.md
+		src\test\integration\DesignSurface\Directory.Build.props = src\test\integration\DesignSurface\Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoConsole", "src\test\integration\DesignSurface\DemoConsole\DemoConsole.csproj", "{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}"
