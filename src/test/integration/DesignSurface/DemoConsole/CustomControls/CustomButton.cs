@@ -3,6 +3,7 @@
 
 namespace TestConsole;
 
+[DesignerCategory("Default")]
 [Designer(typeof(CustomButtonDesigner), typeof(IDesigner))]
 public class CustomButton : Button
 {
