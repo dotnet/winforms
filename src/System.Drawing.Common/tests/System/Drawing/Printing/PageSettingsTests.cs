@@ -63,4 +63,21 @@ public class PageSettingsTests
         Assert.Equal(ps.PaperSource.Kind, clone.PaperSource.Kind);
         Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
     }
+
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    public void PrintToPDF_DefaultPageSettings_IsColor()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/13367
+        if (!Helpers.TryGetPdfPrinterName(out string? printerName))
+        {
+            return;
+        }
+
+        PrinterSettings printerSettings = new()
+        {
+            PrinterName = printerName
+        };
+
+        printerSettings.DefaultPageSettings.Color.Should().BeTrue("PDF printer should support color printing.");
+    }
 }

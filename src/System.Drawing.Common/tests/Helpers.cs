@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Text;
 using Windows.Win32;
@@ -20,6 +21,47 @@ public static unsafe class Helpers
     public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(AreAnyPrintersInstalled)}";
 
     public static bool AreAnyPrintersInstalled() => s_anyInstalledPrinters;
+
+    private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
+
+    /// <summary>
+    ///  Checks if PDF printing is supported by verifying installed printers.
+    /// </summary>
+    /// <returns><see langword="true"/> if a PDF printer is installed; otherwise, <see langword="false"/>.</returns>
+    public static bool CanPrintToPdf()
+    {
+        foreach (string name in InstalledPrinters)
+        {
+            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///  Attempts to get the name of the PDF printer installed on the system.
+    /// </summary>
+    /// <param name="printerName">
+    ///  When this method returns, contains the name of the PDF printer if found; otherwise, <see langword="null"/>.
+    /// </param>
+    /// <returns><see langword="true"/> if a PDF printer is found; otherwise, <see langword="false"/>.</returns>
+    public static bool TryGetPdfPrinterName([NotNullWhen(true)] out string? printerName)
+    {
+        foreach (string name in InstalledPrinters)
+        {
+            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+            {
+                printerName = name;
+                return true;
+            }
+        }
+
+        printerName = null;
+        return false;
+    }
 
     public static string GetTestBitmapPath(string fileName) => GetTestPath("bitmaps", fileName);
     public static string GetTestFontPath(string fileName) => GetTestPath("fonts", fileName);
