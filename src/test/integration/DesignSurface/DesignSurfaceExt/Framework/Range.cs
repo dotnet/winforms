@@ -54,32 +54,32 @@ internal readonly struct Range : IEquatable<Range>
     public override string ToString()
     {
 #if (!NETSTANDARD2_0 && !NETFRAMEWORK)
-            Span<char> span = stackalloc char[2 + (2 * 11)]; // 2 for "..", then for each index 1 for '^' and 10 for longest possible uint
-            int pos = 0;
+        Span<char> span = stackalloc char[2 + (2 * 11)]; // 2 for "..", then for each index 1 for '^' and 10 for longest possible uint
+        int pos = 0;
 
-            if (Start.IsFromEnd)
-            {
-                span[0] = '^';
-                pos = 1;
-            }
+        if (Start.IsFromEnd)
+        {
+            span[0] = '^';
+            pos = 1;
+        }
 
-            bool formatted = ((uint)Start.Value).TryFormat(span[pos..], out int charsWritten);
-            Debug.Assert(formatted);
-            pos += charsWritten;
+        bool formatted = ((uint)Start.Value).TryFormat(span[pos..], out int charsWritten);
+        Debug.Assert(formatted);
+        pos += charsWritten;
 
-            span[pos++] = '.';
-            span[pos++] = '.';
+        span[pos++] = '.';
+        span[pos++] = '.';
 
-            if (End.IsFromEnd)
-            {
-                span[pos++] = '^';
-            }
+        if (End.IsFromEnd)
+        {
+            span[pos++] = '^';
+        }
 
-            formatted = ((uint)End.Value).TryFormat(span[pos..], out charsWritten);
-            Debug.Assert(formatted);
-            pos += charsWritten;
+        formatted = ((uint)End.Value).TryFormat(span[pos..], out charsWritten);
+        Debug.Assert(formatted);
+        pos += charsWritten;
 
-            return new string(span[..pos]);
+        return new string(span[..pos]);
 #else
         return Start.ToString() + ".." + End.ToString();
 #endif
@@ -117,8 +117,5 @@ internal readonly struct Range : IEquatable<Range>
         return (start, end - start);
     }
 
-    private static void ThrowArgumentOutOfRangeException()
-    {
-        throw new ArgumentOutOfRangeException("length");
-    }
+    private static void ThrowArgumentOutOfRangeException() => throw new ArgumentOutOfRangeException("length");
 }

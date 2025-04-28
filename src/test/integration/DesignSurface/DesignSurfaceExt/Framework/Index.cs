@@ -10,11 +10,11 @@ namespace System;
 
 /// <summary>Represent a type can be used to index a collection either from the start or the end.</summary>
 /// <remarks>
-/// <para>Index is used by the C# compiler to support the new index syntax</para>
-/// <code>
-/// int[] someArray = new int[5] { 1, 2, 3, 4, 5 } ;
-/// int lastElement = someArray[^1]; // lastElement = 5
-/// </code>
+///  <para>Index is used by the C# compiler to support the new index syntax</para>
+///  <code>
+///   int[] someArray = new int[5] { 1, 2, 3, 4, 5 } ;
+///   int lastElement = someArray[^1]; // lastElement = 5
+///  </code>
 /// </remarks>
 internal readonly struct Index : IEquatable<Index>
 {
@@ -24,7 +24,7 @@ internal readonly struct Index : IEquatable<Index>
     /// <param name="value">The index value. it has to be zero or positive number.</param>
     /// <param name="fromEnd">Indicating if the index is from the start or from the end.</param>
     /// <remarks>
-    /// <para>If the Index constructed from the end, index value 1 means pointing at the last element and index value 0 means pointing at beyond last element.</para>
+    ///  <para>If the Index constructed from the end, index value 1 means pointing at the last element and index value 0 means pointing at beyond last element.</para>
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Index(int value, bool fromEnd = false)
@@ -145,7 +145,7 @@ internal readonly struct Index : IEquatable<Index>
     private static void ThrowValueArgumentOutOfRange_NeedNonNegNumException()
     {
 #if SYSTEM_PRIVATE_CORELIB
-            throw new ArgumentOutOfRangeException("value", SR.ArgumentOutOfRange_NeedNonNegNum);
+        throw new ArgumentOutOfRangeException("value", SR.ArgumentOutOfRange_NeedNonNegNum);
 #else
         throw new ArgumentOutOfRangeException("value", "value must be non-negative");
 #endif
@@ -154,11 +154,11 @@ internal readonly struct Index : IEquatable<Index>
     private string ToStringFromEnd()
     {
 #if (!NETSTANDARD2_0 && !NETFRAMEWORK)
-            Span<char> span = stackalloc char[11]; // 1 for ^ and 10 for longest possible uint value
-            bool formatted = ((uint)Value).TryFormat(span[1..], out int charsWritten);
-            Debug.Assert(formatted);
-            span[0] = '^';
-            return new string(span[..(charsWritten + 1)]);
+        Span<char> span = stackalloc char[11]; // 1 for ^ and 10 for longest possible uint value
+        bool formatted = ((uint)Value).TryFormat(span[1..], out int charsWritten);
+        Debug.Assert(formatted);
+        span[0] = '^';
+        return new string(span[..(charsWritten + 1)]);
 #else
         return '^' + Value.ToString();
 #endif
