@@ -53,7 +53,7 @@ public unsafe class PageSettings : ICloneable
     public bool Color
     {
         get => _color.IsDefault
-            ? _printerSettings.GetModeField(ModeField.Color, (short)DEVMODE_COLOR.DMCOLOR_MONOCHROME) == (short)DEVMODE_COLOR.DMCOLOR_MONOCHROME
+            ? _printerSettings.GetModeField(ModeField.Color, (short)DEVMODE_COLOR.DMCOLOR_MONOCHROME) == (short)DEVMODE_COLOR.DMCOLOR_COLOR
             : (bool)_color;
         set => _color = value;
     }
