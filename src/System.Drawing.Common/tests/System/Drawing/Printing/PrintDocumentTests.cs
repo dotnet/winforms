@@ -160,7 +160,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(nameof(Helpers.CanPrintToPdf))]
+    [ConditionalFact(typeof(Helpers), nameof(Helpers.CanPrintToPdf))]
     public void Print_DefaultPrintController_Success()
     {
         if (!Helpers.TryGetPdfPrinterName(out string? printerName))
