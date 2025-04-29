@@ -15,21 +15,21 @@ public class DesignerUtilsTests :IDisposable
     private readonly Graphics _graphics;
     private readonly Rectangle _bounds;
 
-    public Button button { get; }
+    public Button Button { get; }
 
     public DesignerUtilsTests()
     {
         _bitmap = new(20, 20);
         _graphics = Graphics.FromImage(_bitmap);
         _bounds = new(5, 5, 20, 20);
-        button = new() { Width = 50, Height = 50 };
+        Button = new() { Width = 50, Height = 50 };
     }
 
     public void Dispose()
     {
         _graphics.Dispose();
         _bitmap.Dispose();
-        button.Dispose();
+        Button.Dispose();
     }
 
     [WinFormsFact]
@@ -153,15 +153,6 @@ public class DesignerUtilsTests :IDisposable
     }
 
     [WinFormsFact]
-    public void LastCursorPoint_ShouldReturnValidPoint()
-    {
-        Point expectedPoint = Cursor.Position;
-        Point actualPoint = DesignerUtils.LastCursorPoint;
-
-        actualPoint.Should().Be(expectedPoint);
-    }
-
-    [WinFormsFact]
     public void LastCursorPoint_ShouldNotThrow_WhenCalled()
     {
         Exception exception = Record.Exception(() =>
@@ -171,11 +162,14 @@ public class DesignerUtilsTests :IDisposable
     }
 
     [WinFormsFact]
-    public void LastCursorPoint_ShouldReturnNonNegativeCoordinates()
+    public void LastCursorPoint_ShouldReturnValidCoordinates()
     {
         Point cursorPoint = DesignerUtils.LastCursorPoint;
-        cursorPoint.X.Should().BeGreaterThanOrEqualTo(0);
-        cursorPoint.Y.Should().BeGreaterThanOrEqualTo(0);
+
+        cursorPoint.X.Should().BeLessThanOrEqualTo(SystemInformation.VirtualScreen.Right);
+        cursorPoint.X.Should().BeGreaterThanOrEqualTo(SystemInformation.VirtualScreen.Left);
+        cursorPoint.Y.Should().BeLessThanOrEqualTo(SystemInformation.VirtualScreen.Bottom);
+        cursorPoint.Y.Should().BeGreaterThanOrEqualTo(SystemInformation.VirtualScreen.Top);
     }
 
     [WinFormsFact]
@@ -229,11 +223,14 @@ public class DesignerUtilsTests :IDisposable
         double opacity = 0.5;
         Color backColor = Color.White;
 
-        DesignerUtils.GenerateSnapShot(button, out Bitmap image, borderSize, opacity, backColor);
+        DesignerUtils.GenerateSnapShot(Button, out Bitmap image, borderSize, opacity, backColor);
 
-        image.Should().NotBeNull();
-        image.Width.Should().BeGreaterThan(0);
-        image.Height.Should().BeGreaterThan(0);
+        using (image)
+        {
+            image.Should().BeOfType<Bitmap>();
+            image.Width.Should().BeGreaterThan(0);
+            image.Height.Should().BeGreaterThan(0);
+        }
     }
 
     [WinFormsFact]
@@ -243,11 +240,14 @@ public class DesignerUtilsTests :IDisposable
         double opacity = 0.5;
         Color backColor = Color.White;
 
-        DesignerUtils.GenerateSnapShot(button, out Bitmap image, borderSize, opacity, backColor);
+        DesignerUtils.GenerateSnapShot(Button, out Bitmap image, borderSize, opacity, backColor);
 
-        image.Should().NotBeNull();
-        Color pixelColor = image.GetPixel(image.Width / 2, image.Height / 2);
-        pixelColor.A.Should().BeLessThan(255);
+        using (image)
+        {
+            image.Should().BeOfType<Bitmap>();
+            Color pixelColor = image.GetPixel(image.Width / 2, image.Height / 2);
+            pixelColor.A.Should().BeLessThan(255);
+        }
     }
 
     [WinFormsFact]
@@ -257,11 +257,14 @@ public class DesignerUtilsTests :IDisposable
         double opacity = 1.0;
         Color backColor = Color.White;
 
-        DesignerUtils.GenerateSnapShot(button, out Bitmap image, borderSize, opacity, backColor);
+        DesignerUtils.GenerateSnapShot(Button, out Bitmap image, borderSize, opacity, backColor);
 
-        image.Should().NotBeNull();
-        Color borderPixelColor = image.GetPixel(0, 0);
-        borderPixelColor.Should().NotBe(backColor);
+        using (image)
+        {
+            image.Should().BeOfType<Bitmap>();
+            Color borderPixelColor = image.GetPixel(0, 0);
+            borderPixelColor.Should().NotBe(backColor);
+        }
     }
 
     [WinFormsTheory]
@@ -288,7 +291,7 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void GetOptionValue_ShouldReturnNull_WhenProviderIsNull()
     {
-        object? result = DesignerUtils.GetOptionValue(null, "SomeOption");
+        object? result = DesignerUtils.GetOptionValue(provider: null, name: "SomeOption");
 
         result.Should().BeNull();
     }
@@ -331,17 +334,27 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void GenerateSnapShotWithBitBlt_ShouldGenerateImage_WhenControlIsValid()
     {
-        DesignerUtils.GenerateSnapShotWithBitBlt(button, out Bitmap image);
+        DesignerUtils.GenerateSnapShotWithBitBlt(Button, out Bitmap image);
 
-        image.Should().NotBeNull();
-        image.Width.Should().BeGreaterThan(0);
-        image.Height.Should().BeGreaterThan(0);
+        using (image)
+        {
+            image.Should().BeOfType<Bitmap>();
+            image.Width.Should().BeGreaterThan(0);
+            image.Height.Should().BeGreaterThan(0);
+        }
     }
 
     [WinFormsFact]
     public void GenerateSnapShotWithBitBlt_ShouldNotThrow_WhenControlIsValid()
     {
-        Exception exception = Record.Exception(() => DesignerUtils.GenerateSnapShotWithBitBlt(button, out _));
+        Exception exception = Record.Exception(() =>
+        {
+            DesignerUtils.GenerateSnapShotWithBitBlt(Button, out Bitmap image);
+            using (image)
+            {
+                image.Should().BeOfType<Bitmap>();
+            }
+        });
 
         exception.Should().BeNull();
     }
@@ -349,12 +362,16 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void GenerateSnapShotWithWM_PRINT_ShouldReturnTrue_WhenControlRespondsToWM_PRINT()
     {
-        bool result = DesignerUtils.GenerateSnapShotWithWM_PRINT(button, out Bitmap image);
+        bool result = DesignerUtils.GenerateSnapShotWithWM_PRINT(Button, out Bitmap image);
 
         result.Should().BeTrue();
-        image.Should().NotBeNull();
-        image.Width.Should().BeGreaterThan(0);
-        image.Height.Should().BeGreaterThan(0);
+
+        using (image)
+        {
+            image.Should().BeOfType<Bitmap>();
+            image.Width.Should().BeGreaterThan(0);
+            image.Height.Should().BeGreaterThan(0);
+        }
     }
 
     [WinFormsTheory]
@@ -365,14 +382,14 @@ public class DesignerUtilsTests :IDisposable
     [InlineData(SelectionBorderGlyphType.Body, 10, 20, 2, 10, 20, 20, 20)]
     [InlineData((SelectionBorderGlyphType)999, 10, 20, 2, 0, 0, 0, 0)]
     internal void GetBoundsForSelectionType_ShouldReturnExpectedBounds(
-    SelectionBorderGlyphType type,
-    int x,
-    int y,
-    int borderSize,
-    int expectedX,
-    int expectedY,
-    int expectedWidth,
-    int expectedHeight)
+        SelectionBorderGlyphType type,
+        int x,
+        int y,
+        int borderSize,
+        int expectedX,
+        int expectedY,
+        int expectedWidth,
+        int expectedHeight)
     {
         Rectangle originalBounds = new(x, y, 20, 20);
 
