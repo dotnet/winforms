@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -316,5 +317,53 @@ public unsafe class ClipboardCoreTests
         outData1.GetDataPresent(format).Should().BeTrue();
         outData1.GetData(format, autoConvert: false).Should().Be(testData);
         outData1.GetData(format, autoConvert: false).Should().Be(outData2.GetData(format, autoConvert: false));
+    }
+
+    [Fact]
+    public void SetData_Int_GetReturnsExpected()
+    {
+        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, 1), copy: false, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent("SomeDataObjectId").Should().BeTrue();
+        outData.GetData("SomeDataObjectId").Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData(null)]
+    public void SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
+    {
+        Action action = () => ClipboardCore.SetData(new DataObject(format!, "data"), copy: true);
+        action.Should().Throw<ArgumentException>().WithParameterName("format");
+    }
+
+    [Fact]
+    public void SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
+    {
+        Action action = () => ClipboardCore.SetFileDropList(null!);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("filePaths");
+    }
+
+    [Fact]
+    public void SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
+    {
+        Action action = static () => ClipboardCore.SetFileDropList([]);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("\0")]
+    public void SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    {
+        StringCollection filePaths =
+        [
+            filePath
+        ];
+        Action action = () => ClipboardCore.SetFileDropList(filePaths);
+        action.Should().Throw<ArgumentException>();
     }
 }
