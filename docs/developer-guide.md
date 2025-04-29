@@ -6,27 +6,22 @@ The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Windows Forms requires the following workloads and components be selected when installing Visual Studio 2022 (17.0.0):
+Windows Forms development requires the following workloads and components be selected when installing Visual Studio 2022 (17.0.0):
 
 * Required Workloads:
   * .NET Desktop Development
   * Desktop development with C++
 * [Required Individual Components][required-individual-components]:
   * Windows 10 SDK
-  * C++/CLI support
+  * C++/CLI support, this brings in CMake required to build tests
 * Required Windows Features
-  * 'Media Features' including 'Windows Media Player Legacy (App)' (Windows 11) or 'Windows Media Player' (Windows 10)
-
-
-  :warning: CMake 3.21.0 or later is required. Install CMake from the [official website][cmake-download] or via [Chocolatey][chocolatey]:
-  ```
-  choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-  ```
-  
+  * 'Media Features' including 'Windows Media Player Legacy (App)' (Windows 11) or 'Windows Media Player' (Windows 10) 
 * Useful Visual Studio extensions:  
   * [Editor guidelines](https://marketplace.dev.azure.com/items?itemName=PaulHarrington.EditorGuidelines), see https://github.com/dotnet/winforms/pull/4836 for more information
   * [VS Color Output](https://marketplace.dev.azure.com/items?itemName=MikeWard-AnnArbor.VSColorOutput64)
   * [Productivity Power Tools](https://marketplace.dev.azure.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2022)
+ 
+Optional: To get the latest C# features in the Visual Studio or to experiment with the latest runtime in the standalone IDE, install the [latest SDK build](https://github.com/dotnet/dotnet/blob/main/docs/builds-table.md).
 
 ## Workflow
 
