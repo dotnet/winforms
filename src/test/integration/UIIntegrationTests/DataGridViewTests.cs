@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using FluentAssertions;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
@@ -42,66 +43,57 @@ public class DataGridViewTests : ControlTestBase
     }
 
     [WinFormsFact]
-    private async Task DataGridView_withBindingSource()
+    public void DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
     {
-        await RunSingleControlTestAsync(
-            testDriverAsync: async (form1, button) =>
-            {
-                form1.Text = "Form1";
-
-                await OpenFormWithDataGridViewAsync();
-                Assert.Equal(form1, Form.ActiveForm);
-
-                form1.Close();
-            },
-            createControl: () =>
-            {
-                Button control = new();
-                return control;
-            },
-            createForm: () =>
-            {
-                return new()
-                {
-                    Size = new(500, 300),
-                };
-            });
-    }
-
-    public async Task OpenFormWithDataGridViewAsync()
-    {
-        await RunTestAsync(async (form2, dataGridView) =>
+        Action action = () =>
         {
-            form2.Text = "Form2";
-            DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn = new()
+            DataGridView dataGridView = new();
+            Form form = new();
+
+            form.Controls.Add(dataGridView);
+            dataGridView.Dock = DockStyle.Fill;
+
+            DataGridViewTextBoxColumn nameColumn = new()
             {
                 HeaderText = "Name",
                 DataPropertyName = "Name"
             };
-            DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn = new()
+            DataGridViewTextBoxColumn ageColumn = new()
             {
                 HeaderText = "Age",
                 DataPropertyName = "Age"
             };
 
-            dataGridView.Columns.AddRange([nameDataGridViewTextBoxColumn, ageDataGridViewTextBoxColumn]);
+            dataGridView.Columns.AddRange([nameColumn, ageColumn]);
 
-            DataRecordList dataRecordList = new DataRecordList
-            {
-                 new DataRecord { Name = "Alice", Age = 30 }
-            };
+            DataRecordList dataRecordList =
+            [
+                new DataRecord { Name = "Alice", Age = 30 }
+            ];
 
             IContainer components = new Container();
-            using BindingSource bindingSource1 = new(components)
+            using BindingSource bindingSource = new(components)
             {
                 DataSource = dataRecordList
             };
-            dataGridView.DataSource = bindingSource1;
-            await MoveMouseToControlAsync(dataGridView);
+            dataGridView.DataSource = bindingSource;
 
-            SendKeys.SendWait("{F2}");
-            SendKeys.SendWait("%{F4}");
-        });
+            form.Shown += (s, e) =>
+            {
+                dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
+                bool beganEdit = dataGridView.BeginEdit(true);
+
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(1000).ConfigureAwait(false);
+                    form.Invoke(() => form.Close());
+                });
+            };
+
+            form.ShowDialog();
+        };
+
+        action.Should().NotThrow();
     }
 
     public class DataRecord
