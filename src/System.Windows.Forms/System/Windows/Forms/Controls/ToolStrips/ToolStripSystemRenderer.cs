@@ -697,8 +697,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         ToolBarState state = GetToolBarState(item);
         VisualStyleElement toolBarElement = VisualStyleElement.ToolBar.Button.Normal;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (ToolStripManager.VisualStylesEnabled && !Application.IsDarkModeEnabled
+        if (ToolStripManager.VisualStylesEnabled
             && VisualStyleRenderer.IsElementDefined(toolBarElement))
         {
             VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
@@ -717,7 +716,6 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         {
             RenderSmall3DBorderInternal(g, new Rectangle(Point.Empty, item.Size), state, (item.RightToLeft == RightToLeft.Yes));
         }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         Rectangle fillRect = item.ContentRectangle;
 
@@ -818,10 +816,9 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
     {
-        if (!Application.IsDarkModeEnabled && Application.RenderWithVisualStyles)
+        if (Application.RenderWithVisualStyles)
         {
             VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
             vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
@@ -835,7 +832,6 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private static void RenderLabelInternal(ToolStripItemRenderEventArgs e)
     {
