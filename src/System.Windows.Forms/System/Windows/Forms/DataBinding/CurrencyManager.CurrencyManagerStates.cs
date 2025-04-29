@@ -13,5 +13,6 @@ public partial class CurrencyManager
         PullingData                     = 0b0000_0100,
         InChangeRecordState             = 0b0000_1000,
         SuspendPushDataInCurrentChanged = 0b0001_0000,
+        InSettingPosition               = 0b0010_0000,
     }
 }

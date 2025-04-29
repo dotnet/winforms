@@ -733,7 +733,7 @@ public partial class BindingSource : Component,
         // when our parent updates which then causes our parent to update which
         // then causes us to update which then causes our parent to update which
         // then causes us to update which then causes our parent to update...
-        if (!_state.HasFlag(BindingSourceStates.InnerListChanging))
+        if (!_state.HasFlag(BindingSourceStates.InnerListChanging) && (CurrencyManager is null || !CurrencyManager.IsInSettingPosition))
         {
             try
             {

@@ -213,6 +213,8 @@ public partial class CurrencyManager : BindingManagerBase
         }
     }
 
+    internal bool IsInSettingPosition => _state.HasFlag(CurrencyManagerStates.InSettingPosition);
+
     /// <summary>
     ///  Gets or sets the position you are at within the list.
     /// </summary>
@@ -221,6 +223,7 @@ public partial class CurrencyManager : BindingManagerBase
         get => listposition;
         set
         {
+            _state.ChangeFlags(CurrencyManagerStates.InSettingPosition, true);
             if (listposition == -1)
             {
                 return;
@@ -243,6 +246,7 @@ public partial class CurrencyManager : BindingManagerBase
                 endCurrentEdit: true,
                 firePositionChange: true,
                 pullData: false);
+            _state.ChangeFlags(CurrencyManagerStates.InSettingPosition, false);
         }
     }
 
