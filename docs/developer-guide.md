@@ -13,7 +13,7 @@ Windows Forms development requires the following workloads and components be sel
   * Desktop development with C++
 * [Required Individual Components][required-individual-components]:
   * Windows 10 SDK
-  * C++/CLI support, this brings in CMake required to build tests
+  * C++ CMake tools for Windows
 * Required Windows Features
   * 'Media Features' including 'Windows Media Player Legacy (App)' (Windows 11) or 'Windows Media Player' (Windows 10) 
 * Useful Visual Studio extensions:  
