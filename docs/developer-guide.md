@@ -21,7 +21,7 @@ Windows Forms development requires the following workloads and components be sel
   * [VS Color Output](https://marketplace.dev.azure.com/items?itemName=MikeWard-AnnArbor.VSColorOutput64)
   * [Productivity Power Tools](https://marketplace.dev.azure.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2022)
  
-Optional: To get the latest C# features in the Visual Studio or to experiment with the latest runtime in the standalone IDE, install the [latest SDK build](https://github.com/dotnet/dotnet/blob/main/docs/builds-table.md).
+Optional: To get the latest C# features in Visual Studio or to experiment with the latest runtime when not using the `start-vs.cmd`, install the [latest SDK build](https://github.com/dotnet/dotnet/blob/main/docs/builds-table.md).
 
 ## Workflow
 
