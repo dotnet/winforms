@@ -39,7 +39,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <returns>A color suitable for dark mode.</returns>
     private static Color GetDarkModeColor(Color color)
     {
-        // Map common system colors to their dark mode equivalents
+        // Map system colors to some slightly different colors we would get
+        // form the actual system colors in dark mode, since the visual style
+        // renderer in light mode would also not "hit" (for contrast and styling
+        // reasons) the exact same palette settings as the system colors.
         if (color == SystemColors.Control)
             return Color.FromArgb(45, 45, 45);
         if (color == SystemColors.ControlLight)
@@ -107,15 +110,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <param name="toolStrip">The ToolStrip to check.</param>
     /// <returns>true if the background should be painted; otherwise, false.</returns>
     private static bool ShouldPaintBackground(ToolStrip toolStrip)
-    {
-        if (toolStrip is null)
-            return true;
-
-        if (toolStrip.BackgroundImage is not null)
-            return false;
-
-        return true;
-    }
+        => toolStrip is null || toolStrip.BackgroundImage is null;
 
     /// <summary>
     /// Fills the background with the specified color.
