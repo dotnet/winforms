@@ -2179,7 +2179,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public FormCornerPreference FormCornerPreference
     {
         get => Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
@@ -2217,7 +2216,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
         if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
@@ -2226,9 +2224,7 @@ public partial class Form : ContainerControl
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
-#pragma warning restore WFO5001
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -2271,7 +2267,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormBorderColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormBorderColor
     {
         get => Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
@@ -2299,7 +2294,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
         if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
@@ -2333,7 +2327,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionBackColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
@@ -2362,7 +2355,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2396,7 +2388,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionTextColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
@@ -2425,7 +2416,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionTextColorChanged] is EventHandler eventHandler)
