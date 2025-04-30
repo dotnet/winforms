@@ -3636,6 +3636,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         Graphics g = e.GraphicsInternal;
         GraphicsState graphicsState = g.Save();
+
         try
         {
             using (Region? transparentRegion = Renderer.GetTransparentRegion(this))
@@ -3645,6 +3646,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                     EraseCorners(e, transparentRegion);
                     g.ExcludeClip(transparentRegion);
                 }
+            }
+
+            if (Renderer.RendererOverride is ToolStripRenderer renderer)
+            {
+                renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(g, this));
+                return;
             }
 
             Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(g, this));
