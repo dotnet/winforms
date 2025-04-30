@@ -3648,6 +3648,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 }
             }
 
+            if (Renderer.RendererOverride is ToolStripRenderer renderer)
+            {
+                renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(g, this));
+                return;
+            }
+
             Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(g, this));
         }
         finally
