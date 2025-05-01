@@ -4,7 +4,6 @@
 #nullable disable
 
 using System.Drawing;
-using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -19,18 +18,19 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     public void ListViewGroupAccessibleObject_Ctor_ThrowsArgumentNullException()
     {
         using ListView list = new();
-        ListViewGroup listGroup = new("Group1");
-        listGroup.Items.Add(new ListViewItem());
-        list.Groups.Add(listGroup);
 
-        Type type = listGroup.AccessibilityObject.GetType();
-        ConstructorInfo ctor = type.GetConstructor([typeof(ListViewGroup), typeof(bool)]);
-        Assert.NotNull(ctor);
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null, false]));
+        // No group.
+        Action action = () => new ListViewGroupAccessibleObject(null, list, false);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("owningGroup");
+        action = () => new ListViewGroupAccessibleObject(null, list, true);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("owningGroup");
 
-        // group without parent ListView
-        ListViewGroup listGroupWithoutList = new("Group2");
-        Assert.Throws<TargetInvocationException>(() => ctor.Invoke([listGroupWithoutList, false]));
+        // Group not parented to the ListView.
+        ListViewGroup listGroupWithoutList = new("Group");
+        action = () => new ListViewGroupAccessibleObject(listGroupWithoutList, null, false);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("listView");
+        action = () => new ListViewGroupAccessibleObject(listGroupWithoutList, null, true);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("listView");
     }
 
     [WinFormsFact]
@@ -310,7 +310,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             Assert.Equal(expectedBounds, actualBounds);
         });
 
-        // verify the remote process succeeded
+        // Verify the remote process succeeded.
         Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
     }
 
@@ -536,7 +536,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
     {
         foreach (View view in Enum.GetValues(typeof(View)))
         {
-            // View.Tile is not supported by ListView in virtual mode
+            // View.Tile is not supported by ListView in virtual mode.
             if (view == View.Tile)
             {
                 continue;
@@ -558,7 +558,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         {
             foreach (View view in Enum.GetValues(typeof(View)))
             {
-                // View.Tile is not supported by ListView in virtual mode
+                // View.Tile is not supported by ListView in virtual mode.
                 if (virtualMode && view == View.Tile)
                 {
                     continue;
@@ -635,7 +635,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         {
             foreach (View view in Enum.GetValues(typeof(View)))
             {
-                // View.Tile is not supported by ListView in virtual mode
+                // View.Tile is not supported by ListView in virtual mode.
                 if (virtualMode && view == View.Tile)
                 {
                     continue;
@@ -654,7 +654,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(ListViewGroup_GroupAddedWithItem_AccessibleObject_TestData))]
-    public void ListViewGroup_GroupAddedWithItem_AccessibleObject_DoesntThrowException(View view, bool showGroups, bool createHandle, bool virtualMode)
+    public void ListViewGroup_GroupAddedWithItem_AccessibleObject_NoException(View view, bool showGroups, bool createHandle, bool virtualMode)
     {
         using ListView listView = new()
         {
@@ -705,31 +705,31 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             ShowGroups = showGroups,
         };
 
-        ListViewGroup lvgroup1 = new()
+        ListViewGroup group1 = new()
         {
             Header = "CollapsibleGroup1",
             CollapsedState = ListViewGroupCollapsedState.Expanded
         };
 
-        listView.Groups.Add(lvgroup1);
-        listView.Items.Add(new ListViewItem("Item1", lvgroup1));
+        listView.Groups.Add(group1);
+        listView.Items.Add(new ListViewItem("Item1", group1));
 
-        ListViewGroup lvgroup2 = new()
+        ListViewGroup group2 = new()
         {
             Header = "CollapsibleGroup2",
             CollapsedState = ListViewGroupCollapsedState.Collapsed
         };
 
-        listView.Groups.Add(lvgroup2);
-        listView.Items.Add(new ListViewItem("Item2", lvgroup2));
+        listView.Groups.Add(group2);
+        listView.Items.Add(new ListViewItem("Item2", group2));
 
         if (createHandle)
         {
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
         }
 
-        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, lvgroup1.AccessibilityObject.ExpandCollapseState);
-        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, lvgroup2.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, group1.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, group2.AccessibilityObject.ExpandCollapseState);
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, listView.DefaultGroup.AccessibilityObject.ExpandCollapseState);
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }
@@ -767,7 +767,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         KeyboardSimulator.KeyPress(listView, Keys.Left);
 
-        // The second left key pressing should not change Collapsed state
+        // The second left key pressing should not change Collapsed state.
         Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
@@ -778,7 +778,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         KeyboardSimulator.KeyPress(listView, Keys.Right);
 
-        // The second right key pressing should not change Expanded state
+        // The second right key pressing should not change Expanded state.
         Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
     }
@@ -803,12 +803,12 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         listView.CreateControl();
         item1.Focused = true;
 
-        // Keep indices of groups, that GroupCollapsedStateChanged event was raised for.
-        // It will help to understand if the event was raised for a correct group and was raised at all.
+        // Keep indices of groups for which the GroupCollapsedStateChanged event was raised.
+        // This will help to understand if the event was raised for the correct group and was raised at all.
         List<int> eventGroupIndices = [];
         listView.GroupCollapsedStateChanged += (_, e) => eventGroupIndices.Add(e.GroupIndex);
 
-        // Navigate to the second group
+        // Navigate to the second group.
         KeyboardSimulator.KeyPress(listView, Keys.Down);
 
         if (firstGroupSate == ListViewGroupCollapsedState.Collapsed)
@@ -818,7 +818,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         }
 
         // Simulate multiple selection of several groups to test a specific case,
-        // described in https://github.com/dotnet/winforms/issues/6708
+        // described in https://github.com/dotnet/winforms/issues/6708.
         item1.Selected = true;
         item2.Selected = true;
         item3.Selected = true;
@@ -833,13 +833,12 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         Assert.Equal(ListViewGroupCollapsedState.Expanded, group3.GetNativeCollapsedState());
         Assert.Equal(ListViewGroupCollapsedState.Expanded, group3.CollapsedState);
 
-        // GroupCollapsedStateChanged event should be raised
-        // for the second group only in this specific case.
+        // GroupCollapsedStateChanged event should be raised for the second group only in this specific case.
         Assert.Single(eventGroupIndices);
         Assert.Equal(1, eventGroupIndices[0]);
 
-        // Make sure that we really cheched multiple selection case and the items
-        // are still selected after keyboard navigation simulations.
+        // Make sure that we really checked the multiple selection case and that the items are
+        // still selected after keyboard navigation simulations.
         Assert.Equal(3, listView.SelectedItems.Count);
         Assert.True(listView.IsHandleCreated);
     }
@@ -1333,7 +1332,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             Group = listGroup
         };
         listView.Items.Add(item);
-        ListViewGroupAccessibleObject accessibleObject = new(listGroup, false);
+        ListViewGroupAccessibleObject accessibleObject = new(listGroup, listView, false);
 
         if (createHandle)
         {
