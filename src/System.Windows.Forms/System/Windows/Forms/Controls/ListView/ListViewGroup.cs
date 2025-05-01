@@ -83,7 +83,8 @@ public sealed partial class ListViewGroup : ISerializable
                 return _accessibilityObject;
             }
 
-            // Get ListView from the group item as a workaround for https://github.com/dotnet/winforms/issues/4019
+            // Using an item from the group to obtain the ListView because the group might not yet be associated
+            // with the ListView. See https://github.com/dotnet/winforms/issues/4019.
             var listView = ListView ?? (Items.Count > 0 ? Items[0].ListView : null);
             if (listView is not null)
             {
