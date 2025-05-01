@@ -10,12 +10,21 @@
     <Authors>Paolo Foti</Authors>
     <PackageLicenseExpression>CPOL</PackageLicenseExpression>
     <PackageProjectUrl>
-      https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
+      https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful
+    </PackageProjectUrl>
+    <DefaultItemExcludes Condition="'$(TargetFramework)' != 'net481'">
+      $(DefaultItemExcludes);**/Framework/*
+    </DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
     <SignAssembly>true</SignAssembly>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' != 'net481'">
+    <!-- Include framework-specific items as 'None' to show them in the Solution Explorer -->
+    <None Include="**/Framework/*" />
+  </ItemGroup>
 
 </Project>

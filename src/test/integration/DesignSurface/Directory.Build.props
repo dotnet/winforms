@@ -18,9 +18,6 @@
     <!-- Unset TargetFramework as this property gets set in the repo's root. This is necessary to
     avoid over-building. -->
     <TargetFramework />
-
-    <DefaultItemExcludes Condition="'$(TargetFramework)' != 'net481'">
-      $(DefaultItemExcludes);**/Framework/*</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
@@ -46,11 +43,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Design" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'net481'">
-    <!-- Include framework-specific items as 'None' to facilitate their visibility in the Solution Explorer -->
-    <None Include="**/Framework/*" />
   </ItemGroup>
 
 </Project>
