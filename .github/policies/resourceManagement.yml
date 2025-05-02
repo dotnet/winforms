@@ -15,7 +15,7 @@ configuration:
       filters:
       - isOpen
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       - hasLabel:
           label: ':zzz: no-recent-activity'
       - noActivitySince:
@@ -30,7 +30,7 @@ configuration:
       filters:
       - isOpen
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       - noActivitySince:
           days: 14
       - isNotLabeledWith:
@@ -95,7 +95,7 @@ configuration:
           reviewState: Changes_requested
       then:
       - addLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       description: Add needs author feedback label to pull requests when changes are requested
     - if:
       - payloadType: Pull_Request
@@ -105,30 +105,30 @@ configuration:
           isAction:
             action: Closed
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       then:
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       description: Remove needs author feedback label when the author responds to a pull request
     - if:
       - payloadType: Issue_Comment
       - isActivitySender:
           issueAuthor: True
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       then:
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       description: Remove needs author feedback label when the author comments on a pull request
     - if:
       - payloadType: Pull_Request_Review
       - isActivitySender:
           issueAuthor: True
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       then:
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       description: Remove needs author feedback label when the author responds to a pull request review comment
     - if:
       - payloadType: Pull_Request
@@ -237,10 +237,10 @@ configuration:
       - isActivitySender:
           issueAuthor: True
       - hasLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       then:
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       - addLabel:
           label: 'untriaged'
       description: Remove needs author feedback label when the author comments on an issue and adds untriaged label
@@ -312,7 +312,7 @@ configuration:
       - removeLabel:
           label: ':mailbox_with_mail: waiting-for-testing'
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       - removeLabel:
           label: ready-to-merge
       - removeLabel:
@@ -329,7 +329,7 @@ configuration:
       - removeLabel:
           label: untriaged
       - removeLabel:
-          label: ':mailbox_with_no_mail: waiting-author-feedback'
+          label: 'waiting-author-feedback'
       - removeLabel:
           label: ':mailbox_with_mail: waiting-for-testing'
       description: Remove intermediate labels from closed issue.

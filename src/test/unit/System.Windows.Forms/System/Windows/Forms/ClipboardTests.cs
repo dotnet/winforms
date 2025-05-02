@@ -311,7 +311,7 @@ public class ClipboardTests
     [WinFormsTheory]
     [InlineData(1, true, 0, 0)]
     [InlineData(1, false, 1, 2)]
-    [InlineData("data", true, 0, 0)]
+    [InlineData("data", true, 1, 1)]
     [InlineData("data", false, 1, 2)]
     public void SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
     {
