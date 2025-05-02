@@ -77,11 +77,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
     }
@@ -617,7 +612,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    internal bool OwnerDraw => FlatStyle != FlatStyle.System;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    internal bool OwnerDraw =>
+        (FlatStyle != FlatStyle.System)
+        || Application.IsDarkModeEnabled;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
 
@@ -965,27 +964,37 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get
         {
-            if (_adapter is null || FlatStyle != _cachedAdapterType)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (_adapter is null
+                || FlatStyle != _cachedAdapterType)
             {
-                switch (FlatStyle)
+                if (Application.IsDarkModeEnabled)
                 {
-                    case FlatStyle.Standard:
-                        _adapter = CreateStandardAdapter();
-                        break;
-                    case FlatStyle.Popup:
-                        _adapter = CreatePopupAdapter();
-                        break;
-                    case FlatStyle.Flat:
-                        _adapter = CreateFlatAdapter();
-                        ;
-                        break;
-                    default:
-                        Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
-                        break;
+                    _adapter = CreateDarkModeAdapter();
                 }
+                else
+                {
+                    switch (FlatStyle)
+                    {
+                        case FlatStyle.Standard:
+                            _adapter = CreateStandardAdapter();
+                            break;
+                        case FlatStyle.Popup:
+                            _adapter = CreatePopupAdapter();
+                            break;
+                        case FlatStyle.Flat:
+                            _adapter = CreateFlatAdapter();
+                            ;
+                            break;
+                        default:
+                            Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
+                            break;
+                    }
 
-                _cachedAdapterType = FlatStyle;
+                    _cachedAdapterType = FlatStyle;
+                }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return _adapter;
         }
@@ -1004,6 +1013,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     }
 
     internal virtual ButtonBaseAdapter CreateStandardAdapter()
+    {
+        Debug.Fail("Derived classes need to provide a meaningful implementation.");
+        return null;
+    }
+
+    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
     {
         Debug.Fail("Derived classes need to provide a meaningful implementation.");
         return null;
