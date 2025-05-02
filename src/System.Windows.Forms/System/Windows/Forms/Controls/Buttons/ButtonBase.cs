@@ -968,27 +968,37 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get
         {
-            if (_adapter is null || FlatStyle != _cachedAdapterType)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (_adapter is null
+                || FlatStyle != _cachedAdapterType)
             {
-                switch (FlatStyle)
+                if (Application.IsDarkModeEnabled)
                 {
-                    case FlatStyle.Standard:
-                        _adapter = CreateStandardAdapter();
-                        break;
-                    case FlatStyle.Popup:
-                        _adapter = CreatePopupAdapter();
-                        break;
-                    case FlatStyle.Flat:
-                        _adapter = CreateFlatAdapter();
-                        ;
-                        break;
-                    default:
-                        Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
-                        break;
+                    _adapter = CreateDarkModeAdapter();
                 }
+                else
+                {
+                    switch (FlatStyle)
+                    {
+                        case FlatStyle.Standard:
+                            _adapter = CreateStandardAdapter();
+                            break;
+                        case FlatStyle.Popup:
+                            _adapter = CreatePopupAdapter();
+                            break;
+                        case FlatStyle.Flat:
+                            _adapter = CreateFlatAdapter();
+                            ;
+                            break;
+                        default:
+                            Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
+                            break;
+                    }
 
-                _cachedAdapterType = FlatStyle;
+                    _cachedAdapterType = FlatStyle;
+                }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return _adapter;
         }
@@ -1007,6 +1017,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     }
 
     internal virtual ButtonBaseAdapter CreateStandardAdapter()
+    {
+        Debug.Fail("Derived classes need to provide a meaningful implementation.");
+        return null;
+    }
+
+    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
     {
         Debug.Fail("Derived classes need to provide a meaningful implementation.");
         return null;
