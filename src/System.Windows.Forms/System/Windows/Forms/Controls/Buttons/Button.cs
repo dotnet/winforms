@@ -81,6 +81,8 @@ public partial class Button : ButtonBase, IButtonControl
 
     internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonStandardAdapter(this);
 
+    internal override ButtonBaseAdapter CreateDarkModeAdapter() => new ButtonDarkModeAdapter(this);
+
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         if (FlatStyle != FlatStyle.System)
