@@ -223,23 +223,15 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
 
             Rectangle r = Control.ClientRectangle;
 
-            Color backColor;
-            if (!Control.FlatAppearance.MouseOverBackColor.IsEmpty)
-            {
-                backColor = Control.FlatAppearance.MouseOverBackColor;
-            }
-            else if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
-            {
-                backColor = state is CheckState.Checked or CheckState.Indeterminate
-                    ? Control.FlatAppearance.CheckedBackColor.MixColor(colors.LowButtonFace)
-                    : colors.LowButtonFace;
-            }
-            else
-            {
-                backColor = state is CheckState.Indeterminate
-                    ? colors.ButtonFace.MixColor(colors.LowButtonFace)
-                    : colors.LowButtonFace;
-            }
+            Color backColor = !Control.FlatAppearance.MouseOverBackColor.IsEmpty
+                ? Control.FlatAppearance.MouseOverBackColor
+                : !Control.FlatAppearance.CheckedBackColor.IsEmpty
+                    ? state is CheckState.Checked or CheckState.Indeterminate
+                        ? Control.FlatAppearance.CheckedBackColor.MixColor(colors.LowButtonFace)
+                        : colors.LowButtonFace
+                    : state is CheckState.Indeterminate
+                        ? colors.ButtonFace.MixColor(colors.LowButtonFace)
+                        : colors.LowButtonFace;
 
             PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
@@ -249,11 +241,14 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             }
 
             PaintImage(e, layout);
+
             PaintField(
                 e,
                 layout,
                 colors,
-                IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText,
+                IsHighContrastHighlighted()
+                    ? SystemColors.HighlightText
+                    : colors.WindowText,
                 drawFocus: false);
 
             if (Control.Focused && Control.ShowFocusCues)
