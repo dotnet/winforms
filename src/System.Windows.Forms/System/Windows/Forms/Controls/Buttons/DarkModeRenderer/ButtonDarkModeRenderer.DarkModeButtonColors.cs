@@ -6,7 +6,7 @@ namespace System.Windows.Forms;
 internal static partial class ButtonDarkModeRenderer
 {
     /// <summary>Cache of colors for different button states</summary>
-    private static class DarkModeButtonColors
+    internal static class DarkModeButtonColors
     {
         // Normal Button (non-default)
         /// <summary>Button background color for normal state (#2B2B2B)</summary>
