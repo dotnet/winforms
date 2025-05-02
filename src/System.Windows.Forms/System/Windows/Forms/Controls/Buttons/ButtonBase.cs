@@ -1076,6 +1076,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return null;
     }
 
+    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
+    {
+        Debug.Fail("Derived classes need to provide a meaningful implementation.");
+        return null;
+    }
+
     internal virtual StringFormat CreateStringFormat()
     {
         if (Adapter is null)
