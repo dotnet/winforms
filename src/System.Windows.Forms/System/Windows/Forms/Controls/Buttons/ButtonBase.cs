@@ -956,8 +956,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
-        Size preferedSize = Adapter.GetPreferredSizeCore(proposedConstraints);
-        return LayoutUtils.UnionSizes(preferedSize + Padding.Size, MinimumSize);
+        Size preferredSize = Adapter.GetPreferredSizeCore(proposedConstraints);
+        return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
     internal ButtonBaseAdapter Adapter
