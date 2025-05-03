@@ -12,7 +12,7 @@ using System.Numerics.Hashing;
 
 namespace System;
 
-internal readonly struct Range : IEquatable<Range>
+public readonly struct Range : IEquatable<Range>
 {
     /// <summary>Represent the inclusive start index of the Range.</summary>
     public Index Start { get; }
@@ -31,10 +31,12 @@ internal readonly struct Range : IEquatable<Range>
 
     /// <summary>Indicates whether the current Range object is equal to another object of the same type.</summary>
     /// <param name="value">An object to compare with this object</param>
+    #pragma warning disable CA1725 // Parameter names should match base declaration
     public override bool Equals([NotNullWhen(true)] object? value) =>
         value is Range r &&
         r.Start.Equals(Start) &&
         r.End.Equals(End);
+    #pragma warning restore CA1725
 
     /// <summary>Indicates whether the current Range object is equal to another Range object.</summary>
     /// <param name="other">An object to compare with this object</param>
