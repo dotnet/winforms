@@ -3368,7 +3368,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    // Deactivates active MDI child and temporarily marks it as unfocusable,
+    // Deactivates active MDI child and temporarily marks it as un-focusable,
     // so that WM_SETFOCUS sent to MDIClient does not activate that child.
     private void DeactivateMdiChild()
     {
@@ -4906,6 +4906,23 @@ public partial class Form : ContainerControl
             bool result = PInvoke.SetWindowPlacement(HWND, &wp);
             Debug.Assert(result);
         }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (TopLevel && IsHandleCreated)
+        {
+            FormCornerPreference formCornerPreference = Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
+            SetFormCornerPreferenceInternal(formCornerPreference);
+
+            Color colorValue = Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, colorValue);
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         GC.KeepAlive(this);
     }
