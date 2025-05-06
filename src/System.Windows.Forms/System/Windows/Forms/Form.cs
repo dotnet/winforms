@@ -1810,6 +1810,54 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
     /// </summary>
+    [DefaultValue(0)]
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription("")]
+    public ScreenCaptureMode FormScreenCaptureMode
+    {
+        get => _formScreenCaptureMode;
+        set
+        {
+            if (_formScreenCaptureMode == value)
+            {
+                return;
+            }
+
+            _formScreenCaptureMode = value;
+            SetScreenCaptureModeInternal(value);
+        }
+    }
+
+    private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
+    {
+        WINDOW_DISPLAY_AFFINITY affinity = value switch
+        {
+            ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
+            ScreenCaptureMode.HideWindow => WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE,
+            ScreenCaptureMode.HideContent => WINDOW_DISPLAY_AFFINITY.WDA_MONITOR,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+        };
+
+        PInvoke.SetWindowDisplayAffinity(HWND, affinity);
+    }
+
+    private ScreenCaptureMode GetScreenCaptureModeInternal()
+    {
+        PInvoke.GetWindowDisplayAffinity(HWND, out uint affinityValue);
+
+        WINDOW_DISPLAY_AFFINITY affinity = (WINDOW_DISPLAY_AFFINITY)affinityValue;
+
+        return affinity switch
+        {
+            WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE => ScreenCaptureMode.HideWindow,
+            WINDOW_DISPLAY_AFFINITY.WDA_MONITOR => ScreenCaptureMode.HideContent,
+            _ => ScreenCaptureMode.Allow,
+        };
+    }
+
+    /// <summary>
+    ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
+    /// </summary>
     [DefaultValue(true)]
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormShowInTaskbarDescr))]
