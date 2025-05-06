@@ -718,13 +718,14 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Rectangle bounds = e.AffectedBounds;
         Graphics g = e.Graphics;
 
-        // Draw a dark mode sizing grip
-        Color darkColor = GetDarkModeColor(SystemColors.ControlDark);
-        Color lightColor = GetDarkModeColor(SystemColors.ControlLight);
+        // Use better contrast for dark mode
+        Color shadowColor = GetDarkModeColor(SystemColors.ButtonShadow);
+        Color highlightColor = GetDarkModeColor(SystemColors.ButtonHighlight);
 
-        // Start at the bottom-right corner and move up and left
-        int x = bounds.Right - 3;
-        int y = bounds.Bottom - 3;
+        int cornerOffset = GetCornerOffset(e.ToolStrip);
+
+        int x = bounds.Right - cornerOffset;
+        int y = bounds.Bottom - cornerOffset;
 
         for (int i = 0; i < 3; i++)
         {
@@ -733,8 +734,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
             for (int j = 0; j <= i; j++)
             {
-                g.FillRectangle(new SolidBrush(darkColor), tempX, tempY, 2, 2);
-                g.FillRectangle(new SolidBrush(lightColor), tempX - 1, tempY - 1, 1, 1);
+                g.FillRectangle(new SolidBrush(shadowColor), tempX, tempY, 2, 2);
+                g.FillRectangle(new SolidBrush(highlightColor), tempX - 1, tempY - 1, 1, 1);
 
                 tempX -= 4;
                 tempY += 4;
