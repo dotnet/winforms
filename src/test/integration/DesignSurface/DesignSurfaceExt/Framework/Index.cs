@@ -16,7 +16,7 @@ namespace System;
 ///   int lastElement = someArray[^1]; // lastElement = 5
 ///  </code>
 /// </remarks>
-internal readonly struct Index : IEquatable<Index>
+public readonly struct Index : IEquatable<Index>
 {
     private readonly int _value;
 
@@ -121,7 +121,9 @@ internal readonly struct Index : IEquatable<Index>
 
     /// <summary>Indicates whether the current Index object is equal to another object of the same type.</summary>
     /// <param name="value">An object to compare with this object</param>
+#pragma warning disable CA1725 // Parameter names should match base declaration
     public override bool Equals([NotNullWhen(true)] object? value) => value is Index index && _value == index._value;
+#pragma warning restore CA1725
 
     /// <summary>Indicates whether the current Index object is equal to another Index object.</summary>
     /// <param name="other">An object to compare with this object</param>
@@ -136,10 +138,7 @@ internal readonly struct Index : IEquatable<Index>
     /// <summary>Converts the value of the current Index object to its equivalent string representation.</summary>
     public override string ToString()
     {
-        if (IsFromEnd)
-            return ToStringFromEnd();
-
-        return ((uint)Value).ToString();
+        return IsFromEnd ? ToStringFromEnd() : ((uint)Value).ToString();
     }
 
     private static void ThrowValueArgumentOutOfRange_NeedNonNegNumException()
