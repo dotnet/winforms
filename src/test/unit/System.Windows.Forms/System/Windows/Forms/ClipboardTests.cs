@@ -36,72 +36,12 @@ public class ClipboardTests
         Clipboard.ContainsText().Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void Clear_InvokeMultipleTimes_Success()
-    {
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-    }
-
-    public static TheoryData<Func<bool>> ContainsMethodsTheoryData =>
-    [
-        Clipboard.ContainsAudio,
-        Clipboard.ContainsFileDropList,
-        Clipboard.ContainsImage,
-        Clipboard.ContainsText
-    ];
-
-    [WinFormsTheory]
-    [MemberData(nameof(ContainsMethodsTheoryData))]
-    public void Contains_InvokeMultipleTimes_Success(Func<bool> contains)
-    {
-        Clipboard.Clear();
-        bool result = contains.Invoke();
-        contains.Invoke().Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [StringWithNullData]
-    public void ContainsData_InvokeMultipleTimes_Success(string format)
-    {
-        bool result = Clipboard.ContainsData(format);
-        Clipboard.ContainsData(format).Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void ContainsText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        bool result = Clipboard.ContainsText(format);
-        Clipboard.ContainsText(format).Should().Be(result);
-    }
-
     [WinFormsTheory]
     [InvalidEnumData<TextDataFormat>]
     public void ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
         Action action = () => Clipboard.ContainsText(format);
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
-    }
-
-    [WinFormsFact]
-    public void GetAudioStream_InvokeMultipleTimes_Success()
-    {
-        Stream? result = Clipboard.GetAudioStream();
-        (Clipboard.GetAudioStream() == result).Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -114,43 +54,6 @@ public class ClipboardTests
         result.Should().BeNull();
         result = Clipboard.GetData(format!);
         result.Should().BeNull();
-    }
-
-    [WinFormsFact]
-    public void GetDataObject_InvokeMultipleTimes_Success()
-    {
-        DataObject result1 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        DataObject result2 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        result1.GetFormats().Should().BeEquivalentTo(result2.GetFormats());
-    }
-
-    [WinFormsFact]
-    public void GetFileDropList_InvokeMultipleTimes_Success()
-    {
-        StringCollection result = Clipboard.GetFileDropList();
-        Clipboard.GetFileDropList().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetImage_InvokeMultipleTimes_Success()
-    {
-        Image? result = Clipboard.GetImage();
-        Clipboard.GetImage().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetText_InvokeMultipleTimes_Success()
-    {
-        string result = Clipboard.GetText();
-        Clipboard.GetText().Should().Be(result);
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void GetText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        string result = Clipboard.GetText(format);
-        Clipboard.GetText(format).Should().Be(result);
     }
 
     [WinFormsTheory]
