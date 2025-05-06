@@ -1,0 +1,6 @@
+System.Windows.Forms.Form.FormScreenCaptureMode.get -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.Form.FormScreenCaptureMode.set -> void
+System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.Allow = 0 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideContent = 1 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideWindow = 2 -> System.Windows.Forms.ScreenCaptureMode
