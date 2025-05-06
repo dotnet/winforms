@@ -2,6 +2,9 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports System.Net.Http
+Imports System.Threading
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
@@ -262,6 +265,7 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             onUserCancel As UICancelOption)
 
+            ' Construct the local file. This will validate the full name and path
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             ' Make sure the file exists
@@ -280,15 +284,13 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw GetArgumentNullException(NameOf(address))
             End If
 
-            Using client As New WebClientExtended()
-                client.Timeout = connectionTimeout
-
-                ' Set credentials if we have any
-                If networkCredentials IsNot Nothing Then
-                    client.Credentials = networkCredentials
-                End If
-
-                Dim dialog As ProgressDialog = Nothing
+            Dim dialog As ProgressDialog = Nothing
+            Try
+                ' Get network credentials
+                Dim clientHandler As HttpClientHandler =
+                    If(networkCredentials Is Nothing,
+                        New HttpClientHandler,
+                        New HttpClientHandler With {.Credentials = networkCredentials})
                 If InteractiveEnvironment(showUI) Then
                     dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
@@ -299,19 +301,39 @@ Namespace Microsoft.VisualBasic.Devices
                     }
                 End If
 
-                ' Create the copier
-                Dim copier As New WebClientCopy(client, dialog)
+                Dim t As Task = UploadFileAsync(
+                    sourceFileName,
+                    addressUri:=address,
+                    clientHandler,
+                    dialog,
+                    connectionTimeout,
+                    onUserCancel)
 
-                ' Download the file
-                copier.UploadFile(sourceFileName, address)
-
-                ' Handle a dialog cancel
-                If InteractiveEnvironment(showUI) Then
-                    If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                        Throw New OperationCanceledException()
+                If t.IsFaulted Then
+                    ' IsFaulted will be true if any parameters are bad
+                    Throw t.Exception
+                Else
+                    dialog?.ShowProgressDialog()
+                    Do While Not (t.IsCompleted OrElse t.IsFaulted OrElse t.IsCanceled)
+                        ' prevent UI freeze
+                        Thread.Sleep(10)
+                        Application.DoEvents()
+                    Loop
+                    If t.IsFaulted Then
+                        Throw t.Exception
+                    End If
+                    If t.IsCanceled Then
+                        Throw New OperationCanceledException
                     End If
                 End If
-            End Using
+            Catch ex As Exception
+                If ex.InnerException IsNot Nothing Then
+                    Throw ex.InnerException
+                End If
+                Throw
+            Finally
+                CloseProgressDialog(dialog)
+            End Try
 
         End Sub
 

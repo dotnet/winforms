@@ -1,0 +1,12 @@
+{
+  "FileDownloadUrlPrefix": "http://someServer.net/",
+  "FileUploadUrlPrefix": "ftp://ftp.someServer.com/",
+  "ServerDownloadAllowsAnonymousUser": false,
+  "ServerDownloadIgnoresPasswordErrors": true,
+  "ServerDownloadPassword": "Anything",
+  "ServerDownloadUserName": "Anonymous",
+  "ServerUploadAllowsAnonymousUser": false,
+  "ServerUploadIgnoresPasswordErrors": true,
+  "ServerUploadPassword": "rNrKYTX9g7z3RgJRmxWuGHbeu",
+  "ServerUploadUserName": "defaultuser"
+}
