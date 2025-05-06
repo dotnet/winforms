@@ -160,19 +160,13 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             {
                 _active = value;
 
-                if (KeyboardService is not null)
-                {
-                    KeyboardService.TemplateNodeActive = value;
-                }
+                KeyboardService?.TemplateNodeActive = value;
 
                 if (_active)
                 {
                     // Active.. Fire Activated
                     OnActivated(new EventArgs());
-                    if (KeyboardService is not null)
-                    {
-                        KeyboardService.ActiveTemplateNode = this;
-                    }
+                    KeyboardService?.ActiveTemplateNode = this;
 
                     IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
                     if (menuService is not null)
@@ -204,10 +198,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 else
                 {
                     OnDeactivated(new EventArgs());
-                    if (KeyboardService is not null)
-                    {
-                        KeyboardService.ActiveTemplateNode = null;
-                    }
+                    KeyboardService?.ActiveTemplateNode = null;
 
                     IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
                     if (menuService is not null)
@@ -355,7 +346,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _selectionService ??= (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
+            _selectionService ??= (ISelectionService)_component.Site?.GetService(typeof(ISelectionService));
 
             return _selectionService;
         }
@@ -365,7 +356,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _behaviorService ??= (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
+            _behaviorService ??= (BehaviorService)_component.Site?.GetService(typeof(BehaviorService));
 
             return _behaviorService;
         }
@@ -395,10 +386,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     private void AddNewItemClick(object sender, EventArgs e)
     {
         // Close the DropDown.. Important for Morphing ....
-        if (_addItemButton is not null)
-        {
-            _addItemButton.DropDown.Visible = false;
-        }
+        _addItemButton?.DropDown.Visible = false;
 
         if (_component is ToolStrip && SelectionService is not null)
         {
@@ -406,27 +394,18 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             ToolStripDesigner designer = _designerHost.GetDesigner(_component) as ToolStripDesigner;
             try
             {
-                if (designer is not null)
-                {
-                    designer.DontCloseOverflow = true;
-                }
+                designer?.DontCloseOverflow = true;
 
                 SelectionService.SetSelectedComponents(new object[] { _component });
             }
             finally
             {
-                if (designer is not null)
-                {
-                    designer.DontCloseOverflow = false;
-                }
+                designer?.DontCloseOverflow = false;
             }
         }
 
         ItemTypeToolStripMenuItem senderItem = (ItemTypeToolStripMenuItem)sender;
-        if (_lastSelection is not null)
-        {
-            _lastSelection.Checked = false;
-        }
+        _lastSelection?.Checked = false;
 
         // set the appropriate Checked state
         senderItem.Checked = true;
@@ -446,10 +425,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             CommitEditor(true, false, false);
         }
 
-        if (KeyboardService is not null)
-        {
-            KeyboardService.TemplateNodeActive = false;
-        }
+        KeyboardService?.TemplateNodeActive = false;
     }
 
     /// <summary>
@@ -466,10 +442,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 return;
             }
 
-            if (KeyboardService is not null)
-            {
-                KeyboardService.SelectedDesignerControl = _controlHost;
-            }
+            KeyboardService?.SelectedDesignerControl = _controlHost;
 
             SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
             if (BehaviorService is not null)
@@ -484,10 +457,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         {
             if (_hotRegion.Contains(e.Location) && !KeyboardService.TemplateNodeActive)
             {
-                if (KeyboardService is not null)
-                {
-                    KeyboardService.SelectedDesignerControl = _controlHost;
-                }
+                KeyboardService?.SelectedDesignerControl = _controlHost;
 
                 SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                 ToolStripDropDown oldContextMenu = _contextMenu;
@@ -827,7 +797,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         FocusForm();
         CommitTextToDesigner(text, commit, enterKeyPressed, tabKeyPressed);
         // finally Invalidate the selection rect ...
-        if (SelectionService.PrimarySelection is ToolStripItem curSel)
+        if (SelectionService?.PrimarySelection is ToolStripItem curSel)
         {
             if (_designerHost is not null)
             {
@@ -866,10 +836,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 Active = true;
                 _inSituMode = true;
                 // set the renderer state to Selected...
-                if (_renderer is not null)
-                {
-                    _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
-                }
+                _renderer?.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
 
                 // Set UP textBox for InSitu
                 TextBox tb = new TemplateTextBox(_miniToolStrip, this)
@@ -1040,10 +1007,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     private void OnContextMenuOpened(object sender, EventArgs e)
     {
         // Disable All Commands .. the Commands would be reenabled by AddNewItemClick call.
-        if (KeyboardService is not null)
-        {
-            KeyboardService.TemplateNodeContextMenuOpen = true;
-        }
+        KeyboardService?.TemplateNodeContextMenuOpen = true;
     }
 
     protected void OnDeactivated(EventArgs e)
@@ -1166,10 +1130,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     /// </summary>
     private void OnMouseDown(object sender, MouseEventArgs e)
     {
-        if (KeyboardService is not null)
-        {
-            KeyboardService.SelectedDesignerControl = _controlHost;
-        }
+        KeyboardService?.SelectedDesignerControl = _controlHost;
 
         SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
     }

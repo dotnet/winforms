@@ -1,9 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
 using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
 using System.Windows.Forms.TestUtilities;
 using Com = Windows.Win32.System.Com;
 
@@ -11,14 +10,6 @@ namespace System.Windows.Forms.Tests;
 
 public unsafe partial class NativeToWinFormsAdapterTests
 {
-    [GeneratedRegex(@"{[0-9]}")]
-    private static partial Regex PlaceholdersPattern();
-
-    private static string InvalidTypeFormatCombinationMessage =>
-        PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidFormatTypeCombination, "*");
-    private static string TypeRequiresResolverMessage => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidType, "*");
-    private static string UseTryGetDataWithResolver => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_UseTypedAPI, "*");
-
     private const string FormatterDisabledMessage =
         "BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.";
 
@@ -58,7 +49,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject dataObject = new(comDataObject.Value);
 
         Action tryGetData = () => dataObject.TryGetData(format, out object? value);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
 
         dataObject.TryGetData(format, Resolver, autoConvert: false, out object? value).Should().BeTrue();
         value.Should().Be(1);
@@ -79,7 +70,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         // Throw when validating arguments, as these formats allow exactly strings or bitmaps only.
         Action tryGetData = () => dataObject.TryGetData(format, out object? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     private static (DataObject dataObject, TestData value) SetDataObject(string format)
@@ -101,7 +92,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         (DataObject dataObject, TestData _) = SetDataObject(format);
         Action tryGetData = () => dataObject.TryGetData(format, out object? _);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
     }
 
     [WinFormsTheory]
@@ -114,7 +105,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
     }
 
     [WinFormsTheory]
@@ -127,7 +118,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         // Type-Format combination is validated before the we attempt to serialize data.
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -180,7 +171,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         // Theoretically we don't require a resolver here, but this is an exception. In the more common cases resolver
         // is required to instantiate non-concrete types.
         Action tryGetData = () => dataObject.TryGetData(format, out IList<int>? _);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
     }
 
     [WinFormsTheory]
@@ -196,7 +187,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         Action tryGetData = () => dataObject.TryGetData(format, out IList<int>? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -227,7 +218,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         Action tryGetData = () => dataObject.TryGetData(format, out List<int>? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -277,7 +268,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         Action tryGetData = () => dataObject.TryGetData(format, out TestData? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -302,7 +293,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         Action tryGetData = () => dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out TestData? _);
 
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -317,7 +308,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -354,7 +345,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
 
         Action tryGetData = () => dataObject.TryGetData(format, out AbstractBase? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]
@@ -364,7 +355,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         (DataObject dataObject, TestData _) = SetDataObject(format);
         Action tryGetData = () => dataObject.TryGetData(format, out AbstractBase? _);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
 
         dataObject.TryGetData(format, out NotSupportedException? ex).Should().BeTrue();
         ex.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
@@ -380,7 +371,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: ResourceStrings.TypeRequiresResolver);
     }
 
     [WinFormsTheory]
@@ -420,7 +411,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         // Nothing is written to HGLOBAL in this test because format-type combination is invalid.
         Action tryGetData = () => dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out AbstractBase? _);
         tryGetData.Should().Throw<NotSupportedException>()
-            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+            .WithMessage(expectedWildcardPattern: ResourceStrings.InvalidTypeFormatCombinationMessage);
     }
 
     [WinFormsTheory]

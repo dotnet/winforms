@@ -632,10 +632,7 @@ public partial class Binding
                 // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use
                 // things like the Format or Parse events for that). Exceptions thrown here can mess up currency manager behavior big time.
                 // For now, eat any non-critical exceptions and instead just cancel the current push/pull operation.
-                if (e is not null)
-                {
-                    e.Cancel = true;
-                }
+                e?.Cancel = true;
             }
             finally
             {

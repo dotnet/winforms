@@ -971,10 +971,7 @@ public sealed partial class Application
             if (s_exiting)
             {
                 // Recursive call to Exit
-                if (e is not null)
-                {
-                    e.Cancel = false;
-                }
+                e?.Cancel = false;
 
                 return;
             }
@@ -1002,10 +999,7 @@ public sealed partial class Application
                         if (form.RaiseFormClosingOnAppExit())
                         {
                             // A form refused to close
-                            if (e is not null)
-                            {
-                                e.Cancel = true;
-                            }
+                            e?.Cancel = true;
 
                             processedForms.Clear();
                             return;
@@ -1040,10 +1034,7 @@ public sealed partial class Application
                 }
 
                 ThreadContext.ExitApplication();
-                if (e is not null)
-                {
-                    e.Cancel = false;
-                }
+                e?.Cancel = false;
             }
             finally
             {

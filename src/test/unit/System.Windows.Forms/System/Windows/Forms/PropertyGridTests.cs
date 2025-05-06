@@ -3969,12 +3969,46 @@ public partial class PropertyGridTests
         propertyGrid.Site = new MySite();
         MyClass myClass = new();
         propertyGrid.SelectedObject = myClass;
-        PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
         GridEntry entry = propertyGridView.SelectedGridEntry;
         var descriptor = entry.GridItems[0] as PropertyDescriptorGridEntry;
 
         descriptor.SetPropertyTextValue("123");
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
+    }
+
+    [WinFormsFact]
+    public void ShortcutKeys_GridEntry_ProcessInput()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/12982
+        ToolStripMenuItem menuItem = new();
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.SelectedObject = menuItem;
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault();
+        propertyGridView.Should().NotBeNull();
+        var categories = propertyGridView.TopLevelGridEntries;
+        categories.Should().NotBeNull();
+        PropertyDescriptorGridEntry shortcutKeyEntry = categories
+            .FirstOrDefault(category => category.PropertyName == "Misc")?
+            .GridItems
+            .OfType<PropertyDescriptorGridEntry>()
+            .FirstOrDefault(entry => entry.PropertyName == nameof(ToolStripMenuItem.ShortcutKeys));
+
+        shortcutKeyEntry.Should().NotBeNull();
+        shortcutKeyEntry.PropertyDescriptor.GetValue(menuItem).Should().Be(Keys.None);
+
+        propertyGrid.SelectedGridItem = shortcutKeyEntry;
+        var gridViewAccessor = propertyGridView.TestAccessor();
+
+        bool result = gridViewAccessor.Dynamic.ProcessEnumUpAndDown(shortcutKeyEntry, Keys.Down, closeDropDown: true);
+        // Current value indicates the shortcut property is not set, thus up/down keys are ignored.
+        result.Should().BeFalse();
+
+        // Simulate mouse wheel scroll.
+        int index = gridViewAccessor.Dynamic.GetCurrentValueIndex(shortcutKeyEntry);
+        // Current value is not an allowed value.
+        index.Should().Be(-1);
     }
 
     [WinFormsFact]
@@ -4123,6 +4157,63 @@ public partial class PropertyGridTests
         actualSender.Should().Be(propertyGrid);
         eventArgs.NewSelection.Should().Be(gridItem);
     }
+
+    // Regression test for https://github.com/dotnet/winforms/issues/13071
+    [WinFormsFact]
+    public void PropertyGrid_FullRefreshShouldTriggerTypeConverterGetProperties()
+    {
+        using PropertyGrid propertyGrid = new()
+        {
+            SelectedObject = new SelectedObject()
+        };
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView;
+
+        MyTypeConverter.GetPropertiesInvokeCount = 0;
+        propertyGridView.Refresh(true);
+
+        int getPropertiesInvokeCount2 = MyTypeConverter.GetPropertiesInvokeCount;
+        getPropertiesInvokeCount2.Should().Be(1);
+    }
+
+    #region classes used for PropertyGrid_FullRefreshShouldTriggerTypeConverterGetProperties
+    [TypeConverter(typeof(MyTypeConverter))]
+    private class SelectedObject
+    {
+        private string _a;
+        private string _b;
+
+        [RefreshProperties(RefreshProperties.All)]
+        public string A
+        {
+            get { return _a; }
+            set { _a = value; }
+        }
+
+        public string B
+        {
+            get { return _b; }
+            set { _b = value; }
+        }
+    }
+
+    private class MyTypeConverter : TypeConverter
+    {
+        public static int GetPropertiesInvokeCount { get; set; }
+        public MyTypeConverter()
+            : base() { }
+
+        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        {
+            GetPropertiesInvokeCount++;
+            return base.GetProperties(context, value, attributes) ?? TypeDescriptor.GetProperties(value, attributes);
+        }
+    }
+    #endregion
 
     private class SubToolStripRenderer : ToolStripRenderer
     {

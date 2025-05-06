@@ -7,7 +7,7 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.TestUtilities;
 
-internal class ManagedAndRuntimeDataObject : ManagedDataObject, ComTypes.IDataObject
+internal class ManagedAndRuntimeDataObject : UntypedDataObject, ComTypes.IDataObject
 {
     public int DAdvise(ref ComTypes.FORMATETC pFormatetc, ComTypes.ADVF advf, ComTypes.IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
     public void DUnadvise(int connection) => throw new NotImplementedException();

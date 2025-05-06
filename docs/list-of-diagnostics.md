@@ -44,9 +44,9 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
 
 | Diagnostic ID | Introduced | Description |
 | :-------------| :--------- | :---------- |
-| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `WParamInternal`. |
-| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `LParamInternal`. |
-| `WFDEV001`    | NET7.0     | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
+| `WFDEV001`    | NET7.0     | (Internal) Casting to/from IntPtr is unsafe, use `WParamInternal`. |
+| `WFDEV001`    | NET7.0     | (Internal) Casting to/from IntPtr is unsafe, use `LParamInternal`. |
+| `WFDEV001`    | NET7.0     | (Internal) Casting to/from IntPtr is unsafe, use `ResultInternal`. |
 | `WFDEV002`    | NET8.0     | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 | `WFDEV003`    | NET8.0     | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
 | `WFDEV004`    | NET10.0    | `Form.OnClosing`, `Form.OnClosed` and the corresponding events are obsolete. Use `Form.OnFormClosing`, `Form.OnFormClosed`, `Form.FormClosing` and `Form.FormClosed` instead. |
@@ -71,19 +71,19 @@ The diagnostic ID values reserved for obsoletions are `WFDEV001` through `WFDEV9
     - This method will generate the help link in the https://aka.ms/winforms-warnings/WFO#### format.
 3. **Follow the [documentation steps 5-7 described for obsoletions](#create-the-new-aka.ms-link)** above.
 
-| Diagnostic ID | Introduced | Description |
-| :-------------| :--------- | :---------- |
-| `WFAC001`     | NET6.0     | Unsupported project type. |
-| `WFAC002`     | NET6.0     | Unsupported property value. |
-| `WFAC010`     | NET6.0     | Unsupported high DPI configuration. |
-| `WFO0001`     | NET9.0     | Only projects with `OutputType=WindowsApplication` supported. |
-| `WFO0002`     | NET9.0     | ArgumentException: Project property '{0}' cannot be set to '{1}'|
-| `WFO0002`     | NET9.0     | ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.|
-| `WFO0003`     | NET9.0     | Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property.|
-| `WFO0003`     | NET9.0     | Remove high DPI settings from {0} and configure via '{1}' property in Application Framework.|
-| `WFO1000`     | NET9.0     | Property '{0}' does not configure the code serialization for its property content.|
-| `WFO2001`     | NET9.0     | Task is being passed to `InvokeAsync` without a cancellation token |
-| `WFO1001`     | NET10.0    | Type `{0}` does not implement `ITypedDataObject` interface |
+| Diagnostic ID | Introduced | Removed | Description |
+| :-------------| :--------- | :------ | :---------- |
+| `WFAC001`     | NET6.0     | NET9.0  | Unsupported project type. |
+| `WFAC002`     | NET6.0     | NET9.0  | Unsupported property value. |
+| `WFAC010`     | NET6.0     | NET9.0  | Unsupported high DPI configuration. |
+| `WFO0001`     | NET9.0     |         | Only projects with `OutputType=WindowsApplication` supported. |
+| `WFO0002`     | NET9.0     |         | ArgumentException: Project property '{0}' cannot be set to '{1}'|
+| `WFO0002`     | NET9.0     |         | ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.|
+| `WFO0003`     | NET9.0     |         | Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property.|
+| `WFO0003`     | NET9.0     |         | Remove high DPI settings from {0} and configure via '{1}' property in Application Framework.|
+| `WFO1000`     | NET9.0     |         | Property '{0}' does not configure the code serialization for its property content.|
+| `WFO2001`     | NET9.0     |         | Task is being passed to `InvokeAsync` without a cancellation token |
+| `WFO1001`     | NET10.0    |         | Type `{0}` does not implement `ITypedDataObject` interface |
 
 ## Experimental Feature Compiler Errors
 

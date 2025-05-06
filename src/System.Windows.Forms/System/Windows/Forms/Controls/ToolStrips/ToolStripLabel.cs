@@ -269,10 +269,7 @@ public partial class ToolStripLabel : ToolStripItem
         if (IsLink)
         {
             ToolStrip? parent = Parent;
-            if (parent is not null)
-            {
-                parent.Cursor = _lastCursor;
-            }
+            parent?.Cursor = _lastCursor;
         }
 
         base.OnMouseLeave(e);

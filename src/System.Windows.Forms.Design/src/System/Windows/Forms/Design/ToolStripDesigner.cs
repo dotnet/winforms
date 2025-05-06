@@ -44,6 +44,7 @@ internal class ToolStripDesigner : ControlDesigner
     private ToolStripAdornerWindowService _toolStripAdornerWindowService; // Add the Adorner Service for OverFlow DropDown...
     private IDesignerHost _host; // get private copy of the DesignerHost
     private IComponentChangeService _componentChangeService;
+    private UndoEngine _undoEngine;
     private bool _undoingCalled;
     private IToolboxService _toolboxService;
     private ContextMenuStrip _toolStripContextMenu;
@@ -137,7 +138,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
+    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy operations.
     /// </summary>
     public override ICollection AssociatedComponents
     {
@@ -175,13 +176,9 @@ internal class ToolStripDesigner : ControlDesigner
         get
         {
             // Make sure the component is not being inherited -- we can't delete these!
-            InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(ToolStrip)[typeof(InheritanceAttribute)];
-            if (ia is null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
-            {
-                return true;
-            }
-
-            return false;
+            InheritanceAttribute inheritanceAttribute =
+                (InheritanceAttribute)TypeDescriptor.GetAttributes(ToolStrip)[typeof(InheritanceAttribute)];
+            return inheritanceAttribute is null || inheritanceAttribute.InheritanceLevel == InheritanceLevel.NotInherited;
         }
     }
 
@@ -219,7 +216,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown"
+    ///  Since the Item glyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown"
     ///  while the item Drag-Drop operation.
     /// </summary>
     public Rectangle DragBoxFromMouseDown
@@ -249,7 +246,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  EditManager for the ToolStrip Designer. This EditorManager controls the Insitu Editing.
+    ///  EditManager for the ToolStrip Designer. This EditorManager controls the InSitu Editing.
     /// </summary>
     public ToolStripEditorManager EditManager
     {
@@ -298,7 +295,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown
+    ///  Since the Item glyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown
     ///  while the item Drag-Drop operation.
     /// </summary>
     public int IndexOfItemUnderMouseToDrag
@@ -314,12 +311,9 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited))
-            {
-                return InheritanceAttribute.InheritedReadOnly;
-            }
-
-            return base.InheritanceAttribute;
+            return base.InheritanceAttribute == InheritanceAttribute.Inherited
+                ? InheritanceAttribute.InheritedReadOnly
+                : base.InheritanceAttribute;
         }
     }
 
@@ -336,10 +330,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  Checks if there is a selection of the ToolStrip or one of it's items.
     /// </summary>
-    private bool IsToolStripOrItemSelected
-    {
-        get => _toolStripSelected;
-    }
+    private bool IsToolStripOrItemSelected => _toolStripSelected;
 
     /// <summary>
     ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting
@@ -374,14 +365,7 @@ internal class ToolStripDesigner : ControlDesigner
         get
         {
             Rectangle rect = default;
-            if (ToolStrip.OverflowButton.Visible)
-            {
-                return ToolStrip.OverflowButton.Bounds;
-            }
-            else
-            {
-                return rect;
-            }
+            return ToolStrip.OverflowButton.Visible ? ToolStrip.OverflowButton.Bounds : rect;
         }
     }
 
@@ -390,26 +374,14 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     internal ISelectionService SelectionService => _selectionService ??= GetService<ISelectionService>();
 
-    public bool SupportEditing
-    {
-        get
-        {
-            if (GetService(typeof(DesignerOptionService)) is WindowsFormsDesignerOptionService dos)
-            {
-                return dos.CompatibilityOptions.EnableInSituEditing;
-            }
-
-            return true;
-        }
-    }
+    public bool SupportEditing =>
+        GetService<DesignerOptionService>() is not WindowsFormsDesignerOptionService dos
+            || dos.CompatibilityOptions.EnableInSituEditing;
 
     /// <summary>
     ///  Handy way of getting our ToolStrip
     /// </summary>
-    protected ToolStrip ToolStrip
-    {
-        get => (ToolStrip)Component;
-    }
+    protected ToolStrip ToolStrip => (ToolStrip)Component;
 
     /// <summary>
     ///  Get and cache the toolStripKeyBoard service
@@ -432,10 +404,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  There are certain containers (like ToolStrip) that require PerformLayout to be serialized in the code gen.
     /// </summary>
-    internal override bool SerializePerformLayout
-    {
-        get => true;
-    }
+    internal override bool SerializePerformLayout => true;
 
     /// <summary>
     ///  Un - ShadowProperty.
@@ -453,8 +422,6 @@ internal class ToolStripDesigner : ControlDesigner
             }
         }
     }
-
-    private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetRequiredService<IComponentChangeService>();
 
     /// <summary>
     ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems
@@ -492,11 +459,11 @@ internal class ToolStripDesigner : ControlDesigner
                 Rectangle bounds = dropDownItemDesigner.GetGlyphBounds();
                 Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
                 // Initialize Glyph
-                ToolStripItemGlyph bodyGlyphForddItem = new(item, dropDownItemDesigner, bounds, toolStripBehavior);
+                ToolStripItemGlyph bodyGlyphDropDownItem = new(item, dropDownItemDesigner, bounds, toolStripBehavior);
                 // Set the glyph for the item .. so that we can remove it later....
-                dropDownItemDesigner._bodyGlyph = bodyGlyphForddItem;
+                dropDownItemDesigner._bodyGlyph = bodyGlyphDropDownItem;
                 // Add ItemGlyph to the Collection
-                _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(bodyGlyphForddItem);
+                _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(bodyGlyphDropDownItem);
             }
         }
     }
@@ -527,10 +494,7 @@ internal class ToolStripDesigner : ControlDesigner
             }
             finally
             {
-                if (designer is not null)
-                {
-                    designer.InternalCreate = false;
-                }
+                designer?.InternalCreate = false;
 
                 // Resume the Layout as we are about to add Item to the ToolStrip
                 ToolStrip.ResumeLayout();
@@ -594,7 +558,7 @@ internal class ToolStripDesigner : ControlDesigner
             item = component as ToolStripItem;
             if (item is not null)
             {
-                PropertyDescriptor textProperty = TypeDescriptor.GetProperties(item)["Text"];
+                PropertyDescriptor textProperty = TypeDescriptor.GetProperties(item)[nameof(Text)];
                 Debug.Assert(textProperty is not null, "Could not find 'Text' property in ToolStripItem.");
                 if (textProperty is not null && !string.IsNullOrEmpty(text))
                 {
@@ -613,16 +577,16 @@ internal class ToolStripDesigner : ControlDesigner
                     {
                     }
 
-                    PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
+                    PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)[nameof(Image)];
                     Debug.Assert(imageProperty is not null, "Could not find 'Image' property in ToolStripItem.");
                     if (imageProperty is not null && image is not null)
                     {
                         imageProperty.SetValue(item, image);
                     }
 
-                    PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
-                    Debug.Assert(dispProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    dispProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
+                    PropertyDescriptor displayProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
+                    Debug.Assert(displayProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    displayProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
 
                     PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(item)["ImageTransparentColor"];
                     Debug.Assert(imageTransProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
@@ -647,7 +611,7 @@ internal class ToolStripDesigner : ControlDesigner
                 }
                 else
                 {
-                    // put the templateNode into nonselection mode && select the existing Item
+                    // Put the templateNode into non-selection mode && select the existing Item.
                     KeyboardHandlingService.SelectedDesignerControl = null;
                     SelectionService.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Replace);
                     _editorNode.RefreshSelectionGlyph();
@@ -873,7 +837,23 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     private void Control_HandleCreated(object sender, EventArgs e)
     {
+        Control.HandleCreated -= Control_HandleCreated;
+
         InitializeNewItemDropDown();
+
+        // We should HOOK this event here since getting the OverFlowButton property causes
+        // handle creation which we need to avoid
+        // hook the designer for the OverFlow Item events..
+        ToolStrip.OverflowButton.DropDown.Closing += OnOverflowDropDownClosing;
+        ToolStrip.OverflowButton.DropDownOpening += OnOverFlowDropDownOpening;
+        ToolStrip.OverflowButton.DropDownOpened += OnOverFlowDropDownOpened;
+        ToolStrip.OverflowButton.DropDownClosed += OnOverFlowDropDownClosed;
+        ToolStrip.OverflowButton.DropDown.Resize += OnOverflowDropDownResize;
+        ToolStrip.OverflowButton.DropDown.Paint += OnOverFlowDropDownPaint;
+
+        ToolStrip.Move += OnToolStripMove;
+        ToolStrip.VisibleChanged += OnToolStripVisibleChanged;
+        ToolStrip.ItemAdded += OnItemAdded;
     }
 
     /// <summary>
@@ -905,7 +885,7 @@ internal class ToolStripDesigner : ControlDesigner
                     // notify the designer what's changed.
                     try
                     {
-                        RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                        RaiseComponentChanging(TypeDescriptor.GetProperties(Component)[nameof(Items)]);
                         if (SelectionService.PrimarySelection is ToolStripItem selectedItem)
                         {
                             // ADD at the current Selection ...
@@ -927,7 +907,7 @@ internal class ToolStripDesigner : ControlDesigner
                     }
                     finally
                     {
-                        RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                        RaiseComponentChanged(TypeDescriptor.GetProperties(Component)[nameof(Items)], null, null);
                     }
                 }
             }
@@ -984,7 +964,7 @@ internal class ToolStripDesigner : ControlDesigner
         {
             if (addingItem.Owner.Site is null)
             {
-                // we are DummyItem to the ToolStrip...
+                // We are DummyItem to the ToolStrip.
                 return;
             }
         }
@@ -1039,7 +1019,7 @@ internal class ToolStripDesigner : ControlDesigner
                 if (itemIndex != -1)
                 {
                     ToolStrip.Items.Remove(item);
-                    RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                    RaiseComponentChanged(TypeDescriptor.GetProperties(Component)[nameof(Items)], null, null);
                 }
             }
             finally
@@ -1086,10 +1066,7 @@ internal class ToolStripDesigner : ControlDesigner
                 {
                     if (targetSelection is DesignerToolStripControlHost)
                     {
-                        if (KeyboardHandlingService is not null)
-                        {
-                            KeyboardHandlingService.SelectedDesignerControl = targetSelection;
-                        }
+                        KeyboardHandlingService?.SelectedDesignerControl = targetSelection;
 
                         SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                     }
@@ -1114,7 +1091,7 @@ internal class ToolStripDesigner : ControlDesigner
             try
             {
                 _pendingTransaction = _host.CreateTransaction(SR.ToolStripDesignerTransactionRemovingItem);
-                RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                RaiseComponentChanging(TypeDescriptor.GetProperties(Component)[nameof(Items)]);
                 if (e.Component is ToolStripDropDownItem dropDownItem)
                 {
                     dropDownItem.HideDropDown();
@@ -1145,8 +1122,25 @@ internal class ToolStripDesigner : ControlDesigner
                 _items = null;
             }
 
+            if (_undoEngine is not null)
+            {
+                _undoEngine.Undoing -= OnUndoing;
+                _undoEngine.Undone -= OnUndone;
+            }
+
+            if (_componentChangeService is not null)
+            {
+                _componentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
+                _componentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
+                _componentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
+                _componentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
+                _componentChangeService.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
+            }
+
             if (_selectionService is not null)
             {
+                _selectionService.SelectionChanged -= SelSvc_SelectionChanged;
+                _selectionService.SelectionChanging -= SelSvc_SelectionChanging;
                 _selectionService = null;
             }
 
@@ -1162,7 +1156,7 @@ internal class ToolStripDesigner : ControlDesigner
                 _editManager = null;
             }
 
-            // tear down the TemplateNode
+            // Tear down the TemplateNode
             if (_tn is not null)
             {
                 _tn.RollBack();
@@ -1184,7 +1178,26 @@ internal class ToolStripDesigner : ControlDesigner
                 _editorNode = null;
             }
 
-            // tear off the ContextMenu..
+            if (ToolStrip is not null)
+            {
+                ToolStrip.OverflowButton.DropDown.Closing -= OnOverflowDropDownClosing;
+                ToolStrip.OverflowButton.DropDownOpening -= OnOverFlowDropDownOpening;
+                ToolStrip.OverflowButton.DropDownOpened -= OnOverFlowDropDownOpened;
+                ToolStrip.OverflowButton.DropDownClosed -= OnOverFlowDropDownClosed;
+                ToolStrip.OverflowButton.DropDown.Resize -= OnOverflowDropDownResize;
+                ToolStrip.OverflowButton.DropDown.Paint -= OnOverFlowDropDownPaint;
+
+                ToolStrip.Move -= OnToolStripMove;
+                ToolStrip.VisibleChanged -= OnToolStripVisibleChanged;
+
+                ToolStrip.ItemAdded -= OnItemAdded;
+
+                ToolStrip.Resize -= ToolStrip_Resize;
+                ToolStrip.DockChanged -= ToolStrip_Resize;
+                ToolStrip.LayoutCompleted -= ToolStrip_LayoutCompleted;
+            }
+
+            // Tear off the ContextMenu.
             if (_toolStripContextMenu is not null)
             {
                 _toolStripContextMenu.Dispose();
@@ -1206,12 +1219,6 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 _toolStripAdornerWindowService = null;
             }
-
-            ComponentChangeService.ComponentAdding -= ComponentChangeSvc_ComponentAdding;
-            ComponentChangeService.ComponentAdded -= ComponentChangeSvc_ComponentAdded;
-            ComponentChangeService.ComponentRemoving -= ComponentChangeSvc_ComponentRemoving;
-            ComponentChangeService.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
-            ComponentChangeService.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
         }
 
         base.Dispose(disposing);
@@ -1364,7 +1371,7 @@ internal class ToolStripDesigner : ControlDesigner
 
         if ((SelectionRules & SelectionRules.Moveable) != 0 && InheritanceAttribute != InheritanceAttribute.InheritedReadOnly && (selType != GlyphSelectionType.NotSelected))
         {
-            // get the adornerwindow-relative coords for the container control
+            // Get the adorner window-relative coordinates for the container control
             Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
             Rectangle translatedBounds = new(loc, ((Control)Component).Size);
             int glyphOffset = (int)(DesignerUtils.s_containerGrabHandleSize * .5);
@@ -1387,7 +1394,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     protected override bool GetHitTest(Point point)
     {
-        // convert to client coords.
+        // Convert to client coordinates.
         point = Control.PointToClient(point);
 
         if (_miniToolStrip is not null && _miniToolStrip.Visible && AddItemRect.Contains(point))
@@ -1406,38 +1413,62 @@ internal class ToolStripDesigner : ControlDesigner
     /// <summary>
     ///  Get the designer set up to run.
     /// </summary>
-    // EditorServiceContext is newed up to add Edit Items verb.
+    // EditorServiceContext updated to add Edit Items verb.
     public override void Initialize(IComponent component)
     {
         base.Initialize(component);
         AutoResizeHandles = true;
-        ComponentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
-        ComponentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
-        ComponentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
-        ComponentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
-        ComponentChangeService.ComponentChanged += ComponentChangeSvc_ComponentChanged;
+        _host = GetRequiredService<IDesignerHost>();
+        _componentChangeService = _host.GetService<IComponentChangeService>();
+
+        _undoEngine ??= GetService<UndoEngine>();
+        if (_undoEngine is not null)
+        {
+            _undoEngine.Undoing += OnUndoing;
+            _undoEngine.Undone += OnUndone;
+        }
 
         // initialize new Manager For Editing ToolStrips
         _editManager = new ToolStripEditorManager(component);
-
-        _host = GetRequiredService<IDesignerHost>();
 
         // Setup the dropdown if our handle has been created.
         if (Control.IsHandleCreated)
         {
             InitializeNewItemDropDown();
         }
+        else
+        {
+            Control.HandleCreated += Control_HandleCreated;
+        }
+
+        // Attach notifications.
+        if (_componentChangeService is not null)
+        {
+            _componentChangeService.ComponentAdding += ComponentChangeSvc_ComponentAdding;
+            _componentChangeService.ComponentAdded += ComponentChangeSvc_ComponentAdded;
+            _componentChangeService.ComponentRemoving += ComponentChangeSvc_ComponentRemoving;
+            _componentChangeService.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
+            _componentChangeService.ComponentChanged += ComponentChangeSvc_ComponentChanged;
+        }
 
         // Hookup to the AdornerService for the overflow dropdown to be parent properly.
         _toolStripAdornerWindowService = GetService<ToolStripAdornerWindowService>();
 
+        SelectionService.SelectionChanging += SelSvc_SelectionChanging;
+        SelectionService.SelectionChanged += SelSvc_SelectionChanged;
+
+        // Sink size changes.
+        ToolStrip.Resize += ToolStrip_Resize;
+        ToolStrip.DockChanged += ToolStrip_Resize;
+        ToolStrip.LayoutCompleted += ToolStrip_LayoutCompleted;
+
         // Make sure the overflow is not topLevel
         ToolStrip.OverflowButton.DropDown.TopLevel = false;
 
-        // init the verb.
+        // Init the verb.
         if (CanAddItems)
         {
-            new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)["Items"], SR.ToolStripItemCollectionEditorVerb);
+            new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)[nameof(Items)], SR.ToolStripItemCollectionEditorVerb);
 
             // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
             if (GetService<ToolStripKeyboardHandlingService>() is null)
@@ -1445,7 +1476,7 @@ internal class ToolStripDesigner : ControlDesigner
                 new ToolStripKeyboardHandlingService(Component.Site);
             }
 
-            // Add the InsituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
+            // Add the InSituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
             if (GetService<ISupportInSituService>() is null)
             {
                 new ToolStripInSituService(Component.Site);
@@ -1472,10 +1503,18 @@ internal class ToolStripDesigner : ControlDesigner
     {
         Control parent = defaultValues is not null ? defaultValues["Parent"] as Control : null;
         Form parentForm = _host.RootComponent as Form;
+        MenuStrip parentMenu = null;
         FormDocumentDesigner parentFormDesigner = null;
         if (parentForm is not null)
         {
             parentFormDesigner = _host.GetDesigner(parentForm) as FormDocumentDesigner;
+
+            parentMenu = parentForm.Controls.OfType<MenuStrip>().FirstOrDefault();
+            if (parentMenu is not null)
+            {
+                // Stash off the menu strip while we initialize
+                parentForm.Controls.Remove(parentMenu);
+            }
         }
 
         ToolStripPanel parentPanel = parent as ToolStripPanel;
@@ -1495,6 +1534,12 @@ internal class ToolStripDesigner : ControlDesigner
 
         if (parentFormDesigner is not null)
         {
+            // Add MenuStrip back.
+            if (parentMenu is MenuStrip menuStrip)
+            {
+                parentForm.Controls.Add(menuStrip);
+            }
+
             // Set MainMenuStrip property
             if (ToolStrip is MenuStrip)
             {
@@ -1512,23 +1557,24 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 
-                ComponentChangeService.OnComponentChanging(parentPanel, controlsProp);
+                _componentChangeService?.OnComponentChanging(parentPanel, controlsProp);
 
                 parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                ComponentChangeService.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
+                _componentChangeService?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
 
                 // Try to fire ComponentChange on the Location Property for ToolStrip.
                 PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
-                ComponentChangeService.OnComponentChanging(ToolStrip, locationProp);
-                ComponentChangeService.OnComponentChanged(ToolStrip, locationProp);
+                _componentChangeService?.OnComponentChanging(ToolStrip, locationProp);
+                _componentChangeService?.OnComponentChanged(ToolStrip, locationProp);
             }
         }
 
         // If we are added to any container other than ToolStripPanel.
         else if (parent is not null)
         {
-            // If we are adding the MenuStrip ... put it at the Last in the Controls Collection so it gets laid out first.
+            // If we are adding the MenuStrip
+            // put it at the Last in the Controls Collection so it gets laid out first.
             if (ToolStrip is MenuStrip)
             {
                 int index = -1;
@@ -1855,7 +1901,7 @@ internal class ToolStripDesigner : ControlDesigner
         {
             if (TryGetService(out IComponentChangeService changeService))
             {
-                changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
             }
 
             IReadOnlyList<IComponent> components;
@@ -1869,16 +1915,10 @@ internal class ToolStripDesigner : ControlDesigner
                     primaryIndex = dragComponents.IndexOf(primaryItem);
                 }
 
-                if (KeyboardHandlingService is not null)
-                {
-                    KeyboardHandlingService.CopyInProgress = true;
-                }
+                KeyboardHandlingService?.CopyInProgress = true;
 
                 components = DesignerUtils.CopyDragObjects(dragComponents, Component.Site);
-                if (KeyboardHandlingService is not null)
-                {
-                    KeyboardHandlingService.CopyInProgress = false;
-                }
+                KeyboardHandlingService?.CopyInProgress = false;
 
                 if (primaryIndex != -1)
                 {
@@ -1918,15 +1958,15 @@ internal class ToolStripDesigner : ControlDesigner
                 SelectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
             }
 
-            changeService?.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+            changeService?.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
 
             // Fire extra changing/changed events so that the order is "restored" after undo/redo
             if (copy)
             {
                 if (changeService is not null)
                 {
-                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
+                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)[nameof(Items)]);
                 }
             }
 
@@ -1959,9 +1999,11 @@ internal class ToolStripDesigner : ControlDesigner
             if (currentIndexOfEditor == -1 || currentIndexOfEditor != ToolStrip.Items.Count - 1)
             {
                 // if the editor is not there or not at the end, add it to the end.
+                ToolStrip.ItemAdded -= OnItemAdded;
                 ToolStrip.SuspendLayout();
                 ToolStrip.Items.Add(_editorNode);
                 ToolStrip.ResumeLayout();
+                ToolStrip.ItemAdded += OnItemAdded;
             }
         }
 
@@ -2042,7 +2084,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  In Order to Draw the Selection Glyphs we need to reforce painting on the AdornerWindow. This method forces the repaint
+    ///  In Order to Draw the Selection Glyphs we need to force repainting on the AdornerWindow.
+    ///  This method forces the repaint.
     /// </summary>
     private void OnOverFlowDropDownPaint(object sender, PaintEventArgs e)
     {
@@ -2276,14 +2319,9 @@ internal class ToolStripDesigner : ControlDesigner
     {
         if (de.Data is ToolStripItemDataObject data)
         {
-            if (data.Owner != ToolStrip)
-            {
-                de.Effect = DragDropEffects.None;
-            }
-            else
-            {
-                de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
-            }
+            de.Effect = data.Owner != ToolStrip
+                ? DragDropEffects.None
+                : (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
         }
     }
 
@@ -2318,10 +2356,7 @@ internal class ToolStripDesigner : ControlDesigner
             }
 
             // Always Hide the EditorNode if the ToolStrip Is Not Selected...
-            if (_editorNode is not null)
-            {
-                _editorNode.Visible = false;
-            }
+            _editorNode?.Visible = false;
 
             // Show Hide Items...
             ShowHideToolStripItems(false);
@@ -2381,15 +2416,6 @@ internal class ToolStripDesigner : ControlDesigner
                     finally
                     {
                         FireSyncSelection = originalSyncSelection;
-                    }
-                }
-
-                // Required for the refresh of glyphs.
-                if (SelectionService.PrimarySelection is not ToolStripItem)
-                {
-                    if (KeyboardHandlingService is not null)
-                    {
-                        _ = KeyboardHandlingService.SelectedDesignerControl;
                     }
                 }
 

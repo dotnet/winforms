@@ -801,10 +801,7 @@ internal partial class StyleCollectionEditor
         {
             _columnsAndRowsListView.BeginUpdate();
             _columnsAndRowsListView.Focus();
-            if (_columnsAndRowsListView.FocusedItem is not null)
-            {
-                _columnsAndRowsListView.FocusedItem.Focused = false;
-            }
+            _columnsAndRowsListView.FocusedItem?.Focused = false;
 
             _columnsAndRowsListView.SelectedItems.Clear();
             _columnsAndRowsListView.Items[index].Selected = true;

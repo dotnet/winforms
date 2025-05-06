@@ -11,7 +11,8 @@ namespace System.Windows.Forms.UITests;
 // NOTE: This class contains many tests which don't require user input. Although they arguably belong to the unit
 // tests project, these tests assert behaviors of ListView.View=View.Tile, which doesn't work correctly unless
 // we ran an app.
-
+[Collection("ListViewUITests")]
+[UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
 public class ListViewTests : ControlTestBase
 {
     public ListViewTests(ITestOutputHelper testOutputHelper)
@@ -39,10 +40,7 @@ public class ListViewTests : ControlTestBase
         });
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/11328")]
     [WinFormsFact]
-    [SkipOnArchitecture(TestArchitectures.X64,
-        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11328")]
     public async Task ListView_Group_NavigateKeyboard_SucceedsAsync()
     {
         await RunTestAsync(async (form, listView) =>

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests;
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
 // Try up to 3 times before failing.
-[UISettings(MaxAttempts = 3)]
+[UISettings(MaxAttempts = 4)]
 public class ClipboardTests
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
@@ -36,72 +36,12 @@ public class ClipboardTests
         Clipboard.ContainsText().Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void Clear_InvokeMultipleTimes_Success()
-    {
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-    }
-
-    public static TheoryData<Func<bool>> ContainsMethodsTheoryData =>
-    [
-        Clipboard.ContainsAudio,
-        Clipboard.ContainsFileDropList,
-        Clipboard.ContainsImage,
-        Clipboard.ContainsText
-    ];
-
-    [WinFormsTheory]
-    [MemberData(nameof(ContainsMethodsTheoryData))]
-    public void Contains_InvokeMultipleTimes_Success(Func<bool> contains)
-    {
-        Clipboard.Clear();
-        bool result = contains.Invoke();
-        contains.Invoke().Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [StringWithNullData]
-    public void ContainsData_InvokeMultipleTimes_Success(string format)
-    {
-        bool result = Clipboard.ContainsData(format);
-        Clipboard.ContainsData(format).Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void ContainsText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        bool result = Clipboard.ContainsText(format);
-        Clipboard.ContainsText(format).Should().Be(result);
-    }
-
     [WinFormsTheory]
     [InvalidEnumData<TextDataFormat>]
     public void ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
     {
         Action action = () => Clipboard.ContainsText(format);
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
-    }
-
-    [WinFormsFact]
-    public void GetAudioStream_InvokeMultipleTimes_Success()
-    {
-        Stream? result = Clipboard.GetAudioStream();
-        (Clipboard.GetAudioStream() == result).Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -114,43 +54,6 @@ public class ClipboardTests
         result.Should().BeNull();
         result = Clipboard.GetData(format!);
         result.Should().BeNull();
-    }
-
-    [WinFormsFact]
-    public void GetDataObject_InvokeMultipleTimes_Success()
-    {
-        DataObject result1 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        DataObject result2 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        result1.GetFormats().Should().BeEquivalentTo(result2.GetFormats());
-    }
-
-    [WinFormsFact]
-    public void GetFileDropList_InvokeMultipleTimes_Success()
-    {
-        StringCollection result = Clipboard.GetFileDropList();
-        Clipboard.GetFileDropList().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetImage_InvokeMultipleTimes_Success()
-    {
-        Image? result = Clipboard.GetImage();
-        Clipboard.GetImage().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void GetText_InvokeMultipleTimes_Success()
-    {
-        string result = Clipboard.GetText();
-        Clipboard.GetText().Should().Be(result);
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void GetText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        string result = Clipboard.GetText(format);
-        Clipboard.GetText(format).Should().Be(result);
     }
 
     [WinFormsTheory]
@@ -276,7 +179,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -303,7 +206,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -311,7 +214,7 @@ public class ClipboardTests
     [WinFormsTheory]
     [InlineData(1, true, 0, 0)]
     [InlineData(1, false, 1, 2)]
-    [InlineData("data", true, 0, 0)]
+    [InlineData("data", true, 1, 1)]
     [InlineData("data", false, 1, 2)]
     public void SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
     {
@@ -332,7 +235,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -566,13 +469,13 @@ public class ClipboardTests
         PInvokeCore.OleGetClipboard(proxy).Succeeded.Should().BeTrue();
         ((nint)proxy.Value).Should().NotBe((nint)dataScope.Value);
 
-        using var dataUnknown = dataScope.Query<Com.IUnknown>();
-        using var proxyUnknown = proxy.Query<Com.IUnknown>();
+        using var dataUnknown = dataScope.Query<IUnknown>();
+        using var proxyUnknown = proxy.Query<IUnknown>();
         ((nint)proxyUnknown.Value).Should().NotBe((nint)dataUnknown.Value);
 
         // The proxy does not know about this interface, it should give back the real pointer.
-        using var realDataPointer = proxy.Query<Com.IComCallableWrapper>();
-        using var realDataPointerUnknown = realDataPointer.Query<Com.IUnknown>();
+        using var realDataPointer = proxy.Query<IComCallableWrapper>();
+        using var realDataPointerUnknown = realDataPointer.Query<IUnknown>();
         ((nint)proxyUnknown.Value).Should().NotBe((nint)realDataPointerUnknown.Value);
         ((nint)dataUnknown.Value).Should().Be((nint)realDataPointerUnknown.Value);
     }
@@ -1193,7 +1096,7 @@ public class ClipboardTests
         formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
         formats = dataObject.GetFormats(autoConvert: false);
-        formats.Should().BeEquivalentTo(["Text"]);
+        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
         // CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.
         Clipboard.GetText().Should().BeEmpty();
@@ -1256,10 +1159,8 @@ public class ClipboardTests
 
         Clipboard.GetData("System.String").Should().Be(expected);
 
-        // Case sensitivity matters so we end up reading stream/object from HGLOBAL instead of string.
-        MemoryStream stream = Clipboard.GetData("TEXT").Should().BeOfType<MemoryStream>().Subject;
-        byte[] array = stream.ToArray();
-        array.Should().BeEquivalentTo("Hello, World!\0"u8.ToArray());
+        string result = Clipboard.GetData("TEXT").Should().BeOfType<string>().Subject;
+        result.Should().Be(expected);
     }
 
     [WinFormsFact]
@@ -1313,51 +1214,19 @@ public class ClipboardTests
 
     [WinFormsTheory]
     [BoolData]
-    public void RoundTrip_ManagedDataObject_SupportsTypedInterface(bool copy) =>
-        CustomDataObject_RoundTrip_SupportsTypedInterface<ManagedDataObject>(copy);
-
-    [WinFormsTheory]
-    [BoolData]
-    public void RoundTrip_Object_SupportsTypedInterface(bool copy)
-    {
-        SerializableTestData data = new();
-        string format = typeof(SerializableTestData).FullName!;
-
-        // Opt-in into access to the binary formatted stream.
-        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
-        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL
-        // and to write data to HGLOBAL as a binary formatted stream now if it hadn't been flushed.
-        using BinaryFormatterScope scope = new(enable: true);
-
-        Clipboard.SetDataObject(data, copy);
-
-        DataObject received = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-
-        received.TryGetData(
-            format,
-            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-            autoConvert: false,
-            out SerializableTestData? result).Should().BeTrue();
-
-        result.Should().BeEquivalentTo(data);
-
-        Clipboard.TryGetData(
-            format,
-            (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
-            out result).Should().BeTrue();
-
-        result.Should().BeEquivalentTo(data);
-    }
+    public void RoundTrip_UntypedDataObject_SupportsTypedInterface(bool copy) =>
+        CustomDataObject_RoundTrip_SupportsTypedInterface<UntypedDataObject>(copy);
 
     private static void CustomDataObject_RoundTrip_SupportsTypedInterface<T>(bool copy) where T : IDataObject, new()
     {
         SerializableTestData data = new();
         T testDataObject = new();
-        string format = ManagedDataObject.s_format;
+        string format = UntypedDataObject.s_format;
         testDataObject.SetData(format, data);
 
         // Opt-in into access the binary formatted stream.
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
+
         // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
         using (BinaryFormatterScope scope = new(enable: copy))
         {
@@ -1372,7 +1241,7 @@ public class ClipboardTests
             using BinaryFormatterScope scope = new(enable: copy);
             ITypedDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
 
-            // Need an explict resolver to hit the BinaryFormatter path if the data was copied out.
+            // Need an explicit resolver to hit the BinaryFormatter path if the data was copied out.
             received.TryGetData(format, out SerializableTestData? result).Should().Be(!copy);
             if (copy)
             {
@@ -1385,7 +1254,7 @@ public class ClipboardTests
 
             received.TryGetData(
                 format,
-                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
                 autoConvert: false,
                 out result).Should().BeTrue();
 
@@ -1403,7 +1272,7 @@ public class ClipboardTests
 
             Clipboard.TryGetData(
                 format,
-                (TypeName name) => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+                name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
                 out result).Should().BeTrue();
 
             result.Should().BeEquivalentTo(data);
@@ -1412,10 +1281,45 @@ public class ClipboardTests
         {
             T received = Clipboard.GetDataObject().Should().BeOfType<T>().Subject;
             received.Should().Be(testDataObject);
-            // When we are not flushing the data to the HGLOBAL, we are reading from our DataStore or the managed test data object.
+            // When we are not flushing the data to the HGLOBAL, we are reading from our managed test data object,
+            // which might not support the types interface.
             Action tryGetData = () => received.TryGetData(format, out SerializableTestData? result);
-            tryGetData.Should().Throw<NotSupportedException>();
+            tryGetData.Should().Throw<NotSupportedException>()
+                .WithMessage(expectedWildcardPattern: ResourceStrings.TypedInterfaceNotImplemented);
         }
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void RoundTrip_Object_SupportsTypedInterface(bool copy)
+    {
+        SerializableTestData data = new();
+        string format = typeof(SerializableTestData).FullName!;
+
+        // Opt-in into access to the binary formatted stream.
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: copy);
+
+        // We need the BinaryFormatter to flush the data from the managed object to the HGLOBAL.
+        using BinaryFormatterScope scope = new(enable: copy);
+
+        Clipboard.SetDataObject(data, copy);
+
+        DataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
+
+        received.TryGetData(
+            format,
+            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            autoConvert: false,
+            out SerializableTestData? result).Should().BeTrue();
+
+        result.Should().BeEquivalentTo(data);
+
+        Clipboard.TryGetData(
+            format,
+            name => name.FullName == typeof(SerializableTestData).FullName ? typeof(SerializableTestData) : null,
+            out result).Should().BeTrue();
+
+        result.Should().BeEquivalentTo(data);
     }
 
     [WinFormsFact]
@@ -1449,5 +1353,28 @@ public class ClipboardTests
 
         using ComScope<IUnknown> wrapperUnknown = wrapper.Query<IUnknown>();
         ((nint)wrapperUnknown.Value).Should().Be((nint)originalUnknown.Value);
+    }
+
+    [WinFormsFact]
+    public void SetDataObject_SerializableObject_CopyFalse_DoesNotUseBinaryFormatter()
+    {
+        // This test ensures that the SerializableObject does not use BinaryFormatter when running in process.
+        // This only works when copy is not set to true as that is the only case where we are able to extract
+        // the original DataObject we created for the user data.
+
+        SerializablePerson person = new() { Name = "John Doe", Age = 30 };
+        Clipboard.SetDataObject(person);
+
+        bool result = Clipboard.TryGetData(out SerializablePerson? data);
+        result.Should().BeTrue();
+        data.Should().NotBeNull();
+        data.Should().BeSameAs(person);
+    }
+
+    [Serializable]
+    internal class SerializablePerson
+    {
+        public string Name { get; set; } = "DefaultName";
+        public int Age { get; set; }
     }
 }

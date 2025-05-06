@@ -293,10 +293,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             }
 
             _designerHost = value;
-            if (_rootEntry is not null)
-            {
-                _rootEntry.DesignerHost = value;
-            }
+            _rootEntry?.DesignerHost = value;
 
             RefreshTabs(PropertyTabScope.Document);
         }
@@ -1259,10 +1256,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         get => _toolStrip?.Renderer;
         set
         {
-            if (_toolStrip is not null)
-            {
-                _toolStrip.Renderer = value;
-            }
+            _toolStrip?.Renderer = value;
         }
     }
 

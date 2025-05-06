@@ -3,6 +3,7 @@
 
 namespace DesignSurfaceExt;
 
+[DesignerCategory("Default")]
 public class PropertyGridExt : PropertyGrid
 {
     private IDesignerHost _host;

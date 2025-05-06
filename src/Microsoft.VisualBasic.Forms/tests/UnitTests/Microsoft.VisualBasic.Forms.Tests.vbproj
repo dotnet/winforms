@@ -17,30 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="System\Windows\TestUtilities\TestData\ServerConfigurationSample.JSON" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="System\Windows\TestUtilities\TestData\ServerConfiguration.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="System\Windows\TestUtilities\TestData\ServerConfigurationSample.JSON">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
-    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
     <ProjectReference Include="..\..\..\test\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms.vbproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
   </ItemGroup>
 
 </Project>

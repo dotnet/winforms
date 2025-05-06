@@ -440,10 +440,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     }
 
                     // Set the appropriate object.
-                    if (keyService is not null)
-                    {
-                        keyService.ShiftPrimaryItem = glyphItem;
-                    }
+                    keyService?.ShiftPrimaryItem = glyphItem;
                 }
 
                 // we are already selected and if shiftpressed...
@@ -701,16 +698,10 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         }
 
                         ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
-                        if (keyboardHandlingService is not null)
-                        {
-                            keyboardHandlingService.CopyInProgress = true;
-                        }
+                        keyboardHandlingService?.CopyInProgress = true;
 
                         components = DesignerUtils.CopyDragObjects(dragComponents, currentDropItem.Site);
-                        if (keyboardHandlingService is not null)
-                        {
-                            keyboardHandlingService.CopyInProgress = false;
-                        }
+                        keyboardHandlingService?.CopyInProgress = false;
 
                         if (primaryIndex != -1)
                         {

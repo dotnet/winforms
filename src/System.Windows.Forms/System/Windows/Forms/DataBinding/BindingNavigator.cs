@@ -562,16 +562,10 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         }
 
         // Update current position indicator
-        if (_positionItem is not null)
-        {
-            _positionItem.Text = position.ToString(CultureInfo.CurrentCulture);
-        }
+        _positionItem?.Text = position.ToString(CultureInfo.CurrentCulture);
 
         // Update record count indicator
-        if (_countItem is not null)
-        {
-            _countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
-        }
+        _countItem?.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
     }
 
     /// <summary>

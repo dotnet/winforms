@@ -290,10 +290,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                     }
 
                     // A HeaderCell can only be used by one band.
-                    if (value.OwningRow is not null)
-                    {
-                        value.OwningRow.HeaderCell = null;
-                    }
+                    value.OwningRow?.HeaderCell = null;
 
                     Debug.Assert(value.OwningRow is null);
                     value.OwningRow = (DataGridViewRow)this;   // may be a shared row
@@ -311,10 +308,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                     }
 
                     // A HeaderCell can only be used by one band.
-                    if (value.OwningColumn is not null)
-                    {
-                        value.OwningColumn.HeaderCell = null;
-                    }
+                    value.OwningColumn?.HeaderCell = null;
 
                     Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
                     Debug.Assert(value.OwningColumn is null);

@@ -170,10 +170,7 @@ internal partial class DesignerActionUI
             {
                 SuspendLayout();
                 Size = ctrl.Size;
-                if (_panel is not null)
-                {
-                    _panel.Size = ctrl.Size;
-                }
+                _panel?.Size = ctrl.Size;
 
                 _designerActionUI.UpdateDAPLocation(component: null, _relatedGlyph as DesignerActionGlyph);
                 ResumeLayout();

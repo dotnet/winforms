@@ -76,10 +76,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
             }
 
             base.CellTemplate = value;
-            if (dataGridViewComboBoxCell is not null)
-            {
-                dataGridViewComboBoxCell.TemplateComboBoxColumn = this;
-            }
+            dataGridViewComboBoxCell?.TemplateComboBoxColumn = this;
         }
     }
 

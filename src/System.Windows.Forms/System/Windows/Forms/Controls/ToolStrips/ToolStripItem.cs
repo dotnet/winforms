@@ -573,12 +573,12 @@ public abstract partial class ToolStripItem :
     ///  Determines whether or not the item can be selected.
     /// </summary>
     [Browsable(false)]
-    public virtual bool CanSelect => Enabled;
+    public virtual bool CanSelect => true;
 
     /// <remarks>
     ///  <para>Usually the same as can select, but things like the control box in an MDI window are exceptions</para>
     /// </remarks>
-    internal virtual bool CanKeyboardSelect => CanSelect;
+    internal virtual bool CanKeyboardSelect => CanSelect && Enabled;
 
     /// <summary>
     ///  Occurs when the control is clicked.
@@ -3158,7 +3158,7 @@ public abstract partial class ToolStripItem :
             forceRaiseAccessibilityFocusChanged = true;
         }
 
-        if (forceRaiseAccessibilityFocusChanged)
+        if (forceRaiseAccessibilityFocusChanged && Enabled)
         {
             bool accessibilityIsOn = IsAccessibilityObjectCreated ||
                 // When ToolStripItem is selected automatically for the first time

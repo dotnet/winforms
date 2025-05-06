@@ -28,17 +28,57 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
+    private readonly uint _memoryPressure;
 
+    /// <summary>
+    ///  Creates an <see cref="AgileComPointer{TInterface}"/> for the given <paramref name="interface"/>.
+    /// </summary>
+    /// <param name="interface">The COM interface pointer.</param>
+    /// <param name="takeOwnership">
+    ///  Indicates whether to take ownership of the interface. If `<see langword="true"/>` this object will own the ref count.
+    /// </param>
+    /// <param name="memoryPressure">The amount of memory pressure to add.</param>
+    /// <remarks>
+    ///  <para>
+    ///   <paramref name="memoryPressure"/> is used to help the GC know that this object is holding onto native memory.
+    ///   This is most useful for objects that can be created in large quantities, particularly if they are not disposable.
+    ///  </para>
+    ///  <para>
+    ///   Setting <paramref name="takeOwnership"/> to `<see langword="true"/>` will ensure that this object takes
+    ///   responsibility for releasing the COM interface when it is no longer needed. This is done by calling
+    ///   <see cref="IUnknown.Release"/> after the GIT adds a ref to the interface.
+    ///  </para>
+    /// </remarks>
+    /// <devdoc>
+    ///  Other options were explored for ensuring that pending finalizers are not out of control besides
+    ///  <paramref name="memoryPressure"/>. Caching the interface pointers in a static collection was considered,
+    ///  but this had no impact on the HtmlElement scenario, which would create a new COM object for every element
+    ///  access. Tracking creation counts and forcing the Finalizer to run was also considered, but that takes too
+    ///  much responsibility away from the GC- better to let it make the decision based on our additional pressure.
+    /// </devdoc>
 #if DEBUG
-    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
+    public AgileComPointer(TInterface* @interface, bool takeOwnership, uint memoryPressure = 0, bool trackDisposal = true)
         : base(trackDisposal)
 #else
-    public AgileComPointer(TInterface* @interface, bool takeOwnership)
+    public AgileComPointer(TInterface* @interface, bool takeOwnership, uint memoryPressure = 0)
 #endif
     {
+        _memoryPressure = 0;
+
         try
         {
             _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
+            if (memoryPressure > 0)
+            {
+                _memoryPressure = memoryPressure;
+                GC.AddMemoryPressure(_memoryPressure);
+            }
+        }
+        catch
+        {
+            // No need to clean if we couldn't register the interface.
+            GC.SuppressFinalize(this);
+            throw;
         }
         finally
         {
@@ -142,6 +182,11 @@ internal unsafe class AgileComPointer<TInterface> :
         if (cookie == 0)
         {
             return;
+        }
+
+        if (_memoryPressure > 0)
+        {
+            GC.RemoveMemoryPressure(_memoryPressure);
         }
 
         HRESULT hr = GlobalInterfaceTable.RevokeInterface(cookie);
