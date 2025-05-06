@@ -1188,4 +1188,26 @@ public abstract class ToolStripRenderer
 
         return disabledBitmap;
     }
+
+    private protected static int GetCornerOffset(ToolStrip toolStrip)
+    {
+        // If we're on Windows 11, offset slightly to avoid hitting rounded corners,
+        // _if_ we are at all dealing with rounded corners.
+        int cornerOffset = 3;
+
+        if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
+            && toolStrip.FindForm() is Form f)
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            cornerOffset = f.FormCornerPreference switch
+            {
+                FormCornerPreference.Round => 8,
+                FormCornerPreference.RoundSmall => 5,
+                _ => 3
+            };
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        }
+
+        return cornerOffset;
+    }
 }
