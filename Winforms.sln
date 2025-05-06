@@ -57,6 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		docs\coding-style.md = docs\coding-style.md
 		CONTRIBUTING.md = CONTRIBUTING.md
+		.github\copilot-instructions.md = .github\copilot-instructions.md
 		docs\debugging.md = docs\debugging.md
 		docs\developer-guide.md = docs\developer-guide.md
 		docs\getting-started.md = docs\getting-started.md
@@ -103,7 +104,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "interop", "interop", "{A31B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesignSurface", "DesignSurface", "{43E46506-7DF8-4E7A-A579-996CA43041EB}"
 	ProjectSection(SolutionItems) = preProject
-		src\test\integration\DesignSurface\.editorconfig = src\test\integration\DesignSurface\.editorconfig
+		src\test\integration\DesignSurface\README.md = src\test\integration\DesignSurface\README.md
+		src\test\integration\DesignSurface\Directory.Build.props = src\test\integration\DesignSurface\Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoConsole", "src\test\integration\DesignSurface\DemoConsole\DemoConsole.csproj", "{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}"
@@ -189,7 +191,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{
 	ProjectSection(SolutionItems) = preProject
 		eng\pipelines\azure-pipelines-codeql.yml = eng\pipelines\azure-pipelines-codeql.yml
 		azure-pipelines-PR.yml = azure-pipelines-PR.yml
-		azure-pipelines-richnav.yml = azure-pipelines-richnav.yml
 		azure-pipelines.yml = azure-pipelines.yml
 		eng\pipelines\build-PR.yml = eng\pipelines\build-PR.yml
 		eng\pipelines\build.yml = eng\pipelines\build.yml

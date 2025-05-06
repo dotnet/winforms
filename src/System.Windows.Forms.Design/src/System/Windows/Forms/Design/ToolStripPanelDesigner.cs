@@ -371,10 +371,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         // Change the padding which might have been set by the Behavior if the _panel is Expanded.
         Control.Padding = new Padding(0);
 
-        if (_containerSelectorGlyph is not null)
-        {
-            _containerSelectorGlyph.IsExpanded = false;
-        }
+        _containerSelectorGlyph?.IsExpanded = false;
 
         // Smoke the dock property whenever we add a toolstrip to a toolstrip _panel.
         PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(e.Control)["Dock"];
@@ -390,10 +387,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (Control.Controls.Count == 0)
         {
-            if (_containerSelectorGlyph is not null)
-            {
-                _containerSelectorGlyph.IsExpanded = false;
-            }
+            _containerSelectorGlyph?.IsExpanded = false;
 
             RefreshSelection();
         }

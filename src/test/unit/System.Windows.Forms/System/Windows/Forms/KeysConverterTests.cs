@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
-public class KeysConverterTests
+public partial class KeysConverterTests
 {
     [Theory]
     [UseDefaultXunitCulture]
@@ -25,37 +25,6 @@ public class KeysConverterTests
         Assert.Equal(keys, result);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/13117")]
-    [Theory(Skip = "Localization tests, see: https://github.com/dotnet/winforms/issues/13117")]
-    [InlineData("fr-FR", "(aucun)", Keys.None)]
-    [InlineData("nb-NO", "None", Keys.None)]
-    [InlineData("de-DE", "Ende", Keys.End)]
-    public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
-    {
-        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-        KeysConverter converter = new();
-
-        // The 'localizedKeyName' is converted into the corresponding key value according to the specified culture.
-        var resultFromSpecificCulture = (Keys?)converter.ConvertFrom(context: null, culture, localizedKeyName);
-        Assert.Equal(expectedKey, resultFromSpecificCulture);
-
-        // Record original UI culture.
-        CultureInfo originalUICulture = Thread.CurrentThread.CurrentUICulture;
-
-        try
-        {
-            Thread.CurrentThread.CurrentUICulture = culture;
-
-            // When the culture is empty, the 'localizedKeyName' is converted to the corresponding key value based on CurrentUICulture.
-            var resultFromUICulture = (Keys?)converter.ConvertFrom(context: null, culture: null, localizedKeyName);
-            Assert.Equal(expectedKey, resultFromUICulture);
-        }
-        finally
-        {
-            Thread.CurrentThread.CurrentUICulture = originalUICulture;
-        }
-    }
-
     [Theory]
     [InlineData(Keys.None, "(none)")]
     [InlineData(Keys.S, "S")]
@@ -70,20 +39,6 @@ public class KeysConverterTests
         KeysConverter converter = new();
         string result = converter.ConvertToString(null, CultureInfo.InvariantCulture, keys);
         Assert.Equal(expectedResult, result);
-    }
-
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/13117")]
-    [Theory(Skip = "Localization tests, see: https://github.com/dotnet/winforms/issues/13117")]
-    [InlineData("fr-FR", Keys.None, "(aucun)")]
-    [InlineData("de-DE", Keys.End, "Ende")]
-    public void ConvertToString_ShouldConvertKeys_Localization(string cultureName, Keys key, string expectedLocalizedKeyName)
-    {
-        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
-
-        KeysConverter converter = new();
-        string result = converter.ConvertToString(null, culture, key);
-
-        Assert.Equal(expectedLocalizedKeyName, result);
     }
 
     public static IEnumerable<object[]> ConvertToEnumArray_ShouldConvertKeys_TestData()
@@ -147,7 +102,7 @@ public class KeysConverterTests
 
         Keys[] expectedValues =
         [
-            Keys.None, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.Alt, Keys.Back, Keys.Control,
+            Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.Alt, Keys.Back, Keys.Control,
             Keys.Delete, Keys.End, Keys.Enter, Keys.F1, Keys.F10, Keys.F11, Keys.F12, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8,
             Keys.F9, Keys.Home, Keys.Insert, Keys.Next, Keys.PageUp, Keys.Shift
         ];

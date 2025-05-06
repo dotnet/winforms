@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Drawing;
 
@@ -21,7 +19,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     private bool _isPushed; // used to track if this is currently on the stack or not
     private Rectangle _lastRectangle; // cache the last mouse loc - so we can ignore when mouse doesn't move
     private Point _lastOffset; // cache the last snap so we know where to create our control if dropped
-    private DragAssistanceManager _dragManager; // used to apply snaplines when dragging a new tool rect on the designer's surface
+    private DragAssistanceManager? _dragManager; // used to apply snaplines when dragging a new tool rect on the designer's surface
     private readonly bool _targetAllowsSnapLines; // indicates if the drop target allows snaplines (flowpanels don't for ex)
     private readonly StatusCommandUI _statusCommandUI; // used to update the StatusBar Information.
     private readonly bool _targetAllowsDragBox;    // indicates if the drop target allows the generic drag box to be drawn
@@ -248,7 +246,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     ///  OnDragDrop can be overridden so that a Behavior can specify its own
     ///  Drag/Drop rules.
     /// </summary>
-    public override void OnDragDrop(Glyph g, DragEventArgs e)
+    public override void OnDragDrop(Glyph? g, DragEventArgs e)
     {
         _behaviorService.PopBehavior(this);
 
@@ -273,17 +271,12 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     // VSWhidbey #487816
     public void OnBeginDrag()
     {
-        Adorner bodyAdorner = null;
-        SelectionManager selMgr = (SelectionManager)_serviceProvider.GetService(typeof(SelectionManager));
-        if (selMgr is not null)
-        {
-            bodyAdorner = selMgr.BodyGlyphAdorner;
-        }
+        Adorner bodyAdorner = _serviceProvider.GetRequiredService<SelectionManager>().BodyGlyphAdorner;
 
         List<ControlBodyGlyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph body in bodyAdorner.Glyphs)
         {
-            Control ctl = body.RelatedComponent as Control;
+            Control? ctl = body.RelatedComponent as Control;
             if (ctl is not null)
             {
                 if (!ctl.AllowDrop)
@@ -299,7 +292,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
         }
     }
 
-    public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
+    public override bool OnMouseMove(Glyph? g, MouseButtons button, Point mouseLoc)
     {
         bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
 
@@ -313,8 +306,11 @@ internal class ToolboxItemSnapLineBehavior : Behavior
         bool retValue = base.OnMouseMove(g, button, mouseLoc);
 
         // identify where the new box should be...
-        Rectangle newRectangle = new(mouseLoc.X - DesignerUtils.s_boxImageSize / 2, mouseLoc.Y - DesignerUtils.s_boxImageSize / 2,
-                                          DesignerUtils.s_boxImageSize, DesignerUtils.s_boxImageSize);
+        Rectangle newRectangle = new(
+            mouseLoc.X - DesignerUtils.s_boxImageSize / 2,
+            mouseLoc.Y - DesignerUtils.s_boxImageSize / 2,
+            DesignerUtils.s_boxImageSize,
+            DesignerUtils.s_boxImageSize);
 
         // don't do anything if the loc is the same
         if (newRectangle != _lastRectangle)
@@ -341,10 +337,9 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             }
 
             // offset the mouse loc to screen coords for calculations on drops
-            IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            if (host is not null)
+            if (_serviceProvider.TryGetService(out IDesignerHost? host))
             {
-                Control baseControl = host.RootComponent as Control;
+                Control? baseControl = host.RootComponent as Control;
                 if (baseControl is not null)
                 {
                     Point adornerServiceOrigin = _behaviorService.MapAdornerWindowPoint(baseControl.Handle, new Point(0, 0));

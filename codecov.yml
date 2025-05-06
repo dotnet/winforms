@@ -26,7 +26,7 @@ flags:                            # which files to include in the reporting
       - src/System.Drawing.Design/src/
       - src/System.Private.Windows.Core/src/
       - src/System.Private.Windows.GdiPlus/
-      - src/System.Windows.Forms/src/
+      - src/System.Windows.Forms/
       - src/System.Windows.Forms.Analyzers/src/
       - src/System.Windows.Forms.Analyzers.CSharp/src/
       - src/System.Windows.Forms.Design/src/
@@ -39,7 +39,7 @@ flags:                            # which files to include in the reporting
       - src/Microsoft.VisualBasic/tests/
       - src/Microsoft.VisualBasic.Forms/tests/
       - src/System.Drawing.Common/tests/
-      - src/System.Windows.Forms/tests/
+      - src/test/unit/System.Windows.Forms/
       - src/System.Windows.Forms.Analyzers/tests/
       - src/System.Windows.Forms.Analyzers.CSharp/tests/
       - src/System.Windows.Forms.Design/tests/

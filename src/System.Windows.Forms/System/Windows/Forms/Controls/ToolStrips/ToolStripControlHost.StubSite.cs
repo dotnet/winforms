@@ -54,10 +54,7 @@ public partial class ToolStripControlHost
             [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
             set
             {
-                if (_owner.Site is not null)
-                {
-                    _owner.Site.Name = value;
-                }
+                _owner.Site?.Name = value;
             }
         }
 

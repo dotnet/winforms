@@ -852,10 +852,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (LoaderHost.RootComponent == component)
         {
-            if (_documentType is not null)
-            {
-                _documentType.Name = newName;
-            }
+            _documentType?.Name = newName;
 
             return;
         }

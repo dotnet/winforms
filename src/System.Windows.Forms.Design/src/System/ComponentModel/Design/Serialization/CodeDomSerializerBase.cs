@@ -1614,10 +1614,7 @@ public abstract partial class CodeDomSerializerBase
                 }
                 catch
                 {
-                    if (relationships is not null)
-                    {
-                        relationships[lhs, p] = oldRelation;
-                    }
+                    relationships?[lhs, p] = oldRelation;
 
                     throw;
                 }

@@ -85,17 +85,16 @@ public class KeysConverter : TypeConverter, IComparer
             localizedOrder.Add(key);
         }
 
-        void AddLocalizedKey(string keyName, Keys value)
+        void AddLocalizedKey(string resourceName, Keys value)
         {
-            string key = SR.ResourceManager.GetString(keyName, cultureInfo) ??
-                throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, keyName));
+            string key = SR.ResourceManager.GetString(resourceName, cultureInfo) ??
+                throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, resourceName));
             AddKey(key, value);
         }
     }
 
     /// <summary>
-    ///  Access to a lookup table of name/value pairs for keys. These are localized
-    ///  names.
+    ///  This dictionary maps culture to a dictionary of localized names and their corresponding <see cref="Keys"/> value.
     /// </summary>
     private Dictionary<CultureInfo, Dictionary<string, Keys>> CultureToKeyName
     {
@@ -162,7 +161,7 @@ public class KeysConverter : TypeConverter, IComparer
             // Parse an array of key tokens.
             string[] tokens = text.Split('+', StringSplitOptions.TrimEntries);
 
-            // Now lookup each key token in our key hashtable.
+            // Now lookup each key token in our key dictionary.
             Keys key = 0;
             bool foundKeyCode = false;
 
@@ -355,18 +354,18 @@ public class KeysConverter : TypeConverter, IComparer
         return CultureToKeyName[culture];
     }
 
-    /// <summary>
-    ///  Retrieves a collection containing a set of standard values
-    ///  for the data type this validator is designed for. This
-    ///  will return null if the data type does not support a
-    ///  standard set of values.
-    /// </summary>
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
         if (_values is null)
         {
-            Keys[] values = [.. CultureToKeyName[CultureInfo.InvariantCulture].Values];
-            Array.Sort(values, this);
+            // Invariant culture names are initialized on the first access to this property.
+            var keys = CultureToKeyName[CultureInfo.InvariantCulture]!.Values.ToList();
+            // Remove Keys.None from the list of standard values, we need it for conversions only.
+            // It wasn't in the list of standard values on NETFX.
+            keys.Remove(Keys.None);
+            keys.Sort();
+
+            Keys[] values = [.. keys];
             _values = new StandardValuesCollection(values);
         }
 
@@ -374,24 +373,13 @@ public class KeysConverter : TypeConverter, IComparer
     }
 
     /// <summary>
-    ///  Determines if the list of standard values returned from
-    ///  GetStandardValues is an exclusive list. If the list
-    ///  is exclusive, then no other values are valid, such as
+    ///  If the list is exclusive, then no other values are valid, such as
     ///  in an enum data type. If the list is not exclusive,
     ///  then there are other valid values besides the list of
     ///  standard values GetStandardValues provides.
     /// </summary>
-    public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
-    {
-        return false;
-    }
+    /// <inheritdoc cref="TypeConverter.GetStandardValuesExclusive(ITypeDescriptorContext?)" />
+    public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context) => false;
 
-    /// <summary>
-    ///  Determines if this object supports a standard set of values
-    ///  that can be picked from a list.
-    /// </summary>
-    public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
-    {
-        return true;
-    }
+    public override bool GetStandardValuesSupported(ITypeDescriptorContext? context) => true;
 }

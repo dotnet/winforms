@@ -540,20 +540,14 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             try
             {
-                if (value is not null)
-                {
-                    value.BecomingActiveControl = true;
-                }
+                value?.BecomingActiveControl = true;
 
                 _activeControl = value;
                 UpdateFocusedControl();
             }
             finally
             {
-                if (value is not null)
-                {
-                    value.BecomingActiveControl = false;
-                }
+                value?.BecomingActiveControl = false;
             }
 
             if (_activeControl == value)
@@ -1939,10 +1933,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
                         if (currentActiveControl is ContainerControl currentActiveContainerControl)
                         {
-                            if (currentActiveContainerControl._focusedControl is not null)
-                            {
-                                currentActiveContainerControl._focusedControl.ValidationCancelled = true;
-                            }
+                            currentActiveContainerControl._focusedControl?.ValidationCancelled = true;
 
                             currentActiveContainerControl.ResetActiveAndFocusedControlsRecursive();
                         }

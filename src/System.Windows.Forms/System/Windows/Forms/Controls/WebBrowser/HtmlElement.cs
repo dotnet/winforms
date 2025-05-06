@@ -35,12 +35,19 @@ public sealed unsafe partial class HtmlElement
     private readonly HtmlShimManager _shimManager;
     private readonly int _hashCode;
 
+    // 500 bytes exhibits memory behavior similar to built-in COM when creating a large number of elements in a tight loop.
+    private const int MemoryPressure = 500;
+
     internal HtmlElement(HtmlShimManager shimManager, IHTMLElement* element)
     {
+        // Add memory pressure to the native handle to help push the GC to clean up a bit more aggressively.
+        // Otherwise many tens of thousands of these can be created before the GC kicks in, leading to excessive
+        // memory usage and undue pressure on the GIT.
+
 #if DEBUG
-        _htmlElement = new(element, takeOwnership: true, trackDisposal: false);
+        _htmlElement = new(element, takeOwnership: true, MemoryPressure, trackDisposal: false);
 #else
-        _htmlElement = new(element, takeOwnership: true);
+        _htmlElement = new(element, takeOwnership: true, MemoryPressure);
 #endif
         Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
         using var scope = _htmlElement.GetInterface<IUnknown>();

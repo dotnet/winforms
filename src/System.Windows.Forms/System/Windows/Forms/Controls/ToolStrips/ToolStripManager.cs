@@ -309,10 +309,7 @@ public static partial class ToolStripManager
     {
         lock (s_internalSyncObject)
         {
-            if (t_staticEventHandlers is not null)
-            {
-                t_staticEventHandlers[key] = Delegate.Remove(t_staticEventHandlers[key], value);
-            }
+            t_staticEventHandlers?[key] = Delegate.Remove(t_staticEventHandlers[key], value);
         }
     }
 

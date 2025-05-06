@@ -2482,11 +2482,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             {
                 designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
                 ControlDesigner cd = designer as ControlDesigner;
-                if (cd is not null)
-                {
-                    // Make sure the component doesn't get set to Visible
-                    cd.ForceVisible = false;
-                }
+                // Make sure the component doesn't get set to Visible
+                cd?.ForceVisible = false;
 
                 designer.Initialize(component);
                 disposeDesigner = true;

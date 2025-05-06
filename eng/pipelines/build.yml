@@ -45,9 +45,6 @@ jobs:
         publishLocation: Container
         artifactName: ${{ coalesce(parameters.enablePublishBuildArtifacts.artifactName, '$(Agent.Os)_$(Agent.JobName)' ) }}
   steps:
-  - checkout: self
-    clean: true
-
   - template: /eng/common/templates-official/steps/enable-internal-sources.yml
   - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
 
@@ -144,12 +141,11 @@ jobs:
     condition: and(succeeded(), eq(variables._Coverage, 'true'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
   #Publish code coverage results
-  - task: PublishCodeCoverageResults@1
+  - task: PublishCodeCoverageResults@2
     inputs:
-      codeCoverageTool: 'cobertura'
       summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full\Cobertura.xml'
       pathToSources: '$(Build.SourcesDirectory)'
-      reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full'
+      failIfCoverageEmpty: true
     displayName: PublishCodeCoverageResults
     condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 

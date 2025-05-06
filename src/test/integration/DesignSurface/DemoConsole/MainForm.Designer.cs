@@ -298,7 +298,7 @@ partial class MainForm
         this.MainMenuStrip = this.menuStrip1;
         this.Margin = new System.Windows.Forms.Padding(4);
         this.Name = "MainForm";
-        this.Text = "Tiny Form Designer";
+        this.Text = "Tiny Form Designer - .NET";
         this.Load += this.MainForm_Load;
         this.splitContainer.Panel1.ResumeLayout(false);
         this.splitContainer.Panel2.ResumeLayout(false);
