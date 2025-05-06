@@ -1741,12 +1741,21 @@ public partial class Form : ContainerControl
             }
 
             _formScreenCaptureMode = value;
-            SetScreenCaptureModeInternal(value);
+
+            if (IsHandleCreated)
+            {
+                SetScreenCaptureModeInternal(value);
+            }
         }
     }
 
     private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
     {
+        if (!TopLevel)
+        {
+            return;
+        }
+
         WINDOW_DISPLAY_AFFINITY affinity = value switch
         {
             ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
@@ -1761,7 +1770,6 @@ public partial class Form : ContainerControl
     private ScreenCaptureMode GetScreenCaptureModeInternal()
     {
         PInvoke.GetWindowDisplayAffinity(HWND, out uint affinityValue);
-
         WINDOW_DISPLAY_AFFINITY affinity = (WINDOW_DISPLAY_AFFINITY)affinityValue;
 
         return affinity switch
