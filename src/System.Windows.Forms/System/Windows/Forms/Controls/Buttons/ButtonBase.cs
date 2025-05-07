@@ -960,35 +960,44 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
-        Size preferedSize = Adapter.GetPreferredSizeCore(proposedConstraints);
-        return LayoutUtils.UnionSizes(preferedSize + Padding.Size, MinimumSize);
+        Size preferredSize = Adapter.GetPreferredSizeCore(proposedConstraints);
+        return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal ButtonBaseAdapter Adapter
     {
         get
         {
-            if (_adapter is null || FlatStyle != _cachedAdapterType)
+            if (_adapter is null
+                || FlatStyle != _cachedAdapterType)
             {
-                switch (FlatStyle)
+                if (Application.IsDarkModeEnabled && this is Button)
                 {
-                    case FlatStyle.Standard:
-                        _adapter = CreateStandardAdapter();
-                        break;
-                    case FlatStyle.Popup:
-                        _adapter = CreatePopupAdapter();
-                        break;
-                    case FlatStyle.Flat:
-                        _adapter = CreateFlatAdapter();
-                        ;
-                        break;
-                    default:
-                        Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
-                        break;
+                    _adapter = CreateDarkModeAdapter();
                 }
+                else
+                {
+                    switch (FlatStyle)
+                    {
+                        case FlatStyle.Standard:
+                            _adapter = CreateStandardAdapter();
+                            break;
+                        case FlatStyle.Popup:
+                            _adapter = CreatePopupAdapter();
+                            break;
+                        case FlatStyle.Flat:
+                            _adapter = CreateFlatAdapter();
+                            break;
+                        default:
+                            Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
+                            break;
+                    }
 
-                _cachedAdapterType = FlatStyle;
+                    _cachedAdapterType = FlatStyle;
+                }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return _adapter;
         }
@@ -1010,6 +1019,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         Debug.Fail("Derived classes need to provide a meaningful implementation.");
         return null;
+    }
+
+    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
+    {
+        // When a button-derived class does not have a dedicated DarkMode adapter implementation,
+        // we're falling back to the standard adapter, to not _force_ the derived class to implement
+        // a dark mode adapter.
+        return CreateStandardAdapter();
     }
 
     internal virtual StringFormat CreateStringFormat()
