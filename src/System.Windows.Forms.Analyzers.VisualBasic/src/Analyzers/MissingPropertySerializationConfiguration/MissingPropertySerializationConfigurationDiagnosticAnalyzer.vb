@@ -46,15 +46,6 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
                 Return
             End If
 
-            ' Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
-            If propertySymbol.ContainingType Is Nothing OrElse
-               Not propertySymbol.ContainingType.AllInterfaces.Any(
-                Function(i) i.Name = NameOf(IComponent) AndAlso
-                          i.ContainingNamespace IsNot Nothing AndAlso
-                          i.ContainingNamespace.ToString() = SystemComponentModelName) Then
-                Return
-            End If
-
             ' Skip static properties since they are not serialized by the designer
             If propertySymbol.IsStatic Then
                 Return
@@ -70,6 +61,15 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
             ' Skip overridden properties since the base property should already
             ' have the appropriate serialization configuration
             If propertySymbol.IsOverride Then
+                Return
+            End If
+
+            ' Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
+            If propertySymbol.ContainingType Is Nothing OrElse
+               Not propertySymbol.ContainingType.AllInterfaces.Any(
+                Function(i) i.Name = NameOf(IComponent) AndAlso
+                          i.ContainingNamespace IsNot Nothing AndAlso
+                          i.ContainingNamespace.ToString() = SystemComponentModelName) Then
                 Return
             End If
 

@@ -40,6 +40,21 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
+        // Is the property read/write and at least internal and doesn't have a private setter?
+        if (propertySymbol.SetMethod is not IMethodSymbol propertySetter
+            || propertySetter.DeclaredAccessibility == Accessibility.Private
+            || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
+        {
+            return;
+        }
+
+        // Skip overridden properties since the base property should already
+        // have the appropriate serialization configuration
+        if (propertySymbol.IsOverride)
+        {
+            return;
+        }
+
         // If the property is part of any interface named IComponent, we're out.
         if (propertySymbol.ContainingType.Name == nameof(IComponent))
         {
@@ -54,21 +69,6 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
                 .Any(i => i.Name == nameof(IComponent) &&
                           i.ContainingNamespace is not null &&
                           i.ContainingNamespace.ToString() == SystemComponentModelName))
-        {
-            return;
-        }
-
-        // Is the property read/write and at least internal and doesn't have a private setter?
-        if (propertySymbol.SetMethod is not IMethodSymbol propertySetter
-            || propertySetter.DeclaredAccessibility == Accessibility.Private
-            || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
-        {
-            return;
-        }
-
-        // Skip overridden properties since the base property should already
-        // have the appropriate serialization configuration
-        if (propertySymbol.IsOverride)
         {
             return;
         }
