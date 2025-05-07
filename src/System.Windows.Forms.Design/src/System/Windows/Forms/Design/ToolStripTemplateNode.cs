@@ -167,7 +167,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                     if (_component.Site is not null)
                     {
-                        if (_component.Site.TryGetService(out IMenuCommandService? menuService) && menuService is not null)
+                        if (_component.Site.TryGetService(out IMenuCommandService? menuService))
                         {
                             _oldUndoCommand = menuService.FindCommand(StandardCommands.Undo);
                             if (_oldUndoCommand is not null)
@@ -203,7 +203,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                     if (_component.Site is not null)
                     {
-                        if (_component.Site.TryGetService(out IMenuCommandService? menuService) && menuService is not null)
+                        if (_component.Site.TryGetService(out IMenuCommandService? menuService))
                         {
                             for (int i = 0; i < _addCommands.Length; i++)
                             {
@@ -267,7 +267,12 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            BaseContextMenuStrip templateNodeContextMenu = new(_component.Site!)
+            if (_component.Site is null)
+            {
+                throw new InvalidOperationException("Cannot create the designer context menu because the component is not sited.");
+            }
+
+            BaseContextMenuStrip templateNodeContextMenu = new(_component.Site)
             {
                 Populated = false
             };
@@ -338,7 +343,11 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _toolStripKeyBoardService ??= _component.Site?.GetRequiredService<ToolStripKeyboardHandlingService>();
+            if (_toolStripKeyBoardService is null
+                && _component.Site?.GetService(typeof(ToolStripKeyboardHandlingService)) is ToolStripKeyboardHandlingService service)
+            {
+                _toolStripKeyBoardService = service;
+            }
 
             return _toolStripKeyBoardService;
         }
@@ -351,7 +360,11 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _selectionService ??= _component.Site?.GetRequiredService<ISelectionService>();
+            if (_selectionService is null
+                && _component.Site?.GetService(typeof(ISelectionService)) is ISelectionService service)
+            {
+                _selectionService = service;
+            }
 
             return _selectionService;
         }
@@ -361,7 +374,11 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _behaviorService ??= _component.Site?.GetRequiredService<BehaviorService>();
+            if (_behaviorService is null
+                && _component.Site?.GetService(typeof(BehaviorService)) is BehaviorService service)
+            {
+                _behaviorService = service;
+            }
 
             return _behaviorService;
         }
