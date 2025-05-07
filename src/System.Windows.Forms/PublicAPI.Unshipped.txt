@@ -7,3 +7,7 @@ virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) 
 virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
+[WFO5001]System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
