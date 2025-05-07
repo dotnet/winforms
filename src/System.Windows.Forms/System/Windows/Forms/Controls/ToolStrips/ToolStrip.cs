@@ -4579,7 +4579,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             SnapFocus((HWND)(nint)m.WParamInternal);
 
             // For fix https://github.com/dotnet/winforms/issues/12916
-            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            // Narrow down the range, because ToolStripDropDown is ToolStrip too. we only need to set outer ToolStrip active.
+            if (IsOuterToolStrip(this))
+            {
+                ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            }
         }
 
         if (!AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE)
@@ -4645,6 +4649,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // destroying our parent actually causes a recursive
             // WM_DESTROY.
             _dropDownOwnerWindow?.DestroyHandle();
+        }
+
+        static bool IsOuterToolStrip(ToolStrip toolStrip)
+        {
+            static ToolStrip getParentToolStrip(ToolStrip toolStrip)
+            {
+                if (toolStrip.Parent is ToolStrip parent)
+                {
+                    return getParentToolStrip(parent);
+                }
+
+                return toolStrip;
+            }
+
+            return toolStrip == getParentToolStrip(toolStrip);
         }
     }
 
