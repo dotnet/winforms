@@ -12,6 +12,8 @@ namespace System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConf
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnalyzer
 {
+    private const string SystemComponentModelName = "System.ComponentModel";
+
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
         [CSharpDiagnosticDescriptors.s_missingPropertySerializationConfiguration];
 
@@ -24,7 +26,7 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
     {
-        // We only care about properties, and don't care about static properties.
+        // We never flag a property named Site of type of ISite
         if (context.Symbol is not IPropertySymbol propertySymbol
             || propertySymbol.IsStatic)
         {
@@ -33,7 +35,7 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
 
         // A property of System.ComponentModel.ISite we never flag.
         if (propertySymbol.Type.Name == nameof(ISite)
-            && propertySymbol.Type.ContainingNamespace.ToString() == "System.ComponentModel")
+            && propertySymbol.Type.ContainingNamespace.ToString() == SystemComponentModelName)
         {
             return;
         }
@@ -51,7 +53,7 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
                 .AllInterfaces
                 .Any(i => i.Name == nameof(IComponent) &&
                           i.ContainingNamespace is not null &&
-                          i.ContainingNamespace.ToString() == "System.ComponentModel"))
+                          i.ContainingNamespace.ToString() == SystemComponentModelName))
         {
             return;
         }
@@ -64,7 +66,8 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
-        // Skip overridden properties since the base property should already have the appropriate serialization configuration
+        // Skip overridden properties since the base property should already
+        // have the appropriate serialization configuration
         if (propertySymbol.IsOverride)
         {
             return;

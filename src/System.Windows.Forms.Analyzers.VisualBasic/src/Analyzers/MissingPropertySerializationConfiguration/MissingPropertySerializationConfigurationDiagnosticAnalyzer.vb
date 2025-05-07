@@ -12,6 +12,8 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
     Public Class MissingPropertySerializationConfigurationAnalyzer
         Inherits DiagnosticAnalyzer
 
+        Private Const SystemComponentModelName As String = "System.ComponentModel"
+
         Public Overrides ReadOnly Property SupportedDiagnostics As ImmutableArray(Of DiagnosticDescriptor)
             Get
                 Return ImmutableArray.Create(s_missingPropertySerializationConfiguration)
@@ -28,13 +30,14 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
 
             ' We analyze only properties.
             Dim propertySymbol As IPropertySymbol = TryCast(context.Symbol, IPropertySymbol)
+
             If propertySymbol Is Nothing Then
                 Return
             End If
 
             ' A property of System.ComponentModel.ISite we never flag.
             If propertySymbol.Type.Name = NameOf(ISite) AndAlso
-               propertySymbol.Type.ContainingNamespace.ToString() = "System.ComponentModel" Then
+               propertySymbol.Type.ContainingNamespace.ToString() = SystemComponentModelName Then
                 Return
             End If
 
@@ -48,7 +51,7 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
                Not propertySymbol.ContainingType.AllInterfaces.Any(
                 Function(i) i.Name = NameOf(IComponent) AndAlso
                           i.ContainingNamespace IsNot Nothing AndAlso
-                          i.ContainingNamespace.ToString() = "System.ComponentModel") Then
+                          i.ContainingNamespace.ToString() = SystemComponentModelName) Then
                 Return
             End If
 
@@ -64,7 +67,8 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
                 Return
             End If
 
-            ' Skip overridden properties since the base property should already have the appropriate serialization configuration
+            ' Skip overridden properties since the base property should already
+            ' have the appropriate serialization configuration
             If propertySymbol.IsOverride Then
                 Return
             End If
