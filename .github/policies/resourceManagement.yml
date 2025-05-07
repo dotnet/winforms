@@ -286,8 +286,8 @@ configuration:
           isRegex: False
       then:
       - addLabel:
-          label: 'area: NRT'
-      description: 'Apply "area: NRT" label'
+          label: 'area-NRT'
+      description: 'Apply "area-NRT" label'
     - if:
       - payloadType: Issues
       - isOpen
