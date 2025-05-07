@@ -6,7 +6,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Provides dark mode rendering capabilities for ToolStrip controls in Windows Forms.
+///  Provides dark mode rendering capabilities for ToolStrip controls in Windows Forms.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -18,14 +18,14 @@ namespace System.Windows.Forms;
 internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 {
     /// <summary>
-    /// Initializes a new instance of the ToolStripSystemDarkModeRenderer class.
+    ///  Initializes a new instance of the ToolStripSystemDarkModeRenderer class.
     /// </summary>
     public ToolStripSystemDarkModeRenderer()
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the ToolStripSystemDarkModeRenderer class with the specified default state.
+    ///  Initializes a new instance of the ToolStripSystemDarkModeRenderer class with the specified default state.
     /// </summary>
     /// <param name="isDefault">true if this is the default renderer; otherwise, false.</param>
     internal ToolStripSystemDarkModeRenderer(bool isDefault) : base(isDefault)
@@ -33,7 +33,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Gets dark-appropriate system colors based on the control type.
+    ///  Gets dark-appropriate system colors based on the control type.
     /// </summary>
     /// <param name="color">The color to convert to a dark mode equivalent.</param>
     /// <returns>A color suitable for dark mode.</returns>
@@ -85,27 +85,27 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Creates a dark mode compatible brush.
+    ///  Creates a dark mode compatible brush. Important:
+    ///  Always do: `using var brush = GetDarkModeBrush(color)`,
+    ///  since you're dealing with a cached brush => scope, really!
     /// </summary>
     /// <param name="color">The system color to convert.</param>
     /// <returns>A brush with the dark mode color.</returns>
-    private static SolidBrush GetDarkModeBrush(Color color)
-    {
-        return new SolidBrush(GetDarkModeColor(color));
-    }
+    private static SolidBrushCache.Scope GetDarkModeBrush(Color color)
+        => GetDarkModeColor(color).GetCachedSolidBrushScope();
 
     /// <summary>
-    /// Creates a dark mode compatible pen.
+    ///  Creates a dark mode compatible pen. Important:
+    ///  Always do: `using var somePen = GetDarkModePen(color)`,
+    ///  since you're dealing with a cached pen => scope, really!
     /// </summary>
     /// <param name="color">The system color to convert.</param>
     /// <returns>A pen with the dark mode color.</returns>
-    private static Pen GetDarkModePen(Color color)
-    {
-        return new Pen(GetDarkModeColor(color));
-    }
+    private static PenCache.Scope GetDarkModePen(Color color)
+        => GetDarkModeColor(color).GetCachedPenScope();
 
     /// <summary>
-    /// Returns whether the background should be painted.
+    ///  Returns whether the background should be painted.
     /// </summary>
     /// <param name="toolStrip">The ToolStrip to check.</param>
     /// <returns>true if the background should be painted; otherwise, false.</returns>
@@ -113,7 +113,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         => toolStrip is null || toolStrip.BackgroundImage is null;
 
     /// <summary>
-    /// Fills the background with the specified color.
+    ///  Fills the background with the specified color.
     /// </summary>
     /// <param name="g">The Graphics to draw on.</param>
     /// <param name="bounds">The bounds to fill.</param>
@@ -124,12 +124,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
 
         // Use a dark mode color
-        using Brush brush = GetDarkModeBrush(backColor);
+        using var brush = GetDarkModeBrush(backColor);
         g.FillRectangle(brush, bounds);
     }
 
     /// <summary>
-    /// Raises the RenderToolStripBackground event.
+    ///  Raises the RenderToolStripBackground event.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
@@ -168,7 +168,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Renders the StatusStrip background in dark mode.
+    ///  Renders the StatusStrip background in dark mode.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     private static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
@@ -181,7 +181,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderToolStripBorder event.
+    ///  Raises the RenderToolStripBorder event.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
@@ -207,25 +207,25 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 bounds.Width -= 1;
                 bounds.Height -= 1;
 
-                using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
+                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
             else
             {
-                using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
+                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
         }
         else
         {
             // Draw a subtle bottom border for toolstrips
-            using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
+            using var borderPen = GetDarkModePen(SystemColors.ControlDark);
             g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
         }
     }
 
     /// <summary>
-    /// Renders the StatusStrip border in dark mode.
+    ///  Renders the StatusStrip border in dark mode.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     private static void RenderStatusStripBorder(ToolStripRenderEventArgs e)
@@ -234,12 +234,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Rectangle bounds = e.ToolStrip.ClientRectangle;
 
         // Dark mode StatusStrip border (usually top border only)
-        using Pen borderPen = GetDarkModePen(SystemColors.ControlDark);
+        using var borderPen = GetDarkModePen(SystemColors.ControlDark);
         g.DrawLine(borderPen, 0, 0, bounds.Width, 0);
     }
 
     /// <summary>
-    /// Raises the RenderItemBackground event.
+    ///  Raises the RenderItemBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
@@ -258,7 +258,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         if (e.Item.Selected || e.Item.Pressed)
         {
             // Dark mode selection highlight
-            using Brush highlightBrush = GetDarkModeBrush(SystemColors.Highlight);
+            using var highlightBrush = GetDarkModeBrush(SystemColors.Highlight);
             e.Graphics.FillRectangle(highlightBrush, bounds);
         }
         else
@@ -283,7 +283,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderButtonBackground event.
+    ///  Raises the RenderButtonBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
@@ -307,18 +307,16 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
         if (isPressed || isSelected)
         {
-            Color fillColor = isPressed
-                ? GetDarkModeColor(SystemColors.ControlDark)
-                : GetDarkModeColor(SystemColors.Highlight);
+            var fillColor = isPressed
+                ? GetDarkModeBrush(SystemColors.ControlDark)
+                : GetDarkModeBrush(SystemColors.Highlight);
 
-            using Brush fillBrush = new SolidBrush(fillColor);
-
-            e.Graphics.FillRectangle(fillBrush, bounds);
+            e.Graphics.FillRectangle(fillColor, bounds);
         }
     }
 
     /// <summary>
-    /// Raises the RenderDropDownButtonBackground event.
+    ///  Raises the RenderDropDownButtonBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
@@ -328,7 +326,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderSplitButtonBackground event.
+    ///  Raises the RenderSplitButtonBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
@@ -345,17 +343,16 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         // Render the background based on state
         if (splitButton.Selected || splitButton.Pressed)
         {
-            Color fillColor = splitButton.Pressed
-                ? GetDarkModeColor(SystemColors.ControlDark)
-                : GetDarkModeColor(SystemColors.Highlight);
+            var fillColor = splitButton.Pressed
+                ? GetDarkModeBrush(SystemColors.ControlDark)
+                : GetDarkModeBrush(SystemColors.Highlight);
 
-            using Brush fillBrush = new SolidBrush(fillColor);
-            e.Graphics.FillRectangle(fillBrush, bounds);
+            e.Graphics.FillRectangle(fillColor, bounds);
         }
 
         // Draw the split line
         Rectangle dropDownRect = splitButton.DropDownButtonBounds;
-        using Pen linePen = GetDarkModePen(SystemColors.ControlDark);
+        using var linePen = GetDarkModePen(SystemColors.ControlDark);
 
         e.Graphics.DrawLine(
             linePen,
@@ -366,7 +363,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderSeparator event.
+    ///  Raises the RenderSeparator event.
     /// </summary>
     /// <param name="e">A ToolStripSeparatorRenderEventArgs that contains the event data.</param>
     protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
@@ -382,27 +379,31 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
         }
 
-        Color foreColor = GetDarkModeColor(SystemColors.ControlDark);
-
         bool rightToLeft = e.Item.RightToLeft == RightToLeft.Yes;
-
-        using Pen foreColorPen = new Pen(foreColor);
 
         if (isVertical)
         {
-            // Vertical separator
-            using Pen leftPen = rightToLeft
-                ? foreColorPen
-                : GetDarkModePen(SystemColors.ButtonHighlight);
-
-            using Pen rightPen = rightToLeft
-                ? GetDarkModePen(SystemColors.ButtonHighlight)
-                : foreColorPen;
-
             int startX = bounds.Width / 2;
-            g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
-            startX++;
-            g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
+
+            if (rightToLeft)
+            {
+                using var leftPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
+                g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
+
+                startX++;
+
+                using var rightPen = GetDarkModeColor(SystemColors.ButtonShadow).GetCachedPenScope();
+                g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
+            }
+            else
+            {
+                using var leftPen = GetDarkModeColor(SystemColors.ButtonShadow).GetCachedPenScope();
+                g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
+
+                startX++;
+                using var rightPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
+                g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
+            }
         }
         else
         {
@@ -413,14 +414,17 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             }
 
             int startY = bounds.Height / 2;
+            using var foreColorPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
             g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right, startY);
+
             startY++;
-            g.DrawLine(GetDarkModePen(SystemColors.ButtonHighlight), bounds.Left, startY, bounds.Right, startY);
+            using var darkModePen = GetDarkModeColor(SystemColors.ButtonShadow).GetCachedPenScope();
+            g.DrawLine(darkModePen, bounds.Left, startY, bounds.Right, startY);
         }
     }
 
     /// <summary>
-    /// Raises the RenderOverflowButtonBackground event.
+    ///  Raises the RenderOverflowButtonBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
@@ -435,11 +439,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         // Render the background based on state
         if (item.Selected || item.Pressed)
         {
-            Color fillColor = item.Pressed ?
-                GetDarkModeColor(SystemColors.ControlDark) :
-                GetDarkModeColor(SystemColors.Highlight);
+            using var fillBrush = item.Pressed
+                ? GetDarkModeColor(SystemColors.ControlDark).GetCachedSolidBrushScope()
+                : GetDarkModeColor(SystemColors.Highlight).GetCachedSolidBrushScope();
 
-            using Brush fillBrush = new SolidBrush(fillColor);
             e.Graphics.FillRectangle(fillBrush, bounds);
         }
 
@@ -472,12 +475,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         // else default to ArrowDirection.Down
 
         // Set arrow color based on state
-        Color arrowColor = GetDarkModeColor(SystemColors.ControlText);
-
-        if (item.Pressed || item.Selected)
-        {
-            arrowColor = GetDarkModeColor(SystemColors.HighlightText);
-        }
+        using var arrowBrush = GetDarkModeColor(
+            item.Pressed || item.Selected
+                ? SystemColors.HighlightText
+                : SystemColors.ControlText)
+            .GetCachedSolidBrushScope();
 
         // Define arrow polygon based on direction
         Point[] arrow = arrowDirection switch
@@ -509,12 +511,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         };
 
         // Draw the arrow
-        using Brush arrowBrush = new SolidBrush(arrowColor);
         e.Graphics.FillPolygon(arrowBrush, arrow);
     }
 
     /// <summary>
-    /// Raises the RenderGrip event.
+    ///  Raises the RenderGrip event.
     /// </summary>
     /// <param name="e">A ToolStripGripRenderEventArgs that contains the event data.</param>
     protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
@@ -525,8 +526,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
 
         // Use dark mode colors for the grip dots
-        Color darkColor = GetDarkModeColor(SystemColors.ControlDark);
-        Color lightColor = GetDarkModeColor(SystemColors.ControlLight);
+        using var darkColorBrush = GetDarkModeColor(SystemColors.ControlDark).GetCachedSolidBrushScope();
+        using var lightColorBrush = GetDarkModeColor(SystemColors.ControlLight).GetCachedSolidBrushScope();
 
         ToolStrip toolStrip = e.ToolStrip;
         Graphics g = e.Graphics;
@@ -540,8 +541,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
             while (y < bounds.Bottom - 3)
             {
-                g.FillRectangle(new SolidBrush(darkColor), bounds.Left + 2, y, 1, 1);
-                g.FillRectangle(new SolidBrush(lightColor), bounds.Left + 3, y + 1, 1, 1);
+                g.FillRectangle(darkColorBrush, bounds.Left + 2, y, 1, 1);
+                g.FillRectangle(lightColorBrush, bounds.Left + 3, y + 1, 1, 1);
                 y += 3;
             }
         }
@@ -552,17 +553,20 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
             while (x < bounds.Right - 3)
             {
-                g.FillRectangle(new SolidBrush(darkColor), x, bounds.Top + 2, 1, 1);
-                g.FillRectangle(new SolidBrush(lightColor), x + 1, bounds.Top + 3, 1, 1);
+                g.FillRectangle(darkColorBrush, x, bounds.Top + 2, 1, 1);
+                g.FillRectangle(lightColorBrush, x + 1, bounds.Top + 3, 1, 1);
                 x += 3;
             }
         }
     }
 
     /// <summary>
-    /// Raises the RenderArrow event.
+    ///  Raises the RenderArrow event.
     /// </summary>
     /// <param name="e">A ToolStripArrowRenderEventArgs that contains the event data.</param>
+    /// <summary>
+    /// Raises the RenderArrow event in the derived class with dark mode support.
+    /// </summary>
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);
@@ -576,51 +580,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             arrowColor = GetDarkModeColor(SystemColors.HighlightText);
         }
 
-        // Draw the arrow with the appropriate color
-        Rectangle rect = e.ArrowRectangle;
-        Graphics g = e.Graphics;
-
-        Point middle = new Point(
-            rect.Left + rect.Width / 2,
-            rect.Top + rect.Height / 2);
-
-        // Define the arrow polygon based on direction
-        Point[] arrow;
-
-        arrow = e.Direction switch
-        {
-            ArrowDirection.Up =>
-                [
-                    new Point(middle.X - 2, middle.Y + 1),
-                    new Point(middle.X + 3, middle.Y + 1),
-                    new Point(middle.X, middle.Y - 2)
-                ],
-            ArrowDirection.Left =>
-                [
-                    new Point(middle.X + 2, middle.Y - 4),
-                    new Point(middle.X + 2, middle.Y + 4),
-                    new Point(middle.X - 2, middle.Y)
-                ],
-            ArrowDirection.Right =>
-                [
-                    new Point(middle.X - 2, middle.Y - 4),
-                    new Point(middle.X - 2, middle.Y + 4),
-                    new Point(middle.X + 2, middle.Y)
-                ],
-            _ =>
-                [
-                    new Point(middle.X - 2, middle.Y - 1),
-                    new Point(middle.X + 3, middle.Y - 1),
-                    new Point(middle.X, middle.Y + 2)
-                ]
-        };
-
-        using Brush brush = new SolidBrush(arrowColor);
-        g.FillPolygon(brush, arrow);
+        RenderArrowCore(e, arrowColor);
     }
 
     /// <summary>
-    /// Raises the RenderImageMargin event.
+    ///  Raises the RenderImageMargin event.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
@@ -628,13 +592,13 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         // Fill the image margin with a slightly different color than the background
-        Color marginColor = GetDarkModeColor(SystemColors.ControlLight);
-        using Brush brush = new SolidBrush(marginColor);
-        e.Graphics.FillRectangle(brush, e.AffectedBounds);
+        using var marginColorBrush = GetDarkModeColor(SystemColors.ControlLight).GetCachedSolidBrushScope();
+
+        e.Graphics.FillRectangle(marginColorBrush, e.AffectedBounds);
     }
 
     /// <summary>
-    /// Raises the RenderItemText event.
+    ///  Raises the RenderItemText event.
     /// </summary>
     /// <param name="e">A ToolStripItemTextRenderEventArgs that contains the event data.</param>
     protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
@@ -669,7 +633,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderItemImage event.
+    ///  Raises the RenderItemImage event.
     /// </summary>
     /// <param name="e">A ToolStripItemImageRenderEventArgs that contains the event data.</param>
     protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
@@ -679,26 +643,17 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         if (e.Image is null)
             return;
 
-        // Draw the image normally, no need to adjust for dark mode as images
-        // should already be designed for the appropriate context
-        if (!e.Item.Enabled)
-        {
-            // For disabled items, draw a grayscale version
-            ControlPaint.DrawImageDisabled(
-                e.Graphics,
-                e.Image,
-                e.ImageRectangle.X,
-                e.ImageRectangle.Y,
-                GetDarkModeColor(SystemColors.Control));
-        }
-        else
-        {
-            e.Graphics.DrawImage(e.Image, e.ImageRectangle);
-        }
+        // DarkMode adjustments for the image are done by
+        // the base class implementation already.
+        Image image = !e.Item.Enabled
+            ? CreateDisabledImage(e.Image)
+            : e.Image;
+
+        e.Graphics.DrawImage(image, e.ImageRectangle);
     }
 
     /// <summary>
-    /// Raises the RenderLabelBackground event.
+    ///  Raises the RenderLabelBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
@@ -708,41 +663,19 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Raises the RenderToolStripStatusLabelBackground event.
+    ///  Raises the RenderToolStripStatusLabelBackground event.
     /// </summary>
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        Rectangle bounds = e.AffectedBounds;
-        Graphics g = e.Graphics;
+        using var highLightBrush = GetDarkModeBrush(SystemColors.ButtonHighlight);
+        using var shadowBrush = GetDarkModeBrush(SystemColors.ButtonShadow);
 
-        // Use better contrast for dark mode
-        Color shadowColor = GetDarkModeColor(SystemColors.ButtonShadow);
-        Color highlightColor = GetDarkModeColor(SystemColors.ButtonHighlight);
-
-        int cornerOffset = GetCornerOffset(e.ToolStrip);
-
-        int x = bounds.Right - cornerOffset;
-        int y = bounds.Bottom - cornerOffset;
-
-        for (int i = 0; i < 3; i++)
-        {
-            int tempX = x;
-            int tempY = y;
-
-            for (int j = 0; j <= i; j++)
-            {
-                g.FillRectangle(new SolidBrush(shadowColor), tempX, tempY, 2, 2);
-                g.FillRectangle(new SolidBrush(highlightColor), tempX - 1, tempY - 1, 1, 1);
-
-                tempX -= 4;
-                tempY += 4;
-            }
-
-            x -= 4;
-            y -= 4;
-        }
+        OnRenderStatusStripSizingGrip(
+            eArgs: e,
+            highLightBrush: highLightBrush,
+            shadowBrush: shadowBrush);
     }
 }
