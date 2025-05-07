@@ -666,26 +666,26 @@ public abstract class ToolStripRenderer
             ArrowDirection.Up =>
             [
                 new(middle.X - Offset2X, middle.Y + 1),
-                new(middle.X + Offset2X + 1, middle.Y + 1),
-                new(middle.X, middle.Y - Offset2Y)
+            new(middle.X + Offset2X + 1, middle.Y + 1),
+            new(middle.X, middle.Y - Offset2Y)
             ],
             ArrowDirection.Left =>
             [
                 new(middle.X + Offset2X, middle.Y - s_offset4Y),
-                new(middle.X + Offset2X, middle.Y + s_offset4Y),
-                new(middle.X - horizontalOffset, middle.Y)
+            new(middle.X + Offset2X, middle.Y + s_offset4Y),
+            new(middle.X - horizontalOffset, middle.Y)
             ],
             ArrowDirection.Right =>
             [
                 new(middle.X - Offset2X, middle.Y - s_offset4Y),
-                new(middle.X - Offset2X, middle.Y + s_offset4Y),
-                new(middle.X + horizontalOffset, middle.Y)
+            new(middle.X - Offset2X, middle.Y + s_offset4Y),
+            new(middle.X + horizontalOffset, middle.Y)
             ],
             _ =>
             [
                 new(middle.X - Offset2X, middle.Y - 1),
-                new(middle.X + Offset2X + 1, middle.Y - 1),
-                new(middle.X, middle.Y + Offset2Y)
+            new(middle.X + Offset2X + 1, middle.Y - 1),
+            new(middle.X, middle.Y + Offset2Y)
             ],
         };
 
@@ -1022,9 +1022,17 @@ public abstract class ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
+        OnRenderStatusStripSizingGrip(
+            eArgs: e,
+            highLightBrush: SystemBrushes.ButtonHighlight,
+            shadowBrush: SystemBrushes.ButtonShadow);
+    }
+
+    private protected void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs eArgs, Brush highLightBrush, Brush shadowBrush)
+    {
         if (RendererOverride is not null)
         {
-            RendererOverride.OnRenderStatusStripSizingGrip(e);
+            RendererOverride.OnRenderStatusStripSizingGrip(eArgs);
             return;
         }
 
