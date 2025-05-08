@@ -7,5 +7,5 @@ global using System.Diagnostics;
 global using System.ComponentModel;
 global using System.ComponentModel.Design;
 global using System.Windows.Forms.Design;
-global using DesignSurfaceExt;
+global using DemoConsole;
 global using Timer = System.Windows.Forms.Timer;

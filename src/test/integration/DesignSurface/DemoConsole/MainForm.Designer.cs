@@ -37,7 +37,7 @@ partial class MainForm
         this.tabPage4 = new System.Windows.Forms.TabPage();
         this.tabPage5 = new System.Windows.Forms.TabPage();
         this.tabPage6 = new System.Windows.Forms.TabPage();
-        this.propertyGrid = new PropertyGridExt();
+        this.propertyGrid = new PropertyGridExtended();
         this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.ToolStripMenuItemUnDo = new System.Windows.Forms.ToolStripMenuItem();
@@ -314,7 +314,7 @@ partial class MainForm
     #endregion
 
     private System.Windows.Forms.SplitContainer splitContainer;
-    private PropertyGridExt propertyGrid;
+    private PropertyGridExtended propertyGrid;
     private System.Windows.Forms.MenuStrip menuStrip1;
     private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemUnDo;
