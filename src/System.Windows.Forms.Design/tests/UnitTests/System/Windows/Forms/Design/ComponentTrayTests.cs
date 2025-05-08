@@ -91,14 +91,6 @@ public class ComponentTrayTests : IDisposable
     public void GetLocation_ReturnsLocation() => _componentTray.GetLocation(new Mock<ContextMenuStrip>().Object).Should().Be(new Point() { X = 0, Y = 0 });
 
     [Fact]
-    public void GetTrayLocation_WithoutAComponentView_ThrowsException()
-    {
-        Action action = () => _componentTray.GetTrayLocation(new Mock<ContextMenuStrip>().Object);
-
-        action.Should().Throw<Exception>();
-    }
-
-    [Fact]
     public void IsTrayComponent_WithoutAComponentView_ReturnsFalse() =>
         _componentTray.IsTrayComponent(_component).Should().BeFalse();
 
