@@ -56,12 +56,16 @@ public abstract class ToolStripRenderer
     // status strip sizing grip.
     private static readonly Rectangle[] s_baseSizeGripRectangles =
     [
-        new(8, 0, 2, 2),
+        new(12, 0, 2, 2),
         new(8, 4, 2, 2),
-        new(8, 8, 2, 2),
-        new(4, 4, 2, 2),
         new(4, 8, 2, 2),
-        new(0, 8, 2, 2)
+        new(0, 12, 2, 2),
+        new(8, 0, 2, 2),
+        new(4, 4, 2, 2),
+        new(0, 8, 2, 2),
+        new(4, 0, 2, 2),
+        new(0, 4, 2, 2),
+        new(1, 1, 2, 2),
     ];
 
     protected ToolStripRenderer()
@@ -1064,60 +1068,59 @@ public abstract class ToolStripRenderer
                 Math.Max((int)(r.Height * dpiScale), 2));
         }
 
+        (int cornerOffset, Rectangle lastRect) = GetCornerOffset(statusStrip);
+        scaledRects[^1] = lastRect;
+
         SmoothingMode oldSmoothing = g.SmoothingMode;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        int cornerOffset = GetCornerOffset(statusStrip);
 
         // Draw the grip dots, bottom-right aligned (mirrored for RTL)
         foreach (Rectangle dotRect in scaledRects)
         {
-            Rectangle actualRect;
-            if (statusStrip.RightToLeft == RightToLeft.Yes)
-            {
-                actualRect = new Rectangle(
-                    sizeGripBounds.Left + cornerOffset + dotRect.X,
-                    sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
-                    dotRect.Width,
-                    dotRect.Height);
-            }
-            else
-            {
-                actualRect = new Rectangle(
-                    sizeGripBounds.Right - cornerOffset - dotRect.X - dotRect.Width,
-                    sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
-                    dotRect.Width,
-                    dotRect.Height);
-            }
+            Rectangle actualRect = statusStrip.RightToLeft == RightToLeft.Yes
+                ? new Rectangle(
+                    x: sizeGripBounds.Left + cornerOffset + dotRect.X,
+                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
+                    width: dotRect.Width,
+                    height: dotRect.Height)
+
+                : new Rectangle(
+                    x: sizeGripBounds.Right - cornerOffset - dotRect.X - dotRect.Width,
+                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
+                    width: dotRect.Width,
+                    height: dotRect.Height);
 
             // Highlight dot (top-left)
             Rectangle highlightRect = actualRect;
             highlightRect.Offset(-1, -1);
+
             g.FillEllipse(highLightBrush, highlightRect);
 
             // Shadow dot (bottom-right)
             Rectangle shadowRect = actualRect;
             shadowRect.Offset(1, 1);
+
             g.FillEllipse(shadowBrush, shadowRect);
         }
 
         g.SmoothingMode = oldSmoothing;
 
-        static int GetCornerOffset(StatusStrip statusStrip)
+        static (int cornerOffset, Rectangle rect) GetCornerOffset(StatusStrip statusStrip)
         {
-            int cornerOffset = 0;
+            (int, Rectangle) cornerDef = (2, new(1, 1, 2, 2));
+
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
-                cornerOffset = f.FormCornerPreference switch
+                cornerDef = f.FormCornerPreference switch
                 {
-                    FormCornerPreference.Round => 5,
-                    FormCornerPreference.RoundSmall => 3,
-                    _ => 3
+                    FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
+                    FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
+                    _ => (2, new(0, 0, 2, 2))
                 };
             }
 
-            return cornerOffset;
+            return cornerDef;
         }
     }
 
