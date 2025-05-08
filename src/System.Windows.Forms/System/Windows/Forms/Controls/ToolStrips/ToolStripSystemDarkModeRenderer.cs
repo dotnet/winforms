@@ -677,7 +677,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        using var highLightBrush = GetDarkModeBrush(SystemColors.ButtonHighlight);
+        using var highLightBrush = GetDarkModeBrush(SystemColors.GrayText);
         using var shadowBrush = GetDarkModeBrush(SystemColors.ButtonShadow);
 
         OnRenderStatusStripSizingGrip(
