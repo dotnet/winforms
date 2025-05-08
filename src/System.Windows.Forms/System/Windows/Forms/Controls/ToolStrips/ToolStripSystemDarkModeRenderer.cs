@@ -677,8 +677,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        using var highLightBrush = GetDarkModeBrush(SystemColors.ButtonHighlight);
-        using var shadowBrush = GetDarkModeBrush(SystemColors.ButtonShadow);
+        // Color choice here is not a mistake. The shadow effect in dark mode is
+        // not made of the complementary "colors" of light mode. That doesn't give
+        // enough contrast for an effect to actually spot.
+        using var highLightBrush = GetDarkModeBrush(SystemColors.ButtonShadow);
+        using var shadowBrush = GetDarkModeBrush(SystemColors.GrayText);
 
         OnRenderStatusStripSizingGrip(
             eArgs: e,
