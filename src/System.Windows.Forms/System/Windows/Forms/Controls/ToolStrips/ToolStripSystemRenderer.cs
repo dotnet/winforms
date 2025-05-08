@@ -39,7 +39,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
+            _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
             return _toolStripHighContrastRenderer;
         }
     }
@@ -51,7 +51,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer();
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isDefault: false);
             return _toolStripDarkModeRenderer;
         }
     }
@@ -240,18 +240,18 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             else if (DisplayInformation.LowResolution)
             {
                 FillBackground(g, bounds, (toolStrip is ToolStripDropDown)
-                    ? SystemColors.ControlLight
-                    : e.BackColor);
+                    ? e.BackColor
+                    : SystemColors.ControlLight);
             }
             else if (toolStrip.IsDropDown)
             {
-                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
                     ? SystemColors.Menu
                     : e.BackColor);
             }
             else if (toolStrip is MenuStrip)
             {
-                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
                     ? SystemColors.MenuBar
                     : e.BackColor);
             }
@@ -264,9 +264,9 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else
             {
-                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
-                    ? SystemColors.MenuBar
-                    : e.BackColor);
+                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
+                    ? e.BackColor
+                    : SystemColors.MenuBar);
             }
         }
     }
