@@ -3,6 +3,7 @@
 
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace System.Drawing.Tests;
 
@@ -284,16 +285,16 @@ public class TextureBrushTests
     [InlineData(0, 5, 1, 6)]
     [InlineData(0, 0, 1, 0)]
     [InlineData(0, 0, 0, 1)]
-    public void Ctor_InvalidRectangle_ThrowsOutOfMemoryException(int x, int y, int width, int height)
+    public void Ctor_InvalidRectangle_ThrowsExternalException(int x, int y, int width, int height)
     {
         Rectangle rectangle = new(x, y, width, height);
         using Bitmap image = new(10, 10);
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, (RectangleF)rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, WrapMode.Tile, rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, WrapMode.Tile, (RectangleF)rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, rectangle, null));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, (RectangleF)rectangle, null));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, (RectangleF)rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, WrapMode.Tile, rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, WrapMode.Tile, (RectangleF)rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, rectangle, null));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, (RectangleF)rectangle, null));
     }
 
     [Fact]
