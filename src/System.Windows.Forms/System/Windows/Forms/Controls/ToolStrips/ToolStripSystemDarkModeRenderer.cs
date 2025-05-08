@@ -307,7 +307,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
         if (isPressed || isSelected)
         {
-            var fillColor = isPressed
+            using var fillColor = isPressed
                 ? GetDarkModeBrush(SystemColors.ControlDark)
                 : GetDarkModeBrush(SystemColors.Highlight);
 
@@ -343,7 +343,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         // Render the background based on state
         if (splitButton.Selected || splitButton.Pressed)
         {
-            var fillColor = splitButton.Pressed
+            using var fillColor = splitButton.Pressed
                 ? GetDarkModeBrush(SystemColors.ControlDark)
                 : GetDarkModeBrush(SystemColors.Highlight);
 
@@ -360,6 +360,13 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             dropDownRect.Top + 2,
             dropDownRect.Left - 1,
             dropDownRect.Bottom - 2);
+
+        DrawArrow(new ToolStripArrowRenderEventArgs(
+            e.Graphics,
+            e.Item,
+            dropDownRect,
+            SystemColors.ControlText,
+            ArrowDirection.Down));
     }
 
     /// <summary>
