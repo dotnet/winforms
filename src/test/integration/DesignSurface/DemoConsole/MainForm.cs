@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
 namespace TestConsole;
 
 [DesignerCategory("Default")]
@@ -8,7 +7,7 @@ public partial class MainForm : Form
 {
     private ISelectionService _selectionService;
 
-    private readonly List<IDesignSurfaceExt> _listOfDesignSurface = [];
+    private readonly List<IDesignSurfaceExtended> _listOfDesignSurface = [];
 
     public MainForm()
     {
@@ -38,7 +37,7 @@ public partial class MainForm : Form
         // - enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
-            IDesignSurfaceExt isurf = _listOfDesignSurface[i];
+            IDesignSurfaceExtended isurf = _listOfDesignSurface[i];
             isurf.GetUndoEngineExt().Enabled = true;
         }
 
@@ -47,7 +46,7 @@ public partial class MainForm : Form
         // - if we obtain it then hook the SelectionChanged event
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
-            IDesignSurfaceExt isurf = _listOfDesignSurface[i];
+            IDesignSurfaceExtended isurf = _listOfDesignSurface[i];
             _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
             if (_selectionService is not null)
                 _selectionService.SelectionChanged += OnSelectionChanged;
@@ -60,7 +59,7 @@ public partial class MainForm : Form
         if (_selectionService is null)
             return;
 
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         if (isurf is not null)
         {
             ISelectionService selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
@@ -72,7 +71,7 @@ public partial class MainForm : Form
     {
         // - step.0
         // - create a DesignSurface and put it inside a Form in DesignTime
-        DesignSurfaceExt.DesignSurfaceExt surface = new();
+        DesignSurfaceExtended surface = new();
         // -
         // -
         // - store for later use
@@ -442,7 +441,7 @@ public partial class MainForm : Form
     private void SelectRootComponent()
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         if (isurf is not null)
         {
             splitContainer.Panel2.Controls.Remove(propertyGrid);
@@ -465,13 +464,13 @@ public partial class MainForm : Form
 
     private void undoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         isurf?.GetUndoEngineExt().Undo();
     }
 
     private void redoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         isurf?.GetUndoEngineExt().Redo();
     }
 
@@ -483,7 +482,7 @@ public partial class MainForm : Form
     private void toolStripMenuItemTabOrder_Click(object sender, EventArgs e)
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         isurf?.SwitchTabOrder();
     }
 
@@ -504,7 +503,7 @@ public partial class MainForm : Form
 
     private void OnMenuClick(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
+        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
         isurf?.DoAction((sender as ToolStripMenuItem).Text);
     }
 }
