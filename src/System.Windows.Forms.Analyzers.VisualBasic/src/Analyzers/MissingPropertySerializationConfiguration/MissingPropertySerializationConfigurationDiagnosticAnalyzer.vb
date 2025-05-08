@@ -12,6 +12,8 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
     Public Class MissingPropertySerializationConfigurationAnalyzer
         Inherits DiagnosticAnalyzer
 
+        Private Const SystemComponentModelName As String = "System.ComponentModel"
+
         Public Overrides ReadOnly Property SupportedDiagnostics As ImmutableArray(Of DiagnosticDescriptor)
             Get
                 Return ImmutableArray.Create(s_missingPropertySerializationConfiguration)
@@ -28,22 +30,46 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySeria
 
             ' We analyze only properties.
             Dim propertySymbol As IPropertySymbol = TryCast(context.Symbol, IPropertySymbol)
+
             If propertySymbol Is Nothing Then
                 Return
             End If
 
-            ' Does the property belong to a class which derives from Component?
-            If propertySymbol.ContainingType Is Nothing OrElse
-               Not propertySymbol.ContainingType.AllInterfaces.Any(
-                Function(i) i.Name = NameOf(IComponent)) Then
-
+            ' A property of System.ComponentModel.ISite we never flag.
+            If propertySymbol.Type.Name = NameOf(ISite) AndAlso
+               propertySymbol.Type.ContainingNamespace.ToString() = SystemComponentModelName Then
                 Return
             End If
 
-            ' Is the property read/write and at least internal?
-            If propertySymbol.SetMethod Is Nothing OrElse
-               propertySymbol.DeclaredAccessibility < Accessibility.Internal Then
+            ' If the property is part of any interface named IComponent, we're out.
+            If propertySymbol.ContainingType.Name = NameOf(IComponent) Then
+                Return
+            End If
 
+            ' Skip static properties since they are not serialized by the designer
+            If propertySymbol.IsStatic Then
+                Return
+            End If
+
+            ' Is the property read/write, at least internal, and doesn't have a private setter?
+            If propertySymbol.SetMethod Is Nothing OrElse
+               propertySymbol.SetMethod.DeclaredAccessibility = Accessibility.Private OrElse
+               propertySymbol.DeclaredAccessibility < Accessibility.Internal Then
+                Return
+            End If
+
+            ' Skip overridden properties since the base property should already
+            ' have the appropriate serialization configuration
+            If propertySymbol.IsOverride Then
+                Return
+            End If
+
+            ' Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
+            If propertySymbol.ContainingType Is Nothing OrElse
+               Not propertySymbol.ContainingType.AllInterfaces.Any(
+                Function(i) i.Name = NameOf(IComponent) AndAlso
+                          i.ContainingNamespace IsNot Nothing AndAlso
+                          i.ContainingNamespace.ToString() = SystemComponentModelName) Then
                 Return
             End If
 
