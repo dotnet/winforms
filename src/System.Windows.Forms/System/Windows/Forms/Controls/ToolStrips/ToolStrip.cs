@@ -4578,10 +4578,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             SnapFocus((HWND)(nint)m.WParamInternal);
 
-            // For fix https://github.com/dotnet/winforms/issues/12916
-            // Narrow down the range, because ToolStripDropDown is ToolStrip too. we only need to set outer ToolStrip active.
+            // For fix https://github.com/dotnet/winforms/issues/13400
+            // Narrow down the range because TransparentToolStrip (at design time) is also a ToolStrip. We only need to set the outer ToolStrip as active.
             if (IsOuterToolStrip(this))
             {
+                // For fix https://github.com/dotnet/winforms/issues/12916
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
             }
         }
@@ -4653,17 +4654,13 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         static bool IsOuterToolStrip(ToolStrip toolStrip)
         {
-            static ToolStrip getParentToolStrip(ToolStrip toolStrip)
+            ToolStrip tempToolStrip = toolStrip;
+            while (tempToolStrip.Parent is ToolStrip parentControl)
             {
-                if (toolStrip.Parent is ToolStrip parent)
-                {
-                    return getParentToolStrip(parent);
-                }
-
-                return toolStrip;
+                tempToolStrip = parentControl;
             }
 
-            return toolStrip == getParentToolStrip(toolStrip);
+            return toolStrip == tempToolStrip;
         }
     }
 
