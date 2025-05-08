@@ -170,9 +170,6 @@
   <data name="GdiplusInvalidSize" xml:space="preserve">
     <value>Operation requires a transformation of the image from GDI+ to GDI. GDI does not support images with a width or height greater than 32767.</value>
   </data>
-  <data name="GdiplusOutOfMemory" xml:space="preserve">
-    <value>Out of memory.</value>
-  </data>
   <data name="GdiplusNotImplemented" xml:space="preserve">
     <value>Not implemented.</value>
   </data>
