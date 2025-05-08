@@ -150,6 +150,7 @@ HRGN
 HWND
 HWND_*
 IDataObject
+IDataObjectAsyncCapability
 IDI_*
 IDispatchEx
 IDragSourceHelper2
