@@ -47,11 +47,16 @@ public class DataGridViewTests : ControlTestBase
     {
         Action action = () =>
         {
-            DataGridView dataGridView = new();
-            Form form = new();
+            using IContainer components = new Container();
+            using Form form = new();
 
+            DataGridView dataGridView = new()
+            {
+                Dock = DockStyle.Fill
+            };
+
+            components.Add(dataGridView);
             form.Controls.Add(dataGridView);
-            dataGridView.Dock = DockStyle.Fill;
 
             DataGridViewTextBoxColumn nameColumn = new()
             {
@@ -66,28 +71,27 @@ public class DataGridViewTests : ControlTestBase
 
             dataGridView.Columns.AddRange([nameColumn, ageColumn]);
 
-            DataRecordList dataRecordList =
+            BindingList<DataRecord> dataRecordList =
             [
                 new DataRecord { Name = "Alice", Age = 30 }
             ];
 
-            IContainer components = new Container();
             using BindingSource bindingSource = new(components)
             {
                 DataSource = dataRecordList
             };
             dataGridView.DataSource = bindingSource;
 
+            dataGridView.CellBeginEdit += (s, e) =>
+            {
+                // Close the form as soon as editing begins.
+                form.BeginInvoke(() => form.Close());
+            };
+
             form.Shown += (s, e) =>
             {
                 dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
-                bool beganEdit = dataGridView.BeginEdit(true);
-
-                _ = Task.Run(async () =>
-                {
-                    await Task.Delay(1000).ConfigureAwait(false);
-                    form.Invoke(() => form.Close());
-                });
+                dataGridView.BeginEdit(true);
             };
 
             form.ShowDialog();
@@ -101,8 +105,6 @@ public class DataGridViewTests : ControlTestBase
         public string Name { get; set; } = "";
         public int Age { get; set; }
     }
-
-    public class DataRecordList : BindingList<DataRecord> { };
 
     [WinFormsTheory]
     [InlineData("short value", false)]
