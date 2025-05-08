@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms.Layout;
@@ -55,12 +56,16 @@ public abstract class ToolStripRenderer
     // status strip sizing grip.
     private static readonly Rectangle[] s_baseSizeGripRectangles =
     [
-        new(8, 0, 2, 2),
+        new(12, 0, 2, 2),
         new(8, 4, 2, 2),
-        new(8, 8, 2, 2),
-        new(4, 4, 2, 2),
         new(4, 8, 2, 2),
-        new(0, 8, 2, 2)
+        new(0, 12, 2, 2),
+        new(8, 0, 2, 2),
+        new(4, 4, 2, 2),
+        new(0, 8, 2, 2),
+        new(4, 0, 2, 2),
+        new(0, 4, 2, 2),
+        new(1, 1, 2, 2),
     ];
 
     protected ToolStripRenderer()
@@ -1028,78 +1033,94 @@ public abstract class ToolStripRenderer
             return;
         }
 
-        Graphics g = eArgs.Graphics;
-
-        // we have a set of stock rectangles. Translate them over to where the grip is to be drawn
-        // for the white set, then translate them up and right one pixel for the grey.
-
         if (eArgs.ToolStrip is not StatusStrip statusStrip)
         {
             return;
         }
 
         Rectangle sizeGripBounds = statusStrip.SizeGripBounds;
-
         if (LayoutUtils.IsZeroWidthOrHeight(sizeGripBounds))
         {
             return;
         }
 
-        Rectangle[] whiteRectangles = new Rectangle[s_baseSizeGripRectangles.Length];
-        Rectangle[] greyRectangles = new Rectangle[s_baseSizeGripRectangles.Length];
+        Graphics g = eArgs.Graphics;
+
+        // Use device DPI for scaling
+        float dpiScale = 1.0f;
+
+        if (statusStrip.DeviceDpi > 0 && ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            dpiScale = statusStrip.DeviceDpi / 96f;
+        }
+
+        // Scale the base rectangles for the grip dots
+        Rectangle[] scaledRects = new Rectangle[s_baseSizeGripRectangles.Length];
 
         for (int i = 0; i < s_baseSizeGripRectangles.Length; i++)
         {
-            Rectangle baseRect = s_baseSizeGripRectangles[i];
+            Rectangle r = s_baseSizeGripRectangles[i];
 
-            if (statusStrip.RightToLeft == RightToLeft.Yes)
-            {
-                baseRect.X = sizeGripBounds.Width - baseRect.X - baseRect.Width;
-            }
-
-            // Height of pyramid (10px) + 2px padding from bottom.
-            baseRect.Offset(
-                x: sizeGripBounds.X,
-                y: sizeGripBounds.Bottom - 12);
-
-            whiteRectangles[i] = baseRect;
-
-            int offset = -1 + GetCornerOffset(statusStrip);
-
-            if (statusStrip.RightToLeft == RightToLeft.Yes)
-            {
-                baseRect.Offset(1, -1 - offset);
-            }
-            else
-            {
-                baseRect.Offset(-1, -1 - offset);
-            }
-
-            greyRectangles[i] = baseRect;
+            scaledRects[i] = new Rectangle(
+                (int)(r.X * dpiScale),
+                (int)(r.Y * dpiScale),
+                Math.Max((int)(r.Width * dpiScale), 2),
+                Math.Max((int)(r.Height * dpiScale), 2));
         }
 
-        g.FillRectangles(highLightBrush, whiteRectangles);
-        g.FillRectangles(shadowBrush, greyRectangles);
+        (int cornerOffset, Rectangle lastRect) = GetCornerOffset(statusStrip);
+        scaledRects[^1] = lastRect;
 
-        // We need to compensate for the rounded Window corners from Windows 11 on.
-        static int GetCornerOffset(StatusStrip statusStrip)
+        SmoothingMode oldSmoothing = g.SmoothingMode;
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Draw the grip dots, bottom-right aligned (mirrored for RTL)
+        foreach (Rectangle dotRect in scaledRects)
         {
-            // If we're on Windows 11, offset slightly to avoid hitting rounded corners,
-            // _if_ we are at all dealing with rounded corners.
-            int cornerOffset = 0;
+            Rectangle actualRect = statusStrip.RightToLeft == RightToLeft.Yes
+                ? new Rectangle(
+                    x: sizeGripBounds.Left + cornerOffset + dotRect.X,
+                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
+                    width: dotRect.Width,
+                    height: dotRect.Height)
+
+                : new Rectangle(
+                    x: sizeGripBounds.Right - cornerOffset - dotRect.X - dotRect.Width,
+                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
+                    width: dotRect.Width,
+                    height: dotRect.Height);
+
+            // Highlight dot (top-left)
+            Rectangle highlightRect = actualRect;
+            highlightRect.Offset(-1, -1);
+
+            g.FillEllipse(highLightBrush, highlightRect);
+
+            // Shadow dot (bottom-right)
+            Rectangle shadowRect = actualRect;
+            shadowRect.Offset(1, 1);
+
+            g.FillEllipse(shadowBrush, shadowRect);
+        }
+
+        g.SmoothingMode = oldSmoothing;
+
+        static (int cornerOffset, Rectangle rect) GetCornerOffset(StatusStrip statusStrip)
+        {
+            (int, Rectangle) cornerDef = (2, new(1, 1, 2, 2));
 
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
-                cornerOffset = f.FormCornerPreference switch
+                cornerDef = f.FormCornerPreference switch
                 {
-                    FormCornerPreference.Round => 5,
-                    FormCornerPreference.RoundSmall => 3,
-                    _ => 3
+                    FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
+                    FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
+                    _ => (2, new(0, 0, 2, 2))
                 };
             }
 
-            return cornerOffset;
+            return cornerDef;
         }
     }
 
