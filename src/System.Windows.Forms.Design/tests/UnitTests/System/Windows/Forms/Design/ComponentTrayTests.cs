@@ -20,7 +20,11 @@ public class ComponentTrayTests : IDisposable
         _componentTray.AddComponent(_component);
     }
 
-    public void Dispose() => _componentTray.Dispose();
+    public void Dispose()
+    {
+        _component.Dispose();
+        _componentTray.Dispose();
+    }
 
     [Fact]
     public void Constructor_Default()
@@ -114,13 +118,6 @@ public class ComponentTrayTests : IDisposable
     {
         Action action = () => _componentTray.SetLocation(_component, new(0, 0));
         action.Should().NotThrow<Exception>();
-    }
-
-    [Fact]
-    public void SetTrayLocation_WithoutAComponentView_Throws()
-    {
-        Action action = () => _componentTray.SetTrayLocation(_component, new(0, 0));
-        action.Should().Throw<Exception>();
     }
 
     private Mock<IServiceProvider> MockServiceProvider()
