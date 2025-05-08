@@ -668,7 +668,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
             parentControl = parentControl.Parent;
         }
 
-        return parentControl is ContainerControl container ? container._currentAutoScaleFactor : new SizeF(1F, 1F);
+        return parentControl is ContainerControl container ? container.AutoScaleFactor : new SizeF(1F, 1F);
     }
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
