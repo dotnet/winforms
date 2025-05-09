@@ -1,7 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Design.Behavior;
@@ -399,5 +402,163 @@ public class DesignerUtilsTests :IDisposable
         result.Y.Should().Be(expectedY);
         result.Width.Should().Be(expectedWidth);
         result.Height.Should().Be(expectedHeight);
+    }
+
+    [WinFormsFact]
+    public void ApplyListViewThemeStyles_ShouldNotThrow_WhenCalledWithValidListView()
+    {
+        using ListView listView = new();
+        Exception exception = Record.Exception(() => DesignerUtils.ApplyListViewThemeStyles(listView));
+        exception.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void ApplyTreeViewThemeStyles_ShouldNotThrow_WhenCalledWithValidTreeView()
+    {
+        using TreeView treeView = new();
+        Exception exception = Record.Exception(() => DesignerUtils.ApplyTreeViewThemeStyles(treeView));
+        exception.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void CheckForNestedContainer_ShouldReturnSameContainer_WhenNotNested()
+    {
+        Mock<IContainer> mockContainer = new();
+        IContainer? result = DesignerUtils.CheckForNestedContainer(mockContainer.Object);
+        result.Should().BeSameAs(mockContainer.Object);
+    }
+
+    [WinFormsFact]
+    public void FilterGenericTypes_ShouldReturnNull_WhenTypesIsNull()
+    {
+        ICollection? result = DesignerUtils.FilterGenericTypes(null);
+        result.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void FilterGenericTypes_ShouldReturnEmptyCollection_WhenTypesIsEmpty()
+    {
+        ICollection emptyCollection = Array.Empty<Type>();
+        ICollection? result = DesignerUtils.FilterGenericTypes(emptyCollection);
+        result.Should().BeSameAs(emptyCollection);
+    }
+
+    [WinFormsFact]
+    public void FilterGenericTypes_ShouldFilterOutGenericTypes()
+    {
+        ICollection types = new List<Type>
+        {
+            typeof(List<>),
+            typeof(int),
+            typeof(Dictionary<,>),
+            typeof(string)
+        };
+
+        ICollection? result = DesignerUtils.FilterGenericTypes(types);
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<List<Type>>();
+        result.Should().BeEquivalentTo(new List<Type> { typeof(int), typeof(string) });
+    }
+
+    [WinFormsFact]
+    public void GetUniqueSiteName_ShouldReturnNull_WhenNameIsNullOrEmpty()
+    {
+        Mock<IDesignerHost> mockHost = new();
+        string? result = DesignerUtils.GetUniqueSiteName(mockHost.Object, null);
+        result.Should().BeNull();
+
+        result = DesignerUtils.GetUniqueSiteName(mockHost.Object, string.Empty);
+        result.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void GetUniqueSiteName_ShouldReturnName_WhenNameIsNotInUseAndValid()
+    {
+        Mock<IDesignerHost> mockHost = new();
+        Mock<INameCreationService> mockNameCreationService = new();
+        mockNameCreationService.Setup(s => s.IsValidName("TestName")).Returns(true);
+
+        mockHost.Setup(h => h.GetService(typeof(INameCreationService))).Returns(mockNameCreationService.Object);
+
+        ComponentCollection components = new(Array.Empty<IComponent>());
+        Mock<IContainer> mockContainer = new();
+        mockContainer.Setup(c => c.Components).Returns(components);
+        mockHost.Setup(h => h.Container).Returns(mockContainer.Object);
+
+        string? result = DesignerUtils.GetUniqueSiteName(mockHost.Object, "TestName");
+
+        result.Should().Be("TestName");
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Top, false, 0, 10)]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Bottom, false, 0, -90)]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Left, false, 10, 0)]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Right, false, -90, 0)]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Top, true, 0, 10)]
+    [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Right, true, -10, 0)]
+    internal void GetBoundsFromToolboxSnapDragDropInfo_ShouldReturnExpectedBounds(
+    int x, int y, int width, int height, int offsetX, int offsetY,
+    ToolboxSnapDragDropEventArgs.SnapDirection snapDirection, bool isMirrored,
+    int expectedX, int expectedY)
+    {
+        Rectangle originalBounds = new(x, y, width, height);
+        ToolboxSnapDragDropEventArgs args = new(snapDirection, new Point(offsetX, offsetY), new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None));
+
+        Rectangle result = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e: args, originalBounds: originalBounds, isMirrored: isMirrored);
+
+        result.X.Should().Be(expectedX);
+        result.Y.Should().Be(expectedY);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ContentAlignment.TopLeft, 14)]
+    [InlineData(ContentAlignment.TopCenter, 14)]
+    [InlineData(ContentAlignment.TopRight, 14)]
+    [InlineData(ContentAlignment.MiddleLeft, 31)]
+    [InlineData(ContentAlignment.MiddleCenter, 31)]
+    [InlineData(ContentAlignment.MiddleRight, 31)]
+    [InlineData(ContentAlignment.BottomLeft, 48)]
+    [InlineData(ContentAlignment.BottomCenter, 48)]
+    [InlineData(ContentAlignment.BottomRight, 48)]
+    public void GetTextBaseline_ShouldReturnExpectedBaseline(ContentAlignment alignment, int expectedBaseline)
+    {
+        using Button button = new()
+        {
+            Width = 100,
+            Height = 50,
+            Font = new Font("Arial", 10)
+        };
+
+        int baseline = DesignerUtils.GetTextBaseline(button, alignment);
+
+        baseline.Should().Be(expectedBaseline);
+    }
+
+    [WinFormsFact]
+    public void GetTextBaseline_ShouldThrowArgumentNullException_WhenControlIsNull()
+    {
+        Action action = () => DesignerUtils.GetTextBaseline(null!, ContentAlignment.TopLeft);
+
+        action.Should().Throw<NullReferenceException>();
+    }
+
+    [WinFormsTheory]
+    [InlineData(ContentAlignment.TopLeft, 16)]
+    [InlineData(ContentAlignment.MiddleCenter, 57)]
+    [InlineData(ContentAlignment.BottomRight, 97)]
+    public void GetTextBaseline_ShouldRespectFontAndBounds(ContentAlignment alignment, int expectedBaseline)
+    {
+        using Button button = new()
+        {
+            Width = 200,
+            Height = 100,
+            Font = new Font("Times New Roman", 12)
+        };
+
+        int baseline = DesignerUtils.GetTextBaseline(button, alignment);
+
+        baseline.Should().Be(expectedBaseline);
     }
 }
