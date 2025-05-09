@@ -26,6 +26,7 @@ public class ComponentTrayTests : IDisposable
         _componentTray.Dispose();
     }
 
+
     [Fact]
     public void Constructor_Default()
     {
@@ -136,4 +137,103 @@ public class ComponentTrayTests : IDisposable
 
         return serviceProviderMock;
     }
+
+    [Fact]
+    public void AddComponent_WithValidComponent_AddsToTray()
+    {
+        using Component component = new();
+        int initialCount = _componentTray.ComponentCount;
+
+        _componentTray.AddComponent(component);
+
+        _componentTray.ComponentCount.Should().Be(initialCount + 1);
+    }
+
+    [Fact]
+    public void AddComponent_WithNonDisplayableComponent_DoesNotAddToTray()
+    {
+        using Component component = new MyCustomComponent();
+        Mock<ISelectionUIService> selectionUISvcMock = new();
+        Mock<IServiceProvider> serviceProviderMock = MockServiceProvider();
+        serviceProviderMock
+            .Setup(s => s.GetService(typeof(ISelectionUIService)))
+            .Returns(selectionUISvcMock.Object);
+
+        ComponentTray componentTray = new(new Mock<IDesigner>().Object, serviceProviderMock.Object);
+        componentTray.AddComponent(component);
+
+        componentTray.ComponentCount.Should().Be(0);
+    }
+
+    [DesignTimeVisible(false)]
+    public class MyCustomComponent : Component
+    {
+    }
+
+    [Fact]
+    public void AddComponent_WhenHostIsLoading_DoesNotPositionControl()
+    {
+        Mock<IDesignerHost> hostMock = new();
+        hostMock.Setup(h => h.Loading).Returns(true);
+
+        Mock<IServiceProvider> serviceProviderMock = MockServiceProvider();
+        serviceProviderMock
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(hostMock.Object);
+
+        ComponentTray componentTray = new(new Mock<IDesigner>().Object, serviceProviderMock.Object);
+        Mock<Component> mockComponent = new();
+        int initialCount = componentTray.ComponentCount;
+
+        componentTray.AddComponent(mockComponent.Object);
+
+        componentTray.ComponentCount.Should().Be(initialCount + 1);
+    }
+
+[Fact]
+public void AutoArrange_TogglesCorrectly()
+{
+    _componentTray.AutoArrange = true;
+    _componentTray.AutoArrange.Should().BeTrue();
+
+    _componentTray.AutoArrange = false;
+    _componentTray.AutoArrange.Should().BeFalse();
+}
+
+[Fact]
+public void ShowLargeIcons_TogglesCorrectly()
+{
+    _componentTray.ShowLargeIcons = true;
+    _componentTray.ShowLargeIcons.Should().BeTrue();
+
+    _componentTray.ShowLargeIcons = false;
+    _componentTray.ShowLargeIcons.Should().BeFalse();
+}
+
+[Fact]
+public void ComponentCount_ReturnsCorrectCount()
+{
+    int initialCount = _componentTray.ComponentCount;
+
+    using Component newComponent = new();
+    _componentTray.AddComponent(newComponent);
+
+    _componentTray.ComponentCount.Should().Be(initialCount + 1);
+}
+
+[Fact]
+public void IsTrayComponent_WithComponentNotInTray_ReturnsFalse()
+{
+    Mock<IComponent> mockComponent = new();
+    _componentTray.IsTrayComponent(mockComponent.Object).Should().BeFalse();
+}
+
+[Fact]
+public void CreateComponentFromTool_WithValidTool_DoesNotThrow()
+{
+    Mock<ToolboxItem> mockToolboxItem = new();
+    Action action = () => _componentTray.CreateComponentFromTool(mockToolboxItem.Object);
+
+    action.Should().NotThrow();
+}
 }
