@@ -1,14 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-public class UndoEngineExt : UndoEngine
+public class UndoEngineExtended : UndoEngine
 {
     private readonly Stack<UndoUnit> _undoStack = new();
     private readonly Stack<UndoUnit> _redoStack = new();
 
-    public UndoEngineExt(IServiceProvider provider) : base(provider) { }
+    public UndoEngineExtended(IServiceProvider provider) : base(provider) { }
 
     public bool EnableUndo
     {

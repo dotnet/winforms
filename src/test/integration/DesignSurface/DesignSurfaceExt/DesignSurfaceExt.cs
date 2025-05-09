@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
+public class DesignSurfaceExtended : DesignSurface, IDesignSurfaceExtended
 {
     private const string Name = "DesignSurfaceExt";
 
@@ -73,7 +73,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 
-    public UndoEngineExt GetUndoEngineExt()
+    public UndoEngineExtended GetUndoEngineExt()
     {
         return _undoEngine;
     }
@@ -270,15 +270,15 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
     #region  UndoEngine
 
-    private UndoEngineExt _undoEngine;
-    private NameCreationServiceImp _nameCreationService;
-    private DesignerSerializationServiceImpl _designerSerializationService;
+    private UndoEngineExtended _undoEngine;
+    private NameCreationService _nameCreationService;
+    private DesignerSerializationService _designerSerializationService;
     private CodeDomComponentSerializationService _codeDomComponentSerializationService;
 
     #endregion
 
     // - ctor
-    public DesignSurfaceExt()
+    public DesignSurfaceExtended()
     {
         InitServices();
     }
@@ -300,7 +300,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         // - otherwise the root component did not have a name and this caused
         // - troubles when we try to use the UndoEngine
         // - 1. NameCreationService
-        _nameCreationService = new NameCreationServiceImp();
+        _nameCreationService = new NameCreationService();
         ServiceContainer.RemoveService(typeof(INameCreationService), false);
         ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
 
@@ -310,12 +310,12 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
 
         // - 3. IDesignerSerializationService
-        _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
+        _designerSerializationService = new DesignerSerializationService(ServiceContainer);
         ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
         ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
 
         // - 4. UndoEngine
-        _undoEngine = new UndoEngineExt(ServiceContainer)
+        _undoEngine = new UndoEngineExtended(ServiceContainer)
         {
             // Disable the UndoEngine
             Enabled = false
