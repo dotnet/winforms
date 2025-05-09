@@ -2665,7 +2665,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2677,7 +2676,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2689,7 +2687,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2701,7 +2698,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
