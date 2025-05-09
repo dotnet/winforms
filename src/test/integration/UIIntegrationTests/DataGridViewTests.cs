@@ -1,8 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using FluentAssertions;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
@@ -38,6 +40,70 @@ public class DataGridViewTests : ControlTestBase
             form.Close();
             dataTable.AcceptChanges();
         });
+    }
+
+    [WinFormsFact]
+    public void DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
+    {
+        Action action = () =>
+        {
+            using IContainer components = new Container();
+            using Form form = new();
+
+            DataGridView dataGridView = new()
+            {
+                Dock = DockStyle.Fill
+            };
+
+            components.Add(dataGridView);
+            form.Controls.Add(dataGridView);
+
+            DataGridViewTextBoxColumn nameColumn = new()
+            {
+                HeaderText = "Name",
+                DataPropertyName = "Name"
+            };
+            DataGridViewTextBoxColumn ageColumn = new()
+            {
+                HeaderText = "Age",
+                DataPropertyName = "Age"
+            };
+
+            dataGridView.Columns.AddRange([nameColumn, ageColumn]);
+
+            BindingList<DataRecord> dataRecordList =
+            [
+                new DataRecord { Name = "Alice", Age = 30 }
+            ];
+
+            using BindingSource bindingSource = new(components)
+            {
+                DataSource = dataRecordList
+            };
+            dataGridView.DataSource = bindingSource;
+
+            dataGridView.CellBeginEdit += (s, e) =>
+            {
+                // Close the form as soon as editing begins.
+                form.BeginInvoke(() => form.Close());
+            };
+
+            form.Shown += (s, e) =>
+            {
+                dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
+                dataGridView.BeginEdit(true);
+            };
+
+            form.ShowDialog();
+        };
+
+        action.Should().NotThrow();
+    }
+
+    public class DataRecord
+    {
+        public string Name { get; set; } = "";
+        public int Age { get; set; }
     }
 
     [WinFormsTheory]
