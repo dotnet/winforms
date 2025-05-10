@@ -3250,7 +3250,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         LayoutRequired = false;
 
-        // we need to do this to prevent autosizing to happen while we're reparenting.
+        // we need to do this to prevent auto-sizing to happen while we're reparenting.
         ToolStripOverflow? overflow = GetOverflow();
         if (overflow is not null)
         {
@@ -3636,6 +3636,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         Graphics g = e.GraphicsInternal;
         GraphicsState graphicsState = g.Save();
+
         try
         {
             using (Region? transparentRegion = Renderer.GetTransparentRegion(this))
