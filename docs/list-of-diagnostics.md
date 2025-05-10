@@ -104,3 +104,4 @@ Documentation for experimental features is available in the [Experimental Help](
 | `WFO5001`     | NET9.0     |         | `System.Windows.Forms.Application.SetColorMode`(System.Windows.Forms.SystemColorMode) is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
 | `WFO5001`     | NET9.0     |         | `System.Windows.Forms.SystemColorMode` is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
 | `WFO5002`     | NET9.0     |         | `System.Windows.Forms.Form.ShowAsync` is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
+| `WFO5003`     | NET10.0     |         | `System.Windows.Forms.IAsyncDropTarget` is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed. |
