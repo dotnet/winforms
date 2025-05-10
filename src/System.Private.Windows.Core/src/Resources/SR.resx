@@ -194,7 +194,7 @@
   <data name="GdiplusInvalidParameter" xml:space="preserve">
     <value>Parameter is not valid.</value>
   </data>
-  <data name="GdiplusOutOfMemory" xml:space="preserve">
+  <data name="GdiplusInvalidOperation" xml:space="preserve">
     <value>An object could not be created, possibly due to a lack of memory, but most likely due to invalid input.</value>
   </data>
   <data name="GdiplusNotImplemented" xml:space="preserve">

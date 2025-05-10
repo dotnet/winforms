@@ -434,11 +434,11 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(0, 1, 1, 3)]
     [InlineData(4, 1, 1, 1)]
     [InlineData(1, 4, 1, 1)]
-    public void Clone_InvalidRect_ThrowsOutOfMemoryException(int x, int y, int width, int height)
+    public void Clone_InvalidRect_ThrowsExternalException(int x, int y, int width, int height)
     {
         using Bitmap bitmap = new(3, 3);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
     }
 
     [Theory]
@@ -450,19 +450,19 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Extended)]
     [InlineData(PixelFormat.Format16bppGrayScale)]
     [InlineData(PixelFormat.Canonical)]
-    public void Clone_InvalidPixelFormat_ThrowsOutOfMemoryException(PixelFormat format)
+    public void Clone_InvalidPixelFormat_ThrowsExternalException(PixelFormat format)
     {
         using Bitmap bitmap = new(1, 1);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
     }
 
     [Fact]
-    public void Clone_GrayscaleFormat_ThrowsOutOfMemoryException()
+    public void Clone_GrayscaleFormat_ThrowsExternalException()
     {
         using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
     }
 
     [Fact]

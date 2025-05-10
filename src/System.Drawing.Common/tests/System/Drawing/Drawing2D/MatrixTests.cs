@@ -23,6 +23,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Runtime.InteropServices;
 using System.XUnit;
 
 namespace System.Drawing.Drawing2D.Tests;
@@ -142,17 +143,17 @@ public partial class MatrixTests
     }
 
     [Fact]
-    public void Ctor_WidthZero_ThrowsOutOfMemoryException()
+    public void Ctor_WidthZero_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => new Matrix(new Rectangle(1, 1, 0, 1), new Point[3]));
-        Assert.Throws<OutOfMemoryException>(() => new Matrix(new RectangleF(1, 1, 0, 1), new PointF[3]));
+        Assert.Throws<ExternalException>(() => new Matrix(new Rectangle(1, 1, 0, 1), new Point[3]));
+        Assert.Throws<ExternalException>(() => new Matrix(new RectangleF(1, 1, 0, 1), new PointF[3]));
     }
 
     [Fact]
-    public void Ctor_HeightZero_ThrowsOutOfMemoryException()
+    public void Ctor_HeightZero_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => new Matrix(new Rectangle(1, 1, 1, 0), new Point[3]));
-        Assert.Throws<OutOfMemoryException>(() => new Matrix(new RectangleF(1, 1, 1, 0), new PointF[3]));
+        Assert.Throws<ExternalException>(() => new Matrix(new Rectangle(1, 1, 1, 0), new Point[3]));
+        Assert.Throws<ExternalException>(() => new Matrix(new RectangleF(1, 1, 1, 0), new PointF[3]));
     }
 
     [Fact]

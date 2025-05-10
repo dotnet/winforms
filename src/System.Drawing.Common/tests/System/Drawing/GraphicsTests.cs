@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -111,22 +112,22 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromHdcInternal_ZeroHdc_ThrowsOutOfMemoryException()
+    public void FromHdcInternal_ZeroHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdcInternal(IntPtr.Zero));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdcInternal(IntPtr.Zero));
     }
 
     [Fact]
-    public void FromHdc_ZeroHdc_ThrowsOutOfMemoryException()
+    public void FromHdc_ZeroHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdc(IntPtr.Zero, 10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdc(IntPtr.Zero, 10));
     }
 
     [Fact]
-    public void FromHdc_InvalidHdc_ThrowsOutOfMemoryException()
+    public void FromHdc_InvalidHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHwnd(10));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHwndInternal(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHwnd(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHwndInternal(10));
     }
 
     [Fact]
@@ -229,10 +230,10 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromHwnd_InvalidHwnd_ThrowsOutOfMemoryException()
+    public void FromHwnd_InvalidHwnd_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdc(10));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdcInternal(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdc(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdcInternal(10));
     }
 
     [Theory]
@@ -280,19 +281,19 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromImage_Metafile_ThrowsOutOfMemoryException()
+    public void FromImage_Metafile_ThrowsExternalException()
     {
         using Metafile image = new(Helpers.GetTestBitmapPath("telescope_01.wmf"));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
+        Assert.Throws<ExternalException>(() => Graphics.FromImage(image));
     }
 
     [Theory]
     [InlineData(PixelFormat.Format16bppArgb1555)]
     [InlineData(PixelFormat.Format16bppGrayScale)]
-    public void FromImage_Invalid16BitFormat_ThrowsOutOfMemoryException(PixelFormat format)
+    public void FromImage_Invalid16BitFormat_ThrowsExternalException(PixelFormat format)
     {
         using Bitmap image = new(10, 10, format);
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
+        Assert.Throws<ExternalException>(() => Graphics.FromImage(image));
     }
 
     public static IEnumerable<object[]> CompositingMode_TestData()
