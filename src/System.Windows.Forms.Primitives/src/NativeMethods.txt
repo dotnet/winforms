@@ -225,6 +225,7 @@ GetViewportExtEx
 GetWindow
 GetWindowDpiAwarenessContext
 GetWindowPlacement
+GetWindowTheme
 GetWorldTransform
 GMR_*
 HC_*

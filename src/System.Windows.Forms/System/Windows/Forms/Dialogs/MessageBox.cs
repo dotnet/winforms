@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Analyzers.Diagnostics;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.Graphics.Dwm;
 namespace System.Windows.Forms;
 
@@ -96,7 +95,9 @@ public class MessageBox
         switch (msg)
         {
             case PInvokeCore.WM_CTLCOLORBTN:
-                return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.ButtonFace));
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return new LRESULT(PInvokeCore.CreateSolidBrush(FooterBackColor));
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             case PInvokeCore.WM_CTLCOLORDLG:
             case PInvokeCore.WM_CTLCOLORSTATIC:
                 HDC hdc = new HDC(wParam);
@@ -156,8 +157,13 @@ public class MessageBox
         {
             case PInvoke.WC_BUTTON:
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                // Make sure that Uxtheme Visual Style is applied at this time to the Buttons
+                HTHEME buttonTheme = PInvoke.GetWindowTheme(handle);
 
-                PInvoke.SetWindowTheme(handle, Application.IsDarkModeEnabled ? "DarkMode_Explorer" : className, null);
+                if (!buttonTheme.IsNull)
+                {
+                    PInvoke.SetWindowTheme(handle, Application.IsDarkModeEnabled ? "DarkMode_Explorer" : className, null);
+                }
 
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                 if (s_resourceManager is null)
@@ -165,41 +171,41 @@ public class MessageBox
                     return true;
                 }
 
-                int dlgCtrlID = PInvoke.GetDlgCtrlID(s_hWndInternal);
+                int dlgCtrlID = PInvoke.GetDlgCtrlID(handle);
                 switch (dlgCtrlID)
                 {
                     case MBOKId:
                         OK = s_resourceManager.GetString("OK", CultureInfo.CurrentCulture) ?? "&OK";
-                        PInvoke.SetWindowText(s_hWndInternal, OK);
+                        PInvoke.SetWindowText(handle, OK);
                         break;
                     case MBCancelId:
                         OK = s_resourceManager.GetString("OK", CultureInfo.CurrentCulture);
                         Cancel = s_resourceManager.GetString("Cancel", CultureInfo.CurrentCulture) ?? "&Cancel";
-                        PInvoke.SetWindowText(s_hWndInternal, Cancel);
+                        PInvoke.SetWindowText(handle, Cancel);
                         break;
                     case MBAbortId:
                         Abort = s_resourceManager.GetString("Abort", CultureInfo.CurrentCulture) ?? "&Abort";
-                        PInvoke.SetWindowText(s_hWndInternal, Abort);
+                        PInvoke.SetWindowText(handle, Abort);
                         break;
                     case MBRetryId:
                         Retry = s_resourceManager.GetString("Retry", CultureInfo.CurrentCulture) ?? "&Retry";
-                        PInvoke.SetWindowText(s_hWndInternal, Retry);
+                        PInvoke.SetWindowText(handle, Retry);
                         break;
                     case MBIgnoreId:
                         Ignore = s_resourceManager.GetString("Ignore", CultureInfo.CurrentCulture) ?? "&Ignore";
-                        PInvoke.SetWindowText(s_hWndInternal, Ignore);
+                        PInvoke.SetWindowText(handle, Ignore);
                         break;
                     case MBYesId:
                         Yes = s_resourceManager.GetString("Yes", CultureInfo.CurrentCulture) ?? "&Yes";
-                        PInvoke.SetWindowText(s_hWndInternal, Yes);
+                        PInvoke.SetWindowText(handle, Yes);
                         break;
                     case MBNoId:
                         No = s_resourceManager.GetString("No", CultureInfo.CurrentCulture) ?? "&No";
-                        PInvoke.SetWindowText(s_hWndInternal, No);
+                        PInvoke.SetWindowText(handle, No);
                         break;
                     case MBHelpId:
                         Help = s_resourceManager.GetString("Help", CultureInfo.CurrentCulture) ?? "&Help";
-                        PInvoke.SetWindowText(s_hWndInternal, Help);
+                        PInvoke.SetWindowText(handle, Help);
                         break;
                 }
 
@@ -272,6 +278,10 @@ public class MessageBox
                 return;
             }
 
+            // see https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-setwindowshookexw
+            // Installs a hook procedure that monitors messages before the system sends them to the destination.
+
+            // Handling messages from WH_CALLWNDPROC or WH_CALLWNDPROCRET does not give good results so we chose to use WH_CALLWNDPROC and support subclassing by using Setwindowlong.
             s_messageBoxHook = PInvoke.SetWindowsHookEx(
                 WINDOWS_HOOK_ID.WH_CALLWNDPROC,
                 (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)s_hookPointer,
@@ -318,6 +328,8 @@ public class MessageBox
                 HWND hwndText = PInvoke.GetDlgItem(msg.hwnd, MBTextId);
                 if (!hwndText.IsNull)
                 {
+                    // subclassing the DLGPROC instead of WNDPROC.
+                    // DWL_DLGPROC and DWLP_DLGPROC have the exact value of IntPtr.Size.
                     WNDPROC ownerWindowProcedure = DlgProcInternal;
                     nint newDlgProcPointer = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
                     Debug.Assert(s_priorDlgProc == 0, "The previous subclass wasn't properly cleaned up");
@@ -326,7 +338,6 @@ public class MessageBox
                        (WINDOW_LONG_PTR_INDEX)IntPtr.Size,
                        newDlgProcPointer);
                 }
-
             }
         }
 
@@ -668,7 +679,8 @@ public class MessageBox
     }
 
     /// <summary>
-    ///  Displays a message box with specified text, caption, style and Help file Path for a IWin32Window.
+    ///  Displays a message box with specified text, caption, style and Help file Path for a IWin32Window with custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -688,6 +700,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path, keyword and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -707,6 +720,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path, keyword and custom Icon for a IWin32Window.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -727,6 +741,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path HelpNavigator, and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -746,6 +761,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path HelpNavigator, and custom Icon for IWin32Window.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -766,6 +782,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator,object and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -786,6 +803,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator, object and custom Icon for a IWin32Window.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -807,6 +825,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -823,6 +842,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -838,6 +858,7 @@ public class MessageBox
 
     /// <summary>
     ///  Displays a message box with specified text, caption, style, and custom Icon.
+    ///  Rcomnded size of the custom icon is 32x32.
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static DialogResult Show(
@@ -978,7 +999,7 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        if (LocalAppContextSwitches.NoClientNotifications)
+        if (AppContextSwitches.NoClientNotifications)
         {
             return DialogResult.None;
         }

@@ -3,6 +3,8 @@
 
 #nullable enable
 
+using System.Drawing;
+
 namespace WinFormsControlsTest;
 
 [DesignerCategory("Default")]
@@ -17,7 +19,7 @@ public partial class MessageBoxes : Form
 
         _btnOpen = new("Show MessageBox")
         {
-            Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
+            Image = (Bitmap?)(resources.GetObject("OpenDialog")),
             Enabled = false
         };
 
@@ -25,11 +27,25 @@ public partial class MessageBoxes : Form
         {
             if ((_messgageBoxProxy.Options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0)
             {
-                MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
-                    _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
-                    _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
-                    "mmc.chm", HelpNavigator.KeywordIndex, "ovals");
+                PreparOpthions();
+                if (_messgageBoxProxy.CustomIcon is not null)
+                {
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
+                        _messgageBoxProxy.Buttons, _messgageBoxProxy.CustomIcon,
+                        _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
+                        "mmc.chm", HelpNavigator.KeywordIndex, "ovals");
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                }
+                else
+                {
+                    MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
+                        _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
+                        _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
+                        "mmc.chm", HelpNavigator.KeywordIndex, "ovals");
+                }
             }
+
             else
             {
                 MessageBox.Show(_messgageBoxProxy.Text, _messgageBoxProxy.Caption,
@@ -43,6 +59,34 @@ public partial class MessageBoxes : Form
         toolbar.Items.Add(_btnOpen);
 
         propertyGrid1.SelectedObject = _messgageBoxProxy;
+    }
+
+    private void PreparOpthions()
+    {
+        if (_messgageBoxProxy.Localized)
+        {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            MessageBox.ResourceType = typeof(MessageBoxes);
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        }
+        else
+        {
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            MessageBox.ResourceType = null;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+        }
+
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        MessageBox.ForeColor = _messgageBoxProxy.ForColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        MessageBox.BackColor = _messgageBoxProxy.BackColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        MessageBox.FooterBackColor = _messgageBoxProxy.FooterBackColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     private ToolStrip GetToolbar()
@@ -72,5 +116,16 @@ public partial class MessageBoxes : Form
         public MessageBoxIcon Icon { get; set; }
         public MessageBoxDefaultButton DefaultButton { get; set; }
         public MessageBoxOptions Options { get; set; }
+        public Icon? CustomIcon { get; set; }
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        public Color ForColor { get; set; } = MessageBox.ForeColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        public Color BackColor { get; set; } = MessageBox.BackColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        public Color FooterBackColor { get; set; } = MessageBox.FooterBackColor;
+#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        public bool Localized { get; set; }
     }
 }
