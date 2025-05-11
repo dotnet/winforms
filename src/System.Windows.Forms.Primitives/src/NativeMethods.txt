@@ -58,6 +58,7 @@ CreateStdAccessibleObject
 CreateWindowEx
 CSIDL_*
 CW_USEDEFAULT
+CWPSTRUCT
 DATETIMEPICK_CLASS
 DeactivateActCtx
 DefFrameProc
@@ -149,6 +150,7 @@ GetCurrentThread
 GetCursor
 GetCursorPos
 GetDIBits
+GetDlgCtrlID
 GetDlgItem
 GetDlgItemInt
 GetDoubleClickTime

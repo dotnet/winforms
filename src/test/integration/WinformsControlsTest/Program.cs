@@ -16,6 +16,10 @@ Application.SetColorMode(SystemColorMode.Classic);
 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+Application.SetColorMode(SystemColorMode.Dark);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
 try
 {
     MainForm form = new()
