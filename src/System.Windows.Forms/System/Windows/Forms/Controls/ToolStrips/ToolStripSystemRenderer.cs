@@ -51,7 +51,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isDefault: false);
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: false);
             return _toolStripDarkModeRenderer;
         }
     }
@@ -218,6 +218,18 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     /// </summary>
     protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
     {
+        // It is not entirely clear, why we're not leaving it to the respective renderers
+        // what to do here, but for keeping as much as possible of the original behavior,
+        // we need to check if the renderer override is set, test for particular renderer types
+        // and then decide what to do.
+        if (RendererOverride is ToolStripSystemDarkModeRenderer darkModeRenderer
+            && darkModeRenderer.IsSystemDefaultAlternative)
+        {
+            base.OnRenderToolStripBackground(e);
+
+            return;
+        }
+
         ToolStrip toolStrip = e.ToolStrip;
         Graphics g = e.Graphics;
         Rectangle bounds = e.AffectedBounds;
@@ -240,18 +252,18 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             else if (DisplayInformation.LowResolution)
             {
                 FillBackground(g, bounds, (toolStrip is ToolStripDropDown)
-                    ? e.BackColor
-                    : SystemColors.ControlLight);
+                     ? SystemColors.ControlLight
+                     : e.BackColor);
             }
             else if (toolStrip.IsDropDown)
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
                     ? SystemColors.Menu
                     : e.BackColor);
             }
             else if (toolStrip is MenuStrip)
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
                     ? SystemColors.MenuBar
                     : e.BackColor);
             }
@@ -264,9 +276,9 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled)
-                    ? e.BackColor
-                    : SystemColors.MenuBar);
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                    ? SystemColors.MenuBar
+                    : e.BackColor);
             }
         }
     }

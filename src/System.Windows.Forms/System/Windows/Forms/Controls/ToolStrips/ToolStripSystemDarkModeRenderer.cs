@@ -27,8 +27,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <summary>
     ///  Initializes a new instance of the ToolStripSystemDarkModeRenderer class with the specified default state.
     /// </summary>
-    /// <param name="isDefault">true if this is the default renderer; otherwise, false.</param>
-    internal ToolStripSystemDarkModeRenderer(bool isDefault) : base(isDefault)
+    /// <param name="isSystemDefaultAlternative">
+    ///  True if this should be seen as a variation of the default renderer
+    ///  (so, no _custom_ renderer provided by the user); otherwise, false.
+    /// </param>
+    internal ToolStripSystemDarkModeRenderer(bool isSystemDefaultAlternative)
+        : base(isSystemDefaultAlternative)
     {
     }
 
@@ -171,7 +175,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     ///  Renders the StatusStrip background in dark mode.
     /// </summary>
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
-    private static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
+    internal static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
     {
         Graphics g = e.Graphics;
         Rectangle bounds = e.AffectedBounds;
