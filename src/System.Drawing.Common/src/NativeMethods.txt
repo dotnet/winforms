@@ -35,6 +35,7 @@ LANG_ARABIC
 LANG_JAPANESE
 LevelsEffectGuid
 LevelsParams
+LookupIconIdFromDirectoryEx
 PALETTEENTRY
 PaletteFlags
 PaletteType

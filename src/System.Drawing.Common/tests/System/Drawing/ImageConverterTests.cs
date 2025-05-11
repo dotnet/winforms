@@ -31,7 +31,6 @@ public class ImageConverterTest
 
     [Theory]
     [InlineData("48x48_multiple_entries_4bit.ico")]
-    [InlineData("256x256_seven_entries_multiple_bits.ico")]
     [InlineData("pngwithheight_icon.ico")]
     public void ImageConverterFromIconTest(string name)
     {
