@@ -46,7 +46,6 @@ public class MessageBox
                 PInvokeCore.SetBkMode(hdc, BACKGROUND_MODE.TRANSPARENT);
                 PInvokeCore.SetTextColor(hdc, SystemColors.ControlText);
                 return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.Window));
-
         }
 
         return new LRESULT(0);
