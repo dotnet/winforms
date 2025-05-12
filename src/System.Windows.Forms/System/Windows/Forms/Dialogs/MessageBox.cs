@@ -3,10 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
-using System.Resources;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using Windows.Win32.Graphics.Dwm;
 namespace System.Windows.Forms;
 
@@ -17,21 +14,11 @@ public class MessageBox
 {
     [ThreadStatic]
     private static HelpInfo[]? t_helpInfoTable;
-    private const int MBOKId = 1;
-    private const int MBCancelId = 2;
-    private const int MBAbortId = 3;
-    private const int MBRetryId = 4;
-    private const int MBIgnoreId = 5;
-    private const int MBYesId = 6;
-    private const int MBNoId = 7;
-    private const int MBHelpId = 9;
     // see
     // https://devblogs.microsoft.com/oldnewthing/20140224-00/?p=1683
     // and https://learn.microsoft.com/archive/msdn-magazine/2002/november/cutting-edge-using-windows-hooks-to-enhance-messagebox-in-net
     // Unique ID for static Edit in MessageBox, This ID has not changed since Windows 95 and will remain so.
     private const int MBTextId = ushort.MaxValue; // 0xFFFF
-    private const int MBIconId = 20; // 0X0014
-    private const int STM_SETICON = 0x00000170;
     private static HHOOK s_messageBoxHook;
     private static bool s_isMessageBoxHooked;
     private static readonly HOOKPROC s_hookCallBack = HookProc;
@@ -40,51 +27,8 @@ public class MessageBox
     private static HWND s_hWndInternal;
     private static nint s_priorDlgProc;
     private static readonly PInvokeCore.EnumChildWindowsCallback s_childWindowsCallback = new PInvokeCore.EnumChildWindowsCallback(EnumChildProc);
-
-#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static ResourceManager? s_resourceManager => ResourceType is null ? null : new ResourceManager(ResourceType);
-#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static string? OK { get; set; }
-    [Localizable(true)]
-    private static string? Cancel { get; set; }
-    [Localizable(true)]
-    private static string? Abort { get; set; }
-    [Localizable(true)]
-    private static string? Retry { get; set; }
-    [Localizable(true)]
-    private static string? Ignore { get; set; }
-    [Localizable(true)]
-    private static string? Yes { get; set; }
-    [Localizable(true)]
-    private static string? No { get; set; }
-    [Localizable(true)]
-    private static string? Help { get; set; }
-
-    /// <summary>
-    ///  Type of <see cref="Resources"/> that used to localize Buttons in <see cref="MessageBox"/>.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static Type? ResourceType { get; set; }
-    /// <summary>
-    ///  The foreground color of the  <see cref="MessageBox"/>.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static Color ForeColor { get; set; } = SystemColors.ControlText;
-    /// <summary>
-    ///  The background color of the  <see cref="MessageBox"/>.
-    /// </summary>
-
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static Color BackColor { get; set; } = SystemColors.Window;
-    /// <summary>
-    ///  The background color of the Footer in <see cref="MessageBox"/>.
-    /// </summary>
-
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static Color FooterBackColor { get; set; } = SystemColors.Control;
     private static LRESULT DlgProcInternal(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
         => DlgProc(hWnd, (int)msg, (nint)wParam, lParam);
-    private static Icon? s_customIcon;
     // This is meant to be a static class, but predates that feature.
     private MessageBox()
     {
@@ -95,17 +39,13 @@ public class MessageBox
         switch (msg)
         {
             case PInvokeCore.WM_CTLCOLORBTN:
-#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                return new LRESULT(PInvokeCore.CreateSolidBrush(FooterBackColor));
-#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.Control));
             case PInvokeCore.WM_CTLCOLORDLG:
             case PInvokeCore.WM_CTLCOLORSTATIC:
                 HDC hdc = new HDC(wParam);
                 PInvokeCore.SetBkMode(hdc, BACKGROUND_MODE.TRANSPARENT);
-#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                PInvokeCore.SetTextColor(hdc, ForeColor);
-                return new LRESULT(PInvokeCore.CreateSolidBrush(BackColor));
-#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                PInvokeCore.SetTextColor(hdc, SystemColors.ControlText);
+                return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.Window));
 
         }
 
@@ -117,27 +57,20 @@ public class MessageBox
         HDC hdc = (HDC)wParam;
         bool usingBeginPaint = hdc.IsNull;
         using var paintScope = usingBeginPaint ? new BeginPaintScope(hWnd) : default;
-
         RECT clipRect;
+        PInvokeCore.GetClientRect(hWnd, out clipRect);
         if (usingBeginPaint)
         {
             hdc = paintScope!.HDC;
-            clipRect = paintScope.PaintRectangle;
-        }
-        else
-        {
-            PInvokeCore.GetClientRect(hWnd, out clipRect);
         }
 
-#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        using CreateBrushScope backGroundBrushScope = new CreateBrushScope(BackColor);
-#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        // Fill the background with the BackColor
+        using CreateBrushScope backGroundBrushScope = new CreateBrushScope(SystemColors.Window);
         hdc.FillRectangle(clipRect, backGroundBrushScope);
         RECT FooterRect = clipRect;
         FooterRect.top = clipRect.Height - SystemInformation.CaptionHeight * 2;
-#pragma warning disable WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        using CreateBrushScope FooterBrushScope = new CreateBrushScope(FooterBackColor);
-#pragma warning restore WFO5003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        // Fill the footer with the FooterBackColor
+        using CreateBrushScope FooterBrushScope = new CreateBrushScope(SystemColors.Control);
         hdc.FillRectangle(FooterRect, FooterBrushScope);
         return new LRESULT(0);
     }
@@ -162,53 +95,15 @@ public class MessageBox
 
                 if (!buttonTheme.IsNull)
                 {
-                    PInvoke.SetWindowTheme(handle, Application.IsDarkModeEnabled ? "DarkMode_Explorer" : className, null);
+                    const string DarkModeThemeIdentifier
+                        = $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}";
+                    PInvoke.SetWindowTheme(handle,
+                        Application.IsDarkModeEnabled
+                        ? $"{DarkModeThemeIdentifier}"
+                        : PInvoke.WC_BUTTON, null);
                 }
 
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-                if (s_resourceManager is null)
-                {
-                    return true;
-                }
-
-                int dlgCtrlID = PInvoke.GetDlgCtrlID(handle);
-                switch (dlgCtrlID)
-                {
-                    case MBOKId:
-                        OK = s_resourceManager.GetString("OK", CultureInfo.CurrentCulture) ?? "&OK";
-                        PInvoke.SetWindowText(handle, OK);
-                        break;
-                    case MBCancelId:
-                        OK = s_resourceManager.GetString("OK", CultureInfo.CurrentCulture);
-                        Cancel = s_resourceManager.GetString("Cancel", CultureInfo.CurrentCulture) ?? "&Cancel";
-                        PInvoke.SetWindowText(handle, Cancel);
-                        break;
-                    case MBAbortId:
-                        Abort = s_resourceManager.GetString("Abort", CultureInfo.CurrentCulture) ?? "&Abort";
-                        PInvoke.SetWindowText(handle, Abort);
-                        break;
-                    case MBRetryId:
-                        Retry = s_resourceManager.GetString("Retry", CultureInfo.CurrentCulture) ?? "&Retry";
-                        PInvoke.SetWindowText(handle, Retry);
-                        break;
-                    case MBIgnoreId:
-                        Ignore = s_resourceManager.GetString("Ignore", CultureInfo.CurrentCulture) ?? "&Ignore";
-                        PInvoke.SetWindowText(handle, Ignore);
-                        break;
-                    case MBYesId:
-                        Yes = s_resourceManager.GetString("Yes", CultureInfo.CurrentCulture) ?? "&Yes";
-                        PInvoke.SetWindowText(handle, Yes);
-                        break;
-                    case MBNoId:
-                        No = s_resourceManager.GetString("No", CultureInfo.CurrentCulture) ?? "&No";
-                        PInvoke.SetWindowText(handle, No);
-                        break;
-                    case MBHelpId:
-                        Help = s_resourceManager.GetString("Help", CultureInfo.CurrentCulture) ?? "&Help";
-                        PInvoke.SetWindowText(handle, Help);
-                        break;
-                }
-
                 break;
         }
 
@@ -247,14 +142,6 @@ public class MessageBox
             case PInvokeCore.WM_INITDIALOG:
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                 AllowDarkNonClientArea(s_hWndInternal, Application.IsDarkModeEnabled);
-                if (s_customIcon is not null && s_customIcon.Handle != IntPtr.Zero)
-                {
-                    HWND hwndIcon = PInvoke.GetDlgItem(s_hWndInternal, MBIconId);
-                    if (!hwndIcon.IsNull)
-                    {
-                        PInvokeCore.SendMessage<HWND>(hwndIcon, STM_SETICON, (WPARAM)s_customIcon.Handle, 0);
-                    }
-                }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                 PInvokeCore.EnumChildWindows(s_hWndInternal, s_childWindowsCallback);
                 return PInvokeCore.CallWindowProc((void*)s_priorDlgProc, s_hWndInternal, (uint)msg, (nuint)wparam, lparam);
@@ -294,7 +181,7 @@ public class MessageBox
         }
     }
 
-    private static void UnInstallHook()
+    private static void UninstallHook()
     {
         lock (s_lock)
         {
@@ -644,234 +531,6 @@ public class MessageBox
     }
 
     /// <summary>
-    ///  Displays a message box with specified text, caption, and style with Help Button.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        bool displayHelpButton)
-    {
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, displayHelpButton);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style and Help file Path .
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath)
-    {
-        HelpInfo hpi = new(helpFilePath);
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style and Help file Path for a IWin32Window with custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        IWin32Window? owner,
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath)
-    {
-        HelpInfo hpi = new(helpFilePath);
-        s_customIcon = icon;
-        return ShowCore(owner, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path, keyword and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        string keyword)
-    {
-        HelpInfo hpi = new(helpFilePath, keyword);
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path, keyword and custom Icon for a IWin32Window.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        IWin32Window? owner,
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        string keyword)
-    {
-        HelpInfo hpi = new(helpFilePath, keyword);
-        s_customIcon = icon;
-        return ShowCore(owner, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path HelpNavigator, and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        HelpNavigator navigator)
-    {
-        HelpInfo hpi = new(helpFilePath, navigator);
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path HelpNavigator, and custom Icon for IWin32Window.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        IWin32Window? owner,
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        HelpNavigator navigator)
-    {
-        HelpInfo hpi = new(helpFilePath, navigator);
-        s_customIcon = icon;
-        return ShowCore(owner, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator,object and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        HelpNavigator navigator,
-        object? param)
-    {
-        HelpInfo hpi = new(helpFilePath, navigator, param);
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator, object and custom Icon for a IWin32Window.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        IWin32Window? owner,
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        string helpFilePath,
-        HelpNavigator navigator,
-        object? param)
-    {
-        HelpInfo hpi = new(helpFilePath, navigator, param);
-        s_customIcon = icon;
-        return ShowCore(owner, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, hpi);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options)
-    {
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, options, false);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        Icon icon,
-        MessageBoxDefaultButton defaultButton)
-    {
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, defaultButton, 0, false);
-    }
-
-    /// <summary>
-    ///  Displays a message box with specified text, caption, style, and custom Icon.
-    ///  Rcomnded size of the custom icon is 32x32.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalMessageBox, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static DialogResult Show(
-      string? text,
-      string? caption,
-      MessageBoxButtons buttons,
-      Icon icon)
-    {
-        s_customIcon = icon;
-        return ShowCore(null, text, caption, buttons, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, false);
-    }
-
-    /// <summary>
     ///  Displays a message box with specified text, caption, style .
     /// </summary>
     public static DialogResult Show(string? text, string? caption, MessageBoxButtons buttons)
@@ -1032,12 +691,22 @@ public class MessageBox
 
         try
         {
-            InstallHook();
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                InstallHook();
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             return (DialogResult)PInvoke.MessageBox(handle.Handle, text, caption, style);
         }
         finally
         {
-            UnInstallHook();
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                UninstallHook();
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Application.EndModalMessageLoop();
 
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
