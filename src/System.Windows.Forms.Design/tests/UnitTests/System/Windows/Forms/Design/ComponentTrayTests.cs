@@ -26,7 +26,6 @@ public class ComponentTrayTests : IDisposable
         _componentTray.Dispose();
     }
 
-
     [Fact]
     public void Constructor_Default()
     {
