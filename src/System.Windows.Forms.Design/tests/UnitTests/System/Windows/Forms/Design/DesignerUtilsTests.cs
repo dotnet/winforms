@@ -537,7 +537,7 @@ public class DesignerUtilsTests :IDisposable
     }
 
     [WinFormsFact]
-    public void GetTextBaseline_ShouldThrowArgumentNullException_WhenControlIsNull()
+    public void GetTextBaseline_ShouldThrowNullNullException_WhenControlIsNull()
     {
         Action action = () => DesignerUtils.GetTextBaseline(null!, ContentAlignment.TopLeft);
 
