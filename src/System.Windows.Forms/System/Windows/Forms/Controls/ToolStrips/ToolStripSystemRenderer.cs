@@ -39,7 +39,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: true);
+            _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
             return _toolStripHighContrastRenderer;
         }
     }
@@ -51,7 +51,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: true);
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: false);
             return _toolStripDarkModeRenderer;
         }
     }
