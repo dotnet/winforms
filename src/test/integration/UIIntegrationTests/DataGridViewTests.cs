@@ -4,7 +4,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using FluentAssertions;
+using System.Windows.Forms.IntegrationTests.Common;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
@@ -45,65 +45,44 @@ public class DataGridViewTests : ControlTestBase
     [WinFormsFact]
     public void DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
     {
-        Action action = () =>
+        using Form form1 = new();
+        using Form form2 = new();
+        using DataGridView dataGridView = new();
+        using IContainer components = new Container();
+        using BindingSource bindingSource = new(components)
         {
-            using IContainer components = new Container();
-            using Form form = new();
-
-            DataGridView dataGridView = new()
-            {
-                Dock = DockStyle.Fill
-            };
-
-            components.Add(dataGridView);
-            form.Controls.Add(dataGridView);
-
-            DataGridViewTextBoxColumn nameColumn = new()
-            {
-                HeaderText = "Name",
-                DataPropertyName = "Name"
-            };
-            DataGridViewTextBoxColumn ageColumn = new()
-            {
-                HeaderText = "Age",
-                DataPropertyName = "Age"
-            };
-
-            dataGridView.Columns.AddRange([nameColumn, ageColumn]);
-
-            BindingList<DataRecord> dataRecordList =
-            [
-                new DataRecord { Name = "Alice", Age = 30 }
-            ];
-
-            using BindingSource bindingSource = new(components)
-            {
-                DataSource = dataRecordList
-            };
-            dataGridView.DataSource = bindingSource;
-
-            dataGridView.CellBeginEdit += (s, e) =>
-            {
-                // Close the form as soon as editing begins.
-                form.BeginInvoke(() => form.Close());
-            };
-
-            form.Shown += (s, e) =>
-            {
-                dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
-                dataGridView.BeginEdit(true);
-            };
-
-            form.ShowDialog();
+            DataSource = TestDataSources.GetPersons()
         };
 
-        action.Should().NotThrow();
-    }
+        dataGridView.DataSource = bindingSource;
+        dataGridView.Dock = DockStyle.Fill;
+        form2.Controls.Add(dataGridView);
 
-    public class DataRecord
-    {
-        public string Name { get; set; } = "";
-        public int Age { get; set; }
+        form1.Shown += (_, _) =>
+        {
+            form2.Shown += (_, _) =>
+            {
+                // Ensure that DataGridView editing operations are performed after the form is fully displayed.
+                form2.BeginInvoke(() =>
+                {
+                    // Close the form when the DataGridView enters edit mode.
+                    void handler(object? s, DataGridViewEditingControlShowingEventArgs e)
+                    {
+                        dataGridView.EditingControlShowing -= handler;
+                        form2.Close();
+                    }
+
+                    dataGridView.EditingControlShowing += handler;
+                    dataGridView.CurrentCell = dataGridView.Rows[0].Cells[1];
+                    dataGridView.BeginEdit(true);
+                });
+            };
+
+            form2.ShowDialog(form1);
+            form1.Close();
+        };
+
+        form1.ShowDialog();
     }
 
     [WinFormsTheory]
