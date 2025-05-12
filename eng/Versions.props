@@ -15,7 +15,6 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>10.0.0-preview.5.25260.104</VSRedistCommonNetCoreSharedFrameworkx64100PackageVersion>
     <SystemFormatsNrbfPackageVersion>10.0.0-preview.5.25260.104</SystemFormatsNrbfPackageVersion>
     <SystemIOHashingPackageVersion>10.0.0-preview.5.25260.104</SystemIOHashingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
@@ -24,7 +23,6 @@
     <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.5.25260.104</SystemRuntimeSerializationFormattersPackageVersion>
     <SystemTextJsonPackageVersion>10.0.0-preview.5.25260.104</SystemTextJsonPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.5.25260.104</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>10.0.0-preview.5.25260.104</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
     <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.5.25260.104</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.5.25260.104</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>10.0.0-preview.5.25260.104</SystemCodeDomPackageVersion>
