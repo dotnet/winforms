@@ -117,54 +117,78 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
                 _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
             };
 
-    /// <summary>
-    /// Draws the button border based on the current state to create 3D effect.
-    /// </summary>
+    // Refactored DrawButtonBorder for a more visible 3D effect in dark mode.
     private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
         // Popup style has a 3D effect border
         Rectangle borderRect = bounds;
 
+        // Use slightly more contrasting border colors for dark mode 3D effect
+        Color topLeftOuter, bottomRightOuter, topLeftInner, bottomRightInner;
+
         if (state == PushButtonState.Pressed)
         {
-            // For pressed state, invert the 3D effect
-            using var topLeftPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor);
-            using var bottomRightPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.TopLeftBorderColor);
-
-            // Draw top and left borders (darker in pressed state)
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 1, borderRect.Top);
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 1);
-
-            // Draw bottom and right borders (lighter in pressed state)
-            graphics.DrawLine(bottomRightPen, borderRect.Left, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
-            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top, borderRect.Right - 1, borderRect.Bottom - 1);
+            // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
+            topLeftOuter = Color.FromArgb(60, 60, 60); // shadow
+            bottomRightOuter = Color.FromArgb(110, 110, 110); // highlight
+            topLeftInner = Color.FromArgb(40, 40, 40); // deeper shadow
+            bottomRightInner = Color.FromArgb(130, 130, 130); // brighter highlight
         }
-        else if (state != PushButtonState.Disabled)
+        else if (state == PushButtonState.Disabled)
         {
-            // For normal and hot states
-            using var topLeftPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.TopLeftBorderColor);
-            using var bottomRightPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor);
+            // Disabled: subtle, low-contrast border
+            topLeftOuter = Color.FromArgb(55, 55, 55);
+            bottomRightOuter = Color.FromArgb(45, 45, 45);
+            topLeftInner = Color.FromArgb(50, 50, 50);
+            bottomRightInner = Color.FromArgb(50, 50, 50);
+        }
+        else
+        {
+            // Normal/hot: highlight top/left, shadow bottom/right
+            topLeftOuter = Color.FromArgb(110, 110, 110); // highlight
+            bottomRightOuter = Color.FromArgb(60, 60, 60); // shadow
+            topLeftInner = Color.FromArgb(130, 130, 130); // brighter highlight
+            bottomRightInner = Color.FromArgb(40, 40, 40); // deeper shadow
+        }
 
-            // Draw top and left borders (lighter)
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 1, borderRect.Top);
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 1);
+        // Outer border
+        using (var topLeftPen = new Pen(topLeftOuter))
+        using (var bottomRightPen = new Pen(bottomRightOuter))
+        {
+            // Top
+            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
+            // Left
+            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 2);
+            // Bottom
+            graphics.DrawLine(bottomRightPen, borderRect.Left + 1, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
+            // Right
+            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top + 1, borderRect.Right - 1, borderRect.Bottom - 1);
+        }
 
-            // Draw bottom and right borders (darker)
-            graphics.DrawLine(bottomRightPen, borderRect.Left, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
-            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top, borderRect.Right - 1, borderRect.Bottom - 1);
+        // Inner border for more depth
+        borderRect.Inflate(-1, -1);
+        using (var topLeftPen = new Pen(topLeftInner))
+        using (var bottomRightPen = new Pen(bottomRightInner))
+        {
+            // Top
+            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
+            // Left
+            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 2);
+            // Bottom
+            graphics.DrawLine(bottomRightPen, borderRect.Left + 1, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
+            // Right
+            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top + 1, borderRect.Right - 1, borderRect.Bottom - 1);
+        }
 
-            // For default buttons, add an additional inner border
-            if (isDefault)
-            {
-                borderRect.Inflate(-1, -1);
-
-                using var innerBorderPen = new Pen(Color.FromArgb(
-                    red: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 20,
-                    green: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 10,
-                    blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30));
-
-                graphics.DrawRectangle(innerBorderPen, borderRect);
-            }
+        // For default buttons, add an additional inner border
+        if (isDefault && state != PushButtonState.Disabled)
+        {
+            borderRect.Inflate(-1, -1);
+            using var innerBorderPen = new Pen(Color.FromArgb(
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 30),
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 20),
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 40)));
+            graphics.DrawRectangle(innerBorderPen, borderRect);
         }
     }
 
