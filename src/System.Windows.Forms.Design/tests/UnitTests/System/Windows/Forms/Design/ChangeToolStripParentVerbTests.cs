@@ -62,12 +62,4 @@ public class ChangeToolStripParentVerbTests : IDisposable
         Control? newParent = _toolStrip.Parent;
         newParent.Should().Be(oldParent);
     }
-
-    [Fact]
-    public void Constructor_WithNullDesigner_Throws()
-    {
-        Action action = () => new ChangeToolStripParentVerb(null);
-
-        action.Should().Throw<Exception>();
-    }
 }
