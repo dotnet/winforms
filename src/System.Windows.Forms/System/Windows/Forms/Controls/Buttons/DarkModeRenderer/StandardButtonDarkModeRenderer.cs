@@ -35,10 +35,8 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
         Color backColor = GetBackgroundColor(state, isDefault);
 
         // Fill the background
-        using (SolidBrush brush = new(backColor))
-        {
-            graphics.FillPath(brush, path);
-        }
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillPath(brush, path);
 
         // Draw border if needed
         DrawButtonBorder(graphics, path, state, isDefault);
@@ -67,7 +65,7 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
             ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
             : ButtonDarkModeRenderer.DarkModeButtonColors.FocusIndicatorColor;
 
-        using var focusPen = new Pen(focusColor)
+        var focusPen = new Pen(focusColor)
         {
             DashStyle = DashStyle.Dot
         };
@@ -85,14 +83,11 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
@@ -125,9 +120,9 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
         // For pressed state, draw a darker inner border
         if (state == PushButtonState.Pressed)
         {
-            using var borderPen = new Pen(isDefault
+            using var borderPen = (isDefault
                 ? Color.FromArgb(80, 0, 0, 0)
-                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor);
+                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor).GetCachedPenScope();
 
             graphics.DrawPath(borderPen, path);
         }
@@ -142,7 +137,7 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
                     blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor;
 
-            using var borderPen = new Pen(borderColor);
+            using var borderPen = borderColor.GetCachedPenScope();
             graphics.DrawPath(borderPen, path);
         }
     }

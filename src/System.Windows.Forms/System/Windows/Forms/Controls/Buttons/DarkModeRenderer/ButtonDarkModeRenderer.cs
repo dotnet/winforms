@@ -11,64 +11,26 @@ namespace System.Windows.Forms;
 /// </summary>
 internal static partial class ButtonDarkModeRenderer
 {
-    private const FlatStyle FlatSyleStandard = FlatStyle.Standard;
-
-    // Thread-static instances of each renderer type
-    [ThreadStatic]
-    private static IButtonDarkModeRenderer? s_standardRenderer;
-
-    [ThreadStatic]
-    private static IButtonDarkModeRenderer? s_flatRenderer;
-
-    [ThreadStatic]
-    private static IButtonDarkModeRenderer? s_popupRenderer;
-
-    [ThreadStatic]
-    private static IButtonDarkModeRenderer? s_systemRenderer;
-
-    // Default FlatStyle if not specified
-    private const FlatStyle DefaultFlatStyle = FlatSyleStandard;
+    /// <summary>
+    ///  Gets or sets the amount by which the button bounds are deflated before rendering the button.
+    ///  This value is applied to all sides of the button.
+    /// </summary>
+    public static Padding ButtonDeflation { get; set; } = new(2);
 
     /// <summary>
-    /// Gets the standard style renderer instance.
+    ///  Returns the bounds to use for the button background, after applying deflation.
     /// </summary>
-    internal static IButtonDarkModeRenderer StandardRenderer =>
-        s_standardRenderer ??= new StandardButtonDarkModeRenderer();
-
-    /// <summary>
-    /// Gets the flat style renderer instance.
-    /// </summary>
-    internal static IButtonDarkModeRenderer FlatRenderer =>
-        s_flatRenderer ??= new FlatButtonDarkModeRenderer();
-
-    /// <summary>
-    /// Gets the popup style renderer instance.
-    /// </summary>
-    internal static IButtonDarkModeRenderer PopupRenderer =>
-        s_popupRenderer ??= new PopupButtonDarkModeRenderer();
-
-    /// <summary>
-    /// Gets the system style renderer instance.
-    /// </summary>
-    internal static IButtonDarkModeRenderer SystemRenderer =>
-        s_systemRenderer ??= new SystemButtonDarkModeRenderer();
-
-    /// <summary>
-    ///  Gets or sets a value indicating whether the renderer uses the application state to determine rendering style.
-    /// </summary>
-    public static bool RenderMatchingApplicationState { get; set; } = true;
-
-    /// <summary>
-    ///  Indicates whether the background has semitransparent or alpha-blended pieces.
-    /// </summary>
-    public static bool IsBackgroundPartiallyTransparent()
+    private static Rectangle GetDeflatedBounds(Rectangle bounds)
     {
-        // Dark mode always has partially transparent background due to rounded corners
-        return true;
+        return Rectangle.FromLTRB(
+            bounds.Left + ButtonDeflation.Left,
+            bounds.Top + ButtonDeflation.Top,
+            bounds.Right - ButtonDeflation.Right,
+            bounds.Bottom - ButtonDeflation.Bottom);
     }
 
     /// <summary>
-    ///  Draws the background of a control's parent in the specified area.
+    ///  Draws the background of a control's parent in the specified area, adjusted for button deflation.
     /// </summary>
     public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
         => DrawParentBackground((IDeviceContext)g, bounds, childControl);
@@ -88,31 +50,28 @@ internal static partial class ButtonDarkModeRenderer
             return;
         }
 
+        // Adjust bounds for deflation
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
+
         // Create a temporary graphics context with the proper transformation
-        using Bitmap tempBitmap = new(bounds.Width, bounds.Height);
+        using Bitmap tempBitmap = new(deflatedBounds.Width, deflatedBounds.Height);
         using Graphics tempGraphics = Graphics.FromImage(tempBitmap);
 
         // Calculate the portion of parent we need to render
         Point pt = parent.PointToClient(childControl.PointToScreen(Point.Empty));
-        tempGraphics.TranslateTransform(-pt.X, -pt.Y);
+        tempGraphics.TranslateTransform(-pt.X - ButtonDeflation.Left, -pt.Y - ButtonDeflation.Top);
 
         // Call internal PaintBackground directly with the rectangle
-        Rectangle parentRect = new(pt, bounds.Size);
+        Rectangle parentRect = new(pt.X + ButtonDeflation.Left, pt.Y + ButtonDeflation.Top, deflatedBounds.Width, deflatedBounds.Height);
         using PaintEventArgs e = new(tempGraphics, parentRect);
 
-        // This is the important part - we need to pass the rectangle
         parent.PaintBackground(e, parentRect);
 
         // Now draw the captured background to our target graphics
-        graphics.DrawImage(tempBitmap, bounds);
+        graphics.DrawImage(tempBitmap, deflatedBounds);
     }
 
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state) =>
-        DrawButton((IDeviceContext)g, bounds, state);
-
-    internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state) => DrawButton(deviceContext, bounds, state, DefaultFlatStyle);
-
+    // Update all DrawButton methods to use GetDeflatedBounds for the button area
     internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state, FlatStyle flatStyle)
     {
         Graphics? graphics = deviceContext.TryGetGraphics(create: true);
@@ -122,17 +81,10 @@ internal static partial class ButtonDarkModeRenderer
             return;
         }
 
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-        renderer.DrawButtonBackground(graphics, bounds, state, isDefault: false);
-    }
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
 
-    internal static void DrawButtonForHandle(
-        IDeviceContext deviceContext,
-        Rectangle bounds,
-        bool focused,
-        PushButtonState state)
-    {
-        DrawButtonForHandle(deviceContext, bounds, focused, state, DefaultFlatStyle);
+        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
+        renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault: false);
     }
 
     internal static void DrawButtonForHandle(
@@ -148,11 +100,13 @@ internal static partial class ButtonDarkModeRenderer
             return;
         }
 
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
+
         // Get the appropriate renderer
         IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
 
         // Calculate the content bounds (inner area of button)
-        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, bounds, state, isDefault: false);
+        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault: false);
 
         // Draw focus indicator if needed
         if (focused)
@@ -161,55 +115,6 @@ internal static partial class ButtonDarkModeRenderer
         }
     }
 
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state) =>
-        DrawButtonForHandle(g, bounds, focused, state);
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState, FlatStyle)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state, FlatStyle flatStyle) =>
-        DrawButtonForHandle(g, bounds, focused, state, flatStyle);
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, bool focused, PushButtonState state)
-    {
-        DrawButton(
-            g,
-            bounds,
-            buttonText,
-            font,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-            focused,
-            state);
-    }
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState, FlatStyle)"/>
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-    {
-        DrawButton(
-            g,
-            bounds,
-            buttonText,
-            font,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-            focused,
-            state,
-            flatStyle);
-    }
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, TextFormatFlags flags, bool focused, PushButtonState state)
-    {
-        DrawButton(g, bounds, buttonText, font, flags, focused, state, DefaultFlatStyle);
-    }
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState, FlatStyle)"/>
     public static void DrawButton(
         Graphics g,
         Rectangle bounds,
@@ -223,8 +128,10 @@ internal static partial class ButtonDarkModeRenderer
         // Get the appropriate renderer
         IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
 
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
+
         // Draw button background first
-        Rectangle contentBounds = renderer.DrawButtonBackground(g, bounds, state, isDefault: false);
+        Rectangle contentBounds = renderer.DrawButtonBackground(g, deflatedBounds, state, isDefault: false);
 
         // Get appropriate text color
         Color textColor = renderer.GetTextColor(state, isDefault: false);
@@ -239,13 +146,6 @@ internal static partial class ButtonDarkModeRenderer
         }
     }
 
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(Graphics g, Rectangle bounds, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
-    {
-        DrawButton(g, bounds, image, imageBounds, focused, state, DefaultFlatStyle);
-    }
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState, FlatStyle)"/>
     public static void DrawButton(
         Graphics g,
         Rectangle bounds,
@@ -258,8 +158,10 @@ internal static partial class ButtonDarkModeRenderer
         // Get the appropriate renderer
         IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
 
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
+
         // Draw button background
-        Rectangle contentBounds = renderer.DrawButtonBackground(g, bounds, state, isDefault: false);
+        Rectangle contentBounds = renderer.DrawButtonBackground(g, deflatedBounds, state, isDefault: false);
 
         // Draw the image
         g.DrawImage(image, imageBounds);
@@ -269,93 +171,6 @@ internal static partial class ButtonDarkModeRenderer
         {
             renderer.DrawFocusIndicator(g, contentBounds, isDefault: false);
         }
-    }
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState)"/>
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state) => DrawButton(
-            g,
-            bounds,
-            buttonText,
-            font,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-            image,
-            imageBounds,
-            focused,
-            state);
-
-    /// <inheritdoc cref="DrawButton(Graphics, Rectangle, string?, Font?, TextFormatFlags, Image, Rectangle, bool, PushButtonState, FlatStyle)"/>
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle) => DrawButton(
-            g,
-            bounds,
-            buttonText,
-            font,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-            image,
-            imageBounds,
-            focused,
-            state,
-            flatStyle);
-
-    /// <summary>
-    ///  Draws a button control in dark mode style.
-    /// </summary>
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        TextFormatFlags flags,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state)
-        => DrawButton((IDeviceContext)g, bounds, buttonText, font, flags, image, imageBounds, focused, state, DefaultFlatStyle);
-
-    /// <summary>
-    ///  Draws a button control in dark mode style with the specified FlatStyle.
-    /// </summary>
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        TextFormatFlags flags,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-        => DrawButton((IDeviceContext)g, bounds, buttonText, font, flags, image, imageBounds, focused, state, flatStyle);
-
-    internal static void DrawButton(
-        IDeviceContext deviceContext,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        TextFormatFlags flags,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state)
-    {
-        DrawButton(deviceContext, bounds, buttonText, font, flags, image, imageBounds, focused, state, DefaultFlatStyle);
     }
 
     internal static void DrawButton(
@@ -376,6 +191,8 @@ internal static partial class ButtonDarkModeRenderer
             return;
         }
 
+        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
+
         // Determine if this is a default button
         bool isDefault = false; // In a real implementation, we'd determine this from the button's properties
 
@@ -383,7 +200,7 @@ internal static partial class ButtonDarkModeRenderer
         IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
 
         // Draw button background and get content bounds
-        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, bounds, state, isDefault);
+        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault);
 
         // Draw the image
         graphics.DrawImage(image, imageBounds);
@@ -400,11 +217,4 @@ internal static partial class ButtonDarkModeRenderer
             renderer.DrawFocusIndicator(graphics, contentBounds, isDefault);
         }
     }
-
-    internal static ButtonState ConvertToButtonState(PushButtonState state) => state switch
-    {
-        PushButtonState.Pressed => ButtonState.Pushed,
-        PushButtonState.Disabled => ButtonState.Inactive,
-        _ => ButtonState.Normal,
-    };
 }

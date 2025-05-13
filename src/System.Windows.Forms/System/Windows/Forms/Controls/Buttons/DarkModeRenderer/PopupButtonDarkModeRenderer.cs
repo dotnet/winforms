@@ -85,14 +85,11 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
