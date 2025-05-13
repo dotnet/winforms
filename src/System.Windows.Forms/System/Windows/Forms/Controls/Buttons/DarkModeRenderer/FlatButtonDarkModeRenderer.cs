@@ -12,25 +12,28 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
 {
+    // Magic numbers as consts or static properties
+    private const int FocusIndicatorInflate = -2;
+    private const int BorderThicknessDefault = 2;
+    private const int BorderThicknessNormal = 1;
+
+    private static Color PressedDefaultBorderColor => Color.FromArgb(200, 0, 0, 0);
+    private static int DefaultBorderColorRedOffset => -20;
+    private static int DefaultBorderColorGreenOffset => -10;
+    private static int DefaultBorderColorBlueOffset => -30;
+
     /// <summary>
     ///  Draws button background with flat styling (no rounded corners).
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Get appropriate background color based on state
         Color backColor = GetBackgroundColor(state, isDefault);
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillRectangle(brush, bounds);
 
-        // Fill the background - using rectangle, not path since corners aren't rounded
-        using (var brush = new SolidBrush(backColor))
-        {
-            graphics.FillRectangle(brush, bounds);
-        }
-
-        // Draw border
         DrawButtonBorder(graphics, bounds, state, isDefault);
 
-        // Return content bounds (area inside the button for text/image)
-        return Rectangle.Inflate(bounds, -6, -6);
+        return bounds;
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     public void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
     {
         // Create a slightly smaller rectangle for the focus indicator
-        Rectangle focusRect = Rectangle.Inflate(contentBounds, -2, -2);
+        Rectangle focusRect = Rectangle.Inflate(contentBounds, FocusIndicatorInflate, FocusIndicatorInflate);
 
         // Create dotted pen with appropriate color
         Color focusColor = isDefault
@@ -60,14 +63,11 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
@@ -97,14 +97,18 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
+        // For flat style, we need to create a GraphicsPath for the rectangle
+        using GraphicsPath path = new();
+        path.AddRectangle(bounds);
+
         // For pressed state, draw a darker border
         if (state == PushButtonState.Pressed)
         {
-            using var borderPen = new Pen(isDefault
-                ? Color.FromArgb(80, 0, 0, 0)
-                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor);
+            Color borderColor = isDefault
+                ? PressedDefaultBorderColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor;
 
-            graphics.DrawRectangle(borderPen, bounds);
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, BorderThicknessNormal);
         }
 
         // For other states, draw a single-pixel border
@@ -112,13 +116,13 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
         {
             Color borderColor = isDefault
                 ? Color.FromArgb(
-                    red: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 20,
-                    green: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 10,
-                    blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30)
+                    red: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R + DefaultBorderColorRedOffset,
+                    green: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G + DefaultBorderColorGreenOffset,
+                    blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B + DefaultBorderColorBlueOffset)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor;
 
-            using var borderPen = new Pen(borderColor);
-            graphics.DrawRectangle(borderPen, bounds);
+            int thickness = isDefault ? BorderThicknessDefault : BorderThicknessNormal;
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
         }
     }
 }
