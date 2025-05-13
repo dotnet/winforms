@@ -9,14 +9,12 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class ChangeToolStripParentVerbTests : IDisposable
 {
+    private readonly Mock<IDesignerHost> _designerHostMock = new();
+    private readonly Mock<IServiceProvider> _serviceProviderMock = new();
+    private readonly Mock<ISite> _siteMock = new();
+    private readonly Mock<IComponentChangeService> _componentChangeServiceMock = new()  ;
     private readonly ToolStripDesigner _designer = new();
-    private readonly ToolStrip _toolStrip;
-
-    public ChangeToolStripParentVerbTests()
-    {
-        _toolStrip = MockToolStrip();
-        _designer.Initialize(_toolStrip);
-    }
+    private ToolStrip _toolStrip = new();
 
     public void Dispose()
     {
@@ -24,23 +22,45 @@ public class ChangeToolStripParentVerbTests : IDisposable
         _designer.Dispose();
     }
 
-    private ToolStrip MockToolStrip()
+    private ToolStrip MockMinimalControl()
     {
-        Mock<ISite> mockSite = new();
         Mock<ISelectionService> mockSelectionService = new();
-        mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(mockSelectionService.Object);
-
-        Mock<IDesignerHost> mockDesignerHost = new();
-        mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(mockDesignerHost.Object);
-
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        mockDesignerHost
+        _siteMock
+            .Setup(s => s.GetService(typeof(ISelectionService)))
+            .Returns(mockSelectionService.Object);
+        _siteMock
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(_designerHostMock.Object);
+        _serviceProviderMock
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(_designerHostMock.Object);
+        _serviceProviderMock
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(new Mock<IComponentChangeService>().Object);
+        _designerHostMock
             .Setup(dh => dh.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
+            .Returns(_componentChangeServiceMock.Object);
+        _designerHostMock
+            .Setup(dh => dh.GetDesigner(It.IsAny<IComponent>()))
+            .Returns(new Mock<ParentControlDesigner>().Object);
 
-        ToolStrip toolStrip = new() { Site = mockSite.Object };
+        ToolStrip toolStrip = new() { Site = _siteMock.Object };
 
         return toolStrip;
+    }
+
+    [Fact]
+    public void ChangeParent_WithoutDesignerActionUIService_DoesNotChangeParent()
+    {
+        Control? oldParent = _toolStrip.Parent;
+        _toolStrip = MockMinimalControl();
+        _designer.Initialize(_toolStrip);
+
+        ChangeToolStripParentVerb changeToolStripParentVerb = new(_designer);
+
+        changeToolStripParentVerb.ChangeParent();
+        Control? newParent = _toolStrip.Parent;
+        newParent.Should().Be(oldParent);
     }
 
     [Fact]
@@ -49,25 +69,5 @@ public class ChangeToolStripParentVerbTests : IDisposable
         Action action = () => new ChangeToolStripParentVerb(null);
 
         action.Should().Throw<Exception>();
-    }
-
-    [Fact]
-    public void ChangeParent_DeepestPossibleTest()
-    {
-        var changeToolStripParentVerb = new ChangeToolStripParentVerb(_designer);
-
-        changeToolStripParentVerb.ChangeParent();
-
-        throw new NotImplementedException();
-    }
-
-    [Fact]
-    public void ChangeParent_WithNullRootDesigner_DoesNotChangesParent()
-    {
-        var changeToolStripParentVerb = new ChangeToolStripParentVerb(_designer);
-
-        changeToolStripParentVerb.ChangeParent();
-
-        throw new NotImplementedException();
     }
 }
