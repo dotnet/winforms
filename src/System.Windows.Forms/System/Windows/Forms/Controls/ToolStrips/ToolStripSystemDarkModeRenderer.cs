@@ -181,12 +181,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 bounds.Width -= 1;
                 bounds.Height -= 1;
 
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
             else
             {
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
         }
