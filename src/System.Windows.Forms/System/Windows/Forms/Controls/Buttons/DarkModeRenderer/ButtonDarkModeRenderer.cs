@@ -32,22 +32,26 @@ internal static partial class ButtonDarkModeRenderer
     /// <summary>
     /// Gets the standard style renderer instance.
     /// </summary>
-    internal static IButtonDarkModeRenderer StandardRenderer => s_standardRenderer ??= new StandardButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer StandardRenderer =>
+        s_standardRenderer ??= new StandardButtonDarkModeRenderer();
 
     /// <summary>
     /// Gets the flat style renderer instance.
     /// </summary>
-    internal static IButtonDarkModeRenderer FlatRenderer => s_flatRenderer ??= new FlatButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer FlatRenderer =>
+        s_flatRenderer ??= new FlatButtonDarkModeRenderer();
 
     /// <summary>
     /// Gets the popup style renderer instance.
     /// </summary>
-    internal static IButtonDarkModeRenderer PopupRenderer => s_popupRenderer ??= new PopupButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer PopupRenderer =>
+        s_popupRenderer ??= new PopupButtonDarkModeRenderer();
 
     /// <summary>
     /// Gets the system style renderer instance.
     /// </summary>
-    internal static IButtonDarkModeRenderer SystemRenderer => s_systemRenderer ??= new SystemButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer SystemRenderer =>
+        s_systemRenderer ??= new SystemButtonDarkModeRenderer();
 
     /// <summary>
     ///  Gets or sets a value indicating whether the renderer uses the application state to determine rendering style.
@@ -72,6 +76,7 @@ internal static partial class ButtonDarkModeRenderer
     internal static void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
     {
         Graphics? graphics = dc.TryGetGraphics(create: true);
+
         if (graphics is null)
         {
             return;
@@ -106,10 +111,7 @@ internal static partial class ButtonDarkModeRenderer
     public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state) =>
         DrawButton((IDeviceContext)g, bounds, state);
 
-    internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state)
-    {
-        DrawButton(deviceContext, bounds, state, DefaultFlatStyle);
-    }
+    internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state) => DrawButton(deviceContext, bounds, state, DefaultFlatStyle);
 
     internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state, FlatStyle flatStyle)
     {
