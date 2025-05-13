@@ -11,19 +11,17 @@ internal static class ButtonDarkModeRendererFactory
     /// <summary>
     ///  Gets the appropriate renderer for the specified FlatStyle.
     /// </summary>
-    public static IButtonDarkModeRenderer GetRenderer(FlatStyle flatStyle)
-    {
-        return flatStyle switch
+    public static IButtonDarkModeRenderer GetRenderer(FlatStyle flatStyle) =>
+        flatStyle switch
         {
             FlatStyle.Flat => GetFlatRenderer(),
             FlatStyle.Popup => GetPopupRenderer(),
             FlatStyle.System => GetSystemRenderer(),
             _ => GetStandardRenderer() // FlatStyle.Standard is default
         };
-    }
 
     /// <summary>
-    /// Gets the renderer for FlatStyle.Standard.
+    ///  Gets the renderer for FlatStyle.Standard.
     /// </summary>
     private static IButtonDarkModeRenderer GetStandardRenderer()
     {
@@ -32,7 +30,7 @@ internal static class ButtonDarkModeRendererFactory
     }
 
     /// <summary>
-    /// Gets the renderer for FlatStyle.Flat.
+    ///  Gets the renderer for FlatStyle.Flat.
     /// </summary>
     private static IButtonDarkModeRenderer GetFlatRenderer()
     {
@@ -40,7 +38,7 @@ internal static class ButtonDarkModeRendererFactory
     }
 
     /// <summary>
-    /// Gets the renderer for FlatStyle.Popup.
+    ///  Gets the renderer for FlatStyle.Popup.
     /// </summary>
     private static IButtonDarkModeRenderer GetPopupRenderer()
     {
@@ -48,7 +46,7 @@ internal static class ButtonDarkModeRendererFactory
     }
 
     /// <summary>
-    /// Gets the renderer for FlatStyle.System.
+    ///  Gets the renderer for FlatStyle.System.
     /// </summary>
     private static IButtonDarkModeRenderer GetSystemRenderer()
     {
