@@ -52,8 +52,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: false);
-
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: true);
             return _toolStripDarkModeRenderer;
         }
     }
