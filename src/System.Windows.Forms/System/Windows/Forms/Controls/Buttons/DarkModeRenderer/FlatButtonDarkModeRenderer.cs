@@ -21,10 +21,8 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
         Color backColor = GetBackgroundColor(state, isDefault);
 
         // Fill the background - using rectangle, not path since corners aren't rounded
-        using (var brush = new SolidBrush(backColor))
-        {
-            graphics.FillRectangle(brush, bounds);
-        }
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillRectangle(brush, bounds);
 
         // Draw border
         DrawButtonBorder(graphics, bounds, state, isDefault);
@@ -60,12 +58,9 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
             ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
             : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
@@ -100,10 +95,11 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
         // For pressed state, draw a darker border
         if (state == PushButtonState.Pressed)
         {
-            using var borderPen = new Pen(isDefault
+            Color borderColor = isDefault
                 ? Color.FromArgb(80, 0, 0, 0)
-                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor);
+                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor;
 
+            using var borderPen = borderColor.GetCachedPenScope();
             graphics.DrawRectangle(borderPen, bounds);
         }
 
@@ -117,7 +113,7 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
                     blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor;
 
-            using var borderPen = new Pen(borderColor);
+            using var borderPen = borderColor.GetCachedPenScope();
             graphics.DrawRectangle(borderPen, bounds);
         }
     }

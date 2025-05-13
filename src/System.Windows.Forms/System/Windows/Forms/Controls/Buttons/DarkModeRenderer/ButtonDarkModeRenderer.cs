@@ -11,6 +11,12 @@ namespace System.Windows.Forms;
 /// </summary>
 internal static partial class ButtonDarkModeRenderer
 {
+    // Singleton instances for each renderer type
+    internal static IButtonDarkModeRenderer StandardRenderer { get; } = new StandardButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer FlatRenderer { get; } = new FlatButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer PopupRenderer { get; } = new PopupButtonDarkModeRenderer();
+    internal static IButtonDarkModeRenderer SystemRenderer { get; } = new SystemButtonDarkModeRenderer();
+
     /// <summary>
     ///  Gets or sets the amount by which the button bounds are deflated before rendering the button.
     ///  This value is applied to all sides of the button.

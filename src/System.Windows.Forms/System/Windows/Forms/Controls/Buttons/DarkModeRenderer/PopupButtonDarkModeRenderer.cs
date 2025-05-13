@@ -35,10 +35,8 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         Color backColor = GetBackgroundColor(state, isDefault);
 
         // Fill the background
-        using (SolidBrush brush = new(backColor))
-        {
-            graphics.FillPath(brush, path);
-        }
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillPath(brush, path);
 
         // Draw 3D effect borders
         DrawButtonBorder(graphics, bounds, state, isDefault);
@@ -71,6 +69,7 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         {
             DashStyle = DashStyle.Dot
         };
+        focusPen.DashStyle = DashStyle.Dot;
 
         // Draw the focus rectangle with rounded corners
         GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, 3);
@@ -149,8 +148,8 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         }
 
         // Outer border
-        using (var topLeftPen = new Pen(topLeftOuter))
-        using (var bottomRightPen = new Pen(bottomRightOuter))
+        using (var topLeftPen = topLeftOuter.GetCachedPenScope())
+        using (var bottomRightPen = bottomRightOuter.GetCachedPenScope())
         {
             // Top
             graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
@@ -164,8 +163,8 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
 
         // Inner border for more depth
         borderRect.Inflate(-1, -1);
-        using (var topLeftPen = new Pen(topLeftInner))
-        using (var bottomRightPen = new Pen(bottomRightInner))
+        using (var topLeftPen = topLeftInner.GetCachedPenScope())
+        using (var bottomRightPen = bottomRightInner.GetCachedPenScope())
         {
             // Top
             graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
@@ -181,10 +180,11 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         if (isDefault && state != PushButtonState.Disabled)
         {
             borderRect.Inflate(-1, -1);
-            using var innerBorderPen = new Pen(Color.FromArgb(
+            Color innerBorderColor = Color.FromArgb(
                 Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 30),
                 Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 20),
-                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 40)));
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 40));
+            using var innerBorderPen = innerBorderColor.GetCachedPenScope();
             graphics.DrawRectangle(innerBorderPen, borderRect);
         }
     }

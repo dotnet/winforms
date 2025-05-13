@@ -38,10 +38,8 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         Color backColor = GetBackgroundColor(state, isDefault);
 
         // Fill the background
-        using (SolidBrush brush = new(backColor))
-        {
-            graphics.FillPath(brush, path);
-        }
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillPath(brush, path);
 
         // Draw border
         DrawButtonBorder(graphics, path, state, isDefault);
@@ -70,7 +68,7 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, 6);
 
         // System style uses a solid white border instead of dotted lines
-        using var focusPen = new Pen(Color.White, 2f);
+        using var focusPen = Color.White.GetCachedPenScope(2);
         graphics.DrawPath(focusPen, focusPath);
 
         // Restore original smoothing mode
@@ -82,14 +80,11 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
@@ -98,9 +93,8 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
     private static Color GetBackgroundColor(PushButtonState state, bool isDefault)
     {
         // For default button in System style, use a darker version of the background color
-        if (isDefault)
-        {
-            return state switch
+        return isDefault
+            ? state switch
             {
                 PushButtonState.Normal => Color.FromArgb(
                     ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 20,
@@ -116,17 +110,15 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
                     ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.B - 20),
                 PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
                 _ => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor
+            }
+            : state switch
+            {
+                PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DisabledBackgroundColor,
+                _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
             };
-        }
-
-        return state switch
-        {
-            PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor,
-            PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.HoverBackgroundColor,
-            PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.PressedBackgroundColor,
-            PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-            _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
-        };
     }
 
     /// <summary>
@@ -138,13 +130,13 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         if (isDefault)
         {
             // Default button gets a thicker border
-            using var borderPen = new Pen(Color.White, 2f);
+            using var borderPen = Color.White.GetCachedPenScope(2);
             graphics.DrawPath(borderPen, path);
         }
         else if (state != PushButtonState.Disabled)
         {
             // Non-default buttons get a thin border
-            using var borderPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor);
+            using var borderPen = ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor.GetCachedPenScope();
             graphics.DrawPath(borderPen, path);
         }
     }
