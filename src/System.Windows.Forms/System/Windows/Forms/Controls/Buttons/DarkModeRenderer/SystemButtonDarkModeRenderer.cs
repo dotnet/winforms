@@ -12,46 +12,36 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
 {
-    // Make this per-thread, so that different threads can safely use these methods
-    [ThreadStatic]
-    private static GraphicsPath? s_cornerPath;
+    // Magic numbers as consts or static properties
+    private const int CornerRadius = 8;
+    private const int FocusIndicatorCornerRadius = 6;
+
+    private const int DefaultButtonBorderThickness = 0;
+    private const int NonDefaultButtonBorderThickness = 0;
+    private const int FocusedButtonBorderThickness = 3;
+    private const int DarkBorderGapThickness = 2;
+    private const int SystemStylePadding = FocusedButtonBorderThickness + DarkBorderGapThickness;
+
+    private const int DefaultBackgroundColorOffset = 20;
 
     /// <summary>
     ///  Draws button background with system styling (larger rounded corners).
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Save original smoothing mode and set to anti-alias for smooth corners
-        SmoothingMode originalMode = graphics.SmoothingMode;
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // System style uses larger rounded corners
-        const int cornerRadius = 8;
-
-        // Add 2px margin for the System style
-        Rectangle drawBounds = Rectangle.Inflate(bounds, -2, -2);
-
-        // Create path for rounded corners
-        GraphicsPath path = GetRoundedRectanglePath(drawBounds, cornerRadius);
+        // Shrink for DarkBorderGap and FocusBorderThickness
+        Rectangle fillBounds = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
+        using GraphicsPath fillPath = GetRoundedRectanglePath(fillBounds, CornerRadius - DarkBorderGapThickness);
 
         // Get appropriate background color based on state
         Color backColor = GetBackgroundColor(state, isDefault);
 
         // Fill the background
-        using (SolidBrush brush = new(backColor))
-        {
-            graphics.FillPath(brush, path);
-        }
-
-        // Draw border
-        DrawButtonBorder(graphics, path, state, isDefault);
-
-        // Restore original smoothing mode
-        graphics.SmoothingMode = originalMode;
+        using var brush = backColor.GetCachedSolidBrushScope();
+        graphics.FillPath(brush, fillPath);
 
         // Return content bounds (area inside the button for text/image)
-        // System style has more padding than other styles
-        return Rectangle.Inflate(drawBounds, -8, -8);
+        return fillBounds;
     }
 
     /// <summary>
@@ -59,129 +49,251 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
     {
-        // System style uses a white border instead of dotted lines
-        SmoothingMode originalMode = graphics.SmoothingMode;
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // Create focus rectangle slightly larger than content
-        Rectangle focusRect = Rectangle.Inflate(contentBounds, 4, 4);
+        // We need the bottom and the right border one pixel inside the button
+        Rectangle focusRect = new Rectangle(
+            x: contentBounds.X,
+            y: contentBounds.Y,
+            width: contentBounds.Width - 1,
+            height: contentBounds.Height - 1);
 
         // Create path for the focus outline
-        GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, 6);
+        using GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, FocusIndicatorCornerRadius);
 
         // System style uses a solid white border instead of dotted lines
-        using var focusPen = new Pen(Color.White, 2f);
+        using var focusPen = Color.White.GetCachedPenScope(FocusedButtonBorderThickness);
         graphics.DrawPath(focusPen, focusPath);
-
-        // Restore original smoothing mode
-        graphics.SmoothingMode = originalMode;
     }
 
     /// <summary>
-    /// Gets the text color appropriate for the button state and type.
+    ///  Gets the text color appropriate for the button state and type.
     /// </summary>
     public Color GetTextColor(PushButtonState state, bool isDefault)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            return ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor;
-        }
-
-        return isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+        return state == PushButtonState.Disabled
+            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            : isDefault
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
-    /// Gets the background color appropriate for the button state and type.
+    ///  Gets the background color appropriate for the button state and type.
     /// </summary>
     private static Color GetBackgroundColor(PushButtonState state, bool isDefault)
     {
         // For default button in System style, use a darker version of the background color
-        if (isDefault)
-        {
-            return state switch
+        return isDefault
+            ? state switch
             {
                 PushButtonState.Normal => Color.FromArgb(
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 20),
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBackgroundColorOffset),
                 PushButtonState.Hot => Color.FromArgb(
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.R - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.G - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.B - 20),
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.R - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.G - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.B - DefaultBackgroundColorOffset),
                 PushButtonState.Pressed => Color.FromArgb(
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.R - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.G - 20,
-                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.B - 20),
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.R - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.G - DefaultBackgroundColorOffset,
+                    ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.B - DefaultBackgroundColorOffset),
                 PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
                 _ => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor
+            }
+            : state switch
+            {
+                PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DisabledBackgroundColor,
+                _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
             };
-        }
-
-        return state switch
-        {
-            PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor,
-            PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.HoverBackgroundColor,
-            PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.PressedBackgroundColor,
-            PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-            _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
-        };
     }
 
     /// <summary>
-    /// Draws the button border based on the current state.
+    ///  Draws the button border based on the current state, using anti-aliasing and an additional inner border.
     /// </summary>
-    private static void DrawButtonBorder(Graphics graphics, GraphicsPath path, PushButtonState state, bool isDefault)
+    public static void DrawButtonBorder(
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        bool isFocused)
     {
-        // For System style, we use a thicker border for default button
-        if (isDefault)
+        // Outer border path
+        Rectangle borderRect = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
+        using GraphicsPath borderPath = GetRoundedRectanglePath(borderRect, CornerRadius);
+
+        // We need to implement a subtle 3d effect around the already
+        // painted filling. We do this by drawing a border with a 1px pen,
+        // which is - with brighter colors - top and right a bit darker than
+        // the fill color, and bottom and left yet another bit darker.
+        //
+        // For darker fill colors, we use a slightly lighter color for the top and right sides,
+        // and a yet bit lighter color for the bottom and left sides.
+        // We never change the color for the borders, we just adjust the brightness.
+
+        // Get base color for the border based on button state and type
+        Color backColor = GetBackgroundColor(state, isDefault);
+
+        // Skip border drawing for disabled state
+        if (state == PushButtonState.Disabled)
         {
-            // Default button gets a thicker border
-            using var borderPen = new Pen(Color.White, 2f);
-            graphics.DrawPath(borderPen, path);
+            return;
         }
-        else if (state != PushButtonState.Disabled)
+
+        // For normal colors, make borders darker
+        // For dark colors, make borders lighter
+        bool isDarkColor = backColor.GetBrightness() < 0.5;
+
+        // Top-left border (slightly lighter/darker)
+        Color topLeftColor = isDarkColor
+            ? ControlPaint.Light(backColor, 0.2f)
+            : ControlPaint.Dark(backColor, 0.1f);
+
+        // Bottom-right border (more pronounced light/dark)
+        Color bottomRightColor = isDarkColor
+            ? ControlPaint.Light(backColor, 0.4f)
+            : ControlPaint.Dark(backColor, 0.2f);
+
+        // Determine border thickness
+        int borderThickness = isDefault ? DefaultButtonBorderThickness : NonDefaultButtonBorderThickness;
+
+        if (isFocused)
         {
-            // Non-default buttons get a thin border
-            using var borderPen = new Pen(ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor);
-            graphics.DrawPath(borderPen, path);
+            // Don't draw regular border if focus border is already drawn
+            return;
         }
+
+        // Save graphics state to restore anti-aliasing settings later
+        GraphicsState graphicState = graphics.Save();
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Draw top-left border segment
+        using var topLeftPen = topLeftColor.GetCachedPenScope(borderThickness);
+        graphics.DrawPath(topLeftPen, GetTopLeftSegmentPath(borderRect, CornerRadius));
+
+        // Draw bottom-right border segment
+        using var bottomRightPen = bottomRightColor.GetCachedPenScope(borderThickness);
+        graphics.DrawPath(bottomRightPen, GetBottomRightSegmentPath(borderRect, CornerRadius));
+
+        // Restore graphics state
+        graphics.Restore(graphicState);
     }
 
     /// <summary>
-    /// Creates a GraphicsPath for a rounded rectangle.
+    ///  Creates a path for the top and left segments of a rounded rectangle.
+    /// </summary>
+    private static GraphicsPath GetTopLeftSegmentPath(Rectangle bounds, int radius)
+    {
+        GraphicsPath path = new();
+        int diameter = radius * 2;
+
+        // Top left corner arc
+        Rectangle arcRect = new(bounds.Location, new Size(diameter, diameter));
+        path.AddArc(arcRect, 180, 90);
+
+        // Top line
+        path.AddLine(bounds.Left + radius, bounds.Top, bounds.Right - radius, bounds.Top);
+
+        // Top right corner arc (just the top portion)
+        arcRect.X = bounds.Right - diameter;
+        path.AddArc(arcRect, 270, 45);
+
+        // Path back to middle of right side
+        path.AddLine(
+            bounds.Right - (int)(radius * Math.Sin(Math.PI / 4)),
+            bounds.Top + (int)(radius * (1 - Math.Cos(Math.PI / 4))),
+            bounds.Right,
+            bounds.Top + bounds.Height / 2);
+
+        // Path to middle of bottom
+        path.AddLine(bounds.Right, bounds.Top + bounds.Height / 2, bounds.Left + bounds.Width / 2, bounds.Bottom);
+
+        // Path to bottom left corner
+        path.AddLine(bounds.Left + bounds.Width / 2, bounds.Bottom, bounds.Left, bounds.Bottom - bounds.Height / 2);
+
+        // Path back to start
+        path.AddLine(bounds.Left, bounds.Bottom - bounds.Height / 2, bounds.Left, bounds.Top + radius);
+
+        return path;
+    }
+
+    /// <summary>
+    ///  Creates a path for the bottom and right segments of a rounded rectangle.
+    /// </summary>
+    private static GraphicsPath GetBottomRightSegmentPath(Rectangle bounds, int radius)
+    {
+        GraphicsPath path = new();
+        int diameter = radius * 2;
+
+        // Start from middle of top edge
+        path.AddLine(bounds.Left + bounds.Width / 2, bounds.Top, bounds.Right, bounds.Top + bounds.Height / 2);
+
+        // Right line
+        path.AddLine(bounds.Right, bounds.Top + bounds.Height / 2, bounds.Right, bounds.Bottom - radius);
+
+        // Bottom right corner arc
+        Rectangle arcRect = new(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter);
+        path.AddArc(arcRect, 0, 90);
+
+        // Bottom line
+        path.AddLine(bounds.Right - radius, bounds.Bottom, bounds.Left + radius, bounds.Bottom);
+
+        // Bottom left corner arc
+        arcRect.X = bounds.Left;
+        path.AddArc(arcRect, 90, 45);
+
+        // Path back to middle of left side
+        path.AddLine(
+            bounds.Left + (int)(radius * (1 - Math.Cos(Math.PI/4))),
+            bounds.Bottom - (int)(radius * Math.Sin(Math.PI/4)),
+            bounds.Left,
+            bounds.Top + bounds.Height / 2);
+
+        // Close the path back to start
+        path.AddLine(bounds.Left, bounds.Top + bounds.Height / 2, bounds.Left + bounds.Width / 2, bounds.Top);
+
+        return path;
+    }
+
+    /// <summary>
+    ///  Creates a GraphicsPath for a rounded rectangle.
     /// </summary>
     private static GraphicsPath GetRoundedRectanglePath(Rectangle bounds, int radius)
     {
-        if (s_cornerPath is null)
-        {
-            s_cornerPath = new GraphicsPath();
-        }
-        else
-        {
-            s_cornerPath.Reset();
-        }
-
+        GraphicsPath path = new();
         int diameter = radius * 2;
         Rectangle arcRect = new(bounds.Location, new Size(diameter, diameter));
 
         // Top left corner
-        s_cornerPath.AddArc(arcRect, 180, 90);
+        path.AddArc(
+            rect: arcRect,
+            startAngle: 180,
+            sweepAngle: 90);
 
         // Top right corner
         arcRect.X = bounds.Right - diameter;
-        s_cornerPath.AddArc(arcRect, 270, 90);
+        path.AddArc(
+            rect: arcRect,
+            startAngle: 270,
+            sweepAngle: 90);
 
         // Bottom right corner
         arcRect.Y = bounds.Bottom - diameter;
-        s_cornerPath.AddArc(arcRect, 0, 90);
+        path.AddArc(
+            rect: arcRect,
+            startAngle: 0,
+            sweepAngle: 90);
 
         // Bottom left corner
         arcRect.X = bounds.Left;
-        s_cornerPath.AddArc(arcRect, 90, 90);
+        path.AddArc(
+            rect: arcRect,
+            startAngle: 90,
+            sweepAngle: 90);
 
-        s_cornerPath.CloseFigure();
-        return s_cornerPath;
+        path.CloseFigure();
+        return path;
     }
 }
