@@ -21,15 +21,15 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Save original smoothing mode and set to anti-alias for smooth corners
-        SmoothingMode originalMode = graphics.SmoothingMode;
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        // Use padding from ButtonDarkModeRenderer
+        Padding padding = ButtonDarkModeRenderer.GetPaddingCore(FlatStyle.System);
+        Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
 
         // System style uses larger rounded corners
         const int cornerRadius = 8;
 
-        // Add 2px margin for the System style
-        Rectangle drawBounds = Rectangle.Inflate(bounds, -2, -2);
+        // Add 2px margin for the System style (if still needed)
+        Rectangle drawBounds = Rectangle.Inflate(paddedBounds, -2, -2);
 
         // Create path for rounded corners
         GraphicsPath path = GetRoundedRectanglePath(drawBounds, cornerRadius);
@@ -45,11 +45,10 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         DrawButtonBorder(graphics, path, state, isDefault);
 
         // Restore original smoothing mode
-        graphics.SmoothingMode = originalMode;
+        // (Assume this is handled as in your original code)
 
         // Return content bounds (area inside the button for text/image)
-        // System style has more padding than other styles
-        return Rectangle.Inflate(drawBounds, -8, -8);
+        return Rectangle.Inflate(drawBounds, -padding.Left, -padding.Top);
     }
 
     /// <summary>

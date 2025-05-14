@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms;
 
@@ -17,42 +18,22 @@ internal static partial class ButtonDarkModeRenderer
     internal static IButtonDarkModeRenderer PopupRenderer { get; } = new PopupButtonDarkModeRenderer();
     internal static IButtonDarkModeRenderer SystemRenderer { get; } = new SystemButtonDarkModeRenderer();
 
-    /// <summary>
-    ///  Gets or sets the amount by which the button bounds are deflated before rendering the button.
-    ///  This value is applied to all sides of the button.
-    /// </summary>
-    public static Padding ButtonDeflation { get; set; } = new(2);
+    // Define padding values for each renderer type
+    internal static Padding StandardPaddingCore { get; } = new(2);
+    internal static Padding FlatPaddingCore { get; } = new(2);
+    internal static Padding PopupPaddingCore { get; } = new(2);
+    internal static Padding SystemPaddingCore { get; } = new(2);
 
     /// <summary>
-    ///  Draws the background of a control's parent in the specified area.
-    ///  Simply fills with the parent's BackColor using the original bounds (no deflation).
+    ///  Returns the appropriate padding for the specified flat style.
     /// </summary>
-    public static void DrawParentBackground(
-        Graphics g,
-        Rectangle bounds,
-        Control childControl)
+    internal static Padding GetPaddingCore(FlatStyle flatStyle) => flatStyle switch
     {
-        if (g is null || childControl?.Parent is null)
-        {
-            return;
-        }
-
-        // Use original bounds for parent background (no deflation)
-        Color parentBackColor = childControl.Parent.BackColor;
-
-        using var brush = parentBackColor.GetCachedSolidBrushScope();
-        g.FillRectangle(brush, bounds);
-    }
-
-    /// <summary>
-    ///  Draws the button background with a frame indicating its default state.
-    /// </summary>
-    public static void DrawButtonBackground(Graphics graphics, Rectangle bounds, Color frameColor, bool isDefault)
-    {
-        int frameThickness = isDefault ? 2 : 1;
-        using var framePen = frameColor.GetCachedPenScope(frameThickness);
-        graphics.DrawRectangle(framePen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-    }
+        FlatStyle.Flat => FlatPaddingCore,
+        FlatStyle.Popup => PopupPaddingCore,
+        FlatStyle.System => SystemPaddingCore,
+        _ => StandardPaddingCore
+    };
 
     /// <summary>
     ///  Draws a button border using a specified path and border properties,
@@ -62,5 +43,48 @@ internal static partial class ButtonDarkModeRenderer
     {
         using var borderPen = borderColor.GetCachedPenScope(borderWidth);
         graphics.DrawPath(borderPen, path);
+    }
+
+    /// <summary>
+    ///  Renders a button with the specified properties and delegates for painting image and field.
+    /// </summary>
+    internal static void RenderButton(
+        Graphics graphics,
+        Rectangle bounds,
+        FlatStyle flatStyle,
+        PushButtonState state,
+        bool isDefault,
+        bool focused,
+        bool showFocusCues,
+        Action<Rectangle> paintImage,
+        Action<Rectangle, Color, bool> paintField)
+    {
+        IButtonDarkModeRenderer renderer = flatStyle switch
+        {
+            FlatStyle.Flat => FlatRenderer,
+            FlatStyle.Popup => PopupRenderer,
+            FlatStyle.System => SystemRenderer,
+            _ => StandardRenderer
+        };
+
+        Padding padding = GetPaddingCore(flatStyle);
+
+        // Draw button background and get content bounds
+        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, bounds, state, isDefault);
+
+        // Adjust bounds for padding
+        Rectangle paddedBounds = Rectangle.Inflate(contentBounds, -padding.Left, -padding.Top);
+
+        // Paint image and field using the provided delegates
+        paintImage(paddedBounds);
+        paintField(
+            paddedBounds,
+            renderer.GetTextColor(state, isDefault),
+            false);
+
+        if (focused && showFocusCues)
+        {
+            renderer.DrawFocusIndicator(graphics, paddedBounds, isDefault);
+        }
     }
 }

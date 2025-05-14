@@ -15,7 +15,6 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     // UI constants
     private const int ButtonCornerRadius = 5;
     private const int FocusCornerRadius = 3;
-    private const int ContentPadding = 6;
     private const int FocusPadding = 2;
     private const int BorderThickness = 1;
 
@@ -58,12 +57,12 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Save original smoothing mode and set to anti-alias for smooth corners
-        SmoothingMode originalMode = graphics.SmoothingMode;
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        // Use padding from ButtonDarkModeRenderer
+        Padding padding = ButtonDarkModeRenderer.GetPaddingCore(FlatStyle.Popup);
+        Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
 
         // Create path for rounded corners
-        GraphicsPath path = GetRoundedRectanglePath(bounds, ButtonCornerRadius);
+        GraphicsPath path = GetRoundedRectanglePath(paddedBounds, ButtonCornerRadius);
 
         // Get appropriate background color based on state
         Color backColor = GetBackgroundColor(state, isDefault);
@@ -73,13 +72,10 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         graphics.FillPath(brush, path);
 
         // Draw 3D effect borders
-        DrawButtonBorder(graphics, bounds, state, isDefault);
-
-        // Restore original smoothing mode
-        graphics.SmoothingMode = originalMode;
+        DrawButtonBorder(graphics, paddedBounds, state, isDefault);
 
         // Return content bounds (area inside the button for text/image)
-        return Rectangle.Inflate(bounds, -ContentPadding, -ContentPadding);
+        return Rectangle.Inflate(paddedBounds, -padding.Left, -padding.Top);
     }
 
     /// <summary>

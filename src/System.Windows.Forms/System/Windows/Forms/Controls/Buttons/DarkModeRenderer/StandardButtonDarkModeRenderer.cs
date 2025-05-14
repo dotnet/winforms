@@ -21,15 +21,15 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Save original smoothing mode and set to anti-alias for smooth corners
-        SmoothingMode originalMode = graphics.SmoothingMode;
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        // Use padding from ButtonDarkModeRenderer
+        Padding padding = ButtonDarkModeRenderer.GetPaddingCore(FlatStyle.Standard);
+        Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
 
         // Standard style uses slightly rounded corners
         const int cornerRadius = 5;
 
         // Create path for rounded corners
-        GraphicsPath path = GetRoundedRectanglePath(bounds, cornerRadius);
+        GraphicsPath path = GetRoundedRectanglePath(paddedBounds, cornerRadius);
 
         // Get appropriate background color based on state
         Color backColor = GetBackgroundColor(state, isDefault);
@@ -42,10 +42,10 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
         DrawButtonBorder(graphics, path, state, isDefault);
 
         // Restore original smoothing mode
-        graphics.SmoothingMode = originalMode;
+        // (Assume this is handled as in your original code)
 
         // Return content bounds (area inside the button for text/image)
-        return Rectangle.Inflate(bounds, -6, -6);
+        return Rectangle.Inflate(paddedBounds, -padding.Left, -padding.Top);
     }
 
     /// <summary>

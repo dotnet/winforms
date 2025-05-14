@@ -17,18 +17,17 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Get appropriate background color based on state
+        // Use padding from ButtonDarkModeRenderer
+        Padding padding = ButtonDarkModeRenderer.GetPaddingCore(FlatStyle.Flat);
+        Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
+
         Color backColor = GetBackgroundColor(state, isDefault);
-
-        // Fill the background - using rectangle, not path since corners aren't rounded
         using var brush = backColor.GetCachedSolidBrushScope();
-        graphics.FillRectangle(brush, bounds);
+        graphics.FillRectangle(brush, paddedBounds);
 
-        // Draw border
-        DrawButtonBorder(graphics, bounds, state, isDefault);
+        DrawButtonBorder(graphics, paddedBounds, state, isDefault);
 
-        // Return content bounds (area inside the button for text/image)
-        return Rectangle.Inflate(bounds, -6, -6);
+        return Rectangle.Inflate(paddedBounds, -padding.Left, -padding.Top);
     }
 
     /// <summary>
@@ -61,8 +60,8 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
         return state == PushButtonState.Disabled
             ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
             : isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
+                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
     }
 
     /// <summary>
