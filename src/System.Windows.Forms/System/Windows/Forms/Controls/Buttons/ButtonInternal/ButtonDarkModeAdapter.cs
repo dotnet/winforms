@@ -21,6 +21,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             Control.IsDefault,
             Control.Focused,
             Control.ShowFocusCues,
+            Control.Parent?.BackColor ?? Control.BackColor,
             _ => PaintImage(e, layout),
             (_, textColor, drawFocus) => PaintField(
                 e,
@@ -42,6 +43,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             Control.IsDefault,
             Control.Focused,
             Control.ShowFocusCues,
+            Control.Parent?.BackColor ?? Control.BackColor,
             _ => PaintImage(e, layout),
             (_, textColor, drawFocus) => PaintField(
                 e,
@@ -63,6 +65,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             Control.IsDefault,
             Control.Focused,
             Control.ShowFocusCues,
+            Control.Parent?.BackColor ?? Control.BackColor,
             _ => PaintImage(e, layout),
             (_, textColor, drawFocus) => PaintField(
                 e,

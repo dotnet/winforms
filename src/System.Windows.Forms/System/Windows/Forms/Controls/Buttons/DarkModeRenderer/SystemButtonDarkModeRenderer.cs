@@ -44,9 +44,6 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         // Draw border
         DrawButtonBorder(graphics, path, state, isDefault);
 
-        // Restore original smoothing mode
-        // (Assume this is handled as in your original code)
-
         // Return content bounds (area inside the button for text/image)
         return Rectangle.Inflate(drawBounds, -padding.Left, -padding.Top);
     }

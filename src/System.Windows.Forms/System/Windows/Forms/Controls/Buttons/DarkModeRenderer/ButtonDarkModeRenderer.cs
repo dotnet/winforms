@@ -46,6 +46,18 @@ internal static partial class ButtonDarkModeRenderer
     }
 
     /// <summary>
+    ///  Clears the background with the parent's background color or the control's background color if no parent is available.
+    /// </summary>
+    /// <param name="graphics">Graphics context to draw on</param>
+    /// <param name="bounds">Bounds of the area to clear</param>
+    private static void ClearBackground(Graphics graphics, Rectangle bounds, Color parentBackgroundColor)
+    {
+        // Clear the background with the determined color
+        using var brush = parentBackgroundColor.GetCachedSolidBrushScope();
+        graphics.FillRectangle(brush, bounds);
+    }
+
+    /// <summary>
     ///  Renders a button with the specified properties and delegates for painting image and field.
     /// </summary>
     internal static void RenderButton(
@@ -56,6 +68,7 @@ internal static partial class ButtonDarkModeRenderer
         bool isDefault,
         bool focused,
         bool showFocusCues,
+        Color parentBackgroundColor,
         Action<Rectangle> paintImage,
         Action<Rectangle, Color, bool> paintField)
     {
@@ -67,24 +80,25 @@ internal static partial class ButtonDarkModeRenderer
             _ => StandardRenderer
         };
 
-        Padding padding = GetPaddingCore(flatStyle);
-
         // Draw button background and get content bounds
         Rectangle contentBounds = renderer.DrawButtonBackground(graphics, bounds, state, isDefault);
 
-        // Adjust bounds for padding
-        Rectangle paddedBounds = Rectangle.Inflate(contentBounds, -padding.Left, -padding.Top);
+        // Clear the background if needed
+        if (flatStyle == FlatStyle.Standard)
+        {
+            ClearBackground(graphics, bounds, parentBackgroundColor);
+        }
 
         // Paint image and field using the provided delegates
-        paintImage(paddedBounds);
+        paintImage(contentBounds);
         paintField(
-            paddedBounds,
+            contentBounds,
             renderer.GetTextColor(state, isDefault),
             false);
 
         if (focused && showFocusCues)
         {
-            renderer.DrawFocusIndicator(graphics, paddedBounds, isDefault);
+            renderer.DrawFocusIndicator(graphics, contentBounds, isDefault);
         }
     }
 }
