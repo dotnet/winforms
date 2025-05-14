@@ -120,11 +120,12 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
         // For pressed state, draw a darker inner border
         if (state == PushButtonState.Pressed)
         {
-            using var borderPen = (isDefault
+            Color borderColor = isDefault
                 ? Color.FromArgb(80, 0, 0, 0)
-                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor).GetCachedPenScope();
+                : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor;
 
-            graphics.DrawPath(borderPen, path);
+            // Use the helper with inset alignment
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, 1);
         }
 
         // For other states, draw a single-pixel border
@@ -137,8 +138,8 @@ internal class StandardButtonDarkModeRenderer : IButtonDarkModeRenderer
                     blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor;
 
-            using var borderPen = borderColor.GetCachedPenScope();
-            graphics.DrawPath(borderPen, path);
+            int thickness = isDefault ? 2 : 1;
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
         }
     }
 

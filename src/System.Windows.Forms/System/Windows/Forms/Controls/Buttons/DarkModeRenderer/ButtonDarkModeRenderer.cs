@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
+using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms;
 
@@ -24,203 +24,43 @@ internal static partial class ButtonDarkModeRenderer
     public static Padding ButtonDeflation { get; set; } = new(2);
 
     /// <summary>
-    ///  Returns the bounds to use for the button background, after applying deflation.
+    ///  Draws the background of a control's parent in the specified area.
+    ///  Simply fills with the parent's BackColor using the original bounds (no deflation).
     /// </summary>
-    private static Rectangle GetDeflatedBounds(Rectangle bounds)
+    public static void DrawParentBackground(
+        Graphics g,
+        Rectangle bounds,
+        Control childControl)
     {
-        return Rectangle.FromLTRB(
-            bounds.Left + ButtonDeflation.Left,
-            bounds.Top + ButtonDeflation.Top,
-            bounds.Right - ButtonDeflation.Right,
-            bounds.Bottom - ButtonDeflation.Bottom);
+        if (g is null || childControl?.Parent is null)
+        {
+            return;
+        }
+
+        // Use original bounds for parent background (no deflation)
+        Color parentBackColor = childControl.Parent.BackColor;
+
+        using var brush = parentBackColor.GetCachedSolidBrushScope();
+        g.FillRectangle(brush, bounds);
     }
 
     /// <summary>
-    ///  Draws the background of a control's parent in the specified area, adjusted for button deflation.
+    ///  Draws the button background with a frame indicating its default state.
     /// </summary>
-    public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
-        => DrawParentBackground((IDeviceContext)g, bounds, childControl);
-
-    internal static void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
+    public static void DrawButtonBackground(Graphics graphics, Rectangle bounds, Color frameColor, bool isDefault)
     {
-        Graphics? graphics = dc.TryGetGraphics(create: true);
-
-        if (graphics is null)
-        {
-            return;
-        }
-
-        Control? parent = childControl.Parent;
-        if (parent is null)
-        {
-            return;
-        }
-
-        // Adjust bounds for deflation
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        // Create a temporary graphics context with the proper transformation
-        using Bitmap tempBitmap = new(deflatedBounds.Width, deflatedBounds.Height);
-        using Graphics tempGraphics = Graphics.FromImage(tempBitmap);
-
-        // Calculate the portion of parent we need to render
-        Point pt = parent.PointToClient(childControl.PointToScreen(Point.Empty));
-        tempGraphics.TranslateTransform(-pt.X - ButtonDeflation.Left, -pt.Y - ButtonDeflation.Top);
-
-        // Call internal PaintBackground directly with the rectangle
-        Rectangle parentRect = new(pt.X + ButtonDeflation.Left, pt.Y + ButtonDeflation.Top, deflatedBounds.Width, deflatedBounds.Height);
-        using PaintEventArgs e = new(tempGraphics, parentRect);
-
-        parent.PaintBackground(e, parentRect);
-
-        // Now draw the captured background to our target graphics
-        graphics.DrawImage(tempBitmap, deflatedBounds);
+        int frameThickness = isDefault ? 2 : 1;
+        using var framePen = frameColor.GetCachedPenScope(frameThickness);
+        graphics.DrawRectangle(framePen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
     }
 
-    // Update all DrawButton methods to use GetDeflatedBounds for the button area
-    internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state, FlatStyle flatStyle)
+    /// <summary>
+    ///  Draws a button border using a specified path and border properties,
+    ///  with the pen aligned inward to maintain consistent dimensions.
+    /// </summary>
+    public static void DrawButtonBorder(Graphics graphics, GraphicsPath path, Color borderColor, int borderWidth)
     {
-        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-
-        if (graphics is null)
-        {
-            return;
-        }
-
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-        renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault: false);
-    }
-
-    internal static void DrawButtonForHandle(
-        IDeviceContext deviceContext,
-        Rectangle bounds,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-    {
-        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-        if (graphics is null)
-        {
-            return;
-        }
-
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        // Get the appropriate renderer
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-
-        // Calculate the content bounds (inner area of button)
-        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault: false);
-
-        // Draw focus indicator if needed
-        if (focused)
-        {
-            renderer.DrawFocusIndicator(graphics, contentBounds, isDefault: false);
-        }
-    }
-
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        TextFormatFlags flags,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-    {
-        // Get the appropriate renderer
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        // Draw button background first
-        Rectangle contentBounds = renderer.DrawButtonBackground(g, deflatedBounds, state, isDefault: false);
-
-        // Get appropriate text color
-        Color textColor = renderer.GetTextColor(state, isDefault: false);
-
-        // Draw the text
-        TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
-
-        // Draw focus indicator if needed
-        if (focused)
-        {
-            renderer.DrawFocusIndicator(g, contentBounds, isDefault: false);
-        }
-    }
-
-    public static void DrawButton(
-        Graphics g,
-        Rectangle bounds,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-    {
-        // Get the appropriate renderer
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        // Draw button background
-        Rectangle contentBounds = renderer.DrawButtonBackground(g, deflatedBounds, state, isDefault: false);
-
-        // Draw the image
-        g.DrawImage(image, imageBounds);
-
-        // Draw focus indicator if needed
-        if (focused)
-        {
-            renderer.DrawFocusIndicator(g, contentBounds, isDefault: false);
-        }
-    }
-
-    internal static void DrawButton(
-        IDeviceContext deviceContext,
-        Rectangle bounds,
-        string? buttonText,
-        Font? font,
-        TextFormatFlags flags,
-        Image image,
-        Rectangle imageBounds,
-        bool focused,
-        PushButtonState state,
-        FlatStyle flatStyle)
-    {
-        Graphics? graphics = deviceContext.TryGetGraphics(create: true);
-        if (graphics is null)
-        {
-            return;
-        }
-
-        Rectangle deflatedBounds = GetDeflatedBounds(bounds);
-
-        // Determine if this is a default button
-        bool isDefault = false; // In a real implementation, we'd determine this from the button's properties
-
-        // Get the appropriate renderer
-        IButtonDarkModeRenderer renderer = ButtonDarkModeRendererFactory.GetRenderer(flatStyle);
-
-        // Draw button background and get content bounds
-        Rectangle contentBounds = renderer.DrawButtonBackground(graphics, deflatedBounds, state, isDefault);
-
-        // Draw the image
-        graphics.DrawImage(image, imageBounds);
-
-        // Get appropriate text color based on state
-        Color textColor = renderer.GetTextColor(state, isDefault);
-
-        // Draw the text
-        TextRenderer.DrawText(deviceContext, buttonText, font, contentBounds, textColor, flags);
-
-        // Draw focus indicator if needed
-        if (focused)
-        {
-            renderer.DrawFocusIndicator(graphics, contentBounds, isDefault);
-        }
+        using var borderPen = borderColor.GetCachedPenScope(borderWidth);
+        graphics.DrawPath(borderPen, path);
     }
 }

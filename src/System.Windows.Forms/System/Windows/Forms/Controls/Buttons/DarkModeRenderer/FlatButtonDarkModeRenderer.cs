@@ -92,6 +92,10 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// </summary>
     private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
+        // For flat style, we need to create a GraphicsPath for the rectangle
+        using GraphicsPath path = new();
+        path.AddRectangle(bounds);
+
         // For pressed state, draw a darker border
         if (state == PushButtonState.Pressed)
         {
@@ -99,8 +103,7 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
                 ? Color.FromArgb(80, 0, 0, 0)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.BottomRightBorderColor;
 
-            using var borderPen = borderColor.GetCachedPenScope();
-            graphics.DrawRectangle(borderPen, bounds);
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, 1);
         }
 
         // For other states, draw a single-pixel border
@@ -113,8 +116,8 @@ internal class FlatButtonDarkModeRenderer : IButtonDarkModeRenderer
                     blue: ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 30)
                 : ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor;
 
-            using var borderPen = borderColor.GetCachedPenScope();
-            graphics.DrawRectangle(borderPen, bounds);
+            int thickness = isDefault ? 2 : 1;
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
         }
     }
 }

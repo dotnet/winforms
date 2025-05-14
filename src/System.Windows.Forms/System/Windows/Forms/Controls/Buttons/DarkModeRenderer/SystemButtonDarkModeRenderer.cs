@@ -130,14 +130,16 @@ internal class SystemButtonDarkModeRenderer : IButtonDarkModeRenderer
         if (isDefault)
         {
             // Default button gets a thicker border
-            using var borderPen = Color.White.GetCachedPenScope(2);
-            graphics.DrawPath(borderPen, path);
+            ButtonDarkModeRenderer.DrawButtonBorder(graphics, path, Color.White, 2);
         }
         else if (state != PushButtonState.Disabled)
         {
             // Non-default buttons get a thin border
-            using var borderPen = ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor.GetCachedPenScope();
-            graphics.DrawPath(borderPen, path);
+            ButtonDarkModeRenderer.DrawButtonBorder(
+                graphics,
+                path,
+                ButtonDarkModeRenderer.DarkModeButtonColors.SingleBorderColor,
+                1);
         }
     }
 

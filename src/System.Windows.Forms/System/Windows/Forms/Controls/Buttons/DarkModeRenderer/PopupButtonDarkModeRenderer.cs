@@ -12,9 +12,46 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
 {
+    // UI constants
+    private const int ButtonCornerRadius = 5;
+    private const int FocusCornerRadius = 3;
+    private const int ContentPadding = 6;
+    private const int FocusPadding = 2;
+    private const int BorderThickness = 1;
+
+    // Border color constants
+    private static Color ShadowDarkColor { get; } = Color.FromArgb(40, 40, 40);         // Deeper shadow
+    private static Color ShadowColor { get; } = Color.FromArgb(60, 60, 60);             // Standard shadow
+    private static Color HighlightColor { get; } = Color.FromArgb(110, 110, 110);       // Standard highlight
+    private static Color HighlightBrightColor { get; } = Color.FromArgb(130, 130, 130); // Brighter highlight
+    private static Color DisabledBorderDarkColor { get; } = Color.FromArgb(45, 45, 45);
+    private static Color DisabledBorderLightColor { get; } = Color.FromArgb(55, 55, 55);
+    private static Color DisabledBorderMidColor { get; } = Color.FromArgb(50, 50, 50);
+
+    // Default border color adjustment constants
+    private const int DefaultBorderROffset = 30;
+    private const int DefaultBorderGOffset = 20;
+    private const int DefaultBorderBOffset = 40;
+
     // Make this per-thread, so that different threads can safely use these methods
     [ThreadStatic]
     private static GraphicsPath? s_cornerPath;
+
+    // Cached pens for border drawing, also per-thread
+    [ThreadStatic]
+    private static Pen? s_topLeftOuterPen;
+
+    [ThreadStatic]
+    private static Pen? s_bottomRightOuterPen;
+
+    [ThreadStatic]
+    private static Pen? s_topLeftInnerPen;
+
+    [ThreadStatic]
+    private static Pen? s_bottomRightInnerPen;
+
+    [ThreadStatic]
+    private static Pen? s_defaultInnerBorderPen;
 
     /// <summary>
     ///  Draws button background with popup styling, including subtle 3D effect.
@@ -25,11 +62,8 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         SmoothingMode originalMode = graphics.SmoothingMode;
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Popup style uses slightly rounded corners like Standard
-        const int cornerRadius = 5;
-
         // Create path for rounded corners
-        GraphicsPath path = GetRoundedRectanglePath(bounds, cornerRadius);
+        GraphicsPath path = GetRoundedRectanglePath(bounds, ButtonCornerRadius);
 
         // Get appropriate background color based on state
         Color backColor = GetBackgroundColor(state, isDefault);
@@ -45,7 +79,7 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         graphics.SmoothingMode = originalMode;
 
         // Return content bounds (area inside the button for text/image)
-        return Rectangle.Inflate(bounds, -6, -6);
+        return Rectangle.Inflate(bounds, -ContentPadding, -ContentPadding);
     }
 
     /// <summary>
@@ -57,8 +91,8 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         SmoothingMode originalMode = graphics.SmoothingMode;
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Create a slightly smaller rectangle for the focus indicator (2px inside)
-        Rectangle focusRect = Rectangle.Inflate(contentBounds, -2, -2);
+        // Create a slightly smaller rectangle for the focus indicator
+        Rectangle focusRect = Rectangle.Inflate(contentBounds, -FocusPadding, -FocusPadding);
 
         // Create dotted pen with appropriate color
         Color focusColor = isDefault
@@ -72,7 +106,7 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         focusPen.DashStyle = DashStyle.Dot;
 
         // Draw the focus rectangle with rounded corners
-        GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, 3);
+        GraphicsPath focusPath = GetRoundedRectanglePath(focusRect, FocusCornerRadius);
         graphics.DrawPath(focusPen, focusPath);
 
         // Restore original smoothing mode
@@ -113,9 +147,13 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
                 _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
             };
 
-    // Refactored DrawButtonBorder for a more visible 3D effect in dark mode.
+    // Refactored DrawButtonBorder to use cached pens
     private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
+        // Create a GraphicsPath for the border to ensure consistent alignment
+        // The path needs to match exactly the same dimensions as the filled background
+        using GraphicsPath path = GetRoundedRectanglePath(bounds, ButtonCornerRadius);
+
         // Popup style has a 3D effect border
         Rectangle borderRect = bounds;
 
@@ -125,68 +163,90 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         if (state == PushButtonState.Pressed)
         {
             // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
-            topLeftOuter = Color.FromArgb(60, 60, 60); // shadow
-            bottomRightOuter = Color.FromArgb(110, 110, 110); // highlight
-            topLeftInner = Color.FromArgb(40, 40, 40); // deeper shadow
-            bottomRightInner = Color.FromArgb(130, 130, 130); // brighter highlight
+            topLeftOuter = ShadowColor;       // shadow
+            bottomRightOuter = HighlightColor; // highlight
+            topLeftInner = ShadowDarkColor;   // deeper shadow
+            bottomRightInner = HighlightBrightColor; // brighter highlight
         }
         else if (state == PushButtonState.Disabled)
         {
             // Disabled: subtle, low-contrast border
-            topLeftOuter = Color.FromArgb(55, 55, 55);
-            bottomRightOuter = Color.FromArgb(45, 45, 45);
-            topLeftInner = Color.FromArgb(50, 50, 50);
-            bottomRightInner = Color.FromArgb(50, 50, 50);
+            topLeftOuter = DisabledBorderLightColor;
+            bottomRightOuter = DisabledBorderDarkColor;
+            topLeftInner = DisabledBorderMidColor;
+            bottomRightInner = DisabledBorderMidColor;
         }
         else
         {
             // Normal/hot: highlight top/left, shadow bottom/right
-            topLeftOuter = Color.FromArgb(110, 110, 110); // highlight
-            bottomRightOuter = Color.FromArgb(60, 60, 60); // shadow
-            topLeftInner = Color.FromArgb(130, 130, 130); // brighter highlight
-            bottomRightInner = Color.FromArgb(40, 40, 40); // deeper shadow
+            topLeftOuter = HighlightColor;     // highlight
+            bottomRightOuter = ShadowColor;     // shadow
+            topLeftInner = HighlightBrightColor; // brighter highlight
+            bottomRightInner = ShadowDarkColor;  // deeper shadow
         }
 
-        // Outer border
-        using (var topLeftPen = topLeftOuter.GetCachedPenScope())
-        using (var bottomRightPen = bottomRightOuter.GetCachedPenScope())
-        {
-            // Top
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
-            // Left
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 2);
-            // Bottom
-            graphics.DrawLine(bottomRightPen, borderRect.Left + 1, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
-            // Right
-            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top + 1, borderRect.Right - 1, borderRect.Bottom - 1);
-        }
+        // Initialize or update cached outer pens
+        s_topLeftOuterPen = InitializeOrUpdatePen(s_topLeftOuterPen, topLeftOuter);
+        s_bottomRightOuterPen = InitializeOrUpdatePen(s_bottomRightOuterPen, bottomRightOuter);
+
+        // Draw the outer 3D border lines
+
+        // Top
+        graphics.DrawLine(s_topLeftOuterPen, borderRect.Left, borderRect.Top, borderRect.Right - 1, borderRect.Top);
+        // Left
+        graphics.DrawLine(s_topLeftOuterPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 1);
+        // Bottom
+        graphics.DrawLine(s_bottomRightOuterPen, borderRect.Left, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
+        // Right
+        graphics.DrawLine(s_bottomRightOuterPen, borderRect.Right - 1, borderRect.Top, borderRect.Right - 1, borderRect.Bottom - 1);
 
         // Inner border for more depth
-        borderRect.Inflate(-1, -1);
-        using (var topLeftPen = topLeftInner.GetCachedPenScope())
-        using (var bottomRightPen = bottomRightInner.GetCachedPenScope())
-        {
-            // Top
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Right - 2, borderRect.Top);
-            // Left
-            graphics.DrawLine(topLeftPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 2);
-            // Bottom
-            graphics.DrawLine(bottomRightPen, borderRect.Left + 1, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
-            // Right
-            graphics.DrawLine(bottomRightPen, borderRect.Right - 1, borderRect.Top + 1, borderRect.Right - 1, borderRect.Bottom - 1);
-        }
+        borderRect.Inflate(-BorderThickness, -BorderThickness);
+
+        // Initialize or update cached inner pens
+        s_topLeftInnerPen ??= InitializeOrUpdatePen(s_topLeftInnerPen, topLeftInner);
+        s_bottomRightInnerPen ??= InitializeOrUpdatePen(s_bottomRightInnerPen, bottomRightInner);
+
+        // Draw the inner 3D border lines
+        // Top
+        graphics.DrawLine(s_topLeftInnerPen, borderRect.Left, borderRect.Top, borderRect.Right - 1, borderRect.Top);
+        // Left
+        graphics.DrawLine(s_topLeftInnerPen, borderRect.Left, borderRect.Top, borderRect.Left, borderRect.Bottom - 1);
+        // Bottom
+        graphics.DrawLine(s_bottomRightInnerPen, borderRect.Left, borderRect.Bottom - 1, borderRect.Right - 1, borderRect.Bottom - 1);
+        // Right
+        graphics.DrawLine(s_bottomRightInnerPen, borderRect.Right - 1, borderRect.Top, borderRect.Right - 1, borderRect.Bottom - 1);
 
         // For default buttons, add an additional inner border
         if (isDefault && state != PushButtonState.Disabled)
         {
-            borderRect.Inflate(-1, -1);
+            borderRect.Inflate(-BorderThickness, -BorderThickness);
             Color innerBorderColor = Color.FromArgb(
-                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - 30),
-                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - 20),
-                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - 40));
-            using var innerBorderPen = innerBorderColor.GetCachedPenScope();
-            graphics.DrawRectangle(innerBorderPen, borderRect);
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBorderROffset),
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
+                Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
+
+            // Initialize or update default inner border pen
+            s_defaultInnerBorderPen ??= InitializeOrUpdatePen(s_defaultInnerBorderPen, innerBorderColor);
+            graphics.DrawRectangle(s_defaultInnerBorderPen, borderRect);
         }
+    }
+
+    /// <summary>
+    /// Initializes a new pen if null or updates an existing pen's color.
+    /// </summary>
+    private static Pen InitializeOrUpdatePen(Pen? pen, Color color)
+    {
+        if (pen is null)
+        {
+            pen = new Pen(color) { Alignment = PenAlignment.Inset };
+        }
+        else if (pen.Color != color)
+        {
+            pen.Color = color;
+        }
+
+        return pen;
     }
 
     /// <summary>
