@@ -23,6 +23,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Runtime.InteropServices;
+
 namespace System.Drawing.Drawing2D.Tests;
 
 public class PathGradientBrushTests
@@ -107,12 +109,12 @@ public class PathGradientBrushTests
     }
 
     [Fact]
-    public void Ctor_PathWithLessThenTwoPoints_ThrowsOutOfMemoryException()
+    public void Ctor_PathWithLessThenTwoPoints_ThrowsExternalException()
     {
         using GraphicsPath path = new();
-        Assert.Throws<OutOfMemoryException>(() => new PathGradientBrush(path));
+        Assert.Throws<ExternalException>(() => new PathGradientBrush(path));
         path.AddLines(new PointF[] { new(1, 1) });
-        Assert.Throws<OutOfMemoryException>(() => new PathGradientBrush(path));
+        Assert.Throws<ExternalException>(() => new PathGradientBrush(path));
     }
 
     [Fact]
