@@ -874,12 +874,12 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
-    Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
+        Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {
         using SubCheckBox control = (SubCheckBox)CreateButton();
         control.Appearance = appearance;
@@ -896,14 +896,12 @@ public class CheckBoxTests : AbstractButtonBaseTests
             size.Width.Should().BeGreaterThan(0);
             size.Height.Should().BeGreaterThan(0);
         }
-
         else if (flatStyle == FlatStyle.System)
         {
             Size size = control.GetPreferredSizeCore(proposed);
             size.Width.Should().BeGreaterThan(0);
             size.Height.Should().BeGreaterThan(0);
         }
-
         else
         {
             Size size = control.GetPreferredSizeCore(proposed);
