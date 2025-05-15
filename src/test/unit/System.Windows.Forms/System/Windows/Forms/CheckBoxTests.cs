@@ -875,8 +875,8 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
     [WinFormsTheory]
     [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
     [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
