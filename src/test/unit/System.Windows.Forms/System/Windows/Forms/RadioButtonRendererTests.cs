@@ -357,7 +357,7 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
             );
     }
 
-    [WinFormsTheory]
+    [Theory]
     [InlineData(RadioButtonState.CheckedNormal, ButtonState.Checked)]
     [InlineData(RadioButtonState.CheckedHot, ButtonState.Checked)]
     [InlineData(RadioButtonState.CheckedPressed, ButtonState.Checked | ButtonState.Pushed)]
@@ -370,7 +370,7 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         RadioButtonRenderer.ConvertToButtonState(radioState).Should().Be(expected);
     }
 
-    [WinFormsTheory]
+    [Theory]
     [InlineData(ButtonState.Checked, false, RadioButtonState.CheckedNormal)]
     [InlineData(ButtonState.Checked, true, RadioButtonState.CheckedHot)]
     [InlineData(ButtonState.Checked | ButtonState.Pushed, false, RadioButtonState.CheckedPressed)]
