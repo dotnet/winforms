@@ -33,4 +33,11 @@ public static class AppContextSwitchNames
     /// </summary>
     public const string ClipboardDragDropEnableNrbfSerializationSwitchName
         = "Windows.ClipboardDragDrop.EnableNrbfSerialization";
+
+    /// <summary>
+    ///  When set to true, prevents the async capable drag/drop operations from being performed in a
+    ///  synchronous manner.
+    /// </summary>
+    public const string DragDropDisableSyncOverAsyncSwitchName
+        = "Windows.DragDrop.DisableSyncOverAsync";
 }
