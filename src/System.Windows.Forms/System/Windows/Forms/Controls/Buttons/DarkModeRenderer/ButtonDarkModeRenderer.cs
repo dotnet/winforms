@@ -41,7 +41,11 @@ internal static partial class ButtonDarkModeRenderer
     /// </summary>
     public static void DrawButtonBorder(Graphics graphics, GraphicsPath path, Color borderColor, int borderWidth)
     {
-        using var borderPen = borderColor.GetCachedPenScope(borderWidth);
+        using var borderPen = new Pen(borderColor, borderWidth)
+        {
+            Alignment = PenAlignment.Inset // Align pen inward
+        };
+
         graphics.DrawPath(borderPen, path);
     }
 
