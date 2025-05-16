@@ -988,7 +988,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                             break;
                         case FlatStyle.Flat:
                             _adapter = CreateFlatAdapter();
-                            ;
                             break;
                         default:
                             Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
@@ -1024,8 +1023,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
     {
-        Debug.Fail("Derived classes need to provide a meaningful implementation.");
-        return null;
+        // When a button-derived class does not have a dedicated DarkMode adapter implementation,
+        // we're falling back to the standard adapter, to not _force_ the derived class to implement
+        // a dark mode adapter.
+        return CreateStandardAdapter();
     }
 
     internal virtual StringFormat CreateStringFormat()
