@@ -1725,11 +1725,43 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
+    ///  Gets or sets the behavior for preventing screen capture/video recording of the
+    ///  form's content via screen capture applications based on the Windows APIs.
     /// </summary>
-    [DefaultValue(0)]
+    /// <remarks>
+    ///  <para>
+    ///   This property determines how the form's content behaves when captured by screen capture applications
+    ///   or screenshots. Different capture modes provide varying levels of privacy and security for sensitive content.
+    ///  </para>
+    ///  <para>
+    ///   By default, forms allow their content to be captured. Setting this property to a more restrictive value
+    ///   can prevent sensitive information from being captured in screenshots or recorded in screen recordings.
+    ///  </para>
+    ///  <para>
+    ///   The setting takes effect immediately for visible forms. For forms that aren't yet shown,
+    ///   the setting takes effect when the form becomes visible.
+    ///  </para>
+    ///  <para>
+    ///   Warning! Additional top-level window, which will be spinning off the form, will not be affected 
+    ///   by this setting. Please be aware, that for example sensitive information in a pop-up window 
+    ///   like a MessageBox, a context menu, DropDownButton menus or PullDown-menus can not be prevented
+    ///   from being captured!
+    ///  </para>
+    ///  <para>
+    ///   Note that this setting only affects the current form and not any other windows in the application.
+    ///   Also note that this will also affect video streaming applications for video conferencing, etc.
+    ///  </para>
+    ///  <para>
+    ///   Disclaimer: Please keep in mind, that this setting can of course not prevent screen recordings by tools,
+    ///   which are either circumvent the public Windows APIs or use hardware-based screen capture methods.
+    ///  </para>
+    /// </remarks>
+    /// <value>
+    ///  One of the <see cref="ScreenCaptureMode"/> enumeration values. The default is 
+    ///  <see cref="ScreenCaptureMode.Allow"/>.
+    /// </value>
     [SRCategory(nameof(SR.CatWindowStyle))]
-    [SRDescription("")]
+    [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
     public ScreenCaptureMode FormScreenCaptureMode
     {
         get => _formScreenCaptureMode;
@@ -1749,6 +1781,12 @@ public partial class Form : ContainerControl
         }
     }
 
+    private bool ShouldSerializeFormScreenCaptureMode() =>
+        FormScreenCaptureMode != ScreenCaptureMode.Allow;
+
+    private void ResetFormScreenCaptureMode() =>
+        FormScreenCaptureMode = ScreenCaptureMode.Allow;
+
     private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
     {
         if (!TopLevel)
@@ -1765,19 +1803,6 @@ public partial class Form : ContainerControl
         };
 
         PInvoke.SetWindowDisplayAffinity(HWND, affinity);
-    }
-
-    private ScreenCaptureMode GetScreenCaptureModeInternal()
-    {
-        PInvoke.GetWindowDisplayAffinity(HWND, out uint affinityValue);
-        WINDOW_DISPLAY_AFFINITY affinity = (WINDOW_DISPLAY_AFFINITY)affinityValue;
-
-        return affinity switch
-        {
-            WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE => ScreenCaptureMode.HideWindow,
-            WINDOW_DISPLAY_AFFINITY.WDA_MONITOR => ScreenCaptureMode.HideContent,
-            _ => ScreenCaptureMode.Allow,
-        };
     }
 
     /// <summary>
