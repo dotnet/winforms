@@ -8,12 +8,6 @@ namespace System.Windows.Forms.ButtonInternal;
 
 internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 {
-    // Magic numbers for PushButtonState mapping
-    private const PushButtonState DisabledPushButtonState = PushButtonState.Disabled;
-    private const PushButtonState NormalPushButtonState = PushButtonState.Normal;
-    private const PushButtonState PressedPushButtonState = PushButtonState.Pressed;
-    private const PushButtonState HotPushButtonState = PushButtonState.Hot;
-
     internal ButtonDarkModeAdapter(ButtonBase control) : base(control) { }
 
     internal override void PaintUp(PaintEventArgs e, CheckState state)
@@ -55,7 +49,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             e.Graphics,
             Control.ClientRectangle,
             Control.FlatStyle,
-            PressedPushButtonState,
+            PushButtonState.Pressed,
             Control.IsDefault,
             Control.Focused,
             Control.ShowFocusCues,
@@ -84,7 +78,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             e.Graphics,
             Control.ClientRectangle,
             Control.FlatStyle,
-            HotPushButtonState,
+            PushButtonState.Hot,
             Control.IsDefault,
             Control.Focused,
             Control.ShowFocusCues,
@@ -122,13 +116,13 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     private static PushButtonState ToPushButtonState(CheckState state, bool enabled)
     {
         return !enabled
-            ? DisabledPushButtonState
+            ? PushButtonState.Disabled
             : state switch
             {
-                CheckState.Unchecked => NormalPushButtonState,
-                CheckState.Checked => PressedPushButtonState,
-                CheckState.Indeterminate => HotPushButtonState,
-                _ => NormalPushButtonState
+                CheckState.Unchecked => PushButtonState.Normal,
+                CheckState.Checked => PushButtonState.Pressed,
+                CheckState.Indeterminate => PushButtonState.Hot,
+                _ => PushButtonState.Normal
             };
     }
 }
