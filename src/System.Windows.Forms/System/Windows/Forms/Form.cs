@@ -1742,8 +1742,8 @@ public partial class Form : ContainerControl
     ///   the setting takes effect when the form becomes visible.
     ///  </para>
     ///  <para>
-    ///   Warning! Additional top-level window, which will be spinning off the form, will not be affected 
-    ///   by this setting. Please be aware, that for example sensitive information in a pop-up window 
+    ///   Warning! Additional top-level windows, which will be spinning off the form, will not be affected
+    ///   by this setting. Please be aware, that for example sensitive information in a pop-up window
     ///   like a MessageBox, a context menu, DropDownButton menus or PullDown-menus can not be prevented
     ///   from being captured!
     ///  </para>
@@ -1757,7 +1757,7 @@ public partial class Form : ContainerControl
     ///  </para>
     /// </remarks>
     /// <value>
-    ///  One of the <see cref="ScreenCaptureMode"/> enumeration values. The default is 
+    ///  One of the <see cref="ScreenCaptureMode"/> enumeration values. The default is
     ///  <see cref="ScreenCaptureMode.Allow"/>.
     /// </value>
     [SRCategory(nameof(SR.CatWindowStyle))]
