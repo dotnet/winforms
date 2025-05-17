@@ -2265,6 +2265,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Transparent"/> suppresses the drawing of the window border, allowing the form to have rounded corners without a visible border. Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormBorderColorChanged"/> event is raised accordingly when the value is
@@ -2327,6 +2330,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormCaptionBackColorChanged"/> event is raised accordingly when the value is
@@ -2395,6 +2401,9 @@ public partial class Form : ContainerControl
     ///   <see cref="FormCaptionTextColorChanged"/> event is raised accordingly when the value is
     ///   changed, which allows the property to be participating in binding scenarios.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
@@ -2453,7 +2462,11 @@ public partial class Form : ContainerControl
 
     private unsafe void SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute, Color color)
     {
-        COLORREF colorRef = color;
+        COLORREF colorRef = color.IsEmpty ? (COLORREF)(Color.White.ToArgb()) : (COLORREF)color;
+        if (color == Color.Transparent && dmwWindowAttribute == DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR)
+        {
+            colorRef = (COLORREF)(Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFE).ToArgb());
+        }
 
         PInvoke.DwmSetWindowAttribute(
             HWND,
@@ -4510,6 +4523,28 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    /// Handles the WM_THEMECHANGED message for the form. Updates the window's immersive dark mode attribute
+    /// if the application's color mode is set, ensuring the form reflects the current system theme (light or dark).
+    ///</summary>
+    ///<param name="m"> The Windows message containing theme change information.</param>
+    private unsafe void WmThemeChanged(ref Message m)
+    {
+        base.WndProc(ref m);
+        if (Application.ColorModeSet && GetTopLevel())
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            BOOL value = Application.IsDarkModeEnabled;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+            PInvoke.DwmSetWindowAttribute(
+                m.HWND,
+                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                &value,
+                (uint)sizeof(BOOL)).AssertSuccess();
+        }
+    }
+
+    /// <summary>
     ///  Handles the WM_DPICHANGED message
     /// </summary>
     private void WmDpiChanged(ref Message m)
@@ -6535,11 +6570,34 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  WM_CREATE handler
     /// </summary>
-    private void WmCreate(ref Message m)
+    private unsafe void WmCreate(ref Message m)
     {
         base.WndProc(ref m);
         PInvoke.GetStartupInfo(out STARTUPINFOW si);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (TopLevel && IsHandleCreated)
+        {
+            FormCornerPreference formCornerPreference = Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
+            SetFormCornerPreferenceInternal(formCornerPreference);
 
+            Color colorValue = Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, colorValue);
+        }
+
+        // Set the theme for the form. This is needed to set the dark mode theme
+        if (Application.IsDarkModeEnabled && Application.ColorModeSet)
+        {
+            BOOL value = true;
+            PInvoke.DwmSetWindowAttribute(HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(int));
+        }
+
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to chang
         // If we've been created from explorer, it may
         // force us to show up normal. Force our current window state to
         // the specified state, unless it's _specified_ max or min
@@ -7115,6 +7173,9 @@ public partial class Form : ContainerControl
                 break;
             case PInvokeCore.WM_DPICHANGED:
                 WmDpiChanged(ref m);
+                break;
+            case PInvokeCore.WM_THEMECHANGED:
+                WmThemeChanged(ref m);
                 break;
             default:
                 base.WndProc(ref m);

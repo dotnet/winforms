@@ -3399,6 +3399,16 @@ public partial class TreeView : Control
                 PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)Indent);
                 base.WndProc(ref m);
                 break;
+            case PInvokeCore.WM_THEMECHANGED:
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    HTHEME theme = PInvoke.GetWindowTheme(m.HWND);
+                    PInvoke.CloseThemeData(theme);
+                    m.ResultInternal = (LRESULT)0;
+                }
+
+                break;
             case PInvokeCore.WM_SETFOCUS:
                 // If we get focus through the LButtonDown .. we might have done the validation...
                 // so skip it..

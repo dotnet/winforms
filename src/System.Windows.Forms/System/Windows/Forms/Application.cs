@@ -313,6 +313,7 @@ public sealed partial class Application
             {
                 SystemColors.UseAlternativeColorSet = darkModeEnabled;
                 NotifySystemEventsOfColorChange();
+                PInvokeCore.EnumWindows(SendThemeChanged);
             }
         }
 
