@@ -10306,7 +10306,8 @@ public unsafe partial class Control :
                 {
                     // We shouldn't mess with the color mode if users haven't specifically set it.
                     // https://github.com/dotnet/winforms/issues/12014
-                    if (value && Application.ColorModeSet)
+                    // I Don't think we should be doing this for Forms here , but it is the same as the old code but execute Form Control.
+                    if (value && Application.ColorModeSet && this is not Form)
                     {
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }
@@ -10314,7 +10315,7 @@ public unsafe partial class Control :
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
-#pragma warning restore WFO5001
+#pragma warning restore WFO5001w
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl
@@ -12481,6 +12482,23 @@ public unsafe partial class Control :
             case PInvokeCore.WM_SETTINGCHANGE:
                 if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
                 {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    Application.SetColorMode(Application.ColorMode);
+                    PInvoke.RedrawWindow(
+                        m.HWND,
+                        lprcUpdate: (RECT*)null,
+                        HRGN.Null,
+                        REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                        | REDRAW_WINDOW_FLAGS.RDW_FRAME
+                        | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                        | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
+                    const string DarkModeThemeIdentifier = $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}";
+                    PInvoke.SetWindowTheme(m.HWND,
+                        Application.IsDarkModeEnabled
+                        ? DarkModeThemeIdentifier
+                        : default,
+                        null);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     SYSTEM_PARAMETERS_INFO_ACTION action = (SYSTEM_PARAMETERS_INFO_ACTION)(uint)m.WParamInternal;
 
                     // Left here for debugging purposes.
