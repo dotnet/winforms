@@ -12482,8 +12482,15 @@ public unsafe partial class Control :
             case PInvokeCore.WM_SETTINGCHANGE:
                 if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
                 {
+                    // need Handle immediately drawing of Scrollbars.
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     Application.SetColorMode(Application.ColorMode);
+                    const string DarkModeThemeIdentifier = $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}";
+                    PInvoke.SetWindowTheme(m.HWND,
+                        Application.IsDarkModeEnabled
+                        ? DarkModeThemeIdentifier
+                        : default,
+                        null);
                     PInvoke.RedrawWindow(
                         m.HWND,
                         lprcUpdate: (RECT*)null,
@@ -12492,12 +12499,6 @@ public unsafe partial class Control :
                         | REDRAW_WINDOW_FLAGS.RDW_FRAME
                         | REDRAW_WINDOW_FLAGS.RDW_ERASE
                         | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
-                    const string DarkModeThemeIdentifier = $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}";
-                    PInvoke.SetWindowTheme(m.HWND,
-                        Application.IsDarkModeEnabled
-                        ? DarkModeThemeIdentifier
-                        : default,
-                        null);
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     SYSTEM_PARAMETERS_INFO_ACTION action = (SYSTEM_PARAMETERS_INFO_ACTION)(uint)m.WParamInternal;
 

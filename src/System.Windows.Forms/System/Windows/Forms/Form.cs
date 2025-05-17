@@ -2265,6 +2265,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Transparent"/> suppresses the drawing of the window border, allowing the form to have rounded corners without a visible border. Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormBorderColorChanged"/> event is raised accordingly when the value is
@@ -2327,6 +2330,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormCaptionBackColorChanged"/> event is raised accordingly when the value is
@@ -2395,6 +2401,9 @@ public partial class Form : ContainerControl
     ///   <see cref="FormCaptionTextColorChanged"/> event is raised accordingly when the value is
     ///   changed, which allows the property to be participating in binding scenarios.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
@@ -2453,7 +2462,11 @@ public partial class Form : ContainerControl
 
     private unsafe void SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute, Color color)
     {
-        COLORREF colorRef = color;
+        COLORREF colorRef = color.IsEmpty ? (COLORREF)(Color.White.ToArgb()) : (COLORREF)color;
+        if (color == Color.Transparent && dmwWindowAttribute == DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR)
+        {
+            colorRef = (COLORREF)(Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFE).ToArgb());
+        }
 
         PInvoke.DwmSetWindowAttribute(
             HWND,
