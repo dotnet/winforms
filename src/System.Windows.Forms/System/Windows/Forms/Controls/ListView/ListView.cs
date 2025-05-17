@@ -1821,27 +1821,35 @@ public partial class ListView : Control
                 throw new NotSupportedException(SR.ListViewCantSetViewToTileViewInVirtualMode);
             }
 
-            if (_viewStyle != value)
+            if (_viewStyle == value)
             {
-                _viewStyle = value;
-                if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
-                {
-                    PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
-                    UpdateGroupView();
-
-                    // if we switched to Tile view we should update the win32 list view tile view info
-                    if (_viewStyle == View.Tile)
-                    {
-                        UpdateTileView();
-                    }
-                }
-                else
-                {
-                    UpdateStyles();
-                }
-
-                UpdateListViewItemsLocations();
+                return;
             }
+
+            _viewStyle = value;
+
+            if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
+            {
+                PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
+                UpdateGroupView();
+
+                // if we switched to Tile view we should update the win32 list view tile view info
+                if (_viewStyle == View.Tile)
+                {
+                    UpdateTileView();
+                }
+            }
+            else
+            {
+                UpdateStyles();
+            }
+
+            if (IsHandleCreated && _viewStyle == View.Details)
+            {
+                ApplyColumnHeaderDarkModeOnDemand();
+            }
+
+            UpdateListViewItemsLocations();
         }
     }
 
@@ -4529,16 +4537,7 @@ public partial class ListView : Control
             PInvokeCore.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled)
-        {
-            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-
-            // Get the ListView's ColumnHeader handle:
-            HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
-            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
-        }
-#pragma warning restore WFO5001
+        ApplyColumnHeaderDarkModeOnDemand();
 
         UpdateExtendedStyles();
         RealizeProperties();
@@ -4655,6 +4654,20 @@ public partial class ListView : Control
                 }
             }
         }
+    }
+
+    private void ApplyColumnHeaderDarkModeOnDemand()
+    {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Get the ListView's ColumnHeader handle:
+            HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
+        }
+#pragma warning restore WFO5001
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
