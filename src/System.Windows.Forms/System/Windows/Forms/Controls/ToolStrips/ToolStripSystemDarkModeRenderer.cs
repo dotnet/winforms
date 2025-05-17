@@ -206,17 +206,17 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 
             Debug.Assert(toolStripDropDown is not null, $"ToolStripDropDown cannot be null in {nameof(OnRenderToolStripBorder)}.");
 
+            using var borderPen = GetDarkModePen(SystemColors.ControlDark);
+
             if (toolStripDropDown.DropShadowEnabled)
             {
                 bounds.Width -= 1;
                 bounds.Height -= 1;
 
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
             else
             {
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
         }
