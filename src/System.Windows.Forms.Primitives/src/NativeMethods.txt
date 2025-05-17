@@ -221,6 +221,7 @@ GetUpdateRgn
 GetUserObjectInformation
 GetViewportExtEx
 GetWindow
+GetWindowDisplayAffinity
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWorldTransform
@@ -559,6 +560,7 @@ SetThreadDpiHostingBehavior
 SetTimer
 SetViewportExtEx
 SetViewportOrgEx
+SetWindowDisplayAffinity
 SetWindowExtEx
 SetWindowOrgEx
 SetWindowPlacement
