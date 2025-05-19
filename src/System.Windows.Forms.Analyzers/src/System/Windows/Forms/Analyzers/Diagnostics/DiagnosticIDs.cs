@@ -22,4 +22,5 @@ internal static class DiagnosticIDs
     // Experimental, number group 5000+
     public const string ExperimentalDarkMode = "WFO5001";
     public const string ExperimentalAsync = "WFO5002";
+    public const string ExperimentalAsyncDropTarget = "WFO5003";
 }
