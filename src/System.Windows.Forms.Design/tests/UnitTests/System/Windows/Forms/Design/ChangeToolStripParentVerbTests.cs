@@ -30,7 +30,7 @@ public class ChangeToolStripParentVerbTests : IDisposable
         _parentControlDesigner.Dispose();
         _designerActionService?.Dispose();
         _designerActionUIService?.Dispose();
-        _behaviorService.Dispose();
+        _behaviorService!.Dispose();
         _designer.Dispose();
     }
 
@@ -41,10 +41,10 @@ public class ChangeToolStripParentVerbTests : IDisposable
         _siteMock.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_mockSelectionService.Object);
         _siteMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
         _siteMock.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(_componentChangeServiceMock.Object);
-        _behaviorService = new (_serviceProviderMock.Object, new DesignerFrame(_siteMock.Object));
+        _behaviorService = new(_serviceProviderMock.Object, new DesignerFrame(_siteMock.Object));
         _siteMock.Setup(s => s.GetService(typeof(BehaviorService))).Returns(_behaviorService);
         _siteMock.Setup(s => s.GetService(typeof(ToolStripAdornerWindowService))).Returns(null!);
-        _designerActionService = new (_siteMock.Object);
+        _designerActionService = new(_siteMock.Object);
         _siteMock.Setup(s => s.GetService(typeof(DesignerActionService))).Returns(_designerActionService);
 
         _siteMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
@@ -105,7 +105,7 @@ public class ChangeToolStripParentVerbTests : IDisposable
         _parentControlDesigner.Initialize(_toolStrip);
         _designer.Initialize(_toolStrip);
 
-        _siteMock.Setup(s => s.GetService(typeof(DesignerActionUIService))).Returns(null);
+        _siteMock!.Setup(s => s.GetService(typeof(DesignerActionUIService))).Returns(null!);
 
         Control oldParent = _toolStrip.Parent;
         var changeToolStripParentVerb = new ChangeToolStripParentVerb(_designer);
