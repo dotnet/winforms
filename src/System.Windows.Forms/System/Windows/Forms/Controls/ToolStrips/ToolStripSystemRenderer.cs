@@ -251,7 +251,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else if (DisplayInformation.LowResolution)
             {
-                FillBackground(g, bounds, (toolStrip is ToolStripDropDown)
+                FillBackground(g, bounds, toolStrip is ToolStripDropDown
                      ? SystemColors.ControlLight
                      : e.BackColor);
             }
@@ -527,7 +527,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, fillRect);
                     }
-                    else if (!ToolStripManager.VisualStylesEnabled && (item.RawBackColor != Color.Empty))
+                    else if (!ToolStripManager.VisualStylesEnabled && item.RawBackColor != Color.Empty)
                     {
                         FillBackground(g, fillRect, item.BackColor);
                     }
