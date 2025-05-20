@@ -10,6 +10,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Private.Windows.Nrbf;
 
+// Suppress CS0618 warnings for the entire class as we're deliberately testing backward compatibility
+// with obsolete APIs like IHashCodeProvider to ensure proper serialization handling
+#pragma warning disable CS0618
 public class CoreNrbfSerializerTests
 {
     public static TheoryData<object, bool> TryWriteObjectData => new()
@@ -178,7 +181,7 @@ public class CoreNrbfSerializerTests
         { new Hashtable(StringComparer.CurrentCulture) { { "key", "value" } }, false },
         
         // Hashtable with hash code provider won't be deserialized by TryGetPrimitiveHashtable
-        { new Hashtable(new CustomHashCodeProvider()) { { "key", "value" } }, false },
+        { new Hashtable(new CustomHashCodeProvider(), null) { { "key", "value" } }, false },
         { new Hashtable(new CustomHashCodeProvider(), StringComparer.OrdinalIgnoreCase) { { "key", "value" } }, false }
     };
     
@@ -226,7 +229,7 @@ public class CoreNrbfSerializerTests
     public void HashtableWithHashCodeProvider_PreservesData_EvenWhenNotDeserialized()
     {
         // Create a hashtable with a custom hash code provider
-        Hashtable originalHashtable = new(new CustomHashCodeProvider())
+        Hashtable originalHashtable = new(new CustomHashCodeProvider(), null)
         {
             { "Key", "Value" }
         };
@@ -270,3 +273,4 @@ public class CoreNrbfSerializerTests
         public int GetHashCode(object obj) => obj?.GetHashCode() ?? 0;
     }
 }
+#pragma warning restore CS0618
