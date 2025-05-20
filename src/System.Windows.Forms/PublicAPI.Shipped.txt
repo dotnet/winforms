@@ -24,6 +24,8 @@
 [WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+[WFO5003]System.Windows.Forms.IAsyncDropTarget
+[WFO5003]System.Windows.Forms.IAsyncDropTarget.OnAsyncDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.Commit(System.Windows.Forms.CurrencyManager dataSource, int rowNum) -> bool
 ~abstract System.Windows.Forms.DataGridColumnStyle.Edit(System.Windows.Forms.CurrencyManager source, int rowNum, System.Drawing.Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.GetPreferredHeight(System.Drawing.Graphics g, object value) -> int

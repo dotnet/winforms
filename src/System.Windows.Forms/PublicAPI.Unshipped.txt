@@ -1,2 +1,0 @@
-[WFO5003]System.Windows.Forms.IAsyncDropTarget
-[WFO5003]System.Windows.Forms.IAsyncDropTarget.OnAsyncDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
