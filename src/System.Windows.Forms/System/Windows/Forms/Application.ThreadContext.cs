@@ -510,12 +510,15 @@ public sealed partial class Application
         /// </summary>
         internal static ThreadContext? FromId(uint id)
         {
-            if (!s_contextHash.TryGetValue(id, out ThreadContext? context) && id == PInvokeCore.GetCurrentThreadId())
+            lock (s_lock)
             {
-                context = Create();
-            }
+                if (!s_contextHash.TryGetValue(id, out ThreadContext? context) && id == PInvokeCore.GetCurrentThreadId())
+                {
+                    context = Create();
+                }
 
-            return context;
+                return context;
+            }
         }
 
         /// <summary>
