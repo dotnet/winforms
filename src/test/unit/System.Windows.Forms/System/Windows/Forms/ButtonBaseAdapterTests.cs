@@ -11,9 +11,9 @@ public class ButtonBaseAdapterTests
     [WinFormsFact]
     public void Button_Calculate_BackColorIsSystemControl()
     {
-        using Bitmap bmp = new Bitmap(1, 1);
-        using Graphics g = Graphics.FromImage(bmp);
-        ColorOptions options = new ColorOptions(g, Color.Black, SystemColors.Control)
+        using Bitmap bmp = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        ColorOptions options = new ColorOptions(graphics, Color.Black, SystemColors.Control)
         {
             Enabled = true
         };
@@ -24,7 +24,15 @@ public class ButtonBaseAdapterTests
         data.ButtonShadowDark.Should().Be(SystemColors.ControlDarkDark);
         data.Highlight.Should().Be(SystemColors.ControlLightLight);
         data.WindowText.Should().Be(data.WindowFrame);
-        data.WindowDisabled.Should().Be(data.ButtonShadow);
+        if (SystemInformation.HighContrast)
+        {
+            data.WindowDisabled.Should().Be(SystemColors.GrayText);
+        }
+        else
+        {
+            data.WindowDisabled.Should().Be(data.ButtonShadow);
+        }
+
         if (data.ButtonFace.GetBrightness() < 0.5f)
         {
             data.ContrastButtonShadow.Should().Be(data.LowHighlight);
@@ -38,10 +46,10 @@ public class ButtonBaseAdapterTests
     [WinFormsFact]
     public void Button_Calculate_BackColorNotSystemControl_HighContrastFalse()
     {
-        using Bitmap bmp = new Bitmap(1, 1);
-        using Graphics g = Graphics.FromImage(bmp);
+        using Bitmap bmp = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bmp);
         Color backColor = Color.FromArgb(100, 120, 140);
-        ColorOptions options = new ColorOptions(g, Color.Black, backColor)
+        ColorOptions options = new ColorOptions(graphics, Color.Black, backColor)
         {
             Enabled = true
         };
@@ -52,7 +60,15 @@ public class ButtonBaseAdapterTests
         data.ButtonShadowDark.Should().Be(ControlPaint.DarkDark(backColor));
         data.Highlight.Should().Be(ControlPaint.LightLight(backColor));
         data.WindowText.Should().Be(data.WindowFrame);
-        data.WindowDisabled.Should().Be(data.ButtonShadow);
+        if (SystemInformation.HighContrast)
+        {
+            data.WindowDisabled.Should().Be(SystemColors.GrayText);
+        }
+        else
+        {
+            data.WindowDisabled.Should().Be(data.ButtonShadow);
+        }
+
         if (data.ButtonFace.GetBrightness() < 0.5f)
         {
             data.ContrastButtonShadow.Should().Be(data.LowHighlight);
@@ -71,10 +87,10 @@ public class ButtonBaseAdapterTests
             return;
         }
 
-        using Bitmap bmp = new Bitmap(1, 1);
-        using Graphics g = Graphics.FromImage(bmp);
+        using Bitmap bmp = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bmp);
         Color backColor = Color.FromArgb(100, 120, 140);
-        ColorOptions options = new ColorOptions(g, Color.Black, backColor)
+        ColorOptions options = new ColorOptions(graphics, Color.Black, backColor)
         {
             Enabled = true
         };
@@ -85,8 +101,14 @@ public class ButtonBaseAdapterTests
         data.ButtonShadowDark.Should().Be(ControlPaint.LightLight(backColor));
         data.Highlight.Should().Be(ControlPaint.LightLight(backColor));
         data.WindowText.Should().Be(data.WindowFrame);
-        data.WindowDisabled.Should().Be(SystemColors.GrayText);
-        data.Highlight.Should().Be(data.LowHighlight);
+        if (SystemInformation.HighContrast)
+        {
+            data.WindowDisabled.Should().Be(SystemColors.GrayText);
+        }
+        else
+        {
+            data.WindowDisabled.Should().Be(data.ButtonShadow);
+        }
     }
 
     [WinFormsFact]
@@ -97,10 +119,10 @@ public class ButtonBaseAdapterTests
             return;
         }
 
-        using Bitmap bmp = new Bitmap(1, 1);
-        using Graphics g = Graphics.FromImage(bmp);
+        using Bitmap bmp = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bmp);
         Color backColor = Color.FromArgb(100, 120, 140);
-        ColorOptions options = new ColorOptions(g, Color.Black, backColor)
+        ColorOptions options = new ColorOptions(graphics, Color.Black, backColor)
         {
             Enabled = false
         };
@@ -112,15 +134,23 @@ public class ButtonBaseAdapterTests
         data.Highlight.Should().Be(data.WindowDisabled);
         data.WindowFrame.Should().Be(data.WindowDisabled);
         data.WindowText.Should().Be(data.WindowDisabled);
+        if (SystemInformation.HighContrast)
+        {
+            data.WindowDisabled.Should().Be(SystemColors.GrayText);
+        }
+        else
+        {
+            data.WindowDisabled.Should().Be(data.ButtonShadow);
+        }
     }
 
     [WinFormsFact]
     public void Button_Calculate_LowButtonFace_And_LowHighlight()
     {
-        using Bitmap bmp = new Bitmap(1, 1);
-        using Graphics g = Graphics.FromImage(bmp);
+        using Bitmap bmp = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bmp);
         Color backColor = Color.FromArgb(10, 20, 30);
-        ColorOptions options = new ColorOptions(g, Color.Black, backColor)
+        ColorOptions options = new ColorOptions(graphics, Color.Black, backColor)
         {
             Enabled = true
         };
