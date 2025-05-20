@@ -544,25 +544,19 @@ public static partial class ToolStripManager
         }
     }
 
-    internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
+    internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode) => renderMode switch
     {
-        return renderMode switch
-        {
-            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
-    }
+        ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+        ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+        _ => new ToolStripSystemRenderer(isDefault: true),
+    };
 
-    internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
+    internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode) => renderMode switch
     {
-        return renderMode switch
-        {
-            ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
-    }
+        ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+        ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+        _ => new ToolStripSystemRenderer(isDefault: true),
+    };
 
     internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
         => t_activeToolStripPanels ??= [];
