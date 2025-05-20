@@ -248,7 +248,7 @@ public static partial class ToolStripManager
                 ToolStrip? activeToolStrip = GetActiveToolStripInternal();
                 if (activeToolStrip is not null)
                 {
-                    _toplevelToolStrip = activeToolStrip.GetToplevelOwnerToolStrip();
+                    _toplevelToolStrip = activeToolStrip.GetTopLevelOwnerToolStrip();
                 }
             }
 
