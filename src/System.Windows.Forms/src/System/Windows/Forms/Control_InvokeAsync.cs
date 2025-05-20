@@ -171,7 +171,7 @@ public partial class Control
 
         using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
-            BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
+            BeginInvoke(WrappedCallbackAsync);
             await completion.Task.ConfigureAwait(false);
         }
 
@@ -235,7 +235,7 @@ public partial class Control
 
         using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
-            BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
+            BeginInvoke(WrappedCallbackAsync);
             return await completion.Task.ConfigureAwait(false);
         }
 
