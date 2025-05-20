@@ -7,7 +7,7 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Provides system rendering for ToolStrip controls with support for dark mode.
+///  Provides system rendering for ToolStrip controls with support for dark mode.
 /// </summary>
 public class ToolStripSystemRenderer : ToolStripRenderer
 {
@@ -18,14 +18,14 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     private ToolStripRenderer? _toolStripDarkModeRenderer;
 
     /// <summary>
-    /// Initializes a new instance of the ToolStripSystemRenderer class.
+    ///  Initializes a new instance of the ToolStripSystemRenderer class.
     /// </summary>
     public ToolStripSystemRenderer()
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the ToolStripSystemRenderer class with the specified default state.
+    ///  Initializes a new instance of the ToolStripSystemRenderer class with the specified default state.
     /// </summary>
     /// <param name="isDefault">true if this is the default renderer; otherwise, false.</param>
     internal ToolStripSystemRenderer(bool isDefault) : base(isDefault)
@@ -33,7 +33,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Gets the HighContrastRenderer for accessibility support.
+    ///  Gets the HighContrastRenderer for accessibility support.
     /// </summary>
     internal ToolStripRenderer HighContrastRenderer
     {
@@ -45,7 +45,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Gets the DarkModeRenderer for dark mode support.
+    ///  Gets the DarkModeRenderer for dark mode support.
     /// </summary>
     internal ToolStripRenderer DarkModeRenderer
     {
@@ -57,7 +57,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// Gets the renderer that should be used based on current display settings.
+    ///  Gets the renderer that should be used based on current display settings.
     /// </summary>
     internal override ToolStripRenderer? RendererOverride
     {
