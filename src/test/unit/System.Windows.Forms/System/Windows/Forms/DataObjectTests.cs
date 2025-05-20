@@ -3130,6 +3130,76 @@ public partial class DataObjectTests
         data.GetData(format).Should().Be(testData);
     }
 
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void TryGetData_MemoryStream_ReturnsRawData(string format)
+    {
+        // Prepare test data
+        byte[] testData = [1, 2, 3, 4, 5];
+        
+        // Set data in DataObject
+        DataObject data = new();
+        data.SetData(format, testData);
+        
+        // Try to get the data as a MemoryStream
+        data.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // Verify the stream contains the original data
+        byte[] retrievedData = new byte[stream!.Length];
+        stream.Position = 0;
+        stream.Read(retrievedData, 0, retrievedData.Length);
+        retrievedData.Should().BeEquivalentTo(testData);
+    }
+    
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void TryGetData_SerializationRecord_DecodesNrbfData(string format)
+    {
+        // Test only with BinaryFormatter enabled to ensure NRBF serialization
+        using BinaryFormatterScope scope = new(enable: true);
+        
+        // Prepare test data
+        SimpleTestData testData = new() { X = 10, Y = 20 };
+        
+        // Set data in DataObject
+        DataObject data = new();
+        data.SetData(format, testData);
+        
+        // Try to get the data as a SerializationRecord
+        data.TryGetData(format, out SerializationRecord? record).Should().BeTrue();
+        record.Should().NotBeNull();
+        
+        // Verify the SerializationRecord contains the original type info
+        record!.TypeName.FullName.Should().Be(typeof(SimpleTestData).FullName);
+    }
+    
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void SetDataAsJson_TryGetData_MemoryStream_ReturnsJsonRawData(string format)
+    {
+        // Prepare test data
+        SimpleTestData testData = new() { X = 30, Y = 40 };
+        
+        // Set JSON data in DataObject
+        DataObject data = new();
+        data.SetDataAsJson(format, testData);
+        
+        // Try to get the data as a MemoryStream
+        data.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // The stream should contain valid data
+        stream!.Length.Should().BeGreaterThan(0);
+        
+        // Reset position for NRBF decoding
+        stream.Position = 0;
+        
+        // Verify it contains a SerializationRecord with JsonData format
+        SerializationRecord record = stream.DecodeNrbf();
+        record.TypeName.AssemblyName?.FullName.Should().Be(IJsonData.CustomAssemblyName);
+    }
+
     [WinFormsFact]
     public void SetDataAsJson_WrongType_ReturnsNull()
     {

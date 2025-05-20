@@ -1377,4 +1377,95 @@ public class ClipboardTests
         public string Name { get; set; } = "DefaultName";
         public int Age { get; set; }
     }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TryGetData_MemoryStream_ReturnsRawData(bool copy)
+    {
+        // Prepare test data
+        byte[] testBytes = [1, 2, 3, 4, 5];
+        string format = "CustomFormat";
+        
+        // Set data on clipboard
+        DataObject dataObject = new();
+        dataObject.SetData(format, testBytes);
+        Clipboard.SetDataObject(dataObject, copy);
+
+        // Ask for raw data as MemoryStream
+        Clipboard.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // Verify we get the exact raw data
+        byte[] retrievedBytes = new byte[stream!.Length];
+        stream.Position = 0;
+        stream.Read(retrievedBytes, 0, retrievedBytes.Length);
+        retrievedBytes.Should().BeEquivalentTo(testBytes);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TryGetData_SerializationRecord_DecodesNrbfData(bool copy)
+    {
+        // Prepare test data - this will be serialized with NRBF by the framework
+        SimpleTestData testData = new() { X = 10, Y = 20 };
+        string format = "SerializedData";
+        
+        // Set data on clipboard with BinaryFormatter enabled to ensure NRBF serialization
+        using BinaryFormatterScope scope = new(enable: true);
+        Clipboard.SetData(format, testData);
+
+        // Ask for the SerializationRecord directly
+        Clipboard.TryGetData(format, out SerializationRecord? record).Should().BeTrue();
+        record.Should().NotBeNull();
+        
+        // Verify the SerializationRecord contains the expected data
+        record!.TypeName.FullName.Should().Be(typeof(SimpleTestData).FullName);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TryGetData_MemoryStream_FromJsonData_ReturnsRawData(bool copy)
+    {
+        // Prepare test data - JSON serialized data
+        SimpleTestData testData = new() { X = 30, Y = 40 };
+        string format = "JsonData";
+        
+        // Set JSON data on clipboard
+        Clipboard.SetDataAsJson(format, testData);
+        
+        // Ask for the raw memory stream
+        Clipboard.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // The stream should contain the binary format of JsonData<SimpleTestData>
+        stream!.Position = 0;
+        SerializationRecord record = stream.DecodeNrbf();
+        record.Should().NotBeNull();
+        
+        // Verify it's a JsonData type
+        record.TypeName.AssemblyName?.FullName.Should().Be(IJsonData.CustomAssemblyName);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void SetDataObject_WithMemoryStream_TryGetDataReturnsOriginalStream(bool copy)
+    {
+        // Prepare a MemoryStream to store on clipboard
+        byte[] testBytes = [10, 20, 30, 40, 50];
+        MemoryStream originalStream = new(testBytes);
+        string format = "StreamData";
+        
+        // Set data on clipboard
+        DataObject dataObject = new();
+        dataObject.SetData(format, originalStream);
+        Clipboard.SetDataObject(dataObject, copy);
+
+        // Try to get back the data as the original MemoryStream
+        Clipboard.TryGetData(format, out MemoryStream? retrievedStream).Should().BeTrue();
+        retrievedStream.Should().NotBeNull();
+        
+        // Verify the stream contains the original data
+        byte[] retrievedBytes = retrievedStream!.ToArray();
+        retrievedBytes.Should().BeEquivalentTo(testBytes);
+    }
 }

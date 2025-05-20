@@ -75,6 +75,48 @@ public class ClipboardComTests
 
     private class DerivedDataObject : DataObject { }
 
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_TryGetData_MemoryStream_ReturnsRawData(bool copy)
+    {
+        // Prepare test data
+        byte[] testBytes = [1, 2, 3, 4, 5];
+        string format = "CustomFormat";
+        
+        // Set data on clipboard
+        DataObject dataObject = new();
+        dataObject.SetData(format, testBytes);
+        Clipboard.SetDataObject(dataObject, copy);
+
+        // Ask for raw data as MemoryStream
+        Clipboard.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // Verify we get the exact raw data
+        byte[] retrievedBytes = new byte[stream!.Length];
+        stream.Position = 0;
+        stream.Read(retrievedBytes, 0, retrievedBytes.Length);
+        retrievedBytes.Should().BeEquivalentTo(testBytes);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetData_MemoryStream_FromJsonData_ReturnsRawData()
+    {
+        // Prepare test data - JSON serialized data
+        SimpleTestData testData = new() { X = 30, Y = 40 };
+        string format = "JsonData";
+        
+        // Set JSON data on clipboard
+        Clipboard.SetDataAsJson(format, testData);
+        
+        // Ask for the raw memory stream
+        Clipboard.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
+        stream.Should().NotBeNull();
+        
+        // The stream should contain valid data
+        stream!.Length.Should().BeGreaterThan(0);
+    }
+
     private class CustomDataObject : IDataObject, ComTypes.IDataObject
     {
         [DllImport("shell32.dll")]
