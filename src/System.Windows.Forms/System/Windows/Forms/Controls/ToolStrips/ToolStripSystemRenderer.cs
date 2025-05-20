@@ -527,7 +527,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, fillRect);
                     }
-                    else if (!ToolStripManager.VisualStylesEnabled && item.RawBackColor != Color.Empty)
+                    else if (!(ToolStripManager.VisualStylesEnabled || item.RawBackColor == Color.Empty))
                     {
                         FillBackground(g, fillRect, item.BackColor);
                     }
