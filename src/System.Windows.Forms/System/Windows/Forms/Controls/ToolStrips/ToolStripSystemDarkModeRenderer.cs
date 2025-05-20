@@ -114,7 +114,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <param name="toolStrip">The ToolStrip to check.</param>
     /// <returns>true if the background should be painted; otherwise, false.</returns>
     private static bool ShouldPaintBackground(ToolStrip toolStrip)
-        => toolStrip is null || toolStrip.BackgroundImage is null;
+        => toolStrip?.BackgroundImage is null;
 
     /// <summary>
     ///  Fills the background with the specified color.
