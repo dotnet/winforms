@@ -544,25 +544,19 @@ public static partial class ToolStripManager
         }
     }
 
-    internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
+    internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode) => renderMode switch
     {
-        return renderMode switch
-        {
-            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
-    }
+        ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+        ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+        _ => new ToolStripSystemRenderer(isDefault: true),
+    };
 
-    internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
+    internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode) => renderMode switch
     {
-        return renderMode switch
-        {
-            ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
-    }
+        ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+        ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+        _ => new ToolStripSystemRenderer(isDefault: true),
+    };
 
     internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
         => t_activeToolStripPanels ??= [];
@@ -825,7 +819,7 @@ public static partial class ToolStripManager
                 // Make sure that were processing shortcuts for the correct window.
                 // since the shortcut lookup is faster than this check we've postponed this to the last
                 // possible moment.
-                ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
+                ToolStrip? topMostToolStrip = toolStrip.GetTopLevelOwnerToolStrip();
                 if (topMostToolStrip is not null && activeControl is not null)
                 {
                     HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
