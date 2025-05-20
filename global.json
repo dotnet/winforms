@@ -11,8 +11,7 @@
     }
   },
   "sdk": {
-    "version": "8.0.115",
-    "rollForward": "latestMajor"
+    "version": "10.0.100-preview.5.25265.106"
   },
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "10.0.0-beta.25267.102",
