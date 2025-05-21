@@ -960,15 +960,15 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal ButtonBaseAdapter Adapter
     {
         get
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (_adapter is null
                 || FlatStyle != _cachedAdapterType)
             {
-                if (Application.IsDarkModeEnabled)
+                if (Application.IsDarkModeEnabled && this is Button)
                 {
                     _adapter = CreateDarkModeAdapter();
                 }
