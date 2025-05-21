@@ -6,47 +6,83 @@ using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms;
 
+/// <summary>
+/// Provides system rendering for ToolStrip controls with support for dark mode.
+/// </summary>
 public class ToolStripSystemRenderer : ToolStripRenderer
 {
     [ThreadStatic]
     private static VisualStyleRenderer? t_renderer;
-    private ToolStripRenderer? _toolStripHighContrastRenderer;
 
+    private ToolStripRenderer? _toolStripHighContrastRenderer;
+    private ToolStripRenderer? _toolStripDarkModeRenderer;
+
+    /// <summary>
+    /// Initializes a new instance of the ToolStripSystemRenderer class.
+    /// </summary>
     public ToolStripSystemRenderer()
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the ToolStripSystemRenderer class with the specified default state.
+    /// </summary>
+    /// <param name="isDefault">true if this is the default renderer; otherwise, false.</param>
     internal ToolStripSystemRenderer(bool isDefault) : base(isDefault)
     {
     }
 
-    internal override ToolStripRenderer? RendererOverride
-    {
-        get
-        {
-            if (DisplayInformation.HighContrast)
-            {
-                return HighContrastRenderer;
-            }
-
-            return null;
-        }
-    }
-
+    /// <summary>
+    /// Gets the HighContrastRenderer for accessibility support.
+    /// </summary>
     internal ToolStripRenderer HighContrastRenderer
     {
         get
         {
-            // If system in high contrast mode 'false' flag should be passed to render filled selected button background.
-            // This is in consistence with ToolStripProfessionalRenderer.
             _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
-
             return _toolStripHighContrastRenderer;
         }
     }
 
     /// <summary>
-    ///  Draw the background color
+    /// Gets the DarkModeRenderer for dark mode support.
+    /// </summary>
+    internal ToolStripRenderer DarkModeRenderer
+    {
+        get
+        {
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: false);
+            return _toolStripDarkModeRenderer;
+        }
+    }
+
+    /// <summary>
+    /// Gets the renderer that should be used based on current display settings.
+    /// </summary>
+    internal override ToolStripRenderer? RendererOverride
+    {
+        get
+        {
+            // First, check for high contrast mode (accessibility takes precedence)
+            if (DisplayInformation.HighContrast)
+            {
+                return HighContrastRenderer;
+            }
+
+            // Then check for dark mode
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                return DarkModeRenderer;
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    ///  Get the Visual Style Renderer. This is used to draw the background of the ToolStrip.
     /// </summary>
     private static VisualStyleRenderer? VisualStyleRenderer
     {
@@ -182,6 +218,18 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     /// </summary>
     protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
     {
+        // It is not entirely clear, why we're not leaving it to the respective renderers
+        // what to do here, but for keeping as much as possible of the original behavior,
+        // we need to check if the renderer override is set, test for particular renderer types
+        // and then decide what to do.
+        if (RendererOverride is ToolStripSystemDarkModeRenderer darkModeRenderer
+            && darkModeRenderer.IsSystemDefaultAlternative)
+        {
+            base.OnRenderToolStripBackground(e);
+
+            return;
+        }
+
         ToolStrip toolStrip = e.ToolStrip;
         Graphics g = e.Graphics;
         Rectangle bounds = e.AffectedBounds;
@@ -203,19 +251,24 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else if (DisplayInformation.LowResolution)
             {
-                FillBackground(g, bounds, (toolStrip is ToolStripDropDown) ? SystemColors.ControlLight : e.BackColor);
+                FillBackground(g, bounds, toolStrip is ToolStripDropDown
+                     ? SystemColors.ControlLight
+                     : e.BackColor);
             }
             else if (toolStrip.IsDropDown)
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                     e.BackColor : SystemColors.Menu);
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                    ? SystemColors.Menu
+                    : e.BackColor);
             }
             else if (toolStrip is MenuStrip)
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                           e.BackColor : SystemColors.MenuBar);
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                    ? SystemColors.MenuBar
+                    : e.BackColor);
             }
-            else if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Band.Normal))
+            else if (ToolStripManager.VisualStylesEnabled
+                && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Band.Normal))
             {
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
                 vsRenderer.SetParameters(VisualStyleElement.ToolBar.Bar.Normal);
@@ -223,8 +276,9 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else
             {
-                FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
-                                           e.BackColor : SystemColors.MenuBar);
+                FillBackground(g, bounds, ToolStripManager.VisualStylesEnabled
+                    ? SystemColors.MenuBar
+                    : e.BackColor);
             }
         }
     }
@@ -279,7 +333,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         Rectangle bounds = new(Point.Empty, e.GripBounds.Size);
         bool verticalGrip = e.GripDisplayStyle == ToolStripGripDisplayStyle.Vertical;
 
-        if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
+        if (ToolStripManager.VisualStylesEnabled
+            && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
         {
             VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
 
@@ -521,11 +576,18 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         Graphics g = e.Graphics;
 
         bool rightToLeft = splitButton.RightToLeft == RightToLeft.Yes;
-        Color arrowColor = splitButton.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
+        Color arrowColor = splitButton.Enabled
+            ? SystemColors.ControlText
+            : SystemColors.ControlDark;
 
         // in right to left - we need to swap the parts so we don't draw  v][ toolStripSplitButton
-        VisualStyleElement splitButtonDropDownPart = rightToLeft ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
-        VisualStyleElement splitButtonPart = rightToLeft ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
+        VisualStyleElement splitButtonDropDownPart = rightToLeft
+            ? VisualStyleElement.ToolBar.SplitButton.Normal
+            : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
+
+        VisualStyleElement splitButtonPart = rightToLeft
+            ? VisualStyleElement.ToolBar.DropDownButton.Normal
+            : VisualStyleElement.ToolBar.SplitButton.Normal;
 
         if (ToolStripManager.VisualStylesEnabled
             && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)
@@ -536,10 +598,10 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             // Draw the SplitButton Button portion of it.
             vsRenderer.SetParameters(splitButtonPart.ClassName, splitButtonPart.Part, GetSplitButtonItemState(splitButton));
 
-            // the lovely Windows theming for split button comes in three pieces:
+            // the Windows theming for split button comes in three pieces:
             //  SplitButtonDropDown: [ v |
-            //  Separator:                |
-            //  SplitButton:               |  ]
+            //  Separator:               |
+            //  SplitButton:             |  ]
             // this is great except if you want to swap the button in RTL. In this case we need
             // to use the DropDownButton instead of the SplitButtonDropDown and paint the arrow ourselves.
             Rectangle splitButtonBounds = splitButton.ButtonBounds;
