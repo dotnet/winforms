@@ -45,7 +45,8 @@ public class DomainItemAccessibleObjectTests
     {
         DomainUpDown.DomainItemAccessibleObject obj = new("test", parent: null!);
         int[] runtimeId = obj.RuntimeId;
-        runtimeId.Should().NotBeNull();
+
+        runtimeId.Should().BeOfType<int[]>();
         runtimeId.Length.Should().Be(2);
         runtimeId[0].Should().Be(AccessibleObject.RuntimeIDFirstItem);
         runtimeId[1].Should().Be(obj.GetHashCode());
