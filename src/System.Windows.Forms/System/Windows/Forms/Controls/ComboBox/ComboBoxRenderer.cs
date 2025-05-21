@@ -14,7 +14,15 @@ public static class ComboBoxRenderer
     // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
-    private static readonly VisualStyleElement s_comboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    private static readonly VisualStyleElement s_comboBoxElement = Application.IsDarkModeEnabled
+        ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::{Control.ComboboxClassIdentifier}", 1, 1)
+        : VisualStyleElement.ComboBox.DropDownButton.Normal;
+
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     private static readonly VisualStyleElement s_textBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
     /// <summary>
