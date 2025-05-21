@@ -810,6 +810,7 @@ public unsafe partial class Control :
             {
                 Properties.RemoveValue(s_dataContextProperty);
                 OnDataContextChanged(EventArgs.Empty);
+
                 return;
             }
 
@@ -7328,6 +7329,18 @@ public unsafe partial class Control :
                 SetWindowFont();
             }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                HRESULT result = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+
+                Debug.Assert(result.Succeeded, "SetWindowTheme failed with HRESULT: " + result);
+            }
+#pragma warning restore WFO5001
+
             HandleHighDpi();
 
             // Restore drag drop status. Ole Initialize happens when the ThreadContext in Application is created.
@@ -7360,16 +7373,6 @@ public unsafe partial class Control :
             {
                 PInvoke.SetWindowText(this, _text);
             }
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
-            {
-                _ = PInvoke.SetWindowTheme(
-                    hwnd: HWND,
-                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
-                    pszSubIdList: null);
-            }
-#pragma warning restore WFO5001
 
             if (this is not ScrollableControl
                 && !IsMirrored
@@ -10366,7 +10369,9 @@ public unsafe partial class Control :
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }
 
-                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
+                    PInvoke.ShowWindow(HWND, value
+                        ? ShowParams
+                        : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
 #pragma warning restore WFO5001
@@ -10378,6 +10383,7 @@ public unsafe partial class Control :
 
                 SetState(States.Visible, value);
                 fireChange = true;
+
                 try
                 {
                     if (value)
@@ -10386,14 +10392,19 @@ public unsafe partial class Control :
                     }
 
                     PInvoke.SetWindowPos(
-                        this,
-                        HWND.Null,
-                        0, 0, 0, 0,
-                        SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                        hWnd: this,
+                        hWndInsertAfter: HWND.Null,
+                        X: 0,
+                        Y: 0,
+                        cx: 0,
+                        cy: 0,
+                        uFlags: SET_WINDOW_POS_FLAGS.SWP_NOSIZE
                             | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
                             | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
                             | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
-                            | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
+                            | (value
+                                ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW
+                                : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
                 }
                 catch
                 {
@@ -10447,27 +10458,30 @@ public unsafe partial class Control :
             if (IsHandleCreated)
             {
                 PInvoke.SetWindowPos(
-                    this,
-                    HWND.HWND_TOP,
-                    0, 0, 0, 0,
-                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                    hWnd: this,
+                    hWndInsertAfter: HWND.HWND_TOP,
+                    X: 0,
+                    Y: 0,
+                    cx: 0,
+                    cy: 0,
+                    uFlags: SET_WINDOW_POS_FLAGS.SWP_NOSIZE
                         | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
                         | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
                         | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
         }
+    }
 
-        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
-        {
-            BOOL value = darkModeEnabled;
+    private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+    {
+        BOOL value = darkModeEnabled;
 
-            PInvoke.DwmSetWindowAttribute(
-                hwnd,
-                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                &value,
-                (uint)sizeof(BOOL)).AssertSuccess();
-        }
+        PInvoke.DwmSetWindowAttribute(
+            hwnd,
+            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &value,
+            (uint)sizeof(BOOL)).AssertSuccess();
     }
 
     /// <summary>
