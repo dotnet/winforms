@@ -70,14 +70,7 @@ public partial class StatusStrip : ToolStrip
         {
             if (Orientation == Orientation.Horizontal)
             {
-                if (RightToLeft == RightToLeft.No)
-                {
-                    return new Padding(1, 0, 14, 0);
-                }
-                else
-                {
-                    return new Padding(14, 0, 1, 0);
-                }
+                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 14, 0) : new Padding(14, 0, 1, 0);
             }
             else
             {
@@ -208,14 +201,9 @@ public partial class StatusStrip : ToolStrip
                 // the orientation could change.
                 int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
 
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    return new Rectangle(0, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
-                }
-                else
-                {
-                    return new Rectangle(statusStripSize.Width - GripWidth, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
-                }
+                return RightToLeft == RightToLeft.Yes
+                    ? new Rectangle(0, statusStripSize.Height - gripHeight, GripWidth, gripHeight)
+                    : new Rectangle(statusStripSize.Width - GripWidth, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
             }
 
             return Rectangle.Empty;
@@ -303,14 +291,9 @@ public partial class StatusStrip : ToolStrip
                 proposedSize.Height = int.MaxValue;
             }
 
-            if (Orientation == Orientation.Horizontal)
-            {
-                return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
-            }
-            else
-            {
-                return GetPreferredSizeVertical(this) + Padding.Size;
-            }
+            return Orientation == Orientation.Horizontal
+                ? GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size
+                : GetPreferredSizeVertical(this) + Padding.Size;
         }
 
         return base.GetPreferredSizeCore(proposedSize);
@@ -584,15 +567,9 @@ public partial class StatusStrip : ToolStrip
                     PInvokeCore.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
 
                     // map the size grip FROM statusStrip coords TO the toplevel window coords.
-                    Point gripLocation;
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
-                    }
-                    else
-                    {
-                        gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
-                    }
+                    Point gripLocation = RightToLeft == RightToLeft.Yes
+                        ? new Point(SizeGripBounds.Left, SizeGripBounds.Bottom)
+                        : new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
 
                     PInvokeCore.MapWindowPoints(this, rootHwnd, ref gripLocation);
 

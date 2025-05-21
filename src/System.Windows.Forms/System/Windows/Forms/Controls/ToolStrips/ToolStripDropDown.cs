@@ -908,7 +908,7 @@ public partial class ToolStripDropDown : ToolStrip
 
     private void CancelAutoExpand()
     {
-        ToolStrip? toplevelOwnerToolStrip = GetToplevelOwnerToolStrip();
+        ToolStrip? toplevelOwnerToolStrip = GetTopLevelOwnerToolStrip();
         toplevelOwnerToolStrip?.MenuAutoExpand = false;
     }
 
@@ -1051,7 +1051,7 @@ public partial class ToolStripDropDown : ToolStrip
     /// <summary>
     ///  Returns the ToolStrip from which all the dropdowns started from. This can be null.
     /// </summary>
-    internal override ToolStrip? GetToplevelOwnerToolStrip()
+    internal override ToolStrip? GetTopLevelOwnerToolStrip()
     {
         ToolStripDropDown topmost = GetFirstDropDown();
         return (topmost.OwnerItem is null) ? null : topmost.OwnerToolStrip;
@@ -1306,7 +1306,7 @@ public partial class ToolStripDropDown : ToolStrip
 
                 if (closeOnHorizontalKey)
                 {
-                    ToolStrip? toplevelToolStrip = GetToplevelOwnerToolStrip();
+                    ToolStrip? toplevelToolStrip = GetTopLevelOwnerToolStrip();
                     ToolStripItem? rootItem = GetToplevelOwnerItem();
 
                     // This is the case where you need to open up the adjacent DropDown (File->Edit) menus because:
@@ -1356,7 +1356,7 @@ public partial class ToolStripDropDown : ToolStrip
         {
             SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
             DismissAll();
-            ToolStrip? toplevel = GetToplevelOwnerToolStrip();
+            ToolStrip? toplevel = GetTopLevelOwnerToolStrip();
             if (toplevel is not null)
             {
                 toplevel.RestoreFocusInternal();
@@ -1662,7 +1662,7 @@ public partial class ToolStripDropDown : ToolStrip
                             DismissActiveDropDowns();
 
                             // Make sure we cancel auto expansion on the root
-                            ToolStrip? topLevelToolStrip = GetToplevelOwnerToolStrip();
+                            ToolStrip? topLevelToolStrip = GetTopLevelOwnerToolStrip();
                             ToolStrip? parentToolStrip = OwnerItem?.ParentInternal;
 
                             // We don't consider reason == ToolStripDropDownCloseReason.Keyboard here.
@@ -1750,7 +1750,7 @@ public partial class ToolStripDropDown : ToolStrip
                             // intersection with the toplevel toolstrip
                             if (!DesignMode && IsFirstDropDown && OwnerItem is not null && TopLevel)
                             {
-                                ToolStrip? toolStrip = GetToplevelOwnerToolStrip();
+                                ToolStrip? toolStrip = GetTopLevelOwnerToolStrip();
                                 if (toolStrip is not null && !(toolStrip.IsDisposed || toolStrip.Disposing))
                                 {
                                     // translate the bounds (already in screen coords) to toolstrip.

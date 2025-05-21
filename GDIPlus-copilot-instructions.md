@@ -72,7 +72,7 @@ private PenCache.Scope GetHighlightPenScope()
 
 ### 2.1 When to Use GraphicsInternal
 
-Always prefer `GraphicsInternal` over `Graphics` for performance improvements:
+Always prefer `GraphicsInternal` over `Graphics` for performance improvements.
 
 ```csharp
 // INCORRECT: Using Graphics directly
@@ -96,6 +96,8 @@ From the `PaintEventArgs` class:
 /// </summary>
 internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal(SaveStateIfNeeded);
 ```
+
+IMPORTANT: While using `GraphicsInternal` should be used directly for performance improvements, avoid passing it around, since he callee would not be able to recognize the `GraphicsInternal` type.
 
 ### 2.2 State Management
 
