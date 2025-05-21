@@ -920,24 +920,24 @@ public class ToolStripSystemRenderer : ToolStripRenderer
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
     {
-        Graphics graphics = e.Graphics;
-
-        if (Application.RenderWithVisualStyles)
+        if (!Application.IsDarkModeEnabled && Application.RenderWithVisualStyles)
         {
             VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
             vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
-            vsRenderer.DrawBackground(graphics, new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1));
+            vsRenderer.DrawBackground(e.Graphics, new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1));
         }
         else
         {
             if (!SystemInformation.InLockedTerminalSession())
             {
-                graphics.Clear(e.BackColor);
+                e.Graphics.Clear(e.BackColor);
             }
         }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private static void RenderLabelInternal(ToolStripItemRenderEventArgs e)
     {
