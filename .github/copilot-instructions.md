@@ -423,6 +423,16 @@ using Pen focusPen = new(focusColor) // Use 'using' with type name and omit type
 
 - **Don't XML-comment local functions**, as this is not supported. Instead, be more verbose in a comment if the local function's purpose is not immediately obvious.
 
+- **Use `<inheritdoc/>` for inherited members** to avoid duplication and ensure consistency in documentation.
+  ```csharp
+  /// <inheritdoc/>
+  public override void OnClick(EventArgs e)
+  {
+      base.OnClick(e);
+      // Additional logic here
+  }
+  ```
+
 ### 1.9 File Structure and Formatting
 
 - **Use file-scoped namespaces**
