@@ -110,7 +110,8 @@ public class StandardMenuStripVerbTests : IDisposable
     {
         StandardMenuStripVerb standardMenuStripVerb = new(_designer);
         standardMenuStripVerb.Should().BeOfType<StandardMenuStripVerb>();
-        standardMenuStripVerb.TestAccessor().Dynamic._designer.Should().Be(_designer);
+        ToolStripDesigner toolStripDesigner = standardMenuStripVerb.TestAccessor().Dynamic._designer;
+        toolStripDesigner.Should().Be(_designer);
     }
 
     [WinFormsFact]

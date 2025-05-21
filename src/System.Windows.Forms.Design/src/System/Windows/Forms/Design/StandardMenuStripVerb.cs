@@ -28,8 +28,8 @@ internal class StandardMenuStripVerb
     internal StandardMenuStripVerb(ToolStripDesigner designer)
     {
         Debug.Assert(designer is not null, "Can't have a StandardMenuStripVerb without an associated designer");
-        _designer = designer;
-        _provider = designer.Component.Site;
+        _designer = designer.OrThrowIfNull();
+        _provider = designer.Component.Site.OrThrowIfNull();
         _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
         _changeService = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
     }
