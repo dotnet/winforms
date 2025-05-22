@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///   This renderer is designed to be used with the ToolStripSystemRenderer to provide dark mode
 ///   styling while maintaining accessibility features. It inherits from ToolStripRenderer
 ///   and overrides necessary methods to provide dark-themed rendering.
-///   </para>
+///  </para>
 /// </remarks>
 internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
 {
@@ -41,80 +41,51 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// </summary>
     /// <param name="color">The color to convert to a dark mode equivalent.</param>
     /// <returns>A color suitable for dark mode.</returns>
-    private static Color GetDarkModeColor(Color color)
-    {
-        // Map system colors to some slightly different colors we would get
-        // form the actual system colors in dark mode, since the visual style
-        // renderer in light mode would also not "hit" (for contrast and styling
-        // reasons) the exact same palette settings as the system colors.
-        if (color == SystemColors.Control)
-            return Color.FromArgb(45, 45, 45);
-        if (color == SystemColors.ControlLight)
-            return Color.FromArgb(60, 60, 60);
-        if (color == SystemColors.ControlDark)
-            return Color.FromArgb(30, 30, 30);
-        if (color == SystemColors.ControlText)
-            return Color.FromArgb(240, 240, 240);
-        if (color == SystemColors.ButtonFace)
-            return Color.FromArgb(45, 45, 45);
-        if (color == SystemColors.Highlight)
-            return Color.FromArgb(0, 120, 215);
-        if (color == SystemColors.HighlightText)
-            return Color.White;
-        if (color == SystemColors.Window)
-            return Color.FromArgb(32, 32, 32);
-        if (color == SystemColors.WindowText)
-            return Color.FromArgb(240, 240, 240);
-        if (color == SystemColors.GrayText)
-            return Color.FromArgb(153, 153, 153);
-        if (color == SystemColors.InactiveBorder)
-            return Color.FromArgb(70, 70, 70);
-        if (color == SystemColors.ButtonHighlight)
-            return Color.FromArgb(80, 80, 80);
-        if (color == SystemColors.ButtonShadow)
-            return Color.FromArgb(20, 20, 20);
-        if (color == SystemColors.Menu)
-            return Color.FromArgb(45, 45, 45);
-        if (color == SystemColors.MenuText)
-            return Color.FromArgb(240, 240, 240);
-
-        // For any other colors, darken them if they're bright
-        if (color.GetBrightness() > 0.5)
+    private static Color GetDarkModeColor(Color color) =>
+        color switch
         {
-            // Create a darker version for light colors
-            return ControlPaint.Dark(color, 0.2f);
-        }
-
-        return color;
-    }
+            Color c when c == SystemColors.Control => Color.FromArgb(45, 45, 45),
+            Color c when c == SystemColors.ControlLight => Color.FromArgb(60, 60, 60),
+            Color c when c == SystemColors.ControlDark => Color.FromArgb(30, 30, 30),
+            Color c when c == SystemColors.ControlText => Color.FromArgb(240, 240, 240),
+            Color c when c == SystemColors.ButtonFace => Color.FromArgb(45, 45, 45),
+            Color c when c == SystemColors.Highlight => Color.FromArgb(0, 120, 215),
+            Color c when c == SystemColors.HighlightText => Color.White,
+            Color c when c == SystemColors.Window => Color.FromArgb(32, 32, 32),
+            Color c when c == SystemColors.WindowText => Color.FromArgb(240, 240, 240),
+            Color c when c == SystemColors.GrayText => Color.FromArgb(153, 153, 153),
+            Color c when c == SystemColors.InactiveBorder => Color.FromArgb(70, 70, 70),
+            Color c when c == SystemColors.ButtonHighlight => Color.FromArgb(80, 80, 80),
+            Color c when c == SystemColors.ButtonShadow => Color.FromArgb(20, 20, 20),
+            Color c when c == SystemColors.Menu => Color.FromArgb(45, 45, 45),
+            Color c when c == SystemColors.MenuText => Color.FromArgb(240, 240, 240),
+            _ when color.GetBrightness() > 0.5 => ControlPaint.Dark(color, 0.2f),
+            _ => color
+        };
 
     /// <summary>
-    ///  Creates a dark mode compatible brush. Important:
-    ///  Always do: `using var brush = GetDarkModeBrush(color)`,
-    ///  since you're dealing with a cached brush => scope, really!
+    ///  Creates a dark mode compatible brush. Always use 'using var brush = GetDarkModeBrush(color)'.
     /// </summary>
     /// <param name="color">The system color to convert.</param>
     /// <returns>A brush with the dark mode color.</returns>
-    private static SolidBrushCache.Scope GetDarkModeBrush(Color color)
-        => GetDarkModeColor(color).GetCachedSolidBrushScope();
+    private static SolidBrushCache.Scope GetDarkModeBrush(Color color) =>
+        GetDarkModeColor(color).GetCachedSolidBrushScope();
 
     /// <summary>
-    ///  Creates a dark mode compatible pen. Important:
-    ///  Always do: `using var somePen = GetDarkModePen(color)`,
-    ///  since you're dealing with a cached pen => scope, really!
+    ///  Creates a dark mode compatible pen. Always use 'using var pen = GetDarkModePen(color)'.
     /// </summary>
     /// <param name="color">The system color to convert.</param>
     /// <returns>A pen with the dark mode color.</returns>
-    private static PenCache.Scope GetDarkModePen(Color color)
-        => GetDarkModeColor(color).GetCachedPenScope();
+    private static PenCache.Scope GetDarkModePen(Color color) =>
+        GetDarkModeColor(color).GetCachedPenScope();
 
     /// <summary>
     ///  Returns whether the background should be painted.
     /// </summary>
     /// <param name="toolStrip">The ToolStrip to check.</param>
     /// <returns>true if the background should be painted; otherwise, false.</returns>
-    private static bool ShouldPaintBackground(ToolStrip toolStrip)
-        => toolStrip?.BackgroundImage is null;
+    private static bool ShouldPaintBackground(ToolStrip toolStrip) =>
+        toolStrip?.BackgroundImage is null;
 
     /// <summary>
     ///  Fills the background with the specified color.
@@ -125,9 +96,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     private static void FillBackground(Graphics g, Rectangle bounds, Color backColor)
     {
         if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
             return;
+        }
 
-        // Use a dark mode color
         using var brush = GetDarkModeBrush(backColor);
         g.FillRectangle(brush, bounds);
     }
@@ -145,7 +117,9 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Rectangle bounds = e.AffectedBounds;
 
         if (!ShouldPaintBackground(toolStrip))
+        {
             return;
+        }
 
         if (toolStrip is StatusStrip)
         {
@@ -200,12 +174,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         {
             RenderStatusStripBorder(e);
         }
-        else if (toolStrip is ToolStripDropDown)
+        else if (toolStrip is ToolStripDropDown toolStripDropDown)
         {
-            ToolStripDropDown? toolStripDropDown = toolStrip as ToolStripDropDown;
-
-            Debug.Assert(toolStripDropDown is not null, $"ToolStripDropDown cannot be null in {nameof(OnRenderToolStripBorder)}.");
-
             if (toolStripDropDown.DropShadowEnabled)
             {
                 bounds.Width -= 1;
@@ -222,7 +192,6 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         }
         else
         {
-            // Draw a subtle bottom border for toolstrips
             using var borderPen = GetDarkModePen(SystemColors.ControlDark);
             g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
         }
@@ -237,7 +206,6 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Graphics g = e.Graphics;
         Rectangle bounds = e.ToolStrip.ClientRectangle;
 
-        // Dark mode StatusStrip border (usually top border only)
         using var borderPen = GetDarkModePen(SystemColors.ControlDark);
         g.DrawLine(borderPen, 0, 0, bounds.Width, 0);
     }
@@ -250,9 +218,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+        Rectangle bounds = new(Point.Empty, e.Item.Size);
 
-        // For items on dropdowns, adjust the bounds
         if (e.Item.IsOnDropDown)
         {
             bounds.X += 2;
@@ -271,12 +238,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             if (e.Item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(
-                    e.Graphics,
-                    e.Item.BackgroundImage,
-                    GetDarkModeColor(e.Item.BackColor),
-                    e.Item.BackgroundImageLayout,
-                    e.Item.ContentRectangle,
-                    bounds);
+                    g: e.Graphics,
+                    backgroundImage: e.Item.BackgroundImage,
+                    backColor: GetDarkModeColor(e.Item.BackColor),
+                    backgroundImageLayout: e.Item.BackgroundImageLayout,
+                    bounds: e.Item.ContentRectangle,
+                    clipRect: bounds);
             }
             else if (e.Item.BackColor != Color.Transparent && e.Item.BackColor != Color.Empty)
             {
@@ -294,7 +261,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+        Rectangle bounds = new(Point.Empty, e.Item.Size);
         bool isPressed;
         bool isSelected;
 
@@ -325,7 +292,6 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <param name="e">A ToolStripItemRenderEventArgs that contains the event data.</param>
     protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
     {
-        // Reuse button background drawing for dropdown buttons
         OnRenderButtonBackground(e);
     }
 
@@ -342,7 +308,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             return;
         }
 
-        Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+        Rectangle bounds = new(Point.Empty, e.Item.Size);
 
         // Render the background based on state
         if (splitButton.Selected || splitButton.Pressed)
@@ -359,18 +325,18 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         using var linePen = GetDarkModePen(SystemColors.ControlDark);
 
         e.Graphics.DrawLine(
-            linePen,
-            dropDownRect.Left - 1,
-            dropDownRect.Top + 2,
-            dropDownRect.Left - 1,
-            dropDownRect.Bottom - 2);
+            pen: linePen,
+            x1: dropDownRect.Left - 1,
+            y1: dropDownRect.Top + 2,
+            x2: dropDownRect.Left - 1,
+            y2: dropDownRect.Bottom - 2);
 
         DrawArrow(new ToolStripArrowRenderEventArgs(
-            e.Graphics,
-            e.Item,
-            dropDownRect,
-            SystemColors.ControlText,
-            ArrowDirection.Down));
+            g: e.Graphics,
+            toolStripItem: e.Item,
+            arrowRectangle: dropDownRect,
+            arrowColor: SystemColors.ControlText,
+            arrowDirection: ArrowDirection.Down));
     }
 
     /// <summary>
@@ -421,7 +387,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             // Horizontal separator
             if (bounds.Width >= 4)
             {
-                bounds.Inflate(-2, 0); // Scoot over 2px and start drawing
+                bounds.Inflate(-2, 0);
             }
 
             int startY = bounds.Height / 2;
@@ -443,9 +409,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         if (e.Item is not ToolStripOverflowButton item)
+        {
             return;
+        }
 
-        Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+        Rectangle bounds = new(Point.Empty, e.Item.Size);
 
         // Render the background based on state
         if (item.Selected || item.Pressed)
@@ -457,12 +425,11 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             e.Graphics.FillRectangle(fillBrush, bounds);
         }
 
-        // Draw the overflow arrow
         Rectangle arrowRect = item.ContentRectangle;
 
-        Point middle = new Point(
-            arrowRect.Left + arrowRect.Width / 2,
-            arrowRect.Top + arrowRect.Height / 2);
+        Point middle = new(
+            x: arrowRect.Left + arrowRect.Width / 2,
+            y: arrowRect.Top + arrowRect.Height / 2);
 
         // Default to down arrow for overflow buttons
         ArrowDirection arrowDirection = ArrowDirection.Down;
@@ -534,9 +501,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         if (e.GripBounds.Width <= 0 || e.GripBounds.Height <= 0)
+        {
             return;
+        }
 
-        // Use dark mode colors for the grip dots
         using var darkColorBrush = GetDarkModeColor(SystemColors.ControlDark).GetCachedSolidBrushScope();
         using var lightColorBrush = GetDarkModeColor(SystemColors.ControlLight).GetCachedSolidBrushScope();
 
@@ -547,7 +515,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         // Draw grip dots
         if (toolStrip.Orientation == Orientation.Horizontal)
         {
-            // Draw vertical grip
+            // Draw horizontal grip
             int y = bounds.Top + 2;
 
             while (y < bounds.Bottom - 3)
@@ -575,21 +543,14 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     ///  Raises the RenderArrow event.
     /// </summary>
     /// <param name="e">A ToolStripArrowRenderEventArgs that contains the event data.</param>
-    /// <summary>
-    /// Raises the RenderArrow event in the derived class with dark mode support.
-    /// </summary>
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);
         Debug.Assert(e.Item is not null, "The ToolStripItem should not be null on rendering the Arrow.");
 
-        Color arrowColor = GetDarkModeColor(e.ArrowColor);
-
-        // Use white arrow for selected/highlighted items
-        if (e.Item.Selected || e.Item.Pressed)
-        {
-            arrowColor = GetDarkModeColor(SystemColors.HighlightText);
-        }
+        Color arrowColor = (e.Item.Selected || e.Item.Pressed)
+            ? GetDarkModeColor(SystemColors.HighlightText)
+            : GetDarkModeColor(e.ArrowColor);
 
         RenderArrowCore(e, arrowColor);
     }
@@ -603,7 +564,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         // Fill the image margin with a slightly different color than the background
-        using var marginColorBrush = GetDarkModeColor(SystemColors.ControlLight).GetCachedSolidBrushScope();
+        using var marginColorBrush = GetDarkModeBrush(SystemColors.ControlLight);
 
         e.Graphics.FillRectangle(marginColorBrush, e.AffectedBounds);
     }
@@ -616,31 +577,19 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        // Set text color based on selection state
-        Color textColor;
+        Color textColor = (e.Item.Selected || e.Item.Pressed)
+            ? GetDarkModeColor(SystemColors.HighlightText)
+            : !e.Item.Enabled
+                ? GetDarkModeColor(SystemColors.GrayText)
+                : GetDarkModeColor(e.TextColor);
 
-        if (e.Item.Selected || e.Item.Pressed)
-        {
-            textColor = GetDarkModeColor(SystemColors.HighlightText);
-        }
-        else if (!e.Item.Enabled)
-        {
-            textColor = GetDarkModeColor(SystemColors.GrayText);
-        }
-        else
-        {
-            // Use the original text color but make sure it's dark mode compatible
-            textColor = GetDarkModeColor(e.TextColor);
-        }
-
-        // Draw the text
         TextRenderer.DrawText(
-            e.Graphics,
-            e.Text,
-            e.TextFont,
-            e.TextRectangle,
-            textColor,
-            e.TextFormat);
+            dc: e.Graphics,
+            text: e.Text,
+            font: e.TextFont,
+            bounds: e.TextRectangle,
+            foreColor: textColor,
+            flags: e.TextFormat);
     }
 
     /// <summary>
@@ -652,13 +601,15 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         if (e.Image is null)
+        {
             return;
+        }
 
         // DarkMode adjustments for the image are done by
         // the base class implementation already.
-        Image image = !e.Item.Enabled
-            ? CreateDisabledImage(e.Image)
-            : e.Image;
+        Image image = e.Item.Enabled
+            ? e.Image
+            : CreateDisabledImage(e.Image);
 
         e.Graphics.DrawImage(image, e.ImageRectangle);
     }
