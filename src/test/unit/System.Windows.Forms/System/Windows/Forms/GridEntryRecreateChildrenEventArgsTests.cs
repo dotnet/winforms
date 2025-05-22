@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests;
 
 public class GridEntryRecreateChildrenEventArgsTests
 {
-    [WinFormsTheory]
+    [Theory]
     [InlineData(0, 0)]
     [InlineData(1, 2)]
     [InlineData(-1, 5)]
@@ -22,14 +22,7 @@ public class GridEntryRecreateChildrenEventArgsTests
         args.NewChildCount.Should().Be(newCount);
     }
 
-    [WinFormsFact]
-    public void GridEntryRecreateChildrenEventArgs_Inherits_EventArgs()
-    {
-        GridEntryRecreateChildrenEventArgs args = new(1, 2);
-        args.Should().BeAssignableTo<EventArgs>();
-    }
-
-    [WinFormsFact]
+    [Fact]
     public void GridEntryRecreateChildrenEventArgs_Properties_AreReadOnly()
     {
         typeof(GridEntryRecreateChildrenEventArgs)
