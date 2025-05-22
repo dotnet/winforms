@@ -3,16 +3,24 @@
 
 namespace System.Windows.Forms.AccessibleObjects;
 
-public class UpDownBase_UpDownBaseAccessibleObjectTests
+public class UpDownBase_UpDownBaseAccessibleObjectTests : IDisposable
 {
+    private readonly TestUpDownBase _upDown;
+    private readonly UpDownBase.UpDownBaseAccessibleObject _accObj;
+
+    public UpDownBase_UpDownBaseAccessibleObjectTests()
+    {
+        _upDown = new();
+        _accObj = new(_upDown);
+    }
+
+    public void Dispose() => _upDown.Dispose();
+
     [WinFormsFact]
     public void GetChild_WithValidIndices_ReturnsExpectedChildren()
     {
-        using TestUpDownBase upDown = new();
-        UpDownBase.UpDownBaseAccessibleObject accObj = new(upDown);
-
-        accObj.GetChild(0).Should().BeSameAs(upDown.TextBox.AccessibilityObject.Parent);
-        accObj.GetChild(1).Should().BeSameAs(upDown.UpDownButtonsInternal.AccessibilityObject.Parent);
+        _accObj.GetChild(0).Should().BeSameAs(_upDown.TextBox.AccessibilityObject.Parent);
+        _accObj.GetChild(1).Should().BeSameAs(_upDown.UpDownButtonsInternal.AccessibilityObject.Parent);
     }
 
     [WinFormsTheory]
@@ -21,33 +29,28 @@ public class UpDownBase_UpDownBaseAccessibleObjectTests
     [InlineData(100)]
     public void GetChild_WithInvalidIndices_ReturnsNull(int index)
     {
-        using TestUpDownBase upDown = new();
-        UpDownBase.UpDownBaseAccessibleObject accObj = new(upDown);
-
-        accObj.GetChild(index).Should().BeNull();
+        _accObj.GetChild(index).Should().BeNull();
     }
 
     [WinFormsFact]
-    public void GetChildCount_Returns2()
+    public void GetChildCount_WithCustomParents_ReturnsTwo()
     {
-        using TestUpDownBase upDown = new();
-        UpDownBase.UpDownBaseAccessibleObject accObj = new(upDown);
+        _accObj.GetChildCount().Should().Be(2);
+    }
 
-        accObj.GetChildCount().Should().Be(2);
+    [WinFormsFact]
+
+    public void Role_WithCustomParents_ReturnsSpinButton()
+    {
+        _accObj.Role.Should().Be(AccessibleRole.SpinButton);
     }
 
     private class TestUpDownBase : UpDownBase
     {
-        public AccessibleObject CustomTextBoxAO { get; }
-        public AccessibleObject CustomButtonsAO { get; }
-
         public TestUpDownBase()
         {
             AccessibleObject textBoxParent = new();
             AccessibleObject buttonsParent = new();
-
-            CustomTextBoxAO = new MyAccessibleObject(textBoxParent);
-            CustomButtonsAO = new MyAccessibleObject(buttonsParent);
 
             TextBox.AccessibilityObject.SetParent(textBoxParent);
             UpDownButtonsInternal.AccessibilityObject.SetParent(buttonsParent);
@@ -58,17 +61,5 @@ public class UpDownBase_UpDownBaseAccessibleObjectTests
         protected override AccessibleObject CreateAccessibilityInstance()
             => new UpDownBaseAccessibleObject(this);
         protected override void UpdateEditText() => throw new NotImplementedException();
-    }
-
-    private class MyAccessibleObject : AccessibleObject
-    {
-        private readonly AccessibleObject _parent;
-
-        public MyAccessibleObject(AccessibleObject parent)
-        {
-            _parent = parent;
-        }
-
-        public override AccessibleObject? Parent => _parent;
     }
 }
