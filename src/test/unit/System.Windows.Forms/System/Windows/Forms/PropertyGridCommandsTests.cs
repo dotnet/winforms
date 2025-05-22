@@ -1,33 +1,28 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel.Design;
 using System.Windows.Forms.PropertyGridInternal;
 
 namespace System.Windows.Forms.Tests;
 
 public class PropertyGridCommandsTests
 {
-    [WinFormsTheory]
-    [InlineData(0x3000)]
-    [InlineData(0x3001)]
-    [InlineData(0x3002)]
-    [InlineData(0x3010)]
-    public void PropertyGridCommand_CommandID_HasExpectedValues(int expectedId)
+    [Fact]
+    public void PropertyGridCommand_CommandID_HasExpectedValues()
     {
-        Guid expectedGuid = new Guid("5a51cf82-7619-4a5d-b054-47f438425aa7");
-        CommandID command = expectedId switch
-        {
-            0x3000 => PropertyGridCommands.Reset,
-            0x3001 => PropertyGridCommands.Description,
-            0x3002 => PropertyGridCommands.Hide,
-            0x3010 => PropertyGridCommands.Commands,
-            _ => throw new ArgumentOutOfRangeException(nameof(expectedId))
-        };
+        Guid expectedGuid = new("5a51cf82-7619-4a5d-b054-47f438425aa7");
 
-        command.Should().NotBeNull();
-        command.Guid.Should().Be(expectedGuid);
-        command.ID.Should().Be(expectedId);
+        PropertyGridCommands.Reset.Guid.Should().Be(expectedGuid);
+        PropertyGridCommands.Reset.ID.Should().Be(0x3000);
+
+        PropertyGridCommands.Description.Guid.Should().Be(expectedGuid);
+        PropertyGridCommands.Description.ID.Should().Be(0x3001);
+
+        PropertyGridCommands.Hide.Guid.Should().Be(expectedGuid);
+        PropertyGridCommands.Hide.ID.Should().Be(0x3002);
+
+        PropertyGridCommands.Commands.Guid.Should().Be(expectedGuid);
+        PropertyGridCommands.Commands.ID.Should().Be(0x3010);
     }
 
     private class PropertyGridCommandsAccessor : PropertyGridCommands
@@ -36,17 +31,19 @@ public class PropertyGridCommandsTests
         public static Guid WfcMenuCommand => wfcMenuCommand;
     }
 
-    [WinFormsFact]
+    [Fact]
     public void WfcMenuGroup_HasExpectedGuid()
     {
-        PropertyGridCommandsAccessor.WfcMenuGroup
-            .Should().Be(new Guid("a72bd644-1979-4cbc-a620-ea4112198a66"));
+        PropertyGridCommands propertyGridCommands = new();
+        Guid tests = propertyGridCommands.TestAccessor().Dynamic.wfcMenuGroup;
+        tests.Should().Be(new Guid("a72bd644-1979-4cbc-a620-ea4112198a66"));
     }
 
-    [WinFormsFact]
+    [Fact]
     public void WfcMenuCommand_HasExpectedGuid()
     {
-        PropertyGridCommandsAccessor.WfcMenuCommand
-            .Should().Be(new Guid("5a51cf82-7619-4a5d-b054-47f438425aa7"));
+        PropertyGridCommands propertyGridCommands = new();
+        Guid tests = propertyGridCommands.TestAccessor().Dynamic.wfcMenuCommand;
+        tests.Should().Be(new Guid("5a51cf82-7619-4a5d-b054-47f438425aa7"));
     }
 }
