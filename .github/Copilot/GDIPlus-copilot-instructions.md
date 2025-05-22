@@ -14,6 +14,23 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey>
 
 These cached objects have implicit conversions that make them behave like actual GDI+ types while significantly reducing allocation overhead.
 
+### APIs, which already provide cached Pens or Brushes.
+
+The APIs `SystemPens` and `SystemBrushes` already provide cached Pen/Brush objects. 
+- Make sure you prioritize their usage (except you need pen objects with a different width).
+- If you use this API, these Pen or Brush object MUST NOT be disposed!
+
+For example:
+```CSharp
+    // Nothing to explicitly cache, since `SystemPens` already provides cached pen objects.
+    if (ToolStripManager.VisualStylesEnabled)
+    {
+        e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
+        e.Graphics.DrawLine(SystemPens.InactiveBorder, 0, bounds.Bottom - 2, bounds.Width, bounds.Bottom - 2);
+    }
+```
+
+
 ### 1.2 Using Cached Objects
 
 Always prefer cached objects over direct instantiation:

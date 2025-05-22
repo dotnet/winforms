@@ -26,12 +26,43 @@
 - **Always insert empty lines after structure blocks and before `return` statements**
 
 - Use pattern matching, `is`, `and`, `or`, and switch expressions where applicable
+
   ```csharp
   if (obj is Control control && control.Visible)
   {
       // Use 'control' variable
   }
-  
+  ```
+
+- Refactor or use the ternary operator where possible, but make sure that you put each branch on its own line, except if the expression is very short:
+
+    ```csharp
+    // Original code
+    textColor = e.Item.Enabled ? GetDarkModeColor(e.TextColor) : GetDarkModeColor(SystemColors.GrayText);
+
+    // or:
+    if (e.Item.Enabled)
+    {
+        textColor = GetDarkModeColor(e.TextColor);
+    }
+    else
+    {
+        textColor = GetDarkModeColor(SystemColors.GrayText);
+    }
+    ```
+
+    becomes:
+
+    ```csharp
+    // Use ternary operator with line breaks for clarity
+    textColor = e.Item.Enabled 
+        ? GetDarkModeColor(e.TextColor) 
+        : GetDarkModeColor(SystemColors.GrayText);
+    ```
+
+- - Prefer `switch` expression over switch statements over chains of `if` statements, where if makes sense:
+
+  ```csharp
   // Prefer switch expressions over switch statements
   string result = value switch
   {
@@ -41,7 +72,131 @@
   };
   ```
 
+  Chain of If-statements can often be converted like so:
+
+    ```csharp
+    // Original code
+    private static Color GetDarkModeColor(Color color)
+    {
+        if (color == SystemColors.Control)
+            return Color.FromArgb(45, 45, 45);
+        if (color == SystemColors.ControlLight)
+            return Color.FromArgb(60, 60, 60);
+        if (color == SystemColors.ControlDark)
+            return Color.FromArgb(30, 30, 30);
+        if (color == SystemColors.ControlText)
+            return Color.FromArgb(240, 240, 240);
+        // For any other colors, darken them if they're bright
+        if (color.GetBrightness() > 0.5)
+        {
+            // Create a darker version for light colors
+            return ControlPaint.Dark(color, 0.2f);
+        }
+
+        return color;
+    }
+    ```
+
+    becomes:
+
+    ```csharp
+    // Use switch expression for color handling
+    private static Color GetDarkModeColor(Color color) =>
+        color switch
+        {
+            Color c when c == SystemColors.Control => Color.FromArgb(45, 45, 45),
+            Color c when c == SystemColors.ControlLight => Color.FromArgb(60, 60, 60),
+            Color c when c == SystemColors.ControlDark => Color.FromArgb(30, 30, 30),
+            _ when color.GetBrightness() > 0.5 => ControlPaint.Dark(color, 0.2f),
+            _ => color
+        };
+    ```
+
+    Other examples for switch expressions are:
+    // Multiple conditions with 'and'/'or' patterns
+    string GetFileCategory(string extension) => extension.ToLower() switch
+    {
+        ".jpg" or ".png" or ".gif" or ".bmp" => "Image",
+        ".mp4" or ".avi" or ".mkv" or ".mov" => "Video", 
+        ".txt" or ".md" or ".csv" => "Text",
+        string ext when ext.StartsWith(".doc") => "Document",
+        _ => "Unknown"
+    };
+
+    // Tuple patterns for multiple parameters
+    string GetQuadrant(int x, int y) => (x, y) switch
+    {
+        (> 0, > 0) => "First",
+        (< 0, > 0) => "Second", 
+        (< 0, < 0) => "Third",
+        (> 0, < 0) => "Fourth",
+        _ => "Origin or Axis"
+    };
+
+    // Property patterns with nested conditions
+    decimal CalculateShipping(Order order) => order switch
+    {
+        { Weight: > 50, IsPriority: true } => 25.00m,
+        { Weight: > 50 } => 15.00m,
+        { IsPriority: true, Total: > 100 } => 5.00m,
+        { Total: > 100 } => 0m,
+        _ => 7.50m
+    };
+
+    // Type patterns with casting
+    string ProcessValue(object value) => value switch
+    {
+        int i when i > 0 => $"Positive: {i}",
+        int i when i < 0 => $"Negative: {i}",
+        string s when !string.IsNullOrEmpty(s) => $"Text: {s}",
+        bool b => b ? "True" : "False",
+        null => "Null value",
+        _ => "Unknown type"
+    };
+
+    // Range patterns (C# 11+)
+    string GetAgeGroup(int age) => age switch
+    {
+        < 13 => "Child",
+        >= 13 and < 20 => "Teen", 
+        >= 20 and < 65 => "Adult",
+        >= 65 => "Senior",
+        _ => "Invalid"
+    };
+
+    // List patterns (C# 11+) - great for method parameter validation
+    string AnalyzeList<T>(List<T> items) => items switch
+    {
+        [] => "Empty",
+        [var single] => $"Single item: {single}",
+        [var first, var second] => $"Two items: {first}, {second}",
+        [var first, .., var last] => $"Multiple items from {first} to {last}",
+    };
+
+    // Enum with flags - often overlooked refactoring opportunity
+    string GetPermissionDescription(FilePermissions permissions) => permissions switch
+    {
+        FilePermissions.Read => "Read only",
+        FilePermissions.Write => "Write only", 
+        FilePermissions.Read | FilePermissions.Write => "Read and Write",
+        FilePermissions.Read | FilePermissions.Execute => "Read and Execute",
+        FilePermissions.All => "Full access",
+        _ => "No permissions"
+    };
+
+    // Refactoring complex validation chains
+    ValidationResult ValidateUser(User user) => user switch
+    {
+        null => ValidationResult.Error("User cannot be null"),
+        { Email: null or "" } => ValidationResult.Error("Email required"),
+        { Email: string email } when !email.Contains('@') => ValidationResult.Error("Invalid email"),
+        { Age: < 13 } => ValidationResult.Error("Must be 13 or older"),
+        { Name.Length: < 2 } => ValidationResult.Error("Name too short"),
+        _ => ValidationResult.Success()
+    };
+
 - **Prefer modern collection initializers**: Use `[]` syntax for collections
+
   ```csharp
   List<string> items = [];           // Preferred
   List<string> items = new();        // Also acceptable
@@ -235,6 +390,7 @@
 - **Remove trailing whitespace** (enforced as warning)
 - **Insert final newline at end of files**
 - **Use 4-space indentation consistently**
+
 - **Place opening braces on new lines** (Allman style)
   ```csharp
   if (condition)
@@ -242,6 +398,64 @@
       // Code here
   }
   ```
+
+### 1.10 Magic Numbers
+
+- **Avoid magic numbers**: Use named constants or enums instead of hard-coded values. This improves readability and maintainability.
+  ```csharp
+  // Avoid magic numbers
+  const int MaxItems = 100;
+  const double Pi = 3.14159;
+  
+  // Use named constants or enums
+  public enum ColorCode
+  {
+      Red = 1,
+      Green = 2,
+      Blue = 3
+  }
+  
+  // Example usage
+  ColorCode color = ColorCode.Red;
+  ```
+
+### 1.11 Using of empty lines for clarity
+
+- **Use empty lines to separate logical sections of code**: This improves readability and helps to understand the structure of the code. Use them judiciously to avoid cluttering the code.
+
+  ```csharp
+  // Example of using empty lines for clarity
+  public int SomeMethod()
+  {
+      if (condition)
+      {
+          // Do something
+      }
+      else
+      {
+         // Do something else.
+         // Leave a line after the closing brace for clarity.
+      }
+
+      // Initialize variables
+      int x = 0;
+      int y = 0;
+  
+      // Perform calculations
+      x = CalculateX();
+  
+      // Update UI, and the return in a separate line.
+      UpdateUI(x, y);
+
+      return x;
+  }
+  ```
+
+### 1.12 Refactoring of existing comments
+
+- **Refactor existing comments**: When refactoring code, also consider updating or removing outdated comments. Comments should accurately reflect the current state of the code and its purpose. Avoid/rephrase inappropriate comments or microaggressions.
+
+- Do not delete comments, though, when they carry either necessary information or are helpful for the reader. Instead, refactor them to be more precise and clear.
 
 ## 2. WinForms-Specific Guidelines
 
@@ -256,6 +470,20 @@
       Click?.Invoke(this, e);
   }
   ```
+
+- **Use `EventArgs.Empty` for empty event arguments**
+  ```csharp
+  protected virtual void OnPaint(PaintEventArgs e)
+  {
+      Paint?.Invoke(this, EventArgs.Empty);
+  }
+  ```
+
+- Take into account, that the typical Event handler signature has been modified for NRT:
+    ```csharp
+    private void OnClick(object? sender, EventArgs e) { ... }
+    ```
+
 
 ### 2.2 Designer Integration
 

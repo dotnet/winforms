@@ -1130,12 +1130,14 @@ public abstract class ToolStripRenderer
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 cornerDef = f.FormCornerPreference switch
                 {
                     FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
                     FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
                     _ => (2, new(0, 0, 2, 2))
                 };
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
 
             return cornerDef;
