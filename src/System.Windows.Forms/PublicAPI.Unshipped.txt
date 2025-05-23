@@ -1,3 +1,5 @@
+override System.Windows.Forms.DataGridView.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TabPage.CreateParams.get -> System.Windows.Forms.CreateParams!
 System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
