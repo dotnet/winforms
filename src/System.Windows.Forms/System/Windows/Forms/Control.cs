@@ -279,12 +279,12 @@ public unsafe partial class Control :
     private Font? _scaledControlFont;
     private FontHandleWrapper? _scaledFontWrapper;
 
+    // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
+    private Dictionary<int, Font>? _dpiFonts;
+
     // ContainerControls like 'PropertyGrid' scale their children when they resize.
     // no explicit scaling of children required in such cases. They have specific logic.
     internal bool _doNotScaleChildren;
-
-    // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
-    private Dictionary<int, Font>? _dpiFonts;
 
     // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo,
     // particularly in cases involving nested containers.

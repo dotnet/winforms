@@ -645,8 +645,7 @@ internal abstract partial class ButtonBaseAdapter
             Enabled = Control.Enabled
         };
 
-    protected ColorOptions PaintRender(IDeviceContext deviceContext)
-        => CommonRender(deviceContext);
+    protected ColorOptions PaintRender(IDeviceContext deviceContext) => CommonRender(deviceContext);
 
     internal static ColorOptions PaintFlatRender(Graphics g, Color foreColor, Color backColor, bool enabled) =>
         CommonRender(g, foreColor, backColor, enabled);
