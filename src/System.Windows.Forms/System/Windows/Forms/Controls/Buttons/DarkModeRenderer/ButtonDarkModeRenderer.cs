@@ -14,26 +14,33 @@ internal static partial class ButtonDarkModeRenderer
 {
     // Singleton instances for each renderer type
     internal static IButtonDarkModeRenderer StandardRenderer { get; } = new StandardButtonDarkModeRenderer();
+
     internal static IButtonDarkModeRenderer FlatRenderer { get; } = new FlatButtonDarkModeRenderer();
+
     internal static IButtonDarkModeRenderer PopupRenderer { get; } = new PopupButtonDarkModeRenderer();
+
     internal static IButtonDarkModeRenderer SystemRenderer { get; } = new SystemButtonDarkModeRenderer();
 
     // Define padding values for each renderer type
     internal static Padding StandardPaddingCore { get; } = new(0);
+
     internal static Padding FlatPaddingCore { get; } = new(0);
+
     internal static Padding PopupPaddingCore { get; } = new(0);
+
     internal static Padding SystemPaddingCore { get; } = new(0);
 
     /// <summary>
     ///  Returns the appropriate padding for the specified flat style.
     /// </summary>
-    internal static Padding GetPaddingCore(FlatStyle flatStyle) => flatStyle switch
-    {
-        FlatStyle.Flat => FlatPaddingCore,
-        FlatStyle.Popup => PopupPaddingCore,
-        FlatStyle.System => SystemPaddingCore,
-        _ => StandardPaddingCore
-    };
+    internal static Padding GetPaddingCore(FlatStyle flatStyle) =>
+        flatStyle switch
+        {
+            FlatStyle.Flat => FlatPaddingCore,
+            FlatStyle.Popup => PopupPaddingCore,
+            FlatStyle.System => SystemPaddingCore,
+            _ => StandardPaddingCore
+        };
 
     /// <summary>
     ///  Draws a button border using a specified path and border properties,
@@ -43,7 +50,7 @@ internal static partial class ButtonDarkModeRenderer
     {
         using var borderPen = new Pen(borderColor, borderWidth)
         {
-            Alignment = PenAlignment.Inset // Align pen inward
+            Alignment = PenAlignment.Inset
         };
 
         graphics.DrawPath(borderPen, path);
@@ -53,8 +60,10 @@ internal static partial class ButtonDarkModeRenderer
     ///  Clears the background with the parent's background color or the control's background color if no parent is available.
     /// </summary>
     /// <param name="graphics">Graphics context to draw on</param>
-    private static void ClearBackground(Graphics graphics, Color parentBackgroundColor) =>
+    private static void ClearBackground(Graphics graphics, Color parentBackgroundColor)
+    {
         graphics.Clear(parentBackgroundColor);
+    }
 
     /// <summary>
     ///  Renders a button with the specified properties and delegates for painting image and field.
@@ -71,6 +80,10 @@ internal static partial class ButtonDarkModeRenderer
         Action<Rectangle> paintImage,
         Action<Rectangle, Color, bool> paintField)
     {
+        ArgumentNullException.ThrowIfNull(graphics);
+        ArgumentNullException.ThrowIfNull(paintImage);
+        ArgumentNullException.ThrowIfNull(paintField);
+
         IButtonDarkModeRenderer renderer = flatStyle switch
         {
             FlatStyle.Flat => FlatRenderer,
@@ -79,11 +92,12 @@ internal static partial class ButtonDarkModeRenderer
             _ => StandardRenderer
         };
 
-        // Background over the whole Button area needs to be cleared in any case.
+        // Clear the background over the whole button area.
         ClearBackground(graphics, parentBackgroundColor);
 
         // Use padding from ButtonDarkModeRenderer
-        Padding padding = GetPaddingCore(FlatStyle.System);
+        Padding padding = GetPaddingCore(flatStyle);
+
         Rectangle paddedBounds = new(
             x: bounds.X + padding.Left,
             y: bounds.Y + padding.Top,
@@ -111,6 +125,7 @@ internal static partial class ButtonDarkModeRenderer
         {
             // Focus with the system renderer is completely surrounded by a border.
             renderer.DrawFocusIndicator(graphics, bounds, isDefault);
+
             return;
         }
 
