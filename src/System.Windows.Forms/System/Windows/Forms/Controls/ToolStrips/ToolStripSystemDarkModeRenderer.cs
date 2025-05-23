@@ -170,6 +170,8 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Graphics g = e.Graphics;
         Rectangle bounds = e.ToolStrip.ClientRectangle;
 
+        using var borderPen = GetDarkModePen(SystemColors.ControlDark);
+
         if (toolStrip is StatusStrip)
         {
             RenderStatusStripBorder(e);
@@ -190,7 +192,6 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         }
         else
         {
-            using var borderPen = GetDarkModePen(SystemColors.ControlDark);
             g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
         }
     }
