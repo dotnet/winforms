@@ -337,6 +337,44 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     /// <summary>
     ///  Gets or sets the flat style appearance of the button control.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The <see cref="FlatStyle"/> property determines how the button is rendered. The following values are supported:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Standard"/></term>
+    ///    <description>
+    ///     The default style. The button is not wrapping the system button. It is rendered using the StandardButton adapter.
+    ///     VisualStyleRenderer from the OS is used for certain parts, which may have issues in high-resolution scenarios.
+    ///     Dark mode works to some extent, but improvements are needed.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Popup"/></term>
+    ///    <description>
+    ///     The button is fully owner-drawn. No rendering is delegated to the OS, not even VisualStyleRenderer.
+    ///     This style works well in dark mode and is fully controlled by the application.
+    ///     3D effects are expected but may not be rendered; consider revisiting for meaningful styling.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Flat"/></term>
+    ///    <description>
+    ///     The button is fully owner-drawn, with no OS calls or VisualStyleRenderer usage.
+    ///     This fits modern design language and works well in dark mode.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.System"/></term>
+    ///    <description>
+    ///     The button wraps the system button and is not owner-drawn.
+    ///     No <c>OnPaint</c>, <c>OnPaintBackground</c>, or adapter is involved.
+    ///     In dark mode, this style is used as a fallback for Standard-style buttons.
+    ///    </description>
+    ///   </item>
+    ///  </list>
+    /// </remarks>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(FlatStyle.Standard)]
     [Localizable(true)]
@@ -356,6 +394,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _flatStyle = value;
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
             Invalidate();
+
             UpdateOwnerDraw();
         }
     }
@@ -409,11 +448,17 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             StopAnimate();
 
             _image = value;
+
             if (_image is not null)
             {
                 ImageIndex = ImageList.Indexer.DefaultIndex;
                 ImageList = null;
             }
+
+            // If we have an Image, for some flat styles we need to change the rendering approach from
+            // being a wrapper around the Win32 control to being owner-drawn. The Win32 control does not
+            // support images in the same flexible way as we need it.
+            UpdateOwnerDraw();
 
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
             Animate();
@@ -620,7 +665,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    private protected virtual bool OwnerDraw => FlatStyle != FlatStyle.System;
+    /// <summary>
+    ///  OwnerDraw ultimately determines, if we're wrapping the respective Win32 control
+    ///  (Button, CheckBox, RadioButton - OwnerDraw == false) or not. When we're not OwnerDraw,
+    ///  both Light- and DarkMode are (and can be) rendered by the System, but then there is
+    ///  no image rendering, and no OnPaint. This is the original behavior of the Win32 controls.
+    /// </summary>
+    private protected virtual bool OwnerDraw =>
+            FlatStyle != FlatStyle.System;
 
     bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
 
@@ -964,7 +1016,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    /// <summary>
+    ///  Returns an adapter for Rendering one of the FlatStyles. Note, that we always render
+    ///  buttons ourselves, except when the User explicitly requests FlatStyle.System rendering!
+    /// </summary>
     internal ButtonBaseAdapter Adapter
     {
         get
@@ -972,32 +1027,24 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             if (_adapter is null
                 || FlatStyle != _cachedAdapterType)
             {
-                if (Application.IsDarkModeEnabled && this is Button)
+                switch (FlatStyle)
                 {
-                    _adapter = CreateDarkModeAdapter();
+                    case FlatStyle.Standard:
+                        _adapter = CreateStandardAdapter();
+                        break;
+                    case FlatStyle.Popup:
+                        _adapter = CreatePopupAdapter();
+                        break;
+                    case FlatStyle.Flat:
+                        _adapter = CreateFlatAdapter();
+                        break;
+                    default:
+                        Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
+                        break;
                 }
-                else
-                {
-                    switch (FlatStyle)
-                    {
-                        case FlatStyle.Standard:
-                            _adapter = CreateStandardAdapter();
-                            break;
-                        case FlatStyle.Popup:
-                            _adapter = CreatePopupAdapter();
-                            break;
-                        case FlatStyle.Flat:
-                            _adapter = CreateFlatAdapter();
-                            break;
-                        default:
-                            Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
-                            break;
-                    }
 
-                    _cachedAdapterType = FlatStyle;
-                }
+                _cachedAdapterType = FlatStyle;
             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return _adapter;
         }
@@ -1019,14 +1066,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         Debug.Fail("Derived classes need to provide a meaningful implementation.");
         return null;
-    }
-
-    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
-    {
-        // When a button-derived class does not have a dedicated DarkMode adapter implementation,
-        // we're falling back to the standard adapter, to not _force_ the derived class to implement
-        // a dark mode adapter.
-        return CreateStandardAdapter();
     }
 
     internal virtual StringFormat CreateStringFormat()
@@ -1255,7 +1294,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool ShouldSerializeImage() => _image is not null;
 
-    private void UpdateOwnerDraw()
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
+    private protected void UpdateOwnerDraw()
     {
         if (OwnerDraw != GetStyle(ControlStyles.UserPaint))
         {
