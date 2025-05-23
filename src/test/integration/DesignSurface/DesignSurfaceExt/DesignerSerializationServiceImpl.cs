@@ -33,8 +33,7 @@ internal sealed class DesignerSerializationService : IDesignerSerializationServi
         {
             foreach (object obj in objects)
             {
-                if (obj is Control)
-                    componentSerializationService.Serialize(serializationStore, obj);
+                componentSerializationService.Serialize(serializationStore, obj);
             }
 
             returnObject = serializationStore;
