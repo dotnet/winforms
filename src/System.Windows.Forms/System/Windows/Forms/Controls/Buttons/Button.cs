@@ -115,6 +115,7 @@ public partial class Button : ButtonBase, IButtonControl
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (GetStyle(ControlStyles.UserPaint))
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
@@ -122,6 +123,7 @@ public partial class Button : ButtonBase, IButtonControl
             else
             {
                 cp.Style |= PInvoke.BS_PUSHBUTTON;
+
                 if (IsDefault)
                 {
                     cp.Style |= PInvoke.BS_DEFPUSHBUTTON;
@@ -147,6 +149,13 @@ public partial class Button : ButtonBase, IButtonControl
             _dialogResult = value;
         }
     }
+
+#pragma warning disable WFO5001
+    private protected override bool OwnerDraw =>
+        (!Application.IsDarkModeEnabled
+            || FlatStyle != FlatStyle.Standard)
+            && base.OwnerDraw;
+#pragma warning restore WFO5001
 
     internal override bool SupportsUiaProviders => true;
 
