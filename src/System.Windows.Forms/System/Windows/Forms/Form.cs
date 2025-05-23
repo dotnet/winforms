@@ -205,10 +205,6 @@ public partial class Form : ContainerControl
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -759,6 +755,10 @@ public partial class Form : ContainerControl
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
 
             if (IsHandleCreated && WindowStyle.HasFlag(WINDOW_STYLE.WS_DISABLED))
