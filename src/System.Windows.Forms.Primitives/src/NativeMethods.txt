@@ -221,6 +221,7 @@ GetUpdateRgn
 GetUserObjectInformation
 GetViewportExtEx
 GetWindow
+GetWindowTheme
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWorldTransform
