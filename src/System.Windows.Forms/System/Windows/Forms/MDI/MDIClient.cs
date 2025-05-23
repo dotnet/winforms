@@ -29,8 +29,6 @@ public sealed partial class MdiClient : Control
     public MdiClient() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
-        BackColor = SystemColors.AppWorkspace;
-        Dock = DockStyle.Fill;
     }
 
     /// <summary>

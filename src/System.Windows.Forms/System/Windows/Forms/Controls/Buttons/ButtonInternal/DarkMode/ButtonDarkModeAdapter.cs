@@ -136,10 +136,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
     }
 
-    protected override LayoutOptions Layout(PaintEventArgs e)
-    {
-        return CommonLayout();
-    }
+    protected override LayoutOptions Layout(PaintEventArgs e) => CommonLayout();
 
     private new LayoutOptions CommonLayout()
     {
