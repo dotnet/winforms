@@ -1023,17 +1023,9 @@ public abstract class ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        OnRenderStatusStripSizingGrip(
-            eArgs: e,
-            highLightBrush: SystemBrushes.ButtonHighlight,
-            shadowBrush: SystemBrushes.ButtonShadow);
-    }
-
-    private protected void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs eArgs, Brush highLightBrush, Brush shadowBrush)
-    {
         if (RendererOverride is not null)
         {
-            RendererOverride.OnRenderStatusStripSizingGrip(eArgs);
+            RendererOverride.OnRenderStatusStripSizingGrip(e);
             return;
         }
 
