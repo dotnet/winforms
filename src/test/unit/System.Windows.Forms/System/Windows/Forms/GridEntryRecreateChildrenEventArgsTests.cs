@@ -23,14 +23,10 @@ public class GridEntryRecreateChildrenEventArgsTests
     }
 
     [Fact]
-    public void GridEntryRecreateChildrenEventArgs_Properties_AreReadOnly()
+    public void GridEntryRecreateChildrenEventArgs_Inherits_EventArgs()
     {
-        typeof(GridEntryRecreateChildrenEventArgs)
-            .GetProperty(nameof(GridEntryRecreateChildrenEventArgs.OldChildCount))!
-            .CanWrite.Should().BeFalse();
+        GridEntryRecreateChildrenEventArgs args = new(1, 2);
 
-        typeof(GridEntryRecreateChildrenEventArgs)
-            .GetProperty(nameof(GridEntryRecreateChildrenEventArgs.NewChildCount))!
-            .CanWrite.Should().BeFalse();
+        args.Should().BeAssignableTo<EventArgs>();
     }
 }
