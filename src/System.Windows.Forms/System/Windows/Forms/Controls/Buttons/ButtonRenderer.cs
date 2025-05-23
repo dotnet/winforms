@@ -11,10 +11,20 @@ namespace System.Windows.Forms;
 /// </summary>
 public static class ButtonRenderer
 {
+    private const string DarkModeThemeIdentifier = $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::{PInvoke.WC_BUTTON}";
+
     // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
-    private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly VisualStyleElement s_darkButtonElement =
+        VisualStyleElement.CreateElement(DarkModeThemeIdentifier, 1, 1);
+    private static readonly VisualStyleElement s_lightButtonElement = VisualStyleElement.Button.PushButton.Normal;
+    private static readonly VisualStyleElement s_buttonElement =
+        Application.IsDarkModeEnabled
+        ? s_darkButtonElement
+        : s_lightButtonElement;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets a value indicating whether the renderer uses the application state to determine rendering style.
