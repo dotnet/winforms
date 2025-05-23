@@ -25,12 +25,6 @@ public class PropertyGridCommandsTests
         PropertyGridCommands.Commands.ID.Should().Be(0x3010);
     }
 
-    private class PropertyGridCommandsAccessor : PropertyGridCommands
-    {
-        public static Guid WfcMenuGroup => wfcMenuGroup;
-        public static Guid WfcMenuCommand => wfcMenuCommand;
-    }
-
     [Fact]
     public void WfcMenuGroup_HasExpectedGuid()
     {
