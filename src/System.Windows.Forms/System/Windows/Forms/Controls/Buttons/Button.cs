@@ -75,13 +75,11 @@ public partial class Button : ButtonBase, IButtonControl
 
     protected override AccessibleObject CreateAccessibilityInstance() => new ButtonAccessibleObject(this);
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new ButtonFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter() => DarkModeAdapterFactory.CreateFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new ButtonPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter() => DarkModeAdapterFactory.CreatePopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonStandardAdapter(this);
-
-    internal override ButtonBaseAdapter CreateDarkModeAdapter() => new ButtonDarkModeAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter() => DarkModeAdapterFactory.CreateStandardAdapter(this);
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
@@ -123,6 +121,7 @@ public partial class Button : ButtonBase, IButtonControl
             else
             {
                 cp.Style |= PInvoke.BS_PUSHBUTTON;
+
                 if (IsDefault)
                 {
                     cp.Style |= PInvoke.BS_DEFPUSHBUTTON;
