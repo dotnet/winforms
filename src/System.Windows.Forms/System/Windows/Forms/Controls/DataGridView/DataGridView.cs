@@ -638,6 +638,18 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
+            return base.CreateParams;
+        }
+    }
+
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public DataGridViewAdvancedBorderStyle AdvancedCellBorderStyle { get; }

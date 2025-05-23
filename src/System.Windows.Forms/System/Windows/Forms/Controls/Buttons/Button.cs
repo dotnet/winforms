@@ -115,6 +115,7 @@ public partial class Button : ButtonBase, IButtonControl
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (GetStyle(ControlStyles.UserPaint))
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
@@ -122,6 +123,7 @@ public partial class Button : ButtonBase, IButtonControl
             else
             {
                 cp.Style |= PInvoke.BS_PUSHBUTTON;
+
                 if (IsDefault)
                 {
                     cp.Style |= PInvoke.BS_DEFPUSHBUTTON;

@@ -291,6 +291,10 @@ public partial class MonthCalendar : Control
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.MONTHCAL_CLASS;
             cp.Style |= (int)PInvoke.MCS_MULTISELECT | (int)PInvoke.MCS_DAYSTATE;
