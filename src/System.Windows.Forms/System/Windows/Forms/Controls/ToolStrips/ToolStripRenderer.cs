@@ -1028,20 +1028,6 @@ public abstract class ToolStripRenderer
             shadowBrush: SystemBrushes.ButtonShadow);
     }
 
-    private protected void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs eArgs, Brush highLightBrush, Brush shadowBrush)
-    {
-        if (RendererOverride is not null)
-        {
-            RendererOverride.OnRenderStatusStripSizingGrip(eArgs);
-            return;
-        }
-
-        OnRenderStatusStripSizingGrip(
-            eArgs: e,
-            highLightBrush: SystemBrushes.ButtonHighlight,
-            shadowBrush: SystemBrushes.GrayText);
-    }
-
     private protected static void OnRenderStatusStripSizingGrip(
         ToolStripRenderEventArgs eArgs,
         Brush highLightBrush,
@@ -1060,7 +1046,7 @@ public abstract class ToolStripRenderer
         }
 
         Graphics g = eArgs.Graphics;
-        ReadOnlySpan<Rectangle> baseRects = s_baseSizeGripRectangles;
+        ReadOnlySpan<Rectangle> baseRectangle = s_baseSizeGripRectangles;
 
         // Use device DPI for scaling
         float dpiScale = 1.0f;
@@ -1071,12 +1057,12 @@ public abstract class ToolStripRenderer
         }
 
         // Create a buffer on the stack for the scaled rectangles
-        Span<Rectangle> scaledRects = stackalloc Rectangle[baseRects.Length];
+        Span<Rectangle> scaledRects = stackalloc Rectangle[baseRectangle.Length];
 
         // Scale the base rectangles for the grip dots
-        for (int i = 0; i < baseRects.Length; i++)
+        for (int i = 0; i < baseRectangle.Length; i++)
         {
-            Rectangle r = baseRects[i];
+            Rectangle r = baseRectangle[i];
 
             scaledRects[i] = new Rectangle(
                 (int)(r.X * dpiScale),
