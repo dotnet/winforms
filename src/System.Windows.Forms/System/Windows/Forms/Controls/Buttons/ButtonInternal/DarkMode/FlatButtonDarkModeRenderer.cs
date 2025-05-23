@@ -137,6 +137,7 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
         }
 
         // For other states, draw a border with appropriate thickness
+        // For pressed state, draw a darker border
         borderColor = isDefault
             ? DarkModeButtonColors.DefaultSingleBorderColor
             : DarkModeButtonColors.SingleBorderColor;
