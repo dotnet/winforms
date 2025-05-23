@@ -29,8 +29,6 @@ public sealed partial class MdiClient : Control
     public MdiClient() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
-        BackColor = SystemColors.AppWorkspace;
-        Dock = DockStyle.Fill;
     }
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -38,6 +36,8 @@ public sealed partial class MdiClient : Control
     {
         base.InitializeControl(deviceDpi);
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+        BackColor = SystemColors.AppWorkspace;
+        Dock = DockStyle.Fill;
     }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
