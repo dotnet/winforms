@@ -14,6 +14,23 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey>
 
 These cached objects have implicit conversions that make them behave like actual GDI+ types while significantly reducing allocation overhead.
 
+### APIs, which already provide cached Pens or Brushes.
+
+The APIs `SystemPens` and `SystemBrushes` already provide cached Pen/Brush objects. 
+- Make sure you prioritize their usage (except you need pen objects with a different width).
+- If you use this API, these Pen or Brush object MUST NOT be disposed!
+
+For example:
+```CSharp
+    // Nothing to explicitly cache, since `SystemPens` already provides cached pen objects.
+    if (ToolStripManager.VisualStylesEnabled)
+    {
+        e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
+        e.Graphics.DrawLine(SystemPens.InactiveBorder, 0, bounds.Bottom - 2, bounds.Width, bounds.Bottom - 2);
+    }
+```
+
+
 ### 1.2 Using Cached Objects
 
 Always prefer cached objects over direct instantiation:
@@ -47,6 +64,8 @@ Available cached objects:
   ```
 
 Always use `var` for brevity and always apply `using` to ensure proper disposal.
+
+IMPORTANT: You cannot use pen- or brush-scoped, when the pen needs additional features, for example, when during its lifetime, the pen needs to be modified (e.g., `Inset`, `DashStyle`, `CustomStartCap`, etc.). In these cases, you need to use the non-cached version of the pen or brush.
 
 ### 1.3 Transforming Helper Methods
 
@@ -205,91 +224,8 @@ using (var brush = color.GetCachedSolidBrushScope())
 }
 ```
 
-## 5. Code Style and Quality Guidelines
 
-When working on GDI+ related code, follow these general coding guidelines:
-
-### 5.1 C# Language Features
-
-- Use C# 13 features and patterns throughout the codebase
-- Apply Nullable Reference Types (NRT) consistently
-  ```csharp
-  // Update event handler signatures
-  public event EventHandler<EventArgs>? SomeEvent;
-  private void OnSomeEvent(object? sender, EventArgs e) { ... }
-  ```
-- Always insert empty lines after structure blocks and before `return` statements
-- Use pattern matching, `is`, `and`, `or`, and switch expressions where applicable
-  ```csharp
-  if (obj is Control control && control.Visible)
-  {
-      // Use 'control' variable
-  }
-  ```
-
-### 5.2 Visibility and Scope
-
-- Use the narrowest possible scope for classes, methods, and fields
-  - Prefer `private` over `internal` over `public`
-  - Consider `private protected` for overridable members in internal classes
-- Mark appropriate methods as `static` when they don't access instance state
-
-### 5.3 Naming and Formatting
-
-- Prefix static fields with `s_`
-  ```csharp
-  private static readonly int s_defaultBorderWidth = 1;
-  ```
-- Prefix instance fields with `_`
-  ```csharp
-  private int _borderWidth;
-  ```
-- Use PascalCase for constants, properties, and public/internal fields
-  ```csharp
-  public const int DefaultWidth = 100;
-  internal int BorderWidth { get; set; }
-  ```
-- Use explicit type names for primitive types (not `var`)
-  ```csharp
-  int count = 5;           // Correct
-  string name = "Button";  // Correct
-  var index = 0;           // Avoid for primitives
-  ```
-- Use `var` for complex types or when the type is obvious from initialization
-
-### 5.4 XML Documentation
-
-- Format XML comments with single-space indentation
-  ```csharp
-  /// <summary>
-  ///  This is a properly formatted summary.
-  /// </summary>
-  ```
-- Use `<para>` tags for multiple paragraphs in documentation
-  ```csharp
-  /// <summary>
-  ///  First paragraph of documentation.
-  ///  <para>
-  ///   Second paragraph with additional details.
-  ///  </para>
-  /// </summary>
-  ```
-- Include appropriate XML tags (`<remarks>`, `<param>`, `<returns>`, etc.)
-
-### 5.5 Expression Bodies
-
-- Use expression bodies for simple properties and methods
-- For longer expressions, use line breaks with proper alignment:
-  ```csharp
-  internal int SomeFooIntegerProperty =>
-      _someFooIntegerProperty;
-      
-  private bool IsValidSize(Size size) =>
-      size.Width > 0 && 
-      size.Height > 0;
-  ```
-
-## 6. Complete Examples
+## 5. Complete Examples
 
 ### Basic Rendering with Cached Resources
 
