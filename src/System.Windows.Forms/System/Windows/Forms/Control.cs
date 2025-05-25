@@ -5781,7 +5781,8 @@ public unsafe partial class Control :
         {
             PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
             PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
-            return BackColorBrush;
+            // Avoid redundant caching; use the existing brush if already owned
+            return GetState(States.OwnCtlBrush) ? BackColorBrush : PInvokeCore.GetSysColorBrush(BackColor);
         }
 
         return (HBRUSH)PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);

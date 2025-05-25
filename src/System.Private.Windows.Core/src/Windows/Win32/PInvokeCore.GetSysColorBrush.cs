@@ -7,7 +7,15 @@ namespace Windows.Win32;
 
 internal static partial class PInvokeCore
 {
-    /// <inheritdoc cref="GetSysColorBrush(SYS_COLOR_INDEX)"/>
+    private static HBRUSH s_solidBrush;
+    private static HBRUSH s_lastSolidBruch;
+
+    /// <summary>
+    /// Returns a system color brush for the given color.
+    /// If using an alternative color set, manages solid brush creation and cleanup to prevent GDI leaks.
+    /// </summary>
+    /// <param name="systemColor">The system color.</param>
+    /// <returns>An HBRUSH for the color.</returns>
     public static HBRUSH GetSysColorBrush(Color systemColor)
     {
 #if NET9_0_OR_GREATER
@@ -20,13 +28,35 @@ internal static partial class PInvokeCore
 
         if (useSolidBrush)
         {
-            // We don't have a real system color, so we'll just create a solid brush.
-            return CreateSolidBrush(systemColor);
+            // Create a new solid brush for the alternative color set.
+            s_solidBrush = CreateSolidBrush(systemColor);
+
+            // Delete the previous solid brush to avoid GDI leaks.
+            if (s_lastSolidBruch != s_solidBrush)
+            {
+                if (s_lastSolidBruch != default)
+                {
+                    DeleteObject(s_lastSolidBruch);
+                }
+
+                s_lastSolidBruch = s_solidBrush;
+            }
+
+            return s_solidBrush;
         }
 
         Debug.Assert(systemColor.IsSystemColor);
 
-        // Extract the COLOR value
+        // Clean up any previously created solid brushes to prevent GDI leaks.
+        if (s_solidBrush != default || s_lastSolidBruch != default)
+        {
+            DeleteObject(s_solidBrush);
+            DeleteObject(s_lastSolidBruch);
+            s_solidBrush = default;
+            s_lastSolidBruch = default;
+        }
+
+        // Return the system color brush for the specified system color.
         return GetSysColorBrush((SYS_COLOR_INDEX)(ColorTranslator.ToOle(systemColor) & 0xFF));
     }
 }
