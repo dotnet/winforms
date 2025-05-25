@@ -265,6 +265,11 @@ public static partial class ToolStripManager
 
     private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
     {
+        if (e.Category == UserPreferenceCategory.Color)
+        {
+            t_defaultRenderer = CreateRenderer(RenderMode);
+        }
+
         // Using changing here so that the cache will be cleared by the time the ToolStrip
         // hooks onto the changed event.
 
