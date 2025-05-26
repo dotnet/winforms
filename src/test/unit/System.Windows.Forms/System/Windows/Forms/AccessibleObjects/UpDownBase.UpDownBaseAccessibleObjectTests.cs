@@ -27,16 +27,16 @@ public class UpDownBase_UpDownBaseAccessibleObjectTests : IDisposable
     [InlineData(-1)]
     [InlineData(2)]
     [InlineData(100)]
-    public void GetChild_WithInvalidIndices_ReturnsNull(int index)
-        => _accObj.GetChild(index).Should().BeNull();
+    public void GetChild_WithInvalidIndices_ReturnsNull(int index) =>
+        _accObj.GetChild(index).Should().BeNull();
 
     [WinFormsFact]
-    public void GetChildCount_WithCustomParents_ReturnsTwo()
-        => _accObj.GetChildCount().Should().Be(2);
+    public void GetChildCount_WithCustomParents_ReturnsTwo() =>
+        _accObj.GetChildCount().Should().Be(2);
 
     [WinFormsFact]
-    public void Role_WithCustomParents_ReturnsSpinButton()
-        => _accObj.Role.Should().Be(AccessibleRole.SpinButton);
+    public void Role_WithCustomParents_ReturnsSpinButton() =>
+        _accObj.Role.Should().Be(AccessibleRole.SpinButton);
 
     private class TestUpDownBase : UpDownBase
     {
@@ -52,7 +52,7 @@ public class UpDownBase_UpDownBaseAccessibleObjectTests : IDisposable
         public override void DownButton() => throw new NotImplementedException();
         public override void UpButton() => throw new NotImplementedException();
         protected override void UpdateEditText() => throw new NotImplementedException();
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new UpDownBaseAccessibleObject(this);
+        protected override AccessibleObject CreateAccessibilityInstance() =>
+            new UpDownBaseAccessibleObject(this);
     }
 }
