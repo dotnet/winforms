@@ -7329,18 +7329,6 @@ public unsafe partial class Control :
                 SetWindowFont();
             }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
-            {
-                HRESULT result = PInvoke.SetWindowTheme(
-                    hwnd: HWND,
-                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
-                    pszSubIdList: null);
-
-                Debug.Assert(result.Succeeded, "SetWindowTheme failed with HRESULT: " + result);
-            }
-#pragma warning restore WFO5001
-
             HandleHighDpi();
 
             // Restore drag drop status. Ole Initialize happens when the ThreadContext in Application is created.
@@ -7383,6 +7371,18 @@ public unsafe partial class Control :
                 SetExtendedState(ExtendedStates.HaveInvoked, true);
                 SetExtendedState(ExtendedStates.SetScrollPosition, false);
             }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                HRESULT result = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+
+                Debug.Assert(result.Succeeded, "SetWindowTheme failed with HRESULT: " + result);
+            }
+#pragma warning restore WFO5001
         }
 
         ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
