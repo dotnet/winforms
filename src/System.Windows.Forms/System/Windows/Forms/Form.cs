@@ -3358,7 +3358,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    // Deactivates active MDI child and temporarily marks it as unfocusable,
+    // Deactivates active MDI child and temporarily marks it as un-focusable,
     // so that WM_SETFOCUS sent to MDIClient does not activate that child.
     private void DeactivateMdiChild()
     {
@@ -4126,29 +4126,14 @@ public partial class Form : ContainerControl
         _formStateEx[s_formStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
         base.OnHandleCreated(e);
 
-        if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
-        }
-
-        if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
-        }
-
-        if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
-        }
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
-        {
-            SetFormCornerPreferenceInternal(cornerPreference.Value);
-        }
-#pragma warning restore WFO5001
-
         UpdateLayered();
+
+        // On RecreateHandle, there is another point in time, when we need to do that.
+        // So, we will be doing it there, and cannot have it here as well.
+        if (!_inRecreateHandle)
+        {
+            SetFormTitleProperties();
+        }
     }
 
     /// <summary>
@@ -4897,7 +4882,35 @@ public partial class Form : ContainerControl
             Debug.Assert(result);
         }
 
+        SetFormTitleProperties();
+
         GC.KeepAlive(this);
+    }
+
+    private void SetFormTitleProperties()
+    {
+        if (TopLevel && IsHandleCreated)
+        {
+            if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
+            {
+                SetFormCornerPreferenceInternal(cornerPreference.Value);
+            }
+        }
     }
 
     /// <summary>
