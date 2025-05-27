@@ -69,7 +69,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 | ControlStyles.ResizeRedraw
                 | ControlStyles.OptimizedDoubleBuffer
                 // We gain about 2% in painting by avoiding extra GetWindowText calls
-                | ControlStyles.CacheText,
+                | ControlStyles.CacheText
+                | ControlStyles.StandardClick,
             true);
 
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result
