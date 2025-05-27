@@ -154,6 +154,7 @@ public partial class Form : ContainerControl
     private MdiClient? _ctlClient;
     private NativeWindow? _ownerWindow;
     private bool _rightToLeftLayout;
+    private ScreenCaptureMode _formScreenCaptureMode = ScreenCaptureMode.Allow;
 
     private Rectangle _restoreBounds = new(-1, -1, -1, -1);
     private CloseReason _closeReason = CloseReason.None;
@@ -1724,6 +1725,89 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Gets or sets the behavior for preventing screen capture/video recording of the
+    ///  form's content via screen capture applications based on the Windows APIs.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This property determines how the form's content behaves when captured by screen capture applications
+    ///   or screenshots. Different capture modes provide varying levels of privacy and security for sensitive content.
+    ///  </para>
+    ///  <para>
+    ///   By default, forms allow their content to be captured. Setting this property to a more restrictive value
+    ///   can prevent sensitive information from being captured in screenshots or recorded in screen recordings.
+    ///  </para>
+    ///  <para>
+    ///   The setting takes effect immediately for visible forms. For forms that aren't yet shown,
+    ///   the setting takes effect when the form becomes visible.
+    ///  </para>
+    ///  <para>
+    ///   Warning! Additional top-level windows, which will be spinning off the form, will not be affected
+    ///   by this setting. Please be aware, that for example sensitive information in a pop-up window
+    ///   like a MessageBox, a context menu, DropDownButton menus or PullDown-menus can not be prevented
+    ///   from being captured!
+    ///  </para>
+    ///  <para>
+    ///   Note that this setting only affects the current form and not any other windows in the application.
+    ///   Also note that this will also affect video streaming applications for video conferencing, etc.
+    ///  </para>
+    ///  <para>
+    ///   Disclaimer: Please keep in mind, that this setting can of course not prevent screen recordings by tools,
+    ///   which are either circumvent the public Windows APIs or use hardware-based screen capture methods.
+    ///  </para>
+    /// </remarks>
+    /// <value>
+    ///  One of the <see cref="ScreenCaptureMode"/> enumeration values. The default is
+    ///  <see cref="ScreenCaptureMode.Allow"/>.
+    /// </value>
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
+    public ScreenCaptureMode FormScreenCaptureMode
+    {
+        get => _formScreenCaptureMode;
+        set
+        {
+            if (_formScreenCaptureMode == value)
+            {
+                return;
+            }
+
+            SourceGenerated.EnumValidator.Validate(value);
+
+            _formScreenCaptureMode = value;
+
+            if (IsHandleCreated)
+            {
+                SetScreenCaptureModeInternal(value);
+            }
+        }
+    }
+
+    private bool ShouldSerializeFormScreenCaptureMode() =>
+        FormScreenCaptureMode != ScreenCaptureMode.Allow;
+
+    private void ResetFormScreenCaptureMode() =>
+        FormScreenCaptureMode = ScreenCaptureMode.Allow;
+
+    private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
+    {
+        if (!TopLevel)
+        {
+            return;
+        }
+
+        WINDOW_DISPLAY_AFFINITY affinity = value switch
+        {
+            ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
+            ScreenCaptureMode.HideWindow => WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE,
+            ScreenCaptureMode.HideContent => WINDOW_DISPLAY_AFFINITY.WDA_MONITOR,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+        };
+
+        PInvoke.SetWindowDisplayAffinity(HWND, affinity);
+    }
+
+    /// <summary>
     ///  If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
     /// </summary>
     [DefaultValue(true)]
@@ -2598,7 +2682,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2610,7 +2693,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2622,7 +2704,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2634,7 +2715,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
