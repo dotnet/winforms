@@ -39,7 +39,7 @@ public partial class MainForm : Form
             // - ISelectionService
             // - try to get a ptr to ISelectionService interface
             // - if we obtain it then hook the SelectionChanged event
-            _selectionService = (ISelectionService)(designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService)));
+            _selectionService = (ISelectionService)designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService));
             if (_selectionService is not null)
             {
                 _selectionService.SelectionChanged += OnSelectionChanged;
