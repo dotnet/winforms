@@ -40,19 +40,10 @@ public class UpDownBase_UpDownBaseAccessibleObjectTests : IDisposable
 
     private class TestUpDownBase : UpDownBase
     {
-        public TestUpDownBase()
-        {
-            AccessibleObject textBoxParent = new();
-            AccessibleObject buttonsParent = new();
-
-            TextBox.AccessibilityObject.SetParent(textBoxParent);
-            UpDownButtonsInternal.AccessibilityObject.SetParent(buttonsParent);
-        }
+        public TestUpDownBase() : base() { }
 
         public override void DownButton() => throw new NotImplementedException();
         public override void UpButton() => throw new NotImplementedException();
         protected override void UpdateEditText() => throw new NotImplementedException();
-        protected override AccessibleObject CreateAccessibilityInstance() =>
-            new UpDownBaseAccessibleObject(this);
     }
 }
