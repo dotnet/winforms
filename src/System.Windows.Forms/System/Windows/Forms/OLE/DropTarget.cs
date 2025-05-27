@@ -283,7 +283,7 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
         try
         {
             _owner.OnDragDrop(e);
-            effect = (DROPEFFECT)e.Effect;
+            *pdwEffect = effect = (DROPEFFECT)e.Effect;
         }
         finally
         {
