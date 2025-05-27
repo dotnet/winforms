@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Provides methods for rendering a button with Popup FlatStyle in dark mode.
 /// </summary>
-internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
+internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 {
     // UI constants
     private const int ButtonCornerRadius = 5;
@@ -19,14 +19,7 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     private const int BorderThickness = 2;
     private const int ContentOffset = 1; // Offset for content when pressed
 
-    // Border color constants
-    private static Color ShadowDarkColor { get; } = Color.FromArgb(40, 40, 40);         // Deeper shadow
-    private static Color ShadowColor { get; } = Color.FromArgb(60, 60, 60);             // Standard shadow
-    private static Color HighlightColor { get; } = Color.FromArgb(110, 110, 110);       // Standard highlight
-    private static Color HighlightBrightColor { get; } = Color.FromArgb(130, 130, 130); // Brighter highlight
-    private static Color DisabledBorderDarkColor { get; } = Color.FromArgb(45, 45, 45);
-    private static Color DisabledBorderLightColor { get; } = Color.FromArgb(55, 55, 55);
-    private static Color DisabledBorderMidColor { get; } = Color.FromArgb(50, 50, 50);
+    private protected override Padding PaddingCore { get; } = new(0);
 
     // Default border color adjustment constants
     private const int DefaultBorderROffset = 30;
@@ -36,10 +29,10 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     /// <summary>
     ///  Draws button background with popup styling, including subtle 3D effect.
     /// </summary>
-    public Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
+    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
         // Use padding from ButtonDarkModeRenderer
-        Padding padding = ButtonDarkModeRenderer.GetPaddingCore(FlatStyle.Popup);
+        Padding padding = PaddingCore;
         Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
 
         // Content rect will be used to position text and images
@@ -72,15 +65,15 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     ///  Draws a focus rectangle with dotted lines inside the button.
     ///  Adjusts for the 3D effect based on the button's state.
     /// </summary>
-    public void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
+    public override void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
     {
         // Create a slightly smaller rectangle for the focus indicator
         Rectangle focusRect = Rectangle.Inflate(contentBounds, -FocusPadding, -FocusPadding);
 
         // Create dotted pen with appropriate color
         Color focusColor = isDefault
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
-            : ButtonDarkModeRenderer.DarkModeButtonColors.FocusIndicatorColor;
+            ? IButtonRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
+            : IButtonRenderer.DarkModeButtonColors.FocusIndicatorColor;
 
         // Custom pen needed for DashStyle - can't use cached version
         using var focusPen = new Pen(focusColor)
@@ -97,12 +90,12 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
     ///  Gets the text color appropriate for the button state and type.
     ///  Adjusts color for 3D effect when needed.
     /// </summary>
-    public Color GetTextColor(PushButtonState state, bool isDefault) =>
+    public override Color GetTextColor(PushButtonState state, bool isDefault) =>
         state == PushButtonState.Disabled
-            ? ButtonDarkModeRenderer.DarkModeButtonColors.DisabledTextColor
+            ? IButtonRenderer.DarkModeButtonColors.DisabledTextColor
             : isDefault
-                ? ButtonDarkModeRenderer.DarkModeButtonColors.DefaultTextColor
-                : ButtonDarkModeRenderer.DarkModeButtonColors.NormalTextColor;
+                ? IButtonRenderer.DarkModeButtonColors.DefaultTextColor
+                : IButtonRenderer.DarkModeButtonColors.NormalTextColor;
 
     /// <summary>
     ///  Gets the background color appropriate for the button state and type.
@@ -111,19 +104,19 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
         isDefault
             ? state switch
             {
-                PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor,
-                PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor,
-                PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor,
-                PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
-                _ => ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor
+                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor,
+                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor,
+                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor,
+                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
+                _ => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor
             }
             : state switch
             {
-                PushButtonState.Normal => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor,
-                PushButtonState.Hot => ButtonDarkModeRenderer.DarkModeButtonColors.HoverBackgroundColor,
-                PushButtonState.Pressed => ButtonDarkModeRenderer.DarkModeButtonColors.PressedBackgroundColor,
-                PushButtonState.Disabled => ButtonDarkModeRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-                _ => ButtonDarkModeRenderer.DarkModeButtonColors.NormalBackgroundColor
+                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DisabledBackgroundColor,
+                _ => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor
             };
 
     /// <summary>
@@ -151,26 +144,26 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
             if (state == PushButtonState.Pressed)
             {
                 // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
-                topLeftOuter = ShadowColor;       // shadow
-                bottomRightOuter = HighlightColor; // highlight
-                topLeftInner = ShadowDarkColor;   // deeper shadow
-                bottomRightInner = HighlightBrightColor; // brighter highlight
+                topLeftOuter = IButtonRenderer.DarkModeButtonColors.ShadowColor;       // shadow
+                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.HighlightColor; // highlight
+                topLeftInner = IButtonRenderer.DarkModeButtonColors.ShadowDarkColor;   // deeper shadow
+                bottomRightInner = IButtonRenderer.DarkModeButtonColors.HighlightBrightColor; // brighter highlight
             }
             else if (state == PushButtonState.Disabled)
             {
                 // Disabled: subtle, low-contrast border
-                topLeftOuter = DisabledBorderLightColor;
-                bottomRightOuter = DisabledBorderDarkColor;
-                topLeftInner = DisabledBorderMidColor;
-                bottomRightInner = DisabledBorderMidColor;
+                topLeftOuter = IButtonRenderer.DarkModeButtonColors.DisabledBorderLightColor;
+                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.DisabledBorderDarkColor;
+                topLeftInner = IButtonRenderer.DarkModeButtonColors.DisabledBorderMidColor;
+                bottomRightInner = IButtonRenderer.DarkModeButtonColors.DisabledBorderMidColor;
             }
             else
             {
                 // Normal/hot: highlight top/left, shadow bottom/right
-                topLeftOuter = HighlightColor;     // highlight
-                bottomRightOuter = ShadowColor;     // shadow
-                topLeftInner = HighlightBrightColor; // brighter highlight
-                bottomRightInner = ShadowDarkColor;  // deeper shadow
+                topLeftOuter = IButtonRenderer.DarkModeButtonColors.HighlightColor;     // highlight
+                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.ShadowColor;     // shadow
+                topLeftInner = IButtonRenderer.DarkModeButtonColors.HighlightBrightColor; // brighter highlight
+                bottomRightInner = IButtonRenderer.DarkModeButtonColors.ShadowDarkColor;  // deeper shadow
             }
 
             // Create and use outer pens with proper disposal
@@ -211,9 +204,9 @@ internal class PopupButtonDarkModeRenderer : IButtonDarkModeRenderer
             {
                 borderRect.Inflate(-BorderThickness, -BorderThickness);
                 Color innerBorderColor = Color.FromArgb(
-                    Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBorderROffset),
-                    Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
-                    Math.Max(0, ButtonDarkModeRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
+                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBorderROffset),
+                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
+                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
 
                 // Create and use default inner border pen with proper disposal
                 using var defaultInnerBorderPen = new Pen(innerBorderColor) { Alignment = PenAlignment.Inset };
