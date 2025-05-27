@@ -29,13 +29,15 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         try
         {
-            var smoothingMode = e.Graphics.SmoothingMode;
-            e.Graphics.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            // Use GraphicsInternal for better performance (GDI+ best practice)
+            var g = e.GraphicsInternal;
+            var smoothingMode = g.SmoothingMode;
+            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             LayoutData layout = CommonLayout().Layout();
 
             ButtonDarkModeRenderer.RenderButton(
-                e.Graphics,
+                g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 ToPushButtonState(state, Control.Enabled),
@@ -52,7 +54,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                     drawFocus: false)
             );
 
-            e.Graphics.SmoothingMode = smoothingMode;
+            g.SmoothingMode = smoothingMode;
         }
         catch (Exception)
         {
@@ -65,13 +67,14 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         try
         {
-            // Set the smoothing mode to AntiAlias for better rendering quality
-            var smoothingMode = e.Graphics.SmoothingMode;
-            e.Graphics.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            // Use GraphicsInternal for better performance (GDI+ best practice)
+            var g = e.GraphicsInternal;
+            var smoothingMode = g.SmoothingMode;
+            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
-                e.Graphics,
+                g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 PushButtonState.Pressed,
@@ -88,8 +91,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                     drawFocus: false)
             );
 
-            // Restore the original smoothing mode
-            e.Graphics.SmoothingMode = smoothingMode;
+            g.SmoothingMode = smoothingMode;
         }
         catch (Exception)
         {
@@ -102,13 +104,14 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         try
         {
-            // Set the smoothing mode to AntiAlias for better rendering quality
-            var smoothingMode = e.Graphics.SmoothingMode;
-            e.Graphics.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            // Use GraphicsInternal for better performance (GDI+ best practice)
+            var g = e.GraphicsInternal;
+            var smoothingMode = g.SmoothingMode;
+            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
-                e.Graphics,
+                g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 PushButtonState.Hot,
@@ -125,8 +128,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                     drawFocus: false)
             );
 
-            // Restore the original smoothing mode
-            e.Graphics.SmoothingMode = smoothingMode;
+            g.SmoothingMode = smoothingMode;
         }
         catch (Exception ex)
         {
@@ -134,7 +136,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
     }
 
-    protected override LayoutOptions Layout(PaintEventArgs e) => CommonLayout();
+    protected override LayoutOptions Layout(PaintEventArgs e)
+    {
+        return CommonLayout();
+    }
 
     private new LayoutOptions CommonLayout()
     {

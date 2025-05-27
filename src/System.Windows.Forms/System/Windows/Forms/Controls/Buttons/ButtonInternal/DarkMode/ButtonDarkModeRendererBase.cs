@@ -20,6 +20,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     /// <param name="graphics">Graphics context to draw on</param>
     private static void ClearBackground(Graphics graphics, Color parentBackgroundColor)
     {
+        ArgumentNullException.ThrowIfNull(graphics);
+
         graphics.Clear(parentBackgroundColor);
     }
 
@@ -57,12 +59,6 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         // Draw button background and get content bounds
         Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
 
-        // Offset content bounds for Popup style when button is pressed
-        // if (flatStyle == FlatStyle.Popup && state == PushButtonState.Pressed)
-        // {
-        //    contentBounds.Offset(1, 1);
-        // }
-
         // Paint image and field using the provided delegates
         paintImage(contentBounds);
 
@@ -72,12 +68,6 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             false);
 
         DrawFocusIndicator(graphics, bounds, isDefault);
-
-        // if (focused && showFocusCues)
-        // {
-        //    // Draw focus indicator for other styles
-        //    renderer.DrawFocusIndicator(graphics, contentBounds, isDefault);
-        // }
     }
 
     public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);

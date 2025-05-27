@@ -6,6 +6,7 @@ namespace System.Windows.Forms.ButtonInternal;
 internal static class DarkModeAdapterFactory
 {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     public static ButtonBaseAdapter CreateFlatAdapter(ButtonBase control)
     {
         return Application.IsDarkModeEnabled
@@ -26,5 +27,6 @@ internal static class DarkModeAdapterFactory
             ? new ButtonDarkModeAdapter(control)
             : new ButtonPopupAdapter(control);
     }
+
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

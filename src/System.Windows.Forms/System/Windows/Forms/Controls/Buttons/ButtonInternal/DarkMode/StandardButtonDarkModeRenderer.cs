@@ -64,7 +64,7 @@ internal class StandardButtonDarkModeRenderer : ButtonDarkModeRendererBase
             : IButtonRenderer.DarkModeButtonColors.FocusIndicatorColor;
 
         // Custom pen needed for DashStyle - can't use cached version
-        using var focusPen = new Pen(focusColor)
+        using Pen focusPen = new Pen(focusColor)
         {
             DashStyle = DashStyle.Dot
         };

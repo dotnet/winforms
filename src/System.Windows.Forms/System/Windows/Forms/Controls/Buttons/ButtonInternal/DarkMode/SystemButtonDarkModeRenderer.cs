@@ -33,6 +33,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     {
         // Shrink for DarkBorderGap and FocusBorderThickness
         Rectangle fillBounds = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
+
         using GraphicsPath fillPath = CreateRoundedRectanglePath(fillBounds, CornerRadius - DarkBorderGapThickness);
 
         // Get appropriate background color based on state
@@ -63,6 +64,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         // System style uses a solid white border instead of dotted lines
         using var focusPen = Color.White.GetCachedPenScope(FocusedButtonBorderThickness);
+
         graphics.DrawPath(focusPen, focusPath);
     }
 
@@ -132,6 +134,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         // Outer border path
         Rectangle borderRect = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
+
         using GraphicsPath borderPath = CreateRoundedRectanglePath(borderRect, CornerRadius);
 
         // We need to implement a subtle 3d effect around the already
@@ -195,6 +198,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private static GraphicsPath GetTopLeftSegmentPath(Rectangle bounds, int radius)
     {
         GraphicsPath path = new();
+
         int diameter = radius * 2;
 
         // Top left corner arc
@@ -233,6 +237,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private static GraphicsPath GetBottomRightSegmentPath(Rectangle bounds, int radius)
     {
         GraphicsPath path = new();
+
         int diameter = radius * 2;
 
         // Start from middle of top edge
@@ -268,12 +273,10 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Creates a GraphicsPath for a rounded rectangle.
     /// </summary>
-    /// <summary>
-    ///  Creates a GraphicsPath for a rounded rectangle.
-    /// </summary>
     private static GraphicsPath CreateRoundedRectanglePath(Rectangle bounds, int radius)
     {
         GraphicsPath path = new();
+
         path.AddRoundedRectangle(bounds, new Size(radius, radius));
 
         return path;

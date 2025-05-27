@@ -215,8 +215,11 @@
 
 - **Use `var` only for complex types when type is apparent from context**
   ```csharp
-  var control = new Button();              // OK - type is obvious
-  var items = GetComplexCollection();      // OK - long type name
+  var control = new Button();              // OK - type is obvious, but better is:
+  Button control = new();                  // Preferred
+  
+  // OK - long type name
+  var items = GetComplexCollectionWithRidiculousLongTypeName();
   int primitiveValue = 42;                 // Required for primitives
   ```
 
@@ -238,6 +241,11 @@
 - **Prefix static fields with `s_`** (suggestion level)
   ```csharp
   private static readonly int s_defaultBorderWidth = 1;
+  ```
+An exception to this rule is when the field is attributed with `[ThreadStatic]`, in which case the prefix should be `t_`:
+  ```csharp
+  [ThreadStatic]
+  private static int t_threadLocalValue;
   ```
 
 - **Prefix private/internal instance fields with `_`** (suggestion level)
@@ -286,7 +294,7 @@
   private bool IsVisible() => Visible && Parent?.Visible == true;
   ```
 
-- For longer expressions, use line breaks with proper alignment:
+For longer expressions, use line breaks with proper alignment:
   ```csharp
   internal int SomeFooIntegerProperty =>
       _someFooIntegerProperty;
@@ -295,6 +303,19 @@
       size.Width > 0 
       && size.Height > 0;
   ```
+**IMPORTANT**
+
+In C#, `public Foo FooInstance => new Foo();` and `public Foo FooInstance { get; } = new Foo();` are NOT interchangeable.
+
+* The first is an expression-bodied property that returns a new value each time it is accessed.
+* The second is a read-only auto-property with initializer that returns the same value every time, created once.
+
+When editing, generating, or suggesting C# properties, always maintain the original intent:
+
+* Use an expression-bodied property (`=>`) for computed or dynamic values.
+* Use an auto-property with initializer (`{ get; } = ...`) for stored, initialized-once values.
+
+Never "correct" or convert one style to the other unless you are certain the semantic behavior is intended to change because it was wrong with 100% confidence to begin with. If you encounter a case, where you have a expression-bodied property that returns a new instance, and you encounter this in a code review, you should add a comment explaining why this is intended, and that it is not a mistake.
 
 ### 1.5 Error Handling and Argument Validation
 
@@ -345,19 +366,38 @@
 - **Handle platform-specific code appropriately**
   ```csharp
   [SupportedOSPlatform("windows")]
-  private void WindowsSpecificMethod() { ... }
+  private void WindowsSpecificMethod() 
+  { 
+      ... 
+  }
   ```
 
 - **Use proper disposal patterns**
-  ```csharp
-  using var brush = new SolidBrush(Color.Red);  // Simple using for single resources
-  
-  // Traditional using for complex scenarios
-  using (Graphics g = CreateGraphics())
-  {
-      // Drawing operations
-  }
-  ```
+Prefer the modern C# “using declaration” syntax (using var ...) over the traditional using statement block.
+Use:
+
+```csharp
+using var brush = backColor.GetCachedSolidBrushScope();
+```
+
+instead of:
+
+```csharp
+using (SolidBrushCache.Scope brush = backColor.GetCachedSolidBrushScope())
+{
+    // ...
+}
+```
+
+This makes code more concise, reduces nesting, and improves readability. Only use the older style if you need to limit the scope of the variable to a smaller section within a larger method, or when the using var pattern is not supported. **Note**, that if you use `using` with the type name over `var` for new instances that you can omit the type name after the `new` like:
+
+```csharp
+using Pen focusPen = new(focusColor) // Use 'using' with type name and omit type after 'new'
+{
+    Width = 1.0f,
+    DashStyle = DashStyle.Dot
+};
+```
 
 ### 1.8 XML Documentation Standards
 
@@ -402,6 +442,7 @@
 ### 1.10 Magic Numbers
 
 - **Avoid magic numbers**: Use named constants or enums instead of hard-coded values. This improves readability and maintainability.
+
   ```csharp
   // Avoid magic numbers
   const int MaxItems = 100;
@@ -450,6 +491,9 @@
       return x;
   }
   ```
+
+  Note: If a code line for which these empty-line rules apply has a comment on top of it, the empty line should be placed before the comment, if there isn't one. And of course, NEVER comment that an empty lines need to be inserted at a spot, which would defeat the purpose of the empty line.
+  
 
 ### 1.12 Refactoring of existing comments
 

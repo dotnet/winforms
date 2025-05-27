@@ -75,7 +75,7 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
             ? IButtonRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
             : IButtonRenderer.DarkModeButtonColors.FocusIndicatorColor;
 
-        // Custom pen needed for DashStyle - can't use cached version
+        // See GDI+ best practices: pens with custom DashStyle must not use cached pens.
         using var focusPen = new Pen(focusColor)
         {
             DashStyle = DashStyle.Dot
@@ -166,7 +166,8 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 bottomRightInner = IButtonRenderer.DarkModeButtonColors.ShadowDarkColor;  // deeper shadow
             }
 
-            // Create and use outer pens with proper disposal
+            // Custom pen needed for PenAlignment.Inset - can't use cached version
+            // See GDI+ best practices: pens with custom alignment must not use cached pens.
             using (var topLeftOuterPen = new Pen(topLeftOuter) { Alignment = PenAlignment.Inset })
             using (var bottomRightOuterPen = new Pen(bottomRightOuter) { Alignment = PenAlignment.Inset })
             {
@@ -184,7 +185,6 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
             // Inner border for more depth
             borderRect.Inflate(-BorderThickness, -BorderThickness);
 
-            // Create and use inner pens with proper disposal
             using (var topLeftInnerPen = new Pen(topLeftInner) { Alignment = PenAlignment.Inset })
             using (var bottomRightInnerPen = new Pen(bottomRightInner) { Alignment = PenAlignment.Inset })
             {
@@ -208,7 +208,7 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
                     Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
                     Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
 
-                // Create and use default inner border pen with proper disposal
+                // Custom pen needed for PenAlignment.Inset - can't use cached version
                 using var defaultInnerBorderPen = new Pen(innerBorderColor) { Alignment = PenAlignment.Inset };
                 graphics.DrawRectangle(defaultInnerBorderPen, borderRect);
             }
