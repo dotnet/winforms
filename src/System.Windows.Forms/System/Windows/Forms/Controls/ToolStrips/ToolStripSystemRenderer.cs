@@ -52,7 +52,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: false);
+            _toolStripDarkModeRenderer ??= new ToolStripSystemDarkModeRenderer(isSystemDefaultAlternative: true);
 
             return _toolStripDarkModeRenderer;
         }
@@ -482,7 +482,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             if (item.IsTopLevel && !ToolStripManager.VisualStylesEnabled)
             {
                 // Classic Mode (3D edges)
-                // Draw box highlight for toplevel items in downlevel platforms.
+                // Draw box highlight for top-level items in downlevel platforms.
                 if (item.BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(
@@ -498,7 +498,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                     FillBackground(graphics, item.ContentRectangle, item.BackColor);
                 }
 
-                // Toplevel menu items do 3D borders.
+                // Top-level menu items do 3D borders.
                 ToolBarState state = GetToolBarState(item);
 
                 RenderSmall3DBorderInternal(
@@ -511,7 +511,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
 
             // Modern MODE (no 3D edges)
-            // Draw blue filled highlight for toplevel items in themed platforms or items parented to a drop down.
+            // Draw blue filled highlight for top-level items in themed platforms or items parented to a drop down.
             Rectangle fillRect = new(Point.Empty, item.Size);
 
             if (item.IsOnDropDown)

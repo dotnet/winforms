@@ -101,6 +101,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         }
 
         using var brush = GetDarkModeBrush(backColor);
+
         g.FillRectangle(brush, bounds);
     }
 
@@ -124,24 +125,24 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         if (toolStrip is StatusStrip)
         {
             RenderStatusStripBackground(e);
+
+            return;
+        }
+
+        if (toolStrip.IsDropDown)
+        {
+            // Dark mode dropdown background
+            FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
+        }
+        else if (toolStrip is MenuStrip)
+        {
+            // Dark mode menu background
+            FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
         }
         else
         {
-            if (toolStrip.IsDropDown)
-            {
-                // Dark mode dropdown background
-                FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
-            }
-            else if (toolStrip is MenuStrip)
-            {
-                // Dark mode menu background
-                FillBackground(g, bounds, GetDarkModeColor(SystemColors.Menu));
-            }
-            else
-            {
-                // Standard ToolStrip background
-                FillBackground(g, bounds, GetDarkModeColor(e.BackColor));
-            }
+            // Standard ToolStrip background
+            FillBackground(g, bounds, GetDarkModeColor(e.BackColor));
         }
     }
 
@@ -170,31 +171,33 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Graphics g = e.Graphics;
         Rectangle bounds = e.ToolStrip.ClientRectangle;
 
+        using var borderPen = GetDarkModePen(SystemColors.ControlDark);
+
         if (toolStrip is StatusStrip)
         {
             RenderStatusStripBorder(e);
+
+            return;
         }
-        else if (toolStrip is ToolStripDropDown toolStripDropDown)
+
+        if (toolStrip is ToolStripDropDown toolStripDropDown)
         {
             if (toolStripDropDown.DropShadowEnabled)
             {
                 bounds.Width -= 1;
                 bounds.Height -= 1;
 
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
             else
             {
-                using var borderPen = GetDarkModePen(SystemColors.ControlDark);
                 g.DrawRectangle(borderPen, bounds);
             }
+
+            return;
         }
-        else
-        {
-            using var borderPen = GetDarkModePen(SystemColors.ControlDark);
-            g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
-        }
+
+        g.DrawLine(borderPen, 0, bounds.Bottom - 1, bounds.Width, bounds.Bottom - 1);
     }
 
     /// <summary>
@@ -207,6 +210,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         Rectangle bounds = e.ToolStrip.ClientRectangle;
 
         using var borderPen = GetDarkModePen(SystemColors.ControlDark);
+
         g.DrawLine(borderPen, 0, 0, bounds.Width, 0);
     }
 
@@ -231,25 +235,28 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             // Dark mode selection highlight
             using var highlightBrush = GetDarkModeBrush(SystemColors.Highlight);
             e.Graphics.FillRectangle(highlightBrush, bounds);
+
+            return;
         }
-        else
+
+        // Render background image if available
+        if (e.Item.BackgroundImage is not null)
         {
-            // Render background image if available
-            if (e.Item.BackgroundImage is not null)
-            {
-                ControlPaint.DrawBackgroundImage(
-                    g: e.Graphics,
-                    backgroundImage: e.Item.BackgroundImage,
-                    backColor: GetDarkModeColor(e.Item.BackColor),
-                    backgroundImageLayout: e.Item.BackgroundImageLayout,
-                    bounds: e.Item.ContentRectangle,
-                    clipRect: bounds);
-            }
-            else if (e.Item.BackColor != Color.Transparent && e.Item.BackColor != Color.Empty)
-            {
-                // Custom background color (apply dark mode transformation)
-                FillBackground(e.Graphics, bounds, e.Item.BackColor);
-            }
+            ControlPaint.DrawBackgroundImage(
+                g: e.Graphics,
+                backgroundImage: e.Item.BackgroundImage,
+                backColor: GetDarkModeColor(e.Item.BackColor),
+                backgroundImageLayout: e.Item.BackgroundImageLayout,
+                bounds: e.Item.ContentRectangle,
+                clipRect: bounds);
+
+            return;
+        }
+
+        if (e.Item.BackColor != Color.Transparent && e.Item.BackColor != Color.Empty)
+        {
+            // Custom background color (apply dark mode transformation)
+            FillBackground(e.Graphics, bounds, e.Item.BackColor);
         }
     }
 
@@ -378,6 +385,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
                 g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom);
 
                 startX++;
+
                 using var rightPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
                 g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
             }
@@ -391,10 +399,12 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             }
 
             int startY = bounds.Height / 2;
+
             using var foreColorPen = GetDarkModeColor(SystemColors.ControlDark).GetCachedPenScope();
             g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right, startY);
 
             startY++;
+
             using var darkModePen = GetDarkModeColor(SystemColors.ButtonShadow).GetCachedPenScope();
             g.DrawLine(darkModePen, bounds.Left, startY, bounds.Right, startY);
         }
@@ -522,18 +532,20 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
             {
                 g.FillRectangle(darkColorBrush, bounds.Left + 2, y, 1, 1);
                 g.FillRectangle(lightColorBrush, bounds.Left + 3, y + 1, 1, 1);
+
                 y += 3;
             }
         }
         else
         {
-            // Draw horizontal grip
+            // Draw vertical grip
             int x = bounds.Left + 2;
 
             while (x < bounds.Right - 3)
             {
                 g.FillRectangle(darkColorBrush, x, bounds.Top + 2, 1, 1);
                 g.FillRectangle(lightColorBrush, x + 1, bounds.Top + 3, 1, 1);
+
                 x += 3;
             }
         }
