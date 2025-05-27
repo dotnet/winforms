@@ -1772,6 +1772,8 @@ public partial class Form : ContainerControl
                 return;
             }
 
+            SourceGenerated.EnumValidator.Validate(value);
+
             _formScreenCaptureMode = value;
 
             if (IsHandleCreated)
