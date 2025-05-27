@@ -464,6 +464,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 ImageList = null;
             }
 
+            UpdateOwnerDraw();
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
             Animate();
             Invalidate();
@@ -1033,15 +1034,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             if (_adapter is null
                 || FlatStyle != _cachedAdapterType)
             {
-                if (Application.IsDarkModeEnabled && this is Button)
-                {
-                    // For the Button, we use every aspect of our DarkMode adapter(s).
-                    _adapter = CreateDarkModeAdapter();
-                    _cachedAdapterType = FlatStyle;
-
-                    return _adapter;
-                }
-
                 switch (FlatStyle)
                 {
                     case FlatStyle.Standard:
@@ -1082,14 +1074,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         Debug.Fail("Derived classes need to provide a meaningful implementation.");
         return null;
-    }
-
-    internal virtual ButtonBaseAdapter CreateDarkModeAdapter()
-    {
-        // When a button-derived class does not have a dedicated DarkMode adapter implementation,
-        // we're falling back to the standard adapter, to not _force_ the derived class to implement
-        // a dark mode adapter.
-        return CreateStandardAdapter();
     }
 
     internal virtual StringFormat CreateStringFormat()
