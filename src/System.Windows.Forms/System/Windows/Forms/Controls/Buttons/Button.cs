@@ -75,13 +75,11 @@ public partial class Button : ButtonBase, IButtonControl
 
     protected override AccessibleObject CreateAccessibilityInstance() => new ButtonAccessibleObject(this);
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new ButtonFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter() => DarkModeAdapterFactory.CreateFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new ButtonPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter() => DarkModeAdapterFactory.CreatePopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonStandardAdapter(this);
-
-    internal override ButtonBaseAdapter CreateDarkModeAdapter() => new ButtonDarkModeAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter() => DarkModeAdapterFactory.CreateStandardAdapter(this);
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
@@ -153,6 +151,7 @@ public partial class Button : ButtonBase, IButtonControl
 #pragma warning disable WFO5001
     private protected override bool OwnerDraw =>
         (!Application.IsDarkModeEnabled
+            || Image is not null
             || FlatStyle != FlatStyle.Standard)
             && base.OwnerDraw;
 #pragma warning restore WFO5001

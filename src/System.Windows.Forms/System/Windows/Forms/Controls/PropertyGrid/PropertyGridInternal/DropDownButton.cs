@@ -68,7 +68,9 @@ internal sealed partial class DropDownButton : Button
     {
         base.OnPaint(pevent);
 
-        if (Application.RenderWithVisualStyles & _useComboBoxTheme)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (!Application.IsDarkModeEnabled
+            && (Application.RenderWithVisualStyles & _useComboBoxTheme))
         {
             ComboBoxState state = ComboBoxState.Normal;
 
@@ -107,6 +109,7 @@ internal sealed partial class DropDownButton : Button
                 ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
             }
         }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     internal void PerformButtonClick()
