@@ -149,11 +149,32 @@ public partial class Button : ButtonBase, IButtonControl
     }
 
 #pragma warning disable WFO5001
-    private protected override bool OwnerDraw =>
-        (!Application.IsDarkModeEnabled
-            || Image is not null
-            || FlatStyle != FlatStyle.Standard)
-            && base.OwnerDraw;
+    /// <summary>
+    ///  Defines, whether the control is owner-drawn. Based on this,
+    ///  the UserPaint flags get set, which in turn makes it later
+    ///  a Win32 controls, which we wrap (OwnerDraw == false) or if we
+    ///  draw ourselves. If the user wants to opt out of DarkMode, we cannot
+    ///  force System-Painting for FlatStyle.Standard, so we need to know here
+    ///  and now.
+    /// </summary>
+    private protected override bool OwnerDraw
+    {
+        get
+        {
+            if (Application.IsDarkModeEnabled
+                // The SystemRenderer cannot render images. So, we flip to our
+                // own DarkMode renderer, if we need to render images, OR
+                && Image is null
+                // when the user wants to opt out of implicit DarkMode rendering.
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+                && FlatStyle == FlatStyle.Standard)
+            {
+                return false;
+            }
+
+            return base.OwnerDraw;
+        }
+    }
 #pragma warning restore WFO5001
 
     internal override bool SupportsUiaProviders => true;
