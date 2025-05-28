@@ -73,10 +73,10 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// </summary>
     public override Color GetTextColor(PushButtonState state, bool isDefault) =>
         state == PushButtonState.Disabled
-            ? IButtonRenderer.DarkModeButtonColors.DisabledTextColor
+            ? DarkModeButtonColors.DisabledTextColor
             : isDefault
-                ? IButtonRenderer.DarkModeButtonColors.DefaultTextColor
-                : IButtonRenderer.DarkModeButtonColors.NormalTextColor;
+                ? DarkModeButtonColors.DefaultTextColor
+                : DarkModeButtonColors.NormalTextColor;
 
     /// <summary>
     ///  Gets the background color appropriate for the button state and type.
@@ -87,27 +87,27 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
             ? state switch
             {
                 PushButtonState.Normal => Color.FromArgb(
-                    IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBackgroundColorOffset),
+                    DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBackgroundColorOffset),
                 PushButtonState.Hot => Color.FromArgb(
-                    IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.R - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.G - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor.B - DefaultBackgroundColorOffset),
+                    DarkModeButtonColors.DefaultHoverBackgroundColor.R - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultHoverBackgroundColor.G - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultHoverBackgroundColor.B - DefaultBackgroundColorOffset),
                 PushButtonState.Pressed => Color.FromArgb(
-                    IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.R - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.G - DefaultBackgroundColorOffset,
-                    IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor.B - DefaultBackgroundColorOffset),
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor
+                    DarkModeButtonColors.DefaultPressedBackgroundColor.R - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultPressedBackgroundColor.G - DefaultBackgroundColorOffset,
+                    DarkModeButtonColors.DefaultPressedBackgroundColor.B - DefaultBackgroundColorOffset),
+                PushButtonState.Disabled => DarkModeButtonColors.DefaultDisabledBackgroundColor,
+                _ => DarkModeButtonColors.DefaultBackgroundColor
             }
             : state switch
             {
-                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor,
-                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.HoverBackgroundColor,
-                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.PressedBackgroundColor,
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor
+                PushButtonState.Normal => DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => DarkModeButtonColors.DisabledBackgroundColor,
+                _ => DarkModeButtonColors.NormalBackgroundColor
             };
 
     /// <summary>

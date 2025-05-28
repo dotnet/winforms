@@ -156,9 +156,8 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             Enabled = Control.Enabled
         };
 
-    private static PushButtonState ToPushButtonState(CheckState state, bool enabled)
-    {
-        return !enabled
+    private static PushButtonState ToPushButtonState(CheckState state, bool enabled) =>
+        !enabled
             ? PushButtonState.Disabled
             : state switch
             {
@@ -167,5 +166,4 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 CheckState.Indeterminate => PushButtonState.Hot,
                 _ => PushButtonState.Normal
             };
-    }
 }

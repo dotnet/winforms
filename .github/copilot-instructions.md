@@ -373,7 +373,7 @@ Never "correct" or convert one style to the other unless you are certain the sem
   ```
 
 - **Use proper disposal patterns**
-Prefer the modern C# “using declaration” syntax (using var ...) over the traditional using statement block.
+Prefer the modern C# "using declaration" syntax (using var ...) over the traditional using statement block.
 Use:
 
 ```csharp

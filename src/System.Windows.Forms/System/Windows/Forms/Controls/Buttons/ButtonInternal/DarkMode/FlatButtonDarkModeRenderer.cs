@@ -52,8 +52,8 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         // Create dotted pen with appropriate color
         Color focusColor = isDefault
-            ? IButtonRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
-            : IButtonRenderer.DarkModeButtonColors.FocusIndicatorColor;
+            ? DarkModeButtonColors.DefaultFocusIndicatorColor
+            : DarkModeButtonColors.FocusIndicatorColor;
 
         // Custom pen needed for DashStyle - can't use cached version
         using var focusPen = new Pen(focusColor)
@@ -70,10 +70,10 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// </summary>
     public override Color GetTextColor(PushButtonState state, bool isDefault) =>
         state == PushButtonState.Disabled
-            ? IButtonRenderer.DarkModeButtonColors.DisabledTextColor
+            ? DarkModeButtonColors.DisabledTextColor
             : isDefault
-                ? IButtonRenderer.DarkModeButtonColors.DefaultTextColor
-                : IButtonRenderer.DarkModeButtonColors.NormalTextColor;
+                ? DarkModeButtonColors.DefaultTextColor
+                : DarkModeButtonColors.NormalTextColor;
 
     /// <summary>
     ///  Gets the background color appropriate for the button state and type.
@@ -82,19 +82,19 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
         isDefault
             ? state switch
             {
-                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor,
-                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor,
-                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor,
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor
+                PushButtonState.Normal => DarkModeButtonColors.DefaultBackgroundColor,
+                PushButtonState.Hot => DarkModeButtonColors.DefaultHoverBackgroundColor,
+                PushButtonState.Pressed => DarkModeButtonColors.DefaultPressedBackgroundColor,
+                PushButtonState.Disabled => DarkModeButtonColors.DefaultDisabledBackgroundColor,
+                _ => DarkModeButtonColors.DefaultBackgroundColor
             }
             : state switch
             {
-                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor,
-                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.HoverBackgroundColor,
-                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.PressedBackgroundColor,
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor
+                PushButtonState.Normal => DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => DarkModeButtonColors.DisabledBackgroundColor,
+                _ => DarkModeButtonColors.NormalBackgroundColor
             };
 
     /// <summary>
@@ -112,7 +112,7 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
             IButtonRenderer.DrawButtonBorder(
                 graphics,
                 path,
-                IButtonRenderer.DarkModeButtonColors.DisabledBorderLightColor,
+                DarkModeButtonColors.DisabledBorderLightColor,
                 1);
 
             return;
@@ -128,8 +128,8 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
         if (state == PushButtonState.Pressed)
         {
             borderColor = isDefault
-                ? IButtonRenderer.DarkModeButtonColors.PressedSingleBorderColor
-                : IButtonRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor;
+                ? DarkModeButtonColors.PressedSingleBorderColor
+                : DarkModeButtonColors.DefaultFocusIndicatorColor;
 
             IButtonRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
 
@@ -138,8 +138,8 @@ internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         // For other states, draw a border with appropriate thickness
         borderColor = isDefault
-            ? IButtonRenderer.DarkModeButtonColors.DefaultSingleBorderColor
-            : IButtonRenderer.DarkModeButtonColors.SingleBorderColor;
+            ? DarkModeButtonColors.DefaultSingleBorderColor
+            : DarkModeButtonColors.SingleBorderColor;
 
         IButtonRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
 
