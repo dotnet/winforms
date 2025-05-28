@@ -671,13 +671,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    private protected virtual bool OwnerDraw => FlatStyle != FlatStyle.System;
-    // "OwnerDraw" controls are COMPLETELY rendered by us when we're either wrapping the system button
-    // and none of OnPaint, OnPaintBackground, or any adapter ever gets called,
-    // OR when we're taking over rendering entirely.
-    // We make this internally virtual, so CheckBox and RadioButton can override it,
-    // and determine, what they want the System render for DarkMode, and what
-    // by the adapters. For the background, refer to the FlatStyle property comments.
+    /// <summary>
+    ///  OwnerDraw ultimately determines, if we're wrapping the respective Win32 control
+    ///  (Button, CheckBox, RadioButton - OwnerDraw == false) or not. When we're not OwnerDraw,
+    ///  both Light- and DarkMode are (and can be) rendered by the System, but then there is
+    ///  no image rendering, and no OnPaint. This is the original behavior of the Win32 controls.
+    /// </summary>
     private protected virtual bool OwnerDraw =>
             FlatStyle != FlatStyle.System;
 
@@ -1025,8 +1024,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
 #pragma warning disable WFO5001
     /// <summary>
-    ///  Returns an adapter for Rendering one of the FlatStyles. Note, that we ALWAYS render
-    ///  Buttons ourselves, except when the User explicitly requests FlatStyle.System rendering!
+    ///  Returns an adapter for Rendering one of the FlatStyles. Note, that we always render
+    ///  buttons ourselves, except when the User explicitly requests FlatStyle.System rendering!
     /// </summary>
     internal ButtonBaseAdapter Adapter
     {

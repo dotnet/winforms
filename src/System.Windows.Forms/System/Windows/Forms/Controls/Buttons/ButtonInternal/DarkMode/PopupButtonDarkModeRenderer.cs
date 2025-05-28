@@ -72,8 +72,8 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         // Create dotted pen with appropriate color
         Color focusColor = isDefault
-            ? IButtonRenderer.DarkModeButtonColors.DefaultFocusIndicatorColor
-            : IButtonRenderer.DarkModeButtonColors.FocusIndicatorColor;
+            ? DarkModeButtonColors.DefaultFocusIndicatorColor
+            : DarkModeButtonColors.FocusIndicatorColor;
 
         // See GDI+ best practices: pens with custom DashStyle must not use cached pens.
         using var focusPen = new Pen(focusColor)
@@ -92,10 +92,10 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// </summary>
     public override Color GetTextColor(PushButtonState state, bool isDefault) =>
         state == PushButtonState.Disabled
-            ? IButtonRenderer.DarkModeButtonColors.DisabledTextColor
+            ? DarkModeButtonColors.DisabledTextColor
             : isDefault
-                ? IButtonRenderer.DarkModeButtonColors.DefaultTextColor
-                : IButtonRenderer.DarkModeButtonColors.NormalTextColor;
+                ? DarkModeButtonColors.DefaultTextColor
+                : DarkModeButtonColors.NormalTextColor;
 
     /// <summary>
     ///  Gets the background color appropriate for the button state and type.
@@ -104,19 +104,19 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
         isDefault
             ? state switch
             {
-                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor,
-                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.DefaultHoverBackgroundColor,
-                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.DefaultPressedBackgroundColor,
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DefaultDisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor
+                PushButtonState.Normal => DarkModeButtonColors.DefaultBackgroundColor,
+                PushButtonState.Hot => DarkModeButtonColors.DefaultHoverBackgroundColor,
+                PushButtonState.Pressed => DarkModeButtonColors.DefaultPressedBackgroundColor,
+                PushButtonState.Disabled => DarkModeButtonColors.DefaultDisabledBackgroundColor,
+                _ => DarkModeButtonColors.DefaultBackgroundColor
             }
             : state switch
             {
-                PushButtonState.Normal => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor,
-                PushButtonState.Hot => IButtonRenderer.DarkModeButtonColors.HoverBackgroundColor,
-                PushButtonState.Pressed => IButtonRenderer.DarkModeButtonColors.PressedBackgroundColor,
-                PushButtonState.Disabled => IButtonRenderer.DarkModeButtonColors.DisabledBackgroundColor,
-                _ => IButtonRenderer.DarkModeButtonColors.NormalBackgroundColor
+                PushButtonState.Normal => DarkModeButtonColors.NormalBackgroundColor,
+                PushButtonState.Hot => DarkModeButtonColors.HoverBackgroundColor,
+                PushButtonState.Pressed => DarkModeButtonColors.PressedBackgroundColor,
+                PushButtonState.Disabled => DarkModeButtonColors.DisabledBackgroundColor,
+                _ => DarkModeButtonColors.NormalBackgroundColor
             };
 
     /// <summary>
@@ -144,26 +144,26 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
             if (state == PushButtonState.Pressed)
             {
                 // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
-                topLeftOuter = IButtonRenderer.DarkModeButtonColors.ShadowColor;       // shadow
-                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.HighlightColor; // highlight
-                topLeftInner = IButtonRenderer.DarkModeButtonColors.ShadowDarkColor;   // deeper shadow
-                bottomRightInner = IButtonRenderer.DarkModeButtonColors.HighlightBrightColor; // brighter highlight
+                topLeftOuter = DarkModeButtonColors.ShadowColor;       // shadow
+                bottomRightOuter = DarkModeButtonColors.HighlightColor; // highlight
+                topLeftInner = DarkModeButtonColors.ShadowDarkColor;   // deeper shadow
+                bottomRightInner = DarkModeButtonColors.HighlightBrightColor; // brighter highlight
             }
             else if (state == PushButtonState.Disabled)
             {
                 // Disabled: subtle, low-contrast border
-                topLeftOuter = IButtonRenderer.DarkModeButtonColors.DisabledBorderLightColor;
-                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.DisabledBorderDarkColor;
-                topLeftInner = IButtonRenderer.DarkModeButtonColors.DisabledBorderMidColor;
-                bottomRightInner = IButtonRenderer.DarkModeButtonColors.DisabledBorderMidColor;
+                topLeftOuter = DarkModeButtonColors.DisabledBorderLightColor;
+                bottomRightOuter = DarkModeButtonColors.DisabledBorderDarkColor;
+                topLeftInner = DarkModeButtonColors.DisabledBorderMidColor;
+                bottomRightInner = DarkModeButtonColors.DisabledBorderMidColor;
             }
             else
             {
                 // Normal/hot: highlight top/left, shadow bottom/right
-                topLeftOuter = IButtonRenderer.DarkModeButtonColors.HighlightColor;     // highlight
-                bottomRightOuter = IButtonRenderer.DarkModeButtonColors.ShadowColor;     // shadow
-                topLeftInner = IButtonRenderer.DarkModeButtonColors.HighlightBrightColor; // brighter highlight
-                bottomRightInner = IButtonRenderer.DarkModeButtonColors.ShadowDarkColor;  // deeper shadow
+                topLeftOuter = DarkModeButtonColors.HighlightColor;     // highlight
+                bottomRightOuter = DarkModeButtonColors.ShadowColor;     // shadow
+                topLeftInner = DarkModeButtonColors.HighlightBrightColor; // brighter highlight
+                bottomRightInner = DarkModeButtonColors.ShadowDarkColor;  // deeper shadow
             }
 
             // Custom pen needed for PenAlignment.Inset - can't use cached version
@@ -204,9 +204,9 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
             {
                 borderRect.Inflate(-BorderThickness, -BorderThickness);
                 Color innerBorderColor = Color.FromArgb(
-                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBorderROffset),
-                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
-                    Math.Max(0, IButtonRenderer.DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
+                    Math.Max(0, DarkModeButtonColors.DefaultBackgroundColor.R - DefaultBorderROffset),
+                    Math.Max(0, DarkModeButtonColors.DefaultBackgroundColor.G - DefaultBorderGOffset),
+                    Math.Max(0, DarkModeButtonColors.DefaultBackgroundColor.B - DefaultBorderBOffset));
 
                 // Custom pen needed for PenAlignment.Inset - can't use cached version
                 using var defaultInnerBorderPen = new Pen(innerBorderColor) { Alignment = PenAlignment.Inset };

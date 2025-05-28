@@ -163,13 +163,10 @@ public partial class Button : ButtonBase, IButtonControl
         {
             if (Application.IsDarkModeEnabled
                 // The SystemRenderer cannot render images. So, we flip to our
-                // own DarkMode renderer, if we need to render images, except if
-                && GetStyle(ControlStyles.ApplyThemingImplicitly)
-                // the user wants to opt out of implicit DarkMode rendering.
+                // own DarkMode renderer, if we need to render images, OR
                 && Image is null
-                // And this only counts for FlatStyle.Standard. For the rest,
-                // we're using specific renderers, which check themselves, if
-                // they need to apply Light- or DarkMode.
+                // when the user wants to opt out of implicit DarkMode rendering.
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
                 && FlatStyle == FlatStyle.Standard)
             {
                 return false;
