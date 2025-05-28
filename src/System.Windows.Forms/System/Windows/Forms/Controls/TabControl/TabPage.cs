@@ -35,9 +35,6 @@ public partial class TabPage : Panel
     public TabPage() : base()
     {
         SetStyle(ControlStyles.CacheText, true);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
         Text = null;
     }
 
@@ -132,6 +129,18 @@ public partial class TabPage : Panel
             }
 
             base.BackColor = value;
+        }
+    }
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
+            return base.CreateParams;
         }
     }
 

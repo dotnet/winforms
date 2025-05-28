@@ -120,10 +120,6 @@ public partial class ListBox : ListControl
     {
         SetStyle(ControlStyles.UserPaint | ControlStyles.StandardClick | ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
@@ -268,6 +264,10 @@ public partial class ListBox : ListControl
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_LISTBOX;
 

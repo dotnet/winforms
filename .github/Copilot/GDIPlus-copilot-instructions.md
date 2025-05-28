@@ -65,6 +65,8 @@ Available cached objects:
 
 Always use `var` for brevity and always apply `using` to ensure proper disposal.
 
+IMPORTANT: You cannot use pen- or brush-scoped, when the pen needs additional features, for example, when during its lifetime, the pen needs to be modified (e.g., `Inset`, `DashStyle`, `CustomStartCap`, etc.). In these cases, you need to use the non-cached version of the pen or brush.
+
 ### 1.3 Transforming Helper Methods
 
 When refactoring existing code:

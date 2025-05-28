@@ -75,11 +75,11 @@ public partial class Button : ButtonBase, IButtonControl
 
     protected override AccessibleObject CreateAccessibilityInstance() => new ButtonAccessibleObject(this);
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new ButtonFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter() => DarkModeAdapterFactory.CreateFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new ButtonPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter() => DarkModeAdapterFactory.CreatePopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonStandardAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter() => DarkModeAdapterFactory.CreateStandardAdapter(this);
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
@@ -113,6 +113,7 @@ public partial class Button : ButtonBase, IButtonControl
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (GetStyle(ControlStyles.UserPaint))
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
@@ -120,6 +121,7 @@ public partial class Button : ButtonBase, IButtonControl
             else
             {
                 cp.Style |= PInvoke.BS_PUSHBUTTON;
+
                 if (IsDefault)
                 {
                     cp.Style |= PInvoke.BS_DEFPUSHBUTTON;
@@ -145,6 +147,35 @@ public partial class Button : ButtonBase, IButtonControl
             _dialogResult = value;
         }
     }
+
+#pragma warning disable WFO5001
+    /// <summary>
+    ///  Defines, whether the control is owner-drawn. Based on this,
+    ///  the UserPaint flags get set, which in turn makes it later
+    ///  a Win32 controls, which we wrap (OwnerDraw == false) or if we
+    ///  draw ourselves. If the user wants to opt out of DarkMode, we cannot
+    ///  force System-Painting for FlatStyle.Standard, so we need to know here
+    ///  and now.
+    /// </summary>
+    private protected override bool OwnerDraw
+    {
+        get
+        {
+            if (Application.IsDarkModeEnabled
+                // The SystemRenderer cannot render images. So, we flip to our
+                // own DarkMode renderer, if we need to render images, OR
+                && Image is null
+                // when the user wants to opt out of implicit DarkMode rendering.
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+                && FlatStyle == FlatStyle.Standard)
+            {
+                return false;
+            }
+
+            return base.OwnerDraw;
+        }
+    }
+#pragma warning restore WFO5001
 
     internal override bool SupportsUiaProviders => true;
 
