@@ -33,10 +33,10 @@
     <PackageVersion Include="AwesomeAssertions" Version="$(AwesomeAssertionsVersion)" />
     <PackageVersion Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageVersion Include="Microsoft.DotNet.RemoteExecutor" Version="$(MicrosoftDotNetRemoteExecutorVersion)" />
-    <PackageVersion Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.DotNet.XUnitV3Extensions" Version="$(MicrosoftDotNetXUnitV3ExtensionsPackageVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="$(MicrosoftVisualStudioThreadingVersion)" />
-    <PackageVersion Include="Verify.Xunit" Version="$(VerifyXunitVersion)" />
-    <PackageVersion Include="xunit.assert" Version="$(XUnitAssertVersion)" Condition="'$(IsTestProject)' != 'true'" />
+    <PackageVersion Include="Verify.XunitV3" Version="$(VerifyXunitV3Version)" />
+    <PackageVersion Include="xunit.v3.assert" Version="$(XUnitV3Version)" Condition="'$(IsTestProject)' != 'true'" />
     <PackageVersion Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
 
     <!-- Code coverage-->
@@ -50,10 +50,6 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonPackageVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
@@ -66,10 +62,6 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="$(MicrosoftCodeAnalysisPublicApiAnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.SourceGenerators.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="$(MicrosoftCodeAnalysisVisualBasicWorkspacesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
     <PackageVersion Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
