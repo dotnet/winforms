@@ -40,7 +40,7 @@ public class AppManifestAnalyzerTests
             {
                 AdditionalFiles = { }
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
 
     [Fact]
     public async Task AppManifestAnalyzer_no_op_if_manifest_file_has_no_dpi_info()
@@ -56,7 +56,7 @@ public class AppManifestAnalyzerTests
             {
                  AdditionalFiles = { (@"C:\temp\app.manifest", manifestFile) }
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class AppManifestAnalyzerTests
             {
                  AdditionalFiles = { (@"C:\temp\app.manifest", manifestFile) }
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class AppManifestAnalyzerTests
                 new DiagnosticResult(SharedDiagnosticDescriptors.s_cSharpMigrateHighDpiSettings)
                     .WithArguments(manifestFilePath, ApplicationConfig.PropertyNameCSharp.HighDpiMode)
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class AppManifestAnalyzerTests
                 new DiagnosticResult(SharedDiagnosticDescriptors.s_visualBasicMigrateHighDpiSettings)
                     .WithArguments(manifestFilePath, ApplicationConfig.PropertyNameVisualBasic.HighDpiMode)
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class AppManifestAnalyzerTests
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
                 AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.{DiagnosticIDs.MigrateHighDpiSettings}.severity = none") }
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -161,6 +161,6 @@ public class AppManifestAnalyzerTests
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
                 AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.{DiagnosticIDs.MigrateHighDpiSettings}.severity = none") }
             }
-        }.RunAsync();
+        }.RunAsync(TestContext.Current.CancellationToken);
     }
 }

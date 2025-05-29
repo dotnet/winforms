@@ -74,7 +74,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -97,7 +97,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -151,7 +151,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -177,7 +177,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -215,7 +215,7 @@ public partial class ApplicationConfigurationGeneratorTests
             },
         };
 
-        await test.RunAsync();
+        await test.RunAsync(TestContext.Current.CancellationToken);
     }
 
     private async Task<SourceText> LoadFileContentAsync(string testName)
