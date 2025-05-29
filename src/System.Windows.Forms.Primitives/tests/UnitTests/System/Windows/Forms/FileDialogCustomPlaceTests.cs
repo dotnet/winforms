@@ -9,7 +9,7 @@ public class FileDialogCustomPlaceTests
     {
         var data = new TheoryData<string?>
         {
-            null,
+            (string?)null,
             string.Empty,
             "reasonable"
         };

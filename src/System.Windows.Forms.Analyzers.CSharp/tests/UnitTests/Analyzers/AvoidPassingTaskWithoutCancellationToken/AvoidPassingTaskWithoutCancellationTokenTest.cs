@@ -126,6 +126,6 @@ public sealed class AvoidPassingTaskWithoutCancellationTokenTests
             context.TestState.AdditionalReferences.Add(pathToWinFormsAssembly);
         }
 
-        await context.RunAsync();
+        await context.RunAsync(TestContext.Current.CancellationToken);
     }
 }
