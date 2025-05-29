@@ -12,7 +12,9 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     public void Add_NullValue_DoesNothing()
     {
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(false);
+
         collection.Add(null);
+
         collection.Cast<Control>().Should().BeEmpty();
     }
 
@@ -20,8 +22,10 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     public void Add_WhenReadOnly_ThrowsNotSupportedException()
     {
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(true);
-        ToolStripPanel panel = new();
+        using ToolStripPanel panel = new();
+
         Action act = () => collection.Add(panel);
+
         act.Should().Throw<NotSupportedException>();
     }
 
@@ -30,7 +34,9 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     {
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(false);
         using Button button = new();
+
         Action act = () => collection.Add(button);
+
         act.Should().Throw<ArgumentException>();
     }
 
@@ -39,10 +45,20 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     [InlineData(typeof(ToolStripContentPanel))]
     public void Add_ValidType_AddsSuccessfully(Type type)
     {
-        ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(false);
+        using Form form = new();
+        using ToolStripContainer container = new();
+        form.Controls.Add(container);
+
+        ToolStripContainer.ToolStripContainerTypedControlCollection collection = new(container, isReadOnly: false);
+
         Control control = (Control)Activator.CreateInstance(type)!;
+
         collection.Add(control);
+
         collection.Cast<Control>().Should().Contain(control);
+
+        collection.Remove(control);
+        control.Dispose();
     }
 
     [WinFormsTheory]
@@ -50,11 +66,13 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     [InlineData(typeof(ToolStripContentPanel))]
     public void Remove_WhenReadOnly_ThrowsNotSupportedException(Type type)
     {
-        ToolStripContainer container = new();
+        using ToolStripContainer container = new();
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = new(container, true);
-        Control control = (Control)Activator.CreateInstance(type)!;
+        using Control control = (Control)Activator.CreateInstance(type)!;
         container.ContentPanel.Controls.Add(control);
+
         Action act = () => collection.Remove(control);
+
         act.Should().Throw<NotSupportedException>();
     }
 
@@ -62,20 +80,24 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     public void Remove_Panel_WhenNotReadOnly_RemovesPanel()
     {
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(false);
-        ToolStripPanel panel = new();
+        using ToolStripPanel panel = new();
         collection.Add(panel);
+
         collection.Remove(panel);
+
         collection.Cast<Control>().Should().NotContain(panel);
     }
 
     [WinFormsFact]
     public void Remove_NonPanelOrContentPanel_DoesNotThrow()
     {
-        ToolStripContainer container = new();
+        using ToolStripContainer container = new();
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = new(container, false);
         using Button button = new();
         container.ContentPanel.Controls.Add(button);
+
         Action act = () => collection.Remove(button);
+
         act.Should().NotThrow();
         collection.Cast<Control>().Should().NotContain(button);
     }
@@ -85,21 +107,33 @@ public class ToolStripContainer_ToolStripContainerTypedControlCollectionTests
     [InlineData(typeof(ToolStripContentPanel))]
     public void SetChildIndexInternal_WhenReadOnly_ThrowsNotSupportedException(Type type)
     {
-        ToolStripContainer container = new();
+        using ToolStripContainer container = new();
         ToolStripContainer.ToolStripContainerTypedControlCollection collection = new(container, true);
-        Control control = (Control)Activator.CreateInstance(type)!;
+        using Control control = (Control)Activator.CreateInstance(type)!;
         container.ContentPanel.Controls.Add(control);
+
         Action act = () => collection.SetChildIndexInternal(control, 0);
+
         act.Should().Throw<NotSupportedException>();
     }
 
     [WinFormsFact]
     public void SetChildIndexInternal_Panel_WhenNotReadOnly_CallsBase()
     {
-        ToolStripContainer.ToolStripContainerTypedControlCollection collection = CreateCollection(false);
+        using Form form = new();
+        using ToolStripContainer container = new();
+        form.Controls.Add(container);
+
+        ToolStripContainer.ToolStripContainerTypedControlCollection collection = new(container, isReadOnly: false);
+
         ToolStripPanel panel = new();
         collection.Add(panel);
+
         collection.SetChildIndexInternal(panel, 0);
+
         collection.GetChildIndex(panel).Should().Be(0);
+
+        collection.Remove(panel);
+        panel.Dispose();
     }
 }
