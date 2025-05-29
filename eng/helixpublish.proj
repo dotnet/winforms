@@ -23,7 +23,6 @@
     <EnableXUnitReporter>true</EnableXUnitReporter>
     <XUnitPublishTargetFramework>$(XUnitPublishTargetFramework)</XUnitPublishTargetFramework>
     <XUnitRuntimeTargetFramework>$(XUnitRuntimeTargetFramework)</XUnitRuntimeTargetFramework>
-    <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
   </PropertyGroup>
 
   <ItemGroup>
