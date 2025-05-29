@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Threading;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 

@@ -3,7 +3,6 @@
 
 using System.Globalization;
 using Xunit;
-using Xunit.Abstractions;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
