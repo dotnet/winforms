@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.HiDpi;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests.Dpi;
 

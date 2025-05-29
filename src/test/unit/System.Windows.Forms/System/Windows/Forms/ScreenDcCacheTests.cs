@@ -21,7 +21,7 @@ public class ScreenDcCacheTests
                 using var screen = cache.Acquire();
                 Assert.False(screen.HDC.IsNull);
                 Thread.Sleep(random.Next(5));
-            });
+            }, TestContext.Current.CancellationToken);
         }
     }
 }
