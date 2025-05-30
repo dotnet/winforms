@@ -11,7 +11,7 @@ public class GridToolTipTests : IDisposable
     public GridToolTipTests()
     {
         _controls = [new Button(), new TextBox()];
-        _toolTip = new GridToolTip(_controls);
+        _toolTip = new(_controls);
     }
 
     public void Dispose()
@@ -24,53 +24,58 @@ public class GridToolTipTests : IDisposable
         _toolTip.Dispose();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_SetAndGetValue()
     {
         _toolTip.ToolTip = "Test tooltip";
+
         _toolTip.ToolTip.Should().Be("Test tooltip");
 
         _toolTip.ToolTip = "Another tooltip";
+
         _toolTip.ToolTip.Should().Be("Another tooltip");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_SetNullValue()
     {
         _toolTip.ToolTip = null;
+
         _toolTip.ToolTip.Should().BeNull();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_SetEmptyString()
     {
         _toolTip.ToolTip = string.Empty;
+
         _toolTip.ToolTip.Should().BeEmpty();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_SetTooLong_Truncates()
     {
-        string longText = new('a', 1005);
-        _toolTip.ToolTip = longText;
+        _toolTip.ToolTip = new('a', 1005);
+
         _toolTip.ToolTip.Should().EndWith("...");
         _toolTip.ToolTip.Length.Should().Be(1003);
 
-        string text = new('b', 1000);
-        _toolTip.ToolTip = text;
+        _toolTip.ToolTip = new('b', 1000);
+
         _toolTip.ToolTip.Should().NotEndWith("...");
         _toolTip.ToolTip.Length.Should().Be(1000);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_Reset()
     {
         _toolTip.ToolTip = "abc";
         _toolTip.Reset();
+
         _toolTip.ToolTip.Should().Be("abc");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GridToolTip_OnHandleCreated_CallsSetupToolTip()
     {
         using Form form = new();
@@ -84,6 +89,7 @@ public class GridToolTipTests : IDisposable
         _toolTip.IsHandleCreated.Should().BeFalse();
 
         form.Show();
+
         _toolTip.IsHandleCreated.Should().BeTrue();
     }
 }
