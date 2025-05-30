@@ -32,7 +32,6 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using Microsoft.DotNet.XUnitExtensions;
 
 namespace MonoTests.System.Drawing;
 
@@ -2187,13 +2186,13 @@ public class GraphicsTest : IDisposable
         Assert.Throws<ArgumentException>(g.ReleaseHdc);
     }
 
-    [ConditionalFact]
+    [Fact]
     public void VisibleClipBound()
     {
         if (PlatformDetection.IsArmOrArm64Process)
         {
             // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
-            throw new SkipTestException("Precision on float numbers");
+            Assert.Skip("Precision on float numbers");
         }
 
         // see #78958
@@ -2221,13 +2220,13 @@ public class GraphicsTest : IDisposable
         Assert.Equal(32.0, rotclip.Height, 4);
     }
 
-    [ConditionalFact]
+    [Fact]
     public void VisibleClipBound_BigClip()
     {
         if (PlatformDetection.IsArmOrArm64Process)
         {
             // ActiveIssue: 35744
-            throw new SkipTestException("Precision on float numbers");
+            Assert.Skip("Precision on float numbers");
         }
 
         using Bitmap bmp = new(100, 100);
@@ -2266,13 +2265,13 @@ public class GraphicsTest : IDisposable
         Assert.Equal(100.0, rotclip.Height, 4);
     }
 
-    [ConditionalFact]
+    [Fact]
     public void Rotate()
     {
         if (PlatformDetection.IsArmOrArm64Process)
         {
             // ActiveIssue: 35744
-            throw new SkipTestException("Precision on float numbers");
+            Assert.Skip("Precision on float numbers");
         }
 
         using Bitmap bmp = new(100, 50);

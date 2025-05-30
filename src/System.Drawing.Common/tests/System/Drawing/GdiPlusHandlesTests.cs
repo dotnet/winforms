@@ -15,7 +15,7 @@ public static class GdiPlusHandlesTests
 {
     public static bool IsDrawingAndRemoteExecutorSupported => RemoteExecutor.IsSupported;
 
-    [ConditionalFact(nameof(IsDrawingAndRemoteExecutorSupported))]
+    [Fact(SkipUnless = nameof(IsDrawingAndRemoteExecutorSupported))]
     public static void GraphicsDrawIconDoesNotLeakHandles()
     {
         RemoteExecutor.Invoke(() =>

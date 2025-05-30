@@ -66,6 +66,10 @@
     <ExcludeByFile />
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TestRunnerName>XUnitV3</TestRunnerName>
+  </PropertyGroup>
+
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
   <PropertyGroup>
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>

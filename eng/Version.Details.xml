@@ -103,7 +103,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/dotnet</Uri>
       <Sha>0a01b394b186e190a80cb55740c13f6293cf5446</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="10.0.0-beta.25278.103">
+    <Dependency Name="Microsoft.DotNet.XUnitV3Extensions" Version="10.0.0-beta.25278.103">
       <Uri>https://github.com/dotnet/dotnet</Uri>
       <Sha>0a01b394b186e190a80cb55740c13f6293cf5446</Sha>
     </Dependency>

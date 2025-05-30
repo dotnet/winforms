@@ -101,7 +101,7 @@ public class GifCodecTest
         Bitmap8bitsPixels(Helpers.GetTestBitmapPath("nature24bits87.gif"));
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap8bitsData()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature24bits.gif");

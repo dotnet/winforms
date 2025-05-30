@@ -4,7 +4,6 @@
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.DotNet.XUnitExtensions;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -645,7 +644,7 @@ public class ImageTests
     {
         if (PlatformDetection.IsNetFramework)
         {
-            throw new SkipTestException("This is a known bug for .NET Framework");
+            Assert.Skip("This is a known bug for .NET Framework");
         }
 
         ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();

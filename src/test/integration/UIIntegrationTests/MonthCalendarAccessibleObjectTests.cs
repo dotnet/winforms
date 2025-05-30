@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.UITests;

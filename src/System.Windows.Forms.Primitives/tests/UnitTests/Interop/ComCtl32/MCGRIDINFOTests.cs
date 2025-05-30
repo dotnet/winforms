@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
 public class MCGRIDINFOTests
 {
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void MCGRIDINFO_x32_Size()
     {
         if (Environment.Is64BitProcess)
@@ -19,7 +19,7 @@ public class MCGRIDINFOTests
         Assert.Equal(84, sizeof(MCGRIDINFO));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void MCGRIDINFO_x32_Marshal_Size()
     {
         if (Environment.Is64BitProcess)
@@ -30,7 +30,7 @@ public class MCGRIDINFOTests
         Assert.Equal(84, Marshal.SizeOf<MCGRIDINFO>());
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void MCGRIDINFO_x32_ensure_layout()
     {
         if (Environment.Is64BitProcess)
@@ -55,7 +55,7 @@ public class MCGRIDINFOTests
         Assert.Equal(80, (byte*)&sut.cchName - addr);        // 4, size_t
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public void MCGRIDINFO_x32_Marshal_OffsetOf_IsCorrect()
     {
         if (Environment.Is64BitProcess)
@@ -77,7 +77,7 @@ public class MCGRIDINFOTests
         Assert.Equal(80, (int)Marshal.OffsetOf<MCGRIDINFO>(nameof(MCGRIDINFO.cchName)));          // 8, size_t
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void MCGRIDINFO_x64_Size()
     {
         if (!Environment.Is64BitProcess)
@@ -88,7 +88,7 @@ public class MCGRIDINFOTests
         Assert.Equal(96, sizeof(MCGRIDINFO));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public void MCGRIDINFO_x64_Marshal_Size()
     {
         if (!Environment.Is64BitProcess)
@@ -99,7 +99,7 @@ public class MCGRIDINFOTests
         Assert.Equal(96, Marshal.SizeOf<MCGRIDINFO>());
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void MCGRIDINFO_x64_ensure_layout()
     {
         if (!Environment.Is64BitProcess)
@@ -125,7 +125,7 @@ public class MCGRIDINFOTests
         Assert.Equal(88, (byte*)&sut.cchName - addr);        // 8, size_t
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public void MCGRIDINFO_x64_Marshal_OffsetOf_IsCorrect()
     {
         if (!Environment.Is64BitProcess)

@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
 public class TASKDIALOGCONFIGIconUnionTests
 {
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void TASKDIALOGCONFIGIconUnion_x32_Size()
     {
         if (Environment.Is64BitProcess)
@@ -18,7 +18,7 @@ public class TASKDIALOGCONFIGIconUnionTests
         Assert.Equal(4, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void TASKDIALOGCONFIGIconUnion_x32_ensure_layout()
     {
         if (Environment.Is64BitProcess)
@@ -33,7 +33,7 @@ public class TASKDIALOGCONFIGIconUnionTests
         Assert.Equal(0, (byte*)&icon.pszMainIcon - addr);  // 4, PCWSTR
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void TASKDIALOGCONFIGIconUnion_x64_Size()
     {
         if (!Environment.Is64BitProcess)
@@ -44,7 +44,7 @@ public class TASKDIALOGCONFIGIconUnionTests
         Assert.Equal(8, sizeof(TASKDIALOGCONFIG_MainIcon));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void TASKDIALOGCONFIGIconUnion_x64_ensure_layout()
     {
         if (!Environment.Is64BitProcess)

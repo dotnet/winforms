@@ -76,10 +76,10 @@ public static class CommonTestHelperEx
     {
         TheoryData<Padding> data = new()
         {
-            default,
-            new(1, 2, 3, 4),
-            new(1),
-            new(-1, -2, -3, -4)
+            default(Padding),
+            new Padding(1, 2, 3, 4),
+            new Padding(1),
+            new Padding(-1, -2, -3, -4)
         };
         return data;
     }
@@ -100,8 +100,8 @@ public static class CommonTestHelperEx
     {
         TheoryData<Cursor> data = new()
         {
-            null,
-            new(1)
+            (Cursor)null,
+            new Cursor(1)
         };
         return data;
     }
@@ -112,8 +112,8 @@ public static class CommonTestHelperEx
         Graphics graphics = Graphics.FromImage(image);
         return new TheoryData<PaintEventArgs>
         {
-            null,
-            new(graphics, Rectangle.Empty)
+            (PaintEventArgs)null,
+            new PaintEventArgs(graphics, Rectangle.Empty)
         };
     }
 
@@ -121,8 +121,8 @@ public static class CommonTestHelperEx
     {
         return new TheoryData<KeyEventArgs>
         {
-            new(Keys.None),
-            new(Keys.Cancel)
+            new KeyEventArgs(Keys.None),
+            new KeyEventArgs(Keys.Cancel)
         };
     }
 
@@ -130,8 +130,8 @@ public static class CommonTestHelperEx
     {
         TheoryData<KeyPressEventArgs> data = new()
         {
-            null,
-            new('1')
+            (KeyPressEventArgs)null,
+            new KeyPressEventArgs('1')
         };
         return data;
     }
@@ -140,9 +140,9 @@ public static class CommonTestHelperEx
     {
         TheoryData<LayoutEventArgs> data = new()
         {
-            null,
-            new(null, null),
-            new(new Control(), "affectedProperty")
+            (LayoutEventArgs)null,
+            new LayoutEventArgs(null, null),
+            new LayoutEventArgs(new Control(), "affectedProperty")
         };
         return data;
     }
@@ -151,8 +151,8 @@ public static class CommonTestHelperEx
     {
         return new TheoryData<MouseEventArgs>
         {
-            null,
-            new(MouseButtons.Left, 1, 2, 3, 4),
+            (MouseEventArgs)null,
+            new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
             new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
         };
     }
