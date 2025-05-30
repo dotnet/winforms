@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -9,19 +10,16 @@ public class DataGridViewLinkCellTests : IDisposable
 {
     private readonly DataGridViewLinkCell _cell;
 
-    public DataGridViewLinkCellTests()
-    {
-        _cell = new();
-    }
+    public DataGridViewLinkCellTests() => _cell = new();
 
     public void Dispose() => _cell.Dispose();
 
     private static DataGridView CreateGridWithColumn()
     {
-        DataGridView dgv = new();
-        dgv.Columns.Add(new DataGridViewTextBoxColumn());
-        dgv.Rows.Add();
-        return dgv;
+        DataGridView dataGridView = new();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add();
+        return dataGridView;
     }
 
     [Fact]
@@ -31,36 +29,50 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.Should().BeAssignableTo<DataGridViewCell>();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ActiveLinkColor_Default_ReturnsExpected()
     {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+
         _cell.Selected = false;
         _cell.ActiveLinkColor.Should().Be(LinkUtilities.IEActiveLinkColor);
+
+        _cell.Selected = true;
+        _cell.ActiveLinkColor.Should().Be(SystemColors.HighlightText);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ActiveLinkColor_SetAndGet_ReturnsSetValue()
     {
         Color color = Color.Red;
         _cell.ActiveLinkColor = color;
+
         _cell.ActiveLinkColor.Should().Be(color);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ActiveLinkColor_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
     {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
 
         _cell.Selected = false;
+
         _cell.ActiveLinkColor = Color.Blue;
+        _cell.ActiveLinkColor.Should().Be(Color.Blue);
+
+        _cell.Selected = true;
+        _cell.ActiveLinkColor = Color.Blue;
+
         _cell.ActiveLinkColor.Should().Be(Color.Blue);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ActiveLinkColorInternal_SetsValueWithoutInvalidation()
     {
         _cell.ActiveLinkColorInternal = Color.Yellow;
+
         _cell.ActiveLinkColor.Should().Be(Color.Yellow);
     }
 
@@ -71,7 +83,8 @@ public class DataGridViewLinkCellTests : IDisposable
     [Fact]
     public void EditType_Override_ReturnsNull_ForDerivedType()
     {
-        DerivedDataGridViewLinkCell cell = new();
+        using DerivedDataGridViewLinkCell cell = new();
+
         cell.EditType.Should().BeNull();
     }
 
@@ -86,7 +99,8 @@ public class DataGridViewLinkCellTests : IDisposable
     [Fact]
     public void FormattedValueType_Override_ReturnsStringType_ForDerivedType()
     {
-        DerivedDataGridViewLinkCell cell = new();
+        using DerivedDataGridViewLinkCell cell = new();
+
         cell.FormattedValueType.Should().Be(typeof(string));
     }
 
@@ -109,67 +123,76 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         _cell.LinkBehavior = LinkBehavior.SystemDefault;
         _cell.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
+
         _cell.LinkBehavior = LinkBehavior.SystemDefault;
         _cell.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkBehavior_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
     {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+       _cell.LinkBehavior = LinkBehavior.AlwaysUnderline;
 
-        _cell.LinkBehavior = LinkBehavior.AlwaysUnderline;
         _cell.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkColor_Default_ReturnsExpected()
     {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+
         _cell.Selected = false;
         _cell.LinkColor.Should().Be(LinkUtilities.IELinkColor);
-    }
-
-    [Fact]
-    public void LinkColor_Selected_ReturnsHighlightText()
-    {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
 
         _cell.Selected = true;
         _cell.LinkColor.Should().Be(SystemColors.HighlightText);
     }
 
-    [Fact]
+    [WinFormsFact]
+    public void LinkColor_Selected_ReturnsHighlightText()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        _cell.Selected = true;
+
+        _cell.LinkColor.Should().Be(SystemColors.HighlightText);
+    }
+
+    [WinFormsFact]
     public void LinkColor_SetAndGet_RoundTrips()
     {
         Color color = Color.Purple;
         _cell.LinkColor = color;
+
         _cell.LinkColor.Should().Be(color);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkColor_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
     {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
-
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
         _cell.LinkColor = Color.Orange;
+
         _cell.LinkColor.Should().Be(Color.Orange);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkColorInternal_SetsValueWithoutInvalidation()
     {
         _cell.LinkColorInternal = Color.Brown;
+
         _cell.LinkColor.Should().Be(Color.Brown);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkVisited_Default_IsFalse() =>
         _cell.LinkVisited.Should().BeFalse();
 
-    [Fact]
+    [WinFormsFact]
     public void LinkVisited_SetTrueAndFalse_RoundTrips()
     {
         _cell.LinkVisited = true;
@@ -179,30 +202,31 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.LinkVisited.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkVisited_SetSameValue_DoesNotChange()
     {
         _cell.LinkVisited = false;
         _cell.LinkVisited.Should().BeFalse();
+
         _cell.LinkVisited = false;
         _cell.LinkVisited.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void LinkVisited_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
     {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
-
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
         _cell.LinkVisited = true;
+
         _cell.LinkVisited.Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackVisitedState_Default_IsTrue() =>
         _cell.TrackVisitedState.Should().BeTrue();
 
-    [Fact]
+    [WinFormsFact]
     public void TrackVisitedState_SetAndGet_RoundTrips()
     {
         _cell.TrackVisitedState = false;
@@ -212,30 +236,31 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.TrackVisitedState.Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackVisitedState_SetSameValue_DoesNotChange()
     {
         _cell.TrackVisitedState = true;
         _cell.TrackVisitedState.Should().BeTrue();
+
         _cell.TrackVisitedState = true;
         _cell.TrackVisitedState.Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void TrackVisitedState_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
     {
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
 
         _cell.TrackVisitedState = false;
         _cell.TrackVisitedState.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void UseColumnTextForLinkValue_Default_IsFalse() =>
         _cell.UseColumnTextForLinkValue.Should().BeFalse();
 
-    [Fact]
+    [WinFormsFact]
     public void UseColumnTextForLinkValue_SetAndGet_RoundTrips()
     {
         _cell.UseColumnTextForLinkValue = true;
@@ -245,27 +270,29 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.UseColumnTextForLinkValue.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void UseColumnTextForLinkValue_SetSameValue_DoesNotChange()
     {
         _cell.UseColumnTextForLinkValue = false;
         _cell.UseColumnTextForLinkValue.Should().BeFalse();
+
         _cell.UseColumnTextForLinkValue = false;
         _cell.UseColumnTextForLinkValue.Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ToString_ReturnsExpectedFormat()
     {
         _cell.ToString().Should().Be("DataGridViewLinkCell { ColumnIndex=-1, RowIndex=-1 }");
 
-        DataGridView dgv = CreateGridWithColumn();
-        dgv.Rows[0].Cells[0] = _cell;
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
         string result = _cell.ToString();
+
         result.Should().Contain("DataGridViewLinkCell { ColumnIndex=0, RowIndex=0 }");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Clone_Default_CopiesAllRelevantProperties()
     {
         _cell.ActiveLinkColor = Color.Red;
@@ -288,24 +315,445 @@ public class DataGridViewLinkCellTests : IDisposable
         clone.LinkVisited.Should().Be(_cell.LinkVisited);
     }
 
-    [Fact]
-    public void Clone_DerivedType_CreatesSameType()
+    [WinFormsFact]
+    public void Clone_BaseType_CreatesSameType()
     {
-        DerivedDataGridViewLinkCell cell = new() { LinkColor = Color.Pink };
-        var clone = cell.Clone();
-        clone.Should().BeOfType<DerivedDataGridViewLinkCell>();
-        ((DerivedDataGridViewLinkCell)clone).LinkColor.Should().Be(cell.LinkColor);
+        _cell.LinkColor = Color.Pink;
+        DataGridViewLinkCell clone = (DataGridViewLinkCell)_cell.Clone();
+
+        clone.Should().BeOfType<DataGridViewLinkCell>();
+        clone.LinkColor.Should().Be(_cell.LinkColor);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Clone_OnlyCopiesSetProperties()
     {
         _cell.LinkColor = Color.Orange;
         DataGridViewLinkCell clone = (DataGridViewLinkCell)_cell.Clone();
+
         clone.LinkColor.Should().Be(Color.Orange);
         clone.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
         clone.TrackVisitedState.Should().BeTrue();
         clone.UseColumnTextForLinkValue.Should().BeFalse();
         clone.LinkVisited.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void CreateAccessibilityInstance_ReturnsAccessibleObject()
+    {
+        AccessibleObject accessibleObject = _cell.AccessibilityObject;
+
+        accessibleObject.Should().NotBeNull();
+        accessibleObject.Should().BeAssignableTo<AccessibleObject>();
+    }
+
+    [WinFormsFact]
+    public void GetContentBounds_ReturnsEmpty_WhenNotInDataGridView() =>
+        _cell.GetContentBounds(0).Should().Be(Rectangle.Empty);
+
+    [WinFormsFact]
+    public void GetContentBounds_ThrowsArgumentOutOfRangeException_WhenRowIndexNegative()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+
+        Action action = () => _cell.GetContentBounds(-1);
+
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsFact]
+    public void GetContentBounds_ReturnsEmpty_WhenOwningColumnIsNull() =>
+        _cell.GetContentBounds(0).Should().Be(Rectangle.Empty);
+
+    [WinFormsFact]
+    public void GetErrorIconBounds_ThrowsInvalidOperationException_WhenNotInDataGridView() =>
+        ((Action)(() => _cell.GetErrorIconBounds(0))).Should().Throw<InvalidOperationException>();
+
+    [WinFormsFact]
+    public void GetErrorIconBounds_ThrowsArgumentOutOfRangeException_WhenRowIndexNegative()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+
+        Action action = () => _cell.GetErrorIconBounds(-1);
+
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsFact]
+    public void GetErrorIconBounds_ThrowsInvalidOperationException_WhenOwningColumnIsNull() =>
+        ((Action)(() => _cell.GetErrorIconBounds(0))).Should().Throw<InvalidOperationException>();
+
+    [WinFormsFact]
+    public void GetErrorIconBounds_ReturnsEmpty_WhenShowCellErrorsIsFalse()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        dataGridView.ShowCellErrors = false;
+        Rectangle result = _cell.GetErrorIconBounds(0);
+
+        result.Should().Be(Rectangle.Empty);
+    }
+
+    [WinFormsFact]
+    public void GetErrorIconBounds_ReturnsEmpty_WhenErrorTextIsNullOrEmpty()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+
+        string? errorText = _cell.TestAccessor().Dynamic.GetErrorText(0);
+        errorText.Should().BeNullOrEmpty();
+        Rectangle result = _cell.GetErrorIconBounds(0);
+
+        result.Should().Be(Rectangle.Empty);
+    }
+
+    [WinFormsFact]
+    public void GetValue_ReturnsBaseValue_WhenUseColumnTextForLinkValueIsFalse()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Columns.Clear();
+        dataGridView.Columns.Add(new DataGridViewLinkColumn());
+        dataGridView.Rows.Add();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        object testValue = "TestValue";
+        _cell.Value = testValue;
+
+        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+
+        result.Should().Be(testValue);
+    }
+
+    [WinFormsFact]
+    public void GetValue_ReturnsColumnText_WhenUseColumnTextForLinkValueIsTrue_AndOwningColumnIsLinkColumn()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Columns.Clear();
+        dataGridView.Columns.AddRange([new DataGridViewLinkColumn { Text = "ColumnText" }]);
+        dataGridView.Rows.Add();
+        _cell.UseColumnTextForLinkValue = true;
+        dataGridView.Rows[0].Cells[0] = _cell;
+
+        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+
+        result.Should().Be("ColumnText");
+    }
+
+    [WinFormsFact]
+    public void GetValue_ReturnsBaseValue_WhenUseColumnTextForLinkValueIsTrue_ButOwningColumnIsNotLinkColumn()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        _cell.UseColumnTextForLinkValue = true;
+        dataGridView.Rows[0].Cells[0] = _cell;
+        object testValue = "TestValue";
+        _cell.Value = testValue;
+
+        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+
+        result.Should().Be(testValue);
+    }
+
+    [WinFormsFact]
+    public void GetValue_ReturnsBaseValue_WhenUseColumnTextForLinkValueIsTrue_AndRowIsNewRow()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Columns.Clear();
+        dataGridView.Columns.AddRange([new DataGridViewLinkColumn { Text = "ColumnText" }]);
+        dataGridView.Rows.Add();
+        _cell.UseColumnTextForLinkValue = true;
+        dataGridView.Rows[0].Cells[0] = _cell;
+        int newRowIndex = dataGridView.NewRowIndex;
+        object testValue = "TestValue";
+        _cell.Value = testValue;
+
+        object? result = _cell.TestAccessor().Dynamic.GetValue(newRowIndex);
+
+        result.Should().Be(testValue);
+    }
+
+    [WinFormsTheory]
+    [InlineData(Keys.Space, false, false, false, true, false, true)]
+    [InlineData(Keys.Space, false, false, false, false, false, false)]
+    [InlineData(Keys.Space, true, false, false, true, false, true)]
+    [InlineData(Keys.Space, false, true, false, true, false, true)]
+    [InlineData(Keys.Space, false, false, true, true, false, true)]
+    [InlineData(Keys.Enter, false, false, false, true, false, true)]
+    public void KeyUpUnsharesRow_VariousScenarios_ReturnsExpected(Keys key, bool alt, bool control, bool shift, bool trackVisitedState, bool linkVisited, bool expected)
+    {
+        KeyEventArgs keyEvent = new(key | (alt ? Keys.Alt : 0) | (control ? Keys.Control : 0) | (shift ? Keys.Shift : 0));
+        typeof(DataGridViewLinkCell).GetProperty("TrackVisitedState")!.SetValue(_cell, trackVisitedState);
+        typeof(DataGridViewLinkCell).GetProperty("LinkVisited")!.SetValue(_cell, linkVisited);
+
+        bool result = _cell.TestAccessor().Dynamic.KeyUpUnsharesRow(keyEvent, 0);
+
+        result.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void MouseDownUnsharesRow_ReturnsFalse_WhenPointInLinkBounds()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseDownUnsharesRow(args);
+
+        result.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MouseDownUnsharesRow_ReturnsFalse_WhenPointNotInLinkBounds()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseDownUnsharesRow(args);
+
+        result.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MouseMoveUnsharesRow_ReturnsTrue_WhenPointInLinkBounds_AndHoverSet()
+    {
+        _cell.TestAccessor().Dynamic.LinkState = LinkState.Hover;
+
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+
+        result.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void MouseMoveUnsharesRow_CanSetLinkBehaviorInternal()
+    {
+        _cell.TestAccessor().Dynamic.LinkBehaviorInternal = LinkBehavior.AlwaysUnderline;
+
+        _cell.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
+    }
+
+    [WinFormsFact]
+    public void MouseMoveUnsharesRow_ReturnsTrue_WhenPointNotInLinkBounds_AndHoverSet()
+    {
+        _cell.TestAccessor().Dynamic.LinkState = LinkState.Hover;
+
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+
+        result.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void MouseMoveUnsharesRow_ReturnsFalse_WhenPointNotInLinkBounds_AndNotHover()
+    {
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+
+        result.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MouseUpUnsharesRow_ReturnsFalse_WhenTrackVisitedStateFalse_AndPointInLinkBounds()
+    {
+        _cell.TrackVisitedState = false;
+
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseUpUnsharesRow(args);
+
+        result.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void MouseUpUnsharesRow_ReturnsFalse_WhenTrackVisitedStateFalse_AndPointNotInLinkBounds()
+    {
+        _cell.TrackVisitedState = false;
+
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
+
+        bool result = _cell.TestAccessor().Dynamic.MouseUpUnsharesRow(args);
+
+        result.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void OnKeyUp_DoesNothing_WhenDataGridViewIsNull()
+    {
+        KeyEventArgs keyEvent = new(Keys.Space);
+
+        _cell.Invoking(c => c.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0)).Should().NotThrow();
+        keyEvent.Handled.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void OnKeyUp_RaisesCellClickAndContentClick_AndSetsHandled_AndLinkVisited_WhenSpacePressed()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        _cell.TrackVisitedState = true;
+        bool cellClickRaised = false;
+        bool contentClickRaised = false;
+        dataGridView.CellClick += (s, e) =>
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex == 0)
+                cellClickRaised = true;
+        };
+        dataGridView.CellContentClick += (s, e) =>
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex == 0)
+                contentClickRaised = true;
+        };
+        KeyEventArgs keyEvent = new(Keys.Space);
+
+        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+
+        cellClickRaised.Should().BeTrue();
+        contentClickRaised.Should().BeTrue();
+        keyEvent.Handled.Should().BeTrue();
+        _cell.LinkVisited.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void OnKeyUp_RaisesCellClickAndContentClick_ButNotLinkVisited_WhenTrackVisitedStateIsFalse()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        _cell.TrackVisitedState = false;
+        bool cellClickRaised = false;
+        bool contentClickRaised = false;
+        dataGridView.CellClick += (s, e) =>
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex == 0)
+                cellClickRaised = true;
+        };
+        dataGridView.CellContentClick += (s, e) =>
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex == 0)
+                contentClickRaised = true;
+        };
+        KeyEventArgs keyEvent = new(Keys.Space);
+
+        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+
+        cellClickRaised.Should().BeTrue();
+        contentClickRaised.Should().BeTrue();
+        keyEvent.Handled.Should().BeTrue();
+        _cell.LinkVisited.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void OnKeyUp_DoesNotRaiseEvents_WhenKeyIsNotSpace()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        bool cellClickRaised = false;
+        bool contentClickRaised = false;
+        dataGridView.CellClick += (s, e) => cellClickRaised = true;
+        dataGridView.CellContentClick += (s, e) => contentClickRaised = true;
+        KeyEventArgs keyEvent = new(Keys.Enter);
+
+        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+
+        cellClickRaised.Should().BeFalse();
+        contentClickRaised.Should().BeFalse();
+        keyEvent.Handled.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void OnMouseDown_DoesNothing_WhenDataGridViewIsNull()
+    {
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseDown(args)).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void OnMouseLeave_DoesNothing_WhenDataGridViewIsNull() =>
+        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseLeave(0)).Should().NotThrow();
+
+    [WinFormsFact]
+    public void OnMouseMove_DoesNothing_WhenDataGridViewIsNull()
+    {
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseMove(args)).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void OnMouseUp_DoesNothing_WhenDataGridViewIsNull()
+    {
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseUp(args)).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void OnMouseUp_DoesNotSetLinkVisited_WhenPointNotInLinkBounds()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        _cell.TrackVisitedState = true;
+        _cell.LinkVisited = false;
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
+
+        _cell.TestAccessor().Dynamic.OnMouseUp(args);
+
+        _cell.LinkVisited.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void OnMouseUp_DoesNotSetLinkVisited_WhenTrackVisitedStateFalse()
+    {
+        using DataGridView dataGridView = CreateGridWithColumn();
+        dataGridView.Rows[0].Cells[0] = _cell;
+        _cell.TrackVisitedState = false;
+        _cell.LinkVisited = false;
+        MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
+        DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
+
+        _cell.TestAccessor().Dynamic.OnMouseUp(args);
+
+        _cell.LinkVisited.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void Paint_ThrowsArgumentNullException_WhenCellStyleIsNull()
+    {
+        using Bitmap bitmap = new(10, 10);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        TargetInvocationException ex = ((Action)(() =>
+            _cell.TestAccessor().Dynamic.Paint(
+                graphics,
+                new Rectangle(0, 0, 10, 10),
+                new Rectangle(0, 0, 10, 10),
+                0,
+                DataGridViewElementStates.None,
+                null,
+                null,
+                null,
+                null,
+                null,
+                DataGridViewPaintParts.All
+            )
+        )).Should().Throw<TargetInvocationException>().Subject.First();
+
+        ex.InnerException.Should().BeOfType<ArgumentNullException>();
+        ex.InnerException!.Message.Should().Contain("cellStyle");
     }
 }
