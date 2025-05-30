@@ -29,7 +29,7 @@ public class ColorBlendTests
         Assert.Throws<OverflowException>(() => new ColorBlend(-1));
     }
 
-    [Fact(SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
     public void Ctor_LargeCount_ThrowsOutOfMemoryException()
     {
         Assert.Throws<OutOfMemoryException>(() => new ColorBlend(int.MaxValue));
