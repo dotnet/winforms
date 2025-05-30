@@ -12,7 +12,7 @@ public class PrintControllerTests
         Assert.False(controller.IsPreview);
     }
 
-    [Fact(SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void OnStartPage_InvokeWithPrint_ReturnsNull()
     {
         using PrintDocument document = new();

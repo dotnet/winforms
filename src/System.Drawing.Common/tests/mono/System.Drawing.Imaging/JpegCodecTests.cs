@@ -221,7 +221,7 @@ public class JpegCodecTest
         Assert.Equal(-12944166, bmp.GetPixel(96, 96).ToArgb());
     }
 
-    [Fact(SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap24bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");

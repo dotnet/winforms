@@ -13,7 +13,7 @@ public class MouseTests
 
     public static bool MousePresentAndMouseWheelPresent => SystemInformation.MousePresent && SystemInformation.MouseWheelPresent;
 
-    [Fact(SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
     public void Mouse_ButtonsSwapped_Get_ReturnsExpected()
     {
         Mouse mouse = new();
@@ -31,7 +31,7 @@ public class MouseTests
         }
     }
 
-    [Fact(SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
     public void Mouse_WheelExists_Get_ReturnsExpected()
     {
         Mouse mouse = new();

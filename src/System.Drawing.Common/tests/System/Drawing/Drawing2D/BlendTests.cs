@@ -29,7 +29,7 @@ public class BlendTests
         Assert.Throws<OverflowException>(() => new Blend(-1));
     }
 
-    [Fact(SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
     public void Ctor_LargeCount_ThrowsOutOfMemoryException()
     {
         Assert.Throws<OutOfMemoryException>(() => new Blend(int.MaxValue));
