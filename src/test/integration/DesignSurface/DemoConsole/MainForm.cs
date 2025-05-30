@@ -20,13 +20,6 @@ public partial class MainForm : Form
 
     private void InitFormDesigner()
     {
-        CreateDesignSurface(1);
-        CreateDesignSurface(2);
-        CreateDesignSurface(3);
-        CreateDesignSurface(4);
-        CreateDesignSurface(5);
-        CreateDesignSurface(6);
-
         tabPage1.Text = "Use SnapLines";
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
@@ -34,22 +27,42 @@ public partial class MainForm : Form
         tabPage5.Text = "TabControl and TableLayoutPanel";
         tabPage6.Text = "ToolStripContainer";
 
-        // - enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
-            IDesignSurfaceExtended isurf = _listOfDesignSurface[i];
-            isurf.GetUndoEngineExt().Enabled = true;
-        }
+            CreateDesignSurface(i + 1);
 
-        // - ISelectionService
-        // - try to get a ptr to ISelectionService interface
-        // - if we obtain it then hook the SelectionChanged event
-        for (int i = 0; i < tabControl1.TabCount; i++)
-        {
-            IDesignSurfaceExtended isurf = _listOfDesignSurface[i];
-            _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
+            IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[i];
+
+            // - enable the UndoEngines
+            designSurfaceExtended.GetUndoEngineExt().Enabled = true;
+
+            // - ISelectionService
+            // - try to get a ptr to ISelectionService interface
+            // - if we obtain it then hook the SelectionChanged event
+            _selectionService = (ISelectionService)designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService));
             if (_selectionService is not null)
+            {
                 _selectionService.SelectionChanged += OnSelectionChanged;
+            }
+
+            ((Control)(designSurfaceExtended as DesignSurface).View).KeyUp += (s, e) =>
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                        designSurfaceExtended.DoAction("KeyMoveUp");
+                        break;
+                    case Keys.Down:
+                        designSurfaceExtended.DoAction("KeyMoveDown");
+                        break;
+                    case Keys.Left:
+                        designSurfaceExtended.DoAction("KeyMoveLeft");
+                        break;
+                    case Keys.Right:
+                        designSurfaceExtended.DoAction("KeyMoveRight");
+                        break;
+                }
+            };
         }
     }
 
@@ -59,10 +72,10 @@ public partial class MainForm : Form
         if (_selectionService is null)
             return;
 
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        if (isurf is not null)
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        if (designSurfaceExtended is not null)
         {
-            ISelectionService selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
+            ISelectionService selectionService = designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
             propertyGrid.SelectedObject = selectionService.PrimarySelection;
         }
     }
@@ -441,21 +454,21 @@ public partial class MainForm : Form
     private void SelectRootComponent()
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        if (isurf is not null)
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        if (designSurfaceExtended is not null)
         {
             splitContainer.Panel2.Controls.Remove(propertyGrid);
             propertyGrid.Dispose();
             propertyGrid = new()
             {
-                DesignerHost = isurf.GetIDesignerHost(),
+                DesignerHost = designSurfaceExtended.GetIDesignerHost(),
                 Dock = DockStyle.Fill,
                 Location = new Point(0, 0),
                 Margin = new Padding(4),
                 Name = "propertyGrid",
                 Size = new Size(226, 502),
                 TabIndex = 0,
-                SelectedObject = isurf.GetIDesignerHost().RootComponent
+                SelectedObject = designSurfaceExtended.GetIDesignerHost().RootComponent
             };
 
             splitContainer.Panel2.Controls.Add(propertyGrid);
@@ -464,14 +477,14 @@ public partial class MainForm : Form
 
     private void undoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.GetUndoEngineExt().Undo();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.GetUndoEngineExt().Undo();
     }
 
     private void redoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.GetUndoEngineExt().Redo();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.GetUndoEngineExt().Redo();
     }
 
     private void OnAbout(object sender, EventArgs e)
@@ -482,8 +495,8 @@ public partial class MainForm : Form
     private void toolStripMenuItemTabOrder_Click(object sender, EventArgs e)
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.SwitchTabOrder();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.SwitchTabOrder();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -492,7 +505,7 @@ public partial class MainForm : Form
 
         tabControl1.Selected += OnTabPageSelected;
 
-        // - select into the propertygrid the current Form
+        // - select into the propertyGrid the current Form
         SelectRootComponent();
     }
 
@@ -503,7 +516,7 @@ public partial class MainForm : Form
 
     private void OnMenuClick(object sender, EventArgs e)
     {
-        IDesignSurfaceExtended isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.DoAction((sender as ToolStripMenuItem).Text);
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.DoAction((sender as ToolStripMenuItem).Text);
     }
 }
