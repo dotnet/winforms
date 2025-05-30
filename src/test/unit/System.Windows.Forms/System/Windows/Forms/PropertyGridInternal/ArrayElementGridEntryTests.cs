@@ -23,7 +23,7 @@ public class ArrayElementGridEntryTests
 
     private static PropertyGrid CreatePropertyGrid() => new();
 
-    [Fact]
+    [WinFormsFact]
     public void ArrayElementGridEntry_ConstructorAndProperties()
     {
         using PropertyGrid grid = CreatePropertyGrid();
