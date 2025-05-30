@@ -27,22 +27,23 @@ public class DesignBindingPickerTests : IDisposable
 
     public void Dispose() => _picker.Dispose();
 
-    [Fact]
+    [WinFormsFact]
     public void Ctor_InitializesControlsAndProperties()
     {
-        // Check control hierarchy
+        // Check control hierarchy.
         var controls = _picker.Controls;
+
         controls.Contains(_treeViewCtrl).Should().BeTrue();
         controls.Contains(_addNewPanel).Should().BeTrue();
         controls.Contains(_helpTextPanel).Should().BeTrue();
 
-        // Check some property values
+        // Check some property values.
         Assert.Equal(SystemColors.Control, _picker.BackColor);
         Assert.Equal(SR.DesignBindingPickerAccessibleName, _picker.AccessibleName);
         Assert.Equal(_treeViewCtrl, _picker.ActiveControl);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void AddNewPanel_ContainsExpectedControls()
     {
         _addNewPanel.Controls.Contains(_addNewCtrl).Should().BeTrue();
@@ -50,14 +51,13 @@ public class DesignBindingPickerTests : IDisposable
         ContainsType<Label>(_addNewPanel.Controls).Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void HelpTextPanel_ContainsExpectedControls()
     {
         _helpTextPanel.Controls.Contains(_helpTextCtrl).Should().BeTrue();
         ContainsType<Label>(_helpTextPanel.Controls).Should().BeTrue();
     }
 
-    // Add the following extension method to replace the missing 'ContainsType' functionality.
     private static bool ContainsType<T>(Control.ControlCollection collection)
     {
         foreach (var item in collection)
