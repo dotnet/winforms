@@ -14,7 +14,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </summary>
 internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
 {
-    private object? _lastManaged;
+    // If the first call to ConvertManagedToNative happened to be passing managedValue: null, we want
+    // cancelSet to be false.
+    // So we start _lastManaged default value to a unique object.
+    private object? _lastManaged = new();
 
     private OLE_HANDLE _lastNativeHandle;
 
