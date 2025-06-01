@@ -411,7 +411,7 @@ public class PrinterSettingsTests
         Assert.False(printerSettings.IsDirectPrintingSupported(bitmap));
     }
 
-    [Fact(SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
     public void SupportsColor_ReturnsExpected()
     {
         // XPS and PDF printers support color.
@@ -536,7 +536,7 @@ public class PrinterSettingsTests
         Assert.NotEqual(0, handle);
     }
 
-    [Fact(SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
     public void SetHdevmode_IntPtr_Success()
     {
         string printerName = GetNameOfTestPrinterSuitableForDevModeTesting();
