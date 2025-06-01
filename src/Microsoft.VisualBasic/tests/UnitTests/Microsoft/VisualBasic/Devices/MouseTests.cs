@@ -21,7 +21,7 @@ public class MouseTests
         Assert.Equal(mouse.ButtonsSwapped, mouse.ButtonsSwapped);
     }
 
-    [Fact(SkipUnless = nameof(NoMousePresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMousePresent))]
     public void Mouse_ButtonsSwapped_GetNoMousePresent_ThrowsInvalidOperationException()
     {
         if (NoMousePresent)
@@ -39,7 +39,7 @@ public class MouseTests
         Assert.Equal(mouse.WheelExists, mouse.WheelExists);
     }
 
-    [Fact(SkipUnless = nameof(NoMousePresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMousePresent))]
     public void Mouse_WheelExists_GetNoMousePresent_ThrowsInvalidOperationException()
     {
         if (NoMousePresent)
@@ -49,7 +49,7 @@ public class MouseTests
         }
     }
 
-    [Fact(SkipUnless = nameof(MousePresentAndMouseWheelPresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(MousePresentAndMouseWheelPresent))]
     public void Mouse_WheelScrollLines_Get_ReturnsExpected()
     {
         if (SystemInformation.MouseWheelPresent)
@@ -60,7 +60,7 @@ public class MouseTests
         }
     }
 
-    [Fact(SkipUnless = nameof(NoMouseWheelPresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMouseWheelPresent))]
     public void Mouse_WheelScrollLines_GetNoMouseWheelPresent_ThrowsInvalidOperationException()
     {
         if (NoMouseWheelPresent)
