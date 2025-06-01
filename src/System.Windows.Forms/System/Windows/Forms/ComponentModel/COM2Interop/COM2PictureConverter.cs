@@ -123,7 +123,8 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             using ComScope<IPicture> picture = new(null);
             PInvokeCore.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), own, picture).ThrowOnFailure();
             _lastManaged = managedValue;
-            picture.Value->get_Handle(out _lastNativeHandle).ThrowOnFailure();
+            picture.Value->get_Handle(out var nativeHandle).ThrowOnFailure();
+            _lastNativeHandle = nativeHandle;
             IUnknown* unknown;
             picture.Value->QueryInterface(IID.Get<IUnknown>(), (void**)&unknown).ThrowOnFailure();
             return (VARIANT)unknown;
