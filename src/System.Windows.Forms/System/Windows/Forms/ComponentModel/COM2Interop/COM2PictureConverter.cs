@@ -19,7 +19,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
     // So we start _lastManaged default value to a unique object.
     private object? _lastManaged = new();
 
-    private OLE_HANDLE _lastNativeHandle;
+    private OLE_HANDLE? _lastNativeHandle;
 
     private Type _pictureType = typeof(Bitmap);
 
@@ -51,7 +51,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
 
         picture.Value->get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
 
-        if (_lastManaged is not null && handle == _lastNativeHandle)
+        if (_lastManaged is not null && _lastNativeHandle.HasValue && handle == _lastNativeHandle.Value)
         {
             return _lastManaged;
         }
@@ -131,7 +131,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
         else
         {
             _lastManaged = null;
-            _lastNativeHandle = default;
+            _lastNativeHandle = null;
             return VARIANT.Empty;
         }
     }
