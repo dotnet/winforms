@@ -24,17 +24,20 @@ public static unsafe class Helpers
     ///  Checks if PDF printing is supported by verifying installed printers.
     /// </summary>
     /// <returns><see langword="true"/> if a PDF printer is installed; otherwise, <see langword="false"/>.</returns>
-    public static bool CanPrintToPdf()
+    public static bool CanPrintToPdf
     {
-        foreach (string name in InstalledPrinters)
+        get
         {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+            foreach (string name in InstalledPrinters)
             {
-                return true;
+                if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+                {
+                    return true;
+                }
             }
-        }
 
-        return false;
+            return false;
+        }
     }
 
     /// <summary>
