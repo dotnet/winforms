@@ -179,24 +179,121 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
             return HRESULT.E_INVALIDARG;
         }
 
-        if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
+        // Some drag sources only support async operations. Notably, Chromium-based applications with file drop (the
+        // new Outlook is one example). The async interface is primarily a feature check and ref counting mechanism.
+        // To enable applications to accept filenames from these sources we use the interface when available and just
+        // do the operation synchronously. When we add new async API we would defer to the async interface.
+        //
+        // While initial investigations show that this is not a problem, we'll still provide a way to opt out should
+        // this prove blocking for some unknown scenario.
+        //
+        // https://learn.microsoft.com/windows/win32/shell/datascenarios#dragging-and-dropping-shell-objects-asynchronously
+
+        IDataObjectAsyncCapability* asyncCapability = null;
+        HRESULT result = HRESULT.S_OK;
+
+        bool enableSyncOverAsync = !CoreAppContextSwitches.DragDropDisableSyncOverAsync;
+#pragma warning disable WFO5003 // Type is for evaluation purposes only
+        IAsyncDropTarget? asyncDropTarget = _owner as IAsyncDropTarget;
+#pragma warning restore WFO5003
+        if (asyncDropTarget is not null || enableSyncOverAsync)
         {
-            if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
+            result = pDataObj->QueryInterface(out asyncCapability);
+            if (result.Succeeded
+                && asyncCapability is not null
+                && asyncCapability->GetAsyncMode(out BOOL isAsync).Succeeded
+                && isAsync)
             {
-                ClearDropDescription();
-                DragDropHelper.Drop(dragEvent);
+                result = asyncCapability->StartOperation();
+                if (result.Failed)
+                {
+                    return result;
+                }
+            }
+        }
+
+        *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
+
+        try
+        {
+            if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
+            {
+                if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
+                {
+                    ClearDropDescription();
+                    DragDropHelper.Drop(dragEvent);
+                }
+
+                result = HandleOnDragDrop(dragEvent, asyncCapability, pdwEffect);
+                asyncCapability = null;
             }
 
-            _owner.OnDragDrop(dragEvent);
-            *pdwEffect = (DROPEFFECT)dragEvent.Effect;
+            _lastEffect = DragDropEffects.None;
+            _lastDataObject = null;
         }
-        else
+        finally
         {
-            *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
+            if (asyncCapability is not null)
+            {
+                // We weren't successful in completing the operation, so we need to end it with no drop effect.
+                // There isn't clear guidance on expected errors here, so we'll just use E_UNEXPECTED.
+                result = asyncCapability->EndOperation(HRESULT.E_UNEXPECTED, null, (uint)DROPEFFECT.DROPEFFECT_NONE);
+                asyncCapability->Release();
+            }
         }
 
-        _lastEffect = DragDropEffects.None;
-        _lastDataObject = null;
+        return result;
+    }
+
+    private HRESULT HandleOnDragDrop(DragEventArgs e, IDataObjectAsyncCapability* asyncCapability, DROPEFFECT* pdwEffect)
+    {
+#pragma warning disable WFO5003 // Type is for evaluation purposes only
+        if (asyncCapability is not null && _owner is IAsyncDropTarget asyncDropTarget)
+#pragma warning restore WFO5003
+        {
+            // We have an implemented IAsyncDropTarget and the drag source supports async operations, push to a
+            // worker thread to allow the drop to complete without blocking the UI thread.
+            Task.Run(() =>
+            {
+                DROPEFFECT effect = DROPEFFECT.DROPEFFECT_NONE;
+
+                try
+                {
+                    asyncDropTarget.OnAsyncDragDrop(e);
+                    effect = (DROPEFFECT)e.Effect;
+                }
+                finally
+                {
+                    HRESULT result = asyncCapability->EndOperation(HRESULT.S_OK, null, (uint)effect);
+                    asyncCapability->Release();
+                }
+            });
+
+            // It isn't clear what we're supposed to do with the effect here as the actual result comes from
+            // EndOperation. Perhaps DROPEFFECT_COPY would be a better default?
+            *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
+            return HRESULT.S_OK;
+        }
+
+        // We don't have the IAsyncDropTarget or the drag source doesn't support async operations, so just call
+        // the normal OnDragDrop.
+
+        DROPEFFECT effect = DROPEFFECT.DROPEFFECT_NONE;
+
+        try
+        {
+            _owner.OnDragDrop(e);
+            *pdwEffect = effect = (DROPEFFECT)e.Effect;
+        }
+        finally
+        {
+            if (asyncCapability is not null)
+            {
+                HRESULT result = asyncCapability->EndOperation(HRESULT.S_OK, null, (uint)effect);
+                asyncCapability->Release();
+            }
+        }
+
         return HRESULT.S_OK;
     }
 
