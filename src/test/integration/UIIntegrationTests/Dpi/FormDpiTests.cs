@@ -71,9 +71,9 @@ public class FormDpiTests : ControlTestBase
             form.AutoScaleMode = AutoScaleMode.Dpi;
             form.Show();
             DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
-
-            Assert.Equal(form.MinimumSize, minSize);
-            Assert.Equal(form.MaximumSize, maxSize);
+            var factor = newDpi / ScaleHelper.OneHundredPercentLogicalDpi;
+            Assert.Equal(minSize * factor, form.MinimumSize);
+            Assert.Equal(maxSize * factor, form.MaximumSize);
             form.Close();
         }
         finally
