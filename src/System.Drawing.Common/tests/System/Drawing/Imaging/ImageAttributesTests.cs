@@ -24,6 +24,7 @@
 //
 
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace System.Drawing.Imaging.Tests;
 
@@ -1092,11 +1093,11 @@ public class ImageAttributesTests
     }
 
     [Fact]
-    public void SetOutputChannelColorProfile_InvalidPath_ThrowsOutOfMemoryException()
+    public void SetOutputChannelColorProfile_InvalidPath_ThrowsExternalException()
     {
         using ImageAttributes imageAttr = new();
-        Assert.Throws<OutOfMemoryException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath"));
-        Assert.Throws<OutOfMemoryException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath", ColorAdjustType.Default));
+        Assert.Throws<ExternalException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath"));
+        Assert.Throws<ExternalException>(() => imageAttr.SetOutputChannelColorProfile("invalidPath", ColorAdjustType.Default));
     }
 
     [Fact]

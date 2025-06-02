@@ -27,7 +27,14 @@ internal static class StatusExtensions
             case Status.InvalidParameter:
                 return new ArgumentException(SR.GdiplusInvalidParameter);
             case Status.OutOfMemory:
-                return new OutOfMemoryException(SR.GdiplusOutOfMemory);
+                // This is almost never an actual out of memory error. It usually means that GDI+
+                // was unable to create an internal object due to an invalid parameter or some other
+                // missing state. As it causes no end of confusion, we've switched both the message and
+                // the exception type to be less misleading.
+                //
+                // If we're truly running low on memory, an OutOfMemoryException is likely to be thrown
+                // in some other path soon anyway.
+                return new ExternalException(SR.GdiplusInvalidOperation, (int)HRESULT.E_UNEXPECTED);
             case Status.ObjectBusy:
                 return new InvalidOperationException(SR.GdiplusObjectBusy);
             case Status.InsufficientBuffer:
