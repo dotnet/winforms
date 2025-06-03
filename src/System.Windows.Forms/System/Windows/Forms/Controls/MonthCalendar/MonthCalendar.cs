@@ -137,12 +137,18 @@ public partial class MonthCalendar : Control
         _focusedDate = _todaysDate;
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
         TabStop = true;
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        ScaleConstants();
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     protected override AccessibleObject CreateAccessibilityInstance()
         => new MonthCalendarAccessibleObject(this);
@@ -152,8 +158,6 @@ public partial class MonthCalendar : Control
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
-
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

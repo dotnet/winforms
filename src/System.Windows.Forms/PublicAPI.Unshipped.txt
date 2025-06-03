@@ -1,0 +1,30 @@
+override System.Windows.Forms.ButtonBase.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.CheckBox.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.DataGridView.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.Label.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.ListBox.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.MonthCalendar.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.PictureBox.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.ProgressBar.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.RadioButton.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.ScrollableControl.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.ScrollBar.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.Splitter.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.TabControl.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.TabPage.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.TrackBar.InitializeControl(int deviceDpi) -> void
+override System.Windows.Forms.TreeView.InitializeControl(int deviceDpi) -> void
+[WFO5001]System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreferencevirtual System.Windows.Forms.Control.InitializeControl(int deviceDpi) -> void
+[WFO5001]System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.FormCornerPreference
+[WFO5001]virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
