@@ -78,13 +78,20 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        // Call the base classes, and let them setup their fields.
+        base.InitializeControl(deviceDpi);
+
+        // Opt into DarkMode.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets a value indicating whether the ellipsis character (...) appears at the right edge of the control,
@@ -617,7 +624,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    internal bool OwnerDraw => FlatStyle != FlatStyle.System;
+    private protected virtual bool OwnerDraw => FlatStyle != FlatStyle.System;
 
     bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
 
