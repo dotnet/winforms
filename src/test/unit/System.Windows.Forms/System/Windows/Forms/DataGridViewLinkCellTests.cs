@@ -482,8 +482,8 @@ public class DataGridViewLinkCellTests : IDisposable
     public void KeyUpUnsharesRow_VariousScenarios_ReturnsExpected(Keys key, bool alt, bool control, bool shift, bool trackVisitedState, bool linkVisited, bool expected)
     {
         KeyEventArgs keyEvent = new(key | (alt ? Keys.Alt : 0) | (control ? Keys.Control : 0) | (shift ? Keys.Shift : 0));
-        typeof(DataGridViewLinkCell).GetProperty("TrackVisitedState")!.SetValue(_cell, trackVisitedState);
-        typeof(DataGridViewLinkCell).GetProperty("LinkVisited")!.SetValue(_cell, linkVisited);
+        _cell.TrackVisitedState = trackVisitedState;
+        _cell.LinkVisited = linkVisited;
 
         bool result = _cell.TestAccessor().Dynamic.KeyUpUnsharesRow(keyEvent, 0);
 
