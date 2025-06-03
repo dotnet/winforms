@@ -342,8 +342,7 @@ public partial class MainForm : Form
                         richTextBox.Width = toolStripContainer.Width;
                         richTextBox.Text = "I'm a RichTextBox";
 
-                        MyUserControl userControl = surface.CreateControl<MyUserControl>(new Size(0, 0), new Point(0, 0));
-                        userControl.Dock = DockStyle.Fill;
+                        MyUserControl userControl = surface.CreateControl<MyUserControl>(new Size(350, 100), new Point(0, 0));
                         userControl.BackColor = Color.LightSkyBlue;
 
                         MyScrollableControl scrollableControl = surface.CreateControl<MyScrollableControl>(new Size(0, 0), new Point(0, 0));
@@ -363,7 +362,7 @@ public partial class MainForm : Form
                         splitter.BackColor = Color.Green;
                         splitter.Dock = DockStyle.Bottom;
 
-                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height / 2), new(0, 0));
+                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height / 3), new(0, 0));
                         panel.Dock = DockStyle.Bottom;
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
