@@ -60,11 +60,15 @@ public partial class ScrollableControl : Control, IArrangedElement
         SetStyle(ControlStyles.ContainerControl, true);
         SetStyle(ControlStyles.AllPaintingInWmPaint, false);
         SetScrollState(ScrollStateAutoScrolling, false);
+    }
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets a value indicating whether the container will allow the user to

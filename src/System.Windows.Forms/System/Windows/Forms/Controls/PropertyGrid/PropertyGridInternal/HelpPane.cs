@@ -57,6 +57,8 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         SetStyle(ControlStyles.Selectable, false);
     }
 
+    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+
     public virtual int Lines
     {
         get
@@ -177,8 +179,6 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
-
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

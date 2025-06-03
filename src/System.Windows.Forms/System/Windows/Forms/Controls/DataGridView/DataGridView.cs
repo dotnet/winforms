@@ -387,10 +387,6 @@ public partial class DataGridView : Control, ISupportInitialize
 
         SetStyle(ControlStyles.SupportsTransparentBackColor, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
@@ -491,6 +487,14 @@ public partial class DataGridView : Control, ISupportInitialize
         _columnHeadersHeight = LogicalToDeviceUnits(DefaultColumnHeadersHeight);
         Invalidate();
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
