@@ -49,6 +49,8 @@ public partial class CheckBox : ButtonBase
         TextAlign = ContentAlignment.MiddleLeft;
     }
 
+    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+
     private bool AccObjDoDefaultAction { get; set; }
 
     /// <summary>
@@ -255,8 +257,6 @@ public partial class CheckBox : ButtonBase
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
-
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {

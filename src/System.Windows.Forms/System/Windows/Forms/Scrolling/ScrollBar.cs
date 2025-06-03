@@ -35,21 +35,20 @@ public abstract partial class ScrollBar : Control
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         TabStop = false;
 
-        if ((CreateParams.Style & (int)SCROLLBAR_CONSTANTS.SB_VERT) != 0)
-        {
-            _scrollOrientation = ScrollOrientation.VerticalScroll;
-        }
-        else
-        {
-            _scrollOrientation = ScrollOrientation.HorizontalScroll;
-        }
+        _scrollOrientation = (CreateParams.Style & (int)SCROLLBAR_CONSTANTS.SB_VERT) != 0
+            ? ScrollOrientation.VerticalScroll
+            : ScrollOrientation.HorizontalScroll;
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Hide AutoSize: it doesn't make sense for this control
