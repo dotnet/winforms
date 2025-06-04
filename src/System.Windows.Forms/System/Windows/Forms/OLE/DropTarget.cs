@@ -212,8 +212,6 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
             }
         }
 
-        *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
-
         try
         {
             if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
@@ -226,6 +224,10 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
 
                 result = HandleOnDragDrop(dragEvent, asyncCapability, pdwEffect);
                 asyncCapability = null;
+            }
+            else
+            {
+                *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
             }
 
             _lastEffect = DragDropEffects.None;
