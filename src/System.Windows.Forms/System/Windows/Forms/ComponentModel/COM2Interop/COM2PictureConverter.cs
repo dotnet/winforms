@@ -14,12 +14,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </summary>
 internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
 {
-    // If the first call to ConvertManagedToNative happened to be passing managedValue: null, we want
-    // cancelSet to be false.
-    // So we start _lastManaged default value to a unique object.
-    private object? _lastManaged = new();
+    private object? _lastManaged;
 
-    private OLE_HANDLE? _lastNativeHandle;
+    private OLE_HANDLE _lastNativeHandle;
 
     private Type _pictureType = typeof(Bitmap);
 
@@ -51,7 +48,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
 
         picture.Value->get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
 
-        if (_lastManaged is not null && _lastNativeHandle.HasValue && handle == _lastNativeHandle.Value)
+        if (_lastManaged is not null && handle == _lastNativeHandle)
         {
             return _lastManaged;
         }
@@ -90,7 +87,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
 
     public override VARIANT ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor property, ref bool cancelSet)
     {
-        if (managedValue == _lastManaged)
+        if (managedValue is not null && managedValue == _lastManaged)
         {
             // There should be no point in setting the same object back for this property.
             cancelSet = true;
@@ -123,8 +120,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             using ComScope<IPicture> picture = new(null);
             PInvokeCore.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), own, picture).ThrowOnFailure();
             _lastManaged = managedValue;
-            picture.Value->get_Handle(out var nativeHandle).ThrowOnFailure();
-            _lastNativeHandle = nativeHandle;
+            picture.Value->get_Handle(out _lastNativeHandle).ThrowOnFailure();
             IUnknown* unknown;
             picture.Value->QueryInterface(IID.Get<IUnknown>(), (void**)&unknown).ThrowOnFailure();
             return (VARIANT)unknown;
@@ -132,7 +128,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
         else
         {
             _lastManaged = null;
-            _lastNativeHandle = null;
+            _lastNativeHandle = default;
             return VARIANT.Empty;
         }
     }
