@@ -1,10 +1,9 @@
 <Project>
 
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.targets" />
+  <Import Project="$(RepositoryEngineeringDir)Analyzer.targets" />
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
-  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
   <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
@@ -17,7 +16,7 @@
   
   <!-- to prevent using MS.NC.Platforms from SDK, which is lagging behind the version that WinForms gets from the CoreFx packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Set code coverage properties that reference properties not available in Directory.Build.props -->
@@ -81,24 +80,11 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppRuntimewinx64PackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppRefPackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(MicrosoftNETCoreAppRefPackageVersion)</RuntimeFrameworkVersion>
 
     <!-- If TargetFramework is not net8.x, then reset RuntimeFrameworkVersion -->
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />
   </PropertyGroup>
-
-  <Choose>
-    <When Condition="'$(IncludeInternalObsoleteAttribute)' == 'true' and '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-      <ItemGroup>
-        <Compile Include="$(RepoRoot)src\Common\src\ObsoleteAttribute.cs" />
-      </ItemGroup>
-      <PropertyGroup>
-        <!-- Suppress CS0436 to allow ObsoleteAttribute to be internally defined and used in .NET Standard. -->
-        <NoWarn>$(NoWarn);CS0436</NoWarn>
-      </PropertyGroup>
-    </When>
-  </Choose>
 
   <!-- If a tfm doesn't target .NETCoreApp but uses the platform support attributes, then we include the
        System.Runtime.Versioning*Platform* annotation attribute classes in the project as internal.

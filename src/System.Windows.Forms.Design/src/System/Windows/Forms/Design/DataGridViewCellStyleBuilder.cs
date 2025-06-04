@@ -309,7 +309,8 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridViewSelected.Rows[0].Height = _sampleDataGridViewSelected.Height;
         _sampleDataGridViewSelected.Columns[0].Width = _sampleDataGridViewSelected.Width;
 
-        // sync the Layout event for both sample DataGridView's so that when the sample DataGridView's are laid out we know to change the size of their cells
+        // sync the Layout event for both sample DataGridView's so that
+        // when the sample DataGridView's are laid out we know to change the size of their cells
         _sampleDataGridView.Layout += sampleDataGridView_Layout;
         _sampleDataGridViewSelected.Layout += sampleDataGridView_Layout;
     }

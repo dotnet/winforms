@@ -440,7 +440,6 @@ namespace System.Windows.Forms.Design
             _windowsFormsEditorService = null;
             _dataSourceProviderService = null;
             _designerHost = null;
-            context = null;
 
             // Return final selection to caller
             return finalSelectedItem;
@@ -488,10 +487,7 @@ namespace System.Windows.Forms.Design
             if (_context?.Instance is BindingSource instance && _designerHost is not null)
             {
                 BindingSourceDesigner? designer = _designerHost.GetDesigner(instance) as BindingSourceDesigner;
-                if (designer is not null)
-                {
-                    designer.BindingUpdatedByUser = true;
-                }
+                designer?.BindingUpdatedByUser = true;
             }
 
             // Tell the editor service to close the dropdown
@@ -721,10 +717,13 @@ namespace System.Windows.Forms.Design
             }
 
             // Special case: Data source is a list type (or list item type) rather than a list instance.
-            //    Arises when some component's DataSource property is bound to a Type, and the user opens the dropdown for the DataMember property.
-            //    We need to create a temporary instance of the correct list type, and use that as our data source for the purpose of determining
-            //    data members. Since only BindingSource supports type binding, we bind a temporary BindingSource to the specified type - it will
-            //    create an instance of the correct list type for us. Fixes VSWhidbey bugs 302757 and 280708.
+            //    Arises when some component's DataSource property is bound to a Type, and the user opens
+            //    the dropdown for the DataMember property.
+            //    We need to create a temporary instance of the correct list type,
+            //    and use that as our data source for the purpose of determining data members.
+            //    Since only BindingSource supports type binding, we bind a temporary BindingSource
+            //    to the specified type - it will create an instance of the correct list type for us.
+            //    Fixes VSWhidbey bugs 302757 and 280708.
             if (dataSource is Type)
             {
                 try
@@ -1387,7 +1386,10 @@ namespace System.Windows.Forms.Design
         ///  use that in preference to using the Type class (since this service can more
         ///  reliably instantiate project level types).
         /// </devdoc>
-        [SuppressMessage("Trimming", "IL2096:Call to 'Type.GetType' method can perform case insensitive lookup of the type, currently trimming can not guarantee presence of all the matching types.", Justification = "<Pending>")]
+        [SuppressMessage(
+            "Trimming",
+            "IL2096:Call to 'Type.GetType' method can perform case insensitive lookup of the type, currently trimming can not guarantee presence of all the matching types.",
+            Justification = "No known workaround.")]
         private Type? GetType(string name, bool throwOnError, bool ignoreCase)
         {
             if (_typeResolutionService is not null)
@@ -1843,13 +1845,18 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Label control that renders its text with both word wrapping, end ellipsis and partial line clipping.
+        ///  Label control that renders its text with both word wrapping, end ellipsis and partial line clipping.
         /// </summary>
         internal class HelpTextLabel : Label
         {
             protected override void OnPaint(PaintEventArgs e)
             {
-                TextFormatFlags formatFlags = TextFormatFlags.WordBreak | TextFormatFlags.EndEllipsis | TextFormatFlags.TextBoxControl;
+                TextFormatFlags formatFlags =
+                    TextFormatFlags.WordBreak |
+                    TextFormatFlags.EndEllipsis |
+                    TextFormatFlags.TextBoxControl |
+                    TextFormatFlags.PreserveGraphicsClipping |
+                    TextFormatFlags.PreserveGraphicsTranslateTransform;
                 Rectangle rect = new(ClientRectangle.Location, ClientRectangle.Size);
                 rect.Inflate(-2, -2);
                 TextRenderer.DrawText(e.Graphics, Text, Font, rect, ForeColor, formatFlags);

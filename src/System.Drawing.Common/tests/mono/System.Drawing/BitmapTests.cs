@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Bitmap class testing unit
 //
 // Authors:
@@ -8,7 +8,7 @@
 //  Jonathan Gilbert <logic@deltaq.org>
 //  Sebastien Pouliot  <sebastien@ximian.com>
 //
-// (C) 2004 Ximian, Inc.  http://www.ximian.com
+// (C) 2004 Ximian, Inc. http://www.ximian.com
 // Copyright (C) 2004,2006-2007 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -292,16 +292,13 @@ public class BitmapTests
     {
         string sSub, sRslt;
 
-        if (Environment.GetEnvironmentVariable("MSNet") is null)
-            sSub = "mono/";
-        else
-            sSub = "MSNet/";
+        sSub = Environment.GetEnvironmentVariable("MSNet") is null ? "mono/" : "MSNet/";
 
         sRslt = Path.GetFullPath(sSub);
 
         if (!Directory.Exists(sRslt))
         {
-            sRslt = "Test/System.Drawing/" + sSub;
+            sRslt = $"Test/System.Drawing/{sSub}";
         }
 
         if (sRslt.Length > 0)
@@ -389,7 +386,7 @@ public class BitmapTests
             }
         }
 
-        hash = SHA256.Create().ComputeHash(pixels);
+        hash = SHA256.HashData(pixels);
         return ByteArrayToString(hash);
     }
 
@@ -434,10 +431,7 @@ public class BitmapTests
             }
         }
 
-        if (pixel_data is null)
-            return "--ERROR--";
-
-        byte[] hash = SHA256.Create().ComputeHash(pixel_data);
+        byte[] hash = SHA256.HashData(pixel_data);
         return ByteArrayToString(hash);
     }
 
@@ -500,7 +494,7 @@ public class BitmapTests
             }
         }
 
-        return SHA256.Create().ComputeHash(pixels);
+        return SHA256.HashData(pixels);
     }
 
     private static byte[] HashLock(Bitmap bmp, int width, int height, PixelFormat fmt, ImageLockMode mode)
@@ -546,7 +540,7 @@ public class BitmapTests
             bmp.UnlockBits(bd);
         }
 
-        return SHA256.Create().ComputeHash(pixels);
+        return SHA256.HashData(pixels);
     }
 
     // Tests the LockBitmap functions. Makes a hash of the block of pixels that it returns
@@ -554,7 +548,7 @@ public class BitmapTests
     // The results match the .NET Framework
     private static readonly byte[] s_defaultBitmapHash = [0x29, 0x39, 0x25, 0xCE, 0x10, 0x9C, 0x6A, 0xB, 0x2D, 0xCD, 0xAA, 0xD9,
         0x18, 0xBE, 0xF3, 0xA5, 0x58, 0xA5, 0x4D, 0xD9, 0xFA, 0x41, 0x70, 0x76, 0x83, 0x3, 0x9C, 0x41, 0x5A, 0x25, 0xCE, 0xCB];
-    private static readonly byte[] s_finalWholeBitmapHash = [0xDE, 0xBF, 0xCF, 0xFB, 0xE, 0x9E, 0xA7, 0xC1, 0x23, 0xC, 0x9E,0x7E,
+    private static readonly byte[] s_finalWholeBitmapHash = [0xDE, 0xBF, 0xCF, 0xFB, 0xE, 0x9E, 0xA7, 0xC1, 0x23, 0xC, 0x9E, 0x7E,
         0xE3, 0xC1, 0xFC, 0x14, 0x37, 0x21, 0xE2, 0x30, 0x2A, 0x6D, 0xD0, 0xDB, 0xBE, 0xE, 0x1C, 0x1F, 0xC2, 0xB7, 0xBD, 0xC4];
 
     [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
@@ -1182,7 +1176,7 @@ public class BitmapTests
         b.PixelFormat.Should().Be(PixelFormat.Format32bppArgb, msg);
 
         // Unlike the GDI+ icon decoder the palette isn't kept
-        Assert.Equal(0, b.Palette.Entries.Length);
+        Assert.Empty(b.Palette.Entries);
         Assert.Equal(size, b.Height);
         Assert.Equal(size, b.Width);
         Assert.Equal(b.RawFormat, ImageFormat.MemoryBmp);
@@ -1269,7 +1263,7 @@ public class BitmapTests
         using (Bitmap bitmap = new(sInFile))
         {
             Assert.Equal(PixelFormat.Format24bppRgb, bitmap.PixelFormat);
-            Assert.Equal(0, bitmap.Palette.Entries.Length);
+            Assert.Empty(bitmap.Palette.Entries);
             Assert.Equal(183, bitmap.Height);
             Assert.Equal(173, bitmap.Width);
             Assert.Equal(73744, bitmap.Flags);
@@ -1280,7 +1274,7 @@ public class BitmapTests
         // hbitmap survives original bitmap disposal
         using Image image = Image.FromHbitmap(hbitmap);
         // Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
-        Assert.Equal(0, image.Palette.Entries.Length);
+        Assert.Empty(image.Palette.Entries);
         Assert.Equal(183, image.Height);
         Assert.Equal(173, image.Width);
         Assert.Equal(335888, image.Flags);
@@ -1295,7 +1289,7 @@ public class BitmapTests
         using (Bitmap bitmap = new(sInFile))
         {
             Assert.Equal(PixelFormat.Format24bppRgb, bitmap.PixelFormat);
-            Assert.Equal(0, bitmap.Palette.Entries.Length);
+            Assert.Empty(bitmap.Palette.Entries);
             Assert.Equal(183, bitmap.Height);
             Assert.Equal(173, bitmap.Width);
             Assert.Equal(73744, bitmap.Flags);
@@ -1307,7 +1301,7 @@ public class BitmapTests
         using (Image image = Image.FromHbitmap(hbitmap))
         {
             // Assert.Equal (PixelFormat.Format32bppRgb, image.PixelFormat);
-            Assert.Equal(0, image.Palette.Entries.Length);
+            Assert.Empty(image.Palette.Entries);
             Assert.Equal(183, image.Height);
             Assert.Equal(173, image.Width);
             Assert.Equal(335888, image.Flags);
@@ -1316,7 +1310,7 @@ public class BitmapTests
 
         using Image image2 = Image.FromHbitmap(hbitmap);
         // Assert.Equal (PixelFormat.Format32bppRgb, image2.PixelFormat);
-        Assert.Equal(0, image2.Palette.Entries.Length);
+        Assert.Empty(image2.Palette.Entries);
         Assert.Equal(183, image2.Height);
         Assert.Equal(173, image2.Width);
         Assert.Equal(335888, image2.Flags);

@@ -31,7 +31,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
     {
         private int _nextNode;
         private TreeNode _curNode;
-        private readonly TreeNodeCollectionEditor _editor = null!;
+        private readonly TreeNodeCollectionEditor _editor;
         private Button _okButton;
         private Button _btnCancel;
         private Button _btnAddChild;
@@ -54,7 +54,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
         public TreeNodeCollectionForm(CollectionEditor editor)
             : base(editor)
         {
-            editor = (TreeNodeCollectionEditor)editor;
+            _editor = (TreeNodeCollectionEditor)editor;
             InitializeComponent();
             HookEvents();
 
@@ -151,7 +151,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
 
         private void Add(TreeNode parent)
         {
-            TreeNode newNode = null;
+            TreeNode newNode;
             string baseNodeName = SR.BaseNodeName;
 
             if (parent is null)
@@ -182,20 +182,20 @@ internal class TreeNodeCollectionEditor : CollectionEditor
 
         private void HookEvents()
         {
-            _okButton.Click += new EventHandler(BtnOK_click);
-            _btnCancel.Click += new EventHandler(BtnCancel_click);
-            _btnAddChild.Click += new EventHandler(BtnAddChild_click);
-            _btnAddRoot.Click += new EventHandler(BtnAddRoot_click);
-            _btnDelete.Click += new EventHandler(BtnDelete_click);
-            _propertyGrid1.PropertyValueChanged += new PropertyValueChangedEventHandler(PropertyGrid_propertyValueChanged);
-            _treeView1.AfterSelect += new TreeViewEventHandler(treeView1_afterSelect);
-            _treeView1.DragEnter += new DragEventHandler(treeView1_DragEnter);
-            _treeView1.ItemDrag += new ItemDragEventHandler(treeView1_ItemDrag);
-            _treeView1.DragDrop += new DragEventHandler(treeView1_DragDrop);
-            _treeView1.DragOver += new DragEventHandler(treeView1_DragOver);
-            HelpButtonClicked += new CancelEventHandler(TreeNodeCollectionEditor_HelpButtonClicked);
-            _moveDownButton.Click += new EventHandler(moveDownButton_Click);
-            _moveUpButton.Click += new EventHandler(moveUpButton_Click);
+            _okButton.Click += BtnOK_click;
+            _btnCancel.Click += BtnCancel_click;
+            _btnAddChild.Click += BtnAddChild_click;
+            _btnAddRoot.Click += BtnAddRoot_click;
+            _btnDelete.Click += BtnDelete_click;
+            _propertyGrid1.PropertyValueChanged += PropertyGrid_propertyValueChanged;
+            _treeView1.AfterSelect += treeView1_afterSelect;
+            _treeView1.DragEnter += treeView1_DragEnter;
+            _treeView1.ItemDrag += treeView1_ItemDrag;
+            _treeView1.DragDrop += treeView1_DragDrop;
+            _treeView1.DragOver += treeView1_DragOver;
+            HelpButtonClicked += TreeNodeCollectionEditor_HelpButtonClicked;
+            _moveDownButton.Click += moveDownButton_Click;
+            _moveUpButton.Click += moveUpButton_Click;
         }
 
         /// <summary>
@@ -712,60 +712,5 @@ internal class TreeNodeCollectionEditor : CollectionEditor
                 NextNode = _initialNextNode;
             }
         }
-    }
-}
-
-internal class PropertyGridSite : ISite
-{
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IComponent _component;
-    private bool _inGetService;
-
-    public PropertyGridSite(IServiceProvider serviceProvider, IComponent component)
-    {
-        _serviceProvider = serviceProvider;
-        _component = component;
-    }
-
-    /// <summary>
-    ///  The component sited by this component site.
-    /// </summary>
-    public IComponent Component => _component;
-
-    /// <summary>
-    ///  The container in which the component is sited.
-    /// </summary>
-    public IContainer Container => null;
-
-    /// <summary>
-    ///  Indicates whether the component is in design mode.
-    /// </summary>
-    public bool DesignMode => false;
-
-    /// <summary>
-    ///  The name of the component.
-    /// </summary>
-    public string Name
-    {
-        get { return null; }
-        set { }
-    }
-
-    public object GetService(Type type)
-    {
-        if (!_inGetService && _serviceProvider is not null)
-        {
-            try
-            {
-                _inGetService = true;
-                return _serviceProvider.GetService(type);
-            }
-            finally
-            {
-                _inGetService = false;
-            }
-        }
-
-        return null;
     }
 }

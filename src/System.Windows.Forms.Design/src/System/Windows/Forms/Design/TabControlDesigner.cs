@@ -101,22 +101,17 @@ internal class TabControlDesigner : ParentControlDesigner
         RaiseComponentChanged(member, null, null);
 
         TabControl tc = (TabControl)Component;
-        if (tc is not null)
-        { // always Select the First Tab on Initialising the component...
-            tc.SelectedIndex = 0;
-        }
+        // Always select the first tab on initializing the component.
+        tc?.SelectedIndex = 0;
     }
 
-    // If the tabcontrol already contains the control we are dropping then don't allow the drop.
-    // I.e. we don't want to allow local drag-drop for tabcontrols.
+    // If the TabControl already contains the control we are dropping then don't allow the drop.
+    // I.e. we don't want to allow local drag-drop for TabControls.
     public override bool CanParent(Control control) => (control is TabPage && !Control.Contains(control));
 
     private void CheckVerbStatus()
     {
-        if (_removeVerb is not null)
-        {
-            _removeVerb.Enabled = Control.Controls.Count > 0;
-        }
+        _removeVerb?.Enabled = Control.Controls.Count > 0;
     }
 
     protected override IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
@@ -146,21 +141,21 @@ internal class TabControlDesigner : ParentControlDesigner
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
             if (svc is not null)
             {
-                svc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                svc.SelectionChanged -= OnSelectionChanged;
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (HasComponent && Control is TabControl tabControl)
             {
-                tabControl.SelectedIndexChanged -= new EventHandler(OnTabSelectedIndexChanged);
-                tabControl.GotFocus -= new EventHandler(OnGotFocus);
-                tabControl.RightToLeftLayoutChanged -= new EventHandler(OnRightToLeftLayoutChanged);
-                tabControl.ControlAdded -= new ControlEventHandler(OnControlAdded);
+                tabControl.SelectedIndexChanged -= OnTabSelectedIndexChanged;
+                tabControl.GotFocus -= OnGotFocus;
+                tabControl.RightToLeftLayoutChanged -= OnRightToLeftLayoutChanged;
+                tabControl.ControlAdded -= OnControlAdded;
             }
         }
 
@@ -173,7 +168,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
         // tabControlSelected tells us if a tab page or the tab control itself is selected.
         // If the tab control is selected, then we need to return true from here - so we can switch back and forth
-        // between tabs.  If we're not currently selected, we want to select the tab control
+        // between tabs. If we're not currently selected, we want to select the tab control
         // so return false.
         if (_tabControlSelected)
         {
@@ -217,21 +212,21 @@ internal class TabControlDesigner : ParentControlDesigner
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
         if (svc is not null)
         {
-            svc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            svc.SelectionChanged += OnSelectionChanged;
         }
 
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         if (control is not null)
         {
-            control.SelectedIndexChanged += new EventHandler(OnTabSelectedIndexChanged);
-            control.GotFocus += new EventHandler(OnGotFocus);
-            control.RightToLeftLayoutChanged += new EventHandler(OnRightToLeftLayoutChanged);
-            control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            control.SelectedIndexChanged += OnTabSelectedIndexChanged;
+            control.GotFocus += OnGotFocus;
+            control.RightToLeftLayoutChanged += OnRightToLeftLayoutChanged;
+            control.ControlAdded += OnControlAdded;
         }
     }
 
@@ -388,7 +383,8 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         if (e.Control is not null && !e.Control.IsHandleCreated)
         {
-            IntPtr hwnd = e.Control.Handle;
+            // Force handle creation.
+            _ = e.Control.Handle;
         }
     }
 
@@ -517,7 +513,7 @@ internal class TabControlDesigner : ParentControlDesigner
         }
         else
         {
-            // We must be dragging something off the toolbox, so forward the drag to the right tabpage.
+            // We must be dragging something off the toolbox, so forward the drag to the right TabPage.
             _forwardOnDrag = true;
         }
 
@@ -602,7 +598,7 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_NCHITTEST:
+            case PInvokeCore.WM_NCHITTEST:
                 // The tab control always fires HTTRANSPARENT in empty areas, which causes the message to go to our parent. We want
                 // the tab control's designer to get these messages, however, so change this.
                 base.WndProc(ref m);
@@ -612,7 +608,7 @@ internal class TabControlDesigner : ParentControlDesigner
                 }
 
                 break;
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 // We handle this in addition to a right mouse button.
                 // Why?  Because we often eat the right mouse button, so
                 // it may never generate a WM_CONTEXTMENU.  However, the
@@ -629,10 +625,10 @@ internal class TabControlDesigner : ParentControlDesigner
 
                 OnContextMenu(x, y);
                 break;
-            case PInvoke.WM_HSCROLL:
-            case PInvoke.WM_VSCROLL:
+            case PInvokeCore.WM_HSCROLL:
+            case PInvokeCore.WM_VSCROLL:
                 // We do this so that we can update the areas covered by glyphs correctly. VSWhidbey# 187405.
-                // We just invalidate the area corresponding to the ClientRectangle in the adornerwindow.
+                // We just invalidate the area corresponding to the ClientRectangle in the AdornerWindow.
                 BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
                 base.WndProc(ref m);
                 break;

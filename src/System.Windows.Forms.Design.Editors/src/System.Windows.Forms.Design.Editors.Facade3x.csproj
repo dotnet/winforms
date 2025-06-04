@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
   </ItemGroup>
   
 </Project>

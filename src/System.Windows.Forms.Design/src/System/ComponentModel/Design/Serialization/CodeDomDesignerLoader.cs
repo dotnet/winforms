@@ -12,11 +12,11 @@ using System.Text;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  DesignerLoader.  This class is responsible for loading a designer document.
+///  DesignerLoader. This class is responsible for loading a designer document.
 ///  Where and how this load occurs is a private matter for the designer loader.
-///  The designer loader will be handed to an IDesignerHost instance.  This instance,
+///  The designer loader will be handed to an IDesignerHost instance. This instance,
 ///  when it is ready to load the document, will call BeginLoad, passing an instance
-///  of IDesignerLoaderHost.  The designer loader will load up the design surface
+///  of IDesignerLoaderHost. The designer loader will load up the design surface
 ///  using the host interface, and call EndLoad on the interface when it is done.
 ///  The error collection passed into EndLoad should be empty or null to indicate a
 ///  successful load, or it should contain a collection of exceptions that
@@ -55,15 +55,15 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  The TypeResolutionService property returns a type resolution service that the code dom
-    ///  serializers will use when resolving types.  The CodeDomDesignerLoader automatically
+    ///  serializers will use when resolving types. The CodeDomDesignerLoader automatically
     ///  adds this type resolver as a service to the service container during Initialize if it
-    ///  is non-null.  While the type resolution service is optional in many scenarios, it is required for
+    ///  is non-null. While the type resolution service is optional in many scenarios, it is required for
     ///  code interpretation because source code contains type names, but no assembly references.
     /// </summary>
     protected abstract ITypeResolutionService? TypeResolutionService { get; }
 
     /// <summary>
-    ///  This is the reverse of EnsureDocument.  It clears the document state which will
+    ///  This is the reverse of EnsureDocument. It clears the document state which will
     ///  cause us to parse the next time we need to access it.
     /// </summary>
     private void ClearDocument()
@@ -80,7 +80,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  Disposes this designer loader.  The designer host will call
+    ///  Disposes this designer loader. The designer host will call
     ///  this method when the design document itself is being destroyed.
     ///  Once called, the designer loader will never be called again.
     ///  This implementation flushes any changes and removes any
@@ -90,8 +90,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            componentChangeService.ComponentRemoved -= OnComponentRemoved;
+            componentChangeService.ComponentRename -= OnComponentRename;
         }
 
         if (TryGetService(out IDesignerHost? host))
@@ -174,12 +174,12 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  This ensures that we can load the code dom elements into a
-    ///  document.  It ensures that there is a code dom provider, that
+    ///  document. It ensures that there is a code dom provider, that
     ///  the provider can parse the code, and that the returned
     ///  code compile unit contains a class that can be deserialized
-    ///  through a code dom serializer.  During all of this checking
+    ///  through a code dom serializer. During all of this checking
     ///  it establishes state in our member variables so that
-    ///  calls after it can assume that the variables are set.  This
+    ///  calls after it can assume that the variables are set. This
     ///  will throw a human readable exception if any part of the
     ///  process fails.
     /// </summary>
@@ -192,7 +192,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // If we do not yet have the compile unit, ask for it.
         if (_documentCompileUnit is null)
         {
-            Debug.Assert(_documentType is null && _documentNamespace is null, "We have no compile unit but we still have a type or namespace.  Our state is inconsistent.");
+            Debug.Assert(_documentType is null && _documentNamespace is null, "We have no compile unit but we still have a type or namespace. Our state is inconsistent.");
             _documentCompileUnit = Parse();
 
             if (_documentCompileUnit is null)
@@ -209,7 +209,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // Search namespaces and types to identify something that we can load.
         if (_documentType is null)
         {
-            // We keep track of any failures here.  If we failed to find a type this
+            // We keep track of any failures here. If we failed to find a type this
             // array list will contain a list of strings listing what we have tried.
             List<string>? failures = null;
             bool firstClass = true;
@@ -221,13 +221,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 throw invalidOperation;
             }
 
-            // Look in the compile unit for a class we can load.  The first one we find
+            // Look in the compile unit for a class we can load. The first one we find
             // that has an appropriate serializer attribute, we take.
             foreach (CodeNamespace codeNamespace in _documentCompileUnit.Namespaces)
             {
                 foreach (CodeTypeDeclaration typeDeclaration in codeNamespace.Types)
                 {
-                    // Uncover the base type of this class.  In case we totally fail
+                    // Uncover the base type of this class. In case we totally fail
                     // we document each time we were unable to load a particular class.
                     Type? baseType = null;
 
@@ -247,7 +247,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                         }
                     }
 
-                    // We have a potential type.  The next step is to examine the type's attributes
+                    // We have a potential type. The next step is to examine the type's attributes
                     // and see if there is a root designer serializer attribute that supports the
                     // code dom.
                     if (baseType is not null)
@@ -317,7 +317,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                         }
                     }
 
-                    // If we found a serializer, then we're done.  Save this type and namespace for later use.
+                    // If we found a serializer, then we're done. Save this type and namespace for later use.
                     if (_rootSerializer is not null || _typeSerializer is not null)
                     {
                         _documentNamespace = codeNamespace;
@@ -367,7 +367,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             }
             else
             {
-                // We are successful.  At this point, we want to provide some of these
+                // We are successful. At this point, we want to provide some of these
                 // code dom elements as services for outside parties to use.
                 LoaderHost.AddService(_documentType);
             }
@@ -376,7 +376,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  Takes the given code element and integrates it into the existing CodeDom
-    ///  tree stored in _documentCompileUnit.  This returns true if any changes
+    ///  tree stored in _documentCompileUnit. This returns true if any changes
     ///  were made to the tree.
     /// </summary>
     [MemberNotNull(nameof(_documentCompileUnit))]
@@ -408,7 +408,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
 
         // Now, hash up the member names in the document and use this
-        // when determining what to add and what to replace.  In addition,
+        // when determining what to add and what to replace. In addition,
         // we also build up a set of indexes into approximate locations for
         // inserting fields and methods.
         int fieldInsertLocation = 0;
@@ -507,7 +507,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                     {
                         // If there is an existing constructor, preserve it.
                         // For methods, we do not want to replace the method; rather, we
-                        // just want to replace its contents.  This helps to preserve
+                        // just want to replace its contents. This helps to preserve
                         // the layout of the file.
                         CodeMemberMethod existingMethod = (CodeMemberMethod)existingMember;
 
@@ -573,8 +573,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  This method is called immediately after the first time
-    ///  BeginLoad is invoked.  This is an appropriate place to
-    ///  add custom services to the loader host.  Remember to
+    ///  BeginLoad is invoked. This is an appropriate place to
+    ///  add custom services to the loader host. Remember to
     ///  remove any custom services you add here by overriding
     ///  Dispose.
     /// </summary>
@@ -589,7 +589,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         LoaderHost.AddService<IDesignerSerializationService>(this);
 
         // The code dom designer loader requires a working ITypeResolutionService to
-        // function.  See if someone added one already, and if not, provide
+        // function. See if someone added one already, and if not, provide
         // our own.
         if (!TryGetService(out ITypeResolutionService? typeResolutionService))
         {
@@ -620,8 +620,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  Determines if the designer needs to be reloaded.  It does this
-    ///  by examining the code dom tree for changes.  This does not check
+    ///  Determines if the designer needs to be reloaded. It does this
+    ///  by examining the code dom tree for changes. This does not check
     ///  for outside influences; the caller should already think a reload
     ///  is needed -- this is just a last optimization.
     /// </summary>
@@ -660,7 +660,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         catch
         {
             // If the document is not in a state where we can get any information
-            // from it, we will assume this is a reload.  The error will then
+            // from it, we will assume this is a reload. The error will then
             // be displayed to the user when the designer does actually
             // reload.
         }
@@ -677,13 +677,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  This method should be called by the designer loader service
-    ///  when the first dependent load has started.  This initializes
+    ///  when the first dependent load has started. This initializes
     ///  the state of the code dom loader and prepares it for loading.
     ///  By default, the designer loader provides
     ///  IDesignerLoaderService itself, so this is called automatically.
     ///  If you provide your own loader service, or if you choose not
     ///  to provide a loader service, you are responsible for calling
-    ///  this method.  BeginLoad will automatically call this, either
+    ///  this method. BeginLoad will automatically call this, either
     ///  indirectly by calling AddLoadDependency if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
@@ -693,8 +693,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            componentChangeService.ComponentRemoved -= OnComponentRemoved;
+            componentChangeService.ComponentRename -= OnComponentRename;
         }
 
         base.OnBeginLoad();
@@ -703,7 +703,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// <summary>
     ///  This method is called immediately before the document is unloaded.
     ///  The document may be unloaded in preparation for reload, or
-    ///  if the document failed the load.  If you added document-specific
+    ///  if the document failed the load. If you added document-specific
     ///  services in OnBeginLoad or OnEndLoad, you should remove them
     ///  here.
     /// </summary>
@@ -723,8 +723,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  Raised by the host when a component is renamed.  Here we dirty ourselves
-    ///  and then whack the component declaration.  At the next code gen
+    ///  Raised by the host when a component is renamed. Here we dirty ourselves
+    ///  and then whack the component declaration. At the next code gen
     ///  cycle we will recreate the declaration.
     /// </summary>
     private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
@@ -749,13 +749,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  This method should be called by the designer loader service
-    ///  when all dependent loads have been completed.  This
+    ///  when all dependent loads have been completed. This
     ///  "shuts down" the loading process that was initiated by
-    ///  BeginLoad.  By default, the designer loader provides
+    ///  BeginLoad. By default, the designer loader provides
     ///  IDesignerLoaderService itself, so this is called automatically.
     ///  If you provide your own loader service, or if you choose not
     ///  to provide a loader service, you are responsible for calling
-    ///  this method.  BeginLoad will automatically call this, either
+    ///  this method. BeginLoad will automatically call this, either
     ///  indirectly by calling DependentLoadComplete if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
@@ -775,8 +775,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             return;
         }
 
-        cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-        cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+        cs.ComponentRemoved += OnComponentRemoved;
+        cs.ComponentRename += OnComponentRename;
     }
 
     /// <summary>
@@ -793,7 +793,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         CodeTypeDeclaration? typeDeclaration = null;
 
-        // Ask the serializer for the root component to serialize.  This should return
+        // Ask the serializer for the root component to serialize. This should return
         // a CodeTypeDeclaration, which we will plug into our existing code DOM tree.
         Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, $"What are we saving right now?  Base component has no serializer: {LoaderHost.RootComponent.GetType().FullName}");
 
@@ -808,7 +808,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
 
         // Now we must integrate the code DOM tree from the serializer with
-        // our own tree.  If changes were made to the tree this will
+        // our own tree. If changes were made to the tree this will
         // return true.
         if (typeDeclaration is not null && IntegrateSerializedTree(manager, typeDeclaration))
         {
@@ -822,11 +822,11 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     protected override void PerformLoad(IDesignerSerializationManager manager)
     {
-        // This ensures that all of the state for the document is available.  This
+        // This ensures that all of the state for the document is available. This
         // will throw if state we need to load cannot be obtained.
         EnsureDocument(manager);
 
-        // Ok, now we have a document, and a root serializer and a namespace.  Or,
+        // Ok, now we have a document, and a root serializer and a namespace. Or,
         // at least we better.
         Debug.Assert(_documentType is not null, "EnsureDocument didn't create a document type");
         Debug.Assert(_documentNamespace is not null, "EnsureDocument didn't create a document namespace");
@@ -852,10 +852,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (LoaderHost.RootComponent == component)
         {
-            if (_documentType is not null)
-            {
-                _documentType.Name = newName;
-            }
+            _documentType?.Name = newName;
 
             return;
         }
@@ -879,7 +876,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  This is called when a component is deleted or renamed.  We remove
+    ///  This is called when a component is deleted or renamed. We remove
     ///  the component's declaration here, if it exists.
     /// </summary>
     private void RemoveDeclaration(string? name)
@@ -952,7 +949,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  This abstract method is called in response to a Flush
-    ///  call when the designer loader is dirty.  It will pass
+    ///  call when the designer loader is dirty. It will pass
     ///  a new CodeCompileUnit that represents the source code
     ///  needed to recreate the current designer's component
     ///  graph.
@@ -1005,7 +1002,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     /// <summary>
     ///  Creates a new name that is unique to all the components
-    ///  in the given container.  The name will be used to create
+    ///  in the given container. The name will be used to create
     ///  an object of the given data type, so the service may
     ///  derive a name from the data type's name.
     /// </summary>
@@ -1099,7 +1096,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  Determines if the given name is valid.  A name
+    ///  Determines if the given name is valid. A name
     ///  creation service may have rules defining a valid
     ///  name, and this method allows the service to enforce
     ///  those rules.
@@ -1156,7 +1153,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
             // If the designer has been modified there is a chance that
             // the document type does not have all the necessary
-            // members in it yet.  So, we need to check the container
+            // members in it yet. So, we need to check the container
             // as well.
             if (Modified && LoaderHost.Container.Components[name] is not null)
             {
@@ -1168,12 +1165,12 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     }
 
     /// <summary>
-    ///  Determines if the given name is valid.  A name
+    ///  Determines if the given name is valid. A name
     ///  creation service may have rules defining a valid
     ///  name, and this method allows the service to enforce
-    ///  those rules.  It is similar to IsValidName, except
+    ///  those rules. It is similar to IsValidName, except
     ///  that this method will throw an exception if the
-    ///  name is invalid.  This allows implementors to provide
+    ///  name is invalid. This allows implementors to provide
     ///  rich information in the exception message.
     /// </summary>
     void INameCreationService.ValidateName(string name)
@@ -1249,7 +1246,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         // If the designer has been modified there is a chance that
         // the document type does not have all the necessary
-        // members in it yet.  So, we need to check the container
+        // members in it yet. So, we need to check the container
         // as well.
         if (!dup && Modified && LoaderHost.Container.Components[name] is not null)
         {

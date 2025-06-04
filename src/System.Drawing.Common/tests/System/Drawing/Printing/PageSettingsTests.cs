@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -62,5 +62,22 @@ public class PageSettingsTests
         // PaperSource
         Assert.Equal(ps.PaperSource.Kind, clone.PaperSource.Kind);
         Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
+    }
+
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    public void PrintToPDF_DefaultPageSettings_IsColor()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/13367
+        if (!Helpers.TryGetPdfPrinterName(out string? printerName))
+        {
+            return;
+        }
+
+        PrinterSettings printerSettings = new()
+        {
+            PrinterName = printerName
+        };
+
+        printerSettings.DefaultPageSettings.Color.Should().BeTrue("PDF printer should support color printing.");
     }
 }

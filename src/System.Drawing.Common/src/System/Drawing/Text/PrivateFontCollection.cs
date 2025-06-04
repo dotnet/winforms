@@ -13,11 +13,15 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     /// <summary>
     ///  Initializes a new instance of the <see cref='PrivateFontCollection'/> class.
     /// </summary>
-    public PrivateFontCollection() : base()
+    public PrivateFontCollection() : base(Create())
+    {
+    }
+
+    private static GpFontCollection* Create()
     {
         GpFontCollection* fontCollection;
-        PInvoke.GdipNewPrivateFontCollection(&fontCollection).ThrowIfFailed();
-        _nativeFontCollection = fontCollection;
+        PInvokeGdiPlus.GdipNewPrivateFontCollection(&fontCollection).ThrowIfFailed();
+        return fontCollection;
     }
 
     /// <summary>
@@ -25,26 +29,14 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-        if (_nativeFontCollection is not null)
-        {
-            GpFontCollection* nativeFontCollection = _nativeFontCollection;
+        GpFontCollection* nativeFontCollection = this.Pointer();
 
-            try
+        if (nativeFontCollection is not null)
+        {
+            Status status = PInvokeGdiPlus.GdipDeletePrivateFontCollection(&nativeFontCollection);
+            if (disposing)
             {
-#if DEBUG
-                Status status = !Gdip.Initialized ? Status.Ok :
-#endif
-                PInvoke.GdipDeletePrivateFontCollection(&nativeFontCollection);
-#if DEBUG
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
-#endif
-            }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-            {
-            }
-            finally
-            {
-                _nativeFontCollection = null;
             }
         }
 
@@ -65,7 +57,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
 
         fixed (char* p = filename)
         {
-            PInvoke.GdipPrivateAddFontFile(_nativeFontCollection, p).ThrowIfFailed();
+            PInvokeGdiPlus.GdipPrivateAddFontFile(this.Pointer(), p).ThrowIfFailed();
             GC.KeepAlive(this);
         }
 
@@ -78,7 +70,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     /// </summary>
     public void AddMemoryFont(IntPtr memory, int length)
     {
-        PInvoke.GdipPrivateAddMemoryFont(_nativeFontCollection, (void*)memory, length).ThrowIfFailed();
+        PInvokeGdiPlus.GdipPrivateAddMemoryFont(this.Pointer(), (void*)memory, length).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 

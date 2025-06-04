@@ -10,7 +10,7 @@ public class ServerComputerTests
     {
         ServerComputer computer = new();
 
-        Assert.Equal(System.Environment.MachineName, computer.Name);
+        Assert.Equal(Environment.MachineName, computer.Name);
 
         var clock = computer.Clock;
         Assert.NotNull(clock);

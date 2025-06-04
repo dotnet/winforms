@@ -9,8 +9,8 @@ namespace Windows.Win32.Graphics.Gdi;
 /// </summary>
 /// <remarks>
 ///  <para>
-///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
+///   Use in a <see langword="using" /> statement. If you must pass this around, always pass
+///   by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
 ///  </para>
 /// </remarks>
 #if DEBUG
@@ -22,7 +22,7 @@ internal readonly ref struct CreateDcScope
     public HDC HDC { get; }
 
     /// <summary>
-    ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="CreateCompatibleDC(HDC)"/>.
+    ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="PInvokeCore.CreateCompatibleDC(HDC)"/>.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -50,7 +50,7 @@ internal readonly ref struct CreateDcScope
     }
 
     public static implicit operator HDC(in CreateDcScope scope) => scope.HDC;
-    public static implicit operator HGDIOBJ(in CreateDcScope scope) => (HGDIOBJ)(scope.HDC.Value);
+    public static unsafe implicit operator HGDIOBJ(in CreateDcScope scope) => (HGDIOBJ)(scope.HDC.Value);
     public static implicit operator nint(in CreateDcScope scope) => scope.HDC;
     public static explicit operator WPARAM(in CreateDcScope scope) => (WPARAM)(nuint)(nint)scope.HDC;
 

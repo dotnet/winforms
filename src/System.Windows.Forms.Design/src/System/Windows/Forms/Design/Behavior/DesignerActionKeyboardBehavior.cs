@@ -24,15 +24,20 @@ internal sealed class DesignerActionKeyboardBehavior : Behavior
         }
     }
 
-    // THIS should not stay here, creation of a custom command or of the real thing should be handled in the designeractionpanel itself
+    // THIS should not stay here, creation of a custom command or of the real thing should
+    // be handled in the designeractionpanel itself
     public override MenuCommand? FindCommand(CommandID commandId)
     {
         if (_panel is not null && _menuService is not null)
         {
-            // if the command we're looking for is handled by the panel, just tell VS that this command is disabled. otherwise let it through as usual...
+            // if the command we're looking for is handled by the panel, just tell VS that this command is disabled.
+            // otherwise let it through as usual...
             foreach (CommandID candidateCommandId in _panel.FilteredCommandIDs)
             {
-                // VisualStudio shell implements a mutable derived class from the base CommandID. The mutable class compares overridden properties instead of the read-only backing fields when testing equality of command IDs. Thus Equals method is asymmetrical derived class's override that compares properties is the accurate one.
+                // VisualStudio shell implements a mutable derived class from the base CommandID.
+                // The mutable class compares overridden properties instead of the read-only backing
+                // fields when testing equality of command IDs. Thus Equals method is
+                // asymmetrical derived class's override that compares properties is the accurate one.
                 if (commandId.Equals(candidateCommandId))
                 {
                     MenuCommand dummyMC = new(delegate

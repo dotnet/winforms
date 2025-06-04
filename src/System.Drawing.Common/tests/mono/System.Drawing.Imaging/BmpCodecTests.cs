@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // BMPCodec class testing unit
 //
 // Authors:
 //  Jordi Mas i Hernandez (jordi@ximian.com)
 //  Sebastien Pouliot  <sebastien@ximian.com>
 //
-// (C) 2004 Ximian, Inc.  http://www.ximian.com
+// (C) 2004 Ximian, Inc. http://www.ximian.com
 // Copyright (C) 2004-2007 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -421,7 +421,7 @@ public class BmpCodecTest
         Assert.Equal(-9211799, bmp.GetPixel(160, 160).ToArgb());
     }
 
-    private void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
+    private static void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
     {
         string sOutFile = $"linerect-{expected}.bmp";
 

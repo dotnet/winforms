@@ -8,25 +8,36 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
+///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.
+///  The SelectionBehavior performs two main tasks:
+///  1) forward messages to the related ControlDesigner
+///  2) calls upon the SelectionManager to push a potential DragBehavior.
 /// </summary>
 internal sealed class SelectionManager : IDisposable
 {
-    private BehaviorService _behaviorService;           // ptr back to our BehaviorService
-    private IServiceProvider _serviceProvider;          // standard service provider
-    private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    // used for quick look up of designers related to components
-    private readonly Control _rootComponent;            // root component being designed
-    private ISelectionService _selectionService;                  // we cache the selection service for perf.
-    private IDesignerHost _designerHost;                // we cache the designerhost for perf.
-    private Rectangle[]? _previousSelectionBounds;           // used to only repaint the changing part of the selection
-    private object? _previousPrimarySelection;               // used to check if the primary selection changed
+    // ptr back to our BehaviorService
+    private BehaviorService _behaviorService;
+    private IServiceProvider _serviceProvider;
+    // used for quick look up of designers related to components
+    private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;
+    private readonly Control _rootComponent;
+    private ISelectionService _selectionService;
+    private IDesignerHost _designerHost;
+    // used to only repaint the changing part of the selection
+    private Rectangle[]? _previousSelectionBounds;
+    // used to check if the primary selection changed
+    private object? _previousPrimarySelection;
     private Rectangle[]? _currentSelectionBounds;
     private int _curCompIndex;
-    private DesignerActionUI? _designerActionUI;         // the "container" for all things related to the designer action (smarttags) UI
-    private bool _selectionChanging;                    // we don't want the OnSelectionChanged to be recursively called.
+    // the "container" for all things related to the designer action (SmartTags) UI
+    // we don't want the OnSelectionChanged to be recursively called.
+    private DesignerActionUI? _designerActionUI;
+    private bool _selectionChanging;
 
     /// <summary>
-    ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
+    ///  Here we query for necessary services and cache them for performance reasons.
+    ///  We also hook to <see cref="Component" /> Added/Removed/Changed notifications so we can keep in sync when the designers'
+    ///  components change. Also, we create our custom <see cref="Adorner" /> and add it to the <see cref="BehaviorService" />.
     /// </summary>
     public SelectionManager(IServiceProvider serviceProvider, BehaviorService behaviorService)
     {
@@ -38,13 +49,13 @@ internal sealed class SelectionManager : IDisposable
         _selectionService = serviceProvider.GetRequiredService<ISelectionService>();
         _designerHost = serviceProvider.GetRequiredService<IDesignerHost>();
 
-        // sync the BehaviorService's begindrag event
-        behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
+        // sync the BehaviorService's BeginDrag event
+        behaviorService.BeginDrag += OnBeginDrag;
 
         // sync the BehaviorService's Synchronize event
-        behaviorService.Synchronize += new EventHandler(OnSynchronize);
+        behaviorService.Synchronize += OnSynchronize;
 
-        _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+        _selectionService.SelectionChanged += OnSelectionChanged;
         _rootComponent = (Control)_designerHost.RootComponent;
 
         // create and add both of our adorners,
@@ -52,21 +63,21 @@ internal sealed class SelectionManager : IDisposable
         SelectionGlyphAdorner = new Adorner();
         BodyGlyphAdorner = new Adorner();
         behaviorService.Adorners.Add(BodyGlyphAdorner);
-        behaviorService.Adorners.Add(SelectionGlyphAdorner); // adding this will cause the adorner to get setup with a ptr
-                                                         // to the beh.svc.
+        // Adding this will cause the adorner to get set up with the BehaviorService.
+        behaviorService.Adorners.Add(SelectionGlyphAdorner);
 
         _componentToDesigner = [];
 
         if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentAdded += OnComponentAdded;
+            cs.ComponentRemoved += OnComponentRemoved;
+            cs.ComponentChanged += OnComponentChanged;
         }
 
-        _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+        _designerHost.TransactionClosed += OnTransactionClosed;
 
-        // designeraction UI
+        // DesignerActionUI
         DesignerOptionService? options = _designerHost.GetService<DesignerOptionService>();
         PropertyDescriptor? p = options?.Options.Properties["UseSmartTags"];
         if (p is not null && p.TryGetValue(component: null, out bool b) && b)
@@ -169,7 +180,7 @@ internal sealed class SelectionManager : IDisposable
     {
         if (_designerHost is not null)
         {
-            _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+            _designerHost.TransactionClosed -= OnTransactionClosed;
             _designerHost = null!;
         }
 
@@ -177,14 +188,14 @@ internal sealed class SelectionManager : IDisposable
         {
             if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentAdded -= OnComponentAdded;
+                cs.ComponentChanged -= OnComponentChanged;
+                cs.ComponentRemoved -= OnComponentRemoved;
             }
 
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
                 _selectionService = null!;
             }
 
@@ -195,8 +206,8 @@ internal sealed class SelectionManager : IDisposable
         {
             _behaviorService.Adorners.Remove(BodyGlyphAdorner);
             _behaviorService.Adorners.Remove(SelectionGlyphAdorner);
-            _behaviorService.BeginDrag -= new BehaviorDragDropEventHandler(OnBeginDrag);
-            _behaviorService.Synchronize -= new EventHandler(OnSynchronize);
+            _behaviorService.BeginDrag -= OnBeginDrag;
+            _behaviorService.Synchronize -= OnSynchronize;
             _behaviorService = null!;
         }
 
@@ -229,7 +240,7 @@ internal sealed class SelectionManager : IDisposable
     }
 
     /// <summary>
-    ///  When a component is added, we get the designer and add it to our hashtable for quick lookup.
+    ///  When a component is added, we get the designer and add it to our hash table for quick lookup.
     /// </summary>
     private void OnComponentAdded(object? source, ComponentEventArgs ce)
     {
@@ -246,7 +257,7 @@ internal sealed class SelectionManager : IDisposable
     /// </summary>
     private void OnBeginDrag(object? source, BehaviorDragDropEventArgs e)
     {
-        List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
+        List<IComponent> dragComps = [..e.DragComponents.Cast<IComponent>()];
         List<Glyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph g in BodyGlyphAdorner.Glyphs)
         {
@@ -287,13 +298,13 @@ internal sealed class SelectionManager : IDisposable
     }
 
     /// <summary>
-    ///  When a component is removed - we remove the key and value from our hashtable.
+    ///  When a component is removed - we remove the key and value from our hash table.
     /// </summary>
     private void OnComponentRemoved(object? source, ComponentEventArgs ce)
     {
         _componentToDesigner.Remove(ce.Component!);
 
-        // remove the associated designeractionpanel
+        // remove the associated DesignerActionPanel
         _designerActionUI?.RemoveActionGlyph(ce.Component);
     }
 
@@ -316,8 +327,8 @@ internal sealed class SelectionManager : IDisposable
             smaller = currentSelectionBounds;
         }
 
-        // we need to make sure all of the rects in the smaller array are
-        // accounted for.  Any that don't intersect a rect in the larger
+        // we need to make sure all of the rectangles in the smaller array are
+        // accounted for. Any that don't intersect a rectangle in the larger
         // array need to be included in the region to repaint.
         bool[] intersected = new bool[smaller.Length];
         for (int i = 0; i < smaller.Length; i++)
@@ -325,9 +336,9 @@ internal sealed class SelectionManager : IDisposable
             intersected[i] = false;
         }
 
-        // determine which rects in the larger array need to be
+        // determine which rectangles in the larger array need to be
         // included in the region to invalidate by intersecting
-        // with rects in the smaller array.
+        // with rectangles in the smaller array.
         foreach (Rectangle large in larger)
         {
             bool largeIntersected = false;
@@ -354,7 +365,7 @@ internal sealed class SelectionManager : IDisposable
             }
         }
 
-        // now add any rects from the smaller array that weren't accounted for
+        // now add any rectangles from the smaller array that weren't accounted for
         for (int k = 0; k < intersected.Length; k++)
         {
             if (!intersected[k])
@@ -365,7 +376,8 @@ internal sealed class SelectionManager : IDisposable
 
         using Graphics g = _behaviorService.AdornerWindowGraphics;
 
-        // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
+        // If all that changed was the primary selection, then the refresh region was empty,
+        // but we do need to update the 2 controls.
         if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_previousPrimarySelection))
         {
             for (int i = 0; i < currentSelectionBounds.Length; i++)
@@ -386,7 +398,8 @@ internal sealed class SelectionManager : IDisposable
     }
 
     /// <summary>
-    ///  On every selectionchange, we remove all glyphs, get the newly selected components, and re-add all glyphs back to the Adorner.
+    ///  On every SelectionChanged Event, we remove all glyphs, get the newly selected components,
+    ///  and re-add all glyphs back to the Adorner.
     /// </summary>
     private void OnSelectionChanged(object? sender, EventArgs? e)
     {
@@ -399,7 +412,7 @@ internal sealed class SelectionManager : IDisposable
             SelectionGlyphAdorner.Glyphs.Clear();
             BodyGlyphAdorner.Glyphs.Clear();
 
-            List<IComponent> selComps = _selectionService.GetSelectedComponents().Cast<IComponent>().ToList();
+            List<IComponent> selComps = [.._selectionService.GetSelectedComponents().Cast<IComponent>()];
             object? primarySelection = _selectionService.PrimarySelection;
 
             // add all control glyphs to all controls on rootComp
@@ -447,7 +460,7 @@ internal sealed class SelectionManager : IDisposable
     }
 
     /// <summary>
-    ///  When a transaction that involves one of our components closes,  refresh to reflect any changes.
+    ///  When a transaction that involves one of our components closes, refresh to reflect any changes.
     /// </summary>
     private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
     {

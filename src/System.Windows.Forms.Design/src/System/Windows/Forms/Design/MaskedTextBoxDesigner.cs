@@ -9,7 +9,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// Designer class for the MaskedTextBox control.
+///  Designer class for the MaskedTextBox control.
 /// </summary>
 internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 {
@@ -21,7 +21,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     protected override bool SetTextualDefaultProperty => false;
 
     /// <summary>
-    /// MaskedTextBox designer action list property. Gets the design-time supported actions on the control.
+    ///  MaskedTextBox designer action list property. Gets the design-time supported actions on the control.
     /// </summary>
     public override DesignerActionListCollection ActionLists
     {
@@ -38,7 +38,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    /// A utility method to get a design time masked text box based on the masked text box being designed.
+    ///  A utility method to get a design time masked text box based on the masked text box being designed.
     /// </summary>
     /// <param name="maskedTextBox">The masked text box.</param>
     /// <returns></returns>
@@ -131,8 +131,8 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    /// Obsolete ComponentDesigner method which sets component default properties.  Overriden to avoid setting
-    /// the Mask improperly.
+    ///  Obsolete ComponentDesigner method which sets component default properties. Overridden to avoid setting
+    ///  the Mask improperly.
     /// </summary>
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     public override void OnSetComponentDefaults()
@@ -152,7 +152,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     /// <summary>
     ///  Allows a designer to filter the set of properties
     ///  the component it is designing will expose through the
-    ///  TypeDescriptor object.  This method is called
+    ///  TypeDescriptor object. This method is called
     ///  immediately before its corresponding "Post" method.
     ///  If you are overriding this method you should call
     ///  the base implementation before you perform your own
@@ -183,7 +183,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules
@@ -197,8 +197,8 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
-    ///  of PasswordChar it will return the system password char.  However, the value of PasswordChar is
+    ///  Shadows the PasswordChar. UseSystemPasswordChar overrides PasswordChar so independent on the value
+    ///  of PasswordChar it will return the system password char. However, the value of PasswordChar is
     ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
     ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
     /// </summary>
@@ -284,7 +284,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     }
 
     /// <summary>
-    ///  MaskedTextBox designer verb collection property.  Gets the design-time supported verbs of the control.
+    ///  MaskedTextBox designer verb collection property. Gets the design-time supported verbs of the control.
     /// </summary>
     public override DesignerVerbCollection Verbs
     {

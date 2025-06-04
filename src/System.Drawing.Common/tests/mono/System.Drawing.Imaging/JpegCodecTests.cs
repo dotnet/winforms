@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // JpegCodec class testing unit
 //
 // Authors:
 //  Jordi Mas i Hernandez (jordi@ximian.com)
 //  Sebastien Pouliot  <sebastien@ximian.com>
 //
-// (C) 2004 Ximian, Inc.  http://www.ximian.com
+// (C) 2004 Ximian, Inc. http://www.ximian.com
 // Copyright (C) 2004-2007 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -192,7 +192,7 @@ public class JpegCodecTest
         /* note: under MS flags aren't constant between executions in this case (no palette) */
         // Assert.Equal(77960, bmp.Flags);
 
-        Assert.Equal(0, bmp.Palette.Entries.Length);
+        Assert.Empty(bmp.Palette.Entries);
     }
 
     [Fact]
@@ -340,7 +340,7 @@ public class JpegCodecTest
         }
     }
 
-    private void Save(PixelFormat original, PixelFormat expected)
+    private static void Save(PixelFormat original, PixelFormat expected)
     {
         string sOutFile = $"linerect-{expected}.jpeg";
 

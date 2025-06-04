@@ -9,7 +9,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// UI for the MaskTypeEditor (Design time).
+///  UI for the MaskTypeEditor (Design time).
 /// </summary>
 internal class MaskDesignerDialog : Form
 {
@@ -37,7 +37,7 @@ internal class MaskDesignerDialog : Form
     private readonly IHelpService? _helpService;
 
     /// <summary>
-    /// Constructor receiving a clone of the MaskedTextBox control under design.
+    ///  Constructor receiving a clone of the MaskedTextBox control under design.
     /// </summary>
     public MaskDesignerDialog(MaskedTextBox instance, IHelpService? helpService)
     {
@@ -88,16 +88,16 @@ internal class MaskDesignerDialog : Form
 
     private void HookEvents()
     {
-        _listViewCannedMasks.SelectedIndexChanged += new EventHandler(listViewCannedMasks_SelectedIndexChanged);
-        _listViewCannedMasks.ColumnClick += new ColumnClickEventHandler(listViewCannedMasks_ColumnClick);
-        _listViewCannedMasks.Enter += new EventHandler(listViewCannedMasks_Enter);
-        _btnOK.Click += new EventHandler(btnOK_Click);
-        _txtBoxMask.TextChanged += new EventHandler(txtBoxMask_TextChanged);
-        _txtBoxMask.Validating += new CancelEventHandler(txtBoxMask_Validating);
-        _maskedTextBox.KeyDown += new KeyEventHandler(maskedTextBox_KeyDown);
-        _maskedTextBox.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox_MaskInputRejected);
-        Load += new EventHandler(MaskDesignerDialog_Load);
-        HelpButtonClicked += new CancelEventHandler(MaskDesignerDialog_HelpButtonClicked);
+        _listViewCannedMasks.SelectedIndexChanged += listViewCannedMasks_SelectedIndexChanged;
+        _listViewCannedMasks.ColumnClick += listViewCannedMasks_ColumnClick;
+        _listViewCannedMasks.Enter += listViewCannedMasks_Enter;
+        _btnOK.Click += btnOK_Click;
+        _txtBoxMask.TextChanged += txtBoxMask_TextChanged;
+        _txtBoxMask.Validating += txtBoxMask_Validating;
+        _maskedTextBox.KeyDown += maskedTextBox_KeyDown;
+        _maskedTextBox.MaskInputRejected += maskedTextBox_MaskInputRejected;
+        Load += MaskDesignerDialog_Load;
+        HelpButtonClicked += MaskDesignerDialog_HelpButtonClicked;
     }
 
     [MemberNotNull(nameof(_components))]
@@ -298,25 +298,25 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// The current text (mask) in the txtBoxMask control.
+    ///  The current text (mask) in the txtBoxMask control.
     /// </summary>
     public string Mask => _maskedTextBox.Mask;
 
     /// <summary>
-    /// The current text (mask) in the txtBoxMask control.
+    ///  The current text (mask) in the txtBoxMask control.
     /// </summary>
     public Type? ValidatingType { get; private set; }
 
     /// <summary>
-    /// A collection of MaskDescriptor objects represented in the ListView with the canned mask
-    /// descriptions.
+    ///  A collection of MaskDescriptor objects represented in the ListView with the canned mask
+    ///  descriptions.
     /// </summary>
     public IEnumerator MaskDescriptors => _maskDescriptors.GetEnumerator();
 
     /// <summary>
-    /// Adds the default mask descriptors to the mask description list.
-    /// We need to add the default descriptors explicitly because the DiscoverMaskDescriptors method only adds
-    /// public descriptors and these are internal.
+    ///  Adds the default mask descriptors to the mask description list.
+    ///  We need to add the default descriptors explicitly because the DiscoverMaskDescriptors method only adds
+    ///  public descriptors and these are internal.
     /// </summary>
     [MemberNotNull(nameof(_customMaskDescriptor))]
     private void AddDefaultMaskDescriptors(CultureInfo culture)
@@ -336,7 +336,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Determines whether the specified MaskDescriptor object is in the MaskDescriptor collection or not.
+    ///  Determines whether the specified MaskDescriptor object is in the MaskDescriptor collection or not.
     /// </summary>
     private bool ContainsMaskDescriptor(MaskDescriptor maskDescriptor)
     {
@@ -360,8 +360,8 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Uses the specified ITypeDiscoveryService service provider to discover MaskDescriptor objects from
-    /// the referenced assemblies.
+    ///  Uses the specified ITypeDiscoveryService service provider to discover MaskDescriptor objects from
+    ///  the referenced assemblies.
     /// </summary>
     public void DiscoverMaskDescriptors(ITypeDiscoveryService? discoveryService)
     {
@@ -394,7 +394,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Gets the index of a mask descriptor in the mask descriptor table.
+    ///  Gets the index of a mask descriptor in the mask descriptor table.
     /// </summary>
     private int GetMaskDescriptorIndex(MaskDescriptor maskDescriptor)
     {
@@ -413,7 +413,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Selects the mask descriptor corresponding to the current MaskedTextBox.Mask if any, otherwise the custom entry.
+    ///  Selects the mask descriptor corresponding to the current MaskedTextBox.Mask if any, otherwise the custom entry.
     /// </summary>
     private void SelectMtbMaskDescriptor()
     {
@@ -450,7 +450,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Selects the specified item in the ListView.
+    ///  Selects the specified item in the ListView.
     /// </summary>
     private void SetSelectedMaskDescriptor(MaskDescriptor maskDex)
     {
@@ -471,7 +471,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Sorts the maskDescriptors and the list view items.
+    ///  Sorts the maskDescriptors and the list view items.
     /// </summary>
     private void UpdateSortedListView(MaskDescriptorComparer.SortType sortType)
     {
@@ -496,9 +496,9 @@ internal class MaskDesignerDialog : Form
         _maskDescriptors.Sort(new MaskDescriptorComparer(sortType, _listViewSortOrder));
 
         // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
-        // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
+        // from it first and then add the sorted ones back (no replace). Stop redrawing while we change the list.
 
-        PInvoke.SendMessage(_listViewCannedMasks, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+        PInvokeCore.SendMessage(_listViewCannedMasks, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
 
         try
         {
@@ -532,13 +532,13 @@ internal class MaskDesignerDialog : Form
         finally
         {
             // Resume redraw.
-            PInvoke.SendMessage(_listViewCannedMasks, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+            PInvokeCore.SendMessage(_listViewCannedMasks, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
             _listViewCannedMasks.Invalidate();
         }
     }
 
     /// <summary>
-    /// Inserts a MaskDescriptor object in the specified position in the internal MaskDescriptor collection.
+    ///  Inserts a MaskDescriptor object in the specified position in the internal MaskDescriptor collection.
     /// </summary>
     private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor)
     {
@@ -559,7 +559,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view Column click event handler.  Sorts the items.
+    ///  Canned masks list view Column click event handler. Sorts the items.
     /// </summary>
     private void listViewCannedMasks_ColumnClick(object? sender, ColumnClickEventArgs e)
     {
@@ -579,7 +579,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// OK button Click event handler.  Updates the validating type.
+    ///  OK button Click event handler. Updates the validating type.
     /// </summary>
     private void btnOK_Click(object? sender, EventArgs e)
     {
@@ -594,7 +594,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view Enter event handler.  Sets focus in the first item if none has it.
+    ///  Canned masks list view Enter event handler. Sets focus in the first item if none has it.
     /// </summary>
     private void listViewCannedMasks_Enter(object? sender, EventArgs e)
     {
@@ -607,8 +607,8 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view SelectedIndexChanged event handler.  Gets the selected canned mask
-    /// information.
+    ///  Canned masks list view SelectedIndexChanged event handler. Gets the selected canned mask
+    ///  information.
     /// </summary>
     private void listViewCannedMasks_SelectedIndexChanged(object? sender, EventArgs e)
     {
@@ -654,9 +654,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    ///  <para>
     ///  Called when the help button is clicked.
-    ///  </para>
     /// </summary>
     private void ShowHelp()
     {
@@ -682,7 +680,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Mask text box Leave event handler.
+    ///  Mask text box Leave event handler.
     /// </summary>
     private void txtBoxMask_Validating(object? sender, CancelEventArgs e)
     {
@@ -697,7 +695,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Mask text box TextChanged event handler.
+    ///  Mask text box TextChanged event handler.
     /// </summary>
     private void txtBoxMask_TextChanged(object? sender, EventArgs e)
     {

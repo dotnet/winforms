@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Private.Windows.Core.Resources;
 using System.Runtime.InteropServices;
 
 namespace Windows.Win32.Graphics.GdiPlus;
@@ -28,7 +27,14 @@ internal static class StatusExtensions
             case Status.InvalidParameter:
                 return new ArgumentException(SR.GdiplusInvalidParameter);
             case Status.OutOfMemory:
-                return new OutOfMemoryException(SR.GdiplusOutOfMemory);
+                // This is almost never an actual out of memory error. It usually means that GDI+
+                // was unable to create an internal object due to an invalid parameter or some other
+                // missing state. As it causes no end of confusion, we've switched both the message and
+                // the exception type to be less misleading.
+                //
+                // If we're truly running low on memory, an OutOfMemoryException is likely to be thrown
+                // in some other path soon anyway.
+                return new ExternalException(SR.GdiplusInvalidOperation, (int)HRESULT.E_UNEXPECTED);
             case Status.ObjectBusy:
                 return new InvalidOperationException(SR.GdiplusObjectBusy);
             case Status.InsufficientBuffer:
@@ -75,5 +81,5 @@ internal static class StatusExtensions
 
         return new ExternalException($"{SR.GdiplusUnknown} [{status}]", (int)HRESULT.E_UNEXPECTED);
     }
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
 }

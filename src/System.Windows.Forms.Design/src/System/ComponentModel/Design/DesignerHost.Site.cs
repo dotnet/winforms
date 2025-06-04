@@ -171,7 +171,7 @@ internal sealed partial class DesignerHost
             }
 
             // SiteNestedContainer does offer IServiceContainer and IContainer as services, but we always want a default
-            // site query for these services to delegate to the host. Because it is more common to add  services to the
+            // site query for these services to delegate to the host. Because it is more common to add services to the
             // host than it is to add them to the site itself, and also because we need this for backward compatibility.
             if (service != typeof(IServiceContainer) && service != typeof(IContainer) && _nestedContainer is not null)
             {
@@ -250,7 +250,7 @@ internal sealed partial class DesignerHost
                     nameService.ValidateName(value);
                 }
 
-                // It is OK to change the name to this value.  Announce the change and do it.
+                // It is OK to change the name to this value. Announce the change and do it.
                 string? oldName = _name;
                 _name = value;
                 _host.OnComponentRename(_component, oldName, _name);

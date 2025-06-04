@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <LangVersion>15.5</LangVersion>
+    <RootNamespace>System.Windows.Forms.Analyzers.Tests</RootNamespace>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/TestData/*.vb</DefaultItemExcludesInProjectFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.SourceGenerators.Testing" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.XUnit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.SourceGenerators.Testing.XUnit" />
+    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="NuGet.Packaging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\tests\UnitTests\System.Windows.Forms.Analyzers.Tests.csproj" />
+    <ProjectReference Include="..\..\..\src\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="**\TestData\*.vb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

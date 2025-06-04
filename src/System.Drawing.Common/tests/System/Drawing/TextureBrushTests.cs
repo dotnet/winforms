@@ -1,8 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace System.Drawing.Tests;
 
@@ -238,7 +239,7 @@ public class TextureBrushTests
     [Fact]
     public void Ctor_NullImage_ThrowsArgumentNullException()
     {
-        AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null));
+        AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush((Image)null));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, WrapMode.Tile));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, RectangleF.Empty));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, Rectangle.Empty));
@@ -284,16 +285,16 @@ public class TextureBrushTests
     [InlineData(0, 5, 1, 6)]
     [InlineData(0, 0, 1, 0)]
     [InlineData(0, 0, 0, 1)]
-    public void Ctor_InvalidRectangle_ThrowsOutOfMemoryException(int x, int y, int width, int height)
+    public void Ctor_InvalidRectangle_ThrowsExternalException(int x, int y, int width, int height)
     {
         Rectangle rectangle = new(x, y, width, height);
         using Bitmap image = new(10, 10);
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, (RectangleF)rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, WrapMode.Tile, rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, WrapMode.Tile, (RectangleF)rectangle));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, rectangle, null));
-        Assert.Throws<OutOfMemoryException>(() => new TextureBrush(image, (RectangleF)rectangle, null));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, (RectangleF)rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, WrapMode.Tile, rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, WrapMode.Tile, (RectangleF)rectangle));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, rectangle, null));
+        Assert.Throws<ExternalException>(() => new TextureBrush(image, (RectangleF)rectangle, null));
     }
 
     [Fact]
@@ -315,7 +316,7 @@ public class TextureBrushTests
         TextureBrush brush = new(image);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Clone);
     }
 
     [Fact]
@@ -450,7 +451,7 @@ public class TextureBrushTests
         TextureBrush brush = new(image);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.ResetTransform());
+        AssertExtensions.Throws<ArgumentException>(null, brush.ResetTransform);
     }
 
     public static IEnumerable<object[]> RotateTransform_TestData()

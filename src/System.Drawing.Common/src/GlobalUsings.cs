@@ -13,6 +13,10 @@ global using Windows.Win32.Storage.Xps;
 global using Windows.Win32.System.Memory;
 global using Windows.Win32.UI.WindowsAndMessaging;
 
+#if NET9_0_OR_GREATER
+global using Lock = System.Threading.Lock;
+#endif
+
 global using BitmapData = System.Drawing.Imaging.BitmapData;
 global using ColorPalette = System.Drawing.Imaging.ColorPalette;
 global using DashCap = System.Drawing.Drawing2D.DashCap;

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -17,7 +18,7 @@ public unsafe class IPictureTests
     {
         using MockCursor arrow = new(PInvoke.IDC_ARROW);
 
-        using var picture = IPicture.CreateFromIcon(Icon.FromHandle(arrow.Handle), copy: true);
+        using var picture = Icon.FromHandle(arrow.Handle).CreateIPicture(copy: true);
         Assert.False(picture.IsNull);
         picture.Value->get_Type(out PICTYPE type);
         Assert.Equal(PICTYPE.PICTYPE_ICON, type);
@@ -34,7 +35,7 @@ public unsafe class IPictureTests
         using MockCursor arrow = new(PInvoke.IDC_ARROW);
         using Icon icon = Icon.FromHandle(arrow.Handle);
         using Bitmap bitmap = icon.ToBitmap();
-        using var picture = IPicture.CreateFromImage(bitmap);
+        using var picture = bitmap.CreateIPicture();
         Assert.False(picture.IsNull);
         picture.Value->get_Type(out PICTYPE type);
         Assert.Equal(PICTYPE.PICTYPE_BITMAP, type);
@@ -50,9 +51,9 @@ public unsafe class IPictureTests
     {
         using Icon icon = SystemIcons.Question;
         using Bitmap bitmap = icon.ToBitmap();
-        using var picture = IPictureDisp.CreateFromImage(bitmap);
+        using var picture = bitmap.CreateIPictureDisp();
         Assert.False(picture.IsNull);
-        using VARIANT variant = new();
+        using VARIANT variant = default;
 
         IDispatch* dispatch = (IDispatch*)picture.Value;
         dispatch->TryGetProperty(PInvokeCore.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
@@ -70,7 +71,7 @@ public unsafe class IPictureTests
     {
         using Icon icon = SystemIcons.Exclamation;
         using Bitmap bitmap = icon.ToBitmap();
-        using var picture = IPicture.CreateFromImage(bitmap);
+        using var picture = bitmap.CreateIPicture();
         Assert.False(picture.IsNull);
         using Image? image = ImageExtensions.ToImage(picture);
         Assert.NotNull(image);
@@ -81,7 +82,7 @@ public unsafe class IPictureTests
     public void GetPictureFromIPictureDisp()
     {
         using Bitmap bitmap = new(100, 200);
-        using var picture = IPictureDisp.CreateFromImage(bitmap);
+        using var picture = bitmap.CreateIPictureDisp();
         Assert.False(picture.IsNull);
         using Image? image = ImageExtensions.ToImage(picture);
         Assert.NotNull(image);

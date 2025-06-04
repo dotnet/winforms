@@ -4,7 +4,7 @@
 namespace System.Drawing.Drawing2D;
 
 /// <summary>
-/// Specifies the available dash cap styles with which a <see cref='Pen'/> can end a line.
+///  Specifies the available dash cap styles with which a <see cref='Pen'/> can end a line.
 /// </summary>
 public enum DashCap
 {

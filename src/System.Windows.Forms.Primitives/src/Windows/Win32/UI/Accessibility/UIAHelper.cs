@@ -9,7 +9,8 @@ internal static class UIAHelper
 {
     /// <summary>
     ///  Converts a window handle to a <see cref="VARIANT"/> for UIA purposes.
-    ///  Specifically, for <see cref="IRawElementProviderSimple.GetPropertyValue(IRawElementProviderSimple*, UIA_PROPERTY_ID, VARIANT*)"/>
+    ///  Specifically, for
+    ///  <see cref="IRawElementProviderSimple.GetPropertyValue(IRawElementProviderSimple*, UIA_PROPERTY_ID, VARIANT*)"/>
     ///  with <see cref="UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId"/> passed.
     /// </summary>
     /// <param name="handle">The handle to the window</param>

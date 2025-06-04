@@ -9,12 +9,12 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
 {
     internal GpRegion* NativeRegion { get; private set; }
 
-    GpRegion* IPointer<GpRegion>.Pointer => NativeRegion;
+    nint IPointer<GpRegion>.Pointer => (nint)NativeRegion;
 
     public Region()
     {
         GpRegion* region;
-        CheckStatus(PInvoke.GdipCreateRegion(&region));
+        CheckStatus(PInvokeGdiPlus.GdipCreateRegion(&region));
         SetNativeRegion(region);
     }
 
@@ -22,7 +22,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         GpRegion* region = default;
         RectF rectF = rect;
-        CheckStatus(PInvoke.GdipCreateRegionRect(&rectF, &region));
+        CheckStatus(PInvokeGdiPlus.GdipCreateRegionRect(&rectF, &region));
         SetNativeRegion(region);
     }
 
@@ -35,7 +35,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
         ArgumentNullException.ThrowIfNull(path);
 
         GpRegion* region = default;
-        CheckStatus(PInvoke.GdipCreateRegionPath(path._nativePath, &region));
+        CheckStatus(PInvokeGdiPlus.GdipCreateRegionPath(path._nativePath, &region));
         GC.KeepAlive(path);
         SetNativeRegion(region);
     }
@@ -47,7 +47,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
         GpRegion* region = default;
         fixed (byte* data = rgnData.Data)
         {
-            CheckStatus(PInvoke.GdipCreateRegionRgnData(data, rgnData.Data.Length, &region));
+            CheckStatus(PInvokeGdiPlus.GdipCreateRegionRgnData(data, rgnData.Data.Length, &region));
         }
 
         SetNativeRegion(region);
@@ -58,7 +58,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public static Region FromHrgn(IntPtr hrgn)
     {
         GpRegion* region = default;
-        Gdip.CheckStatus(PInvoke.GdipCreateRegionHrgn((HRGN)hrgn, &region));
+        Gdip.CheckStatus(PInvokeGdiPlus.GdipCreateRegionHrgn((HRGN)hrgn, &region));
         return new Region(region);
     }
 
@@ -73,7 +73,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public Region Clone()
     {
         GpRegion* region = default;
-        CheckStatus(PInvoke.GdipCloneRegion(NativeRegion, &region));
+        CheckStatus(PInvokeGdiPlus.GdipCloneRegion(NativeRegion, &region));
         return new Region(region);
     }
 
@@ -92,7 +92,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         if (NativeRegion is not null)
         {
-            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeleteRegion(NativeRegion);
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDeleteRegion(NativeRegion);
             NativeRegion = null;
             Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
@@ -102,106 +102,106 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
 
     ~Region() => Dispose();
 
-    public void MakeInfinite() => CheckStatus(PInvoke.GdipSetInfinite(NativeRegion));
+    public void MakeInfinite() => CheckStatus(PInvokeGdiPlus.GdipSetInfinite(NativeRegion));
 
-    public void MakeEmpty() => CheckStatus(PInvoke.GdipSetEmpty(NativeRegion));
+    public void MakeEmpty() => CheckStatus(PInvokeGdiPlus.GdipSetEmpty(NativeRegion));
 
     public void Intersect(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeIntersect));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeIntersect));
 
     public void Intersect(Rectangle rect) => Intersect((RectangleF)rect);
 
     public void Intersect(GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeIntersect));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeIntersect));
         GC.KeepAlive(path);
     }
 
     public void Intersect(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeIntersect));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeIntersect));
         GC.KeepAlive(region);
     }
 
     public void Union(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeUnion));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeUnion));
 
     public void Union(Rectangle rect) => Union((RectangleF)rect);
 
     public void Union(GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeUnion));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeUnion));
         GC.KeepAlive(path);
     }
 
     public void Union(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeUnion));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeUnion));
         GC.KeepAlive(region);
     }
 
     public void Xor(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeXor));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeXor));
 
     public void Xor(Rectangle rect) => Xor((RectangleF)rect);
 
     public void Xor(GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeXor));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeXor));
         GC.KeepAlive(path);
     }
 
     public void Xor(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeXor));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeXor));
         GC.KeepAlive(region);
     }
 
     public void Exclude(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeExclude));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeExclude));
 
     public void Exclude(Rectangle rect) => Exclude((RectangleF)rect);
 
     public void Exclude(GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeExclude));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeExclude));
         GC.KeepAlive(path);
     }
 
     public void Exclude(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeExclude));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeExclude));
         GC.KeepAlive(region);
     }
 
     public void Complement(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeComplement));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRect(NativeRegion, (RectF*)&rect, GdiPlus.CombineMode.CombineModeComplement));
 
     public void Complement(Rectangle rect) => Complement((RectangleF)rect);
 
     public void Complement(GraphicsPath path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeComplement));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionPath(NativeRegion, path._nativePath, GdiPlus.CombineMode.CombineModeComplement));
         GC.KeepAlive(path);
     }
 
     public void Complement(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeComplement));
+        CheckStatus(PInvokeGdiPlus.GdipCombineRegionRegion(NativeRegion, region.NativeRegion, GdiPlus.CombineMode.CombineModeComplement));
         GC.KeepAlive(region);
     }
 
-    public void Translate(float dx, float dy) => CheckStatus(PInvoke.GdipTranslateRegion(NativeRegion, dx, dy));
+    public void Translate(float dx, float dy) => CheckStatus(PInvokeGdiPlus.GdipTranslateRegion(NativeRegion, dx, dy));
 
     public void Translate(int dx, int dy) => Translate((float)dx, dy);
 
@@ -209,7 +209,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
-        CheckStatus(PInvoke.GdipTransformRegion(NativeRegion, matrix.NativeMatrix));
+        CheckStatus(PInvokeGdiPlus.GdipTransformRegion(NativeRegion, matrix.NativeMatrix));
         GC.KeepAlive(matrix);
     }
 
@@ -217,7 +217,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         RectF bounds;
-        CheckStatus(PInvoke.GdipGetRegionBounds(NativeRegion, g.NativeGraphics, &bounds));
+        CheckStatus(PInvokeGdiPlus.GdipGetRegionBounds(NativeRegion, g.NativeGraphics, &bounds));
         GC.KeepAlive(g);
         return bounds;
     }
@@ -226,7 +226,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         HRGN hrgn;
-        CheckStatus(PInvokeCore.GdipGetRegionHRgn(NativeRegion, g.NativeGraphics, &hrgn));
+        CheckStatus(PInvokeGdiPlus.GdipGetRegionHRgn(NativeRegion, g.NativeGraphics, &hrgn));
         GC.KeepAlive(g);
         return hrgn;
     }
@@ -235,7 +235,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         BOOL isEmpty;
-        CheckStatus(PInvoke.GdipIsEmptyRegion(NativeRegion, g.NativeGraphics, &isEmpty));
+        CheckStatus(PInvokeGdiPlus.GdipIsEmptyRegion(NativeRegion, g.NativeGraphics, &isEmpty));
         GC.KeepAlive(g);
         return isEmpty;
     }
@@ -244,7 +244,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     {
         ArgumentNullException.ThrowIfNull(g);
         BOOL isInfinite;
-        CheckStatus(PInvokeCore.GdipIsInfiniteRegion(NativeRegion, g.NativeGraphics, &isInfinite));
+        CheckStatus(PInvokeGdiPlus.GdipIsInfiniteRegion(NativeRegion, g.NativeGraphics, &isInfinite));
         return isInfinite;
     }
 
@@ -253,7 +253,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
         ArgumentNullException.ThrowIfNull(region);
         ArgumentNullException.ThrowIfNull(g);
         BOOL isEqual;
-        CheckStatus(PInvoke.GdipIsEqualRegion(NativeRegion, region.NativeRegion, g.NativeGraphics, &isEqual));
+        CheckStatus(PInvokeGdiPlus.GdipIsEqualRegion(NativeRegion, region.NativeRegion, g.NativeGraphics, &isEqual));
         GC.KeepAlive(g);
         GC.KeepAlive(region);
         return isEqual;
@@ -262,7 +262,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public RegionData? GetRegionData()
     {
         uint regionSize;
-        CheckStatus(PInvoke.GdipGetRegionDataSize(NativeRegion, &regionSize));
+        CheckStatus(PInvokeGdiPlus.GdipGetRegionDataSize(NativeRegion, &regionSize));
 
         if (regionSize == 0)
             return null;
@@ -270,7 +270,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
         byte[] regionData = new byte[regionSize];
         fixed (byte* rd = regionData)
         {
-            CheckStatus(PInvoke.GdipGetRegionData(NativeRegion, rd, regionSize, &regionSize));
+            CheckStatus(PInvokeGdiPlus.GdipGetRegionData(NativeRegion, rd, regionSize, &regionSize));
         }
 
         return new RegionData(regionData);
@@ -285,7 +285,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public bool IsVisible(PointF point, Graphics? g)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRegionPoint(
+        CheckStatus(PInvokeGdiPlus.GdipIsVisibleRegionPoint(
             NativeRegion,
             point.X,
             point.Y,
@@ -305,7 +305,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
     public bool IsVisible(RectangleF rect, Graphics? g)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRegionRect(
+        CheckStatus(PInvokeGdiPlus.GdipIsVisibleRegionRect(
             NativeRegion,
             rect.X, rect.Y, rect.Width, rect.Height,
             g is null ? null : g.NativeGraphics,
@@ -334,7 +334,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
         ArgumentNullException.ThrowIfNull(matrix);
 
         uint count;
-        CheckStatus(PInvoke.GdipGetRegionScansCount(
+        CheckStatus(PInvokeGdiPlus.GdipGetRegionScansCount(
             NativeRegion,
             &count,
             matrix.NativeMatrix));
@@ -348,7 +348,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
 
         fixed (RectangleF* r = rectangles)
         {
-            CheckStatus(PInvoke.GdipGetRegionScans(
+            CheckStatus(PInvokeGdiPlus.GdipGetRegionScans(
                 NativeRegion,
                 (RectF*)r,
                 (int*)&count,

@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -60,7 +62,7 @@ public class ToolStripDesignerTests
         Assert.Equal(-1, toolStripDesigner.IndexOfItemUnderMouseToDrag);
         Assert.Equal(-1, toolStripDesigner.IndexOfItemUnderMouseToDrag);
         Assert.Null(toolStripDesigner.InsertTransaction);
-        Assert.Equal(0, toolStripDesigner.Items.Count);
+        Assert.Empty(toolStripDesigner.Items);
         Assert.Null(toolStripDesigner.NewItemTransaction);
         Assert.NotNull(toolStripDesigner.SelectionService);
         Assert.True(toolStripDesigner.SerializePerformLayout);

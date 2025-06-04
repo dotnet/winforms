@@ -113,7 +113,7 @@ internal partial class DesignerActionUI
                 }
 
                 // What's the owner of the windows being activated?
-                HWND parent = (HWND)PInvoke.GetWindowLong(
+                HWND parent = (HWND)PInvokeCore.GetWindowLong(
                     new HandleRef<HWND>(this, hwndActivating),
                     WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
@@ -137,8 +137,8 @@ internal partial class DesignerActionUI
 
             Debug.Assert(relatedGlyph is not null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
-            panel.SizeChanged += new EventHandler(PanelResized);
-            // hook up the event
+            panel.SizeChanged += PanelResized;
+
             if (_panel is not null)
             {
                 Items.Remove(_panel);
@@ -148,7 +148,7 @@ internal partial class DesignerActionUI
 
             _panel = new ToolStripControlHost(panel)
             {
-                // we don't want no margin
+                // We don't want a margin
                 Margin = Padding.Empty,
                 Size = panel.Size
             };
@@ -170,10 +170,7 @@ internal partial class DesignerActionUI
             {
                 SuspendLayout();
                 Size = ctrl.Size;
-                if (_panel is not null)
-                {
-                    _panel.Size = ctrl.Size;
-                }
+                _panel?.Size = ctrl.Size;
 
                 _designerActionUI.UpdateDAPLocation(component: null, _relatedGlyph as DesignerActionGlyph);
                 ResumeLayout();
@@ -203,7 +200,7 @@ internal partial class DesignerActionUI
 
             while (!hWndDescendant.IsNull)
             {
-                hWndDescendant = (HWND)PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                hWndDescendant = (HWND)PInvokeCore.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 if (hWndDescendant.IsNull)
                 {
                     return false;
@@ -220,7 +217,7 @@ internal partial class DesignerActionUI
 
         private bool IsWindowEnabled(IntPtr handle)
         {
-            int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            int style = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             return (style & (int)WINDOW_STYLE.WS_DISABLED) == 0;
         }
 
@@ -243,7 +240,7 @@ internal partial class DesignerActionUI
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_ACTIVATE:
+                case PInvokeCore.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }
@@ -253,7 +250,9 @@ internal partial class DesignerActionUI
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control. if it's a button, we click it and return that we handled the message
+            // since we're not hosted in a form we need to do the same logic as Form.cs.
+            // If we get an enter key we need to find the current focused control.
+            // if it's a button, we click it and return that we handled the message
             if (keyData == Keys.Enter)
             {
                 HWND focusedControlPtr = PInvoke.GetFocus();

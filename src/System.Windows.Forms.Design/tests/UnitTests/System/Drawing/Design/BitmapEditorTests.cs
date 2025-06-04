@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.Drawing.Imaging;
@@ -19,7 +21,6 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_BitmapExtensions_Get_ReturnsExpected()
     {
-        SubBitmapEditor editor = new();
         List<string> extensions = SubBitmapEditor.BitmapExtensions;
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
         Assert.Same(extensions, SubBitmapEditor.BitmapExtensions);

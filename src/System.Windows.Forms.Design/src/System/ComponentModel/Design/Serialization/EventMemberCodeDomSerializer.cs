@@ -17,7 +17,7 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
     internal static EventMemberCodeDomSerializer Default => s_default ??= new EventMemberCodeDomSerializer();
 
     /// <summary>
-    ///  This method actually performs the serialization.  When the member is serialized
+    ///  This method actually performs the serialization. When the member is serialized
     ///  the necessary statements will be added to the statements collection.
     /// </summary>
     public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)

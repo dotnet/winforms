@@ -6,6 +6,8 @@ namespace Microsoft.VisualBasic.Devices.Tests;
 public class ComputerTests
 {
     [Fact]
+    // This test does not modify the system clipboard state, do not move it into the
+    // sequential collection, it is safe to run in parallel with other tests in this assembly.
     public void Properties()
     {
         Computer computer = new();

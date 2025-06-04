@@ -44,7 +44,8 @@ public sealed partial class CodeDomComponentSerializationService
                 }
                 else if (data is CodeExpression expression)
                 {
-                    // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
+                    // we handle expressions a little differently since they don't have a LHS or RHS
+                    // they won't show up correctly in the statement table. We will deserialize them explicitly.
                     if (!expressions.TryGetValue(name, out List<CodeExpression>? exps))
                     {
                         exps = [];
@@ -60,7 +61,9 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
+            ///  Deserializes the given object state. The results are contained within the serialization manager's
+            ///  name table. The objectNames list is used to deserialize in the proper order,
+            ///  as objectState is unordered.
             /// </summary>
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
@@ -86,8 +89,9 @@ public sealed partial class CodeDomComponentSerializationService
                 // generate statement table keyed on component name
                 FillStatementTable(manager, _statementsTable, mappedStatements);
 
-                // We need to also ensure that for every entry in the statement table we have a corresponding entry in objectNames.  Otherwise, we won't deserialize completely.
-                HashSet<string> completeNames = new(objectNames);
+                // We need to also ensure that for every entry in the statement table we have a
+                // corresponding entry in objectNames. Otherwise, we won't deserialize completely.
+                HashSet<string> completeNames = [..objectNames];
                 completeNames.UnionWith(_statementsTable.Keys);
 
                 _objectState = new(objectState);
@@ -111,7 +115,8 @@ public sealed partial class CodeDomComponentSerializationService
             private void OnResolveName(object? sender, ResolveNameEventArgs e)
             {
                 string name = e.Name!;
-                // note: this recursionguard does not fix the problem, but rather avoids a stack overflow which will bring down VS and cause loss of data.
+                // note: this recursion guard does not fix the problem,
+                // but rather avoids a stack overflow which will bring down VS and cause loss of data.
                 if (!_nameResolveGuard.Add(name))
                 {
                     return;
@@ -133,7 +138,7 @@ public sealed partial class CodeDomComponentSerializationService
 
             private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, List<string>? defProps)
             {
-                // Next, default properties, but only if we successfully  resolved.
+                // Next, default properties, but only if we successfully resolved.
                 if (defProps is null || !_applyDefaults)
                 {
                     return;
@@ -151,7 +156,9 @@ public sealed partial class CodeDomComponentSerializationService
                     PropertyDescriptor? prop = props[propName];
                     if (prop is not null && prop.CanResetValue(comp))
                     {
-                        // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
+                        // If there is a member relationship setup for this property, we should disconnect it first.
+                        // This makes sense, since if there was a previous relationship,
+                        // we would have serialized it and not come here at all.
                         if (manager.TryGetService(out MemberRelationshipService? relationships) && relationships[comp, prop] != MemberRelationship.Empty)
                         {
                             relationships[comp, prop] = MemberRelationship.Empty;
@@ -185,7 +192,11 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
+            ///  This is used to resolve nested component references.
+            ///  NestedComponents don't exist as sited components within the DesignerHost,
+            ///  they are actually sited within a parent component.
+            ///  This method takes the FullName defined on INestedSite and returns the component which matches it.
+            ///  outerComponent is the name of the topmost component which does exist in the DesignerHost
             ///  This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
             /// </summary>
             private static IComponent? ResolveNestedName(IDesignerSerializationManager? manager, string name, [NotNullIfNotNull(nameof(manager))] out string? outerComponent)
@@ -234,14 +245,18 @@ public sealed partial class CodeDomComponentSerializationService
             private bool ResolveName(IDesignerSerializationManager manager, string name, bool canInvokeManager)
             {
                 bool resolved = false;
-                // Check for a nested name. Components that are sited within NestedContainers need to be looked up in their nested container, and won't be resolvable directly via the manager.
+                // Check for a nested name. Components that are sited within NestedContainers need to be looked up
+                // in their nested container, and won't be resolvable directly via the manager.
                 if (name.IndexOf('.') > 0)
                 {
                     IComponent? nestedComp = ResolveNestedName(manager, name, out string? parentName);
                     if (nestedComp is not null && parentName is not null)
                     {
                         manager.SetName(nestedComp, name);
-                        // What is the point of this?  Well, the nested components won't be in the statement table with its nested name.  However, their most parent component will be, so forcing a resolve of their name will actually deserialize the nested statements.
+                        // What is the point of this?
+                        // Well, the nested components won't be in the statement table with its nested name.
+                        // However, their most parent component will be, so forcing a resolve of their name
+                        // will actually deserialize the nested statements.
                         ResolveName(manager, parentName, canInvokeManager);
                     }
                     else
@@ -250,10 +265,16 @@ public sealed partial class CodeDomComponentSerializationService
                     }
                 }
 
-                // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name.  If it does this means we have not resolved this name yet, so we grab its OrderedCodeStatementCollection and deserialize that, along with any default properties and design-time properties.
+                // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name.
+                // If it does this means we have not resolved this name yet, so we grab its
+                // OrderedCodeStatementCollection and deserialize that, along with any default properties
+                // and design-time properties.
                 // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
-                // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
-                // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
+                // 1. We already resolved this name and shoved an instance in there.
+                //    In this case we just return the instance
+                // 2. There are no statements corresponding to this name,
+                //    but there might be expressions that have never been deserialized,
+                //    so we check for that and deserialize those.
                 _statementsTable.TryGetValue(name, out OrderedCodeStatementCollection? statements);
                 if (statements is not null)
                 {
@@ -282,7 +303,8 @@ public sealed partial class CodeDomComponentSerializationService
                             CodeDomSerializer? serializer = GetSerializer(manager, type);
                             if (serializer is null)
                             {
-                                // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
+                                // We report this as an error. This indicates that there are code statements
+                                // in initialize component that we do not know how to load.
                                 manager.ReportError(new CodeDomSerializerException(
                                     string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                             }
@@ -305,7 +327,8 @@ public sealed partial class CodeDomComponentSerializationService
                         }
                     }
 
-                    // if we can't find a typeName to get a serializer with we fallback to deserializing each statement individually using the default serializer.
+                    // if we can't find a typeName to get a serializer with we fallback to deserializing
+                    // each statement individually using the default serializer.
                     else
                     {
                         foreach (CodeStatement cs in statements)
@@ -350,7 +373,11 @@ public sealed partial class CodeDomComponentSerializationService
                             }
                         }
 
-                        // Sometimes components won't be in either the statements table or the expressions table, for example, this occurs for resources  during undo/redo. In these cases the component should be resolvable by the manager. Never do this when we have been asked by the serialization manager to resolve the name;  otherwise we may infinitely recurse.
+                        // Sometimes components won't be in either the statements table or the expressions table,
+                        // for example, this occurs for resources during undo/redo.
+                        // In these cases the component should be resolvable by the manager.
+                        // Never do this when we have been asked by the serialization manager to resolve the name;
+                        // otherwise we may infinitely recurse.
                         if (!resolved && canInvokeManager)
                         {
                             resolved = manager.GetInstance(name) is not null;
@@ -521,7 +548,7 @@ public sealed partial class CodeDomComponentSerializationService
 
                                             resources[prop.Name] = prop.GetValue(data._value);
                                         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
                                     }
                                     else
                                     {

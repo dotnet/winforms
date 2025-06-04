@@ -21,7 +21,7 @@ public unsafe class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
         WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
-        Assert.True(((int)actual & PInvoke.ES_MULTILINE) != 0);
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_MULTILINE));
     }
 
     [StaFact]
@@ -35,7 +35,7 @@ public unsafe class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
         WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
-        Assert.False(((int)actual & PInvoke.ES_MULTILINE) != 0);
+        Assert.Equal(0, ((int)actual & PInvoke.ES_MULTILINE));
     }
 
     [StaFact]
@@ -65,8 +65,6 @@ public unsafe class UiaTextProviderTests
     [StaFact]
     public void UiaTextProvider_RectArrayToDoubleArray_ReturnsCorrectValue()
     {
-        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
-
         double[] expected = [0, 0, 10, 5, 10, 10, 20, 30];
         using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(
         [
@@ -82,22 +80,16 @@ public unsafe class UiaTextProviderTests
         }
     }
 
-#pragma warning disable CS8625 // RectArrayToDoubleArray doesn't accept a null parameter
     [StaFact]
     public void UiaTextProvider_RectArrayToDoubleArray_NullParameter_ReturnsNull()
     {
-        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
-
-        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(null);
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(null!);
         Assert.True(actual.IsEmpty);
     }
-#pragma warning restore CS8625
 
     [StaFact]
     public void UiaTextProvider_RectArrayToDoubleArray_EmptyArrayParameter_ReturnsEmptyArrayResult()
     {
-        Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
-
         using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray([]);
         Assert.True(actual.IsEmpty);
     }
@@ -105,7 +97,7 @@ public unsafe class UiaTextProviderTests
     [StaFact]
     public unsafe void UiaTextProvider_SendInput_SendsOneInput()
     {
-        INPUT keyboardInput = new();
+        INPUT keyboardInput = default;
         int actual = UiaTextProvider.SendInput(ref keyboardInput);
         Assert.Equal(1, actual);
     }

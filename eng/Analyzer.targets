@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
+
+  <ItemGroup>
+    <!-- https://github.com/DotNetAnalyzers/StyleCopAnalyzers -->
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- https://github.com/dotnet/roslyn-analyzers -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- https://github.com/DotNetAnalyzers/DocumentationAnalyzers -->
+    <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- https://github.com/AArnott/CSharpIsNull -->
+    <PackageReference Include="CSharpIsNullAnalyzer" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

@@ -4,7 +4,7 @@
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 
-namespace System.Windows.Forms.TestUtilities;
+namespace System.Private.Windows.TestUtilities;
 
 public static class CommonTestHelper
 {
@@ -78,7 +78,7 @@ public static class CommonTestHelper
         TheoryData<Point> data = new();
         if (!includeType.HasFlag(TestIncludeType.NoPositives))
         {
-            data.Add(default(Point));
+            data.Add(default);
             data.Add(new Point(10));
             data.Add(new Point(1, 2));
         }
@@ -99,7 +99,7 @@ public static class CommonTestHelper
         TheoryData<Size> data = new();
         if (!includeType.HasFlag(TestIncludeType.NoPositives))
         {
-            data.Add(default(Size));
+            data.Add(default);
             data.Add(new Size(new Point(1, 1)));
             data.Add(new Size(1, 2));
         }

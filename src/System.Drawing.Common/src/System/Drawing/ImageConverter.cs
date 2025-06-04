@@ -28,7 +28,6 @@ public partial class ImageConverter : TypeConverter
 
         if (value is byte[] bytes)
         {
-            Debug.Assert(value is not null, "value is null.");
             // Try to get memory stream for images with ole header.
             MemoryStream memStream = GetBitmapStream(bytes) ?? new MemoryStream(bytes);
             return Image.FromStream(memStream);
@@ -116,8 +115,8 @@ public partial class ImageConverter : TypeConverter
         // 2.2.5 EmbeddedObject
         // https://learn.microsoft.com/openspecs/windows_protocols/ms-oleds/3395d95d-97f0-49ff-b792-28d331f254f1
 
-        // Read and validate the ObjectHeader
-        if (!reader.TryRead(out uint version)
+        // Read and validate the ObjectHeader (version is the first uint)
+        if (!reader.TryRead(out uint _)
             || !reader.TryRead(out FMTID format)
             || format != FMTID.FMTID_EMBED
             || !reader.TryRead(out int classLength)

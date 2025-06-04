@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // GIF Codec class testing unit
 //
 // Authors:
@@ -36,7 +36,7 @@ namespace MonoTests.System.Drawing.Imaging;
 public class GifCodecTest
 {
     /* Checks bitmap features on a known 1bbp bitmap */
-    private void Bitmap8bitsFeatures(string filename)
+    private static void Bitmap8bitsFeatures(string filename)
     {
         using Bitmap bmp = new(filename);
         GraphicsUnit unit = GraphicsUnit.World;
@@ -67,7 +67,7 @@ public class GifCodecTest
         Bitmap8bitsFeatures(Helpers.GetTestBitmapPath("nature24bits87.gif"));
     }
 
-    private void Bitmap8bitsPixels(string filename)
+    private static void Bitmap8bitsPixels(string filename)
     {
         using Bitmap bmp = new(filename);
         // sampling values from a well known bitmap
@@ -175,7 +175,7 @@ public class GifCodecTest
         }
     }
 
-    private void Save(PixelFormat original, PixelFormat expected, bool exactColorCheck)
+    private static void Save(PixelFormat original, PixelFormat expected, bool exactColorCheck)
     {
         string sOutFile = $"linerect-{expected}.gif";
 

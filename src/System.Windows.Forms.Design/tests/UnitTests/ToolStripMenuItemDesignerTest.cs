@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -23,7 +25,7 @@ public class ToolStripMenuItemDesignerTest
 
         toolStripDropDown.DropDownItems.Add("123");
 
-        Assert.Equal(1, toolStripMenuItemDesigner.AssociatedComponents.Count);
+        Assert.Single(toolStripMenuItemDesigner.AssociatedComponents);
         Assert.Null(toolStripMenuItemDesigner.Editor);
         Assert.Null(toolStripMenuItemDesigner.GetParentComponentProperty());
     }

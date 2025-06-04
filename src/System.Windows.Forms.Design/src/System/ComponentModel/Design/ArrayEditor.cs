@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -22,12 +20,16 @@ public class ArrayEditor : CollectionEditor
     ///  Gets or sets the data type this collection contains.
     /// </summary>
     protected override Type CreateCollectionItemType()
-        => CollectionType?.GetElementType();
+    {
+        Type? type = CollectionType.GetElementType();
+
+        return type is null ? throw new InvalidOperationException() : type;
+    }
 
     /// <summary>
     ///  Gets the items in the array.
     /// </summary>
-    protected override object[] GetItems(object editValue)
+    protected override object[] GetItems(object? editValue)
     {
         if (editValue is Array valueArray)
         {
@@ -42,7 +44,7 @@ public class ArrayEditor : CollectionEditor
     /// <summary>
     ///  Sets the items in the array.
     /// </summary>
-    protected override object SetItems(object editValue, object[] value)
+    protected override object? SetItems(object? editValue, object[]? value)
     {
         if (editValue is not null and not Array)
         {

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-Hans" original="../ToolStripItemEditorForm.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Items Collection Editor</source>
+        <target state="translated">项集合编辑器</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnAddNew.Text">
+        <source>&amp;Add</source>
+        <target state="translated">添加(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="translated">取消</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleDescription">
+        <source>Move the selected item down in the list</source>
+        <target state="translated">将列表中的选定项下移</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveDown.AccessibleName">
+        <source>Move Down</source>
+        <target state="translated">下移</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleDescription">
+        <source>Move the selected item up in the list</source>
+        <target state="translated">将列表中的选定项上移</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnMoveUp.AccessibleName">
+        <source>Move Up</source>
+        <target state="translated">上移</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnOK.Text">
+        <source>OK</source>
+        <target state="translated">确定</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleDescription">
+        <source>Remove the selected item from the list</source>
+        <target state="translated">从列表中移除所选项</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnRemove.AccessibleName">
+        <source>Remove</source>
+        <target state="translated">删除</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblItems.Text">
+        <source>&amp;Select item and add to list below:</source>
+        <target state="translated">选择项并添加到以下列表(&amp;S):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMembers.Text">
+        <source>&amp;Members:</source>
+        <target state="translated">成员(&amp;M):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedItemName.Text">
+        <source>toolStrip1</source>
+        <target state="translated">toolStrip1</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

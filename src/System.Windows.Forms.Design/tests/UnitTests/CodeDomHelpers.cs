@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.CodeDom;
 
@@ -67,7 +69,7 @@ public static class CodeDomHelpers
                         return $"new CodeObjectCreateExpression({GetType(coce.CreateType)})";
                     }
 
-                    string parameters = string.Join(", ", coce.Parameters.Cast<CodeObject>().Select(o => GetConstructionString(o)));
+                    string parameters = string.Join(", ", coce.Parameters.Cast<CodeObject>().Select(GetConstructionString));
                     return $"new CodeObjectCreateExpression({GetType(coce.CreateType)}, {parameters})";
                 }
 

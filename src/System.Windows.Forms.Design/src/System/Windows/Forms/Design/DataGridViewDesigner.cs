@@ -5,11 +5,10 @@ using System.ComponentModel;
 using System.Collections;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design;
 
-internal class DataGridViewDesigner : ControlDesigner
+internal partial class DataGridViewDesigner : ControlDesigner
 {
     protected DesignerVerbCollection? designerVerbs;
 
@@ -124,7 +123,8 @@ internal class DataGridViewDesigner : ControlDesigner
         DataGridView dataGridView = Control;
 
         // DataGridViewDesigner::Initialize runs after InitializeComponent was deserialized.
-        // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to TRUE if there is no DataSource, otherwise set it to FALSE
+        // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to
+        // TRUE if there is no DataSource, otherwise set it to FALSE
         dataGridView.AutoGenerateColumns = dataGridView.DataSource is null;
 
         // hook up the DataSourceChanged event, DataMemberChanged event
@@ -324,7 +324,7 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         // Clear out the DisplayIndex for columns removed at design time.
         // If we don't do this, the columns will be reordered after build when there are both databound
-        // columns and non databound columns.  See VSWhidbey 572859. Ideally, we would do this on the Clear
+        // columns and non databound columns. See VSWhidbey 572859. Ideally, we would do this on the Clear
         // of the column collection but there is no event there and we are restricted from adding any
         // Note: this does not break Undo/Redo because Undo/Redo uses serialization the same way
         // the build does and DisplayIndex is not serialized
@@ -804,62 +804,6 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    [ComplexBindingProperties("DataSource", "DataMember")]
-    private class DataGridViewChooseDataSourceActionList : DesignerActionList
-    {
-        private readonly DataGridViewDesigner _owner;
-
-        public DataGridViewChooseDataSourceActionList(DataGridViewDesigner owner) : base(owner.Component)
-        {
-            _owner = owner;
-        }
-
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items = [];
-            DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
-                                                               SR.DataGridViewChooseDataSource)
-            {
-                RelatedComponent = _owner.Component
-            };// displayName
-            items.Add(chooseDataSource);
-            return items;
-        }
-
-        [AttributeProvider(typeof(IListSource))]
-        [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
-        public object? DataSource
-        {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-            // Use the shadow property which is defined on the designer.
-            get => _owner.DataSource;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
-            set
-            {
-                // left to do: transaction stuff
-                DataGridView dataGridView = _owner.Control;
-                IDesignerHost? host = dataGridView.Site?.GetService<IDesignerHost>();
-                PropertyDescriptor? dataSourceProp = TypeDescriptor.GetProperties(dataGridView)["DataSource"];
-                IComponentChangeService? changeService = dataGridView.Site?.GetService<IComponentChangeService>();
-                DesignerTransaction? transaction = host?.CreateTransaction(string.Format(SR.DataGridViewChooseDataSourceTransactionString, dataGridView.Name));
-                try
-                {
-                    changeService?.OnComponentChanging(_owner.Component, dataSourceProp);
-                    // Use the shadow property which is defined on the designer.
-                    _owner.DataSource = value;
-                    changeService?.OnComponentChanged(_owner.Component, dataSourceProp, null, null);
-                    transaction?.Commit();
-                    transaction = null;
-                }
-                finally
-                {
-                    transaction?.Cancel();
-                }
-            }
-        }
-    }
-
     private class DataGridViewColumnEditingActionList : DesignerActionList
     {
         private readonly DataGridViewDesigner _owner;
@@ -899,28 +843,17 @@ internal class DataGridViewDesigner : ControlDesigner
             _owner = owner;
         }
 
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items =
-            [
-                new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                            SR.DataGridViewEnableAdding),
-                new DesignerActionPropertyItem("ReadOnly",
-                                                            SR.DataGridViewEnableEditing),
-                new DesignerActionPropertyItem("AllowUserToDeleteRows",
-                                                            SR.DataGridViewEnableDeleting),
-                new DesignerActionPropertyItem("AllowUserToOrderColumns",
-                                                            SR.DataGridViewEnableColumnReordering),
-            ];
-            return items;
-        }
+        public override DesignerActionItemCollection GetSortedActionItems() =>
+        [
+            new DesignerActionPropertyItem(nameof(AllowUserToAddRows), SR.DataGridViewEnableAdding),
+            new DesignerActionPropertyItem(nameof(ReadOnly), SR.DataGridViewEnableEditing),
+            new DesignerActionPropertyItem(nameof(AllowUserToDeleteRows), SR.DataGridViewEnableDeleting),
+            new DesignerActionPropertyItem(nameof(AllowUserToOrderColumns), SR.DataGridViewEnableColumnReordering)
+        ];
 
         public bool AllowUserToAddRows
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToAddRows;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToAddRows)
@@ -963,10 +896,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToDeleteRows
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToDeleteRows;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToDeleteRows)
@@ -1009,10 +939,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToOrderColumns
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToOrderColumns;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToOrderColumns)
@@ -1055,10 +982,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool ReadOnly
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => !_owner.Control.ReadOnly;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == ReadOnly)

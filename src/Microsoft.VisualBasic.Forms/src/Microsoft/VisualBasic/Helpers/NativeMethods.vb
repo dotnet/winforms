@@ -1,67 +1,28 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Runtime.InteropServices
 Imports System.Text
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComVisible(False)>
-    Friend NotInheritable Class NativeMethods
+    Friend Module NativeMethods
 
         <PreserveSig()>
-        Friend Declare Auto Function _
-            WaitForInputIdle _
-                Lib "user32" (Process As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, Milliseconds As Integer) As Integer
+        Friend Declare Auto Function WaitForInputIdle Lib "user32" (
+            Process As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid,
+            Milliseconds As Integer) As Integer
 
         <PreserveSig()>
-        Friend Declare Function _
-            GetWindow _
-                Lib "user32" (hwnd As IntPtr, wFlag As Integer) As IntPtr
+        Friend Declare Function GetWindow Lib "user32" (
+            hwnd As IntPtr,
+            wFlag As Integer) As IntPtr
 
         <PreserveSig()>
-        Friend Declare Function _
-            GetDesktopWindow _
-                Lib "user32" () As IntPtr
+        Friend Declare Function GetDesktopWindow Lib "user32" () As IntPtr
 
 #Disable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
-        <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
-        Friend Shared Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
-#Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
-        End Function
-
-        <PreserveSig()>
-        Friend Declare Function _
-            AttachThreadInput _
-                Lib "user32" (idAttach As Integer, idAttachTo As Integer, fAttach As Integer) As Integer
-
-        <PreserveSig()>
-        Friend Declare Function _
-            SetForegroundWindow _
-                Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
-
-        <PreserveSig()>
-        Friend Declare Function _
-            SetFocus _
-                Lib "user32" (hwnd As IntPtr) As IntPtr
-
-        <PreserveSig()>
-        Friend Declare Auto Function _
-            FindWindow _
-                Lib "user32" (lpClassName As String, lpWindowName As String) As IntPtr
-
-        <PreserveSig()>
-        Friend Declare Function _
-            CloseHandle _
-                Lib "kernel32" (hObject As IntPtr) As Integer
-
-        <PreserveSig()>
-        Friend Declare Function _
-            WaitForSingleObject _
-                Lib "kernel32" (hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, dwMilliseconds As Integer) As Integer
 
         <DllImport(
              "kernel32",
@@ -69,16 +30,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
              PreserveSig:=True,
              BestFitMapping:=False,
              ThrowOnUnmappableChar:=True)>
-        Friend Shared Sub GetStartupInfo(<[In](), Out()> lpStartupInfo As NativeTypes.STARTUPINFO)
-        End Sub
-
-        <DllImport(
-             "kernel32",
-             CharSet:=CharSet.Auto,
-             PreserveSig:=True,
-             BestFitMapping:=False,
-             ThrowOnUnmappableChar:=True)>
-        Friend Shared Function CreateProcess(
+        Friend Function CreateProcess(
             lpApplicationName As String,
             lpCommandLine As String,
             lpProcessAttributes As NativeTypes.SECURITY_ATTRIBUTES,
@@ -91,10 +43,63 @@ Namespace Microsoft.VisualBasic.CompilerServices
             lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
         End Function
 
-#Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
+        <DllImport(
+             "kernel32",
+             CharSet:=CharSet.Auto,
+             PreserveSig:=True,
+             BestFitMapping:=False,
+             ThrowOnUnmappableChar:=True)>
+        Friend Sub GetStartupInfo(<[In](), Out()> lpStartupInfo As NativeTypes.STARTUPINFO)
+        End Sub
+
+        <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
+        Friend Function GetWindowText(
+            hWnd As IntPtr,
+            <Out(),
+            MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder,
+            nMaxCount As Integer) As Integer
+#Enable Warning CA1838
+        End Function
+
+        <PreserveSig()>
+        Friend Declare Function AttachThreadInput Lib "user32" (
+            idAttach As Integer,
+            idAttachTo As Integer,
+            fAttach As Integer) As Integer
+
+        <PreserveSig()>
+        Friend Declare Function SetForegroundWindow Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+
+        <PreserveSig()>
+        Friend Declare Function SetFocus Lib "user32" (hwnd As IntPtr) As IntPtr
+
+        <PreserveSig()>
+        Friend Declare Auto Function FindWindow Lib "user32" (
+            lpClassName As String,
+            lpWindowName As String) As IntPtr
+
+        <PreserveSig()>
+        Friend Declare Function CloseHandle Lib "kernel32" (hObject As IntPtr) As Integer
+
+        <PreserveSig()>
+        Friend Declare Function WaitForSingleObject Lib "kernel32" (
+            hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid,
+            dwMilliseconds As Integer) As Integer
+
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
+
         ''' <summary>
-        ''' Contains information about the current state of both physical and virtual memory, including extended memory.
+        '''  Obtains information about the system's current usage of both physical and virtual memory.
+        ''' </summary>
+        ''' <param name="lpBuffer">Pointer to a <see cref="MEMORYSTATUSEX"/> structure.</param>
+        ''' <returns><see langword="True"/> if the function succeeds. Otherwise, <see langword="False"/>.</returns>
+        <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
+        Friend Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        ''' <summary>
+        '''  Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
@@ -119,29 +124,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend ullTotalVirtual As UInt64
             Friend ullAvailVirtual As UInt64
             Friend ullAvailExtendedVirtual As UInt64
-#Enable Warning IDE1006 ' Naming Styles
+#Enable Warning IDE1006
 
             Friend Sub Init()
-                dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
+                dwLength = CType(Marshal.SizeOf(Of MEMORYSTATUSEX)(), UInt32)
             End Sub
+
         End Structure
-#Enable Warning IDE0049 ' Simplify Names
+#Enable Warning IDE0049
 
-        ''' <summary>
-        ''' Obtains information about the system's current usage of both physical and virtual memory.
-        ''' </summary>
-        ''' <param name="lpBuffer">Pointer to a MEMORYSTATUSEX structure.</param>
-        ''' <returns>True if the function succeeds. Otherwise, False.</returns>
-        <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
-        Friend Shared Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
-        End Function
-
-        ''' <summary>
-        ''' Adding a private constructor to prevent the compiler from generating a default constructor.
-        ''' </summary>
-        Private Sub New()
-        End Sub
-
-    End Class
-
+    End Module
 End Namespace

@@ -21,9 +21,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     internal static CodeDomSerializer Default => s_default ??= new CodeDomSerializer();
 
     /// <summary>
-    ///  Determines which statement group the given statement should belong to.  The expression parameter
+    ///  Determines which statement group the given statement should belong to. The expression parameter
     ///  is an expression that the statement has been reduced to, and targetType represents the type
-    ///  of this statement.  This method returns the name of the component this statement should be grouped
+    ///  of this statement. This method returns the name of the component this statement should be grouped
     ///  with.
     /// </summary>
     public virtual string? GetTargetComponentName(CodeStatement? statement, CodeExpression? expression, Type? targetType)
@@ -37,9 +37,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Deserializes the given CodeDom object into a real object.  This
+    ///  Deserializes the given CodeDom object into a real object. This
     ///  will use the serialization manager to create objects and resolve
-    ///  data types.  The root of the object graph is returned.
+    ///  data types. The root of the object graph is returned.
     /// </summary>
     public virtual object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
@@ -56,7 +56,8 @@ public class CodeDomSerializer : CodeDomSerializerBase
         {
             foreach (CodeStatement element in statements)
             {
-                // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
+                // If we do not yet have an instance, we will need to pick through the statements
+                // and see if we can find one.
                 if (instance is null)
                 {
                     instance = DeserializeStatementToInstance(manager, element);
@@ -91,7 +92,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method deserializes a single statement.  It is equivalent of calling
+    ///  This method deserializes a single statement. It is equivalent of calling
     ///  DeserializeStatement, except that it returns an object instance if the
     ///  resulting statement was a variable assign statement, a variable
     ///  declaration with an init expression, or a field assign statement.
@@ -120,7 +121,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         }
         else
         {
-            // This statement isn't one that will return a named object.  Deserialize it normally.
+            // This statement isn't one that will return a named object. Deserialize it normally.
             DeserializeStatement(manager, statement);
         }
 
@@ -231,7 +232,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
 
         CodeStatementCollection statements = [];
 
-        // See if we have an existing expression for this member.  If not, fabricate one
+        // See if we have an existing expression for this member. If not, fabricate one
         CodeExpression? expression = GetExpression(manager, owningObject);
         if (expression is null)
         {
@@ -283,58 +284,58 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This serializes the given value to an expression.  It will return null if the value could not be
-    ///  serialized.  This is similar to SerializeToExpression, except that it will stop
-    ///  if it cannot obtain a simple reference expression for the value.  Call this method
+    ///  This serializes the given value to an expression. It will return null if the value could not be
+    ///  serialized. This is similar to SerializeToExpression, except that it will stop
+    ///  if it cannot obtain a simple reference expression for the value. Call this method
     ///  when you expect the resulting expression to be used as a parameter or target
     ///  of a statement.
     /// </summary>
     [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected CodeExpression? SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
     {
-        CodeExpression? expression = null;
-
         // First - try GetExpression
-        expression = GetExpression(manager, value);
-        // Next, we check for a named IComponent, and return a reference to it.
-        if (expression is null && value is IComponent)
+        if (GetExpression(manager, value) is { } expression)
         {
-            string? name = manager.GetName(value);
-            bool referenceName = false;
-            if (name is null)
-            {
-                IReferenceService? referenceService = manager.GetService<IReferenceService>();
-                if (referenceService is not null)
-                {
-                    name = referenceService.GetName(value);
-                    referenceName = name is not null;
-                }
-            }
+            return expression;
+        }
 
-            if (name is not null)
+        if (value is not IComponent)
+        {
+            return null;
+        }
+
+        // Next, we check for a named IComponent, and return a reference to it.
+        string? name = manager.GetName(value);
+        bool referenceName = false;
+        if (name is null)
+        {
+            IReferenceService? referenceService = manager.GetService<IReferenceService>();
+            if (referenceService is not null)
             {
-                // Check to see if this is a reference to the root component.  If it is, then use "this".
-                if (manager.TryGetContext(out RootContext? root) && root.Value == value)
-                {
-                    expression = root.Expression;
-                }
-                else
-                {
-                    int dotIndex = name.IndexOf('.');
-                    if (referenceName && dotIndex != -1)
-                    {
-                        // if it's a reference name with a dot, we've actually got a property here...
-                        expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(s_thisRef, name[..dotIndex]), name[(dotIndex + 1)..]);
-                    }
-                    else
-                    {
-                        expression = new CodeFieldReferenceExpression(s_thisRef, name);
-                    }
-                }
+                name = referenceService.GetName(value);
+                referenceName = name is not null;
             }
         }
 
-        return expression;
+        if (name is null)
+        {
+            return null;
+        }
+
+        // Check to see if this is a reference to the root component. If it is, then use "this".
+        if (manager.TryGetContext(out RootContext? root) && root.Value == value)
+        {
+            return root.Expression;
+        }
+
+        // If it's a reference name with a dot, we've actually got a property.
+
+        int dotIndex = name.IndexOf('.');
+        return referenceName && dotIndex != -1
+            ? new CodePropertyReferenceExpression(
+                new CodeFieldReferenceExpression(s_thisRef, name[..dotIndex]),
+                name[(dotIndex + 1)..])
+            : new CodeFieldReferenceExpression(s_thisRef, name);
     }
 
     private static void ResetBrowsableProperties(object? instance)

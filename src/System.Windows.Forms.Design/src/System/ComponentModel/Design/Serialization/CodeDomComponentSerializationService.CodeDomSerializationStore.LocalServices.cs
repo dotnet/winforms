@@ -11,7 +11,10 @@ public sealed partial class CodeDomComponentSerializationService
     private sealed partial class CodeDomSerializationStore
     {
         /// <summary>
-        ///  LocalServices contains the services that we add to our serialization manager.  We do this, rather than implement interfaces directly on CodeDomSerializationStore to prevent people from assuming what our implementation is (CodeDomSerializationStore is returned publicly as SerializationStore).
+        ///  LocalServices contains the services that we add to our serialization manager.
+        ///  We do this, rather than implement interfaces directly on <see cref="CodeDomSerializationStore"/>
+        ///  to prevent people from assuming what our implementation is
+        ///  (CodeDomSerializationStore is returned publicly as <see cref="SerializationStore"/>).
         /// </summary>
         private class LocalServices : IServiceProvider, IResourceService
         {

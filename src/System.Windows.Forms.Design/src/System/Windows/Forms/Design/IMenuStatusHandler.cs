@@ -11,12 +11,14 @@ namespace System.Windows.Forms.Design;
 internal interface IMenuStatusHandler
 {
     /// <summary>
-    ///  CommandSet will check with this handler on each status update to see if the handler wants to override the availability of this command.
+    ///  CommandSet will check with this handler on each status update to see
+    ///  if the handler wants to overridethe availability of this command.
     /// </summary>
     bool OverrideInvoke(MenuCommand cmd);
 
     /// <summary>
-    ///  CommandSet will check with this handler on each status update to see if the handler wants to override the availability of this command.
+    ///  CommandSet will check with this handler on each status update to see
+    ///  if the handler wants to override the availability of this command.
     /// </summary>
     bool OverrideStatus(MenuCommand cmd);
 }

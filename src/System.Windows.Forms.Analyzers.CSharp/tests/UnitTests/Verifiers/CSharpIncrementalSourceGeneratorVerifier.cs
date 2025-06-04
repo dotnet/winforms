@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace System.Windows.Forms.Analyzers.Tests;
+namespace System.Windows.Forms.Analyzers.Tests.Verifiers;
 
 // Note: this is bleeding edge, eventually this can be removed once it is all baked in to Roslyn SDK.
 public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementalGenerator>
@@ -18,8 +18,10 @@ public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementa
             SolutionTransforms.Add((solution, projectId) =>
             {
                 var compilationOptions = solution.GetProject(projectId)!.CompilationOptions;
+
                 compilationOptions = compilationOptions!.WithSpecificDiagnosticOptions(
                     compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
+
                 solution = solution.WithProjectCompilationOptions(projectId, compilationOptions);
 
                 return solution;

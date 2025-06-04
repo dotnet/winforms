@@ -166,7 +166,7 @@ internal class TableLayoutPanelBehavior : Behavior
     {
         if ((_styles is null || isColumn != _currentColumnStyles) && _table is not null)
         {
-            _styles = ((TableLayoutStyleCollection)_changedProp.GetValue(_table)).Cast<TableLayoutStyle>().ToList();
+            _styles = [..((TableLayoutStyleCollection)_changedProp.GetValue(_table)).Cast<TableLayoutStyle>()];
             _currentColumnStyles = isColumn;
         }
     }
@@ -356,7 +356,7 @@ internal class TableLayoutPanelBehavior : Behavior
                 _table.ResumeLayout(true);
 
                 // now determine if the values we pushed into the TLP
-                // actually had any effect.  If they didn't,
+                // actually had any effect. If they didn't,
                 // we delay updating the last mouse position so that
                 // next time a mouse move message comes in the delta is larger.
                 bool updatedSize = true;

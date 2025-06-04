@@ -25,7 +25,7 @@ public abstract partial class BasicDesignerLoader
         ModifyOnError = 0x01,
 
         /// <summary>
-        ///  If this flag is set, a reload will occur.  If the
+        ///  If this flag is set, a reload will occur. If the
         ///  flag is not set a reload will only occur if the
         ///  IsReloadNeeded method returns true.
         /// </summary>
@@ -33,7 +33,7 @@ public abstract partial class BasicDesignerLoader
 
         /// <summary>
         ///  If this flag is set, any pending changes in the
-        ///  designer will be abandoned.  If this flag is not
+        ///  designer will be abandoned. If this flag is not
         ///  set, designer changes will be flushed through the
         ///  designer loader before reloading the design surface.
         /// </summary>

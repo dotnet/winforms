@@ -21,12 +21,12 @@ namespace System.Drawing.Imaging;
 
 // Bitmaps, Brushes, Pens, and Text will all use any color adjustments
 // that have been set into the default ImageAttributes until their own
-// color adjustments have been set.  So as soon as any "Set" method is
+// color adjustments have been set. So as soon as any "Set" method is
 // called for Bitmaps, Brushes, Pens, or Text, then they start from
 // scratch with only the color adjustments that have been set for them.
 // Calling Reset removes any individual color adjustments for a type
 // and makes it revert back to using all the default color adjustments
-// (if any).  The SetToIdentity method is a way to force a type to
+// (if any). The SetToIdentity method is a way to force a type to
 // have no color adjustments at all, regardless of what previous adjustments
 // have been set for the defaults or for that type.
 
@@ -55,7 +55,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     {
         GpImageAttributes* newImageAttributes;
 
-        PInvoke.GdipCreateImageAttributes(&newImageAttributes).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateImageAttributes(&newImageAttributes).ThrowIfFailed();
         SetNativeImageAttributes(newImageAttributes);
     }
 
@@ -72,7 +72,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
             return;
         }
 
-        Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDisposeImageAttributes(_nativeImageAttributes);
+        Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDisposeImageAttributes(_nativeImageAttributes);
         _nativeImageAttributes = null;
         Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         GC.SuppressFinalize(this);
@@ -89,7 +89,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     public object Clone()
     {
         GpImageAttributes* clone;
-        PInvoke.GdipCloneImageAttributes(_nativeImageAttributes, &clone).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneImageAttributes(_nativeImageAttributes, &clone).ThrowIfFailed();
         GC.KeepAlive(this);
 
         return new ImageAttributes(clone);
@@ -123,7 +123,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     /// </summary>
     public void ClearColorMatrix(ColorAdjustType type)
     {
-        PInvoke.GdipSetImageAttributesColorMatrix(
+        PInvokeGdiPlus.GdipSetImageAttributesColorMatrix(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             false,
@@ -156,7 +156,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
             fixed (void* cm = &newColorMatrix.GetPinnableReference())
             fixed (void* gm = &grayMatrix.GetPinnableReference())
             {
-                PInvoke.GdipSetImageAttributesColorMatrix(
+                PInvokeGdiPlus.GdipSetImageAttributesColorMatrix(
                     _nativeImageAttributes,
                     (GdiPlus.ColorAdjustType)type,
                     enableFlag: true,
@@ -169,7 +169,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
         {
             fixed (void* cm = &newColorMatrix.GetPinnableReference())
             {
-                PInvoke.GdipSetImageAttributesColorMatrix(
+                PInvokeGdiPlus.GdipSetImageAttributesColorMatrix(
                     _nativeImageAttributes,
                     (GdiPlus.ColorAdjustType)type,
                     enableFlag: true,
@@ -192,7 +192,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     private void SetThreshold(float threshold, ColorAdjustType type, bool enableFlag)
     {
-        PInvoke.GdipSetImageAttributesThreshold(
+        PInvokeGdiPlus.GdipSetImageAttributesThreshold(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag,
@@ -211,7 +211,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     private void SetGamma(float gamma, ColorAdjustType type, bool enableFlag)
     {
-        PInvoke.GdipSetImageAttributesGamma(
+        PInvokeGdiPlus.GdipSetImageAttributesGamma(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag,
@@ -230,7 +230,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     private void SetNoOp(ColorAdjustType type, bool enableFlag)
     {
-        PInvoke.GdipSetImageAttributesNoOp(
+        PInvokeGdiPlus.GdipSetImageAttributesNoOp(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag).ThrowIfFailed();
@@ -250,7 +250,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     private void SetColorKey(Color colorLow, Color colorHigh, ColorAdjustType type, bool enableFlag)
     {
-        PInvoke.GdipSetImageAttributesColorKeys(
+        PInvokeGdiPlus.GdipSetImageAttributesColorKeys(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag,
@@ -272,7 +272,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     private void SetOutputChannel(ColorAdjustType type, ColorChannelFlag flags, bool enableFlag)
     {
-        PInvoke.GdipSetImageAttributesOutputChannel(
+        PInvokeGdiPlus.GdipSetImageAttributesOutputChannel(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag,
@@ -291,7 +291,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
         fixed (char* n = colorProfileFilename)
         {
-            PInvoke.GdipSetImageAttributesOutputChannelColorProfile(
+            PInvokeGdiPlus.GdipSetImageAttributesOutputChannelColorProfile(
                 _nativeImageAttributes,
                 (GdiPlus.ColorAdjustType)type,
                 enableFlag: true,
@@ -305,7 +305,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     public void ClearOutputChannelColorProfile(ColorAdjustType type)
     {
-        PInvoke.GdipSetImageAttributesOutputChannel(
+        PInvokeGdiPlus.GdipSetImageAttributesOutputChannel(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             false,
@@ -367,7 +367,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
         fixed (void* m = buffer)
         {
-            PInvoke.GdipSetImageAttributesRemapTable(
+            PInvokeGdiPlus.GdipSetImageAttributesRemapTable(
                 _nativeImageAttributes,
                 (GdiPlus.ColorAdjustType)type,
                 enableFlag: true,
@@ -392,7 +392,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
         fixed (void* m = buffer)
         {
-            PInvoke.GdipSetImageAttributesRemapTable(
+            PInvokeGdiPlus.GdipSetImageAttributesRemapTable(
                 _nativeImageAttributes,
                 (GdiPlus.ColorAdjustType)type,
                 enableFlag: true,
@@ -414,7 +414,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     public void ClearRemapTable(ColorAdjustType type)
     {
-        PInvoke.GdipSetImageAttributesRemapTable(
+        PInvokeGdiPlus.GdipSetImageAttributesRemapTable(
             _nativeImageAttributes,
             (GdiPlus.ColorAdjustType)type,
             enableFlag: false,
@@ -427,8 +427,10 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     public void SetBrushRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
 
 #if NET9_0_OR_GREATER
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
     public void SetBrushRemapTable(params ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
 
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
     public void SetBrushRemapTable(params ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Brush, map);
 #endif
 
@@ -440,7 +442,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
     public void SetWrapMode(Drawing2D.WrapMode mode, Color color, bool clamp)
     {
-        PInvoke.GdipSetImageAttributesWrapMode(
+        PInvokeGdiPlus.GdipSetImageAttributesWrapMode(
             _nativeImageAttributes,
             (WrapMode)mode,
             (uint)color.ToArgb(),
@@ -454,7 +456,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
         using var buffer = palette.ConvertToBuffer();
         fixed (void* p = buffer)
         {
-            PInvoke.GdipGetImageAttributesAdjustedPalette(
+            PInvokeGdiPlus.GdipGetImageAttributesAdjustedPalette(
                 _nativeImageAttributes,
                 (GdiPlus.ColorPalette*)p,
                 (GdiPlus.ColorAdjustType)type).ThrowIfFailed();

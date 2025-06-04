@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Windows.Win32.Graphics.GdiPlus;
 
 namespace Windows.Win32.Graphics.Gdi;
 
@@ -24,19 +23,19 @@ internal unsafe ref struct RegionScope
     public HRGN Region { get; private set; }
 
     /// <summary>
-    ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+    ///  Creates a region with the given rectangle via <see cref="PInvokeCore.CreateRectRgn(int, int, int, int)"/>.
     /// </summary>
     public RegionScope(Rectangle rectangle) =>
         Region = PInvokeCore.CreateRectRgn(rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
     /// <summary>
-    ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+    ///  Creates a region with the given rectangle via <see cref="PInvokeCore.CreateRectRgn(int, int, int, int)"/>.
     /// </summary>
     public RegionScope(int x1, int y1, int x2, int y2) =>
         Region = PInvokeCore.CreateRectRgn(x1, y1, x2, y2);
 
     /// <summary>
-    ///  Creates a clipping region copy via <see cref="GetClipRgn(HDC, HRGN)"/> for the given device context.
+    ///  Creates a clipping region copy via <see cref="PInvokeCore.GetClipRgn(HDC, HRGN)"/> for the given device context.
     /// </summary>
     /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
     public RegionScope(HDC hdc)
@@ -58,48 +57,9 @@ internal unsafe ref struct RegionScope
     }
 
     /// <summary>
-    ///  Creates a native region from a GDI+ <see cref="GpRegion"/>.
+    ///  Creates a region scope with the given <see cref="HRGN"/>.
     /// </summary>
-    public RegionScope(IPointer<GpRegion> region, IPointer<GpGraphics> graphics)
-    {
-        InitializeFromGdiPlus(region.Pointer, graphics.Pointer);
-        GC.KeepAlive(region);
-        GC.KeepAlive(graphics);
-    }
-
-    private void InitializeFromGdiPlus(GpRegion* region, GpGraphics* graphics)
-    {
-        BOOL isInfinite;
-        PInvokeCore.GdipIsInfiniteRegion(region, graphics, &isInfinite).ThrowIfFailed();
-
-        if (isInfinite)
-        {
-            // An infinite region would cover the entire device region which is the same as
-            // not having a clipping region. Observe that this is not the same as having an
-            // empty region, which when clipping to it has the effect of excluding the entire
-            // device region.
-            //
-            // To remove the clip region from a dc the SelectClipRgn() function needs to be
-            // called with a null region ptr - that's why we use the empty constructor here.
-            // GDI+ will return IntPtr.Zero for Region.GetHrgn(Graphics) when the region is
-            // Infinite.
-
-            Region = default;
-            return;
-        }
-
-        HRGN hrgn;
-        PInvokeCore.GdipGetRegionHRgn(region, graphics, &hrgn).ThrowIfFailed();
-        Region = hrgn;
-    }
-
-    public RegionScope(IPointer<GpRegion> region, HWND hwnd)
-    {
-        GpGraphics* graphics = null;
-        PInvokeCore.GdipCreateFromHWND(hwnd, &graphics).ThrowIfFailed();
-        InitializeFromGdiPlus(region.Pointer, graphics);
-        GC.KeepAlive(region);
-    }
+    public RegionScope(HRGN region) => Region = region;
 
     /// <summary>
     ///  Returns true if this represents a null HRGN.

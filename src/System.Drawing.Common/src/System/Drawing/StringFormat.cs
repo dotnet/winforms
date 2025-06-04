@@ -37,7 +37,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     public StringFormat(StringFormatFlags options, int language)
     {
         GpStringFormat* format;
-        PInvoke.GdipCreateStringFormat((int)options, (ushort)language, &format).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateStringFormat((int)options, (ushort)language, &format).ThrowIfFailed();
         _nativeFormat = format;
     }
 
@@ -49,7 +49,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     {
         ArgumentNullException.ThrowIfNull(format);
         GpStringFormat* newFormat;
-        PInvoke.GdipCloneStringFormat(format._nativeFormat, &newFormat).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneStringFormat(format._nativeFormat, &newFormat).ThrowIfFailed();
         _nativeFormat = newFormat;
         GC.KeepAlive(format);
     }
@@ -72,7 +72,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
 #if DEBUG
                 Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                PInvoke.GdipDeleteStringFormat(_nativeFormat);
+                PInvokeGdiPlus.GdipDeleteStringFormat(_nativeFormat);
 #if DEBUG
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
@@ -106,13 +106,13 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             StringFormatFlags format;
-            PInvoke.GdipGetStringFormatFlags(_nativeFormat, (int*)&format).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatFlags(_nativeFormat, (int*)&format).ThrowIfFailed();
             GC.KeepAlive(this);
             return format;
         }
         set
         {
-            PInvoke.GdipSetStringFormatFlags(_nativeFormat, (int)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetStringFormatFlags(_nativeFormat, (int)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -129,7 +129,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         GdiPlus.CharacterRange stub;
         fixed (void* r = ranges)
         {
-            PInvoke.GdipSetStringFormatMeasurableCharacterRanges(
+            PInvokeGdiPlus.GdipSetStringFormatMeasurableCharacterRanges(
                 _nativeFormat,
                 ranges.Length,
                 r is null ? &stub : (GdiPlus.CharacterRange*)r).ThrowIfFailed();
@@ -146,7 +146,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             StringAlignment alignment;
-            PInvoke.GdipGetStringFormatAlign(_nativeFormat, (GdiPlus.StringAlignment*)&alignment).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatAlign(_nativeFormat, (GdiPlus.StringAlignment*)&alignment).ThrowIfFailed();
             GC.KeepAlive(this);
             return alignment;
         }
@@ -157,7 +157,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StringAlignment));
             }
 
-            PInvoke.GdipSetStringFormatAlign(_nativeFormat, (GdiPlus.StringAlignment)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetStringFormatAlign(_nativeFormat, (GdiPlus.StringAlignment)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -170,7 +170,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             StringAlignment alignment;
-            PInvoke.GdipGetStringFormatLineAlign(_nativeFormat, (GdiPlus.StringAlignment*)&alignment).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatLineAlign(_nativeFormat, (GdiPlus.StringAlignment*)&alignment).ThrowIfFailed();
             GC.KeepAlive(this);
             return alignment;
         }
@@ -181,7 +181,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StringAlignment));
             }
 
-            PInvoke.GdipSetStringFormatLineAlign(_nativeFormat, (GdiPlus.StringAlignment)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetStringFormatLineAlign(_nativeFormat, (GdiPlus.StringAlignment)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -194,7 +194,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             HotkeyPrefix hotkeyPrefix;
-            PInvoke.GdipGetStringFormatHotkeyPrefix(_nativeFormat, (int*)&hotkeyPrefix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatHotkeyPrefix(_nativeFormat, (int*)&hotkeyPrefix).ThrowIfFailed();
             GC.KeepAlive(this);
             return hotkeyPrefix;
         }
@@ -205,7 +205,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HotkeyPrefix));
             }
 
-            PInvoke.GdipSetStringFormatHotkeyPrefix(_nativeFormat, (int)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetStringFormatHotkeyPrefix(_nativeFormat, (int)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -227,7 +227,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         float stub;
         fixed (float* ts = tabStops)
         {
-            PInvoke.GdipSetStringFormatTabStops(
+            PInvokeGdiPlus.GdipSetStringFormatTabStops(
                 _nativeFormat,
                 firstTabOffset,
                 tabStops.Length,
@@ -242,7 +242,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     public float[] GetTabStops(out float firstTabOffset)
     {
         int count;
-        PInvoke.GdipGetStringFormatTabStopCount(_nativeFormat, &count).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetStringFormatTabStopCount(_nativeFormat, &count).ThrowIfFailed();
 
         if (count == 0)
         {
@@ -255,7 +255,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         fixed (float* fto = &firstTabOffset)
         fixed (float* ts = tabStops)
         {
-            PInvoke.GdipGetStringFormatTabStops(_nativeFormat, count, fto, ts).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatTabStops(_nativeFormat, count, fto, ts).ThrowIfFailed();
             GC.KeepAlive(this);
             return tabStops;
         }
@@ -272,7 +272,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             StringTrimming trimming;
-            PInvoke.GdipGetStringFormatTrimming(_nativeFormat, (GdiPlus.StringTrimming*)&trimming).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatTrimming(_nativeFormat, (GdiPlus.StringTrimming*)&trimming).ThrowIfFailed();
             GC.KeepAlive(this);
             return trimming;
         }
@@ -283,7 +283,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StringTrimming));
             }
 
-            PInvoke.GdipSetStringFormatTrimming(_nativeFormat, (GdiPlus.StringTrimming)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetStringFormatTrimming(_nativeFormat, (GdiPlus.StringTrimming)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -296,7 +296,8 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     ///
     ///     - No string format flags are set.
     ///     - Character alignment and line alignment are set to StringAlignmentNear.
-    ///     - Language ID is set to neutral language, which means that the current language associated with the calling thread is used.
+    ///     - Language ID is set to neutral language, which means that the current language associated
+    ///       with the calling thread is used.
     ///     - String digit substitution is set to StringDigitSubstituteUser.
     ///     - Hot key prefix is set to HotkeyPrefixNone.
     ///     - Number of tab stops is set to zero.
@@ -307,7 +308,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             GpStringFormat* format;
-            PInvoke.GdipStringFormatGetGenericDefault(&format).ThrowIfFailed();
+            PInvokeGdiPlus.GdipStringFormatGetGenericDefault(&format).ThrowIfFailed();
             return new StringFormat(format);
         }
     }
@@ -318,9 +319,11 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     /// <devdoc>
     ///  Remarks from MSDN: A generic, typographic StringFormat object has the following characteristics:
     ///
-    ///     - String format flags StringFormatFlagsLineLimit, StringFormatFlagsNoClip, and StringFormatFlagsNoFitBlackBox are set.
+    ///     - String format flags StringFormatFlagsLineLimit, StringFormatFlagsNoClip,
+    ///       and StringFormatFlagsNoFitBlackBox are set.
     ///     - Character alignment and line alignment are set to StringAlignmentNear.
-    ///     - Language ID is set to neutral language, which means that the current language associated with the calling thread is used.
+    ///     - Language ID is set to neutral language, which means that the current language associated
+    ///       with the calling thread is used.
     ///     - String digit substitution is set to StringDigitSubstituteUser.
     ///     - Hot key prefix is set to HotkeyPrefixNone.
     ///     - Number of tab stops is set to zero.
@@ -331,14 +334,14 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             GpStringFormat* format;
-            PInvoke.GdipStringFormatGetGenericTypographic(&format).ThrowIfFailed();
+            PInvokeGdiPlus.GdipStringFormatGetGenericTypographic(&format).ThrowIfFailed();
             return new StringFormat(format);
         }
     }
 
     public void SetDigitSubstitution(int language, StringDigitSubstitute substitute)
     {
-        PInvoke.GdipSetStringFormatDigitSubstitution(
+        PInvokeGdiPlus.GdipSetStringFormatDigitSubstitution(
             _nativeFormat,
             (ushort)language,
             (GdiPlus.StringDigitSubstitute)substitute).ThrowIfFailed();
@@ -354,7 +357,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             StringDigitSubstitute digitSubstitute;
-            PInvoke.GdipGetStringFormatDigitSubstitution(
+            PInvokeGdiPlus.GdipGetStringFormatDigitSubstitution(
                 _nativeFormat,
                 null,
                 (GdiPlus.StringDigitSubstitute*)&digitSubstitute).ThrowIfFailed();
@@ -372,7 +375,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
         get
         {
             ushort language;
-            PInvoke.GdipGetStringFormatDigitSubstitution(_nativeFormat, &language, null).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetStringFormatDigitSubstitution(_nativeFormat, &language, null).ThrowIfFailed();
             GC.KeepAlive(this);
             return language;
         }
@@ -381,7 +384,7 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     internal int GetMeasurableCharacterRangeCount()
     {
         int count;
-        PInvoke.GdipGetStringFormatMeasurableCharacterRangeCount(_nativeFormat, &count).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetStringFormatMeasurableCharacterRangeCount(_nativeFormat, &count).ThrowIfFailed();
         GC.KeepAlive(this);
         return count;
     }

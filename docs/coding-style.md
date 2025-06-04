@@ -15,7 +15,7 @@ There are a few key things we strive for to attain our clarity goals:
 - Minimal code visibility (via access modifiers, type nesting, and local functions).
 - All context captured in source (via code or comments).
 
-Windows Forms dates back to the mid 1990s (originally [Windows Foundation Classes](https://web.archive.org/web/20050915003238/http://msdn.microsoft.com/library/en-us/vjcore98/html/vjconintroductiontowfcprogramming.asp)). It has seen over 25 years of language and coding evolution. We believe that updating the code to modern style makes the code easier to maintain and update in the longer term. While we do not update everything as the style guidelines evolve, we do make continual investments in cleaning the codebase as an engineering best practice.
+Windows Forms dates back to the mid 1990s (originally [Windows Foundation Classes](https://web.archive.org/web/20050915003238/http://msdn.microsoft.com/library/vjcore98/html/vjconintroductiontowfcprogramming.asp)). It has seen over 25 years of language and coding evolution. We believe that updating the code to modern style makes the code easier to maintain and update in the longer term. While we do not update everything as the style guidelines evolve, we do make continual investments in cleaning the codebase as an engineering best practice.
 
 A number of the following detailed guidelines are captured in our `.editorconfig` and as such you'll get the appropriate feedback in Visual Studio. We're iterating to enable more automated analyzers in the future.
 
@@ -102,7 +102,7 @@ internal bool SingleVerticalBorderAdded
 ### Namespace Usings
 
 1. Namespace `using`s should be specified at the top of the file, before `namespace` declarations, and should be sorted alphabetically, with the exception of `System.*` namespaces, which are to be placed on top of all others.
-1. Global usings go should in a file called `globalusings.cs`.
+1. Global `using`s go should in a file called `globalusings.cs`.
 
 ### Namespaces
 

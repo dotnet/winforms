@@ -55,7 +55,7 @@ public class SystemPensTests
         Assert.Equal(PenType.SolidColor, pen.PenType);
         Assert.Same(pen, getPen());
 
-        AssertExtensions.Throws<ArgumentException>(null, () => pen.Dispose());
+        AssertExtensions.Throws<ArgumentException>(null, pen.Dispose);
         AssertExtensions.Throws<ArgumentException>(null, () => pen.SetLineCap(LineCap.ArrowAnchor, LineCap.Custom, DashCap.Round));
 
         AssertExtensions.Throws<ArgumentException>(null, () => pen.Alignment = PenAlignment.Center);

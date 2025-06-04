@@ -8,7 +8,10 @@ using System.Drawing;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class is going to replace the shell contextMenu and uses the ContextMenuStrip. The ContextMenuStrip contains groups and groupOrder which it uses to add items to itself. ControlDesigners can add custom items to the contextMenu, using the new member to the  group and add the groupOrder to the ContextMenu.
+///  This class is going to replace the shell contextMenu and uses the ContextMenuStrip.
+///  The ContextMenuStrip contains groups and groupOrder which it uses to add items to itself.
+///  ControlDesigners can add custom items to the contextMenu, using the new member to the
+///  group and add the groupOrder to the ContextMenu.
 /// </summary>
 internal class BaseContextMenuStrip : GroupedContextMenuStrip
 {
@@ -192,7 +195,6 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void InitializeContextMenu()
     {
-        // this.Opening += new CancelEventHandler(OnContextMenuOpening);
         Name = "designerContextMenuStrip";
 
         if (_serviceProvider.TryGetService(out IUIService? uis))
@@ -205,7 +207,17 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             }
         }
 
-        GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
+        GroupOrdering.AddRange([
+            StandardGroups.Code,
+            StandardGroups.ZORder,
+            StandardGroups.Grid,
+            StandardGroups.Lock,
+            StandardGroups.Verbs,
+            StandardGroups.Custom,
+            StandardGroups.Selection,
+            StandardGroups.Edit,
+            StandardGroups.Properties]);
+
         // ADD MENUITEMS
         AddCodeMenuItem();
         AddZorderMenuItem();
@@ -280,7 +292,9 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
                 if (!_cachedImage)
                 {
                     _cachedImage = true;
-                    // else attempt to get the resource from a known place in the manifest. if and only if the namespace of the type is System.Windows.Forms. else attempt to get the resource from a known place in the manifest
+                    // else attempt to get the resource from a known place in the manifest.
+                    // if and only if the namespace of the type is System.Windows.Forms.
+                    // else attempt to get the resource from a known place in the manifest
                     if (_itemType.Namespace == s_systemWindowsFormsNamespace)
                     {
                         _image = ToolboxBitmapAttribute.GetImageFromResource(_itemType, imageName: null, large: false);

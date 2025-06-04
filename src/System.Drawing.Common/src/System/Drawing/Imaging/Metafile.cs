@@ -21,7 +21,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
 
-    GpMetafile* IPointer<GpMetafile>.Pointer => this.Pointer();
+    nint IPointer<GpMetafile>.Pointer => (nint)this.Pointer();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
@@ -32,7 +32,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (GdiPlus.WmfPlaceableFileHeader* header = &wmfHeader._header)
         {
             GpMetafile* metafile;
-            PInvoke.GdipCreateMetafileFromWmf(
+            PInvokeGdiPlus.GdipCreateMetafileFromWmf(
                 (HMETAFILE)hmetafile,
                 deleteWmf,
                 header,
@@ -49,7 +49,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     public Metafile(IntPtr henhmetafile, bool deleteEmf)
     {
         GpMetafile* metafile;
-        PInvoke.GdipCreateMetafileFromEmf((HENHMETAFILE)henhmetafile, deleteEmf, &metafile).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateMetafileFromEmf((HENHMETAFILE)henhmetafile, deleteEmf, &metafile).ThrowIfFailed();
         SetNativeImage((GpImage*)metafile);
     }
 
@@ -63,7 +63,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* fn = filename)
         {
             GpMetafile* metafile;
-            PInvoke.GdipCreateMetafileFromFile(fn, &metafile).ThrowIfFailed();
+            PInvokeGdiPlus.GdipCreateMetafileFromFile(fn, &metafile).ThrowIfFailed();
             SetNativeImage((GpImage*)metafile);
         }
     }
@@ -123,7 +123,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         GpMetafile* metafile;
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafile(
+            PInvokeGdiPlus.GdipRecordMetafile(
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
                 &rect,
@@ -218,7 +218,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* f = fileName)
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafileFileName(
+            PInvokeGdiPlus.GdipRecordMetafileFileName(
                 f,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -345,7 +345,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         using var iStream = stream.ToIStream(makeSeekable: true);
 
         GpMetafile* metafile = null;
-        PInvoke.GdipCreateMetafileFromStream(iStream, &metafile).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateMetafileFromStream(iStream, &metafile).ThrowIfFailed();
         SetNativeImage((GpImage*)metafile);
     }
 
@@ -357,7 +357,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         GpMetafile* metafile;
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafile(
+            PInvokeGdiPlus.GdipRecordMetafile(
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)emfType,
                 null,
@@ -381,7 +381,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
 
         fixed (char* d = desc)
         {
-            PInvoke.GdipRecordMetafile(
+            PInvokeGdiPlus.GdipRecordMetafile(
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
                 frameRect.IsEmpty ? null : &rect,
@@ -405,7 +405,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* f = fileName)
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafileFileName(
+            PInvokeGdiPlus.GdipRecordMetafileFileName(
                 f,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -419,7 +419,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
+    ///  Initializes a new instance of the <see cref='Metafile'/> class with the specified filename.
     /// </summary>
     public Metafile(string fileName, IntPtr referenceHdc, Rectangle frameRect, MetafileFrameUnit frameUnit, EmfType type, string? description)
     {
@@ -431,7 +431,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* f = fileName)
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafileFileName(
+            PInvokeGdiPlus.GdipRecordMetafileFileName(
                 f,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -455,7 +455,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         GpMetafile* metafile = null;
         fixed (char* d = description)
         {
-            PInvoke.GdipRecordMetafileStream(
+            PInvokeGdiPlus.GdipRecordMetafileStream(
                 iStream,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -480,7 +480,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* d = description)
         {
             RectF rect = frameRect;
-            PInvoke.GdipRecordMetafileStream(
+            PInvokeGdiPlus.GdipRecordMetafileStream(
                 iStream,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -505,7 +505,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* d = description)
         {
             RectF rect = (RectangleF)frameRect;
-            PInvoke.GdipRecordMetafileStream(
+            PInvokeGdiPlus.GdipRecordMetafileStream(
                 iStream,
                 (HDC)referenceHdc,
                 (GdiPlus.EmfType)type,
@@ -533,12 +533,12 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     public void PlayRecord(EmfPlusRecordType recordType, int flags, int dataSize, byte[] data)
     {
         // Used in conjunction with Graphics.EnumerateMetafile to play an EMF+
-        // The data must be DWORD aligned if it's an EMF or EMF+.  It must be
+        // The data must be DWORD aligned if it's an EMF or EMF+. It must be
         // WORD aligned if it's a WMF.
 
         fixed (byte* d = data)
         {
-            PInvoke.GdipPlayMetafileRecord(
+            PInvokeGdiPlus.GdipPlayMetafileRecord(
                 this.Pointer(),
                 (GdiPlus.EmfPlusRecordType)recordType,
                 (uint)flags,
@@ -559,7 +559,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         fixed (GdiPlus.WmfPlaceableFileHeader* wmf = &wmfHeader._header)
         {
-            PInvoke.GdipGetMetafileHeaderFromWmf((HMETAFILE)hmetafile, wmf, mf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetMetafileHeaderFromWmf((HMETAFILE)hmetafile, wmf, mf).ThrowIfFailed();
             return header;
         }
     }
@@ -572,7 +572,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         MetafileHeader header = new();
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            PInvoke.GdipGetMetafileHeaderFromEmf((HENHMETAFILE)henhmetafile, mf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetMetafileHeaderFromEmf((HENHMETAFILE)henhmetafile, mf).ThrowIfFailed();
             return header;
         }
     }
@@ -590,7 +590,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (char* fn = fileName)
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            PInvoke.GdipGetMetafileHeaderFromFile(fn, mf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetMetafileHeaderFromFile(fn, mf).ThrowIfFailed();
             return header;
         }
     }
@@ -607,7 +607,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
             using var iStream = stream.ToIStream(makeSeekable: true);
-            PInvoke.GdipGetMetafileHeaderFromStream(iStream, mf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetMetafileHeaderFromStream(iStream, mf).ThrowIfFailed();
             return header;
         }
     }
@@ -621,7 +621,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
 
         fixed (GdiPlus.MetafileHeader* mf = &header._header)
         {
-            PInvoke.GdipGetMetafileHeaderFromMetafile(this.Pointer(), mf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetMetafileHeaderFromMetafile(this.Pointer(), mf).ThrowIfFailed();
             GC.KeepAlive(this);
             return header;
         }

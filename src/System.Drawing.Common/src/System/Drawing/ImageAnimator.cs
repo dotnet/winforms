@@ -7,27 +7,27 @@ using System.Threading;
 namespace System.Drawing;
 
 /// <summary>
-///     Animates one or more images that have time-based frames.
-///     See the ImageInfo.cs file for the helper nested ImageInfo class.
+///  Animates one or more images that have time-based frames.
+///  See the ImageInfo.cs file for the helper nested ImageInfo class.
 ///
-///     A common pattern for using this class is as follows (See PictureBox control):
-///     1. The winform app (user's code) calls ImageAnimator.Animate() from the main thread.
-///     2. Animate() spawns the animating (worker) thread in the background, which will update the image
-///        frames and raise the OnFrameChanged event, which handler will be executed in the main thread.
-///     3. The main thread triggers a paint event (Invalidate()) from the OnFrameChanged handler.
-///     4. From the OnPaint event, the main thread calls ImageAnimator.UpdateFrames() and then paints the
-///        image (updated frame).
-///     5. The main thread calls ImageAnimator.StopAnimate() when needed. This does not kill the worker thread.
+///  A common pattern for using this class is as follows (See PictureBox control):
+///  1. The WinForms app (user's code) calls ImageAnimator.Animate() from the main thread.
+///  2. Animate() spawns the animating (worker) thread in the background, which will update the image
+///  frames and raise the OnFrameChanged event, which handler will be executed in the main thread.
+///  3. The main thread triggers a paint event (Invalidate()) from the OnFrameChanged handler.
+///  4. From the OnPaint event, the main thread calls ImageAnimator.UpdateFrames() and then paints the
+///  image (updated frame).
+///  5. The main thread calls ImageAnimator.StopAnimate() when needed. This does not kill the worker thread.
 ///
-///     Comment on locking the image ref:
-///     We need to synchronize access to sections of code that modify the image(s), but we don't want to block
-///     animation of one image when modifying a different one; for this, we use the image ref for locking the
-///     critical section (lock(image)).
+///  Comment on locking the image ref:
+///  We need to synchronize access to sections of code that modify the image(s), but we don't want to block
+///  animation of one image when modifying a different one; for this, we use the image ref for locking the
+///  critical section (lock(image)).
 ///
-///     This class is safe for multi-threading but Image is not; multithreaded applications must use a critical
-///     section lock using the image ref the image access is not from the same thread that executes ImageAnimator
-///     code.  If the user code locks on the image ref forever a deadlock will happen preventing the animation
-///     from occurring.
+///  This class is safe for multi-threading but Image is not; multithreaded applications must use a critical
+///  section lock using the image ref the image access is not from the same thread that executes ImageAnimator
+///  code. If the user code locks on the image ref forever a deadlock will happen preventing the animation
+///  from occurring.
 /// </summary>
 public sealed partial class ImageAnimator
 {
@@ -44,7 +44,7 @@ public sealed partial class ImageAnimator
 
     /// <summary>
     ///  A variable to flag when an image or images need to be updated due to the selection of a new frame
-    ///  in an image.  We don't need to synchronize access to this variable, in the case it is true we don't
+    ///  in an image. We don't need to synchronize access to this variable, in the case it is true we don't
     ///  do anything, otherwise the worse case is where a thread attempts to update the image's frame after
     ///  another one did which is harmless.
     /// </summary>
@@ -57,7 +57,7 @@ public sealed partial class ImageAnimator
 
     /// <summary>
     ///  Lock that allows either concurrent read-access to the images list for multiple threads, or write-
-    ///  access to it for a single thread.  Observe that synchronization access to image objects are done
+    ///  access to it for a single thread. Observe that synchronization access to image objects are done
     ///  with critical sections (lock).
     /// </summary>
     private static readonly ReaderWriterLock s_rwImgListLock = new();
@@ -69,12 +69,12 @@ public sealed partial class ImageAnimator
     ///
     ///  The comment above refers to the COM STA message pump, not to be confused with the UI message pump.
     ///  However, the effect is the same, the COM message pump will pump messages and dispatch them to the
-    ///  window while waiting on the writer lock; this has the potential of creating a re-entrancy situation
+    ///  window while waiting on the writer lock; this has the potential of creating a reentrancy situation
     ///  that if during the message processing a wait on a reader lock is originated the thread will be block
     ///  on itself.
     ///
     ///  While processing STA message, the thread may call back into managed code. We do this because
-    ///  we can not block finalizer thread.  Finalizer thread may need to release STA objects on this thread. If
+    ///  we can not block finalizer thread. Finalizer thread may need to release STA objects on this thread. If
     ///  the current thread does not pump message, finalizer thread is blocked, and AD  unload is blocked while
     ///  waiting for finalizer thread. RWLock is a fair lock. If a thread waits for a writer lock, then it needs
     ///  a reader lock while pumping message, the thread is blocked forever.
@@ -190,7 +190,7 @@ public sealed partial class ImageAnimator
     }
 
     /// <summary>
-    ///  Adds an image to the image manager.  If the image does not support animation this method does nothing.
+    ///  Adds an image to the image manager. If the image does not support animation this method does nothing.
     ///  This method creates the image list and spawns the animation thread the first time it is called.
     /// </summary>
     public static void Animate(Image image, EventHandler onFrameChangedHandler)
@@ -212,10 +212,10 @@ public sealed partial class ImageAnimator
         // If the image is already animating, stop animating it
         StopAnimate(image, onFrameChangedHandler);
 
-        // Acquire a writer lock to modify the image info list.  If the thread has a reader lock we need to upgrade
+        // Acquire a writer lock to modify the image info list. If the thread has a reader lock we need to upgrade
         // it to a writer lock; acquiring a reader lock in this case would block the thread on itself.
         // If the thread already has a writer lock its ref count will be incremented w/o placing the request in the
-        // writer queue.  See ReaderWriterLock.AcquireWriterLock method in the MSDN.
+        // writer queue. See ReaderWriterLock.AcquireWriterLock method in the MSDN.
 
         bool readerLockHeld = s_rwImgListLock.IsReaderLockHeld;
         LockCookie lockDowngradeCookie = default;

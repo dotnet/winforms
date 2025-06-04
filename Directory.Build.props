@@ -1,7 +1,7 @@
 <Project>
 
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
+  <Import Project="$(RepositoryEngineeringDir)Analyzer.props" />
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
   <Import Project="$(RepositoryEngineeringDir)Test.props" Condition="'$(IsTestProject)' == 'true'"/>
@@ -11,21 +11,17 @@
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dotnet/winforms</PackageProjectUrl>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <LangVersion>preview</LangVersion>
+    <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
+  </PropertyGroup>
 
-    <IsAnalyzerProject>false</IsAnalyzerProject>
-    <IsAnalyzerProject Condition="!$(IsTestProject) and
-                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
-                                  >true</IsAnalyzerProject>
-
-    <!--
-     XML cref tags don't resolve the same way code does. Until we can get this resolved we need to turn this off in
-     order to use CsWin32 in both System.Drawing and System.Windows.Forms.
-    -->
-    <NoWarn>$(NoWarn);CS1574;CS1580</NoWarn>
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+    <!-- There is no need to validate packages while iterating inside VS. -->
+    <EnablePackageValidation>false</EnablePackageValidation>
   </PropertyGroup>
 
   <!--
@@ -37,13 +33,6 @@
     -->
   <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true'">
     <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
-    <IsRoslynComponent>true</IsRoslynComponent>
-
-    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
-    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
   </PropertyGroup>
 
   <!-- SDK flipped to 'true' by default https://github.com/dotnet/sdk/pull/12720 -->

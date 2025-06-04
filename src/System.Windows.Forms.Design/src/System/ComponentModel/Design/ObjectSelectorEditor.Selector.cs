@@ -30,7 +30,7 @@ public abstract partial class ObjectSelectorEditor
             ShowLines = editor.SubObjectSelector;
             ShowRootLines = editor.SubObjectSelector;
 
-            AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+            AfterSelect += OnAfterSelect;
         }
 
         /// <summary>
@@ -190,10 +190,10 @@ public abstract partial class ObjectSelectorEditor
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_GETDLGCODE:
+                case PInvokeCore.WM_GETDLGCODE:
                     m.ResultInternal = (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTALLKEYS);
                     return;
-                case PInvoke.WM_MOUSEMOVE:
+                case PInvokeCore.WM_MOUSEMOVE:
                     if (clickSeen)
                     {
                         clickSeen = false;

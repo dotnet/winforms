@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design;
 
 /// <summary>
 ///  This class handles all design time behavior for the <see cref="Forms.FlowLayoutPanel"/>
-///  control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
-///  draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
+///  control. Basically, this designer carefully watches drag operations. During a drag, we attempt to
+///  draw an "I" bar for insertion/feedback purposes. When a control is added to our designer, we check
 ///  some cached state to see if we believe that it needs to be inserted at a particular index. If
 ///  so, we re-insert the control appropriately.
 /// </summary>
@@ -159,8 +159,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Called when we receive a DragEnter notification - here we attempt to cache child position and information
     ///  intended to be used by drag move and drop messages. Basically we pass through the children twice - first
-    ///  we build up an array of rects representing the children bounds (w/margins) and identify where the row/
-    ///  column changes are.  Secondly, we normalize the child rects so that children in each row/column are the
+    ///  we build up an array of rectangles representing the children bounds (w/margins) and identify where the row/
+    ///  column changes are. Secondly, we normalize the child rectangles so that children in each row/column are the
     ///  same height/width;
     /// </summary>
     private void CreateMarginBoundsList()
@@ -193,7 +193,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         Point offset = Control.PointToScreen(Point.Empty);
         int i;
 
-        // Pass 1 - store off the original margin rects & identify row/column sizes
+        // Pass 1 - store off the original margin rectangles & identify row/column sizes
         for (i = 0; i < children.Count; i++)
         {
             var currentControl = children[i];
@@ -370,7 +370,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    ///  Shadows the FlowDirection property.  We do this so that we can update the areas
+    ///  Shadows the FlowDirection property. We do this so that we can update the areas
     ///  covered by glyphs correctly. VSWhidbey# 232910.
     /// </summary>
     private FlowDirection FlowDirection
@@ -707,7 +707,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
     /// <summary>
     ///  When a child is added -we check to see if we cached an index
-    ///  representing where this control should be inserted.  If so, we
+    ///  representing where this control should be inserted. If so, we
     ///  re-insert the new child.
     ///  This is only done on an external drag-drop.
     /// </summary>
@@ -757,7 +757,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         // Get the sorted drag controls. We use these for an internal drag.
         if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            _dragControls = data.GetSortedDragControls(out int primaryIndex).OfType<Control>().ToList();
+            _dragControls = [..data.GetSortedDragControls(out int primaryIndex).OfType<Control>()];
             _primaryDragControl = _dragControls[primaryIndex];
         }
 
@@ -779,7 +779,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  During a drag over, if we have successfully cached margin/row/col information
     ///  we will attempt to render an "I-bar" for the user based on where we think the
-    ///  user is attempting to insert the control at.  Note that we also cache off this
+    ///  user is attempting to insert the control at. Note that we also cache off this
     ///  guessed-index so that if a control is dropped/added we can re-insert it at this
     ///  spot.
     /// </summary>
@@ -891,8 +891,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  On a drop, if we have cached a special index where we think a control
     ///  should be inserted - we check to see if this was a pure-local drag
-    ///  (i.e. we dragged a child control inside ourselves).  If so, we re-insert the
-    ///  child to the appropriate index.  Otherwise, we'll do this in the ChildAdded
+    ///  (i.e. we dragged a child control inside ourselves). If so, we re-insert the
+    ///  child to the appropriate index. Otherwise, we'll do this in the ChildAdded
     ///  event.
     /// </summary>
     protected override void OnDragDrop(DragEventArgs de)

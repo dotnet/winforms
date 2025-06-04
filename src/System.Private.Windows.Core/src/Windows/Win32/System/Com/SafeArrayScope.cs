@@ -7,8 +7,10 @@ using Windows.Win32.System.Variant;
 namespace Windows.Win32.System.Com;
 
 /// <summary>
-///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via <see cref="PInvoke.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
-///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a one dimensional <see cref="SAFEARRAY"/>.
+///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via
+///  <see cref="PInvokeCore.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
+///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a
+///  one dimensional <see cref="SAFEARRAY"/>.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -16,7 +18,7 @@ namespace Windows.Win32.System.Com;
 ///  </para>
 ///  <para>
 ///   If the <see cref="SAFEARRAY"/> you are intending to scope the lifetime of has type <see cref="VARENUM.VT_UNKNOWN"/>,
-///   use <see cref="ComSafeArrayScope{T}"/> for better usability.
+///   use <see cref="T:Windows.Win32.System.Com.ComSafeArrayScope`1"/> for better usability.
 ///  </para>
 /// </remarks>
 internal readonly unsafe ref struct SafeArrayScope<T>
@@ -86,7 +88,8 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
     public SafeArrayScope(uint size)
     {
-        VARENUM vt = VARENUM.VT_EMPTY;
+        VARENUM vt;
+
         if (typeof(T) == typeof(string))
         {
             vt = VARENUM.VT_BSTR;

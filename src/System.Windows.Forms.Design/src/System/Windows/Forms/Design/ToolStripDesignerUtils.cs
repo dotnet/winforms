@@ -164,7 +164,7 @@ internal sealed class ToolStripDesignerUtils
     }
 
     /// <summary>
-    ///  Fishes out the display name attribute from the Toolbox item  if not present, uses Type.Name
+    ///  Fishes out the display name attribute from the Toolbox item if not present, uses Type.Name
     /// </summary>
     public static string GetToolboxDescription(Type itemType)
     {
@@ -282,7 +282,7 @@ internal sealed class ToolStripDesignerUtils
                         continue;
                     }
 
-                    // if the visibility matches the current toolstrip type,  add it to the list of possible types to create.
+                    // if the visibility matches the current toolstrip type, add it to the list of possible types to create.
                     ToolStripItemDesignerAvailabilityAttribute visibilityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
                     if (visibilityAttribute is not null && ((visibilityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
                     {
@@ -486,7 +486,8 @@ internal sealed class ToolStripDesignerUtils
                         behaviorService.Invalidate(invalidateRegion);
                     }
 
-                    // When a ToolStripItem is PrimarySelection, the glyph bounds are not invalidated  through the SelectionManager so we have to do this.
+                    // When a ToolStripItem is PrimarySelection, the glyph bounds are not invalidated
+                    // through the SelectionManager so we have to do this.
                     designer = designerHost.GetDesigner(nextSelection) as ToolStripItemDesigner;
                     if (designer is not null)
                     {
@@ -525,8 +526,8 @@ internal sealed class ToolStripDesignerUtils
 
         static DisplayInformation()
         {
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
-            SystemEvents.DisplaySettingsChanged += new EventHandler(DisplaySettingChanged);
+            SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
+            SystemEvents.DisplaySettingsChanged += DisplaySettingChanged;
         }
 
         public static short BitsPerPixel
@@ -604,7 +605,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///test to see if we are under terminal server mode
+        ///  Test to see if we are under terminal server mode
         /// </summary>
         public static bool TerminalServer
         {
@@ -622,7 +623,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///event handler for change in display setting
+        ///  Event handler for change in display setting
         /// </summary>
         private static void DisplaySettingChanged(object obj, EventArgs ea)
         {
@@ -633,7 +634,7 @@ internal sealed class ToolStripDesignerUtils
         }
 
         /// <summary>
-        ///event handler for change in user preference
+        ///  Event handler for change in user preference
         /// </summary>
         private static void UserPreferenceChanged(object obj, UserPreferenceChangedEventArgs ea)
         {

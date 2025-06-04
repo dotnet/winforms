@@ -171,9 +171,9 @@ public partial class ColorEditor
             _tabControl.TabPages.Add(_systemTabPage);
             _tabControl.TabStop = false;
             _tabControl.SelectedTab = _systemTabPage;
-            _tabControl.SelectedIndexChanged += new EventHandler(OnTabControlSelChange);
+            _tabControl.SelectedIndexChanged += OnTabControlSelChange;
             _tabControl.Dock = DockStyle.Fill;
-            _tabControl.Resize += new EventHandler(OnTabControlResize);
+            _tabControl.Resize += OnTabControlResize;
 
             _lbSystem = new ColorEditorListBox
             {
@@ -182,11 +182,12 @@ public partial class ColorEditor
                 IntegralHeight = false,
                 Sorted = false
             };
-            _lbSystem.Click += new EventHandler(OnListClick);
-            _lbSystem.DrawItem += new DrawItemEventHandler(OnListDrawItem);
-            _lbSystem.KeyDown += new KeyEventHandler(OnListKeyDown);
+
+            _lbSystem.Click += OnListClick;
+            _lbSystem.DrawItem += OnListDrawItem;
+            _lbSystem.KeyDown += OnListKeyDown;
             _lbSystem.Dock = DockStyle.Fill;
-            _lbSystem.FontChanged += new EventHandler(OnFontChanged);
+            _lbSystem.FontChanged += OnFontChanged;
 
             _lbCommon = new ColorEditorListBox
             {
@@ -195,9 +196,10 @@ public partial class ColorEditor
                 IntegralHeight = false,
                 Sorted = false
             };
-            _lbCommon.Click += new EventHandler(OnListClick);
-            _lbCommon.DrawItem += new DrawItemEventHandler(OnListDrawItem);
-            _lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
+
+            _lbCommon.Click += OnListClick;
+            _lbCommon.DrawItem += OnListDrawItem;
+            _lbCommon.KeyDown += OnListKeyDown;
             _lbCommon.Dock = DockStyle.Fill;
 
             Array.Sort(ColorValues, StandardColorComparer.Instance);
@@ -216,7 +218,7 @@ public partial class ColorEditor
             }
 
             _pal = new ColorPalette(this, CustomColors);
-            _pal.Picked += new EventHandler(OnPalettePick);
+            _pal.Picked += OnPalettePick;
 
             _paletteTabPage.Controls.Add(_pal);
             _systemTabPage.Controls.Add(_lbSystem);
@@ -328,7 +330,7 @@ public partial class ColorEditor
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // We treat tab characters as switching tab pages.  In most other contexts,
+            // We treat tab characters as switching tab pages. In most other contexts,
             // ctrl-tab switches tab pages, but I couldn't get that to work, and besides,
             // then there would be nothing for tab to do in this editor.
             if ((keyData & Keys.Alt) == 0

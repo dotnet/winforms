@@ -18,12 +18,11 @@ Param(
 
 $assemblies = $xmlDoc.package.files.file | `
     Where-Object { 
-            # take only assemblies placed in \lib\netcoreappX.Y, and that are not resources
-            # also exclude Accessibility.dll as it is explicitly added to WindowsDesktop bundle
+            # take assemblies that are not analyzer resources. Also exclude Accessibility.dll as it is explicitly added to WindowsDesktop bundle.
             ($_.target.StartsWith('lib\') -or $_.target.StartsWith('ref\') -or $_.target.StartsWith('sdk\analyzers\'))`
                 -and $_.target.EndsWith('.dll', [System.StringComparison]::OrdinalIgnoreCase) `
-                -and !$_.target.EndsWith('resources.dll', [System.StringComparison]::OrdinalIgnoreCase) `
-                -and !$_.target.EndsWith('\Accessibility.dll', [System.StringComparison]::OrdinalIgnoreCase)
+                -and !$_.target.EndsWith('\Accessibility.dll', [System.StringComparison]::OrdinalIgnoreCase) `
+                -and $_.target -notmatch "..*Analyzers..*.resources.dll"
         } | `
     Select-Object -Unique @{Name="Path";Expression={Split-Path $_.target -Leaf}} | `
     Select-Object -ExpandProperty Path;
@@ -61,17 +60,49 @@ else {
     #>
     Write-Host "Regenerating the manifest" -ForegroundColor Green
 
+    $sorted = $assemblies | Sort-Object;
+
     $output = "<!--
     This props file comes from dotnet/winforms. It gets ingested by dotnet/windowsdesktop and processed by
-    pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
+    src\windowsdesktop\src\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj and src\windowsdesktop\src\sfx\Microsoft.WindowsDesktop.App.Runtime.sfxproj.
 -->
 <Project>
-  <ItemGroup Condition=`"'`$(PackageTargetRuntime)' == ''`">`r`n";
-    $assemblies | `
-        Sort-Object | `
+  <!-- File classifications that should be included for both the ref and runtime pack. -->
+  <ItemGroup>`r`n";
+    $sorted | `
         ForEach-Object {
             $assembly = $_;
-            $output += "    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms`" />`r`n"
+            if (!$assembly.Contains("Analyzers") `
+                -and !$assembly.EndsWith("resources.dll")) {
+                if ($assembly.Equals("System.Private.Windows.Core.dll")) {
+                    $output += "    <!-- System.Private.Windows.Core is now used by both WPF and Windows Forms -->`r`n    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms;WPF`" />`r`n"
+                }
+                else {
+                    $output += "    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms`" />`r`n"
+                }
+            }
+        }
+    $output += "  </ItemGroup>
+        
+  <!-- File classifications that should only be included for the ref pack. -->
+  <ItemGroup Condition=`"'`$(PackageTargetRuntime)' == ''`">`r`n";
+    $sorted | `
+        ForEach-Object {
+            $assembly = $_;
+            if ($assembly.Contains("Analyzers")) {
+                $output += "    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms`" />`r`n"
+            }
+        }
+    $output += "  </ItemGroup>
+
+  <!-- File classifications that should only be included for the runtime pack. Note analyzers should not be included in the runtime pack. -->
+  <ItemGroup Condition=`"'`$(PackageTargetRuntime)' != ''`">`r`n";
+    $sorted | `
+        ForEach-Object {
+            $assembly = $_;
+            if ($assembly.EndsWith("resources.dll")) {
+                $output += "    <FrameworkListFileClass Include=`"$assembly`" Profile=`"WindowsForms`" />`r`n"
+            }
         }
     $output += "  </ItemGroup>
 </Project>";

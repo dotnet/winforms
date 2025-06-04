@@ -6,10 +6,10 @@ using Windows.Win32.System.Variant;
 namespace Windows.Win32.System.Com;
 
 /// <summary>
-///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via <see cref="PInvoke.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
-///  that holds COM pointers.
-///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a one dimensional <see cref="SAFEARRAY"/>
-///  of type <see cref="VARENUM.VT_UNKNOWN"/>
+///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via
+///  <see cref="PInvokeCore.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
+///  that holds COM pointers. Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope
+///  currently only works for a one dimensional <see cref="SAFEARRAY"/> of type <see cref="VARENUM.VT_UNKNOWN"/>
 /// </summary>
 /// <remarks>
 ///  <para>

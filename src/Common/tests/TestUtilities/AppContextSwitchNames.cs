@@ -8,59 +8,36 @@ namespace System;
 public static class AppContextSwitchNames
 {
     /// <summary>
-    /// The switch that controls whether AnchorLayoutV2 feature is enabled.
-    /// </summary>
-    public const string AnchorLayoutV2
-        = "System.Windows.Forms.AnchorLayoutV2";
-
-    /// <summary>
-    /// The switch that controls whether the parent font (as set by <see cref="Forms.Application.SetDefaultFont(Font)" />
-    ///  or by the parent control or form's font) is applied to menus.
-    /// </summary>
-    public const string ApplyParentFontToMenus
-        = "System.Windows.Forms.ApplyParentFontToMenus";
-
-    /// <summary>
-    /// The switch that controls whether or not the DataGridView starts its UI row count at zero.
-    /// </summary>
-    public const string DataGridViewUIAStartRowCountAtZero
-        = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
-
-    /// <summary>
     ///  The switch that controls whether or not the <see cref="BinaryFormatter"/> is enabled.
     /// </summary>
     public const string EnableUnsafeBinaryFormatterSerialization
         = "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization";
 
     /// <summary>
-    ///  Switch that controls <see cref="AppContext"/> switch caching.
+    ///  Switch that controls <see cref="AppContext"/> switch caching. This switch is set to
+    ///  <see langword="true" /> in our test assemblies.
     /// </summary>
     public const string LocalAppContext_DisableCaching
         = "TestSwitch.LocalAppContext.DisableCaching";
 
     /// <summary>
-    /// The switch that controls whether UIA notifications are raised.
+    ///  The switch that controls whether or not the <see cref="BinaryFormatter"/> is enabled in the
+    ///  Clipboard or drag-and-drop operations.
     /// </summary>
-    public const string NoClientNotifications
-        = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
+    public const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName
+        = "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
 
     /// <summary>
-    /// The switch that controls whether to scale the top level form min/max size for dpi.
+    ///  The switch that controls whether or not the System.Windows.Forms.BinaryFormat.Deserializer
+    ///  is enabled in the Clipboard or drag-and-drop operations.
     /// </summary>
-    public const string ScaleTopLevelFormMinMaxSizeForDpi
-        = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+    public const string ClipboardDragDropEnableNrbfSerializationSwitchName
+        = "Windows.ClipboardDragDrop.EnableNrbfSerialization";
 
     /// <summary>
-    /// The switch that controls whether certificates are checked against the certificate authority revocation list.
-    ///  If true, revoked certificates will not be accepted by WebRequests and WebClients as valid.
-    ///  Otherwise, revoked certificates will be accepted as valid.
+    ///  When set to true, prevents the async capable drag/drop operations from being performed in a
+    ///  synchronous manner.
     /// </summary>
-    public const string ServicePointManagerCheckCrl
-        = "System.Windows.Forms.ServicePointManagerCheckCrl";
-
-    /// <summary>
-    /// The switch that controls whether the TreeNodeCollection will insert nodes in the sorted order.
-    /// </summary>
-    public const string TreeNodeCollectionAddRangeRespectsSortOrder
-        = "System.Windows.Forms.ApplyParentFontToMenus";
+    public const string DragDropDisableSyncOverAsyncSwitchName
+        = "Windows.DragDrop.DisableSyncOverAsync";
 }

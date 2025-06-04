@@ -8,7 +8,7 @@ using System.Runtime.Versioning;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the panel class.  This
+///  This class handles all design time behavior for the panel class. This
 ///  draws a visible border on the panel if it doesn't have a border so the
 ///  user knows where the boundaries of the panel lie.
 /// </summary>
@@ -20,7 +20,7 @@ internal class PanelDesigner : ScrollableControlDesigner
     }
 
     /// <summary>
-    ///  This draws a nice border around our panel.  We need
+    ///  This draws a nice border around our panel. We need
     ///  this because the panel can have no border and you can't
     ///  tell where it is.
     /// </summary>
@@ -44,8 +44,8 @@ internal class PanelDesigner : ScrollableControlDesigner
     }
 
     /// <summary>
-    ///  Overrides our base class.  Here we check to see if there
-    ///  is no border on the panel.  If not, we draw one so that
+    ///  Overrides our base class. Here we check to see if there
+    ///  is no border on the panel. If not, we draw one so that
     ///  the panel shape is visible at design time.
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs pe)

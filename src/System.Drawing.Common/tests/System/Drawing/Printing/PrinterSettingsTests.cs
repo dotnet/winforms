@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Authors:
 //  Sebastien Pouliot  <sebastien@ximian.com>
 //
@@ -43,14 +43,14 @@ public class PrinterSettingsTests
     public void CanDuplex_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        bool canDuplex = printerSettings.CanDuplex;
+        _ = printerSettings.CanDuplex;
     }
 
     [Fact]
     public void Copies_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        int copies = printerSettings.Copies;
+        _ = printerSettings.Copies;
     }
 
     [Theory]
@@ -79,7 +79,7 @@ public class PrinterSettingsTests
     public void Collate_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        bool collate = printerSettings.Collate;
+        _ = printerSettings.Collate;
     }
 
     [Fact]
@@ -380,7 +380,7 @@ public class PrinterSettingsTests
     public void IsDirectPrintingSupported_ImageFormatSupported_ReturnsExpected(ImageFormat imageFormat)
     {
         PrinterSettings printerSettings = new();
-        bool supported = printerSettings.IsDirectPrintingSupported(imageFormat);
+        _ = printerSettings.IsDirectPrintingSupported(imageFormat);
     }
 
     public static IEnumerable<object[]> IsDirectPrintingSupported_ImageFormatNotSupported_TestData()
@@ -415,7 +415,7 @@ public class PrinterSettingsTests
     public void SupportsColor_ReturnsExpected()
     {
         // XPS and PDF printers support color.
-        // docs.microsoft.com/en-us/windows-hardware/drivers/print/improved-color-printing
+        // docs.microsoft.com/windows-hardware/drivers/print/improved-color-printing
         PrinterSettings printerSettings = new() { PrinterName = GetNameOfTestPrinterSuitableForDevModeTesting() };
         Assert.True(printerSettings.SupportsColor);
     }
@@ -508,10 +508,8 @@ public class PrinterSettingsTests
     public void GetHdevmode_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevmode();
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevmode();
+        Assert.NotEqual(0, handle);
     }
 
     [Fact]
@@ -519,10 +517,8 @@ public class PrinterSettingsTests
     {
         PrinterSettings printerSettings = new();
         PageSettings pageSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevmode(pageSettings);
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevmode(pageSettings);
+        Assert.NotEqual(0, handle);
     }
 
     [Fact]
@@ -536,10 +532,8 @@ public class PrinterSettingsTests
     public void GetHdevnames_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevnames();
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevnames();
+        Assert.NotEqual(0, handle);
     }
 
     [ConditionalFact(typeof(PrinterSettingsTests), nameof(CanTestSetHdevmode_IntPtr_Success))]
@@ -572,9 +566,10 @@ public class PrinterSettingsTests
 
     private static readonly string[] s_testPrinterNames =
     [
-        // Our method of testing some apis requires a printer that supports multi-copy printing, collating, color and duplex settings. Not all printers
-        // support these so rather than trust the machine running the test to have configured such a printer as the default, use the name of
-        // a known compliant printer that ships with Windows 10.
+        // Our method of testing some apis requires a printer that supports multi-copy printing,
+        // collating, color and duplex settings. Not all printers support these so
+        // rather than trust the machine running the test to have configured such a printer as the default,
+        // use the name of a known compliant printer that ships with Windows 10.
         "Microsoft Print to PDF",
         "Microsoft XPS Document Writer", // Backup for older Windows
     ];

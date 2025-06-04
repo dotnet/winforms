@@ -12,19 +12,19 @@ public sealed partial class CodeDomComponentSerializationService
 {
     /// <summary>
     ///  The <see cref="CodeDomSerializationStore"/> class is an implementation-specific class that stores serialization data
-    ///  for the CodeDom component serialization service.  The service adds state to this serialization store.
+    ///  for the CodeDom component serialization service. The service adds state to this serialization store.
     ///  Once the store is closed it can be serialized or deserialized in memory.
     /// </summary>
     /// <para>
-    ///   On .NET Framework, once the store is closed it can be saved to a stream.  A serialization store can be deserialized
-    ///   at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
-    ///   cannot be saved to a stream or loaded from a stream.
+    ///  On .NET Framework, once the store is closed it can be saved to a stream. A serialization store can be deserialized
+    ///  at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
+    ///  cannot be saved to a stream or loaded from a stream.
     /// </para>
     /// <para>
-    ///   <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
-    ///   that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
-    ///   <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
-    ///   The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    ///  <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
+    ///  that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
+    ///  <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
+    ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
     /// </para>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
@@ -165,7 +165,7 @@ public sealed partial class CodeDomComponentSerializationService
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 }
             }
 
@@ -215,7 +215,10 @@ public sealed partial class CodeDomComponentSerializationService
 
             bool recycleInstances = objects is null;
 
-            // RecycleInstances is used so that we re-use objects already in the container.  PreserveNames is used raise errors in the case of duplicate names.  We only care about name preservation when we are recycling instances.  Otherwise, we'd prefer to create objects with different names.
+            // RecycleInstances is used so that we re-use objects already in the container.
+            // PreserveNames is used raise errors in the case of duplicate names.
+            // We only care about name preservation when we are recycling instances.
+            // Otherwise, we'd prefer to create objects with different names.
             delegator.Manager.RecycleInstances = recycleInstances;
             delegator.Manager.PreserveNames = recycleInstances;
             delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
@@ -225,8 +228,12 @@ public sealed partial class CodeDomComponentSerializationService
             {
                 _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable;
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
+#pragma warning disable CA2301 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
+                Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable; // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+#pragma warning restore CA2301
+#pragma warning restore CA2300
+#pragma warning restore SYSLIB0011
                 _resources = new LocalResourceManager(resources);
             }
 
@@ -275,7 +282,7 @@ public sealed partial class CodeDomComponentSerializationService
         }
 
         /// <summary>
-        ///  Gets a name for this object.  It first tries the object's site, if it exists, and otherwise fabricates a unique name.
+        ///  Gets a name for this object. It first tries the object's site, if it exists, and otherwise fabricates a unique name.
         /// </summary>
         private static string GetObjectName(object value)
         {
@@ -311,8 +318,8 @@ public sealed partial class CodeDomComponentSerializationService
         public override void Save(Stream stream) => throw new PlatformNotSupportedException();
 
         /// <summary>
-        ///  On .NET Framework, this method implements the save part of <see cref="ISerializable"/> interface.  On .NET,
-        ///  this interface is implemented only for binary compatibility with the .NET Framework.  Formatter deserialization
+        ///  On .NET Framework, this method implements the save part of <see cref="ISerializable"/> interface. On .NET,
+        ///  this interface is implemented only for binary compatibility with .NET Framework. Formatter deserialization
         ///  is disabled .NET by removing the <see cref="SerializableAttribute"/> from this class.
         ///  This method is used in unit tests only.
         /// </summary>

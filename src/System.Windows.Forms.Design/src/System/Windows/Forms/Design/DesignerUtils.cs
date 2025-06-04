@@ -25,13 +25,13 @@ internal static class DesignerUtils
         new(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
     // Pens and Brushes used via GDI to render our grabhandles
     private static HBRUSH s_grabHandleFillBrushPrimary =
-        PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     private static HBRUSH s_grabHandleFillBrush =
-        PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
     private static HPEN s_grabHandlePenPrimary =
-        PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
     private static HPEN s_grabHandlePen =
-        PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
     // The box-like image used as the user is dragging comps from the toolbox
     private static Bitmap? s_boxImage;
@@ -42,18 +42,20 @@ internal static class DesignerUtils
     // Although the selection border is only 1, we actually want a 3 pixel hittestarea
     public static int s_selectionBorderHitArea = ScaleLogicalToDeviceUnitsX(3);
 
-    // We want to make sure that the 1 pixel selectionborder is centered on the handles.
-    // The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
-    // grabhandle size (diameter)
+    // We want to make sure that the 1 pixel selectionBorder is centered on the handles.
+    // The fact that the border is actually 3 pixels wide works like magic.
+    // If you draw a picture, then you will see why.
+    // GrabHandle size (diameter)
     public static int s_handleSize = ScaleLogicalToDeviceUnitsX(7);
-    // how much should the grabhandle overlap the control
+    // how much should the GrabHandle overlap the control
     public static int s_handleOverlap = ScaleLogicalToDeviceUnitsX(2);
-    // we want the selection border to be centered on a grabhandle, so how much do. we need to offset the border from the control to make that happen
+    // we want the selection border to be centered on a GrabHandle,
+    // so how much do. we need to offset the border from the control to make that happen
     public static int s_selectionBorderOffset = ((s_handleSize - s_selectionBorderSize) / 2) - s_handleOverlap;
 
     // no-resize handle size (diameter)
     public static int s_noResizeHandleSize = ScaleLogicalToDeviceUnitsX(5);
-    // we want the selection border to be centered on a grabhandle, so how much do
+    // we want the selection border to be centered on a GrabHandle, so how much do
     // we need to offset the border from the control to make that happen
     public static int s_noResizeBorderOffset = ((s_noResizeHandleSize - s_selectionBorderSize) / 2);
 
@@ -106,7 +108,8 @@ internal static class DesignerUtils
     public const ContentAlignment AnyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
     /// <summary>
-    ///  Used when the user clicks and drags a toolbox item onto the documentdesigner - this is the small box that is painted beneath the mouse pointer.
+    ///  Used when the user clicks and drags a toolbox item onto the <see cref="DocumentDesigner"/>
+    ///  - this is the small box that is painted beneath the mouse pointer.
     /// </summary>
     public static Image BoxImage
     {
@@ -167,16 +170,16 @@ internal static class DesignerUtils
         s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
-        s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        s_grabHandleFillBrushPrimary = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrush);
-        s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        s_grabHandleFillBrush = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
         PInvokeCore.DeleteObject(s_grabHandlePenPrimary);
-        s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        s_grabHandlePenPrimary = PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
         PInvokeCore.DeleteObject(s_grabHandlePen);
-        s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        s_grabHandlePen = PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     }
 
     /// <summary>
@@ -196,7 +199,7 @@ internal static class DesignerUtils
         g.DrawLine(pen, 0, 1, 0, imageSize.Height - 2);
         g.DrawLine(pen, imageSize.Width - 1, 1, imageSize.Width - 1, imageSize.Height - 2);
 
-        // loop through drawing inner-rects until we get the proper thickness
+        // loop through drawing inner-rectangles until we get the proper thickness
         for (int i = 1; i < borderSize; i++)
         {
             g.DrawRectangle(pen, i, i, imageSize.Width - (2 + i), imageSize.Height - (2 + i));
@@ -264,7 +267,7 @@ internal static class DesignerUtils
         using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Draw our rect no-resize handle
-        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+        PInvokeCore.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
     }
 
     /// <summary>
@@ -287,8 +290,8 @@ internal static class DesignerUtils
             height: 2);
 
         // Lower rect - its fillbrush depends on the primary selection
-        PInvoke.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
+        PInvokeCore.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        PInvokeCore.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
     }
 
     /// <summary>
@@ -332,7 +335,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
+    ///  Retrieves the width and height of a selection border grab handle.
+    ///  Designers may need this to properly position their user interfaces.
     /// </summary>
     public static Size GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
@@ -370,12 +374,9 @@ internal static class DesignerUtils
             return prop?.GetValue(null);
         }
 
-        if (provider.TryGetService(out IDesignerOptionService? optionService))
-        {
-            return optionService.GetOptionValue("WindowsFormsDesigner\\General", name);
-        }
-
-        return null;
+        return provider.TryGetService(out IDesignerOptionService? optionService)
+            ? optionService.GetOptionValue("WindowsFormsDesigner\\General", name)
+            : null;
     }
 
     /// <summary>
@@ -399,7 +400,7 @@ internal static class DesignerUtils
 
         using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
-        // Perform our bitblit operation to push the image into the dest bitmap
+        // Perform our BitBlt operation to push the image into the dest bitmap
         PInvokeCore.BitBlt(
             destDC,
             x: 0,
@@ -413,7 +414,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Uses WM_PRINT to get a snapshot of the control.  This method will return true if the control properly responded to the wm_print message.
+    ///  Uses WM_PRINT to get a snapshot of the control. This method will return true
+    ///  if the control properly responded to the wm_print message.
     /// </summary>
     public static bool GenerateSnapShotWithWM_PRINT(Control control, out Bitmap image)
     {
@@ -430,7 +432,7 @@ internal static class DesignerUtils
         }
 
         // To validate that the control responded to the wm_print message, we pre-populate the bitmap with a
-        //  colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel
+        //  colored center pixel. We assume that the control _did not_ respond to wm_print if these center pixel
         //  is still this value.
 
         Color testColor = Color.FromArgb(255, 252, 186, 238);
@@ -438,25 +440,21 @@ internal static class DesignerUtils
         using (Graphics g = Graphics.FromImage(image))
         {
             IntPtr hDc = g.GetHdc();
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 control,
-                PInvoke.WM_PRINT,
+                PInvokeCore.WM_PRINT,
                 (WPARAM)hDc,
                 (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
             g.ReleaseHdc(hDc);
         }
 
         // Now check to see if our center pixel was cleared, if not then our WM_PRINT failed
-        if (image.GetPixel(image.Width / 2, image.Height / 2).Equals(testColor))
-        {
-            return false;
-        }
-
-        return true;
+        return !image.GetPixel(image.Width / 2, image.Height / 2).Equals(testColor);
     }
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize) =>
         type switch
@@ -470,8 +468,9 @@ internal static class DesignerUtils
         };
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
-    ///  Offset - how many pixels between the border glyph and the control
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
+    ///  Offset - how many pixels between the border glyph and the control.
     /// </summary>
     private static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int bordersize, int offset)
     {
@@ -506,7 +505,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
     {
@@ -722,17 +722,8 @@ internal static class DesignerUtils
     ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
     ///  since SplitContainer sites its two SplitterPanels inside a nested container.
     /// </summary>
-    public static IContainer? CheckForNestedContainer(IContainer? container)
-    {
-        if (container is NestedContainer nestedContainer)
-        {
-            return nestedContainer.Owner.Site?.Container;
-        }
-        else
-        {
-            return container;
-        }
-    }
+    public static IContainer? CheckForNestedContainer(IContainer? container) =>
+        container is NestedContainer nestedContainer ? (nestedContainer.Owner.Site?.Container) : container;
 
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
@@ -828,7 +819,7 @@ internal static class DesignerUtils
     private static int ScaleLogicalToDeviceUnitsX(int unit) => ScaleHelper.ScaleToInitialSystemDpi(unit);
 
     private static uint TreeView_GetExtendedStyle(HWND handle)
-        => (uint)PInvoke.SendMessage(handle, PInvoke.TVM_GETEXTENDEDSTYLE);
+        => (uint)PInvokeCore.SendMessage(handle, PInvoke.TVM_GETEXTENDEDSTYLE);
 
     /// <summary>
     ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -844,7 +835,7 @@ internal static class DesignerUtils
         PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
         uint exstyle = TreeView_GetExtendedStyle(hwnd);
         exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
-        PInvoke.SendMessage(treeView, PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);
+        PInvokeCore.SendMessage(treeView, PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);
     }
 
     /// <summary>
@@ -857,7 +848,7 @@ internal static class DesignerUtils
 
         HWND hwnd = (HWND)listView.Handle;
         PInvoke.SetWindowTheme(hwnd, "Explorer", null);
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             listView,
             PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
             (WPARAM)PInvoke.LVS_EX_DOUBLEBUFFER,

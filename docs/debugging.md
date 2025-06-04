@@ -32,10 +32,12 @@ Add references to the binary(-ies) to your project ported to .NET. For example, 
 
 ```xml
 <ItemGroup>
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\System.Windows.Forms.dll" />
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms.Primitives\Debug\net7.0\System.Windows.Forms.Primitives.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net9.0\System.Drawing.Common.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net9.0\System.Private.Windows.Core.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net9.0\System.Windows.Forms.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms.Primitives\Debug\net9.0\System.Windows.Forms.Primitives.dll" />
     <!-- Optionally you may need designer -->
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms.Design\Debug\net7.0\System.Windows.Forms.Design.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms.Design\Debug\net9.0\System.Windows.Forms.Design.dll" />
 </ItemGroup>
 ```
 

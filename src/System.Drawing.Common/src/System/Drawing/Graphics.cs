@@ -11,6 +11,8 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
+using Drawing2DCoordinateSpace = System.Drawing.Drawing2D.CoordinateSpace;
+
 namespace System.Drawing;
 
 /// <summary>
@@ -25,7 +27,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     private GraphicsContext? _previousContext;
 
-    private static readonly object s_syncObject = new();
+    private static readonly Lock s_syncObject = new();
 
     // Object reference used for printing; it could point to a PrintPreviewGraphics to obtain the VisibleClipBounds, or
     // a DeviceContext holding a printer DC.
@@ -46,8 +48,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public delegate bool DrawImageAbort(IntPtr callbackdata);
 
     /// <summary>
-    /// Callback for EnumerateMetafile methods.
-    /// This method can then call Metafile.PlayRecord to play the record that was just enumerated.
+    ///  Callback for EnumerateMetafile methods.
+    ///  This method can then call Metafile.PlayRecord to play the record that was just enumerated.
     /// </summary>
     /// <param name="recordType">if >= MinRecordType, it's an EMF+ record</param>
     /// <param name="flags">always 0 for EMF records</param>
@@ -79,17 +81,14 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdc(IntPtr hdc)
     {
-        if (hdc == IntPtr.Zero)
-            throw new ArgumentNullException(nameof(hdc));
-
-        return FromHdcInternal(hdc);
+        return hdc == 0 ? throw new ArgumentNullException(nameof(hdc)) : FromHdcInternal(hdc);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdcInternal(IntPtr hdc)
     {
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvoke.GdipCreateFromHDC((HDC)hdc, &nativeGraphics));
+        Gdip.CheckStatus(PInvokeGdiPlus.GdipCreateFromHDC((HDC)hdc, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
@@ -100,7 +99,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public static Graphics FromHdc(IntPtr hdc, IntPtr hdevice)
     {
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvoke.GdipCreateFromHDC2((HDC)hdc, (HANDLE)hdevice, &nativeGraphics));
+        Gdip.CheckStatus(PInvokeGdiPlus.GdipCreateFromHDC2((HDC)hdc, (HANDLE)hdevice, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
@@ -114,7 +113,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public static Graphics FromHwndInternal(IntPtr hwnd)
     {
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvokeCore.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
+
+        // This is one of the few places we need to manually ensure GDI+ is initialized. Other calls to PInvoke will do
+        // this automatically, PInvokeCore cannot and as such needs to be manually initialized if we've never called
+        // another PInvoke method.
+        GdiPlusInitialization.EnsureInitialized();
+        Gdip.CheckStatus(PInvokeGdiPlus.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
 
@@ -129,7 +133,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             throw new ArgumentException(SR.GdiplusCannotCreateGraphicsFromIndexedPixelFormat, nameof(image));
 
         GpGraphics* nativeGraphics;
-        Gdip.CheckStatus(PInvoke.GdipGetImageGraphicsContext(image.Pointer(), &nativeGraphics));
+        Gdip.CheckStatus(PInvokeGdiPlus.GdipGetImageGraphicsContext(image.Pointer(), &nativeGraphics));
         GC.KeepAlive(image);
 
         return new Graphics(nativeGraphics) { _backingImage = image };
@@ -138,7 +142,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void ReleaseHdcInternal(IntPtr hdc)
     {
-        CheckStatus(!Gdip.Initialized ? Status.Ok : PInvoke.GdipReleaseDC(NativeGraphics, (HDC)hdc));
+        CheckStatus(!Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipReleaseDC(NativeGraphics, (HDC)hdc));
         _nativeHdc = HDC.Null;
     }
 
@@ -177,7 +181,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         if (NativeGraphics is not null)
         {
-            Status status = !Gdip.Initialized ? Status.Ok : PInvokeCore.GdipDeleteGraphics(NativeGraphics);
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDeleteGraphics(NativeGraphics);
             NativeGraphics = null;
             Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
@@ -190,14 +194,14 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     internal GpGraphics* NativeGraphics { get; private set; }
 
-    GpGraphics* IPointer<GpGraphics>.Pointer => NativeGraphics;
+    nint IPointer<GpGraphics>.Pointer => (nint)NativeGraphics;
 
     public Region Clip
     {
         get
         {
             Region region = new();
-            CheckStatus(PInvoke.GdipGetClip(NativeGraphics, region.NativeRegion));
+            CheckStatus(PInvokeGdiPlus.GdipGetClip(NativeGraphics, region.NativeRegion));
             return region;
         }
         set => SetClip(value, Drawing2D.CombineMode.Replace);
@@ -208,20 +212,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             RectF rect;
-            CheckStatus(PInvoke.GdipGetClipBounds(NativeGraphics, &rect));
+            CheckStatus(PInvokeGdiPlus.GdipGetClipBounds(NativeGraphics, &rect));
             return rect;
         }
     }
 
     /// <summary>
-    /// Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
+    ///  Gets or sets the <see cref='Drawing2D.CompositingMode'/> associated with this <see cref='Graphics'/>.
     /// </summary>
     public Drawing2D.CompositingMode CompositingMode
     {
         get
         {
             GdiPlus.CompositingMode mode;
-            CheckStatus(PInvoke.GdipGetCompositingMode(NativeGraphics, &mode));
+            CheckStatus(PInvokeGdiPlus.GdipGetCompositingMode(NativeGraphics, &mode));
             return (Drawing2D.CompositingMode)mode;
         }
         set
@@ -229,7 +233,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < Drawing2D.CompositingMode.SourceOver or > Drawing2D.CompositingMode.SourceCopy)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.CompositingMode));
 
-            CheckStatus(PInvoke.GdipSetCompositingMode(NativeGraphics, (GdiPlus.CompositingMode)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetCompositingMode(NativeGraphics, (GdiPlus.CompositingMode)value));
         }
     }
 
@@ -238,7 +242,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             GdiPlus.CompositingQuality quality;
-            CheckStatus(PInvoke.GdipGetCompositingQuality(NativeGraphics, &quality));
+            CheckStatus(PInvokeGdiPlus.GdipGetCompositingQuality(NativeGraphics, &quality));
             return (Drawing2D.CompositingQuality)quality;
         }
         set
@@ -246,7 +250,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < Drawing2D.CompositingQuality.Invalid or > Drawing2D.CompositingQuality.AssumeLinear)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.CompositingQuality));
 
-            CheckStatus(PInvoke.GdipSetCompositingQuality(NativeGraphics, (GdiPlus.CompositingQuality)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetCompositingQuality(NativeGraphics, (GdiPlus.CompositingQuality)value));
         }
     }
 
@@ -255,7 +259,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             float dpi;
-            CheckStatus(PInvoke.GdipGetDpiX(NativeGraphics, &dpi));
+            CheckStatus(PInvokeGdiPlus.GdipGetDpiX(NativeGraphics, &dpi));
             return dpi;
         }
     }
@@ -265,20 +269,20 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             float dpi;
-            CheckStatus(PInvoke.GdipGetDpiY(NativeGraphics, &dpi));
+            CheckStatus(PInvokeGdiPlus.GdipGetDpiY(NativeGraphics, &dpi));
             return dpi;
         }
     }
 
     /// <summary>
-    /// Gets or sets the interpolation mode associated with this Graphics.
+    ///  Gets or sets the interpolation mode associated with this Graphics.
     /// </summary>
     public Drawing2D.InterpolationMode InterpolationMode
     {
         get
         {
             GdiPlus.InterpolationMode mode;
-            CheckStatus(PInvoke.GdipGetInterpolationMode(NativeGraphics, &mode));
+            CheckStatus(PInvokeGdiPlus.GdipGetInterpolationMode(NativeGraphics, &mode));
             return (Drawing2D.InterpolationMode)mode;
         }
         set
@@ -286,7 +290,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < Drawing2D.InterpolationMode.Invalid or > Drawing2D.InterpolationMode.HighQualityBicubic)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.InterpolationMode));
 
-            CheckStatus(PInvoke.GdipSetInterpolationMode(NativeGraphics, (GdiPlus.InterpolationMode)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetInterpolationMode(NativeGraphics, (GdiPlus.InterpolationMode)value));
         }
     }
 
@@ -295,7 +299,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             BOOL isEmpty;
-            CheckStatus(PInvoke.GdipIsClipEmpty(NativeGraphics, &isEmpty));
+            CheckStatus(PInvokeGdiPlus.GdipIsClipEmpty(NativeGraphics, &isEmpty));
             return isEmpty;
         }
     }
@@ -305,7 +309,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             BOOL isEmpty;
-            CheckStatus(PInvoke.GdipIsVisibleClipEmpty(NativeGraphics, &isEmpty));
+            CheckStatus(PInvokeGdiPlus.GdipIsVisibleClipEmpty(NativeGraphics, &isEmpty));
             return isEmpty;
         }
     }
@@ -315,10 +319,10 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             float scale;
-            CheckStatus(PInvoke.GdipGetPageScale(NativeGraphics, &scale));
+            CheckStatus(PInvokeGdiPlus.GdipGetPageScale(NativeGraphics, &scale));
             return scale;
         }
-        set => CheckStatus(PInvoke.GdipSetPageScale(NativeGraphics, value));
+        set => CheckStatus(PInvokeGdiPlus.GdipSetPageScale(NativeGraphics, value));
     }
 
     public GraphicsUnit PageUnit
@@ -326,7 +330,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             Unit unit;
-            CheckStatus(PInvoke.GdipGetPageUnit(NativeGraphics, &unit));
+            CheckStatus(PInvokeGdiPlus.GdipGetPageUnit(NativeGraphics, &unit));
             return (GraphicsUnit)unit;
         }
         set
@@ -334,7 +338,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < GraphicsUnit.World or > GraphicsUnit.Millimeter)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(GraphicsUnit));
 
-            CheckStatus(PInvoke.GdipSetPageUnit(NativeGraphics, (Unit)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetPageUnit(NativeGraphics, (Unit)value));
         }
     }
 
@@ -343,7 +347,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             GdiPlus.PixelOffsetMode mode;
-            CheckStatus(PInvoke.GdipGetPixelOffsetMode(NativeGraphics, &mode));
+            CheckStatus(PInvokeGdiPlus.GdipGetPixelOffsetMode(NativeGraphics, &mode));
             return (PixelOffsetMode)mode;
         }
         set
@@ -351,7 +355,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < PixelOffsetMode.Invalid or > PixelOffsetMode.Half)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PixelOffsetMode));
 
-            CheckStatus(PInvoke.GdipSetPixelOffsetMode(NativeGraphics, (GdiPlus.PixelOffsetMode)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetPixelOffsetMode(NativeGraphics, (GdiPlus.PixelOffsetMode)value));
         }
     }
 
@@ -360,10 +364,10 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             int x, y;
-            CheckStatus(PInvoke.GdipGetRenderingOrigin(NativeGraphics, &x, &y));
+            CheckStatus(PInvokeGdiPlus.GdipGetRenderingOrigin(NativeGraphics, &x, &y));
             return new Point(x, y);
         }
-        set => CheckStatus(PInvoke.GdipSetRenderingOrigin(NativeGraphics, value.X, value.Y));
+        set => CheckStatus(PInvokeGdiPlus.GdipSetRenderingOrigin(NativeGraphics, value.X, value.Y));
     }
 
     public Drawing2D.SmoothingMode SmoothingMode
@@ -371,7 +375,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             GdiPlus.SmoothingMode mode;
-            CheckStatus(PInvoke.GdipGetSmoothingMode(NativeGraphics, &mode));
+            CheckStatus(PInvokeGdiPlus.GdipGetSmoothingMode(NativeGraphics, &mode));
             return (Drawing2D.SmoothingMode)mode;
         }
         set
@@ -379,7 +383,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < Drawing2D.SmoothingMode.Invalid or > Drawing2D.SmoothingMode.AntiAlias)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.SmoothingMode));
 
-            CheckStatus(PInvoke.GdipSetSmoothingMode(NativeGraphics, (GdiPlus.SmoothingMode)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetSmoothingMode(NativeGraphics, (GdiPlus.SmoothingMode)value));
         }
     }
 
@@ -388,10 +392,10 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             uint textContrast;
-            CheckStatus(PInvoke.GdipGetTextContrast(NativeGraphics, &textContrast));
+            CheckStatus(PInvokeGdiPlus.GdipGetTextContrast(NativeGraphics, &textContrast));
             return (int)textContrast;
         }
-        set => CheckStatus(PInvoke.GdipSetTextContrast(NativeGraphics, (uint)value));
+        set => CheckStatus(PInvokeGdiPlus.GdipSetTextContrast(NativeGraphics, (uint)value));
     }
 
     /// <summary>
@@ -402,7 +406,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             GdiPlus.TextRenderingHint hint;
-            CheckStatus(PInvoke.GdipGetTextRenderingHint(NativeGraphics, &hint));
+            CheckStatus(PInvokeGdiPlus.GdipGetTextRenderingHint(NativeGraphics, &hint));
             return (TextRenderingHint)hint;
         }
         set
@@ -410,7 +414,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             if (value is < TextRenderingHint.SystemDefault or > TextRenderingHint.ClearTypeGridFit)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextRenderingHint));
 
-            CheckStatus(PInvoke.GdipSetTextRenderingHint(NativeGraphics, (GdiPlus.TextRenderingHint)value));
+            CheckStatus(PInvokeGdiPlus.GdipSetTextRenderingHint(NativeGraphics, (GdiPlus.TextRenderingHint)value));
         }
     }
 
@@ -422,12 +426,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             Matrix matrix = new();
-            CheckStatus(PInvoke.GdipGetWorldTransform(NativeGraphics, matrix.NativeMatrix));
+            CheckStatus(PInvokeGdiPlus.GdipGetWorldTransform(NativeGraphics, matrix.NativeMatrix));
             return matrix;
         }
         set
         {
-            CheckStatus(PInvoke.GdipSetWorldTransform(NativeGraphics, value.NativeMatrix));
+            CheckStatus(PInvokeGdiPlus.GdipSetWorldTransform(NativeGraphics, value.NativeMatrix));
             GC.KeepAlive(value);
         }
     }
@@ -445,21 +449,21 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         get
         {
             GdiPlus.Matrix* nativeMatrix;
-            CheckStatus(PInvoke.GdipCreateMatrix(&nativeMatrix));
+            CheckStatus(PInvokeGdiPlus.GdipCreateMatrix(&nativeMatrix));
 
             try
             {
-                CheckStatus(PInvoke.GdipGetWorldTransform(NativeGraphics, nativeMatrix));
+                CheckStatus(PInvokeGdiPlus.GdipGetWorldTransform(NativeGraphics, nativeMatrix));
 
                 Matrix3x2 matrix = default;
-                CheckStatus(PInvoke.GdipGetMatrixElements(nativeMatrix, (float*)&matrix));
+                CheckStatus(PInvokeGdiPlus.GdipGetMatrixElements(nativeMatrix, (float*)&matrix));
                 return matrix;
             }
             finally
             {
                 if (nativeMatrix is not null)
                 {
-                    PInvoke.GdipDeleteMatrix(nativeMatrix);
+                    PInvokeGdiPlus.GdipDeleteMatrix(nativeMatrix);
                 }
             }
         }
@@ -469,13 +473,13 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
             try
             {
-                CheckStatus(PInvoke.GdipSetWorldTransform(NativeGraphics, nativeMatrix));
+                CheckStatus(PInvokeGdiPlus.GdipSetWorldTransform(NativeGraphics, nativeMatrix));
             }
             finally
             {
                 if (nativeMatrix is not null)
                 {
-                    PInvoke.GdipDeleteMatrix(nativeMatrix);
+                    PInvokeGdiPlus.GdipDeleteMatrix(nativeMatrix);
                 }
             }
         }
@@ -486,7 +490,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public IntPtr GetHdc()
     {
         HDC hdc;
-        CheckStatus(PInvoke.GdipGetDC(NativeGraphics, &hdc));
+        CheckStatus(PInvokeGdiPlus.GdipGetDC(NativeGraphics, &hdc));
 
         // Need to cache the hdc to be able to release with a call to IDeviceContext.ReleaseHdc().
         _nativeHdc = hdc;
@@ -507,7 +511,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Forces execution of all operations currently on the stack.
     /// </summary>
     public void Flush(Drawing2D.FlushIntention intention) =>
-        CheckStatus(PInvoke.GdipFlush(NativeGraphics, (GdiPlus.FlushIntention)intention));
+        CheckStatus(PInvokeGdiPlus.GdipFlush(NativeGraphics, (GdiPlus.FlushIntention)intention));
 
     public void SetClip(Graphics g) => SetClip(g, Drawing2D.CombineMode.Replace);
 
@@ -515,7 +519,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(g);
 
-        CheckStatus(PInvoke.GdipSetClipGraphics(NativeGraphics, g.NativeGraphics, (GdiPlus.CombineMode)combineMode));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipGraphics(NativeGraphics, g.NativeGraphics, (GdiPlus.CombineMode)combineMode));
         GC.KeepAlive(g);
     }
 
@@ -526,28 +530,28 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void SetClip(RectangleF rect) => SetClip(rect, Drawing2D.CombineMode.Replace);
 
     public void SetClip(RectangleF rect, Drawing2D.CombineMode combineMode) =>
-        CheckStatus(PInvoke.GdipSetClipRect(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, (GdiPlus.CombineMode)combineMode));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRect(NativeGraphics, rect.X, rect.Y, rect.Width, rect.Height, (GdiPlus.CombineMode)combineMode));
 
     public void SetClip(GraphicsPath path) => SetClip(path, Drawing2D.CombineMode.Replace);
 
     public void SetClip(GraphicsPath path, Drawing2D.CombineMode combineMode)
     {
         ArgumentNullException.ThrowIfNull(path);
-        CheckStatus(PInvoke.GdipSetClipPath(NativeGraphics, path._nativePath, (GdiPlus.CombineMode)combineMode));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipPath(NativeGraphics, path._nativePath, (GdiPlus.CombineMode)combineMode));
         GC.KeepAlive(path);
     }
 
     public void SetClip(Region region, Drawing2D.CombineMode combineMode)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, (GdiPlus.CombineMode)combineMode));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRegion(NativeGraphics, region.NativeRegion, (GdiPlus.CombineMode)combineMode));
         GC.KeepAlive(region);
     }
 
     public void IntersectClip(Rectangle rect) => IntersectClip((RectangleF)rect);
 
     public void IntersectClip(RectangleF rect) =>
-        CheckStatus(PInvoke.GdipSetClipRect(
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRect(
             NativeGraphics,
             rect.X, rect.Y, rect.Width, rect.Height,
             GdiPlus.CombineMode.CombineModeIntersect));
@@ -555,12 +559,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void IntersectClip(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeIntersect));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeIntersect));
         GC.KeepAlive(region);
     }
 
     public void ExcludeClip(Rectangle rect) =>
-        CheckStatus(PInvoke.GdipSetClipRect(
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRect(
             NativeGraphics,
             rect.X, rect.Y, rect.Width, rect.Height,
             GdiPlus.CombineMode.CombineModeExclude));
@@ -568,24 +572,24 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void ExcludeClip(Region region)
     {
         ArgumentNullException.ThrowIfNull(region);
-        CheckStatus(PInvoke.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeExclude));
+        CheckStatus(PInvokeGdiPlus.GdipSetClipRegion(NativeGraphics, region.NativeRegion, GdiPlus.CombineMode.CombineModeExclude));
         GC.KeepAlive(region);
     }
 
-    public void ResetClip() => CheckStatus(PInvoke.GdipResetClip(NativeGraphics));
+    public void ResetClip() => CheckStatus(PInvokeGdiPlus.GdipResetClip(NativeGraphics));
 
-    public void TranslateClip(float dx, float dy) => CheckStatus(PInvoke.GdipTranslateClip(NativeGraphics, dx, dy));
+    public void TranslateClip(float dx, float dy) => CheckStatus(PInvokeGdiPlus.GdipTranslateClip(NativeGraphics, dx, dy));
 
-    public void TranslateClip(int dx, int dy) => CheckStatus(PInvoke.GdipTranslateClip(NativeGraphics, dx, dy));
+    public void TranslateClip(int dx, int dy) => CheckStatus(PInvokeGdiPlus.GdipTranslateClip(NativeGraphics, dx, dy));
 
-    public bool IsVisible(int x, int y) => IsVisible(new Point(x, y));
+    public bool IsVisible(int x, int y) => IsVisible((float)x, y);
 
     public bool IsVisible(Point point) => IsVisible(point.X, point.Y);
 
     public bool IsVisible(float x, float y)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisiblePoint(NativeGraphics, x, y, &isVisible));
+        CheckStatus(PInvokeGdiPlus.GdipIsVisiblePoint(NativeGraphics, x, y, &isVisible));
         return isVisible;
     }
 
@@ -598,7 +602,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public bool IsVisible(float x, float y, float width, float height)
     {
         BOOL isVisible;
-        CheckStatus(PInvoke.GdipIsVisibleRect(NativeGraphics, x, y, width, height, &isVisible));
+        CheckStatus(PInvokeGdiPlus.GdipIsVisibleRect(NativeGraphics, x, y, width, height, &isVisible));
         return isVisible;
     }
 
@@ -607,7 +611,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <summary>
     ///  Resets the world transform to identity.
     /// </summary>
-    public void ResetTransform() => CheckStatus(PInvoke.GdipResetWorldTransform(NativeGraphics));
+    public void ResetTransform() => CheckStatus(PInvokeGdiPlus.GdipResetWorldTransform(NativeGraphics));
 
     /// <summary>
     ///  Multiplies the <see cref='Matrix'/> that represents the world transform and <paramref name="matrix"/>.
@@ -620,24 +624,24 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void MultiplyTransform(Matrix matrix, MatrixOrder order)
     {
         ArgumentNullException.ThrowIfNull(matrix);
-        CheckStatus(PInvoke.GdipMultiplyWorldTransform(NativeGraphics, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order));
+        CheckStatus(PInvokeGdiPlus.GdipMultiplyWorldTransform(NativeGraphics, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order));
         GC.KeepAlive(matrix);
     }
 
     public void TranslateTransform(float dx, float dy) => TranslateTransform(dx, dy, MatrixOrder.Prepend);
 
     public void TranslateTransform(float dx, float dy, MatrixOrder order) =>
-        CheckStatus(PInvoke.GdipTranslateWorldTransform(NativeGraphics, dx, dy, (GdiPlus.MatrixOrder)order));
+        CheckStatus(PInvokeGdiPlus.GdipTranslateWorldTransform(NativeGraphics, dx, dy, (GdiPlus.MatrixOrder)order));
 
     public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
 
     public void ScaleTransform(float sx, float sy, MatrixOrder order) =>
-        CheckStatus(PInvoke.GdipScaleWorldTransform(NativeGraphics, sx, sy, (GdiPlus.MatrixOrder)order));
+        CheckStatus(PInvokeGdiPlus.GdipScaleWorldTransform(NativeGraphics, sx, sy, (GdiPlus.MatrixOrder)order));
 
     public void RotateTransform(float angle) => RotateTransform(angle, MatrixOrder.Prepend);
 
     public void RotateTransform(float angle, MatrixOrder order) =>
-        CheckStatus(PInvoke.GdipRotateWorldTransform(NativeGraphics, angle, (GdiPlus.MatrixOrder)order));
+        CheckStatus(PInvokeGdiPlus.GdipRotateWorldTransform(NativeGraphics, angle, (GdiPlus.MatrixOrder)order));
 
     /// <summary>
     ///  Draws an arc from the specified ellipse.
@@ -646,7 +650,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(pen);
 
-        CheckErrorStatus(PInvoke.GdipDrawArc(
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawArc(
             NativeGraphics,
             pen.NativePen,
             x, y, width, height,
@@ -663,7 +667,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         DrawArc(pen, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
     /// <summary>
-    /// Draws an arc from the specified ellipse.
+    ///  Draws an arc from the specified ellipse.
     /// </summary>
     public void DrawArc(Pen pen, int x, int y, int width, int height, int startAngle, int sweepAngle)
         => DrawArc(pen, (float)x, y, width, height, startAngle, sweepAngle);
@@ -681,7 +685,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(pen);
 
-        CheckErrorStatus(PInvoke.GdipDrawBezier(
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawBezier(
             NativeGraphics,
             pen.NativePen,
             x1, y1, x2, y2, x3, y3, x4, y4));
@@ -722,7 +726,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Draws the outline of the specified rounded rectangle.
     /// </summary>
     /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
+    /// <param name="rect">The bounds of the rounded rectangle.</param>
+    /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
     public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF radius)
     {
         using GraphicsPath path = new();
@@ -737,7 +742,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawRectangle(Pen pen, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawRectangle(NativeGraphics, pen.NativePen, x, y, width, height));
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawRectangle(NativeGraphics, pen.NativePen, x, y, width, height));
         GC.KeepAlive(pen);
     }
 
@@ -762,7 +767,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (RectangleF* r = rects)
         {
-            CheckErrorStatus(PInvoke.GdipDrawRectangles(NativeGraphics, pen.NativePen, (RectF*)r, rects.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawRectangles(NativeGraphics, pen.NativePen, (RectF*)r, rects.Length));
         }
 
         GC.KeepAlive(pen);
@@ -787,7 +792,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Rectangle* r = rects)
         {
-            CheckErrorStatus(PInvoke.GdipDrawRectanglesI(NativeGraphics, pen.NativePen, (Rect*)r, rects.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawRectanglesI(NativeGraphics, pen.NativePen, (Rect*)r, rects.Length));
         }
 
         GC.KeepAlive(pen);
@@ -804,7 +809,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawEllipse(Pen pen, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawEllipse(NativeGraphics, pen.NativePen, x, y, width, height));
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawEllipse(NativeGraphics, pen.NativePen, x, y, width, height));
         GC.KeepAlive(pen);
     }
 
@@ -830,7 +835,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawPie(Pen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawPie(NativeGraphics, pen.NativePen, x, y, width, height, startAngle, sweepAngle));
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawPie(NativeGraphics, pen.NativePen, x, y, width, height, startAngle, sweepAngle));
         GC.KeepAlive(pen);
     }
 
@@ -861,7 +866,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawPolygon(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawPolygon(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -886,7 +891,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawPolygonI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawPolygonI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -900,7 +905,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ArgumentNullException.ThrowIfNull(pen);
         ArgumentNullException.ThrowIfNull(path);
 
-        CheckErrorStatus(PInvoke.GdipDrawPath(NativeGraphics, pen.NativePen, path._nativePath));
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawPath(NativeGraphics, pen.NativePen, path._nativePath));
 
         GC.KeepAlive(pen);
         GC.KeepAlive(path);
@@ -921,7 +926,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurve(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurve(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -943,7 +948,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurve2(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurve2(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.PointF*)p, points.Length,
@@ -979,7 +984,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurve3(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurve3(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.PointF*)p, points.Length,
@@ -1006,7 +1011,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurveI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurveI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -1028,7 +1033,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurve2I(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurve2I(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.Point*)p, points.Length,
@@ -1061,7 +1066,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawCurve3I(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawCurve3I(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.Point*)p, points.Length,
@@ -1089,7 +1094,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawClosedCurve(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawClosedCurve(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.PointF*)p, points.Length));
@@ -1120,7 +1125,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawClosedCurve2(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawClosedCurve2(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.PointF*)p, points.Length,
@@ -1145,7 +1150,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawClosedCurveI(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawClosedCurveI(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.Point*)p, points.Length));
@@ -1171,7 +1176,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawClosedCurve2I(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawClosedCurve2I(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.Point*)p, points.Length,
@@ -1184,10 +1189,10 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <summary>
     ///  Fills the entire drawing surface with the specified color.
     /// </summary>
-    public void Clear(Color color) => CheckStatus(PInvoke.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
+    public void Clear(Color color) => CheckStatus(PInvokeGdiPlus.GdipGraphicsClear(NativeGraphics, (uint)color.ToArgb()));
 
 #if NET9_0_OR_GREATER
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>/>
+    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
     public void FillRoundedRectangle(Brush brush, Rectangle rect, Size radius) =>
         FillRoundedRectangle(brush, (RectangleF)rect, radius);
 
@@ -1217,7 +1222,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(PInvoke.GdipFillRectangle(
+        CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangle(
             NativeGraphics,
             brush.NativeBrush,
             x, y, width, height));
@@ -1258,7 +1263,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (RectangleF* r = rects)
         {
-            CheckErrorStatus(PInvoke.GdipFillRectangles(NativeGraphics, brush.NativeBrush, (RectF*)r, rects.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangles(NativeGraphics, brush.NativeBrush, (RectF*)r, rects.Length));
         }
 
         GC.KeepAlive(brush);
@@ -1280,7 +1285,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Rectangle* r = rects)
         {
-            CheckErrorStatus(PInvoke.GdipFillRectanglesI(NativeGraphics, brush.NativeBrush, (Rect*)r, rects.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillRectanglesI(NativeGraphics, brush.NativeBrush, (Rect*)r, rects.Length));
         }
 
         GC.KeepAlive(brush);
@@ -1310,7 +1315,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillPolygon(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillPolygon(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.PointF*)p, points.Length,
@@ -1349,7 +1354,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillPolygonI(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillPolygonI(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.Point*)p, points.Length,
@@ -1371,7 +1376,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(PInvoke.GdipFillEllipse(
+        CheckErrorStatus(PInvokeGdiPlus.GdipFillEllipse(
             NativeGraphics,
             brush.NativeBrush,
             x, y, width, height));
@@ -1399,9 +1404,17 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     /// <param name="brush">A Brush that determines the characteristics of the fill.</param>
-    /// <param name="rect">A Rectangle structure that represents the bounding rectangle that defines the ellipse from which the pie section comes.</param>
-    /// <param name="startAngle">Angle in degrees measured clockwise from the x-axis to the first side of the pie section.</param>
-    /// <param name="sweepAngle">Angle in degrees measured clockwise from the <paramref name="startAngle"/> parameter to the second side of the pie section.</param>
+    /// <param name="rect">
+    ///  A Rectangle structure that represents the bounding rectangle that defines the ellipse from which
+    ///  the pie section comes.
+    /// </param>
+    /// <param name="startAngle">
+    ///  Angle in degrees measured clockwise from the x-axis to the first side of the pie section.
+    /// </param>
+    /// <param name="sweepAngle">
+    ///  Angle in degrees measured clockwise from the <paramref name="startAngle"/> parameter
+    ///  to the second side of the pie section.
+    /// </param>
     public void FillPie(Brush brush, RectangleF rect, float startAngle, float sweepAngle) =>
         FillPie(brush, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
@@ -1412,7 +1425,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(brush);
 
-        CheckErrorStatus(PInvoke.GdipFillPie(
+        CheckErrorStatus(PInvokeGdiPlus.GdipFillPie(
             NativeGraphics,
             brush.NativeBrush,
             x, y, width, height,
@@ -1444,7 +1457,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillClosedCurve(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillClosedCurve(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.PointF*)p, points.Length));
@@ -1485,7 +1498,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillClosedCurve2(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillClosedCurve2(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.PointF*)p, points.Length,
@@ -1512,7 +1525,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillClosedCurveI(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillClosedCurveI(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.Point*)p, points.Length));
@@ -1548,7 +1561,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipFillClosedCurve2I(
+            CheckErrorStatus(PInvokeGdiPlus.GdipFillClosedCurve2I(
                 NativeGraphics,
                 brush.NativeBrush,
                 (GdiPlus.Point*)p, points.Length,
@@ -1731,7 +1744,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (char* c = s)
         {
-            CheckErrorStatus(PInvoke.GdipDrawString(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawString(
                 NativeGraphics,
                 c, s.Length,
                 font.NativeFont,
@@ -1792,7 +1805,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (int* fitted = &charactersFitted)
         fixed (int* filled = &linesFilled)
         {
-            CheckStatus(PInvoke.GdipMeasureString(
+            CheckStatus(PInvokeGdiPlus.GdipMeasureString(
                 NativeGraphics,
                 c,
                 text.Length,
@@ -1829,8 +1842,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea) => MeasureString(text, font, layoutArea, null);
 #endif
 
-    /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
-    /// <param name="layoutArea"><see cref="SizeF"/> structure that specifies the maximum layout area for the text.</param>
+    /// <param name="stringFormat">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
+    /// <param name="layoutArea">
+    ///  <see cref="SizeF"/> structure that specifies the maximum layout area for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
     public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat) =>
         MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out _, out _);
@@ -1882,7 +1899,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         MeasureString(text, font, new SizeF(width, 999999));
 #endif
 
-    /// <param name="format"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+    /// <param name="format">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
     public SizeF MeasureString(string? text, Font font, int width, StringFormat? format) =>
         MeasureString(text, font, new SizeF(width, 999999), format);
@@ -1900,7 +1919,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="text">Text to measure.</param>
     /// <param name="font"><see cref="Font"/> that defines the text format.</param>
     /// <param name="layoutRect"><see cref="RectangleF"/> structure that specifies the layout rectangle for the text.</param>
-    /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+    /// <param name="stringFormat">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
     /// <returns>
     ///  This method returns an array of <see cref="Region"/> objects, each of which bounds a range of character
     ///  positions within the specified text.
@@ -1933,7 +1954,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ArgumentNullException.ThrowIfNull(font);
 
         int count;
-        CheckStatus(PInvoke.GdipGetStringFormatMeasurableCharacterRangeCount(stringFormat.Pointer(), &count));
+        CheckStatus(PInvokeGdiPlus.GdipGetStringFormatMeasurableCharacterRangeCount(stringFormat.Pointer(), &count));
 
         if (count == 0)
         {
@@ -1952,7 +1973,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (char* c = text)
         fixed (GpRegion** r = gpRegions)
         {
-            CheckStatus(PInvoke.GdipMeasureCharacterRanges(
+            CheckStatus(PInvokeGdiPlus.GdipMeasureCharacterRanges(
                 NativeGraphics,
                 c,
                 text.Length,
@@ -1977,7 +1998,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, float x, float y)
     {
         ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImage(NativeGraphics, image.Pointer(), x, y);
+        Status status = PInvokeGdiPlus.GdipDrawImage(NativeGraphics, image.Pointer(), x, y);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
@@ -1987,7 +2008,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(image);
-        Status status = PInvoke.GdipDrawImageRect(NativeGraphics, image.Pointer(), x, y, width, height);
+        Status status = PInvokeGdiPlus.GdipDrawImageRect(NativeGraphics, image.Pointer(), x, y, width, height);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
@@ -2042,7 +2063,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePoints(NativeGraphics, image.Pointer(), (GdiPlus.PointF*)p, count);
+            Status status = PInvokeGdiPlus.GdipDrawImagePoints(NativeGraphics, image.Pointer(), (GdiPlus.PointF*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -2059,7 +2080,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePointsI(NativeGraphics, image.Pointer(), (GdiPlus.Point*)p, count);
+            Status status = PInvokeGdiPlus.GdipDrawImagePointsI(NativeGraphics, image.Pointer(), (GdiPlus.Point*)p, count);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -2069,7 +2090,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        Status status = PInvoke.GdipDrawImagePointRect(
+        Status status = PInvokeGdiPlus.GdipDrawImagePointRect(
             NativeGraphics,
             image.Pointer(),
             x, y,
@@ -2087,7 +2108,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        Status status = PInvoke.GdipDrawImageRectRect(
+        Status status = PInvokeGdiPlus.GdipDrawImageRectRect(
             NativeGraphics,
             image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
@@ -2115,7 +2136,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePointsRect(
+            Status status = PInvokeGdiPlus.GdipDrawImagePointsRect(
                 NativeGraphics,
                 image.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
@@ -2160,7 +2181,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePointsRect(
+            Status status = PInvokeGdiPlus.GdipDrawImagePointsRect(
                 NativeGraphics,
                 image.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
@@ -2213,7 +2234,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = destPoints)
         {
-            Status status = PInvoke.GdipDrawImagePointsRectI(
+            Status status = PInvokeGdiPlus.GdipDrawImagePointsRectI(
                 NativeGraphics,
                 image.Pointer(),
                 (GdiPlus.Point*)p, destPoints.Length,
@@ -2275,7 +2296,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        Status status = PInvoke.GdipDrawImageRectRect(
+        Status status = PInvokeGdiPlus.GdipDrawImageRectRect(
             NativeGraphics,
             image.Pointer(),
             destRect.X, destRect.Y, destRect.Width, destRect.Height,
@@ -2353,7 +2374,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawLines(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawLines(NativeGraphics, pen.NativePen, (GdiPlus.PointF*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -2382,7 +2403,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -2400,7 +2421,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawLinesI(NativeGraphics, pen.NativePen, (GdiPlus.Point*)p, points.Length));
         }
 
         GC.KeepAlive(pen);
@@ -2561,23 +2582,23 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="destSpace">The destination coordinate space.</param>
     /// <param name="srcSpace">The source coordinate space.</param>
     /// <param name="pts">The points to transform.</param>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params PointF[] pts)
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<PointF> pts)
     {
         fixed (PointF* p = pts)
         {
-            CheckStatus(PInvoke.GdipTransformPoints(
+            CheckStatus(PInvokeGdiPlus.GdipTransformPoints(
                 NativeGraphics,
                 (GdiPlus.CoordinateSpace)destSpace,
                 (GdiPlus.CoordinateSpace)srcSpace,
@@ -2586,24 +2607,24 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         }
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
-    public void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params Point[] pts)
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
+    public void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
         TransformPoints(destSpace, srcSpace, pts.AsSpan());
     }
 
-    /// <inheritdoc cref="TransformPoints(Drawing2D.CoordinateSpace, Drawing2D.CoordinateSpace, PointF[])"/>
+    /// <inheritdoc cref="TransformPoints(Drawing2DCoordinateSpace, Drawing2DCoordinateSpace, PointF[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
     private
 #endif
-    void TransformPoints(Drawing2D.CoordinateSpace destSpace, Drawing2D.CoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
+    void TransformPoints(Drawing2DCoordinateSpace destSpace, Drawing2DCoordinateSpace srcSpace, params ReadOnlySpan<Point> pts)
     {
         fixed (Point* p = pts)
         {
-            CheckStatus(PInvoke.GdipTransformPointsI(
+            CheckStatus(PInvokeGdiPlus.GdipTransformPointsI(
                 NativeGraphics,
                 (GdiPlus.CoordinateSpace)destSpace,
                 (GdiPlus.CoordinateSpace)srcSpace,
@@ -2633,14 +2654,14 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     internal Region? GetRegionIfNotInfinite()
     {
         GpRegion* regionHandle;
-        CheckStatus(PInvoke.GdipCreateRegion(&regionHandle));
+        CheckStatus(PInvokeGdiPlus.GdipCreateRegion(&regionHandle));
 
         try
         {
             BOOL isInfinite;
-            PInvoke.GdipGetClip(NativeGraphics, regionHandle);
+            PInvokeGdiPlus.GdipGetClip(NativeGraphics, regionHandle);
 
-            CheckStatus(PInvokeCore.GdipIsInfiniteRegion(
+            CheckStatus(PInvokeGdiPlus.GdipIsInfiniteRegion(
                 regionHandle,
                 NativeGraphics,
                 &isInfinite));
@@ -2659,7 +2680,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         {
             if (regionHandle is not null)
             {
-                PInvoke.GdipDeleteRegion(regionHandle);
+                PInvokeGdiPlus.GdipDeleteRegion(regionHandle);
             }
         }
     }
@@ -2750,7 +2771,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public Color GetNearestColor(Color color)
     {
         uint nearest = (uint)color.ToArgb();
-        CheckStatus(PInvoke.GdipGetNearestColor(NativeGraphics, &nearest));
+        CheckStatus(PInvokeGdiPlus.GdipGetNearestColor(NativeGraphics, &nearest));
         return Color.FromArgb((int)nearest);
     }
 
@@ -2760,7 +2781,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
     {
         ArgumentNullException.ThrowIfNull(pen);
-        CheckErrorStatus(PInvoke.GdipDrawLine(NativeGraphics, pen.NativePen, x1, y1, x2, y2));
+        CheckErrorStatus(PInvokeGdiPlus.GdipDrawLine(NativeGraphics, pen.NativePen, x1, y1, x2, y2));
         GC.KeepAlive(pen);
     }
 
@@ -2780,7 +2801,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (PointF* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawBeziers(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawBeziers(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.PointF*)p, points.Length));
@@ -2811,7 +2832,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
         fixed (Point* p = points)
         {
-            CheckErrorStatus(PInvoke.GdipDrawBeziersI(
+            CheckErrorStatus(PInvokeGdiPlus.GdipDrawBeziersI(
                 NativeGraphics,
                 pen.NativePen,
                 (GdiPlus.Point*)p,
@@ -2829,7 +2850,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ArgumentNullException.ThrowIfNull(brush);
         ArgumentNullException.ThrowIfNull(path);
 
-        CheckErrorStatus(PInvoke.GdipFillPath(
+        CheckErrorStatus(PInvokeGdiPlus.GdipFillPath(
             NativeGraphics,
             brush.NativeBrush,
             path._nativePath));
@@ -2846,7 +2867,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ArgumentNullException.ThrowIfNull(brush);
         ArgumentNullException.ThrowIfNull(region);
 
-        CheckErrorStatus(PInvoke.GdipFillRegion(
+        CheckErrorStatus(PInvokeGdiPlus.GdipFillRegion(
             NativeGraphics,
             brush.NativeBrush,
             region.NativeRegion));
@@ -2923,7 +2944,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ImageAttributes? imageAttr)
     {
         using EnumerateMetafileDataAdapter adapter = new(callback);
-        PInvoke.GdipEnumerateMetafileDestPoint(
+        PInvokeGdiPlus.GdipEnumerateMetafileDestPoint(
             NativeGraphics,
             metafile.Pointer(),
             (GdiPlus.PointF*)&destPoint,
@@ -2952,7 +2973,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ImageAttributes? imageAttr)
     {
         using EnumerateMetafileDataAdapter adapter = new(callback);
-        PInvoke.GdipEnumerateMetafileDestRect(
+        PInvokeGdiPlus.GdipEnumerateMetafileDestRect(
             NativeGraphics,
             metafile.Pointer(),
             (RectF*)&destRect,
@@ -2987,7 +3008,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (PointF* p = destPoints)
         {
             using EnumerateMetafileDataAdapter adapter = new(callback);
-            PInvoke.GdipEnumerateMetafileDestPoints(
+            PInvokeGdiPlus.GdipEnumerateMetafileDestPoints(
                 NativeGraphics,
                 metafile.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
@@ -3016,7 +3037,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (Point* p = destPoints)
         {
             using EnumerateMetafileDataAdapter adapter = new(callback);
-            PInvoke.GdipEnumerateMetafileDestPointsI(
+            PInvokeGdiPlus.GdipEnumerateMetafileDestPointsI(
                 NativeGraphics,
                 metafile.Pointer(),
                 (GdiPlus.Point*)p, destPoints.Length,
@@ -3040,7 +3061,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ImageAttributes? imageAttr)
     {
         using EnumerateMetafileDataAdapter adapter = new(callback);
-        PInvoke.GdipEnumerateMetafileSrcRectDestPoint(
+        PInvokeGdiPlus.GdipEnumerateMetafileSrcRectDestPoint(
             NativeGraphics,
             metafile.Pointer(),
             (GdiPlus.PointF*)&destPoint,
@@ -3081,7 +3102,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ImageAttributes? imageAttr)
     {
         using EnumerateMetafileDataAdapter adapter = new(callback);
-        PInvoke.GdipEnumerateMetafileSrcRectDestRect(
+        PInvokeGdiPlus.GdipEnumerateMetafileSrcRectDestRect(
             NativeGraphics,
             metafile.Pointer(),
             (RectF*)&destRect,
@@ -3122,7 +3143,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (PointF* p = destPoints)
         {
             using EnumerateMetafileDataAdapter adapter = new(callback);
-            PInvoke.GdipEnumerateMetafileSrcRectDestPoints(
+            PInvokeGdiPlus.GdipEnumerateMetafileSrcRectDestPoints(
                 NativeGraphics,
                 metafile.Pointer(),
                 (GdiPlus.PointF*)p, destPoints.Length,
@@ -3155,7 +3176,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         fixed (Point* p = destPoints)
         {
             using EnumerateMetafileDataAdapter adapter = new(callback);
-            PInvoke.GdipEnumerateMetafileSrcRectDestPointsI(
+            PInvokeGdiPlus.GdipEnumerateMetafileSrcRectDestPointsI(
                 NativeGraphics,
                 metafile.Pointer(),
                 (GdiPlus.Point*)p, destPoints.Length,
@@ -3287,7 +3308,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             applyTransform = applyTransform && !offset.IsEmpty;
             applyClipping = clipRegion is not null;
 
-            using var graphicsRegion = applyClipping ? new RegionScope(clipRegion!, this) : default;
+            using var graphicsRegion = applyClipping ? clipRegion!.GetRegionScope(this) : default;
             applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
             hdc = (HDC)GetHdc();
@@ -3366,7 +3387,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
                 return ppGraphics.VisibleClipBounds;
 
             RectF rect;
-            CheckStatus(PInvoke.GdipGetVisibleClipBounds(NativeGraphics, &rect));
+            CheckStatus(PInvokeGdiPlus.GdipGetVisibleClipBounds(NativeGraphics, &rect));
             return rect;
         }
     }
@@ -3418,7 +3439,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         GraphicsContext context = new(this);
         uint state;
-        Status status = PInvoke.GdipSaveGraphics(NativeGraphics, &state);
+        Status status = PInvokeGdiPlus.GdipSaveGraphics(NativeGraphics, &state);
         GC.KeepAlive(this);
 
         if (status != Status.Ok)
@@ -3436,7 +3457,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     public void Restore(GraphicsState gstate)
     {
-        CheckStatus(PInvoke.GdipRestoreGraphics(NativeGraphics, (uint)gstate._nativeState));
+        CheckStatus(PInvokeGdiPlus.GdipRestoreGraphics(NativeGraphics, (uint)gstate._nativeState));
         PopContext(gstate._nativeState);
     }
 
@@ -3445,7 +3466,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         GraphicsContext context = new(this);
 
         uint state;
-        Status status = PInvoke.GdipBeginContainer(NativeGraphics, (RectF*)&dstrect, (RectF*)&srcrect, (Unit)unit, &state);
+        Status status = PInvokeGdiPlus.GdipBeginContainer(NativeGraphics, (RectF*)&dstrect, (RectF*)&srcrect, (Unit)unit, &state);
         GC.KeepAlive(this);
 
         if (status != Status.Ok)
@@ -3464,7 +3485,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         GraphicsContext context = new(this);
         uint state;
-        Status status = PInvoke.GdipBeginContainer2(NativeGraphics, &state);
+        Status status = PInvokeGdiPlus.GdipBeginContainer2(NativeGraphics, &state);
         GC.KeepAlive(this);
 
         if (status != Status.Ok)
@@ -3482,7 +3503,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void EndContainer(GraphicsContainer container)
     {
         ArgumentNullException.ThrowIfNull(container);
-        CheckStatus(PInvoke.GdipEndContainer(NativeGraphics, (uint)container._nativeGraphicsContainer));
+        CheckStatus(PInvokeGdiPlus.GdipEndContainer(NativeGraphics, (uint)container._nativeGraphicsContainer));
         PopContext(container._nativeGraphicsContainer);
     }
 
@@ -3494,37 +3515,25 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         ArgumentNullException.ThrowIfNull(data);
         fixed (byte* b = data)
         {
-            CheckStatus(PInvoke.GdipComment(NativeGraphics, (uint)data.Length, b));
+            CheckStatus(PInvokeGdiPlus.GdipComment(NativeGraphics, (uint)data.Length, b));
         }
     }
 
     public static IntPtr GetHalftonePalette()
     {
-        if (s_halftonePalette == IntPtr.Zero)
+        if (s_halftonePalette.IsNull)
         {
             lock (s_syncObject)
             {
-                if (s_halftonePalette == IntPtr.Zero)
+                if (s_halftonePalette.IsNull)
                 {
-                    AppDomain.CurrentDomain.DomainUnload += OnDomainUnload;
-                    AppDomain.CurrentDomain.ProcessExit += OnDomainUnload;
-
-                    s_halftonePalette = PInvoke.GdipCreateHalftonePalette();
+                    GdiPlusInitialization.EnsureInitialized();
+                    s_halftonePalette = PInvokeGdiPlus.GdipCreateHalftonePalette();
                 }
             }
         }
 
         return s_halftonePalette;
-    }
-
-    // This is called from AppDomain.ProcessExit and AppDomain.DomainUnload.
-    private static void OnDomainUnload(object? sender, EventArgs e)
-    {
-        if (!s_halftonePalette.IsNull)
-        {
-            PInvokeCore.DeleteObject(s_halftonePalette);
-            s_halftonePalette = HPALETTE.Null;
-        }
     }
 
     /// <summary>
@@ -3581,7 +3590,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///   The <paramref name="cachedBitmap"/> is not compatible with the <see cref="Graphics"/> device state.
     ///  </para>
     ///  <para>
-    ///  - or -
+    ///   - or -
     ///  </para>
     ///  <para>
     ///   The <see cref="Graphics"/> object has a transform applied other than a translation.
@@ -3591,7 +3600,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(cachedBitmap);
 
-        CheckStatus(PInvoke.GdipDrawCachedBitmap(
+        CheckStatus(PInvokeGdiPlus.GdipDrawCachedBitmap(
             NativeGraphics,
             (GpCachedBitmap*)cachedBitmap.Handle,
             x, y));
@@ -3623,7 +3632,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         GraphicsUnit srcUnit = GraphicsUnit.Pixel,
         ImageAttributes? imageAttr = default)
     {
-        PInvoke.GdipDrawImageFX(
+        PInvokeGdiPlus.GdipDrawImageFX(
             NativeGraphics,
             image.Pointer(),
             srcRect.IsEmpty ? null : (RectF*)&srcRect,

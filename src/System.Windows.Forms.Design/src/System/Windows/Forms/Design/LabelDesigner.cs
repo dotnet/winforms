@@ -10,9 +10,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  <para>
-///  Provides a designer that can design components
-///  that extend TextBoxBase.</para>
+///  Provides a designer that can design components that extend TextBoxBase.
 /// </summary>
 internal class LabelDesigner : ControlDesigner
 {
@@ -135,7 +133,7 @@ internal class LabelDesigner : ControlDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules

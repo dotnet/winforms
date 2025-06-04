@@ -122,7 +122,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     public Color BorderColor { get; } = SystemColors.ActiveBorder;
 
     /// <summary>
-    ///  Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
+    ///  Returns the list of commands that should be filtered by the form that hosts this panel.
+    ///  This is done so that these specific commands will not get passed on to VS,
+    ///  and can instead be handled by the panel itself.
     /// </summary>
     public CommandID[] FilteredCommandIDs =>
         _filteredCommandIDs ??=
@@ -224,12 +226,15 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     }
 
     /// <summary>
-    ///  Computes the best possible location (in desktop coordinates) to display the panel, given the size of the panel and the position of its anchor
+    ///  Computes the best possible location (in desktop coordinates) to display the panel,
+    ///  given the size of the panel and the position of its anchor.
     /// </summary>
     public static Point ComputePreferredDesktopLocation(Rectangle rectangleAnchor, Size sizePanel, out DockStyle edgeToDock)
     {
         Rectangle rectScreen = Screen.FromPoint(rectangleAnchor.Location).WorkingArea;
-        // Determine where we can draw the panel to minimize clipping. Start with the most preferred position, i.e. bottom-right of anchor For the purposes of computing the flags below, assume the anchor to be small enough to ignore its size.
+        // Determine where we can draw the panel to minimize clipping. Start with the most preferred position,
+        // i.e. bottom-right of anchor For the purposes of computing the flags below,
+        // assume the anchor to be small enough to ignore its size.
         bool fRightOfAnchor = true;
         bool fAlignToScreenLeft = false;
 
@@ -270,8 +275,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
         }
 
-        // The flags give us a total of nine possible positions - {LeftOfAnchor, RightOfAnchor, AlignToScreenLeft} X {AboveAnchor, BelowAnchor, AlignToScreenTop}
-        // Out of these, we rule out one combination (AlignToScreenLeft, AlignToScreenTop) because this does not guarantee the alignment of an anchor edge with that of the panel edge
+        // The flags give us a total of nine possible positions
+        // - {LeftOfAnchor, RightOfAnchor, AlignToScreenLeft} X {AboveAnchor, BelowAnchor, AlignToScreenTop}
+        // Out of these, we rule out one combination (AlignToScreenLeft, AlignToScreenTop) because this does
+        // not guarantee the alignment of an anchor edge with that of the panel edge
         if (fAlignToScreenTop)
         {
             fAlignToScreenLeft = false;
@@ -386,7 +393,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     public override Size GetPreferredSize(Size proposedSize)
     {
-        // REVIEW: WinForms calls this inside of PerformLayout() only in DEBUG code.From the comment it looks like it's calling it to verify their own cached preferred size, so we just ignore this call.
+        // REVIEW: WinForms calls this inside of PerformLayout() only in DEBUG code.
+        // From the comment it looks like it's calling it to verify their own cached preferred size,
+        // so we just ignore this call.
         if (proposedSize.IsEmpty)
         {
             return proposedSize;
@@ -417,7 +426,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         ((EventHandler?)Events[s_eventFormActivated])?.Invoke(sender, e);
     }
 
-    private void OnFormClosing(object? sender, CancelEventArgs e)
+    private void OnFormClosing(object? sender, FormClosingEventArgs e)
     {
         if (!e.Cancel && TopLevelControl is not null)
         {
@@ -425,7 +434,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             Form form = (Form)TopLevelControl;
             if (form is not null)
             {
-                form.Closing -= new CancelEventHandler(OnFormClosing);
+                form.FormClosing -= OnFormClosing;
             }
         }
     }
@@ -440,7 +449,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         base.OnHandleCreated(e);
         if (TopLevelControl is Form form)
         {
-            form.Closing += new CancelEventHandler(OnFormClosing);
+            form.FormClosing += OnFormClosing;
         }
     }
 
@@ -480,6 +489,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
 
         Rectangle originalClip = e.ClipRectangle;
+
         // Determine the first line index to paint
         int index = 0;
         while ((index < (_lineYPositions.Count - 1)) && (_lineYPositions[index + 1] <= originalClip.Top))
@@ -901,8 +911,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         {
             UpdateEditXPos();
             _updatingTasks = false;
-            // REVIEW: We should rely on the caller to actually perform layout since it our scenarios, the entire right pane will have to be layed out
-            // Actually, we do want to resume layout since invalidation causes an OnPaint, and OnPaint relies on everything being layed out already
+            // REVIEW: We should rely on the caller to actually perform layout since it our scenarios,
+            // the entire right pane will have to be layed out.
+            // Actually, we do want to resume layout since invalidation causes an OnPaint,
+            // and OnPaint relies on everything being layed out already
             ResumeLayout(true);
         }
 

@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -973,7 +975,7 @@ public class ToolboxItemTests
     {
         SubToolboxItem item = new();
         item.Lock();
-        Assert.Throws<InvalidOperationException>(() => item.CheckUnlocked());
+        Assert.Throws<InvalidOperationException>(item.CheckUnlocked);
     }
 
     public static IEnumerable<object[]> Equals_TestData()
@@ -1247,7 +1249,7 @@ public class ToolboxItemTests
             {
                 CodeBase = "ThrowIOException"
             };
-#pragma warning restore SYSLIB0044 // Type or member is obsolete
+#pragma warning restore SYSLIB0044
             yield return new object[] { null, ioFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
         }
 

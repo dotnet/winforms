@@ -56,8 +56,9 @@ public unsafe class SAFEARRAYTests
             cElements = 10,
             lLbound = 1
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate((VARENUM)vt, 1, &saBound);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -65,9 +66,9 @@ public unsafe class SAFEARRAYTests
             Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
             Assert.Equal(expectedCbElements, psa->cbElements);
             Assert.Equal(0u, psa->cLocks);
-            Assert.True(psa->pvData != null);
-            Assert.Equal(10u, psa->rgsabound._0.cElements);
-            Assert.Equal(1, psa->rgsabound._0.lLbound);
+            NativeAssert.NotNull(psa->pvData);
+            Assert.Equal(10u, psa->rgsabound.AsSpan(1)[0].cElements);
+            Assert.Equal(1, psa->rgsabound.AsSpan(1)[0].lLbound);
 
             VARENUM arrayVt = VT_EMPTY;
             HRESULT hr = PInvokeCore.SafeArrayGetVartype(psa, &arrayVt);
@@ -93,7 +94,7 @@ public unsafe class SAFEARRAYTests
         using ComScope<IRecordInfo> recordInfo = new(new CustomRecordInfo().GetComInterface());
 
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -101,9 +102,9 @@ public unsafe class SAFEARRAYTests
             Assert.Equal(FADF_RECORD, psa->fFeatures);
             Assert.Equal((uint)sizeof(int), psa->cbElements);
             Assert.Equal(0u, psa->cLocks);
-            Assert.True(psa->pvData != null);
-            Assert.Equal(10u, psa->rgsabound._0.cElements);
-            Assert.Equal(1, psa->rgsabound._0.lLbound);
+            NativeAssert.NotNull(psa->pvData);
+            Assert.Equal(10u, psa->rgsabound.AsSpan(1)[0].cElements);
+            Assert.Equal(1, psa->rgsabound.AsSpan(1)[0].lLbound);
 
             VARENUM arrayVt = VT_EMPTY;
             HRESULT hr = PInvokeCore.SafeArrayGetVartype(psa, &arrayVt);
@@ -180,8 +181,9 @@ public unsafe class SAFEARRAYTests
             cElements = 20,
             lLbound = 0
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate((VARENUM)vt, 2, saBounds);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -189,9 +191,9 @@ public unsafe class SAFEARRAYTests
             Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
             Assert.Equal(expectedCbElements, psa->cbElements);
             Assert.Equal(0u, psa->cLocks);
-            Assert.True(psa->pvData != null);
-            Assert.Equal(20u, psa->rgsabound._0.cElements);
-            Assert.Equal(0, psa->rgsabound._0.lLbound);
+            NativeAssert.NotNull(psa->pvData);
+            Assert.Equal(20u, psa->rgsabound.AsSpan(1)[0].cElements);
+            Assert.Equal(0, psa->rgsabound.AsSpan(1)[0].lLbound);
             Assert.Equal(10u, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].cElements);
             Assert.Equal(1, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].lLbound);
 
@@ -215,8 +217,9 @@ public unsafe class SAFEARRAYTests
             cElements = 10,
             lLbound = 0
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(VT_I4, 1, &saBound);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -261,8 +264,9 @@ public unsafe class SAFEARRAYTests
             cElements = 10,
             lLbound = -5
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(VT_I4, 1, &saBound);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -308,13 +312,15 @@ public unsafe class SAFEARRAYTests
             cElements = 10,
             lLbound = 0
         };
+
         saBounds[1] = new SAFEARRAYBOUND
         {
             cElements = 20,
             lLbound = 0
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(VT_I4, 2, saBounds);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {
@@ -360,13 +366,15 @@ public unsafe class SAFEARRAYTests
             cElements = 10,
             lLbound = -5
         };
+
         saBounds[1] = new SAFEARRAYBOUND
         {
             cElements = 20,
             lLbound = -4
         };
+
         SAFEARRAY* psa = PInvokeCore.SafeArrayCreate(VT_I4, 2, saBounds);
-        Assert.True(psa != null);
+        NativeAssert.NotNull(psa);
 
         try
         {

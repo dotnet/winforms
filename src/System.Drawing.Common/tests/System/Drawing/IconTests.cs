@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2004,2006-2008 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -150,7 +150,7 @@ public class IconTests
     public static IEnumerable<object[]> Ctor_InvalidBytesInStream_TestData()
     {
         // No start entry.
-        yield return new object[] { new byte[0], typeof(ArgumentException) };
+        yield return new object[] { Array.Empty<byte>(), typeof(ArgumentException) };
         yield return new object[] { new byte[6], typeof(ArgumentException) };
         yield return new object[] { new byte[21], typeof(ArgumentException) };
 
@@ -374,7 +374,7 @@ public class IconTests
         ExtractAssociatedIcon_FilePath_Success_Helper(bitmapUncPath);
     }
 
-    private void ExtractAssociatedIcon_FilePath_Success_Helper(string filePath)
+    private static void ExtractAssociatedIcon_FilePath_Success_Helper(string filePath)
     {
         using Icon icon = Icon.ExtractAssociatedIcon(filePath);
         Assert.Equal(32, icon.Width);
@@ -551,7 +551,7 @@ public class IconTests
     [Fact]
     public void ToBitmap_PngIconSupportedInSwitches_Success()
     {
-        void VerifyPng()
+        static void VerifyPng()
         {
             using Icon icon = GetPngIcon();
             using Bitmap bitmap = icon.ToBitmap();
@@ -586,10 +586,10 @@ public class IconTests
     [Fact]
     public void ToBitmap_PngIconNotSupportedInSwitches_ThrowsArgumentOutOfRangeException()
     {
-        void VerifyPngNotSupported()
+        static void VerifyPngNotSupported()
         {
             using Icon icon = GetPngIcon();
-            AssertExtensions.Throws<ArgumentOutOfRangeException>(null, () => icon.ToBitmap());
+            AssertExtensions.Throws<ArgumentOutOfRangeException>(null, icon.ToBitmap);
         }
 
         if (RemoteExecutor.IsSupported && (!AppContext.TryGetSwitch(DontSupportPngFramesInIcons, out bool isEnabled) || !isEnabled))

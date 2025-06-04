@@ -29,9 +29,11 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     ///  A caret position after the last character from a text range, not an index of an item.
     /// </param>
     /// <remarks>
-    ///  <para>If there is a range "Test string", then start = 0, end = 11.
-    ///  If start = 2 and end = 9, the range is "et stri".
-    ///  If start=end, that points a caret position only, there is no any text range.</para>
+    ///  <para>
+    ///   If there is a range "Test string", then start = 0, end = 11.
+    ///   If start = 2 and end = 9, the range is "et stri".
+    ///   If start=end, that points a caret position only, there is no any text range.
+    ///  </para>
     /// </remarks>
     public UiaTextRange(IRawElementProviderSimple.Interface enclosingElement, UiaTextProvider provider, int start, int end)
     {
@@ -609,7 +611,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                 if (Start > visibleStart || Start < visibleEnd)
                 {
                     UiaTextProvider.SendKeyboardInputVK(key, true);
-                    _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                    _provider.GetVisibleRangePoints(out _, out _);
                 }
 
                 return HRESULT.S_OK;
@@ -618,7 +620,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             if (Start < visibleStart || Start > visibleEnd)
             {
                 UiaTextProvider.SendKeyboardInputVK(key, true);
-                _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                _provider.GetVisibleRangePoints(out _, out _);
             }
         }
 
@@ -675,7 +677,8 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     private static bool IsApostrophe(char ch) => ch is '\'' or ((char)0x2019); // Unicode Right Single Quote Mark
 
     /// <devdoc>
-    ///  Attribute values and their types are defined here - https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    ///  Attribute values and their types are defined here -
+    ///  https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
     /// </devdoc>
     private VARIANT GetAttributeValue(UIA_TEXTATTRIBUTE_ID textAttributeIdentifier)
     {
@@ -870,7 +873,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
     }
 
-    private static int GetBackgroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
+    private static int GetBackgroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
     private static int GetCapStyle(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None);
@@ -888,7 +891,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     private static int GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
 
-    private static int GetForegroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+    private static int GetForegroundColor() => (int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
     private static int GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_CENTER) != 0
@@ -1020,7 +1023,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     ValidateEndpoints();
 
                     // We'll move 1 format unit if we aren't already at the end of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index < limit ? 1 : 0;
                     index = limit;
                 }
@@ -1092,7 +1095,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
                         // If a line other than the first consists of only "\r\n",
                         // you can move backwards past this line and the position changes,
-                        // hence this is counted.  The first line is special, though:
+                        // hence this is counted. The first line is special, though:
                         // if it is empty, and you move say from the second line back up
                         // to the first, you cannot move further; however if the first line
                         // is nonempty, you can move from the end of the first line to its
@@ -1150,7 +1153,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     // "pages" and document.
 
                     // We'll move 1 format unit if we aren't already at the beginning of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index > 0 ? -1 : 0;
                     index = 0;
                 }

@@ -119,7 +119,7 @@ public class StringFormatTests
         StringFormat format = new();
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, format.Clone);
     }
 
     [Theory]
@@ -197,7 +197,7 @@ public class StringFormatTests
 
     public static IEnumerable<object[]> SetMeasurableCharacterRanges_TestData()
     {
-        yield return new object[] { new CharacterRange[0] };
+        yield return new object[] { Array.Empty<CharacterRange>() };
         yield return new object[] { new CharacterRange[] { new(1, 2) } };
         yield return new object[] { new CharacterRange[] { new(-1, -1) } };
         yield return new object[] { new CharacterRange[32] };
@@ -429,6 +429,6 @@ public class StringFormatTests
         StringFormat format = new(StringFormatFlags.DirectionVertical);
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.ToString());
+        AssertExtensions.Throws<ArgumentException>(null, format.ToString);
     }
 }

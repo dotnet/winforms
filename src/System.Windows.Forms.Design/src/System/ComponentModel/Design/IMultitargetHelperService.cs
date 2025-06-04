@@ -9,7 +9,8 @@ namespace System.ComponentModel.Design;
 public interface IMultitargetHelperService
 {
     /// <summary>
-    ///  To be implemented by a VS component that can get resolve a Type for the target framework and return type.AssemblyQualifiedName.
+    ///  To be implemented by a VS component that can get resolve a Type for the target framework and
+    ///  return type.AssemblyQualifiedName.
     /// </summary>
     string GetAssemblyQualifiedName(Type type);
 }

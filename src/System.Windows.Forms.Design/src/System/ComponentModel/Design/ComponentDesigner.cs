@@ -23,7 +23,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     private protected const string SettingsKeyName = "SettingsKey";
 
     /// <summary>
-    ///  Gets the design-time actionlists supported by the component associated with the designer.
+    ///  Gets the design-time ActionLists supported by the component associated with the designer.
     /// </summary>
     public virtual DesignerActionListCollection ActionLists => _actionLists ??= [];
 
@@ -70,9 +70,9 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     /// <summary>
     ///  This property provides a generic mechanism for discovering parent relationships within designers,
-    ///  and is used by ComponentDesigner's ITreeDesigner interface implementation.  This property
-    ///  should only return null when this designer is the root component.  Otherwise, it should return
-    ///  the parent component.  The default implementation of this property returns the root component
+    ///  and is used by ComponentDesigner's ITreeDesigner interface implementation. This property
+    ///  should only return null when this designer is the root component. Otherwise, it should return
+    ///  the parent component. The default implementation of this property returns the root component
     ///  for all components that are not the root component, and it returns null for the root component.
     /// </summary>
     protected virtual IComponent? ParentComponent
@@ -109,14 +109,14 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  Gets a collection that houses shadow properties.  Shadow properties. are properties that fall through to
+    ///  Gets a collection that houses shadow properties. Shadow properties. are properties that fall through to
     ///  the underlying component before they are set, but return their set values once they are set.
     /// </summary>
     [MemberNotNull(nameof(_shadowProperties))]
     protected ShadowPropertyCollection ShadowProperties => _shadowProperties ??= new ShadowPropertyCollection(this);
 
     /// <summary>
-    ///  This method is called when an existing component is being re-initialized.  This may occur after dragging
+    ///  This method is called when an existing component is being re-initialized. This may occur after dragging
     ///  a component to another container, for example.
     ///
     ///  The defaultValues property contains a name/value dictionary of default values that should be applied to
@@ -133,9 +133,9 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     /// <summary>
     ///  This method is called when a component is first initialized, typically after being first added
-    ///  to a design surface.  The defaultValues property contains a name/value dictionary of default
-    ///  values that should be applied to properties.  This dictionary may be null if no default values
-    ///  are specified.  You may perform any initialization of this component that you like, and you
+    ///  to a design surface. The defaultValues property contains a name/value dictionary of default
+    ///  values that should be applied to properties. This dictionary may be null if no default values
+    ///  are specified. You may perform any initialization of this component that you like, and you
     ///  may even ignore the defaultValues dictionary altogether if you wish.
     ///  The default implemenation of this method does nothing.
     /// </summary>
@@ -172,7 +172,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     public IComponent Component => _component ?? throw new InvalidOperationException("Designer is not initialized");
 
     /// <summary>
-    /// Internal utility used primarily to dispose instances
+    ///  Internal utility used primarily to dispose instances
     /// </summary>
     [MemberNotNullWhen(true, nameof(_component))]
     private protected bool HasComponent => _component is not null;
@@ -377,7 +377,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         ArgumentNullException.ThrowIfNull(component);
         _component = component;
 
-        // For inherited components, save off the current values so we can compute a delta.  We also do this for
+        // For inherited components, save off the current values so we can compute a delta. We also do this for
         // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
         // presence of a default value attribute over the current code value.
         bool isRoot = TryGetService(out IDesignerHost? host) && component == host.RootComponent;
@@ -389,7 +389,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentRename += OnComponentRename;
         }
 
         InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
@@ -409,7 +409,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(Component);
 
-            // Now loop through all the properties.  For each one, try to match a pre-created property.
+            // Now loop through all the properties. For each one, try to match a pre-created property.
             // If that fails, then create a new property.
             PropertyDescriptor[] values = new PropertyDescriptor[properties.Count];
             properties.CopyTo(values, 0);
@@ -429,7 +429,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
                 if (!props.ContainsKey(prop.Name))
                 {
-                    // This ia a publicly inherited component.  We replace all component properties with inherited
+                    // This ia a publicly inherited component. We replace all component properties with inherited
                     // versions that reset the default property values to those that are currently on the component.
                     props.Add(prop.Name, new(prop, Component));
                 }
@@ -455,7 +455,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         {
             if (TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentRename -= OnComponentRename;
             }
 
             _component = null;
@@ -464,7 +464,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  Raised when a component's name changes.  Here we update the SettingsKey property if necessary.
+    ///  Raised when a component's name changes. Here we update the SettingsKey property if necessary.
     /// </summary>
     private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
@@ -643,7 +643,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.
+    ///  Allows a designer to filter the set of properties the component it is
+    ///  designing will expose through the TypeDescriptor object.
     /// </summary>
     protected virtual void PostFilterProperties(IDictionary properties)
     {
@@ -655,7 +656,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         bool readOnlyInherit = InheritanceAttribute.InheritedReadOnly.Equals(InheritanceAttribute);
         if (readOnlyInherit)
         {
-            // Now loop through all the properties.  For each one, try to match a pre-created property.
+            // Now loop through all the properties. For each one, try to match a pre-created property.
             // If that fails, then create a new property.
             PropertyDescriptor[] values = new PropertyDescriptor[properties.Values.Count];
             properties.Values.CopyTo(values, 0);
@@ -718,7 +719,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     /// <summary>
     ///  Notifies the <see cref="IComponentChangeService"/> that this component has been changed.
-    ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
+    ///  You only need to call this when you are affecting component properties directly and not through
+    ///  the MemberDescriptor's accessors.
     /// </summary>
     protected void RaiseComponentChanged(MemberDescriptor? member, object? oldValue, object? newValue)
         => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);

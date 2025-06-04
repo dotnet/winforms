@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,6 +24,9 @@
 //
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace System.Drawing.Imaging.Tests;
 
@@ -513,7 +516,7 @@ public class MetafileTests
         using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         using (Metafile metafile = new(
-            fileName, g.GetHdc(), new RectangleF(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
+            fileName, g.GetHdc(), default(RectangleF), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
@@ -597,7 +600,7 @@ public class MetafileTests
         using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         using (Metafile metafile = new(
-            fileName, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
+            fileName, g.GetHdc(), default, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
@@ -772,7 +775,7 @@ public class MetafileTests
         using Graphics g = Graphics.FromImage(bmp);
         using MemoryStream stream = new();
         using Metafile metafile = new(
-            stream, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description);
+            stream, g.GetHdc(), default, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description);
         AssertMetafileIsBlank(metafile);
         AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
     }
@@ -898,7 +901,7 @@ public class MetafileTests
         Metafile metafile = new(GetPath(WmfFile));
         metafile.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetMetafileHeader());
+        AssertExtensions.Throws<ArgumentException>(null, metafile.GetMetafileHeader);
     }
 
     [Fact]
@@ -927,7 +930,7 @@ public class MetafileTests
             metafile.PlayRecord(EmfPlusRecordType.BeginContainer, 0, 1, new byte[1]));
     }
 
-    private void DeleteFile(string path)
+    private static void DeleteFile(string path)
     {
         if (File.Exists(path))
         {
@@ -935,12 +938,12 @@ public class MetafileTests
         }
     }
 
-    private string GetPath(string fileName)
+    private static string GetPath(string fileName)
     {
         return Helpers.GetTestBitmapPath(fileName);
     }
 
-    private void AssertEmfType(MetafileHeader metafileHeader, EmfType emfType)
+    private static void AssertEmfType(MetafileHeader metafileHeader, EmfType emfType)
     {
         switch (emfType)
         {
@@ -970,7 +973,7 @@ public class MetafileTests
         }
     }
 
-    private void AssertMetafileHeaderIsBlank(MetafileHeader metafileHeader)
+    private static void AssertMetafileHeaderIsBlank(MetafileHeader metafileHeader)
     {
         Assert.Equal(new Rectangle(0, 0, 0, 0), metafileHeader.Bounds);
         Assert.Equal(0, metafileHeader.MetafileSize);
@@ -985,7 +988,7 @@ public class MetafileTests
         Assert.Equal(GraphicsUnit.Pixel, graphicsUnit);
     }
 
-    private void AssertMetafileHeader(MetafileHeader header)
+    private static void AssertMetafileHeader(MetafileHeader header)
     {
         Assert.Equal(MetafileType.WmfPlaceable, header.Type);
         Assert.Equal(0x300, header.Version);
@@ -1013,5 +1016,43 @@ public class MetafileTests
         Assert.Equal(1737, header.WmfHeader.Size);
         Assert.Equal((int)MetafileType.Wmf, header.WmfHeader.Type);
         Assert.Equal(0x300, header.WmfHeader.Version);
+    }
+
+    [Fact]
+    public unsafe void CreateFromNativeHandle_Success()
+    {
+        // Create a memory metafile from the screen DC
+        HDC hdc = PInvokeCore.CreateEnhMetaFile(HDC.Null, default, null, default(PCWSTR));
+        using CreatePenScope pen = new(Color.Blue);
+        using CreateBrushScope brush = new(Color.Green);
+        using SelectObjectScope penScope = new(hdc, pen);
+        using SelectObjectScope brushScope = new(hdc, brush);
+        PInvokeCore.Rectangle(hdc, 10, 10, 100, 100);
+        HENHMETAFILE hemf = PInvokeCore.CloseEnhMetaFile(hdc);
+
+        Metafile metafile = new(henhmetafile: (nint)hemf.Value, deleteEmf: true);
+        metafile.Size.Should().Be(new Size(90, 90));
+
+        List<EmfPlusRecordType> recordTypes = [];
+        using Graphics graphics = Graphics.FromHwnd(0);
+        graphics.EnumerateMetafile(
+            metafile,
+            default(Point),
+            (recordType, flags, dataSize, data, _) =>
+            {
+                recordTypes.Add(recordType);
+                return true;
+            });
+
+        recordTypes.Should().BeEquivalentTo(
+            [
+                EmfPlusRecordType.EmfHeader,
+                EmfPlusRecordType.EmfCreatePen,
+                EmfPlusRecordType.EmfSelectObject,
+                EmfPlusRecordType.EmfCreateBrushIndirect,
+                EmfPlusRecordType.EmfSelectObject,
+                EmfPlusRecordType.EmfRectangle,
+                EmfPlusRecordType.EmfEof
+            ]);
     }
 }

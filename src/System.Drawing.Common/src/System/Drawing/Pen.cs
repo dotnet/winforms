@@ -45,7 +45,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         _color = color;
 
         GpPen* pen;
-        PInvoke.GdipCreatePen1((uint)color.ToArgb(), width, (int)GraphicsUnit.World, &pen).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreatePen1((uint)color.ToArgb(), width, (int)GraphicsUnit.World, &pen).ThrowIfFailed();
         SetNativePen(pen);
 
         if (_color.IsSystemColor)
@@ -68,7 +68,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     {
         ArgumentNullException.ThrowIfNull(brush);
         GpPen* pen;
-        PInvoke.GdipCreatePen2(brush.NativeBrush, width, (int)GraphicsUnit.World, &pen).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreatePen2(brush.NativeBrush, width, (int)GraphicsUnit.World, &pen).ThrowIfFailed();
         GC.KeepAlive(brush);
         SetNativePen(pen);
     }
@@ -88,7 +88,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     public object Clone()
     {
         GpPen* clonedPen;
-        PInvoke.GdipClonePen(NativePen, &clonedPen).ThrowIfFailed();
+        PInvokeGdiPlus.GdipClonePen(NativePen, &clonedPen).ThrowIfFailed();
         GC.KeepAlive(this);
         return new Pen(clonedPen);
     }
@@ -118,7 +118,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
         if (_nativePen is not null)
         {
-            Status status = !Gdip.Initialized ? Status.Ok : PInvoke.GdipDeletePen(NativePen);
+            Status status = !Gdip.Initialized ? Status.Ok : PInvokeGdiPlus.GdipDeletePen(NativePen);
             _nativePen = null;
             Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
         }
@@ -137,7 +137,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             float width;
-            PInvoke.GdipGetPenWidth(NativePen, &width).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenWidth(NativePen, &width).ThrowIfFailed();
             GC.KeepAlive(this);
             return width;
         }
@@ -148,7 +148,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenWidth(NativePen, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenWidth(NativePen, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -163,7 +163,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
         }
 
-        PInvoke.GdipSetPenLineCap197819(
+        PInvokeGdiPlus.GdipSetPenLineCap197819(
             NativePen,
             (GdiPlus.LineCap)startCap,
             (GdiPlus.LineCap)endCap,
@@ -180,7 +180,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             LineCap startCap;
-            PInvoke.GdipGetPenStartCap(NativePen, (GdiPlus.LineCap*)&startCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenStartCap(NativePen, (GdiPlus.LineCap*)&startCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return startCap;
         }
@@ -209,7 +209,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenStartCap(NativePen, (GdiPlus.LineCap)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenStartCap(NativePen, (GdiPlus.LineCap)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -222,7 +222,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             LineCap endCap;
-            PInvoke.GdipGetPenEndCap(NativePen, (GdiPlus.LineCap*)&endCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenEndCap(NativePen, (GdiPlus.LineCap*)&endCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return endCap;
         }
@@ -251,7 +251,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenEndCap(NativePen, (GdiPlus.LineCap)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenEndCap(NativePen, (GdiPlus.LineCap)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -264,7 +264,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             GpCustomLineCap* lineCap;
-            PInvoke.GdipGetPenCustomStartCap(NativePen, &lineCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenCustomStartCap(NativePen, &lineCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return CustomLineCap.CreateCustomLineCapObject(lineCap);
         }
@@ -275,7 +275,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenCustomStartCap(NativePen, value is null ? null : value._nativeCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenCustomStartCap(NativePen, value is null ? null : value._nativeCap).ThrowIfFailed();
             GC.KeepAlive(value);
             GC.KeepAlive(this);
         }
@@ -289,7 +289,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             GpCustomLineCap* lineCap;
-            PInvoke.GdipGetPenCustomEndCap(NativePen, &lineCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenCustomEndCap(NativePen, &lineCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return CustomLineCap.CreateCustomLineCapObject(lineCap);
         }
@@ -300,7 +300,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenCustomEndCap(NativePen, value is null ? null : value._nativeCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenCustomEndCap(NativePen, value is null ? null : value._nativeCap).ThrowIfFailed();
             GC.KeepAlive(value);
             GC.KeepAlive(this);
         }
@@ -314,7 +314,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             DashCap dashCap;
-            PInvoke.GdipGetPenDashCap197819(NativePen, (GdiPlus.DashCap*)&dashCap).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenDashCap197819(NativePen, (GdiPlus.DashCap*)&dashCap).ThrowIfFailed();
             GC.KeepAlive(this);
             return dashCap;
         }
@@ -330,7 +330,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenDashCap197819(NativePen, (GdiPlus.DashCap)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenDashCap197819(NativePen, (GdiPlus.DashCap)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -343,7 +343,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             LineJoin lineJoin;
-            PInvoke.GdipGetPenLineJoin(NativePen, (GdiPlus.LineJoin*)&lineJoin).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenLineJoin(NativePen, (GdiPlus.LineJoin*)&lineJoin).ThrowIfFailed();
             GC.KeepAlive(this);
             return lineJoin;
         }
@@ -359,7 +359,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenLineJoin(NativePen, (GdiPlus.LineJoin)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenLineJoin(NativePen, (GdiPlus.LineJoin)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -372,7 +372,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             float miterLimit;
-            PInvoke.GdipGetPenMiterLimit(NativePen, &miterLimit).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenMiterLimit(NativePen, &miterLimit).ThrowIfFailed();
             GC.KeepAlive(this);
             return miterLimit;
         }
@@ -383,7 +383,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenMiterLimit(NativePen, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenMiterLimit(NativePen, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -396,7 +396,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             PenAlignment penMode;
-            PInvoke.GdipGetPenMode(NativePen, (GdiPlus.PenAlignment*)&penMode).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenMode(NativePen, (GdiPlus.PenAlignment*)&penMode).ThrowIfFailed();
             GC.KeepAlive(this);
             return penMode;
         }
@@ -412,7 +412,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenMode(NativePen, (GdiPlus.PenAlignment)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenMode(NativePen, (GdiPlus.PenAlignment)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -425,7 +425,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             Matrix matrix = new();
-            PInvoke.GdipGetPenTransform(NativePen, matrix.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenTransform(NativePen, matrix.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(this);
             return matrix;
         }
@@ -438,7 +438,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
             ArgumentNullException.ThrowIfNull(value);
 
-            PInvoke.GdipSetPenTransform(NativePen, value.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenTransform(NativePen, value.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(value);
             GC.KeepAlive(this);
         }
@@ -449,7 +449,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     /// </summary>
     public void ResetTransform()
     {
-        PInvoke.GdipResetPenTransform(NativePen).ThrowIfFailed();
+        PInvokeGdiPlus.GdipResetPenTransform(NativePen).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -471,7 +471,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             return;
         }
 
-        PInvoke.GdipMultiplyPenTransform(NativePen, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipMultiplyPenTransform(NativePen, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(matrix);
         GC.KeepAlive(this);
     }
@@ -487,7 +487,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     /// </summary>
     public void TranslateTransform(float dx, float dy, MatrixOrder order)
     {
-        PInvoke.GdipTranslatePenTransform(NativePen, dx, dy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipTranslatePenTransform(NativePen, dx, dy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -501,7 +501,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     /// </summary>
     public void ScaleTransform(float sx, float sy, MatrixOrder order)
     {
-        PInvoke.GdipScalePenTransform(NativePen, sx, sy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipScalePenTransform(NativePen, sx, sy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -515,13 +515,13 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     /// </summary>
     public void RotateTransform(float angle, MatrixOrder order)
     {
-        PInvoke.GdipRotatePenTransform(NativePen, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipRotatePenTransform(NativePen, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     private void InternalSetColor(Color value)
     {
-        PInvoke.GdipSetPenColor(NativePen, (uint)_color.ToArgb()).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSetPenColor(NativePen, (uint)_color.ToArgb()).ThrowIfFailed();
         GC.KeepAlive(this);
         _color = value;
     }
@@ -534,7 +534,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             GdiPlus.PenType type;
-            PInvoke.GdipGetPenFillType(NativePen, &type).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenFillType(NativePen, &type).ThrowIfFailed();
             GC.KeepAlive(this);
             return (Drawing2D.PenType)type;
         }
@@ -555,7 +555,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 }
 
                 ARGB color;
-                PInvoke.GdipGetPenColor(NativePen, (uint*)&color).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetPenColor(NativePen, (uint*)&color).ThrowIfFailed();
                 GC.KeepAlive(this);
                 _color = color;
             }
@@ -631,7 +631,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             }
 
             ArgumentNullException.ThrowIfNull(value);
-            PInvoke.GdipSetPenBrushFill(NativePen, value.Pointer()).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenBrushFill(NativePen, value.Pointer()).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -639,7 +639,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     private GpBrush* GetNativeBrush()
     {
         GpBrush* nativeBrush;
-        PInvoke.GdipGetPenBrushFill(NativePen, &nativeBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetPenBrushFill(NativePen, &nativeBrush).ThrowIfFailed();
         GC.KeepAlive(this);
         return nativeBrush;
     }
@@ -652,7 +652,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             DashStyle dashStyle;
-            PInvoke.GdipGetPenDashStyle(NativePen, (GdiPlus.DashStyle*)&dashStyle).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenDashStyle(NativePen, (GdiPlus.DashStyle*)&dashStyle).ThrowIfFailed();
             GC.KeepAlive(this);
             return dashStyle;
         }
@@ -668,7 +668,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenDashStyle(NativePen, (GdiPlus.DashStyle)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenDashStyle(NativePen, (GdiPlus.DashStyle)value).ThrowIfFailed();
             GC.KeepAlive(this);
 
             // If we just set the pen style to Custom without defining the custom dash pattern,
@@ -692,7 +692,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     private void EnsureValidDashPattern()
     {
         int count;
-        PInvoke.GdipGetPenDashCount(NativePen, &count);
+        PInvokeGdiPlus.GdipGetPenDashCount(NativePen, &count);
         GC.KeepAlive(this);
 
         if (count == 0)
@@ -710,7 +710,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             float dashOffset;
-            PInvoke.GdipGetPenDashOffset(NativePen, &dashOffset).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenDashOffset(NativePen, &dashOffset).ThrowIfFailed();
             GC.KeepAlive(this);
             return dashOffset;
         }
@@ -721,7 +721,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            PInvoke.GdipSetPenDashOffset(NativePen, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPenDashOffset(NativePen, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -734,7 +734,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             int count;
-            PInvoke.GdipGetPenDashCount(NativePen, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenDashCount(NativePen, &count).ThrowIfFailed();
             GC.KeepAlive(this);
 
             float[] pattern;
@@ -745,7 +745,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
                 pattern = new float[count];
                 fixed (float* p = pattern)
                 {
-                    PInvoke.GdipGetPenDashArray(NativePen, p, count).ThrowIfFailed();
+                    PInvokeGdiPlus.GdipGetPenDashArray(NativePen, p, count).ThrowIfFailed();
                 }
             }
             else if (DashStyle == DashStyle.Solid && !_dashStyleWasOrIsNotSolid)
@@ -781,7 +781,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
 
             fixed (float* f = value)
             {
-                PInvoke.GdipSetPenDashArray(NativePen, f, value.Length).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSetPenDashArray(NativePen, f, value.Length).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
         }
@@ -795,7 +795,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
         get
         {
             int count;
-            PInvoke.GdipGetPenCompoundCount(NativePen, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPenCompoundCount(NativePen, &count).ThrowIfFailed();
 
             if (count == 0)
             {
@@ -805,7 +805,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             float[] array = new float[count];
             fixed (float* f = array)
             {
-                PInvoke.GdipGetPenCompoundArray(NativePen, f, count).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetPenCompoundArray(NativePen, f, count).ThrowIfFailed();
                 GC.KeepAlive(this);
                 return array;
             }
@@ -820,7 +820,7 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
             ArgumentNullException.ThrowIfNull(value);
             fixed (float* f = value)
             {
-                PInvoke.GdipSetPenCompoundArray(NativePen, f, value.Length).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSetPenCompoundArray(NativePen, f, value.Length).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
         }

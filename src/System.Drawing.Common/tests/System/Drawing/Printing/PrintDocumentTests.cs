@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -160,10 +160,10 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(nameof(CanPrintToPdf))]
+    [ConditionalFact(typeof(Helpers), nameof(Helpers.CanPrintToPdf))]
     public void Print_DefaultPrintController_Success()
     {
-        if (!CanPrintToPdf())
+        if (!Helpers.TryGetPdfPrinterName(out string? printerName))
         {
             return;
         }
@@ -172,7 +172,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         PrintEventHandler endPrintHandler = new((sender, e) => endPrintCalled = true);
         using (PrintDocument document = new())
         {
-            document.PrinterSettings.PrinterName = GetPdfPrinterName();
+            document.PrinterSettings.PrinterName = printerName;
             document.PrinterSettings.PrintFileName = GetTestFilePath();
             document.PrinterSettings.PrintToFile = true;
             document.EndPrint += endPrintHandler;
@@ -203,7 +203,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)] 
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -229,7 +229,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.Equal(expected, document.ToString());
     }
 
-    private void AssertDefaultPageSettings(PageSettings pageSettings)
+    private static void AssertDefaultPageSettings(PageSettings pageSettings)
     {
         // A4 and Letter are both common default sizes for systems to have.
         switch (pageSettings.PaperSize.Kind)
@@ -245,33 +245,6 @@ public class PrintDocumentTests : FileCleanupTestBase
 
         Assert.True(Enum.IsDefined(typeof(PrinterResolutionKind), pageSettings.PrinterResolution.Kind));
         Assert.True(pageSettings.PrinterSettings.IsDefaultPrinter);
-    }
-
-    private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
-    private static bool CanPrintToPdf()
-    {
-        foreach (string name in Helpers.InstalledPrinters)
-        {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static string GetPdfPrinterName()
-    {
-        foreach (string name in Helpers.InstalledPrinters)
-        {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
-            {
-                return name;
-            }
-        }
-
-        throw new InvalidOperationException("No PDF printer installed");
     }
 
     private class TestPrintController : PrintController

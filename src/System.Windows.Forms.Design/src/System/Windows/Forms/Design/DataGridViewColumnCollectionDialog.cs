@@ -325,28 +325,30 @@ internal class DataGridViewColumnCollectionDialog : Form
     private static void CopyDefaultCellStyle(DataGridViewColumn srcColumn, DataGridViewColumn destColumn)
     {
         // Here is what we want to do ( see vsw 352177 for more details ):
-        // 1. If srcColumn and destColumn have the same type simply copy the default cell style from source to destination
-        //  and be done w/ it.
+        // 1. If srcColumn and destColumn have the same type simply copy the default cell style
+        //      from source to destination and be done w/ it.
         // 2. Otherwise, determine which properties in the cell style are no longer default and copy those properties.
         //      To do that we need to:
-        //      2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
-        //      then we copy all the public properties.
-        //      2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
-        //      2.c We need to special case the DataGridViewCellStyle::NullValue property. This property will be copied only if the NullValue
-        //      has the same type in destColumn and in srcColumn.
+        //      2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are
+        //      creating the default cell style then we copy all the public properties.
+        //      2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property
+        //      that are changed from the default values;
+        //      2.c We need to special case the DataGridViewCellStyle::NullValue property. This property
+        //      will be copied only if the NullValue has the same type in destColumn and in srcColumn.
 
         Type srcType = srcColumn.GetType();
         Type destType = destColumn.GetType();
 
-        // 1. If srcColumn and destColumn have the same type simply copy the default cell style from source to destination
-        //  and be done w/ it.
+        // 1. If srcColumn and destColumn have the same type simply copy the
+        // default cell style from source to destination and be done w/ it.
         if (srcType.IsAssignableFrom(destType) || destType.IsAssignableFrom(srcType))
         {
             destColumn.DefaultCellStyle = srcColumn.DefaultCellStyle;
             return;
         }
 
-        // 2.a Create a default srcColumn so we get its default cell style. If we get an exception when we are creating the default cell style
+        // 2.a Create a default srcColumn so we get its default cell style.
+        // If we get an exception when we are creating the default cell style
         //      then we copy all the public properties.
         DataGridViewColumn? defaultSrcColumn = null;
         try
@@ -359,11 +361,10 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
                 throw;
             }
-
-            defaultSrcColumn = null;
         }
 
-        // 2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property that are changed from the default values;
+        // 2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property
+        // that are changed from the default values;
         if (defaultSrcColumn is null || defaultSrcColumn.DefaultCellStyle.Alignment != srcColumn.DefaultCellStyle.Alignment)
         {
             destColumn.DefaultCellStyle.Alignment = srcColumn.DefaultCellStyle.Alignment;
@@ -624,7 +625,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         ShowIcon = false;
         ShowInTaskbar = false;
         HelpButtonClicked += DataGridViewColumnCollectionDialog_HelpButtonClicked;
-        Closed += DataGridViewColumnCollectionDialog_Closed;
+        FormClosed += DataGridViewColumnCollectionDialog_Closed;
         Load += DataGridViewColumnCollectionDialog_Load;
         HelpRequested += DataGridViewColumnCollectionDialog_HelpRequested;
         _overarchingTableLayoutPanel.ResumeLayout(false);
@@ -960,7 +961,7 @@ internal class DataGridViewColumnCollectionDialog : Form
                 colorMap[0].OldColor = Color.White;
                 colorMap[0].NewColor = e.BackColor;
 
-                // 
+                //
                 // TO DO : DITHER
                 //
                 attributes.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
@@ -1167,7 +1168,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         if (componentChangeService is not null)
         {
-            componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(componentChanged);
+            componentChangeService.ComponentChanged -= componentChanged;
         }
     }
 
@@ -1266,7 +1267,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(DataGridViewColumn);
 
-            PropertyDescriptor[]? propArray = null;
+            PropertyDescriptor[]? propArray;
             if (DataGridViewColumnDesigner is not null)
             {
                 // PropertyDescriptorCollection does not let us change properties.
@@ -1299,17 +1300,8 @@ internal class DataGridViewColumnCollectionDialog : Form
             return new PropertyDescriptorCollection(propArray);
         }
 
-        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
-        {
-            if (pd is ColumnTypePropertyDescriptor)
-            {
-                return this;
-            }
-            else
-            {
-                return DataGridViewColumn;
-            }
-        }
+        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd) =>
+            pd is ColumnTypePropertyDescriptor ? this : DataGridViewColumn;
 
         ISite? IComponent.Site
         {

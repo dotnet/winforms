@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <IsAnalyzerProject Condition="'$(IsAnalyzerProject)' == ''">false</IsAnalyzerProject>
+
+    <!-- Only upgrade NuGetAudit warnings to errors for official builds. -->
+    <WarningsNotAsErrors Condition="'$(OfficialBuild)' != 'true'">$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!--
+      Don't let Microsoft.CodeAnalysis.NetAnalyzers complain about the version being older than what is in the SDK.
+    -->
+    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
+    <IsRoslynComponent>true</IsRoslynComponent>
+
+    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
+    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
+  </PropertyGroup>
+</Project>

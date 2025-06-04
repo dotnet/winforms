@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // TIFF Codec class testing unit
 //
 // Authors:
@@ -232,7 +232,7 @@ public class TiffCodecTest
         }
     }
 
-    private void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
+    private static void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
     {
         string sOutFile = $"linerect-{expected}.tif";
 

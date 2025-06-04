@@ -4,7 +4,7 @@
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  A service container that supports "fixed" services.  Fixed
+///  A service container that supports "fixed" services. Fixed
 ///  services cannot be removed.
 /// </summary>
 public class DesignSurfaceManager : IServiceProvider, IDisposable
@@ -38,10 +38,10 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
 
     /// <summary>
     ///  This property should be set by the designer's user interface
-    ///  whenever a designer becomes the active window.  The default
+    ///  whenever a designer becomes the active window. The default
     ///  implementation of this property works with the default
     ///  implementation of IDesignerEventService to notify interested
-    ///  parties that a new designer is now active.  If you provide
+    ///  parties that a new designer is now active. If you provide
     ///  your own implementation of IDesignerEventService you should
     ///  override this property to notify your service appropriately.
     /// </summary>
@@ -51,7 +51,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
         set
         {
             // If we are providing IDesignerEventService, then we are responsible for
-            // notifying it of new designers coming into place.  If we aren't
+            // notifying it of new designers coming into place. If we aren't
             // the ones providing the event service, then whoever is providing
             // it will be responsible for updating it when new designers
             // are created.
@@ -63,7 +63,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     }
 
     /// <summary>
-    ///  A collection of design surfaces.  This is offered
+    ///  A collection of design surfaces. This is offered
     ///  for convience, and simply maps to IDesignerEventService.
     /// </summary>
     public DesignSurfaceCollection DesignSurfaces => new(EventService?.Designers);
@@ -82,7 +82,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
 
     /// <summary>
     ///  This event is raised when a new design surface gains
-    ///  activation.  This is mapped through IDesignerEventService.
+    ///  activation. This is mapped through IDesignerEventService.
     /// </summary>
     public event ActiveDesignSurfaceChangedEventHandler? ActiveDesignSurfaceChanged
     {
@@ -93,7 +93,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
-                    eventService.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
+                    eventService.ActiveDesignerChanged += OnActiveDesignerChanged;
                 }
             }
 
@@ -110,14 +110,14 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
-                eventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
+                eventService.ActiveDesignerChanged -= OnActiveDesignerChanged;
             }
         }
     }
 
     /// <summary>
     ///  This event is raised when a new design surface is
-    ///  created.  This is mapped through IDesignerEventService.
+    ///  created. This is mapped through IDesignerEventService.
     /// </summary>
     public event DesignSurfaceEventHandler? DesignSurfaceCreated
     {
@@ -128,7 +128,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
-                    eventService.DesignerCreated += new DesignerEventHandler(OnDesignerCreated);
+                    eventService.DesignerCreated += OnDesignerCreated;
                 }
             }
 
@@ -145,7 +145,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
-                eventService.DesignerCreated -= new DesignerEventHandler(OnDesignerCreated);
+                eventService.DesignerCreated -= OnDesignerCreated;
             }
         }
     }
@@ -163,7 +163,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
-                    eventService.DesignerDisposed += new DesignerEventHandler(OnDesignerDisposed);
+                    eventService.DesignerDisposed += OnDesignerDisposed;
                 }
             }
 
@@ -180,14 +180,14 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
-                eventService.DesignerDisposed -= new DesignerEventHandler(OnDesignerDisposed);
+                eventService.DesignerDisposed -= OnDesignerDisposed;
             }
         }
     }
 
     /// <summary>
     ///  This event is raised when the active designer's
-    ///  selection of component set changes.  This is mapped
+    ///  selection of component set changes. This is mapped
     ///  through IDesignerEventService.
     /// </summary>
     public event EventHandler? SelectionChanged
@@ -199,7 +199,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
-                    eventService.SelectionChanged += new EventHandler(OnSelectionChanged);
+                    eventService.SelectionChanged += OnSelectionChanged;
                 }
             }
 
@@ -216,7 +216,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
-                eventService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                eventService.SelectionChanged -= OnSelectionChanged;
             }
         }
     }
@@ -229,7 +229,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
         DesignSurface surface = CreateDesignSurfaceCore(this);
 
         // If we are providing IDesignerEventService, then we are responsible for
-        // notifying it of new designers coming into place.  If we aren't
+        // notifying it of new designers coming into place. If we aren't
         // the ones providing the event service, then whoever is providing
         // it will be responsible for updating it when new designers are created.
         if (GetService(typeof(IDesignerEventService)) is DesignerEventService eventService)
@@ -241,10 +241,10 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     }
 
     /// <summary>
-    ///  Public method to create a design surface.  This method
-    ///  takes an additional service provider.  This service
+    ///  Public method to create a design surface. This method
+    ///  takes an additional service provider. This service
     ///  provider will be combined with the service provider
-    ///  already contained within DesignSurfaceManager.  Service
+    ///  already contained within DesignSurfaceManager. Service
     ///  requests will go to this provider first, and then bubble
     ///  up to the service provider owned by DesignSurfaceManager.
     ///  This allows for services to be tailored for each design surface.
@@ -258,7 +258,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
         DesignSurface surface = CreateDesignSurfaceCore(mergedProvider);
 
         // If we are providing IDesignerEventService, then we are responsible for
-        // notifying it of new designers coming into place.  If we aren't
+        // notifying it of new designers coming into place. If we aren't
         // the ones providing the event service, then whoever is providing
         // it will be responsible for updating it when new designers are created.
         DesignerEventService? eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
@@ -268,7 +268,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     }
 
     /// <summary>
-    ///  Creates an instance of a design surface.  This can be
+    ///  Creates an instance of a design surface. This can be
     ///  overridden to provide a derived version of DesignSurface.
     /// </summary>
     protected virtual DesignSurface CreateDesignSurfaceCore(IServiceProvider parentProvider) => new(parentProvider);
@@ -311,7 +311,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  The type of service being requested.
     /// </param>
     /// <returns>
-    ///  A new instance of the service.  It is an error to call this with
+    ///  A new instance of the service. It is an error to call this with
     ///  a service type it doesn't know how to create
     /// </returns>
     private static object? OnCreateService(IServiceContainer container, Type serviceType)

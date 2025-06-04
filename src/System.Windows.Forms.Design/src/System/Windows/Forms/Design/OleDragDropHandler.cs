@@ -128,7 +128,7 @@ internal partial class OleDragDropHandler
     public static bool FreezePainting { get; private set; }
 
     /// <summary>
-    ///  This is the worker method of all CreateTool methods.  It is the only one
+    ///  This is the worker method of all CreateTool methods. It is the only one
     ///  that can be overridden.
     /// </summary>
     public IComponent[] CreateTool(ToolboxItem tool, Control? parent, int x, int y, int width, int height, bool hasLocation, bool hasSize)
@@ -257,7 +257,7 @@ internal partial class OleDragDropHandler
         {
             host?.Activate();
 
-            List<IComponent> selectComps = new(comps);
+            List<IComponent> selectComps = [..comps];
 
             for (int i = 0; i < comps.Length; i++)
             {
@@ -349,7 +349,7 @@ internal partial class OleDragDropHandler
             }
 
             // If we are moving, we must make sure that the location property of the component
-            // is not read only.  Otherwise, we can't move the thing.
+            // is not read only. Otherwise, we can't move the thing.
             bool readOnlyLocation = true;
 
             PropertyDescriptor? loc = TypeDescriptor.GetProperties(comps[i])["Location"];
@@ -441,8 +441,8 @@ internal partial class OleDragDropHandler
         using SelectObjectScope brushSelection = new(dc, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(dc, pen);
 
-        PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
-        PInvoke.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+        PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+        PInvokeCore.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         // ------ Duplicate code----------------------------------------------------------
     }
 
@@ -468,7 +468,7 @@ internal partial class OleDragDropHandler
 
         // check to see if any of the components are inherited. if so, don't allow them to be moved.
         // We replace DragDropEffects.Move with a local bit called AllowLocalMoveOnly which means it
-        // can be moved around on the current dropsource/target, but not to another target.  Since only
+        // can be moved around on the current dropsource/target, but not to another target. Since only
         // we understand this bit, other drop targets will not allow the move to occur
         //
         for (int i = 0; i < components.Length; i++)
@@ -484,11 +484,11 @@ internal partial class OleDragDropHandler
 
         DataObject data = new ComponentDataObjectWrapper(new ComponentDataObject(_serviceProvider, components));
 
-        // We make sure we're painted before we start the drag.  Then, we disable window painting to
-        // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
+        // We make sure we're painted before we start the drag. Then, we disable window painting to
+        // ensure that the drag can proceed without leaving artifacts lying around. We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, PInvoke.WM_PAINT, PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvokeCore.PeekMessage(&msg, HWND.Null, PInvokeCore.WM_PAINT, PInvokeCore.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);
@@ -555,7 +555,7 @@ internal partial class OleDragDropHandler
 
         if (selectionUISvc is not null)
         {
-            // We must check to ensure that UI service is still in drag mode.  It is
+            // We must check to ensure that UI service is still in drag mode. It is
             // possible that the user hit escape, which will cancel drag mode.
             //
             if (selectionUISvc.Dragging)
@@ -590,7 +590,7 @@ internal partial class OleDragDropHandler
         // ASURT 43757: By the time we come here, it means that the user completed the drag-drop and
         // we compute the new location/size of the controls if needed and set the property values.
         // We have to stop freezePainting right here, so that controls can get a chance to validate
-        // their new rects.
+        // their new rectangles.
         //
         FreezePainting = false;
 
@@ -752,7 +752,7 @@ internal partial class OleDragDropHandler
                                 if (updateLocation)
                                 {
                                     oldDesignerControl = Destination.GetDesignerControl();
-                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+                                    PInvokeCore.SendMessage(oldDesignerControl, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                                 }
 
                                 Point dropPt = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -800,7 +800,7 @@ internal partial class OleDragDropHandler
                                 if (oldDesignerControl is not null)
                                 {
                                     // ((ComponentDataObject)dataObj).ShowControls();
-                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                                    PInvokeCore.SendMessage(oldDesignerControl, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                                     oldDesignerControl.Invalidate(true);
                                 }
 
@@ -837,7 +837,7 @@ internal partial class OleDragDropHandler
 
                 if (selectionUISvc is not null)
                 {
-                    // We must check to ensure that UI service is still in drag mode.  It is
+                    // We must check to ensure that UI service is still in drag mode. It is
                     // possible that the user hit escape, which will cancel drag mode.
                     //
                     if (selectionUISvc.Dragging && moveAllowed)
@@ -859,7 +859,7 @@ internal partial class OleDragDropHandler
     public void DoOleDragEnter(DragEventArgs de)
     {
         /*
-        this causes focus rects to be drawn, which we don't want to happen.
+        this causes focus rectangles to be drawn, which we don't want to happen.
 
         Control dragHost = client.GetDesignerControl();
 
@@ -964,16 +964,8 @@ internal partial class OleDragDropHandler
         {
             Point convertedPoint = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
-            // draw the shadow rects.
-            Point newOffset;
-            if (_forceDrawFrames)
-            {
-                newOffset = convertedPoint;
-            }
-            else
-            {
-                newOffset = new Point(de.X - _dragBase.X, de.Y - _dragBase.Y);
-            }
+            // draw the shadow rectangles.
+            Point newOffset = _forceDrawFrames ? convertedPoint : new Point(de.X - _dragBase.X, de.Y - _dragBase.Y);
 
             // Only allow drops on the client area.
             if (!Destination.GetDesignerControl().ClientRectangle.Contains(convertedPoint))
@@ -1035,28 +1027,16 @@ internal partial class OleDragDropHandler
             components = cdo.Components;
         }
 
-        if (!topLevelOnly || components is null)
-        {
-            return components;
-        }
-
-        return GetTopLevelComponents(components);
+        return !topLevelOnly || components is null ? components : GetTopLevelComponents(components);
     }
 
-    public static object[]? GetDraggingObjects(IDataObject? dataObj)
-    {
-        return GetDraggingObjects(dataObj, false);
-    }
+    public static object[]? GetDraggingObjects(IDataObject? dataObj) => GetDraggingObjects(dataObj, topLevelOnly: false);
 
-    public static object[]? GetDraggingObjects(DragEventArgs de)
-    {
-        return GetDraggingObjects(de.Data);
-    }
+    public static object[]? GetDraggingObjects(DragEventArgs de) => GetDraggingObjects(de.Data);
 
     private static object[] GetTopLevelComponents(ICollection comps)
     {
         // Filter the top-level components.
-        //
         if (comps is not IList)
         {
             comps = new ArrayList(comps);

@@ -9,8 +9,8 @@ namespace System.Windows.Forms.Design;
 internal partial class DesignerExtenders
 {
     /// <summary>
-    ///  This is the base extender provider for all winform document
-    ///  designers.  It provides the "Name" property.
+    ///  This is the base extender provider for all WinForms document
+    ///  designers. It provides the "Name" property.
     /// </summary>
     [ProvideProperty("Name", typeof(IComponent))]
     private class NameExtenderProvider : IExtenderProvider
@@ -43,7 +43,7 @@ internal partial class DesignerExtenders
         }
 
         /// <summary>
-        ///  Determines if ths extender provider can extend the given object.  We extend
+        ///  Determines if ths extender provider can extend the given object. We extend
         ///  all objects, so we always return true.
         /// </summary>
         public virtual bool CanExtend(object o)
@@ -55,7 +55,7 @@ internal partial class DesignerExtenders
                 return true;
             }
 
-            // See if this object is inherited.  If so, then we don't want to extend.
+            // See if this object is inherited. If so, then we don't want to extend.
             if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)]?.Equals(InheritanceAttribute.NotInherited) ?? false)
             {
                 return false;
@@ -66,7 +66,7 @@ internal partial class DesignerExtenders
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "Name" property.
+        ///  on the form. It implements the "Name" property.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [ParenthesizePropertyName(true)]
@@ -86,15 +86,12 @@ internal partial class DesignerExtenders
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "Name" property.
+        ///  on the form. It implements the "Name" property.
         /// </summary>
         public static void SetName(IComponent comp, string newName)
         {
             ISite? site = comp.Site;
-            if (site is not null)
-            {
-                site.Name = newName;
-            }
+            site?.Name = newName;
         }
     }
 }

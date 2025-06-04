@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using Moq;
 
@@ -24,7 +26,7 @@ public class DesignerCommandSetTests
     }
 
     [Fact]
-    public void DesignerCommandSet_Verbs_OverridenGetCommands_ReturnsExpected()
+    public void DesignerCommandSet_Verbs_OverriddenGetCommands_ReturnsExpected()
     {
         DesignerVerbCollection collection = [];
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
@@ -35,7 +37,7 @@ public class DesignerCommandSetTests
     }
 
     [Fact]
-    public void DesignerCommandSet_Verbs_InvalidOverridenGetCommands_ThrowsInvalidCastException()
+    public void DesignerCommandSet_Verbs_InvalidOverriddenGetCommands_ThrowsInvalidCastException()
     {
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
@@ -45,7 +47,7 @@ public class DesignerCommandSetTests
     }
 
     [Fact]
-    public void DesignerCommandSet_ActionLists_OverridenGetCommands_ReturnsExpected()
+    public void DesignerCommandSet_ActionLists_OverriddenGetCommands_ReturnsExpected()
     {
         DesignerActionListCollection collection = [];
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
@@ -56,7 +58,7 @@ public class DesignerCommandSetTests
     }
 
     [Fact]
-    public void DesignerCommandSet_ActionLists_InvalidOverridenGetCommands_ThrowsInvalidCastException()
+    public void DesignerCommandSet_ActionLists_InvalidOverriddenGetCommands_ThrowsInvalidCastException()
     {
         Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet

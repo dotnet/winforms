@@ -6,16 +6,23 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object. DesignerActions can be added or removed at any  given time. The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration. Designer implementing this service will need to monitor the DesignerActionsChanged event on this class. This event will fire every time a change is made to any object's DesignerActions.
+///  The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object.
+///  DesignerActions can be added or removed at any given time. The DesignerActionService controls the expiration
+///  of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration.
+///  Designer implementing this service will need to monitor the DesignerActionsChanged event on this class.
+///  This event will fire every time a change is made to any object's DesignerActions.
 /// </summary>
 public class DesignerActionService : IDisposable
 {
-    private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
+    private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em. Syntax: key = object, value = DesignerActionListCollection
     private DesignerActionListsChangedEventHandler? _designerActionListsChanged;
     private readonly IServiceProvider? _serviceProvider; // standard service provider
     private readonly ISelectionService? _selectionService; // selection service
-    private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; // Hashset of components which have events hooked up.
-    // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
+    // HashSet of components which have events hooked up.
+    private readonly HashSet<IComponent> _componentToVerbsEventHookedUp;
+    // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the
+    // Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes
+    // recursion leading to Stack Overflow Exception.
     private bool _reEntrantCode;
 
     /// <summary>
@@ -31,7 +38,7 @@ public class DesignerActionService : IDisposable
 
             if (serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved += OnComponentRemoved;
             }
 
             _selectionService = serviceProvider.GetService<ISelectionService>();
@@ -128,7 +135,7 @@ public class DesignerActionService : IDisposable
 
             if (_serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved -= OnComponentRemoved;
             }
         }
     }
@@ -192,7 +199,7 @@ public class DesignerActionService : IDisposable
 
                         if (hookupEvents)
                         {
-                            verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
+                            verb.CommandChanged += OnVerbStatusChanged;
                         }
 
                         if (verb is { Enabled: true, Visible: true })
@@ -208,8 +215,11 @@ public class DesignerActionService : IDisposable
                 }
             }
 
-            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
-            // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
+            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some
+            // time doing this twice but don't have much of a choice here... the panel is not yet displayed and
+            // we want to know if a non empty panel is present...
+            // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an
+            // empty actionList collection
             if (pullCollection is not null)
             {
                 foreach (DesignerActionList actionList in pullCollection)
@@ -259,7 +269,9 @@ public class DesignerActionService : IDisposable
         if (_designerActionLists.TryGetValue(component, out DesignerActionListCollection? pushCollection))
         {
             actionLists.AddRange(pushCollection);
-            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
+            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time
+            // doing this twice but don't have much of a choice here... the panel is not yet displayed and we want
+            // to know if a non empty panel is present...
             foreach (DesignerActionList actionList in pushCollection)
             {
                 DesignerActionItemCollection? collection = actionList?.GetSortedActionItems();
@@ -272,7 +284,7 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  We hook the OnComponentRemoved event so we can clean up  all associated actions.
+    ///  We hook the OnComponentRemoved event so we can clean up all associated actions.
     /// </summary>
     private void OnComponentRemoved(object? source, ComponentEventArgs componentEventArgs)
     {
@@ -288,7 +300,8 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
+    ///  This will remove all DesignerActions associated with the 'comp' object.
+    ///  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
     /// </summary>
     public void Remove(IComponent comp)
     {
@@ -301,7 +314,8 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
+    ///  This will remove the specified DesignerAction from the DesignerActionService.
+    ///  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
     /// </summary>
     public void Remove(DesignerActionList actionList)
     {
@@ -319,7 +333,8 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  This will remove the all instances of the DesignerAction from  the 'comp' object. If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
+    ///  This will remove the all instances of the DesignerAction from the 'comp' object.
+    ///  If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
     /// </summary>
     public void Remove(IComponent comp, DesignerActionList actionList)
     {

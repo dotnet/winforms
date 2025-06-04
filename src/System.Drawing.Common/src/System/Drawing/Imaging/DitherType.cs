@@ -12,15 +12,17 @@ public enum DitherType
 {
     /// <summary>
     ///  No dithering is performed. Pixels in the source bitmap are mapped to the nearest color in the palette specified
-    ///  by the palette parameter of the <see cref="Bitmap.ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/>
+    ///  by the palette parameter of the
+    ///  <see cref="Bitmap.ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/>
     ///  method. This algorithm can be used with any palette other than <see cref="PaletteType.Custom"/>.
     /// </summary>
     None = GdiPlus.DitherType.DitherTypeNone,
 
     /// <summary>
     ///  No dithering is performed. Pixels in the source bitmap are mapped to the nearest color in the palette specified
-    ///  by the palette parameter of the <see cref="Bitmap.ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/>
-    ///  method. This algorithm can be used with any palette.
+    ///  by the palette parameter of the
+    ///  <see cref="Bitmap.ConvertFormat(PixelFormat, DitherType, PaletteType, ColorPalette?, float)"/> method.
+    ///  This algorithm can be used with any palette.
     /// </summary>
     Solid = GdiPlus.DitherType.DitherTypeSolid,
 
@@ -56,7 +58,7 @@ public enum DitherType
     DualSpiral4x4 = GdiPlus.DitherType.DitherTypeDualSpiral4x4,
 
     /// <summary>
-    /// Dithering is performed using the colors in one of the standard fixed palettes.
+    ///  Dithering is performed using the colors in one of the standard fixed palettes.
     /// </summary>
     DualSpiral8x8 = GdiPlus.DitherType.DitherTypeDualSpiral8x8,
 

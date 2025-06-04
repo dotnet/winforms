@@ -36,6 +36,8 @@ schedules:
       - main
       - release/6.0
       - release/7.0
+      - release/8.0
+      - release/9.0
     always: true
 
 jobs:
@@ -43,7 +45,7 @@ jobs:
   displayName: CodeQL
   pool:
     name: $(DncEngInternalBuildPool)
-    demands: ImageOverride -equals 1es-windows-2022
+    demands: ImageOverride -equals windows.vs2022preview.amd64
   timeoutInMinutes: 90
 
   steps:

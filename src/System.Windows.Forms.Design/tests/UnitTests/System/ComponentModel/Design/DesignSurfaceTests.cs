@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
@@ -1190,7 +1192,7 @@ public class DesignSurfaceTests
         mockLoader
             .Setup(l => l.BeginLoad(host));
         surface.BeginLoad(mockLoader.Object);
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.True(host.Loading);
 
         // Should not throw again.
@@ -1211,7 +1213,7 @@ public class DesignSurfaceTests
         Assert.True(host.Loading);
         Assert.True(host.InTransaction);
         Assert.Equal("Transaction1", host.TransactionDescription);
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.True(host.Loading);
         Assert.True(host.InTransaction);
         Assert.Equal("Transaction1", host.TransactionDescription);

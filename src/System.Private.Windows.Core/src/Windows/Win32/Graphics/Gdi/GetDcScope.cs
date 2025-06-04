@@ -4,8 +4,8 @@
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
-///  Helper to scope lifetime of an <see cref="HDC"/> retrieved via <see cref="PInvokeCore.GetDC(HWND)"/> and
-///  <see cref="PInvokeCore.GetDCEx(HWND, HRGN, GET_DCX_FLAGS)"/>. Releases the <see cref="HDC"/> (if any)
+///  Helper to scope lifetime of an <see cref="Gdi.HDC"/> retrieved via <see cref="PInvokeCore.GetDC(HWND)"/> and
+///  <see cref="PInvokeCore.GetDCEx(HWND, HRGN, GET_DCX_FLAGS)"/>. Releases the <see cref="Gdi.HDC"/> (if any)
 ///  when disposed.
 /// </summary>
 /// <remarks>
@@ -26,7 +26,7 @@ internal readonly ref struct GetDcScope
     }
 
     /// <summary>
-    ///  Creates a <see cref="HDC"/> using <see cref="PInvokeCore.GetDCEx(HWND, HRGN, GET_DCX_FLAGS)"/>.
+    ///  Creates a <see cref="Gdi.HDC"/> using <see cref="PInvokeCore.GetDCEx(HWND, HRGN, GET_DCX_FLAGS)"/>.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -47,10 +47,10 @@ internal readonly ref struct GetDcScope
     ///  Creates a DC scope for the primary monitor (not the entire desktop).
     /// </summary>
     /// <remarks>
-    ///   <para>
-    ///    <see cref="PInvoke.CreateDCW(PCWSTR, PCWSTR, PCWSTR, Windows.Win32.Graphics.Gdi.DEVMODEW*)" /> is the
-    ///    API to get the DC for the entire desktop.
-    ///   </para>
+    ///  <para>
+    ///   <see cref="PInvokeCore.CreateDCW(PCWSTR, PCWSTR, PCWSTR, DEVMODEW*)" /> is the
+    ///   API to get the DC for the entire desktop.
+    ///  </para>
     /// </remarks>
     public static GetDcScope ScreenDC => new(HWND.Null);
 

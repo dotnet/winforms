@@ -52,7 +52,7 @@ public static partial class PlatformDetection
 
     // Windows OneCoreUAP SKU doesn't have httpapi.dll
     public static bool IsNotOneCoreUAP =>
-        File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
+        File.Exists(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "httpapi.dll"));
 
     public static bool IsWindowsIoTCore => GetWindowsProductType() is PRODUCT_IOTUAPCOMMERCIAL or PRODUCT_IOTUAP;
 
@@ -110,10 +110,10 @@ public static partial class PlatformDetection
                     // APPMODEL_ERROR_NO_APPLICATION
                     15703 => 0,
                     // ERROR_SUCCESS
-                    0 or 122 => 1,// Success is actually insufficent buffer as we're really only looking for
-                                  // not NO_APPLICATION and we're not actually giving a buffer here. The
-                                  // API will always return NO_APPLICATION if we're not running under a
-                                  // WinRT process, no matter what size the buffer is.
+                    0 or 122 => 1, // Success is actually insufficent buffer as we're really only looking for
+                                   // not NO_APPLICATION and we're not actually giving a buffer here. The
+                                   // API will always return NO_APPLICATION if we're not running under a
+                                   // WinRT process, no matter what size the buffer is.
                     _ => throw new InvalidOperationException($"Failed to get AppId, result was {result}."),
                 };
             }

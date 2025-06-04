@@ -5,34 +5,10 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace System.Private.Windows.Core.BinaryFormat;
+namespace System.Private.Windows.BinaryFormat;
 
 internal static class BinaryFormatTestExtensions
 {
-    /// <summary>
-    ///  Serializes the object using the <see cref="BinaryFormatter"/> and reads it into a <see cref="BinaryFormattedObject"/>.
-    /// </summary>
-    public static BinaryFormattedObject SerializeAndParse(this object source)
-    {
-        using Stream stream = source.Serialize();
-        return new(stream);
-    }
-
-    /// <summary>
-    ///  Serializes the object using the <see cref="BinaryFormatter"/>.
-    /// </summary>
-    public static Stream Serialize(this object source)
-    {
-        MemoryStream stream = new();
-        using BinaryFormatterScope formatterScope = new(enable: true);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
-#pragma warning restore SYSLIB0011
-        formatter.Serialize(stream, source);
-        stream.Position = 0;
-        return stream;
-    }
-
     /// <summary>
     ///  Returns `true` if the <see cref="Type"/> would use the <see cref="BinaryFormatter"/> for the purposes
     ///  of designer serialization (either through Resx or IPropertyBag for ActiveXImpl).

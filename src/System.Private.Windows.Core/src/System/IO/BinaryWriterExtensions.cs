@@ -3,7 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.BinaryFormat.Serializer;
 
 namespace System.IO;
 
@@ -17,9 +17,9 @@ internal static class BinaryWriterExtensions
         // Copied from System.Runtime.Serialization.Formatters.Binary.BinaryFormatterWriter
 
         // In .NET Framework, BinaryFormatter is able to access DateTime's ToBinaryRaw,
-        // which just returns the value of its sole Int64 dateData field.  Here, we don't
+        // which just returns the value of its sole Int64 dateData field. Here, we don't
         // have access to that member (which doesn't even exist anymore, since it was only for
-        // BinaryFormatter, which is now in a separate assembly).  To address that,
+        // BinaryFormatter, which is now in a separate assembly). To address that,
         // we access the sole field directly via an unsafe cast.
         long dateData = Unsafe.As<DateTime, long>(ref value);
         writer.Write(dateData);

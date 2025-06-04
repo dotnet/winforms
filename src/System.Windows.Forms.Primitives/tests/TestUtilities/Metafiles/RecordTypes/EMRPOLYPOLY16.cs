@@ -12,12 +12,12 @@ namespace System.Windows.Forms.Metafiles;
 ///  Record that represents a 16 bit Poly record.
 /// </summary>
 /// <devdoc>
-///   Not an actual Win32 define, encapsulates:
+///  Not an actual Win32 define, encapsulates:
 ///
-///  - EMRPOLYPOLYLINE16
-///  - EMRPOLYPOLYBEZIER16
-///  - EMRPOLYPOLYGON16
-///  - EMRPOLYPOLYLINETO16
+///   - EMRPOLYPOLYLINE16
+///   - EMRPOLYPOLYBEZIER16
+///   - EMRPOLYPOLYGON16
+///   - EMRPOLYPOLYLINETO16
 /// </devdoc>
 [StructLayout(LayoutKind.Sequential)]
 internal struct EMRPOLYPOLY16
@@ -57,7 +57,7 @@ internal struct EMRPOLYPOLY16
     {
         get
         {
-            fixed(uint* c = &_aPolyCounts)
+            fixed (uint* c = &_aPolyCounts)
             {
                 return new(c, checked((int)nPolys));
             }

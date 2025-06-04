@@ -69,7 +69,7 @@ internal partial class ImageListDesigner
         object? IList.this[int index]
         {
             get => this[index];
-            set => this[index] = value is ImageListImage image ? image : throw new ArgumentException();
+            set => this[index] = value is ImageListImage image ? image : throw new ArgumentException(null, nameof(index));
         }
 
         public void SetKeyName(int index, string name)
@@ -79,10 +79,8 @@ internal partial class ImageListDesigner
         }
 
         /// <summary>
-        /// Add the given image to the ImageList.
+        ///  Add the given image to the ImageList.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public int Add(ImageListImage value)
         {
             _items.Add(value);
@@ -110,9 +108,9 @@ internal partial class ImageListDesigner
             }
         }
 
-        int IList.Add(object? value) => value is ImageListImage image ? Add(image) : throw new ArgumentException();
+        int IList.Add(object? value) => value is ImageListImage image ? Add(image) : throw new ArgumentException(null, nameof(value));
 
-        // Called when reloading the form.  In this case, we have no "originals" list,
+        // Called when reloading the form. In this case, we have no "originals" list,
         // so we make one out of the image list.
         internal void ReloadFromImageList()
         {
@@ -125,7 +123,7 @@ internal partial class ImageListDesigner
         }
 
         /// <summary>
-        /// Remove all images and masks from the ImageList.
+        ///  Remove all images and masks from the ImageList.
         /// </summary>
         public void Clear()
         {
@@ -140,9 +138,9 @@ internal partial class ImageListDesigner
 
         public IEnumerator GetEnumerator() => _items.GetEnumerator();
 
-        public int IndexOf(Image? value) => value is Image image ? _items.IndexOf(image) : -1;
+        public int IndexOf(ImageListImage? value) => value is ImageListImage imageListImage ? _items.IndexOf(imageListImage) : -1;
 
-        int IList.IndexOf(object? value) => value is Image image ? IndexOf(image) : -1;
+        int IList.IndexOf(object? value) => value is ImageListImage image ? IndexOf(image) : -1;
 
         void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
@@ -161,7 +159,7 @@ internal partial class ImageListDesigner
             PopulateHandle();
         }
 
-        public void Remove(Image value)
+        public void Remove(ImageListImage value)
         {
             AssertInvariant();
             _items.Remove(value);
@@ -170,7 +168,7 @@ internal partial class ImageListDesigner
 
         void IList.Remove(object? value)
         {
-            if (value is Image image)
+            if (value is ImageListImage image)
             {
                 Remove(image);
             }

@@ -19,7 +19,9 @@ internal static partial class ScaleHelper
     /// <remarks>
     ///  <para>
     ///   Some historical discussion of this can be found
-    ///   <see href="https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards">here</see>.
+    ///   <see href="https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards">
+    ///    here.
+    ///   </see>
     ///  </para>
     /// </remarks>
     internal const int OneHundredPercentLogicalDpi = 96;
@@ -215,31 +217,14 @@ internal static partial class ScaleHelper
     internal static bool IsScalingRequired => InitialSystemDpi != OneHundredPercentLogicalDpi;
 
     /// <summary>
-    ///  Creates a scaled version of the given <see cref="Font"/> to the Windows Accessibility Text Size setting (also
+    ///  Creates a scaled version of the given non system <see cref="Font"/> to the Windows Accessibility Text Size setting (also
     ///  known as Text Scaling) if needed, otherwise returns <see langword="null"/>.
     /// </summary>
     internal static Font? ScaleToSystemTextSize(Font? font)
     {
-        if (!OsVersion.IsWindows10_1507OrGreater() || font is null || font.IsSystemFont)
+        if (font is null || font.IsSystemFont || !OsVersion.IsWindows10_1507OrGreater())
         {
             return null;
-        }
-
-        if (font.IsSystemFont)
-        {
-            // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
-            // done more efficiently by querying the OS to see if this is necessary for the specific font.
-            //
-            // This should never return null.
-            Font newSystemFont = SystemFonts.GetFontByName(font.SystemFontName)!;
-            if (newSystemFont.Size == font.Size)
-            {
-                // No point in keeping an identical one, free the resource.
-                newSystemFont.Dispose();
-                return null;
-            }
-
-            return newSystemFont;
         }
 
         // The default(100) and max(225) text scale factor is value what Settings display text scale
@@ -437,6 +422,17 @@ internal static partial class ScaleHelper
     }
 
     /// <summary>
+    ///  Get X, Y metrics at DPI, IF icon is not already that size, create and return a new one.
+    /// </summary>
+    internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi)
+    {
+        int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
+
+        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
+    }
+
+    /// <summary>
     ///  Sets the requested DPI mode. If the current OS does not support the requested mode,
     /// </summary>
     /// <returns><see langword="true"/> if the mode was successfully set.</returns>
@@ -480,7 +476,6 @@ internal static partial class ScaleHelper
         else
         {
             // Vista or higher has SetProcessDPIAware
-            PROCESS_DPI_AWARENESS dpiAwareness = (PROCESS_DPI_AWARENESS)(-1);
             switch (highDpiMode)
             {
                 case HighDpiMode.DpiUnaware:
@@ -490,13 +485,8 @@ internal static partial class ScaleHelper
                 case HighDpiMode.SystemAware:
                 case HighDpiMode.PerMonitor:
                 case HighDpiMode.PerMonitorV2:
-                    dpiAwareness = PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                    success = PInvoke.SetProcessDPIAware();
                     break;
-            }
-
-            if (dpiAwareness == PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
-            {
-                success = PInvoke.SetProcessDPIAware();
             }
         }
 

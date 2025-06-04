@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -111,22 +112,22 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromHdcInternal_ZeroHdc_ThrowsOutOfMemoryException()
+    public void FromHdcInternal_ZeroHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdcInternal(IntPtr.Zero));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdcInternal(IntPtr.Zero));
     }
 
     [Fact]
-    public void FromHdc_ZeroHdc_ThrowsOutOfMemoryException()
+    public void FromHdc_ZeroHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdc(IntPtr.Zero, 10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdc(IntPtr.Zero, 10));
     }
 
     [Fact]
-    public void FromHdc_InvalidHdc_ThrowsOutOfMemoryException()
+    public void FromHdc_InvalidHdc_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHwnd(10));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHwndInternal(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHwnd(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHwndInternal(10));
     }
 
     [Fact]
@@ -141,12 +142,12 @@ public partial class GraphicsTests
 
         hdc = graphics.GetHdc();
         graphics.ReleaseHdc(hdc);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(hdc));
 
         hdc = graphics.GetHdc();
         graphics.ReleaseHdcInternal(hdc);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(hdc));
     }
 
@@ -187,7 +188,7 @@ public partial class GraphicsTests
     {
         using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc(IntPtr.Zero));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(IntPtr.Zero));
     }
@@ -199,7 +200,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(bitmap);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc(IntPtr.Zero));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(IntPtr.Zero));
     }
@@ -229,10 +230,10 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromHwnd_InvalidHwnd_ThrowsOutOfMemoryException()
+    public void FromHwnd_InvalidHwnd_ThrowsExternalException()
     {
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdc(10));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromHdcInternal(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdc(10));
+        Assert.Throws<ExternalException>(() => Graphics.FromHdcInternal(10));
     }
 
     [Theory]
@@ -280,19 +281,19 @@ public partial class GraphicsTests
     }
 
     [Fact]
-    public void FromImage_Metafile_ThrowsOutOfMemoryException()
+    public void FromImage_Metafile_ThrowsExternalException()
     {
         using Metafile image = new(Helpers.GetTestBitmapPath("telescope_01.wmf"));
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
+        Assert.Throws<ExternalException>(() => Graphics.FromImage(image));
     }
 
     [Theory]
     [InlineData(PixelFormat.Format16bppArgb1555)]
     [InlineData(PixelFormat.Format16bppGrayScale)]
-    public void FromImage_Invalid16BitFormat_ThrowsOutOfMemoryException(PixelFormat format)
+    public void FromImage_Invalid16BitFormat_ThrowsExternalException(PixelFormat format)
     {
         using Bitmap image = new(10, 10, format);
-        Assert.Throws<OutOfMemoryException>(() => Graphics.FromImage(image));
+        Assert.Throws<ExternalException>(() => Graphics.FromImage(image));
     }
 
     public static IEnumerable<object[]> CompositingMode_TestData()
@@ -556,7 +557,7 @@ public partial class GraphicsTests
         graphics.GetHdc();
         try
         {
-            Assert.Throws<InvalidOperationException>(() => graphics.Flush());
+            Assert.Throws<InvalidOperationException>(graphics.Flush);
             Assert.Throws<InvalidOperationException>(() => graphics.Flush(FlushIntention.Sync));
         }
         finally
@@ -572,7 +573,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.Flush());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.Flush);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.Flush(FlushIntention.Flush));
     }
 
@@ -1163,7 +1164,7 @@ public partial class GraphicsTests
         graphics.GetHdc();
         try
         {
-            Assert.Throws<InvalidOperationException>(() => graphics.ResetTransform());
+            Assert.Throws<InvalidOperationException>(graphics.ResetTransform);
         }
         finally
         {
@@ -1178,7 +1179,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ResetTransform());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ResetTransform);
     }
 
     [Fact]
@@ -1850,7 +1851,7 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new Point[] { new(1, 1) }));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, [new(1, 1)]));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new PointF[] { new(1, 1) }));
     }
 
@@ -1861,7 +1862,7 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new Point[] { new(1, 1) }));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, [new(1, 1)]));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new PointF[] { new(1, 1) }));
     }
 
@@ -1879,8 +1880,8 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new Point[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -1891,8 +1892,8 @@ public partial class GraphicsTests
         graphics.GetHdc();
         try
         {
-            Assert.Throws<InvalidOperationException>(() => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new Point[] { Point.Empty }));
-            Assert.Throws<InvalidOperationException>(() => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new PointF[] { PointF.Empty }));
+            Assert.Throws<InvalidOperationException>(() => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, [Point.Empty]));
+            Assert.Throws<InvalidOperationException>(() => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, [PointF.Empty]));
         }
         finally
         {
@@ -1907,8 +1908,8 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new Point[] { Point.Empty }));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new PointF[] { PointF.Empty }));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, [Point.Empty]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, [PointF.Empty]));
     }
 
     public static IEnumerable<object[]> GetNearestColor_TestData()
@@ -2127,8 +2128,8 @@ public partial class GraphicsTests
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         using Pen pen = new(Color.Red);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new Rectangle[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new RectangleF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, Array.Empty<Rectangle>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, Array.Empty<RectangleF>()));
     }
 
     [Fact]
@@ -2781,7 +2782,7 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(50, 50);
         using Graphics graphics = Graphics.FromImage(image);
-        graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, new Point());
+        graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, default(Point));
         Helpers.VerifyBitmapNotBlank(image);
     }
 
@@ -2793,7 +2794,7 @@ public partial class GraphicsTests
         graphics.CompositingMode = CompositingMode.SourceCopy;
         AssertExtensions.Throws<ArgumentException>(
             null,
-            () => graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, new Point()));
+            () => graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, default(Point)));
     }
 
     private static void VerifyGraphics(Graphics graphics, RectangleF expectedVisibleClipBounds)
@@ -2816,6 +2817,45 @@ public partial class GraphicsTests
         Assert.Equal(TextRenderingHint.SystemDefault, graphics.TextRenderingHint);
         Assert.Equal(new Matrix(), graphics.Transform);
         Assert.Equal(expectedVisibleClipBounds, graphics.VisibleClipBounds);
+    }
+
+    [Fact]
+    public void IsVisible_AllOverloads_ReturnSameResult()
+    {
+        using Bitmap bitmap = new(100, 100);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        // Test points
+        Point point = new(10, 10);
+        PointF pointF = new(10.5f, 10.5f);
+        int x = 10, y = 10;
+        float fx = 10.5f, fy = 10.5f;
+
+        // Test rectangles
+        Rectangle rect = new(10, 10, 50, 50);
+        RectangleF rectF = new(10.5f, 10.5f, 50.5f, 50.5f);
+        int width = 50, height = 50;
+        float fwidth = 50.5f, fheight = 50.5f;
+
+        // Verify that all overloads return the same result for points
+        bool result1 = graphics.IsVisible(x, y);
+        bool result2 = graphics.IsVisible(point);
+        bool result3 = graphics.IsVisible(fx, fy);
+        bool result4 = graphics.IsVisible(pointF);
+
+        result1.Should().Be(result2);
+        result1.Should().Be(result3);
+        result1.Should().Be(result4);
+
+        // Verify that all overloads return the same result for rectangles
+        bool result5 = graphics.IsVisible(x, y, width, height);
+        bool result6 = graphics.IsVisible(rect);
+        bool result7 = graphics.IsVisible(fx, fy, fwidth, fheight);
+        bool result8 = graphics.IsVisible(rectF);
+
+        result5.Should().Be(result6);
+        result5.Should().Be(result7);
+        result5.Should().Be(result8);
     }
 
 #if NET8_0_OR_GREATER
@@ -2898,7 +2938,7 @@ public partial class GraphicsTests
     }
 #endif
 
-    internal unsafe static void VerifyBitmapEmpty(Bitmap bitmap)
+    internal static unsafe void VerifyBitmapEmpty(Bitmap bitmap)
     {
         BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         try
@@ -2912,7 +2952,7 @@ public partial class GraphicsTests
         }
     }
 
-    internal unsafe static void VerifyBitmapNotEmpty(Bitmap bitmap)
+    internal static unsafe void VerifyBitmapNotEmpty(Bitmap bitmap)
     {
         BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         try

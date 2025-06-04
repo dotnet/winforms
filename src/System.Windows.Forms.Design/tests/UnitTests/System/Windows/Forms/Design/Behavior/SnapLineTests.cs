@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable disable
+
 namespace System.Windows.Forms.Design.Behavior.Tests;
 
 public class SnapLineTests
@@ -235,5 +237,60 @@ public class SnapLineTests
         SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset, filter, DefaultPriority);
 
         Assert.Equal(expected, snapLine.ToString());
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/13305
+    [Fact]
+    public void SnapLine_ReturnOverrided()
+    {
+        using ControlDesigner baseDesigner = new();
+        using Control control = new();
+        baseDesigner.Initialize(control);
+        baseDesigner.SnapLines.Count.Should().Be(8);
+
+        ControlDesigner derivedDesigner = new ButtonBaseDesigner();
+        using Button button = new();
+        derivedDesigner.Initialize(button);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
+
+        derivedDesigner = new ComboBoxDesigner();
+        using ComboBox comboBox = new();
+        derivedDesigner.Initialize(comboBox);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
+
+        derivedDesigner = new DateTimePickerDesigner();
+        using DateTimePicker dateTimePicker = new();
+        derivedDesigner.Initialize(dateTimePicker);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
+
+        derivedDesigner = new LabelDesigner();
+        using Label label = new();
+        derivedDesigner.Initialize(label);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
+
+        derivedDesigner = new ParentControlDesigner();
+        derivedDesigner.Initialize(control);
+        derivedDesigner.SnapLines.Count.Should().Be(12);
+
+        derivedDesigner = new SplitterPanelDesigner();
+        using SplitContainer splitContainer = new();
+        using SplitterPanel splitterPanel = new(splitContainer);
+        derivedDesigner.Initialize(splitterPanel);
+        derivedDesigner.SnapLines.Count.Should().Be(4);
+
+        derivedDesigner = new TextBoxBaseDesigner();
+        using TextBox textBox = new();
+        derivedDesigner.Initialize(textBox);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
+
+        derivedDesigner = new ToolStripContentPanelDesigner();
+        using ToolStripContentPanel toolStripContentPanel = new();
+        derivedDesigner.Initialize(toolStripContentPanel);
+        derivedDesigner.SnapLines.Count.Should().Be(4);
+
+        derivedDesigner = new UpDownBaseDesigner();
+        using DomainUpDown domainUpDown = new();
+        derivedDesigner.Initialize(domainUpDown);
+        derivedDesigner.SnapLines.Count.Should().Be(9);
     }
 }

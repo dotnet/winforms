@@ -37,7 +37,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         _dropDownAdorner = new Adorner();
         int count = _behaviorService.Adorners.Count;
 
-        // Why this is NEEDED ?  To Add the Adorner at proper index in the AdornerCollection for the BehaviorService. So that the DesignerActionGlyph always stays on the Top.
+        // Why this is NEEDED ?  To Add the Adorner at proper index in the AdornerCollection for the BehaviorService.
+        // So that the DesignerActionGlyph always stays on the Top.
         if (count > 1)
         {
             _behaviorService.Adorners.Insert(count - 1, _dropDownAdorner);
@@ -107,12 +108,12 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         Point pt = new(c.Left, c.Top);
-        PInvoke.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
+        PInvokeCore.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
         return pt;
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate()
     {
@@ -120,7 +121,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Rectangle rect)
     {
@@ -128,7 +129,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Region r)
     {
@@ -145,16 +146,20 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  ControlDesigner calls this internal method in response to a WmPaint. We need to know when a ControlDesigner paints - 'cause we will need to re-paint any glyphs above of this Control.
+    ///  ControlDesigner calls this internal method in response to a WmPaint.
+    ///  We need to know when a ControlDesigner paints
+    ///  - 'cause we will need to re-paint any glyphs above of this Control.
     /// </summary>
     internal void ProcessPaintMessage(Rectangle paintRect)
     {
-        // Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse. Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
+        // Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse.
+        // Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
         _toolStripAdornerWindow.Invalidate(paintRect);
     }
 
     /// <summary>
-    ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
+    ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.
+    ///  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
     /// </summary>
     private class ToolStripAdornerWindow : Control
     {
@@ -232,7 +237,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+        ///  Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow()
         {
@@ -244,7 +250,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+        ///  Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow(Region region)
         {
@@ -256,7 +263,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+        ///  Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow(Rectangle rectangle)
         {
@@ -268,13 +276,15 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest  messages are correctly parsed and translated to AdornerWindow coords.
+        ///  The AdornerWindow intercepts all designer-related messages and
+        ///  forwards them to the BehaviorService for appropriate actions.
+        ///  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_NCHITTEST:
+                case PInvokeCore.WM_NCHITTEST:
                     m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                     break;
                 default:

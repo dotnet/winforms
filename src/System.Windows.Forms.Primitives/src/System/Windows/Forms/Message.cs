@@ -23,7 +23,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
     internal LPARAM LParamInternal;
     internal LRESULT ResultInternal;
     internal readonly HWND HWND => (HWND)HWnd;
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006
 
     public int Msg
     {

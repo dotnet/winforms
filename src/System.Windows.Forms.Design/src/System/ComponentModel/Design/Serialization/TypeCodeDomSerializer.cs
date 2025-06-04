@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Serialization;
 public partial class TypeCodeDomSerializer : CodeDomSerializerBase
 {
     // Used only during deserialization to provide name to object mapping.
-    private IDictionary? _nameTable;
+    private HybridDictionary? _nameTable;
     private Dictionary<string, OrderedCodeStatementCollection>? _statementTable;
     private static readonly Attribute[] s_designTimeFilter = [DesignOnlyAttribute.Yes];
     private static readonly object s_initMethodKey = new();
@@ -24,10 +24,16 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     internal static TypeCodeDomSerializer Default => s_default ??= new TypeCodeDomSerializer();
 
     /// <summary>
-    ///  This method deserializes a previously serialized code type declaration. The default implementation performs the following tasks:
-    ///  • Case Sensitivity Checks: It looks for a CodeDomProvider service to decide if it should treat members as case sensitive or case insensitive.
-    ///  • Statement Sorting:  All member variables and local variables from init methods are stored in a table. Then each statement in an init method is added to a statement collection grouped according to its left hand side. So all statements assigning or operating on a particular variable are grouped under that variable.  Variables that have no statements are discarded.
-    ///  • Deserialization: Finally, the statement collections for each variable are deserialized according to the variable. Deserialize returns an instance of the root object.
+    ///  This method deserializes a previously serialized code type declaration. The default implementation performs
+    ///  the following tasks:
+    ///      • Case Sensitivity Checks: It looks for a CodeDomProvider service to decide if it should treat members
+    ///          as case sensitive or case insensitive.
+    ///      • Statement Sorting:  All member variables and local variables from init methods are stored in a table.
+    ///          Then each statement in an init method is added to a statement collection grouped according
+    ///          to its left hand side. So all statements assigning or operating on a particular variable are grouped
+    ///          under that variable. Variables that have no statements are discarded.
+    ///      • Deserialization: Finally, the statement collections for each variable are deserialized
+    ///          according to the variable. Deserialize returns an instance of the root object.
     /// </summary>
     public virtual object Deserialize(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
     {
@@ -104,7 +110,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
             CodeMemberMethod[] methods = GetInitializeMethods(manager, declaration)
                 ?? throw new InvalidOperationException();
 
-            // Walk through all of our methods and search for local variables.  These guys get added to our nametable too.
+            // Walk through all of our methods and search for local variables. These guys get added to our nametable too.
             foreach (CodeMemberMethod method in methods)
             {
                 foreach (CodeStatement statement in method.Statements)
@@ -128,8 +134,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                 FillStatementTable(manager, _statementTable, names, method.Statements, declaration.Name);
             }
 
-            // Interesting problem.  The CodeDom parser may auto generate statements that are associated with other methods.
-            // VB does this, for example, to  create statements automatically for Handles clauses.  The problem with this
+            // Interesting problem. The CodeDom parser may auto generate statements that are associated with other methods.
+            // VB does this, for example, to create statements automatically for Handles clauses. The problem with this
             // technique is that we will end up with statements that are related to variables that live solely in user code
             // and not in InitializeComponent. We will attempt to construct instances of these objects with limited success.
             // To guard against this, we check to see if the manager even supports this feature, and if it does, we must look
@@ -202,13 +208,16 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
+    ///  This takes the given name and deserializes it from our name table. Before blindly deserializing it checks
+    ///  the contents of the name table to see if the object already exists within it. We do this because
+    ///  deserializing one object may call back into us through OnResolveName and deserialize another.
     /// </summary>
     private object? DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection? statements)
     {
-        object? value = null;
+        object? value;
 
-        // If the name we're looking for isn't in our dictionary, we return null.  It is up to the caller to decide if this is an error or not.
+        // If the name we're looking for isn't in our dictionary, we return null.
+        // It is up to the caller to decide if this is an error or not.
         value = _nameTable![name];
         CodeObject? codeObject = value as CodeObject;
         string? typeName = null;
@@ -246,7 +255,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         }
         else if (value is null)
         {
-            // See if the container has this object.  This may be necessary for visual inheritance.
+            // See if the container has this object. This may be necessary for visual inheritance.
             IContainer? container = manager.GetService<IContainer>();
             if (container is not null)
             {
@@ -282,7 +291,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                     CodeDomSerializer? serializer = GetSerializer(manager, type);
                     if (serializer is null)
                     {
-                        // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
+                        // We report this as an error. This indicates that there are code statements in
+                        // initialize component that we do not know how to load.
                         manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                     }
                     else
@@ -318,7 +328,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method returns the method to emit all of the initialization code to for the given member.   The default implementation returns an empty constructor.
+    ///  This method returns the method to emit all of the initialization code to for the given member.
+    ///  The default implementation returns an empty constructor.
     /// </summary>
     protected virtual CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration declaration, object value)
     {
@@ -336,7 +347,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method returns an array of methods that need to be interpreted during deserialization.   The default implementation returns a single element array with the constructor in it.
+    ///  This method returns an array of methods that need to be interpreted during deserialization.
+    ///  The default implementation returns a single element array with the constructor in it.
     /// </summary>
     protected virtual CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
     {
@@ -370,12 +382,28 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method serializes the given root object and optional collection of members to create a new type definition. The members collection can be null or empty. If it contains values, these values will be serialized. Values themselves may decide to serialize as either member  variables or local variables. This determination is done by looking for an extender property on the object called GenerateMember. If true, a member is generated. Otherwise, a local variable is generated. For convenience, the members collection can contain the root object. In this case the root object will not also be added as a member or local variable. The return value is a CodeTypeDeclaration that defines the root object.  The name of the type will be taken from the root object’s name, if it was a named object.  If not, a name will be fabricated from the simple type name of the root class.
+    ///  This method serializes the given root object and optional collection of members to create a new type definition.
+    ///  The members collection can be null or empty. If it contains values, these values will be serialized.
+    ///  Values themselves may decide to serialize as either member variables or local variables.
+    ///  This determination is done by looking for an extender property on the object called GenerateMember.
+    ///  If <see langword="true"/>, a member is generated. Otherwise, a local variable is generated.
+    ///  For convenience, the members collection can contain the root object.
+    ///  In this case the root object will not also be added as a member or local variable.
+    ///  The return value is a CodeTypeDeclaration that defines the root object.
+    ///  The name of the type will be taken from the root object’s name, if it was a named object.
+    ///  If not, a name will be fabricated from the simple type name of the root class.
     ///  The default implementation of Serialize performs the following tasks:
-    ///  •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
-    ///  •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.
-    ///  •    Root Serialization.  Finally, the root object is serialized and its statements are added to the statement collection.
-    ///  •    Statement Integration.  After all objects have been serialized the Serialize method orders the statements and adds them to a method returned from GetInitializeMethod.  Finally, a constructor is fabricated that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when GetInitializeMethod returns a constructor.
+    ///  •    Context Seeding. The serialization context will be “seeded” with data including the RootContext,
+    ///           and CodeTypeDeclaration.
+    ///  •    Member Serialization. Next Serialize will walk all of the members and call SerializeToExpression.
+    ///           Because serialization is done opportunistically in SerializeToExpression,
+    ///           this ensures that we do not serialize twice.
+    ///  •    Root Serialization. Finally, the root object is serialized and its statements are added to the
+    ///           statement collection.
+    ///  •    Statement Integration. After all objects have been serialized the Serialize method orders the statements
+    ///           and adds them to a method returned from GetInitializeMethod. Finally, a constructor is fabricated
+    ///           that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when
+    ///           GetInitializeMethod returns a constructor.
     /// </summary>
     public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection? members)
     {
@@ -404,7 +432,10 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         manager.Context.Push(statementCtx);
         try
         {
-            // Do each component, skipping us, since we handle our own serialization. This looks really sweet, but is it worth it?  We take the perf hit of a quicksort + the allocation overhead of 4 bytes for each component. Profiles show this as a 2% cost for a form with 100 controls. Let's meet the perf goals first, then consider uncommenting this.
+            // Do each component, skipping us, since we handle our own serialization.
+            // This looks really sweet, but is it worth it?  We take the perf hit of a quicksort + the allocation
+            // overhead of 4 bytes for each component. Profiles show this as a 2% cost for a form with 100 controls.
+            // Let's meet the perf goals first, then consider uncommenting this.
             if (members is not null)
             {
                 foreach (object member in members)
@@ -441,7 +472,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Takes the statement context and integrates all the statements into the correct methods.  Then, those methods are added to the code type declaration.
+    ///  Takes the statement context and integrates all the statements into the correct methods.
+    ///  Then, those methods are added to the code type declaration.
     /// </summary>
     private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection? members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
     {

@@ -26,7 +26,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG_MainIcon icon = new();
+        TASKDIALOGCONFIG_MainIcon icon = default;
         byte* addr = (byte*)&icon;
 
         Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 4, HICON
@@ -52,7 +52,7 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG_MainIcon icon = new();
+        TASKDIALOGCONFIG_MainIcon icon = default;
         byte* addr = (byte*)&icon;
 
         Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 8, HICON

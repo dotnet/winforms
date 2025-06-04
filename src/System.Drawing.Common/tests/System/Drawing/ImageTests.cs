@@ -5,6 +5,9 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.DotNet.XUnitExtensions;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace System.Drawing.Tests;
@@ -21,7 +24,7 @@ public class ImageTests
     public void PropertyIdList_GetBitmapJpg_Success()
     {
         using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         Assert.NotSame(bitmap.PropertyIdList, bitmap.PropertyIdList);
     }
 
@@ -135,12 +138,12 @@ public class ImageTests
         bitmap.SetPropertyItem(item3);
 
         bitmap.RemovePropertyItem(PropertyTagExifUserComment);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagExifUserComment));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagExifUserComment));
 
         bitmap.RemovePropertyItem(PropertyTagLuminanceTable);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagLuminanceTable));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagLuminanceTable));
 
@@ -155,12 +158,12 @@ public class ImageTests
     {
         using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         bitmap.RemovePropertyItem(PropertyTagExifUserComment);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagExifUserComment));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagExifUserComment));
 
         bitmap.RemovePropertyItem(PropertyTagLuminanceTable);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagLuminanceTable));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagLuminanceTable));
 
@@ -234,7 +237,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Single(items);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -249,7 +252,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -264,7 +267,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -292,7 +295,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Equal(3, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -335,7 +338,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(4, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -378,7 +381,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(4, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -435,7 +438,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Single(items);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -450,7 +453,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -465,7 +468,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -490,11 +493,11 @@ public class ImageTests
 
     [Theory]
     [MemberData(nameof(InvalidBytes_TestData))]
-    public void FromFile_InvalidBytes_ThrowsOutOfMemoryException(byte[] bytes)
+    public void FromFile_InvalidBytes_ThrowsExternalException(byte[] bytes)
     {
         using var file = TempFile.Create(bytes);
-        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path));
-        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
+        Assert.Throws<ExternalException>(() => Image.FromFile(file.Path));
+        Assert.Throws<ExternalException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
     }
 
     [Fact]
@@ -660,7 +663,74 @@ public class ImageTests
     public void Save_InvalidDirectory_ThrowsDirectoryNotFoundException()
     {
         using Bitmap bitmap = new(1, 1);
-        string badTarget = System.IO.Path.Combine("NoSuchDirectory", "NoSuchFile");
+        string badTarget = Path.Join("NoSuchDirectory", "NoSuchFile");
         AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");
+    }
+
+    [Fact]
+    public unsafe void FromStream_NativeMetafile()
+    {
+        // Create a memory metafile from the screen DC
+        HDC hdc = PInvokeCore.CreateEnhMetaFile(HDC.Null, default, null, default(PCWSTR));
+        using CreatePenScope pen = new(Color.Red);
+        using SelectObjectScope penScope = new(hdc, pen);
+        PInvokeCore.Rectangle(hdc, 10, 10, 100, 100);
+        HENHMETAFILE hemf = PInvokeCore.CloseEnhMetaFile(hdc);
+
+        uint length = PInvokeCore.GetEnhMetaFileBits(hemf, 0, null);
+        byte[] buffer = new byte[length];
+        length = PInvokeCore.GetEnhMetaFileBits(hemf, buffer);
+        PInvokeCore.DeleteEnhMetaFile(hemf);
+
+        MemoryStream stream = new(buffer);
+        using Image image = Image.FromStream(stream);
+        image.Size.Should().Be(new Size(90, 90));
+
+        // The stream must be at the beginning for WMF/EMF
+        stream.Position = 10;
+        Action action = () => Image.FromStream(stream);
+        action.Should().Throw<ArgumentException>();
+
+        // https://github.com/dotnet/winforms/issues/12951
+        stream.Position = 0;
+        using Image image2 = Image.FromStream(new NonSeekableStreamWrapper(stream));
+    }
+
+    public class NonSeekableStreamWrapper : Stream
+    {
+        private readonly Stream _innerStream;
+
+        public NonSeekableStreamWrapper(Stream innerStream) =>
+            _innerStream = innerStream ?? throw new ArgumentNullException(nameof(innerStream));
+
+        public override bool CanRead => _innerStream.CanRead;
+        public override bool CanSeek => false;
+        public override bool CanWrite => _innerStream.CanWrite;
+        public override long Length => throw new NotSupportedException("This stream does not support seeking.");
+        public override long Position
+        {
+            get => throw new NotSupportedException("This stream does not support seeking.");
+            set => throw new NotSupportedException("This stream does not support seeking.");
+        }
+
+        public override void Flush() => _innerStream.Flush();
+
+        public override int Read(byte[] buffer, int offset, int count) => _innerStream.Read(buffer, offset, count);
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException("This stream does not support seeking.");
+
+        public override void SetLength(long value) => _innerStream.SetLength(value);
+
+        public override void Write(byte[] buffer, int offset, int count) => _innerStream.Write(buffer, offset, count);
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _innerStream.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

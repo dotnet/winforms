@@ -1,5 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
+#nullable disable
 
 using System.Collections.Specialized;
 using System.Reflection;
@@ -195,7 +197,7 @@ public class DesignerActionMethodItemTests
         item.Invoke();
         Assert.Equal(memberName, list.CalledMethod);
 
-        // Call again to test caching behaviour.
+        // Call again to test caching behavior.
         list.CalledMethod = null;
         item.Invoke();
         Assert.Equal(memberName, list.CalledMethod);
@@ -205,10 +207,11 @@ public class DesignerActionMethodItemTests
     public void Invoke_NullActionList_ThrowsInvalidOperationException()
     {
         DesignerActionMethodItem item = new(null, "memberName", "displayName", "category", "description");
-        Assert.Throws<InvalidOperationException>(() => item.Invoke());
+        Assert.Throws<InvalidOperationException>(item.Invoke);
     }
 
     [Theory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData("NoSuchMember")]
     [InlineData(nameof(SubDesignerActionList.StaticMethod))]
@@ -216,15 +219,7 @@ public class DesignerActionMethodItemTests
     {
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, memberName, "displayName", "category", "description");
-        Assert.Throws<InvalidOperationException>(() => item.Invoke());
-    }
-
-    [Fact]
-    public void Invoke_NullMemberName_ThrowsArgumentNullException()
-    {
-        SubDesignerActionList list = new();
-        DesignerActionMethodItem item = new(list, null, "displayName", "category", "description");
-        Assert.Throws<ArgumentNullException>("name", () => item.Invoke());
+        Assert.Throws<InvalidOperationException>(item.Invoke);
     }
 
     [Fact]
@@ -232,7 +227,7 @@ public class DesignerActionMethodItemTests
     {
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, nameof(SubDesignerActionList.MethodWithParameters), "displayName", "category", "description");
-        Assert.Throws<TargetParameterCountException>(() => item.Invoke());
+        Assert.Throws<TargetParameterCountException>(item.Invoke);
     }
 
     private class SubDesignerActionList : DesignerActionList

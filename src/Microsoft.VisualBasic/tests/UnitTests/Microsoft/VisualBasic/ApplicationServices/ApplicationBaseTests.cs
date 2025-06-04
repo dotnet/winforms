@@ -10,16 +10,16 @@ public class ApplicationBaseTests
     {
         ApplicationBase app = new();
         var culture = app.Culture;
-        Assert.Equal(System.Threading.Thread.CurrentThread.CurrentCulture, culture);
+        Assert.Equal(Thread.CurrentThread.CurrentCulture, culture);
         try
         {
             app.ChangeCulture("en-US");
-            Assert.Equal(System.Threading.Thread.CurrentThread.CurrentCulture, app.Culture);
+            Assert.Equal(Thread.CurrentThread.CurrentCulture, app.Culture);
             Assert.Equal("en-US", app.Culture.Name);
         }
         finally
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
         }
     }
 
@@ -28,16 +28,16 @@ public class ApplicationBaseTests
     {
         ApplicationBase app = new();
         var culture = app.UICulture;
-        Assert.Equal(System.Threading.Thread.CurrentThread.CurrentUICulture, culture);
+        Assert.Equal(Thread.CurrentThread.CurrentUICulture, culture);
         try
         {
             app.ChangeUICulture("en-US");
-            Assert.Equal(System.Threading.Thread.CurrentThread.CurrentUICulture, app.UICulture);
+            Assert.Equal(Thread.CurrentThread.CurrentUICulture, app.UICulture);
             Assert.Equal("en-US", app.UICulture.Name);
         }
         finally
         {
-            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
     }
 

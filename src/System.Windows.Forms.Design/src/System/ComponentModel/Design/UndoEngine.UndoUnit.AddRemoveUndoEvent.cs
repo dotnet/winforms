@@ -18,7 +18,10 @@ public abstract partial class UndoEngine
             private readonly string? _componentName;
 
             /// <summary>
-            ///  Creates a new object that contains the state of the event.  The last parameter, add, determines the initial mode of this event.  If true, it means this event is being created in response to a component add.  If false, it is being created in response to   a component remove.
+            ///  Creates a new object that contains the state of the event.
+            ///  The last parameter, add, determines the initial mode of this event.
+            ///  If true, it means this event is being created in response to a component add.
+            ///  If false, it is being created in response to a component remove.
             /// </summary>
             public AddRemoveUndoEvent(UndoEngine engine, IComponent component, bool add)
             {
@@ -68,19 +71,22 @@ public abstract partial class UndoEngine
             {
                 if (NextUndoAdds)
                 {
-                    // We need to add this component.  To add it, we deserialize it and then we add it to the designer host's container.
+                    // We need to add this component. To add it, we deserialize it and then we add it to
+                    // the designer host's container.
                     IDesignerHost host = engine.GetRequiredService<IDesignerHost>();
 
                     engine._serializationService.DeserializeTo(_serializedData, host.Container);
                 }
                 else
                 {
-                    // We need to remove this component.  Take the name and match it to an object, and then ask that object to delete itself.
+                    // We need to remove this component. Take the name and match it to an object,
+                    // and then ask that object to delete itself.
                     IDesignerHost host = engine.GetRequiredService<IDesignerHost>();
 
                     IComponent? component = host.Container.Components[_componentName];
 
-                    // Note: It's ok for the component to be null here.  This could happen if the parent to this control is disposed first. Ex:SplitContainer
+                    // Note: It's ok for the component to be null here.
+                    // This could happen if the parent to this control is disposed first. Ex:SplitContainer
                     if (component is not null)
                     {
                         host.DestroyComponent(component);

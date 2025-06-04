@@ -163,10 +163,12 @@ public sealed partial class MultilineStringEditor
             Rectangle workingArea = Screen.GetWorkingArea(this);
             Point location = PointToScreen(Location);
 
-            // DANGER:  This assumes we will grow to the left. This is true for propertygrid (DropDownHolder::OnCurrentControlResize)
+            // DANGER:  This assumes we will grow to the left. This is true for
+            // PropertyGrid (DropDownHolder::OnCurrentControlResize)
             int maxDelta = location.X - workingArea.Left;
 
-            // NOTE:  If we are shrinking, requestedWidth will be negative, so the Min will not bound shrinking by maxDelta.  This is intentional.
+            // NOTE:  If we are shrinking, requestedWidth will be negative, so the Min
+            // will not bound shrinking by maxDelta. This is intentional.
             int requestedDelta = Math.Min((requestedSize.Width - ClientSize.Width), maxDelta);
             ClientSize = new Size(ClientSize.Width + requestedDelta, MinimumSize.Height);
         }
@@ -332,7 +334,7 @@ public sealed partial class MultilineStringEditor
                     return string.Empty;
                 }
 
-                string windowText = PInvoke.GetWindowText(this);
+                string windowText = PInvokeCore.GetWindowText(this);
                 if (!_ctrlEnterPressed)
                 {
                     return windowText;
@@ -403,7 +405,7 @@ public sealed partial class MultilineStringEditor
             base.WndProc(ref m);
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_PAINT:
+                case PInvokeCore.WM_PAINT:
                     {
                         if (ShouldShowWatermark)
                         {

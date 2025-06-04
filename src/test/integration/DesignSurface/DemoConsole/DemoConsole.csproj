@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>DesignSurface</AssemblyName>
+    <RootNamespace>TestConsole</RootNamespace>
+    <ApplicationIcon>painter.ico</ApplicationIcon>
+    <OutputType>WinExe</OutputType>
+    <StartupObject />
+    <Copyright>Copyright © Paolo Foti 2008</Copyright>
+    <Company />
+    <Authors>Paolo Foti</Authors>
+    <PackageLicenseExpression>CPOL</PackageLicenseExpression>
+    <PackageProjectUrl>
+      https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <NoWarn>$(NoWarn)CS8002;CA1824</NoWarn>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator"
+      LastGenOutput="Resources.Designer.cs" />
+    <Compile Update="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx" DesignTime="True" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DesignSurfaceExt\DesignSurfaceExt.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="painter.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

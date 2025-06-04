@@ -4,23 +4,23 @@
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
-    <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>latest</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <UseApplicationFramework>True</UseApplicationFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
-    <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
-    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
-    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms.vbproj" />
-  </ItemGroup>
 
   <ItemGroup>
-    <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\test\util\System.Windows.Forms\System.Windows.Forms.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms.vbproj" />
   </ItemGroup>
 
 </Project>

@@ -10,10 +10,23 @@ public sealed unsafe class InstalledFontCollection : FontCollection
     /// <summary>
     ///  Initializes a new instance of the <see cref='InstalledFontCollection'/> class.
     /// </summary>
-    public InstalledFontCollection() : base()
+    public InstalledFontCollection() : base(Create())
+    {
+        // The installed font collection is a static in GDI+. We don't need to track it.
+        GC.SuppressFinalize(this);
+    }
+
+    internal static InstalledFontCollection Instance { get; } = new();
+
+    private static GpFontCollection* Create()
     {
         GpFontCollection* fontCollection;
-        PInvoke.GdipNewInstalledFontCollection(&fontCollection).ThrowIfFailed();
-        _nativeFontCollection = fontCollection;
+        PInvokeGdiPlus.GdipNewInstalledFontCollection(&fontCollection).ThrowIfFailed();
+        return fontCollection;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        // Do nothing.
     }
 }

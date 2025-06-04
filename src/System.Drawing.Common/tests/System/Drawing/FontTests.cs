@@ -334,7 +334,10 @@ public class FontTests
     [Fact]
     public void Ctor_DisposedFamily_ThrowsArgumentException()
     {
-        FontFamily family = FontFamily.GenericSansSerif;
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+
+        FontFamily family = new("Code New Roman", collection);
         family.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => new Font(family, 10));
@@ -408,7 +411,7 @@ public class FontTests
         Font font = new(family, 10);
         font.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => font.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, font.Clone);
     }
 
     public static IEnumerable<object[]> Equals_TestData()
@@ -649,7 +652,7 @@ public class FontTests
         }
     }
 
-    [Serializable()]
+    [Serializable]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     public struct UnblittableLOGFONT
     {

@@ -132,7 +132,7 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Attempts to unwrap a ComWrapper CCW as a particular managed object.
     /// </summary>
-    private static bool TryUnwrapComWrapperCCW<TWrapper>(
+    public static bool TryUnwrapComWrapperCCW<TWrapper>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
     {
@@ -153,14 +153,14 @@ internal static unsafe partial class ComHelpers
         return false;
     }
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject, TInterface>(
         ComScope<TInterface> comScope,
         [NotNullWhen(true)] out TObject? @object)
         where TObject : class
         where TInterface : unmanaged, IComIID => TryGetObjectForIUnknown(comScope.Value, out @object);
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject, TInterface>(
         TInterface* comPointer,
         [NotNullWhen(true)] out TObject? @object)
@@ -190,7 +190,7 @@ internal static unsafe partial class ComHelpers
         return TryGetObjectForIUnknown(unknown, out @object);
     }
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TObject? @object) where TObject : class =>
@@ -234,7 +234,8 @@ internal static unsafe partial class ComHelpers
     }
 
     /// <summary>
-    ///  Returns <see langword="true"/> if the given <paramref name="object"/> is projected as the given <paramref name="comPointer"/>.
+    ///  Returns <see langword="true"/> if the given <paramref name="object"/>
+    ///  is projected as the given <paramref name="comPointer"/>.
     /// </summary>
     internal static bool WrapsManagedObject<T>(object @object, T* comPointer)
         where T : unmanaged, IComIID

@@ -17,7 +17,7 @@ public readonly ref struct BinaryFormatterScope
         // Prevent multiple BinaryFormatterScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(BinaryFormatterScope));
-        _switchScope = new(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, enable);
+        _switchScope = new(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, GetDefaultValue, enable);
     }
 
     public void Dispose()
@@ -32,28 +32,5 @@ public readonly ref struct BinaryFormatterScope
         }
     }
 
-    static BinaryFormatterScope()
-    {
-        // Need to explicitly set the switch to whatever the default is as its default value is in transition.
-
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
-#pragma warning restore SYSLIB0011
-        try
-        {
-            formatter.Serialize(null!, null!);
-        }
-        catch (NotSupportedException)
-        {
-            AppContext.SetSwitch(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, false);
-            return;
-        }
-        catch (ArgumentNullException)
-        {
-            AppContext.SetSwitch(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, true);
-            return;
-        }
-
-        throw new InvalidOperationException();
-    }
+    public static bool GetDefaultValue() => false;
 }

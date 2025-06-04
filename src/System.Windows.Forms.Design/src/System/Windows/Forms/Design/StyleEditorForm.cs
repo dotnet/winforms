@@ -34,7 +34,7 @@ internal partial class StyleCollectionEditor
         private readonly PropertyDescriptor _colStyleProp;
 
         /// <summary>
-        /// All our control instance variables.
+        ///  All our control instance variables.
         /// </summary>
 
         private TableLayoutPanel _overarchingTableLayoutPanel;
@@ -145,8 +145,8 @@ internal partial class StyleCollectionEditor
         #region Windows Form Designer generated code
 
         /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -396,13 +396,8 @@ internal partial class StyleCollectionEditor
 
             // absoluteNumericUpDown
             resources.ApplyResources(_absoluteNumericUpDown, "absoluteNumericUpDown");
-            _absoluteNumericUpDown.Maximum = new decimal(new int[]
-            {
-                99999,
-                0,
-                0,
-                0
-            });
+            _absoluteNumericUpDown.Maximum = new decimal(99999u);
+
             _absoluteNumericUpDown.Name = "absoluteNumericUpDown";
             _absoluteNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
             _absoluteNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
@@ -435,13 +430,7 @@ internal partial class StyleCollectionEditor
             // percentNumericUpDown
             resources.ApplyResources(_percentNumericUpDown, "percentNumericUpDown");
             _percentNumericUpDown.DecimalPlaces = 2;
-            _percentNumericUpDown.Maximum = new decimal(new int[]
-            {
-                9999,
-                0,
-                0,
-                0
-            });
+            _percentNumericUpDown.Maximum = new decimal(9999u);
             _percentNumericUpDown.Name = "percentNumericUpDown";
             _percentNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
             _percentNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
@@ -746,10 +735,10 @@ internal partial class StyleCollectionEditor
             // Unhook the event while we reset.
             // If we didn't the setting the value would cause OnValueChanged below to get called.
             // If we then go ahead and update the listView, which we don't want in the reset case.
-            _absoluteNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
+            _absoluteNumericUpDown.ValueChanged -= OnValueChanged;
             _absoluteNumericUpDown.Enabled = false;
             _absoluteNumericUpDown.Value = DesignerUtils.s_minimumStyleSize;
-            _absoluteNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _absoluteNumericUpDown.ValueChanged += OnValueChanged;
         }
 
         private void ResetPercent()
@@ -757,10 +746,10 @@ internal partial class StyleCollectionEditor
             // Unhook the event while we reset.
             // If we didn't the setting the value would cause OnValueChanged below to get called.
             // If we then go ahead and update the listView, which we don't want in the reset case.
-            _percentNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
+            _percentNumericUpDown.ValueChanged -= OnValueChanged;
             _percentNumericUpDown.Enabled = false;
             _percentNumericUpDown.Value = DesignerUtils.s_minimumStylePercent;
-            _percentNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _percentNumericUpDown.ValueChanged += OnValueChanged;
         }
 
         private void UpdateGroupBox(SizeType type, float value)
@@ -812,10 +801,7 @@ internal partial class StyleCollectionEditor
         {
             _columnsAndRowsListView.BeginUpdate();
             _columnsAndRowsListView.Focus();
-            if (_columnsAndRowsListView.FocusedItem is not null)
-            {
-                _columnsAndRowsListView.FocusedItem.Focused = false;
-            }
+            _columnsAndRowsListView.FocusedItem?.Focused = false;
 
             _columnsAndRowsListView.SelectedItems.Clear();
             _columnsAndRowsListView.Items[index].Selected = true;
@@ -829,33 +815,30 @@ internal partial class StyleCollectionEditor
         /// </summary>
         private void AddItem(int index)
         {
-            string member = null;
             _tableLayoutPanelDesigner.InsertRowCol(_isRowCollection, index);
 
-            member = _isRowCollection
-                ? "Row" + _tableLayoutPanel.RowStyles.Count.ToString(CultureInfo.InvariantCulture)
-                : "Column" + _tableLayoutPanel.RowStyles.Count.ToString(CultureInfo.InvariantCulture);
+            string member = _isRowCollection
+                ? $"Row{_tableLayoutPanel.RowStyles.Count}"
+                : $"Column{_tableLayoutPanel.RowStyles.Count}";
 
-            if (member is not null)
-            {
-                _columnsAndRowsListView.Items.Insert(
-                    index,
-                    new ListViewItem(
-                    [
-                        member, SizeType.Absolute.ToString(),
-                        DesignerUtils.s_minimumStyleSize.ToString(CultureInfo.InvariantCulture)
-                     ]));
+            _columnsAndRowsListView.Items.Insert(
+                index,
+                new ListViewItem(
+                [
+                    member, SizeType.Absolute.ToString(),
+                    DesignerUtils.s_minimumStyleSize.ToString(CultureInfo.InvariantCulture)
+                ]));
 
-                // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
-                // so we might as well just update the entire listView.
-                UpdateListViewMember();
-                ClearAndSetSelectionAndFocus(index);
-            }
+            // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
+            // so we might as well just update the entire listView.
+            UpdateListViewMember();
+            ClearAndSetSelectionAndFocus(index);
         }
 
         private void OnAddButtonClick(object sender, EventArgs e)
         {
             _isDialogDirty = true;
+
             // Add an item to the end of the listView
             AddItem(_columnsAndRowsListView.Items.Count);
         }

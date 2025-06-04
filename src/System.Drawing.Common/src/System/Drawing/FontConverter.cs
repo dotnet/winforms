@@ -33,10 +33,10 @@ public class FontConverter : TypeConverter
                 culture ??= CultureInfo.CurrentCulture;
 
                 ValueStringBuilder sb = default;
-                sb.Append(font.Name);
+                sb.AppendLiteral(font.Name);
                 sb.Append(culture.TextInfo.ListSeparator[0]);
                 sb.Append(' ');
-                sb.Append(font.Size.ToString(culture.NumberFormat));
+                sb.AppendLiteral(font.Size.ToString(culture.NumberFormat));
 
                 switch (font.Unit)
                 {
@@ -44,39 +44,39 @@ public class FontConverter : TypeConverter
                     // to GraphicsUnit.Display
                     // Don't know what to append for GraphicsUnit.Display
                     case GraphicsUnit.Display:
-                        sb.Append("display");
+                        sb.AppendLiteral("display");
                         break;
 
                     case GraphicsUnit.Document:
-                        sb.Append("doc");
+                        sb.AppendLiteral("doc");
                         break;
 
                     case GraphicsUnit.Point:
-                        sb.Append("pt");
+                        sb.AppendLiteral("pt");
                         break;
 
                     case GraphicsUnit.Inch:
-                        sb.Append("in");
+                        sb.AppendLiteral("in");
                         break;
 
                     case GraphicsUnit.Millimeter:
-                        sb.Append("mm");
+                        sb.AppendLiteral("mm");
                         break;
 
                     case GraphicsUnit.Pixel:
-                        sb.Append("px");
+                        sb.AppendLiteral("px");
                         break;
 
                     case GraphicsUnit.World:
-                        sb.Append("world");
+                        sb.AppendLiteral("world");
                         break;
                 }
 
                 if (font.Style != FontStyle.Regular)
                 {
                     sb.Append(culture.TextInfo.ListSeparator[0]);
-                    sb.Append(" style=");
-                    sb.Append(font.Style.ToString());
+                    sb.AppendLiteral(" style=");
+                    sb.AppendLiteral(font.Style.ToString());
                 }
 
                 return sb.ToString();
@@ -268,7 +268,7 @@ public class FontConverter : TypeConverter
         if (length > 0)
         {
             // text is expected to have a format like " 8,25pt, ". Leading and trailing spaces (trimmed above),
-            // last comma, unit and decimal value may not appear.  We need to make it ####.##CC
+            // last comma, unit and decimal value may not appear. We need to make it ####.##CC
             for (splitPoint = 0; splitPoint < length; splitPoint++)
             {
                 if (char.IsLetter(text[splitPoint]))
@@ -367,7 +367,7 @@ public class FontConverter : TypeConverter
         }
         else
         {
-            FontCollection collection = new InstalledFontCollection();
+            FontCollection collection = InstalledFontCollection.Instance;
             FontFamily[] installedFontList = collection.Families;
             foreach (FontFamily font in installedFontList)
             {
@@ -378,22 +378,6 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            // font family not found in installed fonts
-            if (fontFamily is null)
-            {
-                collection = new PrivateFontCollection();
-                FontFamily[] privateFontList = collection.Families;
-                foreach (FontFamily font in privateFontList)
-                {
-                    if (name.Equals(font.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        fontFamily = font;
-                        break;
-                    }
-                }
-            }
-
-            // font family not found in private fonts also
             fontFamily ??= FontFamily.GenericSansSerif;
         }
 

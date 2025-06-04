@@ -16,7 +16,7 @@ public class ImageConverterTest
 
     public ImageConverterTest()
     {
-        _image = Image.FromFile(Path.Combine("bitmaps", "TestImage.bmp"));
+        _image = Image.FromFile(Path.Join("bitmaps", "TestImage.bmp"));
         _imageStr = _image.ToString();
 
         using (MemoryStream destStream = new())
@@ -46,7 +46,7 @@ public class ImageConverterTest
     [Fact]
     public void ImageWithOleHeader()
     {
-        string path = Path.Combine("bitmaps", "TestImageWithOleHeader.bmp");
+        string path = Path.Join("bitmaps", "TestImageWithOleHeader.bmp");
         using FileStream fileStream = File.Open(path, FileMode.Open);
         using MemoryStream ms = new();
         fileStream.CopyTo(ms);
