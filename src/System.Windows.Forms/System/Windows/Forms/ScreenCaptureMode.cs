@@ -20,7 +20,11 @@ public enum ScreenCaptureMode
 
     /// <summary>
     ///  The form or control appears blurred in screenshots.
-    /// Requires Windows 10 version 2004 or higher.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Using this option requires Windows 10 version 2004 or higher.
+    ///  </para>
+    /// </remarks>
     HideWindow = 2
 }

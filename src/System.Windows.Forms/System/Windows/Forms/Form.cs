@@ -1725,41 +1725,40 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Gets or sets the behavior for preventing screen capture/video recording of the
-    ///  form's content via screen capture applications based on the Windows APIs.
+    ///  Gets or sets how the form’s content is protected from screen capture or video recording
+    ///  using Windows-based screen capture APIs.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This property determines how the form's content behaves when captured by screen capture applications
-    ///   or screenshots. Different capture modes provide varying levels of privacy and security for sensitive content.
+    ///   This property controls how the form’s content is handled when a screen capture or screenshot
+    ///   is attempted. Each capture mode offers different levels of protection for sensitive information.
     ///  </para>
     ///  <para>
-    ///   By default, forms allow their content to be captured. Setting this property to a more restrictive value
-    ///   can prevent sensitive information from being captured in screenshots or recorded in screen recordings.
+    ///   By default, forms permit their content to be captured. Choosing a more restrictive mode
+    ///   can block screenshots or recordings that include confidential data.
     ///  </para>
     ///  <para>
-    ///   The setting takes effect immediately for visible forms. For forms that aren't yet shown,
-    ///   the setting takes effect when the form becomes visible.
+    ///   Changes to this property take effect immediately for any form that is already visible. For
+    ///   forms not yet displayed, the selected mode is applied as soon as the form appears.
     ///  </para>
     ///  <para>
-    ///   Warning! Additional top-level windows, which will be spinning off the form, will not be affected
-    ///   by this setting. Please be aware, that for example sensitive information in a pop-up window
-    ///   like a MessageBox, a context menu, DropDownButton menus or PullDown-menus can not be prevented
-    ///   from being captured!
+    ///   Note that this setting applies only to the form itself. Any additional top-level windows—such
+    ///   as pop-ups, message boxes, context menus, or dropdown menus—are not affected and can still be
+    ///   captured. Similarly, other application windows remain unaffected by this property.
     ///  </para>
     ///  <para>
-    ///   Note that this setting only affects the current form and not any other windows in the application.
-    ///   Also note that this will also affect video streaming applications for video conferencing, etc.
-    ///  </para>
-    ///  <para>
-    ///   Disclaimer: Please keep in mind, that this setting can of course not prevent screen recordings by tools,
-    ///   which are either circumvent the public Windows APIs or use hardware-based screen capture methods.
+    ///   This also influences video-streaming or conferencing applications that rely on the same
+    ///   Windows capture APIs. However, it cannot prevent tools that bypass these APIs or use
+    ///   hardware-level capture methods from recording the screen.
+    ///   See the remarks for the Windows API <a href="https://aka.ms/AAwi872">SetWindowDisplayAffinity</a>
+    ///   for more details.
     ///  </para>
     /// </remarks>
     /// <value>
-    ///  One of the <see cref="ScreenCaptureMode"/> enumeration values. The default is
-    ///  <see cref="ScreenCaptureMode.Allow"/>.
+    ///  A <see cref="ScreenCaptureMode"/> enumeration value indicating the desired capture restriction.
+    ///  The default is <see cref="ScreenCaptureMode.Allow"/>.
     /// </value>
+
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
     public ScreenCaptureMode FormScreenCaptureMode
@@ -4982,6 +4981,11 @@ public partial class Form : ContainerControl
         }
 
         SetFormTitleProperties();
+
+        if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
+        {
+            SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        }
 
         GC.KeepAlive(this);
     }
