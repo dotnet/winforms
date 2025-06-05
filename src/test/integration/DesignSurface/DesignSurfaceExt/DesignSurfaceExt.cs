@@ -350,6 +350,10 @@ public class DesignSurfaceExtended : DesignSurface, IDesignSurfaceExtended
                 "PASTE" => StandardCommands.Paste,
                 "DELETE" => StandardCommands.Delete,
                 "INVOKESMARTTAG" => MenuCommands.KeyInvokeSmartTag,
+                "KEYMOVEUP" => MenuCommands.KeyMoveUp,
+                "KEYMOVEDOWN" => MenuCommands.KeyMoveDown,
+                "KEYMOVELEFT" => MenuCommands.KeyMoveLeft,
+                "KEYMOVERIGHT" => MenuCommands.KeyMoveRight,
                 _ => null,
             };
 
