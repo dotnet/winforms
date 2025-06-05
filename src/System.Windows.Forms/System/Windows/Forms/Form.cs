@@ -4138,8 +4138,14 @@ public partial class Form : ContainerControl
 
         UpdateLayered();
 
-        // On RecreateHandle, there is another point in time, when we need to do that.
-        // So, we will be doing it there, and cannot have it here as well.
+        // Normally, we update the form's title properties here after the handle is created.
+        // However, during handle recreation (ReCreateHandle), this method is invoked as part
+        // of the base class chain—before the new handle is fully established and before
+        // other required updates are complete. In that scenario, SetFormTitleProperties
+        // must be called *after* all recreation steps have finished, which is handled by a
+        // dedicated call at the end of ReCreateHandle. Therefore, to avoid updating the
+        // title properties too early or twice, we skip the call here if we are in the
+        // middle of handle recreation.
         if (!_inRecreateHandle)
         {
             SetFormTitleProperties();
