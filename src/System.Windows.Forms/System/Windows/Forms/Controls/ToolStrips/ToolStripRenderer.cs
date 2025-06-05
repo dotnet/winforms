@@ -1023,31 +1023,17 @@ public abstract class ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         OnRenderStatusStripSizingGrip(
-            eArgs: e,
+            e: e,
             highLightBrush: SystemBrushes.ButtonHighlight,
             shadowBrush: SystemBrushes.ButtonShadow);
     }
 
-    private protected void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs eArgs, Brush highLightBrush, Brush shadowBrush)
-    {
-        if (RendererOverride is not null)
-        {
-            RendererOverride.OnRenderStatusStripSizingGrip(eArgs);
-            return;
-        }
-
-        OnRenderStatusStripSizingGrip(
-            eArgs: e,
-            highLightBrush: SystemBrushes.ButtonHighlight,
-            shadowBrush: SystemBrushes.GrayText);
-    }
-
     private protected static void OnRenderStatusStripSizingGrip(
-        ToolStripRenderEventArgs eArgs,
+        ToolStripRenderEventArgs e,
         Brush highLightBrush,
         Brush shadowBrush)
     {
-        if (eArgs.ToolStrip is not StatusStrip statusStrip)
+        if (e.ToolStrip is not StatusStrip statusStrip)
         {
             return;
         }
@@ -1059,7 +1045,7 @@ public abstract class ToolStripRenderer
             return;
         }
 
-        Graphics g = eArgs.Graphics;
+        Graphics g = e.Graphics;
         ReadOnlySpan<Rectangle> baseRects = s_baseSizeGripRectangles;
 
         // Use device DPI for scaling
