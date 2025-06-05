@@ -7042,4 +7042,7 @@ Stack trace where the illegal operation occurred was:
   <data name="FormScreenCaptureModeDescr" xml:space="preserve">
     <value>Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</value>
   </data>
+  <data name="FormScreenCaptureModeRequiresTopLevel" xml:space="preserve">
+    <value>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</value>
+  </data>
 </root>

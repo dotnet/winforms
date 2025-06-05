@@ -137,6 +137,7 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -154,7 +155,6 @@ public partial class Form : ContainerControl
     private MdiClient? _ctlClient;
     private NativeWindow? _ownerWindow;
     private bool _rightToLeftLayout;
-    private ScreenCaptureMode _formScreenCaptureMode = ScreenCaptureMode.Allow;
 
     private Rectangle _restoreBounds = new(-1, -1, -1, -1);
     private CloseReason _closeReason = CloseReason.None;
@@ -1764,17 +1764,21 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
     public ScreenCaptureMode FormScreenCaptureMode
     {
-        get => _formScreenCaptureMode;
+        get => Properties.GetValueOrDefault(s_propFormScreenCaptureMode, ScreenCaptureMode.Allow);
         set
         {
-            if (_formScreenCaptureMode == value)
+            if (FormScreenCaptureMode == value)
             {
                 return;
             }
 
-            SourceGenerated.EnumValidator.Validate(value);
+            if (!TopLevel)
+            {
+                throw new InvalidOperationException(SR.FormScreenCaptureModeRequiresTopLevel);
+            }
 
-            _formScreenCaptureMode = value;
+            SourceGenerated.EnumValidator.Validate(value);
+            Properties.AddOrRemoveValue(s_propFormScreenCaptureMode, value);
 
             if (IsHandleCreated)
             {
@@ -1791,11 +1795,6 @@ public partial class Form : ContainerControl
 
     private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
     {
-        if (!TopLevel)
-        {
-            return;
-        }
-
         WINDOW_DISPLAY_AFFINITY affinity = value switch
         {
             ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
@@ -2692,6 +2691,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2703,6 +2703,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2714,6 +2715,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2725,6 +2727,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
