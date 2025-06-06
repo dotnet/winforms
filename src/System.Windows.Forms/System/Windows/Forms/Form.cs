@@ -4922,10 +4922,12 @@ public partial class Form : ContainerControl
                 SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
             }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
             {
                 SetFormCornerPreferenceInternal(cornerPreference.Value);
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
     }
 
