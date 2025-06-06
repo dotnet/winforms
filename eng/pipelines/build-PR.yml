@@ -73,6 +73,7 @@ jobs:
         -build
         -configuration $(_BuildConfig)
         /p:Platform=${{ parameters.targetArchitecture }}
+        /p:PlatformTarget=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
@@ -86,6 +87,7 @@ jobs:
         -test
         -configuration $(_BuildConfig)
         /p:Platform=${{ parameters.targetArchitecture }}
+        /p:PlatformTarget=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
@@ -111,6 +113,7 @@ jobs:
         -integrationTest
         -configuration $(_BuildConfig)
         /p:Platform=${{ parameters.targetArchitecture }}
+        /p:PlatformTarget=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
