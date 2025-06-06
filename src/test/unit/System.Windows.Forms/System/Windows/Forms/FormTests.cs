@@ -1054,7 +1054,7 @@ public class FormTests
 
         // Assert that the form is not top-level and cannot be used for screen capture mode,
         // because it would throw:
-        Assert.Throws<InvalidEnumArgumentException>(
+        Assert.Throws<InvalidOperationException>(
             () => formAsControl.FormScreenCaptureMode = ScreenCaptureMode.HideContent);
     }
 
@@ -1066,7 +1066,7 @@ public class FormTests
     public void Form_FormScreenCaptureMode_TestInvalidEnumValues(int invalidValue)
     {
         using Form form = new();
-        Assert.Throws<ArgumentException>(() => form.FormScreenCaptureMode = (ScreenCaptureMode)invalidValue);
+        Assert.Throws<InvalidEnumArgumentException>(() => form.FormScreenCaptureMode = (ScreenCaptureMode)invalidValue);
     }
 
     [WinFormsTheory]
