@@ -5,9 +5,11 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
-public class DataGridViewImageColumnTests
+public class DataGridViewImageColumnTests : IDisposable
 {
     private readonly DataGridViewImageColumn _column = new();
+
+    public void Dispose() => _column.Dispose();
 
     [Fact]
     public void Description_GetSet_RoundTrips()
@@ -21,7 +23,7 @@ public class DataGridViewImageColumnTests
         _column.Description.Should().Be(string.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Description_Set_PropagatesToAllCells()
     {
         using DataGridView dataGridView = new();
@@ -98,7 +100,7 @@ public class DataGridViewImageColumnTests
         _column.ImageLayout.Should().Be(DataGridViewImageCellLayout.Stretch);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ImageLayout_Set_UpdatesCellTemplateAndCells()
     {
         using DataGridView dataGridView = new();
@@ -142,10 +144,10 @@ public class DataGridViewImageColumnTests
         _column.ValuesAreIcons.Should().Be(valueIsIcon);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ValuesAreIcons_Set_UpdatesCellTemplateAndCells()
     {
-        using var dataGridView = new DataGridView();
+        using DataGridView dataGridView = new();
         dataGridView.Columns.Add(_column);
         dataGridView.Rows.Add(2);
 
@@ -218,7 +220,7 @@ public class DataGridViewImageColumnTests
 
     private class MyDataGridViewImageColumn : DataGridViewImageColumn { }
 
-    [Fact]
+    [WinFormsFact]
     public void ToString_ReturnsExpectedFormat()
     {
         _column.Name = "MyImageColumn";
