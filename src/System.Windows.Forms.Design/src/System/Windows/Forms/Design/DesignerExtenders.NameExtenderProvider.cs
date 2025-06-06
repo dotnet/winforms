@@ -88,7 +88,7 @@ internal partial class DesignerExtenders
         ///  This is an extender property that we offer to all components
         ///  on the form. It implements the "Name" property.
         /// </summary>
-        public static void SetName(IComponent comp, string newName)
+        public virtual void SetName(IComponent comp, string newName)
         {
             ISite? site = comp.Site;
             site?.Name = newName;
