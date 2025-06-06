@@ -165,8 +165,12 @@ GetKeyState
 GetLocaleInfoEx
 GetMapMode
 GetMenu
+GetMenuBarInfo
 GetMenuItemCount
 GetMenuItemInfo
+GetMenuItemRect
+GetMenuString
+GetMenuState
 GetMessage
 GetMessagePos
 GetMessageTime
@@ -221,6 +225,7 @@ GetUpdateRgn
 GetUserObjectInformation
 GetViewportExtEx
 GetWindow
+GetWindowTheme
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWorldTransform
@@ -453,6 +458,7 @@ MONTHCAL_CLASS
 MOUSEHOOKSTRUCT
 MoveToEx
 MSFTEDIT_CLASS
+MSGF_*
 MsgWaitForMultipleObjectsEx
 NavigateDirection
 NFR_*
@@ -487,6 +493,7 @@ NOTIFY_ICON_INFOTIP_FLAGS
 NOTIFY_ICON_MESSAGE
 NotifyWinEvent
 OemKeyScan
+OffsetRect
 OLECLOSE
 OLECMDEXECOPT
 OLECMDF
