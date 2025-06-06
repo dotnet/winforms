@@ -137,6 +137,7 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -1721,6 +1722,87 @@ public partial class Form : ContainerControl
 
             base.ParentInternal = value;
         }
+    }
+
+    /// <summary>
+    ///  Gets or sets how the form’s content is protected from screen capture or video recording
+    ///  using Windows-based screen capture APIs.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This property controls how the form’s content is handled when a screen capture or screenshot
+    ///   is attempted. Each capture mode offers different levels of protection for sensitive information.
+    ///  </para>
+    ///  <para>
+    ///   By default, forms permit their content to be captured. Choosing a more restrictive mode
+    ///   can block screenshots or recordings that include confidential data.
+    ///  </para>
+    ///  <para>
+    ///   Changes to this property take effect immediately for any form that is already visible. For
+    ///   forms not yet displayed, the selected mode is applied as soon as the form appears.
+    ///  </para>
+    ///  <para>
+    ///   Note that this setting applies only to the form itself. Any additional top-level windows—such
+    ///   as pop-ups, message boxes, context menus, or dropdown menus—are not affected and can still be
+    ///   captured. Similarly, other application windows remain unaffected by this property.
+    ///  </para>
+    ///  <para>
+    ///   This also influences video-streaming or conferencing applications that rely on the same
+    ///   Windows capture APIs. However, it cannot prevent tools that bypass these APIs or use
+    ///   hardware-level capture methods from recording the screen.
+    ///   See the remarks for the Windows API <a href="https://aka.ms/AAwi872">SetWindowDisplayAffinity</a>
+    ///   for more details.
+    ///  </para>
+    /// </remarks>
+    /// <value>
+    ///  A <see cref="ScreenCaptureMode"/> enumeration value indicating the desired capture restriction.
+    ///  The default is <see cref="ScreenCaptureMode.Allow"/>.
+    /// </value>
+
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
+    public ScreenCaptureMode FormScreenCaptureMode
+    {
+        get => Properties.GetValueOrDefault(s_propFormScreenCaptureMode, ScreenCaptureMode.Allow);
+        set
+        {
+            if (FormScreenCaptureMode == value)
+            {
+                return;
+            }
+
+            if (!TopLevel)
+            {
+                throw new InvalidOperationException(SR.FormScreenCaptureModeRequiresTopLevel);
+            }
+
+            SourceGenerated.EnumValidator.Validate(value);
+            Properties.AddOrRemoveValue(s_propFormScreenCaptureMode, value);
+
+            if (IsHandleCreated)
+            {
+                SetScreenCaptureModeInternal(value);
+            }
+        }
+    }
+
+    private bool ShouldSerializeFormScreenCaptureMode() =>
+        FormScreenCaptureMode != ScreenCaptureMode.Allow;
+
+    private void ResetFormScreenCaptureMode() =>
+        FormScreenCaptureMode = ScreenCaptureMode.Allow;
+
+    private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
+    {
+        WINDOW_DISPLAY_AFFINITY affinity = value switch
+        {
+            ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
+            ScreenCaptureMode.HideWindow => WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE,
+            ScreenCaptureMode.HideContent => WINDOW_DISPLAY_AFFINITY.WDA_MONITOR,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+        };
+
+        PInvoke.SetWindowDisplayAffinity(HWND, affinity);
     }
 
     /// <summary>
@@ -4899,6 +4981,11 @@ public partial class Form : ContainerControl
         }
 
         SetFormTitleProperties();
+
+        if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
+        {
+            SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        }
 
         GC.KeepAlive(this);
     }
