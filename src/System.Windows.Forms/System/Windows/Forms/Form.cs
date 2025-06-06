@@ -6558,6 +6558,65 @@ public partial class Form : ContainerControl
         OnResizeBegin(EventArgs.Empty);
     }
 
+    private unsafe void WmEnterIdle(ref Message m)
+    {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        switch ((uint)m.WParamInternal)
+        {
+            case PInvoke.MSGF_MENU:
+              if (Application.IsDarkModeEnabled && IsMdiContainer)
+                {
+                    Point pos;
+                    PInvoke.GetCursorPos(out pos);
+                    HWND hWnd = (HWND)m.HWnd;
+                    RECT rcWin, rcMenuBar;
+                    PInvokeCore.GetWindowRect(hWnd, out rcWin);
+                    pos.X -= rcWin.left;
+                    pos.Y -= rcWin.top;
+                    MENUBARINFO menuBarInfo = new MENUBARINFO() { cbSize = (uint)sizeof(MENUBARINFO) };
+                    PInvoke.GetMenuBarInfo(hWnd, OBJECT_IDENTIFIER.OBJID_MENU, 0, ref menuBarInfo);
+                    if (!menuBarInfo.rcBar.IsEmpty)
+                    {
+                        PInvokeCore.MapWindowPoints(HWND.Null, hWnd, (Point*)&rcWin, 2);
+                        rcMenuBar = menuBarInfo.rcBar;
+                        PInvokeCore.MapWindowPoints(HWND.Null, hWnd, (Point*)&rcMenuBar, 2);
+                        PInvoke.OffsetRect(ref rcMenuBar, -rcWin.left, -rcWin.top);
+                        MENUBARINFO mbi = new() { cbSize = (uint)sizeof(MENUBARINFO) };
+                        PInvoke.GetMenuBarInfo((HWND)m.LParamInternal, OBJECT_IDENTIFIER.OBJID_CLIENT, 0, &mbi);
+                        if (!Rectangle.FromLTRB(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom).Contains(pos))
+                        {
+                            MENUITEMINFOW info = new MENUITEMINFOW
+                            {
+                                cbSize = (uint)sizeof(MENUITEMINFOW),
+                                fMask = MENU_ITEM_MASK.MIIM_TYPE
+                                | MENU_ITEM_MASK.MIIM_ID
+                                | MENU_ITEM_MASK.MIIM_DATA
+                                | MENU_ITEM_MASK.MIIM_STATE
+                            };
+
+                            PInvoke.GetMenuItemInfo(menuBarInfo.hMenu, 0, true, ref info);
+
+                            // Ensure that the menu item is not a system menu item, because sending WmNcPaint while moving the cursor over a system menu item will cause flicker.
+                            bool isSystemMenuItem = (info.hbmpItem == 1 && info.fState.HasFlag(MENU_ITEM_STATE.MFS_HILITE));
+                            if (!isSystemMenuItem)
+                            {
+                                // If the mouse is outside the menu bar,
+                                // and user does not release the left mouse button after Click on one of the mdi menuBar item but not the SystemMenu,
+                                // we need to invalidate the non-client area
+                                // so that the menu bar can be redrawn.
+                                WmNcPaint(ref m);
+                            }
+                        }
+                    }
+                }
+
+                break;
+        }
+        #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    }
+
     /// <summary>
     ///  WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
     /// </summary>
@@ -6943,6 +7002,93 @@ public partial class Form : ContainerControl
         }
     }
 
+    private unsafe void WmNcPaint(ref Message m)
+    {
+        base.WndProc(ref m);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled && IsMdiContainer)
+        {
+            HRGN rgn = PInvokeCore.CreateRectRgn(0, 0, 0, 0);
+            bool hasRegion = (m.WParamInternal != 1) && (m.Msg == PInvokeCore.WM_NCPAINT);
+            if (hasRegion)
+                PInvokeCore.CombineRgn(rgn, new HRGN((nint)m.WParamInternal.Value), HRGN.Null, RGN_COMBINE_MODE.RGN_COPY);
+            else
+                rgn = default;
+            GET_DCX_FLAGS flags = m.WParamInternal != 1 && m.Msg == PInvokeCore.WM_NCPAINT
+                ? GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_INTERSECTRGN
+                : GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_CACHE;
+            using GetDcScope hdc = new(m.HWND, rgn, flags);
+            RECT rcWin, rcClient, rcMenuBar;
+            // Map the Window rectangle to the window's coordinate space, then offset Client Rectangle accordingly. This logic is aware of right-to-left layout direction.
+            PInvokeCore.GetWindowRect(this, out rcWin);
+            PInvokeCore.GetClientRect(this, out rcClient);
+            PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcWin, 2);
+            PInvoke.OffsetRect(ref rcClient, -rcWin.left, -rcWin.top);
+            MENUBARINFO menuBarInfo = new MENUBARINFO() { cbSize = (uint)Marshal.SizeOf<MENUBARINFO>() };
+            PInvoke.GetMenuBarInfo(m.HWND, OBJECT_IDENTIFIER.OBJID_MENU, 0, ref menuBarInfo);
+            rcMenuBar = menuBarInfo.rcBar;
+            if (menuBarInfo.hMenu != HMENU.Null && !rcMenuBar.IsEmpty)
+            {
+               // Map the menu bar rectangle to the window's coordinate space, then offset it accordingly. This logic is aware of right-to-left layout direction.
+                PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcMenuBar, 2);
+                PInvoke.OffsetRect(ref rcMenuBar, -rcWin.left, -rcWin.top);
+                rcMenuBar.bottom += SystemInformation.Border3DSize.Height;
+                HRGN menuHrgn = PInvokeCore.CreateRectRgn(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom);
+                PInvokeCore.SelectClipRgn(hdc, menuHrgn);
+                using PInvoke.OpenThemeDataScope hTheme = new PInvoke.OpenThemeDataScope(HWND.Null, "DarkMode::Menu");
+                PInvoke.DrawThemeBackground(hTheme, hdc, 9, 1, rcMenuBar, null);
+                int count = PInvoke.GetMenuItemCount(menuBarInfo.hMenu);
+                for (uint i = 0; i < count; i++)
+                {
+                    MENUITEMINFOW info = new MENUITEMINFOW
+                    {
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_TYPE
+                        | MENU_ITEM_MASK.MIIM_ID
+                        | MENU_ITEM_MASK.MIIM_DATA
+                        | MENU_ITEM_MASK.MIIM_STATE
+                    };
+                    PInvoke.GetMenuItemInfo(menuBarInfo.hMenu, i, true, ref info);
+                    RECT rcItem;
+                    PInvoke.GetMenuItemRect(m.HWND, menuBarInfo.hMenu, i, out rcItem);
+                    PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcItem, 2);
+                    PInvoke.OffsetRect(ref rcItem, -rcWin.left, -rcWin.top);
+                    int state = (((info.fState & MENU_ITEM_STATE.MFS_DISABLED) == 0)
+                        || ((info.fState & MENU_ITEM_STATE.MFS_GRAYED) == 0))
+                        ? 1
+                        : 2;
+                    switch (info.wID)
+                    {
+                        case PInvoke.SC_CLOSE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 17, state, rcItem, null);
+                            break;
+                        case PInvoke.SC_MINIMIZE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 19, state, rcItem, null);
+                            break;
+                        case PInvoke.SC_RESTORE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 20, state, rcItem, null);
+                            break;
+                        default:
+                            if (info.hbmpItem == HBITMAP.HBMMENU_SYSTEM && info.dwItemData != 0)
+                            {
+                                HICON hIcon = (HICON)PInvokeCore.SendMessage((HWND)info.dwItemData, PInvokeCore.WM_GETICON, 0, 0).Value;
+                                if (!hIcon.IsNull)
+                                {
+                                    RECT rcIcon = rcItem;
+                                    rcIcon.left += SystemInformation.Border3DSize.Width;
+                                    rcIcon.top += SystemInformation.Border3DSize.Height;
+                                    PInvokeCore.DrawIconEx(hdc, rcIcon.left, rcIcon.top, hIcon, SystemInformation.SmallIconSize.Width, SystemInformation.SmallIconSize.Height, 0, HBRUSH.Null, DI_FLAGS.DI_NORMAL);
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            }
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    }
+
     /// <summary>
     ///  WM_NCHITTEST handler.
     /// </summary>
@@ -7082,7 +7228,8 @@ public partial class Form : ContainerControl
         switch (m.MsgInternal)
         {
             case PInvokeCore.WM_NCACTIVATE:
-                base.WndProc(ref m);
+            case PInvokeCore.WM_NCPAINT:
+                WmNcPaint(ref m);
                 break;
             case PInvokeCore.WM_NCLBUTTONDOWN:
             case PInvokeCore.WM_NCRBUTTONDOWN:
