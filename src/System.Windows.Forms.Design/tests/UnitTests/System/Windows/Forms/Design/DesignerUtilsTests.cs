@@ -97,7 +97,7 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void DrawGrabHandle_ShouldNotThrow_WhenCalledWithValidParameters()
     {
-        Exception exception = Record.Exception(() => DesignerUtils.DrawGrabHandle(_graphics, _bounds, isPrimary: true));
+        Exception? exception = Record.Exception(() => DesignerUtils.DrawGrabHandle(_graphics, _bounds, isPrimary: true));
         exception.Should().BeNull();
     }
 
@@ -140,7 +140,7 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void DrawSelectionBorder_ShouldNotThrow_WhenCalledWithValidParameters()
     {
-        Exception exception = Record.Exception(() => DesignerUtils.DrawSelectionBorder(_graphics, _bounds));
+        Exception? exception = Record.Exception(() => DesignerUtils.DrawSelectionBorder(_graphics, _bounds));
         exception.Should().BeNull();
     }
 
@@ -155,7 +155,7 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void LastCursorPoint_ShouldNotThrow_WhenCalled()
     {
-        Exception exception = Record.Exception(() =>
+        Exception? exception = Record.Exception(() =>
             _ = DesignerUtils.LastCursorPoint);
 
         exception.Should().BeNull();
@@ -200,7 +200,7 @@ public class DesignerUtilsTests :IDisposable
     [BoolData]
     public void DrawNoResizeHandle_ShouldNotThrow_WhenCalledWithValidParameters(bool isPrimary)
     {
-        Exception exception = Record.Exception(() =>
+        Exception? exception = Record.Exception(() =>
             DesignerUtils.DrawNoResizeHandle(_graphics, _bounds, isPrimary));
 
         exception.Should().BeNull();
@@ -347,7 +347,7 @@ public class DesignerUtilsTests :IDisposable
     [WinFormsFact]
     public void GenerateSnapShotWithBitBlt_ShouldNotThrow_WhenControlIsValid()
     {
-        Exception exception = Record.Exception(() =>
+        Exception? exception = Record.Exception(() =>
         {
             DesignerUtils.GenerateSnapShotWithBitBlt(Button, out Bitmap image);
             using (image)

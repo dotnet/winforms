@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests.Interop.SafeArrayTests;
 
 public unsafe class SAFEARRAYTests
 {
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public void SAFEARRAY_Sizeof_InvokeX86_ReturnsExpected()
     {
         if (Environment.Is64BitProcess)
@@ -26,7 +26,7 @@ public unsafe class SAFEARRAYTests
         Assert.Equal(24, sizeof(SAFEARRAY));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public void SAFEARRAY_Sizeof_InvokeX64_ReturnsExpected()
     {
         if (!Environment.Is64BitProcess)

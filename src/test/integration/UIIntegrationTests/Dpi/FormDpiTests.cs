@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.HiDpi;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests.Dpi;
 
@@ -72,9 +71,9 @@ public class FormDpiTests : ControlTestBase
             form.AutoScaleMode = AutoScaleMode.Dpi;
             form.Show();
             DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
-
-            Assert.Equal(form.MinimumSize, minSize);
-            Assert.Equal(form.MaximumSize, maxSize);
+            var factor = (float)newDpi / ScaleHelper.OneHundredPercentLogicalDpi;
+            Assert.Equal(minSize * factor, form.MinimumSize);
+            Assert.Equal(maxSize * factor, form.MaximumSize);
             form.Close();
         }
         finally

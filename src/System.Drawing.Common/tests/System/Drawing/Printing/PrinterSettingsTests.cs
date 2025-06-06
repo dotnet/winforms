@@ -39,7 +39,7 @@ public class PrinterSettingsTests
         Assert.NotNull(printerSettings.DefaultPageSettings);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void CanDuplex_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -75,7 +75,7 @@ public class PrinterSettingsTests
         AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.Copies = copies);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void Collate_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -155,7 +155,7 @@ public class PrinterSettingsTests
         AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.FromPage = pageNumber);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void Static_InstalledPrinters_ReturnsExpected()
     {
         Assert.NotNull(Helpers.InstalledPrinters);
@@ -168,7 +168,7 @@ public class PrinterSettingsTests
         Assert.True(printerSettings.IsDefaultPrinter);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void IsPlotter_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -186,7 +186,7 @@ public class PrinterSettingsTests
         Assert.False(printerSettings.IsValid);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void LandscapeAngle_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -194,7 +194,7 @@ public class PrinterSettingsTests
         Assert.True(validValues.Contains(printerSettings.LandscapeAngle), $"PrinterSettings.LandscapeAngle ({printerSettings.LandscapeAngle}) must be 0, 90, or 270 degrees.");
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void MaximumCopies_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -286,14 +286,14 @@ public class PrinterSettingsTests
         AssertExtensions.Throws<ArgumentNullException>(string.Empty, () => printerSettings.PrintFileName = string.Empty);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PaperSizes_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
         Assert.NotNull(printerSettings.PaperSizes);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PaperSources_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -351,7 +351,7 @@ public class PrinterSettingsTests
         Assert.Equal(printerName, printerSettings.PrinterName);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrinterName_Null_ReturnsExpected()
     {
         PrinterSettings printerSettings = new()
@@ -362,7 +362,7 @@ public class PrinterSettingsTests
         Assert.NotNull(printerSettings.PrinterName);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrinterResolutions_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -375,7 +375,7 @@ public class PrinterSettingsTests
         yield return new object[] { ImageFormat.Png };
     }
 
-    [ConditionalTheory(Helpers.AnyInstalledPrinters)]
+    [Theory(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     [MemberData(nameof(IsDirectPrintingSupported_ImageFormatSupported_TestData))]
     public void IsDirectPrintingSupported_ImageFormatSupported_ReturnsExpected(ImageFormat imageFormat)
     {
@@ -411,7 +411,7 @@ public class PrinterSettingsTests
         Assert.False(printerSettings.IsDirectPrintingSupported(bitmap));
     }
 
-    [ConditionalFact(typeof(PrinterSettingsTests), nameof(CanTestSetHdevmode_IntPtr_Success))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
     public void SupportsColor_ReturnsExpected()
     {
         // XPS and PDF printers support color.
@@ -442,7 +442,7 @@ public class PrinterSettingsTests
         AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.ToPage = toPage);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void Clone_Success()
     {
         PrinterSettings printerSettings = new();
@@ -450,7 +450,7 @@ public class PrinterSettingsTests
         Assert.False(ReferenceEquals(clone, printerSettings));
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void CreateMeasurementGraphics_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -462,7 +462,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void CreateMeasurementGraphics_Bool_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -472,7 +472,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void CreateMeasurementGraphics_PageSettings_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -485,7 +485,7 @@ public class PrinterSettingsTests
         Assert.Equal((double)printerSettings.DefaultPageSettings.PrintableArea.Width, graphic.VisibleClipBounds.Width, 0);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void CreateMeasurementGraphics_PageSettingsBool_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
@@ -536,7 +536,7 @@ public class PrinterSettingsTests
         Assert.NotEqual(0, handle);
     }
 
-    [ConditionalFact(typeof(PrinterSettingsTests), nameof(CanTestSetHdevmode_IntPtr_Success))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(CanTestSetHdevmode_IntPtr_Success))]
     public void SetHdevmode_IntPtr_Success()
     {
         string printerName = GetNameOfTestPrinterSuitableForDevModeTesting();

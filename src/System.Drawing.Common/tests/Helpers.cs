@@ -13,14 +13,10 @@ namespace System.Drawing;
 
 public static unsafe class Helpers
 {
-    // This MUST come before s_anyInstalledPrinters. Caching for performance in tests.
+    // This MUST come before AnyInstalledPrinters. Caching for performance in tests.
     public static PrinterSettings.StringCollection InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;
 
-    private static readonly bool s_anyInstalledPrinters = InstalledPrinters.Count > 0;
-
-    public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(AreAnyPrintersInstalled)}";
-
-    public static bool AreAnyPrintersInstalled() => s_anyInstalledPrinters;
+    public static bool AnyInstalledPrinters { get; } = InstalledPrinters.Count > 0;
 
     private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
 
@@ -28,17 +24,20 @@ public static unsafe class Helpers
     ///  Checks if PDF printing is supported by verifying installed printers.
     /// </summary>
     /// <returns><see langword="true"/> if a PDF printer is installed; otherwise, <see langword="false"/>.</returns>
-    public static bool CanPrintToPdf()
+    public static bool CanPrintToPdf
     {
-        foreach (string name in InstalledPrinters)
+        get
         {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+            foreach (string name in InstalledPrinters)
             {
-                return true;
+                if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
+                {
+                    return true;
+                }
             }
-        }
 
-        return false;
+            return false;
+        }
     }
 
     /// <summary>

@@ -103,7 +103,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.Same(printController, document.PrintController);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrinterSettings_SetValue_ReturnsExpected()
     {
         using PrintDocument document = new();
@@ -124,7 +124,7 @@ public class PrintDocumentTests : FileCleanupTestBase
             document.DefaultPageSettings.PaperSize.Kind);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void BeginPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -142,7 +142,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void EndPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -160,7 +160,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(typeof(Helpers), nameof(Helpers.CanPrintToPdf))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.CanPrintToPdf))]
     public void Print_DefaultPrintController_Success()
     {
         if (!Helpers.TryGetPdfPrinterName(out string? printerName))
@@ -185,7 +185,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.True(endPrintCalled);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrintPage_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -203,7 +203,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;

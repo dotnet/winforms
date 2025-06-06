@@ -4,7 +4,6 @@
 using System.Windows.Forms.PropertyGridInternal.TestUtilities;
 using System.Windows.Forms.UITests;
 using Windows.Win32.UI.Accessibility;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.PropertyGridInternal.UITests;
 
