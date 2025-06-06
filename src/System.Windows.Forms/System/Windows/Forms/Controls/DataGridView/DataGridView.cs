@@ -222,7 +222,6 @@ public partial class DataGridView : Control, ISupportInitialize
     private const int OperationInEndEdit = 0x00400000;
     private const int OperationResizingOperationAboutToStart = 0x00800000;
     private const int OperationTrackKeyboardColResize = 0x01000000;
-    private const int OperationInReleasingDataSource = 0x02000000;
     private const int OperationMouseOperationMask = OperationTrackColResize | OperationTrackRowResize |
         OperationTrackColRelocation | OperationTrackColHeadersResize | OperationTrackRowHeadersResize;
     private const int OperationKeyboardOperationMask = OperationTrackKeyboardColResize;
@@ -1922,16 +1921,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     newDataSource.Disposed += OnDataSourceDisposed;
                 }
 
-                _dataGridViewOper[OperationInReleasingDataSource] = true;
-
-                try
-                {
-                    CurrentCell = null;
-                }
-                finally
-                {
-                    _dataGridViewOper[OperationInReleasingDataSource] = false;
-                }
+                CurrentCell = null;
 
                 if (DataConnection is null)
                 {
