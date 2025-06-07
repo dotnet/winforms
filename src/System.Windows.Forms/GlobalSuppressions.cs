@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 // Publicly shipped API
+
+
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyDown(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnKeyUp(System.Windows.Forms.KeyEventArgs)")]
 [assembly: SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "Public API", Scope = "member", Target = "~M:System.Windows.Forms.ButtonBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)")]
@@ -268,3 +270,5 @@
 [assembly: SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "Analyzer wrongly complains for new APIs - known issue.", Scope = "member", Target = "~M:System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage,System.Windows.Forms.TaskDialogStartupLocation)~System.Threading.Tasks.Task{System.Windows.Forms.TaskDialogButton}")]
 [assembly: SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "Analyzer wrongly complains for new APIs - known issue.", Scope = "member", Target = "~M:System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window,System.Windows.Forms.TaskDialogPage,System.Windows.Forms.TaskDialogStartupLocation)~System.Threading.Tasks.Task{System.Windows.Forms.TaskDialogButton}")]
 [assembly: SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "Analyzer wrongly complains for new APIs - known issue.", Scope = "member", Target = "~M:System.Windows.Forms.TaskDialog.ShowDialogAsync(System.IntPtr,System.Windows.Forms.TaskDialogPage,System.Windows.Forms.TaskDialogStartupLocation)~System.Threading.Tasks.Task{System.Windows.Forms.TaskDialogButton}")]
+[assembly: SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "<Pending>", Scope = "member", Target = "~M:System.Windows.Forms.Control.InvokeAsync(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask},System.Threading.CancellationToken)~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "<Pending>", Scope = "member", Target = "~M:System.Windows.Forms.Control.InvokeAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``0}},System.Threading.CancellationToken)~System.Threading.Tasks.Task{``0}")]
