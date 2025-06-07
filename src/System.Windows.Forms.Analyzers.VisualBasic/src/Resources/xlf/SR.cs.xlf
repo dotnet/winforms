@@ -32,21 +32,6 @@
         <target state="translated">Typ IDataObject neimplementuje rozhraní ITypedDataObject.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFO2001AnalyzerDescription">
-        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
-        <target state="translated">Vyhněte se předávání Func&lt;T&gt; do InvokeAsync, kde T je Task nebo ValueTask, pokud není vaším záměrem, aby se delegát jednoduše spustil jako úloha bez dohledu. Místo toho použijte Func&lt;CancellationToken, ValueTask&gt; nebo Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;, aby bylo možné čekat na delegáta předaného do InvokeAsync, což umožní správné zpracování výjimek.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">Do InvokeAsync se předává úloha bez tokenu zrušení.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">Do InvokeAsync se předává úloha bez tokenu zrušení.</target>
-        <note />
-      </trans-unit>
     </body>
   </file>
 </xliff>
