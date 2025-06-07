@@ -120,10 +120,6 @@ public partial class ListBox : ListControl
     {
         SetStyle(ControlStyles.UserPaint | ControlStyles.StandardClick | ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
@@ -131,13 +127,27 @@ public partial class ListBox : ListControl
         _requestedHeight = Height;
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        // Call the base classes, and let them setup their fields.
+        base.InitializeControl(deviceDpi);
+
+        // Now we're doing our initialization. We're scaling the constants here,
+        // so that the ListBox can be used in a DPI-aware way.
+        ScaleConstants();
+
+        // And now we're setting the styles we need. In this case,
+        // we want ListBox participating implicitly in any DarkMode support.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001
+
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
-
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {
