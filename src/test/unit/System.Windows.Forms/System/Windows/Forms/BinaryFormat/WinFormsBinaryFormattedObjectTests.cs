@@ -244,13 +244,13 @@ public class WinFormsBinaryFormattedObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(Control_DesignerVisibleProperties_TestData))]
-    public void Control_BinaryFormatted_DesignerVisibleProperties(object value, string[] properties)
+    public void Control_BinaryFormatted_DesignerVisibleProperties(Func<Control> controlFactory, string[] properties)
     {
         // Check WinForms types for properties that can hit the BinaryFormatter
 
-        using (value as IDisposable)
+        using var control = controlFactory();
         {
-            var propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
+            var propertyDescriptors = TypeDescriptor.GetProperties(control, s_visible);
 
             List<string> binaryFormattedProperties = [];
             foreach (PropertyDescriptor property in propertyDescriptors)
