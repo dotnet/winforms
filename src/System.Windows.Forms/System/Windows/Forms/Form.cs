@@ -206,10 +206,6 @@ public partial class Form : ContainerControl
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -4341,16 +4337,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (Application.IsDarkModeEnabled)
-            {
-                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-            }
-#pragma warning restore WFO5001
-
+            // Finally fire the new OnShown(unless the form has already been closed).
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
     }

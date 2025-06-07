@@ -74,10 +74,6 @@ public partial class Label : Control, IAutomationLiveRegion
 
         SetStyle(ControlStyles.ResizeRedraw, true);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         CommonProperties.SetSelfAutoSizeInDefaultLayout(this, true);
 
         _labelState[s_stateFlatStyle] = (int)FlatStyle.Standard;
@@ -88,6 +84,14 @@ public partial class Label : Control, IAutomationLiveRegion
         _requestedHeight = Height;
         _requestedWidth = Width;
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Indicates whether the control is automatically resized to fit its contents.

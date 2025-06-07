@@ -110,13 +110,17 @@ public partial class PictureBox : Control, ISupportInitialize
         SetStyle(ControlStyles.Opaque | ControlStyles.Selectable, false);
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.SupportsTransparentBackColor, true);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         TabStop = false;
         _savedSize = Size;
     }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

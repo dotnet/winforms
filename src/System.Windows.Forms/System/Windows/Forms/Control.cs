@@ -309,6 +309,7 @@ public unsafe partial class Control :
 
         // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
         _deviceDpi = _oldDeviceDpi = ScaleHelper.InitialSystemDpi;
+
         _window = new ControlNativeWindow(this);
         RequiredScalingEnabled = true;
         RequiredScaling = BoundsSpecified.All;
@@ -326,6 +327,14 @@ public unsafe partial class Control :
                 | ControlStyles.Selectable,
             true);
 
+        // Allows inheriting controls to initialize their control-specific state, as well as
+        // perform DPI-depending initialization of fields before the constructor code of the
+        // respective (inheriting) control has a chance to run.
+        // At this point, the control is not yet created, but every necessary state as well as
+        // the base class properties are in place, because they have been initialized by the
+        // static ctor of Control, which is called before all other instance constructors.
+        InitializeControl(_deviceDpi);
+
         // We baked the "default default" margin and min size into CommonProperties
         // so that in the common case the PropertyStore would be empty. If, however,
         // someone overrides these Default* methods, we need to write the default
@@ -333,9 +342,6 @@ public unsafe partial class Control :
 
         // Changing the order of property accesses here can break existing code as these are all virtual properties.
         // Try to keep observable state for Control unchanged in this constructor to avoid nasty subtle bugs.
-
-        InitializeConstantsForInitialDpi(_deviceDpi);
-
         if (DefaultMargin != CommonProperties.DefaultMargin)
         {
             Margin = DefaultMargin;
@@ -389,7 +395,8 @@ public unsafe partial class Control :
     /// <summary>
     ///  Initializes a new instance of the <see cref="Control"/> class.
     /// </summary>
-    public Control(string? text, int left, int top, int width, int height) : this(null, text, left, top, width, height)
+    public Control(string? text, int left, int top, int width, int height)
+        : this(null, text, left, top, width, height)
     {
     }
 
@@ -409,6 +416,63 @@ public unsafe partial class Control :
     {
         Location = new Point(left, top);
         Size = new Size(width, height);
+    }
+
+    /// <summary>
+    ///  Provides inheriting controls a dedicated early-initialization hook that is guaranteed to run
+    ///  <i>before</i> <see cref="CreateParams"/> is called by any base class constructor.
+    ///  This method enables derived controls to set styles, flags, or perform other setup that must
+    ///  occur prior to any base class logic that depends on such initialization.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   In WinForms, the constructor call chain for controls can result in base class constructors
+    ///   invoking methods such as <see cref="CreateParams"/> or other initialization logic
+    ///   <b>before</b> the derived class's constructor body executes. This makes it impossible for
+    ///   the derived class to perform certain setup in time using only its constructor.
+    ///  </para>
+    ///  <para>
+    ///   For example, consider the following inheritance and call chain:
+    ///  </para>
+    ///  <code>
+    ///   public class MyButton : Button
+    ///   {
+    ///       public MyButton()
+    ///       {
+    ///           // This code runs after Button's constructor, which may have already called CreateParams.
+    ///       }
+    ///
+    ///       protected override void InitializeControl(int deviceDpi)
+    ///       {
+    ///           // This code runs before any base class calls to CreateParams or similar methods.
+    ///       }
+    ///   }
+    ///
+    ///   // Call chain:
+    ///   new MyButton()
+    ///         → Control..ctor()
+    ///           → Control.InitializeControl (called in base constructor)
+    ///               → ButtonBase.InitializeControl (called before CreateParams)
+    ///               → Button.InitializeControl (called before CreateParams)
+    ///               → MyButton.InitializeControl (called before CreateParams)
+    ///           → Control.CreateParams (called in base constructor)
+    ///               → ButtonBase.CreateParams (called before CreateParams)
+    ///               → Button.CreateParams (called before CreateParams)
+    ///               → MyButton.CreateParams (called before CreateParams)
+    ///               → MyButton.CreateParams (called before CreateParams)
+    ///         → ButtonBase..ctor()
+    ///       → Button..ctor()
+    ///     → MyButton..ctor()
+    ///   </code>
+    ///   <para>
+    ///    By overriding <c>InitializeControl</c>, inheritors can ensure their initialization logic
+    ///    runs at the correct time, even when base class constructors invoke methods that require
+    ///    early setup.
+    ///   </para>
+    /// </remarks>
+    /// <param name="deviceDpi">The DPI value for the control's device context.</param>
+    protected virtual void InitializeControl(int deviceDpi)
+    {
     }
 
     /// <summary>
@@ -8034,15 +8098,6 @@ public unsafe partial class Control :
     {
         ((EventHandler?)Events[s_validatedEvent])?.Invoke(this, e);
     }
-
-    /// <summary>
-    ///  This is called in the <see cref="Control"/> constructor before calculating the initial <see cref="Size"/>.
-    ///  This gives a chance to initialize fields that will be used in calls to sizing related virtuals such as
-    ///  <see cref="DefaultSize"/>, etc. The real size cannot be calculated until the handle is created as Windows
-    ///  can have their own DPI setting. When the handle is created, <see cref="RescaleConstantsForDpi(int, int)"/>
-    ///  is called.
-    /// </summary>
-    private protected virtual void InitializeConstantsForInitialDpi(int initialDpi) { }
 
     /// <summary>
     ///  Invoked when the control handle is created and right before the top level parent control receives a
