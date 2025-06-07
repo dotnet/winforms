@@ -32,21 +32,6 @@
         <target state="translated">O tipo 'IDataObject' não implementa 'ITypedDataObject'</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFO2001AnalyzerDescription">
-        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
-        <target state="translated">Evite passar uma `Func&lt;T&gt;` para `InvokeAsync` em que `T` é uma `Task` ou `ValueTask`, a menos que sua intenção seja que o delegado seja simplesmente iniciado como uma tarefa não supervisionada. Em vez disso, use `Func&lt;CancellationToken, ValueTask&gt;` ou `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, para que o delegado passado para `InvokeAsync` possa ser aguardado, permitindo que as exceções sejam tratadas adequadamente.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">A tarefa está sendo passada para InvokeAsync sem um token de cancelamento</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to InvokeAsync without a cancellation token</source>
-        <target state="translated">A tarefa está sendo passada para InvokeAsync sem um token de cancelamento</target>
-        <note />
-      </trans-unit>
     </body>
   </file>
 </xliff>
