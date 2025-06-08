@@ -109,7 +109,7 @@ public partial class CheckBox : ButtonBase
             if (Application.IsDarkModeEnabled
 
                 // We need wrapping around the Win32 control only for
-                // when we're dealing with a button experience.
+                // when we're dealing with a button appearance.
                 && Appearance == Appearance.Button
 
                 // SystemRenderer cannot draw images, so use our DarkMode renderer
