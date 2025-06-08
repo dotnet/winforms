@@ -9338,6 +9338,21 @@ public unsafe partial class Control :
                 }
             }
 
+            // Note, that we need to take DarkMode-theming into account here at a different point in time
+            // compared to when we create the handle for the first time. The reason is that recreating the handle
+            // usually also might recreating the 
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled
+                && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001
+
             // Note that we need to take DarkMode theming into account at a different point in time
             // than when we create the handle for the first time. The reason is that recreating the handle
             // usually also recreates the handles of any child controls, and we want to
