@@ -7361,16 +7361,6 @@ public unsafe partial class Control :
                 PInvoke.SetWindowText(this, _text);
             }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
-            {
-                _ = PInvoke.SetWindowTheme(
-                    hwnd: HWND,
-                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
-                    pszSubIdList: null);
-            }
-#pragma warning restore WFO5001
-
             if (this is not ScrollableControl
                 && !IsMirrored
                 && GetExtendedState(ExtendedStates.SetScrollPosition)
@@ -7380,6 +7370,18 @@ public unsafe partial class Control :
                 SetExtendedState(ExtendedStates.HaveInvoked, true);
                 SetExtendedState(ExtendedStates.SetScrollPosition, false);
             }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+                && !RecreatingHandle)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001
         }
 
         ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
@@ -9322,6 +9324,21 @@ public unsafe partial class Control :
                     throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                 }
             }
+
+            // Note that we need to take DarkMode theming into account at a different point in time
+            // than when we create the handle for the first time. The reason is that recreating the handle
+            // usually also recreates the handles of any child controls, and we want to
+            // ensure that the theming is applied to all child controls as well.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled
+                && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001
 
             // Restore control focus
             if (focused)
