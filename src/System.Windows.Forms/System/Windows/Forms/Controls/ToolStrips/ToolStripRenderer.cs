@@ -666,26 +666,26 @@ public abstract class ToolStripRenderer
             ArrowDirection.Up =>
             [
                 new(middle.X - Offset2X, middle.Y + 1),
-            new(middle.X + Offset2X + 1, middle.Y + 1),
-            new(middle.X, middle.Y - Offset2Y)
+                new(middle.X + Offset2X + 1, middle.Y + 1),
+                new(middle.X, middle.Y - Offset2Y)
             ],
             ArrowDirection.Left =>
             [
                 new(middle.X + Offset2X, middle.Y - s_offset4Y),
-            new(middle.X + Offset2X, middle.Y + s_offset4Y),
-            new(middle.X - horizontalOffset, middle.Y)
+                new(middle.X + Offset2X, middle.Y + s_offset4Y),
+                new(middle.X - horizontalOffset, middle.Y)
             ],
             ArrowDirection.Right =>
             [
                 new(middle.X - Offset2X, middle.Y - s_offset4Y),
-            new(middle.X - Offset2X, middle.Y + s_offset4Y),
-            new(middle.X + horizontalOffset, middle.Y)
+                new(middle.X - Offset2X, middle.Y + s_offset4Y),
+                new(middle.X + horizontalOffset, middle.Y)
             ],
             _ =>
             [
                 new(middle.X - Offset2X, middle.Y - 1),
-            new(middle.X + Offset2X + 1, middle.Y - 1),
-            new(middle.X, middle.Y + Offset2Y)
+                new(middle.X + Offset2X + 1, middle.Y - 1),
+                new(middle.X, middle.Y + Offset2Y)
             ],
         };
 
@@ -1121,18 +1121,18 @@ public abstract class ToolStripRenderer
             // Default values
             (int offset, Rectangle rect) cornerDef = (2, new(1, 1, 2, 2));
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 cornerDef = f.FormCornerPreference switch
                 {
                     FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
                     FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
                     _ => (2, new(0, 0, 2, 2))
                 };
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return cornerDef;
         }

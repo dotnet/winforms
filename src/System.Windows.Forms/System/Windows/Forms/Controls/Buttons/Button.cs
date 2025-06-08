@@ -149,27 +149,25 @@ public partial class Button : ButtonBase, IButtonControl
     }
 
 #pragma warning disable WFO5001
-    /// <summary>
-    ///  Defines, whether the control is owner-drawn. Based on this,
-    ///  the UserPaint flags get set, which in turn makes it later
-    ///  a Win32 controls, which we wrap (OwnerDraw == false) or if we
-    ///  draw ourselves. If the user wants to opt out of DarkMode, we cannot
-    ///  force System-Painting for FlatStyle.Standard, so we need to know here
-    ///  and now.
-    /// </summary>
+
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
     private protected override bool OwnerDraw
     {
         get
         {
             if (Application.IsDarkModeEnabled
-                // The SystemRenderer cannot render images. So, we flip to our
-                // own DarkMode renderer, if we need to render images, except if
+
+                // SystemRenderer cannot draw images, so use our DarkMode renderer when images are needed,
+                // unless implicit theming has been disabled.
                 && GetStyle(ControlStyles.ApplyThemingImplicitly)
-                // the user wants to opt out of implicit DarkMode rendering.
+
+                // Only apply when no image is set to avoid custom rendering without content.
                 && Image is null
-                // And this only counts for FlatStyle.Standard. For the rest,
-                // we're using specific renderers, which check themselves, if
-                // they need to apply Light- or DarkMode.
+
+                // Restrict this logic to FlatStyle.Standard; other styles use their own light/dark checks.
                 && FlatStyle == FlatStyle.Standard)
             {
                 return false;
