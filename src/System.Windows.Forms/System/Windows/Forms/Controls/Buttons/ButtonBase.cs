@@ -68,7 +68,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 | ControlStyles.Opaque
                 | ControlStyles.ResizeRedraw
                 | ControlStyles.OptimizedDoubleBuffer
-                // We gain about 2% in painting by avoiding extra GetWindowText calls
                 | ControlStyles.CacheText
                 | ControlStyles.StandardClick,
             true);
@@ -399,6 +398,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _flatStyle = value;
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
             Invalidate();
+
             UpdateOwnerDraw();
         }
     }
@@ -452,13 +452,18 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             StopAnimate();
 
             _image = value;
+
             if (_image is not null)
             {
                 ImageIndex = ImageList.Indexer.DefaultIndex;
                 ImageList = null;
             }
 
+            // If we have an Image, for some flat styles we need to change the rendering approach from
+            // being a wrapper around the Win32 control to being owner-drawn. The Win32 control does not
+            // support images in the same flexible way as we need it.
             UpdateOwnerDraw();
+
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
             Animate();
             Invalidate();
@@ -1015,7 +1020,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
-#pragma warning disable WFO5001
     /// <summary>
     ///  Returns an adapter for Rendering one of the FlatStyles. Note, that we always render
     ///  buttons ourselves, except when the User explicitly requests FlatStyle.System rendering!
@@ -1045,7 +1049,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
                 _cachedAdapterType = FlatStyle;
             }
-#pragma warning restore WFO5001
 
             return _adapter;
         }
@@ -1295,6 +1298,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool ShouldSerializeImage() => _image is not null;
 
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
     private protected void UpdateOwnerDraw()
     {
         if (OwnerDraw != GetStyle(ControlStyles.UserPaint))

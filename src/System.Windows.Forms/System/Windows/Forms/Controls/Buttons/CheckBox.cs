@@ -49,7 +49,11 @@ public partial class CheckBox : ButtonBase
         TextAlign = ContentAlignment.MiddleLeft;
     }
 
-    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        ScaleConstants();
+    }
 
     private bool AccObjDoDefaultAction { get; set; }
 
@@ -83,9 +87,8 @@ public partial class CheckBox : ButtonBase
                 {
                     UpdateStyles();
 
-                    // UpdateStyles should also update the UserDraw flag, but it doesn't.
-                    // Since we hijack FlatStyle.Standard for DarkMode and let that SystemRender,
-                    // the threshold from Normal to Button is important to update the OwnerDraw flag.
+                    // When we change the appearance, we might also either stop or start wrapping the
+                    // win32 control. This is controlled by the OwnerDraw setting.
                     UpdateOwnerDraw();
                 }
 
@@ -95,19 +98,36 @@ public partial class CheckBox : ButtonBase
     }
 
 #pragma warning disable WFO5001
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
+    private protected override bool OwnerDraw
+    {
+        get
+        {
+            if (Application.IsDarkModeEnabled
 
-    private protected override bool OwnerDraw =>
-            // We want NO owner draw ONLY when we're
-            // * In Dark Mode
-            // * When _then_ the Appearance is Button
-            // * But then ONLY when we're rendering with FlatStyle.Standard
-            //   (because that would let us usually let us draw with the VisualStyleRenderers,
-            //   which cause HighDPI issues in Dark Mode).
-            (!Application.IsDarkModeEnabled
-                || Appearance != Appearance.Button
-                || FlatStyle != FlatStyle.Standard)
-                && base.OwnerDraw;
+                // We need wrapping around the Win32 control only for
+                // when we're dealing with a button experience.
+                && Appearance == Appearance.Button
 
+                // SystemRenderer cannot draw images, so use our DarkMode renderer
+                // when images are needed, unless implicit theming has been disabled.
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+
+                // Only apply when no image is set to avoid custom rendering without content.
+                && Image is null
+
+                // Restrict this logic to FlatStyle.Standard; other styles use their own light/dark checks.
+                && FlatStyle == FlatStyle.Standard)
+            {
+                return false;
+            }
+
+            return base.OwnerDraw;
+        }
+    }
 #pragma warning restore WFO5001
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -247,6 +267,7 @@ public partial class CheckBox : ButtonBase
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (OwnerDraw)
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
@@ -261,6 +282,7 @@ public partial class CheckBox : ButtonBase
 
                 // Determine the alignment of the check box
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
+
                 if ((align & AnyRight) != 0)
                 {
                     cp.Style |= PInvoke.BS_RIGHTBUTTON;

@@ -555,12 +555,9 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  Raises the RenderArrow event.
+    ///  Raises the RenderArrow event in the derived class with dark mode support.
     /// </summary>
     /// <param name="e">A ToolStripArrowRenderEventArgs that contains the event data.</param>
-    /// <summary>
-    /// Raises the RenderArrow event in the derived class with dark mode support.
-    /// </summary>
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);

@@ -2022,7 +2022,6 @@ public partial class TabControl : Control
 
         // Remove other TabBaseReLayout messages from the message queue
         MSG msg = default;
-
         while (PInvokeCore.PeekMessage(
             &msg,
             this,
