@@ -1846,7 +1846,7 @@ public partial class ListView : Control
 
             if (IsHandleCreated && _viewStyle == View.Details)
             {
-                ApplyColumnHeaderDarkModeOnDemand();
+                ApplyDarkModeOnDemand();
             }
 
             UpdateListViewItemsLocations();
@@ -4537,8 +4537,6 @@ public partial class ListView : Control
             PInvokeCore.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
-        ApplyColumnHeaderDarkModeOnDemand();
-
         UpdateExtendedStyles();
         RealizeProperties();
         PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
@@ -4599,6 +4597,7 @@ public partial class ListView : Control
         }
 
         int columnCount = _columnHeaders is null ? 0 : _columnHeaders.Length;
+
         if (columnCount > 0)
         {
             int[] indices = new int[columnCount];
@@ -4644,6 +4643,7 @@ public partial class ListView : Control
         // When the handle is recreated, update the SavedCheckedItems.
         // It is possible some checked items were added to the list view while its handle was null.
         _savedCheckedItems = null;
+
         if (!CheckBoxes && !VirtualMode)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -4654,21 +4654,48 @@ public partial class ListView : Control
                 }
             }
         }
+
+        if (!RecreatingHandle)
+        {
+            ApplyDarkModeOnDemand();
+        }
     }
 
-    private void ApplyColumnHeaderDarkModeOnDemand()
+#pragma warning disable WFO5001
+    private void ApplyDarkModeOnDemand()
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (Application.IsDarkModeEnabled)
         {
-            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+            // Enable double buffering when in dark mode to reduce flicker.
+            uint exMask = PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_TWOCLICKACTIVATE |
+                PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
+                PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
+                PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
+                PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
+
+            uint exStyle = BuildExStyleInternal();
+            exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
+
+            PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
+                (WPARAM)exMask,
+                (LPARAM)exStyle);
+
+            // Apply dark mode theme to the ListView
+            _ = PInvoke.SetWindowTheme(
+                HWND,
+                $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                null);
 
             // Get the ListView's ColumnHeader handle:
             HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+
+            // Apply dark mode theme to the ColumnHeader
             PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
         }
-#pragma warning restore WFO5001
     }
+#pragma warning restore WFO5001
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
@@ -5622,68 +5649,86 @@ public partial class ListView : Control
         }
     }
 
+    private uint BuildExStyleInternal()
+    {
+        if (!IsHandleCreated)
+        {
+            return 0;
+        }
+
+        uint exStyle = 0;
+
+        switch (_activation)
+        {
+            case ItemActivation.OneClick:
+                exStyle |= PInvoke.LVS_EX_ONECLICKACTIVATE;
+                break;
+            case ItemActivation.TwoClick:
+                exStyle |= PInvoke.LVS_EX_TWOCLICKACTIVATE;
+                break;
+        }
+
+        if (AllowColumnReorder)
+        {
+            exStyle |= PInvoke.LVS_EX_HEADERDRAGDROP;
+        }
+
+        if (CheckBoxes)
+        {
+            exStyle |= PInvoke.LVS_EX_CHECKBOXES;
+        }
+
+        if (DoubleBuffered)
+        {
+            exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
+        }
+
+        if (FullRowSelect)
+        {
+            exStyle |= PInvoke.LVS_EX_FULLROWSELECT;
+        }
+
+        if (GridLines)
+        {
+            exStyle |= PInvoke.LVS_EX_GRIDLINES;
+        }
+
+        if (HoverSelection)
+        {
+            exStyle |= PInvoke.LVS_EX_TRACKSELECT;
+        }
+
+        if (HotTracking)
+        {
+            exStyle |= PInvoke.LVS_EX_UNDERLINEHOT;
+        }
+
+        if (ShowItemToolTips)
+        {
+            exStyle |= PInvoke.LVS_EX_INFOTIP;
+        }
+
+        return exStyle;
+    }
+
     protected void UpdateExtendedStyles()
     {
         if (IsHandleCreated)
         {
-            uint exStyle = 0;
             uint exMask = PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_TWOCLICKACTIVATE |
-                            PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
-                            PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
-                            PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
-                            PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
+                PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
+                PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
+                PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
+                PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
 
-            switch (_activation)
-            {
-                case ItemActivation.OneClick:
-                    exStyle |= PInvoke.LVS_EX_ONECLICKACTIVATE;
-                    break;
-                case ItemActivation.TwoClick:
-                    exStyle |= PInvoke.LVS_EX_TWOCLICKACTIVATE;
-                    break;
-            }
+            uint exStyle = BuildExStyleInternal();
 
-            if (AllowColumnReorder)
-            {
-                exStyle |= PInvoke.LVS_EX_HEADERDRAGDROP;
-            }
+            PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
+                (WPARAM)exMask,
+                (LPARAM)exStyle);
 
-            if (CheckBoxes)
-            {
-                exStyle |= PInvoke.LVS_EX_CHECKBOXES;
-            }
-
-            if (DoubleBuffered)
-            {
-                exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
-            }
-
-            if (FullRowSelect)
-            {
-                exStyle |= PInvoke.LVS_EX_FULLROWSELECT;
-            }
-
-            if (GridLines)
-            {
-                exStyle |= PInvoke.LVS_EX_GRIDLINES;
-            }
-
-            if (HoverSelection)
-            {
-                exStyle |= PInvoke.LVS_EX_TRACKSELECT;
-            }
-
-            if (HotTracking)
-            {
-                exStyle |= PInvoke.LVS_EX_UNDERLINEHOT;
-            }
-
-            if (ShowItemToolTips)
-            {
-                exStyle |= PInvoke.LVS_EX_INFOTIP;
-            }
-
-            PInvokeCore.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)exMask, (LPARAM)exStyle);
             Invalidate();
         }
     }
@@ -6405,6 +6450,7 @@ public partial class ListView : Control
         }
 
         RecreateHandle();
+        ApplyDarkModeOnDemand();
     }
 
     private unsafe void WmReflectNotify(ref Message m)
