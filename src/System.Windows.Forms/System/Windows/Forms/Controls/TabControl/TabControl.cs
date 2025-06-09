@@ -1574,6 +1574,8 @@ public partial class TabControl : Control
             TabPages.Add(tabPages[i]);
         }
 
+        ApplyDarkModeOnDemand();
+
         try
         {
             SetState(State.FromCreateHandles, true);
