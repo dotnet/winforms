@@ -5622,12 +5622,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormScreenCaptureModeDescr">
         <source>Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</source>
-        <target state="new">Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</target>
+        <target state="translated">获取或设置基于 Windows API 阻止通过屏幕剪辑应用程序对窗体内容进行屏幕截图/视频录制的行为。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormScreenCaptureModeRequiresTopLevel">
         <source>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</source>
-        <target state="new">The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</target>
+        <target state="translated">FormsScreenCaptureMode 属性仅能在 TopLevel 属性设为 true 的顶级窗体上进行更改。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormShowIconDescr">
