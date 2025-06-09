@@ -61,6 +61,19 @@ public partial class MainForm : Form
                     case Keys.Right:
                         designSurfaceExtended.DoAction("KeyMoveRight");
                         break;
+                    case Keys.Tab:
+                        {
+                            if (e.Shift)
+                            {
+                                designSurfaceExtended.DoAction("KeySelectPrevious");
+                            }
+                            else
+                            {
+                                designSurfaceExtended.DoAction("KeySelectNext");
+                            }
+                        }
+
+                        break;
                 }
             };
         }
