@@ -16,7 +16,6 @@ override System.Windows.Forms.RadioButton.InitializeControl(int deviceDpi) -> vo
 override System.Windows.Forms.ScrollableControl.InitializeControl(int deviceDpi) -> void
 override System.Windows.Forms.ScrollBar.InitializeControl(int deviceDpi) -> void
 override System.Windows.Forms.Splitter.InitializeControl(int deviceDpi) -> void
-override System.Windows.Forms.TabControl.InitializeControl(int deviceDpi) -> void
 override System.Windows.Forms.TabPage.InitializeControl(int deviceDpi) -> void
 override System.Windows.Forms.TrackBar.InitializeControl(int deviceDpi) -> void
 override System.Windows.Forms.TreeView.InitializeControl(int deviceDpi) -> void

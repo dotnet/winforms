@@ -86,14 +86,6 @@ public partial class TabControl : Control
         SetStyle(ControlStyles.UserPaint, false);
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Returns on what area of the control the tabs reside on (A TabAlignment value).
     ///  The possibilities are Top (the default), Bottom, Left, and Right. When alignment
@@ -1577,6 +1569,8 @@ public partial class TabControl : Control
         {
             TabPages.Add(tabPages[i]);
         }
+
+        ApplyDarkModeOnDemand();
 
         try
         {
