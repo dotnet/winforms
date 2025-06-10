@@ -1022,16 +1022,10 @@ public abstract class ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        if (RendererOverride is not null)
-        {
-            RendererOverride.OnRenderStatusStripSizingGrip(e);
-            return;
-        }
-
         OnRenderStatusStripSizingGrip(
             eArgs: e,
             highLightBrush: SystemBrushes.ButtonHighlight,
-            shadowBrush: SystemBrushes.GrayText);
+            shadowBrush: SystemBrushes.ButtonShadow);
     }
 
     private protected static void OnRenderStatusStripSizingGrip(
@@ -1052,7 +1046,7 @@ public abstract class ToolStripRenderer
         }
 
         Graphics g = eArgs.Graphics;
-        ReadOnlySpan<Rectangle> baseRects = s_baseSizeGripRectangles;
+        ReadOnlySpan<Rectangle> baseRectangle = s_baseSizeGripRectangles;
 
         // Use device DPI for scaling
         float dpiScale = 1.0f;
@@ -1063,12 +1057,12 @@ public abstract class ToolStripRenderer
         }
 
         // Create a buffer on the stack for the scaled rectangles
-        Span<Rectangle> scaledRects = stackalloc Rectangle[baseRects.Length];
+        Span<Rectangle> scaledRects = stackalloc Rectangle[baseRectangle.Length];
 
         // Scale the base rectangles for the grip dots
-        for (int i = 0; i < baseRects.Length; i++)
+        for (int i = 0; i < baseRectangle.Length; i++)
         {
-            Rectangle r = baseRects[i];
+            Rectangle r = baseRectangle[i];
 
             scaledRects[i] = new Rectangle(
                 (int)(r.X * dpiScale),
@@ -1127,18 +1121,18 @@ public abstract class ToolStripRenderer
             // Default values
             (int offset, Rectangle rect) cornerDef = (2, new(1, 1, 2, 2));
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 cornerDef = f.FormCornerPreference switch
                 {
                     FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
                     FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
                     _ => (2, new(0, 0, 2, 2))
                 };
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return cornerDef;
         }

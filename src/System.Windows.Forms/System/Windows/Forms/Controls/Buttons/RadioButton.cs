@@ -50,6 +50,12 @@ public partial class RadioButton : ButtonBase
         SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
     }
 
+    protected override void InitializeControl(int deviceDpi)
+    {
+        base.InitializeControl(deviceDpi);
+        ScaleConstants();
+    }
+
     /// <summary>
     ///  Gets or sets a value indicating whether the <see cref="Checked"/> value and the appearance of
     ///  the control automatically change when the control is clicked.
@@ -96,6 +102,10 @@ public partial class RadioButton : ButtonBase
                     else
                     {
                         UpdateStyles();
+
+                        // When we change the appearance, we might also either stop or start wrapping the
+                        // win32 control. This is controlled by the OwnerDraw setting.
+                        UpdateOwnerDraw();
                     }
 
                     OnAppearanceChanged(EventArgs.Empty);
@@ -168,6 +178,39 @@ public partial class RadioButton : ButtonBase
         }
     }
 
+#pragma warning disable WFO5001
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
+    private protected override bool OwnerDraw
+    {
+        get
+        {
+            if (Application.IsDarkModeEnabled
+
+                // We need wrapping around the Win32 control only for
+                // when we're dealing with a button experience.
+                && Appearance == Appearance.Button
+
+                // SystemRenderer cannot draw images, so use our DarkMode renderer
+                // when images are needed, unless implicit theming has been disabled.
+                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+
+                // Only apply when no image is set to avoid custom rendering without content.
+                && Image is null
+
+                // Restrict this logic to FlatStyle.Standard; other styles use their own light/dark checks.
+                && FlatStyle == FlatStyle.Standard)
+            {
+                return false;
+            }
+
+            return base.OwnerDraw;
+        }
+    }
+#pragma warning restore WFO5001
+
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -192,6 +235,7 @@ public partial class RadioButton : ButtonBase
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (OwnerDraw)
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
@@ -240,8 +284,6 @@ public partial class RadioButton : ButtonBase
         _flatSystemStylePaddingWidth = LogicalToDeviceUnits(LogicalFlatSystemStylePaddingWidth);
         _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
-
-    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
