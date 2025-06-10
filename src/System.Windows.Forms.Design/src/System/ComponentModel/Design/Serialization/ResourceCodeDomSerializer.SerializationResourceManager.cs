@@ -779,7 +779,7 @@ internal partial class ResourceCodeDomSerializer
             // Only append the number when appendCount is set or if there is already a count.
             int count = 0;
 
-            if (appendCount || _nameTable.ContainsKey(resourceName))
+            if (appendCount || _nameTable.ContainsKey(nameBase))
             {
                 _nameTable.TryGetValue(nameBase, out count);
 
