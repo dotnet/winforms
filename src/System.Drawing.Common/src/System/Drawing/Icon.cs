@@ -269,123 +269,43 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
     // object, but a graphics object generally has no idea how to render a given image. So,
     // it passes the call to the actual image. This version crops the image to the given
     // dimensions and allows the user to specify a rectangle within the image to draw.
-    private void DrawIcon(HDC hdc, Rectangle imageRect, Rectangle targetRect, bool stretch)
+    private void DrawIcon(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
     {
-        int imageX = 0;
-        int imageY = 0;
-        int imageWidth;
-        int imageHeight;
-        int targetX = 0;
-        int targetY = 0;
-        int targetWidth;
-        int targetHeight;
-
-        Size cursorSize = Size;
-
         // Compute the dimensions of the icon if needed.
-        if (!imageRect.IsEmpty)
-        {
-            imageX = imageRect.X;
-            imageY = imageRect.Y;
-            imageWidth = imageRect.Width;
-            imageHeight = imageRect.Height;
-        }
-        else
-        {
-            imageWidth = cursorSize.Width;
-            imageHeight = cursorSize.Height;
-        }
+        imageRect = imageRect.IsEmpty ? new Rectangle(Point.Empty, Size) : imageRect;
+        targetRect = targetRect.IsEmpty ? new Rectangle(Point.Empty, Size) : targetRect;
 
-        if (!targetRect.IsEmpty)
-        {
-            targetX = targetRect.X;
-            targetY = targetRect.Y;
-            targetWidth = targetRect.Width;
-            targetHeight = targetRect.Height;
-        }
-        else
-        {
-            targetWidth = cursorSize.Width;
-            targetHeight = cursorSize.Height;
-        }
+        imageRect.Inflate(stretch
+            ? new Size(targetRect.Width / imageRect.Width, targetRect.Height / imageRect.Height)
+            : new Size(0, 0));
 
-        int drawWidth, drawHeight;
-        int clipWidth, clipHeight;
+        targetRect.Offset(Point.Round(graphics.Transform.Offset));
+        targetRect.Intersect(imageRect);
 
-        if (stretch)
-        {
-            drawWidth = cursorSize.Width * targetWidth / imageWidth;
-            drawHeight = cursorSize.Height * targetHeight / imageHeight;
-            clipWidth = targetWidth;
-            clipHeight = targetHeight;
-        }
-        else
-        {
-            drawWidth = cursorSize.Width;
-            drawHeight = cursorSize.Height;
-            clipWidth = targetWidth < imageWidth ? targetWidth : imageWidth;
-            clipHeight = targetHeight < imageHeight ? targetHeight : imageHeight;
-        }
+        imageRect.Location = targetRect.Location;
 
-        // The ROP is SRCCOPY, so we can be simple here and take
-        // advantage of clipping regions. Drawing the cursor
-        // is merely a matter of offsetting and clipping.
+        // The ROP is SRCCOPY, so we can be simple here and take advantage of clipping regions.
+        // Drawing the icon is merely a matter of offsetting and clipping.
+        using DeviceContextHdcScope hdc = new(graphics, ApplyGraphicsProperties.Clipping);
         using RegionScope clippingRegion = new(hdc);
-        try
-        {
-            PInvokeCore.IntersectClipRect(hdc, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
-            PInvokeCore.DrawIconEx(
-                hdc,
-                targetX - imageX,
-                targetY - imageY,
-                this,
-                drawWidth,
-                drawHeight);
-        }
-        finally
-        {
-            // We need to delete the region handle after restoring the region as GDI+ uses a copy of the handle.
-            PInvokeCore.SelectClipRgn(hdc, clippingRegion);
-        }
+        PInvokeCore.IntersectClipRect(hdc, targetRect.X, targetRect.Y, targetRect.Right, targetRect.Bottom);
+        PInvokeCore.DrawIconEx(hdc, imageRect.X, imageRect.Y, this, imageRect.Width, imageRect.Height);
+        PInvokeCore.SelectClipRgn(hdc, clippingRegion);
     }
 
     internal void Draw(Graphics graphics, int x, int y)
     {
-        Size size = Size;
-        Draw(graphics, new Rectangle(x, y, size.Width, size.Height));
+        Draw(graphics, new Rectangle(x, y, Size.Width, Size.Height));
     }
 
-    // Draws this image to a graphics object. The drawing command originates on the graphics
-    // object, but a graphics object generally has no idea how to render a given image. So,
-    // it passes the call to the actual image. This version stretches the image to the given
-    // dimensions and allows the user to specify a rectangle within the image to draw.
     internal void Draw(Graphics graphics, Rectangle targetRect)
     {
-        Rectangle copy = targetRect;
-
-        using Matrix transform = graphics.Transform;
-        PointF offset = transform.Offset;
-        copy.X += (int)offset.X;
-        copy.Y += (int)offset.Y;
-
-        using DeviceContextHdcScope hdc = new(graphics, ApplyGraphicsProperties.Clipping);
-        DrawIcon(hdc, Rectangle.Empty, copy, true);
+        DrawIcon(graphics, Rectangle.Empty, targetRect, true);
     }
 
-    // Draws this image to a graphics object. The drawing command originates on the graphics
-    // object, but a graphics object generally has no idea how to render a given image. So,
-    // it passes the call to the actual image. This version crops the image to the given
-    // dimensions and allows the user to specify a rectangle within the image to draw.
     internal void DrawUnstretched(Graphics graphics, Rectangle targetRect)
     {
-        Rectangle copy = targetRect;
-        using Matrix transform = graphics.Transform;
-        PointF offset = transform.Offset;
-        copy.X += (int)offset.X;
-        copy.Y += (int)offset.Y;
-
-        using DeviceContextHdcScope hdc = new(graphics, ApplyGraphicsProperties.Clipping);
-        DrawIcon(hdc, Rectangle.Empty, copy, false);
+        DrawIcon(graphics, Rectangle.Empty, targetRect, false);
     }
 
     ~Icon() => Dispose();
