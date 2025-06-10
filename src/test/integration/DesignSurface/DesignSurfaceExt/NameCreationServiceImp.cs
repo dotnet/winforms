@@ -62,7 +62,26 @@ internal sealed class NameCreationService : INameCreationService
         else
         {
             int j = max + 1;
+            j = Check(j);
             return $"{type.Name}{j}";
+        }
+
+        int Check(int index)
+        {
+            return Exists($"{type.Name}{index}") ? Check(index + 1) : index;
+        }
+
+        bool Exists(string name)
+        {
+            for (int j = 0; j < cc.Count; j++)
+            {
+                if (cc[j] is Component comp && comp.Site.Name.Equals(name, StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
