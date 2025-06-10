@@ -4688,6 +4688,12 @@ public partial class ListView : Control
                 $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                 null);
 
+            Color c = BackColor;
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
+
+            c = ForeColor;
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
+
             // Get the ListView's ColumnHeader handle:
             HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
 
@@ -4971,11 +4977,9 @@ public partial class ListView : Control
 
     protected void RealizeProperties()
     {
-        // Realize state information
-        Color c;
-
-        c = BackColor;
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        Color c = BackColor;
+
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
@@ -4989,6 +4993,7 @@ public partial class ListView : Control
         }
 #pragma warning restore WFO5001
 
+        // Realize state information
         if (_imageListLarge is not null)
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
