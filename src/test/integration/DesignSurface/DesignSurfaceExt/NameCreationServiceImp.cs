@@ -28,7 +28,7 @@ internal sealed class NameCreationService : INameCreationService
         int i = 0;
         while (i < cc.Count)
         {
-            if (cc[i] is Component comp && comp.GetType() == type)
+            if (cc[i] is Component comp)
             {
                 string name = comp.Site.Name;
                 if (name.StartsWith(type.Name, StringComparison.Ordinal))
