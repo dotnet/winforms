@@ -20,14 +20,14 @@ public class ListView_IconComparerTests
     [InlineData(SortOrder.Ascending, SortOrder.Descending)]
     [InlineData(SortOrder.Descending, SortOrder.Ascending)]
     [InlineData(SortOrder.None, SortOrder.Ascending)]
-    public void SortOrder_Setter_UpdatesSortOrder(SortOrder initial, SortOrder updated)
+    public void SortOrder_Setter_UpdatesSortOrder(SortOrder initialOrder, SortOrder updatedOrder)
     {
-        ListView.IconComparer comparer = new(initial)
+        ListView.IconComparer comparer = new(initialOrder)
         {
-            SortOrder = updated
+            SortOrder = updatedOrder
         };
 
-        ((SortOrder)comparer.TestAccessor().Dynamic._sortOrder).Should().Be(updated);
+        ((SortOrder)comparer.TestAccessor().Dynamic._sortOrder).Should().Be(updatedOrder);
     }
 
     [WinFormsTheory]
@@ -42,7 +42,6 @@ public class ListView_IconComparerTests
         ListView.IconComparer comparer = new(order);
         ListViewItem item1 = new(text1);
         ListViewItem item2 = new(text2);
-
         int result = comparer.Compare(item1, item2);
 
         Math.Sign(result).Should().Be(expectedSign);
@@ -52,12 +51,10 @@ public class ListView_IconComparerTests
     public void Compare_NullItems_ReturnsExpected()
     {
         ListView.IconComparer comparer = new(SortOrder.Ascending);
+        ListViewItem item = new("A");
 
         comparer.Compare(null, null).Should().Be(0);
-
-        ListViewItem item = new("A");
         comparer.Compare(null, item).Should().BeLessThan(0);
-
         comparer.Compare(item, null).Should().BeGreaterThan(0);
     }
 }
