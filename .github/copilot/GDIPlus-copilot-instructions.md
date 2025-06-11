@@ -116,7 +116,7 @@ From the `PaintEventArgs` class:
 internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal(SaveStateIfNeeded);
 ```
 
-IMPORTANT: While using `GraphicsInternal` should be used directly for performance improvements, avoid passing it around, since he callee would not be able to recognize the `GraphicsInternal` type.
+IMPORTANT: While using `GraphicsInternal` should be used directly for performance improvements, avoid passing it around, since the callee would not be able to recognize the `GraphicsInternal` type.
 
 ### 2.2 State Management
 
