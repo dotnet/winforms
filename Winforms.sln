@@ -57,7 +57,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		docs\coding-style.md = docs\coding-style.md
 		CONTRIBUTING.md = CONTRIBUTING.md
-		.github\copilot-instructions.md = .github\copilot-instructions.md
 		docs\debugging.md = docs\debugging.md
 		docs\developer-guide.md = docs\developer-guide.md
 		docs\getting-started.md = docs\getting-started.md
@@ -210,6 +209,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Private.Windows.GdiPlus", "src\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj", "{442C867C-51C0-8CE5-F067-DF065008E3DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{D619FF8C-D99A-48AB-B16B-2F0E819B46D5}"
 	ProjectSection(SolutionItems) = preProject
 		.github\copilot\GDIPlus-copilot-instructions.md = .github\copilot\GDIPlus-copilot-instructions.md
 	EndProjectSection
@@ -1200,6 +1204,7 @@ Global
 		{656C66A4-59CD-4E14-8AE4-1F5BCEECB553} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{442C867C-51C0-8CE5-F067-DF065008E3DA} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
+		{D619FF8C-D99A-48AB-B16B-2F0E819B46D5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
