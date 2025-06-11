@@ -49,7 +49,7 @@ public partial class CheckBox : ButtonBase
         TextAlign = ContentAlignment.MiddleLeft;
     }
 
-    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+    private protected override void InitializeControl() => ScaleConstants();
 
     private bool AccObjDoDefaultAction { get; set; }
 

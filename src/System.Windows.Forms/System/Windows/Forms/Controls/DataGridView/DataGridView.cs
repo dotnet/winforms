@@ -488,14 +488,6 @@ public partial class DataGridView : Control, ISupportInitialize
         Invalidate();
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1494,6 +1486,17 @@ public partial class DataGridView : Control, ISupportInitialize
 
                 OnColumnHeadersBorderStyleChanged(EventArgs.Empty);
             }
+        }
+    }
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+            return base.CreateParams;
         }
     }
 

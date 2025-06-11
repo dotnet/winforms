@@ -141,14 +141,7 @@ public partial class MonthCalendar : Control
         TabStop = true;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        ScaleConstants();
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private protected override void InitializeControl() => ScaleConstants();
 
     protected override AccessibleObject CreateAccessibilityInstance()
         => new MonthCalendarAccessibleObject(this);
@@ -291,6 +284,10 @@ public partial class MonthCalendar : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.MONTHCAL_CLASS;
             cp.Style |= (int)PInvoke.MCS_MULTISELECT | (int)PInvoke.MCS_DAYSTATE;

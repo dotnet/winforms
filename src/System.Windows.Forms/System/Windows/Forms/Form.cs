@@ -4516,7 +4516,7 @@ public partial class Form : ContainerControl
         if (e.DeviceDpiNew != e.DeviceDpiOld)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
-            _oldDeviceDpi = e.DeviceDpiOld;
+            FormerDeviceDpi = e.DeviceDpiOld;
 
             // call any additional handlers
             ((DpiChangedEventHandler?)Events[s_dpiChangedEvent])?.Invoke(this, e);
@@ -4578,8 +4578,8 @@ public partial class Form : ContainerControl
     {
         DefWndProc(ref m);
 
-        DpiChangedEventArgs e = new(_deviceDpi, m);
-        _deviceDpi = e.DeviceDpiNew;
+        DpiChangedEventArgs e = new(DeviceDpiInternal, m);
+        DeviceDpiInternal = e.DeviceDpiNew;
 
         OnDpiChanged(e);
     }
@@ -4631,7 +4631,7 @@ public partial class Form : ContainerControl
 
         Size desiredSize = default;
         if ((_dpiFormSizes is not null && _dpiFormSizes.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
-            || OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            || OnGetDpiScaledSize(DeviceDpiInternal, m.WParamInternal.LOWORD, ref desiredSize))
         {
             SIZE* size = (SIZE*)m.LParamInternal;
             size->cx = desiredSize.Width;

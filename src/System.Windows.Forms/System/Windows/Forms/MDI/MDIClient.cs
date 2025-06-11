@@ -33,14 +33,6 @@ public sealed partial class MdiClient : Control
         Dock = DockStyle.Fill;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Gets or sets the background image displayed in the <see cref="MdiClient" /> control.
     /// </summary>
@@ -87,6 +79,10 @@ public sealed partial class MdiClient : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
 
             cp.ClassName = "MDICLIENT";

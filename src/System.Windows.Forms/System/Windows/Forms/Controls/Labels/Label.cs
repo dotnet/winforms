@@ -85,14 +85,6 @@ public partial class Label : Control, IAutomationLiveRegion
         _requestedWidth = Width;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Indicates whether the control is automatically resized to fit its contents.
     /// </summary>
@@ -251,6 +243,10 @@ public partial class Label : Control, IAutomationLiveRegion
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_STATIC;
 
