@@ -104,14 +104,6 @@ public abstract partial class TextBoxBase : Control
         _requestedHeight = Height;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Gets or sets
     ///  a value indicating whether pressing the TAB key
@@ -405,6 +397,10 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
@@ -804,7 +800,7 @@ public abstract partial class TextBoxBase : Control
             int height = FontHeight;
             if (_borderStyle != BorderStyle.None)
             {
-                height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
+                height += SystemInformation.GetBorderSizeForDpi(DeviceDpiInternal).Height * 4 + 3;
             }
 
             return height;

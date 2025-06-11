@@ -62,14 +62,6 @@ public partial class ScrollableControl : Control, IArrangedElement
         SetScrollState(ScrollStateAutoScrolling, false);
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Gets or sets a value indicating whether the container will allow the user to
     ///  scroll to any controls placed outside of its visible boundaries.
@@ -162,6 +154,10 @@ public partial class ScrollableControl : Control, IArrangedElement
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
 
             if (HScroll || HorizontalScroll.Visible)

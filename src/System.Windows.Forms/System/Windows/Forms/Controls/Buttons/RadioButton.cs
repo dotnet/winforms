@@ -241,7 +241,7 @@ public partial class RadioButton : ButtonBase
         _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
 
-    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+    private protected override void InitializeControl() => ScaleConstants();
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {

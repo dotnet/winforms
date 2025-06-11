@@ -172,14 +172,6 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UseTextForAccessibility, false);
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     internal override void ReleaseUiaProvider(HWND handle)
     {
         foreach (TreeNode rootNode in Nodes)
@@ -312,6 +304,10 @@ public partial class TreeView : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TREEVIEW;
 

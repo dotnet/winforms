@@ -46,14 +46,6 @@ public partial class TabPage : Panel
         Text = text;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     internal override bool AllowsKeyboardToolTip()
         => ParentInternal is TabControl tabControl && tabControl.ShowToolTips;
 
@@ -142,6 +134,18 @@ public partial class TabPage : Panel
 
     protected override AccessibleObject CreateAccessibilityInstance()
         => new TabPageAccessibleObject(this);
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+            return base.CreateParams;
+        }
+    }
 
     /// <summary>
     ///  Constructs the new instance of the Controls collection objects.
