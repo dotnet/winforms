@@ -114,14 +114,6 @@ public partial class PictureBox : Control, ISupportInitialize
         _savedSize = Size;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool AllowDrop
@@ -201,6 +193,9 @@ public partial class PictureBox : Control, ISupportInitialize
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
             CreateParams cp = base.CreateParams;
 
             switch (_borderStyle)

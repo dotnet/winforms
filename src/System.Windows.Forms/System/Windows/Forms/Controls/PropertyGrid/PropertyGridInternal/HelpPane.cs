@@ -57,7 +57,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
         SetStyle(ControlStyles.Selectable, false);
     }
 
-    protected override void InitializeControl(int deviceDpi) => ScaleConstants();
+    private protected override void InitializeControl() => ScaleConstants();
 
     public virtual int Lines
     {

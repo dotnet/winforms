@@ -42,14 +42,6 @@ public abstract partial class ScrollBar : Control
             : ScrollOrientation.HorizontalScroll;
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        base.InitializeControl(deviceDpi);
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Hide AutoSize: it doesn't make sense for this control
     /// </summary>
@@ -122,6 +114,10 @@ public abstract partial class ScrollBar : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_SCROLLBAR;
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;

@@ -221,8 +221,10 @@ public unsafe partial class Control :
     private static readonly int s_cacheTextCountProperty = PropertyStore.CreateKey();
     private static readonly int s_cacheTextFieldProperty = PropertyStore.CreateKey();
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
-
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
+
+    private static readonly int s_currentDpiProperty = PropertyStore.CreateKey();
+    private static readonly int s_formerDpiProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
 
@@ -267,8 +269,6 @@ public unsafe partial class Control :
     private short _updateCount;
     private LayoutEventArgs? _cachedLayoutEventArgs;
     private Queue<ThreadMethodEntry>? _threadCallbackList;
-    internal int _deviceDpi;
-    internal int _oldDeviceDpi;
 
     // For keeping track of our ui state for focus and keyboard cues. Using a member
     // variable here because we hit this a lot
@@ -307,8 +307,13 @@ public unsafe partial class Control :
     {
         Properties = new PropertyStore();
 
-        // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
-        _deviceDpi = _oldDeviceDpi = ScaleHelper.InitialSystemDpi;
+        // Initialize Dpi to the value on the primary screen, we will have the correct
+        // value when the Handle is created. We use the static infra to ensure that the DPI is set
+        // correctly in the PropertyStore, and that it is not set to 0.
+        // So, this is available before any Constructor of any inheriting control runs.
+        Properties.AddValue(
+            s_currentDpiProperty,
+            ScaleHelper.InitialSystemDpi);
 
         _window = new ControlNativeWindow(this);
         RequiredScalingEnabled = true;
@@ -333,7 +338,7 @@ public unsafe partial class Control :
         // At this point, the control is not yet created, but every necessary state as well as
         // the base class properties are in place, because they have been initialized by the
         // static ctor of Control, which is called before all other instance constructors.
-        InitializeControl(_deviceDpi);
+        InitializeControl();
 
         // We baked the "default default" margin and min size into CommonProperties
         // so that in the common case the PropertyStore would be empty. If, however,
@@ -419,59 +424,12 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Provides inheriting controls a dedicated early-initialization hook that is guaranteed to run
-    ///  <i>before</i> <see cref="CreateParams"/> is called by any base class constructor.
-    ///  This method enables derived controls to set styles, flags, or perform other setup that must
-    ///  occur prior to any base class logic that depends on such initialization.
+    ///  Giving a derived control a chance to initialize its state before the
+    ///  constructor code runs. If the control needs to access the initial or former
+    ///  DeviceDPI, it can safely access the internal Properties CurrentDpi and
+    ///  FormerDpi at any time.
     /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   In WinForms, the constructor call chain for controls can result in base class constructors
-    ///   invoking methods such as <see cref="CreateParams"/> or other initialization logic
-    ///   <b>before</b> the derived class's constructor body executes. This makes it impossible for
-    ///   the derived class to perform certain setup in time using only its constructor.
-    ///  </para>
-    ///  <para>
-    ///   For example, consider the following inheritance and call chain:
-    ///  </para>
-    ///  <code>
-    ///   public class MyButton : Button
-    ///   {
-    ///       public MyButton()
-    ///       {
-    ///           // This code runs after Button's constructor, which may have already called CreateParams.
-    ///       }
-    ///
-    ///       protected override void InitializeControl(int deviceDpi)
-    ///       {
-    ///           // This code runs before any base class calls to CreateParams or similar methods.
-    ///       }
-    ///   }
-    ///
-    ///   // Call chain:
-    ///   new MyButton()
-    ///         → Control..ctor()
-    ///           → Control.InitializeControl (called in base constructor)
-    ///               → ButtonBase.InitializeControl (called before CreateParams)
-    ///               → Button.InitializeControl (called before CreateParams)
-    ///               → MyButton.InitializeControl (called before CreateParams)
-    ///           → Control.CreateParams (called in base constructor)
-    ///               → ButtonBase.CreateParams (called before CreateParams)
-    ///               → Button.CreateParams (called before CreateParams)
-    ///               → MyButton.CreateParams (called before CreateParams)
-    ///               → MyButton.CreateParams (called before CreateParams)
-    ///         → ButtonBase..ctor()
-    ///       → Button..ctor()
-    ///     → MyButton..ctor()
-    ///   </code>
-    ///   <para>
-    ///    By overriding <c>InitializeControl</c>, inheritors can ensure their initialization logic
-    ///    runs at the correct time, even when base class constructors invoke methods that require
-    ///    early setup.
-    ///   </para>
-    /// </remarks>
-    /// <param name="deviceDpi">The DPI value for the control's device context.</param>
-    protected virtual void InitializeControl(int deviceDpi)
+    private protected virtual void InitializeControl()
     {
     }
 
@@ -479,6 +437,42 @@ public unsafe partial class Control :
     ///  Gets control Dpi awareness context value.
     /// </summary>
     internal DPI_AWARENESS_CONTEXT DpiAwarenessContext => _window.DpiAwarenessContext;
+
+    internal int DeviceDpiInternal
+    {
+        get
+        {
+            return Properties.GetValueOrDefault(
+                s_currentDpiProperty,
+                ScaleHelper.InitialSystemDpi);
+        }
+
+        set
+        {
+            if (value != DeviceDpiInternal)
+            {
+                Properties.AddOrRemoveValue(s_currentDpiProperty, value, ScaleHelper.InitialSystemDpi);
+            }
+        }
+    }
+
+    internal int FormerDeviceDpi
+    {
+        get
+        {
+            return Properties.GetValueOrDefault(
+                s_formerDpiProperty,
+                DeviceDpiInternal);
+        }
+
+        set
+        {
+            if (value != FormerDeviceDpi)
+            {
+                Properties.AddOrRemoveValue(s_formerDpiProperty, value, DeviceDpiInternal);
+            }
+        }
+    }
 
     /// <summary>
     ///  The Accessibility Object for this Control
@@ -1666,7 +1660,7 @@ public unsafe partial class Control :
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int DeviceDpi
         // deviceDpi may change in WmDpiChangedBeforeParent in PmV2 scenarios, so we can't cache statically.
-        => ScaleHelper.IsThreadPerMonitorV2Aware ? _deviceDpi : ScaleHelper.InitialSystemDpi;
+        => ScaleHelper.IsThreadPerMonitorV2Aware ? DeviceDpiInternal : ScaleHelper.InitialSystemDpi;
 
     // The color to use when drawing disabled text. Normally we use BackColor,
     // but that obviously won't work if we're transparent.
@@ -5375,9 +5369,9 @@ public unsafe partial class Control :
         // We would need to get adornments metrics for both (old and new) Dpi in case application is in PerMonitorV2 mode and Dpi changed.
         AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle);
 
-        if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater())
+        if (FormerDeviceDpi != DeviceDpiInternal && OsVersion.IsWindows10_1703OrGreater())
         {
-            AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle, _oldDeviceDpi);
+            AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle, FormerDeviceDpi);
         }
         else
         {
@@ -5530,7 +5524,7 @@ public unsafe partial class Control :
     /// <returns>The control's <see cref="Font"/></returns>
     private Font GetCurrentFontAndDpi(out int fontDpi)
     {
-        fontDpi = _deviceDpi;
+        fontDpi = DeviceDpiInternal;
 
         // If application is in PerMonitorV2 mode and font is scaled when moved between monitors.
         if (ScaledControlFont is not null)
@@ -6431,7 +6425,7 @@ public unsafe partial class Control :
 
     private protected void AdjustWindowRectExForControlDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle)
     {
-        AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, _deviceDpi);
+        AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, DeviceDpiInternal);
     }
 
     private static void AdjustWindowRectExForDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle, int dpi)
@@ -7404,19 +7398,20 @@ public unsafe partial class Control :
                 return;
             }
 
-            int old = _deviceDpi;
+            int old = DeviceDpiInternal;
             Font localFont = GetCurrentFontAndDpi(out int fontDpi);
-            _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
-            if (old == _deviceDpi)
+
+            Properties.AddOrRemoveValue(s_currentDpiProperty, (int)PInvoke.GetDpiForWindow(this));
+            if (old == DeviceDpiInternal)
             {
                 return;
             }
 
-            if (fontDpi != _deviceDpi)
+            if (fontDpi != DeviceDpiInternal)
             {
                 // Controls are by default font scaled.
                 // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-                Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
+                Font fontForDpi = GetScaledFont(localFont, DeviceDpiInternal, fontDpi);
                 ScaledControlFont = fontForDpi;
 
                 // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
@@ -7428,7 +7423,7 @@ public unsafe partial class Control :
                 }
             }
 
-            RescaleConstantsForDpi(old, _deviceDpi);
+            RescaleConstantsForDpi(old, DeviceDpiInternal);
 
             // If the control is top-level window and its StartPosition is not WindowsDefaultLocation, Location needs
             // recalculated. For example, a Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen,
@@ -11516,7 +11511,7 @@ public unsafe partial class Control :
     {
         DefWndProc(ref m);
 
-        _oldDeviceDpi = _deviceDpi;
+        Properties.AddOrRemoveValue(s_formerDpiProperty, DeviceDpiInternal);
 
         // In order to support tests, will be querying Dpi from the message first.
         int newDeviceDpi = (short)m.WParamInternal.LOWORD;
@@ -11527,16 +11522,16 @@ public unsafe partial class Control :
             newDeviceDpi = (int)PInvoke.GetDpiForWindow(this);
         }
 
-        if (_oldDeviceDpi == newDeviceDpi)
+        if (FormerDeviceDpi == newDeviceDpi)
         {
             OnDpiChangedBeforeParent(EventArgs.Empty);
             return;
         }
 
         Font localFont = GetCurrentFontAndDpi(out int fontDpi);
-        _deviceDpi = newDeviceDpi;
+        Properties.AddOrRemoveValue(s_currentDpiProperty, newDeviceDpi);
 
-        if (fontDpi == _deviceDpi)
+        if (fontDpi == DeviceDpiInternal)
         {
             OnDpiChangedBeforeParent(EventArgs.Empty);
             return;
@@ -11548,7 +11543,7 @@ public unsafe partial class Control :
         ContainerControl? container = this as ContainerControl;
         bool isLocalFontSet = IsFontSet();
 
-        ScaledControlFont = GetScaledFont(localFont, _deviceDpi, fontDpi);
+        ScaledControlFont = GetScaledFont(localFont, DeviceDpiInternal, fontDpi);
 
         if (isLocalFontSet || container is null || !IsScaledByParent(this))
         {
@@ -11567,7 +11562,7 @@ public unsafe partial class Control :
             // This flag is reset when scaling is done on Container in "OnParentFontChanged".
             container?.IsDpiChangeScalingRequired = true;
 
-            RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
+            RescaleConstantsForDpi(FormerDeviceDpi, DeviceDpiInternal);
         }
 
         OnDpiChangedBeforeParent(EventArgs.Empty);

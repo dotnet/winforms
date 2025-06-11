@@ -82,17 +82,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         SetFlag(FlagShowToolTip, false);
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected override void InitializeControl(int deviceDpi)
-    {
-        // Call the base classes, and let them setup their fields.
-        base.InitializeControl(deviceDpi);
-
-        // Opt into DarkMode.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     /// <summary>
     ///  Gets or sets a value indicating whether the ellipsis character (...) appears at the right edge of the control,
     ///  denoting that the control text extends beyond the specified length of the control.
@@ -265,6 +254,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
             if (!OwnerDraw)
             {
