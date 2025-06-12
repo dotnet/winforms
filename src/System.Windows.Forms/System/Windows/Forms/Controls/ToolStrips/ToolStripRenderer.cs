@@ -1052,95 +1052,90 @@ public abstract class ToolStripRenderer
         }
 
         Graphics g = eArgs.Graphics;
-        ReadOnlySpan<Rectangle> baseRects = s_baseSizeGripRectangles;
+        ReadOnlySpan<Rectangle> baseRectangles = s_baseSizeGripRectangles;
 
-        // Use device DPI for scaling
-        float dpiScale = 1.0f;
+        // Reference height for sizing grips at 96 DPI (standard sizing)
+        const int DefaultGripAreaHeight = 20;
 
-        if (statusStrip.DeviceDpi > 0 && ScaleHelper.IsThreadPerMonitorV2Aware)
+        // Calculate scaling based on the almost half of the current height
+        // of the status strip's sizing grip area
+        float heightScale = 0.6f * ((float)sizeGripBounds.Height / DefaultGripAreaHeight);
+
+        // Save the current graphics state before transformations
+        GraphicsState originalState = g.Save();
+
+        try
         {
-            dpiScale = statusStrip.DeviceDpi / 96f;
+            // Set anti-aliasing for smoother appearance
+            SmoothingMode oldSmoothing = g.SmoothingMode;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Translate to the corner where we'll start drawing
+            bool isRtl = statusStrip.RightToLeft == RightToLeft.Yes;
+            int cornerOffset = GetCornerOffset(statusStrip);
+
+            // Set up the transform to scale from the bottom corner
+            if (isRtl)
+            {
+                g.TranslateTransform(sizeGripBounds.Left + cornerOffset, sizeGripBounds.Bottom - cornerOffset);
+            }
+            else
+            {
+                g.TranslateTransform(sizeGripBounds.Right - cornerOffset, sizeGripBounds.Bottom - cornerOffset);
+            }
+
+            // Apply scaling
+            g.ScaleTransform(heightScale, heightScale);
+
+            // Draw the sizing grip dots in the scaled context
+            foreach (Rectangle baseRect in baseRectangles)
+            {
+                Rectangle dotRect = new(
+                    isRtl ? baseRect.X : -baseRect.X - baseRect.Width,
+                    -baseRect.Y - baseRect.Height,
+                    baseRect.Width,
+                    baseRect.Height);
+
+                // Highlight dot (top-left)
+                Rectangle highlightRect = dotRect;
+                highlightRect.Offset(-1, -1);
+                g.FillEllipse(highLightBrush, highlightRect);
+
+                // Shadow dot (bottom-right)
+                Rectangle shadowRect = dotRect;
+                shadowRect.Offset(1, 1);
+                g.FillEllipse(shadowBrush, shadowRect);
+            }
+
+            // Restore the original smoothing mode
+            g.SmoothingMode = oldSmoothing;
+        }
+        finally
+        {
+            // Always restore the original graphics state
+            g.Restore(originalState);
         }
 
-        // Create a buffer on the stack for the scaled rectangles
-        Span<Rectangle> scaledRects = stackalloc Rectangle[baseRects.Length];
-
-        // Scale the base rectangles for the grip dots
-        for (int i = 0; i < baseRects.Length; i++)
+        // Helper method to determine corner offset based on form corner preference
+        static int GetCornerOffset(StatusStrip statusStrip)
         {
-            Rectangle r = baseRects[i];
-
-            scaledRects[i] = new Rectangle(
-                (int)(r.X * dpiScale),
-                (int)(r.Y * dpiScale),
-                Math.Max((int)(r.Width * dpiScale), 2),
-                Math.Max((int)(r.Height * dpiScale), 2));
-        }
-
-        (int cornerOffset, Rectangle lastRect) = GetCornerOffset(statusStrip);
-        scaledRects[^1] = lastRect;
-
-        SmoothingMode oldSmoothing = g.SmoothingMode;
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // Optimize for RTL check by determining the calculation function once
-        bool isRtl = statusStrip.RightToLeft == RightToLeft.Yes;
-
-        // Draw the grip dots, bottom-right aligned (mirrored for RTL)
-        Span<Rectangle> workingRects = stackalloc Rectangle[3]; // actualRect, highlightRect, shadowRect
-
-        for (int i = 0; i < scaledRects.Length; i++)
-        {
-            ref Rectangle dotRect = ref scaledRects[i];
-            ref Rectangle actualRect = ref workingRects[0];
-            ref Rectangle highlightRect = ref workingRects[1];
-            ref Rectangle shadowRect = ref workingRects[2];
-
-            actualRect = isRtl
-                ? new Rectangle(
-                    x: sizeGripBounds.Left + cornerOffset + dotRect.X,
-                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
-                    width: dotRect.Width,
-                    height: dotRect.Height)
-                : new Rectangle(
-                    x: sizeGripBounds.Right - cornerOffset - dotRect.X - dotRect.Width,
-                    y: sizeGripBounds.Bottom - cornerOffset - dotRect.Y - dotRect.Height,
-                    width: dotRect.Width,
-                    height: dotRect.Height);
-
-            // Highlight dot (top-left)
-            highlightRect = actualRect;
-            highlightRect.Offset(-1, -1);
-            g.FillEllipse(highLightBrush, highlightRect);
-
-            // Shadow dot (bottom-right)
-            shadowRect = actualRect;
-            shadowRect.Offset(1, 1);
-            g.FillEllipse(shadowBrush, shadowRect);
-        }
-
-        g.SmoothingMode = oldSmoothing;
-
-        // We need to account for Windows 11+ AND whatever styled corners we have.
-        static (int cornerOffset, Rectangle rect) GetCornerOffset(StatusStrip statusStrip)
-        {
-            // Default values
-            (int offset, Rectangle rect) cornerDef = (2, new(1, 1, 2, 2));
+            // Default offset
+            int offset = 2;
 
             if (Environment.OSVersion.Version >= new Version(10, 0, 22000)
                 && statusStrip.FindForm() is Form f)
             {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                cornerDef = f.FormCornerPreference switch
+                offset = f.FormCornerPreference switch
                 {
-                    FormCornerPreference.Round => (4, new(1, 1, 2, 2)),
-                    FormCornerPreference.RoundSmall => (3, new(1, 1, 2, 2)),
-                    _ => (2, new(0, 0, 2, 2))
+                    FormCornerPreference.Round => 4,
+                    FormCornerPreference.RoundSmall => 3,
+                    _ => 2
                 };
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
 
-            return cornerDef;
+            return offset;
         }
     }
 
