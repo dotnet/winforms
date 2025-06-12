@@ -2574,10 +2574,6 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _editNode = editingNode;
-        }
-
-        if (!e.CancelEdit)
-        {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
         }
@@ -2603,7 +2599,7 @@ public partial class TreeView : Control
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();
-        NodeLabelEditEventArgs e = new(node, newText);
+        NodeLabelEditEventArgs e = new(node, (node is not null && newText != node.Text) ? newText : null);
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
         {
