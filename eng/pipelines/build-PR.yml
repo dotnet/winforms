@@ -96,14 +96,6 @@ jobs:
       displayName: Run Unit Tests
       condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
 
-    - task: PublishBuildArtifacts@1
-      displayName: Publish artifacts
-      inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/artifacts/bin/System.Windows.Forms.Tests'
-        ArtifactName: '$(System.JobName)_${{ parameters.targetArchitecture }}_Artifacts'
-      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
-
-
     # Run Integration Tests
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
     # UI race conditions
