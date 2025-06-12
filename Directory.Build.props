@@ -17,6 +17,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PublishWindowsPdb>false</PublishWindowsPdb>
+
+    <DefaultAppHostRuntimeIdentifier Condition="'$(TargetArchitecture)'!=''">win-$(TargetArchitecture)</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
