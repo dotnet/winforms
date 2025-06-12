@@ -4516,7 +4516,7 @@ public partial class Form : ContainerControl
         if (e.DeviceDpiNew != e.DeviceDpiOld)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
-            FormerDeviceDpi = e.DeviceDpiOld;
+            OriginalDeviceDpiInternal = e.DeviceDpiOld;
 
             // call any additional handlers
             ((DpiChangedEventHandler?)Events[s_dpiChangedEvent])?.Invoke(this, e);
