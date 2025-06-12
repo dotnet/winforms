@@ -3,7 +3,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Windows.Forms.Analyzers.Diagnostics
-Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
+Imports System.Windows.Forms.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
