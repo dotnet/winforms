@@ -43,7 +43,7 @@ public class DataGridViewTests : ControlTestBase
     }
 
     [WinFormsFact]
-    public void DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
+    public async Task DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
     {
         using Form form1 = new();
         using Form form2 = new();
@@ -62,19 +62,27 @@ public class DataGridViewTests : ControlTestBase
         {
             form2.Shown += (_, _) =>
             {
-                // Ensure that DataGridView editing operations are performed after the form is fully displayed.
-                form2.BeginInvoke(() =>
+                _ = Task.Run(async () =>
                 {
-                    // Close the form when the DataGridView enters edit mode.
-                    void handler(object? s, DataGridViewEditingControlShowingEventArgs e)
+                    try
                     {
-                        dataGridView.EditingControlShowing -= handler;
-                        form2.Close();
-                    }
+                        await form2.InvokeAsync(() =>
+                        {
+                            void handler(object? s, DataGridViewEditingControlShowingEventArgs e)
+                            {
+                                dataGridView.EditingControlShowing -= handler;
+                                form2.Close();
+                            }
 
-                    dataGridView.EditingControlShowing += handler;
-                    dataGridView.CurrentCell = dataGridView.Rows[0].Cells[1];
-                    dataGridView.BeginEdit(true);
+                            dataGridView.EditingControlShowing += handler;
+                            dataGridView.CurrentCell = dataGridView.Rows[0].Cells[1];
+                            dataGridView.BeginEdit(true);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException(ex.Message);
+                    }
                 });
             };
 
@@ -82,7 +90,7 @@ public class DataGridViewTests : ControlTestBase
             form1.Close();
         };
 
-        form1.ShowDialog();
+        await Task.Run(form1.ShowDialog);
     }
 
     [WinFormsTheory]
