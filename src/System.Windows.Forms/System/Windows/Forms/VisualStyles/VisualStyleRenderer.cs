@@ -120,6 +120,49 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         return result;
     }
 
+    internal static string DarkModeClassName(string className, int part)
+    {
+        string themeName = className;
+        switch (className)
+        {
+            case "BUTTON":
+                className = themeName.Insert(0, $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::");
+                className = className.Insert(className.Length, $";{themeName}");
+                return className;
+            case "COMBOBOX":
+                className = themeName.Insert(0, $"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::");
+                className = className.Insert(className.Length, $";{themeName}");
+                return className;
+            case "TOOLBAR":
+                // Toolbar Separator is not themed, so we don't need to change the class name.
+                if (part == VisualStyleElement.ToolBar.SeparatorVertical.Normal.Part ||
+                              part == VisualStyleElement.ToolBar.SeparatorHorizontal.Normal.Part)
+                {
+                    return themeName;
+                }
+
+                className = themeName.Insert(0, $"{Control.DarkModeIdentifier}::{themeName};");
+                className = className.Insert(className.Length, $"{Control.ExplorerThemeIdentifier}Menu::{themeName};{themeName}");
+                return className;
+            case "HEADER":
+                className = themeName.Insert(0, $"{Control.DarkModeIdentifier}_{Control.ItemsViewThemeIdentifier}::");
+                className = className.Insert(className.Length, $";{themeName}");
+                return className;
+            case "STATUS":
+                // ExplorerStatusBar not a Full theme but part 0  has the Colors That Uxtheme use it to invert orignal Colors in STATUS this is solid policy from window vista,
+                // so we don't need to change the class name if part is not 0.
+                return part == 0
+                    ? themeName.Insert(0, $"{Control.DarkModeIdentifier}::{Control.StatusBarThemeIdentifier};{themeName}")
+                    : themeName;
+
+            case "Explorer::TreeView":
+                // in Dark Mode, TreeView is themed with DarkModeThemeIdentifier.
+                return $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::TreeView;Explorer::TreeView;TreeView";
+            default:
+                return className;
+        }
+    }
+
     /// <summary>
     ///  Constructor takes a VisualStyleElement.
     /// </summary>
@@ -137,6 +180,12 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
         if (!IsCombinationDefined(className, part))
             throw new ArgumentException(SR.VisualStylesInvalidCombination);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            className = DarkModeClassName(className, part);
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         Class = className;
         Part = part;
@@ -199,6 +248,12 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         if (!IsCombinationDefined(className, part))
             throw new ArgumentException(SR.VisualStylesInvalidCombination);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            className = DarkModeClassName(className, part);
+        }
+#pragma warning restore WFO5001 //
 
         Class = className;
         Part = part;
@@ -223,10 +278,23 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
             return;
         }
 
+        // If we are scaling, we need to use the correct theme handle for the current monitor at darkMode.
         if (!hwnd.IsNull)
         {
-            using var htheme = OpenThemeData(hwnd, Class);
-            _lastHResult = PInvoke.DrawThemeBackground(htheme, dc, Part, State, bounds, null);
+            using var hTheme = OpenThemeData(hwnd, Class);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Class.Contains("::") && Application.IsDarkModeEnabled)
+            {
+                using var desktopTheme = OpenThemeData(HWND.HWND_DESKTOP, Class);
+                _lastHResult = PInvoke.GetThemePartSize(hTheme, dc, Part, State, bounds, THEMESIZE.TS_DRAW, out SIZE dpiSize);
+                RECT rcStretch = new(bounds.Location, dpiSize);
+                _lastHResult = PInvoke.DrawThemeBackground(desktopTheme, dc, Part, State, rcStretch, bounds);
+            }
+            else
+            {
+                _lastHResult = PInvoke.DrawThemeBackground(hTheme, dc, Part, State, bounds, null);
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         else
         {
