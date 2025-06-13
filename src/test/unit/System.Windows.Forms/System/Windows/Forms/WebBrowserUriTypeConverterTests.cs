@@ -39,7 +39,7 @@ public class WebBrowserUriTypeConverterTests
     [Fact]
     public void WebBrowserUri_ConvertFrom_EmptyString_ReturnsNull()
     {
-        object? result = _converter.ConvertFrom(null, CultureInfo.InvariantCulture, "");
+        object? result = _converter.ConvertFrom(null, CultureInfo.InvariantCulture, string.Empty);
 
         result.Should().BeNull();
     }
