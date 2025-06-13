@@ -4474,12 +4474,23 @@ public partial class Form : ContainerControl
             if (Application.RenderWithVisualStyles)
             {
                 _sizeGripRenderer ??= new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
-
                 using DeviceContextHdcScope hdc = new(e);
-                _sizeGripRenderer.DrawBackground(
-                    hdc,
-                    new Rectangle(size.Width - SizeGripSize, size.Height - SizeGripSize, SizeGripSize, SizeGripSize));
+                if (ScaleHelper.IsScalingRequired)
+                {
+                    Size sizeGripSize = _sizeGripRenderer.GetPartSize(hdc, ThemeSizeType.True, HWND);
+                    _sizeGripRenderer.DrawBackground(
+                   hdc,
+                   new Rectangle(size.Width - sizeGripSize.Width, size.Height - sizeGripSize.Height, sizeGripSize.Width, sizeGripSize.Height));
+                }
+
+                else
+                {
+                    _sizeGripRenderer.DrawBackground(
+                  hdc,
+                  new Rectangle(size.Width - SizeGripSize, size.Height - SizeGripSize, SizeGripSize, SizeGripSize));
+                }
             }
+
             else
             {
                 ControlPaint.DrawSizeGrip(
