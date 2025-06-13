@@ -10,14 +10,10 @@ public class ImageListConverterTests
     internal ImageListConverter Converter { get; } = new();
 
     [Fact]
-    public void Ctor_Default_SetsBaseType()
-    {
+    public void Ctor_Default_SetsBaseType() =>
         Converter.Should().BeAssignableTo<ComponentConverter>();
-    }
 
     [Fact]
-    public void GetPropertiesSupported_ReturnsTrue()
-    {
+    public void GetPropertiesSupported_ReturnsTrue() =>
         Converter.GetPropertiesSupported(null).Should().BeTrue();
-    }
 }

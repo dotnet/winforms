@@ -9,9 +9,6 @@ public class RelatedImageListAttributeTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("MainImageList")]
-    public void RelatedImageList_ReturnsConstructorValue(string? value)
-    {
-        RelatedImageListAttribute attr = new(value);
-        attr.RelatedImageList.Should().Be(value);
-    }
+    public void RelatedImageList_ReturnsConstructorValue(string? value) =>
+        new RelatedImageListAttribute(value).RelatedImageList.Should().Be(value);
 }
