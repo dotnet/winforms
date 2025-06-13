@@ -225,6 +225,16 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
         if (!hwnd.IsNull)
         {
+            // in DarkMode we alwayes use OpenThemeData with defult  HWNND if the HWND  is not null,
+            // UxTheme has another Method for drawing if Dpi greater than 96,
+            // Especially when per-monitor aware we need to remove the subclassing. .
+            uint dpi = PInvoke.GetDpiForWindow(hwnd);
+            if (dpi > 96 && Class == $"{Control.DarkModeIdentifier}_" +
+                $"{Control.ExplorerThemeIdentifier}::{PInvoke.WC_BUTTON}")
+            {
+                Class = Class[19..];
+            }
+
             using var htheme = OpenThemeData(hwnd, Class);
             _lastHResult = PInvoke.DrawThemeBackground(htheme, dc, Part, State, bounds, null);
         }
