@@ -291,7 +291,7 @@ public abstract partial class TextBoxBase : Control
                     // If we're ReadOnly and in DarkMode, we are using a different background color.
                     ? Application.IsDarkModeEnabled
                         && GetStyle(ControlStyles.ApplyThemingImplicitly)
-                            ? SystemColors.ControlLight
+                            ? SystemColors.ControlDarkDark
                             : SystemColors.Control
                     : SystemColors.Window;
             }
