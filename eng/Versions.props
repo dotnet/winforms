@@ -48,18 +48,15 @@
   <PropertyGroup>
     <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.25311.107</MicrosoftDotNetGenFacadesPackageVersion>
     <MicrosoftDotNetRemoteExecutorVersion>10.0.0-beta.25311.107</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>10.0.0-beta.25311.107</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.25311.107</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <XUnitVersion>2.9.2</XUnitVersion>
-    <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
-    <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
-    <XUnitRunnerVisualStudioVersion>2.8.1</XUnitRunnerVisualStudioVersion>
-    <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
-    <XUnitStaFactPackageVersion>1.2.46-alpha</XUnitStaFactPackageVersion>
+    <XUnitV3Version>2.0.2</XUnitV3Version>
+    <XUnitRunnerVisualStudioVersion>3.1.0</XUnitRunnerVisualStudioVersion>
+    <XUnitStaFactPackageVersion>2.1.7</XUnitStaFactPackageVersion>
   </PropertyGroup>
   <!-- Test related -->
   <PropertyGroup>
@@ -71,7 +68,10 @@
     <SystemComponentModelTypeConverterTestDataVersion>10.0.0-beta.24568.1</SystemComponentModelTypeConverterTestDataVersion>
     <SystemDrawingCommonTestDataVersion>10.0.0-beta.24568.1</SystemDrawingCommonTestDataVersion>
     <SystemWindowsExtensionsTestDataVersion>10.0.0-beta.24568.1</SystemWindowsExtensionsTestDataVersion>
-    <VerifyXunitVersion>25.0.1</VerifyXunitVersion>
+    <VerifyXunitV3Version>30.1.0</VerifyXunitV3Version>
+
+    <!-- Temporary: Remove once https://github.com/dotnet/arcade/pull/15904 flows to the repo -->
+    <XUnitV3Version>2.0.3</XUnitV3Version>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
