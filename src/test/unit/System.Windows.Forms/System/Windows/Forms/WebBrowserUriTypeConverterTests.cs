@@ -10,20 +10,36 @@ public class WebBrowserUriTypeConverterTests
     private readonly WebBrowserUriTypeConverter _converter = new();
 
     [Theory]
-    [InlineData("http://www.microsoft.com", "http://www.microsoft.com/")]
-    [InlineData("www.microsoft.com", "http://www.microsoft.com/")]
-    public void WebBrowserUri_ConvertFrom_UriString(string input, string expected)
+    [InlineData("ftp.microsoft.com", "http://ftp.microsoft.com/")]
+    [InlineData("  www.example.com  ", "http://www.example.com/")]
+    [InlineData("HTTPS://secure.com", "https://secure.com/")]
+    [InlineData("localhost", "http://localhost/")]
+    [InlineData("sub.domain.com/path", "http://sub.domain.com/path")]
+    public void WebBrowserUri_ConvertFrom_RelativeUri_PrependsHttp(string input, string expected)
     {
         Uri result = (Uri)_converter.ConvertFrom(null, CultureInfo.InvariantCulture, input)!;
 
+        result.Should().NotBeNull();
         result.Should().BeOfType<Uri>();
         result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("http://valid.com")]
+    [InlineData("https://secure.com")]
+    [InlineData("file:///C:/path/to/file.txt")]
+    public void WebBrowserUri_ConvertFrom_AbsoluteUri_ReturnsSame(string input)
+    {
+        Uri inputUri = new(input);
+        Uri result = (Uri)_converter.ConvertFrom(null, CultureInfo.InvariantCulture, inputUri)!;
+
+        result.Should().Be(inputUri);
     }
 
     [Fact]
     public void WebBrowserUri_ConvertFrom_EmptyString_ReturnsNull()
     {
-        Uri result = (Uri)_converter.ConvertFrom(null, CultureInfo.InvariantCulture, "")!;
+        object? result = _converter.ConvertFrom(null, CultureInfo.InvariantCulture, "");
 
         result.Should().BeNull();
     }
