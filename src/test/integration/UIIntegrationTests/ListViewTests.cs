@@ -558,7 +558,7 @@ public class ListViewTests : ControlTestBase
                form,
                inputSimulator => inputSimulator.Mouse.LeftButtonClick()
                                                .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));
-
+            await form.InvokeAsync(() => { });
             foreach (ListViewItem item in listView.Items)
             {
                 Assert.Equal(0, item.StateImageIndex);
