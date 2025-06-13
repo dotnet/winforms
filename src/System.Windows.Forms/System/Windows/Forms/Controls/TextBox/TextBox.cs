@@ -404,12 +404,12 @@ public partial class TextBox : TextBoxBase
 
         if (Multiline && !WordWrap && (ScrollBars & ScrollBars.Horizontal) != 0)
         {
-            scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
+            scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
         }
 
         if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
         {
-            scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
+            scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
         }
 
         // Subtract the scroll bar padding before measuring

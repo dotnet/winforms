@@ -2593,7 +2593,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             // PropertyGrid does a special handling on scaling and positioning its
             // child controls. These are not scaled by their parent when Dpi/Font change.
-            if (_oldDeviceDpi != _deviceDpi)
+            if (OriginalDeviceDpiInternal != DeviceDpiInternal)
             {
                 RescaleConstants();
                 SetupToolbar(fullRebuild: true);

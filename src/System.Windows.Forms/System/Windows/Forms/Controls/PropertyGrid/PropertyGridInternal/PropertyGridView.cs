@@ -214,7 +214,7 @@ internal sealed partial class PropertyGridView :
 
                 CommonEditorSetup(_dropDownButton);
                 _dropDownButton.Size = ScaleHelper.IsScalingRequirementMet
-                    ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                    ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
                     : new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
             }
 
@@ -252,7 +252,7 @@ internal sealed partial class PropertyGridView :
                 _dialogButton.GotFocus += OnDropDownButtonGotFocus;
                 _dialogButton.LostFocus += OnChildLostFocus;
                 _dialogButton.Size = ScaleHelper.IsScalingRequirementMet
-                    ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                    ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
                     : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
                 CommonEditorSetup(_dialogButton);
@@ -4331,7 +4331,7 @@ internal sealed partial class PropertyGridView :
         {
             Control button = needsDropDownButton ? DropDownButton : DialogButton;
             Size sizeBtn = ScaleHelper.IsScalingRequirementMet
-                ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
                 : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
             Rectangle rectTarget = new(
@@ -5144,7 +5144,7 @@ internal sealed partial class PropertyGridView :
                 bool isScalingRequirementMet = ScaleHelper.IsScalingRequirementMet;
                 if (isScalingRequirementMet)
                 {
-                    _dropDownButton.Size = new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight);
+                    _dropDownButton.Size = new(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight);
                 }
                 else
                 {

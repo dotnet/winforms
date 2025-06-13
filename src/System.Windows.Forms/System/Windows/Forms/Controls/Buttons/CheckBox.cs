@@ -49,6 +49,8 @@ public partial class CheckBox : ButtonBase
         TextAlign = ContentAlignment.MiddleLeft;
     }
 
+    private protected override void InitializeControl() => ScaleConstants();
+
     private bool AccObjDoDefaultAction { get; set; }
 
     /// <summary>
@@ -80,12 +82,33 @@ public partial class CheckBox : ButtonBase
                 else
                 {
                     UpdateStyles();
+
+                    // UpdateStyles should also update the UserDraw flag, but it doesn't.
+                    // Since we hijack FlatStyle.Standard for DarkMode and let that SystemRender,
+                    // the threshold from Normal to Button is important to update the OwnerDraw flag.
+                    UpdateOwnerDraw();
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
             }
         }
     }
+
+#pragma warning disable WFO5001
+
+    private protected override bool OwnerDraw =>
+            // We want NO owner draw ONLY when we're
+            // * In Dark Mode
+            // * When _then_ the Appearance is Button
+            // * But then ONLY when we're rendering with FlatStyle.Standard
+            //   (because that would let us usually let us draw with the VisualStyleRenderers,
+            //   which cause HighDPI issues in Dark Mode).
+            (!Application.IsDarkModeEnabled
+                || Appearance != Appearance.Button
+                || FlatStyle != FlatStyle.Standard)
+                && base.OwnerDraw;
+
+#pragma warning restore WFO5001
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
@@ -256,8 +279,6 @@ public partial class CheckBox : ButtonBase
         ScaleConstants();
     }
 
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
-
     private void ScaleConstants()
     {
         const int LogicalFlatSystemStylePaddingWidth = 25;
@@ -314,7 +335,8 @@ public partial class CheckBox : ButtonBase
     {
         get
         {
-            if (Appearance == Appearance.Button || FlatStyle == FlatStyle.System)
+            if (Appearance == Appearance.Button
+                || !OwnerDraw)
             {
                 return base.DownChangeRectangle;
             }
