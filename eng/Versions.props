@@ -10,30 +10,30 @@
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
     <DotNetFinalVersionKind Condition="'$(StabilizePackageVersion)' == 'true'">release</DotNetFinalVersionKind>
-    <SystemReflectionMetadataLoadContextVersion>10.0.0-preview.6.25311.107</SystemReflectionMetadataLoadContextVersion>
-    <SystemTextEncodingsWebVersion>10.0.0-preview.6.25311.107</SystemTextEncodingsWebVersion>
+    <SystemReflectionMetadataLoadContextVersion>10.0.0-preview.6.25313.102</SystemReflectionMetadataLoadContextVersion>
+    <SystemTextEncodingsWebVersion>10.0.0-preview.6.25313.102</SystemTextEncodingsWebVersion>
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <SystemFormatsNrbfPackageVersion>10.0.0-preview.6.25311.107</SystemFormatsNrbfPackageVersion>
-    <SystemIOHashingPackageVersion>10.0.0-preview.6.25311.107</SystemIOHashingPackageVersion>
+    <SystemFormatsNrbfPackageVersion>10.0.0-preview.6.25313.102</SystemFormatsNrbfPackageVersion>
+    <SystemIOHashingPackageVersion>10.0.0-preview.6.25313.102</SystemIOHashingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-preview.6.25311.107</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-preview.6.25313.102</MicrosoftNETCoreILDAsmPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.6.25311.107</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.0-preview.6.25311.107</SystemTextJsonPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.6.25311.107</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.6.25311.107</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.6.25311.107</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>10.0.0-preview.6.25311.107</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-preview.6.25311.107</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>10.0.0-preview.6.25311.107</SystemResourcesExtensionsPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.6.25313.102</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemTextJsonPackageVersion>10.0.0-preview.6.25313.102</SystemTextJsonPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.6.25313.102</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.6.25313.102</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.6.25313.102</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>10.0.0-preview.6.25313.102</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-preview.6.25313.102</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>10.0.0-preview.6.25313.102</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityPermissionsPackageVersion>10.0.0-preview.5.25227.101</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>10.0.0-preview.6.25311.107</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25311.107</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25311.107</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25311.107</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
-    <MicrosoftNETSdkILVersion>10.0.0-preview.6.25311.107</MicrosoftNETSdkILVersion>
+    <SystemWindowsExtensionsPackageVersion>10.0.0-preview.6.25313.102</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25313.102</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25313.102</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.6.25313.102</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETSdkILVersion>10.0.0-preview.6.25313.102</MicrosoftNETSdkILVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
@@ -46,9 +46,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.25311.107</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>10.0.0-beta.25311.107</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.25311.107</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.25313.102</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>10.0.0-beta.25313.102</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.25313.102</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
@@ -69,7 +69,6 @@
     <SystemDrawingCommonTestDataVersion>10.0.0-beta.24568.1</SystemDrawingCommonTestDataVersion>
     <SystemWindowsExtensionsTestDataVersion>10.0.0-beta.24568.1</SystemWindowsExtensionsTestDataVersion>
     <VerifyXunitV3Version>30.1.0</VerifyXunitV3Version>
-
     <!-- Temporary: Remove once https://github.com/dotnet/arcade/pull/15904 flows to the repo -->
     <XUnitV3Version>2.0.3</XUnitV3Version>
   </PropertyGroup>
