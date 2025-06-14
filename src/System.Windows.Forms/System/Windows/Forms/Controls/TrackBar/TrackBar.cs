@@ -54,9 +54,6 @@ public partial class TrackBar : Control, ISupportInitialize
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
         _requestedDim = PreferredDimension;
     }
 
@@ -147,6 +144,10 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             // If the user opts out of TrackBarModernRendering
             // then _autoDrawTicks will be set to true
             _autoDrawTicks = ShouldAutoDrawTicks();

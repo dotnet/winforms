@@ -72,6 +72,7 @@ public partial class TabControl : Control
     private bool _skipUpdateSize;
 
     private ToolTipBuffer _toolTipBuffer;
+    private bool _suspendDarkModeChange;
 
     /// <summary>
     ///  Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
@@ -83,9 +84,6 @@ public partial class TabControl : Control
 
         _tabCollection = new TabPageCollection(this);
         SetStyle(ControlStyles.UserPaint, false);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -157,7 +155,10 @@ public partial class TabControl : Control
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _appearance = value;
+
+                _suspendDarkModeChange = true;
                 RecreateHandle();
+                ApplyDarkModeOnDemand();
 
                 // Fire OnStyleChanged(EventArgs.Empty) here since we are no longer calling UpdateStyles( ) but always reCreating the Handle.
                 OnStyleChanged(EventArgs.Empty);
@@ -270,6 +271,10 @@ public partial class TabControl : Control
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TABCONTROL;
 
@@ -1244,6 +1249,7 @@ public partial class TabControl : Control
         base.OnHandleCreated(e);
         _cachedDisplayRect = Rectangle.Empty;
         ApplyItemSize();
+
         if (_imageList is not null)
         {
             PInvokeCore.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, _imageList.Handle);
@@ -1289,7 +1295,22 @@ public partial class TabControl : Control
         }
 
         UpdateTabSelection(false);
+        ApplyDarkModeOnDemand();
     }
+
+#pragma warning disable WFO5001
+    private void ApplyDarkModeOnDemand()
+    {
+        // We need to avoid to apply the DarkMode theme twice on handle recreate.
+        if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
+        {
+            PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
+            PInvokeCore.EnumChildWindows(this, StyleChildren);
+        }
+
+        _suspendDarkModeChange = false;
+    }
+#pragma warning restore WFO5001
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
@@ -1553,6 +1574,8 @@ public partial class TabControl : Control
             TabPages.Add(tabPages[i]);
         }
 
+        ApplyDarkModeOnDemand();
+
         try
         {
             SetState(State.FromCreateHandles, true);
@@ -1771,6 +1794,10 @@ public partial class TabControl : Control
         return !_padding.Equals(s_defaultPaddingPoint);
     }
 
+    private BOOL StyleChildren(HWND handle) =>
+        PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
+            .Succeeded;
+
     /// <summary>
     ///  Returns a string representation for this control.
     /// </summary>
@@ -1808,6 +1835,7 @@ public partial class TabControl : Control
 
             // make current panel invisible
             TabPage[] tabPages = GetTabPages();
+
             if (index != -1)
             {
                 // Changing the bounds of the TabPage during scaling
@@ -1889,6 +1917,7 @@ public partial class TabControl : Control
     {
         base.OnStyleChanged(e);
         _cachedDisplayRect = Rectangle.Empty;
+
         UpdateTabSelection(false);
     }
 

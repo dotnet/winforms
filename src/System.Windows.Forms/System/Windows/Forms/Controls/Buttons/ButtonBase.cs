@@ -68,7 +68,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 | ControlStyles.Opaque
                 | ControlStyles.ResizeRedraw
                 | ControlStyles.OptimizedDoubleBuffer
-                // We gain about 2% in painting by avoiding extra GetWindowText calls
                 | ControlStyles.CacheText
                 | ControlStyles.StandardClick,
             true);
@@ -76,11 +75,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
+        // Be aware that OwnerDraw is effective calling CreateParams which in turn can be overwritten
+        // by derived classes. So, it's important to set certain flags already in CreateParams -
+        // setting them in the derived control's constructor would already be too late!
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
@@ -258,7 +256,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
+
             if (!OwnerDraw)
             {
                 // WS_EX_RIGHT overrides the BS_XXXX alignment styles
@@ -334,6 +337,44 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     /// <summary>
     ///  Gets or sets the flat style appearance of the button control.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The <see cref="FlatStyle"/> property determines how the button is rendered. The following values are supported:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Standard"/></term>
+    ///    <description>
+    ///     The default style. The button is not wrapping the system button. It is rendered using the StandardButton adapter.
+    ///     VisualStyleRenderer from the OS is used for certain parts, which may have issues in high-resolution scenarios.
+    ///     Dark mode works to some extent, but improvements are needed.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Popup"/></term>
+    ///    <description>
+    ///     The button is fully owner-drawn. No rendering is delegated to the OS, not even VisualStyleRenderer.
+    ///     This style works well in dark mode and is fully controlled by the application.
+    ///     3D effects are expected but may not be rendered; consider revisiting for meaningful styling.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.Flat"/></term>
+    ///    <description>
+    ///     The button is fully owner-drawn, with no OS calls or VisualStyleRenderer usage.
+    ///     This fits modern design language and works well in dark mode.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <term><see cref="FlatStyle.System"/></term>
+    ///    <description>
+    ///     The button wraps the system button and is not owner-drawn.
+    ///     No <c>OnPaint</c>, <c>OnPaintBackground</c>, or adapter is involved.
+    ///     In dark mode, this style is used as a fallback for Standard-style buttons.
+    ///    </description>
+    ///   </item>
+    ///  </list>
+    /// </remarks>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(FlatStyle.Standard)]
     [Localizable(true)]
@@ -353,6 +394,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _flatStyle = value;
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
             Invalidate();
+
             UpdateOwnerDraw();
         }
     }
@@ -406,11 +448,17 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             StopAnimate();
 
             _image = value;
+
             if (_image is not null)
             {
                 ImageIndex = ImageList.Indexer.DefaultIndex;
                 ImageList = null;
             }
+
+            // If we have an Image, for some flat styles we need to change the rendering approach from
+            // being a wrapper around the Win32 control to being owner-drawn. The Win32 control does not
+            // support images in the same flexible way as we need it.
+            UpdateOwnerDraw();
 
             LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
             Animate();
@@ -617,7 +665,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    internal bool OwnerDraw => FlatStyle != FlatStyle.System;
+    /// <summary>
+    ///  OwnerDraw ultimately determines, if we're wrapping the respective Win32 control
+    ///  (Button, CheckBox, RadioButton - OwnerDraw == false) or not. When we're not OwnerDraw,
+    ///  both Light- and DarkMode are (and can be) rendered by the System, but then there is
+    ///  no image rendering, and no OnPaint. This is the original behavior of the Win32 controls.
+    /// </summary>
+    private protected virtual bool OwnerDraw =>
+            FlatStyle != FlatStyle.System;
 
     bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
 
@@ -957,15 +1012,20 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
-        Size preferedSize = Adapter.GetPreferredSizeCore(proposedConstraints);
-        return LayoutUtils.UnionSizes(preferedSize + Padding.Size, MinimumSize);
+        Size preferredSize = Adapter.GetPreferredSizeCore(proposedConstraints);
+        return LayoutUtils.UnionSizes(preferredSize + Padding.Size, MinimumSize);
     }
 
+    /// <summary>
+    ///  Returns an adapter for Rendering one of the FlatStyles. Note, that we always render
+    ///  buttons ourselves, except when the User explicitly requests FlatStyle.System rendering!
+    /// </summary>
     internal ButtonBaseAdapter Adapter
     {
         get
         {
-            if (_adapter is null || FlatStyle != _cachedAdapterType)
+            if (_adapter is null
+                || FlatStyle != _cachedAdapterType)
             {
                 switch (FlatStyle)
                 {
@@ -977,7 +1037,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                         break;
                     case FlatStyle.Flat:
                         _adapter = CreateFlatAdapter();
-                        ;
                         break;
                     default:
                         Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
@@ -1235,7 +1294,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool ShouldSerializeImage() => _image is not null;
 
-    private void UpdateOwnerDraw()
+    // Indicates whether this control uses owner drawing, enabling UserPaint and determining
+    // if we wrap the native Win32 control (OwnerDraw == false) or render it ourselves.
+    // Also needed to detect a Dark Mode opt-out for FlatStyle.Standard when system painting
+    // cannot be forced.
+    private protected void UpdateOwnerDraw()
     {
         if (OwnerDraw != GetStyle(ControlStyles.UserPaint))
         {
