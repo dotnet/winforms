@@ -11,10 +11,10 @@ public class NormalizedStringDataAttribute : CommonMemberDataAttribute
 {
     public NormalizedStringDataAttribute() : base(typeof(NormalizedStringDataAttribute)) { }
 
-    public static ReadOnlyTheoryData TheoryData { get; } = new(new TheoryData<string?, string>()
-    {
-        { null, string.Empty },
-        { string.Empty, string.Empty },
-        { "teststring", "teststring" }
-    });
+    public static IEnumerable<TheoryDataRow<string?, string>> TheoryData { get; } =
+    [
+        new(null, string.Empty),
+        new(string.Empty, string.Empty),
+        new("teststring", "teststring")
+    ];
 }

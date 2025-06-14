@@ -36,6 +36,8 @@ namespace MonoTests.System.Drawing.Imaging;
 
 public class JpegCodecTest
 {
+    public static bool IsWindows7OrIsArm64Process => PlatformDetection.IsWindows7 || PlatformDetection.IsArm64Process;
+
     [Fact]
     public void Bitmap8bbpIndexedGreyscaleFeatures()
     {
@@ -104,7 +106,7 @@ public class JpegCodecTest
         Assert.Equal(-9211021, bmp.GetPixel(96, 96).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotWindows7), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipWhen = nameof(IsWindows7OrIsArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap8bbpIndexedGreyscaleData()
     {
         string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
@@ -219,7 +221,7 @@ public class JpegCodecTest
         Assert.Equal(-12944166, bmp.GetPixel(96, 96).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap24bitData()
     {
         string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
