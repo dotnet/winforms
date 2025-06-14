@@ -775,7 +775,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
             {
                 // The following does not get set, since dropDown has no parent/is not part of the
                 // controls collection, so this gets never called through the normal inheritance chain.
-                item._dropDown._deviceDpi = newDpi;
+                item._dropDown.DeviceDpiInternal = newDpi;
                 item._dropDown.ResetScaling(newDpi);
 
                 foreach (ToolStripItem childItem in item.DropDown.Items)

@@ -96,6 +96,9 @@ public partial class RadioButton : ButtonBase
                     else
                     {
                         UpdateStyles();
+
+                        // UpdateStyles should also update the UserDraw flag, but it doesn't.
+                        UpdateOwnerDraw();
                     }
 
                     OnAppearanceChanged(EventArgs.Empty);
@@ -168,6 +171,21 @@ public partial class RadioButton : ButtonBase
         }
     }
 
+#pragma warning disable WFO5001
+    private protected override bool OwnerDraw =>
+        // Order is key here - do NOT change!
+        // We want NO owner draw ONLY when we're
+        // * in Dark Mode
+        // * when _then_ the Appearance is Button
+        // * but then ONLY when we're rendering with FlatStyle.Standard
+        //   (because that would let us usually let us draw with the VisualStyleRenderers,
+        //   which cause HighDPI issues in Dark Mode).
+        (!Application.IsDarkModeEnabled
+            || Appearance != Appearance.Button
+            || FlatStyle != FlatStyle.Standard)
+            && base.OwnerDraw;
+#pragma warning restore WFO5001
+
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -233,9 +251,6 @@ public partial class RadioButton : ButtonBase
         ScaleConstants();
     }
 
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi)
-        => ScaleConstants();
-
     private void ScaleConstants()
     {
         const int LogicalFlatSystemStylePaddingWidth = 24;
@@ -243,6 +258,8 @@ public partial class RadioButton : ButtonBase
         _flatSystemStylePaddingWidth = LogicalToDeviceUnits(LogicalFlatSystemStylePaddingWidth);
         _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
+
+    private protected override void InitializeControl() => ScaleConstants();
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {

@@ -89,7 +89,7 @@ public partial class ListBox : ListControl
     private int _itemsCount;
 
     /// <summary>
-    ///  This value stores the array of custom tabstops in the listBox. the array should be populated by
+    ///  This value stores the array of custom TabStops in the listBox. the array should be populated by
     ///  integers in a ascending order.
     /// </summary>
     private IntegerCollection? _customTabOffsets;
@@ -120,10 +120,6 @@ public partial class ListBox : ListControl
     {
         SetStyle(ControlStyles.UserPaint | ControlStyles.StandardClick | ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
@@ -131,13 +127,13 @@ public partial class ListBox : ListControl
         _requestedHeight = Height;
     }
 
+    private protected override void InitializeControl() => ScaleConstants();
+
     protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         ScaleConstants();
     }
-
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi) => ScaleConstants();
 
     private void ScaleConstants()
     {
@@ -268,6 +264,10 @@ public partial class ListBox : ListControl
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_LISTBOX;
 
