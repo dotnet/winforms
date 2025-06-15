@@ -724,8 +724,8 @@ public sealed partial class Application
     {
         // First send to all children.
         PInvokeCore.EnumChildWindows(handle, SendThemeChangedRecursive);
-
-        // Then send to ourself.
+        // Send the theme changed message to this window.
+        PInvokeCore.SendMessage(handle, PInvokeCore.WM_SYSCOLORCHANGE);
         PInvokeCore.SendMessage(handle, PInvokeCore.WM_THEMECHANGED);
 
         return true;
