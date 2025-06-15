@@ -8081,9 +8081,11 @@ public unsafe partial class Control :
             for (int i = 0; i < children.Count; i++)
             {
                 children[i].OnSystemColorsChanged(EventArgs.Empty);
+                OnThemChanged(children[i]);
             }
         }
 
+        OnThemChanged(this);
         Invalidate();
 
         ((EventHandler?)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
@@ -10476,7 +10478,7 @@ public unsafe partial class Control :
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
         }
-        }
+    }
 
     /// <summary>
     ///  Determine effective auto-validation setting for a given control, based on the AutoValidate property
@@ -11074,6 +11076,65 @@ public unsafe partial class Control :
     internal void WindowReleaseHandle()
     {
         _window.ReleaseHandle();
+    }
+
+    private void OnThemChanged(Control control)
+    {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        switch (control)
+        {
+            case ProgressBar:
+                string? isDarkTheme = Application.IsDarkModeEnabled ? "" : null;
+                PInvoke.SetWindowTheme(HWND, isDarkTheme, isDarkTheme);
+                break;
+            case ComboBox:
+                {
+                    PInvoke.SetWindowTheme(HWND,
+                        Application.IsDarkModeEnabled
+                        ? $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}"
+                        : null, null);
+                    COMBOBOXINFO cInfo = default;
+                    cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+                    _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
+                    PInvoke.SetWindowTheme(cInfo.hwndList,
+                        Application.IsDarkModeEnabled
+                        ? $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}"
+                        : null, null);
+                    PInvokeCore.SendMessage(cInfo.hwndList, PInvokeCore.WM_THEMECHANGED);
+                    PInvokeCore.SendMessage(HWND, PInvokeCore.WM_THEMECHANGED);
+                }
+
+                break;
+            //case TabControl:
+            //    PInvoke.SetWindowTheme(HWND, null,
+            //       Application.IsDarkModeEnabled
+            //       ? $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}"
+            //       : null);
+            //    break;
+            case ListView:
+                PInvoke.SetWindowTheme(HWND,
+                     Application.IsDarkModeEnabled
+                     ? $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}"
+                     : null, null);
+
+                // Get the ListView's ColumnHeader handle:
+                HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+                PInvoke.SetWindowTheme(columnHeaderHandle, Application.IsDarkModeEnabled
+                    ? $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}"
+                    : null,
+                    null);
+                break;
+            default:
+                // For all other controls, we set the theme to the Explorer theme.
+                PInvoke.SetWindowTheme(HWNDInternal,
+                    Application.IsDarkModeEnabled
+                        ? $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}"
+                        : null, null);
+                break;
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     }
 
     private void WmClose(ref Message m)
@@ -12581,11 +12642,11 @@ public unsafe partial class Control :
                 break;
 
             case PInvokeCore.WM_SETTINGCHANGE:
-                if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
+                if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged))
                 {
-                    // need Handle immediately drawing of Scrollbars.
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     Application.SetColorMode(Application.ColorMode);
+
                     const string DarkModeThemeIdentifier = $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}";
                     PInvoke.SetWindowTheme(m.HWND,
                         Application.IsDarkModeEnabled
@@ -12600,6 +12661,8 @@ public unsafe partial class Control :
                         | REDRAW_WINDOW_FLAGS.RDW_FRAME
                         | REDRAW_WINDOW_FLAGS.RDW_ERASE
                         | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
+                    if (!GetTopLevel())
+                        return;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     SYSTEM_PARAMETERS_INFO_ACTION action = (SYSTEM_PARAMETERS_INFO_ACTION)(uint)m.WParamInternal;
 
@@ -12647,7 +12710,6 @@ public unsafe partial class Control :
                 }
 
                 break;
-
             case PInvokeCore.WM_SYSCOLORCHANGE:
                 if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
                 {
