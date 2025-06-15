@@ -11106,12 +11106,6 @@ public unsafe partial class Control :
                 }
 
                 break;
-            //case TabControl:
-            //    PInvoke.SetWindowTheme(HWND, null,
-            //       Application.IsDarkModeEnabled
-            //       ? $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}"
-            //       : null);
-            //    break;
             case ListView:
                 PInvoke.SetWindowTheme(HWND,
                      Application.IsDarkModeEnabled
@@ -11859,8 +11853,6 @@ public unsafe partial class Control :
             }
         }
     }
-
-
 
     /// <summary>
     ///  Handles the WM_PAINT messages. This should only be called for userpaint controls.

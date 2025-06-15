@@ -1711,11 +1711,10 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                     ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::TreeView;{Control.ExplorerThemeIdentifier}::TreeView;TreeView", 2, 2)
                     : VisualStyleElement.ExplorerTreeView.Glyph.Opened;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
- 
+
                 VisualStyleRenderer explorerTreeRenderer = new(element);
                 explorerTreeRenderer.DrawBackground(hdc, outline, hwnd);
             }
-
 
             unsafe void RedrawExplorerTreeViewClosedGlyph(
                 Graphics graphics,
