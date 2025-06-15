@@ -38,9 +38,6 @@ public partial class MainForm : Form
         }
 
         Text = RuntimeInformation.FrameworkDescription;
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         _colorComboBox.SelectedIndexChanged += (s, e) =>
         {
             if (_colorComboBox.SelectedItem is string selectedItem)
@@ -75,11 +72,6 @@ public partial class MainForm : Form
                 UpdateLayout();
             }
         };
-    }
-
-    private void Button_Click(object sender, EventArgs e)
-    {
-        Windows.Win32.Graphics.Gdi.HBRUSH brush = Windows.Win32.PInvokeCore.GetSysColorBrush(SystemColors.ButtonFace);
     }
 
     private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
