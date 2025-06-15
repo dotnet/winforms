@@ -10385,11 +10385,6 @@ public unsafe partial class Control :
                     // We shouldn't mess with the color mode if users haven't specifically set it.
                     // https://github.com/dotnet/winforms/issues/12014
                     // I Don't think we should be doing this for Forms here , but it is the same as the old code but execute Form Control.
-                    if (value && Application.ColorModeSet && this is not Form)
-                    {
-                        PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
-                    }
-
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
@@ -10481,18 +10476,7 @@ public unsafe partial class Control :
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
         }
-
-        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
-        {
-            BOOL value = darkModeEnabled;
-
-            PInvoke.DwmSetWindowAttribute(
-                hwnd,
-                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                &value,
-                (uint)sizeof(BOOL)).AssertSuccess();
         }
-    }
 
     /// <summary>
     ///  Determine effective auto-validation setting for a given control, based on the AutoValidate property
@@ -11781,6 +11765,43 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Handles the WM_DWMNCRENDERINGCHANGED message, which is sent when the Desktop Window Manager (DWM) non-client area rendering policy changes.
+    ///  This message allows the control to update its appearance or behavior in response to changes in DWM rendering, such as enabling or disabling
+    ///  dark mode for window, borders and title bar Colors.
+    /// </summary>
+    private unsafe void WmDwmNcRenderingChanged(ref Message m)
+    {
+        DefWndProc(ref m);
+
+        // 1. Check if the control's handle is created and  Desktop Window Manager (DWM) non-client area rendering policy is enabled.
+        // 2. If so, update the non-client rendering (e.g., update window frame, invalidate non-client area).
+        // 3. Optionally, raise an event or call a virtual method if needed.
+        // 4. Mark the message as handled if appropriate.
+
+        // Example implementation (actual logic may depend on the rest of the codebase):
+        if (m.WParamInternal != 0)
+        {
+            bool hasDarkNcArea;
+            if (PInvoke.DwmGetWindowAttribute(m.HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &hasDarkNcArea, sizeof(int)).Succeeded)
+            {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled == hasDarkNcArea)
+                {
+                    // No change in dark mode state, no need to update.
+                    return;
+                }
+
+                hasDarkNcArea = Application.IsDarkModeEnabled;
+                PInvoke.DwmSetWindowAttribute(m.HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &hasDarkNcArea, sizeof(int));
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+            }
+        }
+    }
+
+
+
+    /// <summary>
     ///  Handles the WM_PAINT messages. This should only be called for userpaint controls.
     /// </summary>
     private void WmPaint(ref Message m)
@@ -12511,7 +12532,9 @@ public unsafe partial class Control :
             case MessageId.WM_REFLECT_NOTIFYFORMAT:
                 m.ResultInternal = (LRESULT)(nint)PInvoke.NFR_UNICODE;
                 break;
-
+            case PInvokeCore.WM_DWMNCRENDERINGCHANGED:
+                WmDwmNcRenderingChanged(ref m);
+                break;
             case PInvokeCore.WM_SHOWWINDOW:
                 WmShowWindow(ref m);
                 break;
