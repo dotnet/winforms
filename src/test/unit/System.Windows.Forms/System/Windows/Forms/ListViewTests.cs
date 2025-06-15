@@ -5240,8 +5240,8 @@ public class ListViewTests
 
     public static TheoryData<ListViewItem> GetListViewItemTheoryData() => new()
     {
-        { new("Item 1") },
-        { null }
+        { new ListViewItem("Item 1") },
+        { (ListViewItem)null }
     };
 
     [WinFormsTheory]

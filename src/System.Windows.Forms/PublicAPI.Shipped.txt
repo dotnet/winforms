@@ -1,29 +1,18 @@
 #nullable enable
 [WFO5001]static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
 [WFO5001]System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
-[WFO5001]System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
-[WFO5001]System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
-[WFO5001]System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
-[WFO5001]System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
-[WFO5001]System.Windows.Forms.FormCornerPreference
-[WFO5001]System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
-[WFO5001]System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
-[WFO5001]System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
-[WFO5001]System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
 [WFO5001]System.Windows.Forms.SystemColorMode
 [WFO5001]System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
 [WFO5001]System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
 [WFO5001]System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
-[WFO5001]virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
-[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
-[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
-[WFO5001]virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
 [WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 [WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 [WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterScreen) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 [WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+[WFO5003]System.Windows.Forms.IAsyncDropTarget
+[WFO5003]System.Windows.Forms.IAsyncDropTarget.OnAsyncDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.Commit(System.Windows.Forms.CurrencyManager dataSource, int rowNum) -> bool
 ~abstract System.Windows.Forms.DataGridColumnStyle.Edit(System.Windows.Forms.CurrencyManager source, int rowNum, System.Drawing.Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.GetPreferredHeight(System.Drawing.Graphics g, object value) -> int

@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 

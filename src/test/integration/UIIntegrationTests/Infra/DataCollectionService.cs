@@ -5,7 +5,6 @@ using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Text;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace System.Windows.Forms.UITests;
@@ -87,13 +86,7 @@ internal static class DataCollectionService
     }
 
     internal static string GetTestName(ITestCase testCase)
-    {
-        var testMethod = testCase.TestMethod.Method;
-        string testClass = testCase.TestMethod.TestClass.Class.Name;
-        int lastDot = testClass.LastIndexOf('.');
-        testClass = testClass[(lastDot + 1)..];
-        return $"{testClass}.{testMethod.Name}";
-    }
+        => $"{testCase.TestClassSimpleName}.{testCase.TestMethodName}";
 
     internal static void InstallFirstChanceExceptionHandler()
     {

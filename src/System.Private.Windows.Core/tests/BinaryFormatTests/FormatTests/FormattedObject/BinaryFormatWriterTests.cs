@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.BinaryFormat;
-using System.Formats.Nrbf;
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
+using System.Formats.Nrbf;
+using System.Private.Windows.BinaryFormat;
 using System.Private.Windows.Nrbf;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FormatTests.FormattedObject;
 
@@ -165,16 +165,16 @@ public class BinaryFormatWriterTests
         stream.Position.Should().Be(0);
     }
 
-    public static IEnumerable<object[]> TryWriteFrameworkObject_SupportedObjects_TestData =>
-        ((IEnumerable<object[]>)HashtableTests.Hashtables_TestData).Concat(
+    public static IEnumerable<ITheoryDataRow> TryWriteFrameworkObject_SupportedObjects_TestData =>
+        ((IEnumerable<ITheoryDataRow>)HashtableTests.Hashtables_TestData).Concat(
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
             SystemDrawing_TestData).Concat(
             Array_TestData).Skip(9);
 
-    public static IEnumerable<object[]?> TryWriteObject_UnsupportedObjects_TestData =>
-        ((IEnumerable<object[]?>)HashtableTests.Hashtables_UnsupportedTestData).Concat(
+    public static IEnumerable<ITheoryDataRow> TryWriteObject_UnsupportedObjects_TestData =>
+        ((IEnumerable<ITheoryDataRow>)HashtableTests.Hashtables_UnsupportedTestData).Concat(
             ListTests.Lists_UnsupportedTestData).Concat(
             ListTests.ArrayLists_UnsupportedTestData).Concat(
             Array_UnsupportedTestData);
@@ -224,8 +224,8 @@ public class BinaryFormatWriterTests
         new DateTime[] { DateTime.MaxValue }
     ];
 
-    public static IEnumerable<object[]> Array_TestData =>
-        ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
+    public static IEnumerable<ITheoryDataRow> Array_TestData =>
+        StringArray_Parse_Data.Concat(PrimitiveArray_Parse_Data);
 
     public static TheoryData<Array> Array_UnsupportedTestData =>
     [

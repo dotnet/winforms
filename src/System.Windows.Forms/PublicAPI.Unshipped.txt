@@ -1,0 +1,21 @@
+override System.Windows.Forms.DataGridView.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TabPage.CreateParams.get -> System.Windows.Forms.CreateParams!
+System.Windows.Forms.Form.FormScreenCaptureMode.get -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.Form.FormScreenCaptureMode.set -> void
+System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.Allow = 0 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideContent = 1 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideWindow = 2 -> System.Windows.Forms.ScreenCaptureMode
+[WFO5001]System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
+[WFO5001]virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void

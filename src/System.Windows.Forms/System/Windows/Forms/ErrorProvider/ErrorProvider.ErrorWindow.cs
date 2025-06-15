@@ -449,12 +449,12 @@ public partial class ErrorProvider
             base.WmDpiChangedBeforeParent(ref m);
 
             int currentDpi = (int)PInvoke.GetDpiForWindow(this);
-            if (currentDpi == _parent._deviceDpi)
+            if (currentDpi == _parent.DeviceDpiInternal)
             {
                 return;
             }
 
-            double factor = ((double)currentDpi) / _parent._deviceDpi;
+            double factor = ((double)currentDpi) / _parent.DeviceDpiInternal;
             Icon icon = _provider.Icon;
             _provider.CurrentDpi = currentDpi;
             _provider.Icon = new Icon(icon, (int)(icon.Width * factor), (int)(icon.Height * factor));
