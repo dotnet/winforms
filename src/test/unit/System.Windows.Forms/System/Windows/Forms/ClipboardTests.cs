@@ -242,9 +242,9 @@ public class ClipboardTests
 
     public static TheoryData<Action> SetDataObject_Null_TheoryData =>
     [
-        () => Clipboard.SetDataObject(null!),
-        () => Clipboard.SetDataObject(null!, copy: true),
-        () => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0)
+        new(() => Clipboard.SetDataObject(null!)),
+        new(() => Clipboard.SetDataObject(null!, copy: true)),
+        new(() => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0))
     ];
 
     [WinFormsTheory]
@@ -270,15 +270,15 @@ public class ClipboardTests
 
     public static TheoryData<Action> NotAnStaTheoryData =>
     [
-        Clipboard.Clear,
-        () => Clipboard.SetAudio(Array.Empty<byte>()),
-        () => Clipboard.SetAudio(new MemoryStream()),
-        () => Clipboard.SetDataObject(new DataObject()),
-        () => Clipboard.SetDataObject(new DataObject(), copy: true),
-        () => Clipboard.SetDataObject(new DataObject(), copy: true, retryTimes: 10, retryDelay: 0),
-        () => Clipboard.SetFileDropList(["filePath"]),
-        () => Clipboard.SetText("text"),
-        () => Clipboard.SetText("text", TextDataFormat.Text)
+        (Action)Clipboard.Clear,
+        (Action)(() => Clipboard.SetAudio(Array.Empty<byte>())),
+        (Action)(() => Clipboard.SetAudio(new MemoryStream())),
+        (Action)(() => Clipboard.SetDataObject(new DataObject())),
+        (Action)(() => Clipboard.SetDataObject(new DataObject(), copy: true)),
+        (Action)(() => Clipboard.SetDataObject(new DataObject(), copy: true, retryTimes: 10, retryDelay: 0)),
+        (Action)(() => Clipboard.SetFileDropList(["filePath"])),
+        (Action)(() => Clipboard.SetText("text")),
+        (Action)(() => Clipboard.SetText("text", TextDataFormat.Text))
     ];
 
     [Theory] // x-thread

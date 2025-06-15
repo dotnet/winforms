@@ -17,6 +17,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PublishWindowsPdb>false</PublishWindowsPdb>
+
+    <DefaultAppHostRuntimeIdentifier Condition="'$(TargetArchitecture)'!=''">win-$(TargetArchitecture)</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
@@ -64,6 +66,10 @@
     <!-- Exclude anything tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
     <ExcludeByAttribute>ExcludeFromCodeCoverage</ExcludeByAttribute>
     <ExcludeByFile />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TestRunnerName>XUnitV3</TestRunnerName>
   </PropertyGroup>
 
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->

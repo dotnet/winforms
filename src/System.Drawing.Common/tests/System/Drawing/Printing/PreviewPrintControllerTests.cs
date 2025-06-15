@@ -12,7 +12,7 @@ public class PreviewPrintControllerTests
         Assert.True(controller.IsPreview);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void OnStartPage_InvokeWithPrint_ReturnsNull()
     {
         using PrintDocument document = new();
@@ -45,7 +45,7 @@ public class PreviewPrintControllerTests
         Assert.Throws<NullReferenceException>(() => controller.OnStartPage(document, null));
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void OnStartPage_InvokeNullEventArgsPageSettings_ReturnsNull()
     {
         using PrintDocument document = new();
@@ -80,7 +80,7 @@ public class PreviewPrintControllerTests
         yield return new object[] { new PrintEventArgs() };
     }
 
-    [ConditionalTheory(Helpers.AnyInstalledPrinters)]
+    [Theory(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     [MemberData(nameof(PrintEventArgs_TestData))]
     public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
     {
@@ -92,7 +92,7 @@ public class PreviewPrintControllerTests
         controller.OnEndPrint(document, e);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void OnStartPrint_InvokeMultipleTimes_Success()
     {
         using PrintDocument document = new();

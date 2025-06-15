@@ -589,18 +589,18 @@ public class TextRendererTests
     public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
         =>
         [
-                (IDeviceContext context) => () =>
+                new((IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
-                        pt: default, Color.Blue),
-                (IDeviceContext context) => () =>
+                        pt: default, Color.Blue)),
+                new((IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
-                        pt: default, Color.Blue, flags: default),
-                (IDeviceContext context) => () =>
+                        pt: default, Color.Blue, flags: default)),
+                new((IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
-                        bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue),
-                (IDeviceContext context) => () =>
+                        bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue)),
+                new((IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
-                        bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue, flags: default),
+                        bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue, flags: default)),
             ];
 
     [Theory]
@@ -614,47 +614,47 @@ public class TextRendererTests
     public static TheoryData<Action> TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData()
         =>
         [
-            () => TextRenderer.DrawText(
+            new(() => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
                 default(Point),
                 Color.Empty,
-                TextFormatFlags.ModifyString),
-            () => TextRenderer.DrawText(
+                TextFormatFlags.ModifyString)),
+            new(() => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
                 default(Point),
                 Color.Empty,
                 Color.Empty,
-                TextFormatFlags.ModifyString),
-            () => TextRenderer.DrawText(
+                TextFormatFlags.ModifyString)),
+            new(() => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
                 default(Rectangle),
                 Color.Empty,
-                TextFormatFlags.ModifyString),
-            () => TextRenderer.DrawText(
+                TextFormatFlags.ModifyString)),
+            new(() => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
                 default(Rectangle),
                 Color.Empty,
                 Color.Empty,
-                TextFormatFlags.ModifyString),
-            () => TextRenderer.MeasureText(
+                TextFormatFlags.ModifyString)),
+            new(() => TextRenderer.MeasureText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
                 default,
-                TextFormatFlags.ModifyString),
-            () => TextRenderer.MeasureText(
+                TextFormatFlags.ModifyString)),
+            new(() => TextRenderer.MeasureText(
                 string.Empty.AsSpan(),
                 null,
                 default,
-                TextFormatFlags.ModifyString),
+                TextFormatFlags.ModifyString)),
         ];
 #pragma warning restore CS0618
 
