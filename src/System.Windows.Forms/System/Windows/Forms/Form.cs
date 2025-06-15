@@ -4228,19 +4228,6 @@ public partial class Form : ContainerControl
         base.OnHandleCreated(e);
 
         UpdateLayered();
-
-        // Normally, we update the form's title properties here after the handle is created.
-        // However, during handle recreation (ReCreateHandle), this method is invoked as part
-        // of the base class chain—before the new handle is fully established and before
-        // other required updates are complete. In that scenario, SetFormTitleProperties
-        // must be called *after* all recreation steps have finished, which is handled by a
-        // dedicated call at the end of ReCreateHandle. Therefore, to avoid updating the
-        // title properties too early or twice, we skip the call here if we are in the
-        // middle of handle recreation.
-        if (!_inRecreateHandle)
-        {
-            SetFormTitleProperties();
-        }
     }
 
     /// <summary>
@@ -4592,18 +4579,17 @@ public partial class Form : ContainerControl
     private unsafe void WmThemeChanged(ref Message m)
     {
         base.WndProc(ref m);
-        if (Application.ColorModeSet && GetTopLevel())
-        {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            BOOL value = Application.IsDarkModeEnabled;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-            PInvoke.DwmSetWindowAttribute(
-                m.HWND,
-                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                &value,
-                (uint)sizeof(BOOL)).AssertSuccess();
+        if (GetStyle(ControlStyles.ApplyThemingImplicitly))
+        {
+            bool ncRenderingEnabled;
+            if (PInvoke.DwmGetWindowAttribute(m.HWND, DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_ENABLED, &ncRenderingEnabled, sizeof(int))
+                 .Succeeded && ncRenderingEnabled)
+            {
+                PInvokeCore.SendMessage(m.HWND, PInvokeCore.WM_DWMNCRENDERINGCHANGED, 1, 0);
+            }
         }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     /// <summary>
@@ -5003,8 +4989,6 @@ public partial class Form : ContainerControl
             bool result = PInvoke.SetWindowPlacement(HWND, &wp);
             Debug.Assert(result);
         }
-
-        SetFormTitleProperties();
 
         if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
         {
@@ -6679,9 +6663,7 @@ public partial class Form : ContainerControl
                         rcMenuBar = menuBarInfo.rcBar;
                         PInvokeCore.MapWindowPoints(HWND.Null, hWnd, (Point*)&rcMenuBar, 2);
                         PInvoke.OffsetRect(ref rcMenuBar, -rcWin.left, -rcWin.top);
-                        MENUBARINFO mbi = new() { cbSize = (uint)sizeof(MENUBARINFO) };
-                        PInvoke.GetMenuBarInfo((HWND)m.LParamInternal, OBJECT_IDENTIFIER.OBJID_CLIENT, 0, &mbi);
-                        if (!Rectangle.FromLTRB(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom).Contains(pos))
+                         if (!Rectangle.FromLTRB(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom).Contains(pos))
                         {
                             MENUITEMINFOW info = new MENUITEMINFOW
                             {
@@ -7393,6 +7375,10 @@ public partial class Form : ContainerControl
             // case PInvokeCore.WM_WINDOWPOSCHANGING:
             //    WmWindowPosChanging(ref m);
             //    break;
+            case PInvokeCore.WM_ENTERIDLE:
+                // We don't want to handle this message, so we just call the base WndProc.
+                WmEnterIdle(ref m);
+                break;
             case PInvokeCore.WM_ENTERMENULOOP:
                 WmEnterMenuLoop(ref m);
                 break;
@@ -7420,6 +7406,15 @@ public partial class Form : ContainerControl
                 break;
             case PInvokeCore.WM_THEMECHANGED:
                 WmThemeChanged(ref m);
+                break;
+            case PInvokeCore.WM_DWMNCRENDERINGCHANGED:
+                base.WndProc(ref m);
+                // If the DWM is enabled, we need to redraw the non-client area Colors.
+                if (m.WParamInternal == 1)
+                {
+                    SetFormTitleProperties();
+                }
+
                 break;
             default:
                 base.WndProc(ref m);
