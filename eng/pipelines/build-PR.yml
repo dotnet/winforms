@@ -90,7 +90,7 @@ jobs:
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
         /p:Coverage=$(_Coverage)
-        /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
+        /p:TestRunnerAdditionalArguments='--filter-not-trait Category=IgnoreForCI --filter-not-trait Category=failing'
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
         /m:1
       displayName: Run Unit Tests
@@ -107,7 +107,7 @@ jobs:
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
         /p:Coverage=$(_Coverage)
-        /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
+        /p:TestRunnerAdditionalArguments='--filter-not-trait Category=IgnoreForCI --filter-not-trait Category=failing'
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
         /m:1
       env:

@@ -68,7 +68,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 | ControlStyles.Opaque
                 | ControlStyles.ResizeRedraw
                 | ControlStyles.OptimizedDoubleBuffer
-                // We gain about 2% in painting by avoiding extra GetWindowText calls
                 | ControlStyles.CacheText
                 | ControlStyles.StandardClick,
             true);
@@ -76,11 +75,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
+        // Be aware that OwnerDraw is effective calling CreateParams which in turn can be overwritten
+        // by derived classes. So, it's important to set certain flags already in CreateParams -
+        // setting them in the derived control's constructor would already be too late!
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
@@ -258,7 +256,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
+
             if (!OwnerDraw)
             {
                 // WS_EX_RIGHT overrides the BS_XXXX alignment styles
@@ -617,7 +620,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    internal bool OwnerDraw => FlatStyle != FlatStyle.System;
+    private protected virtual bool OwnerDraw => FlatStyle != FlatStyle.System;
 
     bool? ICommandBindingTargetProvider.PreviousEnabledStatus { get; set; }
 
