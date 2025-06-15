@@ -34,12 +34,38 @@ public partial class MainForm : Form
                 UseVisualStyleBackColor = true
             };
             button.Click += info.Click;
-
             overarchingFlowLayoutPanel.Controls.Add(button);
         }
 
         Text = RuntimeInformation.FrameworkDescription;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        _colorComboBox.SelectedIndexChanged += (s, e) =>
+        {
+            if (_colorComboBox.SelectedItem is string selectedItem)
+            {
+                switch (selectedItem)
+                {
+                    case "System":
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                        Application.SetColorMode(SystemColorMode.System);
+
+                        break;
+                    case "Classic":
+                        Application.SetColorMode(SystemColorMode.Classic);
+                        break;
+                    case "Dark":
+                        Application.SetColorMode(SystemColorMode.Dark);
+                        break;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+                }
+            }
+        };
+        _colorPanel.Controls.Add(_colorComboBox);
+        _colorPanel.Controls.Add(_colorLabel);
+        overarchingFlowLayoutPanel.Controls.Add(_colorPanel);
         SystemEvents.UserPreferenceChanged += (s, e) =>
         {
             // The default font gets reset for UserPreferenceCategory.Color
@@ -49,6 +75,11 @@ public partial class MainForm : Form
                 UpdateLayout();
             }
         };
+    }
+
+    private void Button_Click(object sender, EventArgs e)
+    {
+        Windows.Win32.Graphics.Gdi.HBRUSH brush = Windows.Win32.PInvokeCore.GetSysColorBrush(SystemColors.ButtonFace);
     }
 
     private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
@@ -232,10 +263,47 @@ public partial class MainForm : Form
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
-
-        UpdateLayout();
         overarchingFlowLayoutPanel.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+        UpdateLayout();
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        _colorComboBox.SelectedIndex = (int)Application.ColorMode;
+        Point point = _colorLabel.Location;
+        point.Offset(_colorLabel.Width - 30, 0);
+        Size size = _colorComboBox.Size;
+        Size buttonSize = overarchingFlowLayoutPanel.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Size;
+        int width = buttonSize.Width - _colorLabel.Width - 2;
+        size.Width = width;
+        _colorComboBox.Size = size;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
+
+    private readonly ComboBox _colorComboBox = new ComboBox
+    {
+        Name = "ColorComboBox",
+        TabIndex = 52,
+        Text = "ColorMode",
+        AutoSize = true,
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        DataSource = Enum.GetNames<SystemColorMode>(),
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        DropDownStyle = ComboBoxStyle.DropDownList,
+    };
+    private readonly Label _colorLabel = new Label
+    {
+        Name = "ColorLabel",
+        Text = "ColorMode: ",
+        AutoSize = true,
+        TabIndex = 51,
+        Margin = new Padding(0, 6, 0, 0)
+    };
+    private readonly FlowLayoutPanel _colorPanel = new FlowLayoutPanel
+    {
+        Name = "ColorPanel",
+        AutoSize = true,
+        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+        TabIndex = 50,
+        FlowDirection = FlowDirection.RightToLeft,
+    };
 
     private void UpdateLayout()
     {
@@ -246,13 +314,16 @@ public partial class MainForm : Form
         List<Button> buttons = [];
         foreach (Control control in overarchingFlowLayoutPanel.Controls)
         {
-            if (control is Button button)
+            if (control is Button button )
             {
                 buttons.Add(button);
             }
             else
             {
-                Debug.WriteLine($"Why did we get a {control.GetType().Name} instead a {nameof(Button)} on {nameof(MainForm)}?");
+              if (control is not (FlowLayoutPanel or Label or ComboBox))
+                {
+                    Debug.WriteLine($"Why did we get a {control.GetType().Name} instead a {nameof(Button)} on {nameof(MainForm)}?");
+                }
             }
         }
 
