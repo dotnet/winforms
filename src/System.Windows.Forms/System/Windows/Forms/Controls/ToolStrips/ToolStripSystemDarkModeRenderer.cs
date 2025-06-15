@@ -114,13 +114,14 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         ToolStrip toolStrip = e.ToolStrip;
-        Graphics g = e.Graphics;
         Rectangle bounds = e.AffectedBounds;
 
         if (!ShouldPaintBackground(toolStrip))
         {
             return;
         }
+
+        Graphics g = e.Graphics;
 
         if (toolStrip is StatusStrip)
         {
@@ -152,11 +153,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     /// <param name="e">A ToolStripRenderEventArgs that contains the event data.</param>
     internal static void RenderStatusStripBackground(ToolStripRenderEventArgs e)
     {
-        Graphics g = e.Graphics;
         Rectangle bounds = e.AffectedBounds;
 
         // Dark mode StatusStrip background
-        FillBackground(g, bounds, GetDarkModeColor(SystemColors.Control));
+        FillBackground(e.Graphics, bounds, GetDarkModeColor(SystemColors.Control));
     }
 
     /// <summary>
@@ -168,17 +168,17 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         ArgumentNullException.ThrowIfNull(e);
 
         ToolStrip toolStrip = e.ToolStrip;
-        Graphics g = e.Graphics;
-        Rectangle bounds = e.ToolStrip.ClientRectangle;
-
-        using var borderPen = GetDarkModePen(SystemColors.ControlDark);
 
         if (toolStrip is StatusStrip)
         {
             RenderStatusStripBorder(e);
-
             return;
         }
+
+        Graphics g = e.Graphics;
+        Rectangle bounds = e.ToolStrip.ClientRectangle;
+
+        using var borderPen = GetDarkModePen(SystemColors.ControlDark);
 
         if (toolStrip is ToolStripDropDown toolStripDropDown)
         {
@@ -648,7 +648,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         using var shadowBrush = GetDarkModeBrush(SystemColors.ButtonShadow);
 
         OnRenderStatusStripSizingGrip(
-            eArgs: e,
+            e: e,
             highLightBrush: highLightBrush,
             shadowBrush: shadowBrush);
     }

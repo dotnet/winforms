@@ -628,7 +628,7 @@ public abstract class ToolStripRenderer
     /// <param name="e">The event arguments containing rendering information.</param>
     /// <param name="arrowColor">The color to use for the arrow.</param>
     /// <returns>The rendered arrow points.</returns>
-    private protected Point[] RenderArrowCore(
+    private protected void RenderArrowCore(
         ToolStripArrowRenderEventArgs e,
         Color arrowColor)
     {
@@ -661,38 +661,39 @@ public abstract class ToolStripRenderer
             ? s_offset4X - Offset2X
             : Offset2X;
 
-        Point[] arrow = e.Direction switch
+        // Use stackalloc for the 3 arrow points
+        Span<Point> arrow = stackalloc Point[3];
+
+        // Fill the points based on arrow direction
+        switch (e.Direction)
         {
-            ArrowDirection.Up =>
-            [
-                new(middle.X - Offset2X, middle.Y + 1),
-                new(middle.X + Offset2X + 1, middle.Y + 1),
-                new(middle.X, middle.Y - Offset2Y)
-            ],
-            ArrowDirection.Left =>
-            [
-                new(middle.X + Offset2X, middle.Y - s_offset4Y),
-                new(middle.X + Offset2X, middle.Y + s_offset4Y),
-                new(middle.X - horizontalOffset, middle.Y)
-            ],
-            ArrowDirection.Right =>
-            [
-                new(middle.X - Offset2X, middle.Y - s_offset4Y),
-                new(middle.X - Offset2X, middle.Y + s_offset4Y),
-                new(middle.X + horizontalOffset, middle.Y)
-            ],
-            _ =>
-            [
-                new(middle.X - Offset2X, middle.Y - 1),
-                new(middle.X + Offset2X + 1, middle.Y - 1),
-                new(middle.X, middle.Y + Offset2Y)
-            ],
-        };
+            case ArrowDirection.Up:
+                arrow[0] = new(middle.X - Offset2X, middle.Y + 1);
+                arrow[1] = new(middle.X + Offset2X + 1, middle.Y + 1);
+                arrow[2] = new(middle.X, middle.Y - Offset2Y);
+                break;
+
+            case ArrowDirection.Left:
+                arrow[0] = new(middle.X + Offset2X, middle.Y - s_offset4Y);
+                arrow[1] = new(middle.X + Offset2X, middle.Y + s_offset4Y);
+                arrow[2] = new(middle.X - horizontalOffset, middle.Y);
+                break;
+
+            case ArrowDirection.Right:
+                arrow[0] = new(middle.X - Offset2X, middle.Y - s_offset4Y);
+                arrow[1] = new(middle.X - Offset2X, middle.Y + s_offset4Y);
+                arrow[2] = new(middle.X + horizontalOffset, middle.Y);
+                break;
+
+            default: // Down
+                arrow[0] = new(middle.X - Offset2X, middle.Y - 1);
+                arrow[1] = new(middle.X + Offset2X + 1, middle.Y - 1);
+                arrow[2] = new(middle.X, middle.Y + Offset2Y);
+                break;
+        }
 
         using var brush = arrowColor.GetCachedSolidBrushScope();
         g.FillPolygon(brush, arrow);
-
-        return arrow;
     }
 
     /// <summary>
@@ -1029,17 +1030,17 @@ public abstract class ToolStripRenderer
         }
 
         OnRenderStatusStripSizingGrip(
-            eArgs: e,
+            e: e,
             highLightBrush: SystemBrushes.ButtonHighlight,
             shadowBrush: SystemBrushes.GrayText);
     }
 
     private protected static void OnRenderStatusStripSizingGrip(
-        ToolStripRenderEventArgs eArgs,
+        ToolStripRenderEventArgs e,
         Brush highLightBrush,
         Brush shadowBrush)
     {
-        if (eArgs.ToolStrip is not StatusStrip statusStrip)
+        if (e.ToolStrip is not StatusStrip statusStrip)
         {
             return;
         }
@@ -1051,7 +1052,7 @@ public abstract class ToolStripRenderer
             return;
         }
 
-        Graphics g = eArgs.Graphics;
+        Graphics g = e.Graphics;
         ReadOnlySpan<Rectangle> baseRectangles = s_baseSizeGripRectangles;
 
         // Reference height for sizing grips at 96 DPI (standard sizing)

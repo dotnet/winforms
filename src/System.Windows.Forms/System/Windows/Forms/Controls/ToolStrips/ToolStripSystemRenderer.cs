@@ -251,7 +251,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             }
             else if (DisplayInformation.LowResolution)
             {
-                FillBackground(g, bounds, (toolStrip is ToolStripDropDown)
+                FillBackground(g, bounds, toolStrip is ToolStripDropDown
                      ? SystemColors.ControlLight
                      : e.BackColor);
             }
