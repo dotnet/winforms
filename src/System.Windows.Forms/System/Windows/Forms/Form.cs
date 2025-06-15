@@ -206,10 +206,6 @@ public partial class Form : ContainerControl
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -4341,16 +4337,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (Application.IsDarkModeEnabled)
-            {
-                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-            }
-#pragma warning restore WFO5001
-
+            // Finally fire the new OnShown(unless the form has already been closed).
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
     }
@@ -4527,7 +4516,7 @@ public partial class Form : ContainerControl
         if (e.DeviceDpiNew != e.DeviceDpiOld)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
-            _oldDeviceDpi = e.DeviceDpiOld;
+            OriginalDeviceDpiInternal = e.DeviceDpiOld;
 
             // call any additional handlers
             ((DpiChangedEventHandler?)Events[s_dpiChangedEvent])?.Invoke(this, e);
@@ -4589,8 +4578,8 @@ public partial class Form : ContainerControl
     {
         DefWndProc(ref m);
 
-        DpiChangedEventArgs e = new(_deviceDpi, m);
-        _deviceDpi = e.DeviceDpiNew;
+        DpiChangedEventArgs e = new(DeviceDpiInternal, m);
+        DeviceDpiInternal = e.DeviceDpiNew;
 
         OnDpiChanged(e);
     }
@@ -4642,7 +4631,7 @@ public partial class Form : ContainerControl
 
         Size desiredSize = default;
         if ((_dpiFormSizes is not null && _dpiFormSizes.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
-            || OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            || OnGetDpiScaledSize(DeviceDpiInternal, m.WParamInternal.LOWORD, ref desiredSize))
         {
             SIZE* size = (SIZE*)m.LParamInternal;
             size->cx = desiredSize.Width;

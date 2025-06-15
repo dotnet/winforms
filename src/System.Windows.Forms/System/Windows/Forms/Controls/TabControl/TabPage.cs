@@ -35,9 +35,6 @@ public partial class TabPage : Panel
     public TabPage() : base()
     {
         SetStyle(ControlStyles.CacheText, true);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
         Text = null;
     }
 
@@ -137,6 +134,18 @@ public partial class TabPage : Panel
 
     protected override AccessibleObject CreateAccessibilityInstance()
         => new TabPageAccessibleObject(this);
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+            return base.CreateParams;
+        }
+    }
 
     /// <summary>
     ///  Constructs the new instance of the Controls collection objects.
