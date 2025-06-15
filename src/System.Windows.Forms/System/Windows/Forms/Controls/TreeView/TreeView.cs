@@ -3408,6 +3408,11 @@ public partial class TreeView : Control
                     PInvoke.CloseThemeData(theme);
                     m.ResultInternal = (LRESULT)0;
                 }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 break;
             case PInvokeCore.WM_SETFOCUS:
