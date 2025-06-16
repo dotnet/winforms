@@ -4,146 +4,114 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
+using static System.Windows.Forms.DarkModeButtonColors;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Provides methods for rendering a button with Flat FlatStyle in dark mode.
+///  Flat‑style button renderer that, for the moment, mimics the Win32/Dark‑mode
+///  renderer bit‑for‑bit so that we can switch implementations without any
+///  visual delta.  Once the design team decides on a new look we can diverge
+///  again.
 /// </summary>
-internal class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
+internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 {
-    // UI constants
-    private const int FocusIndicatorInflate = -2;
-    private const int BorderThicknessDefault = 2;
-    private const int BorderThicknessNormal = 1;
-    private const int FlatEdgeRoundingAngle = 8;
+    private const int FocusIndicatorInflate = -3;
+    private const int CornerRadius = 6;
+    private static readonly Size s_corner = new(CornerRadius, CornerRadius);
 
-    private static readonly Size s_flatEdgeRoundingAngleSize =
-        new(FlatEdgeRoundingAngle, FlatEdgeRoundingAngle);
+    private protected override Padding PaddingCore { get; } = new(0);
 
-    private protected override Padding PaddingCore { get; } = new Padding(0);
-
-    /// <summary>
-    ///  Draws button background with flat styling (no rounded corners).
-    /// </summary>
-    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
+    public override Rectangle DrawButtonBackground(
+        Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // Get appropriate background color based on state
-        Color backColor = GetBackgroundColor(state, isDefault);
+        // fill background
+        using var back = GetBackgroundColor(state, isDefault).GetCachedSolidBrushScope();
+        graphics.FillRectangle(back, bounds);
 
-        // Fill the background using cached brush
-        using var brush = backColor.GetCachedSolidBrushScope();
-        graphics.FillRectangle(brush, bounds);
-
-        // Draw border if needed
+        // draw border identical to Win32
         DrawButtonBorder(graphics, bounds, state, isDefault);
 
-        // Return content bounds (area inside the button for text/image)
-        return bounds;
+        // return inner content area (border + 1 px system padding)
+        return Rectangle.Inflate(bounds, -3, -3);
     }
 
-    /// <summary>
-    ///  Draws a focus rectangle with dotted lines inside the button.
-    /// </summary>
-    public override void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
+    public override void DrawFocusIndicator(Graphics g, Rectangle contentBounds, bool isDefault)
     {
-        // Create a slightly smaller rectangle for the focus indicator
-        Rectangle focusRect = Rectangle.Inflate(contentBounds, FocusIndicatorInflate, FocusIndicatorInflate);
+        Rectangle focus = Rectangle.Inflate(contentBounds, FocusIndicatorInflate, FocusIndicatorInflate);
 
-        // Create dotted pen with appropriate color
-        Color focusColor = isDefault
-            ? DarkModeButtonColors.DefaultFocusIndicatorColor
-            : DarkModeButtonColors.FocusIndicatorColor;
+        Color focusBackColor = isDefault
+            ? DefaultColors.AcceptFocusIndicatorBackColor
+            : DefaultColors.FocusIndicatorBackColor;
 
-        // Custom pen needed for DashStyle - can't use cached version
-        using var focusPen = new Pen(focusColor)
-        {
-            DashStyle = DashStyle.Dot
-        };
-
-        // Draw the focus rectangle (no rounded corners)
-        graphics.DrawRectangle(focusPen, focusRect);
+        ControlPaint.DrawFocusRectangle(
+            g,
+            focus,
+            DefaultColors.FocusBorderColor,
+            focusBackColor);
     }
 
-    /// <summary>
-    ///  Gets the text color appropriate for the button state and type.
-    /// </summary>
     public override Color GetTextColor(PushButtonState state, bool isDefault) =>
         state == PushButtonState.Disabled
-            ? DarkModeButtonColors.DisabledTextColor
+            ? DefaultColors.DisabledTextColor
             : isDefault
-                ? DarkModeButtonColors.DefaultTextColor
-                : DarkModeButtonColors.NormalTextColor;
+                ? DefaultColors.AcceptButtonTextColor
+                : DefaultColors.NormalTextColor;
 
-    /// <summary>
-    ///  Gets the background color appropriate for the button state and type.
-    /// </summary>
     private static Color GetBackgroundColor(PushButtonState state, bool isDefault) =>
         isDefault
             ? state switch
             {
-                PushButtonState.Normal => DarkModeButtonColors.DefaultBackgroundColor,
-                PushButtonState.Hot => DarkModeButtonColors.DefaultHoverBackgroundColor,
-                PushButtonState.Pressed => DarkModeButtonColors.DefaultPressedBackgroundColor,
-                PushButtonState.Disabled => DarkModeButtonColors.DefaultDisabledBackgroundColor,
-                _ => DarkModeButtonColors.DefaultBackgroundColor
+                PushButtonState.Normal => DefaultColors.StandardBackColor,
+                PushButtonState.Hot => DefaultColors.HoverBackColor,
+                PushButtonState.Pressed => DefaultColors.PressedBackColor,
+                PushButtonState.Disabled => DefaultColors.DisabledBackColor,
+                _ => DefaultColors.StandardBackColor
             }
             : state switch
             {
-                PushButtonState.Normal => DarkModeButtonColors.NormalBackgroundColor,
-                PushButtonState.Hot => DarkModeButtonColors.HoverBackgroundColor,
-                PushButtonState.Pressed => DarkModeButtonColors.PressedBackgroundColor,
-                PushButtonState.Disabled => DarkModeButtonColors.DisabledBackgroundColor,
-                _ => DarkModeButtonColors.NormalBackgroundColor
+                PushButtonState.Normal => DefaultColors.StandardBackColor,
+                PushButtonState.Hot => DefaultColors.HoverBackColor,
+                PushButtonState.Pressed => DefaultColors.PressedBackColor,
+                PushButtonState.Disabled => DefaultColors.DisabledBackColor,
+                _ => DefaultColors.StandardBackColor
             };
 
-    /// <summary>
-    ///  Draws the button border based on the current state.
-    /// </summary>
-    private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
+    private static void DrawButtonBorder(Graphics g, Rectangle bounds, PushButtonState state, bool isDefault)
     {
-        // For flat style, we need to create a GraphicsPath for the rectangle
-        using GraphicsPath path = new();
-        path.AddRoundedRectangle(bounds, s_flatEdgeRoundingAngleSize);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Skip border drawing for disabled state
-        if (state == PushButtonState.Disabled)
+        // Win32 draws its stroke fully *inside* the control → inset by 1 px
+        Rectangle outer = Rectangle.Inflate(bounds, -1, -1);
+
+        DrawSingleBorder(g, outer, GetBorderColor(state));
+
+        // Default button gets a second 1‑px border one pixel further inside
+        if (isDefault)
         {
-            IButtonRenderer.DrawButtonBorder(
-                graphics,
-                path,
-                DarkModeButtonColors.DisabledBorderLightColor,
-                1);
-
-            return;
+            Rectangle inner = Rectangle.Inflate(outer, -1, -1);
+            DrawSingleBorder(g, inner, DefaultColors.AcceptFocusIndicatorBackColor);
         }
-
-        Color borderColor;
-
-        int thickness = isDefault
-            ? BorderThicknessDefault
-            : BorderThicknessNormal;
-
-        // For pressed state, draw a darker border
-        if (state == PushButtonState.Pressed)
-        {
-            borderColor = isDefault
-                ? DarkModeButtonColors.PressedSingleBorderColor
-                : DarkModeButtonColors.DefaultFocusIndicatorColor;
-
-            IButtonRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
-
-            return;
-        }
-
-        // For other states, draw a border with appropriate thickness
-        // For pressed state, draw a darker border
-        borderColor = isDefault
-            ? DarkModeButtonColors.DefaultSingleBorderColor
-            : DarkModeButtonColors.SingleBorderColor;
-
-        IButtonRenderer.DrawButtonBorder(graphics, path, borderColor, thickness);
-
-        return;
     }
+
+    private static void DrawSingleBorder(Graphics g, Rectangle rect, Color color)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        using var path = new GraphicsPath();
+        path.AddRoundedRectangle(rect, s_corner);
+
+        // a 1‑px stroke, aligned *inside*, is exactly what Win32 draws
+        using var pen = new Pen(color) { Alignment = PenAlignment.Inset };
+        g.DrawPath(pen, path);
+    }
+
+    private static Color GetBorderColor(PushButtonState state) =>
+        state switch
+        {
+            PushButtonState.Pressed => DefaultColors.PressedSingleBorderColor,
+            PushButtonState.Hot => DefaultColors.SingleBorderColor,
+            PushButtonState.Disabled => DefaultColors.DisabledBorderLightColor,
+            _ => DefaultColors.SingleBorderColor,
+        };
 }

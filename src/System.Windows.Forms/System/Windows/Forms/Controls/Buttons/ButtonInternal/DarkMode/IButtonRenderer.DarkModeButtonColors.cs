@@ -4,142 +4,267 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Cache of colors for different button states.
+///  Cache of colors for different button states in dark mode.
 /// </summary>
-internal static class DarkModeButtonColors
+internal class DarkModeButtonColors
 {
-    // Normal Button (non-default)
+    private static DarkModeButtonColors? s_defaultColors;
 
     /// <summary>
-    ///  Button background color for normal state (#2B2B2B).
+    ///  Gets the default <see cref="DarkModeButtonColors"/> instance.
     /// </summary>
-    public static Color NormalBackgroundColor => Color.FromArgb(43, 43, 43); // #2B2B2B
+    public static DarkModeButtonColors DefaultColors { get; }
+        = s_defaultColors ??= new();
 
     /// <summary>
-    ///  Button background color for hover state (#3B3B3B).
+    ///  Gets the default accept (default) button focus indicator back color (#A0A0A0).
     /// </summary>
-    public static Color HoverBackgroundColor => Color.FromArgb(59, 59, 59); // #3B3B3B
+    public virtual Color DefaultAcceptFocusIndicatorBackColor =>
+        Color.FromArgb(0xA0, 0xA0, 0xA0);
 
     /// <summary>
-    ///  Button background color for pressed state (#4B4B4B).
+    ///  Gets the default button background color (#333333).
     /// </summary>
-    public static Color PressedBackgroundColor => Color.FromArgb(75, 75, 75); // #4B4B4B
+    protected virtual Color DefaultBackColor =>
+        Color.FromArgb(0x33, 0x33, 0x33);
 
     /// <summary>
-    ///  Button background color for disabled state (#252525).
+    ///  Gets the default button bottom-right border color (#222222).
     /// </summary>
-    public static Color DisabledBackgroundColor => Color.FromArgb(37, 37, 37); // #252525
-
-    // Default Button
+    protected virtual Color DefaultBottomRightBorderColor =>
+        Color.FromArgb(0x22, 0x22, 0x22);
 
     /// <summary>
-    ///  Default button background color (#2B2B2B).
+    ///  Gets the default disabled button background color (#333333).
     /// </summary>
-    public static Color DefaultBackgroundColor => NormalBackgroundColor; // #2B2B2B
+    protected virtual Color DefaultDisabledBackColor =>
+        Color.FromArgb(0x33, 0x33, 0x33);
 
     /// <summary>
-    ///  Default button hover background color (#3B3B3B).
+    ///  Gets the default disabled border dark color (#2D2D2D).
     /// </summary>
-    public static Color DefaultHoverBackgroundColor => HoverBackgroundColor; // #3B3B3B
+    protected virtual Color DefaultDisabledBorderDarkColor =>
+        Color.FromArgb(0x2D, 0x2D, 0x2D);
 
     /// <summary>
-    ///  Default button pressed background color (#4B4B4B).
+    ///  Gets the default disabled border light color (#373737).
     /// </summary>
-    public static Color DefaultPressedBackgroundColor => PressedBackgroundColor; // #4B4B4B
+    protected virtual Color DefaultDisabledBorderLightColor =>
+        Color.FromArgb(0x37, 0x37, 0x37);
 
     /// <summary>
-    ///  Default button disabled background color (#252525).
+    ///  Gets the default disabled border mid color (#323232).
     /// </summary>
-    public static Color DefaultDisabledBackgroundColor => DisabledBackgroundColor; // #252525
-
-    // Text Colors
+    protected virtual Color DefaultDisabledBorderMidColor =>
+        Color.FromArgb(0x32, 0x32, 0x32);
 
     /// <summary>
-    ///  Normal text color (#E0E0E0).
+    ///  Gets the default disabled text color (#CCCCCC).
     /// </summary>
-    public static Color NormalTextColor => Color.FromArgb(224, 224, 224); // #E0E0E0
+    protected virtual Color DefaultDisabledTextColor =>
+        Color.FromArgb(0xCC, 0xCC, 0xCC);
 
     /// <summary>
-    ///  Default button text color (#FFFFFF).
+    ///  Gets the default focus back color (#333333).
     /// </summary>
-    public static Color DefaultTextColor => Color.White; // #FFFFFF
+    protected virtual Color DefaultFocusBackColor =>
+        Color.FromArgb(0x33, 0x33, 0x33);
 
     /// <summary>
-    ///  Disabled text color (#606060, ~40% opacity).
+    ///  Gets the default focus border color (#FFFFFF).
     /// </summary>
-    public static Color DisabledTextColor => Color.FromArgb(96, 96, 96); // #606060
+    protected virtual Color DefaultFocusBorderColor =>
+        Color.FromArgb(0xFF, 0xFF, 0xFF);
 
     /// <summary>
-    ///  Gets the single border color for a button in dark mode (#969696).
+    ///  Gets the default focus indicator back color (#A0A0A0).
     /// </summary>
-    public static Color SingleBorderColor => Color.FromArgb(150, 150, 150); // #969696
+    public virtual Color DefaultFocusIndicatorBackColor =>
+        Color.FromArgb(0xA0, 0xA0, 0xA0);
 
     /// <summary>
-    ///  Gets the single border color for a default button in dark mode (#D2D2D2).
+    ///  Gets the default highlight bright color for button edges (#828282).
     /// </summary>
-    public static Color DefaultSingleBorderColor => Color.FromArgb(210, 210, 210); // #D2D2D2
+    protected virtual Color DefaultHighlightBrightColor =>
+        Color.FromArgb(0x82, 0x82, 0x82);
 
     /// <summary>
-    ///  Gets the single border color for a pressed button in dark mode (#DCDCDC).
+    ///  Gets the default highlight color for button edges (#6E6E6E).
     /// </summary>
-    public static Color PressedSingleBorderColor => Color.FromArgb(220, 220, 220); // #DCDCDC
+    protected virtual Color DefaultHighlightColor =>
+        Color.FromArgb(0x6E, 0x6E, 0x6E);
 
     /// <summary>
-    ///  Button top-left border color (#555555).
+    ///  Gets the default hover back color (#454545).
     /// </summary>
-    public static Color TopLeftBorderColor => Color.FromArgb(85, 85, 85); // #555555
+    protected virtual Color DefaultHoverBackgroundColor =>
+        Color.FromArgb(0x45, 0x45, 0x45);
 
     /// <summary>
-    ///  Button bottom-right border color (#222222).
+    ///  Gets the default pressed back color (#666666).
     /// </summary>
-    public static Color BottomRightBorderColor => Color.FromArgb(34, 34, 34); // #222222
-
-    // Focus Colors
+    protected virtual Color DefaultPressedBackgroundColor =>
+        Color.FromArgb(0x66, 0x66, 0x66);
 
     /// <summary>
-    ///  Focus indicator color (#F0F0F0).
+    ///  Gets the default pressed single border color (#A0A0A0).
     /// </summary>
-    public static Color FocusIndicatorColor => Color.FromArgb(240, 240, 240); // #F0F0F0
+    protected virtual Color DefaultPressedSingleBorderColor =>
+        Color.FromArgb(0xA0, 0xA0, 0xA0);
 
     /// <summary>
-    ///  Default button focus indicator color (#FFFFFF).
+    ///  Gets the default shadow color for mid-tone areas (#3C3C3C).
     /// </summary>
-    public static Color DefaultFocusIndicatorColor => Color.White; // #FFFFFF
-
-    // Shadow and Highlight Colors for 3D effects
-
-    /// <summary>
-    ///  Shadow color for dark areas (#282828).
-    /// </summary>
-    public static Color ShadowDarkColor { get; } = Color.FromArgb(40, 40, 40); // #282828
+    protected virtual Color DefaultShadowColor =>
+        Color.FromArgb(0x3C, 0x3C, 0x3C);
 
     /// <summary>
-    ///  Shadow color for mid-tone areas (#3C3C3C).
+    ///  Gets the default shadow dark color for dark areas (#282828).
     /// </summary>
-    public static Color ShadowColor { get; } = Color.FromArgb(60, 60, 60); // #3C3C3C
+    protected virtual Color DefaultShadowDarkColor =>
+        Color.FromArgb(0x28, 0x28, 0x28);
 
     /// <summary>
-    ///  Highlight color for button edges (#6E6E6E).
+    ///  Gets the default single border color for a button in dark mode (#9B9B9B).
     /// </summary>
-    public static Color HighlightColor { get; } = Color.FromArgb(110, 110, 110); // #6E6E6E
+    protected virtual Color DefaultSingleBorderColor =>
+        Color.FromArgb(0x9B, 0x9B, 0x9B);
 
     /// <summary>
-    ///  Bright highlight color for button edges (#828282).
+    ///  Gets the default button text color (#F0F0F0).
     /// </summary>
-    public static Color HighlightBrightColor { get; } = Color.FromArgb(130, 130, 130); // #828282
+    public virtual Color AcceptButtonTextColor =>
+        Color.FromArgb(0xF0, 0xF0, 0xF0);
 
     /// <summary>
-    ///  Disabled border dark color (#2D2D2D).
+    ///  Gets the default button top-left border color (#555555).
     /// </summary>
-    public static Color DisabledBorderDarkColor { get; } = Color.FromArgb(45, 45, 45); // #2D2D2D
+    protected virtual Color DefaultTopLeftBorderColor =>
+        Color.FromArgb(0x55, 0x55, 0x55);
 
     /// <summary>
-    ///  Disabled border light color (#373737).
+    ///  Gets the accept (default) button focus indicator back color.
     /// </summary>
-    public static Color DisabledBorderLightColor { get; } = Color.FromArgb(55, 55, 55); // #373737
+    public Color AcceptFocusIndicatorBackColor =>
+        DefaultAcceptFocusIndicatorBackColor;
 
     /// <summary>
-    ///  Disabled border mid color (#323232).
+    ///  Gets the button bottom-right border color.
     /// </summary>
-    public static Color DisabledBorderMidColor { get; } = Color.FromArgb(50, 50, 50); // #323232
+    public Color BottomRightBorderColor =>
+        DefaultBottomRightBorderColor;
+
+    /// <summary>
+    ///  Gets the disabled button background color.
+    /// </summary>
+    public Color DisabledBackColor =>
+        DefaultDisabledBackColor;
+
+    /// <summary>
+    ///  Gets the disabled border dark color.
+    /// </summary>
+    public Color DisabledBorderDarkColor =>
+        DefaultDisabledBorderDarkColor;
+
+    /// <summary>
+    ///  Gets the disabled border light color.
+    /// </summary>
+    public Color DisabledBorderLightColor =>
+        DefaultDisabledBorderLightColor;
+
+    /// <summary>
+    ///  Gets the disabled border mid color.
+    /// </summary>
+    public Color DisabledBorderMidColor =>
+        DefaultDisabledBorderMidColor;
+
+    /// <summary>
+    ///  Gets the disabled text color.
+    /// </summary>
+    public Color DisabledTextColor =>
+        DefaultDisabledTextColor;
+
+    /// <summary>
+    ///  Gets the focus border color.
+    /// </summary>
+    public Color FocusBorderColor =>
+        DefaultFocusBorderColor;
+
+    /// <summary>
+    ///  Gets the focus indicator back color.
+    /// </summary>
+    public Color FocusIndicatorBackColor =>
+        DefaultFocusIndicatorBackColor;
+
+    /// <summary>
+    ///  Gets the focused button background color.
+    /// </summary>
+    public Color FocusedBackColor =>
+        DefaultFocusBackColor;
+
+    /// <summary>
+    ///  Gets the highlight bright color for button edges.
+    /// </summary>
+    public Color HighlightBrightColor =>
+        DefaultHighlightBrightColor;
+
+    /// <summary>
+    ///  Gets the highlight color for button edges.
+    /// </summary>
+    public Color HighlightColor =>
+        DefaultHighlightColor;
+
+    /// <summary>
+    ///  Gets the hover button background color.
+    /// </summary>
+    public Color HoverBackColor =>
+        DefaultHoverBackgroundColor;
+
+    /// <summary>
+    ///  Gets the normal button background color.
+    /// </summary>
+    public Color StandardBackColor =>
+        DefaultBackColor;
+
+    /// <summary>
+    ///  Gets the normal button text color.
+    /// </summary>
+    public Color NormalTextColor =>
+        AcceptButtonTextColor;
+
+    /// <summary>
+    ///  Gets the pressed button background color.
+    /// </summary>
+    public Color PressedBackColor =>
+        DefaultPressedBackgroundColor;
+
+    /// <summary>
+    ///  Gets the pressed single border color.
+    /// </summary>
+    public Color PressedSingleBorderColor =>
+        DefaultPressedSingleBorderColor;
+
+    /// <summary>
+    ///  Gets the shadow color for mid-tone areas.
+    /// </summary>
+    public Color ShadowColor =>
+        DefaultShadowColor;
+
+    /// <summary>
+    ///  Gets the shadow dark color for dark areas.
+    /// </summary>
+    public Color ShadowDarkColor =>
+        DefaultShadowDarkColor;
+
+    /// <summary>
+    ///  Gets the single border color for a button in dark mode.
+    /// </summary>
+    public Color SingleBorderColor =>
+        DefaultSingleBorderColor;
+
+    /// <summary>
+    ///  Gets the button top-left border color.
+    /// </summary>
+    public Color TopLeftBorderColor =>
+        DefaultTopLeftBorderColor;
 }
