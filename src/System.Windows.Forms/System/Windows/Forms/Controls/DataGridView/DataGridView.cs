@@ -222,7 +222,6 @@ public partial class DataGridView : Control, ISupportInitialize
     private const int OperationInEndEdit = 0x00400000;
     private const int OperationResizingOperationAboutToStart = 0x00800000;
     private const int OperationTrackKeyboardColResize = 0x01000000;
-    private const int OperationInReleasingDataSource = 0x02000000;
     private const int OperationMouseOperationMask = OperationTrackColResize | OperationTrackRowResize |
         OperationTrackColRelocation | OperationTrackColHeadersResize | OperationTrackRowHeadersResize;
     private const int OperationKeyboardOperationMask = OperationTrackKeyboardColResize;
@@ -387,10 +386,6 @@ public partial class DataGridView : Control, ISupportInitialize
                  ControlStyles.UserMouse, true);
 
         SetStyle(ControlStyles.SupportsTransparentBackColor, false);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -1494,6 +1489,17 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+            return base.CreateParams;
+        }
+    }
+
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersBorderStyleChangedDescr))]
     public event EventHandler? ColumnHeadersBorderStyleChanged
@@ -1922,16 +1928,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     newDataSource.Disposed += OnDataSourceDisposed;
                 }
 
-                _dataGridViewOper[OperationInReleasingDataSource] = true;
-
-                try
-                {
-                    CurrentCell = null;
-                }
-                finally
-                {
-                    _dataGridViewOper[OperationInReleasingDataSource] = false;
-                }
+                CurrentCell = null;
 
                 if (DataConnection is null)
                 {

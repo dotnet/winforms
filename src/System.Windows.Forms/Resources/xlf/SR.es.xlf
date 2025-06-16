@@ -5620,6 +5620,16 @@ Do you want to replace it?</source>
         <target state="translated">Propietario de este formulario.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormScreenCaptureModeDescr">
+        <source>Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</source>
+        <target state="new">Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormScreenCaptureModeRequiresTopLevel">
+        <source>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</source>
+        <target state="new">The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormShowIconDescr">
         <source>Indicates whether an icon is displayed in the title bar of the form.</source>
         <target state="translated">Indica si un icono se muestra en la barra de título del formulario.</target>

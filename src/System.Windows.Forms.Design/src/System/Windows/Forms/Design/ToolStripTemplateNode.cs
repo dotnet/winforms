@@ -346,7 +346,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _selectionService ??= (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
+            _selectionService ??= (ISelectionService)_component.Site?.GetService(typeof(ISelectionService));
 
             return _selectionService;
         }
@@ -356,7 +356,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            _behaviorService ??= (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
+            _behaviorService ??= (BehaviorService)_component.Site?.GetService(typeof(BehaviorService));
 
             return _behaviorService;
         }
@@ -797,7 +797,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         FocusForm();
         CommitTextToDesigner(text, commit, enterKeyPressed, tabKeyPressed);
         // finally Invalidate the selection rect ...
-        if (SelectionService.PrimarySelection is ToolStripItem curSel)
+        if (SelectionService?.PrimarySelection is ToolStripItem curSel)
         {
             if (_designerHost is not null)
             {

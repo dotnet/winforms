@@ -170,9 +170,6 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -307,6 +304,10 @@ public partial class TreeView : Control
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TREEVIEW;
 
@@ -2574,10 +2575,6 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _editNode = editingNode;
-        }
-
-        if (!e.CancelEdit)
-        {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
         }
@@ -2603,7 +2600,10 @@ public partial class TreeView : Control
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();
-        NodeLabelEditEventArgs e = new(node, newText);
+        string? editedText = null;
+        if (node is not null && newText != node.Text)
+            editedText = newText;
+        NodeLabelEditEventArgs e = new(node, editedText);
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
         {

@@ -4,7 +4,6 @@
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.DotNet.XUnitExtensions;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -493,11 +492,11 @@ public class ImageTests
 
     [Theory]
     [MemberData(nameof(InvalidBytes_TestData))]
-    public void FromFile_InvalidBytes_ThrowsOutOfMemoryException(byte[] bytes)
+    public void FromFile_InvalidBytes_ThrowsExternalException(byte[] bytes)
     {
         using var file = TempFile.Create(bytes);
-        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path));
-        Assert.Throws<OutOfMemoryException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
+        Assert.Throws<ExternalException>(() => Image.FromFile(file.Path));
+        Assert.Throws<ExternalException>(() => Image.FromFile(file.Path, useEmbeddedColorManagement: true));
     }
 
     [Fact]
@@ -645,7 +644,7 @@ public class ImageTests
     {
         if (PlatformDetection.IsNetFramework)
         {
-            throw new SkipTestException("This is a known bug for .NET Framework");
+            Assert.Skip("This is a known bug for .NET Framework");
         }
 
         ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();

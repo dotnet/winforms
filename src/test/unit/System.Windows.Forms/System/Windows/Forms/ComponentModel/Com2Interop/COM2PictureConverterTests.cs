@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 // NB: doesn't require thread affinity
 public unsafe class COM2PictureConverterTests
 {
-    private static Com2PictureConverter Instance { get; } = new(new Com2PropertyDescriptor(
+    private Com2PictureConverter Instance { get; } = new(new Com2PropertyDescriptor(
         default,
         "Foo",
         default,
