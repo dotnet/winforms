@@ -2343,6 +2343,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Transparent"/> suppresses the drawing of the window border, allowing the form to have rounded corners without a visible border. Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormBorderColorChanged"/> event is raised accordingly when the value is
@@ -2405,6 +2408,9 @@ public partial class Form : ContainerControl
     ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
     ///   bar color.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     ///  <para>
     ///   The property only reflects the value that was previously set using this property. The
     ///   <see cref="FormCaptionBackColorChanged"/> event is raised accordingly when the value is
@@ -2473,6 +2479,9 @@ public partial class Form : ContainerControl
     ///   <see cref="FormCaptionTextColorChanged"/> event is raised accordingly when the value is
     ///   changed, which allows the property to be participating in binding scenarios.
     ///  </para>
+    /// <para>
+    ///   Note: Setting <see cref="FormBorderColor"/> to <see cref="Color.Empty"/> resets it to the system default color.
+    /// </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
@@ -2531,7 +2540,11 @@ public partial class Form : ContainerControl
 
     private unsafe void SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute, Color color)
     {
-        COLORREF colorRef = color;
+        COLORREF colorRef = color.IsEmpty ? (COLORREF)(Color.White.ToArgb()) : (COLORREF)color;
+        if (color == Color.Transparent && dmwWindowAttribute == DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR)
+        {
+            colorRef = (COLORREF)(Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFE).ToArgb());
+        }
 
         PInvoke.DwmSetWindowAttribute(
             HWND,
@@ -4215,19 +4228,6 @@ public partial class Form : ContainerControl
         base.OnHandleCreated(e);
 
         UpdateLayered();
-
-        // Normally, we update the form's title properties here after the handle is created.
-        // However, during handle recreation (ReCreateHandle), this method is invoked as part
-        // of the base class chain—before the new handle is fully established and before
-        // other required updates are complete. In that scenario, SetFormTitleProperties
-        // must be called *after* all recreation steps have finished, which is handled by a
-        // dedicated call at the end of ReCreateHandle. Therefore, to avoid updating the
-        // title properties too early or twice, we skip the call here if we are in the
-        // middle of handle recreation.
-        if (!_inRecreateHandle)
-        {
-            SetFormTitleProperties();
-        }
     }
 
     /// <summary>
@@ -4569,6 +4569,27 @@ public partial class Form : ContainerControl
     {
         add => Events.AddHandler(s_dpiChangedEvent, value);
         remove => Events.RemoveHandler(s_dpiChangedEvent, value);
+    }
+
+    /// <summary>
+    /// Handles the WM_THEMECHANGED message for the form. Updates the window's immersive dark mode attribute
+    /// if the application's color mode is set, ensuring the form reflects the current system theme (light or dark).
+    ///</summary>
+    ///<param name="m"> The Windows message containing theme change information.</param>
+    private unsafe void WmThemeChanged(ref Message m)
+    {
+        base.WndProc(ref m);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (GetStyle(ControlStyles.ApplyThemingImplicitly))
+        {
+            bool ncRenderingEnabled;
+            if (PInvoke.DwmGetWindowAttribute(m.HWND, DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_ENABLED, &ncRenderingEnabled, sizeof(int))
+                 .Succeeded && ncRenderingEnabled)
+            {
+                PInvokeCore.SendMessage(m.HWND, PInvokeCore.WM_DWMNCRENDERINGCHANGED, 1, 0);
+            }
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     /// <summary>
@@ -4968,8 +4989,6 @@ public partial class Form : ContainerControl
             bool result = PInvoke.SetWindowPlacement(HWND, &wp);
             Debug.Assert(result);
         }
-
-        SetFormTitleProperties();
 
         if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
         {
@@ -6620,6 +6639,63 @@ public partial class Form : ContainerControl
         OnResizeBegin(EventArgs.Empty);
     }
 
+    private unsafe void WmEnterIdle(ref Message m)
+    {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        switch ((uint)m.WParamInternal)
+        {
+            case PInvoke.MSGF_MENU:
+              if (Application.IsDarkModeEnabled && IsMdiContainer)
+                {
+                    Point pos;
+                    PInvoke.GetCursorPos(out pos);
+                    HWND hWnd = (HWND)m.HWnd;
+                    RECT rcWin, rcMenuBar;
+                    PInvokeCore.GetWindowRect(hWnd, out rcWin);
+                    pos.X -= rcWin.left;
+                    pos.Y -= rcWin.top;
+                    MENUBARINFO menuBarInfo = new MENUBARINFO() { cbSize = (uint)sizeof(MENUBARINFO) };
+                    PInvoke.GetMenuBarInfo(hWnd, OBJECT_IDENTIFIER.OBJID_MENU, 0, ref menuBarInfo);
+                    if (!menuBarInfo.rcBar.IsEmpty)
+                    {
+                        PInvokeCore.MapWindowPoints(HWND.Null, hWnd, (Point*)&rcWin, 2);
+                        rcMenuBar = menuBarInfo.rcBar;
+                        PInvokeCore.MapWindowPoints(HWND.Null, hWnd, (Point*)&rcMenuBar, 2);
+                        PInvoke.OffsetRect(ref rcMenuBar, -rcWin.left, -rcWin.top);
+                         if (!Rectangle.FromLTRB(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom).Contains(pos))
+                        {
+                            MENUITEMINFOW info = new MENUITEMINFOW
+                            {
+                                cbSize = (uint)sizeof(MENUITEMINFOW),
+                                fMask = MENU_ITEM_MASK.MIIM_TYPE
+                                | MENU_ITEM_MASK.MIIM_ID
+                                | MENU_ITEM_MASK.MIIM_DATA
+                                | MENU_ITEM_MASK.MIIM_STATE
+                            };
+
+                            PInvoke.GetMenuItemInfo(menuBarInfo.hMenu, 0, true, ref info);
+
+                            // Ensure that the menu item is not a system menu item, because sending WmNcPaint while moving the cursor over a system menu item will cause flicker.
+                            bool isSystemMenuItem = (info.hbmpItem == 1 && info.fState.HasFlag(MENU_ITEM_STATE.MFS_HILITE));
+                            if (!isSystemMenuItem)
+                            {
+                                // If the mouse is outside the menu bar,
+                                // and user does not release the left mouse button after Click on one of the mdi menuBar item but not the SystemMenu,
+                                // we need to invalidate the non-client area
+                                // so that the menu bar can be redrawn.
+                                WmNcPaint(ref m);
+                            }
+                        }
+                    }
+                }
+
+                break;
+        }
+        #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    }
+
     /// <summary>
     ///  WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
     /// </summary>
@@ -6632,11 +6708,34 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  WM_CREATE handler
     /// </summary>
-    private void WmCreate(ref Message m)
+    private unsafe void WmCreate(ref Message m)
     {
         base.WndProc(ref m);
         PInvoke.GetStartupInfo(out STARTUPINFOW si);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (TopLevel && IsHandleCreated)
+        {
+            FormCornerPreference formCornerPreference = Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
+            SetFormCornerPreferenceInternal(formCornerPreference);
 
+            Color colorValue = Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, colorValue);
+
+            colorValue = Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, colorValue);
+        }
+
+        // Set the theme for the form. This is needed to set the dark mode theme
+        if (Application.IsDarkModeEnabled && Application.ColorModeSet)
+        {
+            BOOL value = true;
+            PInvoke.DwmSetWindowAttribute(HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(int));
+        }
+
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to chang
         // If we've been created from explorer, it may
         // force us to show up normal. Force our current window state to
         // the specified state, unless it's _specified_ max or min
@@ -6982,6 +7081,93 @@ public partial class Form : ContainerControl
         }
     }
 
+    private unsafe void WmNcPaint(ref Message m)
+    {
+        base.WndProc(ref m);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled && IsMdiContainer)
+        {
+            HRGN rgn = PInvokeCore.CreateRectRgn(0, 0, 0, 0);
+            bool hasRegion = (m.WParamInternal != 1) && (m.Msg == PInvokeCore.WM_NCPAINT);
+            if (hasRegion)
+                PInvokeCore.CombineRgn(rgn, new HRGN((nint)m.WParamInternal.Value), HRGN.Null, RGN_COMBINE_MODE.RGN_COPY);
+            else
+                rgn = default;
+            GET_DCX_FLAGS flags = m.WParamInternal != 1 && m.Msg == PInvokeCore.WM_NCPAINT
+                ? GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_INTERSECTRGN
+                : GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_CACHE;
+            using GetDcScope hdc = new(m.HWND, rgn, flags);
+            RECT rcWin, rcClient, rcMenuBar;
+            // Map the Window rectangle to the window's coordinate space, then offset Client Rectangle accordingly. This logic is aware of right-to-left layout direction.
+            PInvokeCore.GetWindowRect(this, out rcWin);
+            PInvokeCore.GetClientRect(this, out rcClient);
+            PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcWin, 2);
+            PInvoke.OffsetRect(ref rcClient, -rcWin.left, -rcWin.top);
+            MENUBARINFO menuBarInfo = new MENUBARINFO() { cbSize = (uint)Marshal.SizeOf<MENUBARINFO>() };
+            PInvoke.GetMenuBarInfo(m.HWND, OBJECT_IDENTIFIER.OBJID_MENU, 0, ref menuBarInfo);
+            rcMenuBar = menuBarInfo.rcBar;
+            if (menuBarInfo.hMenu != HMENU.Null && !rcMenuBar.IsEmpty)
+            {
+               // Map the menu bar rectangle to the window's coordinate space, then offset it accordingly. This logic is aware of right-to-left layout direction.
+                PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcMenuBar, 2);
+                PInvoke.OffsetRect(ref rcMenuBar, -rcWin.left, -rcWin.top);
+                rcMenuBar.bottom += SystemInformation.Border3DSize.Height;
+                HRGN menuHrgn = PInvokeCore.CreateRectRgn(rcMenuBar.left, rcMenuBar.top, rcMenuBar.right, rcMenuBar.bottom);
+                PInvokeCore.SelectClipRgn(hdc, menuHrgn);
+                using PInvoke.OpenThemeDataScope hTheme = new PInvoke.OpenThemeDataScope(HWND.Null, "DarkMode::Menu");
+                PInvoke.DrawThemeBackground(hTheme, hdc, 9, 1, rcMenuBar, null);
+                int count = PInvoke.GetMenuItemCount(menuBarInfo.hMenu);
+                for (uint i = 0; i < count; i++)
+                {
+                    MENUITEMINFOW info = new MENUITEMINFOW
+                    {
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_TYPE
+                        | MENU_ITEM_MASK.MIIM_ID
+                        | MENU_ITEM_MASK.MIIM_DATA
+                        | MENU_ITEM_MASK.MIIM_STATE
+                    };
+                    PInvoke.GetMenuItemInfo(menuBarInfo.hMenu, i, true, ref info);
+                    RECT rcItem;
+                    PInvoke.GetMenuItemRect(m.HWND, menuBarInfo.hMenu, i, out rcItem);
+                    PInvokeCore.MapWindowPoints(HWND.Null, m.HWND, (Point*)&rcItem, 2);
+                    PInvoke.OffsetRect(ref rcItem, -rcWin.left, -rcWin.top);
+                    int state = (((info.fState & MENU_ITEM_STATE.MFS_DISABLED) == 0)
+                        || ((info.fState & MENU_ITEM_STATE.MFS_GRAYED) == 0))
+                        ? 1
+                        : 2;
+                    switch (info.wID)
+                    {
+                        case PInvoke.SC_CLOSE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 17, state, rcItem, null);
+                            break;
+                        case PInvoke.SC_MINIMIZE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 19, state, rcItem, null);
+                            break;
+                        case PInvoke.SC_RESTORE:
+                            PInvoke.DrawThemeBackground(hTheme, hdc, 20, state, rcItem, null);
+                            break;
+                        default:
+                            if (info.hbmpItem == HBITMAP.HBMMENU_SYSTEM && info.dwItemData != 0)
+                            {
+                                HICON hIcon = (HICON)PInvokeCore.SendMessage((HWND)info.dwItemData, PInvokeCore.WM_GETICON, 0, 0).Value;
+                                if (!hIcon.IsNull)
+                                {
+                                    RECT rcIcon = rcItem;
+                                    rcIcon.left += SystemInformation.Border3DSize.Width;
+                                    rcIcon.top += SystemInformation.Border3DSize.Height;
+                                    PInvokeCore.DrawIconEx(hdc, rcIcon.left, rcIcon.top, hIcon, SystemInformation.SmallIconSize.Width, SystemInformation.SmallIconSize.Height, 0, HBRUSH.Null, DI_FLAGS.DI_NORMAL);
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            }
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    }
+
     /// <summary>
     ///  WM_NCHITTEST handler.
     /// </summary>
@@ -7121,7 +7307,8 @@ public partial class Form : ContainerControl
         switch (m.MsgInternal)
         {
             case PInvokeCore.WM_NCACTIVATE:
-                base.WndProc(ref m);
+            case PInvokeCore.WM_NCPAINT:
+                WmNcPaint(ref m);
                 break;
             case PInvokeCore.WM_NCLBUTTONDOWN:
             case PInvokeCore.WM_NCRBUTTONDOWN:
@@ -7188,6 +7375,10 @@ public partial class Form : ContainerControl
             // case PInvokeCore.WM_WINDOWPOSCHANGING:
             //    WmWindowPosChanging(ref m);
             //    break;
+            case PInvokeCore.WM_ENTERIDLE:
+                // We don't want to handle this message, so we just call the base WndProc.
+                WmEnterIdle(ref m);
+                break;
             case PInvokeCore.WM_ENTERMENULOOP:
                 WmEnterMenuLoop(ref m);
                 break;
@@ -7212,6 +7403,18 @@ public partial class Form : ContainerControl
                 break;
             case PInvokeCore.WM_DPICHANGED:
                 WmDpiChanged(ref m);
+                break;
+            case PInvokeCore.WM_THEMECHANGED:
+                WmThemeChanged(ref m);
+                break;
+            case PInvokeCore.WM_DWMNCRENDERINGCHANGED:
+                base.WndProc(ref m);
+                // If the DWM is enabled, we need to redraw the non-client area Colors.
+                if (m.WParamInternal == 1)
+                {
+                    SetFormTitleProperties();
+                }
+
                 break;
             default:
                 base.WndProc(ref m);
