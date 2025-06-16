@@ -66,7 +66,8 @@ internal sealed partial class DropDownButton : Button
         internal override void PaintUp(PaintEventArgs pevent, CheckState state)
         {
             base.PaintUp(pevent, state);
-            if (!Application.RenderWithVisualStyles)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (!Application.RenderWithVisualStyles || Application.IsDarkModeEnabled)
             {
                 DDB_Draw3DBorder(pevent, Control.ClientRectangle, raised: true);
             }
@@ -82,6 +83,7 @@ internal sealed partial class DropDownButton : Button
                     c, 1, ButtonBorderStyle.Solid,
                     c, 1, ButtonBorderStyle.None);
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)

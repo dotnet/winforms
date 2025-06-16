@@ -64,6 +64,9 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
         };
 
     /// <summary>
+    ///  Creates a dark mode compatible brush. Important:
+    ///  Always do: `using var brush = GetDarkModeBrush(color)`,
+    ///  since you're dealing with a cached brush => scope, really!
     ///  Creates a dark mode compatible brush. Always use 'using var brush = GetDarkModeBrush(color)'.
     /// </summary>
     /// <param name="color">The system color to convert.</param>
@@ -552,7 +555,7 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  Raises the RenderArrow event.
+    ///  Raises the RenderArrow event in the derived class with dark mode support.
     /// </summary>
     /// <param name="e">A ToolStripArrowRenderEventArgs that contains the event data.</param>
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
