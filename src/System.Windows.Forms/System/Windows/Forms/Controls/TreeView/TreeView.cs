@@ -2599,7 +2599,10 @@ public partial class TreeView : Control
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();
-        NodeLabelEditEventArgs e = new(node, (node is not null && newText != node.Text) ? newText : null);
+        string? editedText = null;
+        if (node is not null && newText != node.Text)
+            editedText = newText;
+        NodeLabelEditEventArgs e = new(node, editedText);
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
         {
