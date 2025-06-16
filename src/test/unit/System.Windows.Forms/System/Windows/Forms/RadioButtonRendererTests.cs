@@ -194,44 +194,22 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         }
     }
 
-    [WinFormsFact]
-    public void DrawParentBackground_DoesNotThrow_WhenVisualStylesDisabled()
+    [WinFormsTheory]
+    [BoolData]
+    public void DrawParentBackground_DoesNotThrow_Or_CallsRenderer(bool renderMatchingApplicationState)
     {
         using Form parent = new();
         using Panel child = new();
         parent.Controls.Add(child);
         parent.Show();
-
+    
         using Bitmap bmp = new(10, 10);
         using Graphics g = Graphics.FromImage(bmp);
-
+    
         bool original = RadioButtonRenderer.RenderMatchingApplicationState;
         try
         {
-            RadioButtonRenderer.RenderMatchingApplicationState = true;
-            RadioButtonRenderer.DrawParentBackground(g, new Rectangle(0, 0, 10, 10), child);
-        }
-        finally
-        {
-            RadioButtonRenderer.RenderMatchingApplicationState = original;
-        }
-    }
-
-    [WinFormsFact]
-    public void DrawParentBackground_CallsRenderer_WhenVisualStylesEnabled()
-    {
-        using Form parent = new();
-        using Panel child = new();
-        parent.Controls.Add(child);
-        parent.Show();
-
-        using Bitmap bmp = new(10, 10);
-        using Graphics g = Graphics.FromImage(bmp);
-
-        bool original = RadioButtonRenderer.RenderMatchingApplicationState;
-        try
-        {
-            RadioButtonRenderer.RenderMatchingApplicationState = false;
+            RadioButtonRenderer.RenderMatchingApplicationState = renderMatchingApplicationState;
             RadioButtonRenderer.DrawParentBackground(g, new Rectangle(0, 0, 10, 10), child);
         }
         finally
