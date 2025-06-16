@@ -405,27 +405,43 @@ public class DesignerUtilsTests :IDisposable
     }
 
     [WinFormsFact]
-    public void ApplyListViewThemeStyles_ShouldNotThrow_WhenCalledWithValidListView()
+    public void ApplyListViewThemeStyles_ShouldSetWindowThemeToExplorer()
     {
         using ListView listView = new();
         Exception exception = Record.Exception(() => DesignerUtils.ApplyListViewThemeStyles(listView));
         exception.Should().BeNull();
+        listView.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
-    public void ApplyTreeViewThemeStyles_ShouldNotThrow_WhenCalledWithValidTreeView()
+    public void ApplyListViewThemeStyles_ShouldThrowArgumentNullException_WhenListViewIsNull()
+    {
+        Action action = () => DesignerUtils.ApplyListViewThemeStyles(null!);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [WinFormsFact]
+    public void ApplyTreeViewThemeStyles_ShouldSetWindowThemeToExplorer()
     {
         using TreeView treeView = new();
         Exception exception = Record.Exception(() => DesignerUtils.ApplyTreeViewThemeStyles(treeView));
         exception.Should().BeNull();
+        treeView.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void ApplyTreeViewThemeStyles_ShouldThrowArgumentNullException_WhenTreeViewIsNull()
+    {
+        Action action = () => DesignerUtils.ApplyTreeViewThemeStyles(null!);
+        action.Should().Throw<ArgumentNullException>();
     }
 
     [WinFormsFact]
     public void CheckForNestedContainer_ShouldReturnSameContainer_WhenNotNested()
     {
-        Mock<IContainer> mockContainer = new();
-        IContainer? result = DesignerUtils.CheckForNestedContainer(mockContainer.Object);
-        result.Should().BeSameAs(mockContainer.Object);
+        Mock<IContainer> nestedContainer = new();
+        IContainer? result = DesignerUtils.CheckForNestedContainer(nestedContainer.Object);
+        result.Should().BeSameAs(nestedContainer.Object);
     }
 
     [WinFormsFact]
@@ -499,36 +515,59 @@ public class DesignerUtilsTests :IDisposable
     [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Top, true, 0, 10)]
     [InlineData(0, 0, 100, 100, 10, 10, ToolboxSnapDragDropEventArgs.SnapDirection.Right, true, -10, 0)]
     internal void GetBoundsFromToolboxSnapDragDropInfo_ShouldReturnExpectedBounds(
-    int x, int y, int width, int height, int offsetX, int offsetY,
-    ToolboxSnapDragDropEventArgs.SnapDirection snapDirection, bool isMirrored,
-    int expectedX, int expectedY)
+        int x,
+        int y,
+        int width,
+        int height,
+        int offsetX,
+        int offsetY,
+        ToolboxSnapDragDropEventArgs.SnapDirection snapDirection,
+        bool isMirrored,
+        int expectedX,
+        int expectedY)
     {
         Rectangle originalBounds = new(x, y, width, height);
-        ToolboxSnapDragDropEventArgs args = new(snapDirection, new Point(offsetX, offsetY), new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None));
+        ToolboxSnapDragDropEventArgs args = new(
+         snapDirection,
+         new Point(offsetX, offsetY),
+         new DragEventArgs(
+             null,
+             0,
+             0,
+             0,
+             DragDropEffects.None,
+             DragDropEffects.None));
 
-        Rectangle result = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e: args, originalBounds: originalBounds, isMirrored: isMirrored);
+        Rectangle result = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(
+            e: args,
+            originalBounds: originalBounds,
+            isMirrored: isMirrored);
 
         result.X.Should().Be(expectedX);
         result.Y.Should().Be(expectedY);
     }
 
     [WinFormsTheory]
-    [InlineData(ContentAlignment.TopLeft, 14)]
-    [InlineData(ContentAlignment.TopCenter, 14)]
-    [InlineData(ContentAlignment.TopRight, 14)]
-    [InlineData(ContentAlignment.MiddleLeft, 31)]
-    [InlineData(ContentAlignment.MiddleCenter, 31)]
-    [InlineData(ContentAlignment.MiddleRight, 31)]
-    [InlineData(ContentAlignment.BottomLeft, 48)]
-    [InlineData(ContentAlignment.BottomCenter, 48)]
-    [InlineData(ContentAlignment.BottomRight, 48)]
-    public void GetTextBaseline_ShouldReturnExpectedBaseline(ContentAlignment alignment, int expectedBaseline)
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.TopLeft, 14)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.TopCenter, 14)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.TopRight, 14)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.MiddleLeft, 31)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.MiddleCenter, 31)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.MiddleRight, 31)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.BottomLeft, 48)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.BottomCenter, 48)]
+    [InlineData(100, 50, "Arial", 10, ContentAlignment.BottomRight, 48)]
+    [InlineData(200, 100, "Times New Roman", 12, ContentAlignment.TopLeft, 16)]
+    [InlineData(200, 100, "Times New Roman", 12, ContentAlignment.MiddleCenter, 57)]
+    [InlineData(200, 100, "Times New Roman", 12, ContentAlignment.BottomRight, 97)]
+    public void GetTextBaseline_ShouldReturnExpectedBaseline_WithVariousFontsAndBounds(
+        int width, int height, string fontFamily, float fontSize, ContentAlignment alignment, int expectedBaseline)
     {
         using Button button = new()
         {
-            Width = 100,
-            Height = 50,
-            Font = new Font("Arial", 10)
+            Width = width,
+            Height = height,
+            Font = new Font(fontFamily, fontSize)
         };
 
         int baseline = DesignerUtils.GetTextBaseline(button, alignment);
@@ -542,23 +581,5 @@ public class DesignerUtilsTests :IDisposable
         Action action = () => DesignerUtils.GetTextBaseline(null!, ContentAlignment.TopLeft);
 
         action.Should().Throw<NullReferenceException>();
-    }
-
-    [WinFormsTheory]
-    [InlineData(ContentAlignment.TopLeft, 16)]
-    [InlineData(ContentAlignment.MiddleCenter, 57)]
-    [InlineData(ContentAlignment.BottomRight, 97)]
-    public void GetTextBaseline_ShouldRespectFontAndBounds(ContentAlignment alignment, int expectedBaseline)
-    {
-        using Button button = new()
-        {
-            Width = 200,
-            Height = 100,
-            Font = new Font("Times New Roman", 12)
-        };
-
-        int baseline = DesignerUtils.GetTextBaseline(button, alignment);
-
-        baseline.Should().Be(expectedBaseline);
     }
 }
