@@ -73,13 +73,11 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             GetTextColor(state, isDefault),
             false);
 
-        DrawFocusIndicator(graphics, bounds, isDefault);
-
-        // if (focused && showFocusCues)
-        // {
-        //    // Draw focus indicator for other styles
-        //    renderer.DrawFocusIndicator(graphics, contentBounds, isDefault);
-        // }
+        if (focused && showFocusCues)
+        {
+            // Draw focus indicator for other styles
+            DrawFocusIndicator(graphics, bounds, isDefault);
+        }
     }
 
     public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);
