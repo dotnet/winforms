@@ -418,7 +418,7 @@ public unsafe class ClipboardCoreTests
     public static IEnumerable<object[]> GetEmptyStreamData()
     {
         yield return new object[] { new MemoryStream([1, 2, 3]), new byte[] { 1, 2, 3 } };
-        yield return new object[] { new MemoryStream(Array.Empty<byte>()), Array.Empty<byte>() };
+        yield return new object[] { new MemoryStream([]), Array.Empty<byte>() };
     }
 
     [Theory]
