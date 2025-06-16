@@ -32,36 +32,61 @@ public class TabRendererTests : IDisposable
     [WinFormsFact]
     public void DrawTabItem_Basic_ChangesTabStateSuccessfully()
     {
-        using Bitmap bmp = new(100, 30);
-        using Graphics g = Graphics.FromImage(bmp);
-        Rectangle bounds = new(0, 0, 100, 30);
-        Color before = bmp.GetPixel(10, 10);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
 
         foreach (TabItemState state in Enum.GetValues<TabItemState>())
         {
-            TabRenderer.DrawTabItem(g, bounds, state);
-            TabRenderer.DrawTabItem(g, bounds, focused: true, state);
+            TabRenderer.DrawTabItem(_g, _bounds, state);
+            TabRenderer.DrawTabItem(_g, _bounds, focused: true, state);
         }
 
-        Color after = bmp.GetPixel(10, 10);
-        after.Should().NotBe(before);
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
     }
 
     [WinFormsFact]
     public void DrawTabItem_WithText_ChangesTabStateSuccessfully()
     {
         using Font font = new("Arial", 8);
-        Color before = _bmp.GetPixel(10, 10);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
 
         foreach (TabItemState state in Enum.GetValues<TabItemState>())
         {
             TabRenderer.DrawTabItem(_g, _bounds, "TabText", font, state);
+        }
+
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
+    }
+
+    [WinFormsFact]
+    public void DrawTabItem_WithText_Focused_ChangesTabStateSuccessfully()
+    {
+        using Font font = new("Arial", 8);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
+
+        foreach (TabItemState state in Enum.GetValues<TabItemState>())
+        {
             TabRenderer.DrawTabItem(_g, _bounds, "TabText", font, focused: true, state);
+        }
+
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
+    }
+
+    [WinFormsFact]
+    public void DrawTabItem_WithText_TextFormatFlags_Focused_ChangesTabStateSuccessfully()
+    {
+        using Font font = new("Arial", 8);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
+
+        foreach (TabItemState state in Enum.GetValues<TabItemState>())
+        {
             TabRenderer.DrawTabItem(_g, _bounds, "TabText", font, TextFormatFlags.Default, focused: true, state);
         }
 
-        Color after = _bmp.GetPixel(10, 10);
-        after.Should().NotBe(before);
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
     }
 
     [WinFormsFact]
@@ -69,7 +94,7 @@ public class TabRendererTests : IDisposable
     {
         using Bitmap image = new(16, 16);
         Rectangle imageRect = new(5, 5, 16, 16);
-        Color before = _bmp.GetPixel(10, 10);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
 
         foreach (TabItemState state in Enum.GetValues<TabItemState>())
         {
@@ -77,8 +102,8 @@ public class TabRendererTests : IDisposable
             TabRenderer.DrawTabItem(_g, _bounds, image, imageRect, focused: true, state);
         }
 
-        Color after = _bmp.GetPixel(10, 10);
-        after.Should().NotBe(before);
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
     }
 
     [WinFormsFact]
@@ -87,7 +112,7 @@ public class TabRendererTests : IDisposable
         using Font font = new("Arial", 8);
         using Bitmap image = new(16, 16);
         Rectangle imageRect = new(5, 5, 16, 16);
-        Color before = _bmp.GetPixel(10, 10);
+        Color colorBeforeDraw = _bmp.GetPixel(10, 10);
 
         foreach (TabItemState state in Enum.GetValues<TabItemState>())
         {
@@ -95,8 +120,8 @@ public class TabRendererTests : IDisposable
             TabRenderer.DrawTabItem(_g, _bounds, "TabText", font, TextFormatFlags.Default, image, imageRect, focused: true, state);
         }
 
-        Color after = _bmp.GetPixel(10, 10);
-        after.Should().NotBe(before);
+        Color colorAfterDraw = _bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
     }
 
     [WinFormsFact]
@@ -105,11 +130,11 @@ public class TabRendererTests : IDisposable
         using Bitmap bmp = new(100, 100);
         using Graphics g = Graphics.FromImage(bmp);
         Rectangle bounds = new(0, 0, 100, 100);
-        Color before = bmp.GetPixel(10, 10);
+        Color colorBeforeDraw = bmp.GetPixel(10, 10);
 
         TabRenderer.DrawTabPage(g, bounds);
 
-        Color after = bmp.GetPixel(10, 10);
-        after.Should().NotBe(before);
+        Color colorAfterDraw = bmp.GetPixel(10, 10);
+        colorAfterDraw.Should().NotBe(colorBeforeDraw);
     }
 }
