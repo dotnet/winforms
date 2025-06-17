@@ -366,4 +366,72 @@ public unsafe class ClipboardCoreTests
         Action action = () => ClipboardCore.SetFileDropList(filePaths);
         action.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void SetText_InvokeString_GetReturnsExpected()
+    {
+        ClipboardCore.SetData(new DataObject(DataFormatNames.UnicodeText, "text"), copy: false, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.UnicodeText).Should().BeTrue();
+        outData.GetData(DataFormatNames.UnicodeText).Should().Be("text");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("\t")]
+    public void GetData_NullOrEmptyFormat_Returns_Null(string? format)
+    {
+        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, null!), copy: false, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(format!).Should().BeFalse();
+    }
+
+    [Theory]
+    [EnumData<TextDataFormat>]
+    public void GetData_InvalidFormat_Returns_Null(string format)
+    {
+        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, null!), copy: false, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetData(format).Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(new byte[] { 1, 2, 3 })]
+    [InlineData(new byte[] { })]
+    [InlineData(null)]
+    public void SetAudio_InvokeByteArray_GetReturnsExpected(byte[]? audioBytes)
+    {
+        DataObject dataObject = new(DataFormatNames.WaveAudio, audioBytes!);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.WaveAudio).Should().BeTrue();
+        outData.GetData(DataFormatNames.WaveAudio).Should().Be(audioBytes);
+    }
+
+    public static IEnumerable<object[]> GetEmptyStreamData()
+    {
+        yield return new object[] { new MemoryStream([1, 2, 3]), new byte[] { 1, 2, 3 } };
+        yield return new object[] { new MemoryStream([]), Array.Empty<byte>() };
+    }
+
+    [Theory]
+    [MemberData(nameof(GetEmptyStreamData))]
+    public void SetAudio_InvokeStream_GetReturnsExpected(Stream audioStream, byte[] audioBytes)
+    {
+        DataObject dataObject = new(DataFormatNames.WaveAudio, audioStream);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.WaveAudio).Should().BeTrue();
+        outData.GetData(DataFormatNames.WaveAudio).Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
+    }
 }
