@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 
