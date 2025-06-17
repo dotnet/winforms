@@ -219,11 +219,6 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void DrawRadioButton_WithImage_Overload_CallsMainOverload()
     {
-        using Form form = new();
-        using RadioButton control = (RadioButton)CreateButton();
-        form.Controls.Add(control);
-        form.Show();
-
         using Bitmap bmp = new(20, 20);
         using Graphics g = Graphics.FromImage(bmp);
         using Image image = new Bitmap(10, 10);
