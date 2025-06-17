@@ -1056,11 +1056,11 @@ public abstract class ToolStripRenderer
         ReadOnlySpan<Rectangle> baseRectangles = s_baseSizeGripRectangles;
 
         // Reference height for sizing grips at 96 DPI (standard sizing)
-        const int DefaultGripAreaHeight = 20;
+        int scaledDefaultGripAreaHeight = ScaleHelper.ScaleToDpi(20, e.ToolStrip.DeviceDpi);
 
         // Calculate scaling based on the almost half of the current height
         // of the status strip's sizing grip area
-        float heightScale = 0.6f * ((float)sizeGripBounds.Height / DefaultGripAreaHeight);
+        float heightScale = ((float)sizeGripBounds.Height / scaledDefaultGripAreaHeight);
 
         // Save the current graphics state before transformations
         GraphicsState originalState = g.Save();
@@ -1078,11 +1078,15 @@ public abstract class ToolStripRenderer
             // Set up the transform to scale from the bottom corner
             if (isRtl)
             {
-                g.TranslateTransform(sizeGripBounds.Left + cornerOffset, sizeGripBounds.Bottom - cornerOffset);
+                g.TranslateTransform(
+                    sizeGripBounds.Left + cornerOffset,
+                    sizeGripBounds.Bottom - cornerOffset);
             }
             else
             {
-                g.TranslateTransform(sizeGripBounds.Right - cornerOffset, sizeGripBounds.Bottom - cornerOffset);
+                g.TranslateTransform(
+                    sizeGripBounds.Right - cornerOffset,
+                    sizeGripBounds.Bottom - cornerOffset);
             }
 
             // Apply scaling
