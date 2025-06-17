@@ -233,9 +233,6 @@ public partial class RadioButton : ButtonBase
         ScaleConstants();
     }
 
-    private protected override void InitializeConstantsForInitialDpi(int initialDpi)
-        => ScaleConstants();
-
     private void ScaleConstants()
     {
         const int LogicalFlatSystemStylePaddingWidth = 24;
@@ -243,6 +240,8 @@ public partial class RadioButton : ButtonBase
         _flatSystemStylePaddingWidth = LogicalToDeviceUnits(LogicalFlatSystemStylePaddingWidth);
         _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(LogicalFlatSystemStyleMinimumHeight);
     }
+
+    private protected override void InitializeControl() => ScaleConstants();
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {

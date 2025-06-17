@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationService
+internal sealed class DesignerSerializationService : IDesignerSerializationService
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public DesignerSerializationServiceImpl(IServiceProvider serviceProvider)
+    public DesignerSerializationService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
@@ -33,8 +33,7 @@ internal sealed class DesignerSerializationServiceImpl : IDesignerSerializationS
         {
             foreach (object obj in objects)
             {
-                if (obj is Control)
-                    componentSerializationService.Serialize(serializationStore, obj);
+                componentSerializationService.Serialize(serializationStore, obj);
             }
 
             returnObject = serializationStore;

@@ -31,7 +31,7 @@ namespace System.Drawing.Printing.Tests;
 
 public class PageSettingsTests
 {
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void Clone_Success()
     {
         PageSettings ps = new()
@@ -62,5 +62,22 @@ public class PageSettingsTests
         // PaperSource
         Assert.Equal(ps.PaperSource.Kind, clone.PaperSource.Kind);
         Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
+    }
+
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
+    public void PrintToPDF_DefaultPageSettings_IsColor()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/13367
+        if (!Helpers.TryGetPdfPrinterName(out string? printerName))
+        {
+            return;
+        }
+
+        PrinterSettings printerSettings = new()
+        {
+            PrinterName = printerName
+        };
+
+        printerSettings.DefaultPageSettings.Color.Should().BeTrue("PDF printer should support color printing.");
     }
 }

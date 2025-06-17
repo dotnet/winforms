@@ -1,14 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 
 using ClipboardCore = System.Private.Windows.Ole.ClipboardCore<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
-using DataObject = System.Private.Windows.Ole.TestDataObject<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
 using ClipboardScope = System.Private.Windows.Ole.ClipboardScope<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
+using DataObject = System.Private.Windows.Ole.TestDataObject<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
 
 namespace System.Private.Windows.Ole;
 
@@ -178,5 +179,191 @@ public unsafe class ClipboardCoreTests
     {
         public string Name { get; set; } = "DefaultName";
         public int Age { get; set; }
+    }
+
+    [Fact]
+    public void Clear_InvokeMultipleTimes_Success()
+    {
+        ClipboardCore.Clear();
+        HRESULT result = ClipboardCore.TryGetData(out var data, out var original, retryTimes: 1, retryDelay: 0);
+        using (data)
+        {
+            result.Should().Be(HRESULT.CLIPBRD_E_BAD_DATA);
+            data.IsNull.Should().BeTrue();
+            original.Should().BeNull();
+        }
+
+        ClipboardCore.Clear();
+        result = ClipboardCore.TryGetData(out var data1, out var original1, retryTimes: 1, retryDelay: 0);
+        using (data1)
+        {
+            result.Should().Be(HRESULT.CLIPBRD_E_BAD_DATA);
+            data1.IsNull.Should().BeTrue();
+            original1.Should().BeNull();
+        }
+    }
+
+    [Fact]
+    public void Contains_InvokeMultipleTimes_Success()
+    {
+        DataObject dataObject = new();
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.Clear();
+
+        result = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var data, retryTimes: 1, retryDelay: 0);
+        HRESULT result2 = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var data2, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(result2);
+        result.Should().Be(HRESULT.CLIPBRD_E_BAD_DATA);
+
+        data.Should().Be(data2);
+        data.Should().BeNull();
+    }
+
+    [Theory]
+    [StringWithNullData]
+    public void ContainsData_InvokeMultipleTimes_Success(string? format)
+    {
+        SetAndGetClipboardDataMultipleTimes(format, null!, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        outData1!.GetFormats().Should().BeEquivalentTo(outData2!.GetFormats());
+    }
+
+    [Theory]
+    [EnumData<TextDataFormat>]
+    public void ContainsText_TextDataFormat_InvokeMultipleTimes_Success(string format)
+    {
+        SetAndGetClipboardDataMultipleTimes(format, null!, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        outData1!.GetFormats().Contains(format).Should().BeTrue();
+        outData1!.GetFormats().Should().BeEquivalentTo(outData2!.GetFormats());
+    }
+
+    [Fact]
+    public void GetAudioStream_InvokeMultipleTimes_Success()
+    {
+        string testData = "WaveAudio";
+        string format = DataFormatNames.WaveAudio;
+        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        VerifyResult(testData, format, outData1, outData2);
+    }
+
+    [Fact]
+    public void GetDataObject_InvokeMultipleTimes_Success()
+    {
+        SetAndGetClipboardDataMultipleTimes(null, null!, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        outData1.Should().NotBeNull();
+        outData2.Should().NotBeNull();
+        outData1.GetFormats().Should().BeEquivalentTo(outData2.GetFormats());
+    }
+
+    [Fact]
+    public void GetFileDropList_InvokeMultipleTimes_Success()
+    {
+        string testData = "FileDrop";
+        string format = DataFormatNames.FileDrop;
+        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        VerifyResult(testData, format, outData1, outData2);
+    }
+
+    [Fact]
+    public void GetImage_InvokeMultipleTimes_Success()
+    {
+        string testData = "Bitmap";
+        string format = DataFormatNames.Bitmap;
+        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        VerifyResult(testData, format, outData1, outData2);
+    }
+
+    [Fact]
+    public void GetText_InvokeMultipleTimes_Success()
+    {
+        string testData = "Text";
+        string format = DataFormatNames.UnicodeText;
+        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        VerifyResult(testData, format, outData1, outData2);
+    }
+
+    [Theory]
+    [EnumData<TextDataFormat>]
+    public void GetText_TextDataFormat_InvokeMultipleTimes_Success(string format)
+    {
+        string testData = "Text";
+        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
+
+        VerifyResult(testData, format, outData1, outData2);
+    }
+
+    private static void SetAndGetClipboardDataMultipleTimes(string? format, string data, out ITestDataObject? outData1, out ITestDataObject? outData2)
+    {
+        DataObject dataObject = string.IsNullOrEmpty(format) ? new() : new(format, data);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out outData1, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out outData2, retryTimes: 1, retryDelay: 0);
+    }
+
+    private static void VerifyResult(string testData, string format, ITestDataObject? outData1, ITestDataObject? outData2)
+    {
+        outData1.Should().NotBeNull();
+        outData2.Should().NotBeNull();
+        outData1.GetDataPresent(format).Should().BeTrue();
+        outData1.GetData(format, autoConvert: false).Should().Be(testData);
+        outData1.GetData(format, autoConvert: false).Should().Be(outData2.GetData(format, autoConvert: false));
+    }
+
+    [Fact]
+    public void SetData_Int_GetReturnsExpected()
+    {
+        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, 1), copy: false, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent("SomeDataObjectId").Should().BeTrue();
+        outData.GetData("SomeDataObjectId").Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData(null)]
+    public void SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
+    {
+        Action action = () => ClipboardCore.SetData(new DataObject(format!, "data"), copy: true);
+        action.Should().Throw<ArgumentException>().WithParameterName("format");
+    }
+
+    [Fact]
+    public void SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
+    {
+        Action action = () => ClipboardCore.SetFileDropList(null!);
+        action.Should().Throw<ArgumentNullException>().WithParameterName("filePaths");
+    }
+
+    [Fact]
+    public void SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
+    {
+        Action action = static () => ClipboardCore.SetFileDropList([]);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("\0")]
+    public void SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    {
+        StringCollection filePaths =
+        [
+            filePath
+        ];
+        Action action = () => ClipboardCore.SetFileDropList(filePaths);
+        action.Should().Throw<ArgumentException>();
     }
 }

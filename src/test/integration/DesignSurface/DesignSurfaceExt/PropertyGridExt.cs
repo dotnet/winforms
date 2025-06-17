@@ -1,9 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-public class PropertyGridExt : PropertyGrid
+[DesignerCategory("Default")]
+public class PropertyGridExtended : PropertyGrid
 {
     private IDesignerHost _host;
     private IComponentChangeService _componentChangeService;

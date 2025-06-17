@@ -17,15 +17,10 @@ public partial class ListViewGroup
         private readonly ListViewGroup _owningGroup;
         private readonly bool _owningGroupIsDefault;
 
-        public ListViewGroupAccessibleObject(ListViewGroup owningGroup, bool owningGroupIsDefault)
+        public ListViewGroupAccessibleObject(ListViewGroup owningGroup, ListView listView, bool owningGroupIsDefault)
         {
             _owningGroup = owningGroup.OrThrowIfNull();
-
-            // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
-            _owningListView = owningGroup.ListView
-                ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView is ListView listView
-                    ? listView
-                    : throw new InvalidOperationException(nameof(owningGroup.ListView)));
+            _owningListView = listView.OrThrowIfNull();
 
             _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListViewAccessibleObject
                 ?? throw new InvalidOperationException(nameof(_owningListView.AccessibilityObject));

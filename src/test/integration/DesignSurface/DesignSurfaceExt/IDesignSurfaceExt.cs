@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-public interface IDesignSurfaceExt
+public interface IDesignSurfaceExtended
 {
     // - perform Cut/Copy/Paste/Delete commands
     void DoAction(string command);
@@ -25,7 +25,7 @@ public interface IDesignSurfaceExt
         where TControl : Control;
 
     // - Get the UndoEngineExtended object
-    UndoEngineExt GetUndoEngineExt();
+    UndoEngineExtended GetUndoEngineExt();
 
     // - Get the IDesignerHost of the .NET 2.0 DesignSurface
     IDesignerHost GetIDesignerHost();

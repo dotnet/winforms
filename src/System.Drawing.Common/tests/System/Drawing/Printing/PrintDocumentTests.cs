@@ -103,7 +103,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.Same(printController, document.PrintController);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrinterSettings_SetValue_ReturnsExpected()
     {
         using PrintDocument document = new();
@@ -124,7 +124,7 @@ public class PrintDocumentTests : FileCleanupTestBase
             document.DefaultPageSettings.PaperSize.Kind);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void BeginPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -142,7 +142,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void EndPrint_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -160,10 +160,10 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(nameof(CanPrintToPdf))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.CanPrintToPdf))]
     public void Print_DefaultPrintController_Success()
     {
-        if (!CanPrintToPdf())
+        if (!Helpers.TryGetPdfPrinterName(out string? printerName))
         {
             return;
         }
@@ -172,7 +172,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         PrintEventHandler endPrintHandler = new((sender, e) => endPrintCalled = true);
         using (PrintDocument document = new())
         {
-            document.PrinterSettings.PrinterName = GetPdfPrinterName();
+            document.PrinterSettings.PrinterName = printerName;
             document.PrinterSettings.PrintFileName = GetTestFilePath();
             document.PrinterSettings.PrintToFile = true;
             document.EndPrint += endPrintHandler;
@@ -185,7 +185,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.True(endPrintCalled);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrintPage_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -203,7 +203,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;
@@ -245,33 +245,6 @@ public class PrintDocumentTests : FileCleanupTestBase
 
         Assert.True(Enum.IsDefined(typeof(PrinterResolutionKind), pageSettings.PrinterResolution.Kind));
         Assert.True(pageSettings.PrinterSettings.IsDefaultPrinter);
-    }
-
-    private const string PrintToPdfPrinterName = "Microsoft Print to PDF";
-    private static bool CanPrintToPdf()
-    {
-        foreach (string name in Helpers.InstalledPrinters)
-        {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static string GetPdfPrinterName()
-    {
-        foreach (string name in Helpers.InstalledPrinters)
-        {
-            if (name.StartsWith(PrintToPdfPrinterName, StringComparison.Ordinal))
-            {
-                return name;
-            }
-        }
-
-        throw new InvalidOperationException("No PDF printer installed");
     }
 
     private class TestPrintController : PrintController

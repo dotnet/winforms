@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace DesignSurfaceExt;
+namespace DemoConsole;
 
-public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
+public class DesignSurfaceExtended : DesignSurface, IDesignSurfaceExtended
 {
     private const string Name = "DesignSurfaceExt";
 
@@ -73,7 +73,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         serviceProvider.AddService(typeof(DesignerOptionService), opsService2);
     }
 
-    public UndoEngineExt GetUndoEngineExt()
+    public UndoEngineExtended GetUndoEngineExt()
     {
         return _undoEngine;
     }
@@ -211,7 +211,9 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
             if (designer is IComponentInitializer initializer)
             {
-                initializer.InitializeNewComponent(null);
+                // This is to address a difference in nullability annotations between the .NET and NETFX
+                // See https://github.com/dotnet/winforms/pull/12996/#issuecomment-2765302289
+                initializer.InitializeNewComponent(new Dictionary<object, object>());
             }
 
             return (TComponent)newComp;
@@ -268,15 +270,15 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
 
     #region  UndoEngine
 
-    private UndoEngineExt _undoEngine;
-    private NameCreationServiceImp _nameCreationService;
-    private DesignerSerializationServiceImpl _designerSerializationService;
+    private UndoEngineExtended _undoEngine;
+    private NameCreationService _nameCreationService;
+    private DesignerSerializationService _designerSerializationService;
     private CodeDomComponentSerializationService _codeDomComponentSerializationService;
 
     #endregion
 
     // - ctor
-    public DesignSurfaceExt()
+    public DesignSurfaceExtended()
     {
         InitServices();
     }
@@ -298,7 +300,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         // - otherwise the root component did not have a name and this caused
         // - troubles when we try to use the UndoEngine
         // - 1. NameCreationService
-        _nameCreationService = new NameCreationServiceImp();
+        _nameCreationService = new NameCreationService();
         ServiceContainer.RemoveService(typeof(INameCreationService), false);
         ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
 
@@ -308,12 +310,12 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
 
         // - 3. IDesignerSerializationService
-        _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
+        _designerSerializationService = new DesignerSerializationService(ServiceContainer);
         ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
         ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
 
         // - 4. UndoEngine
-        _undoEngine = new UndoEngineExt(ServiceContainer)
+        _undoEngine = new UndoEngineExtended(ServiceContainer)
         {
             // Disable the UndoEngine
             Enabled = false
@@ -348,6 +350,12 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
                 "PASTE" => StandardCommands.Paste,
                 "DELETE" => StandardCommands.Delete,
                 "INVOKESMARTTAG" => MenuCommands.KeyInvokeSmartTag,
+                "KEYMOVEUP" => MenuCommands.KeyMoveUp,
+                "KEYMOVEDOWN" => MenuCommands.KeyMoveDown,
+                "KEYMOVELEFT" => MenuCommands.KeyMoveLeft,
+                "KEYMOVERIGHT" => MenuCommands.KeyMoveRight,
+                "KEYSELECTNEXT" => MenuCommands.KeySelectNext,
+                "KEYSELECTPREVIOUS" => MenuCommands.KeySelectPrevious,
                 _ => null,
             };
 

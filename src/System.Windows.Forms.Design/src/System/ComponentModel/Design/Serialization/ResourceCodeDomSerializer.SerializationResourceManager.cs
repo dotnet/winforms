@@ -778,10 +778,17 @@ internal partial class ResourceCodeDomSerializer
 
             // Only append the number when appendCount is set or if there is already a count.
             int count = 0;
-            if (appendCount || _nameTable.TryGetValue(nameBase, out count))
+
+            if (appendCount || _nameTable.ContainsKey(nameBase))
             {
-                count++;
-                resourceName = $"{nameBase}{count}";
+                _nameTable.TryGetValue(nameBase, out count);
+
+                do
+                {
+                    count++;
+                    resourceName = $"{nameBase}{count}";
+                }
+                while (_nameTable.ContainsKey(resourceName));
             }
 
             // Now that we have a name, write out the resource.

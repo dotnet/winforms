@@ -24,6 +24,8 @@
 [WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+[WFO5003]System.Windows.Forms.IAsyncDropTarget
+[WFO5003]System.Windows.Forms.IAsyncDropTarget.OnAsyncDragDrop(System.Windows.Forms.DragEventArgs! e) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.Commit(System.Windows.Forms.CurrencyManager dataSource, int rowNum) -> bool
 ~abstract System.Windows.Forms.DataGridColumnStyle.Edit(System.Windows.Forms.CurrencyManager source, int rowNum, System.Drawing.Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.GetPreferredHeight(System.Drawing.Graphics g, object value) -> int
@@ -666,6 +668,7 @@ override System.Windows.Forms.DataGridView.BackgroundImageLayout.set -> void
 override System.Windows.Forms.DataGridView.CanEnableIme.get -> bool
 override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.DataGridView.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
@@ -1941,6 +1944,7 @@ override System.Windows.Forms.TabPage.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.TabPage.BackColor.set -> void
 override System.Windows.Forms.TabPage.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.TabPage.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.TabPage.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.TabPage.Dock.get -> System.Windows.Forms.DockStyle
 override System.Windows.Forms.TabPage.Dock.set -> void
 override System.Windows.Forms.TabPage.MaximumSize.get -> System.Drawing.Size
@@ -2734,6 +2738,7 @@ static System.Windows.Forms.Clipboard.SetFileDropList(System.Collections.Special
 static System.Windows.Forms.Clipboard.SetImage(System.Drawing.Image! image) -> void
 static System.Windows.Forms.Clipboard.SetText(string! text) -> void
 static System.Windows.Forms.Clipboard.SetText(string! text, System.Windows.Forms.TextDataFormat format) -> void
+static System.Windows.Forms.Clipboard.TryGetData<T>(out T data) -> bool
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, out T data) -> bool
 static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type?>! resolver, out T data) -> bool
 static System.Windows.Forms.ComboBoxRenderer.DrawDropDownButton(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
@@ -7070,6 +7075,8 @@ System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHand
 System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler?
 System.Windows.Forms.Form.FormCornerPreference.get -> System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.Form.FormCornerPreference.set -> void
+System.Windows.Forms.Form.FormScreenCaptureMode.get -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.Form.FormScreenCaptureMode.set -> void
 System.Windows.Forms.Form.HelpButton.get -> bool
 System.Windows.Forms.Form.HelpButton.set -> void
 System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler?
@@ -9750,6 +9757,10 @@ System.Windows.Forms.Screen.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Screen.DeviceName.get -> string!
 System.Windows.Forms.Screen.Primary.get -> bool
 System.Windows.Forms.Screen.WorkingArea.get -> System.Drawing.Rectangle
+System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.Allow = 0 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideContent = 1 -> System.Windows.Forms.ScreenCaptureMode
+System.Windows.Forms.ScreenCaptureMode.HideWindow = 2 -> System.Windows.Forms.ScreenCaptureMode
 System.Windows.Forms.ScrollableControl
 System.Windows.Forms.ScrollableControl.AutoScrollMargin.get -> System.Drawing.Size
 System.Windows.Forms.ScrollableControl.AutoScrollMargin.set -> void

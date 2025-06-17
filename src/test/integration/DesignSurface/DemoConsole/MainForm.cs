@@ -1,28 +1,25 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
 namespace TestConsole;
 
+[DesignerCategory("Default")]
 public partial class MainForm : Form
 {
     private ISelectionService _selectionService;
 
-    private readonly List<IDesignSurfaceExt> _listOfDesignSurface = [];
+    private readonly List<IDesignSurfaceExtended> _listOfDesignSurface = [];
 
     public MainForm()
     {
         InitializeComponent();
+
+#if !NETCOREAPP
+        Text = "Tiny Form Designer - .NET Framework";
+#endif
     }
 
     private void InitFormDesigner()
     {
-        CreateDesignSurface(1);
-        CreateDesignSurface(2);
-        CreateDesignSurface(3);
-        CreateDesignSurface(4);
-        CreateDesignSurface(5);
-        CreateDesignSurface(6);
-
         tabPage1.Text = "Use SnapLines";
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
@@ -30,22 +27,55 @@ public partial class MainForm : Form
         tabPage5.Text = "TabControl and TableLayoutPanel";
         tabPage6.Text = "ToolStripContainer";
 
-        // - enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
         {
-            IDesignSurfaceExt isurf = _listOfDesignSurface[i];
-            isurf.GetUndoEngineExt().Enabled = true;
-        }
+            CreateDesignSurface(i + 1);
 
-        // - ISelectionService
-        // - try to get a ptr to ISelectionService interface
-        // - if we obtain it then hook the SelectionChanged event
-        for (int i = 0; i < tabControl1.TabCount; i++)
-        {
-            IDesignSurfaceExt isurf = _listOfDesignSurface[i];
-            _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
+            IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[i];
+
+            // - enable the UndoEngines
+            designSurfaceExtended.GetUndoEngineExt().Enabled = true;
+
+            // - ISelectionService
+            // - try to get a ptr to ISelectionService interface
+            // - if we obtain it then hook the SelectionChanged event
+            _selectionService = (ISelectionService)designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService));
             if (_selectionService is not null)
+            {
                 _selectionService.SelectionChanged += OnSelectionChanged;
+            }
+
+            ((Control)(designSurfaceExtended as DesignSurface).View).KeyUp += (s, e) =>
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                        designSurfaceExtended.DoAction("KeyMoveUp");
+                        break;
+                    case Keys.Down:
+                        designSurfaceExtended.DoAction("KeyMoveDown");
+                        break;
+                    case Keys.Left:
+                        designSurfaceExtended.DoAction("KeyMoveLeft");
+                        break;
+                    case Keys.Right:
+                        designSurfaceExtended.DoAction("KeyMoveRight");
+                        break;
+                    case Keys.Tab:
+                        {
+                            if (e.Shift)
+                            {
+                                designSurfaceExtended.DoAction("KeySelectPrevious");
+                            }
+                            else
+                            {
+                                designSurfaceExtended.DoAction("KeySelectNext");
+                            }
+                        }
+
+                        break;
+                }
+            };
         }
     }
 
@@ -55,10 +85,10 @@ public partial class MainForm : Form
         if (_selectionService is null)
             return;
 
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        if (isurf is not null)
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        if (designSurfaceExtended is not null)
         {
-            ISelectionService selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
+            ISelectionService selectionService = designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
             propertyGrid.SelectedObject = selectionService.PrimarySelection;
         }
     }
@@ -67,7 +97,7 @@ public partial class MainForm : Form
     {
         // - step.0
         // - create a DesignSurface and put it inside a Form in DesignTime
-        DesignSurfaceExt.DesignSurfaceExt surface = new();
+        DesignSurfaceExtended surface = new();
         // -
         // -
         // - store for later use
@@ -264,6 +294,7 @@ public partial class MainForm : Form
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
+                        // See https://github.com/microsoft/winforms-designer/issues/2508
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                         surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
                         surface.CreateComponent<NotifyIcon>();
@@ -290,6 +321,7 @@ public partial class MainForm : Form
 
                         ToolStrip toolStrip1 = surface.CreateControl<ToolStrip>(new Size(400, 50), new Point(0, 0));
                         ToolStripButton toolStripButton1 = surface.CreateComponent<ToolStripButton>();
+                        // See https://github.com/dotnet/winforms/issues/13040
                         ToolStripDropDownButton toolStripDropDownButton1 = surface.CreateComponent<ToolStripDropDownButton>();
                         ToolStripTextBox toolStripTextBox = surface.CreateComponent<ToolStripTextBox>();
                         toolStrip1.Items.Add(toolStripButton1);
@@ -336,8 +368,7 @@ public partial class MainForm : Form
                         richTextBox.Width = toolStripContainer.Width;
                         richTextBox.Text = "I'm a RichTextBox";
 
-                        MyUserControl userControl = surface.CreateControl<MyUserControl>(new Size(0, 0), new Point(0, 0));
-                        userControl.Dock = DockStyle.Fill;
+                        MyUserControl userControl = surface.CreateControl<MyUserControl>(new Size(350, 100), new Point(0, 0));
                         userControl.BackColor = Color.LightSkyBlue;
 
                         MyScrollableControl scrollableControl = surface.CreateControl<MyScrollableControl>(new Size(0, 0), new Point(0, 0));
@@ -349,7 +380,7 @@ public partial class MainForm : Form
                         splitterPanel1.Controls.Add(richTextBox);
                         splitterPanel2.Controls.Add(scrollableControl);
 
-                        toolStripContainer.ContentPanel.Controls.AddRange(splitContainer);
+                        toolStripContainer.ContentPanel.Controls.Add(splitContainer);
 
                         Component component = surface.CreateComponent<Component>();
 
@@ -357,11 +388,15 @@ public partial class MainForm : Form
                         splitter.BackColor = Color.Green;
                         splitter.Dock = DockStyle.Bottom;
 
-                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height / 2), new(0, 0));
+                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height / 3), new(0, 0));
                         panel.Dock = DockStyle.Bottom;
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
 
+                        // A nested host is required for .NET Framework.
+                        // See https://github.com/dotnet/winforms/issues/11866#issuecomment-2673266564
+                        // and https://github.com/dotnet/winforms/issues/13248#issuecomment-2803589449
+#if NETCOREAPP
                         BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
 
                         BindingSource bindingSource = new()
@@ -375,6 +410,7 @@ public partial class MainForm : Form
                         richTextBox.DataBindings.Add(new Binding("Text", bindingSource, "Text", true, DataSourceUpdateMode.OnPropertyChanged));
 
                         panel.Controls.Add(bindingNavigator);
+#endif
                     }
 
                     break;
@@ -430,21 +466,21 @@ public partial class MainForm : Form
     private void SelectRootComponent()
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        if (isurf is not null)
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        if (designSurfaceExtended is not null)
         {
             splitContainer.Panel2.Controls.Remove(propertyGrid);
             propertyGrid.Dispose();
             propertyGrid = new()
             {
-                DesignerHost = isurf.GetIDesignerHost(),
+                DesignerHost = designSurfaceExtended.GetIDesignerHost(),
                 Dock = DockStyle.Fill,
                 Location = new Point(0, 0),
                 Margin = new Padding(4),
                 Name = "propertyGrid",
                 Size = new Size(226, 502),
                 TabIndex = 0,
-                SelectedObject = isurf.GetIDesignerHost().RootComponent
+                SelectedObject = designSurfaceExtended.GetIDesignerHost().RootComponent
             };
 
             splitContainer.Panel2.Controls.Add(propertyGrid);
@@ -453,14 +489,14 @@ public partial class MainForm : Form
 
     private void undoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.GetUndoEngineExt().Undo();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.GetUndoEngineExt().Undo();
     }
 
     private void redoToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.GetUndoEngineExt().Redo();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.GetUndoEngineExt().Redo();
     }
 
     private void OnAbout(object sender, EventArgs e)
@@ -471,8 +507,8 @@ public partial class MainForm : Form
     private void toolStripMenuItemTabOrder_Click(object sender, EventArgs e)
     {
         // - find out the DesignSurfaceExt control hosted by the TabPage
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.SwitchTabOrder();
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.SwitchTabOrder();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -481,7 +517,7 @@ public partial class MainForm : Form
 
         tabControl1.Selected += OnTabPageSelected;
 
-        // - select into the propertygrid the current Form
+        // - select into the propertyGrid the current Form
         SelectRootComponent();
     }
 
@@ -492,7 +528,7 @@ public partial class MainForm : Form
 
     private void OnMenuClick(object sender, EventArgs e)
     {
-        IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-        isurf?.DoAction((sender as ToolStripMenuItem).Text);
+        IDesignSurfaceExtended designSurfaceExtended = _listOfDesignSurface[tabControl1.SelectedIndex];
+        designSurfaceExtended?.DoAction((sender as ToolStripMenuItem).Text);
     }
 }

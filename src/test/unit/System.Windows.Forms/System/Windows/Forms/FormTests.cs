@@ -165,6 +165,7 @@ public class FormTests
         Assert.False(control.VScroll);
         Assert.Equal(300, control.Width);
         Assert.Equal(FormWindowState.Normal, control.WindowState);
+        Assert.Equal(ScreenCaptureMode.Allow, control.FormScreenCaptureMode);
 
         Assert.False(control.IsHandleCreated);
     }
@@ -1029,6 +1030,43 @@ public class FormTests
 
         Assert.Equal(new Point(20, 21), form.Location);
         Assert.Equal(new Size(300, 310), form.Size);
+    }
+
+    [WinFormsFact]
+    public void Form_FormScreenCaptureMode_ThrowIfFormIsNotTopLevel()
+    {
+        if (!OsVersion.IsWindows11_OrGreater())
+        {
+            return;
+        }
+
+        using Form mainForm = new();
+        mainForm.Show();
+
+        using Form formAsControl = new()
+        {
+            TopLevel = false
+        };
+
+        // formIsControl is now a hybrid between control and MDI window.
+        mainForm.Controls.Add(formAsControl);
+        mainForm.Show();
+
+        // Assert that the form is not top-level and cannot be used for screen capture mode,
+        // because it would throw:
+        Assert.Throws<InvalidOperationException>(
+            () => formAsControl.FormScreenCaptureMode = ScreenCaptureMode.HideContent);
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(3)]
+    [InlineData(int.MinValue)]
+    [InlineData(int.MaxValue)]
+    public void Form_FormScreenCaptureMode_TestInvalidEnumValues(int invalidValue)
+    {
+        using Form form = new();
+        Assert.Throws<InvalidEnumArgumentException>(() => form.FormScreenCaptureMode = (ScreenCaptureMode)invalidValue);
     }
 
     [WinFormsTheory]
