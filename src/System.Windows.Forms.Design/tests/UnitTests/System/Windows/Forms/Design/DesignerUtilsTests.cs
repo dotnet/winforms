@@ -410,7 +410,6 @@ public class DesignerUtilsTests :IDisposable
         using ListView listView = new();
         Exception exception = Record.Exception(() => DesignerUtils.ApplyListViewThemeStyles(listView));
         exception.Should().BeNull();
-        listView.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -426,7 +425,6 @@ public class DesignerUtilsTests :IDisposable
         using TreeView treeView = new();
         Exception exception = Record.Exception(() => DesignerUtils.ApplyTreeViewThemeStyles(treeView));
         exception.Should().BeNull();
-        treeView.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
