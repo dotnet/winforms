@@ -23,6 +23,22 @@ public class DataGridViewImageColumnTests : IDisposable
         _column.Description.Should().Be(string.Empty);
     }
 
+    [Fact]
+    public void Description_Get_ThrowsIfCellTemplateIsNull()
+    {
+        _column.CellTemplate = null;
+        Action action = () => { var _ = _column.Description; };
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void Description_Set_ThrowsIfCellTemplateIsNull()
+    {
+        _column.CellTemplate = null;
+        Action action = () => _column.Description = "desc";
+        action.Should().Throw<InvalidOperationException>();
+    }
+
     [WinFormsFact]
     public void Description_Set_PropagatesToAllCells()
     {
@@ -123,7 +139,7 @@ public class DataGridViewImageColumnTests : IDisposable
     [Fact]
     public void ImageLayout_Set_SameValue_DoesNothing()
     {
-        DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
+        using DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
         cellTemplate.ImageLayout = DataGridViewImageCellLayout.Stretch;
         _column.ImageLayout = DataGridViewImageCellLayout.Stretch;
 
@@ -138,7 +154,7 @@ public class DataGridViewImageColumnTests : IDisposable
     [BoolData]
     public void ValuesAreIcons_Get_ReturnsCellTemplateValue(bool valueIsIcon)
     {
-        DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
+        using DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
         cellTemplate.ValueIsIcon = valueIsIcon;
 
         _column.ValuesAreIcons.Should().Be(valueIsIcon);
