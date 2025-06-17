@@ -408,8 +408,9 @@ public class DesignerUtilsTests :IDisposable
     public void ApplyListViewThemeStyles_ShouldSetWindowThemeToExplorer()
     {
         using ListView listView = new();
-        Exception exception = Record.Exception(() => DesignerUtils.ApplyListViewThemeStyles(listView));
+        Exception? exception = Record.Exception(() => DesignerUtils.ApplyListViewThemeStyles(listView));
         exception.Should().BeNull();
+        listView.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -423,8 +424,9 @@ public class DesignerUtilsTests :IDisposable
     public void ApplyTreeViewThemeStyles_ShouldSetWindowThemeToExplorer()
     {
         using TreeView treeView = new();
-        Exception exception = Record.Exception(() => DesignerUtils.ApplyTreeViewThemeStyles(treeView));
+        Exception? exception = Record.Exception(() => DesignerUtils.ApplyTreeViewThemeStyles(treeView));
         exception.Should().BeNull();
+        treeView.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
