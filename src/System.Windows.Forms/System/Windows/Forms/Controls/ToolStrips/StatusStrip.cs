@@ -21,6 +21,8 @@ public partial class StatusStrip : ToolStrip
     private static readonly int s_stateCalledSpringTableLayout = BitVector32.CreateMask(s_stateSizingGrip);
 
     private const int GripWidth = 12;
+    private const int GripHeight = 22;
+
     private RightToLeftLayoutGrip? _rtlLayoutGrip;
     private Orientation _lastOrientation = Orientation.Horizontal;
 
@@ -70,14 +72,7 @@ public partial class StatusStrip : ToolStrip
         {
             if (Orientation == Orientation.Horizontal)
             {
-                if (RightToLeft == RightToLeft.No)
-                {
-                    return new Padding(1, 0, 14, 0);
-                }
-                else
-                {
-                    return new Padding(14, 0, 1, 0);
-                }
+                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 14, 0) : new Padding(14, 0, 1, 0);
             }
             else
             {
@@ -201,24 +196,30 @@ public partial class StatusStrip : ToolStrip
     {
         get
         {
-            if (SizingGrip)
+            if (!SizingGrip)
             {
-                Size statusStripSize = Size;
-                // we can't necessarily make this the height of the status strip, as
-                // the orientation could change.
-                int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
-
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    return new Rectangle(0, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
-                }
-                else
-                {
-                    return new Rectangle(statusStripSize.Width - GripWidth, statusStripSize.Height - gripHeight, GripWidth, gripHeight);
-                }
+                return Rectangle.Empty;
             }
 
-            return Rectangle.Empty;
+            Size statusStripSize = Size;
+            Rectangle clientRect = ClientRectangle;
+
+            int scaledGripHeight = ScaleHelper.ScaleToDpi(GripHeight, DeviceDpi);
+            int scaleGripWidth = ScaleHelper.ScaleToDpi(GripWidth, DeviceDpi);
+
+            scaledGripHeight = Math.Min(scaledGripHeight, clientRect.Height);
+
+            return RightToLeft == RightToLeft.Yes
+                ? new Rectangle(
+                    x: 0,
+                    y: statusStripSize.Height - scaledGripHeight,
+                    width: scaleGripWidth,
+                    height: scaledGripHeight)
+                : new Rectangle(
+                    x: statusStripSize.Width - scaleGripWidth,
+                    y: statusStripSize.Height - scaledGripHeight,
+                    width: scaleGripWidth,
+                    height: scaledGripHeight);
         }
     }
 
@@ -303,14 +304,9 @@ public partial class StatusStrip : ToolStrip
                 proposedSize.Height = int.MaxValue;
             }
 
-            if (Orientation == Orientation.Horizontal)
-            {
-                return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
-            }
-            else
-            {
-                return GetPreferredSizeVertical(this) + Padding.Size;
-            }
+            return Orientation == Orientation.Horizontal
+                ? GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size
+                : GetPreferredSizeVertical(this) + Padding.Size;
         }
 
         return base.GetPreferredSizeCore(proposedSize);
@@ -584,15 +580,9 @@ public partial class StatusStrip : ToolStrip
                     PInvokeCore.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
 
                     // map the size grip FROM statusStrip coords TO the toplevel window coords.
-                    Point gripLocation;
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
-                    }
-                    else
-                    {
-                        gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
-                    }
+                    Point gripLocation = RightToLeft == RightToLeft.Yes
+                        ? new Point(SizeGripBounds.Left, SizeGripBounds.Bottom)
+                        : new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
 
                     PInvokeCore.MapWindowPoints(this, rootHwnd, ref gripLocation);
 
