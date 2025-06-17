@@ -202,10 +202,8 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         using Panel child = new();
         parent.Controls.Add(child);
         parent.Show();
-    
         using Bitmap bmp = new(10, 10);
         using Graphics g = Graphics.FromImage(bmp);
-    
         bool original = RadioButtonRenderer.RenderMatchingApplicationState;
         try
         {
