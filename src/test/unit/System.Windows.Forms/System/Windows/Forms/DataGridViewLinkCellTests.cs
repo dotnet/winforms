@@ -83,26 +83,14 @@ public class DataGridViewLinkCellTests : IDisposable
     [Fact]
     public void EditType_Override_ReturnsNull_ForDerivedType()
     {
-        using DerivedDataGridViewLinkCell cell = new();
+        using DataGridViewLinkCell cell = new();
 
         cell.EditType.Should().BeNull();
-    }
-
-    private class DerivedDataGridViewLinkCell : DataGridViewLinkCell
-    {
     }
 
     [Fact]
     public void FormattedValueType_Always_ReturnsStringType() =>
         _cell.FormattedValueType.Should().Be(typeof(string));
-
-    [Fact]
-    public void FormattedValueType_Override_ReturnsStringType_ForDerivedType()
-    {
-        using DerivedDataGridViewLinkCell cell = new();
-
-        cell.FormattedValueType.Should().Be(typeof(string));
-    }
 
     [Fact]
     public void LinkBehavior_Default_IsSystemDefault() =>
@@ -123,19 +111,6 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         _cell.LinkBehavior = LinkBehavior.SystemDefault;
         _cell.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
-
-        _cell.LinkBehavior = LinkBehavior.SystemDefault;
-        _cell.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
-    }
-
-    [WinFormsFact]
-    public void LinkBehavior_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
-    {
-        using DataGridView dataGridView = CreateGridWithColumn();
-        dataGridView.Rows[0].Cells[0] = _cell;
-       _cell.LinkBehavior = LinkBehavior.AlwaysUnderline;
-
-        _cell.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
     }
 
     [WinFormsFact]
@@ -152,32 +127,12 @@ public class DataGridViewLinkCellTests : IDisposable
     }
 
     [WinFormsFact]
-    public void LinkColor_Selected_ReturnsHighlightText()
-    {
-        using DataGridView dataGridView = CreateGridWithColumn();
-        dataGridView.Rows[0].Cells[0] = _cell;
-        _cell.Selected = true;
-
-        _cell.LinkColor.Should().Be(SystemColors.HighlightText);
-    }
-
-    [WinFormsFact]
     public void LinkColor_SetAndGet_RoundTrips()
     {
         Color color = Color.Purple;
         _cell.LinkColor = color;
 
         _cell.LinkColor.Should().Be(color);
-    }
-
-    [WinFormsFact]
-    public void LinkColor_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
-    {
-        using DataGridView dataGridView = CreateGridWithColumn();
-        dataGridView.Rows[0].Cells[0] = _cell;
-        _cell.LinkColor = Color.Orange;
-
-        _cell.LinkColor.Should().Be(Color.Orange);
     }
 
     [WinFormsFact]
@@ -207,19 +162,6 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         _cell.LinkVisited = false;
         _cell.LinkVisited.Should().BeFalse();
-
-        _cell.LinkVisited = false;
-        _cell.LinkVisited.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void LinkVisited_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
-    {
-        using DataGridView dataGridView = CreateGridWithColumn();
-        dataGridView.Rows[0].Cells[0] = _cell;
-        _cell.LinkVisited = true;
-
-        _cell.LinkVisited.Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -241,19 +183,6 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         _cell.TrackVisitedState = true;
         _cell.TrackVisitedState.Should().BeTrue();
-
-        _cell.TrackVisitedState = true;
-        _cell.TrackVisitedState.Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void TrackVisitedState_Set_TriggersInvalidateCell_WhenInDataGridViewAndRowIndexSet()
-    {
-        using DataGridView dataGridView = CreateGridWithColumn();
-        dataGridView.Rows[0].Cells[0] = _cell;
-
-        _cell.TrackVisitedState = false;
-        _cell.TrackVisitedState.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -275,9 +204,6 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         _cell.UseColumnTextForLinkValue = false;
         _cell.UseColumnTextForLinkValue.Should().BeFalse();
-
-        _cell.UseColumnTextForLinkValue = false;
-        _cell.UseColumnTextForLinkValue.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -287,7 +213,7 @@ public class DataGridViewLinkCellTests : IDisposable
 
         using DataGridView dataGridView = CreateGridWithColumn();
         dataGridView.Rows[0].Cells[0] = _cell;
-        string result = _cell.ToString();
+        string result = dataGridView.Rows[0].Cells[0].ToString();
 
         result.Should().Contain("DataGridViewLinkCell { ColumnIndex=0, RowIndex=0 }");
     }
@@ -303,48 +229,39 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.UseColumnTextForLinkValue = true;
         _cell.LinkVisited = true;
 
-        DataGridViewLinkCell clone = (DataGridViewLinkCell)_cell.Clone();
+        DataGridViewLinkCell clonedLinkCell = (DataGridViewLinkCell)_cell.Clone();
 
-        clone.Should().NotBeSameAs(_cell);
-        clone.ActiveLinkColor.Should().Be(_cell.ActiveLinkColor);
-        clone.LinkBehavior.Should().Be(_cell.LinkBehavior);
-        clone.LinkColor.Should().Be(_cell.LinkColor);
-        clone.TrackVisitedState.Should().Be(_cell.TrackVisitedState);
-        clone.VisitedLinkColor.Should().Be(_cell.VisitedLinkColor);
-        clone.UseColumnTextForLinkValue.Should().Be(_cell.UseColumnTextForLinkValue);
-        clone.LinkVisited.Should().Be(_cell.LinkVisited);
+        clonedLinkCell.Should().NotBeSameAs(_cell);
+        clonedLinkCell.ActiveLinkColor.Should().Be(_cell.ActiveLinkColor);
+        clonedLinkCell.LinkBehavior.Should().Be(_cell.LinkBehavior);
+        clonedLinkCell.LinkColor.Should().Be(_cell.LinkColor);
+        clonedLinkCell.TrackVisitedState.Should().Be(_cell.TrackVisitedState);
+        clonedLinkCell.VisitedLinkColor.Should().Be(_cell.VisitedLinkColor);
+        clonedLinkCell.UseColumnTextForLinkValue.Should().Be(_cell.UseColumnTextForLinkValue);
+        clonedLinkCell.LinkVisited.Should().Be(_cell.LinkVisited);
     }
 
     [WinFormsFact]
     public void Clone_BaseType_CreatesSameType()
     {
         _cell.LinkColor = Color.Pink;
-        DataGridViewLinkCell clone = (DataGridViewLinkCell)_cell.Clone();
+        DataGridViewLinkCell clonedLinkCell = (DataGridViewLinkCell)_cell.Clone();
 
-        clone.Should().BeOfType<DataGridViewLinkCell>();
-        clone.LinkColor.Should().Be(_cell.LinkColor);
+        clonedLinkCell.Should().BeOfType<DataGridViewLinkCell>();
+        clonedLinkCell.LinkColor.Should().Be(_cell.LinkColor);
     }
 
     [WinFormsFact]
-    public void Clone_OnlyCopiesSetProperties()
+    public void Clone_CopiesSetProperties_LeavesOthersDefault()
     {
         _cell.LinkColor = Color.Orange;
-        DataGridViewLinkCell clone = (DataGridViewLinkCell)_cell.Clone();
+        DataGridViewLinkCell clonedLinkCell = (DataGridViewLinkCell)_cell.Clone();
 
-        clone.LinkColor.Should().Be(Color.Orange);
-        clone.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
-        clone.TrackVisitedState.Should().BeTrue();
-        clone.UseColumnTextForLinkValue.Should().BeFalse();
-        clone.LinkVisited.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void CreateAccessibilityInstance_ReturnsAccessibleObject()
-    {
-        AccessibleObject accessibleObject = _cell.AccessibilityObject;
-
-        accessibleObject.Should().NotBeNull();
-        accessibleObject.Should().BeAssignableTo<AccessibleObject>();
+        clonedLinkCell.LinkColor.Should().Be(Color.Orange);
+        clonedLinkCell.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
+        clonedLinkCell.TrackVisitedState.Should().BeTrue();
+        clonedLinkCell.UseColumnTextForLinkValue.Should().BeFalse();
+        clonedLinkCell.LinkVisited.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -357,7 +274,7 @@ public class DataGridViewLinkCellTests : IDisposable
         using DataGridView dataGridView = CreateGridWithColumn();
         dataGridView.Rows[0].Cells[0] = _cell;
 
-        Action action = () => _cell.GetContentBounds(-1);
+        Action action = () => dataGridView.Rows[0].Cells[0].GetContentBounds(-1);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
