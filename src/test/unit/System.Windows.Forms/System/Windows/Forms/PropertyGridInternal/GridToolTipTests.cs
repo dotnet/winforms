@@ -7,6 +7,7 @@ public class GridToolTipTests : IDisposable
 {
     private readonly Control[] _controls;
     private readonly GridToolTip _toolTip;
+    private const int MaximumToolTipLength = 1000;
 
     public GridToolTipTests()
     {
@@ -55,15 +56,15 @@ public class GridToolTipTests : IDisposable
     [WinFormsFact]
     public void GridToolTip_SetTooLong_Truncates()
     {
-        _toolTip.ToolTip = new('a', 1005);
+        _toolTip.ToolTip = new('a', MaximumToolTipLength + 5);
 
         _toolTip.ToolTip.Should().EndWith("...");
-        _toolTip.ToolTip.Length.Should().Be(1003);
+        _toolTip.ToolTip.Length.Should().Be(MaximumToolTipLength + 3);
 
-        _toolTip.ToolTip = new('b', 1000);
+        _toolTip.ToolTip = new('b', MaximumToolTipLength);
 
         _toolTip.ToolTip.Should().NotEndWith("...");
-        _toolTip.ToolTip.Length.Should().Be(1000);
+        _toolTip.ToolTip.Length.Should().Be(MaximumToolTipLength);
     }
 
     [WinFormsFact]
