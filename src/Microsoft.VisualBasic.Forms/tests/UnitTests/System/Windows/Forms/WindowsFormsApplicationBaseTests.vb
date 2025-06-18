@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.Threading
 Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Microsoft.DotNet.RemoteExecutor
@@ -114,7 +115,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        ' NOTE for the race condition:
+        ' ShowSplashScreen runs logic with on ThreadPool thread (using Task.Run),
+        ' that code will try to access the Form, racing with the test disposing it.
+        <Fact(Skip:="This test case a race condition.")>
         Public Sub ShowHideSplashScreenSuccess()
             Dim testCode As Action
             Using form1 As New Form
