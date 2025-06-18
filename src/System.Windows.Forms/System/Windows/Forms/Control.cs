@@ -162,6 +162,8 @@ public unsafe partial class Control :
     internal const string ExplorerThemeIdentifier = "Explorer";
     internal const string ItemsViewThemeIdentifier = "ItemsView";
     internal const string ComboBoxButtonThemeIdentifier = "CFD";
+    internal const string BannerContainerThemeIdentifier = "FileExplorerBannerContainer";
+    internal const string ComboboxClassIdentifier = "COMBOBOX";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -9207,9 +9209,12 @@ public unsafe partial class Control :
 
             bool focused = ContainsFocus;
 
-            Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, $"RecreateHandle: {GetType().FullName} [Text={Text}]");
+            Debug.WriteLineIf(
+                CoreSwitches.PerfTrack.Enabled,
+                $"RecreateHandle: {GetType().FullName} [Text={Text}]");
 
             bool created = GetState(States.Created);
+
             if (GetState(States.TrackingMouseEvent))
             {
                 SetState(States.MouseEnterPending, true);
@@ -9232,9 +9237,11 @@ public unsafe partial class Control :
                 if (ChildControls is { } children && children.Count > 0)
                 {
                     controlSnapshot = new Control[children.Count];
+
                     for (int i = 0; i < children.Count; i++)
                     {
                         Control childControl = children[i];
+
                         if (childControl is not null && childControl.IsHandleCreated)
                         {
                             // SetParent to parking window
@@ -9294,6 +9301,7 @@ public unsafe partial class Control :
                     for (int i = 0; i < controlSnapshot.Length; i++)
                     {
                         Control? childControl = controlSnapshot[i];
+
                         if (childControl is not null && childControl.IsHandleCreated)
                         {
                             // Re-parent the control.

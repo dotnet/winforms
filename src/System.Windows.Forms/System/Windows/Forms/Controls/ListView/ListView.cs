@@ -627,6 +627,10 @@ public partial class ListView : Control
     {
         get
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             CreateParams cp = base.CreateParams;
 
             cp.ClassName = PInvoke.WC_LISTVIEW;
@@ -1821,27 +1825,35 @@ public partial class ListView : Control
                 throw new NotSupportedException(SR.ListViewCantSetViewToTileViewInVirtualMode);
             }
 
-            if (_viewStyle != value)
+            if (_viewStyle == value)
             {
-                _viewStyle = value;
-                if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
-                {
-                    PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
-                    UpdateGroupView();
-
-                    // if we switched to Tile view we should update the win32 list view tile view info
-                    if (_viewStyle == View.Tile)
-                    {
-                        UpdateTileView();
-                    }
-                }
-                else
-                {
-                    UpdateStyles();
-                }
-
-                UpdateListViewItemsLocations();
+                return;
             }
+
+            _viewStyle = value;
+
+            if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
+            {
+                PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
+                UpdateGroupView();
+
+                // if we switched to Tile view we should update the win32 list view tile view info
+                if (_viewStyle == View.Tile)
+                {
+                    UpdateTileView();
+                }
+            }
+            else
+            {
+                UpdateStyles();
+            }
+
+            if (IsHandleCreated && _viewStyle == View.Details)
+            {
+                ApplyDarkModeOnDemand();
+            }
+
+            UpdateListViewItemsLocations();
         }
     }
 
@@ -2545,6 +2557,8 @@ public partial class ListView : Control
 
     protected override unsafe void CreateHandle()
     {
+        base.CreateHandle();
+
         if (!RecreatingHandle)
         {
             using ThemingScope scope = new(Application.UseVisualStyles);
@@ -2554,8 +2568,6 @@ public partial class ListView : Control
                 dwICC = INITCOMMONCONTROLSEX_ICC.ICC_LISTVIEW_CLASSES
             });
         }
-
-        base.CreateHandle();
 
         if (BackgroundImage is not null)
         {
@@ -2574,7 +2586,7 @@ public partial class ListView : Control
     /// </remarks>
     private unsafe void CustomDraw(ref Message m)
     {
-        bool dontmess = false;
+        bool lockReturnValue = false;
         bool itemDrawDefault = false;
 
         try
@@ -2670,7 +2682,7 @@ public partial class ListView : Control
                     if (_viewStyle is View.Details or View.Tile)
                     {
                         m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NOTIFYSUBITEMDRAW | PInvoke.CDRF_NEWFONT);
-                        dontmess = true; // don't mess with our return value!
+                        lockReturnValue = true; // Let's make sure we're not changing this.
 
                         // ITEMPREPAINT is used to work out the rect for the first column!!! GAH!!!
                         // (which means we can't just do our color/font work on SUBITEM|ITEM_PREPAINT)
@@ -2752,7 +2764,7 @@ public partial class ListView : Control
                     // get the node
                     ListViewItem item = Items[(int)nmcd->nmcd.dwItemSpec];
                     // if we're doing the whole row in one style, change our result!
-                    if (dontmess && item.UseItemStyleForSubItems)
+                    if (lockReturnValue && item.UseItemStyleForSubItems)
                     {
                         m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
                     }
@@ -2903,7 +2915,7 @@ public partial class ListView : Control
                         PInvokeCore.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
                     }
 
-                    if (!dontmess)
+                    if (!lockReturnValue)
                     {
                         m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
                     }
@@ -4529,19 +4541,9 @@ public partial class ListView : Control
             PInvokeCore.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled)
-        {
-            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-
-            // Get the ListView's ColumnHeader handle:
-            HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
-            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
-        }
-#pragma warning restore WFO5001
-
         UpdateExtendedStyles();
         RealizeProperties();
+
         PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
         PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
 
@@ -4593,17 +4595,22 @@ public partial class ListView : Control
 
         // Use a copy of the list items array so that we can maintain the (handle created || listItemsArray is not null) invariant
         ListViewItem[]? listViewItemsToAdd = null;
+
         if (_listViewItems is not null)
         {
             listViewItemsToAdd = [.. _listViewItems];
             _listViewItems = null;
         }
 
-        int columnCount = _columnHeaders is null ? 0 : _columnHeaders.Length;
+        int columnCount = _columnHeaders is null
+            ? 0
+            : _columnHeaders.Length;
+
         if (columnCount > 0)
         {
             int[] indices = new int[columnCount];
             int index = 0;
+
             foreach (ColumnHeader column in _columnHeaders!)
             {
                 indices[index] = column.DisplayIndex;
@@ -4645,6 +4652,7 @@ public partial class ListView : Control
         // When the handle is recreated, update the SavedCheckedItems.
         // It is possible some checked items were added to the list view while its handle was null.
         _savedCheckedItems = null;
+
         if (!CheckBoxes && !VirtualMode)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -4655,7 +4663,55 @@ public partial class ListView : Control
                 }
             }
         }
+
+        // We need to wait for the next message loop
+        // to apply dark mode on demand.
+        BeginInvoke(ApplyDarkModeOnDemand);
     }
+
+#pragma warning disable WFO5001
+    private void ApplyDarkModeOnDemand()
+    {
+        if (Application.IsDarkModeEnabled
+            && GetStyle(ControlStyles.ApplyThemingImplicitly))
+        {
+            // Enable double buffering when in dark mode to reduce flicker.
+            uint exMask = PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_TWOCLICKACTIVATE |
+                PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
+                PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
+                PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
+                PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
+
+            uint exStyle = BuildExStyleInternal();
+            exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
+
+            PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
+                (WPARAM)exMask,
+                (LPARAM)exStyle);
+
+            // Apply dark mode theme to the ListView
+            _ = PInvoke.SetWindowTheme(
+                HWND,
+                $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                null);
+
+            // Get the ListView's ColumnHeader handle:
+            HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_GETHEADER,
+                (WPARAM)0,
+                (LPARAM)0);
+
+            // Apply dark mode theme to the ColumnHeader
+            PInvoke.SetWindowTheme(
+                columnHeaderHandle,
+                $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}",
+                null);
+        }
+    }
+#pragma warning restore WFO5001
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
@@ -4931,11 +4987,9 @@ public partial class ListView : Control
 
     protected void RealizeProperties()
     {
-        // Realize state information
-        Color c;
-
-        c = BackColor;
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        Color c = BackColor;
+
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
@@ -4949,6 +5003,7 @@ public partial class ListView : Control
         }
 #pragma warning restore WFO5001
 
+        // Realize state information
         if (_imageListLarge is not null)
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
@@ -5609,68 +5664,86 @@ public partial class ListView : Control
         }
     }
 
+    private uint BuildExStyleInternal()
+    {
+        if (!IsHandleCreated)
+        {
+            return 0;
+        }
+
+        uint exStyle = 0;
+
+        switch (_activation)
+        {
+            case ItemActivation.OneClick:
+                exStyle |= PInvoke.LVS_EX_ONECLICKACTIVATE;
+                break;
+            case ItemActivation.TwoClick:
+                exStyle |= PInvoke.LVS_EX_TWOCLICKACTIVATE;
+                break;
+        }
+
+        if (AllowColumnReorder)
+        {
+            exStyle |= PInvoke.LVS_EX_HEADERDRAGDROP;
+        }
+
+        if (CheckBoxes)
+        {
+            exStyle |= PInvoke.LVS_EX_CHECKBOXES;
+        }
+
+        if (DoubleBuffered)
+        {
+            exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
+        }
+
+        if (FullRowSelect)
+        {
+            exStyle |= PInvoke.LVS_EX_FULLROWSELECT;
+        }
+
+        if (GridLines)
+        {
+            exStyle |= PInvoke.LVS_EX_GRIDLINES;
+        }
+
+        if (HoverSelection)
+        {
+            exStyle |= PInvoke.LVS_EX_TRACKSELECT;
+        }
+
+        if (HotTracking)
+        {
+            exStyle |= PInvoke.LVS_EX_UNDERLINEHOT;
+        }
+
+        if (ShowItemToolTips)
+        {
+            exStyle |= PInvoke.LVS_EX_INFOTIP;
+        }
+
+        return exStyle;
+    }
+
     protected void UpdateExtendedStyles()
     {
         if (IsHandleCreated)
         {
-            uint exStyle = 0;
             uint exMask = PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_TWOCLICKACTIVATE |
-                            PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
-                            PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
-                            PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
-                            PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
+                PInvoke.LVS_EX_TRACKSELECT | PInvoke.LVS_EX_UNDERLINEHOT |
+                PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_HEADERDRAGDROP |
+                PInvoke.LVS_EX_CHECKBOXES | PInvoke.LVS_EX_FULLROWSELECT |
+                PInvoke.LVS_EX_GRIDLINES | PInvoke.LVS_EX_INFOTIP | PInvoke.LVS_EX_DOUBLEBUFFER;
 
-            switch (_activation)
-            {
-                case ItemActivation.OneClick:
-                    exStyle |= PInvoke.LVS_EX_ONECLICKACTIVATE;
-                    break;
-                case ItemActivation.TwoClick:
-                    exStyle |= PInvoke.LVS_EX_TWOCLICKACTIVATE;
-                    break;
-            }
+            uint exStyle = BuildExStyleInternal();
 
-            if (AllowColumnReorder)
-            {
-                exStyle |= PInvoke.LVS_EX_HEADERDRAGDROP;
-            }
+            PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
+                (WPARAM)exMask,
+                (LPARAM)exStyle);
 
-            if (CheckBoxes)
-            {
-                exStyle |= PInvoke.LVS_EX_CHECKBOXES;
-            }
-
-            if (DoubleBuffered)
-            {
-                exStyle |= PInvoke.LVS_EX_DOUBLEBUFFER;
-            }
-
-            if (FullRowSelect)
-            {
-                exStyle |= PInvoke.LVS_EX_FULLROWSELECT;
-            }
-
-            if (GridLines)
-            {
-                exStyle |= PInvoke.LVS_EX_GRIDLINES;
-            }
-
-            if (HoverSelection)
-            {
-                exStyle |= PInvoke.LVS_EX_TRACKSELECT;
-            }
-
-            if (HotTracking)
-            {
-                exStyle |= PInvoke.LVS_EX_UNDERLINEHOT;
-            }
-
-            if (ShowItemToolTips)
-            {
-                exStyle |= PInvoke.LVS_EX_INFOTIP;
-            }
-
-            PInvokeCore.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)exMask, (LPARAM)exStyle);
             Invalidate();
         }
     }
@@ -6383,9 +6456,10 @@ public partial class ListView : Control
 
     internal void RecreateHandleInternal()
     {
-        // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native
-        // listView destroys the state imageList.
-        // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
+        // For some reason, if CheckBoxes are set to true and the list view has a state imageList,
+        // then the native listView destroys the state imageList.
+        // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS
+        // on the native listView.)
         if (IsHandleCreated && StateImageList is not null)
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
