@@ -55,6 +55,7 @@
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
     <XUnitV3Version>2.0.2</XUnitV3Version>
+    <MicrosoftTestingPlatformVersion>1.7.3</MicrosoftTestingPlatformVersion>
     <XUnitRunnerVisualStudioVersion>3.1.0</XUnitRunnerVisualStudioVersion>
     <XUnitStaFactPackageVersion>2.1.7</XUnitStaFactPackageVersion>
   </PropertyGroup>
