@@ -545,8 +545,19 @@ public class ListViewTests : ControlTestBase
                 Assert.False(item.Selected);
             }
 
-            Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
-            await MoveMouseAsync(form, listViewCenter);
+            await form.InvokeAsync(() => listView.Update());
+
+            Point listViewCenter;
+            if (listView.Items.Count > 0 && listView.Items[0].SubItems.Count > 1)
+            {
+                listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
+                await MoveMouseAsync(form, listViewCenter);
+            }
+            else
+            {
+                throw new InvalidOperationException("ListView does not contain enough subitems.");
+            }
+
             await InputSimulator.SendAsync(
                form,
                inputSimulator => inputSimulator.Keyboard.KeyDown(VIRTUAL_KEY.VK_SHIFT)
