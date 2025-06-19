@@ -1,8 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Windows.Forms.IntegrationTests.Common;
 
 namespace System.Windows.Forms.UITests;
 
@@ -37,6 +39,57 @@ public class DataGridViewTests : ControlTestBase
             form.Close();
             dataTable.AcceptChanges();
         });
+    }
+
+    [WinFormsFact]
+    public async Task DataGridView_ClosesFormWhileDataGridViewInEditMode_WithBindingSource()
+    {
+        using Form form1 = new();
+        using Form form2 = new();
+        using DataGridView dataGridView = new();
+        using IContainer components = new Container();
+        using BindingSource bindingSource = new(components)
+        {
+            DataSource = TestDataSources.GetPersons()
+        };
+
+        dataGridView.DataSource = bindingSource;
+        dataGridView.Dock = DockStyle.Fill;
+        form2.Controls.Add(dataGridView);
+
+        form1.Shown += (_, _) =>
+        {
+            form2.Shown += (_, _) =>
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await form2.InvokeAsync(() =>
+                        {
+                            void handler(object? s, DataGridViewEditingControlShowingEventArgs e)
+                            {
+                                dataGridView.EditingControlShowing -= handler;
+                                form2.Close();
+                            }
+
+                            dataGridView.EditingControlShowing += handler;
+                            dataGridView.CurrentCell = dataGridView.Rows[0].Cells[1];
+                            dataGridView.BeginEdit(true);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException(ex.Message);
+                    }
+                });
+            };
+
+            form2.ShowDialog(form1);
+            form1.Close();
+        };
+
+        await Task.Run(form1.ShowDialog);
     }
 
     [WinFormsTheory]
