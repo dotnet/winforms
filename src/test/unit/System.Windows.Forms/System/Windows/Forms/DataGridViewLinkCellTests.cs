@@ -296,6 +296,7 @@ public class DataGridViewLinkCellTests : IDisposable
         Action action = () => _cell.GetErrorIconBounds(-1);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
+        ReferenceEquals(_cell, dataGridView.Rows[0].Cells[0]).Should().BeTrue();
     }
 
     [WinFormsFact]
