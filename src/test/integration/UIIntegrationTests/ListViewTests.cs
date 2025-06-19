@@ -545,18 +545,20 @@ public class ListViewTests : ControlTestBase
                 Assert.False(item.Selected);
             }
 
-            await form.InvokeAsync(() => listView.Update());
+            await form.InvokeAsync(() =>
+            {
+                listView.Update();
+                listView.Refresh();
+                Application.DoEvents();
+            });
 
-            Point listViewCenter;
-            if (listView.Items.Count > 0 && listView.Items[0].SubItems.Count > 1)
-            {
-                listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
-                await MoveMouseAsync(form, listViewCenter);
-            }
-            else
-            {
-                throw new InvalidOperationException("ListView does not contain enough subitems.");
-            }
+            Assert.True(listView.Items.Count > 0,
+                $"Expected ListView to contain at least one item, but found {listView.Items.Count}.");
+            Assert.True(listView.Items[0].SubItems.Count > 1,
+                $"Expected first item to have more than one subitem, but found {listView.Items[0].SubItems.Count}.");
+
+            Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
+            await MoveMouseAsync(form, listViewCenter);
 
             await InputSimulator.SendAsync(
                form,
@@ -568,7 +570,7 @@ public class ListViewTests : ControlTestBase
                form,
                inputSimulator => inputSimulator.Mouse.LeftButtonClick()
                                                .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));
-            await form.InvokeAsync(() => { });
+
             foreach (ListViewItem item in listView.Items)
             {
                 Assert.Equal(0, item.StateImageIndex);
