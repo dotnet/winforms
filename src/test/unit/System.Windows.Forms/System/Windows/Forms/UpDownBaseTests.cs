@@ -3086,7 +3086,7 @@ public class UpDownBaseTests
 
     public class SubUpDownBase : UpDownBase
     {
-        private int _onHandleCreatedCount;
+        private int _handleCreatedCallCount;
 
         public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
@@ -3196,7 +3196,7 @@ public class UpDownBaseTests
         public new void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            _onHandleCreatedCount++;
+            _handleCreatedCallCount++;
         }
 
         public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
@@ -3240,8 +3240,8 @@ public class UpDownBaseTests
             // In this case, we are subscribing to UserPreferenceChanged (multiple times!).
             // We need to call OnHandleDestroyed to avoid leaks.
             // We need to call it the "right" number of times though.
-            // We start with _onHandleCreatedCount.
-            var destroyCount = disposing ? _onHandleCreatedCount : 0;
+            // We start with _handleCreatedCallCount.
+            var destroyCount = disposing ? _handleCreatedCallCount : 0;
 
             if (IsHandleCreated)
             {
