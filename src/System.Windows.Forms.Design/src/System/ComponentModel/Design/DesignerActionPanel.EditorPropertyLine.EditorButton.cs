@@ -28,6 +28,11 @@ internal sealed partial class DesignerActionPanel
                 }
             }
 
+            public EditorButton()
+            {
+                FlatStyle = FlatStyle.Popup;
+            }
+
             protected override void OnMouseEnter(EventArgs e)
             {
                 base.OnMouseEnter(e);
