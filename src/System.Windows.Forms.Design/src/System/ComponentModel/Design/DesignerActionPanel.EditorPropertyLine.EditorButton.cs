@@ -30,6 +30,7 @@ internal sealed partial class DesignerActionPanel
 
             public EditorButton()
             {
+                // We need to set OwnerDraw true to be able to draw the button ourselves. So we set FlatStyle to Popup to break parent class's OwnerDraw logic.
                 FlatStyle = FlatStyle.Popup;
             }
 
