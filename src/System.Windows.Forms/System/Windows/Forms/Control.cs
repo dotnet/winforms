@@ -11086,6 +11086,12 @@ public unsafe partial class Control :
         _window.ReleaseHandle();
     }
 
+    /// <summary>
+    /// Updates the visual theme of the specified control based on the application's current theme settings.
+    /// This method applies the appropriate theme to the specified control depending on whether the application is in dark mode or light mode.
+    /// </summary>
+    /// <param name="control">The control whose theme is to be updated. Supported controls include <see cref="ProgressBar"/>, <see
+    /// cref="ComboBox"/>, <see cref="ListView"/>, and others.</param>
     private void OnThemChanged(Control control)
     {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -11838,10 +11844,8 @@ public unsafe partial class Control :
 
         // 1. Check if the control's handle is created and  Desktop Window Manager (DWM) non-client area rendering policy is enabled.
         // 2. If so, update the non-client rendering (e.g., update window frame, invalidate non-client area).
-        // 3. Optionally, raise an event or call a virtual method if needed.
-        // 4. Mark the message as handled if appropriate.
 
-        // Example implementation (actual logic may depend on the rest of the codebase):
+        // Specifies whether DWM rendering is enabled for the non-client area of the window. WPARAM is TRUE if enabled; otherwise, FALSE.
         if (m.WParamInternal != 0)
         {
             bool hasDarkNcArea;
