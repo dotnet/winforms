@@ -561,9 +561,9 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);
-        Debug.Assert(e.Item is not null, "The ToolStripItem should not be null on rendering the Arrow.");
 
-        Color arrowColor = (e.Item.Selected || e.Item.Pressed)
+        // We need to check for null here, since at design time at this point Item can be null.
+        Color arrowColor = (e.Item is not null) && (e.Item.Selected || e.Item.Pressed)
             ? GetDarkModeColor(SystemColors.HighlightText)
             : GetDarkModeColor(e.ArrowColor);
 
