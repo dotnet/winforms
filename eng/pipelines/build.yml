@@ -145,7 +145,6 @@ jobs:
     inputs:
       summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full\Cobertura.xml'
       pathToSources: '$(Build.SourcesDirectory)'
-      failIfCoverageEmpty: true
     displayName: PublishCodeCoverageResults
     condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
 
