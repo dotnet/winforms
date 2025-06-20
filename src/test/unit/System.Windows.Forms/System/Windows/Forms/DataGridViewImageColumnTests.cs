@@ -53,7 +53,7 @@ public class DataGridViewImageColumnTests : IDisposable
                 continue;
             var cell = row.Cells[0] as DataGridViewImageCell;
             cell.Should().NotBeNull();
-            cell!.Description.Should().Be("desc1");
+            cell.Description.Should().Be("desc1");
         }
 
         _column.Description = "desc2";
@@ -63,18 +63,36 @@ public class DataGridViewImageColumnTests : IDisposable
                 continue;
             var cell = row.Cells[0] as DataGridViewImageCell;
             cell.Should().NotBeNull();
-            cell!.Description.Should().Be("desc2");
+            cell.Description.Should().Be("desc2");
         }
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Description_Set_SameValue_DoesNotPropagate()
     {
-        DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
-        cellTemplate.Description = "foo";
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(_column);
+        dataGridView.Rows.Add(2);
+
         _column.Description = "foo";
 
-        _column.Description.Should().Be("foo");
+        List<DataGridViewImageCell> cells = [];
+        foreach (DataGridViewRow row in dataGridView.Rows)
+        {
+            if (row.IsNewRow)
+                continue;
+            var cell = row.Cells[0] as DataGridViewImageCell;
+            cell.Should().NotBeNull();
+            cell.Description = "foo";
+            cells.Add(cell!);
+        }
+
+        _column.Description = "foo";
+
+        foreach (var cell in cells)
+        {
+            cell.Description.Should().Be("foo");
+        }
     }
 
     [Fact]
@@ -110,7 +128,7 @@ public class DataGridViewImageColumnTests : IDisposable
     [Fact]
     public void ImageLayout_Get_ReturnsCellTemplateValue()
     {
-        DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
+        using DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
         cellTemplate.ImageLayout = DataGridViewImageCellLayout.Stretch;
 
         _column.ImageLayout.Should().Be(DataGridViewImageCellLayout.Stretch);
@@ -124,7 +142,7 @@ public class DataGridViewImageColumnTests : IDisposable
         dataGridView.Rows.Add(2);
 
         _column.ImageLayout = DataGridViewImageCellLayout.Zoom;
-        ((DataGridViewImageCell)_column.CellTemplate!).ImageLayout.Should().Be(DataGridViewImageCellLayout.Zoom);
+        _column.CellTemplate.Should().NotBeNull();
 
         foreach (DataGridViewRow row in dataGridView.Rows)
         {
@@ -132,18 +150,8 @@ public class DataGridViewImageColumnTests : IDisposable
                 continue;
             var cell = row.Cells[0] as DataGridViewImageCell;
             cell.Should().NotBeNull();
-            cell!.ImageLayout.Should().Be(DataGridViewImageCellLayout.Zoom);
+            cell.ImageLayout.Should().Be(DataGridViewImageCellLayout.Zoom);
         }
-    }
-
-    [Fact]
-    public void ImageLayout_Set_SameValue_DoesNothing()
-    {
-        using DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
-        cellTemplate.ImageLayout = DataGridViewImageCellLayout.Stretch;
-        _column.ImageLayout = DataGridViewImageCellLayout.Stretch;
-
-        _column.ImageLayout.Should().Be(DataGridViewImageCellLayout.Stretch);
     }
 
     [Fact]
@@ -168,7 +176,8 @@ public class DataGridViewImageColumnTests : IDisposable
         dataGridView.Rows.Add(2);
 
         _column.ValuesAreIcons = true;
-        ((DataGridViewImageCell)_column.CellTemplate!).ValueIsIcon.Should().BeTrue();
+        _column.CellTemplate.Should().NotBeNull();
+        ((DataGridViewImageCell)_column.CellTemplate).ValueIsIcon.Should().BeTrue();
 
         foreach (DataGridViewRow row in dataGridView.Rows)
         {
@@ -176,11 +185,11 @@ public class DataGridViewImageColumnTests : IDisposable
                 continue;
             var cell = row.Cells[0] as DataGridViewImageCell;
             cell.Should().NotBeNull();
-            cell!.ValueIsIcon.Should().BeTrue();
+            cell.ValueIsIcon.Should().BeTrue();
         }
 
         _column.ValuesAreIcons = false;
-        ((DataGridViewImageCell)_column.CellTemplate!).ValueIsIcon.Should().BeFalse();
+        _column.CellTemplate.Should().NotBeNull();
 
         foreach (DataGridViewRow row in dataGridView.Rows)
         {
@@ -189,18 +198,40 @@ public class DataGridViewImageColumnTests : IDisposable
             var cell = row.Cells[0] as DataGridViewImageCell;
 
             cell.Should().NotBeNull();
-            cell!.ValueIsIcon.Should().BeFalse();
+            cell.ValueIsIcon.Should().BeFalse();
         }
     }
 
-    [Fact]
-    public void ValuesAreIcons_Set_SameValue_DoesNothing()
+    [WinFormsFact]
+    public void ImageLayout_Set_SameValue_DoesNothing()
     {
-        DataGridViewImageCell cellTemplate = (DataGridViewImageCell)_column.CellTemplate!;
-        cellTemplate.ValueIsIcon = true;
-        _column.ValuesAreIcons = true;
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(_column);
+        dataGridView.Rows.Add(2);
 
-        _column.ValuesAreIcons.Should().BeTrue();
+        _column.ImageLayout = DataGridViewImageCellLayout.Normal;
+
+        _column.ImageLayout = DataGridViewImageCellLayout.Stretch;
+
+        List<DataGridViewImageCell> cells = [];
+        foreach (DataGridViewRow row in dataGridView.Rows)
+        {
+            if (row.IsNewRow)
+                continue;
+            var cell = row.Cells[0] as DataGridViewImageCell;
+            cell.Should().NotBeNull();
+            cell.ImageLayout = DataGridViewImageCellLayout.Stretch;
+            cells.Add(cell);
+        }
+
+        _column.ImageLayout = DataGridViewImageCellLayout.Stretch;
+
+        _column.CellTemplate.Should().NotBeNull();
+        ((DataGridViewImageCell)_column.CellTemplate).ImageLayout.Should().Be(DataGridViewImageCellLayout.Stretch);
+        foreach (var cell in cells)
+        {
+            cell.ImageLayout.Should().Be(DataGridViewImageCellLayout.Stretch);
+        }
     }
 
     [Fact]
@@ -214,24 +245,24 @@ public class DataGridViewImageColumnTests : IDisposable
         _column.ValuesAreIcons = true;
         _column.ImageLayout = DataGridViewImageCellLayout.Stretch;
 
-        DataGridViewImageColumn clone = (DataGridViewImageColumn)_column.Clone();
+        DataGridViewImageColumn dataGridViewImageColumnclone = (DataGridViewImageColumn)_column.Clone();
 
-        clone.Should().NotBeSameAs(_column);
-        clone.Icon.Should().Be(_column.Icon);
-        clone.Image.Should().Be(_column.Image);
-        clone.Description.Should().Be(_column.Description);
-        clone.ValuesAreIcons.Should().Be(_column.ValuesAreIcons);
-        clone.ImageLayout.Should().Be(_column.ImageLayout);
-        clone.DefaultCellStyle.Alignment.Should().Be(_column.DefaultCellStyle.Alignment);
+        dataGridViewImageColumnclone.Should().NotBeSameAs(_column);
+        dataGridViewImageColumnclone.Icon.Should().Be(_column.Icon);
+        dataGridViewImageColumnclone.Image.Should().Be(_column.Image);
+        dataGridViewImageColumnclone.Description.Should().Be(_column.Description);
+        dataGridViewImageColumnclone.ValuesAreIcons.Should().Be(_column.ValuesAreIcons);
+        dataGridViewImageColumnclone.ImageLayout.Should().Be(_column.ImageLayout);
+        dataGridViewImageColumnclone.DefaultCellStyle.Alignment.Should().Be(_column.DefaultCellStyle.Alignment);
     }
 
     [Fact]
     public void Clone_TypeDerived_CreatesInstanceOfSameType()
     {
         using MyDataGridViewImageColumn derived = new();
-        DataGridViewImageColumn clone = (DataGridViewImageColumn)derived.Clone();
+        DataGridViewImageColumn dataGridViewImageColumnclone = (DataGridViewImageColumn)derived.Clone();
 
-        clone.Should().BeOfType<MyDataGridViewImageColumn>();
+        dataGridViewImageColumnclone.Should().BeOfType<MyDataGridViewImageColumn>();
     }
 
     private class MyDataGridViewImageColumn : DataGridViewImageColumn { }
