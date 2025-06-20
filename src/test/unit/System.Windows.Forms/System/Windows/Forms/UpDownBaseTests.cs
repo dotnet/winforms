@@ -3086,6 +3086,8 @@ public class UpDownBaseTests
 
     public class SubUpDownBase : UpDownBase
     {
+        private int _handleCreatedCallCount;
+
         public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
         public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
@@ -3191,7 +3193,11 @@ public class UpDownBaseTests
 
         public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
 
-        public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+        public new void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            _handleCreatedCallCount++;
+        }
 
         public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
 
@@ -3226,6 +3232,31 @@ public class UpDownBaseTests
         public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
         public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);
+
+        protected override void Dispose(bool disposing)
+        {
+            // See https://github.com/dotnet/winforms/issues/13596.
+            // Some tests call OnHandleCreated (even multiple times!), but doesn't really create handle.
+            // In this case, we are subscribing to UserPreferenceChanged (multiple times!).
+            // We need to call OnHandleDestroyed to avoid leaks.
+            // We need to call it the "right" number of times though.
+            // We start with _handleCreatedCallCount.
+            var destroyCount = disposing ? _handleCreatedCallCount : 0;
+
+            if (IsHandleCreated)
+            {
+                // If a "real" handle was created, base.Dispose will destroy.
+                // So, we subtract 1.
+                destroyCount--;
+            }
+
+            for (int i = 0; i < destroyCount; i++)
+            {
+                OnHandleDestroyed(EventArgs.Empty);
+            }
+
+            base.Dispose(disposing);
+        }
 
         public override void UpButton()
         {
