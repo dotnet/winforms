@@ -54,9 +54,9 @@
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <XUnitV3Version>2.0.2</XUnitV3Version>
+    <XUnitV3Version>3.0.0-pre.25</XUnitV3Version>
     <XUnitRunnerVisualStudioVersion>3.1.0</XUnitRunnerVisualStudioVersion>
-    <XUnitStaFactPackageVersion>2.1.7</XUnitStaFactPackageVersion>
+    <XUnitStaFactPackageVersion>3.0.6-alpha</XUnitStaFactPackageVersion>
   </PropertyGroup>
   <!-- Test related -->
   <PropertyGroup>
