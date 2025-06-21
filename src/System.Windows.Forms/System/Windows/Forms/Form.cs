@@ -6646,7 +6646,7 @@ public partial class Form : ContainerControl
         switch ((uint)m.WParamInternal)
         {
             case PInvoke.MSGF_MENU:
-              if (Application.IsDarkModeEnabled && IsMdiContainer)
+              if (Application.IsDarkModeEnabled && IsMdiContainer && GetStyle(ControlStyles.ApplyThemingImplicitly))
                 {
                     Point pos;
                     PInvoke.GetCursorPos(out pos);
@@ -7062,7 +7062,7 @@ public partial class Form : ContainerControl
     {
         base.WndProc(ref m);
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled && IsMdiContainer)
+        if (Application.IsDarkModeEnabled && IsMdiContainer && GetStyle(ControlStyles.ApplyThemingImplicitly))
         {
             HRGN rgn = PInvokeCore.CreateRectRgn(0, 0, 0, 0);
             bool hasRegion = (m.WParamInternal != 1) && (m.Msg == PInvokeCore.WM_NCPAINT);

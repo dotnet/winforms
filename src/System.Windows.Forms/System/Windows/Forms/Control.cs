@@ -11095,9 +11095,10 @@ public unsafe partial class Control :
     private void OnThemChanged(Control control)
     {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-        switch (control)
+        if (control.GetStyle(ControlStyles.ApplyThemingImplicitly))
         {
+            switch (control)
+            {
             case ProgressBar:
                 string? isDarkTheme = Application.IsDarkModeEnabled ? "" : null;
                 PInvoke.SetWindowTheme(HWND, isDarkTheme, isDarkTheme);
@@ -11140,6 +11141,7 @@ public unsafe partial class Control :
                         ? $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}"
                         : null, null);
                 break;
+        }
         }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
