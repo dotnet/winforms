@@ -23,11 +23,12 @@ internal abstract partial class ButtonBaseAdapter
     /// <summary>
     ///  Returns a darkened color according to the required color contrast ratio.
     /// </summary>
-    private protected static Color GetContrastingBorderColor(Color buttonBorderShadowColor) => Color.FromArgb(
-        buttonBorderShadowColor.A,
-        (int)(buttonBorderShadowColor.R * 0.8f),
-        (int)(buttonBorderShadowColor.G * 0.8f),
-        (int)(buttonBorderShadowColor.B * 0.8f));
+    private protected static Color GetContrastingBorderColor(Color buttonBorderShadowColor) =>
+        Color.FromArgb(
+            buttonBorderShadowColor.A,
+            (int)(buttonBorderShadowColor.R * 0.8f),
+            (int)(buttonBorderShadowColor.G * 0.8f),
+            (int)(buttonBorderShadowColor.B * 0.8f));
 
     internal void Paint(PaintEventArgs e)
     {
@@ -48,6 +49,7 @@ internal abstract partial class ButtonBaseAdapter
     internal virtual Size GetPreferredSizeCore(Size proposedSize)
     {
         LayoutOptions? options = default;
+
         using (var screen = GdiCache.GetScreenHdc())
         using (PaintEventArgs e = new(screen, default))
         {
@@ -277,11 +279,10 @@ internal abstract partial class ButtonBaseAdapter
         hdc.DrawLine(topLeftInsetPen, p2, p3);      // Left (up-down)
 
         // Bottom + right inset
-
         using CreatePenScope bottomRightInsetPen = new(
             disabledHighContrast
-            ? colors.WindowDisabled
-            : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
+                ? colors.WindowDisabled
+                : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
         p1.Offset(0, -1);                           // Need to paint last pixel too.
         hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
@@ -342,6 +343,7 @@ internal abstract partial class ButtonBaseAdapter
             g.FillRectangle(brush, right);
             g.FillRectangle(brush, top);
             g.FillRectangle(brush, bottom);
+
             return;
         }
 
@@ -648,10 +650,12 @@ internal abstract partial class ButtonBaseAdapter
     internal static ColorOptions PaintFlatRender(Graphics g, Color foreColor, Color backColor, bool enabled) =>
         CommonRender(g, foreColor, backColor, enabled);
 
-    protected ColorOptions PaintFlatRender(IDeviceContext deviceContext) => CommonRender(deviceContext);
+    protected ColorOptions PaintFlatRender(IDeviceContext deviceContext)
+        => CommonRender(deviceContext);
 
     internal static ColorOptions PaintPopupRender(Graphics g, Color foreColor, Color backColor, bool enabled) =>
         CommonRender(g, foreColor, backColor, enabled);
 
-    protected ColorOptions PaintPopupRender(IDeviceContext deviceContext) => CommonRender(deviceContext);
+    protected ColorOptions PaintPopupRender(IDeviceContext deviceContext)
+        => CommonRender(deviceContext);
 }
