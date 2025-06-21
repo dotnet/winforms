@@ -213,9 +213,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{02EA
 		.github\copilot-instructions.md = .github\copilot-instructions.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rendering", "Rendering", "{D619FF8C-D99A-48AB-B16B-2F0E819B46D5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GDI", "GDI", "{D619FF8C-D99A-48AB-B16B-2F0E819B46D5}"
 	ProjectSection(SolutionItems) = preProject
-		.github\copilot\GDIPlus-copilot-instructions.md = .github\copilot\GDIPlus-copilot-instructions.md
+		.github\copilot\GDI\DarkModeButtonRendererCodeGenerationInstructions.md = .github\copilot\GDI\DarkModeButtonRendererCodeGenerationInstructions.md
+		.github\copilot\GDI\GDIPlus-copilot-instructions.md = .github\copilot\GDI\GDIPlus-copilot-instructions.md
 	EndProjectSection
 EndProject
 Global
