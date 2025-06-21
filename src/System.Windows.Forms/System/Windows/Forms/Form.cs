@@ -6712,30 +6712,7 @@ public partial class Form : ContainerControl
     {
         base.WndProc(ref m);
         PInvoke.GetStartupInfo(out STARTUPINFOW si);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (TopLevel && IsHandleCreated)
-        {
-            FormCornerPreference formCornerPreference = Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
-            SetFormCornerPreferenceInternal(formCornerPreference);
 
-            Color colorValue = Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, colorValue);
-
-            colorValue = Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, colorValue);
-
-            colorValue = Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, colorValue);
-        }
-
-        // Set the theme for the form. This is needed to set the dark mode theme
-        if (Application.IsDarkModeEnabled && Application.ColorModeSet)
-        {
-            BOOL value = true;
-            PInvoke.DwmSetWindowAttribute(HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(int));
-        }
-
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to chang
         // If we've been created from explorer, it may
         // force us to show up normal. Force our current window state to
         // the specified state, unless it's _specified_ max or min
