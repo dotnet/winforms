@@ -30,8 +30,8 @@ internal sealed partial class DesignerActionPanel
 
             public EditorButton()
             {
-                // We need to set OwnerDraw true to be able to draw the button ourselves. So we set FlatStyle to Popup to break parent class's OwnerDraw logic.
-                FlatStyle = FlatStyle.Popup;
+                // We need to set OwnerDraw true to be able to draw the button ourselves. So we set Image not null to break parent class's OwnerDraw logic.
+                Image = new Bitmap(1, 1);
             }
 
             protected override void OnMouseEnter(EventArgs e)
