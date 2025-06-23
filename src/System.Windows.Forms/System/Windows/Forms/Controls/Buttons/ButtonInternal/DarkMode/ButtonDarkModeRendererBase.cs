@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms;
@@ -44,39 +45,50 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         ArgumentNullException.ThrowIfNull(paintImage);
         ArgumentNullException.ThrowIfNull(paintField);
 
-        // Clear the background over the whole button area.
-        ClearBackground(graphics, parentBackgroundColor);
+        GraphicsState? graphicsState = default;
 
-        // Use padding from ButtonDarkModeRenderer
-        Padding padding = PaddingCore;
-
-        Rectangle paddedBounds = new(
-            x: bounds.X + padding.Left,
-            y: bounds.Y + padding.Top,
-            width: bounds.Width - padding.Horizontal,
-            height: bounds.Height - padding.Vertical);
-
-        // Draw button background and get content bounds
-        Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
-
-        // Offset content bounds for Popup style when button is pressed
-        // if (flatStyle == FlatStyle.Popup && state == PushButtonState.Pressed)
-        // {
-        //    contentBounds.Offset(1, 1);
-        // }
-
-        // Paint image and field using the provided delegates
-        paintImage(contentBounds);
-
-        paintField(
-            contentBounds,
-            GetTextColor(state, isDefault),
-            false);
-
-        if (focused && showFocusCues)
+        try
         {
-            // Draw focus indicator for other styles
-            DrawFocusIndicator(graphics, bounds, isDefault);
+            // Save the graphics state, so we can restore it later and the
+            // overrides do not to be concerned with restoring the state.
+            graphicsState = graphics.Save();
+
+            // Clear the background over the whole button area.
+            ClearBackground(graphics, parentBackgroundColor);
+
+            // Use padding from ButtonDarkModeRenderer
+            Padding padding = PaddingCore;
+
+            Rectangle paddedBounds = new(
+                x: bounds.X + padding.Left,
+                y: bounds.Y + padding.Top,
+                width: bounds.Width - padding.Horizontal,
+                height: bounds.Height - padding.Vertical);
+
+            // Draw button background and get content bounds
+            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
+
+            // Paint image and field using the provided delegates
+            paintImage(contentBounds);
+
+            paintField(
+                contentBounds,
+                GetTextColor(state, isDefault),
+                false);
+
+            if (focused && showFocusCues)
+            {
+                // Draw focus indicator for other styles
+                DrawFocusIndicator(graphics, bounds, isDefault);
+            }
+        }
+        finally
+        {
+            if (graphicsState is not null)
+            {
+                // Restore the graphics state to ensure no side effects
+                graphics.Restore(graphicsState);
+            }
         }
     }
 
