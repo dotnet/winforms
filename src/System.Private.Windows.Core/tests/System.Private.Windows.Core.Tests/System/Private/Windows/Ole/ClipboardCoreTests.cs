@@ -434,4 +434,46 @@ public unsafe class ClipboardCoreTests
         outData.GetDataPresent(DataFormatNames.WaveAudio).Should().BeTrue();
         outData.GetData(DataFormatNames.WaveAudio).Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
     }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData("data")]
+    public void SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
+    {
+        DataObject dataObject = new(data);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(data.GetType().FullName!).Should().BeTrue();
+        outData.GetData(data.GetType()).Should().Be(data);
+    }
+
+    [Theory]
+    [InlineData(1, true, 0, 0)]
+    [InlineData(1, false, 1, 2)]
+    [InlineData("data", true, 0, 0)]
+    [InlineData("data", false, 1, 2)]
+    public void SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
+    {
+        DataObject dataObject = new(data);
+        try
+        {
+            HRESULT result = ClipboardCore.SetData(dataObject, copy, retryTimes, retryDelay);
+            result.Should().Be(HRESULT.S_OK);
+
+            ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes, retryDelay);
+            outData.Should().NotBeNull();
+            outData.GetDataPresent(data.GetType()).Should().BeTrue();
+            outData.GetData(data.GetType().FullName!).Should().Be(data);
+        }
+        catch (Exception e)
+        {
+            if (copy)
+            {
+                e.GetType().Name.Should().Be("NotImplementedException");
+            }
+        }
+    }
 }
