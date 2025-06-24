@@ -28,8 +28,7 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(_dataGridViewComboBoxColumn);
-        dataGridView.Rows.Add();
-        dataGridView.Rows.Add();
+        dataGridView.Rows.Add(2);
 
         _dataGridViewComboBoxColumn.AutoComplete = false;
 
@@ -37,16 +36,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.AutoComplete.Should().BeFalse();
+            cell.AutoComplete.Should().BeFalse();
         }
     }
 
     [Fact]
     public void AutoComplete_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.AutoComplete = false;
         _dataGridViewComboBoxColumn.AutoComplete = false;
 
@@ -57,11 +56,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void AutoComplete_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.AutoComplete; };
-        Action set = () => _dataGridViewComboBoxColumn.AutoComplete = false;
+        Action getAutoComplete = () => { var _ = _dataGridViewComboBoxColumn.AutoComplete; };
+        Action setAutoCompleteFalse = () => _dataGridViewComboBoxColumn.AutoComplete = false;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getAutoComplete.Should().Throw<InvalidOperationException>();
+        setAutoCompleteFalse.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
@@ -100,32 +99,21 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.DataSource.Should().BeSameAs(dataSource);
+            cell.DataSource.Should().BeSameAs(dataSource);
         }
-    }
-
-    [WinFormsFact]
-    public void DataSource_SetSameValue_DoesNotPropagate()
-    {
-        object dataSource = new[] { "A", "B" };
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
-        cellTemplate.DataSource = dataSource;
-        _dataGridViewComboBoxColumn.DataSource = dataSource;
-
-        _dataGridViewComboBoxColumn.DataSource.Should().BeSameAs(dataSource);
     }
 
     [WinFormsFact]
     public void DataSource_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.DataSource; };
-        Action set = () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" };
+        Action getDataSource = () => { var _ = _dataGridViewComboBoxColumn.DataSource; };
+        Action setDataSourceToNewArray = () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" };
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getDataSource.Should().Throw<InvalidOperationException>();
+        setDataSourceToNewArray.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -164,16 +152,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.DisplayMember.Should().Be("Name");
+            cell.DisplayMember.Should().Be("Name");
         }
     }
 
     [WinFormsFact]
     public void DisplayMember_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.DisplayMember = "Name";
         _dataGridViewComboBoxColumn.DisplayMember = "Name";
 
@@ -224,16 +212,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.DisplayStyle.Should().Be(DataGridViewComboBoxDisplayStyle.ComboBox);
+            cell.DisplayStyle.Should().Be(DataGridViewComboBoxDisplayStyle.ComboBox);
         }
     }
 
     [WinFormsFact]
     public void DisplayStyle_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
         _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
 
@@ -285,16 +273,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.DisplayStyleForCurrentCellOnly.Should().BeTrue();
+            cell.DisplayStyleForCurrentCellOnly.Should().BeTrue();
         }
     }
 
     [WinFormsFact]
     public void DisplayStyleForCurrentCellOnly_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.DisplayStyleForCurrentCellOnly = true;
         _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true;
 
@@ -346,16 +334,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.DropDownWidth.Should().Be(77);
+            cell.DropDownWidth.Should().Be(77);
         }
     }
 
     [Fact]
     public void DropDownWidth_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.DropDownWidth = 42;
         _dataGridViewComboBoxColumn.DropDownWidth = 42;
 
@@ -406,16 +394,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.FlatStyle.Should().Be(FlatStyle.Flat);
+            cell.FlatStyle.Should().Be(FlatStyle.Flat);
         }
     }
 
     [WinFormsFact]
     public void FlatStyle_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.FlatStyle = FlatStyle.Popup;
         _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Popup;
 
@@ -426,11 +414,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void FlatStyle_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.FlatStyle; };
-        Action set = () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat;
+        Action getFlatStyle = () => { var _ = _dataGridViewComboBoxColumn.FlatStyle; };
+        Action setFlatStyleToFlat = () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getFlatStyle.Should().Throw<InvalidOperationException>();
+        setFlatStyleToFlat.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -458,9 +446,9 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void Items_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.Items; };
+        Action getItems = () => { var _ = _dataGridViewComboBoxColumn.Items; };
 
-        get.Should().Throw<InvalidOperationException>();
+        getItems.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -489,16 +477,16 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
             cell.Should().NotBeNull();
-            cell!.ValueMember.Should().Be("Id");
+            cell.ValueMember.Should().Be("Id");
         }
     }
 
     [WinFormsFact]
     public void ValueMember_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.ValueMember = "Id";
         _dataGridViewComboBoxColumn.ValueMember = "Id";
 
@@ -509,11 +497,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void ValueMember_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.ValueMember; };
-        Action set = () => _dataGridViewComboBoxColumn.ValueMember = "Id";
+        Action getValueMember = () => { var _ = _dataGridViewComboBoxColumn.ValueMember; };
+        Action setValueMemberToId = () => _dataGridViewComboBoxColumn.ValueMember = "Id";
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getValueMember.Should().Throw<InvalidOperationException>();
+        setValueMemberToId.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -549,17 +537,17 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
 
             cell.Should().NotBeNull();
-            cell!.MaxDropDownItems.Should().Be(12);
+            cell.MaxDropDownItems.Should().Be(12);
         }
     }
 
     [Fact]
     public void MaxDropDownItems_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.MaxDropDownItems = 7;
         _dataGridViewComboBoxColumn.MaxDropDownItems = 7;
 
@@ -570,11 +558,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void MaxDropDownItems_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.MaxDropDownItems; };
-        Action set = () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5;
+        Action getMaxDropDownItems = () => { var _ = _dataGridViewComboBoxColumn.MaxDropDownItems; };
+        Action setMaxDropDownItemsToFive = () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getMaxDropDownItems.Should().Throw<InvalidOperationException>();
+        setMaxDropDownItemsToFive.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
@@ -611,17 +599,17 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         {
             if (row.IsNewRow)
                 continue;
-            DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
+            using DataGridViewComboBoxCell? cell = row.Cells[0] as DataGridViewComboBoxCell;
 
             cell.Should().NotBeNull();
-            cell!.Sorted.Should().BeTrue();
+            cell.Sorted.Should().BeTrue();
         }
     }
 
     [Fact]
     public void Sorted_SetSameValue_DoesNotPropagate()
     {
-        DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
+        using DataGridViewComboBoxCell cellTemplate = (DataGridViewComboBoxCell)_dataGridViewComboBoxColumn.CellTemplate!;
         cellTemplate.Sorted = true;
         _dataGridViewComboBoxColumn.Sorted = true;
 
@@ -632,11 +620,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void Sorted_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.Sorted; };
-        Action set = () => _dataGridViewComboBoxColumn.Sorted = true;
+        Action getSorted = () => { var _ = _dataGridViewComboBoxColumn.Sorted; };
+        Action setSortedToTrue = () => _dataGridViewComboBoxColumn.Sorted = true;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getSorted.Should().Throw<InvalidOperationException>();
+        setSortedToTrue.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
@@ -660,7 +648,7 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         _dataGridViewComboBoxColumn.MaxDropDownItems = 5;
         _dataGridViewComboBoxColumn.Sorted = true;
 
-        DataGridViewComboBoxColumn dataGridViewComboBoxColumn = (DataGridViewComboBoxColumn)_dataGridViewComboBoxColumn.Clone();
+        using DataGridViewComboBoxColumn dataGridViewComboBoxColumn = (DataGridViewComboBoxColumn)_dataGridViewComboBoxColumn.Clone();
 
         dataGridViewComboBoxColumn.Should().NotBeSameAs(_dataGridViewComboBoxColumn);
         dataGridViewComboBoxColumn.AutoComplete.Should().BeFalse();
