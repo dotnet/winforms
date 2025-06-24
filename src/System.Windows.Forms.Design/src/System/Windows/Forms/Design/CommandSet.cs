@@ -1,14 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Windows.Forms.Design.Behavior;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Collections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design;
 
@@ -1382,6 +1383,7 @@ internal partial class CommandSet : IDisposable
         }
     }
 
+    private ICollection _toBeCopiedComponents;
     /// <summary>
     ///  Called when the copy menu item is selected.
     /// </summary>
@@ -1397,29 +1399,8 @@ internal partial class CommandSet : IDisposable
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            ICollection selectedComponents = GetCopySelection();
-
-            selectedComponents = PrependComponentNames(selectedComponents);
-
-            IDesignerSerializationService? ds = GetService<IDesignerSerializationService>();
-            Debug.Assert(ds is not null, "No designer serialization service -- we cannot copy to clipboard");
-            if (ds is not null)
-            {
-                object serializationData = ds.Serialize(selectedComponents);
-                using MemoryStream stream = new();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                new BinaryFormatter().Serialize(stream, serializationData);
-#pragma warning restore SYSLIB0011
-                stream.Seek(0, SeekOrigin.Begin);
-                byte[] bytes = stream.GetBuffer();
-                IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
-                if (!ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false))
-                {
-                    _uiService?.ShowError(SR.ClipboardError);
-                }
-            }
-
-            UpdateClipboardItems(null, null);
+            _toBeCopiedComponents = SelectionService!.GetSelectedComponents();
+            _commandSet.First(command => command.CommandID == StandardCommands.Paste)?.UpdateStatus();
         }
         finally
         {
@@ -1843,52 +1824,31 @@ internal partial class CommandSet : IDisposable
                 return;
             }
 
-            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject? dataObj);
-
-            if (clipboardOperationSuccessful)
+            if (_toBeCopiedComponents is not null && _toBeCopiedComponents.Count != 0)
             {
-                ICollection? components = null;
+                List<IComponent>? components = null;
                 bool createdItems = false;
 
                 // Get the current number of controls in the Component Tray in the target
                 ComponentTray? tray = GetService<ComponentTray>();
                 int numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
-                // We understand two things:  CF_DESIGNER, and toolbox items.
-                object? data = dataObj?.GetData(CF_DESIGNER);
-
                 using DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste);
-                if (data is byte[] bytes)
-                {
-                    MemoryStream s = new(bytes);
 
-                    // CF_DESIGNER was put on the clipboard by us using the designer serialization service.
-                    if (TryGetService(out IDesignerSerializationService? ds))
-                    {
-                        s.Seek(0, SeekOrigin.Begin);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
-                        object serializationData = new BinaryFormatter().Deserialize(s); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
-#pragma warning restore CA2300
-#pragma warning restore SYSLIB0011
-                        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
-                        {
-                            components = ds.Deserialize(serializationData);
-                        }
-                    }
-                }
-                else if (TryGetService(out IToolboxService? ts) && ts.IsSupported(dataObj, host))
+                components = DesignerUtils.CopyDragObjects(new ReadOnlyCollection<IComponent>([.. _toBeCopiedComponents.Cast<IComponent>()]), GetService<IDesignerHost>());
+
+                if (_toBeCopiedComponents.Count == components.Count)
                 {
-                    // Now check for a toolbox item.
-                    ToolboxItem? ti = ts.DeserializeToolboxItem(dataObj, host);
-                    if (ti is not null)
+                    int i = 0;
+                    foreach (IComponent component in _toBeCopiedComponents)
                     {
-                        using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                        if (component is Control original && components[i] is Control duplicate)
                         {
-                            components = ti.CreateComponents(host);
+                            duplicate.Parent = original.Parent;
+                            duplicate.Location = new Point(original.Location.X + 15, original.Location.Y + 15);
                         }
 
-                        createdItems = true;
+                        i++;
                     }
                 }
 
@@ -1897,7 +1857,7 @@ internal partial class CommandSet : IDisposable
                 if (components is not null && components.Count > 0)
                 {
                     // Make copy of Items in Array..
-                    object[] allComponents = new object[components.Count];
+                    IComponent[] allComponents = new IComponent[components.Count];
                     components.CopyTo(allComponents, 0);
 
                     List<IComponent> selectComps = [];
@@ -2170,11 +2130,8 @@ internal partial class CommandSet : IDisposable
                     }
 
                     trans.Commit();
+                    SelectionService?.SetSelectedComponents(components);
                 }
-            }
-            else
-            {
-                _uiService?.ShowError(SR.ClipboardError);
             }
         }
         finally
@@ -3091,28 +3048,7 @@ internal partial class CommandSet : IDisposable
             }
         }
 
-        // Not being inherited. Now look at the contents of the data
-        bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject? dataObj);
-
-        bool enable = false;
-
-        if (clipboardOperationSuccessful && dataObj is not null)
-        {
-            if (dataObj.GetDataPresent(CF_DESIGNER))
-            {
-                enable = true;
-            }
-            else
-            {
-                // Not ours, check to see if the toolbox service understands this
-                if (TryGetService(out IToolboxService? ts))
-                {
-                    enable = host is not null ? ts.IsSupported(dataObj, host) : ts.IsToolboxItem(dataObj);
-                }
-            }
-        }
-
-        cmd.Enabled = enable;
+        cmd.Enabled = _toBeCopiedComponents is not null;
     }
 
     private void OnStatusPrimarySelection(object? sender, EventArgs e)
