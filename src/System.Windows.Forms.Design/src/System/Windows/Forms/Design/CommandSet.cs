@@ -53,6 +53,8 @@ internal partial class CommandSet : IDisposable
     private StatusCommandUI _statusCommandUI; // Used to update the statusBar Information.
     private readonly IUIService? _uiService;
 
+    private ICollection? _toBeCopiedComponents;
+
     /// <summary>
     ///  Creates a new CommandSet object. This object implements the set
     ///  of commands that the UI.Win32 form designer offers.
@@ -422,6 +424,7 @@ internal partial class CommandSet : IDisposable
 
     // This function will return true if call to func is successful, false otherwise
     // Output of call to func is available in result out parameter
+    [SuppressMessage("Style", "IDE0051:Remove unused private members", Justification = "retain this unused method")]
     private static bool ExecuteSafely<T>(Func<T> func, bool throwOnException, [MaybeNullWhen(false)] out T result)
     {
         try
@@ -1383,7 +1386,6 @@ internal partial class CommandSet : IDisposable
         }
     }
 
-    private ICollection _toBeCopiedComponents;
     /// <summary>
     ///  Called when the copy menu item is selected.
     /// </summary>
@@ -1835,9 +1837,9 @@ internal partial class CommandSet : IDisposable
 
                 using DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste);
 
-                components = DesignerUtils.CopyDragObjects(new ReadOnlyCollection<IComponent>([.. _toBeCopiedComponents.Cast<IComponent>()]), GetService<IDesignerHost>());
+                components = DesignerUtils.CopyDragObjects(new ReadOnlyCollection<IComponent>([.. _toBeCopiedComponents.Cast<IComponent>()]), GetService<IDesignerHost>()!);
 
-                if (_toBeCopiedComponents.Count == components.Count)
+                if (components is not null && _toBeCopiedComponents.Count == components.Count)
                 {
                     int i = 0;
                     foreach (IComponent component in _toBeCopiedComponents)
