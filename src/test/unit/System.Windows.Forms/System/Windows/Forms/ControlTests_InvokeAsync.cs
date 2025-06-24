@@ -12,6 +12,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_Action_ExecutesOnUIThread()
     {
         using var control = new TestControl();
@@ -33,6 +37,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_FuncT_ExecutesOnUIThread_AndReturnsValue()
     {
         using var control = new TestControl();
@@ -53,6 +61,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_AsyncCallback_ExecutesOnUIThread()
     {
         using var control = new TestControl();
@@ -74,6 +86,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_AsyncCallbackT_ExecutesOnUIThread_AndReturnsValue()
     {
         using var control = new TestControl();
@@ -207,6 +223,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_Propagates_Exception_FromCallback()
     {
         using var control = new TestControl();
@@ -226,6 +246,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_Reentry_Supported()
     {
         using var control = new TestControl();
@@ -241,6 +265,10 @@ public partial class ControlTests
     }
 
     [Fact]
+    [Diagnostics.CodeAnalysis.SuppressMessage(
+        category: "Usage",
+        checkId: "xUnit1051",
+        Justification = "We need to test a series of specific overloads and/or exceptions.")]
     public async Task InvokeAsync_MultipleConcurrentCalls_AreThreadSafe()
     {
         using var control = new TestControl();
