@@ -31,13 +31,22 @@ internal sealed class NameCreationService : INameCreationService
             if (cc[i] is Component comp)
             {
                 string name = comp.Site.Name;
-                if (name.StartsWith(type.Name, StringComparison.Ordinal))
+                int numberStartIndex = name.Length - 1;
+
+                while (numberStartIndex >= 0 && char.IsDigit(name[numberStartIndex]))
+                {
+                    numberStartIndex--;
+                }
+
+                string typeName = name[..(numberStartIndex + 1)];
+                string number = name[(numberStartIndex + 1)..];
+
+                if (typeName == type.Name)
                 {
                     count++;
                     try
                     {
-                        int value;
-                        value = int.Parse(name[type.Name.Length..]);
+                        int value = int.Parse(number);
                         if (value < min)
                             min = value;
                         if (value > max)
