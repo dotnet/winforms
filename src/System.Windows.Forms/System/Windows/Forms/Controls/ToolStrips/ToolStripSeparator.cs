@@ -290,7 +290,43 @@ public partial class ToolStripSeparator : ToolStripItem
         if (Owner is not null && ParentInternal is not null)
         {
             Renderer!.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            MethodInfo? method = ParentInternal.GetType().GetMethod("GetStyle", BindingFlags.Instance | BindingFlags.NonPublic);
+            object? applyThemingImplicitly = method?.Invoke(ParentInternal, [ControlStyles.ApplyThemingImplicitly]);
+            if (applyThemingImplicitly is not null && (bool)applyThemingImplicitly)
+            {
+                // If the parent has ApplyThemingImplicitly set, we need to paint the background
+                // in dark mode, otherwise it will be transparent.
+
+                if (Application.IsDarkModeEnabled)
+                {
+                    FillAlpha(e);
         }
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        }
+    }
+
+    private unsafe void FillAlpha(PaintEventArgs e)
+    {
+        BITMAPINFOHEADER bih = new BITMAPINFOHEADER
+        {
+            biSize = (uint)Marshal.SizeOf<BITMAPINFOHEADER>(),
+            biWidth = 1,
+            biHeight = 1,
+            biPlanes = 1,
+            biBitCount = 32,
+            biCompression = (uint)BI_COMPRESSION.BI_RGB
+        };
+
+        BITMAPINFO bi = new BITMAPINFO() { bmiHeader = bih };
+        RGBQUAD bitmapBits = new RGBQUAD { rgbBlue = 45, rgbGreen = 0x2D, rgbRed = 0x2D, rgbReserved = 0xEF };
+        HDC hdc = (HDC)e.Graphics.GetHdc();
+        PInvoke.StretchDIBits(hdc, 0, 0, Size.Width, Size.Height,
+                        0, 0, 1, 1, &bitmapBits, &bi,
+                        DIB_USAGE.DIB_RGB_COLORS, ROP_CODE.SRCPAINT);
+        e.Graphics.ReleaseHdc(hdc);
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]

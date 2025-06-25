@@ -10392,9 +10392,6 @@ public unsafe partial class Control :
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    // We shouldn't mess with the color mode if users haven't specifically set it.
-                    // https://github.com/dotnet/winforms/issues/12014
-                    // I Don't think we should be doing this for Forms here , but it is the same as the old code but execute Form Control.
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }

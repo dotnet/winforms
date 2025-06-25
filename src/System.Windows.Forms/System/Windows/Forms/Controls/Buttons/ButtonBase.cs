@@ -1354,14 +1354,16 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
         // If  disabled DarkMode, we need to update the button's appearance
         // to reflect the new color scheme.
-        if (FlatStyle == FlatStyle.Standard && !Application.IsDarkModeEnabled)
+        if (!Application.IsDarkModeEnabled)
         {
             if (OwnerDraw != GetStyle(ControlStyles.UserPaint))
             {
                 SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
-                _cachedAdapterType = default;
             }
         }
+
+        // If Application.ColorMode Changed we need to reset the adapter, so it can re-evaluated;
+        _adapter = default;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     }
