@@ -313,7 +313,7 @@ public partial class ToolStripSeparator : ToolStripItem
     {
         BITMAPINFOHEADER bih = new BITMAPINFOHEADER
         {
-            biSize = (uint)Marshal.SizeOf<BITMAPINFOHEADER>(),
+            biSize = (uint)sizeof(BITMAPINFOHEADER),
             biWidth = 1,
             biHeight = 1,
             biPlanes = 1,
