@@ -3,6 +3,8 @@
 
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Drawing.Imaging;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -475,5 +477,60 @@ public unsafe class ClipboardCoreTests
                 e.GetType().Name.Should().Be("NotImplementedException");
             }
         }
+    }
+
+    [Fact]
+    public void SetFileDropList_Invoke_GetReturnsExpected()
+    {
+        StringCollection filePaths =
+        [
+            "filePath",
+            "filePath2"
+        ];
+
+        DataObject dataObject = new(DataFormatNames.FileDrop, filePaths);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.FileDrop).Should().BeTrue();
+        outData.GetData(DataFormatNames.FileDrop).Should().BeEquivalentTo(filePaths);
+    }
+
+    [Fact]
+    public void SetImage_InvokeBitmap_GetReturnsExpected()
+    {
+        using Bitmap bitmap = new(10, 10);
+        bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+        DataObject dataObject = new(DataFormatNames.Bitmap, bitmap);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.Bitmap).Should().BeTrue();
+
+        var getDataResult = outData.GetData(DataFormatNames.Bitmap).Should().BeOfType<Bitmap>().Subject;
+        getDataResult.Size.Should().Be(bitmap.Size);
+        getDataResult.GetPixel(1, 2).Should().Be(Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+    }
+
+    [Theory]
+    [InlineData("bitmaps/telescope_01.wmf")]
+    [InlineData("bitmaps/milkmateya01.emf")]
+    public void SetImage_InvokeMetafile_and_EnhancedMetafile_GetReturnsExpected(string metafilePath)
+    {
+        using Metafile metafile = new(metafilePath);
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
+        DataObject dataObject = new(DataFormatNames.Bitmap, metafile);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.Bitmap).Should().BeTrue();
     }
 }
