@@ -321,14 +321,34 @@ public unsafe class ClipboardCoreTests
         outData1.GetData(format, autoConvert: false).Should().Be(outData2.GetData(format, autoConvert: false));
     }
 
-    [Fact]
-    public void SetData_Int_GetReturnsExpected()
+    public static TheoryData<object, Type?> TestData => new()
     {
-        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, 1), copy: false, retryTimes: 1, retryDelay: 0);
+        { Color.Black, null },
+        { new FileNotFoundException(), typeof(FileNotFoundException) },
+        { 1, null }
+    };
+
+    [Theory]
+    [MemberData(nameof(TestData))]
+    public void SetData_CustomFormat_GetReturnsExpected(object inputData, Type? expectedExceptionType)
+    {
+        string format = nameof(SetData_CustomFormat_GetReturnsExpected);
+        DataObject dataObject = new(format, inputData);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
         ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
         outData.Should().NotBeNull();
-        outData.GetDataPresent("SomeDataObjectId").Should().BeTrue();
-        outData.GetData("SomeDataObjectId").Should().Be(1);
+        outData.GetDataPresent(format).Should().BeTrue();
+
+        if (expectedExceptionType is null)
+        {
+            outData.GetData(format).Should().Be(inputData);
+        }
+        else
+        {
+            outData.GetData(format).Should().BeOfType(expectedExceptionType);
+        }
     }
 
     [Theory]
@@ -532,5 +552,24 @@ public unsafe class ClipboardCoreTests
         ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
         outData.Should().NotBeNull();
         outData.GetDataPresent(DataFormatNames.Bitmap).Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(DataFormatNames.Text)]
+    [InlineData(DataFormatNames.UnicodeText)]
+    [InlineData(DataFormatNames.Rtf)]
+    [InlineData(DataFormatNames.Html)]
+    [InlineData(DataFormatNames.Xaml)]
+    [InlineData(DataFormatNames.Csv)]
+    public void SetText_InvokeStringTextDataFormat_GetReturnsExpected(string dataFormatName)
+    {
+        DataObject dataObject = new(dataFormatName, "text");
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(dataFormatName).Should().BeTrue();
+        outData.GetData(dataFormatName).Should().Be("text");
     }
 }
