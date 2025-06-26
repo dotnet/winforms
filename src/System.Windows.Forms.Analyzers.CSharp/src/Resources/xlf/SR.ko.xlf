@@ -82,21 +82,6 @@
         <target state="translated">'IDataObject' 형식이 'ITypedDataObject'를 구현하지 않습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFO2001AnalyzerDescription">
-        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
-        <target state="translated">대리자가 감독되지 않은 작업으로 단순히 시작되도록 의도하지 않는 한 `Func&lt;T&gt;`를 `InvokeAsync`에 전달하지 마세요(`T`는 `Task` 또는 `ValueTask`임). 대신 `Func&lt;CancellationToken, ValueTask&gt;` 또는 `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`를 사용하면 `InvokeAsync`에 전달된 대리자가 대기되어 예외가 적절하게 처리될 수 있습니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
-        <target state="translated">취소 토큰 없이 ‘InvokeAsync’에 작업을 전달하는 중</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
-        <target state="translated">취소 토큰 없이 ‘InvokeAsync’에 작업을 전달하는 중</target>
-        <note />
-      </trans-unit>
     </body>
   </file>
 </xliff>
