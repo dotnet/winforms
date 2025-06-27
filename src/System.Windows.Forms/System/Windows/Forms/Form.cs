@@ -1767,7 +1767,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!TopLevel)
+            if (!TopLevel && !DesignMode)
             {
                 throw new InvalidOperationException(SR.FormScreenCaptureModeRequiresTopLevel);
             }
