@@ -7,28 +7,33 @@ namespace System.Windows.Forms.Tests;
 
 public class DataGridViewImageCellTests : IDisposable
 {
-    public DataGridViewImageCell dataGridViewImageCell => new();
+    private readonly DataGridViewImageCell _dataGridViewImageCell;
 
-    public void Dispose() => dataGridViewImageCell.Dispose();
+    public DataGridViewImageCellTests()
+    {
+        _dataGridViewImageCell = new();
+    }
+
+    public void Dispose() => _dataGridViewImageCell.Dispose();
 
     [Fact]
     public void Ctor_Default_SetsValueIsIconFalse() =>
-        dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
+        _dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
 
     [Theory]
     [BoolData]
     public void Ctor_ValueIsIcon_SetsValueIsIcon(bool valueIsIcon)
     {
-        using DataGridViewImageCell cell = new(valueIsIcon);
+        using DataGridViewImageCell dataGridViewImageCell = new(valueIsIcon);
 
-        cell.ValueIsIcon.Should().Be(valueIsIcon);
+        dataGridViewImageCell.ValueIsIcon.Should().Be(valueIsIcon);
     }
 
     [Fact]
     public void DefaultNewRowValue_ReturnsErrorBitmap_WhenValueTypeIsImage()
     {
-        dataGridViewImageCell.ValueType = typeof(Image);
-        var value = dataGridViewImageCell.DefaultNewRowValue;
+        _dataGridViewImageCell.ValueType = typeof(Image);
+        var value = _dataGridViewImageCell.DefaultNewRowValue;
 
         value.Should().BeSameAs(DataGridViewImageCell.ErrorBitmap);
     }
@@ -36,63 +41,67 @@ public class DataGridViewImageCellTests : IDisposable
     [Fact]
     public void DefaultNewRowValue_ReturnsNull_WhenValueTypeIsOther()
     {
-        dataGridViewImageCell.ValueType = typeof(string);
-        dataGridViewImageCell.ValueIsIcon = false;
-        var value = dataGridViewImageCell.DefaultNewRowValue;
+        _dataGridViewImageCell.ValueType = typeof(string);
+        _dataGridViewImageCell.ValueIsIcon = false;
+        object? value = _dataGridViewImageCell.DefaultNewRowValue;
 
-        value.Should().BeSameAs(DataGridViewImageCell.ErrorBitmap);
+        value.Should().BeNull();
     }
 
     [Fact]
     public void EditType_IsAlwaysNull()
     {
-        dataGridViewImageCell.EditType.Should().BeNull();
+        _dataGridViewImageCell.EditType.Should().BeNull();
 
-        using DataGridViewImageCell cellIcon = new(true);
-        cellIcon.EditType.Should().BeNull();
+        using DataGridViewImageCell dataGridViewImageCellIcon = new(true);
+        dataGridViewImageCellIcon.EditType.Should().BeNull();
     }
 
     [Fact]
     public void FormattedValueType_ReturnsImage_WhenValueIsIconFalse()
     {
-        dataGridViewImageCell.ValueIsIcon = false;
-        dataGridViewImageCell.FormattedValueType.Should().Be(typeof(Image));
+        _dataGridViewImageCell.ValueIsIcon = false;
+        _dataGridViewImageCell.FormattedValueType.Should().Be(typeof(Image));
     }
 
     [Fact]
     public void ValueIsIcon_SetFalse_UpdatesFlag()
     {
-        dataGridViewImageCell.ValueIsIcon = true;
-        dataGridViewImageCell.ValueIsIcon = false;
-        dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
+        _dataGridViewImageCell.ValueIsIcon = true;
+        _dataGridViewImageCell.ValueIsIcon = false;
+        _dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
     }
 
     [Fact]
     public void ValueType_GetSet_RoundTrips()
     {
-        dataGridViewImageCell.ValueType = typeof(Image);
-        dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
+        _dataGridViewImageCell.ValueType = typeof(Image);
+        _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
 
-        dataGridViewImageCell.ValueType = null;
-        dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
+        _dataGridViewImageCell.ValueType = null;
+        _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
+
+        _dataGridViewImageCell.ValueIsIcon = true;
+        _dataGridViewImageCell.ValueType = typeof(Image);
+        _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
     }
 
     [Fact]
     public void ValueType_SetToNull_ResetsValueIsIconToDefault()
     {
-        dataGridViewImageCell.ValueType = typeof(Icon);
-        dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
+        _dataGridViewImageCell.ValueType = typeof(Icon);
+        _dataGridViewImageCell.ValueIsIcon.Should().BeTrue();
 
-        dataGridViewImageCell.ValueType = null;
-        dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
+        _dataGridViewImageCell.ValueType = null;
+        _dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
     }
 
     [Fact]
     public void GetContentBounds_ReturnsEmpty_WhenDataGridViewIsNull()
     {
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -101,10 +110,10 @@ public class DataGridViewImageCellTests : IDisposable
     public void GetContentBounds_ReturnsEmpty_WhenRowIndexNegative()
     {
         using DataGridView dataGridView = new();
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, style, -1);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, -1);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -115,10 +124,10 @@ public class DataGridViewImageCellTests : IDisposable
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewImageColumn());
         dataGridView.Rows.Add();
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -127,8 +136,8 @@ public class DataGridViewImageCellTests : IDisposable
     public void GetErrorIconBounds_ReturnsEmpty_WhenDataGridViewIsNull()
     {
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -139,10 +148,10 @@ public class DataGridViewImageCellTests : IDisposable
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewImageColumn());
         dataGridView.Rows.Add();
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, -1);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, -1);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -153,10 +162,10 @@ public class DataGridViewImageCellTests : IDisposable
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewImageColumn());
         dataGridView.Rows.Add();
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -165,14 +174,14 @@ public class DataGridViewImageCellTests : IDisposable
     public void GetErrorIconBounds_ReturnsEmpty_WhenShowCellErrorsIsFalse()
     {
         using DataGridView dataGridView = new();
-        DataGridViewImageColumn col = new();
-        dataGridView.Columns.Add(col);
+        DataGridViewImageColumn dataGridViewImageColumn = new();
+        dataGridView.Columns.Add(dataGridViewImageColumn);
         dataGridView.Rows.Add();
         dataGridView.ShowCellErrors = false;
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -181,14 +190,14 @@ public class DataGridViewImageCellTests : IDisposable
     public void GetErrorIconBounds_ReturnsEmpty_WhenErrorTextIsNullOrEmpty()
     {
         using DataGridView dataGridView = new();
-        DataGridViewImageColumn col = new();
-        dataGridView.Columns.Add(col);
+        DataGridViewImageColumn dataGridViewImageColumn = new();
+        dataGridView.Columns.Add(dataGridViewImageColumn);
         dataGridView.Rows.Add();
         dataGridView.ShowCellErrors = true;
-        dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Rectangle bounds = (Rectangle)dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, 0);
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -196,10 +205,10 @@ public class DataGridViewImageCellTests : IDisposable
     [Fact]
     public void GetPreferredSize_ReturnsMinusOne_WhenDataGridViewIsNull()
     {
-        DataGridViewImageCell cell = dataGridViewImageCell;
+        DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
-        Size size = (Size)cell.TestAccessor().Dynamic.GetPreferredSize(g, style, 0, new Size(100, 100));
+        DataGridViewCellStyle dataGridViewCellStyle = new();
+        Size size = (Size)dataGridViewImageCell.TestAccessor().Dynamic.GetPreferredSize(g, dataGridViewCellStyle, 0, new Size(100, 100));
 
         size.Should().Be(new Size(-1, -1));
     }
@@ -207,9 +216,9 @@ public class DataGridViewImageCellTests : IDisposable
     [Fact]
     public void GetPreferredSize_ThrowsNullReferenceException_WhenCellStyleIsNull()
     {
-        DataGridViewImageCell cell = dataGridViewImageCell;
+        DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        Action action = () => cell.TestAccessor().Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
+        Action action = () => dataGridViewImageCell.TestAccessor().Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
 
         action.Should().Throw<NullReferenceException>();
     }
@@ -218,16 +227,16 @@ public class DataGridViewImageCellTests : IDisposable
     public void Paint_DoesNotThrow_WithValidArguments_UsingTestAccessor()
     {
         using DataGridView dataGridView = new();
-        DataGridViewImageColumn col = new();
-        dataGridView.Columns.Add(col);
+        DataGridViewImageColumn dataGridViewImageColumn = new();
+        dataGridView.Columns.Add(dataGridViewImageColumn);
         dataGridView.Rows.Add();
-        DataGridViewImageCell cell = dataGridViewImageCell;
-        dataGridView.Rows[0].Cells[0] = cell;
+        DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
+        dataGridView.Rows[0].Cells[0] = dataGridViewImageCell;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        DataGridViewCellStyle style = new();
+        DataGridViewCellStyle dataGridViewCellStyle = new();
         DataGridViewAdvancedBorderStyle borderStyle = new();
 
-        Action action = () => cell.TestAccessor().Dynamic.Paint(
+        Action action = () => dataGridViewImageCell.TestAccessor().Dynamic.Paint(
         g,
         new Rectangle(0, 0, 10, 10),
         new Rectangle(0, 0, 10, 10),
@@ -236,7 +245,7 @@ public class DataGridViewImageCellTests : IDisposable
         null,
         null,
         null,
-        style,
+        dataGridViewCellStyle,
         borderStyle,
         DataGridViewPaintParts.All);
 
@@ -244,14 +253,14 @@ public class DataGridViewImageCellTests : IDisposable
     }
 
     [Fact]
-    public void ToString_ReturnsExpectedFormat()
+    public void ColumnIndex_ReturnsExpectedFormat()
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewImageColumn());
         dataGridView.Rows.Add();
-        DataGridViewImageCell cell = dataGridViewImageCell;
-        dataGridView.Rows[0].Cells[0] = cell;
+        DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
+        dataGridView.Rows[0].Cells[0] = dataGridViewImageCell;
 
-        cell.ColumnIndex.Should().Be(0);
+        dataGridViewImageCell.ColumnIndex.Should().Be(0);
     }
 }
