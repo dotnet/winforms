@@ -330,6 +330,10 @@ public partial class ComboBox : ListControl
     {
         get
         {
+#pragma warning disable WFO5001
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_COMBOBOX;
             cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.CBS_HASSTRINGS | PInvoke.CBS_AUTOHSCROLL;
@@ -2335,7 +2339,7 @@ public partial class ComboBox : ListControl
         }
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled)
+        if (Application.IsDarkModeEnabled &&GetStyle(ControlStyles.ApplyThemingImplicitly))
         {
             // Style the ComboBox Open-Button:
             PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}", null);
