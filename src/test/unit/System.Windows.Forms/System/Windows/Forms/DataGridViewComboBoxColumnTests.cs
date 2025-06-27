@@ -150,11 +150,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void DisplayMember_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.DisplayMember; };
-        Action set = () => _dataGridViewComboBoxColumn.DisplayMember = "Name";
+        Action getDisplayMember = () => { var _ = _dataGridViewComboBoxColumn.DisplayMember; };
+        Action setDisplayMemberToName = () => _dataGridViewComboBoxColumn.DisplayMember = "Name";
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getDisplayMember.Should().Throw<InvalidOperationException>();
+        setDisplayMemberToName.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -199,11 +199,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void DisplayStyle_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.DisplayStyle; };
-        Action set = () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+        Action getDisplayStyle = () => { var _ = _dataGridViewComboBoxColumn.DisplayStyle; };
+        Action setDisplayStyle = () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getDisplayStyle.Should().Throw<InvalidOperationException>();
+        setDisplayStyle.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -249,11 +249,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void DisplayStyleForCurrentCellOnly_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; };
-        Action set = () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true;
+        Action getDisplayStyleForCurrentCellOnly = () => { var _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; };
+        Action setDisplayStyleForCurrentCellOnlyTrue = () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getDisplayStyleForCurrentCellOnly.Should().Throw<InvalidOperationException>();
+        setDisplayStyleForCurrentCellOnlyTrue.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -299,11 +299,11 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     public void DropDownWidth_ThrowsIfCellTemplateIsNull()
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
-        Action get = () => { var _ = _dataGridViewComboBoxColumn.DropDownWidth; };
-        Action set = () => _dataGridViewComboBoxColumn.DropDownWidth = 5;
+        Action getDropDownWidth = () => { var _ = _dataGridViewComboBoxColumn.DropDownWidth; };
+        Action setDropDownWidth = () => _dataGridViewComboBoxColumn.DropDownWidth = 5;
 
-        get.Should().Throw<InvalidOperationException>();
-        set.Should().Throw<InvalidOperationException>();
+        getDropDownWidth.Should().Throw<InvalidOperationException>();
+        setDropDownWidth.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
