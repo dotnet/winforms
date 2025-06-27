@@ -31,28 +31,22 @@ internal sealed class NameCreationService : INameCreationService
             if (cc[i] is Component comp)
             {
                 string name = comp.Site.Name;
-                int numberStartIndex = name.Length - 1;
-
-                while (numberStartIndex >= 0 && char.IsDigit(name[numberStartIndex]))
+                if (name.StartsWith(type.Name, StringComparison.Ordinal))
                 {
-                    numberStartIndex--;
-                }
-
-                string typeName = name[..(numberStartIndex + 1)];
-                string number = name[(numberStartIndex + 1)..];
-
-                if (typeName == type.Name)
-                {
-                    count++;
-                    try
+                    string suffix = name[type.Name.Length..];
+                    if (!string.IsNullOrEmpty(suffix) && suffix.All(char.IsDigit))
                     {
-                        int value = int.Parse(number);
-                        if (value < min)
-                            min = value;
-                        if (value > max)
-                            max = value;
+                        count++;
+                        try
+                        {
+                            int value = int.Parse(suffix);
+                            if (value < min)
+                                min = value;
+                            if (value > max)
+                                max = value;
+                        }
+                        catch (Exception) { }
                     }
-                    catch (Exception) { }
                 }
             }
 
