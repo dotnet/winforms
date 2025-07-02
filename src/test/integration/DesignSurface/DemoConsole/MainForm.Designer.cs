@@ -1,4 +1,4 @@
-﻿namespace TestConsole;
+﻿namespace DemoConsole;
 
 partial class MainForm
 {
