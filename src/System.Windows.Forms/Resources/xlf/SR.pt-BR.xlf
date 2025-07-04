@@ -5622,12 +5622,12 @@ Deseja substituí-lo?</target>
       </trans-unit>
       <trans-unit id="FormScreenCaptureModeDescr">
         <source>Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</source>
-        <target state="new">Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</target>
+        <target state="translated">Obtém ou define o comportamento para impedir a captura de tela/gravação de vídeo do conteúdo do formulário por meio de aplicativos de captura de tela com base nas APIs do Windows.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormScreenCaptureModeRequiresTopLevel">
         <source>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</source>
-        <target state="new">The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</target>
+        <target state="translated">A propriedade FormScreenCaptureMode só pode ser alterada em Formulários de nível superior com sua propriedade TopLevel definida como true.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormShowIconDescr">
