@@ -9,10 +9,7 @@ public class DataGridViewImageCellTests : IDisposable
 {
     private readonly DataGridViewImageCell _dataGridViewImageCell;
 
-    public DataGridViewImageCellTests()
-    {
-        _dataGridViewImageCell = new();
-    }
+    public DataGridViewImageCellTests() => _dataGridViewImageCell = new();
 
     public void Dispose() => _dataGridViewImageCell.Dispose();
 
@@ -20,7 +17,7 @@ public class DataGridViewImageCellTests : IDisposable
     public void Ctor_Default_SetsValueIsIconFalse() =>
         _dataGridViewImageCell.ValueIsIcon.Should().BeFalse();
 
-    [Theory]
+    [WinFormsTheory]
     [BoolData]
     public void Ctor_ValueIsIcon_SetsValueIsIcon(bool valueIsIcon)
     {
@@ -38,7 +35,7 @@ public class DataGridViewImageCellTests : IDisposable
         value.Should().BeSameAs(DataGridViewImageCell.ErrorBitmap);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void DefaultNewRowValue_ReturnsNull_WhenValueTypeIsOther()
     {
         _dataGridViewImageCell.ValueType = typeof(string);
@@ -57,14 +54,14 @@ public class DataGridViewImageCellTests : IDisposable
         dataGridViewImageCellIcon.EditType.Should().BeNull();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void FormattedValueType_ReturnsImage_WhenValueIsIconFalse()
     {
         _dataGridViewImageCell.ValueIsIcon = false;
         _dataGridViewImageCell.FormattedValueType.Should().Be(typeof(Image));
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ValueIsIcon_SetFalse_UpdatesFlag()
     {
         _dataGridViewImageCell.ValueIsIcon = true;
@@ -106,7 +103,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetContentBounds_ReturnsEmpty_WhenRowIndexNegative()
     {
         using DataGridView dataGridView = new();
@@ -118,7 +115,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetContentBounds_ReturnsEmpty_WhenOwningColumnIsNull()
     {
         using DataGridView dataGridView = new();
@@ -142,7 +139,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenRowIndexNegative()
     {
         using DataGridView dataGridView = new();
@@ -156,7 +153,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenOwningColumnIsNull()
     {
         using DataGridView dataGridView = new();
@@ -170,7 +167,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenShowCellErrorsIsFalse()
     {
         using DataGridView dataGridView = new();
@@ -186,7 +183,7 @@ public class DataGridViewImageCellTests : IDisposable
         bounds.Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenErrorTextIsNullOrEmpty()
     {
         using DataGridView dataGridView = new();
@@ -223,7 +220,7 @@ public class DataGridViewImageCellTests : IDisposable
         action.Should().Throw<NullReferenceException>();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Paint_DoesNotThrow_WithValidArguments_UsingTestAccessor()
     {
         using DataGridView dataGridView = new();
@@ -252,7 +249,7 @@ public class DataGridViewImageCellTests : IDisposable
         action.Should().NotThrow();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ColumnIndex_ReturnsExpectedFormat()
     {
         using DataGridView dataGridView = new();
