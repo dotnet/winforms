@@ -99,7 +99,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
     public void FlatStyle_DefaultValue_IsStandard() =>
         _dataGridViewComboBoxCell.FlatStyle.Should().Be(FlatStyle.Standard);
 
-    [Theory]
+    [WinFormsTheory]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
     [InlineData(FlatStyle.System)]
@@ -147,7 +147,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         _dataGridViewComboBoxCell.Sorted.Should().BeTrue();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Sorted_SetTrue_WithDataSource_Throws()
     {
         _dataGridViewComboBoxCell.DataSource = new List<string> { "a", "b" };
@@ -161,7 +161,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
     public void ValueMember_DefaultValue_IsEmpty() =>
         _dataGridViewComboBoxCell.ValueMember.Should().BeEmpty();
 
-    [Theory]
+    [WinFormsTheory]
     [InlineData("Id")]
     [InlineData("Name")]
     [InlineData("")]
