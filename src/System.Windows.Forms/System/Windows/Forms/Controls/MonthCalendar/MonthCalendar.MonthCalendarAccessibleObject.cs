@@ -564,7 +564,7 @@ public partial class MonthCalendar
         internal CalendarTodayLinkAccessibleObject TodayLinkAccessibleObject
             => _todayLinkAccessibleObject ??= new CalendarTodayLinkAccessibleObject(this);
 
-        public override string? Value
+        public override string? Name
         {
             get
             {
@@ -606,7 +606,7 @@ public partial class MonthCalendar
 
                         return $"{range.Start:yyyy} - {range.End:yyyy}";
                     default:
-                        return base.Value;
+                        return Name;
                 }
             }
         }
