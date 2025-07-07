@@ -162,7 +162,7 @@ internal static class LinkUtilities
         LinkBehavior link,
         [AllowNull] ref Font linkFont,
         [AllowNull] ref Font hoverLinkFont,
-        bool isActive = false)
+        bool? isActive = null)
     {
         if (linkFont is not null && hoverLinkFont is not null)
         {
@@ -209,11 +209,11 @@ internal static class LinkUtilities
                 style &= ~FontStyle.Underline;
             }
 
-            if (isActive)
+            if (isActive is not null and true)
             {
                 style |= FontStyle.Bold;
             }
-            else
+            else if (isActive is not null and false)
             {
                 style &= ~FontStyle.Bold;
             }
