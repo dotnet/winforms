@@ -21,11 +21,11 @@ public class DataGridViewButtonCellTests : IDisposable
         result.Should().Be(typeof(string));
     }
 
-    [Fact]
+    [WinFormsFact]
     public void UseColumnTextForButtonValue_DefaultValue_IsFalse() =>
         _dataGridViewButtonCell.UseColumnTextForButtonValue.Should().BeFalse();
 
-    [Fact]
+    [WinFormsFact]
     public void UseColumnTextForButtonValue_SetTrue_ReflectsValue()
     {
         _dataGridViewButtonCell.UseColumnTextForButtonValue = true;
@@ -47,7 +47,7 @@ public class DataGridViewButtonCellTests : IDisposable
         _dataGridViewButtonCell.ValueType.Should().Be(customType);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetContentBounds_ReturnsEmpty_WhenDataGridViewIsNull()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -57,7 +57,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetContentBounds_ReturnsEmpty_WhenRowIndexIsNegative()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -71,7 +71,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetContentBounds_ReturnsEmpty_WhenOwningColumnIsNull()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -86,7 +86,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenDataGridViewIsNull()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -96,7 +96,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenRowIndexIsNegative()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -110,7 +110,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenOwningColumnIsNull()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -125,7 +125,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsEmpty_WhenShowCellErrorsIsFalse()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -140,8 +140,8 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
-    public void GetErrorIconBounds_ReturnsEmpty_WhenErrorTextIsNullOrEmpty()
+    [WinFormsFact]
+    public void GetErrorIconBounds_ReturnsEmpty_WhenErrorTextIsEmpty()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
@@ -154,7 +154,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetErrorIconBounds_ReturnsNonEmpty_WhenErrorTextIsSet()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
@@ -170,7 +170,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Rectangle)result).Should().NotBe(Rectangle.Empty);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetPreferredSize_ReturnsMinusOne_WhenDataGridViewIsNull()
     {
         DataGridViewCellStyle dataGridViewCellStyle = new()
@@ -183,7 +183,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Size)result).Should().Be(new Size(-1, -1));
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetPreferredSize_ThrowsNullReferenceException_WhenCellStyleIsNull()
     {
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
@@ -196,7 +196,7 @@ public class DataGridViewButtonCellTests : IDisposable
         action.Should().Throw<NullReferenceException>();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetPreferredSize_UsesThemeMargins_WhenVisualStylesApplied()
     {
         using Graphics g = Graphics.FromImage(new Bitmap(100, 100));
@@ -220,7 +220,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((Size)result).Height.Should().BeGreaterThan(0);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetValue_ReturnsColumnText_WhenUseColumnTextForButtonValueIsTrue()
     {
         using DataGridView dataGridView = new();
@@ -235,7 +235,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((string)value).Should().Be("ColumnText");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetValue_ReturnsBaseValue_WhenUseColumnTextForButtonValueIsFalse()
     {
         using DataGridView dataGridView = new();
@@ -251,7 +251,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((string)value).Should().Be("CellValue");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetValue_ReturnsBaseValue_WhenOwningColumnIsNotButtonColumn()
     {
         using DataGridView dataGridView = new();
@@ -315,8 +315,12 @@ public class DataGridViewButtonCellTests : IDisposable
         result.Should().Be(expected);
     }
 
-    [Fact]
-    public void MouseLeaveUnsharesRow_ReturnsTrue_WhenButtonStateIsPushed()
+    [WinFormsTheory]
+    [InlineData(ButtonState.Pushed, true)]
+    [InlineData(ButtonState.Normal, false)]
+    [InlineData(ButtonState.Checked, false)]
+    [InlineData(ButtonState.Pushed | ButtonState.Checked, true)]
+    public void MouseLeaveUnsharesRow_ReturnsExpected(ButtonState buttonState, bool expected)
     {
         using DataGridView dataGridView = new();
         using DataGridViewButtonColumn dataGridViewButtonColumn = new();
@@ -324,58 +328,13 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Pushed;
+        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = buttonState;
 
         bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseLeaveUnsharesRow(0);
-        result.Should().BeTrue();
+        result.Should().Be(expected);
     }
 
-    [Fact]
-    public void MouseLeaveUnsharesRow_ReturnsFalse_WhenButtonStateIsNormal()
-    {
-        using DataGridView dataGridView = new();
-        using DataGridViewButtonColumn dataGridViewButtonColumn = new();
-        dataGridView.Columns.Add(dataGridViewButtonColumn);
-        dataGridView.Rows.Add();
-        dataGridView[0, 0] = _dataGridViewButtonCell;
-
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Normal;
-
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseLeaveUnsharesRow(0);
-        result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void MouseLeaveUnsharesRow_ReturnsFalse_WhenButtonStateIsChecked()
-    {
-        using DataGridView dataGridView = new();
-        using DataGridViewButtonColumn dataGridViewButtonColumn = new();
-        dataGridView.Columns.Add(dataGridViewButtonColumn);
-        dataGridView.Rows.Add();
-        dataGridView[0, 0] = _dataGridViewButtonCell;
-
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Checked;
-
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseLeaveUnsharesRow(0);
-        result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void MouseLeaveUnsharesRow_ReturnsTrue_WhenButtonStateIsPushedAndChecked()
-    {
-        using DataGridView dataGridView = new();
-        using DataGridViewButtonColumn dataGridViewButtonColumn = new();
-        dataGridView.Columns.Add(dataGridViewButtonColumn);
-        dataGridView.Rows.Add();
-        dataGridView[0, 0] = _dataGridViewButtonCell;
-
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Pushed | ButtonState.Checked;
-
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseLeaveUnsharesRow(0);
-        result.Should().BeTrue();
-    }
-
-    [Theory]
+    [WinFormsTheory]
     [InlineData(MouseButtons.Left, true)]
     [InlineData(MouseButtons.Right, false)]
     [InlineData(MouseButtons.Middle, false)]
@@ -393,7 +352,7 @@ public class DataGridViewButtonCellTests : IDisposable
         result.Should().Be(expected);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OnKeyDown_SetsCheckedStateAndHandled_WhenSpacePressedWithoutModifiers()
     {
         using DataGridView dataGridView = new();
@@ -414,7 +373,7 @@ public class DataGridViewButtonCellTests : IDisposable
         keyEventArgs.Handled.Should().BeTrue();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [InlineData(Keys.Space | Keys.Alt)]
     [InlineData(Keys.Space | Keys.Control)]
     [InlineData(Keys.Space | Keys.Shift)]
@@ -439,30 +398,12 @@ public class DataGridViewButtonCellTests : IDisposable
         keyEventArgs.Handled.Should().BeFalse();
     }
 
-    [Fact]
-    public void OnKeyUp_RemovesCheckedStateAndSetsHandled_WhenSpacePressedWithoutModifiers()
-    {
-        using DataGridView dataGridView = new();
-        using DataGridViewButtonColumn dataGridViewButtonColumn = new();
-        dataGridView.Columns.Add(dataGridViewButtonColumn);
-        dataGridView.Rows.Add();
-        dataGridView[0, 0] = _dataGridViewButtonCell;
-
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Checked;
-
-        KeyEventArgs keyEventArgs = new(Keys.Space);
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnKeyUp(keyEventArgs, 0);
-
-        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
-        buttonState.HasFlag(ButtonState.Checked).Should().BeFalse();
-        keyEventArgs.Handled.Should().BeTrue();
-    }
-
-    [Theory]
-    [InlineData(Keys.Space | Keys.Alt)]
-    [InlineData(Keys.Space | Keys.Control)]
-    [InlineData(Keys.Space | Keys.Shift)]
-    public void OnKeyUp_RemovesCheckedStateAndDoesNotSetHandled_WhenSpaceWithModifiers(Keys keyData)
+    [WinFormsTheory]
+    [InlineData(Keys.Space, true)]
+    [InlineData(Keys.Space | Keys.Alt, false)]
+    [InlineData(Keys.Space | Keys.Control, false)]
+    [InlineData(Keys.Space | Keys.Shift, false)]
+    public void OnKeyUp_RemovesCheckedState_AndSetsHandledAsExpected(Keys keyData, bool expectedHandled)
     {
         using DataGridView dataGridView = new();
         using DataGridViewButtonColumn dataGridViewButtonColumn = new();
@@ -477,10 +418,10 @@ public class DataGridViewButtonCellTests : IDisposable
 
         ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
         buttonState.HasFlag(ButtonState.Checked).Should().BeFalse();
-        keyEventArgs.Handled.Should().BeFalse();
+        keyEventArgs.Handled.Should().Be(expectedHandled);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OnLeave_ResetsButtonState_WhenNotNormal()
     {
         using DataGridView dataGridView = new();
@@ -497,7 +438,7 @@ public class DataGridViewButtonCellTests : IDisposable
         buttonState.Should().Be(ButtonState.Normal);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void OnMouseUp_UpdatesButtonState_WhenLeftButton()
     {
         using DataGridView dataGridView = new();
@@ -513,7 +454,7 @@ public class DataGridViewButtonCellTests : IDisposable
         ((ButtonState)_dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState).HasFlag(ButtonState.Pushed).Should().BeFalse();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Paint_CallsPaintPrivate_WithExpectedParameters()
     {
         using var g = Graphics.FromImage(new Bitmap(10, 10));
@@ -547,7 +488,7 @@ public class DataGridViewButtonCellTests : IDisposable
         result.Should().Be("DataGridViewButtonCell { ColumnIndex=-1, RowIndex=-1 }");
     }
 
-    [Fact]
+    [WinFormsFact]
     public void ToString_ReturnsExpectedFormat_WhenAddedToDataGridView()
     {
         using DataGridView dataGridView = new();
