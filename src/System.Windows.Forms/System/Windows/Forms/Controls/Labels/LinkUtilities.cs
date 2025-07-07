@@ -164,7 +164,7 @@ internal static class LinkUtilities
         LinkBehavior link,
         [AllowNull] ref Font linkFont,
         [AllowNull] ref Font hoverLinkFont,
-        bool isActive = null)
+        bool isActive = false)
     {
         if (linkFont is not null && hoverLinkFont is not null)
         {
