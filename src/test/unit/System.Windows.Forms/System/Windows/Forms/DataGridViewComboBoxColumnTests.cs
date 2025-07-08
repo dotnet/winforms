@@ -324,69 +324,35 @@ public class DataGridViewComboBoxColumnTests : IDisposable
     {
         _dataGridViewComboBoxColumn.CellTemplate = null;
 
-        Action getAutoComplete = () => { bool _ = _dataGridViewComboBoxColumn.AutoComplete; };
-        Action setAutoComplete = () => _dataGridViewComboBoxColumn.AutoComplete = false;
+        var actions = new List<Action>
+    {
+        () => { var _ = _dataGridViewComboBoxColumn.AutoComplete; },
+        () => _dataGridViewComboBoxColumn.AutoComplete = false,
+        () => { var _ = _dataGridViewComboBoxColumn.DataSource; },
+        () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" },
+        () => { var _ = _dataGridViewComboBoxColumn.DisplayMember; },
+        () => _dataGridViewComboBoxColumn.DisplayMember = "Name",
+        () => { var _ = _dataGridViewComboBoxColumn.ValueMember; },
+        () => _dataGridViewComboBoxColumn.ValueMember = "Id",
+        () => { var _ = _dataGridViewComboBoxColumn.Items; },
+        () => { var _ = _dataGridViewComboBoxColumn.DisplayStyle; },
+        () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox,
+        () => { var _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; },
+        () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true,
+        () => { var _ = _dataGridViewComboBoxColumn.DropDownWidth; },
+        () => _dataGridViewComboBoxColumn.DropDownWidth = 5,
+        () => { var _ = _dataGridViewComboBoxColumn.MaxDropDownItems; },
+        () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5,
+        () => { var _ = _dataGridViewComboBoxColumn.Sorted; },
+        () => _dataGridViewComboBoxColumn.Sorted = true,
+        () => { var _ = _dataGridViewComboBoxColumn.FlatStyle; },
+        () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat
+    };
 
-        Action getDataSource = () => { object? _ = _dataGridViewComboBoxColumn.DataSource; };
-        Action setDataSource = () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" };
-
-        Action getDisplayMember = () => { string _ = _dataGridViewComboBoxColumn.DisplayMember; };
-        Action setDisplayMember = () => _dataGridViewComboBoxColumn.DisplayMember = "Name";
-
-        Action getValueMember = () => { string _ = _dataGridViewComboBoxColumn.ValueMember; };
-        Action setValueMember = () => _dataGridViewComboBoxColumn.ValueMember = "Id";
-
-        Action getItems = () => { var _ = _dataGridViewComboBoxColumn.Items; };
-
-        Action getDisplayStyle = () => { DataGridViewComboBoxDisplayStyle _ = _dataGridViewComboBoxColumn.DisplayStyle; };
-        Action setDisplayStyle = () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-
-        Action getDisplayStyleForCurrentCellOnly = () => { bool _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; };
-        Action setDisplayStyleForCurrentCellOnly = () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true;
-
-        Action getDropDownWidth = () => { int _ = _dataGridViewComboBoxColumn.DropDownWidth; };
-        Action setDropDownWidth = () => _dataGridViewComboBoxColumn.DropDownWidth = 5;
-
-        Action getMaxDropDownItems = () => { int _ = _dataGridViewComboBoxColumn.MaxDropDownItems; };
-        Action setMaxDropDownItems = () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5;
-
-        Action getSorted = () => { bool _ = _dataGridViewComboBoxColumn.Sorted; };
-        Action setSorted = () => _dataGridViewComboBoxColumn.Sorted = true;
-
-        Action getFlatStyle = () => { FlatStyle _ = _dataGridViewComboBoxColumn.FlatStyle; };
-        Action setFlatStyle = () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat;
-
-        getAutoComplete.Should().Throw<InvalidOperationException>();
-        setAutoComplete.Should().Throw<InvalidOperationException>();
-
-        getDataSource.Should().Throw<InvalidOperationException>();
-        setDataSource.Should().Throw<InvalidOperationException>();
-
-        getDisplayMember.Should().Throw<InvalidOperationException>();
-        setDisplayMember.Should().Throw<InvalidOperationException>();
-
-        getValueMember.Should().Throw<InvalidOperationException>();
-        setValueMember.Should().Throw<InvalidOperationException>();
-
-        getItems.Should().Throw<InvalidOperationException>();
-
-        getDisplayStyle.Should().Throw<InvalidOperationException>();
-        setDisplayStyle.Should().Throw<InvalidOperationException>();
-
-        getDisplayStyleForCurrentCellOnly.Should().Throw<InvalidOperationException>();
-        setDisplayStyleForCurrentCellOnly.Should().Throw<InvalidOperationException>();
-
-        getDropDownWidth.Should().Throw<InvalidOperationException>();
-        setDropDownWidth.Should().Throw<InvalidOperationException>();
-
-        getMaxDropDownItems.Should().Throw<InvalidOperationException>();
-        setMaxDropDownItems.Should().Throw<InvalidOperationException>();
-
-        getSorted.Should().Throw<InvalidOperationException>();
-        setSorted.Should().Throw<InvalidOperationException>();
-
-        getFlatStyle.Should().Throw<InvalidOperationException>();
-        setFlatStyle.Should().Throw<InvalidOperationException>();
+        foreach (var action in actions)
+        {
+            action.Should().Throw<InvalidOperationException>();
+        }
     }
 
     [WinFormsFact]
