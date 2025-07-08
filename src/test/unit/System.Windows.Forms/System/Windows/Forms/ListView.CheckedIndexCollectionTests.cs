@@ -67,8 +67,10 @@ public class ListView_CheckedIndexCollectionTests
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
-    [WinFormsFact]
-    public void Contains_ReturnsTrue_IfIndexIsChecked()
+    [WinFormsTheory]
+    [InlineData(1, true)]
+    [InlineData(0, false)]
+    public void Contains_ReturnsExpected(int index, bool expected)
     {
         using ListView listView = new();
         listView.CheckBoxes = true;
@@ -78,21 +80,7 @@ public class ListView_CheckedIndexCollectionTests
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
 
-        collection.Contains(1).Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void Contains_ReturnsFalse_IfIndexIsNotChecked()
-    {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.Items.AddRange([
-            new ListViewItem { Checked = false },
-            new ListViewItem { Checked = true }
-        ]);
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        collection.Contains(0).Should().BeFalse();
+        collection.Contains(index).Should().Be(expected);
     }
 
     [WinFormsFact]
@@ -169,59 +157,29 @@ public class ListView_CheckedIndexCollectionTests
         array.Should().Equal(0, 2);
     }
 
-    [WinFormsFact]
-    public void IList_Add_ThrowsNotSupportedException()
+    [WinFormsTheory]
+    [InlineData("Add")]
+    [InlineData("Clear")]
+    [InlineData("Insert")]
+    [InlineData("Remove")]
+    [InlineData("RemoveAt")]
+    public void IList_ModificationMethods_ThrowNotSupportedException(string method)
     {
         using ListView listView = new();
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
-        ilist.Invoking(i => i.Add(0)).Should().Throw<NotSupportedException>();
-    }
+        Action act = method switch
+        {
+            "Add" => () => ilist.Add(0),
+            "Clear" => ilist.Clear,
+            "Insert" => () => ilist.Insert(0, 0),
+            "Remove" => () => ilist.Remove(0),
+            "RemoveAt" => () => ilist.RemoveAt(0),
+            _ => throw new ArgumentOutOfRangeException(nameof(method))
+        };
 
-    [WinFormsFact]
-    public void IList_Clear_ThrowsNotSupportedException()
-    {
-        using ListView listView = new();
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        IList ilist = collection;
-
-        ilist.Invoking(i => i.Clear()).Should().Throw<NotSupportedException>();
-    }
-
-    [WinFormsFact]
-    public void IList_Insert_ThrowsNotSupportedException()
-    {
-        using ListView listView = new();
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        IList ilist = collection;
-
-        ilist.Invoking(i => i.Insert(0, 0)).Should().Throw<NotSupportedException>();
-    }
-
-    [WinFormsFact]
-    public void IList_Remove_ThrowsNotSupportedException()
-    {
-        using ListView listView = new();
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        IList ilist = collection;
-
-        ilist.Invoking(i => i.Remove(0)).Should().Throw<NotSupportedException>();
-    }
-
-    [WinFormsFact]
-    public void IList_RemoveAt_ThrowsNotSupportedException()
-    {
-        using ListView listView = new();
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        IList ilist = collection;
-
-        ilist.Invoking(i => i.RemoveAt(0)).Should().Throw<NotSupportedException>();
+        act.Should().Throw<NotSupportedException>();
     }
 
     [WinFormsFact]
@@ -313,14 +271,15 @@ public class ListView_CheckedIndexCollectionTests
             new ListViewItem { Checked = true }
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
         ilist.Contains(value).Should().Be(expected);
     }
 
-    [WinFormsFact]
-    public void IList_Contains_ReturnsTrue_IfIntIndexIsChecked()
+    [WinFormsTheory]
+    [InlineData(1, true)]
+    [InlineData(0, false)]
+    public void IList_Contains_ReturnsExpected_ForIntIndex(int index, bool expected)
     {
         using ListView listView = new();
         listView.CheckBoxes = true;
@@ -329,26 +288,9 @@ public class ListView_CheckedIndexCollectionTests
             new ListViewItem { Checked = true }
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
-        ilist.Contains(1).Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void IList_Contains_ReturnsFalse_IfIntIndexIsNotChecked()
-    {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.Items.AddRange([
-            new ListViewItem { Checked = false },
-            new ListViewItem { Checked = true }
-        ]);
-        ListView.CheckedIndexCollection collection = new(listView);
-
-        IList ilist = collection;
-
-        ilist.Contains(0).Should().BeFalse();
+        ilist.Contains(index).Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -365,7 +307,6 @@ public class ListView_CheckedIndexCollectionTests
             new ListViewItem { Checked = true }
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
         ilist.IndexOf(value).Should().Be(expected);
@@ -382,7 +323,6 @@ public class ListView_CheckedIndexCollectionTests
             new ListViewItem { Checked = true }
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
         ilist.IndexOf(1).Should().Be(0);
@@ -399,7 +339,6 @@ public class ListView_CheckedIndexCollectionTests
             new ListViewItem { Checked = true }
         ]);
         ListView.CheckedIndexCollection collection = new(listView);
-
         IList ilist = collection;
 
         ilist.IndexOf(0).Should().Be(-1);
