@@ -5,8 +5,22 @@ using System.Collections;
 
 namespace System.Windows.Forms.Tests;
 
-public class ListView_CheckedListViewItemCollectionTests
+public class ListView_CheckedListViewItemCollectionTests : IDisposable
 {
+    private readonly ListView _listView;
+    private readonly ListView.CheckedListViewItemCollection _collection;
+
+    public ListView_CheckedListViewItemCollectionTests()
+    {
+        _listView = new ListView();
+        _collection = new ListView.CheckedListViewItemCollection(_listView);
+    }
+
+    public void Dispose()
+    {
+        _listView.Dispose();
+    }
+
     [WinFormsFact]
     public void CheckedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()
     {
@@ -16,27 +30,23 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void Count_ReturnsCheckedItemCount_WhenNotVirtualMode()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.Items.AddRange([
+        _listView.CheckBoxes = true;
+        _listView.Items.AddRange([
             new ListViewItem { Checked = true },
             new ListViewItem { Checked = false },
             new ListViewItem { Checked = true }
         ]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
 
-        collection.Count.Should().Be(2);
+        _collection.Count.Should().Be(2);
     }
 
     [WinFormsFact]
     public void Count_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.CheckBoxes = true;
+        _listView.VirtualMode = true;
 
-        Action act = () => { int _ = collection.Count; };
+        Action act = () => { int _ = _collection.Count; };
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -44,27 +54,23 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void Indexer_ReturnsCheckedItem_ByIndex()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Name = "a", Checked = false };
         ListViewItem item2 = new() { Name = "b", Checked = true };
         ListViewItem item3 = new() { Name = "c", Checked = true };
-        listView.Items.AddRange([item1, item2, item3]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2, item3]);
 
-        collection[0].Should().Be(item2);
-        collection[1].Should().Be(item3);
+        _collection[0].Should().Be(item2);
+        _collection[1].Should().Be(item3);
     }
 
     [WinFormsFact]
     public void Indexer_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.CheckBoxes = true;
+        _listView.VirtualMode = true;
 
-        Action act = () => { var _ = collection[0]; };
+        Action act = () => { var _ = _collection[0]; };
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -72,13 +78,11 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_Indexer_Get_ReturnsCheckedItem()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Checked = false };
         ListViewItem item2 = new() { Checked = true };
-        listView.Items.AddRange([item1, item2]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        _listView.Items.AddRange([item1, item2]);
+        IList ilist = _collection;
 
         ilist[0].Should().Be(item2);
     }
@@ -86,9 +90,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_Indexer_Set_ThrowsNotSupportedException()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        IList ilist = _collection;
 
         Action act = () => ilist[0] = new ListViewItem();
 
@@ -98,49 +100,41 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void StringIndexer_ReturnsCheckedItem_ByKey()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Name = "foo", Checked = true };
         ListViewItem item2 = new() { Name = "bar", Checked = true };
-        listView.Items.AddRange([item1, item2]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2]);
 
-        collection["foo"].Should().Be(item1);
-        collection["bar"].Should().Be(item2);
+        _collection["foo"].Should().Be(item1);
+        _collection["bar"].Should().Be(item2);
     }
 
     [WinFormsFact]
     public void StringIndexer_ReturnsNull_ForNullOrEmptyKey()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.CheckBoxes = true;
 
-        collection[null].Should().BeNull();
-        collection[string.Empty].Should().BeNull();
+        _collection[null].Should().BeNull();
+        _collection[string.Empty].Should().BeNull();
     }
 
     [WinFormsFact]
     public void StringIndexer_ReturnsNull_IfKeyNotFound()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item = new() { Name = "foo", Checked = true };
-        listView.Items.Add(item);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.Add(item);
 
-        collection["bar"].Should().BeNull();
+        _collection["bar"].Should().BeNull();
     }
 
     [WinFormsFact]
     public void StringIndexer_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.CheckBoxes = true;
+        _listView.VirtualMode = true;
 
-        Action act = () => { var _ = collection["foo"]; };
+        Action act = () => { var _ = _collection["foo"]; };
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -148,21 +142,15 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void ICollection_SyncRoot_ReturnsSelf()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        ListView.CheckedListViewItemCollection syncRoot = (ListView.CheckedListViewItemCollection)((ICollection)_collection).SyncRoot;
 
-        ListView.CheckedListViewItemCollection syncRoot = (ListView.CheckedListViewItemCollection)((ICollection)collection).SyncRoot;
-
-        syncRoot.Should().BeSameAs(collection);
+        syncRoot.Should().BeSameAs(_collection);
     }
 
     [WinFormsFact]
     public void ICollection_IsSynchronized_IsFalse()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-
-        bool isSynchronized = ((ICollection)collection).IsSynchronized;
+        bool isSynchronized = ((ICollection)_collection).IsSynchronized;
 
         isSynchronized.Should().BeFalse();
     }
@@ -170,10 +158,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_IsFixedSize_IsTrue()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-
-        bool isFixedSize = ((IList)collection).IsFixedSize;
+        bool isFixedSize = ((IList)_collection).IsFixedSize;
 
         isFixedSize.Should().BeTrue();
     }
@@ -181,10 +166,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IsReadOnly_IsTrue()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-
-        collection.IsReadOnly.Should().BeTrue();
+        _collection.IsReadOnly.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -193,35 +175,30 @@ public class ListView_CheckedListViewItemCollectionTests
     [InlineData(true, false, false)] // Checked but not owned
     public void Contains_ReturnsExpected_BasedOnCheckedAndOwnership(bool isChecked, bool isOwned, bool expected)
     {
-        using ListView listView1 = new();
         using ListView listView2 = new();
-        listView1.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         listView2.CheckBoxes = true;
 
         ListViewItem item = new() { Checked = isChecked };
         if (isOwned)
         {
-            listView1.Items.Add(item);
+            _listView.Items.Add(item);
         }
         else
         {
             listView2.Items.Add(item);
         }
 
-        ListView.CheckedListViewItemCollection collection = new(listView1);
-
-        collection.Contains(item).Should().Be(expected);
+        _collection.Contains(item).Should().Be(expected);
     }
 
     [WinFormsFact]
     public void Contains_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
         ListViewItem item = new();
 
-        Action act = () => collection.Contains(item);
+        Action act = () => _collection.Contains(item);
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -229,12 +206,10 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_Contains_ReturnsTrue_IfListViewItemIsCheckedAndOwned()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item = new() { Checked = true };
-        listView.Items.Add(item);
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        _listView.Items.Add(item);
+        IList ilist = _collection;
 
         ilist.Contains(item).Should().BeTrue();
     }
@@ -242,9 +217,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_Contains_ReturnsFalse_IfNotListViewItem()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        IList ilist = _collection;
 
         ilist.Contains("not an item").Should().BeFalse();
     }
@@ -252,10 +225,8 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_Contains_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        _listView.VirtualMode = true;
+        IList ilist = _collection;
 
         Action act = () => ilist.Contains(new ListViewItem());
 
@@ -269,23 +240,19 @@ public class ListView_CheckedListViewItemCollectionTests
     [InlineData("", false)]
     public void ContainsKey_ReturnsExpected(string? key, bool expected)
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item = new() { Name = "foo", Checked = true };
-        listView.Items.Add(item);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.Add(item);
 
-        collection.ContainsKey(key).Should().Be(expected);
+        _collection.ContainsKey(key).Should().Be(expected);
     }
 
     [WinFormsFact]
     public void ContainsKey_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
 
-        Action act = () => collection.ContainsKey("foo");
+        Action act = () => _collection.ContainsKey("foo");
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -293,36 +260,30 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IndexOf_ReturnsIndex_IfItemIsCheckedAndOwned()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Checked = true };
         ListViewItem item2 = new() { Checked = true };
-        listView.Items.AddRange([item1, item2]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2]);
 
-        collection.IndexOf(item2).Should().Be(1);
+        _collection.IndexOf(item2).Should().Be(1);
     }
 
     [WinFormsFact]
     public void IndexOf_ReturnsMinusOne_IfItemIsNotChecked()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item = new() { Checked = false };
-        listView.Items.Add(item);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.Add(item);
 
-        collection.IndexOf(item).Should().Be(-1);
+        _collection.IndexOf(item).Should().Be(-1);
     }
 
     [WinFormsFact]
     public void IndexOf_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
 
-        Action act = () => collection.IndexOf(new ListViewItem());
+        Action act = () => _collection.IndexOf(new ListViewItem());
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -330,35 +291,29 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IndexOfKey_ReturnsIndex_IfKeyExists()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Name = "foo", Checked = true };
         ListViewItem item2 = new() { Name = "bar", Checked = true };
-        listView.Items.AddRange([item1, item2]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2]);
 
-        collection.IndexOfKey("bar").Should().Be(1);
+        _collection.IndexOfKey("bar").Should().Be(1);
     }
 
     [WinFormsFact]
     public void IndexOfKey_ReturnsMinusOne_IfKeyIsNullOrEmpty()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.CheckBoxes = true;
 
-        collection.IndexOfKey(null).Should().Be(-1);
-        collection.IndexOfKey(string.Empty).Should().Be(-1);
+        _collection.IndexOfKey(null).Should().Be(-1);
+        _collection.IndexOfKey(string.Empty).Should().Be(-1);
     }
 
     [WinFormsFact]
     public void IndexOfKey_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
 
-        Action act = () => collection.IndexOfKey("foo");
+        Action act = () => _collection.IndexOfKey("foo");
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -366,13 +321,11 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_IndexOf_ReturnsIndex_IfListViewItemIsCheckedAndOwned()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Checked = true };
         ListViewItem item2 = new() { Checked = true };
-        listView.Items.AddRange([item1, item2]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        _listView.Items.AddRange([item1, item2]);
+        IList ilist = _collection;
 
         ilist.IndexOf(item2).Should().Be(1);
     }
@@ -380,9 +333,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_IndexOf_ReturnsMinusOne_IfNotListViewItem()
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        IList ilist = _collection;
 
         ilist.IndexOf("not an item").Should().Be(-1);
     }
@@ -390,10 +341,8 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void IList_IndexOf_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        _listView.VirtualMode = true;
+        IList ilist = _collection;
 
         Action act = () => ilist.IndexOf(new ListViewItem());
 
@@ -408,9 +357,7 @@ public class ListView_CheckedListViewItemCollectionTests
     [InlineData("RemoveAt")]
     public void IList_Methods_ThrowNotSupportedException(string methodName)
     {
-        using ListView listView = new();
-        ListView.CheckedListViewItemCollection collection = new(listView);
-        IList ilist = collection;
+        IList ilist = _collection;
 
         Action act = methodName switch
         {
@@ -428,16 +375,14 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void CopyTo_CopiesCheckedItems()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Checked = true };
         ListViewItem item2 = new() { Checked = false };
         ListViewItem item3 = new() { Checked = true };
-        listView.Items.AddRange([item1, item2, item3]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2, item3]);
         ListViewItem[] array = new ListViewItem[2];
 
-        collection.CopyTo(array, 0);
+        _collection.CopyTo(array, 0);
 
         array.Should().Equal(item1, item3);
     }
@@ -445,12 +390,10 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void CopyTo_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
         ListViewItem[] array = new ListViewItem[1];
 
-        Action act = () => collection.CopyTo(array, 0);
+        Action act = () => _collection.CopyTo(array, 0);
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -458,15 +401,13 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void GetEnumerator_EnumeratesCheckedItems()
     {
-        using ListView listView = new();
-        listView.CheckBoxes = true;
+        _listView.CheckBoxes = true;
         ListViewItem item1 = new() { Checked = true };
         ListViewItem item2 = new() { Checked = false };
         ListViewItem item3 = new() { Checked = true };
-        listView.Items.AddRange([item1, item2, item3]);
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.Items.AddRange([item1, item2, item3]);
 
-        ListViewItem[] items = collection.Cast<ListViewItem>().ToArray();
+        ListViewItem[] items = _collection.Cast<ListViewItem>().ToArray();
 
         items.Should().Equal(item1, item3);
     }
@@ -474,11 +415,9 @@ public class ListView_CheckedListViewItemCollectionTests
     [WinFormsFact]
     public void GetEnumerator_ThrowsInvalidOperationException_WhenVirtualMode()
     {
-        using ListView listView = new();
-        listView.VirtualMode = true;
-        ListView.CheckedListViewItemCollection collection = new(listView);
+        _listView.VirtualMode = true;
 
-        Action act = () => collection.GetEnumerator();
+        Action act = () => _collection.GetEnumerator();
 
         act.Should().Throw<InvalidOperationException>();
     }
