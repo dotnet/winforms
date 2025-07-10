@@ -16,10 +16,7 @@ public class ListView_CheckedIndexCollectionTests : IDisposable
         _collection = new ListView.CheckedIndexCollection(_listView);
     }
 
-    public void Dispose()
-    {
-        _listView.Dispose();
-    }
+    public void Dispose() => _listView.Dispose();
 
     [WinFormsFact]
     public void CheckedIndexCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()
