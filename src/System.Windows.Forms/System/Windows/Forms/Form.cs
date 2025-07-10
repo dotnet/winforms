@@ -4228,6 +4228,8 @@ public partial class Form : ContainerControl
         {
             SetFormTitleProperties();
         }
+
+        SetScreenCaptureModeInternal(FormScreenCaptureMode);
     }
 
     /// <summary>
