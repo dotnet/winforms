@@ -4229,7 +4229,10 @@ public partial class Form : ContainerControl
             SetFormTitleProperties();
         }
 
-        SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
+        {
+            SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        }
     }
 
     /// <summary>
