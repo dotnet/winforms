@@ -325,29 +325,29 @@ public class DataGridViewComboBoxColumnTests : IDisposable
         _dataGridViewComboBoxColumn.CellTemplate = null;
 
         var actions = new List<Action>
-    {
-        () => { var _ = _dataGridViewComboBoxColumn.AutoComplete; },
-        () => _dataGridViewComboBoxColumn.AutoComplete = false,
-        () => { var _ = _dataGridViewComboBoxColumn.DataSource; },
-        () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" },
-        () => { var _ = _dataGridViewComboBoxColumn.DisplayMember; },
-        () => _dataGridViewComboBoxColumn.DisplayMember = "Name",
-        () => { var _ = _dataGridViewComboBoxColumn.ValueMember; },
-        () => _dataGridViewComboBoxColumn.ValueMember = "Id",
-        () => { var _ = _dataGridViewComboBoxColumn.Items; },
-        () => { var _ = _dataGridViewComboBoxColumn.DisplayStyle; },
-        () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox,
-        () => { var _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; },
-        () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true,
-        () => { var _ = _dataGridViewComboBoxColumn.DropDownWidth; },
-        () => _dataGridViewComboBoxColumn.DropDownWidth = 5,
-        () => { var _ = _dataGridViewComboBoxColumn.MaxDropDownItems; },
-        () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5,
-        () => { var _ = _dataGridViewComboBoxColumn.Sorted; },
-        () => _dataGridViewComboBoxColumn.Sorted = true,
-        () => { var _ = _dataGridViewComboBoxColumn.FlatStyle; },
-        () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat
-    };
+        {
+            () => { var _ = _dataGridViewComboBoxColumn.AutoComplete; },
+            () => _dataGridViewComboBoxColumn.AutoComplete = false,
+            () => { var _ = _dataGridViewComboBoxColumn.DataSource; },
+            () => _dataGridViewComboBoxColumn.DataSource = new[] { "A" },
+            () => { var _ = _dataGridViewComboBoxColumn.DisplayMember; },
+            () => _dataGridViewComboBoxColumn.DisplayMember = "Name",
+            () => { var _ = _dataGridViewComboBoxColumn.ValueMember; },
+            () => _dataGridViewComboBoxColumn.ValueMember = "Id",
+            () => { var _ = _dataGridViewComboBoxColumn.Items; },
+            () => { var _ = _dataGridViewComboBoxColumn.DisplayStyle; },
+            () => _dataGridViewComboBoxColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox,
+            () => { var _ = _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly; },
+            () => _dataGridViewComboBoxColumn.DisplayStyleForCurrentCellOnly = true,
+            () => { var _ = _dataGridViewComboBoxColumn.DropDownWidth; },
+            () => _dataGridViewComboBoxColumn.DropDownWidth = 5,
+            () => { var _ = _dataGridViewComboBoxColumn.MaxDropDownItems; },
+            () => _dataGridViewComboBoxColumn.MaxDropDownItems = 5,
+            () => { var _ = _dataGridViewComboBoxColumn.Sorted; },
+            () => _dataGridViewComboBoxColumn.Sorted = true,
+            () => { var _ = _dataGridViewComboBoxColumn.FlatStyle; },
+            () => _dataGridViewComboBoxColumn.FlatStyle = FlatStyle.Flat
+        };
 
         foreach (var action in actions)
         {
