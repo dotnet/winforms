@@ -79,7 +79,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
 
         _dataGridViewImageCell.ValueIsIcon = true;
-        _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
+        _dataGridViewImageCell.ValueType.Should().Be(typeof(Icon));
     }
 
     [Fact]
