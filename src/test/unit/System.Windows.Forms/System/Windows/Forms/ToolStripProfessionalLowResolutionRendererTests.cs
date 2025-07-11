@@ -46,30 +46,17 @@ public class ToolStripProfessionalLowResolutionRendererTests
     [WinFormsTheory]
     [InlineData(typeof(MenuStrip))]
     [InlineData(typeof(StatusStrip))]
-    public void OnRenderToolStripBorder_DoesNotThrow_ForMenuOrStatusStrip(Type stripType)
-    {
-        using ToolStrip toolStrip = (ToolStrip)Activator.CreateInstance(stripType)!;
-        using Bitmap bmp = new(10, 10);
-        using Graphics g = Graphics.FromImage(bmp);
-        ToolStripRenderEventArgs args = new(g, toolStrip);
-
-        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBorder(args);
-
-        action.Should().NotThrow();
-    }
-
-    [WinFormsTheory]
     [InlineData(typeof(ToolStripDropDown))]
     [InlineData(typeof(ToolStrip))]
-    public void OnRenderToolStripBorder_DoesNotThrow_ForVariousToolStrips(Type toolStripType)
+    public void OnRenderToolStripBorder_DoesNotThrow_ForAllToolStrips(Type toolStripType)
     {
         using ToolStrip toolStrip = (ToolStrip)Activator.CreateInstance(toolStripType)!;
         using Bitmap bmp = new(10, 10);
         using Graphics g = Graphics.FromImage(bmp);
         ToolStripRenderEventArgs args = new(g, toolStrip);
-
+    
         Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBorder(args);
-
+    
         action.Should().NotThrow();
     }
 
