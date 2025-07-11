@@ -194,6 +194,7 @@ public class DataGridViewImageCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView.ShowCellErrors = true;
         _dataGridViewImageCell.DataGridView = dataGridView;
+        _dataGridViewImageCell.ErrorText = null;
         _dataGridViewImageCell.OwningColumn = null;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
