@@ -4673,7 +4673,7 @@ public partial class ListView : Control
     private void ApplyDarkModeOnDemand()
     {
         if (Application.IsDarkModeEnabled
-            && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            && _darkModeRequestState is true)
         {
             // Enable double buffering when in dark mode to reduce flicker.
             uint exMask = PInvoke.LVS_EX_ONECLICKACTIVATE | PInvoke.LVS_EX_TWOCLICKACTIVATE |

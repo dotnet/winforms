@@ -993,7 +993,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                         ToolStripMenuItemDesigner parentItemDesigner = (ToolStripMenuItemDesigner)designerHost.GetDesigner(parentItem);
                         parentItemDesigner?.InitializeDropDown();
 
-                        needRefresh = true;
+                        needRefresh = GetFirstDropDown(currentSelection) is not null and not ContextMenuStrip;
                     }
                     else if (parentDropDown is ContextMenuStrip)
                     {
