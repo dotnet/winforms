@@ -79,7 +79,6 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
 
         _dataGridViewImageCell.ValueIsIcon = true;
-        _dataGridViewImageCell.ValueType = typeof(Image);
         _dataGridViewImageCell.ValueType.Should().Be(typeof(Image));
     }
 
@@ -98,6 +97,7 @@ public class DataGridViewImageCellTests : IDisposable
     {
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
+        _dataGridViewImageCell.DataGridView = null;
         Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
