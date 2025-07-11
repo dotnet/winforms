@@ -44,39 +44,37 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         ArgumentNullException.ThrowIfNull(paintImage);
         ArgumentNullException.ThrowIfNull(paintField);
 
-        // Clear the background over the whole button area.
-        ClearBackground(graphics, parentBackgroundColor);
-
-        // Use padding from ButtonDarkModeRenderer
-        Padding padding = PaddingCore;
-
-        Rectangle paddedBounds = new(
-            x: bounds.X + padding.Left,
-            y: bounds.Y + padding.Top,
-            width: bounds.Width - padding.Horizontal,
-            height: bounds.Height - padding.Vertical);
-
-        // Draw button background and get content bounds
-        Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
-
-        // Offset content bounds for Popup style when button is pressed
-        // if (flatStyle == FlatStyle.Popup && state == PushButtonState.Pressed)
-        // {
-        //    contentBounds.Offset(1, 1);
-        // }
-
-        // Paint image and field using the provided delegates
-        paintImage(contentBounds);
-
-        paintField(
-            contentBounds,
-            GetTextColor(state, isDefault),
-            false);
-
-        if (focused && showFocusCues)
+        // Scope the graphics state so all changes are reverted after rendering
+        using (new GraphicsStateScope(graphics))
         {
-            // Draw focus indicator for other styles
-            DrawFocusIndicator(graphics, bounds, isDefault);
+            // Clear the background over the whole button area.
+            ClearBackground(graphics, parentBackgroundColor);
+
+            // Use padding from ButtonDarkModeRenderer
+            Padding padding = PaddingCore;
+
+            Rectangle paddedBounds = new(
+                x: bounds.X + padding.Left,
+                y: bounds.Y + padding.Top,
+                width: bounds.Width - padding.Horizontal,
+                height: bounds.Height - padding.Vertical);
+
+            // Draw button background and get content bounds
+            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
+
+            // Paint image and field using the provided delegates
+            paintImage(contentBounds);
+
+            paintField(
+                contentBounds,
+                GetTextColor(state, isDefault),
+                false);
+
+            if (focused && showFocusCues)
+            {
+                // Draw focus indicator for other styles
+                DrawFocusIndicator(graphics, bounds, isDefault);
+            }
         }
     }
 
