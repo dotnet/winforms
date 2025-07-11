@@ -298,6 +298,11 @@ public unsafe partial class Control :
 
     internal byte LayoutSuspendCount { get; private set; }
 
+    // Flag for the youngest control in the descendant-inheritance hierarchy as the
+    // ultimate truth if the control - by having set the ControlStyles. -
+    // indicates to participate in automatic dark mode theming or not.
+    internal bool? _darkModeRequestState;
+
     /// <summary>
     ///  Initializes a new instance of the <see cref="Control"/> class.
     /// </summary>
@@ -7379,7 +7384,7 @@ public unsafe partial class Control :
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (Application.IsDarkModeEnabled
-                && GetStyle(ControlStyles.ApplyThemingImplicitly)
+                && _darkModeRequestState is true
                 && !RecreatingHandle)
             {
                 _ = PInvoke.SetWindowTheme(
@@ -9344,7 +9349,7 @@ public unsafe partial class Control :
             // ensure that the theming is applied to all child controls as well.
 #pragma warning disable WFO5001
             if (Application.IsDarkModeEnabled
-                && GetStyle(ControlStyles.ApplyThemingImplicitly))
+                && _darkModeRequestState is true)
             {
                 _ = PInvoke.SetWindowTheme(
                     hwnd: HWND,
@@ -10325,12 +10330,27 @@ public unsafe partial class Control :
     ///  NOTE: This is control style, not the Win32 style of the hWnd.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected void SetStyle(ControlStyles flag, bool value)
     {
         // WARNING: if we ever add argument checking to "flag", we will need
         // to move private styles like Layered to State.
         _controlStyle = value ? _controlStyle | flag : _controlStyle & ~flag;
+
+        // We need to special-treat ApplyThemingImplicitly, as it is not a real style,which we
+        // would hand down to Win32. It's important, that we capture what an inherited control
+        // wanted in terms of getting the respective dark mode theme applied automatically.
+        // Since the inherited control sets or clears this style implicitly in CreateParams
+        // (Which always runs _before_ its constructor code runs), and since base controls can
+        // reset those settings - the source of truth ultimately is the value which gets set
+        // for the first time a control sets or clears this style explicitly in CreateParams.
+        if ((flag & ControlStyles.ApplyThemingImplicitly) == ControlStyles.ApplyThemingImplicitly
+            && !_darkModeRequestState.HasValue)
+        {
+            _darkModeRequestState = value;
+        }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     internal virtual void SetToolTip(ToolTip toolTip)
     {
@@ -10391,7 +10411,8 @@ public unsafe partial class Control :
                 {
                     // We shouldn't mess with the color mode if users haven't specifically set it.
                     // https://github.com/dotnet/winforms/issues/12014
-                    if (value && Application.ColorModeSet)
+                    // And we shouldn't prepare dark mode, if the form opted out.
+                    if (value && Application.ColorModeSet && _darkModeRequestState is true)
                     {
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }
