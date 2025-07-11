@@ -19,10 +19,8 @@ public class ListView_CheckedListViewItemCollectionTests : IDisposable
     public void Dispose() => _listView.Dispose();
 
     [WinFormsFact]
-    public void CheckedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()
-    {
-        Assert.Throws<ArgumentNullException>("owner", () => { new ListView.CheckedListViewItemCollection(null!); });
-    }
+    public void CheckedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException() =>
+        Assert.Throws<ArgumentNullException>("owner", () => new ListView.CheckedListViewItemCollection(null!));
 
     [WinFormsFact]
     public void Count_ReturnsCheckedItemCount_WhenNotVirtualMode()
@@ -79,17 +77,17 @@ public class ListView_CheckedListViewItemCollectionTests : IDisposable
         ListViewItem item1 = new() { Checked = false };
         ListViewItem item2 = new() { Checked = true };
         _listView.Items.AddRange([item1, item2]);
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        ilist[0].Should().Be(item2);
+        iList[0].Should().Be(item2);
     }
 
     [WinFormsFact]
     public void IList_Indexer_Set_ThrowsNotSupportedException()
     {
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        Action act = () => ilist[0] = new ListViewItem();
+        Action act = () => iList[0] = new ListViewItem();
 
         act.Should().Throw<NotSupportedException>();
     }
@@ -206,26 +204,26 @@ public class ListView_CheckedListViewItemCollectionTests : IDisposable
         _listView.CheckBoxes = true;
         ListViewItem item = new() { Checked = true };
         _listView.Items.Add(item);
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        ilist.Contains(item).Should().BeTrue();
+        iList.Contains(item).Should().BeTrue();
     }
 
     [WinFormsFact]
     public void IList_Contains_ReturnsFalse_IfNotListViewItem()
     {
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        ilist.Contains("not an item").Should().BeFalse();
+        iList.Contains("not an item").Should().BeFalse();
     }
 
     [WinFormsFact]
     public void IList_Contains_ThrowsInvalidOperationException_WhenVirtualMode()
     {
         _listView.VirtualMode = true;
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        Action act = () => ilist.Contains(new ListViewItem());
+        Action act = () => iList.Contains(new ListViewItem());
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -322,26 +320,26 @@ public class ListView_CheckedListViewItemCollectionTests : IDisposable
         ListViewItem item1 = new() { Checked = true };
         ListViewItem item2 = new() { Checked = true };
         _listView.Items.AddRange([item1, item2]);
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        ilist.IndexOf(item2).Should().Be(1);
+        iList.IndexOf(item2).Should().Be(1);
     }
 
     [WinFormsFact]
     public void IList_IndexOf_ReturnsMinusOne_IfNotListViewItem()
     {
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        ilist.IndexOf("not an item").Should().Be(-1);
+        iList.IndexOf("not an item").Should().Be(-1);
     }
 
     [WinFormsFact]
     public void IList_IndexOf_ThrowsInvalidOperationException_WhenVirtualMode()
     {
         _listView.VirtualMode = true;
-        IList ilist = _collection;
+        IList iList = _collection;
 
-        Action act = () => ilist.IndexOf(new ListViewItem());
+        Action act = () => iList.IndexOf(new ListViewItem());
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -354,15 +352,15 @@ public class ListView_CheckedListViewItemCollectionTests : IDisposable
     [InlineData("RemoveAt")]
     public void IList_Methods_ThrowNotSupportedException(string methodName)
     {
-        IList ilist = _collection;
+        IList iList = _collection;
 
         Action act = methodName switch
         {
-            "Add" => () => ilist.Add(new ListViewItem()),
-            "Clear" => ilist.Clear,
-            "Insert" => () => ilist.Insert(0, new ListViewItem()),
-            "Remove" => () => ilist.Remove(new ListViewItem()),
-            "RemoveAt" => () => ilist.RemoveAt(0),
+            "Add" => () => iList.Add(new ListViewItem()),
+            "Clear" => iList.Clear,
+            "Insert" => () => iList.Insert(0, new ListViewItem()),
+            "Remove" => () => iList.Remove(new ListViewItem()),
+            "RemoveAt" => () => iList.RemoveAt(0),
             _ => throw new ArgumentException($"Invalid method name: {methodName}", nameof(methodName))
         };
 
