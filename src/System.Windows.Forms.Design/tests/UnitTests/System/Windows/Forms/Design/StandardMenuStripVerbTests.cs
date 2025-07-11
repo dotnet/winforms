@@ -34,7 +34,7 @@ public class StandardMenuStripVerbTests : IDisposable
         _siteMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_designerHostMock.Object);
         _siteMock.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(_componentChangeServiceMock.Object);
 
-         _designerFrame = new(_siteMock.Object);
+        _designerFrame = new(_siteMock.Object);
         _behaviorService = new(_serviceProviderMock.Object, _designerFrame);
         _siteMock.Setup(s => s.GetService(typeof(BehaviorService))).Returns(_behaviorService);
         _siteMock.Setup(s => s.GetService(typeof(ToolStripAdornerWindowService))).Returns(null!);
@@ -112,6 +112,38 @@ public class StandardMenuStripVerbTests : IDisposable
         standardMenuStripVerb.Should().BeOfType<StandardMenuStripVerb>();
         ToolStripDesigner toolStripDesigner = standardMenuStripVerb.TestAccessor().Dynamic._designer;
         toolStripDesigner.Should().Be(_designer);
+    }
+
+    [WinFormsFact]
+    public void Ctor_ThrowsIfDesignerIsNull()
+    {
+        Action action = () => new StandardMenuStripVerb(null);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [WinFormsFact]
+    public void Ctor_ThrowsIfComponentOrSiteIsNull()
+    {
+        Action action = () =>
+        {
+            ToolStripDesigner toolStripDesigner = new();
+            toolStripDesigner.Initialize(new MenuStrip());
+
+            new StandardMenuStripVerb(toolStripDesigner);
+        };
+
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [WinFormsFact]
+    public void Ctor_AssignsHostAndChangeServiceIfAvailable()
+    {
+        StandardMenuStripVerb standardMenuStripVerb = new(_designer);
+        IDesignerHost host = standardMenuStripVerb.TestAccessor().Dynamic._host;
+        IComponentChangeService changeService = standardMenuStripVerb.TestAccessor().Dynamic._changeService;
+
+        host.Should().BeSameAs(_designerHostMock.Object);
+        changeService.Should().BeSameAs(_componentChangeServiceMock.Object);
     }
 
     [WinFormsFact]
