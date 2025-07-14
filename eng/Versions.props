@@ -54,8 +54,8 @@
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <!-- Temporary: Remove once xunit.v3 3.x stable is released and Arcade is updated and flows to winforms repo -->
-    <XUnitV3Version>3.0.0-pre.40</XUnitV3Version>
+    <!-- Temporary: Remove once https://github.com/dotnet/arcade/pull/15963 is merged and flows to VMR then to this repo -->
+    <XUnitV3Version>3.0.0</XUnitV3Version>
     <XUnitRunnerVisualStudioVersion>3.1.0</XUnitRunnerVisualStudioVersion>
     <XUnitStaFactPackageVersion>3.0.6-alpha</XUnitStaFactPackageVersion>
   </PropertyGroup>
