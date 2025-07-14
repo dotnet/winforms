@@ -54,9 +54,9 @@ public class ToolStripProfessionalLowResolutionRendererTests
         using Bitmap bmp = new(10, 10);
         using Graphics g = Graphics.FromImage(bmp);
         ToolStripRenderEventArgs args = new(g, toolStrip);
-        
+
         Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBorder(args);
-        
+
         action.Should().NotThrow();
     }
 
