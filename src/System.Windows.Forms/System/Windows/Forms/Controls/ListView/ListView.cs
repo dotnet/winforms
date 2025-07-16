@@ -988,7 +988,11 @@ public partial class ListView : Control
     // this essentially means that the version of CommCtl supports list view grouping
     // and that the user wants to make use of list view groups
     internal bool GroupsEnabled
-        => ShowGroups && _groups is not null && _groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
+        => ShowGroups
+            && _groups is not null
+            && _groups.Count > 0
+            && Application.ComCtlSupportsVisualStyles
+            && !VirtualMode;
 
     /// <summary>
     ///  Column headers can either be invisible, clickable, or non-clickable.
