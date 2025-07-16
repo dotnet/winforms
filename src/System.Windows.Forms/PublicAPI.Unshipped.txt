@@ -18,5 +18,12 @@ System.Windows.Forms.DrawListViewGroupHeaderEventArgs.State.get -> System.Window
 System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Subtitle.get -> string?
 System.Windows.Forms.DrawListViewGroupHeaderEventHandler
 System.Windows.Forms.ListView.DrawGroupHeader -> System.Windows.Forms.DrawListViewGroupHeaderEventHandler?
+System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Collapsed = 1 -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Collapsible = 16 -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Focused = 8 -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Hot = 2 -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Normal = 0 -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.ListViewGroupState.Selected = 4 -> System.Windows.Forms.ListViewGroupState
 virtual System.Windows.Forms.DrawListViewGroupHeaderEventHandler.Invoke(object? sender, System.Windows.Forms.DrawListViewGroupHeaderEventArgs! e) -> void
 virtual System.Windows.Forms.ListView.OnDrawGroupHeader(System.Windows.Forms.DrawListViewGroupHeaderEventArgs! e) -> void
