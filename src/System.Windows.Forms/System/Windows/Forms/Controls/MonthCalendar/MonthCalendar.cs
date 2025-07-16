@@ -2063,6 +2063,12 @@ public partial class MonthCalendar : Control
         _selectionStart = start;
         _selectionEnd = end;
 
+        PInvoke.NotifyWinEvent(
+              (uint)AccessibleEvents.Focus,
+              this,
+              (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+              (int)PInvoke.CHILDID_SELF);
+
         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
         AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
 
@@ -2089,6 +2095,11 @@ public partial class MonthCalendar : Control
         {
             MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
             calendarAccessibleObject.RaiseAutomationEventForChild(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+
+            AccessibilityObject.InternalRaiseAutomationNotification(
+                Automation.AutomationNotificationKind.Other,
+                Automation.AutomationNotificationProcessing.MostRecent,
+                calendarAccessibleObject.Value!);
         }
 
         OnDateChanged(new DateRangeEventArgs(start, end));
