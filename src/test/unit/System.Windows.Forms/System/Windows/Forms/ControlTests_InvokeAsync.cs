@@ -8,10 +8,11 @@ public partial class ControlTests
     private sealed class TestControl : Control
     {
         public void EnsureHandle() => _ = Handle;
+
         public void DestroyTestHandle() => DestroyHandle();
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -36,7 +37,7 @@ public partial class ControlTests
                 : originalThread);
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -60,7 +61,7 @@ public partial class ControlTests
         Assert.Equal(42, result);
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -85,7 +86,7 @@ public partial class ControlTests
         Assert.NotEqual(originalThread, callbackThread.Value);
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -110,7 +111,7 @@ public partial class ControlTests
         Assert.Equal(99, result);
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_Action_Cancellation_PreCancelledToken_ReturnsEarly()
     {
         using var control = new TestControl();
@@ -123,7 +124,7 @@ public partial class ControlTests
             () => throw new ArgumentOutOfRangeException("Should not run"), cts.Token);
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_FuncT_Cancellation_PreCancelledToken_ReturnsDefault()
     {
         using var control = new TestControl();
@@ -144,7 +145,7 @@ public partial class ControlTests
         }
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_AsyncCallback_Cancellation_PreCancelledToken_ReturnsEarly()
     {
         using var control = new TestControl();
@@ -158,7 +159,7 @@ public partial class ControlTests
             cts.Token);
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_AsyncCallbackT_Cancellation_PreCancelledToken_ReturnsDefault()
     {
         using var control = new TestControl();
@@ -173,7 +174,7 @@ public partial class ControlTests
         Assert.Equal(0, result);
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_Action_Cancellation_WhileQueued()
     {
         using var control = new TestControl();
@@ -190,7 +191,7 @@ public partial class ControlTests
             async () => await task.ConfigureAwait(false));
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_AsyncCallback_Cancellation_WhileRunning()
     {
         using var control = new TestControl();
@@ -208,7 +209,7 @@ public partial class ControlTests
             async () => await task.ConfigureAwait(false));
     }
 
-    [Fact]
+    [WinFormsFact]
     public async Task InvokeAsync_Throws_InvalidOperationException_IfHandleNotCreated()
     {
         using var control = new TestControl();
@@ -222,7 +223,7 @@ public partial class ControlTests
                 CancellationToken.None));
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -245,7 +246,7 @@ public partial class ControlTests
             control.InvokeAsync<int>(ct => throw new InvalidOperationException()));
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
@@ -264,7 +265,7 @@ public partial class ControlTests
         Assert.True(innerCalled);
     }
 
-    [Fact]
+    [WinFormsFact]
     [Diagnostics.CodeAnalysis.SuppressMessage(
         category: "Usage",
         checkId: "xUnit1051",
