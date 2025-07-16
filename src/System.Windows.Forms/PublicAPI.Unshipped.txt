@@ -1,0 +1,22 @@
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.BackColor.get -> System.Drawing.Color
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Bounds.get -> System.Drawing.Rectangle
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawBackground() -> void
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawDefault.get -> bool
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawDefault.set -> void
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawListViewGroupHeaderEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewGroup? group, int groupId, System.Windows.Forms.ListViewGroupState state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawText() -> void
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.DrawText(System.Windows.Forms.TextFormatFlags flags) -> void
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Font.get -> System.Drawing.Font?
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.ForeColor.get -> System.Drawing.Color
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Group.get -> System.Windows.Forms.ListViewGroup?
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.GroupId.get -> int
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Header.get -> string?
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.IsCollapsed.get -> bool
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.State.get -> System.Windows.Forms.ListViewGroupState
+System.Windows.Forms.DrawListViewGroupHeaderEventArgs.Subtitle.get -> string?
+System.Windows.Forms.DrawListViewGroupHeaderEventHandler
+System.Windows.Forms.ListView.DrawGroupHeader -> System.Windows.Forms.DrawListViewGroupHeaderEventHandler?
+virtual System.Windows.Forms.DrawListViewGroupHeaderEventHandler.Invoke(object? sender, System.Windows.Forms.DrawListViewGroupHeaderEventArgs! e) -> void
+virtual System.Windows.Forms.ListView.OnDrawGroupHeader(System.Windows.Forms.DrawListViewGroupHeaderEventArgs! e) -> void
