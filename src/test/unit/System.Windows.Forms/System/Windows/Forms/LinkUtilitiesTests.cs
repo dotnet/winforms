@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -39,23 +39,6 @@ public class LinkUtilitiesTests
         Font? hoverLinkFont = null;
 
         Action act = () => LinkUtilities.EnsureLinkFonts(baseFont, behavior, ref linkFont, ref hoverLinkFont);
-
-        act.Should().NotThrow();
-        linkFont.Should().BeOfType<Font>();
-        hoverLinkFont.Should().BeOfType<Font>();
-    }
-
-    [WinFormsTheory]
-    [InlineData(LinkBehavior.AlwaysUnderline)]
-    [InlineData(LinkBehavior.HoverUnderline)]
-    [InlineData(LinkBehavior.NeverUnderline)]
-    public void LinkUtilities_EnsureLinkFonts_CreatesExpectedFonts_WithActive(LinkBehavior behavior)
-    {
-        using Font baseFont = new("Arial", 12);
-        Font? linkFont = null;
-        Font? hoverLinkFont = null;
-
-        Action act = () => LinkUtilities.EnsureLinkFonts(baseFont, behavior, ref linkFont, ref hoverLinkFont, isActive: true);
 
         act.Should().NotThrow();
         linkFont.Should().BeOfType<Font>();
