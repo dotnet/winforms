@@ -10,6 +10,7 @@ namespace System.Windows.Forms.Tests;
 public class MultiPropertyDescriptorGridEntryTests
 {
     private sealed class DummyComponent : Component { }
+
     private sealed class TestGridEntry : GridEntry
     {
         public TestGridEntry(PropertyGrid ownerGrid)
