@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
-using System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
+using System.Windows.Forms.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
