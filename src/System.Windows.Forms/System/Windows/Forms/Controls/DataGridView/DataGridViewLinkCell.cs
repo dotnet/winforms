@@ -949,7 +949,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Font? getHoverFont = null;
             bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
-            LinkUtilities.EnsureLinkFonts(cellStyle.Font!, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
+            LinkUtilities.EnsureLinkFonts(cellStyle.Font!, LinkBehavior, ref getLinkFont, ref getHoverFont);
             using Font linkFont = getLinkFont;
             using Font hoverFont = getHoverFont;
 
@@ -1028,6 +1028,18 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                             valBounds,
                             linkColor,
                             flags);
+
+                        // add a visiting effect.
+                        if (isActive)
+                        {
+                            TextRenderer.DrawText(
+                                g,
+                                formattedValueStr,
+                                LinkState == LinkState.Hover ? hoverFont : linkFont,
+                                new Rectangle(valBounds.X + 1, valBounds.Y, valBounds.Width, valBounds.Height),
+                                linkColor,
+                                flags);
+                        }
                     }
                 }
                 else if (cellCurrent &&
