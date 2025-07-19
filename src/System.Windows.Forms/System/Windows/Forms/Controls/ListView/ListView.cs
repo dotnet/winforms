@@ -39,6 +39,7 @@ public partial class ListView : Control
     private static readonly object s_drawColumnHeaderEvent = new();
     private static readonly object s_drawItemEvent = new();
     private static readonly object s_drawSubItemEvent = new();
+    private static readonly object s_drawGroupHeaderEvent = new();
     private static readonly object s_itemSelectionChangedEvent = new();
     private static readonly object s_retrieveVirtualItemEvent = new();
     private static readonly object s_searchForVirtualItemEvent = new();
@@ -154,6 +155,7 @@ public partial class ListView : Control
     private SelectedIndexCollection? _selectedIndexCollection;
     private ListViewGroupCollection? _groups;
     private ListViewInsertionMark? _insertionMark;
+
     private LabelEditEventHandler? _onAfterLabelEdit;
     private LabelEditEventHandler? _onBeforeLabelEdit;
     private ColumnClickEventHandler? _onColumnClick;
@@ -2050,7 +2052,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Fires in owner draw mode and Details view when a ListView sub-item needs to be drawn.
+    ///  Fires in owner draw mode and Details view when a ListView GroupHeader needs to be drawn.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
@@ -2058,6 +2060,17 @@ public partial class ListView : Control
     {
         add => Events.AddHandler(s_drawSubItemEvent, value);
         remove => Events.RemoveHandler(s_drawSubItemEvent, value);
+    }
+
+    /// <summary>
+    ///  Fires in owner draw mode and Details view when a ListView sub-item needs to be drawn.
+    /// </summary>
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
+    public event DrawListViewGroupHeaderEventHandler? DrawGroupHeader
+    {
+        add => Events.AddHandler(s_drawGroupHeaderEvent, value);
+        remove => Events.RemoveHandler(s_drawGroupHeaderEvent, value);
     }
 
     [SRCategory(nameof(SR.CatAction))]
@@ -2576,12 +2589,16 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Handles custom drawing of list items - for individual item font/color changes.
+    ///  Handles custom drawing of list items and group headers - for individual item font/color changes.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
+    ///   If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view only.)
     ///   events and let the user do the drawing.
+    ///  </para>
+    ///  <para>
+    ///   In that case, and if we're in details view and using groups,
+    ///   we also fire OnDrawGroupHeader.
     ///  </para>
     /// </remarks>
     private unsafe void CustomDraw(ref Message m)
@@ -2592,6 +2609,7 @@ public partial class ListView : Control
         try
         {
             NMLVCUSTOMDRAW* nmcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
+
             // Find out which stage we're drawing
             switch (nmcd->nmcd.dwDrawStage)
             {
@@ -2611,9 +2629,16 @@ public partial class ListView : Control
                     _odCacheFont = Font;
                     _odCacheFontHandle = FontHandle;
 
-                    // If preparing to paint a group item, make sure its bolded.
+                    // If preparing to paint a group item, check if we're in OwnerDraw mode
                     if (nmcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP)
                     {
+                        if (OwnerDraw && GroupsDisplayed)
+                        {
+                            // Request notification for group drawing
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
+                            return;
+                        }
+
                         _odCacheFontHandleWrapper?.Dispose();
 
                         _odCacheFont = new Font(_odCacheFont, FontStyle.Bold);
@@ -2625,13 +2650,88 @@ public partial class ListView : Control
 
                     return;
 
-                // We have to return a NOTIFYSUBITEMDRAW (called NOTIFYSUBITEMREDRAW in the docs) here to
-                // get it to enter "change all subitems instead of whole rows" mode.
-
-                // HOWEVER... we only want to do this for report styles...
-
                 case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
+                    // Check if this is a group header
+                    if (nmcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP
+                        && OwnerDraw && GroupsDisplayed)
+                    {
+                        int groupId = (int)nmcd->nmcd.dwItemSpec;
 
+                        // Find the group by ID
+                        ListViewGroup? group = null;
+                        int groupIndex = -1;
+
+                        if (_groups is not null)
+                        {
+                            for (int i = 0; i < _groups.Count; i++)
+                            {
+                                if (_groups[i].ID == groupId)
+                                {
+                                    group = _groups[i];
+                                    groupIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Check if it's the default group
+                        if (group is null && groupId == DefaultGroup.ID)
+                        {
+                            group = DefaultGroup;
+                        }
+
+                        // Create the event args
+                        using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
+                        Rectangle bounds = nmcd->nmcd.rc;
+
+                        // Determine the group state
+                        ListViewGroupState groupState = ListViewGroupState.Normal;
+
+                        if ((nmcd->nmcd.uItemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT) != 0)
+                        {
+                            groupState |= ListViewGroupState.Hot;
+                        }
+
+                        if ((nmcd->nmcd.uItemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED) != 0)
+                        {
+                            groupState |= ListViewGroupState.Selected;
+                        }
+
+                        if ((nmcd->nmcd.uItemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS) != 0)
+                        {
+                            groupState |= ListViewGroupState.Focused;
+                        }
+
+                        if (group?.CollapsedState == ListViewGroupCollapsedState.Collapsed)
+                        {
+                            groupState |= ListViewGroupState.Collapsed;
+                        }
+
+                        if (group?.CollapsedState != ListViewGroupCollapsedState.Default)
+                        {
+                            groupState |= ListViewGroupState.Collapsible;
+                        }
+
+                        DrawListViewGroupHeaderEventArgs e = new(
+                            g,
+                            bounds,
+                            group,
+                            groupId,
+                            groupState,
+                            ForeColor,
+                            BackColor,
+                            Font);
+
+                        OnDrawGroupHeader(e);
+
+                        m.ResultInternal = !e.DrawDefault
+                            ? (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT
+                            : (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
+
+                        return;
+                    }
+
+                    // We need to draw an item.
                     int itemIndex = (int)nmcd->nmcd.dwItemSpec;
                     // The following call silently returns Rectangle.Empty if no corresponding
                     // item was found. We do this because the native listview, under some circumstances, seems
@@ -3093,11 +3193,8 @@ public partial class ListView : Control
                 Items.Clear();
             }
 
-            if (_odCacheFontHandleWrapper is not null)
-            {
-                _odCacheFontHandleWrapper.Dispose();
-                _odCacheFontHandleWrapper = null;
-            }
+            _odCacheFontHandleWrapper?.Dispose();
+            _odCacheFontHandleWrapper = null;
 
             if (!string.IsNullOrEmpty(_backgroundImageFileName) || _bkImgFileNames is not null)
             {
@@ -6482,11 +6579,9 @@ public partial class ListView : Control
                 {
                     Debug.Assert(_labelEdit is null,
                         "A new label editing shouldn't start before the previous one ended");
-                    if (_labelEdit is not null)
-                    {
-                        _labelEdit.ReleaseHandle();
-                        _labelEdit = null;
-                    }
+
+                    _labelEdit?.ReleaseHandle();
+                    _labelEdit = null;
 
                     bool cancelEdit;
                     if (_blockLabelEdit)
@@ -7173,5 +7268,14 @@ public partial class ListView : Control
     protected override AccessibleObject CreateAccessibilityInstance()
     {
         return new ListViewAccessibleObject(this);
+    }
+
+    // Add the OnDrawGroupHeader method (around line 5800, near other OnDraw methods)
+    /// <summary>
+    ///  Fires the DrawGroupHeader event.
+    /// </summary>
+    protected virtual void OnDrawGroupHeader(DrawListViewGroupHeaderEventArgs e)
+    {
+        ((DrawListViewGroupHeaderEventHandler?)Events[s_drawGroupHeaderEvent])?.Invoke(this, e);
     }
 }
