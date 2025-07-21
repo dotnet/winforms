@@ -249,15 +249,31 @@ public partial class ComboBox : ListControl
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  The background color of this control. This is an ambient property and
     ///  will always return a non-null value.
     /// </summary>
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
+        get
+        {
+            if (ShouldSerializeBackColor())
+            {
+                return base.BackColor;
+            }
+            else
+            {
+                return Application.IsDarkModeEnabled
+                    && DarkModeRequestState is true
+                        ? SystemColors.ControlDarkDark
+                        : SystemColors.Window;
+            }
+        }
+
         set => base.BackColor = value;
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3620,6 +3636,9 @@ public partial class ComboBox : ListControl
         m.ResultInternal = (LRESULT)1;
     }
 
+    private static readonly IntPtr s_darkEditBrush
+        = PInvokeCore.CreateSolidBrush(ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
     /// <summary>
     ///  The ComboBox's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
@@ -3672,7 +3691,32 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
+
             case PInvokeCore.WM_CTLCOLOREDIT:
+                // Only handle if the ComboBox is disabled
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (IsHandleCreated
+                    && !Enabled
+                    && Application.IsDarkModeEnabled
+                    && DarkModeRequestState is true)
+                {
+                    PInvokeCore.SetBkColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+                    PInvokeCore.SetTextColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+                    m.ResultInternal = (LRESULT)s_darkEditBrush;
+                }
+                else
+                {
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+                }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+                break;
             case PInvokeCore.WM_CTLCOLORLISTBOX:
                 m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                 break;
