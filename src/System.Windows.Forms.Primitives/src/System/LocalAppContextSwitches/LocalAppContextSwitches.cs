@@ -234,7 +234,7 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Indicates whether the text of the RichTextBox is sent to the UIA provider.
+    ///  Indicates whether automation notifications for the MonthCalendar control are enabled.
     /// </summary>
     public static bool EnableMonthCalendarAutomationNotification
     {
