@@ -249,15 +249,31 @@ public partial class ComboBox : ListControl
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  The background color of this control. This is an ambient property and
     ///  will always return a non-null value.
     /// </summary>
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
+        get
+        {
+            if (ShouldSerializeBackColor())
+            {
+                return base.BackColor;
+            }
+            else
+            {
+                return Application.IsDarkModeEnabled
+                    && DarkModeRequestState is true
+                        ? SystemColors.ControlDarkDark
+                        : SystemColors.Window;
+            }
+        }
+
         set => base.BackColor = value;
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
