@@ -1,0 +1,2 @@
+override System.Windows.Forms.ComboBox.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.OnEnabledChanged(System.EventArgs! e) -> void
