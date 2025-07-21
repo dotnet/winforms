@@ -21,18 +21,18 @@ public class MultiPropertyDescriptorGridEntryTests
 
     private static MultiPropertyDescriptorGridEntry CreateEntryWithObjects(object[] objects, PropertyDescriptor[] descriptors)
     {
-        PropertyGrid ownerGrid = new();
+        using PropertyGrid ownerGrid = new();
         TestGridEntry parent = new(ownerGrid);
-        bool hide = false;
-        return new MultiPropertyDescriptorGridEntry(ownerGrid, parent, objects, descriptors, hide);
+
+        return new MultiPropertyDescriptorGridEntry(ownerGrid, parent, objects, descriptors, false);
     }
 
     [Fact]
     public void Container_AllObjectsAreIComponentWithSameContainer_ReturnsContainer()
     {
-        Container container = new();
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using Container container = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         container.Add(dummyComponent1);
         container.Add(dummyComponent2);
 
@@ -49,10 +49,10 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void Container_ObjectsAreIComponentWithDifferentContainers_ReturnsNull()
     {
-        Container container1 = new();
-        Container container2 = new();
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using Container container1 = new();
+        using Container container2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         container1.Add(dummyComponent1);
         container2.Add(dummyComponent2);
 
@@ -70,7 +70,7 @@ public class MultiPropertyDescriptorGridEntryTests
     public void Container_ObjectsAreNotIComponent_ReturnsNull()
     {
         object[] objects = [new object(), new object()];
-        DummyComponent dummyComponent = new();
+        using DummyComponent dummyComponent = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent)[0], TypeDescriptor.GetProperties(dummyComponent)[0]];
 
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -83,9 +83,9 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void Container_ObjectsAreIComponent_SomeWithoutSite_ReturnsNull()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
-        Container container = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
+        using Container container = new();
         container.Add(dummyComponent1);
 
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
@@ -102,7 +102,7 @@ public class MultiPropertyDescriptorGridEntryTests
     public void Container_EmptyObjects_ReturnsNull()
     {
         object[] objects = [];
-        DummyComponent dummyComponent = new();
+        using DummyComponent dummyComponent = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent)[0]];
 
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -115,15 +115,15 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void Expandable_FlagExpandableAndHasChildren_ReturnsTrue()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
         object[] objects = [dummyComponent1, dummyComponent2];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
         multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.SetFlag(Flags.Expandable, true);
 
-        PropertyGrid ownerGrid = new();
+        using PropertyGrid ownerGrid = new();
         multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.ChildCollection.Add(new TestGridEntry(ownerGrid));
 
         bool result = multiPropertyDescriptorGridEntry.Expandable;
@@ -134,8 +134,8 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void Expandable_ExpandableFailedFlag_ReturnsFalse()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
         object[] objects = [dummyComponent1, dummyComponent2];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -150,8 +150,8 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void GetComponents_ReturnsCopyOfObjects()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
         object[] objects = [dummyComponent1, dummyComponent2];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -166,7 +166,7 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void GetPropertyTextValue_ValueIsNullAndMergedDescriptorReturnsNull_ReturnsEmptyString()
     {
-        DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent1 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0]];
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -179,7 +179,7 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void SendNotification_GridEntry_CreatesTransactionAndCommits()
     {
-        DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent1 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0]];
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -194,7 +194,7 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void NotifyParentsOfChanges_NotifiesParentProperties()
     {
-        DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent1 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0]];
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -205,7 +205,7 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void SendNotification_GridEntry_HandlesResetAndDoubleClick()
     {
-        DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent1 = new();
         PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0]];
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
@@ -238,8 +238,8 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void OnComponentChanging_CallsChangeServiceForEachObject()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         PropertyDescriptor[] descriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
         object[] objects = [dummyComponent1, dummyComponent2];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, descriptors);
@@ -252,8 +252,8 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void OnComponentChanged_DoesNothing_WhenServiceIsNull()
     {
-        DummyComponent dummyComponent1 = new();
-        DummyComponent dummyComponent2 = new();
+        using DummyComponent dummyComponent1 = new();
+        using DummyComponent dummyComponent2 = new();
         PropertyDescriptor[] propertyDescriptors =
         [
             TypeDescriptor.GetProperties(dummyComponent1)[0],
