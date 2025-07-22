@@ -71,10 +71,12 @@ public static unsafe partial class ControlPaint
     private static readonly Color s_darkModeBackgroundPressed = Color.FromArgb(255, 70, 70, 70);
     private static readonly Color s_darkModeBackgroundDisabled = Color.FromArgb(255, 45, 45, 45);
     private static readonly Color s_darkModeBackgroundNormal = Color.FromArgb(255, 60, 60, 60);
+    private static readonly Color s_darkModeBackgroundHover = Color.FromArgb(255, 80, 80, 80);
 
     private static readonly Color s_darkModeBorderPressed = Color.FromArgb(255, 80, 80, 80);
     private static readonly Color s_darkModeBorderDisabled = Color.FromArgb(255, 50, 50, 50);
     private static readonly Color s_darkModeBorderNormal = Color.FromArgb(255, 90, 90, 90);
+    private static readonly Color s_darkModeBorderHover = Color.FromArgb(255, 110, 110, 110);
 
     private static readonly Color s_darkModeArrowDisabled = Color.FromArgb(255, 100, 100, 100);
     private static readonly Color s_darkModeArrowNormal = Color.FromArgb(255, 220, 220, 220);
@@ -83,10 +85,12 @@ public static unsafe partial class ControlPaint
     private static readonly Color s_lightModeBackgroundPressed = Color.FromArgb(255, 218, 218, 218);
     private static readonly Color s_lightModeBackgroundDisabled = Color.FromArgb(255, 244, 244, 244);
     private static readonly Color s_lightModeBackgroundNormal = Color.FromArgb(255, 241, 241, 241);
+    private static readonly Color s_lightModeBackgroundHover = Color.FromArgb(255, 220, 220, 220);
 
     private static readonly Color s_lightModeBorderPressed = Color.FromArgb(255, 166, 166, 166);
     private static readonly Color s_lightModeBorderDisabled = Color.FromArgb(255, 205, 205, 205);
     private static readonly Color s_lightModeBorderNormal = Color.FromArgb(255, 195, 195, 195);
+    private static readonly Color s_lightModeBorderHover = Color.FromArgb(255, 170, 170, 170);
 
     private static readonly Color s_lightModeArrowDisabled = Color.FromArgb(255, 170, 170, 170);
     private static readonly Color s_lightModeArrowNormal = Color.FromArgb(255, 68, 68, 68);
@@ -1878,16 +1882,21 @@ public static unsafe partial class ControlPaint
         // If dark mode is enabled, use the new modern rendering
         if (Application.IsDarkModeEnabled)
         {
-            Rectangle bounds = new(x, y, width, height);
-            bool isPressed = (state & ButtonState.Pushed) == ButtonState.Pushed;
-            bool isDisabled = (state & ButtonState.Inactive) == ButtonState.Inactive;
-
-            ModernControlButton modernControlButton = button switch
+            ModernControlButtonState controlButtonState = state switch
             {
-                ScrollButton.Up => ModernControlButton.Up,
-                ScrollButton.Down => ModernControlButton.Down,
-                ScrollButton.Left => ModernControlButton.Left,
-                ScrollButton.Right => ModernControlButton.Right,
+                ButtonState.Pushed => ModernControlButtonState.Pressed,
+                ButtonState.Inactive => ModernControlButtonState.Disabled,
+                _ => ModernControlButtonState.Normal
+            };
+
+            Rectangle bounds = new(x, y, width, height);
+
+            ModernControlButtonStyle modernControlButton = button switch
+            {
+                ScrollButton.Up => ModernControlButtonStyle.Up,
+                ScrollButton.Down => ModernControlButtonStyle.Down,
+                ScrollButton.Left => ModernControlButtonStyle.Left,
+                ScrollButton.Right => ModernControlButtonStyle.Right,
                 _ => throw new ArgumentOutOfRangeException(nameof(button), button, null)
             };
 
@@ -1895,8 +1904,7 @@ public static unsafe partial class ControlPaint
                 graphics,
                 bounds,
                 modernControlButton,
-                isPressed,
-                isDisabled,
+                controlButtonState,
                 isDarkMode: true);
         }
         else
