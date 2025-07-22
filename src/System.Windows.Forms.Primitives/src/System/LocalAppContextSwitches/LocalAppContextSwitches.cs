@@ -26,7 +26,6 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
-    internal const string EnableMonthCalendarAutomationNotificationSwitchName = "System.Windows.Forms.RichTextBox.EnableMonthCalendarAutomationNotification";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -38,7 +37,6 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
-    private static int s_enableMonthCalendarAutomationNotification;
     private static int s_moveTreeViewTextLocationOnePixel;
 
     private static FrameworkName? s_targetFrameworkName;
@@ -231,14 +229,5 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
-    }
-
-    /// <summary>
-    ///  Indicates whether automation notifications for the MonthCalendar control are enabled.
-    /// </summary>
-    public static bool EnableMonthCalendarAutomationNotification
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(EnableMonthCalendarAutomationNotificationSwitchName, ref s_enableMonthCalendarAutomationNotification);
     }
 }
