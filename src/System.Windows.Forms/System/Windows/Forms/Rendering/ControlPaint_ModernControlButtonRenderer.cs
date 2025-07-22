@@ -8,6 +8,12 @@ namespace System.Windows.Forms;
 
 public static unsafe partial class ControlPaint
 {
+    /// <summary>
+    ///  Scaling factor for button content (arrows, dots, etc.).
+    ///  Values greater than 1.0 make the content larger relative to the button.
+    /// </summary>
+    private const double ContentScaleFactor = 1.5;
+
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws a modern up/down button suitable for both light and dark modes.
@@ -15,9 +21,8 @@ public static unsafe partial class ControlPaint
     internal static void DrawModernControlButton(
         Graphics graphics,
         Rectangle bounds,
-        ModernControlButton button,
-        bool isPressed,
-        bool isDisabled,
+        ModernControlButtonStyle button,
+        ModernControlButtonState state,
         bool isDarkMode)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -30,42 +35,46 @@ public static unsafe partial class ControlPaint
         if (isDarkMode)
         {
             // Dark mode colors
-            backgroundColor =
-                isPressed
-                    ? s_darkModeBackgroundPressed
-                    : isDisabled
-                        ? s_darkModeBackgroundDisabled
-                        : s_darkModeBackgroundNormal;
+            backgroundColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_darkModeBackgroundPressed,
+                ModernControlButtonState.Disabled => s_darkModeBackgroundDisabled,
+                ModernControlButtonState.Hover => s_darkModeBackgroundHover,
+                _ => s_darkModeBackgroundNormal
+            };
 
-            borderColor =
-                isPressed
-                    ? s_darkModeBorderPressed
-                    : isDisabled
-                        ? s_darkModeBorderDisabled
-                        : s_darkModeBorderNormal;
+            borderColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_darkModeBorderPressed,
+                ModernControlButtonState.Disabled => s_darkModeBorderDisabled,
+                ModernControlButtonState.Hover => s_darkModeBorderHover,
+                _ => s_darkModeBorderNormal
+            };
 
-            arrowColor = isDisabled
+            arrowColor = state == ModernControlButtonState.Disabled
                 ? s_darkModeArrowDisabled
                 : s_darkModeArrowNormal;
         }
         else
         {
             // Light mode colors
-            backgroundColor =
-                isPressed
-                    ? s_lightModeBackgroundPressed
-                    : isDisabled
-                        ? s_lightModeBackgroundDisabled
-                        : s_lightModeBackgroundNormal;
+            backgroundColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_lightModeBackgroundPressed,
+                ModernControlButtonState.Disabled => s_lightModeBackgroundDisabled,
+                ModernControlButtonState.Hover => s_lightModeBackgroundHover,
+                _ => s_lightModeBackgroundNormal
+            };
 
-            borderColor =
-                isPressed
-                    ? s_lightModeBorderPressed
-                    : isDisabled
-                        ? s_lightModeBorderDisabled
-                        : s_lightModeBorderNormal;
+            borderColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_lightModeBorderPressed,
+                ModernControlButtonState.Disabled => s_lightModeBorderDisabled,
+                ModernControlButtonState.Hover => s_lightModeBorderHover,
+                _ => s_lightModeBorderNormal
+            };
 
-            arrowColor = isDisabled
+            arrowColor = state == ModernControlButtonState.Disabled
                 ? s_lightModeArrowDisabled
                 : s_lightModeArrowNormal;
         }
@@ -77,8 +86,10 @@ public static unsafe partial class ControlPaint
         try
         {
             // Extract border flags
-            bool hasBorder = (button & ModernControlButton.SingleBorder) != 0 || (button & ModernControlButton.RoundedBorder) != 0;
-            bool hasRoundedBorder = (button & ModernControlButton.RoundedBorder) != 0;
+            bool hasBorder = (button & ModernControlButtonStyle.SingleBorder) != 0
+                || (button & ModernControlButtonStyle.RoundedBorder) != 0;
+
+            bool hasRoundedBorder = (button & ModernControlButtonStyle.RoundedBorder) != 0;
 
             // Draw background
             using (var backgroundBrush = backgroundColor.GetCachedSolidBrushScope())
@@ -111,7 +122,11 @@ public static unsafe partial class ControlPaint
             }
 
             // Draw the content
-            ModernControlButton contentType = button & ~(ModernControlButton.SingleBorder | ModernControlButton.RoundedBorder);
+            ModernControlButtonStyle contentType = button
+                & ~(ModernControlButtonStyle.SingleBorder
+                    | ModernControlButtonStyle.RoundedBorder);
+
+            bool isPressed = state == ModernControlButtonState.Pressed;
             DrawButtonContent(graphics, bounds, contentType, arrowColor, isPressed);
         }
         finally
@@ -126,7 +141,7 @@ public static unsafe partial class ControlPaint
     private static void DrawButtonContent(
         Graphics graphics,
         Rectangle bounds,
-        ModernControlButton buttonType,
+        ModernControlButtonStyle buttonType,
         Color contentColor,
         bool isPressed)
     {
@@ -145,91 +160,132 @@ public static unsafe partial class ControlPaint
 
         switch (buttonType)
         {
-            case ModernControlButton.Empty:
+            case ModernControlButtonStyle.Empty:
                 // Nothing to draw
                 break;
 
-            case ModernControlButton.Up:
-                DrawUpArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+            case ModernControlButtonStyle.Up:
+                DrawUpArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
-            case ModernControlButton.Down:
-                DrawDownArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+            case ModernControlButtonStyle.Down:
+                DrawDownArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
-            case ModernControlButton.UpDown:
+            case ModernControlButtonStyle.UpDown:
                 DrawUpDownArrows(graphics, contentBrush, centerX, centerY, bounds);
                 break;
 
-            case ModernControlButton.Left:
-                DrawLeftArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+            case ModernControlButtonStyle.Left:
+                DrawLeftArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
-            case ModernControlButton.Right:
-                DrawRightArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+            case ModernControlButtonStyle.Right:
+                DrawRightArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
-            case ModernControlButton.LeftRight:
+            case ModernControlButtonStyle.RightLeft:
                 DrawLeftRightArrows(graphics, contentBrush, centerX, centerY, bounds);
                 break;
 
-            case ModernControlButton.Ellipse:
-                DrawEllipse(graphics, contentBrush, centerX, centerY, bounds);
+            case ModernControlButtonStyle.Ellipse:
+                DrawEllipseSymbol(graphics, contentBrush, centerX, centerY, bounds);
+                break;
+
+            case ModernControlButtonStyle.OpenDropDown:
+                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
         }
     }
 
     /// <summary>
-    ///  Calculates the arrow size based on button bounds.
+    ///  Calculates the arrow size based on button bounds and DPI scaling.
     /// </summary>
-    private static int CalculateArrowSize(Rectangle bounds)
+    private static int ScaleSymbolSize(Rectangle bounds)
     {
-        int arrowSize = Math.Min(bounds.Width, bounds.Height) / 2;
+        // Base size is calculated as a fraction of the smaller dimension
+        int minDimension = Math.Min(bounds.Width, bounds.Height);
 
-        return Math.Max(3, Math.Min(arrowSize, 7)); // Clamp between 3 and 7 pixels
+        // Use a base ratio that provides good visual balance
+        // This gives us roughly 40% of the button size for the symbol
+        const double baseSymbolRatio = 0.4;
+
+        // Calculate the symbol size with scaling factor applied
+        int symbolSize = (int)(minDimension * baseSymbolRatio * ContentScaleFactor);
+
+        // Ensure we always have at least a 1-pixel symbol
+        return Math.Max(1, symbolSize);
     }
 
     /// <summary>
-    ///  Draws combined up/down arrows with kerning.
+    ///  Draws combined up/down arrows with proportional spacing.
     /// </summary>
     private static void DrawUpDownArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int arrowSize = CalculateArrowSize(bounds) - 1; // Slightly smaller for combined
-        int spacing = 2; // Minimal spacing between arrows
+        // Get the base symbol size
+        int baseArrowSize = ScaleSymbolSize(bounds);
 
-        // Draw up arrow (top half)
-        int upCenterY = centerY - spacing;
-        DrawUpArrow(graphics, brush, upCenterY - arrowSize / 2, centerX, arrowSize);
+        // For combined arrows, reduce size slightly to fit both with spacing
+        int arrowSize = (int)(baseArrowSize * 0.7);
 
-        // Draw down arrow (bottom half)
-        int downCenterY = centerY + spacing;
-        DrawDownArrow(graphics, brush, downCenterY + arrowSize / 2, centerX, arrowSize);
+        // Calculate proportional spacing based on arrow size
+        int spacing = Math.Max(1, arrowSize / 3);
+
+        // Calculate total height needed
+        int totalHeight = (arrowSize * 2) + spacing;
+
+        // Adjust positions to center the combined arrows
+        int topY = centerY - (totalHeight / 2) + (arrowSize / 2);
+        int bottomY = centerY + (totalHeight / 2) - (arrowSize / 2);
+
+        // Draw up arrow
+        DrawUpArrow(graphics, brush, centerX, topY, arrowSize);
+
+        // Draw down arrow
+        DrawDownArrow(graphics, brush, centerX, bottomY, arrowSize);
     }
 
     /// <summary>
-    ///  Draws combined left/right arrows with kerning.
+    ///  Draws combined left/right arrows with proportional spacing.
     /// </summary>
     private static void DrawLeftRightArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int arrowSize = CalculateArrowSize(bounds) - 1; // Slightly smaller for combined
-        int spacing = 2; // Minimal spacing between arrows
+        // Get the base symbol size
+        int baseArrowSize = ScaleSymbolSize(bounds);
+
+        // For combined arrows, reduce size slightly to fit both with spacing
+        int arrowSize = (int)(baseArrowSize * 0.7);
+
+        // Calculate proportional spacing based on arrow size
+        int spacing = Math.Max(1, arrowSize / 3);
+
+        // Calculate total width needed
+        int totalWidth = (arrowSize * 2) + spacing;
+
+        // Adjust positions to center the combined arrows
+        int leftX = centerX - (totalWidth / 2) + (arrowSize / 2);
+        int rightX = centerX + (totalWidth / 2) - (arrowSize / 2);
 
         // Draw left arrow
-        int leftCenterX = centerX - spacing;
-        DrawLeftArrow(graphics, brush, leftCenterX - arrowSize / 2, centerY, arrowSize);
+        DrawLeftArrow(graphics, brush, leftX, centerY, arrowSize);
 
         // Draw right arrow
-        int rightCenterX = centerX + spacing;
-        DrawRightArrow(graphics, brush, rightCenterX + arrowSize / 2, centerY, arrowSize);
+        DrawRightArrow(graphics, brush, rightX, centerY, arrowSize);
     }
 
     /// <summary>
-    ///  Draws an ellipse symbol (...).
+    ///  Draws an ellipse symbol (...) with DPI-aware sizing.
     /// </summary>
-    private static void DrawEllipse(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
+    private static void DrawEllipseSymbol(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int dotSize = Math.Max(2, Math.Min(bounds.Height / 8, 3));
-        int spacing = dotSize + 1;
+        // Calculate dot size as a proportion of button height
+        int minDimension = Math.Min(bounds.Width, bounds.Height);
+        int dotSize = Math.Max(1, (int)(minDimension * 0.15 * ContentScaleFactor));
+
+        // Calculate proportional spacing
+        int spacing = Math.Max(1, dotSize / 2);
+
+        // Calculate total width for centering
         int totalWidth = (dotSize * 3) + (spacing * 2);
 
         // Center the dots
@@ -238,8 +294,48 @@ public static unsafe partial class ControlPaint
         for (int i = 0; i < 3; i++)
         {
             int x = startX + (i * (dotSize + spacing));
-            graphics.FillEllipse(brush, x - dotSize / 2, centerY - dotSize / 2, dotSize, dotSize);
+
+            graphics.FillEllipse(
+                brush: brush,
+                x: x - dotSize / 2,
+                y: centerY - dotSize / 2,
+                width: dotSize,
+                height: dotSize);
         }
+    }
+
+    /// <summary>
+    ///  Draws a classic down-facing chevron for combo box dropdowns with DPI-aware sizing.
+    /// </summary>
+    private static void DrawOpenDropDownChevron(Graphics graphics, Brush brush, int centerX, int centerY, int size)
+    {
+        // Calculate chevron dimensions proportionally
+        int chevronWidth = size + (size / 2);
+        int chevronHeight = (size * 2) / 3;
+
+        // Stroke thickness scales with size
+        int strokeThickness = Math.Max(1, size / 4);
+
+        // Define the 4 points of the chevron (two strokes forming a downward angle)
+        Point[] leftStroke =
+        [
+            new Point(centerX - chevronWidth / 2, centerY - chevronHeight / 3),
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX - chevronWidth / 2 + strokeThickness, centerY - chevronHeight / 3),
+        ];
+
+        Point[] rightStroke =
+        [
+            new Point(centerX + chevronWidth / 2 - strokeThickness, centerY - chevronHeight / 3),
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + chevronWidth / 2, centerY - chevronHeight / 3),
+        ];
+
+        // Draw both strokes to form the chevron
+        graphics.FillPolygon(brush, leftStroke);
+        graphics.FillPolygon(brush, rightStroke);
     }
 
     private static void DrawUpArrow(Graphics graphics, Brush brush, int centerX, int centerY, int size)
