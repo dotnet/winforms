@@ -1857,11 +1857,8 @@ public partial class ComboBox : ListControl
                 _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
-            if (_stringSource is not null)
-            {
-                _stringSource.ReleaseAutoComplete();
-                _stringSource = null;
-            }
+            _stringSource?.ReleaseAutoComplete();
+            _stringSource = null;
         }
 
         base.Dispose(disposing);
@@ -2400,11 +2397,8 @@ public partial class ComboBox : ListControl
             _selectedIndex = SelectedIndex;
         }
 
-        if (_stringSource is not null)
-        {
-            _stringSource.ReleaseAutoComplete();
-            _stringSource = null;
-        }
+        _stringSource?.ReleaseAutoComplete();
+        _stringSource = null;
 
         base.OnHandleDestroyed(e);
     }
@@ -3058,23 +3052,14 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void ReleaseChildWindow()
     {
-        if (_childEdit is not null)
-        {
-            _childEdit.ReleaseHandle();
-            _childEdit = null;
-        }
+        _childEdit?.ReleaseHandle();
+        _childEdit = null;
 
-        if (_childListBox is not null)
-        {
-            _childListBox.ReleaseHandle();
-            _childListBox = null;
-        }
+        _childListBox?.ReleaseHandle();
+        _childListBox = null;
 
-        if (_childDropDown is not null)
-        {
-            _childDropDown.ReleaseHandle();
-            _childDropDown = null;
-        }
+        _childDropDown?.ReleaseHandle();
+        _childDropDown = null;
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -3692,13 +3677,11 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case PInvokeCore.WM_CTLCOLOREDIT:
-                // Only handle if the ComboBox is disabled
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                if (IsHandleCreated
-                    && !Enabled
-                    && Application.IsDarkModeEnabled
-                    && DarkModeRequestState is true)
+#pragma warning disable WFO5001
+            case PInvokeCore.WM_CTLCOLORSTATIC:
+
+                HWND hwndChild = (HWND)m.LParamInternal;
+                if (hwndChild == _childEdit?.HWND && Application.IsDarkModeEnabled)
                 {
                     PInvokeCore.SetBkColor(
                         (HDC)m.WParamInternal,
@@ -3709,14 +3692,31 @@ public partial class ComboBox : ListControl
                         ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
 
                     m.ResultInternal = (LRESULT)s_darkEditBrush;
+                    return;
                 }
-                else
+
+                // Additional handling for Simple style listbox when disabled
+                if (DropDownStyle == ComboBoxStyle.Simple && Application.IsDarkModeEnabled && !Enabled)
                 {
-                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+                    if (hwndChild == _childListBox?.HWND)
+                    {
+                        PInvokeCore.SetBkColor(
+                            (HDC)m.WParamInternal,
+                            ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+                        PInvokeCore.SetTextColor(
+                            (HDC)m.WParamInternal,
+                            ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+                        m.ResultInternal = (LRESULT)s_darkEditBrush;
+                        return;
+                    }
                 }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
                 break;
+
+            case PInvokeCore.WM_CTLCOLOREDIT:
             case PInvokeCore.WM_CTLCOLORLISTBOX:
                 m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                 break;
@@ -3810,6 +3810,29 @@ public partial class ComboBox : ListControl
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
+
+#pragma warning disable WFO5001
+                    // Special handling for disabled DropDownList in dark mode
+                    if (Application.IsDarkModeEnabled && !Enabled && DropDownStyle == ComboBoxStyle.DropDownList)
+                    {
+                        // The text area for DropDownList (excluding the dropdown button)
+                        Rectangle textBounds = ClientRectangle;
+                        textBounds.Width -= SystemInformation.VerticalScrollBarWidth;
+
+                        // Fill the background
+                        using var bgBrush = new SolidBrush(Color.FromArgb(64, 64, 64));
+                        g.FillRectangle(bgBrush, textBounds);
+
+                        // Draw the text
+                        TextRenderer.DrawText(
+                            g,
+                            Text,
+                            Font,
+                            textBounds,
+                            Color.FromArgb(180, 180, 180),
+                            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                    }
+#pragma warning restore WFO5001
 
                     return;
                 }
