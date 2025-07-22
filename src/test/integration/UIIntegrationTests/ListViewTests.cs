@@ -537,14 +537,15 @@ public class ListViewTests : ControlTestBase
     {
         await RunTestAsync(async (form, listView) =>
         {
+            listView.BeginUpdate();
             InitializeItems(listView, View.Details, virtualModeEnabled: false, checkBoxesEnabled: true);
+            listView.EndUpdate();
 
             Assert.True(listView.Items.Count > 0,
                 $"Expected ListView to contain at least one item, but found {listView.Items.Count}.");
 
             foreach (ListViewItem item in listView.Items)
             {
-                Console.WriteLine($"Item State: SubItems count = {item.SubItems.Count}, StateImageIndex = {item.StateImageIndex}");
                 Assert.Equal(0, item.StateImageIndex);
                 Assert.False(item.Selected);
             }
@@ -556,7 +557,7 @@ public class ListViewTests : ControlTestBase
                 Application.DoEvents();
             });
 
-            if (listView.Items.Count > 0 && listView.Items[0].SubItems.Count > 1)
+            if (listView.Items.Count > 0 && listView.Items[0].SubItems is not null && listView.Items[0].SubItems.Count > 1)
             {
                 Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
