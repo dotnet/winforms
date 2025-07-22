@@ -1857,11 +1857,8 @@ public partial class ComboBox : ListControl
                 _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
-            if (_stringSource is not null)
-            {
-                _stringSource.ReleaseAutoComplete();
-                _stringSource = null;
-            }
+            _stringSource?.ReleaseAutoComplete();
+            _stringSource = null;
         }
 
         base.Dispose(disposing);
@@ -2400,11 +2397,8 @@ public partial class ComboBox : ListControl
             _selectedIndex = SelectedIndex;
         }
 
-        if (_stringSource is not null)
-        {
-            _stringSource.ReleaseAutoComplete();
-            _stringSource = null;
-        }
+        _stringSource?.ReleaseAutoComplete();
+        _stringSource = null;
 
         base.OnHandleDestroyed(e);
     }
@@ -3058,23 +3052,14 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void ReleaseChildWindow()
     {
-        if (_childEdit is not null)
-        {
-            _childEdit.ReleaseHandle();
-            _childEdit = null;
-        }
+        _childEdit?.ReleaseHandle();
+        _childEdit = null;
 
-        if (_childListBox is not null)
-        {
-            _childListBox.ReleaseHandle();
-            _childListBox = null;
-        }
+        _childListBox?.ReleaseHandle();
+        _childListBox = null;
 
-        if (_childDropDown is not null)
-        {
-            _childDropDown.ReleaseHandle();
-            _childDropDown = null;
-        }
+        _childDropDown?.ReleaseHandle();
+        _childDropDown = null;
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -3692,13 +3677,11 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case PInvokeCore.WM_CTLCOLOREDIT:
-                // Only handle if the ComboBox is disabled
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                if (IsHandleCreated
-                    && !Enabled
-                    && Application.IsDarkModeEnabled
-                    && DarkModeRequestState is true)
+#pragma warning disable WFO5001
+            case PInvokeCore.WM_CTLCOLORSTATIC:
+
+                HWND hwndChild = (HWND)m.LParamInternal;
+                if (hwndChild == _childEdit?.HWND && Application.IsDarkModeEnabled)
                 {
                     PInvokeCore.SetBkColor(
                         (HDC)m.WParamInternal,
@@ -3710,13 +3693,11 @@ public partial class ComboBox : ListControl
 
                     m.ResultInternal = (LRESULT)s_darkEditBrush;
                 }
-                else
-                {
-                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
-                }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
                 break;
+
+            case PInvokeCore.WM_CTLCOLOREDIT:
             case PInvokeCore.WM_CTLCOLORLISTBOX:
                 m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                 break;
