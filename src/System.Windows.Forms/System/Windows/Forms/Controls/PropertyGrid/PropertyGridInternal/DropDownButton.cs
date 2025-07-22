@@ -17,6 +17,10 @@ internal sealed partial class DropDownButton : Button
         SetAccessibleName();
     }
 
+    // If a control uses it needs it in the context of rendering
+    // something in dark mode - this flag needs to be set.
+    public bool RequestDarkModeRendering { get; set; }
+
     // When the holder is open, we don't fire clicks.
     public bool IgnoreMouse { get; set; }
 
@@ -64,52 +68,70 @@ internal sealed partial class DropDownButton : Button
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected override void OnPaint(PaintEventArgs pevent)
     {
+        ComboBoxState state = ComboBoxState.Normal;
+
         base.OnPaint(pevent);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (!Application.IsDarkModeEnabled
             && (Application.RenderWithVisualStyles & _useComboBoxTheme))
         {
-            ComboBoxState state = ComboBoxState.Normal;
-
-            if (MouseIsDown)
-            {
-                state = ComboBoxState.Pressed;
-            }
-            else if (MouseIsOver)
-            {
-                state = ComboBoxState.Hot;
-            }
-
-            Rectangle dropDownButtonRect = new(0, 0, Width, Height);
-            if (state == ComboBoxState.Normal)
-            {
-                pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
-            }
-
-            using (DeviceContextHdcScope hdc = new(pevent))
-            {
-                ComboBoxRenderer.DrawDropDownButtonForHandle(
-                    hdc,
-                    dropDownButtonRect,
-                    state,
-                    ScaleHelper.IsScalingRequirementMet ? HWNDInternal : HWND.Null);
-            }
-
-            // Redraw focus cues.
-            //
-            // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that
-            // always show visual cues when focused, we need to do the same for this custom button, painted as
-            // a ComboBox control part (drop-down).
-            if (Focused)
-            {
-                dropDownButtonRect.Inflate(-1, -1);
-                ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
-            }
+            RenderComboBoxButtonWithVisualStyles(pevent);
         }
+
+        if (Application.IsDarkModeEnabled && RequestDarkModeRendering)
+        {
+            ControlPaint.DrawModernControlButton(
+                pevent.Graphics,
+                new Rectangle(0, 0, Width, Height),
+                ControlPaint.ModernControlButton.Down | ControlPaint.ModernControlButton.RoundedBorder,
+                state == ComboBoxState.Pressed,
+                state == ComboBoxState.Disabled,
+                isDarkMode: true);
+        }
+    }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    private void RenderComboBoxButtonWithVisualStyles(PaintEventArgs pevent)
+    {
+        ComboBoxState state = ComboBoxState.Normal;
+
+        if (MouseIsDown)
+        {
+            state = ComboBoxState.Pressed;
+        }
+        else if (MouseIsOver)
+        {
+            state = ComboBoxState.Hot;
+        }
+
+        Rectangle dropDownButtonRect = new(0, 0, Width, Height);
+        if (state == ComboBoxState.Normal)
+        {
+            pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
+        }
+
+        using (DeviceContextHdcScope hdc = new(pevent))
+        {
+            ComboBoxRenderer.DrawDropDownButtonForHandle(
+                hdc,
+                dropDownButtonRect,
+                state,
+                ScaleHelper.IsScalingRequirementMet ? HWNDInternal : HWND.Null);
+        }
+
+        // Redraw focus cues.
+        //
+        // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that
+        // always show visual cues when focused, we need to do the same for this custom button, painted as
+        // a ComboBox control part (drop-down).
+        if (Focused)
+        {
+            dropDownButtonRect.Inflate(-1, -1);
+            ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
+        }
     }
 
     internal void PerformButtonClick()
