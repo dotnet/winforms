@@ -113,18 +113,17 @@ public class MultiPropertyDescriptorGridEntryTests
     }
 
     [Fact]
-    public void Expandable_FlagExpandableAndHasChildren_ReturnsTrue()
+    public void Expandable_WhenFlagExpandableAndDescriptionExist_ReturnsTrue()
     {
-        using DummyComponent dummyComponent1 = new();
-        using DummyComponent dummyComponent2 = new();
-        PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
-        object[] objects = [dummyComponent1, dummyComponent2];
+        using Button button = new();
+        PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(button)[0]];
+        object[] objects = [button];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
         multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.SetFlag(Flags.Expandable, true);
 
-        using PropertyGrid ownerGrid = new();
-        multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.ChildCollection.Add(new TestGridEntry(ownerGrid));
+        string? description = propertyDescriptors[0].Description;
+        description.Should().NotBeNull();
 
         bool result = multiPropertyDescriptorGridEntry.Expandable;
 
@@ -134,10 +133,9 @@ public class MultiPropertyDescriptorGridEntryTests
     [Fact]
     public void Expandable_ExpandableFailedFlag_ReturnsFalse()
     {
-        using DummyComponent dummyComponent1 = new();
-        using DummyComponent dummyComponent2 = new();
-        PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(dummyComponent1)[0], TypeDescriptor.GetProperties(dummyComponent2)[0]];
-        object[] objects = [dummyComponent1, dummyComponent2];
+        using Button button = new();
+        PropertyDescriptor[] propertyDescriptors = [TypeDescriptor.GetProperties(button)[0]];
+        object[] objects = [button];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
         multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.SetFlag(Flags.ExpandableFailed, true);
