@@ -37,6 +37,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
+
     private static int s_moveTreeViewTextLocationOnePixel;
 
     private static FrameworkName? s_targetFrameworkName;
