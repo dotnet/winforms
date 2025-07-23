@@ -2063,9 +2063,9 @@ public partial class MonthCalendar : Control
         _selectionStart = start;
         _selectionEnd = end;
 
-        AccessibilityNotifyClients(AccessibleEvents.Focus, -1);
-        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-        AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
+        NotifyWinEvent(AccessibleEvents.Focus);
+        NotifyWinEvent(AccessibleEvents.NameChange);
+        NotifyWinEvent(AccessibleEvents.ValueChange);
 
         // We should use the Date for comparison in this case. The user can work in the calendar only with dates,
         // while the minimum / maximum date can contain the date and custom time, which, when comparing Ticks,
@@ -2093,6 +2093,16 @@ public partial class MonthCalendar : Control
         }
 
         OnDateChanged(new DateRangeEventArgs(start, end));
+    }
+
+    private void NotifyWinEvent(AccessibleEvents accessibleEvent)
+    {
+        PInvoke.NotifyWinEvent(
+            (uint)accessibleEvent,
+            this,
+            (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+            (int)PInvoke.CHILDID_SELF
+        );
     }
 
     /// <summary>
