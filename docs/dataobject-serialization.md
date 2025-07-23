@@ -4,7 +4,7 @@ The **.NET 10** cycle introduces major updates to the clipboard and drag‑and�
 
 ## Background
 
-`BinaryFormatter` was used when a custom type was placed on the clipboard for a user defined data format or in a drag‑and‑drop operation. The `BinaryFormatter` is insecure and has been removed from the base runtime. WinForms has introduced new, safer APIs and depreciated older APIs. WinForms also now makes you explicitly enable clipboard and drag drop scenarios for `BinaryFormatter` so you don't get unexpected usage if you need to enable it for other scenarios.
+`BinaryFormatter` was used when a custom type was placed on the clipboard for a user defined data format or in a drag‑and‑drop operation. The `BinaryFormatter` is insecure and has been removed from the base runtime. WinForms has introduced new, safer APIs and deprecated older APIs. WinForms also now makes you explicitly enable clipboard and drag drop scenarios for `BinaryFormatter` so you don't get unexpected usage if you need to enable it for other scenarios.
 
 ### Best Practices
 
@@ -115,7 +115,7 @@ Although the default behaviour removes `BinaryFormatter`, a full fallback is sti
     }
     ```
 
-4. **Use the resolver overload to control which types are allowed**: Even with `BinaryFormatter` enabled, you must specify a resolver when calling `TryGetData<T>` so you only deserialize known safe types. The existing, depreciated, `GetData` APIs will continue to work, but provide no additional constraints. A sample type resolver follows:
+4. **Use the resolver overload to control which types are allowed**: Even with `BinaryFormatter` enabled, you must specify a resolver when calling `TryGetData<T>` so you only deserialize known safe types. The existing, deprecated, `GetData` APIs will continue to work, but provide no additional constraints. A sample type resolver follows:
 
     ```csharp
     static Type MyExactMatchResolver(TypeName typeName)
