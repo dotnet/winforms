@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
+using static System.Windows.Forms.ControlPaint;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -20,6 +21,8 @@ internal sealed partial class DropDownButton : Button
     // If a control uses it needs it in the context of rendering
     // something in dark mode - this flag needs to be set.
     public bool RequestDarkModeRendering { get; set; }
+
+    public ModernControlButtonStyle ControlButtonStyle { get; set; }
 
     // When the holder is open, we don't fire clicks.
     public bool IgnoreMouse { get; set; }
@@ -73,31 +76,6 @@ internal sealed partial class DropDownButton : Button
     {
         ComboBoxState state = ComboBoxState.Normal;
 
-        base.OnPaint(pevent);
-
-        if (!Application.IsDarkModeEnabled
-            && (Application.RenderWithVisualStyles & _useComboBoxTheme))
-        {
-            RenderComboBoxButtonWithVisualStyles(pevent);
-        }
-
-        if (Application.IsDarkModeEnabled && RequestDarkModeRendering)
-        {
-            ControlPaint.DrawModernControlButton(
-                pevent.Graphics,
-                new Rectangle(0, 0, Width, Height),
-                ControlPaint.ModernControlButton.Down | ControlPaint.ModernControlButton.RoundedBorder,
-                state == ComboBoxState.Pressed,
-                state == ComboBoxState.Disabled,
-                isDarkMode: true);
-        }
-    }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-    private void RenderComboBoxButtonWithVisualStyles(PaintEventArgs pevent)
-    {
-        ComboBoxState state = ComboBoxState.Normal;
-
         if (MouseIsDown)
         {
             state = ComboBoxState.Pressed;
@@ -107,10 +85,43 @@ internal sealed partial class DropDownButton : Button
             state = ComboBoxState.Hot;
         }
 
+        base.OnPaint(pevent);
+
+        if (Application.IsDarkModeEnabled && RequestDarkModeRendering)
+        {
+            ModernControlButtonState buttonState = state switch
+            {
+                ComboBoxState.Disabled => ModernControlButtonState.Disabled,
+                ComboBoxState.Hot => ModernControlButtonState.Hover,
+                ComboBoxState.Pressed => ModernControlButtonState.Pressed,
+                _ => ModernControlButtonState.Normal
+            };
+
+            DrawModernControlButton(
+                pevent.Graphics,
+                new Rectangle(0, 0, Width, Height),
+                ControlButtonStyle,
+                buttonState,
+                isDarkMode: true);
+
+            return;
+        }
+
+        if (Application.RenderWithVisualStyles & _useComboBoxTheme)
+        {
+            RenderComboBoxButtonWithVisualStyles(pevent, state);
+        }
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private void RenderComboBoxButtonWithVisualStyles(PaintEventArgs pevent, ComboBoxState state)
+    {
         Rectangle dropDownButtonRect = new(0, 0, Width, Height);
+
         if (state == ComboBoxState.Normal)
         {
-            pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
+            pevent.Graphics.FillRectangle(
+                SystemBrushes.Window,
+                dropDownButtonRect);
         }
 
         using (DeviceContextHdcScope hdc = new(pevent))
@@ -130,7 +141,11 @@ internal sealed partial class DropDownButton : Button
         if (Focused)
         {
             dropDownButtonRect.Inflate(-1, -1);
-            ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
+            DrawFocusRectangle(
+                pevent.Graphics,
+                dropDownButtonRect,
+                ForeColor,
+                BackColor);
         }
     }
 

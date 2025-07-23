@@ -8,6 +8,12 @@ namespace System.Windows.Forms;
 
 public static unsafe partial class ControlPaint
 {
+    /// <summary>
+    ///  Scaling factor for button content (arrows, dots, etc.).
+    ///  Values greater than 1.0 make the content larger relative to the button.
+    /// </summary>
+    private const double ContentScaleFactor = 1.5;
+
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws a modern up/down button suitable for both light and dark modes.
@@ -15,9 +21,8 @@ public static unsafe partial class ControlPaint
     internal static void DrawModernControlButton(
         Graphics graphics,
         Rectangle bounds,
-        ModernControlButton button,
-        bool isPressed,
-        bool isDisabled,
+        ModernControlButtonStyle button,
+        ModernControlButtonState state,
         bool isDarkMode)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -30,42 +35,46 @@ public static unsafe partial class ControlPaint
         if (isDarkMode)
         {
             // Dark mode colors
-            backgroundColor =
-                isPressed
-                    ? s_darkModeBackgroundPressed
-                    : isDisabled
-                        ? s_darkModeBackgroundDisabled
-                        : s_darkModeBackgroundNormal;
+            backgroundColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_darkModeBackgroundPressed,
+                ModernControlButtonState.Disabled => s_darkModeBackgroundDisabled,
+                ModernControlButtonState.Hover => s_darkModeBackgroundHover,
+                _ => s_darkModeBackgroundNormal
+            };
 
-            borderColor =
-                isPressed
-                    ? s_darkModeBorderPressed
-                    : isDisabled
-                        ? s_darkModeBorderDisabled
-                        : s_darkModeBorderNormal;
+            borderColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_darkModeBorderPressed,
+                ModernControlButtonState.Disabled => s_darkModeBorderDisabled,
+                ModernControlButtonState.Hover => s_darkModeBorderHover,
+                _ => s_darkModeBorderNormal
+            };
 
-            arrowColor = isDisabled
+            arrowColor = state == ModernControlButtonState.Disabled
                 ? s_darkModeArrowDisabled
                 : s_darkModeArrowNormal;
         }
         else
         {
             // Light mode colors
-            backgroundColor =
-                isPressed
-                    ? s_lightModeBackgroundPressed
-                    : isDisabled
-                        ? s_lightModeBackgroundDisabled
-                        : s_lightModeBackgroundNormal;
+            backgroundColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_lightModeBackgroundPressed,
+                ModernControlButtonState.Disabled => s_lightModeBackgroundDisabled,
+                ModernControlButtonState.Hover => s_lightModeBackgroundHover,
+                _ => s_lightModeBackgroundNormal
+            };
 
-            borderColor =
-                isPressed
-                    ? s_lightModeBorderPressed
-                    : isDisabled
-                        ? s_lightModeBorderDisabled
-                        : s_lightModeBorderNormal;
+            borderColor = state switch
+            {
+                ModernControlButtonState.Pressed => s_lightModeBorderPressed,
+                ModernControlButtonState.Disabled => s_lightModeBorderDisabled,
+                ModernControlButtonState.Hover => s_lightModeBorderHover,
+                _ => s_lightModeBorderNormal
+            };
 
-            arrowColor = isDisabled
+            arrowColor = state == ModernControlButtonState.Disabled
                 ? s_lightModeArrowDisabled
                 : s_lightModeArrowNormal;
         }
@@ -77,8 +86,10 @@ public static unsafe partial class ControlPaint
         try
         {
             // Extract border flags
-            bool hasBorder = (button & ModernControlButton.SingleBorder) != 0 || (button & ModernControlButton.RoundedBorder) != 0;
-            bool hasRoundedBorder = (button & ModernControlButton.RoundedBorder) != 0;
+            bool hasBorder = (button & ModernControlButtonStyle.SingleBorder) != 0
+                || (button & ModernControlButtonStyle.RoundedBorder) != 0;
+
+            bool hasRoundedBorder = (button & ModernControlButtonStyle.RoundedBorder) != 0;
 
             // Draw background
             using (var backgroundBrush = backgroundColor.GetCachedSolidBrushScope())
@@ -111,7 +122,11 @@ public static unsafe partial class ControlPaint
             }
 
             // Draw the content
-            ModernControlButton contentType = button & ~(ModernControlButton.SingleBorder | ModernControlButton.RoundedBorder);
+            ModernControlButtonStyle contentType = button
+                & ~(ModernControlButtonStyle.SingleBorder
+                    | ModernControlButtonStyle.RoundedBorder);
+
+            bool isPressed = state == ModernControlButtonState.Pressed;
             DrawButtonContent(graphics, bounds, contentType, arrowColor, isPressed);
         }
         finally
@@ -126,7 +141,7 @@ public static unsafe partial class ControlPaint
     private static void DrawButtonContent(
         Graphics graphics,
         Rectangle bounds,
-        ModernControlButton buttonType,
+        ModernControlButtonStyle buttonType,
         Color contentColor,
         bool isPressed)
     {
@@ -145,38 +160,74 @@ public static unsafe partial class ControlPaint
 
         switch (buttonType)
         {
-            case ModernControlButton.Empty:
+            case ModernControlButtonStyle.Empty:
                 // Nothing to draw
                 break;
 
-            case ModernControlButton.Up:
+            case ModernControlButtonStyle.Up:
                 DrawUpArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
                 break;
 
-            case ModernControlButton.Down:
+            case ModernControlButtonStyle.Down:
                 DrawDownArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
                 break;
 
-            case ModernControlButton.UpDown:
+            case ModernControlButtonStyle.UpDown:
                 DrawUpDownArrows(graphics, contentBrush, centerX, centerY, bounds);
                 break;
 
-            case ModernControlButton.Left:
+            case ModernControlButtonStyle.Left:
                 DrawLeftArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
                 break;
 
-            case ModernControlButton.Right:
+            case ModernControlButtonStyle.Right:
                 DrawRightArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
                 break;
 
-            case ModernControlButton.LeftRight:
+            case ModernControlButtonStyle.RightLeft:
                 DrawLeftRightArrows(graphics, contentBrush, centerX, centerY, bounds);
                 break;
 
-            case ModernControlButton.Ellipse:
-                DrawEllipse(graphics, contentBrush, centerX, centerY, bounds);
+            case ModernControlButtonStyle.Ellipse:
+                DrawEllipseSymbol(graphics, contentBrush, centerX, centerY, bounds);
+                break;
+
+            case ModernControlButtonStyle.OpenDropDown:
+                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
                 break;
         }
+    }
+
+    /// <summary>
+    ///  Draws a classic down-facing chevron for combo box dropdowns.
+    /// </summary>
+    private static void DrawOpenDropDownChevron(Graphics graphics, Brush brush, int centerX, int centerY, int size)
+    {
+        // Create a 4-point chevron that's more visible
+        int chevronWidth = size + (size / 2);
+        int chevronHeight = (size * 2) / 3;
+        int strokeThickness = Math.Max(2, size / 3);
+
+        // Define the 4 points of the chevron (two strokes forming a downward angle)
+        Point[] leftStroke =
+        [
+            new Point(centerX - chevronWidth / 2, centerY - chevronHeight / 3),      // Top left
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),   // Bottom center-left
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),   // Bottom center-right
+            new Point(centerX - chevronWidth / 2 + strokeThickness, centerY - chevronHeight / 3), // Top left inner
+        ];
+
+        Point[] rightStroke =
+        [
+            new Point(centerX + chevronWidth / 2 - strokeThickness, centerY - chevronHeight / 3), // Top right inner
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),                // Bottom center-left
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),                // Bottom center-right
+            new Point(centerX + chevronWidth / 2, centerY - chevronHeight / 3),                  // Top right
+        ];
+
+        // Draw both strokes to form the chevron
+        graphics.FillPolygon(brush, leftStroke);
+        graphics.FillPolygon(brush, rightStroke);
     }
 
     /// <summary>
@@ -184,9 +235,10 @@ public static unsafe partial class ControlPaint
     /// </summary>
     private static int CalculateArrowSize(Rectangle bounds)
     {
-        int arrowSize = Math.Min(bounds.Width, bounds.Height) / 2;
+        int baseArrowSize = Math.Min(bounds.Width, bounds.Height) / 2;
+        int scaledArrowSize = (int)(baseArrowSize * ContentScaleFactor);
 
-        return Math.Max(3, Math.Min(arrowSize, 7)); // Clamp between 3 and 7 pixels
+        return Math.Max(3, Math.Min(scaledArrowSize, 7)); // Clamp between 3 and 7 pixels
     }
 
     /// <summary>
@@ -226,9 +278,14 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Draws an ellipse symbol (...).
     /// </summary>
-    private static void DrawEllipse(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
+    private static void DrawEllipseSymbol(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int dotSize = Math.Max(2, Math.Min(bounds.Height / 8, 3));
+        int baseDotSize = Math.Max(2, Math.Min(bounds.Height / 8, 3));
+        int dotSize = (int)(baseDotSize * ContentScaleFactor);
+
+        // Clamp dot size between 2 and 4 pixels
+        dotSize = Math.Max(2, Math.Min(dotSize, 4));
+
         int spacing = dotSize + 1;
         int totalWidth = (dotSize * 3) + (spacing * 2);
 
@@ -238,7 +295,12 @@ public static unsafe partial class ControlPaint
         for (int i = 0; i < 3; i++)
         {
             int x = startX + (i * (dotSize + spacing));
-            graphics.FillEllipse(brush, x - dotSize / 2, centerY - dotSize / 2, dotSize, dotSize);
+
+            graphics.FillEllipse(
+                brush: brush,
+                x: x - dotSize / 2,
+                y: centerY - dotSize / 2,
+                width: dotSize, height: dotSize);
         }
     }
 
