@@ -165,11 +165,11 @@ public static unsafe partial class ControlPaint
                 break;
 
             case ModernControlButtonStyle.Up:
-                DrawUpArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+                DrawUpArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
             case ModernControlButtonStyle.Down:
-                DrawDownArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+                DrawDownArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
             case ModernControlButtonStyle.UpDown:
@@ -177,11 +177,11 @@ public static unsafe partial class ControlPaint
                 break;
 
             case ModernControlButtonStyle.Left:
-                DrawLeftArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+                DrawLeftArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
             case ModernControlButtonStyle.Right:
-                DrawRightArrow(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+                DrawRightArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
 
             case ModernControlButtonStyle.RightLeft:
@@ -193,100 +193,99 @@ public static unsafe partial class ControlPaint
                 break;
 
             case ModernControlButtonStyle.OpenDropDown:
-                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, CalculateArrowSize(bounds));
+                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
                 break;
         }
     }
 
     /// <summary>
-    ///  Draws a classic down-facing chevron for combo box dropdowns.
+    ///  Calculates the arrow size based on button bounds and DPI scaling.
     /// </summary>
-    private static void DrawOpenDropDownChevron(Graphics graphics, Brush brush, int centerX, int centerY, int size)
+    private static int ScaleSymbolSize(Rectangle bounds)
     {
-        // Create a 4-point chevron that's more visible
-        int chevronWidth = size + (size / 2);
-        int chevronHeight = (size * 2) / 3;
-        int strokeThickness = Math.Max(2, size / 3);
+        // Base size is calculated as a fraction of the smaller dimension
+        int minDimension = Math.Min(bounds.Width, bounds.Height);
 
-        // Define the 4 points of the chevron (two strokes forming a downward angle)
-        Point[] leftStroke =
-        [
-            new Point(centerX - chevronWidth / 2, centerY - chevronHeight / 3),      // Top left
-            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),   // Bottom center-left
-            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),   // Bottom center-right
-            new Point(centerX - chevronWidth / 2 + strokeThickness, centerY - chevronHeight / 3), // Top left inner
-        ];
+        // Use a base ratio that provides good visual balance
+        // This gives us roughly 40% of the button size for the symbol
+        const double baseSymbolRatio = 0.4;
 
-        Point[] rightStroke =
-        [
-            new Point(centerX + chevronWidth / 2 - strokeThickness, centerY - chevronHeight / 3), // Top right inner
-            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),                // Bottom center-left
-            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),                // Bottom center-right
-            new Point(centerX + chevronWidth / 2, centerY - chevronHeight / 3),                  // Top right
-        ];
+        // Calculate the symbol size with scaling factor applied
+        int symbolSize = (int)(minDimension * baseSymbolRatio * ContentScaleFactor);
 
-        // Draw both strokes to form the chevron
-        graphics.FillPolygon(brush, leftStroke);
-        graphics.FillPolygon(brush, rightStroke);
+        // Ensure we always have at least a 1-pixel symbol
+        return Math.Max(1, symbolSize);
     }
 
     /// <summary>
-    ///  Calculates the arrow size based on button bounds.
-    /// </summary>
-    private static int CalculateArrowSize(Rectangle bounds)
-    {
-        int baseArrowSize = Math.Min(bounds.Width, bounds.Height) / 2;
-        int scaledArrowSize = (int)(baseArrowSize * ContentScaleFactor);
-
-        return Math.Max(3, Math.Min(scaledArrowSize, 7)); // Clamp between 3 and 7 pixels
-    }
-
-    /// <summary>
-    ///  Draws combined up/down arrows with kerning.
+    ///  Draws combined up/down arrows with proportional spacing.
     /// </summary>
     private static void DrawUpDownArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int arrowSize = CalculateArrowSize(bounds) - 1; // Slightly smaller for combined
-        int spacing = 2; // Minimal spacing between arrows
+        // Get the base symbol size
+        int baseArrowSize = ScaleSymbolSize(bounds);
 
-        // Draw up arrow (top half)
-        int upCenterY = centerY - spacing;
-        DrawUpArrow(graphics, brush, upCenterY - arrowSize / 2, centerX, arrowSize);
+        // For combined arrows, reduce size slightly to fit both with spacing
+        int arrowSize = (int)(baseArrowSize * 0.7);
 
-        // Draw down arrow (bottom half)
-        int downCenterY = centerY + spacing;
-        DrawDownArrow(graphics, brush, downCenterY + arrowSize / 2, centerX, arrowSize);
+        // Calculate proportional spacing based on arrow size
+        int spacing = Math.Max(1, arrowSize / 3);
+
+        // Calculate total height needed
+        int totalHeight = (arrowSize * 2) + spacing;
+
+        // Adjust positions to center the combined arrows
+        int topY = centerY - (totalHeight / 2) + (arrowSize / 2);
+        int bottomY = centerY + (totalHeight / 2) - (arrowSize / 2);
+
+        // Draw up arrow
+        DrawUpArrow(graphics, brush, centerX, topY, arrowSize);
+
+        // Draw down arrow
+        DrawDownArrow(graphics, brush, centerX, bottomY, arrowSize);
     }
 
     /// <summary>
-    ///  Draws combined left/right arrows with kerning.
+    ///  Draws combined left/right arrows with proportional spacing.
     /// </summary>
     private static void DrawLeftRightArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int arrowSize = CalculateArrowSize(bounds) - 1; // Slightly smaller for combined
-        int spacing = 2; // Minimal spacing between arrows
+        // Get the base symbol size
+        int baseArrowSize = ScaleSymbolSize(bounds);
+
+        // For combined arrows, reduce size slightly to fit both with spacing
+        int arrowSize = (int)(baseArrowSize * 0.7);
+
+        // Calculate proportional spacing based on arrow size
+        int spacing = Math.Max(1, arrowSize / 3);
+
+        // Calculate total width needed
+        int totalWidth = (arrowSize * 2) + spacing;
+
+        // Adjust positions to center the combined arrows
+        int leftX = centerX - (totalWidth / 2) + (arrowSize / 2);
+        int rightX = centerX + (totalWidth / 2) - (arrowSize / 2);
 
         // Draw left arrow
-        int leftCenterX = centerX - spacing;
-        DrawLeftArrow(graphics, brush, leftCenterX - arrowSize / 2, centerY, arrowSize);
+        DrawLeftArrow(graphics, brush, leftX, centerY, arrowSize);
 
         // Draw right arrow
-        int rightCenterX = centerX + spacing;
-        DrawRightArrow(graphics, brush, rightCenterX + arrowSize / 2, centerY, arrowSize);
+        DrawRightArrow(graphics, brush, rightX, centerY, arrowSize);
     }
 
     /// <summary>
-    ///  Draws an ellipse symbol (...).
+    ///  Draws an ellipse symbol (...) with DPI-aware sizing.
     /// </summary>
     private static void DrawEllipseSymbol(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
     {
-        int baseDotSize = Math.Max(2, Math.Min(bounds.Height / 8, 3));
-        int dotSize = (int)(baseDotSize * ContentScaleFactor);
+        // Calculate dot size as a proportion of button height
+        int minDimension = Math.Min(bounds.Width, bounds.Height);
+        int dotSize = Math.Max(1, (int)(minDimension * 0.15 * ContentScaleFactor));
 
-        // Clamp dot size between 2 and 4 pixels
-        dotSize = Math.Max(2, Math.Min(dotSize, 4));
+        // Calculate proportional spacing
+        int spacing = Math.Max(1, dotSize / 2);
 
-        int spacing = dotSize + 1;
+        // Calculate total width for centering
         int totalWidth = (dotSize * 3) + (spacing * 2);
 
         // Center the dots
@@ -300,8 +299,43 @@ public static unsafe partial class ControlPaint
                 brush: brush,
                 x: x - dotSize / 2,
                 y: centerY - dotSize / 2,
-                width: dotSize, height: dotSize);
+                width: dotSize,
+                height: dotSize);
         }
+    }
+
+    /// <summary>
+    ///  Draws a classic down-facing chevron for combo box dropdowns with DPI-aware sizing.
+    /// </summary>
+    private static void DrawOpenDropDownChevron(Graphics graphics, Brush brush, int centerX, int centerY, int size)
+    {
+        // Calculate chevron dimensions proportionally
+        int chevronWidth = size + (size / 2);
+        int chevronHeight = (size * 2) / 3;
+
+        // Stroke thickness scales with size
+        int strokeThickness = Math.Max(1, size / 4);
+
+        // Define the 4 points of the chevron (two strokes forming a downward angle)
+        Point[] leftStroke =
+        [
+            new Point(centerX - chevronWidth / 2, centerY - chevronHeight / 3),
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX - chevronWidth / 2 + strokeThickness, centerY - chevronHeight / 3),
+        ];
+
+        Point[] rightStroke =
+        [
+            new Point(centerX + chevronWidth / 2 - strokeThickness, centerY - chevronHeight / 3),
+            new Point(centerX - strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + strokeThickness / 2, centerY + chevronHeight / 3),
+            new Point(centerX + chevronWidth / 2, centerY - chevronHeight / 3),
+        ];
+
+        // Draw both strokes to form the chevron
+        graphics.FillPolygon(brush, leftStroke);
+        graphics.FillPolygon(brush, rightStroke);
     }
 
     private static void DrawUpArrow(Graphics graphics, Brush brush, int centerX, int centerY, int size)
