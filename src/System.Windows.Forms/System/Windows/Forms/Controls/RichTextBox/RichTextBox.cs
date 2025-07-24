@@ -2412,24 +2412,6 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    protected override void OnEnabledChanged(EventArgs e)
-    {
-        base.OnEnabledChanged(e);
-        HandleDarkModeDisabledBackground();
-    }
-
-    private void HandleDarkModeDisabledBackground()
-    {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled
-            && !Enabled
-            && DarkModeRequestState is true)
-        {
-            Invalidate();
-        }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    }
-
     protected override void OnHandleCreated(EventArgs e)
     {
         // base.OnHandleCreated is called somewhere in the middle of this
@@ -2475,8 +2457,6 @@ public partial class RichTextBox : TextBoxBase
 
         // base sets the Text property. It's important to do this *after* setting EM_AUTOUrlDETECT.
         base.OnHandleCreated(e);
-
-        HandleDarkModeDisabledBackground();
 
         // For some reason, we need to set the OleCallback before setting the RTF property.
         UpdateOleCallback();
@@ -3268,6 +3248,9 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
+    private static readonly IntPtr s_darkEditBrush
+        = PInvokeCore.CreateSolidBrush(ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
     internal unsafe void WmReflectNotify(ref Message m)
     {
         if (m.HWnd != Handle)
@@ -3275,6 +3258,25 @@ public partial class RichTextBox : TextBoxBase
             base.WndProc(ref m);
             return;
         }
+
+#pragma warning disable WFO5001
+        if (m.Msg == PInvokeCore.WM_CTLCOLORSTATIC)
+        {
+            if (Application.IsDarkModeEnabled)
+            {
+                PInvokeCore.SetBkColor(
+                    (HDC)m.WParamInternal,
+                    ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+                PInvokeCore.SetTextColor(
+                    (HDC)m.WParamInternal,
+                    ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+                m.ResultInternal = (LRESULT)s_darkEditBrush;
+                return;
+            }
+        }
+#pragma warning restore WFO5001
 
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
         switch (nmhdr->code)
