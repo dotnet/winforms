@@ -4699,15 +4699,19 @@ public partial class DataGridView
                         (Columns[firstDisplayedScrollingCol]),
                         DataGridViewElementStates.Visible,
                         DataGridViewElementStates.Frozen);
-                    ThrowInvalidOperationExceptionIfNull(dataGridViewColumn);
-                    Debug.Assert(dataGridViewColumn.Thickness > displayWidth - cx);
-                    firstDisplayedScrollingCol = dataGridViewColumn.Index;
-                    FirstDisplayedScrollingColumnHiddenWidth = dataGridViewColumn.Thickness - displayWidth + cx;
-                    _horizontalOffset -= displayWidth - cx;
-                    visibleScrollingColumnsTmp++;
-                    invalidate = true;
-                    cx = displayWidth;
-                    Debug.Assert(FirstDisplayedScrollingColumnHiddenWidth == GetNegOffsetFromHorizontalOffset(_horizontalOffset));
+
+                    // If a valid previous column is found and its width exceeds the remaining displayable space,
+                    // then perform a partial scroll.
+                    if (dataGridViewColumn is not null && dataGridViewColumn.Thickness > displayWidth - cx)
+                    {
+                        firstDisplayedScrollingCol = dataGridViewColumn.Index;
+                        FirstDisplayedScrollingColumnHiddenWidth = dataGridViewColumn.Thickness - displayWidth + cx;
+                        _horizontalOffset -= displayWidth - cx;
+                        visibleScrollingColumnsTmp++;
+                        invalidate = true;
+                        cx = displayWidth;
+                        Debug.Assert(FirstDisplayedScrollingColumnHiddenWidth == GetNegOffsetFromHorizontalOffset(_horizontalOffset));
+                    }
                 }
 
                 // update the number of visible columns to the new reality
