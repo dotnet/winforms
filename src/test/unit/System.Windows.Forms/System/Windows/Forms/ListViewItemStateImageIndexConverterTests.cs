@@ -52,7 +52,7 @@ public class ListViewItemStateImageIndexConverterTests
         result.Cast<object>().Should().BeEmpty();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void GetStandardValues_WithStateImageList_ReturnsCorrectIndexes()
     {
         using ListView listView = new();
