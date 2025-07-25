@@ -537,7 +537,12 @@ public class ListViewTests : ControlTestBase
     {
         await RunTestAsync(async (form, listView) =>
         {
+            listView.BeginUpdate();
             InitializeItems(listView, View.Details, virtualModeEnabled: false, checkBoxesEnabled: true);
+            listView.EndUpdate();
+
+            Assert.True(listView.Items.Count > 0,
+                $"Expected ListView to contain at least one item, but found {listView.Items.Count}.");
 
             foreach (ListViewItem item in listView.Items)
             {
@@ -552,24 +557,26 @@ public class ListViewTests : ControlTestBase
                 Application.DoEvents();
             });
 
-            Assert.True(listView.Items.Count > 0,
-                $"Expected ListView to contain at least one item, but found {listView.Items.Count}.");
-            Assert.True(listView.Items[0].SubItems.Count > 1,
-                $"Expected first item to have more than one subitem, but found {listView.Items[0].SubItems.Count}.");
+            if (listView.Items.Count > 0 && listView.Items[0].SubItems is not null && listView.Items[0].SubItems.Count > 1)
+            {
+                Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
+                await MoveMouseAsync(form, listViewCenter);
 
-            Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
-            await MoveMouseAsync(form, listViewCenter);
-
-            await InputSimulator.SendAsync(
-               form,
-               inputSimulator => inputSimulator.Keyboard.KeyDown(VIRTUAL_KEY.VK_SHIFT)
-                                                .Mouse.LeftButtonClick());
-            listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
-            await MoveMouseAsync(form, listViewCenter);
-            await InputSimulator.SendAsync(
-               form,
-               inputSimulator => inputSimulator.Mouse.LeftButtonClick()
-                                               .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));
+                await InputSimulator.SendAsync(
+                   form,
+                   inputSimulator => inputSimulator.Keyboard.KeyDown(VIRTUAL_KEY.VK_SHIFT)
+                                                    .Mouse.LeftButtonClick());
+                listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
+                await MoveMouseAsync(form, listViewCenter);
+                await InputSimulator.SendAsync(
+                   form,
+                   inputSimulator => inputSimulator.Mouse.LeftButtonClick()
+                                                   .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));
+            }
+            else
+            {
+                throw new InvalidOperationException("ListView refresh failed: insufficient items or subitems.");
+            }
 
             foreach (ListViewItem item in listView.Items)
             {
