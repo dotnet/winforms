@@ -87,6 +87,24 @@ public class RadioButtonBaseAdapterTests
         return (radioButton, radioButtonBaseAdapter);
     }
 
+    private static bool AnyPixelChanged(Bitmap bmp, Rectangle bounds)
+    {
+        Color reference = bmp.GetPixel(bounds.X, bounds.Y);
+
+        for (int x = bounds.X; x < bounds.Right; x++)
+        {
+            for (int y = bounds.Y; y < bounds.Bottom; y++)
+            {
+                if (bmp.GetPixel(x, y) != reference)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     [WinFormsFact]
     public void DrawCheckFlat_CallsBackgroundAndCheckOnly()
     {
@@ -98,18 +116,7 @@ public class RadioButtonBaseAdapterTests
 
         radioButtonBaseAdapter.CallDrawCheckFlat(e, layout, Color.Red, Color.Blue, Color.Green);
 
-        bool anyPixelChanged = false;
-        Color defaultColor = bmp.GetPixel(0, 0);
-        for (int x = 0; x < bmp.Width && !anyPixelChanged; x++)
-        {
-            for (int y = 0; y < bmp.Height && !anyPixelChanged; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColor)
-                {
-                    anyPixelChanged = true;
-                }
-            }
-        }
+        bool anyPixelChanged = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChanged.Should().BeTrue("DrawCheckFlat should modify the bitmap.");
     }
@@ -126,18 +133,7 @@ public class RadioButtonBaseAdapterTests
         radioButton.Enabled = true;
         radioButtonBaseAdapter.CallDrawCheckBackgroundFlat(e, bounds, Color.Black, Color.White);
 
-        bool anyPixelChangedEnabled = false;
-        Color defaultColorEnabled = bmp.GetPixel(bounds.X, bounds.Y);
-        for (int x = bounds.X; x < bounds.Right && !anyPixelChangedEnabled; x++)
-        {
-            for (int y = bounds.Y; y < bounds.Bottom && !anyPixelChangedEnabled; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorEnabled)
-                {
-                    anyPixelChangedEnabled = true;
-                }
-            }
-        }
+        bool anyPixelChangedEnabled = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedEnabled.Should().BeTrue("drawing the background when enabled should modify the bitmap in the bounds area");
 
@@ -149,18 +145,7 @@ public class RadioButtonBaseAdapterTests
         radioButton.Enabled = false;
         radioButtonBaseAdapter.CallDrawCheckBackgroundFlat(e, bounds, Color.Black, Color.White);
 
-        bool anyPixelChangedDisabled = false;
-        Color defaultColorDisabled = bmp.GetPixel(bounds.X, bounds.Y);
-        for (int x = bounds.X; x < bounds.Right && !anyPixelChangedDisabled; x++)
-        {
-            for (int y = bounds.Y; y < bounds.Bottom && !anyPixelChangedDisabled; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorDisabled)
-                {
-                    anyPixelChangedDisabled = true;
-                }
-            }
-        }
+        bool anyPixelChangedDisabled = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedDisabled.Should().BeTrue("drawing the background when disabled should modify the bitmap in the bounds area");
     }
@@ -189,18 +174,7 @@ public class RadioButtonBaseAdapterTests
         radioButton.Enabled = true;
         radioButtonBaseAdapter.CallDrawCheckBackground3DLite(e, bounds, Color.White, colors, disabledColors: false);
 
-        bool anyPixelChangedEnabled = false;
-        Color defaultColorEnabled = bmp.GetPixel(bounds.X, bounds.Y);
-        for (int x = bounds.X; x < bounds.Right && !anyPixelChangedEnabled; x++)
-        {
-            for (int y = bounds.Y; y < bounds.Bottom && !anyPixelChangedEnabled; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorEnabled)
-                {
-                    anyPixelChangedEnabled = true;
-                }
-            }
-        }
+        bool anyPixelChangedEnabled = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedEnabled.Should().BeTrue("drawing the 3D lite background when enabled should modify the bitmap in the bounds area");
 
@@ -212,18 +186,7 @@ public class RadioButtonBaseAdapterTests
         radioButton.Enabled = false;
         radioButtonBaseAdapter.CallDrawCheckBackground3DLite(e, bounds, Color.White, colors, disabledColors: true);
 
-        bool anyPixelChangedDisabled = false;
-        Color defaultColorDisabled = bmp.GetPixel(bounds.X, bounds.Y);
-        for (int x = bounds.X; x < bounds.Right && !anyPixelChangedDisabled; x++)
-        {
-            for (int y = bounds.Y; y < bounds.Bottom && !anyPixelChangedDisabled; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorDisabled)
-                {
-                    anyPixelChangedDisabled = true;
-                }
-            }
-        }
+        bool anyPixelChangedDisabled = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedDisabled.Should().BeTrue("drawing the 3D lite background when disabled should modify the bitmap in the bounds area");
     }
@@ -243,18 +206,7 @@ public class RadioButtonBaseAdapterTests
         radioButton.Checked = false;
         radioButtonBaseAdapter.CallDrawCheckOnly(e, layoutData, Color.Black, disabledColors: false);
 
-        bool anyPixelChangedUnchecked = false;
-        Color defaultColorUnchecked = bmp.GetPixel(layoutData.CheckBounds.X, layoutData.CheckBounds.Y);
-        for (int x = layoutData.CheckBounds.X; x < layoutData.CheckBounds.Right && !anyPixelChangedUnchecked; x++)
-        {
-            for (int y = layoutData.CheckBounds.Y; y < layoutData.CheckBounds.Bottom && !anyPixelChangedUnchecked; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorUnchecked)
-                {
-                    anyPixelChangedUnchecked = true;
-                }
-            }
-        }
+        bool anyPixelChangedUnchecked = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedUnchecked.Should().BeFalse("DrawCheckOnly should not modify the bitmap when unchecked.");
 
@@ -262,36 +214,14 @@ public class RadioButtonBaseAdapterTests
         radioButton.Enabled = true;
         radioButtonBaseAdapter.CallDrawCheckOnly(e, layoutData, Color.Black, disabledColors: false);
 
-        bool anyPixelChangedChecked = false;
-        Color defaultColorChecked = bmp.GetPixel(layoutData.CheckBounds.X, layoutData.CheckBounds.Y);
-        for (int x = layoutData.CheckBounds.X; x < layoutData.CheckBounds.Right && !anyPixelChangedChecked; x++)
-        {
-            for (int y = layoutData.CheckBounds.Y; y < layoutData.CheckBounds.Bottom && !anyPixelChangedChecked; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorChecked)
-                {
-                    anyPixelChangedChecked = true;
-                }
-            }
-        }
+        bool anyPixelChangedChecked = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedChecked.Should().BeTrue("DrawCheckOnly should modify the bitmap when checked and enabled.");
 
         radioButton.Enabled = false;
         radioButtonBaseAdapter.CallDrawCheckOnly(e, layoutData, Color.Black, disabledColors: true);
 
-        bool anyPixelChangedCheckedDisabled = false;
-        Color defaultColorCheckedDisabled = bmp.GetPixel(layoutData.CheckBounds.X, layoutData.CheckBounds.Y);
-        for (int x = layoutData.CheckBounds.X; x < layoutData.CheckBounds.Right && !anyPixelChangedCheckedDisabled; x++)
-        {
-            for (int y = layoutData.CheckBounds.Y; y < layoutData.CheckBounds.Bottom && !anyPixelChangedCheckedDisabled; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColorCheckedDisabled)
-                {
-                    anyPixelChangedCheckedDisabled = true;
-                }
-            }
-        }
+        bool anyPixelChangedCheckedDisabled = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChangedCheckedDisabled.Should().BeTrue("DrawCheckOnly should modify the bitmap when checked and disabled.");
     }
@@ -339,18 +269,7 @@ public class RadioButtonBaseAdapterTests
 
         radioButtonBaseAdapter.CallDrawCheckBox(e, layoutData);
 
-        bool anyPixelChanged = false;
-        Color defaultColor = bmp.GetPixel(0, 0);
-        for (int x = 0; x < bmp.Width && !anyPixelChanged; x++)
-        {
-            for (int y = 0; y < bmp.Height && !anyPixelChanged; y++)
-            {
-                if (bmp.GetPixel(x, y) != defaultColor)
-                {
-                    anyPixelChanged = true;
-                }
-            }
-        }
+        bool anyPixelChanged = AnyPixelChanged(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
         anyPixelChanged.Should().BeTrue("DrawCheckBox should modify the bitmap.");
     }
