@@ -3260,21 +3260,20 @@ public partial class RichTextBox : TextBoxBase
         }
 
 #pragma warning disable WFO5001
-        if (m.Msg == PInvokeCore.WM_CTLCOLORSTATIC)
+        if (m.Msg == MessageId.WM_REFLECT_CTLCOLOREDIT
+            && !Enabled
+            && Application.IsDarkModeEnabled)
         {
-            if (Application.IsDarkModeEnabled)
-            {
-                PInvokeCore.SetBkColor(
-                    (HDC)m.WParamInternal,
-                    ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+            PInvokeCore.SetBkColor(
+                (HDC)m.WParamInternal,
+                ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
 
-                PInvokeCore.SetTextColor(
-                    (HDC)m.WParamInternal,
-                    ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+            PInvokeCore.SetTextColor(
+                (HDC)m.WParamInternal,
+                ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
 
-                m.ResultInternal = (LRESULT)s_darkEditBrush;
-                return;
-            }
+            m.ResultInternal = (LRESULT)s_darkEditBrush;
+            return;
         }
 #pragma warning restore WFO5001
 
