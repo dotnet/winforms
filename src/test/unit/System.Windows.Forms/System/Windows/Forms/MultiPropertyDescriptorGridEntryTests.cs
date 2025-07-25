@@ -182,7 +182,8 @@ public class MultiPropertyDescriptorGridEntryTests
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
-        GridEntry entryParam = new TestGridEntry(new PropertyGrid());
+        using PropertyGrid propertyGrid = new();
+        GridEntry entryParam = new TestGridEntry(propertyGrid);
 
         bool result = multiPropertyDescriptorGridEntry.SendNotification(entryParam, Notify.Reset);
 
@@ -197,7 +198,12 @@ public class MultiPropertyDescriptorGridEntryTests
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
-        multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.NotifyParentsOfChanges(multiPropertyDescriptorGridEntry);
+        Action action = () => multiPropertyDescriptorGridEntry
+            .TestAccessor()
+            .Dynamic
+            .NotifyParentsOfChanges(multiPropertyDescriptorGridEntry);
+
+        action.Should().NotThrow();
     }
 
     [Fact]
@@ -208,7 +214,8 @@ public class MultiPropertyDescriptorGridEntryTests
         object[] objects = [dummyComponent1];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
-        TestGridEntry gridEntry = new(new PropertyGrid());
+        using PropertyGrid propertyGrid = new();
+        TestGridEntry gridEntry = new(propertyGrid);
 
         bool resultReset = multiPropertyDescriptorGridEntry.SendNotification(gridEntry, Notify.Reset);
         bool resultDoubleClick = multiPropertyDescriptorGridEntry.SendNotification(gridEntry, Notify.DoubleClick);
