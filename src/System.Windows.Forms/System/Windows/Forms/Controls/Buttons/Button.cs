@@ -168,7 +168,7 @@ public partial class Button : ButtonBase, IButtonControl
                 && Image is null
 
                 // ...the user wants to opt out of implicit DarkMode rendering.
-                && _darkModeRequestState is true
+                && DarkModeRequestState is true
 
                 // And all of this only counts for FlatStyle.Standard. For the
                 // rest, we're using specific renderers anyway, which check

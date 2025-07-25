@@ -3248,6 +3248,9 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
+    private static readonly IntPtr s_darkEditBrush
+        = PInvokeCore.CreateSolidBrush(ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
     internal unsafe void WmReflectNotify(ref Message m)
     {
         if (m.HWnd != Handle)
@@ -3255,6 +3258,24 @@ public partial class RichTextBox : TextBoxBase
             base.WndProc(ref m);
             return;
         }
+
+#pragma warning disable WFO5001
+        if (m.Msg == MessageId.WM_REFLECT_CTLCOLOREDIT
+            && !Enabled
+            && Application.IsDarkModeEnabled)
+        {
+            PInvokeCore.SetBkColor(
+                (HDC)m.WParamInternal,
+                ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+            PInvokeCore.SetTextColor(
+                (HDC)m.WParamInternal,
+                ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+            m.ResultInternal = (LRESULT)s_darkEditBrush;
+            return;
+        }
+#pragma warning restore WFO5001
 
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
         switch (nmhdr->code)
@@ -3445,6 +3466,24 @@ public partial class RichTextBox : TextBoxBase
     {
         switch (m.MsgInternal)
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            case PInvokeCore.WM_PAINT:
+                if (IsHandleCreated && !Enabled)
+                {
+                    if (Application.IsDarkModeEnabled && DarkModeRequestState is true)
+                    {
+                        // If the control is in dark mode, we need to paint the background
+                        // with the dark mode color.
+                        using Graphics g = Graphics.FromHwnd(Handle);
+                        g.Clear(SystemColors.Control);
+                    }
+                }
+
+                base.WndProc(ref m);
+                break;
+
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;
