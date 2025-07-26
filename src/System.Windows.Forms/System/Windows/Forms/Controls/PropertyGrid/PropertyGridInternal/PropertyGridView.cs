@@ -11,6 +11,7 @@ using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
+using static System.Windows.Forms.ControlPaint;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -190,33 +191,44 @@ internal sealed partial class PropertyGridView :
     ///   the selected row's <see cref="GridEntry"/>.
     ///  </para>
     /// </remarks>
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal DropDownButton DropDownButton
     {
         get
         {
-            if (_dropDownButton is null)
+            if (_dropDownButton is not null)
             {
-                OwnerGrid.CheckInCreate();
-
-                _dropDownButton = new()
-                {
-                    UseComboBoxTheme = true
-                };
-
-                Bitmap bitmap = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
-                _dropDownButton.Image = bitmap;
-                _dropDownButton.BackColor = SystemColors.Control;
-                _dropDownButton.ForeColor = SystemColors.ControlText;
-                _dropDownButton.Click += OnButtonClick;
-                _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
-                _dropDownButton.LostFocus += OnChildLostFocus;
-                _dropDownButton.TabIndex = 2;
-
-                CommonEditorSetup(_dropDownButton);
-                _dropDownButton.Size = ScaleHelper.IsScalingRequirementMet
-                    ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
-                    : new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+                return _dropDownButton;
             }
+
+            OwnerGrid.CheckInCreate();
+
+            _dropDownButton = new()
+            {
+                UseComboBoxTheme = true,
+                RequestDarkModeRendering = Application.IsDarkModeEnabled,
+                ControlButtonStyle = ModernControlButtonStyle.OpenDropDown | ModernControlButtonStyle.RoundedBorder
+            };
+
+            Bitmap bitmap = CreateResizedBitmap(
+                "Arrow",
+                DownArrowIconWidth,
+                DownArrowIconHeight);
+
+            // For classic mode/backwards compatibility.
+            _dropDownButton.Image = bitmap;
+            _dropDownButton.BackColor = SystemColors.Control;
+            _dropDownButton.ForeColor = SystemColors.ControlText;
+            _dropDownButton.Click += OnButtonClick;
+            _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
+            _dropDownButton.LostFocus += OnChildLostFocus;
+            _dropDownButton.TabIndex = 2;
+
+            CommonEditorSetup(_dropDownButton);
+
+            _dropDownButton.Size = ScaleHelper.IsScalingRequirementMet
+                ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
+                : new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
             return _dropDownButton;
         }
@@ -235,32 +247,42 @@ internal sealed partial class PropertyGridView :
     {
         get
         {
-            if (_dialogButton is null)
+            if (_dialogButton is not null)
             {
-                OwnerGrid.CheckInCreate();
-
-                _dialogButton = new DropDownButton
-                {
-                    BackColor = SystemColors.Control,
-                    ForeColor = SystemColors.ControlText,
-                    TabIndex = 3,
-                    Image = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight)
-                };
-
-                _dialogButton.Click += OnButtonClick;
-                _dialogButton.KeyDown += OnButtonKeyDown;
-                _dialogButton.GotFocus += OnDropDownButtonGotFocus;
-                _dialogButton.LostFocus += OnChildLostFocus;
-                _dialogButton.Size = ScaleHelper.IsScalingRequirementMet
-                    ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
-                    : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
-
-                CommonEditorSetup(_dialogButton);
+                return _dialogButton;
             }
+
+            OwnerGrid.CheckInCreate();
+
+            _dialogButton = new DropDownButton
+            {
+                RequestDarkModeRendering = Application.IsDarkModeEnabled,
+                ControlButtonStyle = ModernControlButtonStyle.Ellipse | ModernControlButtonStyle.RoundedBorder,
+                BackColor = SystemColors.Control,
+                ForeColor = SystemColors.ControlText,
+                TabIndex = 3,
+
+                // For classic mode/backwards compatibility.
+                Image = CreateResizedBitmap(
+                    "dotdotdot",
+                    DotDotDotIconWidth,
+                    DotDotDotIconHeight)
+            };
+
+            _dialogButton.Click += OnButtonClick;
+            _dialogButton.KeyDown += OnButtonKeyDown;
+            _dialogButton.GotFocus += OnDropDownButtonGotFocus;
+            _dialogButton.LostFocus += OnChildLostFocus;
+            _dialogButton.Size = ScaleHelper.IsScalingRequirementMet
+                ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(DeviceDpiInternal), RowHeight)
+                : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+
+            CommonEditorSetup(_dialogButton);
 
             return _dialogButton;
         }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  The common text box for editing values.
@@ -269,30 +291,32 @@ internal sealed partial class PropertyGridView :
     {
         get
         {
-            if (_editTextBox is null)
+            if (_editTextBox is not null)
             {
-                OwnerGrid.CheckInCreate();
-
-                _editTextBox = new(this)
-                {
-                    BorderStyle = BorderStyle.None,
-                    AutoSize = false,
-                    TabStop = false,
-                    AcceptsReturn = true,
-                    BackColor = BackColor,
-                    ForeColor = ForeColor
-                };
-
-                _editTextBox.KeyDown += OnEditKeyDown;
-                _editTextBox.KeyPress += OnEditKeyPress;
-                _editTextBox.GotFocus += OnEditGotFocus;
-                _editTextBox.LostFocus += OnEditLostFocus;
-                _editTextBox.MouseDown += OnEditMouseDown;
-                _editTextBox.TextChanged += OnEditChange;
-
-                _editTextBox.TabIndex = 1;
-                CommonEditorSetup(_editTextBox);
+                return _editTextBox;
             }
+
+            OwnerGrid.CheckInCreate();
+
+            _editTextBox = new(this)
+            {
+                BorderStyle = BorderStyle.None,
+                AutoSize = false,
+                TabStop = false,
+                AcceptsReturn = true,
+                BackColor = BackColor,
+                ForeColor = ForeColor
+            };
+
+            _editTextBox.KeyDown += OnEditKeyDown;
+            _editTextBox.KeyPress += OnEditKeyPress;
+            _editTextBox.GotFocus += OnEditGotFocus;
+            _editTextBox.LostFocus += OnEditLostFocus;
+            _editTextBox.MouseDown += OnEditMouseDown;
+            _editTextBox.TextChanged += OnEditChange;
+
+            _editTextBox.TabIndex = 1;
+            CommonEditorSetup(_editTextBox);
 
             return _editTextBox;
         }
@@ -2210,7 +2234,7 @@ internal sealed partial class PropertyGridView :
             if ((Size.Width > doubleOffset) && (Size.Height > doubleOffset))
             {
                 using Graphics g = CreateGraphicsInternal();
-                ControlPaint.DrawFocusRectangle(g, new Rectangle(_offset2Units, _offset2Units, Size.Width - doubleOffset, Size.Height - doubleOffset));
+                DrawFocusRectangle(g, new Rectangle(_offset2Units, _offset2Units, Size.Width - doubleOffset, Size.Height - doubleOffset));
             }
         }
     }

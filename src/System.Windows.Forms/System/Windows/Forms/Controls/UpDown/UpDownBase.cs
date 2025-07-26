@@ -211,10 +211,13 @@ public abstract partial class UpDownBase : ContainerControl
     protected override AccessibleObject CreateAccessibilityInstance()
         => new UpDownBaseAccessibleObject(this);
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected override CreateParams CreateParams
     {
         get
         {
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+
             CreateParams cp = base.CreateParams;
 
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
@@ -234,6 +237,7 @@ public abstract partial class UpDownBase : ContainerControl
             return cp;
         }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
