@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -244,13 +244,13 @@ public class WinFormsBinaryFormattedObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(Control_DesignerVisibleProperties_TestData))]
-    public void Control_BinaryFormatted_DesignerVisibleProperties(object value, string[] properties)
+    public void Control_BinaryFormatted_DesignerVisibleProperties(Func<Control> controlFactory, string[] properties)
     {
         // Check WinForms types for properties that can hit the BinaryFormatter
 
-        using (value as IDisposable)
+        using var control = controlFactory();
         {
-            var propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
+            var propertyDescriptors = TypeDescriptor.GetProperties(control, s_visible);
 
             List<string> binaryFormattedProperties = [];
             foreach (PropertyDescriptor property in propertyDescriptors)
@@ -266,43 +266,75 @@ public class WinFormsBinaryFormattedObjectTests
         }
     }
 
-    public static TheoryData<object, string[]> Control_DesignerVisibleProperties_TestData => new()
+    /// <summary>
+    ///  Provides test data for verifying which designer-relevant properties are visible
+    ///  on various WinForms controls.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   ⚠️ IMPORTANT: Do not instantiate WinForms controls eagerly in this data provider.
+    ///   Controls like <see cref="WebBrowser"/>, <see cref="DataGridView"/>, etc.,
+    ///   require creation on an STA thread with a message loop. Accessing them here directly
+    ///   would under circumstances throw runtime exceptions during test discovery or execution.
+    ///  </para>
+    ///  <para>
+    ///   Instead, we provide a <see cref="Func{T}"/> that produces the control on demand,
+    ///   allowing the test framework (e.g., <c>[WinFormsTheory]</c>) to construct them safely
+    ///   on a UI-thread-enabled context.
+    ///  </para>
+    ///  <para>
+    ///   To consume this data:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>
+    ///     Use [WinFormsTheory] or similar UI-thread-aware test attribute
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     Call the factory method (Func&lt;Control&gt;) **within** the test body
+    ///    </description>
+    ///   </item>
+    ///  </list>
+    /// </remarks>
+    public static TheoryData<Func<Control>, string[]> Control_DesignerVisibleProperties_TestData => new()
+{
+    { () => new Control(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new Form(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new Button(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new CheckBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new RadioButton(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new DataGridView(), new[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
+    { () => new DateTimePicker(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new GroupBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new Label(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new ComboBox(), new[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
+    { () => new ListBox(), new[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
+    { () => new ListView(), new[] { "DataContext: Object", "Tag: Object" } },
     {
-        { new Control(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new Form(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new Button(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new CheckBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new RadioButton(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new DataGridView(), new string[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
-        { new DateTimePicker(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new GroupBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new Label(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new ComboBox(), new string[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
-        { new ListBox(), new string[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
-        { new ListView(), new string[] { "DataContext: Object", "Tag: Object" } },
+        () => new MonthCalendar(), new[]
         {
-            new MonthCalendar(), new string[]
-            {
-                "AnnuallyBoldedDates: DateTime[]",
-                "BoldedDates: DateTime[]",
-                "MonthlyBoldedDates: DateTime[]",
-                "DataContext: Object",
-                "Tag: Object"
-            }
-        },
-        { new PictureBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new PrintPreviewControl(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new ProgressBar(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new ScrollableControl(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new HScrollBar(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new VScrollBar(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new Splitter(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new TabControl(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new TextBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new RichTextBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new MaskedTextBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new ToolStrip(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new TrackBar(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new WebBrowser(), new string[] { "DataContext: Object", "Tag: Object" } },
-    };
+            "AnnuallyBoldedDates: DateTime[]",
+            "BoldedDates: DateTime[]",
+            "MonthlyBoldedDates: DateTime[]",
+            "DataContext: Object",
+            "Tag: Object"
+        }
+    },
+    { () => new PictureBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new PrintPreviewControl(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new ProgressBar(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new ScrollableControl(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new HScrollBar(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new VScrollBar(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new Splitter(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new TabControl(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new TextBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new RichTextBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new MaskedTextBox(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new ToolStrip(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new TrackBar(), new[] { "DataContext: Object", "Tag: Object" } },
+    { () => new WebBrowser(), new[] { "DataContext: Object", "Tag: Object" } },
+};
 }
