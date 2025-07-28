@@ -3696,21 +3696,22 @@ public partial class ComboBox : ListControl
                 }
 
                 // Additional handling for Simple style listbox when disabled
-                if (DropDownStyle == ComboBoxStyle.Simple && Application.IsDarkModeEnabled && !Enabled)
+                if (DropDownStyle == ComboBoxStyle.Simple
+                    && Application.IsDarkModeEnabled
+                    && !Enabled
+                    && hwndChild == _childListBox?.HWND)
                 {
-                    if (hwndChild == _childListBox?.HWND)
-                    {
-                        PInvokeCore.SetBkColor(
-                            (HDC)m.WParamInternal,
-                            ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+                    PInvokeCore.SetBkColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
 
-                        PInvokeCore.SetTextColor(
-                            (HDC)m.WParamInternal,
-                            ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+                    PInvokeCore.SetTextColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
 
-                        m.ResultInternal = (LRESULT)s_darkEditBrush;
-                        return;
-                    }
+                    m.ResultInternal = (LRESULT)s_darkEditBrush;
+
+                    return;
                 }
 #pragma warning restore WFO5001
 
