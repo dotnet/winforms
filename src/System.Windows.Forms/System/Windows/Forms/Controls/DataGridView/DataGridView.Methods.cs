@@ -4702,8 +4702,9 @@ public partial class DataGridView
 
                     // If a valid previous column is found and its width exceeds the remaining displayable space,
                     // then perform a partial scroll.
-                    if (dataGridViewColumn is not null && dataGridViewColumn.Thickness > displayWidth - cx)
+                    if (dataGridViewColumn is not null)
                     {
+                        Debug.Assert(dataGridViewColumn.Thickness > displayWidth - cx);
                         firstDisplayedScrollingCol = dataGridViewColumn.Index;
                         FirstDisplayedScrollingColumnHiddenWidth = dataGridViewColumn.Thickness - displayWidth + cx;
                         _horizontalOffset -= displayWidth - cx;
