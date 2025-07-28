@@ -67,6 +67,34 @@ public static unsafe partial class ControlPaint
     // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
     private const int MaximumLuminosityDifference = 20;
 
+    // Dark mode color constants
+    private static readonly Color s_darkModeBackgroundPressed = Color.FromArgb(255, 70, 70, 70);
+    private static readonly Color s_darkModeBackgroundDisabled = Color.FromArgb(255, 45, 45, 45);
+    private static readonly Color s_darkModeBackgroundNormal = Color.FromArgb(255, 60, 60, 60);
+    private static readonly Color s_darkModeBackgroundHover = Color.FromArgb(255, 80, 80, 80);
+
+    private static readonly Color s_darkModeBorderPressed = Color.FromArgb(255, 80, 80, 80);
+    private static readonly Color s_darkModeBorderDisabled = Color.FromArgb(255, 50, 50, 50);
+    private static readonly Color s_darkModeBorderNormal = Color.FromArgb(255, 90, 90, 90);
+    private static readonly Color s_darkModeBorderHover = Color.FromArgb(255, 110, 110, 110);
+
+    private static readonly Color s_darkModeArrowDisabled = Color.FromArgb(255, 100, 100, 100);
+    private static readonly Color s_darkModeArrowNormal = Color.FromArgb(255, 220, 220, 220);
+
+    // Light mode color constants
+    private static readonly Color s_lightModeBackgroundPressed = Color.FromArgb(255, 218, 218, 218);
+    private static readonly Color s_lightModeBackgroundDisabled = Color.FromArgb(255, 244, 244, 244);
+    private static readonly Color s_lightModeBackgroundNormal = Color.FromArgb(255, 241, 241, 241);
+    private static readonly Color s_lightModeBackgroundHover = Color.FromArgb(255, 220, 220, 220);
+
+    private static readonly Color s_lightModeBorderPressed = Color.FromArgb(255, 166, 166, 166);
+    private static readonly Color s_lightModeBorderDisabled = Color.FromArgb(255, 205, 205, 205);
+    private static readonly Color s_lightModeBorderNormal = Color.FromArgb(255, 195, 195, 195);
+    private static readonly Color s_lightModeBorderHover = Color.FromArgb(255, 170, 170, 170);
+
+    private static readonly Color s_lightModeArrowDisabled = Color.FromArgb(255, 170, 170, 170);
+    private static readonly Color s_lightModeArrowNormal = Color.FromArgb(255, 68, 68, 68);
+
     internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Size imageSize, ImageLayout imageLayout)
     {
         Rectangle result = bounds;
@@ -1841,6 +1869,7 @@ public static unsafe partial class ControlPaint
     public static void DrawScrollButton(Graphics graphics, Rectangle rectangle, ScrollButton button, ButtonState state)
         => DrawScrollButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws a button for a Win32 scroll bar in the given rectangle with the given state.
     /// </summary>
@@ -1848,13 +1877,48 @@ public static unsafe partial class ControlPaint
         Graphics graphics,
         int x, int y, int width, int height,
         ScrollButton button,
-        ButtonState state) => DrawFrameControl(
-            graphics,
-            x, y, width, height,
-            DFC_TYPE.DFC_SCROLL,
-            (DFCS_STATE)button | (DFCS_STATE)state,
-            Color.Empty,
-            Color.Empty);
+        ButtonState state)
+    {
+        // If dark mode is enabled, use the new modern rendering
+        if (Application.IsDarkModeEnabled)
+        {
+            ModernControlButtonState controlButtonState = state switch
+            {
+                ButtonState.Pushed => ModernControlButtonState.Pressed,
+                ButtonState.Inactive => ModernControlButtonState.Disabled,
+                _ => ModernControlButtonState.Normal
+            };
+
+            Rectangle bounds = new(x, y, width, height);
+
+            ModernControlButtonStyle modernControlButton = button switch
+            {
+                ScrollButton.Up => ModernControlButtonStyle.Up,
+                ScrollButton.Down => ModernControlButtonStyle.Down,
+                ScrollButton.Left => ModernControlButtonStyle.Left,
+                ScrollButton.Right => ModernControlButtonStyle.Right,
+                _ => throw new ArgumentOutOfRangeException(nameof(button), button, null)
+            };
+
+            DrawModernControlButton(
+                graphics,
+                bounds,
+                modernControlButton,
+                controlButtonState,
+                isDarkMode: true);
+        }
+        else
+        {
+            // Fall back to classic Windows rendering
+            DrawFrameControl(
+                graphics,
+                x, y, width, height,
+                DFC_TYPE.DFC_SCROLL,
+                (DFCS_STATE)button | (DFCS_STATE)state,
+                Color.Empty,
+                Color.Empty);
+        }
+    }
 
     /// <summary>
     ///  Draws a standard selection frame. A selection frame is a frame that is
