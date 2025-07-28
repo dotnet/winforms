@@ -3435,8 +3435,8 @@ public partial class RichTextBox : TextBoxBase
                     base.WndProc(ref m);
 
                     // If the control is disabled, we don't want to let the RTF control
-                    // paint anything else. We will paint the background and the text
-                    // ourselves, so we don't want the RTF control to paint the background
+                    // paint anything else. We will paint the background and the unformatted
+                    // text ourselves, so we don't want the RTF control to paint the background
                     // and the text in the foreground color.
                     using Graphics g = Graphics.FromHwndInternal(Handle);
 
@@ -3450,7 +3450,10 @@ public partial class RichTextBox : TextBoxBase
                         Font,
                         ClientRectangle,
                         SystemColors.GrayText,
-                        TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                        TextFormatFlags.Left
+                        | TextFormatFlags.Top
+                        | TextFormatFlags.WordBreak,
+                        | TextFormatFlags.EndEllipsis);
 
                     return;
                 }
