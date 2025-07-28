@@ -3428,12 +3428,15 @@ public partial class RichTextBox : TextBoxBase
         {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             case PInvokeCore.WM_PAINT:
+
+                // Important: We need to let to run the base
+                // renderer first in the case of the RTF control.
+                base.WndProc(ref m);
+
                 if (Handle == m.HWND
                     && !Enabled
                     && Application.IsDarkModeEnabled)
                 {
-                    base.WndProc(ref m);
-
                     // If the control is disabled, we don't want to let the RTF control
                     // paint anything else. We will paint the background and the unformatted
                     // text ourselves, so we don't want the RTF control to paint the background
@@ -3452,13 +3455,11 @@ public partial class RichTextBox : TextBoxBase
                         SystemColors.GrayText,
                         TextFormatFlags.Left
                         | TextFormatFlags.Top
-                        | TextFormatFlags.WordBreak,
+                        | TextFormatFlags.WordBreak
                         | TextFormatFlags.EndEllipsis);
 
                     return;
                 }
-
-                base.WndProc(ref m);
 
                 break;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
