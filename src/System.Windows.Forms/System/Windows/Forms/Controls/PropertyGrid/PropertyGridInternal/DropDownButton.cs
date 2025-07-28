@@ -18,13 +18,20 @@ internal sealed partial class DropDownButton : Button
         SetAccessibleName();
     }
 
-    // If a control uses it needs it in the context of rendering
-    // something in dark mode - this flag needs to be set.
+    /// <summary>
+    ///  Indicates whether the control should be rendered in dark mode.
+    ///  Set this property if you use this class for a control in dark mode.
+    /// </summary>
     public bool RequestDarkModeRendering { get; set; }
 
+    /// <summary>
+    ///  Gets or sets the style used for rendering the control button.
+    /// </summary>
     public ModernControlButtonStyle ControlButtonStyle { get; set; }
 
-    // When the holder is open, we don't fire clicks.
+    /// <summary>
+    ///  Gets or sets a value indicating whether mouse events should be ignored when the holder is open.
+    /// </summary>
     public bool IgnoreMouse { get; set; }
 
     /// <summary>
