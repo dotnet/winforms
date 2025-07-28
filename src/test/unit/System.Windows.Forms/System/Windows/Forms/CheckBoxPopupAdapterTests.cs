@@ -18,7 +18,6 @@ public class CheckBoxPopupAdapterTests : AbstractButtonBaseTests
     public void PaintUp_DoesNotThrow_ForAllCheckStates(CheckState state)
     {
         using CheckBox checkBox = new();
-        checkBox.Text = "Test";
         CheckBoxPopupAdapter adapter = new(checkBox);
         using Bitmap bitmap = new(checkBox.Width, checkBox.Height);
         using Graphics graphics = Graphics.FromImage(bitmap);
