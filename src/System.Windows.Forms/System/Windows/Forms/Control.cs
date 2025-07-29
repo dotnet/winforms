@@ -298,11 +298,6 @@ public unsafe partial class Control :
 
     internal byte LayoutSuspendCount { get; private set; }
 
-    // Flag for the youngest control in the descendant-inheritance hierarchy as the
-    // ultimate truth if the control - by having set the ControlStyles. -
-    // indicates to participate in automatic dark mode theming or not.
-    internal bool? _darkModeRequestState;
-
     /// <summary>
     ///  Initializes a new instance of the <see cref="Control"/> class.
     /// </summary>
@@ -490,6 +485,32 @@ public unsafe partial class Control :
             }
         }
     }
+
+    /// <summary>
+    ///  Caches whether the youngest control in the inheritance hierarchy has requested
+    ///  participation in automatic dark mode theming based on its <see cref="ControlStyles"/> settings.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This property acts as a cache for the dark mode theming request state due to the architectural pattern
+    ///   of Control inheritance in WinForms. The constructor of <see cref="Control"/> calls <see cref="CreateParams"/>,
+    ///   which means that <see cref="CreateParams"/> in derived controls is invoked before their respective constructors run.
+    ///  </para>
+    ///  <para>
+    ///   As a result, if a control indicates its intent to participate in dark mode theming by setting
+    ///   <see cref="ControlStyles.ApplyThemingImplicitly"/>, we need to cache this state in this internal property
+    ///   rather than relying on the setting it does in its constructor. This is necessary because theming decisions
+    ///   and related logic may be triggered during the base <see cref="Control"/> construction process, before the
+    ///   derived control's constructor has a chance to execute.
+    ///  </para>
+    ///  <para>
+    ///   Furthermore, since base classes (such as <c>TextBoxBase</c> or <c>ButtonBase</c>) may request dark mode
+    ///   theming, but a more derived control might opt out, this <see cref="DarkModeRequestState"/> property serves
+    ///   as the definitive source of truth for a particular control's dark mode participation. It ensures that the
+    ///   most derived control's preference is respected, regardless of what its ancestors may have set.
+    ///  </para>
+    /// </remarks>
+    internal bool? DarkModeRequestState { get; set; }
 
     /// <summary>
     ///  The Accessibility Object for this Control
@@ -7384,7 +7405,7 @@ public unsafe partial class Control :
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (Application.IsDarkModeEnabled
-                && _darkModeRequestState is true
+                && DarkModeRequestState is true
                 && !RecreatingHandle)
             {
                 _ = PInvoke.SetWindowTheme(
@@ -9349,7 +9370,7 @@ public unsafe partial class Control :
             // ensure that the theming is applied to all child controls as well.
 #pragma warning disable WFO5001
             if (Application.IsDarkModeEnabled
-                && _darkModeRequestState is true)
+                && DarkModeRequestState is true)
             {
                 _ = PInvoke.SetWindowTheme(
                     hwnd: HWND,
@@ -10345,9 +10366,9 @@ public unsafe partial class Control :
         // reset those settings - the source of truth ultimately is the value which gets set
         // for the first time a control sets or clears this style explicitly in CreateParams.
         if ((flag & ControlStyles.ApplyThemingImplicitly) == ControlStyles.ApplyThemingImplicitly
-            && !_darkModeRequestState.HasValue)
+            && !DarkModeRequestState.HasValue)
         {
-            _darkModeRequestState = value;
+            DarkModeRequestState = value;
         }
     }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -10412,7 +10433,7 @@ public unsafe partial class Control :
                     // We shouldn't mess with the color mode if users haven't specifically set it.
                     // https://github.com/dotnet/winforms/issues/12014
                     // And we shouldn't prepare dark mode, if the form opted out.
-                    if (value && Application.ColorModeSet && _darkModeRequestState is true)
+                    if (value && Application.ColorModeSet && DarkModeRequestState is true)
                     {
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }

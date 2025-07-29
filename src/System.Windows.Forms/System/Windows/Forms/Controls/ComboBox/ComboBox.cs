@@ -249,15 +249,31 @@ public partial class ComboBox : ListControl
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  The background color of this control. This is an ambient property and
     ///  will always return a non-null value.
     /// </summary>
     public override Color BackColor
     {
-        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
+        get
+        {
+            if (ShouldSerializeBackColor())
+            {
+                return base.BackColor;
+            }
+            else
+            {
+                return Application.IsDarkModeEnabled
+                    && DarkModeRequestState is true
+                        ? SystemColors.ControlDarkDark
+                        : SystemColors.Window;
+            }
+        }
+
         set => base.BackColor = value;
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1841,11 +1857,8 @@ public partial class ComboBox : ListControl
                 _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
-            if (_stringSource is not null)
-            {
-                _stringSource.ReleaseAutoComplete();
-                _stringSource = null;
-            }
+            _stringSource?.ReleaseAutoComplete();
+            _stringSource = null;
         }
 
         base.Dispose(disposing);
@@ -2384,11 +2397,8 @@ public partial class ComboBox : ListControl
             _selectedIndex = SelectedIndex;
         }
 
-        if (_stringSource is not null)
-        {
-            _stringSource.ReleaseAutoComplete();
-            _stringSource = null;
-        }
+        _stringSource?.ReleaseAutoComplete();
+        _stringSource = null;
 
         base.OnHandleDestroyed(e);
     }
@@ -3042,23 +3052,14 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void ReleaseChildWindow()
     {
-        if (_childEdit is not null)
-        {
-            _childEdit.ReleaseHandle();
-            _childEdit = null;
-        }
+        _childEdit?.ReleaseHandle();
+        _childEdit = null;
 
-        if (_childListBox is not null)
-        {
-            _childListBox.ReleaseHandle();
-            _childListBox = null;
-        }
+        _childListBox?.ReleaseHandle();
+        _childListBox = null;
 
-        if (_childDropDown is not null)
-        {
-            _childDropDown.ReleaseHandle();
-            _childDropDown = null;
-        }
+        _childDropDown?.ReleaseHandle();
+        _childDropDown = null;
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -3620,6 +3621,9 @@ public partial class ComboBox : ListControl
         m.ResultInternal = (LRESULT)1;
     }
 
+    private static readonly IntPtr s_darkEditBrush
+        = PInvokeCore.CreateSolidBrush(ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
     /// <summary>
     ///  The ComboBox's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
@@ -3672,6 +3676,47 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
+
+#pragma warning disable WFO5001
+            case PInvokeCore.WM_CTLCOLORSTATIC:
+
+                HWND hwndChild = (HWND)m.LParamInternal;
+                if (hwndChild == _childEdit?.HWND && Application.IsDarkModeEnabled)
+                {
+                    PInvokeCore.SetBkColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+                    PInvokeCore.SetTextColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+                    m.ResultInternal = (LRESULT)s_darkEditBrush;
+                    return;
+                }
+
+                // Additional handling for Simple style listbox when disabled
+                if (DropDownStyle == ComboBoxStyle.Simple
+                    && Application.IsDarkModeEnabled
+                    && !Enabled
+                    && hwndChild == _childListBox?.HWND)
+                {
+                    PInvokeCore.SetBkColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(64, 64, 64)));
+
+                    PInvokeCore.SetTextColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(Color.FromArgb(180, 180, 180)));
+
+                    m.ResultInternal = (LRESULT)s_darkEditBrush;
+
+                    return;
+                }
+#pragma warning restore WFO5001
+
+                break;
+
             case PInvokeCore.WM_CTLCOLOREDIT:
             case PInvokeCore.WM_CTLCOLORLISTBOX:
                 m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
@@ -3766,6 +3811,29 @@ public partial class ComboBox : ListControl
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
+
+#pragma warning disable WFO5001
+                    // Special handling for disabled DropDownList in dark mode
+                    if (Application.IsDarkModeEnabled && !Enabled && DropDownStyle == ComboBoxStyle.DropDownList)
+                    {
+                        // The text area for DropDownList (excluding the dropdown button)
+                        Rectangle textBounds = ClientRectangle;
+                        textBounds.Width -= SystemInformation.VerticalScrollBarWidth;
+
+                        // Fill the background
+                        using var bgBrush = new SolidBrush(Color.FromArgb(64, 64, 64));
+                        g.FillRectangle(bgBrush, textBounds);
+
+                        // Draw the text
+                        TextRenderer.DrawText(
+                            g,
+                            Text,
+                            Font,
+                            textBounds,
+                            Color.FromArgb(180, 180, 180),
+                            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                    }
+#pragma warning restore WFO5001
 
                     return;
                 }
