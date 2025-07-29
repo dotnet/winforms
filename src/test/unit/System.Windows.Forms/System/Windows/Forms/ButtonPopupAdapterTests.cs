@@ -21,11 +21,11 @@ public class ButtonPopupAdapterTests : IDisposable
     public void Dispose() => button.Dispose();
 
     public static TheoryData<CheckState> PaintStates => new()
-        {
-            CheckState.Unchecked,
-            CheckState.Checked,
-            CheckState.Indeterminate
-        };
+    {
+        CheckState.Unchecked,
+        CheckState.Checked,
+        CheckState.Indeterminate
+    };
 
     private class TestButtonBase : ButtonBase
     {
@@ -34,49 +34,49 @@ public class ButtonPopupAdapterTests : IDisposable
 
         internal override Rectangle OverChangeRectangle => ClientRectangleValue;
 
-        internal override ButtonBaseAdapter CreateStandardAdapter()
-        {
-            return new ButtonPopupAdapter(this);
-        }
+        internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonPopupAdapter(this);
 
-        internal override StringFormat CreateStringFormat()
-        {
-            return new StringFormat();
-        }
+        internal override StringFormat CreateStringFormat() => new StringFormat();
 
-        internal override TextFormatFlags CreateTextFormatFlags()
-        {
-            return TextFormatFlags.Default;
-        }
+        internal override TextFormatFlags CreateTextFormatFlags() => TextFormatFlags.Default;
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintUp_DoesNotThrow(CheckState state)
     {
-        PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => adapter.PaintUp(e, state));
+
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintOver_DoesNotThrow(CheckState state)
     {
-        PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => adapter.PaintOver(e, state));
+
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintDown_DoesNotThrow(CheckState state)
     {
-        PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => adapter.PaintDown(e, state));
+
         exception.Should().BeNull();
     }
 
@@ -86,7 +86,7 @@ public class ButtonPopupAdapterTests : IDisposable
         Rectangle clientRectangle = new(0, 0, 100, 30);
         Padding padding = new(2);
         bool isDefault = false;
-        Font font = SystemFonts.DefaultFont;
+        using Font font = SystemFonts.DefaultFont;
         string text = "Test";
         bool enabled = true;
         ContentAlignment textAlign = ContentAlignment.MiddleCenter;
@@ -119,7 +119,7 @@ public class ButtonPopupAdapterTests : IDisposable
         Rectangle clientRectangle = new(0, 0, 100, 30);
         Padding padding = new(0);
         bool isDefault = false;
-        Font font = SystemFonts.DefaultFont;
+        using Font font = SystemFonts.DefaultFont;
         string text = string.Empty;
         bool enabled = false;
         ContentAlignment textAlign = ContentAlignment.TopLeft;
