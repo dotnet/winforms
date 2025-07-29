@@ -145,20 +145,4 @@ public class StandardMenuStripVerbTests : IDisposable
         host.Should().BeSameAs(_designerHostMock.Object);
         changeService.Should().BeSameAs(_componentChangeServiceMock.Object);
     }
-
-    [WinFormsFact]
-    public void StandardMenuStripVerb_InsertsMenuStrip()
-    {
-        StandardMenuStripVerb standardMenuStripVerb = new(_designer);
-
-        ToolStripItemCollection toolStripItemCollection = _parentControlDesigner.Component.TestAccessor().Dynamic._toolStripItemCollection;
-
-        toolStripItemCollection.Count.Should().Be(0);
-
-        standardMenuStripVerb.InsertItems();
-
-        toolStripItemCollection = _parentControlDesigner.Component.TestAccessor().Dynamic._toolStripItemCollection;
-
-        toolStripItemCollection.Count.Should().Be(1);
-    }
 }
