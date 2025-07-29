@@ -287,10 +287,9 @@ public abstract partial class TextBoxBase : Control
             else
             {
                 return ReadOnly
-
                     // If we're ReadOnly and in DarkMode, we are using a different background color.
                     ? Application.IsDarkModeEnabled
-                        && _darkModeRequestState is true
+                        && DarkModeRequestState is true
                             ? SystemColors.ControlDarkDark
                             : SystemColors.Control
                     : SystemColors.Window;
@@ -955,7 +954,7 @@ public abstract partial class TextBoxBase : Control
     {
         // If we have no specifically defined back color, we set the back color in case we're in dark mode.
         if (Application.IsDarkModeEnabled
-            && _darkModeRequestState is true)
+            && DarkModeRequestState is true)
         {
             base.BackColor = value ? SystemColors.ControlLight : SystemColors.Window;
             Invalidate();

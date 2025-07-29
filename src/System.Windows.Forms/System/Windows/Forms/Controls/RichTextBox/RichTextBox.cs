@@ -1320,14 +1320,9 @@ public partial class RichTextBox : TextBoxBase
 
             if (!IsHandleCreated && _textRtf is null)
             {
-                if (_textPlain is not null)
-                {
-                    return _textPlain;
-                }
-                else
-                {
-                    return base.Text;
-                }
+                return _textPlain is not null
+                    ? _textPlain
+                    : base.Text;
             }
             else
             {
@@ -1457,14 +1452,10 @@ public partial class RichTextBox : TextBoxBase
                 int numerator = 0;
                 int denominator = 0;
                 PInvokeCore.SendMessage(this, PInvokeCore.EM_GETZOOM, (WPARAM)(&numerator), ref denominator);
-                if ((numerator != 0) && (denominator != 0))
-                {
-                    _zoomMultiplier = numerator / ((float)denominator);
-                }
-                else
-                {
-                    _zoomMultiplier = 1.0f;
-                }
+
+                _zoomMultiplier = (numerator != 0) && (denominator != 0)
+                    ? numerator / ((float)denominator)
+                    : 1.0f;
 
                 return _zoomMultiplier;
             }
@@ -2686,14 +2677,9 @@ public partial class RichTextBox : TextBoxBase
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETZOOM, (WPARAM)numerator, (LPARAM)denominator);
         }
 
-        if (numerator != 0)
-        {
-            _zoomMultiplier = numerator / ((float)denominator);
-        }
-        else
-        {
-            _zoomMultiplier = 1.0f;
-        }
+        _zoomMultiplier = numerator != 0
+            ? numerator / ((float)denominator)
+            : 1.0f;
     }
 
     private unsafe bool SetCharFormat(CFM_MASK mask, CFE_EFFECTS effect, RichTextBoxSelectionAttribute charFormat)
@@ -2887,14 +2873,9 @@ public partial class RichTextBox : TextBoxBase
             // set up structure to do stream operation
             EDITSTREAM es = default;
 
-            if ((flags & PInvoke.SF_UNICODE) != 0)
-            {
-                cookieVal = INPUT | UNICODE;
-            }
-            else
-            {
-                cookieVal = INPUT | ANSI;
-            }
+            cookieVal = (flags & PInvoke.SF_UNICODE) != 0
+                ? INPUT | UNICODE
+                : INPUT | ANSI;
 
             if ((flags & PInvoke.SF_RTF) != 0)
             {
@@ -3441,10 +3422,48 @@ public partial class RichTextBox : TextBoxBase
         InternalSetForeColor(ForeColor);
     }
 
-    protected override void WndProc(ref Message m)
+    protected override unsafe void WndProc(ref Message m)
     {
         switch (m.MsgInternal)
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            case PInvokeCore.WM_PAINT:
+
+                // Important: We need to let to run the base
+                // renderer first in the case of the RTF control.
+                base.WndProc(ref m);
+
+                if (Handle == m.HWND
+                    && !Enabled
+                    && Application.IsDarkModeEnabled)
+                {
+                    // If the control is disabled, we don't want to let the RTF control
+                    // paint anything else. We will paint the background and the unformatted
+                    // text ourselves, so we don't want the RTF control to paint the background
+                    // and the text in the foreground color.
+                    using Graphics g = Graphics.FromHwndInternal(Handle);
+
+                    // Paint the background
+                    g.FillRectangle(SystemBrushes.ControlDark, ClientRectangle);
+
+                    // Paint the text
+                    TextRenderer.DrawText(
+                        g,
+                        Text,
+                        Font,
+                        ClientRectangle,
+                        SystemColors.GrayText,
+                        TextFormatFlags.Left
+                        | TextFormatFlags.Top
+                        | TextFormatFlags.WordBreak
+                        | TextFormatFlags.EndEllipsis);
+
+                    return;
+                }
+
+                break;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;
