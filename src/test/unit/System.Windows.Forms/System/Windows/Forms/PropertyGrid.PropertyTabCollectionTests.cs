@@ -3,6 +3,7 @@
 
 #nullable disable
 
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
@@ -55,6 +56,112 @@ public class PropertyTabCollectionTests
         }
     }
 
+    [WinFormsFact]
+    public void AddTabType_AddsTab()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+
+        int initialCount = collection.Count;
+        collection.AddTabType(typeof(TestPropertyTab));
+
+        collection.Count.Should().Be(initialCount + 1);
+        collection[initialCount].Should().BeOfType<TestPropertyTab>();
+    }
+
+    [WinFormsFact]
+    public void AddTabType_WithScope_AddsTab()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+
+        int initialCount = collection.Count;
+        collection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
+
+        collection.Count.Should().Be(initialCount + 1);
+        collection[initialCount].Should().BeOfType<TestPropertyTab>();
+    }
+
+    [WinFormsFact]
+    public void RemoveTabType_RemovesTab()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+        collection.AddTabType(typeof(TestPropertyTab));
+        int countAfterAdd = collection.Count;
+
+        collection.RemoveTabType(typeof(TestPropertyTab));
+
+        collection.Count.Should().Be(countAfterAdd - 1);
+        collection.Cast<PropertyTab>().Should().NotContain(tab => tab is TestPropertyTab);
+    }
+
+    [WinFormsFact]
+    public void Clear_RemovesTabsOfGivenScope()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+        collection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
+        int countAfterAdd = collection.Count;
+
+        collection.Clear(PropertyTabScope.Component);
+
+        collection.Count.Should().BeLessThan(countAfterAdd);
+    }
+
+    [WinFormsFact]
+    public void CopyTo_CopiesTabsToArray()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+        collection.AddTabType(typeof(TestPropertyTab));
+        PropertyTab[] array = new PropertyTab[collection.Count];
+
+        ((ICollection)collection).CopyTo(array, 0);
+
+        array.Should().ContainItemsAssignableTo<PropertyTab>();
+        array.Should().Contain(tab => tab is TestPropertyTab);
+    }
+
+    [WinFormsFact]
+    public void GetEnumerator_EnumeratesTabs()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+        collection.AddTabType(typeof(TestPropertyTab));
+
+        int count = 0;
+        foreach (PropertyTab tab in collection)
+        {
+            tab.Should().NotBeNull();
+            count++;
+        }
+
+        count.Should().Be(collection.Count);
+    }
+
+    [WinFormsFact]
+    public void SyncRoot_ReturnsSelf()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+
+        object syncRoot = ((ICollection)collection).SyncRoot;
+
+        syncRoot.Should().BeSameAs(collection);
+    }
+
+    [WinFormsFact]
+    public void IsSynchronized_ReturnsFalse()
+    {
+        using PropertyGrid grid = new();
+        PropertyGrid.PropertyTabCollection collection = new(grid);
+
+        bool isSynchronized = ((ICollection)collection).IsSynchronized;
+
+        isSynchronized.Should().BeFalse();
+    }
+
     public class TestPropertyTabCollection : PropertyGrid.PropertyTabCollection
     {
         public TestPropertyTabCollection(PropertyGrid ownerPropertyGrid) : base(ownerPropertyGrid)
@@ -76,10 +183,7 @@ public class PropertyTabCollectionTests
         {
             get
             {
-                if (_bitmap is null)
-                {
-                    _bitmap = new Bitmap(1, 1);
-                }
+                _bitmap ??= new Bitmap(1, 1);
 
                 return _bitmap;
             }
