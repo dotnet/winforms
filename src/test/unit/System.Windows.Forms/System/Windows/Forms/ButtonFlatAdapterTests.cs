@@ -39,37 +39,43 @@ public class ButtonFlatAdapterTests : IDisposable
         CheckState.Indeterminate
     };
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintUp_DoesNotThrow(CheckState state)
     {
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintUp(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintDown_DoesNotThrow(CheckState state)
     {
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintDown(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintOver_DoesNotThrow(CheckState state)
     {
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintOver(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintUp_WithCustomBorder_DoesNotThrow(CheckState state)
     {
@@ -77,46 +83,58 @@ public class ButtonFlatAdapterTests : IDisposable
         button.FlatAppearance.BorderSize = 2;
         button.FlatAppearance.BorderColor = Color.Red;
         ButtonFlatAdapter buttonFlatAdapter = new(button);
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintUp(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintDown_WithMouseDownBackColor_DoesNotThrow(CheckState state)
     {
         using TestButtonBase button = new();
         button.FlatAppearance.MouseDownBackColor = Color.Blue;
         ButtonFlatAdapter buttonFlatAdapter = new(button);
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintDown(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintOver_WithMouseOverBackColor_DoesNotThrow(CheckState state)
     {
         using TestButtonBase button = new();
         button.FlatAppearance.MouseOverBackColor = Color.Green;
         ButtonFlatAdapter buttonFlatAdapter = new(button);
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintOver(e, state));
         exception.Should().BeNull();
     }
 
-    [Theory]
+    [WinFormsTheory]
     [MemberData(nameof(PaintStates))]
     public void PaintUp_WithCheckedBackColor_DoesNotThrow(CheckState state)
     {
         using TestButtonBase button = new();
         button.FlatAppearance.CheckedBackColor = Color.Yellow;
         ButtonFlatAdapter buttonFlatAdapter = new(button);
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintUp(e, state));
         exception.Should().BeNull();
@@ -129,7 +147,10 @@ public class ButtonFlatAdapterTests : IDisposable
         using TestButtonBase button = new();
         button.IsDefault = isDefault;
         ButtonFlatAdapter buttonFlatAdapter = new(button);
-        using PaintEventArgs e = new(Graphics.FromImage(new Bitmap(100, 30)), new Rectangle(0, 0, 100, 30));
+
+        using Bitmap bitmap = new(100, 30);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, new Rectangle(0, 0, 100, 30));
 
         Exception? exception = Record.Exception(() => buttonFlatAdapter.PaintUp(e, CheckState.Unchecked));
         exception.Should().BeNull();
