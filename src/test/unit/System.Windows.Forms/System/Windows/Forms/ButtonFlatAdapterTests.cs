@@ -157,39 +157,12 @@ public class ButtonFlatAdapterTests : IDisposable
     }
 
     [Fact]
-    public void PaintFlatLayout_SetsBorderSize_Correctly()
+    public void PaintFlatLayout_SetsProperties_Correctly_WhenUpIsFalse()
     {
         Rectangle clientRectangle = new(0, 0, 50, 20);
         Padding padding = new(1, 2, 3, 4);
         using Font font = new("Segoe UI", 9);
-        string text = "BorderTest";
-        bool enabled = true;
-        ContentAlignment textAlign = ContentAlignment.TopLeft;
-        RightToLeft rightToLeft = RightToLeft.No;
-
-        ButtonBaseAdapter.LayoutOptions layoutOptions = ButtonFlatAdapter.PaintFlatLayout(
-            up: true,
-            check: true,
-            borderSize: 5,
-            clientRectangle,
-            padding,
-            isDefault: false,
-            font,
-            text,
-            enabled,
-            textAlign,
-            rightToLeft);
-
-        layoutOptions.BorderSize.Should().Be(6);
-    }
-
-    [Fact]
-    public void PaintFlatLayout_SetsPaddingSize_Correctly()
-    {
-        Rectangle clientRectangle = new(0, 0, 50, 20);
-        Padding padding = new(1, 2, 3, 4);
-        using Font font = new("Segoe UI", 9);
-        string text = "PaddingTest";
+        string text = "CombinedTest";
         bool enabled = true;
         ContentAlignment textAlign = ContentAlignment.TopLeft;
         RightToLeft rightToLeft = RightToLeft.No;
@@ -222,6 +195,12 @@ public class ButtonFlatAdapterTests : IDisposable
 
         layoutOptionsTrue.PaddingSize.Should().Be(1);
         layoutOptionsFalse.PaddingSize.Should().Be(2);
+
+        layoutOptionsTrue.FocusOddEvenFixup.Should().BeFalse();
+        layoutOptionsFalse.FocusOddEvenFixup.Should().BeFalse();
+
+        layoutOptionsTrue.BorderSize.Should().Be(3);
+        layoutOptionsFalse.BorderSize.Should().Be(2);
     }
 
     [Theory]
@@ -250,32 +229,5 @@ public class ButtonFlatAdapterTests : IDisposable
             rightToLeft);
 
         layoutOptions.TextOffset.Should().Be(!up);
-    }
-
-    [Fact]
-    public void PaintFlatLayout_SetsFocusOddEvenFixup_False()
-    {
-        Rectangle clientRectangle = new(0, 0, 50, 20);
-        Padding padding = new(1, 2, 3, 4);
-        using Font font = new("Segoe UI", 9);
-        string text = "FocusTest";
-        bool enabled = true;
-        ContentAlignment textAlign = ContentAlignment.TopLeft;
-        RightToLeft rightToLeft = RightToLeft.No;
-
-        ButtonBaseAdapter.LayoutOptions layoutOptions = ButtonFlatAdapter.PaintFlatLayout(
-            up: true,
-            check: false,
-            borderSize: 2,
-            clientRectangle,
-            padding,
-            isDefault: false,
-            font,
-            text,
-            enabled,
-            textAlign,
-            rightToLeft);
-
-        layoutOptions.FocusOddEvenFixup.Should().BeFalse();
     }
 }
