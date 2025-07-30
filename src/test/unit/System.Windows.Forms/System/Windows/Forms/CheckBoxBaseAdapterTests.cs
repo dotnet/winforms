@@ -107,18 +107,6 @@ public class CheckBoxBaseAdapterTests
         return (adapter, checkBox);
     }
 
-    private class TestDeviceContext : IDeviceContext
-    {
-        public bool Disposed { get; private set; }
-        public void Dispose()
-        {
-            Disposed = true;
-        }
-
-        public IntPtr GetHdc() => IntPtr.Zero;
-        public void ReleaseHdc() { }
-    }
-
     [WinFormsTheory]
     [InlineData(CheckState.Unchecked, false)]
     [InlineData(CheckState.Checked, false)]
@@ -149,10 +137,10 @@ public class CheckBoxBaseAdapterTests
     [InlineData(false, CheckState.Unchecked, true, 1)]
     [InlineData(true, CheckState.Indeterminate, true, 2)]
     public void DrawCheckBackground_CoversAllBranches(
-    bool controlEnabled,
-    CheckState checkState,
-    bool disabledColors,
-    int expectedBranch)
+        bool controlEnabled,
+        CheckState checkState,
+        bool disabledColors,
+        int expectedBranch)
     {
         Rectangle bounds = new(1, 2, 3, 4);
         using Bitmap bitmap = new(10, 10);
@@ -178,9 +166,9 @@ public class CheckBoxBaseAdapterTests
     [InlineData(CheckState.Indeterminate, false, true)]
     [InlineData(CheckState.Unchecked, true, false)]
     public void DrawCheckOnly_Protected_DoesNotThrow(
-    CheckState checkState,
-    bool enabled,
-    bool isChecked)
+        CheckState checkState,
+        bool enabled,
+        bool isChecked)
     {
         (TestCheckBoxBaseAdapter adapter, TestCheckBox checkBox) = CreateAdapter(checkState);
         checkBox.Enabled = enabled;
@@ -272,9 +260,9 @@ public class CheckBoxBaseAdapterTests
     [InlineData(null, false, 2, 2, 10, 10)]
     [InlineData("", false, 2, 2, 10, 10)]
     public void AdjustFocusRectangle_SetsFocusAsExpected(
-    string? text,
-    bool autoSize,
-    int checkX, int checkY, int checkW, int checkH)
+        string? text,
+        bool autoSize,
+        int checkX, int checkY, int checkW, int checkH)
     {
         (TestCheckBoxBaseAdapter adapter, TestCheckBox checkBox) = CreateAdapter(CheckState.Unchecked);
         checkBox.Text = text;
