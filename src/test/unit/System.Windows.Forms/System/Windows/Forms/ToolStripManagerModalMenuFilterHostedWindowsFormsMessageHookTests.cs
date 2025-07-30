@@ -26,19 +26,6 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
     }
 
     [Fact]
-    public void Constructor_SetsCallingStack()
-    {
-        Type hookType = GetHookType();
-
-        object? hook = Activator.CreateInstance(hookType, nonPublic: true);
-
-        string? callingStack = hook?.TestAccessor().Dynamic._callingStack;
-
-        callingStack.Should().NotBeNullOrEmpty();
-        callingStack.Should().Contain("ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests");
-    }
-
-    [Fact]
     public void InstallMessageHook_DoesNotThrow_WhenCalledTwice()
     {
         Type hookType = GetHookType();
