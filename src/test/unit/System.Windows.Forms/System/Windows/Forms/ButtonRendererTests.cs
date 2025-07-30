@@ -217,10 +217,10 @@ public class ButtonRendererTests
     [InlineData(PushButtonState.Default, null, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter, true)]
     [InlineData(PushButtonState.Default, "Button", TextFormatFlags.SingleLine, false)]
     public void DrawButton_TextFontFlagsImageImageBoundsFocused_DoesNotThrow(
-    PushButtonState state,
-    string? buttonText,
-    TextFormatFlags flags,
-    bool focused)
+        PushButtonState state,
+        string? buttonText,
+        TextFormatFlags flags,
+        bool focused)
     {
         using Bitmap bitmap = new(160, 70);
         using Graphics graphics = Graphics.FromImage(bitmap);
@@ -256,10 +256,10 @@ public class ButtonRendererTests
     [InlineData(PushButtonState.Default, null, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter, true)]
     [InlineData(PushButtonState.Default, "Button", TextFormatFlags.SingleLine, false)]
     public void DrawButton_IDeviceContext_TextFontFlagsImageImageBoundsFocused_DoesNotThrow(
-    PushButtonState state,
-    string? buttonText,
-    TextFormatFlags flags,
-    bool focused)
+        PushButtonState state,
+        string? buttonText,
+        TextFormatFlags flags,
+        bool focused)
     {
         using Bitmap bitmap = new(180, 80);
         using Graphics graphics = Graphics.FromImage(bitmap);
