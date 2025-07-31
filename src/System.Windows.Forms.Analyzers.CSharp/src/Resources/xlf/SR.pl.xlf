@@ -82,21 +82,6 @@
         <target state="translated">Typ "IDataObject" nie implementuje interfejsu "ITypedDataObject"</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFO2001AnalyzerDescription">
-        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
-        <target state="translated">Unikaj przekazywania `Func&lt;T&gt;` do `InvokeAsync`, gdzie `T` jest `Task` lub `ValueTask`, chyba że twoim zamiarem jest, aby delegat został po prostu uruchomiony jako nienadzorowane zadanie. Zamiast tego należy użyć `Func&lt;CancellationToken, ValueTask&gt;` lub `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, aby delegat przekazany do `InvokeAsync` mógł być oczekiwany, umożliwiając prawidłową obsługę wyjątków.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerMessageFormat">
-        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
-        <target state="translated">Zadanie jest przekazywane do `InvokeAsync` bez tokenu anulowania</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WFO2001AnalyzerTitle">
-        <source>Task is being passed to `InvokeAsync` without a cancellation token</source>
-        <target state="translated">Zadanie jest przekazywane do `InvokeAsync` bez tokenu anulowania</target>
-        <note />
-      </trans-unit>
     </body>
   </file>
 </xliff>
