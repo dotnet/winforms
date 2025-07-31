@@ -6,8 +6,25 @@ using System.Windows.Forms.ButtonInternal;
 
 namespace System.Windows.Forms.Tests;
 
-public class CheckBoxFlatAdapterTests
+public class CheckBoxFlatAdapterTests : IDisposable
 {
+    private TestCheckBox? _checkBox;
+
+    private (TestCheckBoxFlatAdapter, TestCheckBox) CreateAdapter(Appearance appearance, bool enabled)
+    {
+        _checkBox = new TestCheckBox
+        {
+            Appearance = appearance,
+            Enabled = enabled
+        };
+
+        TestCheckBoxFlatAdapter checkBoxFlatAdapter = new(_checkBox);
+
+        return (checkBoxFlatAdapter, _checkBox);
+    }
+
+    public void Dispose() => _checkBox?.Dispose();
+
     private class TestCheckBox : CheckBox
     {
         public new bool Enabled
@@ -38,19 +55,6 @@ public class CheckBoxFlatAdapterTests
         public bool PaintFlatWorkerCalled { get; private set; }
 
         protected void PaintFlatWorker() => PaintFlatWorkerCalled = true;
-    }
-
-    private static (TestCheckBoxFlatAdapter, TestCheckBox) CreateAdapter(Appearance appearance, bool enabled)
-    {
-        TestCheckBox checkBox = new()
-        {
-            Appearance = appearance,
-            Enabled = enabled
-        };
-
-        TestCheckBoxFlatAdapter checkBoxFlatAdapter = new(checkBox);
-
-        return (checkBoxFlatAdapter, checkBox);
     }
 
     [WinFormsTheory]
