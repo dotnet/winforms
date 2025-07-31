@@ -6,8 +6,24 @@ using System.Windows.Forms.ButtonInternal;
 
 namespace System.Windows.Forms.Tests;
 
-public class CheckBoxBaseAdapterTests
+public class CheckBoxBaseAdapterTests : IDisposable
 {
+    private TestCheckBox? _checkBox;
+
+    private (TestCheckBoxBaseAdapter, TestCheckBox) CreateAdapter(CheckState checkState)
+    {
+        _checkBox = new TestCheckBox
+        {
+            CheckState = checkState
+        };
+
+        TestCheckBoxBaseAdapter adapter = new(_checkBox);
+
+        return (adapter, _checkBox);
+    }
+
+    public void Dispose() => _checkBox?.Dispose();
+
     private class TestCheckBox : CheckBox
     {
         public new bool Enabled
@@ -35,6 +51,7 @@ public class CheckBoxBaseAdapterTests
             Color checkBorder,
             ColorData colors)
             => DrawCheckFlat(e, layout, checkColor, checkBackground, checkBorder, colors);
+
         protected override LayoutOptions Layout(PaintEventArgs e)
             => new LayoutOptions();
 
@@ -93,18 +110,6 @@ public class CheckBoxBaseAdapterTests
         };
 
         return colorData;
-    }
-
-    private static (TestCheckBoxBaseAdapter, TestCheckBox) CreateAdapter(CheckState checkState)
-    {
-        TestCheckBox checkBox = new()
-        {
-            CheckState = checkState
-        };
-
-        TestCheckBoxBaseAdapter adapter = new(checkBox);
-
-        return (adapter, checkBox);
     }
 
     [WinFormsTheory]
