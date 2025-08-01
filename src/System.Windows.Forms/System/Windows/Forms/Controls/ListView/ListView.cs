@@ -3093,11 +3093,8 @@ public partial class ListView : Control
                 Items.Clear();
             }
 
-            if (_odCacheFontHandleWrapper is not null)
-            {
-                _odCacheFontHandleWrapper.Dispose();
-                _odCacheFontHandleWrapper = null;
-            }
+            _odCacheFontHandleWrapper?.Dispose();
+            _odCacheFontHandleWrapper = null;
 
             if (!string.IsNullOrEmpty(_backgroundImageFileName) || _bkImgFileNames is not null)
             {
@@ -6482,11 +6479,8 @@ public partial class ListView : Control
                 {
                     Debug.Assert(_labelEdit is null,
                         "A new label editing shouldn't start before the previous one ended");
-                    if (_labelEdit is not null)
-                    {
-                        _labelEdit.ReleaseHandle();
-                        _labelEdit = null;
-                    }
+                    _labelEdit?.ReleaseHandle();
+                    _labelEdit = null;
 
                     bool cancelEdit;
                     if (_blockLabelEdit)

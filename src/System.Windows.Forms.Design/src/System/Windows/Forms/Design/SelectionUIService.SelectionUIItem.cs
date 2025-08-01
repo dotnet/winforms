@@ -102,11 +102,8 @@ internal sealed partial class SelectionUIService
                 if (value != _selectionStyle)
                 {
                     _selectionStyle = value;
-                    if (_region is not null)
-                    {
-                        _region.Dispose();
-                        _region = null;
-                    }
+                    _region?.Dispose();
+                    _region = null;
                 }
             }
         }
@@ -358,11 +355,8 @@ internal sealed partial class SelectionUIService
 
         public void Dispose()
         {
-            if (_region is not null)
-            {
-                _region.Dispose();
-                _region = null;
-            }
+            _region?.Dispose();
+            _region = null;
         }
 
         /// <summary>
@@ -521,11 +515,8 @@ internal sealed partial class SelectionUIService
 
                     _outerRect = rcOuterNew;
                     Invalidate();
-                    if (_region is not null)
-                    {
-                        _region.Dispose();
-                        _region = null;
-                    }
+                    _region?.Dispose();
+                    _region = null;
 
                     sizeChanged = true;
                 }

@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.ComponentModel.Design.Serialization;
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.Design;

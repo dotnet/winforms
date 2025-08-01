@@ -549,11 +549,8 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         }
         catch (Exception ex)
         {
-            if (newItemTransaction is not null)
-            {
-                newItemTransaction.Cancel();
-                newItemTransaction = null;
-            }
+            newItemTransaction?.Cancel();
+            newItemTransaction = null;
 
             if (ex.IsCriticalException())
             {

@@ -193,19 +193,13 @@ internal class ToolStripContainerActionList : DesignerActionList
         }
         catch
         {
-            if (changeParent is not null)
-            {
-                changeParent.Cancel();
-                changeParent = null;
-            }
+            changeParent?.Cancel();
+            changeParent = null;
         }
         finally
         {
-            if (changeParent is not null)
-            {
-                changeParent.Commit();
-                changeParent = null;
-            }
+            changeParent?.Commit();
+            changeParent = null;
 
             // Set the Selection on the new Parent, so that the selection is restored to the new item
             ISelectionService? selectionService = _serviceProvider?.GetService<ISelectionService>();

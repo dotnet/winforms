@@ -89,11 +89,8 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
     {
         if (pActiveObject is null)
         {
-            if (_controlInEditMode is not null)
-            {
-                _controlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
-                _controlInEditMode = null;
-            }
+            _controlInEditMode?.SetEditMode(WebBrowserHelper.AXEditMode.None);
+            _controlInEditMode = null;
 
             return HRESULT.S_OK;
         }
