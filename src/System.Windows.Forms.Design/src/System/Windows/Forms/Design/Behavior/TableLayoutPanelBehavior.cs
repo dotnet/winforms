@@ -3,8 +3,8 @@
 
 #nullable disable
 
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior;

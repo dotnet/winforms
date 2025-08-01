@@ -223,11 +223,8 @@ internal sealed class SelectionManager : IDisposable
             BodyGlyphAdorner = null!;
         }
 
-        if (_designerActionUI is not null)
-        {
-            _designerActionUI.Dispose();
-            _designerActionUI = null;
-        }
+        _designerActionUI?.Dispose();
+        _designerActionUI = null;
     }
 
     /// <summary>

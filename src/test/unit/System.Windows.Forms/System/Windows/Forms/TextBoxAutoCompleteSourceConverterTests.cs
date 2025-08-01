@@ -3,8 +3,8 @@
 
 #nullable disable
 
-using Moq;
 using System.ComponentModel;
+using Moq;
 using static System.ComponentModel.TypeConverter;
 
 namespace System.Windows.Forms.Tests;

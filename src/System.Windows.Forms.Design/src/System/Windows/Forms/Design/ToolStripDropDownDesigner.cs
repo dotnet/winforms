@@ -241,11 +241,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             }
 
             DisposeMenu();
-            if (_designMenu is not null)
-            {
-                _designMenu.Dispose();
-                _designMenu = null;
-            }
+            _designMenu?.Dispose();
+            _designMenu = null;
 
             if (_dummyToolStripGlyph is not null)
             {
@@ -276,11 +273,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
 
             if (_menuItem is not null)
             {
-                if (_nestedContainer is not null)
-                {
-                    _nestedContainer.Dispose();
-                    _nestedContainer = null;
-                }
+                _nestedContainer?.Dispose();
+                _nestedContainer = null;
 
                 _menuItem.Dispose();
                 _menuItem = null;

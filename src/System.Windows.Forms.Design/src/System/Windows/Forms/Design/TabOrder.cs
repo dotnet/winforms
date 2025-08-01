@@ -141,11 +141,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     {
         if (disposing)
         {
-            if (_region is not null)
-            {
-                _region.Dispose();
-                _region = null;
-            }
+            _region?.Dispose();
+            _region = null;
 
             if (_host is not null)
             {
@@ -473,11 +470,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         _tabComplete?.Clear();
         _tabNext?.Clear();
 
-        if (_region is not null)
-        {
-            _region.Dispose();
-            _region = null;
-        }
+        _region?.Dispose();
+        _region = null;
 
         Invalidate();
     }
@@ -490,11 +484,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     {
         _tabControls = null;
         _tabGlyphs = null;
-        if (_region is not null)
-        {
-            _region.Dispose();
-            _region = null;
-        }
+        _region?.Dispose();
+        _region = null;
 
         Invalidate();
     }
@@ -752,11 +743,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         {
             if (_ctlHover is not null)
             {
-                if (_region is not null)
-                {
-                    _region.Dispose();
-                    _region = null;
-                }
+                _region?.Dispose();
+                _region = null;
 
                 Rectangle rc = GetConvertedBounds(_ctlHover);
                 rc.Inflate(_selSize, _selSize);

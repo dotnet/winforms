@@ -545,17 +545,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     // and then any changes that happen due to the layout would be in a separate UndoUnit.
                     // We want the D&D to be undoable in one step.
                     CleanupDrag(false);
-                    if (transSource is not null)
-                    {
-                        transSource.Commit();
-                        transSource = null;
-                    }
+                    transSource?.Commit();
+                    transSource = null;
 
-                    if (transTarget is not null)
-                    {
-                        transTarget.Commit();
-                        transTarget = null;
-                    }
+                    transTarget?.Commit();
+                    transTarget = null;
                 }
 
                 finally
@@ -1157,35 +1151,23 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong. We need to sync these.
                 _behaviorServiceSource?.SyncSelection();
 
-                if (_dragImageRegion is not null)
-                {
-                    _dragImageRegion.Dispose();
-                    _dragImageRegion = null;
-                }
+                _dragImageRegion?.Dispose();
+                _dragImageRegion = null;
 
-                if (_dragImage is not null)
-                {
-                    _dragImage.Dispose();
-                    _dragImage = null;
-                }
+                _dragImage?.Dispose();
+                _dragImage = null;
 
                 if (_dragComponents is not null)
                 {
                     for (int i = 0; i < _dragComponents.Length; i++)
                     {
-                        if (_dragComponents[i].dragImage is not null)
-                        {
-                            _dragComponents[i].dragImage.Dispose();
-                            _dragComponents[i].dragImage = null;
-                        }
+                        _dragComponents[i].dragImage?.Dispose();
+                        _dragComponents[i].dragImage = null;
                     }
                 }
 
-                if (_graphicsTarget is not null)
-                {
-                    _graphicsTarget.Dispose();
-                    _graphicsTarget = null;
-                }
+                _graphicsTarget?.Dispose();
+                _graphicsTarget = null;
 
                 _cleanedUpDrag = true;
             }

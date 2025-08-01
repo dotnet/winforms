@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
-using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32;
 

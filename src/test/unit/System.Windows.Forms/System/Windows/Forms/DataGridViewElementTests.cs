@@ -4,8 +4,8 @@
 #nullable disable
 
 using System.ComponentModel;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 
 namespace System.Windows.Forms.Tests;
 

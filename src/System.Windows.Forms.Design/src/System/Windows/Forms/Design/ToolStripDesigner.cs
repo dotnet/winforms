@@ -502,11 +502,8 @@ internal class ToolStripDesigner : ControlDesigner
         }
         catch (Exception e)
         {
-            if (NewItemTransaction is not null)
-            {
-                NewItemTransaction.Cancel();
-                NewItemTransaction = null;
-            }
+            NewItemTransaction?.Cancel();
+            NewItemTransaction = null;
 
             // Throw the exception unless it's a canceled checkout
             if ((!(e is CheckoutException checkoutException)) || (!checkoutException.Equals(CheckoutException.Canceled)))
@@ -646,17 +643,11 @@ internal class ToolStripDesigner : ControlDesigner
         {
             // ResumeLayout on ToolStrip.
             ToolStrip.ResumeLayout();
-            if (_pendingTransaction is not null)
-            {
-                _pendingTransaction.Cancel();
-                _pendingTransaction = null;
-            }
+            _pendingTransaction?.Cancel();
+            _pendingTransaction = null;
 
-            if (outerTransaction is not null)
-            {
-                outerTransaction.Cancel();
-                outerTransaction = null;
-            }
+            outerTransaction?.Cancel();
+            outerTransaction = null;
 
             if (exception is CheckoutException checkoutEx && checkoutEx != CheckoutException.Canceled)
             {
@@ -1024,11 +1015,8 @@ internal class ToolStripDesigner : ControlDesigner
             }
             finally
             {
-                if (_pendingTransaction is not null)
-                {
-                    _pendingTransaction.Commit();
-                    _pendingTransaction = null;
-                }
+                _pendingTransaction?.Commit();
+                _pendingTransaction = null;
             }
 
             // select the next item or the ToolStrip itself.
@@ -1100,11 +1088,8 @@ internal class ToolStripDesigner : ControlDesigner
             }
             catch
             {
-                if (_pendingTransaction is not null)
-                {
-                    _pendingTransaction.Cancel();
-                    _pendingTransaction = null;
-                }
+                _pendingTransaction?.Cancel();
+                _pendingTransaction = null;
             }
         }
     }
@@ -1165,18 +1150,12 @@ internal class ToolStripDesigner : ControlDesigner
             }
 
             // teardown the add item button.
-            if (_miniToolStrip is not null)
-            {
-                _miniToolStrip.Dispose();
-                _miniToolStrip = null;
-            }
+            _miniToolStrip?.Dispose();
+            _miniToolStrip = null;
 
             // tearDown the EditorNode..
-            if (_editorNode is not null)
-            {
-                _editorNode.Dispose();
-                _editorNode = null;
-            }
+            _editorNode?.Dispose();
+            _editorNode = null;
 
             if (ToolStrip is not null)
             {
@@ -1198,11 +1177,8 @@ internal class ToolStripDesigner : ControlDesigner
             }
 
             // Tear off the ContextMenu.
-            if (_toolStripContextMenu is not null)
-            {
-                _toolStripContextMenu.Dispose();
-                _toolStripContextMenu = null;
-            }
+            _toolStripContextMenu?.Dispose();
+            _toolStripContextMenu = null;
 
             // Always Remove all the glyphs we added
             if (HasComponent)
@@ -1976,11 +1952,8 @@ internal class ToolStripDesigner : ControlDesigner
 
         catch
         {
-            if (changeParent is not null)
-            {
-                changeParent.Cancel();
-                changeParent = null;
-            }
+            changeParent?.Cancel();
+            changeParent = null;
         }
         finally
         {

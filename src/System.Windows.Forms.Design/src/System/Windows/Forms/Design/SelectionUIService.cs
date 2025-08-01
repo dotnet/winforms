@@ -1047,11 +1047,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 _dragHandler = null;
 
                 // Always commit this -- BeginDrag returns false for our drags because it is a complete operation.
-                if (_dragTransaction is not null)
-                {
-                    _dragTransaction.Commit();
-                    _dragTransaction = null;
-                }
+                _dragTransaction?.Commit();
+                _dragTransaction = null;
             }
         }
 
@@ -1149,11 +1146,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             // Reset the selection. This will re-display our selection.
             Visible = _savedVisible;
             ((ISelectionUIService)this).SyncSelection();
-            if (_dragTransaction is not null)
-            {
-                _dragTransaction.Commit();
-                _dragTransaction = null;
-            }
+            _dragTransaction?.Commit();
+            _dragTransaction = null;
 
             // In case this drag was initiated by us, ensure that our mouse state is correct
             EndMouseDrag(MousePosition);

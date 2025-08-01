@@ -45,17 +45,11 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_toolDesigner is not null)
-        {
-            _toolDesigner.Dispose();
-            _toolDesigner = null;
-        }
+        _toolDesigner?.Dispose();
+        _toolDesigner = null;
 
-        if (_toolItemDesigner is not null)
-        {
-            _toolItemDesigner.Dispose();
-            _toolItemDesigner = null;
-        }
+        _toolItemDesigner?.Dispose();
+        _toolItemDesigner = null;
 
         if (_componentChangeService is not null)
         {

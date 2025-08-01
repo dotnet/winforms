@@ -4,9 +4,9 @@
 #nullable disable
 
 using System.Collections;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.ComponentModel.Design.Serialization.Tests;
 

@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -1023,11 +1023,8 @@ public partial class Form : ContainerControl
                 _formState[s_formStateIconSet] = value is null ? 0 : 1;
                 _icon = value;
 
-                if (_smallIcon is not null)
-                {
-                    _smallIcon.Dispose();
-                    _smallIcon = null;
-                }
+                _smallIcon?.Dispose();
+                _smallIcon = null;
 
                 UpdateWindowIcon(true);
             }
@@ -3540,17 +3537,11 @@ public partial class Form : ContainerControl
             Properties.RemoveValue(s_propDefaultButton);
             Properties.RemoveValue(s_propActiveMdiChild);
 
-            if (MdiWindowListStrip is not null)
-            {
-                MdiWindowListStrip.Dispose();
-                MdiWindowListStrip = null;
-            }
+            MdiWindowListStrip?.Dispose();
+            MdiWindowListStrip = null;
 
-            if (MdiControlStrip is not null)
-            {
-                MdiControlStrip.Dispose();
-                MdiControlStrip = null;
-            }
+            MdiControlStrip?.Dispose();
+            MdiControlStrip = null;
 
             if (MainMenuStrip is not null)
             {
@@ -3575,11 +3566,8 @@ public partial class Form : ContainerControl
                 }
             }
 
-            if (_smallIcon is not null)
-            {
-                _smallIcon.Dispose();
-                _smallIcon = null;
-            }
+            _smallIcon?.Dispose();
+            _smallIcon = null;
 
             base.Dispose(disposing);
             _ctlClient = null;
@@ -6975,11 +6963,8 @@ public partial class Form : ContainerControl
         // that point our handle is not actually destroyed so
         // destroying our parent actually causes a recursive
         // WM_DESTROY.
-        if (_ownerWindow is not null)
-        {
-            _ownerWindow.DestroyHandle();
-            _ownerWindow = null;
-        }
+        _ownerWindow?.DestroyHandle();
+        _ownerWindow = null;
 
         if (Modal && _dialogResult == DialogResult.None)
         {

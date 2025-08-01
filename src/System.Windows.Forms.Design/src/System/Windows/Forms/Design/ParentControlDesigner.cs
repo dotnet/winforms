@@ -1796,18 +1796,12 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             _graphics.ResetClip();
         }
 
-        if (_graphics is not null)
-        {
-            _graphics.Dispose();
-            _graphics = null;
-        }
+        _graphics?.Dispose();
+        _graphics = null;
 
         // destroy the snapline engine (if we used it)
-        if (_dragManager is not null)
-        {
-            _dragManager.OnMouseUp();
-            _dragManager = null;
-        }
+        _dragManager?.OnMouseUp();
+        _dragManager = null;
 
         // Get the event handler service and pop our handler.
         IEventHandlerService eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));

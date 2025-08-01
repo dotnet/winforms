@@ -2667,11 +2667,8 @@ public partial class DataGridView
                 Debug.Assert(EditingControl is not null);
 
                 ((IDataGridViewEditingControl)EditingControl).EditingControlDataGridView = this;
-                if (_latestEditingControl is not null)
-                {
-                    _latestEditingControl.Dispose();
-                    _latestEditingControl = null;
-                }
+                _latestEditingControl?.Dispose();
+                _latestEditingControl = null;
             }
 
             Debug.Assert(EditingControl is not null);

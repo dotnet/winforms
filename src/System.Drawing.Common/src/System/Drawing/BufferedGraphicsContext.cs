@@ -466,21 +466,15 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
                 throw new InvalidOperationException(SR.GraphicsBufferCurrentlyBusy);
             }
 
-            if (_compatGraphics is not null)
-            {
-                _compatGraphics.Dispose();
-                _compatGraphics = null;
-            }
+            _compatGraphics?.Dispose();
+            _compatGraphics = null;
         }
 
         DisposeDC();
         DisposeBitmap();
 
-        if (_buffer is not null)
-        {
-            _buffer.Dispose();
-            _buffer = null;
-        }
+        _buffer?.Dispose();
+        _buffer = null;
 
         _bufferSize = Size.Empty;
         _virtualSize = Size.Empty;

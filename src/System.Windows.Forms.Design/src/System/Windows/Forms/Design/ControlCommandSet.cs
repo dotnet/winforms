@@ -3,8 +3,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
@@ -351,11 +351,8 @@ internal class ControlCommandSet : CommandSet
             }
         }
 
-        if (_tabOrder is not null)
-        {
-            _tabOrder.Dispose();
-            _tabOrder = null;
-        }
+        _tabOrder?.Dispose();
+        _tabOrder = null;
 
         _statusCommandUI = null;
         base.Dispose();
@@ -925,11 +922,8 @@ internal class ControlCommandSet : CommandSet
         if (cmd.Checked)
         {
             Debug.Assert(_tabOrder is not null, "Tab order and menu enabling are out of sync");
-            if (_tabOrder is not null)
-            {
-                _tabOrder.Dispose();
-                _tabOrder = null;
-            }
+            _tabOrder?.Dispose();
+            _tabOrder = null;
 
             cmd.Checked = false;
         }

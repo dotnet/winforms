@@ -138,17 +138,11 @@ public partial class ErrorProvider
         /// </summary>
         private void EnsureDestroyed()
         {
-            if (_timer is not null)
-            {
-                _timer.Dispose();
-                _timer = null;
-            }
+            _timer?.Dispose();
+            _timer = null;
 
-            if (_tipWindow is not null)
-            {
-                _tipWindow.DestroyHandle();
-                _tipWindow = null;
-            }
+            _tipWindow?.DestroyHandle();
+            _tipWindow = null;
 
             // Hide the window and invalidate the parent to ensure that we leave no visual artifacts.
             // Given that we have an unusual region window, this is needed.

@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Formats.Nrbf;
 using System.Globalization;
+using System.Private.Windows.Nrbf;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Xml;
 using System.Windows.Forms.Nrbf;
-using System.Private.Windows.Nrbf;
+using System.Xml;
 
 namespace System.Resources;
 

@@ -1384,11 +1384,8 @@ public static unsafe partial class ControlPaint
         {
             if (t_checkImage is null || t_checkImage.Width != rectangle.Width || t_checkImage.Height != rectangle.Height)
             {
-                if (t_checkImage is not null)
-                {
-                    t_checkImage.Dispose();
-                    t_checkImage = null;
-                }
+                t_checkImage?.Dispose();
+                t_checkImage = null;
 
                 // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
                 RECT rcCheck = new(rectangle.Size);
@@ -1543,11 +1540,8 @@ public static unsafe partial class ControlPaint
         if (t_gridBrush is null || s_gridSize.Width != pixelsBetweenDots.Width
             || s_gridSize.Height != pixelsBetweenDots.Height || invert != s_gridInvert)
         {
-            if (t_gridBrush is not null)
-            {
-                t_gridBrush.Dispose();
-                t_gridBrush = null;
-            }
+            t_gridBrush?.Dispose();
+            t_gridBrush = null;
 
             s_gridSize = pixelsBetweenDots;
             int idealSize = 16;
@@ -2143,11 +2137,8 @@ public static unsafe partial class ControlPaint
 
         if (t_frameBrushActive is null || !s_frameColorActive.Equals(brushColor))
         {
-            if (t_frameBrushActive is not null)
-            {
-                t_frameBrushActive.Dispose();
-                t_frameBrushActive = null;
-            }
+            t_frameBrushActive?.Dispose();
+            t_frameBrushActive = null;
 
             s_frameColorActive = brushColor;
 
@@ -2273,11 +2264,8 @@ public static unsafe partial class ControlPaint
 
         if (t_frameBrushSelected is null || !s_frameColorSelected.Equals(brushColor))
         {
-            if (t_frameBrushSelected is not null)
-            {
-                t_frameBrushSelected.Dispose();
-                t_frameBrushSelected = null;
-            }
+            t_frameBrushSelected?.Dispose();
+            t_frameBrushSelected = null;
 
             s_frameColorSelected = brushColor;
 

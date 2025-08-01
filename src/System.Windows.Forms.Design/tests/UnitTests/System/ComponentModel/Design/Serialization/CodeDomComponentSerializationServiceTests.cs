@@ -11,8 +11,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.Design;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using CodeDomComponentSerializationState = System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationState;
 
 namespace System.ComponentModel.Design.Serialization.Tests;

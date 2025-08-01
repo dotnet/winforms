@@ -2,5 +2,5 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 global using System.Private.Windows;
-global using Xunit;
 global using FluentAssertions;
+global using Xunit;

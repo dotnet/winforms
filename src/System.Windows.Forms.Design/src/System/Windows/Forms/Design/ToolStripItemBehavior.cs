@@ -808,11 +808,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 }
                 catch (Exception ex)
                 {
-                    if (designerTransaction is not null)
-                    {
-                        designerTransaction.Cancel();
-                        designerTransaction = null;
-                    }
+                    designerTransaction?.Cancel();
+                    designerTransaction = null;
 
                     if (ex.IsCriticalException())
                     {

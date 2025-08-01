@@ -1010,11 +1010,8 @@ public partial class PictureBox : Control, ISupportInitialize
 
     private void DisposeImageStream()
     {
-        if (_localImageStreamReader is not null)
-        {
-            _localImageStreamReader.Dispose();
-            _localImageStreamReader = null;
-        }
+        _localImageStreamReader?.Dispose();
+        _localImageStreamReader = null;
 
         if (_uriImageStream is not null)
         {

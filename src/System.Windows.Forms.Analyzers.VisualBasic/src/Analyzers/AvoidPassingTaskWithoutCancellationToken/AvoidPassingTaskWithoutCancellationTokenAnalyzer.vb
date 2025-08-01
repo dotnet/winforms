@@ -3,9 +3,9 @@
 
 Imports System.Collections.Immutable
 Imports Microsoft.CodeAnalysis
+Imports Microsoft.CodeAnalysis.Diagnostics
 Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Microsoft.CodeAnalysis.Diagnostics
 
 Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 

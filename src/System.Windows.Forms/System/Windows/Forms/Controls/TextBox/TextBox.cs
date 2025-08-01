@@ -517,11 +517,8 @@ public partial class TextBox : TextBoxBase
                 _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
-            if (_stringSource is not null)
-            {
-                _stringSource.ReleaseAutoComplete();
-                _stringSource = null;
-            }
+            _stringSource?.ReleaseAutoComplete();
+            _stringSource = null;
         }
 
         base.Dispose(disposing);
@@ -638,11 +635,8 @@ public partial class TextBox : TextBoxBase
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        if (_stringSource is not null)
-        {
-            _stringSource.ReleaseAutoComplete();
-            _stringSource = null;
-        }
+        _stringSource?.ReleaseAutoComplete();
+        _stringSource = null;
 
         base.OnHandleDestroyed(e);
     }

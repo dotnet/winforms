@@ -1,10 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
-using Moq;
-using System.Windows.Forms.Design.Behavior;
 using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms.Design.Behavior;
+using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 

@@ -7,8 +7,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Automation;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;

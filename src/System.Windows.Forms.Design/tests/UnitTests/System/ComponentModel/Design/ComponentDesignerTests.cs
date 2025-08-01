@@ -5,10 +5,10 @@
 
 using System.Collections;
 using System.Configuration;
+using System.Windows.Forms.Design.Tests.Mocks;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.TestUtilities;
-using System.Windows.Forms.Design.Tests.Mocks;
 
 namespace System.ComponentModel.Design.Tests;
 

@@ -5,8 +5,8 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using Windows.Win32.UI.Shell;
 using Windows.Win32.System.Memory;
+using Windows.Win32.UI.Shell;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;

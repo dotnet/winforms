@@ -2,13 +2,13 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Collections.Immutable
+Imports System.IO
 Imports System.Windows.Forms.Analyzers.Diagnostics
 Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
-Imports System.IO
 
 Public Class AvoidPassingTaskWithoutCancellationTokenTests
 

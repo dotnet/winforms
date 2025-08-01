@@ -1,9 +1,9 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports Microsoft.CodeAnalysis
 Imports System.Windows.Forms.Analyzers.Diagnostics
 Imports System.Windows.Forms.Analyzers.VisualBasic.Resources
+Imports Microsoft.CodeAnalysis
 
 Friend Module VisualBasicDiagnosticDescriptors
 

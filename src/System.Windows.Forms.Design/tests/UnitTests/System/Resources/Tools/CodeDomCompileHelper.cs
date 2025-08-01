@@ -3,14 +3,14 @@
 
 #nullable disable
 
+using System.CodeDom;
 using System.CodeDom.Compiler;
+using System.Drawing;
+using System.Reflection;
+using System.Runtime.Loader;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CSharp;
-using System.CodeDom;
-using System.Runtime.Loader;
-using System.Reflection;
-using System.Drawing;
 
 namespace System.Resources.Tools.Tests;
 

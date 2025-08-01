@@ -84,11 +84,8 @@ public sealed partial class HtmlWindow
 
         public override void DisconnectFromEvents()
         {
-            if (_cookie is not null)
-            {
-                _cookie.Disconnect();
-                _cookie = null;
-            }
+            _cookie?.Disconnect();
+            _cookie = null;
         }
 
         public void OnWindowUnload() => _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);

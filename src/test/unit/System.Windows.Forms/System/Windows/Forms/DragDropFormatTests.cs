@@ -1,16 +1,16 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Private.Windows.Ole;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
 using DVASPECT = System.Runtime.InteropServices.ComTypes.DVASPECT;
 using FORMATETC = System.Runtime.InteropServices.ComTypes.FORMATETC;
 using IStream = Windows.Win32.System.Com.IStream;
 using STGMEDIUM = System.Runtime.InteropServices.ComTypes.STGMEDIUM;
 using TYMED = System.Runtime.InteropServices.ComTypes.TYMED;
-using Com = Windows.Win32.System.Com;
-using System.Private.Windows.Ole;
 
 namespace System.Windows.Forms.Tests;
 

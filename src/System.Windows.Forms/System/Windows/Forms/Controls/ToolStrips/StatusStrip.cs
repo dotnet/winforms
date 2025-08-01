@@ -251,11 +251,8 @@ public partial class StatusStrip : ToolStrip
     {
         if (disposing)
         {
-            if (_rtlLayoutGrip is not null)
-            {
-                _rtlLayoutGrip.Dispose();
-                _rtlLayoutGrip = null;
-            }
+            _rtlLayoutGrip?.Dispose();
+            _rtlLayoutGrip = null;
         }
 
         base.Dispose(disposing);

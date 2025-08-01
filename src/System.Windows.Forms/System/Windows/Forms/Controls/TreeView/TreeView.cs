@@ -2031,11 +2031,8 @@ public partial class TreeView : Control
 
         // for the case when we are NOT being disposed, we'll be recreating the internal state imageList
         // in OnHandleCreate, so it is ok to completely Dispose here
-        if (_internalStateImageList is not null)
-        {
-            _internalStateImageList.Dispose();
-            _internalStateImageList = null;
-        }
+        _internalStateImageList?.Dispose();
+        _internalStateImageList = null;
 
         base.OnHandleDestroyed(e);
     }
@@ -2563,11 +2560,8 @@ public partial class TreeView : Control
         Debug.Assert(_labelEdit is null,
             "A new label editing shouldn't start before the previous one ended");
 
-        if (_labelEdit is not null)
-        {
-            _labelEdit.ReleaseHandle();
-            _labelEdit = null;
-        }
+        _labelEdit?.ReleaseHandle();
+        _labelEdit = null;
 
         TreeNode? editingNode = NodeFromHandle(nmtvdi.item.hItem);
         NodeLabelEditEventArgs e = new(editingNode);
@@ -2592,11 +2586,8 @@ public partial class TreeView : Control
             return (LRESULT)1;
         }
 
-        if (_labelEdit is not null)
-        {
-            _labelEdit.ReleaseHandle();
-            _labelEdit = null;
-        }
+        _labelEdit?.ReleaseHandle();
+        _labelEdit = null;
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();

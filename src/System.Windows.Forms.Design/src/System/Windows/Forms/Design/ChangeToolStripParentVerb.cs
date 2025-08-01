@@ -103,11 +103,8 @@ internal class ChangeToolStripParentVerb
                 uiService.ShowError(e.Message);
             }
 
-            if (changeParent is not null)
-            {
-                changeParent.Cancel();
-                changeParent = null;
-            }
+            changeParent?.Cancel();
+            changeParent = null;
         }
         finally
         {

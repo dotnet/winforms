@@ -196,11 +196,8 @@ public partial class ResXResourceReader : IResourceReader
                 _stream = null;
             }
 
-            if (_reader is not null)
-            {
-                _reader.Close();
-                _reader = null;
-            }
+            _reader?.Close();
+            _reader = null;
         }
     }
 
