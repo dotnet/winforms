@@ -10,13 +10,27 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.Tests;
 
-public class PropertyTabCollectionTests
+public class PropertyTabCollectionTests : IDisposable
 {
+    private readonly PropertyGrid _propertyGrid;
+    private readonly PropertyGrid.PropertyTabCollection _propertyTabCollection;
+
+    public PropertyTabCollectionTests()
+    {
+        _propertyGrid = new PropertyGrid();
+        _propertyTabCollection = new PropertyGrid.PropertyTabCollection(_propertyGrid);
+    }
+
+    public void Dispose()
+    {
+        _propertyGrid.Dispose();
+    }
+
     [WinFormsTheory]
     [InlineData(typeof(PropertyGrid))]
     public void Count_ReturnsCorrectCount(Type ownerType)
     {
-        var owner = Activator.CreateInstance(ownerType) as PropertyGrid;
+        PropertyGrid owner = Activator.CreateInstance(ownerType) as PropertyGrid;
         TestPropertyTabCollection propertyTabCollection = new(owner);
         propertyTabCollection.Count.Should().Be(1); // PropertyGrid initially contains one PropertiesTab
     }
@@ -26,11 +40,11 @@ public class PropertyTabCollectionTests
     [InlineData(typeof(PropertyGrid), 1, typeof(TestPropertyTab))]
     public void Indexer_ReturnsCorrectTab(Type ownerType, int index, Type expectedTabType)
     {
-        var owner = Activator.CreateInstance(ownerType) as PropertyGrid;
+        PropertyGrid owner = Activator.CreateInstance(ownerType) as PropertyGrid;
         TestPropertyTabCollection propertyTabCollection = new(owner);
         propertyTabCollection.AddTabType(typeof(TestPropertyTab));
 
-        var tab = propertyTabCollection[index];
+        PropertyTab tab = propertyTabCollection[index];
         tab.Should().BeOfType(expectedTabType);
     }
 
@@ -39,7 +53,7 @@ public class PropertyTabCollectionTests
     [InlineData(typeof(PropertyGrid), typeof(TestPropertyTab), 2, true)]
     public void AddTabType_WithDifferentInputs(Type ownerType, Type tabType, int expectedCount, bool addTwice)
     {
-        var owner = Activator.CreateInstance(ownerType) as PropertyGrid;
+        PropertyGrid owner = Activator.CreateInstance(ownerType) as PropertyGrid;
         TestPropertyTabCollection propertyTabCollection = new(owner);
         int initialCount = propertyTabCollection.Count;
 
@@ -59,65 +73,53 @@ public class PropertyTabCollectionTests
     [WinFormsFact]
     public void AddTabType_AddsTab()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
+        int initialCount = _propertyTabCollection.Count;
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab));
 
-        int initialCount = collection.Count;
-        collection.AddTabType(typeof(TestPropertyTab));
-
-        collection.Count.Should().Be(initialCount + 1);
-        collection[initialCount].Should().BeOfType<TestPropertyTab>();
+        _propertyTabCollection.Count.Should().Be(initialCount + 1);
+        _propertyTabCollection[initialCount].Should().BeOfType<TestPropertyTab>();
     }
 
     [WinFormsFact]
     public void AddTabType_WithScope_AddsTab()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
+        int initialCount = _propertyTabCollection.Count;
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
 
-        int initialCount = collection.Count;
-        collection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
-
-        collection.Count.Should().Be(initialCount + 1);
-        collection[initialCount].Should().BeOfType<TestPropertyTab>();
+        _propertyTabCollection.Count.Should().Be(initialCount + 1);
+        _propertyTabCollection[initialCount].Should().BeOfType<TestPropertyTab>();
     }
 
     [WinFormsFact]
     public void RemoveTabType_RemovesTab()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
-        collection.AddTabType(typeof(TestPropertyTab));
-        int countAfterAdd = collection.Count;
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab));
+        int countAfterAdd = _propertyTabCollection.Count;
 
-        collection.RemoveTabType(typeof(TestPropertyTab));
+        _propertyTabCollection.RemoveTabType(typeof(TestPropertyTab));
 
-        collection.Count.Should().Be(countAfterAdd - 1);
-        collection.Cast<PropertyTab>().Should().NotContain(tab => tab is TestPropertyTab);
+        _propertyTabCollection.Count.Should().Be(countAfterAdd - 1);
+        _propertyTabCollection.Cast<PropertyTab>().Should().NotContain(tab => tab is TestPropertyTab);
     }
 
     [WinFormsFact]
     public void Clear_RemovesTabsOfGivenScope()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
-        collection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
-        int countAfterAdd = collection.Count;
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Component);
+        int countAfterAdd = _propertyTabCollection.Count;
 
-        collection.Clear(PropertyTabScope.Component);
+        _propertyTabCollection.Clear(PropertyTabScope.Component);
 
-        collection.Count.Should().BeLessThan(countAfterAdd);
+        _propertyTabCollection.Count.Should().BeLessThan(countAfterAdd);
     }
 
     [WinFormsFact]
     public void CopyTo_CopiesTabsToArray()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
-        collection.AddTabType(typeof(TestPropertyTab));
-        PropertyTab[] array = new PropertyTab[collection.Count];
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab));
+        PropertyTab[] array = new PropertyTab[_propertyTabCollection.Count];
 
-        ((ICollection)collection).CopyTo(array, 0);
+        ((ICollection)_propertyTabCollection).CopyTo(array, 0);
 
         array.Should().ContainItemsAssignableTo<PropertyTab>();
         array.Should().Contain(tab => tab is TestPropertyTab);
@@ -126,38 +128,30 @@ public class PropertyTabCollectionTests
     [WinFormsFact]
     public void GetEnumerator_EnumeratesTabs()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
-        collection.AddTabType(typeof(TestPropertyTab));
+        _propertyTabCollection.AddTabType(typeof(TestPropertyTab));
 
         int count = 0;
-        foreach (PropertyTab tab in collection)
+        foreach (PropertyTab tab in _propertyTabCollection)
         {
             tab.Should().NotBeNull();
             count++;
         }
 
-        count.Should().Be(collection.Count);
+        count.Should().Be(_propertyTabCollection.Count);
     }
 
     [WinFormsFact]
     public void SyncRoot_ReturnsSelf()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
+        object syncRoot = ((ICollection)_propertyTabCollection).SyncRoot;
 
-        object syncRoot = ((ICollection)collection).SyncRoot;
-
-        syncRoot.Should().BeSameAs(collection);
+        syncRoot.Should().BeSameAs(_propertyTabCollection);
     }
 
     [WinFormsFact]
     public void IsSynchronized_ReturnsFalse()
     {
-        using PropertyGrid grid = new();
-        PropertyGrid.PropertyTabCollection collection = new(grid);
-
-        bool isSynchronized = ((ICollection)collection).IsSynchronized;
+        bool isSynchronized = ((ICollection)_propertyTabCollection).IsSynchronized;
 
         isSynchronized.Should().BeFalse();
     }
@@ -179,15 +173,7 @@ public class PropertyTabCollectionTests
 
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes) => TypeDescriptor.GetProperties(component, attributes);
 
-        public override Bitmap Bitmap
-        {
-            get
-            {
-                _bitmap ??= new Bitmap(1, 1);
-
-                return _bitmap;
-            }
-        }
+        public override Bitmap Bitmap => _bitmap ??= new(1, 1);
 
         public override void Dispose()
         {
