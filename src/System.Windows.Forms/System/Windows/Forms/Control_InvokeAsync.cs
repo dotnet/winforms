@@ -142,6 +142,7 @@ public partial class Control
     ///  A task representing the operation.
     /// </returns>
     /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if the callback is null.</exception>
     /// <remarks>
     ///  <para>
     ///   <b>Note:</b> The callback will be marshalled to the thread that owns the control's handle,
@@ -162,31 +163,37 @@ public partial class Control
     {
         ArgumentNullException.ThrowIfNull(callback);
 
+        if (!IsHandleCreated)
+        {
+            throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
+        }
+
         if (cancellationToken.IsCancellationRequested)
         {
             return;
         }
 
         TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        CancellationTokenRegistration registration = cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false);
 
-        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
-        {
-            BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
-            await completion.Task.ConfigureAwait(false);
-        }
+        BeginInvoke(async () => await WrappedCallbackAsync());
+        await completion.Task.ConfigureAwait(false);
 
         async Task WrappedCallbackAsync()
         {
             try
             {
-                if (cancellationToken.IsCancellationRequested)
+                using (registration)
                 {
-                    completion.TrySetCanceled(cancellationToken);
-                    return;
-                }
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        completion.TrySetCanceled(cancellationToken);
+                        return;
+                    }
 
-                await callback(cancellationToken).ConfigureAwait(false);
-                completion.TrySetResult();
+                    await callback(cancellationToken).ConfigureAwait(false);
+                    completion.TrySetResult();
+                }
             }
             catch (Exception ex)
             {
@@ -226,25 +233,37 @@ public partial class Control
     {
         ArgumentNullException.ThrowIfNull(callback);
 
+        if (!IsHandleCreated)
+        {
+            throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
+        }
+
         if (cancellationToken.IsCancellationRequested)
         {
             return default!;
         }
 
         TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        CancellationTokenRegistration registration = cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false);
 
-        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
-        {
-            BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
-            return await completion.Task.ConfigureAwait(false);
-        }
+        BeginInvoke(async () => await WrappedCallbackAsync());
+        return await completion.Task.ConfigureAwait(false);
 
         async Task WrappedCallbackAsync()
         {
             try
             {
-                var returnValue = await callback(cancellationToken).ConfigureAwait(false);
-                completion.TrySetResult(returnValue);
+                using (registration)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        completion.TrySetCanceled(cancellationToken);
+                        return;
+                    }
+
+                    T returnValue = await callback(cancellationToken).ConfigureAwait(false);
+                    completion.TrySetResult(returnValue);
+                }
             }
             catch (Exception ex)
             {
