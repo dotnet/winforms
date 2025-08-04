@@ -72,11 +72,8 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
             _baseParent = parent.Parent;
         }
 
-        if (_image is not null)
-        {
-            _image.Dispose();
-            _image = null;
-        }
+        _image?.Dispose();
+        _image = null;
 
         if (!_isExpanded)
         {

@@ -1347,11 +1347,8 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
                             if (s_checkImage is null || s_checkImage.Width != fullSize.Width || s_checkImage.Height != fullSize.Height)
                             {
-                                if (s_checkImage is not null)
-                                {
-                                    s_checkImage.Dispose();
-                                    s_checkImage = null;
-                                }
+                                s_checkImage?.Dispose();
+                                s_checkImage = null;
 
                                 // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
                                 // and compensate below

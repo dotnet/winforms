@@ -1619,17 +1619,11 @@ internal class ToolStripKeyboardHandlingService
             _oldCommandPaste = null;
         }
 
-        if (_newCommands is not null)
-        {
-            _newCommands.Clear();
-            _newCommands = null;
-        }
+        _newCommands?.Clear();
+        _newCommands = null;
 
-        if (_oldCommands is not null)
-        {
-            _oldCommands.Clear();
-            _oldCommands = null;
-        }
+        _oldCommands?.Clear();
+        _oldCommands = null;
 
         if (_selectionService is not null)
         {
