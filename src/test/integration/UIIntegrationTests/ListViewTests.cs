@@ -532,7 +532,10 @@ public class ListViewTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/13291")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/13291")]
     public async Task ListView_Click_On_Second_Column_Does_Not_Alter_CheckBoxesAsync()
     {
         await RunTestAsync(async (form, listView) =>
