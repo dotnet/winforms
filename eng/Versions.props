@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="Version.Details.props" Condition="Exists('Version.Details.props')" />
   <PropertyGroup>
     <MajorVersion>10</MajorVersion>
     <MinorVersion>0</MinorVersion>
@@ -10,48 +11,16 @@
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
     <DotNetFinalVersionKind Condition="'$(StabilizePackageVersion)' == 'true'">release</DotNetFinalVersionKind>
-    <SystemReflectionMetadataLoadContextVersion>10.0.0-preview.7.25377.103</SystemReflectionMetadataLoadContextVersion>
-    <SystemTextEncodingsWebVersion>10.0.0-preview.7.25377.103</SystemTextEncodingsWebVersion>
   </PropertyGroup>
-  <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
+  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <PropertyGroup>
-    <SystemFormatsNrbfPackageVersion>10.0.0-preview.7.25377.103</SystemFormatsNrbfPackageVersion>
-    <SystemIOHashingPackageVersion>10.0.0-preview.7.25377.103</SystemIOHashingPackageVersion>
-    <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-preview.7.25377.103</MicrosoftNETCoreILDAsmPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-preview.7.25377.103</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.0-preview.7.25377.103</SystemTextJsonPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>10.0.0-preview.7.25377.103</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.0-preview.7.25377.103</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>10.0.0-preview.7.25377.103</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>10.0.0-preview.7.25377.103</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>10.0.0-preview.7.25377.103</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>10.0.0-preview.7.25377.103</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>10.0.0-preview.5.25227.101</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>10.0.0-preview.7.25377.103</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.7.25377.103</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.7.25377.103</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.0-preview.7.25377.103</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
-    <MicrosoftNETSdkILVersion>10.0.0-preview.7.25377.103</MicrosoftNETSdkILVersion>
-    <!-- 
-      Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
-    -->
-    <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>
     <MicrosoftWindowsCsWin32PackageVersion>0.3.151</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>
     <MicrosoftPrivateIntellisenseVersion>9.0.0-preview-20241010.1</MicrosoftPrivateIntellisenseVersion>
   </PropertyGroup>
-  <!-- Arcade -->
-  <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.25377.103</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>10.0.0-beta.25377.103</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.25377.103</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
-    <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
-  </PropertyGroup>
-  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
     <XUnitStaFactPackageVersion>3.0.13</XUnitStaFactPackageVersion>
