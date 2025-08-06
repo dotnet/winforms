@@ -649,11 +649,8 @@ public abstract partial class AxHost
 
             if (pActiveObject is null)
             {
-                if (_controlInEditMode is not null)
-                {
-                    _controlInEditMode._editMode = EDITM_NONE;
-                    _controlInEditMode = null;
-                }
+                _controlInEditMode?._editMode = EDITM_NONE;
+                _controlInEditMode = null;
 
                 return HRESULT.S_OK;
             }

@@ -452,11 +452,8 @@ internal partial class ResourceCodeDomSerializer
         private void OnSerializationComplete(object? sender, EventArgs e)
         {
             // Commit any changes we have made.
-            if (_writer is not null)
-            {
-                _writer.Close();
-                _writer = null;
-            }
+            _writer?.Close();
+            _writer = null;
 
             if (_invariantCultureResourcesDirty || _metadataResourcesDirty)
             {

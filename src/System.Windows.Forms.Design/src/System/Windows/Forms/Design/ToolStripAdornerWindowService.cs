@@ -74,17 +74,11 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         _overlayService?.RemoveOverlay(_toolStripAdornerWindow);
 
         _toolStripAdornerWindow.Dispose();
-        if (_behaviorService is not null)
-        {
-            _behaviorService.Adorners.Remove(_dropDownAdorner);
-            _behaviorService = null;
-        }
+        _behaviorService?.Adorners.Remove(_dropDownAdorner);
+        _behaviorService = null;
 
-        if (_dropDownAdorner is not null)
-        {
-            _dropDownAdorner.Glyphs.Clear();
-            _dropDownAdorner = null;
-        }
+        _dropDownAdorner?.Glyphs.Clear();
+        _dropDownAdorner = null;
     }
 
     /// <summary>

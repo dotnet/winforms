@@ -1,8 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Moq;
 using System.ComponentModel;
+using Moq;
 using static System.Windows.Forms.Design.LinkAreaEditor;
 
 namespace System.Windows.Forms.Design.Tests;

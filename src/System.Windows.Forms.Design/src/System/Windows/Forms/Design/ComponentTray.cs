@@ -889,21 +889,15 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
 
             _selectionUISvc = null;
 
-            if (_inheritanceUI is not null)
-            {
-                _inheritanceUI.Dispose();
-                _inheritanceUI = null;
-            }
+            _inheritanceUI?.Dispose();
+            _inheritanceUI = null;
 
             _serviceProvider = null;
             _controls.Clear();
             _controls = null;
 
-            if (_glyphManager is not null)
-            {
-                _glyphManager.Dispose();
-                _glyphManager = null;
-            }
+            _glyphManager?.Dispose();
+            _glyphManager = null;
         }
 
         base.Dispose(disposing);
@@ -2631,11 +2625,8 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         /// </summary>
         public void Dispose()
         {
-            if (_traySelectionAdorner is not null)
-            {
-                _traySelectionAdorner.Glyphs.Clear();
-                _traySelectionAdorner = null;
-            }
+            _traySelectionAdorner?.Glyphs.Clear();
+            _traySelectionAdorner = null;
         }
 
         /// <summary>

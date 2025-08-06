@@ -393,17 +393,11 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 ss.SelectionChanged -= OnSelectionChanged;
             }
 
-            if (_behaviorService is not null)
-            {
-                _behaviorService.Dispose();
-                _behaviorService = null;
-            }
+            _behaviorService?.Dispose();
+            _behaviorService = null;
 
-            if (_selectionManager is not null)
-            {
-                _selectionManager.Dispose();
-                _selectionManager = null;
-            }
+            _selectionManager?.Dispose();
+            _selectionManager = null;
 
             if (_componentTray is not null)
             {
@@ -417,54 +411,33 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 _componentTray = null;
             }
 
-            if (_pbrsFwd is not null)
-            {
-                _pbrsFwd.Dispose();
-                _pbrsFwd = null;
-            }
+            _pbrsFwd?.Dispose();
+            _pbrsFwd = null;
 
-            if (_frame is not null)
-            {
-                _frame.Dispose();
-                _frame = null;
-            }
+            _frame?.Dispose();
+            _frame = null;
 
-            if (_commandSet is not null)
-            {
-                _commandSet.Dispose();
-                _commandSet = null;
-            }
+            _commandSet?.Dispose();
+            _commandSet = null;
 
-            if (_inheritanceService is not null)
-            {
-                _inheritanceService.Dispose();
-                _inheritanceService = null;
-            }
+            _inheritanceService?.Dispose();
+            _inheritanceService = null;
 
-            if (_inheritanceUI is not null)
-            {
-                _inheritanceUI.Dispose();
-                _inheritanceUI = null;
-            }
+            _inheritanceUI?.Dispose();
+            _inheritanceUI = null;
 
             if (_designBindingValueUIHandler is not null)
             {
                 IPropertyValueUIService pvUISvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
-                if (pvUISvc is not null)
-                {
-                    pvUISvc.RemovePropertyValueUIHandler(new PropertyValueUIHandler(_designBindingValueUIHandler.OnGetUIValueItem));
-                    pvUISvc = null;
-                }
+                pvUISvc?.RemovePropertyValueUIHandler(new PropertyValueUIHandler(_designBindingValueUIHandler.OnGetUIValueItem));
+                pvUISvc = null;
 
                 _designBindingValueUIHandler.Dispose();
                 _designBindingValueUIHandler = null;
             }
 
-            if (_designerExtenders is not null)
-            {
-                _designerExtenders.Dispose();
-                _designerExtenders = null;
-            }
+            _designerExtenders?.Dispose();
+            _designerExtenders = null;
 
             _axTools?.Clear();
 

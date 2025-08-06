@@ -649,11 +649,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         if (_miniToolStrip is not null)
         {
             Active = false;
-            if (_lastSelection is not null)
-            {
-                _lastSelection.Dispose();
-                _lastSelection = null;
-            }
+            _lastSelection?.Dispose();
+            _lastSelection = null;
 
             if (_component is ToolStrip strip)
             {

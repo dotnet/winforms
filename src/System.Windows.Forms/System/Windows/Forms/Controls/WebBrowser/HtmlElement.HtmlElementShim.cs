@@ -118,11 +118,8 @@ public sealed partial class HtmlElement
 
         public override void DisconnectFromEvents()
         {
-            if (_cookie is not null)
-            {
-                _cookie.Disconnect();
-                _cookie = null;
-            }
+            _cookie?.Disconnect();
+            _cookie = null;
         }
 
         protected override void Dispose(bool disposing)

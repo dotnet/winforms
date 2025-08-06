@@ -357,11 +357,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 }
                 finally
                 {
-                    if (designer.NewItemTransaction is not null)
-                    {
-                        designer.NewItemTransaction.Commit();
-                        designer.NewItemTransaction = null;
-                    }
+                    designer.NewItemTransaction?.Commit();
+                    designer.NewItemTransaction = null;
                 }
             }
             else
@@ -385,11 +382,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 }
                 catch (Exception e)
                 {
-                    if (designerTransaction is not null)
-                    {
-                        designerTransaction.Cancel();
-                        designerTransaction = null;
-                    }
+                    designerTransaction?.Cancel();
+                    designerTransaction = null;
 
                     selectionManager?.Refresh();
 
@@ -415,11 +409,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 _dummyItemAdded = false;
                 RemoveItem();
 
-                if (designer.NewItemTransaction is not null)
-                {
-                    designer.NewItemTransaction.Cancel();
-                    designer.NewItemTransaction = null;
-                }
+                designer.NewItemTransaction?.Cancel();
+                designer.NewItemTransaction = null;
             }
         }
 
@@ -455,11 +446,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            if (_editorNode is not null)
-            {
-                _editorNode.CloseEditor();
-                _editorNode = null;
-            }
+            _editorNode?.CloseEditor();
+            _editorNode = null;
 
             if (ToolStripItem is not null)
             {
@@ -628,11 +616,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     private void HideDummyNode()
     {
         ToolStripItem.AutoSize = AutoSize;
-        if (_editorNode is not null)
-        {
-            _editorNode.CloseEditor();
-            _editorNode = null;
-        }
+        _editorNode?.CloseEditor();
+        _editorNode = null;
     }
 
     /// <summary>
@@ -884,11 +869,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
         {
             host.Container.Add(ToolStripItem);
             parent.Items.Insert(dummyIndex, ToolStripItem);
-            if (designerTransaction is not null)
-            {
-                designerTransaction.Cancel();
-                designerTransaction = null;
-            }
+            designerTransaction?.Cancel();
+            designerTransaction = null;
         }
         finally
         {
