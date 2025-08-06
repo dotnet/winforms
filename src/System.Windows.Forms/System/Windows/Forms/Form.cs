@@ -4546,6 +4546,7 @@ public partial class Form : ContainerControl
                     _processingDpiChanged = true;
                 }
 
+                UpdateWindowIcon(redrawFrame: true, dpi: e.DeviceDpiNew);
                 ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
             }
             finally
@@ -6417,11 +6418,16 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Updates the window icon.
     /// </summary>
-    private unsafe void UpdateWindowIcon(bool redrawFrame)
+    private unsafe void UpdateWindowIcon(bool redrawFrame, int dpi = 0)
     {
         if (IsHandleCreated)
         {
             Icon? icon;
+
+            if (dpi == 0)
+            {
+                dpi = DeviceDpi;
+            }
 
             // Preserve Win32 behavior by keeping the icon we set NULL if
             // the user hasn't specified an icon and we are a dialog frame.
@@ -6436,20 +6442,23 @@ public partial class Form : ContainerControl
 
             if (icon is not null)
             {
-                if (_smallIcon is null)
+                Icon? oldSmallIcon = _smallIcon;
+
+                try
                 {
-                    try
-                    {
-                        _smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
-                    }
-                    catch
-                    {
-                    }
+                    _smallIcon = ScaleHelper.ScaleSmallIconToDpi(icon, dpi);
+                }
+                catch
+                {
                 }
 
                 if (_smallIcon is not null)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
+                    if (oldSmallIcon is not null && oldSmallIcon.Handle != _smallIcon.Handle)
+                    {
+                        oldSmallIcon.Dispose();
+                    }
                 }
 
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
