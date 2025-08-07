@@ -1428,6 +1428,8 @@ public partial class MonthCalendar : Control
     {
         base.OnGotFocus(e);
 
+        NotifyWinEvent(AccessibleEvents.Focus);
+
         if (IsAccessibilityObjectCreated)
         {
             ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
