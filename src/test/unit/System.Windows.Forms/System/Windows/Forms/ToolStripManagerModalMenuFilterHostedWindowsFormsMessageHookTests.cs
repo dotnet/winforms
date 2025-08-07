@@ -25,7 +25,7 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
         hook.Should().BeOfType(hookType);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void InstallMessageHook_DoesNotThrow_WhenCalledTwice()
     {
         Type hookType = GetHookType();
@@ -42,7 +42,7 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
         messageHookHandle.Should().NotBe(IntPtr.Zero);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void UninstallMessageHook_DoesNotThrow_WhenCalledTwice()
     {
         Type hookType = GetHookType();
