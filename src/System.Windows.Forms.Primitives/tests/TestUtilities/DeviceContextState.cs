@@ -32,9 +32,7 @@ internal unsafe class DeviceContextState
         TextAlign = PInvoke.GetTextAlign(hdc);
         BackgroundMode = PInvoke.GetBkMode(hdc);
 
-        Matrix3x2 transform = default;
-        PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
-        Transform = transform;
+        Transform = hdc.GetWorldTransform();
 
         Point point = default;
         PInvoke.GetBrushOrgEx(hdc, &point);

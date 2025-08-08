@@ -224,7 +224,6 @@ GetWindow
 GetWindowDisplayAffinity
 GetWindowDpiAwarenessContext
 GetWindowPlacement
-GetWorldTransform
 GMR_*
 HC_*
 HDHITTESTINFO
