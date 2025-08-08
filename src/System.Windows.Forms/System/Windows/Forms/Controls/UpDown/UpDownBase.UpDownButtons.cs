@@ -279,7 +279,7 @@ public abstract partial class UpDownBase
                 DrawModernControlButton(
                     cachedGraphics,
                     new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                    ModernControlButtonStyle.Up,
+                    ModernControlButtonStyle.Up | ModernControlButtonStyle.SingleBorder,
                     _pushed == ButtonID.Up
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Up ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
@@ -289,7 +289,7 @@ public abstract partial class UpDownBase
                 DrawModernControlButton(
                     cachedGraphics,
                     new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                    ModernControlButtonStyle.Down,
+                    ModernControlButtonStyle.Down | ModernControlButtonStyle.SingleBorder,
                     _pushed == ButtonID.Down
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Down ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
