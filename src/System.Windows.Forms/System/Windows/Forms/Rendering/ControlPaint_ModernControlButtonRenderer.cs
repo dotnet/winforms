@@ -91,6 +91,8 @@ public static unsafe partial class ControlPaint
 
             bool hasRoundedBorder = (button & ModernControlButtonStyle.RoundedBorder) != 0;
 
+            bool isFocused = state == ModernControlButtonState.Focused;
+
             // Draw background
             using (var backgroundBrush = backgroundColor.GetCachedSolidBrushScope())
             {
@@ -119,6 +121,14 @@ public static unsafe partial class ControlPaint
                 {
                     graphics.DrawRectangle(borderPen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
+            }
+
+            if (isFocused)
+            {
+                // Draw focus rectangle
+                Rectangle focusRect = bounds;
+                focusRect.Inflate(-1, -1); // Deflate to avoid drawing over the border
+                DrawFocusRectangle(graphics, focusRect, Color.Empty, backgroundColor);
             }
 
             // Draw the content
@@ -280,7 +290,7 @@ public static unsafe partial class ControlPaint
     {
         // Calculate dot size as a proportion of button height
         int minDimension = Math.Min(bounds.Width, bounds.Height);
-        int dotSize = Math.Max(1, (int)(minDimension * 0.15 * ContentScaleFactor));
+        int dotSize = Math.Max(1, (int)(minDimension * 0.1 * ContentScaleFactor));
 
         // Calculate proportional spacing
         int spacing = Math.Max(1, dotSize / 2);
@@ -310,7 +320,7 @@ public static unsafe partial class ControlPaint
     private static void DrawOpenDropDownChevron(Graphics graphics, Brush brush, int centerX, int centerY, int size)
     {
         // Calculate chevron dimensions proportionally
-        int chevronWidth = size + (size / 2);
+        int chevronWidth = size;
         int chevronHeight = (size * 2) / 3;
 
         // Stroke thickness scales with size

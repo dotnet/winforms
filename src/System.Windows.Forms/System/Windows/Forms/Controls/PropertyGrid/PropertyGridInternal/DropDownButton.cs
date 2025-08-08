@@ -83,13 +83,21 @@ internal sealed partial class DropDownButton : Button
     {
         ComboBoxState state = ComboBoxState.Normal;
 
-        if (MouseIsDown)
+        if (!Enabled)
+        {
+            state = ComboBoxState.Disabled;
+        }
+        else if (MouseIsDown)
         {
             state = ComboBoxState.Pressed;
         }
         else if (MouseIsOver)
         {
             state = ComboBoxState.Hot;
+        }
+        else if (Focused)
+        {
+            state = ComboBoxState.Focused;
         }
 
         base.OnPaint(pevent);
@@ -101,6 +109,7 @@ internal sealed partial class DropDownButton : Button
                 ComboBoxState.Disabled => ModernControlButtonState.Disabled,
                 ComboBoxState.Hot => ModernControlButtonState.Hover,
                 ComboBoxState.Pressed => ModernControlButtonState.Pressed,
+                ComboBoxState.Focused => ModernControlButtonState.Focused,
                 _ => ModernControlButtonState.Normal
             };
 
