@@ -596,7 +596,9 @@ public partial class CheckedListBox : ListBox
                 if (Enabled)
                 {
                     backColor = SystemColors.Highlight;
-                    foreColor = SystemColors.HighlightText;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    foreColor = Application.IsDarkModeEnabled ? SystemColors.ControlText : SystemColors.HighlightText;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
                 else
                 {
