@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.VisualStyles;
+using static System.Windows.Forms.ControlPaint;
 
 namespace System.Windows.Forms;
 
@@ -275,21 +276,25 @@ public abstract partial class UpDownBase
                     _parent._defaultButtonsWidth,
                     ClientSize.Height);
 
-                ControlPaint.DrawScrollButton(
+                DrawModernControlButton(
                     cachedGraphics,
                     new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                    ScrollButton.Up,
+                    ModernControlButtonStyle.Up | ModernControlButtonStyle.SingleBorder,
                     _pushed == ButtonID.Up
-                        ? ButtonState.Pushed
-                        : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
+                        ? ModernControlButtonState.Pressed
+                        : (Enabled ? (_mouseOver == ButtonID.Up ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
+                                   : ModernControlButtonState.Disabled),
+                    true);
 
-                ControlPaint.DrawScrollButton(
+                DrawModernControlButton(
                     cachedGraphics,
                     new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                    ScrollButton.Down,
+                    ModernControlButtonStyle.Down | ModernControlButtonStyle.SingleBorder,
                     _pushed == ButtonID.Down
-                        ? ButtonState.Pushed
-                        : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
+                        ? ModernControlButtonState.Pressed
+                        : (Enabled ? (_mouseOver == ButtonID.Down ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
+                                   : ModernControlButtonState.Disabled),
+                    true);
 
                 e.GraphicsInternal.DrawImageUnscaled(
                     _cachedBitmap,
