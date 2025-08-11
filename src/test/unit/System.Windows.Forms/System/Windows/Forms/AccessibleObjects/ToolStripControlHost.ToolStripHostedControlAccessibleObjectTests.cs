@@ -67,7 +67,7 @@ public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests
         ToolStripControlHost.ToolStripHostedControlAccessibleObject accessibleObject =
             new(textBox, null);
 
-        // Use a valid direction that is not handled by the switch, e.g.NavigateDirection.NavigateDirection_FirstChild
+        // Use a valid direction that is not handled by the switch, e.g. NavigateDirection.NavigateDirection_FirstChild
         NavigateDirection direction = NavigateDirection.NavigateDirection_FirstChild;
         IRawElementProviderFragment.Interface expected = textBox.AccessibilityObject.FragmentNavigate(direction);
         IRawElementProviderFragment.Interface actual = accessibleObject.FragmentNavigate(direction);
