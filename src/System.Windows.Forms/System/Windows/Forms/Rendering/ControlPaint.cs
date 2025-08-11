@@ -462,6 +462,13 @@ public static unsafe partial class ControlPaint
             }
 
             g.FillRectangle(textureBrush, clipRect);
+
+            // If the Graphics backing HDC has an offset origin (SetViewportOrgEx), drawing with a texture brush will
+            // reset it. Getting the HDC and releasing it will restore the offset.
+            //
+            // See https://github.com/dotnet/winforms/issues/13784 for a repro.
+            g.GetHdc();
+            g.ReleaseHdc();
         }
         else
         {
