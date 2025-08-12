@@ -92,7 +92,8 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     {
         using ToolStripButton toolStripItem = new();
 
-        Type wrapperType = GetToolStripAccessibleObjectWrapperForItemsOnOverflowType();
+        Type wrapperType = typeof(ToolStrip)
+            .GetNestedType("ToolStripAccessibleObjectWrapperForItemsOnOverflow", BindingFlags.Instance | BindingFlags.NonPublic);
         ToolStripItemAccessibleObject accessibleObject =
             (ToolStripItemAccessibleObject)Activator.CreateInstance(wrapperType, toolStripItem);
 
