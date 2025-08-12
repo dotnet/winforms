@@ -99,6 +99,7 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
 
         AccessibleStates state = accessibleObject.State;
 
+        wrapperType.Should().NotBeNull("ToolStripAccessibleObjectWrapperForItemsOnOverflow nested type must exist on ToolStrip");
         state.Should().HaveFlag(AccessibleStates.Offscreen);
         state.Should().HaveFlag(AccessibleStates.Invisible);
     }
