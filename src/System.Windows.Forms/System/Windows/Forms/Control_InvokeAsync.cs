@@ -41,7 +41,9 @@ public partial class Control
 
         TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
+        using (cancellationToken.Register(
+            () => completion.TrySetCanceled(cancellationToken),
+            useSynchronizationContext: false))
         {
             BeginInvoke(WrappedAction);
             await completion.Task.ConfigureAwait(false);
@@ -53,7 +55,7 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    completion.SetCanceled(cancellationToken);
+                    completion.TrySetCanceled(cancellationToken);
                     return;
                 }
 
@@ -96,7 +98,7 @@ public partial class Control
     ///   <b>Important:</b> If you pass a callback that returns a <see cref="Task"/> or <see cref="Task{T}"/>,
     ///   the task will NOT be awaited. The task is treated as a return value and will be returned immediately
     ///   in a "fire-and-forget" manner. To properly await asynchronous operations, use the overloads that accept
-    ///   <see cref="Func{CancellationToken, ValueTask}"/> or <see cref="Func{CancellationToken, ValueTask{T}}"/>.
+    ///   <see cref="Func{CancellationToken, ValueTask}"/> (or <see cref="ValueTask{T}"/>).
     ///  </para>
     /// </remarks>
     public async Task<T> InvokeAsync<T>(Func<T> callback, CancellationToken cancellationToken = default)
@@ -110,7 +112,9 @@ public partial class Control
 
         TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
+        using (
+            cancellationToken.Register(() => completion.TrySetCanceled(cancellationToken),
+            useSynchronizationContext: false))
         {
             BeginInvoke(WrappedCallback);
             return await completion.Task.ConfigureAwait(false);
@@ -174,7 +178,9 @@ public partial class Control
     ///   <see cref="InvokeAsync{T}(Func{T}, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-    public async Task InvokeAsync(Func<CancellationToken, ValueTask> callback, CancellationToken cancellationToken = default)
+    public async Task InvokeAsync(
+        Func<CancellationToken, ValueTask> callback,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -189,9 +195,14 @@ public partial class Control
         }
 
         TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        CancellationTokenRegistration registration = cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false);
 
-        BeginInvoke(async () => await WrappedCallbackAsync());
+        CancellationTokenRegistration registration = cancellationToken.Register(
+            () => completion.TrySetCanceled(cancellationToken),
+            useSynchronizationContext: false);
+
+        BeginInvoke(async () => await WrappedCallbackAsync()
+            .ConfigureAwait(false));
+
         await completion.Task.ConfigureAwait(false);
 
         async Task WrappedCallbackAsync()
@@ -255,7 +266,9 @@ public partial class Control
     ///   <see cref="InvokeAsync{T}(Func{T}, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-    public async Task<T> InvokeAsync<T>(Func<CancellationToken, ValueTask<T>> callback, CancellationToken cancellationToken = default)
+    public async Task<T> InvokeAsync<T>(
+        Func<CancellationToken, ValueTask<T>> callback,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -270,9 +283,14 @@ public partial class Control
         }
 
         TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        CancellationTokenRegistration registration = cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false);
 
-        BeginInvoke(async () => await WrappedCallbackAsync());
+        CancellationTokenRegistration registration = cancellationToken.Register(
+            () => completion.TrySetCanceled(cancellationToken),
+            useSynchronizationContext: false);
+
+        BeginInvoke(async () => await WrappedCallbackAsync()
+            .ConfigureAwait(false));
+
         return await completion.Task.ConfigureAwait(false);
 
         async Task WrappedCallbackAsync()

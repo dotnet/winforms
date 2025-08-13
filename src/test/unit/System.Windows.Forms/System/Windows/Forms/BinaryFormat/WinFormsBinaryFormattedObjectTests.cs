@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -244,13 +244,13 @@ public class WinFormsBinaryFormattedObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(Control_DesignerVisibleProperties_TestData))]
-    public void Control_BinaryFormatted_DesignerVisibleProperties(Func<Control> controlFactory, string[] properties)
+    public void Control_BinaryFormatted_DesignerVisibleProperties(object value, string[] properties)
     {
         // Check WinForms types for properties that can hit the BinaryFormatter
 
-        using var control = controlFactory();
+        using (value as IDisposable)
         {
-            var propertyDescriptors = TypeDescriptor.GetProperties(control, s_visible);
+            var propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
 
             List<string> binaryFormattedProperties = [];
             foreach (PropertyDescriptor property in propertyDescriptors)
