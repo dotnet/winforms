@@ -10,6 +10,7 @@ public static unsafe partial class ControlPaint
         Normal,
         Disabled,
         Pressed,
-        Hover
+        Hover,
+        Focused
     }
 }
