@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -270,9 +270,9 @@ public class WinFormsBinaryFormattedObjectTests
     {
         { new Control(), new string[] { "DataContext: Object", "Tag: Object" } },
         { new Form(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new Button(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new CheckBox(), new string[] { "DataContext: Object", "Tag: Object" } },
-        { new RadioButton(), new string[] { "DataContext: Object", "Tag: Object" } },
+        { new Button(), new string[] { "CommandParameter: Object", "DataContext: Object", "Tag: Object" } },
+        { new CheckBox(), new string[] { "CommandParameter: Object", "DataContext: Object", "Tag: Object" } },
+        { new RadioButton(), new string[] { "CommandParameter: Object", "DataContext: Object", "Tag: Object" } },
         { new DataGridView(), new string[] { "DataSource: Object", "DataContext: Object", "Tag: Object" } },
         { new DateTimePicker(), new string[] { "DataContext: Object", "Tag: Object" } },
         { new GroupBox(), new string[] { "DataContext: Object", "Tag: Object" } },
