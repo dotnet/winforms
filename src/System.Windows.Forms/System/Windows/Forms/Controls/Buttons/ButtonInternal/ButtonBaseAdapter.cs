@@ -545,14 +545,31 @@ internal abstract partial class ButtonBaseAdapter
     /// <summary>
     ///  Draws the button's image.
     /// </summary>
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
+        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
+        {
+            Rectangle bounds = Control.ClientRectangle;
+            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
+            ControlPaint.DrawBackgroundImage(
+                e.GraphicsInternal,
+                Control.BackgroundImage,
+                Color.Transparent,
+                Control.BackgroundImageLayout,
+                Control.ClientRectangle,
+                bounds,
+                Control.DisplayRectangle.Location,
+                Control.RightToLeft);
+        }
+
         if (Control.Image is not null)
         {
             // Setup new clip region & draw
             DrawImageCore(e.GraphicsInternal, Control.Image, layout.ImageBounds, layout.ImageStart, layout);
         }
     }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     internal static LayoutOptions CommonLayout(
         Rectangle clientRectangle,
