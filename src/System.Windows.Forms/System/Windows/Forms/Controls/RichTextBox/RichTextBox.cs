@@ -3426,7 +3426,6 @@ public partial class RichTextBox : TextBoxBase
     {
         switch (m.MsgInternal)
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             case PInvokeCore.WM_PAINT:
 
                 // Important: We need to let to run the base
@@ -3462,7 +3461,6 @@ public partial class RichTextBox : TextBoxBase
                 }
 
                 break;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);

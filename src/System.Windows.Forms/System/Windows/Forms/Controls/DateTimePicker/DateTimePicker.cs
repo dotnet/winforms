@@ -488,12 +488,10 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         get => ShouldSerializeForeColor()
             || Application.IsDarkModeEnabled
                 ? base.ForeColor
                 : SystemColors.WindowText;
-#pragma warning restore WFO5001
 
         set => base.ForeColor = value;
     }

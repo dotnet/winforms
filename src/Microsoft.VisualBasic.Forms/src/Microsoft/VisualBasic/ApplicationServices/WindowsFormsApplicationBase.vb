@@ -194,7 +194,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <value>
         '''  The <see cref="SystemColorMode"/> that the application is running in.
         ''' </value>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=DiagnosticIDs.UrlFormat)>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property ColorMode As SystemColorMode
             Get

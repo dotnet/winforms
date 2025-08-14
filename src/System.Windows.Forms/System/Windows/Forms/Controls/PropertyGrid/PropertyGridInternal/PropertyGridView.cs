@@ -191,7 +191,7 @@ internal sealed partial class PropertyGridView :
     ///   the selected row's <see cref="GridEntry"/>.
     ///  </para>
     /// </remarks>
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     internal DropDownButton DropDownButton
     {
         get
@@ -282,7 +282,6 @@ internal sealed partial class PropertyGridView :
             return _dialogButton;
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  The common text box for editing values.

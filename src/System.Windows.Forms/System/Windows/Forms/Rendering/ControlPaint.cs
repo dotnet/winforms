@@ -1870,7 +1870,6 @@ public static unsafe partial class ControlPaint
     public static void DrawScrollButton(Graphics graphics, Rectangle rectangle, ScrollButton button, ButtonState state)
         => DrawScrollButton(graphics, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, button, state);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws a button for a Win32 scroll bar in the given rectangle with the given state.
     /// </summary>

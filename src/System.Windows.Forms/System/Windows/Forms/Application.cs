@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -44,9 +43,7 @@ public sealed partial class Application
     private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static SystemColorMode? s_colorMode;
-#pragma warning restore WFO5001
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -250,7 +247,6 @@ public sealed partial class Application
     ///   static (shared in VB) <see cref="SystemColorMode"/> property.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
 
     /// <summary>
@@ -259,31 +255,68 @@ public sealed partial class Application
     internal static bool ColorModeSet => s_colorMode is not null;
 
     /// <summary>
-    ///  Sets the default color mode (dark mode) for the application.
+    ///  Sets the default color mode (Classic/Light Mode, Dark Mode, or the system-defined Light/Dark Mode) for the entire application.
     /// </summary>
-    /// <param name="systemColorMode">The application's default color mode (dark mode) to set.</param>
+    /// <param name="systemColorMode">The application's default color mode to set.</param>
     /// <remarks>
     ///  <para>
-    ///   You should use this method to set the default color mode (dark mode) for the application. Set it,
-    ///   before creating any UI elements, to ensure that the correct color mode is used. You can set it to
-    ///   dark mode (<see cref="SystemColorMode.Dark"/>), light mode (<see cref="SystemColorMode.Classic"/>)
-    ///   or to the system setting (<see cref="SystemColorMode.System"/>).
+    ///   Use this method to set the color mode for the entire application. Set it before creating any UI
+    ///   elements to ensure the correct color mode is applied. You can choose Dark Mode
+    ///   (<see cref="SystemColorMode.Dark"/>), Classic (light) Mode (<see cref="SystemColorMode.Classic"/>),
+    ///   or the system-defined mode (<see cref="SystemColorMode.System"/>).
     ///  </para>
     ///  <para>
-    ///   If you set it to <see cref="SystemColorMode.System"/>, the actual color mode is determined by the
-    ///   Windows system settings. If the system setting is changed, the application will not automatically
-    ///   adapt to the new setting.
+    ///   If you set <see cref="SystemColorMode.System"/>, the actual color mode is determined by the Windows system settings.
+    ///   If the system setting changes, the application will not automatically adapt; you must restart the application
+    ///   to apply the new system setting.
     ///  </para>
     ///  <para>
-    ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
-    ///   is set to a high contrast mode, the dark mode is not available.
+    ///   Note that Dark Mode is only available on Windows 11 and later. If Windows is set to High Contrast mode,
+    ///   that mode always takes precedence over other settings.
     ///  </para>
     ///  <para>
-    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, you should set the
-    ///   color mode by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
+    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, set the color mode
+    ///   by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
     ///  </para>
+    ///  <para>
+    ///   <b>Important Considerations for Dark Mode in WinForms:</b>
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>
+    ///     <b>WinForms and Win32 Limitations:</b> WinForms is a managed wrapper around native Win32 controls.
+    ///     This architecture introduces inherent limitations in theming and rendering, especially in Dark Mode.
+    ///     While Windows continues to evolve its support for theming, some constraints remain.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Rendering Limitations:</b> Certain controls may not render perfectly in Dark Mode due to underlying Win32
+    ///     behavior. These imperfections are expected and will not be treated as bugs.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Security and Compatibility First:</b> Security and backward compatibility are prioritized over perfect visual fidelity.
+    ///     Changes that risk breaking classic rendering or introduce regressions will be avoided.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Ongoing Improvements:</b> As Windows improves Win32 theming, WinForms will adapt accordingly. Dark Mode rendering
+    ///     will improve over time, but not all issues will be resolved immediately.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Contrast and Accessibility Edge Cases:</b> Some edge cases may result in suboptimal contrast or may not meet certain
+    ///     accessibility guidelines. While Dark Mode addresses major accessibility concerns for many users (such as reducing eye
+    ///     strain from bright screens), if your application requires strict contrast compliance, we recommend using
+    ///     Classic (light) mode or High Contrast mode.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -306,12 +339,16 @@ public sealed partial class Application
         }
         finally
         {
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             bool useAlternateColorSet = SystemColors.UseAlternativeColorSet;
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             bool darkModeEnabled = IsDarkModeEnabled;
 
             if (useAlternateColorSet != darkModeEnabled)
             {
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 SystemColors.UseAlternativeColorSet = darkModeEnabled;
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 NotifySystemEventsOfColorChange();
             }
         }
@@ -362,7 +399,6 @@ public sealed partial class Application
     ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode SystemColorMode =>
         GetSystemColorModeInternal() == 0
             ? SystemColorMode.Dark
@@ -400,7 +436,6 @@ public sealed partial class Application
     ///  Gets a value indicating whether the application is running in a dark system color context.
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
         && (ColorMode == SystemColorMode.Dark

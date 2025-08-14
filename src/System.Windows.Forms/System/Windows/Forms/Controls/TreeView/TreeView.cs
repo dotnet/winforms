@@ -291,7 +291,7 @@ public partial class TreeView : Control
 
                         // Reset the Checked state after setting the checkboxes (this was Everett behavior)
                         // The implementation of the TreeNode.Checked property has changed in Whidbey
-                        // So we need to explicit set the Checked state to false to keep the everett behavior.
+                        // So we need to explicit set the Checked state to false to keep the Everett behavior.
                         UpdateCheckedState(_root, false);
                         RecreateHandle();
                     }
@@ -304,15 +304,12 @@ public partial class TreeView : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TREEVIEW;
 
             // Keep the scrollbar if we are just updating styles...
-            //
             if (IsHandleCreated)
             {
                 int currentStyle = unchecked((int)((long)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
@@ -1882,7 +1879,7 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
@@ -1894,7 +1891,6 @@ public partial class TreeView : Control
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
-#pragma warning restore WFO5001
 
         // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
