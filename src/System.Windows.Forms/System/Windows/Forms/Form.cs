@@ -5574,18 +5574,21 @@ public partial class Form : ContainerControl
     ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
     /// </exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public async Task ShowAsync(IWin32Window? owner = null)
+    public Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
         // multiple calls to ShowAsync from interfering with each other.
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _nonModalFormCompletion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            _nonModalFormCompletion = new(
+                new WeakReference<Form>(this),
+                TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5598,20 +5601,7 @@ public partial class Form : ContainerControl
 
         syncContext.Post((state) => ShowFormInternally(owner), null);
 
-        // Wait until the form is closed or disposed.
-        try
-        {
-            await _nonModalFormCompletion.Task.ConfigureAwait(true);
-        }
-        catch (Exception ex)
-        {
-            // We need to rethrow the exception on the caller's context.
-            Application.OnThreadException(ex);
-        }
-        finally
-        {
-            _nonModalFormCompletion = null;
-        }
+        return _nonModalFormCompletion.Task;
 
         void ShowFormInternally(IWin32Window? owner)
         {
@@ -5623,6 +5613,7 @@ public partial class Form : ContainerControl
             catch (Exception ex)
             {
                 _nonModalFormCompletion.TrySetException(ex);
+                _nonModalFormCompletion = null;
             }
         }
     }
@@ -5891,12 +5882,15 @@ public partial class Form : ContainerControl
     {
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _modalFormCompletion = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _modalFormCompletion = new TaskCompletionSource<DialogResult>(
+                state: new WeakReference<Form>(this),
+                creationOptions: TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5918,11 +5912,11 @@ public partial class Form : ContainerControl
             try
             {
                 DialogResult result = ShowDialog(owner);
-                modalFormCompletion.SetResult(result);
+                modalFormCompletion.TrySetResult(result);
             }
             catch (Exception ex)
             {
-                modalFormCompletion.SetException(ex);
+                modalFormCompletion.TrySetException(ex);
             }
             finally
             {
