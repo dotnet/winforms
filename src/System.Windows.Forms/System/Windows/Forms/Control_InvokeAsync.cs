@@ -42,8 +42,7 @@ public partial class Control
     ///   <item>
     ///    <description>
     ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
-    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
-    ///     use a token linked to the control's lifetime.
+    ///     control is disposing/its handle is destroyed (recommended).
     ///    </description>
     ///   </item>
     ///  </list>
@@ -87,16 +86,40 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                if (ex is OperationCanceledException oce
-                    && oce.CancellationToken == cancellationToken)
-                {
-                    completion.TrySetCanceled(cancellationToken);
-                }
-                else
-                {
-                    completion.TrySetException(ex);
-                }
+                HandleInternalDelegateException(completion, ex, cancellationToken);
             }
+        }
+    }
+
+    private void HandleInternalDelegateException(
+        TaskCompletionSource completion,
+        Exception ex,
+        CancellationToken cancellationToken)
+    {
+        if (ex is OperationCanceledException oce
+            && oce.CancellationToken == cancellationToken)
+        {
+            completion.TrySetCanceled(cancellationToken);
+        }
+        else
+        {
+            completion.TrySetException(ex);
+        }
+    }
+
+    private void HandleInternalDelegateException<T>(
+        TaskCompletionSource<T> completion,
+        Exception ex,
+        CancellationToken cancellationToken)
+    {
+        if (ex is OperationCanceledException oce
+            && oce.CancellationToken == cancellationToken)
+        {
+            completion.TrySetCanceled(cancellationToken);
+        }
+        else
+        {
+            completion.TrySetException(ex);
         }
     }
 
@@ -144,8 +167,7 @@ public partial class Control
     ///   <item>
     ///    <description>
     ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
-    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
-    ///     use a token linked to the control's lifetime.
+    ///     control is disposing/its handle is destroyed (recommended).
     ///    </description>
     ///   </item>
     ///  </list>
@@ -189,15 +211,7 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                if (ex is OperationCanceledException oce
-                    && oce.CancellationToken == cancellationToken)
-                {
-                    completion.TrySetCanceled(cancellationToken);
-                }
-                else
-                {
-                    completion.TrySetException(ex);
-                }
+                HandleInternalDelegateException(completion, ex, cancellationToken);
             }
         }
     }
@@ -252,8 +266,7 @@ public partial class Control
     ///   <item>
     ///    <description>
     ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
-    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
-    ///     use a token linked to the control's lifetime.
+    ///     control is disposing/its handle is destroyed (recommended).
     ///    </description>
     ///   </item>
     ///  </list>
@@ -303,15 +316,7 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                if (ex is OperationCanceledException oce
-                    && oce.CancellationToken == cancellationToken)
-                {
-                    completion.TrySetCanceled(cancellationToken);
-                }
-                else
-                {
-                    completion.TrySetException(ex);
-                }
+                HandleInternalDelegateException(completion, ex, cancellationToken);
             }
         }
     }
@@ -366,8 +371,7 @@ public partial class Control
     ///   <item>
     ///    <description>
     ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
-    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
-    ///     use a token linked to the control's lifetime.
+    ///     control is disposing/its handle is destroyed (recommended).
     ///    </description>
     ///   </item>
     ///  </list>
@@ -417,15 +421,7 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                if (ex is OperationCanceledException oce
-                    && oce.CancellationToken == cancellationToken)
-                {
-                    completion.TrySetCanceled(cancellationToken);
-                }
-                else
-                {
-                    completion.TrySetException(ex);
-                }
+                HandleInternalDelegateException(completion, ex, cancellationToken);
             }
         }
     }
