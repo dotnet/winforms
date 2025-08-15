@@ -148,7 +148,6 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
-#pragma warning disable WFO5001
     /// <summary>
     ///  Defines, whether the control is owner-drawn. Based on this,
     ///  the UserPaint flags get set, which in turn makes it later
@@ -182,7 +181,6 @@ public partial class Button : ButtonBase, IButtonControl
             return base.OwnerDraw;
         }
     }
-#pragma warning restore WFO5001
 
     internal override bool SupportsUiaProviders => true;
 

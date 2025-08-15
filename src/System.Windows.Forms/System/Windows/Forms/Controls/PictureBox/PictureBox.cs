@@ -193,9 +193,8 @@ public partial class PictureBox : Control, ISupportInitialize
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
+
             CreateParams cp = base.CreateParams;
 
             switch (_borderStyle)

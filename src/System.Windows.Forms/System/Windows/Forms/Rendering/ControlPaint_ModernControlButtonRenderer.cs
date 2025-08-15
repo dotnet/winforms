@@ -14,7 +14,6 @@ public static unsafe partial class ControlPaint
     /// </summary>
     private const double ContentScaleFactor = 1.5;
 
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws a modern up/down button suitable for both light and dark modes.
     /// </summary>

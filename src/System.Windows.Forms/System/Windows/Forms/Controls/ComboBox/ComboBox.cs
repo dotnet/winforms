@@ -249,7 +249,6 @@ public partial class ComboBox : ListControl
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  The background color of this control. This is an ambient property and
     ///  will always return a non-null value.
@@ -273,7 +272,6 @@ public partial class ComboBox : ListControl
 
         set => base.BackColor = value;
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -2347,7 +2345,6 @@ public partial class ComboBox : ListControl
             _fromHandleCreate = false;
         }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (Application.IsDarkModeEnabled)
         {
             // Style the ComboBox Open-Button:
@@ -2359,7 +2356,6 @@ public partial class ComboBox : ListControl
             _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
             PInvoke.SetWindowTheme(cInfo.hwndList, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
         }
-#pragma warning restore WFO5001
 
         if (_itemsCollection is not null)
         {
@@ -3677,7 +3673,6 @@ public partial class ComboBox : ListControl
 
                 break;
 
-#pragma warning disable WFO5001
             case PInvokeCore.WM_CTLCOLORSTATIC:
 
                 HWND hwndChild = (HWND)m.LParamInternal;
@@ -3713,7 +3708,6 @@ public partial class ComboBox : ListControl
 
                     return;
                 }
-#pragma warning restore WFO5001
 
                 break;
 
@@ -3812,7 +3806,6 @@ public partial class ComboBox : ListControl
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
-#pragma warning disable WFO5001
                     // Special handling for disabled DropDownList in dark mode
                     if (Application.IsDarkModeEnabled && !Enabled && DropDownStyle == ComboBoxStyle.DropDownList)
                     {
@@ -3833,7 +3826,6 @@ public partial class ComboBox : ListControl
                             Color.FromArgb(180, 180, 180),
                             TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
                     }
-#pragma warning restore WFO5001
 
                     return;
                 }

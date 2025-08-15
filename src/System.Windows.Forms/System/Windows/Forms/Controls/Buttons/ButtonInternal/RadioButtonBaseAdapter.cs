@@ -62,13 +62,13 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
 
         if (!Control.Enabled)
         {
-            // If we are not in HighContrast mode OR we opted into the legacy behavior
+            // If we are not in contrast theme OR we opted into the legacy behavior
             if (!SystemInformation.HighContrast)
             {
                 border = ControlPaint.ContrastControlDark;
             }
 
-            // Otherwise we are in HighContrast mode
+            // Otherwise we are in a contrast theme
             field = SystemColors.Control;
         }
 

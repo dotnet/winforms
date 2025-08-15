@@ -188,7 +188,6 @@ public partial class MonthCalendar : Control
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
     public override Color BackColor
     {
@@ -203,7 +202,6 @@ public partial class MonthCalendar : Control
         }
         set => base.BackColor = value;
     }
-#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -284,9 +282,7 @@ public partial class MonthCalendar : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.MONTHCAL_CLASS;
@@ -408,7 +404,6 @@ public partial class MonthCalendar : Control
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
     public override Color ForeColor
     {
@@ -423,7 +418,6 @@ public partial class MonthCalendar : Control
         }
         set => base.ForeColor = value;
     }
-#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

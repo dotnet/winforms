@@ -15,13 +15,9 @@ public static class ComboBoxRenderer
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
     private static readonly VisualStyleElement s_comboBoxElement = Application.IsDarkModeEnabled
         ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::{Control.ComboboxClassIdentifier}", 1, 1)
         : VisualStyleElement.ComboBox.DropDownButton.Normal;
-
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private static readonly VisualStyleElement s_textBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 

@@ -627,9 +627,7 @@ public partial class ListView : Control
     {
         get
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             CreateParams cp = base.CreateParams;
 
@@ -4666,7 +4664,6 @@ public partial class ListView : Control
         BeginInvoke(ApplyDarkModeOnDemand);
     }
 
-#pragma warning disable WFO5001
     private void ApplyDarkModeOnDemand()
     {
         if (Application.IsDarkModeEnabled
@@ -4708,7 +4705,6 @@ public partial class ListView : Control
                 null);
         }
     }
-#pragma warning restore WFO5001
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
@@ -4984,7 +4980,6 @@ public partial class ListView : Control
 
     protected void RealizeProperties()
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         Color c = BackColor;
 
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
@@ -4998,7 +4993,6 @@ public partial class ListView : Control
         {
             PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
-#pragma warning restore WFO5001
 
         // Realize state information
         if (_imageListLarge is not null)
@@ -6009,7 +6003,7 @@ public partial class ListView : Control
 
         // We need to set the text color when we are in dark mode,
         // so that the themed headers are actually readable.
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         if (Application.IsDarkModeEnabled
             && !OwnerDraw
             && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
@@ -6032,7 +6026,6 @@ public partial class ListView : Control
                 return false;
             }
         }
-#pragma warning restore WFO5001
 
         if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {

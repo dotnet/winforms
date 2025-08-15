@@ -94,8 +94,6 @@ public partial class CheckBox : ButtonBase
         }
     }
 
-#pragma warning disable WFO5001
-
     private protected override bool OwnerDraw =>
             // We want NO owner draw ONLY when we're
             // * In Dark Mode
@@ -107,8 +105,6 @@ public partial class CheckBox : ButtonBase
                 || Appearance != Appearance.Button
                 || FlatStyle != FlatStyle.Standard)
                 && base.OwnerDraw;
-
-#pragma warning restore WFO5001
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
