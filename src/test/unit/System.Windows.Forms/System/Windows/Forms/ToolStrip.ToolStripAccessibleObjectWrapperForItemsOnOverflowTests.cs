@@ -86,4 +86,21 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
         Assert.Equal(role, actual);
         Assert.False(toolStrip.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_State_Includes_Offscreen_And_Invisible()
+    {
+        using ToolStripButton toolStripItem = new();
+
+        Type wrapperType = typeof(ToolStrip)
+            .GetNestedType("ToolStripAccessibleObjectWrapperForItemsOnOverflow", BindingFlags.Instance | BindingFlags.NonPublic);
+        ToolStripItemAccessibleObject accessibleObject =
+            (ToolStripItemAccessibleObject)Activator.CreateInstance(wrapperType, toolStripItem);
+
+        AccessibleStates state = accessibleObject.State;
+
+        wrapperType.Should().NotBeNull("ToolStripAccessibleObjectWrapperForItemsOnOverflow nested type must exist on ToolStrip");
+        state.Should().HaveFlag(AccessibleStates.Offscreen);
+        state.Should().HaveFlag(AccessibleStates.Invisible);
+    }
 }
