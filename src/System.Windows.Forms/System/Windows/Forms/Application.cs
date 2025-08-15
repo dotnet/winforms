@@ -312,7 +312,7 @@ public sealed partial class Application
     ///     <b>Contrast and Accessibility Edge Cases:</b> Some edge cases may result in suboptimal contrast or may not meet certain
     ///     accessibility guidelines. While Dark Mode addresses major accessibility concerns for many users (such as reducing eye
     ///     strain from bright screens), if your application requires strict contrast compliance, we recommend using
-    ///     Classic (light) mode or High Contrast mode.
+    ///     Classic (light) mode or applying a Windows Accessibility contrast theme.
     ///    </description>
     ///   </item>
     ///  </list>
