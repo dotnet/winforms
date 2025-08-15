@@ -91,7 +91,7 @@ public partial class Control
         }
     }
 
-    private void HandleInternalDelegateException(
+    private static void HandleInternalDelegateException(
         TaskCompletionSource completion,
         Exception ex,
         CancellationToken cancellationToken)
@@ -107,7 +107,7 @@ public partial class Control
         }
     }
 
-    private void HandleInternalDelegateException<T>(
+    private static void HandleInternalDelegateException<T>(
         TaskCompletionSource<T> completion,
         Exception ex,
         CancellationToken cancellationToken)
