@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using TASKDIALOGCONFIG_FooterIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous2_e__Union;
 using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
 namespace System.Windows.Forms;
@@ -324,7 +323,6 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static Task<TaskDialogButton> ShowDialogAsync(
         TaskDialogPage page,
         TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterScreen)
@@ -357,7 +355,6 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static Task<TaskDialogButton> ShowDialogAsync(
         IWin32Window owner,
         TaskDialogPage page,
@@ -391,7 +388,6 @@ public partial class TaskDialog : IWin32Window
     /// <exception cref="InvalidOperationException">
     ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static async Task<TaskDialogButton> ShowDialogAsync(
         nint hwndOwner,
         TaskDialogPage page,
