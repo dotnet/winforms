@@ -29,10 +29,33 @@ public partial class Control
     ///   <see cref="InvokeAsync(Func{CancellationToken, ValueTask}, CancellationToken)"/> or
     ///   <see cref="InvokeAsync{T}(Func{CancellationToken, ValueTask{T}}, CancellationToken)"/>.
     ///  </para>
+    ///  <para>
+    ///   <b>Note:</b> If the control is disposed (or its handle is destroyed) before the
+    ///   marshaled callback runs, the returned task may never complete. This is the same
+    ///   behavior as <see cref="BeginInvoke(Delegate)"/>.
+    ///   To avoid this, either:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>Ensure the control outlives the awaited operation, or</description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
+    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
+    ///     use a token linked to the control's lifetime.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
     public async Task InvokeAsync(Action callback, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(callback);
+
+        if (!IsHandleCreated)
+        {
+            throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
+        }
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -64,7 +87,15 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                completion.TrySetException(ex);
+                if (ex is OperationCanceledException oce
+                    && oce.CancellationToken == cancellationToken)
+                {
+                    completion.TrySetCanceled(cancellationToken);
+                }
+                else
+                {
+                    completion.TrySetException(ex);
+                }
             }
         }
     }
@@ -100,10 +131,33 @@ public partial class Control
     ///   in a "fire-and-forget" manner. To properly await asynchronous operations, use the overloads that accept
     ///   <see cref="Func{CancellationToken, ValueTask}"/> (or <see cref="ValueTask{T}"/>).
     ///  </para>
+    ///  <para>
+    ///   <b>Note:</b> If the control is disposed (or its handle is destroyed) before the
+    ///   marshaled callback runs, the returned task may never complete. This is the same
+    ///   behavior as <see cref="BeginInvoke(Delegate)"/>.
+    ///   To avoid this, either:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>Ensure the control outlives the awaited operation, or</description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
+    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
+    ///     use a token linked to the control's lifetime.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
     public async Task<T> InvokeAsync<T>(Func<T> callback, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(callback);
+
+        if (!IsHandleCreated)
+        {
+            throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
+        }
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -135,7 +189,15 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                completion.TrySetException(ex);
+                if (ex is OperationCanceledException oce
+                    && oce.CancellationToken == cancellationToken)
+                {
+                    completion.TrySetCanceled(cancellationToken);
+                }
+                else
+                {
+                    completion.TrySetException(ex);
+                }
             }
         }
     }
@@ -177,6 +239,24 @@ public partial class Control
     ///   For synchronous operations, use <see cref="InvokeAsync(Action, CancellationToken)"/> or
     ///   <see cref="InvokeAsync{T}(Func{T}, CancellationToken)"/>.
     ///  </para>
+    ///  <para>
+    ///   <b>Note:</b> If the control is disposed (or its handle is destroyed) before the
+    ///   marshaled callback runs, the returned task may never complete. This is the same
+    ///   behavior as <see cref="BeginInvoke(Delegate)"/>.
+    ///   To avoid this, either:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>Ensure the control outlives the awaited operation, or</description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
+    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
+    ///     use a token linked to the control's lifetime.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
     public async Task InvokeAsync(
         Func<CancellationToken, ValueTask> callback,
@@ -223,7 +303,15 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                completion.TrySetException(ex);
+                if (ex is OperationCanceledException oce
+                    && oce.CancellationToken == cancellationToken)
+                {
+                    completion.TrySetCanceled(cancellationToken);
+                }
+                else
+                {
+                    completion.TrySetException(ex);
+                }
             }
         }
     }
@@ -265,6 +353,24 @@ public partial class Control
     ///   For synchronous operations, use <see cref="InvokeAsync(Action, CancellationToken)"/> or
     ///   <see cref="InvokeAsync{T}(Func{T}, CancellationToken)"/>.
     ///  </para>
+    ///  <para>
+    ///   <b>Note:</b> If the control is disposed (or its handle is destroyed) before the
+    ///   marshaled callback runs, the returned task may never complete. This is the same
+    ///   behavior as <see cref="BeginInvoke(Delegate)"/>.
+    ///   To avoid this, either:
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>Ensure the control outlives the awaited operation, or</description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     Always pass a <see cref="CancellationToken"/> that you cancel when the
+    ///     control is disposing/its handle is destroyed (recommended). A common pattern is to
+    ///     use a token linked to the control's lifetime.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
     public async Task<T> InvokeAsync<T>(
         Func<CancellationToken, ValueTask<T>> callback,
@@ -311,7 +417,15 @@ public partial class Control
             }
             catch (Exception ex)
             {
-                completion.TrySetException(ex);
+                if (ex is OperationCanceledException oce
+                    && oce.CancellationToken == cancellationToken)
+                {
+                    completion.TrySetCanceled(cancellationToken);
+                }
+                else
+                {
+                    completion.TrySetException(ex);
+                }
             }
         }
     }
