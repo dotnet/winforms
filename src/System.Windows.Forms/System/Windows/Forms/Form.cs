@@ -5555,6 +5555,43 @@ public partial class Form : ContainerControl
     ///   There is no need to marshal the call to the UI thread manually if the call
     ///   originates from a different thread than the UI-Thread. This is handled automatically.
     ///  </para>
+    ///  <para>
+    ///   The returned <see cref="Task"/> carries a <see cref="WeakReference{T}"/> to the <see cref="Form"/> in its
+    ///   <see cref="Task.AsyncState"/> property. This is particularly useful when managing multiple forms (such as tool windows)
+    ///   in a task-based window manager, as it eliminates the need for a separate lookup table to synchronize between tasks and forms.
+    ///  </para>
+    ///  <para>
+    ///   The following example shows how to retrieve the form from a completed task when managing multiple forms:
+    ///  </para>
+    ///  <code>
+    ///  // Wait for any of the forms to complete
+    ///  Task completedShowAsyncTask = await Task
+    ///      .WhenAny(formAsyncTasks)
+    ///      .ConfigureAwait(false);
+    ///
+    ///  // Retrieve the form using an extension method
+    ///  if (completedShowAsyncTask.ToForm() is Form form)
+    ///  {
+    ///      // Handle the completed form
+    ///  }
+    ///  </code>
+    ///  <para>
+    ///   Where the extension method can be implemented as:
+    ///  </para>
+    ///  <code>
+    ///  public static Form? ToForm(this Task task)
+    ///  {
+    ///      ArgumentNullException.ThrowIfNull(task);
+    ///
+    ///      if (task.AsyncState is WeakReference&lt;Form&gt; weakRefToForm
+    ///          &amp;&amp; weakRefToForm.TryGetTarget(out Form? form))
+    ///      {
+    ///          return form;
+    ///      }
+    ///
+    ///      return null;
+    ///  }
+    ///  </code>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
     ///  <para>Thrown if:</para>
@@ -5573,7 +5610,6 @@ public partial class Form : ContainerControl
     /// <exception cref="ArgumentException">
     ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
@@ -5834,7 +5870,6 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if no
     ///  <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
 
     /// <summary>
@@ -5875,7 +5910,6 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if
     ///  no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)

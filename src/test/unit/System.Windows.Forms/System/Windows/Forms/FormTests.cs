@@ -2656,7 +2656,6 @@ public partial class FormTests
         Assert.False(child.IsHandleCreated);
     }
 
-#pragma warning disable WFO5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [WinFormsFact]
     public async Task Form_ShowAsync_GeneralTaskTests()
     {
@@ -2719,7 +2718,6 @@ public partial class FormTests
             formControlTasks.Remove(finishedTask);
         }
     }
-#pragma warning restore WFO5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [WinFormsFact]
     public void Form_ParentThenSetShowInTaskbarToFalse()
