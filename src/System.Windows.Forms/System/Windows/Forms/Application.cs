@@ -21,12 +21,12 @@ namespace System.Windows.Forms;
 public sealed partial class Application
 {
     /// <summary>
-    ///  Hash table for our event list
+    ///  Hash table for our event list.
     /// </summary>
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
     /// <summary>
-    ///  Scaled version of non system <see cref="s_defaultFont"/>.
+    ///  Scaled version of non-system <see cref="s_defaultFont"/>.
     /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
@@ -50,7 +50,7 @@ public sealed partial class Application
     private const int SystemDarkModeDisabled = 1;
 
     /// <summary>
-    ///  Events the user can hook into
+    ///  Events the user can hook into.
     /// </summary>
     private static readonly object s_eventApplicationExit = new();
     private static readonly object s_eventThreadExit = new();
@@ -65,7 +65,7 @@ public sealed partial class Application
     private static bool s_parkingWindowCreated;
 
     /// <summary>
-    ///  This class is static, there is no need to ever create it.
+    ///  This class is static; there is no need to ever create it.
     /// </summary>
     private Application()
     {
@@ -73,8 +73,8 @@ public sealed partial class Application
 
     /// <summary>
     ///  Determines if the caller should be allowed to quit the application. This will return false,
-    ///  for example, if being called from a windows forms control being hosted within a web browser. The
-    ///  windows forms control should not attempt to quit the application.
+    ///  for example, if being called from a Windows Forms control being hosted within a web browser. The
+    ///  Windows Forms control should not attempt to quit the application.
     /// </summary>
     public static bool AllowQuit => ThreadContext.GetAllowQuit();
 
@@ -271,8 +271,8 @@ public sealed partial class Application
     ///   to apply the new system setting.
     ///  </para>
     ///  <para>
-    ///   Note that Dark Mode is only available on Windows 11 and later. If Windows is set to High Contrast mode,
-    ///   that mode always takes precedence over other settings.
+    ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
+    ///   is set to a accessibility contrast theme, the dark mode is not available.
     ///  </para>
     ///  <para>
     ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, set the color mode
@@ -389,14 +389,15 @@ public sealed partial class Application
     /// <remarks>
     ///  <para>
     ///   The color setting is determined based on the operating system version and its system settings.
-    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
-    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if dark mode is enabled in the system settings,
+    ///   or <see cref="SystemColorMode.Classic"/> if the color mode is set to the light, standard color setting.
     ///  </para>
     ///  <para>
-    ///   SystemColorMode is supported on Windows 11 or later versions.
+    ///   <see cref="SystemColorMode"/> is supported on Windows 11 or later versions.
     ///  </para>
     ///  <para>
-    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///   <see cref="SystemColorMode"/> is not supported if a Windows OS high contrast theme has been
+    ///   enabled in the system settings.
     ///  </para>
     /// </remarks>
     public static SystemColorMode SystemColorMode =>
@@ -434,7 +435,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
-    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    ///  Note: With a accessibility contrast theme selected in the OS, this will always return <see langword="false"/>.
     /// </summary>
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
@@ -949,7 +950,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
-    ///  Uses the default theming manifest file shipped with the redist.
+    ///  Uses the default theming manifest file shipped with the redistributable package.
     /// </summary>
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
     public static void EnableVisualStyles()
@@ -1363,6 +1364,10 @@ public sealed partial class Application
     ///  This switch determines the default text rendering engine to use by some controls that support
     ///  switching rendering engine.
     /// </summary>
+    /// <param name="defaultValue">The default value to use for compatible text rendering.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if any window handle has already been created in the application.
+    /// </exception>
     public static void SetCompatibleTextRenderingDefault(bool defaultValue)
     {
         if (NativeWindow.AnyHandleCreated)
@@ -1374,7 +1379,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Sets the default <see cref="Font"/> for process.
+    ///  Sets the default <see cref="Font"/> for the process.
     /// </summary>
     /// <param name="font">The font to be used as a default across the application.</param>
     /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
@@ -1383,11 +1388,11 @@ public sealed partial class Application
     /// </exception>
     /// <remarks>
     ///  <para>
-    ///   The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
-    ///   and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
+    ///   The system text scale factor will be applied to the font. For example, if the default font is set to "Calibri, 11f"
+    ///   and the text scale factor is set to 150%, the resulting default font will be set to "Calibri, 16.5f".
     ///  </para>
     ///  <para>
-    ///   Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
+    ///   Users can adjust text scale with the "Make text bigger" slider on the Settings → Accessibility → Display screen.
     ///  </para>
     /// </remarks>
     /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
@@ -1403,7 +1408,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    ///  Scales <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
     /// </summary>
     internal static void ScaleDefaultFont()
     {

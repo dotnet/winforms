@@ -398,8 +398,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     /// </summary>
     protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
     {
-        // If system in high contrast mode and specific renderer override is defined, use that.
-        // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+        // If the user selected a contrast theme in the OS and a specific renderer-override is defined, use that.
+        // For ToolStripSystemRenderer in a contrast theme, the RendererOverride property will be ToolStripHighContrastRenderer.
         if (RendererOverride is not null)
         {
             base.OnRenderButtonBackground(e);
@@ -558,8 +558,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     /// </summary>
     protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
     {
-        // If system in high contrast mode and specific renderer override is defined, use that.
-        // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+        // If the user selected a contrast theme in the OS and a specific renderer-override is defined, use that.
+        // For ToolStripSystemRenderer in a contrast theme, the RendererOverride property will be ToolStripHighContrastRenderer.
         if (RendererOverride is not null)
         {
             base.OnRenderSplitButtonBackground(e);
