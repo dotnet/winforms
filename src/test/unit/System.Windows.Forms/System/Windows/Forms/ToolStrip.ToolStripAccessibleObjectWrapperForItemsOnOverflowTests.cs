@@ -94,12 +94,13 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
 
         Type wrapperType = typeof(ToolStrip)
             .GetNestedType("ToolStripAccessibleObjectWrapperForItemsOnOverflow", BindingFlags.Instance | BindingFlags.NonPublic);
-        ToolStripItemAccessibleObject accessibleObject =
-            (ToolStripItemAccessibleObject)Activator.CreateInstance(wrapperType, toolStripItem);
-
-        AccessibleStates state = accessibleObject.State;
 
         wrapperType.Should().NotBeNull("ToolStripAccessibleObjectWrapperForItemsOnOverflow nested type must exist on ToolStrip");
+
+        ToolStripItemAccessibleObject accessibleObject =
+            (ToolStripItemAccessibleObject)Activator.CreateInstance(wrapperType, toolStripItem);
+        AccessibleStates state = accessibleObject.State;
+
         state.Should().HaveFlag(AccessibleStates.Offscreen);
         state.Should().HaveFlag(AccessibleStates.Invisible);
     }
