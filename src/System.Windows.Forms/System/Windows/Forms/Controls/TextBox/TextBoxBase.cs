@@ -269,7 +269,6 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Gets or sets the background color of the control.
     /// </summary>
@@ -298,7 +297,6 @@ public abstract partial class TextBoxBase : Control
 
         set => base.BackColor = value;
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -402,9 +400,7 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
@@ -949,7 +945,6 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private void EnsureReadonlyBackgroundColor(bool value)
     {
         // If we have no specifically defined back color, we set the back color in case we're in dark mode.
@@ -960,7 +955,6 @@ public abstract partial class TextBoxBase : Control
             Invalidate();
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]

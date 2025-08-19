@@ -17,8 +17,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class ApplyApplicationDefaultsEventArgs
         Inherits EventArgs
 
-#Disable Warning WFO5001
-
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
                 colorMode As SystemColorMode)
@@ -28,13 +26,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Me.ColorMode = colorMode
         End Sub
 
-#Enable Warning WFO5001
-
         ''' <summary>
         '''  Setting this property inside the event handler determines the
         '''  <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=DiagnosticIDs.UrlFormat)>
         Public Property ColorMode As SystemColorMode
 
         ''' <summary>

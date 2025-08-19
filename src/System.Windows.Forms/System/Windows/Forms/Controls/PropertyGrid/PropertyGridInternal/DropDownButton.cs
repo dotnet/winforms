@@ -78,7 +78,6 @@ internal sealed partial class DropDownButton : Button
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected override void OnPaint(PaintEventArgs pevent)
     {
         ComboBoxState state = ComboBoxState.Normal;
@@ -128,7 +127,7 @@ internal sealed partial class DropDownButton : Button
             RenderComboBoxButtonWithVisualStyles(pevent, state);
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     private void RenderComboBoxButtonWithVisualStyles(PaintEventArgs pevent, ComboBoxState state)
     {
         Rectangle dropDownButtonRect = new(0, 0, Width, Height);

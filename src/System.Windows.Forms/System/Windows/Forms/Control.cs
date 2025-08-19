@@ -7403,7 +7403,6 @@ public unsafe partial class Control :
                 SetExtendedState(ExtendedStates.SetScrollPosition, false);
             }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (Application.IsDarkModeEnabled
                 && DarkModeRequestState is true
                 && !RecreatingHandle)
@@ -7413,7 +7412,6 @@ public unsafe partial class Control :
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
             }
-#pragma warning restore WFO5001
         }
 
         ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
@@ -9368,7 +9366,7 @@ public unsafe partial class Control :
             // than when we create the handle for the first time. The reason is that recreating the handle
             // often also recreates the handles of any child controls, and we want to
             // ensure that the theming is applied to all child controls as well.
-#pragma warning disable WFO5001
+
             if (Application.IsDarkModeEnabled
                 && DarkModeRequestState is true)
             {
@@ -9377,7 +9375,6 @@ public unsafe partial class Control :
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
             }
-#pragma warning restore WFO5001
 
             // Restore control focus
             if (focused)
@@ -10351,7 +10348,7 @@ public unsafe partial class Control :
     ///  NOTE: This is control style, not the Win32 style of the hWnd.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     protected void SetStyle(ControlStyles flag, bool value)
     {
         // WARNING: if we ever add argument checking to "flag", we will need
@@ -10371,7 +10368,6 @@ public unsafe partial class Control :
             DarkModeRequestState = value;
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     internal virtual void SetToolTip(ToolTip toolTip)
     {
@@ -10423,7 +10419,6 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
@@ -10441,7 +10436,7 @@ public unsafe partial class Control :
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
-#pragma warning restore WFO5001
+
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl

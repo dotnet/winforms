@@ -264,7 +264,7 @@ public abstract partial class UpDownBase
         ///  Handles painting the buttons on the control.
         /// </summary>
         /// <param name="e">The paint event arguments.</param>
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         protected override void OnPaint(PaintEventArgs e)
         {
             int half_height = ClientSize.Height / 2;
@@ -341,7 +341,6 @@ public abstract partial class UpDownBase
                     new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                     HWNDInternal);
             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             if (half_height != (ClientSize.Height + 1) / 2)
             {
