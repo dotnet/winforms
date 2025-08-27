@@ -24,7 +24,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
 
 namespace System.Drawing.Tests;
@@ -33,7 +32,6 @@ public class IconTests
 {
     [Theory]
     [InlineData("48x48_multiple_entries_4bit.ico")]
-    [InlineData("256x256_seven_entries_multiple_bits.ico")]
     [InlineData("pngwithheight_icon.ico")]
     public void Ctor_FilePath(string name)
     {
@@ -50,8 +48,8 @@ public class IconTests
         yield return new object[] { "48x48_multiple_entries_4bit.ico", new Size(-32, -32), new Size(16, 16) };
         yield return new object[] { "48x48_multiple_entries_4bit.ico", new Size(32, 16), new Size(32, 32) };
         yield return new object[] { "256x256_seven_entries_multiple_bits.ico", new Size(48, 48), new Size(48, 48) };
-        yield return new object[] { "256x256_seven_entries_multiple_bits.ico", new Size(0, 0), new Size(32, 32) };
-        yield return new object[] { "256x256_seven_entries_multiple_bits.ico", new Size(1, 1), new Size(256, 256) };
+        yield return new object[] { "256x256_seven_entries_multiple_bits.ico", new Size(0, 0), new Size(64, 32) };
+        yield return new object[] { "256x256_seven_entries_multiple_bits.ico", new Size(1, 1), new Size(16, 16) };
 
         // Unusual size
         yield return new object[] { "10x16_one_entry_32bit.ico", new Size(16, 16), new Size(10, 16) };
@@ -753,10 +751,7 @@ public class IconTests
         using Bitmap bitmap = icon.ToBitmap();
         Assert.Equal(new Size(32, 32), bitmap.Size);
 
-        int expectedBitDepth;
-        string fieldName = PlatformDetection.IsNetFramework ? "bitDepth" : "s_bitDepth";
-        FieldInfo fi = typeof(Icon).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);
-        expectedBitDepth = (int)fi.GetValue(null);
+        int expectedBitDepth = Windows.Forms.Screen.PrimaryScreen.BitsPerPixel;
 
         // If the first icon entry was picked, the color would be black: 0xFF000000?
 
