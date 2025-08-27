@@ -93,7 +93,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(pushButtonState),
                 _ => PaintImage(e, layout),
-                (_, textColor1, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
@@ -131,7 +131,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(PushButtonState.Pressed),
                 _ => PaintImage(e, layout),
-                (_, textColor, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
@@ -169,7 +169,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(PushButtonState.Hot),
                 _ => PaintImage(e, layout),
-                (_, textColor, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),

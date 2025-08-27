@@ -50,7 +50,7 @@ internal partial interface IButtonRenderer
         Color parentBackgroundColor,
         Color backColor,
         Action<Rectangle> paintImage,
-        Action<Rectangle, Color, bool> paintField);
+        Action paintField);
 
     /// <summary>
     ///  Draws button background with appropriate styling.
