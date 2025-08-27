@@ -39,7 +39,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         Color parentBackgroundColor,
         Color backColor,
         Action<Rectangle> paintImage,
-        Action<Rectangle, Color, bool> paintField)
+        Action paintField)
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(paintImage);
@@ -66,10 +66,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
 
-            paintField(
-                contentBounds,
-                GetTextColor(state, isDefault),
-                false);
+            paintField();
 
             if (focused && showFocusCues)
             {
