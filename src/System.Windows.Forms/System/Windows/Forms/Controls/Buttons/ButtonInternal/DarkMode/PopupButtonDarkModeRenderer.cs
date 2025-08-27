@@ -30,7 +30,7 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Draws button background with popup styling, including subtle 3D effect.
     /// </summary>
-    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
+    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
     {
         // Use padding from ButtonDarkModeRenderer
         Padding padding = PaddingCore;
@@ -44,9 +44,6 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
         {
             contentBounds.Offset(ContentOffset, ContentOffset);
         }
-
-        // Get appropriate background color based on state
-        Color backColor = GetBackgroundColor(state, isDefault);
 
         // Create path for rounded corners
         using GraphicsPath path = CreateRoundedRectanglePath(paddedBounds, ButtonCornerRadius);
@@ -101,7 +98,7 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Gets the background color appropriate for the button state and type.
     /// </summary>
-    private static Color GetBackgroundColor(PushButtonState state, bool isDefault) =>
+    public override Color GetBackgroundColor(PushButtonState state, bool isDefault) =>
         isDefault
             ? state switch
             {

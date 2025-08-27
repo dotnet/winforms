@@ -23,10 +23,10 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private protected override Padding PaddingCore { get; } = new(0);
 
     public override Rectangle DrawButtonBackground(
-        Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault)
+        Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
     {
         // fill background
-        using var back = GetBackgroundColor(state, isDefault).GetCachedSolidBrushScope();
+        using var back = backColor.GetCachedSolidBrushScope();
         graphics.FillRectangle(back, bounds);
 
         // draw border identical to Win32
@@ -58,7 +58,7 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 ? DefaultColors.AcceptButtonTextColor
                 : DefaultColors.NormalTextColor;
 
-    private static Color GetBackgroundColor(PushButtonState state, bool isDefault) =>
+    public override Color GetBackgroundColor(PushButtonState state, bool isDefault) =>
         isDefault
             ? state switch
             {
