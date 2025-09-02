@@ -23,7 +23,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     {
     }
 
-    protected new CheckBox Control => (CheckBox)base.ButtonBaseControl;
+    protected CheckBox Control => (CheckBox)ButtonBaseControl;
 
     protected void DrawCheckFlat(
         PaintEventArgs e,

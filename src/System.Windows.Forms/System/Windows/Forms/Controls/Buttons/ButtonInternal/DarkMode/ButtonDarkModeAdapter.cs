@@ -29,7 +29,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color textColor;
 
-        if (ButtonBaseControl.ForeColorSet)
+        if (ButtonBaseControl.ForeColor != Control.DefaultForeColor)
         {
             textColor = new ColorOptions(deviceContext, ButtonBaseControl.ForeColor, ButtonBaseControl.BackColor)
             {
@@ -51,23 +51,23 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
     private Color GetButtonBackColor(PushButtonState state)
     {
-        Color textColor;
+        Color backColor;
 
-        if (ButtonBaseControl.BackColorSet)
+        if (ButtonBaseControl.BackColor != Control.DefaultBackColor)
         {
-            textColor = ButtonBaseControl.BackColor;
+            backColor = ButtonBaseControl.BackColor;
 
             if (IsHighContrastHighlighted())
             {
-                textColor = SystemColors.HighlightText;
+                backColor = SystemColors.HighlightText;
             }
         }
         else
         {
-            textColor = ButtonDarkModeRenderer.GetBackgroundColor(state, ButtonBaseControl.IsDefault);
+            backColor = ButtonDarkModeRenderer.GetBackgroundColor(state, ButtonBaseControl.IsDefault);
         }
 
-        return textColor;
+        return backColor;
     }
 
     internal override void PaintUp(PaintEventArgs e, CheckState state)
