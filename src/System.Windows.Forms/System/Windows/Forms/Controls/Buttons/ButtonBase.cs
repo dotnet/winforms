@@ -1202,6 +1202,23 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         base.OnKeyDown(kevent);
     }
 
+    internal bool BackColorSet { get; set; }
+    internal bool ForeColorSet { get; set; }
+
+    protected override void OnForeColorChanged(EventArgs e)
+    {
+        base.OnForeColorChanged(e);
+        ForeColorSet = ShouldSerializeForeColor();
+        UpdateOwnerDraw();
+    }
+
+    protected override void OnBackColorChanged(EventArgs e)
+    {
+        base.OnBackColorChanged(e);
+        BackColorSet = ShouldSerializeBackColor();
+        UpdateOwnerDraw();
+    }
+
     /// <summary>
     ///  Raises the <see cref="OnKeyUp"/> event.
     /// </summary>
