@@ -1,0 +1,9 @@
+<Project>
+
+  <!-- Only build the Microsoft.Private.Winforms package on non-Windows. -->
+  <ItemGroup Condition="'$(OS)' != 'Windows_NT'">
+    <ProjectToBuild Include="$(RepoRoot)pkg/Microsoft.Private.Winforms/Microsoft.Private.Winforms.csproj" />
+    <ProjectToBuild Include="$(RepoRoot)pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/Microsoft.Dotnet.Winforms.ProjectTemplates.csproj" />
+  </ItemGroup>
+
+</Project>
