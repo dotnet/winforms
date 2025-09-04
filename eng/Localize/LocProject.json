@@ -227,6 +227,16 @@
                      },
                      {
                          "LanguageSet":  "VS_Main_Languages",
+                         "CloneLanguageSet":  "WiX_CloneLanguages",
+                         "LocItems":  [
+
+                                      ],
+                         "LssFiles":  [
+                                          "P210WxlSchemaV4.lss"
+                                      ]
+                     },
+                     {
+                         "LanguageSet":  "VS_Main_Languages",
                          "CloneLanguageSet":  "VS_macOS_CloneLanguages",
                          "LocItems":  [
 
