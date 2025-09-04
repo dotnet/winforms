@@ -1202,21 +1202,28 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         base.OnKeyDown(kevent);
     }
 
+    // These two properties are mainly used for ButtonDarkModeAdapter.
     internal bool BackColorSet { get; set; }
     internal bool ForeColorSet { get; set; }
 
     protected override void OnForeColorChanged(EventArgs e)
     {
         base.OnForeColorChanged(e);
-        ForeColorSet = ShouldSerializeForeColor();
-        UpdateOwnerDraw();
+        if (Application.IsDarkModeEnabled)
+        {
+            ForeColorSet = ShouldSerializeForeColor();
+            UpdateOwnerDraw();
+        }
     }
 
     protected override void OnBackColorChanged(EventArgs e)
     {
         base.OnBackColorChanged(e);
-        BackColorSet = ShouldSerializeBackColor();
-        UpdateOwnerDraw();
+        if (Application.IsDarkModeEnabled)
+        {
+            BackColorSet = ShouldSerializeBackColor();
+            UpdateOwnerDraw();
+        }
     }
 
     /// <summary>
