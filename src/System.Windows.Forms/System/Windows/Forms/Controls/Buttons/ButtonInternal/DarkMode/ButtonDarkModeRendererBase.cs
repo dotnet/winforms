@@ -37,8 +37,9 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         bool focused,
         bool showFocusCues,
         Color parentBackgroundColor,
+        Color backColor,
         Action<Rectangle> paintImage,
-        Action<Rectangle, Color, bool> paintField)
+        Action paintField)
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(paintImage);
@@ -60,15 +61,12 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
                 height: bounds.Height - padding.Vertical);
 
             // Draw button background and get content bounds
-            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault);
+            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor);
 
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
 
-            paintField(
-                contentBounds,
-                GetTextColor(state, isDefault),
-                false);
+            paintField();
 
             if (focused && showFocusCues)
             {
@@ -78,9 +76,11 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         }
     }
 
-    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);
+    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
 
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 
     public abstract Color GetTextColor(PushButtonState state, bool isDefault);
+
+    public abstract Color GetBackgroundColor(PushButtonState state, bool isDefault);
 }

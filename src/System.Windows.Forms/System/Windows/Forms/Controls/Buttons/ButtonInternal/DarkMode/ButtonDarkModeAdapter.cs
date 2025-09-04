@@ -25,6 +25,51 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     private ButtonDarkModeRendererBase ButtonDarkModeRenderer =>
         _buttonDarkModeRenderer;
 
+    private Color GetButtonTextColor(IDeviceContext deviceContext, PushButtonState state)
+    {
+        Color textColor;
+
+        if (Control.ForeColorSet)
+        {
+            textColor = new ColorOptions(deviceContext, Control.ForeColor, Control.BackColor)
+            {
+                Enabled = Control.Enabled
+            }.Calculate().WindowText;
+
+            if (IsHighContrastHighlighted())
+            {
+                textColor = SystemColors.HighlightText;
+            }
+        }
+        else
+        {
+            textColor = ButtonDarkModeRenderer.GetTextColor(state, Control.IsDefault);
+        }
+
+        return textColor;
+    }
+
+    private Color GetButtonBackColor(PushButtonState state)
+    {
+        Color textColor;
+
+        if (Control.BackColorSet)
+        {
+            textColor = Control.BackColor;
+
+            if (IsHighContrastHighlighted())
+            {
+                textColor = SystemColors.HighlightText;
+            }
+        }
+        else
+        {
+            textColor = ButtonDarkModeRenderer.GetBackgroundColor(state, Control.IsDefault);
+        }
+
+        return textColor;
+    }
+
     internal override void PaintUp(PaintEventArgs e, CheckState state)
     {
         try
@@ -36,21 +81,23 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
             LayoutData layout = CommonLayout().Layout();
 
+            PushButtonState pushButtonState = ToPushButtonState(state, Control.Enabled);
             ButtonDarkModeRenderer.RenderButton(
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                ToPushButtonState(state, Control.Enabled),
+                pushButtonState,
                 Control.IsDefault,
                 Control.Focused,
                 Control.ShowFocusCues,
                 Control.Parent?.BackColor ?? Control.BackColor,
+                GetButtonBackColor(pushButtonState),
                 _ => PaintImage(e, layout),
-                (_, textColor, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
-                    textColor,
+                    GetButtonTextColor(e, pushButtonState),
                     drawFocus: false)
             );
 
@@ -82,12 +129,13 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Focused,
                 Control.ShowFocusCues,
                 Control.Parent?.BackColor ?? Control.BackColor,
+                GetButtonBackColor(PushButtonState.Pressed),
                 _ => PaintImage(e, layout),
-                (_, textColor, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
-                    textColor,
+                    GetButtonTextColor(e, PushButtonState.Pressed),
                     drawFocus: false)
             );
 
@@ -119,12 +167,13 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Focused,
                 Control.ShowFocusCues,
                 Control.Parent?.BackColor ?? Control.BackColor,
+                GetButtonBackColor(PushButtonState.Hot),
                 _ => PaintImage(e, layout),
-                (_, textColor, drawFocus) => PaintField(
+                () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
-                    textColor,
+                    GetButtonTextColor(e, PushButtonState.Hot),
                     drawFocus: false)
             );
 
