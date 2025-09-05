@@ -211,11 +211,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GDI", "GDI", "{D619FF8C-D99
 		.github\copilot\GDI\GDIPlus-copilot-instructions.md = .github\copilot\GDI\GDIPlus-copilot-instructions.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Async", "Async", "{7BFA3A16-A19A-4FCE-AE1E-D1187BD92D4C}"
-	ProjectSection(SolutionItems) = preProject
-		.github\copilot\Async\invokeAsync_generate_test_instructions.md = .github\copilot\Async\invokeAsync_generate_test_instructions.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1185,7 +1180,6 @@ Global
 		{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{442C867C-51C0-8CE5-F067-DF065008E3DA} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{D619FF8C-D99A-48AB-B16B-2F0E819B46D5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{7BFA3A16-A19A-4FCE-AE1E-D1187BD92D4C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
