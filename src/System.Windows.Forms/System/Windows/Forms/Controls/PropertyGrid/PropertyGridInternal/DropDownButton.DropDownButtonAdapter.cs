@@ -15,11 +15,11 @@ internal sealed partial class DropDownButton : Button
 
         private void DDB_Draw3DBorder(PaintEventArgs e, Rectangle r, bool raised)
         {
-            if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
+            if (ButtonBaseControl.BackColor != SystemColors.Control && SystemInformation.HighContrast)
             {
                 if (raised)
                 {
-                    Color c = ControlPaint.LightLight(Control.BackColor);
+                    Color c = ControlPaint.LightLight(ButtonBaseControl.BackColor);
                     ControlPaint.DrawBorder(
                         e, r,
                         c, 1, ButtonBorderStyle.Outset,
@@ -29,26 +29,26 @@ internal sealed partial class DropDownButton : Button
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
+                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(ButtonBaseControl.BackColor));
                 }
             }
             else
             {
                 if (raised)
                 {
-                    Color c = ControlPaint.Light(Control.BackColor);
+                    Color c = ControlPaint.Light(ButtonBaseControl.BackColor);
                     ControlPaint.DrawBorder(
                         e, r,
                         c, 1, ButtonBorderStyle.Solid,
                         c, 1, ButtonBorderStyle.Solid,
-                        Control.BackColor, 2, ButtonBorderStyle.Outset,
-                        Control.BackColor, 2, ButtonBorderStyle.Outset);
+                        ButtonBaseControl.BackColor, 2, ButtonBorderStyle.Outset,
+                        ButtonBaseControl.BackColor, 2, ButtonBorderStyle.Outset);
 
                     Rectangle inside = r;
                     inside.Offset(1, 1);
                     inside.Width -= 3;
                     inside.Height -= 3;
-                    c = ControlPaint.LightLight(Control.BackColor);
+                    c = ControlPaint.LightLight(ButtonBaseControl.BackColor);
                     ControlPaint.DrawBorder(
                         e, inside,
                         c, 1, ButtonBorderStyle.Solid,
@@ -58,7 +58,7 @@ internal sealed partial class DropDownButton : Button
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
+                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(ButtonBaseControl.BackColor));
                 }
             }
         }
@@ -69,12 +69,12 @@ internal sealed partial class DropDownButton : Button
 
             if (!Application.RenderWithVisualStyles || Application.IsDarkModeEnabled)
             {
-                DDB_Draw3DBorder(pevent, Control.ClientRectangle, raised: true);
+                DDB_Draw3DBorder(pevent, ButtonBaseControl.ClientRectangle, raised: true);
             }
             else
             {
                 Color c = (ARGB)SystemColors.Window;
-                Rectangle rect = Control.ClientRectangle;
+                Rectangle rect = ButtonBaseControl.ClientRectangle;
                 rect.Inflate(0, -1);
                 ControlPaint.DrawBorder(
                     pevent, rect,
@@ -87,11 +87,11 @@ internal sealed partial class DropDownButton : Button
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
-            bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
-            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            bool isHighContrastHighlighted = !ButtonBaseControl.MouseIsDown && IsHighContrastHighlighted();
+            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : ButtonBaseControl.BackColor;
             if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {
-                using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor);
+                using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, ButtonBaseControl.BackColor);
                 graphics.DrawImage(invertedImage, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, new ImageAttributes());
             }
             else
