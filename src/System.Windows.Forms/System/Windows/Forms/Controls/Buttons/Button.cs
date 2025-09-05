@@ -148,6 +148,18 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
+    public override Image? BackgroundImage
+    {
+        set
+        {
+            base.BackgroundImage = value;
+
+            // BackgroundImage changes may affect rendering logic,
+            // so we manually update the OwnerDraw flag to ensure correct visual behavior.
+            UpdateOwnerDraw();
+        }
+    }
+
     /// <summary>
     ///  Defines, whether the control is owner-drawn. Based on this,
     ///  the UserPaint flags get set, which in turn makes it later
@@ -166,8 +178,6 @@ public partial class Button : ButtonBase, IButtonControl
                 && Image is null
                 // ...or a BackgroundImage, except if...
                 && BackgroundImage is null
-                // Delay BackgroundImage check until handle is created to avoid early null misjudgment
-                && IsHandleCreated
                 // ...the user wants to opt out of implicit DarkMode rendering.
                 && DarkModeRequestState is true
 
