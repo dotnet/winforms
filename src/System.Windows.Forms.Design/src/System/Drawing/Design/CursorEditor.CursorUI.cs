@@ -19,7 +19,8 @@ public partial class CursorEditor
 
         public CursorUI()
         {
-            Height = 310;
+            Height = ScaleHelper.IsScalingRequired ? ScaleHelper.ScaleToInitialSystemDpi(310) : 310;
+
             ItemHeight = Math.Max(4 + Cursors.Default.Size.Height, Font.Height);
             DrawMode = DrawMode.OwnerDrawFixed;
             BorderStyle = BorderStyle.None;
@@ -64,13 +65,14 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
+                var cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(cursor.Handle), DeviceDpi).Size.Width;
 
                 e.DrawBackground();
-                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, 32, e.Bounds.Height - 4));
-                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, 32 - 1, e.Bounds.Height - 4 - 1));
+                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth - 1, e.Bounds.Height - 4 - 1));
 
-                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, 32, e.Bounds.Height - 4));
-                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + 36, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
+                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
 
