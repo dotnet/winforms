@@ -949,7 +949,8 @@ public abstract partial class TextBoxBase : Control
     {
         // If we have no specifically defined back color, we set the back color in case we're in dark mode.
         if (Application.IsDarkModeEnabled
-            && DarkModeRequestState is true)
+            && DarkModeRequestState is true
+            && !ShouldSerializeBackColor())
         {
             base.BackColor = value ? SystemColors.ControlLight : SystemColors.Window;
             Invalidate();
