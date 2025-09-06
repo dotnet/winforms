@@ -2060,7 +2060,9 @@ public partial class DataGridView : Control, ISupportInitialize
                 BackColor = s_defaultBackColor,
                 ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor,
                 SelectionBackColor = DefaultSelectionBackBrush.Color,
-                SelectionForeColor = DefaultSelectionForeBrush.Color,
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                SelectionForeColor = Application.IsDarkModeEnabled ? SystemColors.ControlText : DefaultSelectionForeBrush.Color,
+#pragma warning restore WFO5001
                 Font = base.Font,
                 AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
                 WrapModeInternal = DataGridViewTriState.False
