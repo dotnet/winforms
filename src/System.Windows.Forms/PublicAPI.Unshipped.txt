@@ -1,3 +1,4 @@
+override System.Windows.Forms.Button.BackgroundImage.set -> void
 override System.Windows.Forms.ButtonBase.OnBackColorChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ButtonBase.OnForeColorChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
