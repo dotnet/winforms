@@ -18,7 +18,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
     public static TheoryData<ToolStripItem?> ToolStripItem_Set_TestData() =>
      [
-        null,
+        (ToolStripItem?)null,
         new SubToolStripItem()
      ];
 

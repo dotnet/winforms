@@ -8,5 +8,6 @@ public enum ComboBoxState
     Normal = 1,
     Hot = 2,
     Pressed = 3,
-    Disabled = 4
+    Disabled = 4,
+    Focused = 5,
 }

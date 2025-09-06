@@ -3,15 +3,15 @@
 
 #nullable disable
 
+using System.CodeDom;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing.Design;
-using System.Drawing;
-using System.Windows.Forms.Design.Behavior;
-using System.CodeDom;
 using System.ComponentModel.Design.Serialization;
+using System.Drawing;
+using System.Drawing.Design;
 using System.Text.RegularExpressions;
+using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design;
 
@@ -605,11 +605,8 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
                 base.OnDragComplete(de);
             }
 
-            if (trans is not null)
-            {
-                trans.Commit();
-                trans = null;
-            }
+            trans?.Commit();
+            trans = null;
 
             // Set the selection to be the newly added control - but only if we are doing a local copy
             if (localCopy)

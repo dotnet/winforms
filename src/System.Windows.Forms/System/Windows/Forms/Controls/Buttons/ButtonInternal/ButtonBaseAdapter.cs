@@ -547,6 +547,21 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
+        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
+        {
+            Rectangle bounds = Control.ClientRectangle;
+            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
+            ControlPaint.DrawBackgroundImage(
+                e.GraphicsInternal,
+                Control.BackgroundImage,
+                Color.Transparent,
+                Control.BackgroundImageLayout,
+                Control.ClientRectangle,
+                bounds,
+                Control.DisplayRectangle.Location,
+                Control.RightToLeft);
+        }
+
         if (Control.Image is not null)
         {
             // Setup new clip region & draw

@@ -286,11 +286,8 @@ public partial class ErrorProvider
         /// </summary>
         private void RemoveFromWindow()
         {
-            if (_window is not null)
-            {
-                _window.Remove(this);
-                _window = null;
-            }
+            _window?.Remove(this);
+            _window = null;
         }
 
         /// <summary>

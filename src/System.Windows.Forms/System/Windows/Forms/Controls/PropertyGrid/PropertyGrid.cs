@@ -74,7 +74,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private Color _categoryForegroundColor = SystemColors.ControlText;
     private Color _categorySplitterColor = SystemColors.Control;
     private Color _viewBorderColor = SystemColors.ControlDark;
-    private Color _selectedItemWithFocusForeColor = SystemColors.HighlightText;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private Color _selectedItemWithFocusForeColor = Application.IsDarkModeEnabled ? SystemColors.ControlText : SystemColors.HighlightText;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private Color _selectedItemWithFocusBackColor = SystemColors.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
 

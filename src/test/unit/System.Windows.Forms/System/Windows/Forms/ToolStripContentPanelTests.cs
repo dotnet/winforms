@@ -5,9 +5,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.TestUtilities;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

@@ -150,7 +150,7 @@ public class ApplicationTests
     }
 
 #pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     [Fact]
     public void Application_SetColorMode_PlausibilityTests()
     {
@@ -177,7 +177,7 @@ public class ApplicationTests
         Assert.Equal(SystemColorMode.System, Application.ColorMode);
         Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
     }
-#pragma warning restore WFO5001
+
 #pragma warning restore SYSLIB5002
 
     [WinFormsFact]

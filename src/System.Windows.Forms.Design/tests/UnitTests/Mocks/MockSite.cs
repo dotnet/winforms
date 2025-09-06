@@ -3,8 +3,8 @@
 
 #nullable disable
 
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests.Mocks

@@ -442,10 +442,9 @@ public abstract partial class ToolStripItem :
     ///  which is assigned to the <see cref="Command"/> property.
     /// </summary>
     [Bindable(true)]
-    [Browsable(false)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.CommandComponentCommandParameterDescr))]
+    [TypeConverter(typeof(StringConverter))]
     public object? CommandParameter
     {
         get => _commandParameter;
@@ -459,6 +458,12 @@ public abstract partial class ToolStripItem :
             }
         }
     }
+
+    private void ResetCommandParameter() => CommandParameter = null;
+
+    private bool ShouldSerializeCommandParameter() =>
+        _commandParameter is string parameter
+        && !string.IsNullOrEmpty(parameter);
 
     /// <summary>
     ///  Occurs when the value of the <see cref="CommandParameter"/> property has changed.
