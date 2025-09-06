@@ -79,15 +79,13 @@ public sealed partial class MdiClient : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
 
             cp.ClassName = "MDICLIENT";
 
-            // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting
+            // Note: Don't set the MDIS_ALLCHILDSTYLES CreateParams.Style bit, it prevents an MDI child form from getting
             // activated when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the
             // activation event sequence (MdiChildActivate/Enter/Focus/Activate/etc.).
             cp.Style |= (int)(WINDOW_STYLE.WS_VSCROLL | WINDOW_STYLE.WS_HSCROLL);

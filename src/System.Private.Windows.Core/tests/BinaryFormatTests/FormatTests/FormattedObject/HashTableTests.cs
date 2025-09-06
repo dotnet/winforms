@@ -3,12 +3,12 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Formats.Nrbf;
+using System.Private.Windows.BinaryFormat;
+using System.Private.Windows.Nrbf;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.BinaryFormat;
 using FormatTests.Common;
-using System.Formats.Nrbf;
-using System.Private.Windows.Nrbf;
 
 namespace FormatTests.FormattedObject;
 

@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Drawing.Interop;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Drawing.Interop;
 
 namespace System.Drawing;
 

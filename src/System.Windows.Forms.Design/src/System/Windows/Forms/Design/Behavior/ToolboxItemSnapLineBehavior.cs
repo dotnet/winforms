@@ -87,11 +87,8 @@ internal class ToolboxItemSnapLineBehavior : Behavior
                 _lastRectangle = Rectangle.Empty;
 
                 // destroy the snapline engine (if we used it)
-                if (_dragManager is not null)
-                {
-                    _dragManager.OnMouseUp();
-                    _dragManager = null;
-                }
+                _dragManager?.OnMouseUp();
+                _dragManager = null;
             }
         }
     }

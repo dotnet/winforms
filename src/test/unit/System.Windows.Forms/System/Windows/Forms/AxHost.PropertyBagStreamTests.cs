@@ -4,8 +4,8 @@
 #nullable disable
 
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests;
 

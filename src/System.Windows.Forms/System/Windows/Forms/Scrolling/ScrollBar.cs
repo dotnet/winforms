@@ -114,9 +114,7 @@ public abstract partial class ScrollBar : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_SCROLLBAR;

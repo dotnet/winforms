@@ -118,10 +118,12 @@ GetSystemMetrics
 GetThreadLocale
 GetViewportExtEx
 GetViewportOrgEx
+GetWindowOrgEx
 GetWindowRect
 GetWindowText
 GetWindowTextLength
 GetWindowThreadProcessId
+GetWorldTransform
 GlobalAlloc
 GlobalFree
 GlobalLock

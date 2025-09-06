@@ -48,8 +48,9 @@ internal partial interface IButtonRenderer
         bool focused,
         bool showFocusCues,
         Color parentBackgroundColor,
+        Color backColor,
         Action<Rectangle> paintImage,
-        Action<Rectangle, Color, bool> paintField);
+        Action paintField);
 
     /// <summary>
     ///  Draws button background with appropriate styling.
@@ -59,7 +60,7 @@ internal partial interface IButtonRenderer
     /// <param name="state">State of the button (normal, hot, pressed, disabled)</param>
     /// <param name="isDefault">True if button is the default button</param>
     /// <returns>The content bounds (area inside the button for text/image)</returns>
-    Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);
+    Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
 
     /// <summary>
     ///  Draws focus indicator appropriate for this style.

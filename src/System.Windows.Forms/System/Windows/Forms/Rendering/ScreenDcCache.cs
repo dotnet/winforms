@@ -111,7 +111,7 @@ internal sealed partial class ScreenDcCache : IDisposable
         Debug.Assert(PInvoke.GetBkMode(hdc) == BACKGROUND_MODE.OPAQUE);
 
         Matrix3x2 matrix = default;
-        Debug.Assert(PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&matrix));
+        Debug.Assert(PInvokeCore.GetWorldTransform(hdc, (XFORM*)(void*)&matrix));
         Debug.Assert(matrix.IsIdentity);
     }
 }

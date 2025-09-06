@@ -8,8 +8,8 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.Layout;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 
 namespace System.Windows.Forms.Tests;
 

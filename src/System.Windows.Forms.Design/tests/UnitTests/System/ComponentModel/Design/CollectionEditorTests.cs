@@ -7,9 +7,9 @@ using System.Collections;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Windows.Forms.Design;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.ComponentModel.Design.Tests;
 

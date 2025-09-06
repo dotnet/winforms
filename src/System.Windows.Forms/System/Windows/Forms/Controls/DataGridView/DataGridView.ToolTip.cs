@@ -51,11 +51,8 @@ public partial class DataGridView
 
         public void Dispose()
         {
-            if (ToolTip is not null)
-            {
-                ToolTip.Dispose();
-                ToolTip = null;
-            }
+            ToolTip?.Dispose();
+            ToolTip = null;
         }
     }
 }

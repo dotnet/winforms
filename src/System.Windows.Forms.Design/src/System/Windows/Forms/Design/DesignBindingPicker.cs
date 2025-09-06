@@ -1,12 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Collections;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Data;
 using System.Globalization;
 
 namespace System.Windows.Forms.Design
@@ -1304,11 +1304,8 @@ namespace System.Windows.Forms.Design
 
                 // Notify the provider service that a new form object is referencing this project-level data source
                 _dataSourceProviderService.NotifyDataSourceComponentAdded(bs);
-                if (trans is not null)
-                {
-                    trans.Commit();
-                    trans = null;
-                }
+                trans?.Commit();
+                trans = null;
             }
 
             finally

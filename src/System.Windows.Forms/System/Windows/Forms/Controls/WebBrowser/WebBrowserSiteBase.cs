@@ -397,11 +397,8 @@ public unsafe class WebBrowserSiteBase :
 
     internal void StopEvents()
     {
-        if (_connectionPoint is not null)
-        {
-            _connectionPoint.Disconnect();
-            _connectionPoint = null;
-        }
+        _connectionPoint?.Disconnect();
+        _connectionPoint = null;
     }
 
     private unsafe HRESULT OnActiveXRectChange(RECT* lprcPosRect)

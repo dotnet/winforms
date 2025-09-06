@@ -271,9 +271,7 @@ public partial class TabControl : Control
     {
         get
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TABCONTROL;
@@ -1298,7 +1296,6 @@ public partial class TabControl : Control
         ApplyDarkModeOnDemand();
     }
 
-#pragma warning disable WFO5001
     private void ApplyDarkModeOnDemand()
     {
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
@@ -1310,7 +1307,6 @@ public partial class TabControl : Control
 
         _suspendDarkModeChange = false;
     }
-#pragma warning restore WFO5001
 
     protected override void OnHandleDestroyed(EventArgs e)
     {

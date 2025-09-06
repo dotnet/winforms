@@ -27,9 +27,8 @@ internal class StandardMenuStripVerb
     /// </summary>
     internal StandardMenuStripVerb(ToolStripDesigner designer)
     {
-        Debug.Assert(designer is not null, "Can't have a StandardMenuStripVerb without an associated designer");
-        _designer = designer;
-        _provider = designer.Component.Site;
+        _designer = designer.OrThrowIfNull();
+        _provider = designer.Component.Site.OrThrowIfNull();
         _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
         _changeService = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
     }
@@ -225,20 +224,13 @@ internal class StandardMenuStripVerb
                 uiService.ShowError(e.Message);
             }
 
-            if (createMenu is not null)
-            {
-                createMenu.Cancel();
-                createMenu = null;
-            }
+            createMenu?.Cancel();
+            createMenu = null;
         }
         finally
         {
             ToolStripDesigner.s_autoAddNewItems = true;
-            if (createMenu is not null)
-            {
-                createMenu.Commit();
-                createMenu = null;
-            }
+            createMenu?.Commit();
 
             tool.ResumeLayout();
             // Select the Main Menu...
@@ -368,21 +360,14 @@ internal class StandardMenuStripVerb
                 uiService.ShowError(e.Message);
             }
 
-            if (createMenu is not null)
-            {
-                createMenu.Cancel();
-                createMenu = null;
-            }
+            createMenu?.Cancel();
+            createMenu = null;
         }
         finally
         {
             // Reset the AutoAdd state
             ToolStripDesigner.s_autoAddNewItems = true;
-            if (createMenu is not null)
-            {
-                createMenu.Commit();
-                createMenu = null;
-            }
+            createMenu?.Commit();
 
             tool.ResumeLayout();
             // Select the Main Menu...

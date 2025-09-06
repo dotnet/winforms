@@ -1169,11 +1169,8 @@ public unsafe partial class WebBrowser : WebBrowserBase
     protected override void DetachSink()
     {
         // If we have a cookie get rid of it
-        if (_cookie is not null)
-        {
-            _cookie.Disconnect();
-            _cookie = null;
-        }
+        _cookie?.Disconnect();
+        _cookie = null;
     }
 
     /// <summary>

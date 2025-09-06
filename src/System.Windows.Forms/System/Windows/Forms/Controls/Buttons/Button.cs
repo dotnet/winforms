@@ -148,7 +148,6 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
-#pragma warning disable WFO5001
     /// <summary>
     ///  Defines, whether the control is owner-drawn. Based on this,
     ///  the UserPaint flags get set, which in turn makes it later
@@ -166,9 +165,10 @@ public partial class Button : ButtonBase, IButtonControl
                 // The SystemRenderer cannot render images. So, we flip to our
                 // own DarkMode renderer, if we need to render images, except if...
                 && Image is null
-
+                // ...or a BackgroundImage, except if...
+                && BackgroundImage is null
                 // ...the user wants to opt out of implicit DarkMode rendering.
-                && _darkModeRequestState is true
+                && DarkModeRequestState is true
 
                 // And all of this only counts for FlatStyle.Standard. For the
                 // rest, we're using specific renderers anyway, which check
@@ -181,7 +181,6 @@ public partial class Button : ButtonBase, IButtonControl
             return base.OwnerDraw;
         }
     }
-#pragma warning restore WFO5001
 
     internal override bool SupportsUiaProviders => true;
 

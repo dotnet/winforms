@@ -3,8 +3,8 @@
 
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using DrawingColor = System.Drawing.Color;
 using Windows.Win32.System.Ole;
+using DrawingColor = System.Drawing.Color;
 
 namespace Windows.Win32.Graphics.GdiPlus;
 

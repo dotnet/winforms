@@ -17,11 +17,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub Properties()
             UseCompatibleTextRendering.Should.BeFalse()
 
-#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
             ColorMode.Should.Be(SystemColorMode.Classic)
             ColorMode = SystemColorMode.Dark
             ColorMode.Should.Be(SystemColorMode.Dark)
-#Enable Warning WFO5001
 
             EnableVisualStyles.Should.Be(False)
             EnableVisualStyles = True
