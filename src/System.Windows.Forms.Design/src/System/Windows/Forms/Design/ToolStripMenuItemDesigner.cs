@@ -479,11 +479,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         }
                         finally
                         {
-                            if (_newMenuItemTransaction is not null)
-                            {
-                                _newMenuItemTransaction.Commit();
-                                _newMenuItemTransaction = null;
-                            }
+                            _newMenuItemTransaction?.Commit();
+                            _newMenuItemTransaction = null;
                         }
                     }
                 }
@@ -520,11 +517,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         }
                         finally
                         {
-                            if (_newMenuItemTransaction is not null)
-                            {
-                                _newMenuItemTransaction.Commit();
-                                _newMenuItemTransaction = null;
-                            }
+                            _newMenuItemTransaction?.Commit();
+                            _newMenuItemTransaction = null;
 
                             _dummyItemAdded = false;
                         }
@@ -548,11 +542,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         }
                         catch
                         {
-                            if (designerTransaction is not null)
-                            {
-                                designerTransaction.Cancel();
-                                designerTransaction = null;
-                            }
+                            designerTransaction?.Cancel();
+                            designerTransaction = null;
                         }
                         finally
                         {
@@ -638,17 +629,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 MenuItem.DropDown.Items.Remove(_commitedEditorNode);
                 // put the item back...
                 editedItem.Visible = true;
-                if (_commitedTemplateNode is not null)
-                {
-                    _commitedTemplateNode.CloseEditor();
-                    _commitedTemplateNode = null;
-                }
+                _commitedTemplateNode?.CloseEditor();
+                _commitedTemplateNode = null;
 
-                if (_commitedEditorNode is not null)
-                {
-                    _commitedEditorNode.Dispose();
-                    _commitedEditorNode = null;
-                }
+                _commitedEditorNode?.Dispose();
+                _commitedEditorNode = null;
 
                 if (dummyItem)
                 {
@@ -815,11 +800,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             CommitInsertTransaction(commit: false);
 
-            if (_newMenuItemTransaction is not null)
-            {
-                _newMenuItemTransaction.Cancel();
-                _newMenuItemTransaction = null;
-            }
+            _newMenuItemTransaction?.Cancel();
+            _newMenuItemTransaction = null;
 
             GetService<IUIService>().ShowError(ex.Message);
         }
@@ -903,11 +885,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // There might be scenarios where the ComponentAdding is fired but the Added doesn't get fired.
             // Is such cases the InsertTransaction might be still active... So we need to cancel that too here.
             CommitInsertTransaction(false);
-            if (outerTransaction is not null)
-            {
-                outerTransaction.Cancel();
-                outerTransaction = null;
-            }
+            outerTransaction?.Cancel();
+            outerTransaction = null;
         }
         finally
         {
@@ -1020,11 +999,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 _typeHereTemplateNode = null;
             }
 
-            if (_typeHereNode is not null)
-            {
-                _typeHereNode.Dispose();
-                _typeHereNode = null;
-            }
+            _typeHereNode?.Dispose();
+            _typeHereNode = null;
 
             if (_commitedTemplateNode is not null)
             {
@@ -1033,11 +1009,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 _commitedTemplateNode = null;
             }
 
-            if (_commitedEditorNode is not null)
-            {
-                _commitedEditorNode.Dispose();
-                _commitedEditorNode = null;
-            }
+            _commitedEditorNode?.Dispose();
+            _commitedEditorNode = null;
 
             if (_parentItem is not null)
             {
@@ -1284,11 +1257,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             {
                 CommitInsertTransaction(commit: false);
 
-                if (_newMenuItemTransaction is not null)
-                {
-                    _newMenuItemTransaction.Cancel();
-                    _newMenuItemTransaction = null;
-                }
+                _newMenuItemTransaction?.Cancel();
+                _newMenuItemTransaction = null;
             }
             else
             {
@@ -1894,11 +1864,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
                     finally
                     {
-                        if (_pendingTransaction is not null)
-                        {
-                            _pendingTransaction.Commit();
-                            _pendingTransaction = null;
-                        }
+                        _pendingTransaction?.Commit();
+                        _pendingTransaction = null;
                     }
 
                     // Remove & Add the Glyphs
@@ -1983,11 +1950,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
                     catch
                     {
-                        if (_pendingTransaction is not null)
-                        {
-                            _pendingTransaction.Cancel();
-                            _pendingTransaction = null;
-                        }
+                        _pendingTransaction?.Cancel();
+                        _pendingTransaction = null;
                     }
                 }
             }
@@ -2326,11 +2290,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             _typeHereTemplateNode = null;
         }
 
-        if (_typeHereNode is not null)
-        {
-            _typeHereNode.Dispose();
-            _typeHereNode = null;
-        }
+        _typeHereNode?.Dispose();
+        _typeHereNode = null;
 
         _toolStripAdornerWindowService?.Invalidate(bounds);
     }
@@ -2355,11 +2316,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 _commitedTemplateNode = null;
             }
 
-            if (_commitedEditorNode is not null)
-            {
-                _commitedEditorNode.Dispose();
-                _commitedEditorNode = null;
-            }
+            _commitedEditorNode?.Dispose();
+            _commitedEditorNode = null;
         }
     }
 
@@ -2790,11 +2748,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
                     catch
                     {
-                        if (changeParent is not null)
-                        {
-                            changeParent.Cancel();
-                            changeParent = null;
-                        }
+                        changeParent?.Cancel();
+                        changeParent = null;
                     }
                     finally
                     {

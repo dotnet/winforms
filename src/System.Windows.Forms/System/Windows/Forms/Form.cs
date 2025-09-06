@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -1023,11 +1022,8 @@ public partial class Form : ContainerControl
                 _formState[s_formStateIconSet] = value is null ? 0 : 1;
                 _icon = value;
 
-                if (_smallIcon is not null)
-                {
-                    _smallIcon.Dispose();
-                    _smallIcon = null;
-                }
+                _smallIcon?.Dispose();
+                _smallIcon = null;
 
                 UpdateWindowIcon(true);
             }
@@ -1368,7 +1364,7 @@ public partial class Form : ContainerControl
                     Location.Y,
                     Size.Width,
                     Size.Height,
-                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
 
@@ -2264,7 +2260,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public FormCornerPreference FormCornerPreference
     {
         get => Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
@@ -2302,7 +2297,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
         if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
@@ -2311,9 +2305,7 @@ public partial class Form : ContainerControl
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -2356,7 +2348,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormBorderColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormBorderColor
     {
         get => Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
@@ -2384,7 +2375,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
         if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
@@ -2418,7 +2408,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionBackColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
@@ -2447,7 +2436,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2481,7 +2469,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionTextColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
@@ -2510,7 +2497,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionTextColorChanged] is EventHandler eventHandler)
@@ -2689,7 +2675,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2701,7 +2686,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2713,7 +2697,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2725,7 +2708,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
@@ -3540,17 +3522,11 @@ public partial class Form : ContainerControl
             Properties.RemoveValue(s_propDefaultButton);
             Properties.RemoveValue(s_propActiveMdiChild);
 
-            if (MdiWindowListStrip is not null)
-            {
-                MdiWindowListStrip.Dispose();
-                MdiWindowListStrip = null;
-            }
+            MdiWindowListStrip?.Dispose();
+            MdiWindowListStrip = null;
 
-            if (MdiControlStrip is not null)
-            {
-                MdiControlStrip.Dispose();
-                MdiControlStrip = null;
-            }
+            MdiControlStrip?.Dispose();
+            MdiControlStrip = null;
 
             if (MainMenuStrip is not null)
             {
@@ -3575,11 +3551,8 @@ public partial class Form : ContainerControl
                 }
             }
 
-            if (_smallIcon is not null)
-            {
-                _smallIcon.Dispose();
-                _smallIcon = null;
-            }
+            _smallIcon?.Dispose();
+            _smallIcon = null;
 
             base.Dispose(disposing);
             _ctlClient = null;
@@ -4558,6 +4531,7 @@ public partial class Form : ContainerControl
                     _processingDpiChanged = true;
                 }
 
+                UpdateWindowIcon(redrawFrame: true, dpi: e.DeviceDpiNew);
                 ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
             }
             finally
@@ -5006,12 +4980,10 @@ public partial class Form : ContainerControl
                 SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
             }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
             {
                 SetFormCornerPreferenceInternal(cornerPreference.Value);
             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
     }
 
@@ -5566,6 +5538,43 @@ public partial class Form : ContainerControl
     ///   There is no need to marshal the call to the UI thread manually if the call
     ///   originates from a different thread than the UI-Thread. This is handled automatically.
     ///  </para>
+    ///  <para>
+    ///   The returned <see cref="Task"/> carries a <see cref="WeakReference{T}"/> to the <see cref="Form"/> in its
+    ///   <see cref="Task.AsyncState"/> property. This is particularly useful when managing multiple forms (such as tool windows)
+    ///   in a task-based window manager, as it eliminates the need for a separate lookup table to synchronize between tasks and forms.
+    ///  </para>
+    ///  <para>
+    ///   The following example shows how to retrieve the form from a completed task when managing multiple forms:
+    ///  </para>
+    ///  <code>
+    ///  // Wait for any of the forms to complete
+    ///  Task completedShowAsyncTask = await Task
+    ///      .WhenAny(formAsyncTasks)
+    ///      .ConfigureAwait(false);
+    ///
+    ///  // Retrieve the form using an extension method
+    ///  if (completedShowAsyncTask.ToForm() is Form form)
+    ///  {
+    ///      // Handle the completed form
+    ///  }
+    ///  </code>
+    ///  <para>
+    ///   Where the extension method can be implemented as:
+    ///  </para>
+    ///  <code>
+    ///  public static Form? ToForm(this Task task)
+    ///  {
+    ///      ArgumentNullException.ThrowIfNull(task);
+    ///
+    ///      if (task.AsyncState is WeakReference&lt;Form&gt; weakRefToForm
+    ///          &amp;&amp; weakRefToForm.TryGetTarget(out Form? form))
+    ///      {
+    ///          return form;
+    ///      }
+    ///
+    ///      return null;
+    ///  }
+    ///  </code>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
     ///  <para>Thrown if:</para>
@@ -5584,19 +5593,21 @@ public partial class Form : ContainerControl
     /// <exception cref="ArgumentException">
     ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public async Task ShowAsync(IWin32Window? owner = null)
+    public Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
         // multiple calls to ShowAsync from interfering with each other.
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _nonModalFormCompletion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            _nonModalFormCompletion = new(
+                new WeakReference<Form>(this),
+                TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5609,20 +5620,7 @@ public partial class Form : ContainerControl
 
         syncContext.Post((state) => ShowFormInternally(owner), null);
 
-        // Wait until the form is closed or disposed.
-        try
-        {
-            await _nonModalFormCompletion.Task.ConfigureAwait(true);
-        }
-        catch (Exception ex)
-        {
-            // We need to rethrow the exception on the caller's context.
-            Application.OnThreadException(ex);
-        }
-        finally
-        {
-            _nonModalFormCompletion = null;
-        }
+        return _nonModalFormCompletion.Task;
 
         void ShowFormInternally(IWin32Window? owner)
         {
@@ -5634,6 +5632,7 @@ public partial class Form : ContainerControl
             catch (Exception ex)
             {
                 _nonModalFormCompletion.TrySetException(ex);
+                _nonModalFormCompletion = null;
             }
         }
     }
@@ -5854,7 +5853,6 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if no
     ///  <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
 
     /// <summary>
@@ -5895,19 +5893,21 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if
     ///  no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
     {
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _modalFormCompletion = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _modalFormCompletion = new TaskCompletionSource<DialogResult>(
+                state: new WeakReference<Form>(this),
+                creationOptions: TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5929,11 +5929,11 @@ public partial class Form : ContainerControl
             try
             {
                 DialogResult result = ShowDialog(owner);
-                modalFormCompletion.SetResult(result);
+                modalFormCompletion.TrySetResult(result);
             }
             catch (Exception ex)
             {
-                modalFormCompletion.SetException(ex);
+                modalFormCompletion.TrySetException(ex);
             }
             finally
             {
@@ -6429,11 +6429,16 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Updates the window icon.
     /// </summary>
-    private unsafe void UpdateWindowIcon(bool redrawFrame)
+    private unsafe void UpdateWindowIcon(bool redrawFrame, int dpi = 0)
     {
         if (IsHandleCreated)
         {
             Icon? icon;
+
+            if (dpi == 0)
+            {
+                dpi = DeviceDpi;
+            }
 
             // Preserve Win32 behavior by keeping the icon we set NULL if
             // the user hasn't specified an icon and we are a dialog frame.
@@ -6448,20 +6453,23 @@ public partial class Form : ContainerControl
 
             if (icon is not null)
             {
-                if (_smallIcon is null)
+                Icon? oldSmallIcon = _smallIcon;
+
+                try
                 {
-                    try
-                    {
-                        _smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
-                    }
-                    catch
-                    {
-                    }
+                    _smallIcon = ScaleHelper.ScaleSmallIconToDpi(icon, dpi);
+                }
+                catch
+                {
                 }
 
                 if (_smallIcon is not null)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
+                    if (oldSmallIcon is not null && oldSmallIcon.Handle != _smallIcon.Handle)
+                    {
+                        oldSmallIcon.Dispose();
+                    }
                 }
 
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
@@ -6975,11 +6983,8 @@ public partial class Form : ContainerControl
         // that point our handle is not actually destroyed so
         // destroying our parent actually causes a recursive
         // WM_DESTROY.
-        if (_ownerWindow is not null)
-        {
-            _ownerWindow.DestroyHandle();
-            _ownerWindow = null;
-        }
+        _ownerWindow?.DestroyHandle();
+        _ownerWindow = null;
 
         if (Modal && _dialogResult == DialogResult.None)
         {

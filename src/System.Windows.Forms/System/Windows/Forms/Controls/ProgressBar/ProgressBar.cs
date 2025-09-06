@@ -45,9 +45,7 @@ public partial class ProgressBar : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.PROGRESS_CLASS;
@@ -80,13 +78,12 @@ public partial class ProgressBar : Control
         // If SystemColorMode is enabled, we need to disable the Visual Styles
         // so Windows allows setting Fore- and Background color.
         // There are more ideal ways imaginable, but this does the trick for now.
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         if (Application.IsDarkModeEnabled)
         {
             // Disables Visual Styles for the ProgressBar.
             PInvoke.SetWindowTheme(HWND, " ", " ");
         }
-#pragma warning restore WFO5001
     }
 
     [Browsable(false)]

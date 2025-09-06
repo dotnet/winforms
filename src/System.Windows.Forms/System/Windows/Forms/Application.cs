@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -22,12 +21,12 @@ namespace System.Windows.Forms;
 public sealed partial class Application
 {
     /// <summary>
-    ///  Hash table for our event list
+    ///  Hash table for our event list.
     /// </summary>
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
     /// <summary>
-    ///  Scaled version of non system <see cref="s_defaultFont"/>.
+    ///  Scaled version of non-system <see cref="s_defaultFont"/>.
     /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
@@ -44,16 +43,14 @@ public sealed partial class Application
     private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static SystemColorMode? s_colorMode;
-#pragma warning restore WFO5001
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
     private const int SystemDarkModeDisabled = 1;
 
     /// <summary>
-    ///  Events the user can hook into
+    ///  Events the user can hook into.
     /// </summary>
     private static readonly object s_eventApplicationExit = new();
     private static readonly object s_eventThreadExit = new();
@@ -68,7 +65,7 @@ public sealed partial class Application
     private static bool s_parkingWindowCreated;
 
     /// <summary>
-    ///  This class is static, there is no need to ever create it.
+    ///  This class is static; there is no need to ever create it.
     /// </summary>
     private Application()
     {
@@ -76,8 +73,8 @@ public sealed partial class Application
 
     /// <summary>
     ///  Determines if the caller should be allowed to quit the application. This will return false,
-    ///  for example, if being called from a windows forms control being hosted within a web browser. The
-    ///  windows forms control should not attempt to quit the application.
+    ///  for example, if being called from a Windows Forms control being hosted within a web browser. The
+    ///  Windows Forms control should not attempt to quit the application.
     /// </summary>
     public static bool AllowQuit => ThreadContext.GetAllowQuit();
 
@@ -250,7 +247,6 @@ public sealed partial class Application
     ///   static (shared in VB) <see cref="SystemColorMode"/> property.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
 
     /// <summary>
@@ -259,31 +255,68 @@ public sealed partial class Application
     internal static bool ColorModeSet => s_colorMode is not null;
 
     /// <summary>
-    ///  Sets the default color mode (dark mode) for the application.
+    ///  Sets the default color mode (Classic/Light Mode, Dark Mode, or the system-defined Light/Dark Mode) for the entire application.
     /// </summary>
-    /// <param name="systemColorMode">The application's default color mode (dark mode) to set.</param>
+    /// <param name="systemColorMode">The application's default color mode to set.</param>
     /// <remarks>
     ///  <para>
-    ///   You should use this method to set the default color mode (dark mode) for the application. Set it,
-    ///   before creating any UI elements, to ensure that the correct color mode is used. You can set it to
-    ///   dark mode (<see cref="SystemColorMode.Dark"/>), light mode (<see cref="SystemColorMode.Classic"/>)
-    ///   or to the system setting (<see cref="SystemColorMode.System"/>).
+    ///   Use this method to set the color mode for the entire application. Set it before creating any UI
+    ///   elements to ensure the correct color mode is applied. You can choose Dark Mode
+    ///   (<see cref="SystemColorMode.Dark"/>), Classic (light) Mode (<see cref="SystemColorMode.Classic"/>),
+    ///   or the system-defined mode (<see cref="SystemColorMode.System"/>).
     ///  </para>
     ///  <para>
-    ///   If you set it to <see cref="SystemColorMode.System"/>, the actual color mode is determined by the
-    ///   Windows system settings. If the system setting is changed, the application will not automatically
-    ///   adapt to the new setting.
+    ///   If you set <see cref="SystemColorMode.System"/>, the actual color mode is determined by the Windows system settings.
+    ///   If the system setting changes, the application will not automatically adapt; you must restart the application
+    ///   to apply the new system setting.
     ///  </para>
     ///  <para>
     ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
-    ///   is set to a high contrast mode, the dark mode is not available.
+    ///   is set to a accessibility contrast theme, the dark mode is not available.
     ///  </para>
     ///  <para>
-    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, you should set the
-    ///   color mode by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
+    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, set the color mode
+    ///   by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
     ///  </para>
+    ///  <para>
+    ///   <b>Important Considerations for Dark Mode in WinForms:</b>
+    ///  </para>
+    ///  <list type="bullet">
+    ///   <item>
+    ///    <description>
+    ///     <b>WinForms and Win32 Limitations:</b> WinForms is a managed wrapper around native Win32 controls.
+    ///     This architecture introduces inherent limitations in theming and rendering, especially in Dark Mode.
+    ///     While Windows continues to evolve its support for theming, some constraints remain.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Rendering Limitations:</b> Certain controls may not render perfectly in Dark Mode due to underlying Win32
+    ///     behavior. These imperfections are expected and will not be treated as bugs.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Security and Compatibility First:</b> Security and backward compatibility are prioritized over perfect visual fidelity.
+    ///     Changes that risk breaking classic rendering or introduce regressions will be avoided.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Ongoing Improvements:</b> As Windows improves Win32 theming, WinForms will adapt accordingly. Dark Mode rendering
+    ///     will improve over time, but not all issues will be resolved immediately.
+    ///    </description>
+    ///   </item>
+    ///   <item>
+    ///    <description>
+    ///     <b>Contrast and Accessibility Edge Cases:</b> Some edge cases may result in suboptimal contrast or may not meet certain
+    ///     accessibility guidelines. While Dark Mode addresses major accessibility concerns for many users (such as reducing eye
+    ///     strain from bright screens), if your application requires strict contrast compliance, we recommend using
+    ///     Classic (light) mode or applying a Windows Accessibility contrast theme.
+    ///    </description>
+    ///   </item>
+    ///  </list>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -306,12 +339,16 @@ public sealed partial class Application
         }
         finally
         {
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             bool useAlternateColorSet = SystemColors.UseAlternativeColorSet;
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             bool darkModeEnabled = IsDarkModeEnabled;
 
             if (useAlternateColorSet != darkModeEnabled)
             {
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 SystemColors.UseAlternativeColorSet = darkModeEnabled;
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 NotifySystemEventsOfColorChange();
             }
         }
@@ -352,17 +389,17 @@ public sealed partial class Application
     /// <remarks>
     ///  <para>
     ///   The color setting is determined based on the operating system version and its system settings.
-    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
-    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if dark mode is enabled in the system settings,
+    ///   or <see cref="SystemColorMode.Classic"/> if the color mode is set to the light, standard color setting.
     ///  </para>
     ///  <para>
-    ///   SystemColorMode is supported on Windows 11 or later versions.
+    ///   <see cref="SystemColorMode"/> is supported on Windows 11 or later versions.
     ///  </para>
     ///  <para>
-    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///   <see cref="SystemColorMode"/> is not supported if a Windows OS high contrast theme has been
+    ///   enabled in the system settings.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode SystemColorMode =>
         GetSystemColorModeInternal() == 0
             ? SystemColorMode.Dark
@@ -398,9 +435,8 @@ public sealed partial class Application
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
-    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    ///  Note: With a accessibility contrast theme selected in the OS, this will always return <see langword="false"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
         && (ColorMode == SystemColorMode.Dark
@@ -914,7 +950,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
-    ///  Uses the default theming manifest file shipped with the redist.
+    ///  Uses the default theming manifest file shipped with the redistributable package.
     /// </summary>
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
     public static void EnableVisualStyles()
@@ -1328,6 +1364,10 @@ public sealed partial class Application
     ///  This switch determines the default text rendering engine to use by some controls that support
     ///  switching rendering engine.
     /// </summary>
+    /// <param name="defaultValue">The default value to use for compatible text rendering.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if any window handle has already been created in the application.
+    /// </exception>
     public static void SetCompatibleTextRenderingDefault(bool defaultValue)
     {
         if (NativeWindow.AnyHandleCreated)
@@ -1339,7 +1379,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Sets the default <see cref="Font"/> for process.
+    ///  Sets the default <see cref="Font"/> for the process.
     /// </summary>
     /// <param name="font">The font to be used as a default across the application.</param>
     /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
@@ -1348,11 +1388,11 @@ public sealed partial class Application
     /// </exception>
     /// <remarks>
     ///  <para>
-    ///   The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
-    ///   and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
+    ///   The system text scale factor will be applied to the font. For example, if the default font is set to "Calibri, 11f"
+    ///   and the text scale factor is set to 150%, the resulting default font will be set to "Calibri, 16.5f".
     ///  </para>
     ///  <para>
-    ///   Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
+    ///   Users can adjust text scale with the "Make text bigger" slider on the Settings → Accessibility → Display screen.
     ///  </para>
     /// </remarks>
     /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
@@ -1368,7 +1408,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    ///  Scales <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
     /// </summary>
     internal static void ScaleDefaultFont()
     {

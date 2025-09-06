@@ -203,9 +203,7 @@ public partial class Splitter : Control
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             CreateParams cp = base.CreateParams;
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;

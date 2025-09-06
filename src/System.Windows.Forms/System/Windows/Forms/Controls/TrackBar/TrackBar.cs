@@ -144,9 +144,7 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
 
             // If the user opts out of TrackBarModernRendering
             // then _autoDrawTicks will be set to true

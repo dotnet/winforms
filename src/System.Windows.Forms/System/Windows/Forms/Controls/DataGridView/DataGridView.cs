@@ -1493,9 +1493,8 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-#pragma warning disable WFO5001
             SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
+
             return base.CreateParams;
         }
     }

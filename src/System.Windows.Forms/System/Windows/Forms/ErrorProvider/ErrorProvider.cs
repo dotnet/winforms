@@ -704,11 +704,8 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     private void DisposeRegion()
     {
-        if (_region is not null)
-        {
-            _region.Dispose();
-            _region = null;
-        }
+        _region?.Dispose();
+        _region = null;
     }
 
     /// <summary>

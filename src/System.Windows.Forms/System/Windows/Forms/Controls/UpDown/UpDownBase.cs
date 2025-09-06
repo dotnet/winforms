@@ -215,6 +215,8 @@ public abstract partial class UpDownBase : ContainerControl
     {
         get
         {
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+
             CreateParams cp = base.CreateParams;
 
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
