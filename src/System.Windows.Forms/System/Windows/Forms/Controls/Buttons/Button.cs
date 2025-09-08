@@ -154,9 +154,12 @@ public partial class Button : ButtonBase, IButtonControl
         {
             base.BackgroundImage = value;
 
-            // BackgroundImage changes may affect rendering logic,
-            // so we manually update the OwnerDraw flag to ensure correct visual behavior.
-            UpdateOwnerDraw();
+            if (Application.IsDarkModeEnabled)
+            {
+                // BackgroundImage changes may affect rendering logic,
+                // so we manually update the OwnerDraw flag to ensure correct visual behavior.
+                UpdateOwnerDraw();
+            }
         }
     }
 
