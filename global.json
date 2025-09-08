@@ -20,6 +20,9 @@
       ]
     }
   },
+  "test": {
+    "runner": "Microsoft.Testing.Platform"
+  },
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.25457.103",
     "Microsoft.DotNet.CMake.Sdk": "11.0.0-beta.25457.103",
