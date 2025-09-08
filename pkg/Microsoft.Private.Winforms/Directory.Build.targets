@@ -16,7 +16,8 @@
     -->
   <Target Name="UpdateTransportPackage"
           AfterTargets="GenerateNuspec"
-          DependsOnTargets="GenerateNuspec">
+          DependsOnTargets="GenerateNuspec"
+          Condition="'$(OS)' == 'Windows_NT'">
     <ItemGroup>
       <_NuspecFile Include="@(NuGetPackOutput)" Condition="'%(Extension)' == '.nuspec'" />
     </ItemGroup>
