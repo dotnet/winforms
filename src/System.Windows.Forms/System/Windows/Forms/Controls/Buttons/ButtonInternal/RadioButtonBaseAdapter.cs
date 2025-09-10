@@ -9,7 +9,7 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
 {
     internal RadioButtonBaseAdapter(ButtonBase control) : base(control) { }
 
-    protected RadioButton Control => (RadioButton)ButtonBaseControl;
+    protected new RadioButton Control => (RadioButton)base.ButtonBaseControl;
 
     protected void DrawCheckFlat(
         PaintEventArgs e,
