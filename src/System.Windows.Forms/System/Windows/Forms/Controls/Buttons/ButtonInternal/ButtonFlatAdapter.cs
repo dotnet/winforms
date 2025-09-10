@@ -14,40 +14,40 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
     private void PaintBackground(PaintEventArgs e, Rectangle r, Color backColor)
     {
         Rectangle rect = r;
-        rect.Inflate(-ButtonBaseControl.FlatAppearance.BorderSize, -ButtonBaseControl.FlatAppearance.BorderSize);
-        ButtonBaseControl.PaintBackground(e, rect, backColor, rect.Location);
+        rect.Inflate(-Control.FlatAppearance.BorderSize, -Control.FlatAppearance.BorderSize);
+        Control.PaintBackground(e, rect, backColor, rect.Location);
     }
 
     internal override void PaintUp(PaintEventArgs e, CheckState state)
     {
-        bool hasCustomBorder = ButtonBaseControl.FlatAppearance.BorderSize != BorderSize || !ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty;
+        bool hasCustomBorder = Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty;
 
         ColorData colors = PaintFlatRender(e).Calculate();
         LayoutData layout = PaintFlatLayout(
-            up: !ButtonBaseControl.FlatAppearance.CheckedBackColor.IsEmpty
+            up: !Control.FlatAppearance.CheckedBackColor.IsEmpty
                 || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
             check: !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
-            ButtonBaseControl.FlatAppearance.BorderSize).Layout();
+            Control.FlatAppearance.BorderSize).Layout();
 
         // Paint with the BorderColor if set.
-        if (!ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty)
+        if (!Control.FlatAppearance.BorderColor.IsEmpty)
         {
-            colors.WindowFrame = ButtonBaseControl.FlatAppearance.BorderColor;
+            colors.WindowFrame = Control.FlatAppearance.BorderColor;
         }
 
-        Rectangle r = ButtonBaseControl.ClientRectangle;
+        Rectangle r = Control.ClientRectangle;
 
-        Color backColor = ButtonBaseControl.BackColor;
+        Color backColor = Control.BackColor;
 
-        if (!ButtonBaseControl.FlatAppearance.CheckedBackColor.IsEmpty)
+        if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
         {
             switch (state)
             {
                 case CheckState.Checked:
-                    backColor = ButtonBaseControl.FlatAppearance.CheckedBackColor;
+                    backColor = Control.FlatAppearance.CheckedBackColor;
                     break;
                 case CheckState.Indeterminate:
-                    backColor = ButtonBaseControl.FlatAppearance.CheckedBackColor.MixColor(colors.ButtonFace);
+                    backColor = Control.FlatAppearance.CheckedBackColor.MixColor(colors.ButtonFace);
                     break;
             }
         }
@@ -66,7 +66,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
 
         PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
-        if (ButtonBaseControl.IsDefault)
+        if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
         }
@@ -74,22 +74,22 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         PaintImage(e, layout);
         PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, drawFocus: false);
 
-        if (ButtonBaseControl.Focused && ButtonBaseControl.ShowFocusCues)
+        if (Control.Focused && Control.ShowFocusCues)
         {
             DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ContrastButtonShadow);
         }
 
-        if (!(ButtonBaseControl.IsDefault && ButtonBaseControl.Focused && (ButtonBaseControl.FlatAppearance.BorderSize == 0)))
+        if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
         {
-            DrawDefaultBorder(e, r, colors.WindowFrame, ButtonBaseControl.IsDefault);
+            DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
         }
 
         // Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
         if (hasCustomBorder)
         {
-            if (ButtonBaseControl.FlatAppearance.BorderSize != BorderSize)
+            if (Control.FlatAppearance.BorderSize != BorderSize)
             {
-                DrawFlatBorderWithSize(e, r, colors.WindowFrame, ButtonBaseControl.FlatAppearance.BorderSize);
+                DrawFlatBorderWithSize(e, r, colors.WindowFrame, Control.FlatAppearance.BorderSize);
             }
             else
             {
@@ -113,28 +113,28 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
 
     internal override void PaintDown(PaintEventArgs e, CheckState state)
     {
-        bool hasCustomBorder = (ButtonBaseControl.FlatAppearance.BorderSize != BorderSize || !ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty);
+        bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty);
 
         ColorData colors = PaintFlatRender(e).Calculate();
         LayoutData layout = PaintFlatLayout(
-            !ButtonBaseControl.FlatAppearance.CheckedBackColor.IsEmpty
+            !Control.FlatAppearance.CheckedBackColor.IsEmpty
                 || (SystemInformation.HighContrast ? state != CheckState.Indeterminate : state == CheckState.Unchecked),
             !hasCustomBorder && SystemInformation.HighContrast && state == CheckState.Checked,
-            ButtonBaseControl.FlatAppearance.BorderSize).Layout();
+            Control.FlatAppearance.BorderSize).Layout();
 
         // Paint with the BorderColor if Set.
-        if (!ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty)
+        if (!Control.FlatAppearance.BorderColor.IsEmpty)
         {
-            colors.WindowFrame = ButtonBaseControl.FlatAppearance.BorderColor;
+            colors.WindowFrame = Control.FlatAppearance.BorderColor;
         }
 
-        Rectangle r = ButtonBaseControl.ClientRectangle;
+        Rectangle r = Control.ClientRectangle;
 
-        Color backColor = ButtonBaseControl.BackColor;
+        Color backColor = Control.BackColor;
 
-        if (!ButtonBaseControl.FlatAppearance.MouseDownBackColor.IsEmpty)
+        if (!Control.FlatAppearance.MouseDownBackColor.IsEmpty)
         {
-            backColor = ButtonBaseControl.FlatAppearance.MouseDownBackColor;
+            backColor = Control.FlatAppearance.MouseDownBackColor;
         }
         else
         {
@@ -154,7 +154,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
 
         PaintBackground(e, r, backColor);
 
-        if (ButtonBaseControl.IsDefault)
+        if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
         }
@@ -162,22 +162,22 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         PaintImage(e, layout);
         PaintField(e, layout, colors, colors.WindowText, drawFocus: false);
 
-        if (ButtonBaseControl.Focused && ButtonBaseControl.ShowFocusCues)
+        if (Control.Focused && Control.ShowFocusCues)
         {
             DrawFlatFocus(e, layout.Focus, colors.Options.HighContrast ? colors.WindowText : colors.ContrastButtonShadow);
         }
 
-        if (!(ButtonBaseControl.IsDefault && ButtonBaseControl.Focused && (ButtonBaseControl.FlatAppearance.BorderSize == 0)))
+        if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
         {
-            DrawDefaultBorder(e, r, colors.WindowFrame, ButtonBaseControl.IsDefault);
+            DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
         }
 
         // Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
         if (hasCustomBorder)
         {
-            if (ButtonBaseControl.FlatAppearance.BorderSize != BorderSize)
+            if (Control.FlatAppearance.BorderSize != BorderSize)
             {
-                DrawFlatBorderWithSize(e, r, colors.WindowFrame, ButtonBaseControl.FlatAppearance.BorderSize);
+                DrawFlatBorderWithSize(e, r, colors.WindowFrame, Control.FlatAppearance.BorderSize);
             }
             else
             {
@@ -207,27 +207,27 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
         else
         {
-            bool hasCustomBorder = ButtonBaseControl.FlatAppearance.BorderSize != BorderSize || !ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty;
+            bool hasCustomBorder = Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty;
 
             ColorData colors = PaintFlatRender(e).Calculate();
             LayoutData layout = PaintFlatLayout(
-                up: !ButtonBaseControl.FlatAppearance.CheckedBackColor.IsEmpty || state == CheckState.Unchecked,
+                up: !Control.FlatAppearance.CheckedBackColor.IsEmpty || state == CheckState.Unchecked,
                 check: false,
-                ButtonBaseControl.FlatAppearance.BorderSize).Layout();
+                Control.FlatAppearance.BorderSize).Layout();
 
             // Paint with the BorderColor if Set.
-            if (!ButtonBaseControl.FlatAppearance.BorderColor.IsEmpty)
+            if (!Control.FlatAppearance.BorderColor.IsEmpty)
             {
-                colors.WindowFrame = ButtonBaseControl.FlatAppearance.BorderColor;
+                colors.WindowFrame = Control.FlatAppearance.BorderColor;
             }
 
-            Rectangle r = ButtonBaseControl.ClientRectangle;
+            Rectangle r = Control.ClientRectangle;
 
-            Color backColor = !ButtonBaseControl.FlatAppearance.MouseOverBackColor.IsEmpty
-                ? ButtonBaseControl.FlatAppearance.MouseOverBackColor
-                : !ButtonBaseControl.FlatAppearance.CheckedBackColor.IsEmpty
+            Color backColor = !Control.FlatAppearance.MouseOverBackColor.IsEmpty
+                ? Control.FlatAppearance.MouseOverBackColor
+                : !Control.FlatAppearance.CheckedBackColor.IsEmpty
                     ? state is CheckState.Checked or CheckState.Indeterminate
-                        ? ButtonBaseControl.FlatAppearance.CheckedBackColor.MixColor(colors.LowButtonFace)
+                        ? Control.FlatAppearance.CheckedBackColor.MixColor(colors.LowButtonFace)
                         : colors.LowButtonFace
                     : state is CheckState.Indeterminate
                         ? colors.ButtonFace.MixColor(colors.LowButtonFace)
@@ -235,7 +235,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
 
             PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
-            if (ButtonBaseControl.IsDefault)
+            if (Control.IsDefault)
             {
                 r.Inflate(-1, -1);
             }
@@ -251,22 +251,22 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
                     : colors.WindowText,
                 drawFocus: false);
 
-            if (ButtonBaseControl.Focused && ButtonBaseControl.ShowFocusCues)
+            if (Control.Focused && Control.ShowFocusCues)
             {
                 DrawFlatFocus(e, layout.Focus, colors.ContrastButtonShadow);
             }
 
-            if (!(ButtonBaseControl.IsDefault && ButtonBaseControl.Focused && (ButtonBaseControl.FlatAppearance.BorderSize == 0)))
+            if (!(Control.IsDefault && Control.Focused && (Control.FlatAppearance.BorderSize == 0)))
             {
-                DrawDefaultBorder(e, r, colors.WindowFrame, ButtonBaseControl.IsDefault);
+                DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
             }
 
             // Always check if the BorderSize is not the default.If not, we need to paint with the BorderSize set by the user.
             if (hasCustomBorder)
             {
-                if (ButtonBaseControl.FlatAppearance.BorderSize != BorderSize)
+                if (Control.FlatAppearance.BorderSize != BorderSize)
                 {
-                    DrawFlatBorderWithSize(e, r, colors.WindowFrame, ButtonBaseControl.FlatAppearance.BorderSize);
+                    DrawFlatBorderWithSize(e, r, colors.WindowFrame, Control.FlatAppearance.BorderSize);
                 }
                 else
                 {
@@ -285,7 +285,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
     }
 
     protected override LayoutOptions Layout(PaintEventArgs e) =>
-        PaintFlatLayout(up: false, check: true, ButtonBaseControl.FlatAppearance.BorderSize);
+        PaintFlatLayout(up: false, check: true, Control.FlatAppearance.BorderSize);
 
     internal static LayoutOptions PaintFlatLayout(
         bool up,

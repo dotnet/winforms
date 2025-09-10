@@ -16,9 +16,9 @@ internal abstract partial class ButtonBaseAdapter
     // SystemInformation.Border3DSize + 2 pixels for focus rect
     protected const int ButtonBorderSize = 4;
 
-    internal ButtonBaseAdapter(ButtonBase control) => ButtonBaseControl = control.OrThrowIfNull();
+    internal ButtonBaseAdapter(ButtonBase control) => Control = control.OrThrowIfNull();
 
-    protected ButtonBase ButtonBaseControl { get; }
+    protected ButtonBase Control { get; }
 
     /// <summary>
     ///  Returns a darkened color according to the required color contrast ratio.
@@ -32,11 +32,11 @@ internal abstract partial class ButtonBaseAdapter
 
     internal void Paint(PaintEventArgs e)
     {
-        if (ButtonBaseControl.MouseIsDown)
+        if (Control.MouseIsDown)
         {
             PaintDown(e, CheckState.Unchecked);
         }
-        else if (ButtonBaseControl.MouseIsOver)
+        else if (Control.MouseIsOver)
         {
             PaintOver(e, CheckState.Unchecked);
         }
@@ -70,7 +70,7 @@ internal abstract partial class ButtonBaseAdapter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected bool IsHighContrastHighlighted() => SystemInformation.HighContrast
         && Application.RenderWithVisualStyles
-        && (ButtonBaseControl.Focused || ButtonBaseControl.MouseIsOver || (ButtonBaseControl.IsDefault && ButtonBaseControl.Enabled));
+        && (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
 
     internal static Brush CreateDitherBrush(Color color1, Color color2)
     {
@@ -88,13 +88,13 @@ internal abstract partial class ButtonBaseAdapter
     ///  Get <see cref="StringFormat"/> object for rendering text using GDI+ (<see cref="Graphics"/>).
     /// </summary>
     internal virtual StringFormat CreateStringFormat()
-        => ControlPaint.CreateStringFormat(ButtonBaseControl, ButtonBaseControl.TextAlign, ButtonBaseControl.ShowToolTip, ButtonBaseControl.UseMnemonic);
+        => ControlPaint.CreateStringFormat(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
 
     /// <summary>
     ///  Get <see cref="TextFormatFlags"/> for rendering text using GDI (<see cref="TextRenderer"/>).
     /// </summary>
     internal virtual TextFormatFlags CreateTextFormatFlags()
-        => ControlPaint.CreateTextFormatFlags(ButtonBaseControl, ButtonBaseControl.TextAlign, ButtonBaseControl.ShowToolTip, ButtonBaseControl.UseMnemonic);
+        => ControlPaint.CreateTextFormatFlags(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
 
     internal static void DrawDitheredFill(Graphics g, Color color1, Color color2, Rectangle bounds)
     {
@@ -104,7 +104,7 @@ internal abstract partial class ButtonBaseAdapter
 
     protected void Draw3DBorder(IDeviceContext deviceContext, Rectangle bounds, ColorData colors, bool raised)
     {
-        if (ButtonBaseControl.BackColor != SystemColors.Control && SystemInformation.HighContrast)
+        if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
         {
             if (raised)
             {
@@ -112,7 +112,7 @@ internal abstract partial class ButtonBaseAdapter
             }
             else
             {
-                ControlPaint.DrawBorderSimple(deviceContext, bounds, ControlPaint.Dark(ButtonBaseControl.BackColor));
+                ControlPaint.DrawBorderSimple(deviceContext, bounds, ControlPaint.Dark(Control.BackColor));
             }
         }
         else
@@ -131,7 +131,7 @@ internal abstract partial class ButtonBaseAdapter
     private void Draw3DBorderHighContrastRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-        bool disabledHighContrast = (!ButtonBaseControl.Enabled) && SystemInformation.HighContrast;
+        bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
         using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
@@ -234,7 +234,7 @@ internal abstract partial class ButtonBaseAdapter
     private void Draw3DBorderRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-        bool disabledHighContrast = (!ButtonBaseControl.Enabled) && SystemInformation.HighContrast;
+        bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
         using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
 
@@ -367,9 +367,9 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     private void DrawFocus(Graphics g, Rectangle r)
     {
-        if (ButtonBaseControl.Focused && ButtonBaseControl.ShowFocusCues)
+        if (Control.Focused && Control.ShowFocusCues)
         {
-            ControlPaint.DrawFocusRectangle(g, r, ButtonBaseControl.ForeColor, ButtonBaseControl.BackColor);
+            ControlPaint.DrawFocusRectangle(g, r, Control.ForeColor, Control.BackColor);
         }
     }
 
@@ -382,8 +382,8 @@ internal abstract partial class ButtonBaseAdapter
             Rectangle bounds = new(
                 ButtonBorderSize,
                 ButtonBorderSize,
-                ButtonBaseControl.Width - (2 * ButtonBorderSize),
-                ButtonBaseControl.Height - (2 * ButtonBorderSize));
+                Control.Width - (2 * ButtonBorderSize),
+                Control.Height - (2 * ButtonBorderSize));
 
             Region newClip = oldClip.Clone();
             newClip.Intersect(bounds);
@@ -403,7 +403,7 @@ internal abstract partial class ButtonBaseAdapter
 
         try
         {
-            if (!ButtonBaseControl.Enabled)
+            if (!Control.Enabled)
             {
                 // Need to specify width and height
                 ControlPaint.DrawImageDisabled(graphics, image, imageBounds, unscaledImage: true);
@@ -455,7 +455,7 @@ internal abstract partial class ButtonBaseAdapter
         Rectangle r = layout.TextBounds;
         bool disabledText3D = layout.Options.ShadowedText;
 
-        if (ButtonBaseControl.UseCompatibleTextRendering)
+        if (Control.UseCompatibleTextRendering)
         {
             Graphics g = e.GraphicsInternal;
 
@@ -463,52 +463,52 @@ internal abstract partial class ButtonBaseAdapter
             using StringFormat stringFormat = CreateStringFormat();
 
             // DrawString doesn't seem to draw where it says it does
-            if ((ButtonBaseControl.TextAlign & LayoutUtils.AnyCenter) == 0)
+            if ((Control.TextAlign & LayoutUtils.AnyCenter) == 0)
             {
                 r.X -= 1;
             }
 
             r.Width += 1;
-            if (disabledText3D && !ButtonBaseControl.Enabled && !colors.Options.HighContrast)
+            if (disabledText3D && !Control.Enabled && !colors.Options.HighContrast)
             {
                 using var highlightBrush = colors.Highlight.GetCachedSolidBrushScope();
                 r.Offset(1, 1);
-                g.DrawString(ButtonBaseControl.Text, ButtonBaseControl.Font, highlightBrush, r, stringFormat);
+                g.DrawString(Control.Text, Control.Font, highlightBrush, r, stringFormat);
 
                 r.Offset(-1, -1);
                 using var shadowBrush = colors.ButtonShadow.GetCachedSolidBrushScope();
-                g.DrawString(ButtonBaseControl.Text, ButtonBaseControl.Font, shadowBrush, r, stringFormat);
+                g.DrawString(Control.Text, Control.Font, shadowBrush, r, stringFormat);
             }
             else
             {
                 using var brush = color.GetCachedSolidBrushScope();
 
-                g.DrawString(ButtonBaseControl.Text, ButtonBaseControl.Font, brush, r, stringFormat);
+                g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
             }
         }
         else
         {
             // Draw text using GDI (.NET Framework 2.0+ feature).
             TextFormatFlags formatFlags = CreateTextFormatFlags();
-            if (disabledText3D && !ButtonBaseControl.Enabled && !colors.Options.HighContrast)
+            if (disabledText3D && !Control.Enabled && !colors.Options.HighContrast)
             {
                 if (Application.RenderWithVisualStyles)
                 {
                     // don't draw chiseled text if themed as win32 app does.
-                    TextRenderer.DrawTextInternal(e, ButtonBaseControl.Text, ButtonBaseControl.Font, r, colors.ButtonShadow, formatFlags);
+                    TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, colors.ButtonShadow, formatFlags);
                 }
                 else
                 {
                     r.Offset(1, 1);
-                    TextRenderer.DrawTextInternal(e, ButtonBaseControl.Text, ButtonBaseControl.Font, r, colors.Highlight, formatFlags);
+                    TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, colors.Highlight, formatFlags);
 
                     r.Offset(-1, -1);
-                    TextRenderer.DrawTextInternal(e, ButtonBaseControl.Text, ButtonBaseControl.Font, r, colors.ButtonShadow, formatFlags);
+                    TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, colors.ButtonShadow, formatFlags);
                 }
             }
             else
             {
-                TextRenderer.DrawTextInternal(e, ButtonBaseControl.Text, ButtonBaseControl.Font, r, color, formatFlags);
+                TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, color, formatFlags);
             }
         }
     }
@@ -517,7 +517,7 @@ internal abstract partial class ButtonBaseAdapter
     {
         if (background is null)
         {
-            ButtonBaseControl.PaintBackground(e, bounds);
+            Control.PaintBackground(e, bounds);
         }
         else
         {
@@ -547,25 +547,25 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
-        if (Application.IsDarkModeEnabled && ButtonBaseControl.DarkModeRequestState is true && ButtonBaseControl.BackgroundImage is not null)
+        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
         {
-            Rectangle bounds = ButtonBaseControl.ClientRectangle;
+            Rectangle bounds = Control.ClientRectangle;
             bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
             ControlPaint.DrawBackgroundImage(
                 e.GraphicsInternal,
-                ButtonBaseControl.BackgroundImage,
+                Control.BackgroundImage,
                 Color.Transparent,
-                ButtonBaseControl.BackgroundImageLayout,
-                ButtonBaseControl.ClientRectangle,
+                Control.BackgroundImageLayout,
+                Control.ClientRectangle,
                 bounds,
-                ButtonBaseControl.DisplayRectangle.Location,
-                ButtonBaseControl.RightToLeft);
+                Control.DisplayRectangle.Location,
+                Control.RightToLeft);
         }
 
-        if (ButtonBaseControl.Image is not null)
+        if (Control.Image is not null)
         {
             // Setup new clip region & draw
-            DrawImageCore(e.GraphicsInternal, ButtonBaseControl.Image, layout.ImageBounds, layout.ImageStart, layout);
+            DrawImageCore(e.GraphicsInternal, Control.Image, layout.ImageBounds, layout.ImageStart, layout);
         }
     }
 
@@ -606,39 +606,39 @@ internal abstract partial class ButtonBaseAdapter
     {
         LayoutOptions layout = new()
         {
-            Client = LayoutUtils.DeflateRect(ButtonBaseControl.ClientRectangle, ButtonBaseControl.Padding),
-            Padding = ButtonBaseControl.Padding,
+            Client = LayoutUtils.DeflateRect(Control.ClientRectangle, Control.Padding),
+            Padding = Control.Padding,
             GrowBorderBy1PxWhenDefault = true,
-            IsDefault = ButtonBaseControl.IsDefault,
+            IsDefault = Control.IsDefault,
             BorderSize = 2,
             PaddingSize = 0,
             MaxFocus = true,
             FocusOddEvenFixup = false,
-            Font = ButtonBaseControl.Font,
-            Text = ButtonBaseControl.Text,
-            ImageSize = (ButtonBaseControl.Image is null) ? Size.Empty : ButtonBaseControl.Image.Size,
+            Font = Control.Font,
+            Text = Control.Text,
+            ImageSize = (Control.Image is null) ? Size.Empty : Control.Image.Size,
             CheckSize = 0,
             CheckPaddingSize = 0,
             CheckAlign = ContentAlignment.TopLeft,
-            ImageAlign = ButtonBaseControl.ImageAlign,
-            TextAlign = ButtonBaseControl.TextAlign,
+            ImageAlign = Control.ImageAlign,
+            TextAlign = Control.TextAlign,
             HintTextUp = false,
-            ShadowedText = !ButtonBaseControl.Enabled,
-            LayoutRTL = ButtonBaseControl.RightToLeft == RightToLeft.Yes,
-            TextImageRelation = ButtonBaseControl.TextImageRelation,
-            UseCompatibleTextRendering = ButtonBaseControl.UseCompatibleTextRendering
+            ShadowedText = !Control.Enabled,
+            LayoutRTL = Control.RightToLeft == RightToLeft.Yes,
+            TextImageRelation = Control.TextImageRelation,
+            UseCompatibleTextRendering = Control.UseCompatibleTextRendering
         };
 
-        if (ButtonBaseControl.FlatStyle != FlatStyle.System)
+        if (Control.FlatStyle != FlatStyle.System)
         {
             if (layout.UseCompatibleTextRendering)
             {
-                using StringFormat format = ButtonBaseControl.CreateStringFormat();
+                using StringFormat format = Control.CreateStringFormat();
                 layout.StringFormat = format;
             }
             else
             {
-                layout.GdiTextFormatFlags = ButtonBaseControl.CreateTextFormatFlags();
+                layout.GdiTextFormatFlags = Control.CreateTextFormatFlags();
             }
         }
 
@@ -655,9 +655,9 @@ internal abstract partial class ButtonBaseAdapter
         };
 
     private ColorOptions CommonRender(IDeviceContext deviceContext) =>
-        new(deviceContext, ButtonBaseControl.ForeColor, ButtonBaseControl.BackColor)
+        new(deviceContext, Control.ForeColor, Control.BackColor)
         {
-            Enabled = ButtonBaseControl.Enabled
+            Enabled = Control.Enabled
         };
 
     protected ColorOptions PaintRender(IDeviceContext deviceContext) => CommonRender(deviceContext);

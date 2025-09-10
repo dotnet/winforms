@@ -21,15 +21,15 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         {
             state = PushButtonState.Pressed;
         }
-        else if (ButtonBaseControl.MouseIsOver)
+        else if (Control.MouseIsOver)
         {
             state = PushButtonState.Hot;
         }
-        else if (!ButtonBaseControl.Enabled)
+        else if (!Control.Enabled)
         {
             state = PushButtonState.Disabled;
         }
-        else if (ButtonBaseControl.Focused || ButtonBaseControl.IsDefault)
+        else if (Control.Focused || Control.IsDefault)
         {
             state = PushButtonState.Default;
         }
@@ -50,15 +50,15 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         // First handle transparent case.
         if (ButtonRenderer.IsBackgroundPartiallyTransparent(pbState))
         {
-            ButtonRenderer.DrawParentBackground(e, bounds, ButtonBaseControl);
+            ButtonRenderer.DrawParentBackground(e, bounds, Control);
         }
 
         ButtonRenderer.DrawButtonForHandle(
             e,
-            ButtonBaseControl.ClientRectangle,
+            Control.ClientRectangle,
             focused: false,
             pbState,
-            ScaleHelper.IsScalingRequirementMet ? ButtonBaseControl.HWNDInternal : HWND.Null);
+            ScaleHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
 
         // Now overlay the background image or color (the former overrides the latter), leaving a margin.
         // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
@@ -67,10 +67,10 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
 
         // Only paint if the user said not to use the themed background color.
-        if (!ButtonBaseControl.UseVisualStyleBackColor)
+        if (!Control.UseVisualStyleBackColor)
         {
             bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
-            Color color = isHighContrastHighlighted ? SystemColors.Highlight : ButtonBaseControl.BackColor;
+            Color color = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
 
             if (color.HasTransparency())
             {
@@ -84,22 +84,22 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
                     bounds,
                     isHighContrastHighlighted
                         ? PInvokeCore.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_HIGHLIGHT)
-                        : ButtonBaseControl.BackColorBrush);
+                        : Control.BackColorBrush);
             }
         }
 
         // This code is mostly taken from the non-themed rendering code path.
-        if (ButtonBaseControl.BackgroundImage is not null && !DisplayInformation.HighContrast)
+        if (Control.BackgroundImage is not null && !DisplayInformation.HighContrast)
         {
             ControlPaint.DrawBackgroundImage(
                 e.GraphicsInternal,
-                ButtonBaseControl.BackgroundImage,
+                Control.BackgroundImage,
                 Color.Transparent,
-                ButtonBaseControl.BackgroundImageLayout,
-                ButtonBaseControl.ClientRectangle,
+                Control.BackgroundImageLayout,
+                Control.ClientRectangle,
                 bounds,
-                ButtonBaseControl.DisplayRectangle.Location,
-                ButtonBaseControl.RightToLeft);
+                Control.DisplayRectangle.Location,
+                Control.RightToLeft);
         }
     }
 
@@ -119,10 +119,10 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
             layout = PaintLayout(up).Layout();
         }
 
-        _ = ButtonBaseControl as Button;
+        _ = Control as Button;
         if (Application.RenderWithVisualStyles)
         {
-            PaintThemedButtonBackground(e, ButtonBaseControl.ClientRectangle, up);
+            PaintThemedButtonBackground(e, Control.ClientRectangle, up);
         }
         else
         {
@@ -134,7 +134,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
 
             try
             {
-                Rectangle bounds = ButtonBaseControl.ClientRectangle;
+                Rectangle bounds = Control.ClientRectangle;
                 if (up)
                 {
                     // We are going to draw a 2 pixel border
@@ -157,7 +157,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
         PaintImage(e, layout);
 
         // Inflate the focus rectangle to be consistent with the behavior of Win32 app
-        if (Application.RenderWithVisualStyles && ButtonBaseControl.FlatStyle != FlatStyle.Standard)
+        if (Application.RenderWithVisualStyles && Control.FlatStyle != FlatStyle.Standard)
         {
             layout.Focus.Inflate(1, 1);
         }
@@ -167,7 +167,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
             Color highlightTextColor = SystemColors.HighlightText;
             PaintField(e, layout, colors, highlightTextColor, drawFocus: false);
 
-            if (ButtonBaseControl.Focused && ButtonBaseControl.ShowFocusCues)
+            if (Control.Focused && Control.ShowFocusCues)
             {
                 // Drawing focus rectangle of HighlightText color
                 ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.Focus, highlightTextColor);
@@ -184,13 +184,13 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
 
         if (!Application.RenderWithVisualStyles)
         {
-            Rectangle r = ButtonBaseControl.ClientRectangle;
-            if (ButtonBaseControl.IsDefault)
+            Rectangle r = Control.ClientRectangle;
+            if (Control.IsDefault)
             {
                 r.Inflate(-1, -1);
             }
 
-            DrawDefaultBorder(e, r, colors.WindowFrame, ButtonBaseControl.IsDefault);
+            DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
 
             if (up)
             {

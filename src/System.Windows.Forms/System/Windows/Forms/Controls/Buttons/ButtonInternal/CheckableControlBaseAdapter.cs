@@ -42,17 +42,17 @@ internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
     {
         get
         {
-            if (ButtonBaseControl is CheckBox checkBox)
+            if (Control is CheckBox checkBox)
             {
                 return checkBox.Appearance;
             }
 
-            if (ButtonBaseControl is RadioButton radioButton)
+            if (Control is RadioButton radioButton)
             {
                 return radioButton.Appearance;
             }
 
-            Debug.Fail($"Unexpected control type '{ButtonBaseControl.GetType().FullName}'");
+            Debug.Fail($"Unexpected control type '{Control.GetType().FullName}'");
             return Appearance.Normal;
         }
     }
@@ -69,7 +69,7 @@ internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
         return layout;
     }
 
-    internal double GetDpiScaleRatio() => GetDpiScaleRatio(ButtonBaseControl);
+    internal double GetDpiScaleRatio() => GetDpiScaleRatio(Control);
 
     internal static double GetDpiScaleRatio(Control? control) =>
 

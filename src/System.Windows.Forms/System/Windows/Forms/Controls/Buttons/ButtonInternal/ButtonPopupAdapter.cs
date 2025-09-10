@@ -15,7 +15,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         ColorData colors = PaintPopupRender(e).Calculate();
         LayoutData layout = PaintPopupLayout(state == CheckState.Unchecked, 1).Layout();
 
-        Rectangle r = ButtonBaseControl.ClientRectangle;
+        Rectangle r = Control.ClientRectangle;
 
         if (state == CheckState.Indeterminate)
         {
@@ -24,10 +24,10 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         }
         else
         {
-            ButtonBaseControl.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : ButtonBaseControl.BackColor, r.Location);
+            Control.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : Control.BackColor, r.Location);
         }
 
-        if (ButtonBaseControl.IsDefault)
+        if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
         }
@@ -44,7 +44,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
             ? colors.WindowText
             : GetContrastingBorderColor(colors.ButtonShadow);
 
-        DrawDefaultBorder(e, r, borderColor, ButtonBaseControl.IsDefault);
+        DrawDefaultBorder(e, r, borderColor, Control.IsDefault);
 
         if (state == CheckState.Unchecked)
         {
@@ -61,7 +61,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         ColorData colors = PaintPopupRender(e).Calculate();
         LayoutData layout = PaintPopupLayout(state == CheckState.Unchecked, SystemInformation.HighContrast ? 2 : 1).Layout();
 
-        Rectangle r = ButtonBaseControl.ClientRectangle;
+        Rectangle r = Control.ClientRectangle;
 
         if (state == CheckState.Indeterminate)
         {
@@ -70,10 +70,10 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         }
         else
         {
-            ButtonBaseControl.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : ButtonBaseControl.BackColor, r.Location);
+            Control.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : Control.BackColor, r.Location);
         }
 
-        if (ButtonBaseControl.IsDefault)
+        if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
         }
@@ -81,7 +81,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         PaintImage(e, layout);
         PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, drawFocus: true);
 
-        DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, ButtonBaseControl.IsDefault);
+        DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, Control.IsDefault);
 
         if (SystemInformation.HighContrast)
         {
@@ -119,9 +119,9 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         ColorData colors = PaintPopupRender(e).Calculate();
         LayoutData layout = PaintPopupLayout(up: false, SystemInformation.HighContrast ? 2 : 1).Layout();
 
-        Rectangle r = ButtonBaseControl.ClientRectangle;
+        Rectangle r = Control.ClientRectangle;
         PaintButtonBackground(e, r, background: null);
-        if (ButtonBaseControl.IsDefault)
+        if (Control.IsDefault)
         {
             r.Inflate(-1, -1);
         }
@@ -132,7 +132,7 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
 
         r.Inflate(1, 1);
-        DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, ButtonBaseControl.IsDefault);
+        DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, Control.IsDefault);
         ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : GetContrastingBorderColor(colors.ButtonShadow));
     }
 
