@@ -28,6 +28,8 @@ When data is one of these types, WinForms transfers it without the user needing 
 
 As with any serialization, you should take great care when processing the data you receive. If you follow all of the "Best Practices" above Windows Forms will guarantee that only the types you've requested will be created. We cannot guarantee what the data looks like within the types (other than that we will only create specified types) and we cannot constrain the size of the deserialized data.
 
+For example, if you deserialize an integer, it can contain any value. It could be negative, it could be zero. Your code should be able to handle **any** possible value- it may **not** be what you expect. It could be set to a value unexpected by your code, either accidentally or deliberately.
+
 ## New APIs in .NET 10
 
 ### `TryGetData<T>` – constrained deserialization of data
