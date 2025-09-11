@@ -108,6 +108,9 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 _ => DefaultColors.StandardBackColor
             };
 
+    public override void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault) =>
+        DrawButtonBorder(graphics, bounds, state, isDefault, false);
+
     /// <summary>
     ///  Draws the button border based on the current state, using anti-aliasing and an additional inner border.
     /// </summary>

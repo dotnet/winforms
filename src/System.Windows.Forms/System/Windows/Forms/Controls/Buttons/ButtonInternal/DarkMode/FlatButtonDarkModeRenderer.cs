@@ -17,8 +17,6 @@ namespace System.Windows.Forms;
 internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 {
     private const int FocusIndicatorInflate = -3;
-    private const int CornerRadius = 6;
-    private static readonly Size s_corner = new(CornerRadius, CornerRadius);
 
     private protected override Padding PaddingCore { get; } = new(0);
 
@@ -28,10 +26,6 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
         // fill background
         using var back = backColor.GetCachedSolidBrushScope();
         graphics.FillRectangle(back, bounds);
-
-        // draw border identical to Win32
-        DrawButtonBorder(graphics, bounds, state, isDefault);
-
         // return inner content area (border + 1 px system padding)
         return Rectangle.Inflate(bounds, -3, -3);
     }
@@ -77,7 +71,7 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 _ => DefaultColors.StandardBackColor
             };
 
-    private static void DrawButtonBorder(Graphics g, Rectangle bounds, PushButtonState state, bool isDefault)
+    public override void DrawButtonBorder(Graphics g, Rectangle bounds, PushButtonState state, bool isDefault)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -98,12 +92,9 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        using var path = new GraphicsPath();
-        path.AddRoundedRectangle(rect, s_corner);
-
         // a 1‑px stroke, aligned *inside*, is exactly what Win32 draws
         using var pen = new Pen(color) { Alignment = PenAlignment.Inset };
-        g.DrawPath(pen, path);
+        g.DrawRectangle(pen, rect);
     }
 
     private static Color GetBorderColor(PushButtonState state) =>

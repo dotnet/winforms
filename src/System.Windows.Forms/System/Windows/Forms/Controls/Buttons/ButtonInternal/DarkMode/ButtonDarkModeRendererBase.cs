@@ -66,6 +66,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
 
+            DrawButtonBorder(graphics, bounds, state, isDefault);
+
             paintField();
 
             if (focused && showFocusCues)
@@ -75,6 +77,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             }
         }
     }
+
+    public abstract void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);
 
     public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
 
