@@ -405,6 +405,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint),
     AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.ListControlDataSourceDescr))]
+    [TypeConverter("System.Windows.Forms.Design.DataSourceConverter, System.Windows.Forms.Design")]
     public new object? DataSource
     {
         get => base.DataSource;
