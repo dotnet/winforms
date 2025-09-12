@@ -549,15 +549,13 @@ internal abstract partial class ButtonBaseAdapter
     {
         if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
         {
-            Rectangle bounds = Control.ClientRectangle;
-            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
             ControlPaint.DrawBackgroundImage(
                 e.GraphicsInternal,
                 Control.BackgroundImage,
                 Color.Transparent,
                 Control.BackgroundImageLayout,
                 Control.ClientRectangle,
-                bounds,
+                Control.ClientRectangle,
                 Control.DisplayRectangle.Location,
                 Control.RightToLeft);
         }
