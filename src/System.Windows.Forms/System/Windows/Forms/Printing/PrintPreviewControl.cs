@@ -592,6 +592,7 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
+        // fix issue #13861 caused by pr #12368
         Color brushColor = ShouldSerializeForeColor() ? ForeColor : SystemColors.ControlText;
         if (SystemInformation.HighContrast && Parent is Control parent)
         {
