@@ -65,7 +65,7 @@
     />
 
     <ItemGroup>
-      <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
+      <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" IsPackable="$(IsPackable)" PackageId="$(PackageId)" PackageVersion="$(PackageVersion)" />
       <PackageFile Condition="'$(IncludePdbInPackage)' == 'true'" Include="$(TargetDir)$(TargetName).pdb" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'"
