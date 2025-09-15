@@ -16,7 +16,7 @@ internal class DataSourceConverter : ReferenceConverter
     {
         if (destinationType == typeof(string) && value is null)
         {
-            return SR.None_lc;
+            return SR.None_lc.ToString();
         }
 
         return base.ConvertTo(context, culture, value, destinationType);
