@@ -767,7 +767,18 @@ public partial class TabControl : Control
             SourceGenerated.EnumValidator.Validate(value);
 
             _sizeMode = value;
-            RecreateHandle();
+
+            if (Application.IsDarkModeEnabled)
+            {
+                if (IsHandleCreated)
+                {
+                    RecreateHandle();
+                }
+            }
+            else
+            {
+                RecreateHandle();
+            }
         }
     }
 
