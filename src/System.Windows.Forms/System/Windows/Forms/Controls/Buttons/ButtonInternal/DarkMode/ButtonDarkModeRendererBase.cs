@@ -32,6 +32,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         Graphics graphics,
         Rectangle bounds,
         FlatStyle flatStyle,
+        int borderSize,
         PushButtonState state,
         bool isDefault,
         bool focused,
@@ -39,6 +40,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         Color parentBackgroundColor,
         Color backColor,
         Action<Rectangle> paintImage,
+        Action<Rectangle> paintBackgroundImage,
         Action paintField)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -61,12 +63,14 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
                 height: bounds.Height - padding.Vertical);
 
             // Draw button background and get content bounds
-            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor);
+            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, borderSize, state, isDefault, backColor);
+
+            paintBackgroundImage(paddedBounds);
 
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
 
-            DrawButtonBorder(graphics, bounds, state, isDefault);
+            DrawButtonBorder(graphics, bounds, borderSize, state, isDefault);
 
             paintField();
 
@@ -78,9 +82,9 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         }
     }
 
-    public abstract void DrawButtonBorder(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault);
+    public abstract void DrawButtonBorder(Graphics graphics, Rectangle bounds, int borderSize, PushButtonState state, bool isDefault);
 
-    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
+    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, int borderSize, PushButtonState state, bool isDefault, Color backColor);
 
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 

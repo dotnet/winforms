@@ -70,6 +70,32 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         return textColor;
     }
 
+    internal void PaintBackgroundImage(PaintEventArgs e, int borderSize, Rectangle paddedBounds)
+    {
+        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
+        {
+            Rectangle bounds = paddedBounds;
+            if (Control.FlatStyle == FlatStyle.Popup)
+            {
+                bounds.Inflate(-1, -1);
+            }
+            else
+            {
+                bounds.Inflate(-1 - borderSize, -1 - borderSize);
+            }
+
+            ControlPaint.DrawBackgroundImage(
+                e.GraphicsInternal,
+                Control.BackgroundImage,
+                Color.Transparent,
+                Control.BackgroundImageLayout,
+                paddedBounds,
+                bounds,
+                bounds.Location,
+                Control.RightToLeft);
+        }
+    }
+
     internal override void PaintUp(PaintEventArgs e, CheckState state)
     {
         try
@@ -86,6 +112,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
+                Control.FlatAppearance.BorderSize,
                 pushButtonState,
                 Control.IsDefault,
                 Control.Focused,
@@ -93,6 +120,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(pushButtonState),
                 _ => PaintImage(e, layout),
+                _ => PaintBackgroundImage(
+                    e,
+                    Control.FlatAppearance.BorderSize,
+                    Control.ClientRectangle),
                 () => PaintField(
                     e,
                     layout,
@@ -124,6 +155,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
+                Control.FlatAppearance.BorderSize,
                 PushButtonState.Pressed,
                 Control.IsDefault,
                 Control.Focused,
@@ -131,6 +163,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(PushButtonState.Pressed),
                 _ => PaintImage(e, layout),
+                _ => PaintBackgroundImage(
+                    e,
+                    Control.FlatAppearance.BorderSize,
+                    Control.ClientRectangle),
                 () => PaintField(
                     e,
                     layout,
@@ -156,12 +192,12 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             var g = e.GraphicsInternal;
             var smoothingMode = g.SmoothingMode;
             g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
+                Control.FlatAppearance.BorderSize,
                 PushButtonState.Hot,
                 Control.IsDefault,
                 Control.Focused,
@@ -169,6 +205,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 Control.Parent?.BackColor ?? Control.BackColor,
                 GetButtonBackColor(PushButtonState.Hot),
                 _ => PaintImage(e, layout),
+                _ => PaintBackgroundImage(
+                    e,
+                    Control.FlatAppearance.BorderSize,
+                    Control.ClientRectangle),
                 () => PaintField(
                     e,
                     layout,

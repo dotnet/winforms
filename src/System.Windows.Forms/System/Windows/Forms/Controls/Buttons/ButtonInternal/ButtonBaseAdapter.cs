@@ -547,19 +547,6 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
-        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
-        {
-            ControlPaint.DrawBackgroundImage(
-                e.GraphicsInternal,
-                Control.BackgroundImage,
-                Color.Transparent,
-                Control.BackgroundImageLayout,
-                Control.ClientRectangle,
-                Control.ClientRectangle,
-                Control.DisplayRectangle.Location,
-                Control.RightToLeft);
-        }
-
         if (Control.Image is not null)
         {
             // Setup new clip region & draw
