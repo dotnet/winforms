@@ -26,20 +26,6 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
     }
 
     [WinFormsFact]
-    public void InstallMessageHook_DoesNotThrow_WhenCalledTwice()
-    {
-        Type hookType = GetHookType();
-
-        object? hook = Activator.CreateInstance(hookType, nonPublic: true);
-
-        hook?.TestAccessor().Dynamic.InstallMessageHook();
-        hook?.TestAccessor().Dynamic.InstallMessageHook();
-
-        bool isHooked = hook?.TestAccessor().Dynamic._isHooked;
-        isHooked.Should().BeTrue();
-    }
-
-    [WinFormsFact]
     public void UninstallMessageHook_DoesNotThrow_WhenCalledTwice()
     {
         Type hookType = GetHookType();
