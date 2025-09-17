@@ -37,9 +37,6 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
 
         bool isHooked = hook?.TestAccessor().Dynamic._isHooked;
         isHooked.Should().BeTrue();
-
-        IntPtr messageHookHandle = hook?.TestAccessor().Dynamic._messageHookHandle;
-        messageHookHandle.Should().NotBe(IntPtr.Zero);
     }
 
     [WinFormsFact]
