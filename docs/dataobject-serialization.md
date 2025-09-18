@@ -9,20 +9,26 @@ The **.NET 10** cycle introduces major updates to the clipboard and drag‑and�
 ### Best Practices
 
 - Avoid enabling the `BinaryFormatter` for clipboard and drag and drop scenarios if at all possible.
-- Use the safe built-in types (listed below) and `SetData` APIs.
+- Use the recommended built-in types (listed below) and `SetData` APIs.
 - For custom types, use the new `SetDataAsJson<T>()` APIs or serialize manually as `string` or `byte[]` data.
 - **Always** use `TryGetData<T>()` to get data (not `GetData()`).
 - Read legacy data using the `NrbfDecoder`.
 
-### Safe built‑in types
+### Recommended built‑in types
 
 Without `BinaryFormatter`, WinForms can still transfer certain intrinsic types using a built‑in manual serializer in the `BinaryFormatter` data format, **NRBF** ([.NET Remoting Binary Format](https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/75b9fe09-be15-475f-85b8-ae7b7558cfe5)). Supported types include:
 
 - **Primitive types**: `bool`, `byte`, `char`, `decimal`, `double`, `short`, `int`, `long`, `sbyte`, `ushort`, `uint`, `ulong`, `float`, `string`, `TimeSpan` and `DateTime`.
-- **Arrays or `List<T>`** of these primitive types.
+- **Arrays or `List<T>`** of the above primitive types. For maximum resilience, avoid `string[]` and `List<string>` as they can contain nulls.
 - **System.Drawing types**: `Bitmap`, `PointF`, `RectangleF`, `Point`, `Rectangle`, `SizeF`, `Size`, and `Color`.
 
 When data is one of these types, WinForms transfers it without the user needing to implement any special logic. For custom types with [`DataFormats`](https://learn.microsoft.com/dotnet/api/system.windows.forms.dataformats) that aren't predefined, you should use JSON or your own serialization using raw string or byte data.
+
+### Safety
+
+As with any serialization, you should take great care when processing the data you receive. If you follow all of the "Best Practices" above Windows Forms will guarantee that only the types you've requested will be created. We cannot guarantee what the data looks like within the types (other than that we will only create specified types) and we cannot constrain the size of the deserialized data.
+
+For example, if you deserialize an integer, it can contain any value. It could be negative, it could be zero. Your code should be able to handle **any** possible value- it may **not** be what you expect. It could be set to a value unexpected by your code, either accidentally or deliberately.
 
 ## New APIs in .NET 10
 
@@ -61,7 +67,7 @@ public record Person(string Name, int Age);
 Person person = new("Alisha", 34);
 Clipboard.SetDataAsJson(person);
 ```
-Internally `DataObject.SetDataAsJson<T>` writes the JSON to the underlying OLE data stream in the NRBF format in a way that it can be safely extracted without using the `BinaryFormatter`.
+Internally `DataObject.SetDataAsJson<T>` writes the JSON to the underlying OLE data stream in the NRBF format in a way that it can be manually extracted without using the `BinaryFormatter`.
 
 
 ### `ITypedDataObject` interface – enabling typed data retrieval
@@ -85,7 +91,7 @@ Custom data objects used with drag & drop should implement the **`ITypedDataOb
 
 ## Enabling full `BinaryFormatter` support (not recommended)
 
-Although the default behaviour removes `BinaryFormatter`, a full fallback is still available **for legacy applications**.  To enable it you must do **all** of the following:
+Although the default behavior removes `BinaryFormatter`, a full fallback is still available **for legacy applications**.  To enable it you must do **all** of the following:
 
 1. **Reference the `System.Runtime.Serialization.Formatters` package**:  Add a PackageReference to your project file:
 
@@ -115,7 +121,7 @@ Although the default behaviour removes `BinaryFormatter`, a full fallback is sti
     }
     ```
 
-4. **Use the resolver overload to control which types are allowed**: Even with `BinaryFormatter` enabled, you must specify a resolver when calling `TryGetData<T>` so you only deserialize known safe types. The existing, deprecated, `GetData` APIs will continue to work, but provide no additional constraints. A sample type resolver follows:
+4. **Use the resolver overload to control which types are allowed**: Even with `BinaryFormatter` enabled, you must specify a resolver when calling `TryGetData<T>` so you only deserialize known types. The existing, deprecated, `GetData` APIs will continue to work, but provide no additional constraints. A sample type resolver follows:
 
     ```csharp
     static Type MyExactMatchResolver(TypeName typeName)

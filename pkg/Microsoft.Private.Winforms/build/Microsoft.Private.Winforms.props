@@ -1,0 +1,10 @@
+<Project>
+
+  <!-- The list of redistributed assemblies that also ship via out-of-band packages.
+       Includes the AssemblyName, PackageId and the PackageVersion:
+       <WinformsWindowsDesktopPackageLibrary Include="" PackageId="" PackageVersion="" /> -->
+  <ItemGroup>
+    ${WinformsWindowsDesktopPackageLibraries}
+  </ItemGroup>
+
+</Project>
