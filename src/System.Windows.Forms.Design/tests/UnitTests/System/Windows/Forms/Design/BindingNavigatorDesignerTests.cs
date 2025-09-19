@@ -16,7 +16,7 @@ public class BindingNavigatorDesignerTests : IDisposable
     private readonly Mock<DesignerTransaction> _mockTransaction = new(MockBehavior.Loose);
     private Mock<ISite>? _siteMock;
     private readonly BindingNavigatorDesigner _designer = new();
-    private BindingNavigator _bindingNavigator = new();
+    private readonly BindingNavigator _bindingNavigator = new();
 
     public BindingNavigatorDesignerTests()
     {
@@ -57,7 +57,7 @@ public class BindingNavigatorDesignerTests : IDisposable
 
         _designer.InitializeNewComponent(defaultValues);
 
-        _bindingNavigator.Items.Count.Should().BeGreaterThan(0);
+        _bindingNavigator.Items.Count.Should().Be(11);
         _bindingNavigator.ShowItemToolTips.Should().BeTrue();
     }
 
@@ -79,42 +79,42 @@ public class BindingNavigatorDesignerTests : IDisposable
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.MoveFirstItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.MoveFirstItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.MoveFirstItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.MovePreviousItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.MovePreviousItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.MovePreviousItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.MoveNextItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.MoveNextItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.MoveNextItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.MoveLastItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.MoveLastItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.MoveLastItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.PositionItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.PositionItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.PositionItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.CountItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.CountItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.CountItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.AddNewItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.AddNewItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.AddNewItem)
         };
         yield return new object[]
         {
             (Action<BindingNavigator, ToolStripItem>)((nav, item) => nav.DeleteItem = item),
-            (Func<BindingNavigator, ToolStripItem?>)((nav) => nav.DeleteItem)
+            (Func<BindingNavigator, ToolStripItem?>)(nav => nav.DeleteItem)
         };
     }
 
@@ -149,7 +149,7 @@ public class BindingNavigatorDesignerTests : IDisposable
     }
 
     [Fact]
-    public void ComponentChangeService_ComponentChangedDifferentComponent_ShouldNotUpdateFormat()
+    public void ComponentChangeService_ComponentChangedDifferentComponent_ShouldIgnoreChange()
     {
         using ToolStripLabel countItem = new() { Text = "Original format" };
         using ToolStripLabel otherItem = new() { Text = "Other text" };
@@ -165,7 +165,7 @@ public class BindingNavigatorDesignerTests : IDisposable
     }
 
     [Fact]
-    public void ComponentChangeService_ComponentChangedDifferentProperty_ShouldNotUpdateFormat()
+    public void ComponentChangeService_ComponentChangedDifferentProperty_ShouldIgnoreChange()
     {
         using ToolStripLabel countItem = new() { Text = "Original format" };
         _bindingNavigator.CountItem = countItem;
