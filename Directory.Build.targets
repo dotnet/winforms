@@ -6,6 +6,19 @@
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
+  <!-- 
+    Analyzer projects require incremental versioning for proper side-by-side loading.
+    Use build number from Arcade SDK when available (official builds), otherwise use timestamp for local builds.
+    -->
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
+    <!-- For official builds, extract build number from OfficialBuildId (format: yyyyMMdd.buildNumber) -->
+    <_AnalyzerBuildNumber Condition="'$(OfficialBuildId)' != '' and $(OfficialBuildId.Contains('.'))" >$(OfficialBuildId.Split('.')[1])</_AnalyzerBuildNumber>
+    <!-- For local builds, generate a build number from days since 2020-01-01 (keeps it under 65535) -->
+    <_AnalyzerBuildNumber Condition="'$(_AnalyzerBuildNumber)' == ''">$([MSBuild]::Subtract($([System.DateTime]::Now.Subtract($([System.DateTime]::new(2020,1,1))).Days), 0))</_AnalyzerBuildNumber>
+    <!-- Override the AssemblyVersion for analyzer projects: Major.Minor.BuildNumber.0 -->
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).$(_AnalyzerBuildNumber).0</AssemblyVersion>
+  </PropertyGroup>
+
   <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform" Condition="!$(TargetFramework.StartsWith('netstandard'))">
