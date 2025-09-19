@@ -768,14 +768,7 @@ public partial class TabControl : Control
 
             _sizeMode = value;
 
-            if (Application.IsDarkModeEnabled)
-            {
-                if (IsHandleCreated)
-                {
-                    RecreateHandle();
-                }
-            }
-            else
+            if (!Application.IsDarkModeEnabled || IsHandleCreated)
             {
                 RecreateHandle();
             }
