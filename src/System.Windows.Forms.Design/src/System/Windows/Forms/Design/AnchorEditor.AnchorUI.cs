@@ -69,44 +69,51 @@ public sealed partial class AnchorEditor
 
         internal virtual void InitializeComponent()
         {
-            int XBORDER = SystemInformation.Border3DSize.Width;
-            int YBORDER = SystemInformation.Border3DSize.Height;
+            int XBORDER = ScaleHelper.ScaleToInitialSystemDpi(SystemInformation.Border3DSize.Width);
+            int YBORDER = ScaleHelper.ScaleToInitialSystemDpi(SystemInformation.Border3DSize.Height);
             SuspendLayout();
-            SetBounds(0, 0, 90, 90);
+
+            var pixel_10 = ScaleHelper.ScaleToInitialSystemDpi(10);
+            var pixel_30 = ScaleHelper.ScaleToInitialSystemDpi(30);
+            var pixel_40 = ScaleHelper.ScaleToInitialSystemDpi(40);
+            var pixel_60 = ScaleHelper.ScaleToInitialSystemDpi(60);
+            var pixel_90 = ScaleHelper.ScaleToInitialSystemDpi(90);
+
+            SetBounds(0, 0, pixel_90, pixel_90);
 
             AccessibleName = SR.AnchorEditorAccName;
 
             _container.Location = new Point(0, 0);
-            _container.Size = new Size(90, 90);
+            _container.Size = new Size(pixel_90, pixel_90);
             _container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-            _control.Location = new Point(30, 30);
-            _control.Size = new Size(30, 30);
+            _control.Location = new Point(pixel_30, pixel_30);
+            _control.Size = new Size(pixel_30, pixel_30);
             _control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-            _right.Location = new Point(60, 40);
-            _right.Size = new Size(30 - XBORDER, 10);
+            _right.Location = new Point(pixel_60, pixel_40);
+            _right.Size = new Size(pixel_30 - XBORDER, pixel_10);
             _right.TabIndex = 2;
             _right.TabStop = true;
             _right.Anchor = AnchorStyles.Right;
             _right.AccessibleName = SR.AnchorEditorRightAccName;
 
-            _left.Location = new Point(XBORDER, 40);
-            _left.Size = new Size(30 - XBORDER, 10);
+            _left.Location = new Point(XBORDER, pixel_40);
+            _left.Size = new Size(pixel_30 - XBORDER, pixel_10);
             _left.TabIndex = 0;
             _left.TabStop = true;
             _left.Anchor = AnchorStyles.Left;
             _left.AccessibleName = SR.AnchorEditorLeftAccName;
 
-            _top.Location = new Point(40, YBORDER);
-            _top.Size = new Size(10, 30 - YBORDER);
+            _top.Location = new Point(pixel_40, YBORDER);
+            _top.Size = new Size(pixel_10, pixel_30 - YBORDER);
             _top.TabIndex = 1;
             _top.TabStop = true;
             _top.Anchor = AnchorStyles.Top;
             _top.AccessibleName = SR.AnchorEditorTopAccName;
 
-            _bottom.Location = new Point(40, 60);
-            _bottom.Size = new Size(10, 30 - YBORDER);
+            _bottom.Location = new Point(pixel_40, pixel_60);
+            _bottom.Size = new Size(pixel_10, pixel_30 - YBORDER);
             _bottom.TabIndex = 3;
             _bottom.TabStop = true;
             _bottom.Anchor = AnchorStyles.Bottom;
