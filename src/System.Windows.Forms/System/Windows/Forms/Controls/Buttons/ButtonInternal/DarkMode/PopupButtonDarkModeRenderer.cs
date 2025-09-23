@@ -141,9 +141,9 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
             if (state == PushButtonState.Pressed)
             {
-                // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
-                topLeftOuter = DefaultColors.ShadowColor;       // shadow
-                bottomRightOuter = DefaultColors.HighlightColor; // highlight
+                // In pressed state, invert the 3D effect: brighter highlight bottom/right, deeper shadow top/left
+                topLeftOuter = DefaultColors.ShadowDarkColor;       // deeper shadow
+                bottomRightOuter = DefaultColors.HighlightBrightColor; // brighter highlight
                 topLeftInner = DefaultColors.ShadowDarkColor;   // deeper shadow
                 bottomRightInner = DefaultColors.HighlightBrightColor; // brighter highlight
             }
@@ -155,9 +155,17 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 topLeftInner = DefaultColors.DisabledBorderMidColor;
                 bottomRightInner = DefaultColors.DisabledBorderMidColor;
             }
+            else if (state == PushButtonState.Hot)
+            {
+                // In hover state, invert the 3D effect: highlight bottom/right, shadow top/left
+                topLeftOuter = DefaultColors.ShadowColor;       // shadow
+                bottomRightOuter = DefaultColors.HighlightColor; // highlight
+                topLeftInner = DefaultColors.ShadowColor;   // shadow
+                bottomRightInner = DefaultColors.HighlightColor; // highlight
+            }
             else
             {
-                // Normal/hot: highlight top/left, shadow bottom/right
+                // Normal: highlight top/left, shadow bottom/right
                 topLeftOuter = DefaultColors.HighlightColor;     // highlight
                 bottomRightOuter = DefaultColors.ShadowColor;     // shadow
                 topLeftInner = DefaultColors.HighlightBrightColor; // brighter highlight
