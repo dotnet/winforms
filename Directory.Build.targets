@@ -43,6 +43,17 @@
 	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
+  <!--
+    Set assembly version to align with major and minor version, as for the patches and revisions should be manually
+    updated per assembly if it is serviced.
+
+    Note, any components that aren't exposed as references in the targeting pack (like analyzers/generators) those should rev
+    so that they can exist SxS, as the compiler relies on different version to change assembly version for caching purposes.
+    -->
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true'">
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
+  </PropertyGroup>
+
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
