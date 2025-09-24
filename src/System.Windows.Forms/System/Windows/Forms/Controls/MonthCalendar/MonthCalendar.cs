@@ -2099,12 +2099,21 @@ public partial class MonthCalendar : Control
 
     private void NotifyWinEvent(AccessibleEvents accessibleEvent)
     {
-        PInvoke.NotifyWinEvent(
-            (uint)accessibleEvent,
-            this,
-            (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
-            (int)PInvoke.CHILDID_SELF
-        );
+        try
+        {
+            if (IsHandleCreated)
+            {
+                PInvoke.NotifyWinEvent(
+                    (uint)accessibleEvent,
+                    this,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail($"NotifyWinEvent failed: {ex.Message}");
+        }
     }
 
     /// <summary>
