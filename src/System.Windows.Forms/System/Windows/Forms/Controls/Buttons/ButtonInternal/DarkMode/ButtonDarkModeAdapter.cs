@@ -53,6 +53,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color backColor;
 
+        // Set the initial back color.
         if (Control.BackColor != Forms.Control.DefaultBackColor)
         {
             backColor = Control.BackColor;
@@ -65,6 +66,21 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         else
         {
             backColor = ButtonDarkModeRenderer.GetBackgroundColor(state, Control.IsDefault);
+        }
+
+        // Override the back color for FlatStyle buttons if specific colors are set.
+        if (Control.FlatStyle == FlatStyle.Flat)
+        {
+            if (state == PushButtonState.Pressed && !Control.FlatAppearance.MouseDownBackColor.IsEmpty)
+            {
+                backColor = Control.FlatAppearance.MouseDownBackColor;
+            }
+            else if (state == PushButtonState.Hot
+                && !Control.FlatAppearance.MouseOverBackColor.IsEmpty
+                && !IsHighContrastHighlighted())
+            {
+                backColor = Control.FlatAppearance.MouseOverBackColor;
+            }
         }
 
         return backColor;
