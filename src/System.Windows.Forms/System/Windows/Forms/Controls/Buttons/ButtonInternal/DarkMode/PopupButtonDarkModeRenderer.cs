@@ -141,10 +141,10 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
             if (state == PushButtonState.Pressed)
             {
-                // In pressed state, invert the 3D effect: brighter highlight bottom/right, deeper shadow top/left
-                topLeftOuter = DefaultColors.ShadowDarkColor;       // deeper shadow
+                // In pressed state, brighter all borders to simulate the button being pressed.
+                topLeftOuter = DefaultColors.HighlightBrightColor;       // brighter highlight
                 bottomRightOuter = DefaultColors.HighlightBrightColor; // brighter highlight
-                topLeftInner = DefaultColors.ShadowDarkColor;   // deeper shadow
+                topLeftInner = DefaultColors.HighlightBrightColor;   // deeper shadow
                 bottomRightInner = DefaultColors.HighlightBrightColor; // brighter highlight
             }
             else if (state == PushButtonState.Disabled)
