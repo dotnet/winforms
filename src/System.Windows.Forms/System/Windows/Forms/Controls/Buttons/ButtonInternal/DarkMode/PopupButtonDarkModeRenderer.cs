@@ -30,11 +30,11 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Draws button background with popup styling, including subtle 3D effect.
     /// </summary>
-    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, int borderSize, PushButtonState state, bool isDefault, Color backColor)
+    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
     {
         // Use padding from ButtonDarkModeRenderer
         Padding padding = PaddingCore;
-        Rectangle paddedBounds = Rectangle.Inflate(bounds, -1 - padding.Left, -1 - padding.Top);
+        Rectangle paddedBounds = Rectangle.Inflate(bounds, -padding.Left, -padding.Top);
 
         // Content rect will be used to position text and images
         Rectangle contentBounds = Rectangle.Inflate(paddedBounds, -padding.Left, -padding.Top);
@@ -51,6 +51,9 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
         // Fill the background using cached brush
         using var brush = backColor.GetCachedSolidBrushScope();
         graphics.FillPath(brush, path);
+
+        // Draw 3D effect borders
+        DrawButtonBorder(graphics, paddedBounds, state, isDefault);
 
         // Return content bounds (area inside the button for text/image)
         return contentBounds;
@@ -117,7 +120,7 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Draws the 3D effect border for the button.
     /// </summary>
-    public override void DrawButtonBorder(Graphics graphics, Rectangle bounds, int borderSize, PushButtonState state, bool isDefault)
+    private static void DrawButtonBorder(Graphics graphics, Rectangle bounds, int borderSize, PushButtonState state, bool isDefault)
     {
         // Save original smoothing mode to restore later
         SmoothingMode originalMode = graphics.SmoothingMode;

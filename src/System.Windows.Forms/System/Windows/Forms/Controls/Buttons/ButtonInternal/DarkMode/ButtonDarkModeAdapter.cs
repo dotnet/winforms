@@ -72,16 +72,16 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
     internal void PaintBackgroundImage(PaintEventArgs e, int borderSize, Rectangle paddedBounds)
     {
-        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
+        if (Control.BackgroundImage is not null)
         {
             Rectangle bounds = paddedBounds;
-            if (Control.FlatStyle == FlatStyle.Popup)
+            if (Control.FlatStyle == FlatStyle.Flat)
             {
-                bounds.Inflate(-1, -1);
+                bounds.Inflate(-borderSize - 1, -borderSize - 1);
             }
             else
             {
-                bounds.Inflate(-1 - borderSize, -1 - borderSize);
+                bounds.Inflate(-1, -1);
             }
 
             ControlPaint.DrawBackgroundImage(
@@ -112,7 +112,6 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                Control.FlatAppearance.BorderSize,
                 pushButtonState,
                 Control.IsDefault,
                 Control.Focused,
@@ -155,7 +154,6 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                Control.FlatAppearance.BorderSize,
                 PushButtonState.Pressed,
                 Control.IsDefault,
                 Control.Focused,
@@ -192,12 +190,12 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             var g = e.GraphicsInternal;
             var smoothingMode = g.SmoothingMode;
             g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                Control.FlatAppearance.BorderSize,
                 PushButtonState.Hot,
                 Control.IsDefault,
                 Control.Focused,
