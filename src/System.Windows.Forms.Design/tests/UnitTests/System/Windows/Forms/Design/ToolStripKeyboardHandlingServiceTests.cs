@@ -12,6 +12,7 @@ public class ToolStripKeyboardHandlingServiceTests
     private readonly Mock<IDesignerHost> _designerHostMock;
     private readonly Mock<IComponentChangeService> _componentChangeServiceMock;
     private readonly DummyServiceProvider _provider;
+    private readonly ToolStripKeyboardHandlingService _service;
 
     public ToolStripKeyboardHandlingServiceTests()
     {
@@ -20,12 +21,14 @@ public class ToolStripKeyboardHandlingServiceTests
         _componentChangeServiceMock = new();
 
         _provider = new(type =>
-            type == typeof(ISelectionService) ? _selectionServiceMock.Object :
-            type == typeof(IDesignerHost) ? _designerHostMock.Object :
-            type == typeof(IComponentChangeService) ? _componentChangeServiceMock.Object :
-            null);
+            type == typeof(ISelectionService) ? _selectionServiceMock.Object
+            : type == typeof(IDesignerHost) ? _designerHostMock.Object
+            : type == typeof(IComponentChangeService) ? _componentChangeServiceMock.Object
+            : null);
 
         _designerHostMock.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(_componentChangeServiceMock.Object);
+
+        _service = new(_provider);
     }
 
     private class DummyServiceProvider : IServiceProvider
@@ -43,72 +46,64 @@ public class ToolStripKeyboardHandlingServiceTests
     [Fact]
     public void Ctor_InitializesAndSubscribesToEvents()
     {
-        ToolStripKeyboardHandlingService service = new(_provider);
-
         _selectionServiceMock.VerifyAdd(s => s.SelectionChanging += It.IsAny<EventHandler>(), Times.Once());
         _selectionServiceMock.VerifyAdd(s => s.SelectionChanged += It.IsAny<EventHandler>(), Times.Once());
         _componentChangeServiceMock.VerifyAdd(s => s.ComponentRemoved += It.IsAny<ComponentEventHandler>(), Times.Once());
     }
 
     [Fact]
-    public void AddCommands_DoesNotThrow_WhenNoMenuService()
-    {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.AddCommands();
-    }
+    public void AddCommands_DoesNotThrow_WhenNoMenuService() =>
+        ((Action)_service.AddCommands).Should().NotThrow();
 
     [Fact]
-    public void RestoreCommands_DoesNotThrow_WhenNoMenuService()
-    {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.RestoreCommands();
-    }
+    public void RestoreCommands_DoesNotThrow_WhenNoMenuService() =>
+        ((Action)_service.RestoreCommands).Should().NotThrow();
 
     [Fact]
-    public void RemoveCommands_DoesNotThrow_WhenNoMenuService()
-    {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.RemoveCommands();
-    }
+    public void RemoveCommands_DoesNotThrow_WhenNoMenuService() =>
+        ((Action)_service.RemoveCommands).Should().NotThrow();
 
     [Fact]
     public void OnContextMenu_ReturnsTrue_WhenTemplateNodeActive()
     {
-        ToolStripKeyboardHandlingService service = new(_provider)
-        {
-            TemplateNodeActive = true
-        };
-        service.OnContextMenu(10, 10).Should().BeTrue();
+        _service.TemplateNodeActive = true;
+
+        bool result = _service.OnContextMenu(10, 10);
+
+        result.Should().BeTrue();
     }
 
     [Fact]
     public void OnContextMenu_ReturnsFalse_WhenNotTemplateNodeActive()
     {
-        ToolStripKeyboardHandlingService service = new(_provider)
-        {
-            TemplateNodeActive = false
-        };
-        service.OnContextMenu(10, 10).Should().BeFalse();
+        _service.TemplateNodeActive = false;
+
+        bool result = _service.OnContextMenu(10, 10);
+
+        result.Should().BeFalse();
     }
 
     [Fact]
     public void ProcessKeySelect_DoesNotThrow_WhenNoSelectionService()
     {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.ProcessKeySelect(false);
+        Action action = () => _service.ProcessKeySelect(false);
+
+        action.Should().NotThrow();
     }
 
     [Fact]
     public void ProcessUpDown_DoesNotThrow_WhenNoSelectionService()
     {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.ProcessUpDown(false);
+        Action action = () => _service.ProcessUpDown(false);
+
+        action.Should().NotThrow();
     }
 
     [Fact]
     public void RotateTab_DoesNotThrow_WhenNoSelectionService()
     {
-        ToolStripKeyboardHandlingService service = new(_provider);
-        service.RotateTab(false);
+        Action action = () => _service.RotateTab(false);
+
+        action.Should().NotThrow();
     }
 }
