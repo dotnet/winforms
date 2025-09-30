@@ -1,0 +1,8 @@
+schemaVersion: 0.0.1
+isProduction: true
+accountableOwners:
+  service: 207fa7e8-9931-4637-a9c1-75b5bc8c289e
+routing:
+  defaultAreaPath:
+    org: devdiv
+    path: DevDiv\NET Tools\Winforms\Runtime\Core
