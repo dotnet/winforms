@@ -116,17 +116,17 @@ public sealed class InputLanguage
     {
         using RegistryKey? layouts = Registry.LocalMachine.OpenSubKey(KeyboardLayoutsRegistryPath);
         if (layouts is null) return specialId;
-    
+
         foreach (string keyName in layouts.GetSubKeyNames())
         {
             using RegistryKey? subKey = layouts.OpenSubKey(keyName);
             if (subKey?.GetValue("Layout Id") is string layoutId && Convert.ToInt32(layoutId, 16) == specialId)
             {
-                Debug.Assert(keyName.Length == 8, $"unexpected key length in registry: {keyName.Name}");
+                Debug.Assert(keyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
                 return Convert.ToInt32(keyName, 16);
             }
         }
-    
+
         return specialId;
     }
 
@@ -148,7 +148,7 @@ public sealed class InputLanguage
             // current input language; setting and resetting the current input language would generate spurious
             // InputLanguageChanged events. Try to extract needed information manually from HKL.
             int langId = PARAM.LOWORD(_handle);
-            
+
             // High word of HKL contains a device handle to the physical layout of the keyboard but exact format of this
             // handle is not documented. For older keyboard layouts device handle contains keyboard layout identifier.
             // But for newer keyboard layouts device handle contains special layout identifier if its high nibble is 0xF.
