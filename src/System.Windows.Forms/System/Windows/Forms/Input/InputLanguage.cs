@@ -154,11 +154,11 @@ public sealed class InputLanguage
             // But for newer keyboard layouts device handle contains special layout identifier if its high nibble is 0xF.
             // This identifier may be used to search for keyboard layout under registry.
             int deviceId = PARAM.HIWORD(_handle);
-    
+
             int layoutId = (deviceId & 0xF000) == 0xF000
                 ? FindKeyboardLayout(deviceId & 0x0FFF)
                 : (deviceId != 0 ? deviceId : langId);
-    
+
             return layoutId.ToString("X8");
         }
     }
