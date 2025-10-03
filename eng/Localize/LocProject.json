@@ -230,8 +230,8 @@
                          "CloneLanguageSet":  "WiX_CloneLanguages",
                          "LocItems":  [
                                           {
-                                            "SourceFile":  ".\\WindowsDesktopLocalization\\Wix5Bundle\\theme\\1033\\bundle.wxl",
-                                            "CopyOption":  "LCIDOnPath",
+                                            "SourceFile":  ".\\WindowsDesktopLocalization\\Wix5Bundle\\theme\\bundle.wxl",
+                                            "CopyOption":  "LangIDOnPath",
                                             "OutputPath":  ".\\WindowsDesktopLocalization\\Wix5Bundle\\theme\\"
                                           }
                                       ],
