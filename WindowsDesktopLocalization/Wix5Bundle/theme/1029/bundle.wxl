@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" Language="1033" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="Caption" Value="Instalační program pro [WixBundleName]" />
+  <String Id="Title" Value="[BUNDLEMONIKER]" />
+  <String Id="Motto" Value="Potřebujete jenom prostředí, textový editor a 10 minut času.
+
+Jste připraveni? Dejme se tedy do toho!" />
+  <String Id="ConfirmCancelMessage" Value="Opravdu chcete akci zrušit?" />
+  <String Id="ExecuteUpgradeRelatedBundleMessage" Value="Předchozí verze" />
+  <String Id="HelpHeader" Value="Nápověda k instalaci" />
+  <String Id="HelpText" Value="/install | /repair | /uninstall | /layout [adresář] – Nainstaluje, opraví, odinstaluje nebo
+   vytvoří úplnou místní kopii svazku v adresáři. Výchozí možností je instalace.
+
+/passive | /quiet –  Zobrazí minimální uživatelské rozhraní bez výzev nebo nezobrazí žádné uživatelské rozhraní a
+   žádné výzvy. Výchozí možností je zobrazení uživatelského rozhraní a všech výzev.
+
+/norestart   – potlačí všechny pokusy o restartování. Ve výchozím nastavení uživatelské rozhraní před restartováním zobrazí výzvu.
+/log log.txt – Uloží protokol do konkrétního souboru. Ve výchozím nastavení bude soubor protokolu vytvořen v adresáři %TEMP%." />
+  <String Id="HelpCloseButton" Value="&amp;Zavřít" />
+  <String Id="InstallAcceptCheckbox" Value="Souhl&amp;asím s licenčními podmínkami." />
+  <String Id="InstallOptionsButton" Value="M&amp;ožnosti" />
+  <String Id="InstallInstallButton" Value="&amp;Instalovat" />
+  <String Id="InstallCloseButton" Value="&amp;Zavřít" />
+  <String Id="OptionsHeader" Value="Možnosti instalace" />
+  <String Id="OptionsLocationLabel" Value="Umístění instalace:" />
+  <String Id="OptionsBrowseButton" Value="&amp;Procházet" />
+  <String Id="OptionsOkButton" Value="&amp;OK" />
+  <String Id="OptionsCancelButton" Value="&amp;Storno" />
+  <String Id="ProgressHeader" Value="Průběh instalace" />
+  <String Id="ProgressLabel" Value="Zpracování:" />
+  <String Id="OverallProgressPackageText" Value="Inicializuje se..." />
+  <String Id="ProgressCancelButton" Value="&amp;Storno" />
+  <String Id="ModifyHeader" Value="Změnit instalaci" />
+  <String Id="ModifyRepairButton" Value="Op&amp;ravit" />
+  <String Id="ModifyUninstallButton" Value="O&amp;dinstalovat" />
+  <String Id="ModifyCloseButton" Value="&amp;Zavřít" />
+  <String Id="SuccessRepairHeader" Value="Oprava se úspěšně dokončila." />
+  <String Id="SuccessUninstallHeader" Value="Odinstalace se úspěšně dokončila." />
+  <String Id="SuccessInstallHeader" Value="Instalace proběhla úspěšně." />
+  <String Id="SuccessHeader" Value="Instalace byla úspěšná." />
+  <String Id="SuccessLaunchButton" Value="&amp;Spustit" />
+  <String Id="SuccessRestartText" Value="Před použitím tohoto softwaru musíte restartovat počítač." />
+  <String Id="SuccessRestartButton" Value="&amp;Restartovat" />
+  <String Id="SuccessCloseButton" Value="&amp;Zavřít" />
+  <String Id="FailureHeader" Value="Instalace se nepovedla." />
+  <String Id="FailureInstallHeader" Value="Instalace se nepovedla." />
+  <String Id="FailureUninstallHeader" Value="Odinstalace se nepovedla." />
+  <String Id="FailureRepairHeader" Value="Oprava se nepovedla." />
+  <String Id="FailureHyperlinkLogText" Value="Instalace se nepovedla kvůli jednomu nebo více problémům. Opravte prosím tyto problémy a zkuste software nainstalovat znovu. Další informace najdete v &lt;a href=&quot;#&quot;&gt;souboru protokolu&lt;/a&gt;." />
+  <String Id="FailureRestartText" Value="Pro dokončení vrácení změn tohoto softwaru je potřeba restartovat počítač." />
+  <String Id="FailureRestartButton" Value="&amp;Restartovat" />
+  <String Id="FailureCloseButton" Value="&amp;Zavřít" />
+  <String Id="FailureNotSupportedCurrentOperatingSystem" Value="[PRODUCT_NAME] se tomto operačním systému nepodporuje. Další informace: [LINK_PREREQ_PAGE]" />
+  <String Id="FailureNotSupportedX86OperatingSystem" Value="[PRODUCT_NAME] se v operačních systémech pro platformu x86 nepodporuje. Použijte prosím k instalaci odpovídající instalační program pro platformu x86." />
+  <String Id="FilesInUseHeader" Value="Používané soubory" />
+  <String Id="FilesInUseLabel" Value="Následující aplikace používají soubory, které je potřeba aktualizovat:" />
+  <String Id="FilesInUseCloseRadioButton" Value="Zavřete &amp;aplikace a zkuste je restartovat." />
+  <String Id="FilesInUseDontCloseRadioButton" Value="A&amp;plikace nezavírejte. Bude potřeba provést restart." />
+  <String Id="FilesInUseOkButton" Value="&amp;OK" />
+  <String Id="FilesInUseCancelButton" Value="&amp;Zrušit" />
+  <String Id="WelcomeHeaderMessage" Value="Windows Desktop Runtime" />
+  <String Id="WelcomeDescription" Value="Modul .NET Windows Desktop Runtime se používá ke spouštění aplikací Windows Forms a WPF na počítači. .NET je open source, k dispozici pro více platforem a podporovaný Microsoftem. Doufáme, že se vám bude líbit!" />
+  <String Id="LearnMoreTitle" Value="Další informace o .NET Core" />
+  <String Id="SuccessInstallLocation" Value="Do [DOTNETHOME] se nainstalovaly následující položky." />
+  <String Id="SuccessInstallProductName" Value=" - [BUNDLEMONIKER] " />
+  <String Id="ResourcesHeader" Value="Prostředky" />
+  <String Id="DocumentationLink" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-docs&quot;&gt;Dokumentace&lt;/A&gt;" />
+  <String Id="RelaseNotesLink" Value="&lt;A HREF=&quot;https://aka.ms/20-p2-rel-notes&quot;&gt;Zpráva k vydání verze&lt;/A&gt;" />
+  <String Id="TutorialLink" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-tutorials&quot;&gt;Kurzy&lt;/A&gt;" />
+  <String Id="TelemetryLink" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-cli-telemetry&quot;&gt;Telemetrie pro platformu .NET Core&lt;/A&gt;" />
+  <String Id="PrivacyStatementLink" Value="&lt;A HREF=&quot;https://aka.ms/dev-privacy&quot;&gt;Prohlášení o zásadách ochrany osobních údajů&lt;/A&gt;" />
+  <String Id="EulaLink" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-license-windows&quot;&gt;Informace o licencování pro .NET&lt;/A&gt;" />
+  <String Id="LicenseAssent" Value="Kliknutím na Nainstalovat vyjadřujete souhlas s následujícími podmínkami." />`n  <String Id="VisualStudioWarning" Value="If you plan to use .NET [VERSIONMAJOR].[VERSIONMINOR] with Visual Studio, Visual Studio 2022 [MINIMUMVSVERSION] or newer is required. &lt;A HREF=&quot;https://aka.ms/dotnet[VERSIONMAJOR]-release-notes&quot;&gt;Learn more&lt;/A&gt;." />
+  
+
+  <!-- Success page strings -->
+  <String Id="FirstTimeWelcomeMessage" Value="Thank you for installing [BUNDLEMONIKER]! You can now run applications that require the .NET Windows Desktop Runtime." />
+  <String Id="NetDocumentationLinkText" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-docs&quot;&gt;.NET Documentation&lt;/A&gt;" />
+  <String Id="WindowsDesktopDocumentationLinkText" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-desktop-docs&quot;&gt;Windows Desktop Documentation&lt;/A&gt;" />
+  <String Id="ReleaseNotesLinkText" Value="&lt;A HREF=&quot;https://aka.ms/dotnet[VERSIONMAJOR]-release-notes&quot;&gt;Release Notes&lt;/A&gt;" />
+  <String Id="TutorialsLinkText" Value="&lt;A HREF=&quot;https://aka.ms/dotnet-tutorials&quot;&gt;.NET Tutorials&lt;/A&gt;" />
+  
+  <!-- Additional success headers -->
+  <String Id="SuccessLayoutHeader" Value="Layout Successfully Completed" />
+  <String Id="SuccessUnsafeUninstallHeader" Value="Unsafe Uninstall Successfully Completed" />
+  <String Id="SuccessCacheHeader" Value="Cache Successfully Completed" />
+  <String Id="SuccessModifyHeader" Value="Modification Successfully Completed" />
+  <String Id="SuccessUninstallRestartText" Value="You must restart your computer to complete the uninstallation." />
+  
+  <!-- Additional failure headers -->
+  <String Id="FailureLayoutHeader" Value="Layout Failed" />
+  <String Id="FailureUnsafeUninstallHeader" Value="Unsafe Uninstall Failed" />
+  <String Id="FailureCacheHeader" Value="Cache Failed" />
+  <String Id="FailureModifyHeader" Value="Modification Failed" />
+</WixLocalization>

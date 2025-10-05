@@ -19,7 +19,7 @@
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>
-    <MicrosoftPrivateIntellisenseVersion>9.0.0-preview-20241010.1</MicrosoftPrivateIntellisenseVersion>
+    <MicrosoftPrivateIntellisenseVersion>10.0.0-preview-20250930.1</MicrosoftPrivateIntellisenseVersion>
   </PropertyGroup>
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>

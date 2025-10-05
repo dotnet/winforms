@@ -4790,7 +4790,7 @@ public unsafe partial class Control :
         }
 
         // Unsubscribes from the Disposed event of the ContextMenuStrip.
-        if (ContextMenuStrip is ContextMenuStrip menu)
+        if (Properties?.TryGetValue(s_contextMenuStripProperty, out ContextMenuStrip? menu) == true)
         {
             menu.Disposed -= DetachContextMenuStrip;
         }
@@ -4816,10 +4816,10 @@ public unsafe partial class Control :
             SuspendLayout();
             try
             {
-                Properties.RemoveValue(s_ncAccessibilityProperty);
+                Properties?.RemoveValue(s_ncAccessibilityProperty);
 
                 DisposeAxControls();
-                Properties.GetValueOrDefault<ActiveXImpl>(s_activeXImplProperty)?.Dispose();
+                Properties?.GetValueOrDefault<ActiveXImpl>(s_activeXImplProperty)?.Dispose();
 
                 ResetBindings();
 
