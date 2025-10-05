@@ -229,7 +229,11 @@
                          "LanguageSet":  "VS_Main_Languages",
                          "CloneLanguageSet":  "WiX_CloneLanguages",
                          "LocItems":  [
-
+                                          {
+                                            "SourceFile":  ".\\WindowsDesktopLocalization\\Wix5Bundle\\theme\\1033\\bundle.wxl",
+                                            "CopyOption":  "LCIDOnPath",
+                                            "OutputPath":  ".\\WindowsDesktopLocalization\\Wix5Bundle\\theme\\"
+                                          }
                                       ],
                          "LssFiles":  [
                                           "P210WxlSchemaV4.lss"
