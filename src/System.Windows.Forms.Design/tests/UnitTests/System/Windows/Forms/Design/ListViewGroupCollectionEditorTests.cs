@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Reflection;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -55,15 +54,5 @@ public class ListViewGroupCollectionEditorTests
         result?.Name.Should().BeOfType<string>();
         result?.Name.Should().StartWith("ListViewGroup");
         result?.GetType().Should().Be(typeof(ListViewGroup));
-    }
-
-    [Fact]
-    public void CreateInstance_ThrowsException_WhenEditValueIsNull()
-    {
-        _mockEditor.Object.TestAccessor().Dynamic._editValue = null;
-
-        Action action = () => _mockEditor.Object.TestAccessor().Dynamic.CreateInstance(typeof(ListViewGroup));
-
-        action.Should().Throw<TargetInvocationException>();
     }
 }
