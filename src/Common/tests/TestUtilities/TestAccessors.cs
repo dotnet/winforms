@@ -46,6 +46,12 @@ public static partial class TestAccessors
     ///    Assert.Equal(version2, accessor.Parse("4.1")));
     ///   ]]>
     ///  </code>
+    ///  <para>
+    ///   When attempting to get nested private types that are generic (nested types in a generic type
+    ///   are always generic, and inherit the type specifiers of the the parent type), use the extension
+    ///   <see cref="ReflectionHelper.GetFullNestedType(Type, string, Span{Type})"/> to get a fully
+    ///   instantiated type for the nested type, then pass that Type to this method.
+    ///  </para>
     /// </remarks>
     public static ITestAccessor TestAccessor(this object instanceOrType)
     {
