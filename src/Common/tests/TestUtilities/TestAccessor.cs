@@ -133,7 +133,16 @@ public class TestAccessor<T> : ITestAccessor
             if (methodInfo is null)
                 return false;
 
-            result = methodInfo.Invoke(_instance, args);
+            try
+            {
+                result = methodInfo.Invoke(_instance, args);
+            }
+            catch (TargetInvocationException ex) when (ex.InnerException is not null)
+            {
+                // Unwrap the inner exception to make it easier for callers to handle.
+                throw ex.InnerException;
+            }
+
             return true;
         }
 
