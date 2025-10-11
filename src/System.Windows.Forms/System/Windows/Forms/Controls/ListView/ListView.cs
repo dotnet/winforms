@@ -208,6 +208,10 @@ public partial class ListView : Control
     // We cache the NewWidth supplied by the user and use it on HDN_ENDTRACK to set the final column width.
     private int _newWidthForColumnWidthChangingCancelled = -1;
 
+    // Tracks ListViewItems that have had their AccessibilityObject created in virtual mode,
+    // so their UIA providers can be properly released later without triggering item retrieval
+    private readonly HashSet<ListViewItem> _uiaCreatedItems = [];
+
     /// <summary>
     ///  Creates an empty ListView with default styles.
     /// </summary>
@@ -5084,6 +5088,14 @@ public partial class ListView : Control
         }
     }
 
+    internal void NotifyUiaCreated(ListViewItem item)
+    {
+        if (VirtualMode)
+        {
+            _uiaCreatedItems.Add(item);
+        }
+    }
+
     internal override void ReleaseUiaProvider(HWND handle)
     {
         if (!OsVersion.IsWindows8OrGreater())
@@ -5091,9 +5103,28 @@ public partial class ListView : Control
             return;
         }
 
-        for (int i = 0; i < Items.Count; i++)
+        if (VirtualMode)
         {
-            Items.GetItemByIndex(i)?.ReleaseUiaProvider();
+            foreach (ListViewItem item in _uiaCreatedItems)
+            {
+                if (item.IsAccessibilityObjectCreated)
+                {
+                    item.ReleaseUiaProvider();
+                }
+            }
+
+            _uiaCreatedItems.Clear();
+        }
+        else
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                var item = Items.GetItemByIndex(i);
+                if (item?.IsAccessibilityObjectCreated == true)
+                {
+                    item.ReleaseUiaProvider();
+                }
+            }
         }
 
         if (_defaultGroup is not null)
