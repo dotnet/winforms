@@ -2110,7 +2110,7 @@ public partial class MonthCalendar : Control
                     (int)PInvoke.CHILDID_SELF);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.Fail($"NotifyWinEvent failed: {ex.Message}");
         }
