@@ -265,7 +265,11 @@ public partial class ListViewItem : ICloneable, ISerializable
                 };
             }
 
-            owningListView.NotifyUiaCreated(this);
+            if (owningListView.VirtualMode)
+            {
+                owningListView.NotifyUiaCreated(Index);
+            }
+
             return _accessibilityObject;
         }
     }
