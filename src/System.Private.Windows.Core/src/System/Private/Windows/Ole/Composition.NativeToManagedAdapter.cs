@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -146,7 +147,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             try
             {
-                int size = (int)PInvokeCore.GlobalSize(hglobal);
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
                 byte[] bytes = GC.AllocateUninitializedArray<byte>(size);
                 Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
@@ -169,28 +170,76 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         private static unsafe string ReadStringFromHGLOBAL(HGLOBAL hglobal, bool unicode)
         {
-            string? stringData = null;
-
             void* buffer = PInvokeCore.GlobalLock(hglobal);
+            if (buffer is null)
+            {
+                throw new Win32Exception();
+            }
+
+            // https://learn.microsoft.com/windows/win32/dataxchg/standard-clipboard-formats
+            // https://learn.microsoft.com/windows/win32/shell/clipboard#cfstr_filename
+            //
+            // CF_TEXT, CF_OEMTEXT, CF_UNICODETEXT, and CFSTR_FILENAME are supposed to have a null terminator.
+            // If we cannot find one in the buffer, assume it is corrupted and return an empty string.
+            //
+            // Can't find the explicit docs for CF_RTF, but we've always treated it as null terminated.
+            // The RichText control itself null terminates but looks like it doesn't require it.
+            // Given our prior and "normal" behavior, we'll continue to expect a null terminator.
+
             try
             {
-                stringData = unicode ? new string((char*)buffer) : new string((sbyte*)buffer);
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
+                if (size == 0)
+                {
+                    throw new Win32Exception();
+                }
+
+                if (unicode)
+                {
+                    ReadOnlySpan<char> chars = new((char*)buffer, size / sizeof(char));
+                    int nullIndex = chars.IndexOf('\0');
+                    if (nullIndex < 0)
+                    {
+                        // Malformed, return empty string.
+                        return string.Empty;
+                    }
+
+                    chars = chars[..nullIndex];
+                    return new string(chars);
+                }
+                else
+                {
+                    ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
+                    int nullIndex = bytes.IndexOf((byte)0);
+                    if (nullIndex < 0)
+                    {
+                        // Malformed, return empty string.
+                        return string.Empty;
+                    }
+
+                    return new string((sbyte*)buffer, 0, nullIndex);
+                }
             }
             finally
             {
                 PInvokeCore.GlobalUnlock(hglobal);
             }
-
-            return stringData;
         }
 
         private static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
         {
             void* buffer = PInvokeCore.GlobalLock(hglobal);
+            if (buffer is null)
+            {
+                throw new Win32Exception();
+            }
+
             try
             {
-                int size = (int)PInvokeCore.GlobalSize(hglobal);
-                return Encoding.UTF8.GetString((byte*)buffer, size - 1);
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
+                return size == 0
+                    ? throw new Win32Exception()
+                    : Encoding.UTF8.GetString((byte*)buffer, size - 1);
             }
             finally
             {
