@@ -429,7 +429,7 @@ internal static partial class ScaleHelper
         int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
         int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
 
-        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
+        return new Icon(icon, width, height);
     }
 
     /// <summary>
