@@ -8,7 +8,7 @@
     <FrameworkListFileClass Include="Microsoft.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Design.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms;WPF" />
     <FrameworkListFileClass Include="System.Drawing.Design.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Drawing.dll" Profile="WindowsForms" />
     <!-- System.Private.Windows.Core is now used by both WPF and Windows Forms -->
