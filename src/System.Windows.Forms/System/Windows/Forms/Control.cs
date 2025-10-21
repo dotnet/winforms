@@ -5908,6 +5908,8 @@ public unsafe partial class Control :
         }
         else if (IsHandleCreated)
         {
+            Debug.Assert(region.GetPointer() != null);
+
             using Graphics graphics = CreateGraphicsInternal();
             using RegionScope regionHandle = region.GetRegionScope(graphics);
 
