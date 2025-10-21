@@ -5087,7 +5087,13 @@ public partial class ListView : Control
         }
     }
 
-    internal void NotifyUiaCreated(int index) => _uiaAccessedIndices.Add(index);
+    internal void NotifyUiaCreated(int index)
+    {
+        if (VirtualMode)
+        {
+            _uiaAccessedIndices.Add(index);
+        }
+    }
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
@@ -5100,8 +5106,7 @@ public partial class ListView : Control
         {
             foreach (int index in _uiaAccessedIndices)
             {
-                var item = Items.GetItemByIndex(index);
-                item?.ReleaseUiaProvider();
+                Items.GetItemByIndex(index)?.ReleaseUiaProvider();
             }
 
             _uiaAccessedIndices.Clear();
@@ -5110,11 +5115,7 @@ public partial class ListView : Control
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                var item = Items.GetItemByIndex(i);
-                if (item?.IsAccessibilityObjectCreated == true)
-                {
-                    item.ReleaseUiaProvider();
-                }
+                Items.GetItemByIndex(i)?.ReleaseUiaProvider();
             }
         }
 

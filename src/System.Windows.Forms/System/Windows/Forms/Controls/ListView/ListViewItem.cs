@@ -265,16 +265,13 @@ public partial class ListViewItem : ICloneable, ISerializable
                 };
             }
 
-            if (owningListView.VirtualMode)
-            {
-                owningListView.NotifyUiaCreated(Index);
-            }
+            owningListView.NotifyUiaCreated(Index);
 
             return _accessibilityObject;
         }
     }
 
-    internal bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
+    private bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
 
     /// <summary>
     ///  The font that this item will be displayed in. If its value is null, it will be displayed
