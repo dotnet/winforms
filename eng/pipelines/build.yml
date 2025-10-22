@@ -48,14 +48,10 @@ jobs:
   - template: /eng/common/templates-official/steps/enable-internal-sources.yml
   - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
 
-  - task: MicroBuildSigningPlugin@4
-    displayName: Install MicroBuild plugin for Signing
-    inputs:
-      signType: $(_SignType)
-      zipSources: false
-      feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
-    continueOnError: false
-    condition: and(succeeded(), in(variables['_SignType'], 'real', 'test'))
+  - template: /eng/common/core-templates/steps/install-microbuild.yml
+    parameters:
+      enableMicrobuild: true
+
   # NuGet's http cache lasts 30 minutes. If we're on a static machine, this may interfere with
   # auto-update PRs by preventing the CI build from fetching the new version. Delete the cache.
   - powershell: Remove-Item -Recurse -ErrorAction Ignore "$env:LocalAppData\NuGet\v3-cache"
