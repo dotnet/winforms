@@ -515,6 +515,9 @@ public partial class LinkLabel : Label, IButtonControl
             return _textRegion;
         }
 
+        _textRegion?.Dispose();
+        _textRegion = null;
+
         string text = Text;
 
         if (text.Length == 0)
@@ -723,8 +726,6 @@ public partial class LinkLabel : Label, IButtonControl
     private void InvalidateTextLayout()
     {
         _textLayoutValid = false;
-        _textRegion?.Dispose();
-        _textRegion = null;
     }
 
     private bool LinkInText(int start, int length) => start >= 0 && start < Text.Length && length > 0;
