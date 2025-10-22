@@ -2748,6 +2748,21 @@ public partial class FormTests
         Assert.True((BOOL)message.ResultInternal);
     }
 
+    [WinFormsFact]
+    public void Form_DoesNot_DisposeUserIcon()
+    {
+        // https://github.com/dotnet/winforms/issues/13963
+        using Form form = new();
+        int dpi = form.DeviceDpi;
+        using Icon icon = new(typeof(Form), "wfc");
+        int smallDpi = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        using Icon smallIcon = new(icon, new Size(smallDpi, smallDpi));
+        form.Icon = smallIcon;
+        form.Show();
+        form.Close();
+        smallIcon.Handle.Should().NotBe(0);
+    }
+
     public partial class ParentedForm : Form
     {
         private ParentingForm _parentForm;
