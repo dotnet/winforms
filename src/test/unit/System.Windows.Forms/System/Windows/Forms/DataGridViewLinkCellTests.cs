@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -655,7 +654,7 @@ public class DataGridViewLinkCellTests : IDisposable
         using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
 
-        TargetInvocationException ex = ((Action)(() =>
+        ((Action)(() =>
             _cell.TestAccessor().Dynamic.Paint(
                 graphics,
                 new Rectangle(0, 0, 10, 10),
@@ -669,9 +668,6 @@ public class DataGridViewLinkCellTests : IDisposable
                 null,
                 DataGridViewPaintParts.All
             )
-        )).Should().Throw<TargetInvocationException>().Subject.First();
-
-        ex.InnerException.Should().BeOfType<ArgumentNullException>();
-        ex.InnerException!.Message.Should().Contain("cellStyle");
+        )).Should().Throw<ArgumentNullException>().And.Message.Should().Contain("cellStyle");
     }
 }
