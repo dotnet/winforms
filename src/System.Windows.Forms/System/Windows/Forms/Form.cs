@@ -6453,11 +6453,14 @@ public partial class Form : ContainerControl
 
             if (icon is not null)
             {
-                Icon? oldSmallIcon = _smallIcon;
-
                 try
                 {
-                    _smallIcon = ScaleHelper.ScaleSmallIconToDpi(icon, dpi);
+                    // As we dispose the _smallIcon in multiple places, we'd need to track when we've
+                    // actually created a scaled icon to know when we should free it selectively (so we
+                    // don't free user provided Icons. For now, just always create a new scaled icon.
+                    _smallIcon?.Dispose();
+                    _smallIcon = null;
+                    _smallIcon = ScaleHelper.ScaleSmallIconToDpi(icon, dpi, alwaysCreateNew: true);
                 }
                 catch
                 {
@@ -6466,10 +6469,6 @@ public partial class Form : ContainerControl
                 if (_smallIcon is not null)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
-                    if (oldSmallIcon is not null && oldSmallIcon.Handle != _smallIcon.Handle)
-                    {
-                        oldSmallIcon.Dispose();
-                    }
                 }
 
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
