@@ -50,7 +50,7 @@
     Note, any components that aren't exposed as references in the targeting pack (like analyzers/generators) those should rev
     so that they can exist SxS, as the compiler relies on different version to change assembly version for caching purposes.
     -->
-  <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true'">
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true' and '$(AssemblyVersion)' == ''">
     <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
   </PropertyGroup>
 
