@@ -44,6 +44,7 @@ public abstract class ListControl : Control
     [RefreshProperties(RefreshProperties.Repaint)]
     [AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.ListControlDataSourceDescr))]
+    [TypeConverter("System.Windows.Forms.Design.DataSourceConverter, System.Windows.Forms.Design")]
     public object? DataSource
     {
         get => _dataSource;
