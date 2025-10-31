@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using Moq;
 
-namespace System.Windows.Forms;
+namespace System.Windows.Forms.Tests;
 
 public class WebBrowserContainerTests
 {
