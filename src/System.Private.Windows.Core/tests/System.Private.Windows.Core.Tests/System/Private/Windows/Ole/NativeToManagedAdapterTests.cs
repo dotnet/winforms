@@ -1,11 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
 using System.Text.Json;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
 
 using Composition = System.Private.Windows.Ole.Composition<
     System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.NativeToManagedAdapterTests>,
@@ -107,5 +110,75 @@ public unsafe class NativeToManagedAdapterTests
         var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
         composition.TryGetData(nameof(NativeToManagedAdapterTests), out SerializationRecord? data).Should().BeTrue();
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Private.Windows.JsonData, System.Private.Windows.VirtualJson");
+    }
+
+    [Theory]
+    [BoolData]
+    public void ReadStringFromHGLOBAL_InvalidHGLOBAL_Throws(bool unicode)
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        Action action = () =>
+        {
+            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(HGLOBAL.Null, unicode);
+        };
+
+        action.Should().Throw<Win32Exception>().And.HResult.Should().Be((int)HRESULT.E_FAIL);
+    }
+
+    [Theory]
+    [BoolData]
+    public void ReadStringFromHGLOBAL_NoTerminator_ReturnsEmptyString(bool unicode)
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        // There is no way to create a zero-length HGLOBAL, GlobalAlloc will always allocate at least some memory.
+        HGLOBAL global = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, 6);
+        nuint size = PInvokeCore.GlobalSize(global);
+
+        try
+        {
+            using (GlobalBuffer buffer = new(global, (uint)size))
+            {
+                Span<byte> span = buffer.AsSpan();
+                // Fill spaces or daggers
+                span.Fill(0x20);
+            }
+
+            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(global, unicode);
+            result.Should().BeEmpty();
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(global);
+        }
+    }
+
+    [Theory]
+    [BoolData]
+    public void ReadStringFromHGLOBAL_Terminator_ReturnsString(bool unicode)
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        // There is no way to create a zero-length HGLOBAL, GlobalAlloc will always allocate at least some memory.
+        HGLOBAL global = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT, 6);
+        nuint size = PInvokeCore.GlobalSize(global);
+
+        try
+        {
+            using (GlobalBuffer buffer = new(global, (uint)size))
+            {
+                Span<byte> span = buffer.AsSpan();
+                // Fill spaces or daggers, leave the last two bytes as zero
+                span[..^2].Fill(0x20);
+            }
+
+            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(global, unicode);
+            result.Should().NotBeEmpty();
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(global);
+        }
     }
 }

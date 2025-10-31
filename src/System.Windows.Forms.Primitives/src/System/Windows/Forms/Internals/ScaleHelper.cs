@@ -424,12 +424,12 @@ internal static partial class ScaleHelper
     /// <summary>
     ///  Get X, Y metrics at DPI, IF icon is not already that size, create and return a new one.
     /// </summary>
-    internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi)
+    internal static Icon ScaleSmallIconToDpi(Icon icon, int dpi, bool alwaysCreateNew = false)
     {
         int width = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
         int height = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)dpi);
 
-        return (icon.Width == width && icon.Height == height) ? icon : new(icon, width, height);
+        return (icon.Width == width && icon.Height == height && !alwaysCreateNew) ? icon : new(icon, width, height);
     }
 
     /// <summary>

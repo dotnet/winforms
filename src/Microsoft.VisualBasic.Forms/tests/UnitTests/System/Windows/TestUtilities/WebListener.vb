@@ -266,7 +266,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' </summary>
         ''' <param name="request"></param>
         ''' <returns>
-        '''  A <see cref="Dictionary(Of String, String)"/> that contains the filename and lenght of the data file.
+        '''  A <see cref="Dictionary(Of String, String)"/> that contains the filename and length of the data file.
         ''' </returns>
         Public Function GetMultipartFormData(request As HttpListenerRequest) As Dictionary(Of String, String)
             Dim result As New Dictionary(Of String, String)
