@@ -48,9 +48,8 @@ public class WebBrowserContainerTests
     [WinFormsFact]
     public void FindContainerForControl_ReturnsExistingContainer_IfPresent()
     {
-        WebBrowserContainer expectedContainer;
         using WebBrowser control = new();
-        expectedContainer = new(control);
+        WebBrowserContainer expectedContainer = new(control);
         control._container = expectedContainer;
 
         WebBrowserContainer? result = WebBrowserContainer.FindContainerForControl(control);
@@ -89,8 +88,6 @@ public class WebBrowserContainerTests
         result.Should().BeNull();
     }
 
-    private delegate void TryGetServiceCallback(out IComponentChangeService? service);
-
     [WinFormsTheory]
     [InlineData("SiteName", "ControlName", "SiteName")]
     [InlineData(null, "ControlName", "ControlName")]
@@ -106,7 +103,7 @@ public class WebBrowserContainerTests
 
         if (siteName is not null)
         {
-            var mockSite = new Mock<ISite>();
+            Mock<ISite> mockSite = new Mock<ISite>();
             mockSite.Setup(s => s.Name).Returns(siteName);
             control.Site = mockSite.Object;
         }
