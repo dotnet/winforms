@@ -57,7 +57,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
             Dim filenameWithPath As String = Path.Join(sourceDirectoryName, filename)
 
-            If size >= 0 Then
+            If size <> FileSizes.Unknown Then
                 Using destinationStream As FileStream = File.Create(filenameWithPath)
                     destinationStream.Write(New Byte(size - 1) {})
                     destinationStream.Flush()
