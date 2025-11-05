@@ -6,7 +6,7 @@
     <MinorVersion>0</MinorVersion>
     <PatchVersion>1</PatchVersion>
     <!-- version in our package name #.#.#-below.#####.## -->
-    <PreReleaseVersionLabel>rtm</PreReleaseVersionLabel>
+    <PreReleaseVersionLabel>servicing</PreReleaseVersionLabel>
     <PreReleaseVersionIteration></PreReleaseVersionIteration>
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
