@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1107,6 +1108,61 @@ public partial class ControlTests
         // the control is created, another show message will dispatch, which should cause CreateControl method to
         // exit early, avoiding another trigger to OnCreateControl.
         Assert.Equal(1, control.OnCreateControlCount);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ReassignSameReference_DoesNotThrow()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        using Region region = new(new Rectangle(0, 0, 50, 30));
+        control.Region = region;
+
+        Action action = () => control.Region = region;
+        action.Should().NotThrow();
+        Assert.Same(region, control.Region);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ReassignDifferentReference_UpdatesRegion()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        using Region region1 = new(new Rectangle(0, 0, 50, 30));
+        control.Region = region1;
+
+        using Region region2 = new(new Rectangle(10, 10, 60, 40));
+        control.Region = region2;
+
+        control.Region.Should().BeSameAs(region2);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ShouldPersistAfterHandleCreated()
+    {
+        using TestControl control = new() { Size = new Size(200, 200) };
+
+        using GraphicsPath path = new();
+        path.AddEllipse(0, 0, control.Width, control.Height);
+        using Region ellipseRegion = new(path);
+
+        control.Region = ellipseRegion;
+        control.CreateControl();
+
+        Assert.True(control.IsHandleCreated);
+        control.Region.Should().BeSameAs(ellipseRegion);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_AssignNull_ShouldBeNull()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        control.Region = null;
+        control.Region.Should().BeNull();
     }
 
     private class OnCreateControlCounter : Control
