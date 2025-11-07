@@ -29,6 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildAssist\BuildAssist.msbuildproj" />
     <ProjectReference Include="..\..\..\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj" />
+    <ProjectReference Include="..\..\..\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <!-- This facade assembly is required to resolve UITypeEditor type from NETFX that is referenced in EditorAttributes -->
