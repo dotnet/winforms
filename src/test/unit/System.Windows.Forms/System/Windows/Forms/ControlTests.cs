@@ -1121,7 +1121,7 @@ public partial class ControlTests
 
         Action action = () => control.Region = region;
         action.Should().NotThrow();
-        Assert.Same(region, control.Region);
+        control.Region.Should().BeSameAs(region);
     }
 
     [WinFormsFact]
