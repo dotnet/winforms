@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.Graphics.GdiPlus;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1107,6 +1108,97 @@ public partial class ControlTests
         // the control is created, another show message will dispatch, which should cause CreateControl method to
         // exit early, avoiding another trigger to OnCreateControl.
         Assert.Equal(1, control.OnCreateControlCount);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ReassignSameReference_DoesNotThrow()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        using Region region = new(new Rectangle(0, 0, 50, 30));
+        control.Region = region;
+
+        Action action = () => control.Region = region;
+        action.Should().NotThrow();
+        control.Region.Should().BeSameAs(region);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ReassignDifferentReference_UpdatesRegion()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        using Region region1 = new(new Rectangle(0, 0, 50, 30));
+        control.Region = region1;
+
+        using Region region2 = new(new Rectangle(10, 10, 60, 40));
+        control.Region = region2;
+
+        control.Region.Should().BeSameAs(region2);
+    }
+
+    [WinFormsFact]
+    public void Control_Region_ShouldPersistAfterHandleCreated()
+    {
+        using TestControl control = new() { Size = new Size(200, 100) };
+
+        // Create expected Region (rectangle)
+        Rectangle expectedRect = new Rectangle(0, 0, control.Width, control.Height);
+        using Region expectedRegion = new Region(expectedRect);
+
+        // Inspect expected HRGN rectangles
+        using RegionScope scope = expectedRegion.GetRegionScope(HWND.Null);
+        HRGN hrgnExpected = scope.Region;
+        var expectedRects = hrgnExpected.GetRegionRects();
+
+        // Assert expectedRects contains exactly one rectangle matching expectedRect
+        expectedRects.Should().HaveCount(1);
+        expectedRects[0].left.Should().Be(expectedRect.Left);
+        expectedRects[0].top.Should().Be(expectedRect.Top);
+        expectedRects[0].right.Should().Be(expectedRect.Right);
+        expectedRects[0].bottom.Should().Be(expectedRect.Bottom);
+
+        // Assign Region to control
+        control.Region = expectedRegion;
+
+        // Create handle
+        control.CreateControl();
+        control.IsHandleCreated.Should().BeTrue();
+
+        // Validate actual HRGN from the control's window
+        HRGN hrgnActual = PInvoke.CreateRectRgn(0, 0, 0, 0);
+        try
+        {
+            int result = (int)PInvoke.GetWindowRgn((HWND)control.Handle, hrgnActual);
+
+            // Ensure region exists
+            result.Should().BeGreaterThan(1);
+
+            var actualRects = hrgnActual.GetRegionRects();
+
+            // Assert actualRects matches expected rectangle
+            actualRects.Should().HaveCount(1);
+            actualRects[0].left.Should().Be(expectedRect.Left);
+            actualRects[0].top.Should().Be(expectedRect.Top);
+            actualRects[0].right.Should().Be(expectedRect.Right);
+            actualRects[0].bottom.Should().Be(expectedRect.Bottom);
+        }
+        finally
+        {
+            PInvokeCore.DeleteObject(hrgnActual);
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_Region_AssignNull_ShouldBeNull()
+    {
+        using TestControl control = new();
+        control.CreateControl();
+
+        control.Region = null;
+        control.Region.Should().BeNull();
     }
 
     private class OnCreateControlCounter : Control
