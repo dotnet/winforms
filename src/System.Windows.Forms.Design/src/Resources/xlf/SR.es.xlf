@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">Controla cuándo se deberían mostrar las ventanas de etiquetas inteligentes del diseñador de manera predeterminada.</target>
+        <target state="translated">Controla cuándo se deberían mostrar las ventanas de etiqueta inteligente del diseñador de manera predeterminada.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">Controla si los diseñadores deberían mostrar ventanas emergentes de etiquetas inteligentes.</target>
+        <target state="translated">Controla si los diseñadores deberían mostrar ventanas emergentes de etiqueta inteligente.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">

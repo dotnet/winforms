@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">Controlla se nelle finestre di progettazione devono essere visualizzate finestra popup degli smart tag.</target>
+        <target state="translated">Controlla se nelle finestre di progettazione devono essere visualizzate finestre popup degli smart tag.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">

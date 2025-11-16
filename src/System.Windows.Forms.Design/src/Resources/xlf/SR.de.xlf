@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">Steuert, ob standardmäßig Designer-Smarttagfenster angezeigt werden sollen.</target>
+        <target state="translated">Steuert, ob Designer-Smarttag-Fenster standardmäßig angezeigt werden sollen.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">

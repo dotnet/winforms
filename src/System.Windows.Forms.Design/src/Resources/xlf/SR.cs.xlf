@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">Určuje, zda mají být standardně zobrazena okna inteligentních značek návrháře.</target>
+        <target state="translated">Určuje, zda mají být standardně zobrazena okna inteligentní značka návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">Určuje, zda mají být v návrháři zobrazována místní okna inteligentních značek.</target>
+        <target state="translated">Určuje, zda mají být v návrháři zobrazována místní okna inteligentní značka.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
