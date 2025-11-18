@@ -275,11 +275,12 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         imageRect = imageRect.IsEmpty ? new Rectangle(Point.Empty, Size) : imageRect;
         targetRect = targetRect.IsEmpty ? new Rectangle(Point.Empty, Size) : targetRect;
 
-        imageRect.Inflate(stretch
-            ? new Size(targetRect.Width / imageRect.Width, targetRect.Height / imageRect.Height)
-            : new Size(0, 0));
+        if (stretch)
+        {
+            imageRect.Size = targetRect.Size;
+        }
 
-        targetRect.Offset(Point.Round(graphics.Transform.Offset));
+        targetRect.Offset(Point.Truncate(graphics.Transform.Offset));
         targetRect.Intersect(imageRect);
 
         imageRect.Location = targetRect.Location;
