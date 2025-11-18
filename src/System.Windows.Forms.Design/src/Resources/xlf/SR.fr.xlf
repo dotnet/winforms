@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">Contrôle si les fenêtres des balises actives du concepteur doivent être affichées par défaut.</target>
+        <target state="translated">Contrôle si les fenêtres des balises intelligentes du concepteur doivent être affichées par défaut.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">Contrôle si les concepteurs doivent afficher des fenêtres contextuelles de balises actives.</target>
+        <target state="translated">Contrôle si les concepteurs doivent afficher des fenêtres contextuelles de balises intelligentes.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
