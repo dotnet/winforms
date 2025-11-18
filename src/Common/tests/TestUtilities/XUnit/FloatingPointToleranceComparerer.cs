@@ -6,7 +6,7 @@ using System.Numerics;
 namespace System.XUnit;
 
 /// <summary>
-///  Equality comparer for numbers that checks whether two values are within a specifed tolerance.
+///  Equality comparer for numbers that checks whether two values are within a specified tolerance.
 /// </summary>
 public class FloatingPointToleranceComparerer<T> : IEqualityComparer<T>
     where T : struct, IFloatingPoint<T>
