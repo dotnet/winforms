@@ -50,8 +50,34 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
         UITypeEditor editor = descriptor.GetEditor<UITypeEditor>()!;
         // Get value to edit
         object? value = descriptor.GetValue(objectToChange);
+
         // Edit value
-        object? newValue = editor.EditValue(context, context, value);
+        object? newValue;
+        try
+        {
+            newValue = editor.EditValue(context, context, value);
+        }
+        catch (Exception ex) when (!ex.IsCriticalException())
+        {
+            // Display the error to the user
+            IUIService? uiService = context.GetService<IUIService>();
+            if (uiService is not null)
+            {
+                uiService.ShowError(ex);
+            }
+            else
+            {
+                string message = ex.Message;
+                if (string.IsNullOrEmpty(message))
+                {
+                    message = ex.ToString();
+                }
+
+                MessageBox.Show(message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
+            return value;
+        }
 
         if (newValue != value)
         {
