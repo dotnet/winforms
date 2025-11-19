@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <!-- File classifications that should only be included for the ref pack. -->
-  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+  <ItemGroup Condition="'$(PlatformPackageType)' == 'TargetingPack'">
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CSharp.dll" Profile="WindowsForms" />
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <!-- File classifications that should only be included for the runtime pack. Note analyzers should not be included in the runtime pack. -->
-  <ItemGroup Condition="'$(PackageTargetRuntime)' != ''">
+  <ItemGroup Condition="'$(PlatformPackageType)' == 'RuntimePack'">
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.resources.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.resources.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Primitives.resources.dll" Profile="WindowsForms" />
