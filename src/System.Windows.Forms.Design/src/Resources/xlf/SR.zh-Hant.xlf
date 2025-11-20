@@ -1087,17 +1087,17 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">控制設計工具智慧標籤視窗是否應依預設顯示。</target>
+        <target state="translated">控制設計工具智慧標記視窗是否應依預設顯示。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="translated">自動開啟智慧標籤</target>
+        <target state="translated">自動開啟智慧標記</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="translated">物件已繫結智慧標籤設定</target>
+        <target state="translated">物件已繫結智慧標記設定</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">控制設計工具是否應顯示智慧標籤快顯視窗。</target>
+        <target state="translated">控制設計工具是否應顯示智慧標記快顯視窗。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
