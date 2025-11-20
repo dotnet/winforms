@@ -309,6 +309,33 @@ public partial class StatusStrip : ToolStrip
         return base.GetPreferredSizeCore(proposedSize);
     }
 
+    public override Rectangle DisplayRectangle
+    {
+        get
+        {
+            var baseRectangle = base.DisplayRectangle;
+
+            if (!SizingGrip)
+            {
+                return baseRectangle;
+            }
+
+            int scaleGripWidth = ScaleHelper.ScaleToDpi(GripWidth, DeviceDpi);
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                baseRectangle.X += scaleGripWidth;
+                baseRectangle.Width = Math.Max(0, baseRectangle.Width - scaleGripWidth);
+            }
+            else
+            {
+                baseRectangle.Width = Math.Max(0, baseRectangle.Width - scaleGripWidth);
+            }
+
+            return baseRectangle;
+        }
+    }
+
     protected override void OnPaintBackground(PaintEventArgs e)
     {
         base.OnPaintBackground(e);
