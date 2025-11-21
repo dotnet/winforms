@@ -1087,17 +1087,17 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="translated">Controla se as janelas de marcas inteligentes do designer devem ser mostradas por padrão.</target>
+        <target state="translated">Controla se as janelas de etiquetas inteligentes do designer devem ser mostradas por padrão.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="translated">Abrir Automaticamente as Marcas Inteligentes</target>
+        <target state="translated">Abrir Automaticamente as Etiquetas Inteligentes</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="translated">Configurações de Marcas Inteligentes Associadas a Objetos</target>
+        <target state="translated">Configurações de Etiquetas Inteligentes Associadas a Objetos</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
@@ -1127,7 +1127,7 @@
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="translated">Controla se os designers devem mostrar janelas popup de marcas inteligentes.</target>
+        <target state="translated">Controla se os designers devem mostrar janelas popup de etiquetas inteligentes.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
