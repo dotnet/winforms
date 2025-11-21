@@ -65,7 +65,7 @@ public partial class StatusStripTests
         Assert.False(control.DesignMode);
         Assert.Empty(control.DisplayedItems);
         Assert.Same(control.DisplayedItems, control.DisplayedItems);
-        Assert.Equal(new Rectangle(1, 0, 185, 22), control.DisplayRectangle);
+        Assert.Equal(new Rectangle(1, 0, 173, 22), control.DisplayRectangle);
         Assert.Equal(DockStyle.Bottom, control.Dock);
         Assert.NotNull(control.DockPadding);
         Assert.Same(control.DockPadding, control.DockPadding);
@@ -108,7 +108,7 @@ public partial class StatusStripTests
         Assert.Equal(Point.Empty, control.Location);
         Assert.Equal(Padding.Empty, control.Margin);
         Assert.Equal(Size.Empty, control.MaximumSize);
-        Assert.Equal(new Size(185, 22), control.MaxItemSize);
+        Assert.Equal(new Size(173, 22), control.MaxItemSize);
         Assert.Equal(Size.Empty, control.MinimumSize);
         Assert.Equal(Orientation.Horizontal, control.Orientation);
         Assert.NotNull(control.OverflowButton);

@@ -309,30 +309,36 @@ public partial class StatusStrip : ToolStrip
         return base.GetPreferredSizeCore(proposedSize);
     }
 
+    /// <summary>
+    ///  Returns the client rect of the display area of the control.
+    ///  When SizingGrip is enabled, `DisplayRectangle` excludes the sizing grip width.
+    /// </summary>
     public override Rectangle DisplayRectangle
     {
         get
         {
-            var baseRectangle = base.DisplayRectangle;
+            Rectangle rectangle = base.DisplayRectangle;
 
             if (!SizingGrip)
             {
-                return baseRectangle;
+                return rectangle;
             }
 
-            int scaleGripWidth = ScaleHelper.ScaleToDpi(GripWidth, DeviceDpi);
+            Rectangle grip = SizeGripBounds;
+            int remainingWidth = rectangle.Width - grip.Width;
+            if (grip.IsEmpty || remainingWidth <= 0)
+            {
+                return rectangle;
+            }
 
             if (RightToLeft == RightToLeft.Yes)
             {
-                baseRectangle.X += scaleGripWidth;
-                baseRectangle.Width = Math.Max(0, baseRectangle.Width - scaleGripWidth);
-            }
-            else
-            {
-                baseRectangle.Width = Math.Max(0, baseRectangle.Width - scaleGripWidth);
+                rectangle.X += grip.Width;
             }
 
-            return baseRectangle;
+            rectangle.Width = remainingWidth;
+
+            return rectangle;
         }
     }
 
