@@ -933,7 +933,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
             return new ToolStripStatusLabel()
             {
                 AutoSize = false,
-                Size = new Size(50, 25)
+                Size = new Size(40, 25)
             };
         }
     }
