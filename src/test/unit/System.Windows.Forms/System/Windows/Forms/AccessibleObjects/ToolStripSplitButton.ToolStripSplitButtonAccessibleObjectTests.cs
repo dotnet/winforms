@@ -20,14 +20,14 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ToolStripSplitButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
+    public void ToolStripSplitButtonAccessibleObject_ControlType_IsSplitButton_IfAccessibleRoleIsDefault()
     {
         using ToolStripSplitButton toolStripSplitButton = new();
         // AccessibleRole is not set = Default
 
         var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SplitButtonControlTypeId, actual);
     }
 
     [WinFormsFact]
