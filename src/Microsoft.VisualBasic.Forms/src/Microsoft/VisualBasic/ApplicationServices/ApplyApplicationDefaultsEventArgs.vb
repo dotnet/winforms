@@ -27,8 +27,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Setting this property inside the event handler determines the
-        '''  <see cref="Application.ColorMode"/> for the application.
+        '''  Setting this property inside the event handler determines the application's
+        '''  <see cref="Application.ColorMode"/>. Use this property to control whether the application
+        '''  uses dark mode, classic mode, or system default for its lifecycle.
         ''' </summary>
         Public Property ColorMode As SystemColorMode
 
