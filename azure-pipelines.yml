@@ -43,6 +43,7 @@ extends:
           publishAssetsImmediately: true
           isAssetlessBuild: true
           enableTelemetry: true
+
       - ${{ if eq(variables.enableSourceIndex, 'true') }}:
         - template: /eng/common/templates-official/job/source-index-stage1.yml@self
           parameters:
@@ -52,10 +53,7 @@ extends:
               name: $(DncEngInternalBuildPool)
               demands: ImageOverride -equals windows.vs2022preview.amd64
 
-    - ${{ if eq(variables['EnableLoc'], 'true') }}:
-      - stage: OneLocBuild
-        displayName: Publish localizable content to OneLocBuild
-        jobs:
+      - ${{ if eq(variables['EnableLoc'], 'true') }}:
         - template: /eng/common/templates-official/job/onelocbuild.yml@self
           parameters:
             MirrorRepo: winforms
