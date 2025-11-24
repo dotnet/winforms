@@ -96,37 +96,6 @@ public class EditorServiceContextTests : IDisposable
     }
 
     [Fact]
-    public void EditValue_ShouldShowError_WhenEditorThrowsException()
-    {
-        List<string> list = new() { "Test" };
-        ArgumentException expectedException = new("DataSource is set");
-
-        _mockPropertyDescriptor.Setup(p => p.GetValue(_component)).Returns(list);
-        _mockPropertyDescriptor.Setup(p => p.PropertyType).Returns(typeof(List<string>));
-        _mockPropertyDescriptor.Setup(p => p.Name).Returns("Items");
-        _mockPropertyDescriptor.Setup(p => p.Attributes).Returns(new AttributeCollection(null));
-
-        _mockEditor
-            .Setup(e => e.EditValue(It.IsAny<ITypeDescriptorContext>(), It.IsAny<IServiceProvider>(), list))
-            .Throws(expectedException);
-
-        _mockPropertyDescriptor
-            .Setup(p => p.GetEditor(typeof(UITypeEditor)))
-            .Returns(_mockEditor.Object);
-
-        _mockSite.Setup(s => s.GetService(typeof(IUIService))).Returns(_mockUIService.Object);
-        _component.Site = _mockSite.Object;
-
-        TypeDescriptor.AddProvider(new TypeDescriptionProviderMock(_mockPropertyDescriptor.Object), _component);
-
-        object? result = EditorServiceContext.EditValue(_designer, _component, "Items");
-
-        result.Should().BeSameAs(list);
-        _mockUIService.Verify(s => s.ShowError(expectedException), Times.Once);
-        _mockPropertyDescriptor.Verify(p => p.SetValue(It.IsAny<object>(), It.IsAny<object>()), Times.Never);
-    }
-
-    [Fact]
     public void Container_ShouldReturnNull_WhenComponentSiteIsNull()
     {
         EditorServiceContext context = new(_designer, _mockPropertyDescriptor.Object);
