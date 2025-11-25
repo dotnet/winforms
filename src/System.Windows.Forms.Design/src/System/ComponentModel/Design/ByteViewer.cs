@@ -170,11 +170,11 @@ public class ByteViewer : TableLayoutPanel
     private static bool CharIsPrintable(char c)
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);
-        return uc is not UnicodeCategory.Control
+        return uc is not (UnicodeCategory.Control
             or UnicodeCategory.Format
             or UnicodeCategory.LineSeparator
             or UnicodeCategory.ParagraphSeparator
-            or UnicodeCategory.OtherNotAssigned;
+            or UnicodeCategory.OtherNotAssigned);
     }
 
     /// <summary>
