@@ -30,7 +30,8 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Draws button background with popup styling, including subtle 3D effect.
     /// </summary>
-    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
+    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state,
+        bool isDefault, Color backColor, int borderSize, Color borderColor)
     {
         // Use padding from ButtonDarkModeRenderer
         Padding padding = PaddingCore;
