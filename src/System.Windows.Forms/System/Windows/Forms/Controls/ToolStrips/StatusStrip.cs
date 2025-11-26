@@ -317,28 +317,44 @@ public partial class StatusStrip : ToolStrip
     {
         get
         {
-            Rectangle rectangle = base.DisplayRectangle;
+            Rectangle rect = base.DisplayRectangle;
 
             if (!SizingGrip)
             {
-                return rectangle;
+                return rect;
             }
 
             Rectangle grip = SizeGripBounds;
-            int remainingWidth = rectangle.Width - grip.Width;
-            if (grip.IsEmpty || remainingWidth <= 0)
+
+            if (grip.IsEmpty)
             {
-                return rectangle;
+                return rect;
             }
 
-            if (RightToLeft == RightToLeft.Yes)
+            if (Dock is DockStyle.Bottom or DockStyle.Top or DockStyle.Fill)
             {
-                rectangle.X += grip.Width;
+                int remainingWidth = rect.Width - grip.Width;
+                if (remainingWidth > 0)
+                {
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        rect.X += grip.Width;
+                    }
+
+                    rect.Width = remainingWidth;
+                }
+            }
+            else if (Dock is DockStyle.Left or DockStyle.Right)
+            {
+                int remainingHeight = rect.Height - grip.Height;
+                if (remainingHeight > 0)
+                {
+                    rect.Y += grip.Height;
+                    rect.Height = remainingHeight;
+                }
             }
 
-            rectangle.Width = remainingWidth;
-
-            return rectangle;
+            return rect;
         }
     }
 
