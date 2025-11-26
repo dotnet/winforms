@@ -21,9 +21,9 @@
     }
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "10.0.0-beta.25574.102",
-    "Microsoft.DotNet.CMake.Sdk": "10.0.0-beta.25574.102",
-    "Microsoft.DotNet.Helix.Sdk": "10.0.0-beta.25574.102",
+    "Microsoft.DotNet.Arcade.Sdk": "10.0.0-beta.25575.107",
+    "Microsoft.DotNet.CMake.Sdk": "10.0.0-beta.25575.107",
+    "Microsoft.DotNet.Helix.Sdk": "10.0.0-beta.25575.107",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
     "Microsoft.NET.Sdk.IL": "10.0.2"
   },
