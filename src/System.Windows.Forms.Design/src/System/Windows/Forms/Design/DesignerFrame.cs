@@ -403,6 +403,11 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         /// </summary>
         private void ParentOverlay(Control control)
         {
+            if (!control.IsHandleCreated)
+            {
+                return;
+            }
+
             PInvoke.SetParent(control, this);
             PInvoke.SetWindowPos(
                 control,
@@ -513,11 +518,14 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 {
                     foreach (Control c in _overlayList)
                     {
-                        PInvoke.SetWindowPos(
-                            c,
-                            HWND.HWND_TOP,
-                            0, 0, 0, 0,
-                            SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+                        if (c.IsHandleCreated)
+                        {
+                            PInvoke.SetWindowPos(
+                                c,
+                                HWND.HWND_TOP,
+                                0, 0, 0, 0,
+                                SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+                        }
                     }
                 }
             }
