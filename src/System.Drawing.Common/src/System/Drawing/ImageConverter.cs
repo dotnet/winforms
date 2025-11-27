@@ -16,7 +16,12 @@ public partial class ImageConverter : TypeConverter
 
     public override bool CanConvertTo(ITypeDescriptorContext? context, [NotNullWhen(true)] Type? destinationType)
     {
-        return destinationType == typeof(byte[]) || destinationType == typeof(string);
+        // Support byte[] for resource serialization, string for display,
+        // and Image/Bitmap/Metafile types to indicate that serialization will preserve the type
+        // (via byte[] round-trip through resources).
+        return destinationType == typeof(byte[])
+            || destinationType == typeof(string)
+            || typeof(Image).IsAssignableFrom(destinationType);
     }
 
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
@@ -63,6 +68,17 @@ public partial class ImageConverter : TypeConverter
                 image.Save(ms);
 
                 return ms.ToArray();
+            }
+        }
+        else if (typeof(Image).IsAssignableFrom(destinationType))
+        {
+            // Identity conversion: if the value is already an Image (or subclass like Bitmap),
+            // return it as-is. This supports VS Designer's serialization validation which checks
+            // if a value can be "serialized" to its target type. The actual serialization happens
+            // via byte[] through resources, which preserves the concrete Image type.
+            if (value is Image)
+            {
+                return value;
             }
         }
 

@@ -96,6 +96,9 @@ public class ImageConverterTest
         Assert.True(_imgConv.CanConvertTo(typeof(byte[])), "byte[] (no context)");
         Assert.True(_imgConv.CanConvertTo(null, typeof(byte[])), "byte[]");
         Assert.True(_imgConv.CanConvertTo(null, _imageBytes.GetType()), "_imageBytes.GetType()");
+        Assert.True(_imgConv.CanConvertTo(null, typeof(Image)), "Image");
+        Assert.True(_imgConv.CanConvertTo(null, typeof(Bitmap)), "Bitmap");
+        Assert.True(_imgConv.CanConvertTo(null, typeof(Metafile)), "Metafile");
         Assert.False(_imgConv.CanConvertTo(null, typeof(Rectangle)), "Rectangle");
         Assert.False(_imgConv.CanConvertTo(null, typeof(Point)), "Point");
         Assert.False(_imgConv.CanConvertTo(null, typeof(PointF)), "PointF");
@@ -110,6 +113,9 @@ public class ImageConverterTest
         Assert.True(_imgConvFrmTD.CanConvertTo(typeof(byte[])), "TD byte[] (no context)");
         Assert.True(_imgConvFrmTD.CanConvertTo(null, typeof(byte[])), "TD byte[]");
         Assert.True(_imgConvFrmTD.CanConvertTo(null, _imageBytes.GetType()), "TD _imageBytes.GetType()");
+        Assert.True(_imgConvFrmTD.CanConvertTo(null, typeof(Image)), "TD Image");
+        Assert.True(_imgConvFrmTD.CanConvertTo(null, typeof(Bitmap)), "TD Bitmap");
+        Assert.True(_imgConvFrmTD.CanConvertTo(null, typeof(Metafile)), "TD Metafile");
         Assert.False(_imgConvFrmTD.CanConvertTo(null, typeof(Rectangle)), "TD Rectangle");
         Assert.False(_imgConvFrmTD.CanConvertTo(null, typeof(Point)), "TD Point");
         Assert.False(_imgConvFrmTD.CanConvertTo(null, typeof(PointF)), "TD PointF");
@@ -195,22 +201,52 @@ public class ImageConverterTest
     public void ConvertTo_ThrowsNotSupportedException()
     {
         Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Rectangle)));
-        Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, _image.GetType()));
         Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Size)));
-        Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Bitmap)));
         Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Point)));
-        Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Metafile)));
         Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(object)));
         Assert.Throws<NotSupportedException>(() => _imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(int)));
 
         Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Rectangle)));
-        Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, _image.GetType()));
         Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Size)));
-        Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Bitmap)));
         Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Point)));
-        Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Metafile)));
         Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(object)));
         Assert.Throws<NotSupportedException>(() => _imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(int)));
+    }
+
+    [Fact]
+    public void ConvertTo_ImageTypes_ReturnsValue()
+    {
+        // ImageConverter supports identity conversion for Image types to support
+        // VS Designer's serialization validation. The actual serialization happens
+        // via byte[] through resources.
+        Image result = (Image)_imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, _image.GetType());
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Bitmap));
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Image));
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, _image.GetType());
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Bitmap));
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Image));
+        Assert.Same(_image, result);
+    }
+
+    [Fact]
+    public void ConvertTo_Metafile_ReturnsValue()
+    {
+        // Metafile is also an Image subclass
+        Image result = (Image)_imgConv.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Metafile));
+        Assert.Same(_image, result);
+
+        result = (Image)_imgConvFrmTD.ConvertTo(null, CultureInfo.InvariantCulture, _image, typeof(Metafile));
+        Assert.Same(_image, result);
     }
 
     [Fact]
