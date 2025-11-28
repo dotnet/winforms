@@ -379,6 +379,7 @@ public partial class StatusStrip : ToolStrip
             Rectangle lastItemBounds = Rectangle.Empty;
 
             ToolStripItem? lastItem = null;
+            const double HideIntersectionRatioThreshold = 0.5;
             for (int i = 0; i < Items.Count; i++)
             {
                 ToolStripItem item = Items[i];
@@ -387,9 +388,36 @@ public partial class StatusStrip : ToolStrip
                 // visible.
                 if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
+                    bool hide = false;
+
+                    // Check for collisions with SizingGrip when SizingGrip is enabled.
+                    if (!SizeGripBounds.IsEmpty)
                     {
-                        // if the item collides with the size grip, set the location to nomansland.
+                        Rectangle itemBounds = item.Bounds;
+
+                        if (itemBounds.IntersectsWith(SizeGripBounds))
+                        {
+                            Rectangle intersect = Rectangle.Intersect(itemBounds, SizeGripBounds);
+                            double itemArea = Math.Max(1, itemBounds.Width * itemBounds.Height);
+                            double intersectArea = Math.Max(0, intersect.Width * intersect.Height);
+                            double ratio = intersectArea / itemArea;
+
+                            // Only hide intersections when the intersection ratio exceeds a threshold,
+                            // otherwise, slight overlap is allowed.
+                            if (ratio >= HideIntersectionRatioThreshold)
+                            {
+                                hide = true;
+                            }
+                        }
+                    }
+
+                    if (overflow)
+                    {
+                        hide = true;
+                    }
+
+                    if (hide)
+                    {
                         SetItemLocation(item, noMansLand);
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
