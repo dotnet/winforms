@@ -728,11 +728,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             Rectangle rect = base.DisplayRectangle;
 
-            if (this is StatusStrip)
-            {
-                return rect;
-            }
-
             if ((LayoutEngine is ToolStripSplitStackLayout) && (GripStyle == ToolStripGripStyle.Visible))
             {
                 if (Orientation == Orientation.Horizontal)
@@ -3945,7 +3940,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <param name="items">contains ToolStrip or ToolStripDropDown items to disconnect</param>
     internal virtual void ReleaseToolStripItemsProviders(ToolStripItemCollection items)
     {
-        ToolStripItem[] itemsArray = [.. items.Cast<ToolStripItem>()];
+        ToolStripItem[] itemsArray = [..items.Cast<ToolStripItem>()];
         foreach (ToolStripItem toolStripItem in itemsArray)
         {
             if (toolStripItem is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 0)

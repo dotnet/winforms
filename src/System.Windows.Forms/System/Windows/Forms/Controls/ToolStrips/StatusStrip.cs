@@ -309,55 +309,6 @@ public partial class StatusStrip : ToolStrip
         return base.GetPreferredSizeCore(proposedSize);
     }
 
-    /// <summary>
-    ///  Returns the client rect of the display area of the control.
-    ///  When SizingGrip is enabled, `DisplayRectangle` excludes the sizing grip width.
-    /// </summary>
-    public override Rectangle DisplayRectangle
-    {
-        get
-        {
-            Rectangle rect = base.DisplayRectangle;
-
-            if (!SizingGrip)
-            {
-                return rect;
-            }
-
-            Rectangle grip = SizeGripBounds;
-
-            if (grip.IsEmpty)
-            {
-                return rect;
-            }
-
-            if (Dock is DockStyle.Bottom or DockStyle.Top or DockStyle.Fill)
-            {
-                int remainingWidth = rect.Width - grip.Width;
-                if (remainingWidth > 0)
-                {
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        rect.X += grip.Width;
-                    }
-
-                    rect.Width = remainingWidth;
-                }
-            }
-            else if (Dock is DockStyle.Left or DockStyle.Right)
-            {
-                int remainingHeight = rect.Height - grip.Height;
-                if (remainingHeight > 0)
-                {
-                    rect.Y += grip.Height;
-                    rect.Height = remainingHeight;
-                }
-            }
-
-            return rect;
-        }
-    }
-
     protected override void OnPaintBackground(PaintEventArgs e)
     {
         base.OnPaintBackground(e);
@@ -428,6 +379,7 @@ public partial class StatusStrip : ToolStrip
             Rectangle lastItemBounds = Rectangle.Empty;
 
             ToolStripItem? lastItem = null;
+            const double HideIntersectionRatioThreshold = 0.5;
             for (int i = 0; i < Items.Count; i++)
             {
                 ToolStripItem item = Items[i];
@@ -436,9 +388,36 @@ public partial class StatusStrip : ToolStrip
                 // visible.
                 if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
+                    bool hide = false;
+
+                    // Check for collisions with SizingGrip when SizingGrip is enabled.
+                    if (!SizeGripBounds.IsEmpty)
                     {
-                        // if the item collides with the size grip, set the location to nomansland.
+                        Rectangle itemBounds = item.Bounds;
+
+                        if (itemBounds.IntersectsWith(SizeGripBounds))
+                        {
+                            Rectangle intersect = Rectangle.Intersect(itemBounds, SizeGripBounds);
+                            double itemArea = Math.Max(1, itemBounds.Width * itemBounds.Height);
+                            double intersectArea = Math.Max(0, intersect.Width * intersect.Height);
+                            double ratio = intersectArea / itemArea;
+
+                            // Only hide intersections when the intersection ratio exceeds a threshold,
+                            // otherwise, slight overlap is allowed.
+                            if (ratio >= HideIntersectionRatioThreshold)
+                            {
+                                hide = true;
+                            }
+                        }
+                    }
+
+                    if (overflow)
+                    {
+                        hide = true;
+                    }
+
+                    if (hide)
+                    {
                         SetItemLocation(item, noMansLand);
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
