@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 internal static class WinFormsMetadataUpdateHandler
 {
     /// <summary>Invoked after a metadata update is applied.</summary>
-    internal static void UpdateApplication()
+    internal static void UpdateApplication(Type[]? updatedTypes)
     {
         // Repaint all open forms.
         foreach (Form openForm in Application.OpenForms)
