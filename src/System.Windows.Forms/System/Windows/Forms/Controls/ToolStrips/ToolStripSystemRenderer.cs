@@ -453,6 +453,14 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     /// </summary>
     protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
     {
+        // If system is in high contrast mode or dark mode and a specific renderer-override is defined, use that.
+        // For ToolStripSystemRenderer in a contrast theme, the RendererOverride property will be ToolStripHighContrastRenderer.
+        if (RendererOverride is not null)
+        {
+            base.OnRenderLabelBackground(e);
+            return;
+        }
+
         RenderLabelInternal(e);
     }
 
@@ -545,6 +553,14 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
     protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
     {
+        // If system is in high contrast mode or dark mode and a specific renderer-override is defined, use that.
+        // For ToolStripSystemRenderer in a contrast theme, the RendererOverride property will be ToolStripHighContrastRenderer.
+        if (RendererOverride is not null)
+        {
+            base.OnRenderToolStripStatusLabelBackground(e);
+            return;
+        }
+
         RenderLabelInternal(e);
         ToolStripStatusLabel? item = e.Item as ToolStripStatusLabel;
         if (item is not null)

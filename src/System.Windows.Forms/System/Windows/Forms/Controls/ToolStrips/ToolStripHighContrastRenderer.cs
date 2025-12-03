@@ -173,6 +173,18 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         }
     }
 
+    protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
+    {
+        if (FillWhenSelected)
+        {
+            RenderItemInternalFilled(e);
+        }
+        else
+        {
+            base.OnRenderToolStripStatusLabelBackground(e);
+        }
+    }
+
     protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
     {
         base.OnRenderMenuItemBackground(e);
