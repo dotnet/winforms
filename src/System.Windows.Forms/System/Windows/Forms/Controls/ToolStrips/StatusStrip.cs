@@ -72,14 +72,14 @@ public partial class StatusStrip : ToolStrip
         {
             if (Orientation == Orientation.Horizontal)
             {
-                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 14, 0) : new Padding(14, 0, 1, 0);
+                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 2, 0) : new Padding(2, 0, 1, 0);
             }
             else
             {
                 // vertical
                 // the difference in symmetry here is that the grip does not actually rotate, it remains the same height it
                 // was before, so the DisplayRectangle needs to shrink up by its height.
-                return new Padding(1, 3, 1, DefaultSize.Height);
+                return new Padding(1, 3, 1, 0);
             }
         }
     }
@@ -345,10 +345,7 @@ public partial class StatusStrip : ToolStrip
             else
             {
                 // Reduce height to account for sizing grip (vertical orientation)
-                if (!DesignMode)
-                {
-                    rect.Height = Math.Max(0, rect.Height - grip.Height);
-                }
+                rect.Height = Math.Max(0, rect.Height - grip.Height);
             }
 
             return rect;
