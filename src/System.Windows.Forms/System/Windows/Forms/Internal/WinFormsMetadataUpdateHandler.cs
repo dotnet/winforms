@@ -4,6 +4,8 @@
 using System.Reflection.Metadata;
 using System.Windows.Forms;
 
+#pragma warning disable IDE0060 // Remove unused parameter
+
 [assembly: MetadataUpdateHandler(typeof(WinFormsMetadataUpdateHandler))]
 
 namespace System.Windows.Forms;
