@@ -331,26 +331,27 @@ public partial class StatusStrip : ToolStrip
                 return rect;
             }
 
-            if (Dock is DockStyle.Bottom or DockStyle.Top or DockStyle.Fill)
-            {
-                int remainingWidth = rect.Width - grip.Width;
-                if (remainingWidth > 0)
-                {
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        rect.X += grip.Width;
-                    }
+            int scaledGripWidth = grip.Width;
 
-                    rect.Width = remainingWidth;
+            if (Orientation == Orientation.Horizontal)
+            {
+                // Reduce width to account for sizing grip
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    rect.X += scaledGripWidth;
+                    rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
+                }
+                else
+                {
+                    rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
                 }
             }
-            else if (Dock is DockStyle.Left or DockStyle.Right)
+            else
             {
-                int remainingHeight = rect.Height - grip.Height;
-                if (remainingHeight > 0)
+                // Reduce height to account for sizing grip (vertical orientation)
+                if (!DesignMode)
                 {
-                    rect.Y += grip.Height;
-                    rect.Height = remainingHeight;
+                    rect.Height = Math.Max(0, rect.Height - grip.Height);
                 }
             }
 
