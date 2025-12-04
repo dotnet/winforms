@@ -336,14 +336,10 @@ public partial class StatusStrip : ToolStrip
             if (Orientation == Orientation.Horizontal)
             {
                 // Reduce width to account for sizing grip
+                rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
                 if (RightToLeft == RightToLeft.Yes)
                 {
                     rect.X += scaledGripWidth;
-                    rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
-                }
-                else
-                {
-                    rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
                 }
             }
             else
