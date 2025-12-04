@@ -801,7 +801,12 @@ public partial class ToolStripControlHost : ToolStripItem
     /// </remarks>
     private void SyncControlParent()
     {
-        ReadOnlyControlCollection? newControls = GetControlCollection(ParentInternal);
+        // When the item is displayed in a ToolStripDropDown (e.g., overflow dropdown),
+        // the hosted control should remain parented to the Owner ToolStrip, not the dropdown.
+        // ToolStripDropDown is a TopLevel popup window, and parenting controls to it can cause
+        // Win32Exception due to SetParent failures (e.g., DPI awareness mismatches).
+        ToolStrip? targetParent = ParentInternal is ToolStripDropDown ? Owner : ParentInternal;
+        ReadOnlyControlCollection? newControls = GetControlCollection(targetParent);
         newControls?.AddInternal(_control);
     }
 

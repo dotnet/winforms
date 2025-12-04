@@ -1526,6 +1526,51 @@ public class ToolStripControlHostTests
     }
 
     [WinFormsFact]
+    public void ToolStripControlHost_Parent_SetToToolStripDropDown_ControlRemainsInOwner()
+    {
+        // This test verifies the fix for https://github.com/dotnet/winforms/issues/14077
+        // When a ToolStripControlHost's Parent is set to a ToolStripDropDown (e.g., overflow dropdown),
+        // the hosted control should remain parented to the Owner ToolStrip, not the dropdown.
+        // This prevents Win32Exception when the dropdown shows.
+        using ToolStrip owner = new();
+        using ToolStripDropDown dropDown = new();
+        using Control c = new();
+        using SubToolStripControlHost item = new(c)
+        {
+            Owner = owner
+        };
+
+        // Initially, control should be in owner's Controls collection
+        Assert.Same(c, Assert.Single(owner.Controls));
+        Assert.Empty(dropDown.Controls);
+
+        // When Parent is set to a ToolStripDropDown, control should stay in owner's Controls
+        item.Parent = dropDown;
+        Assert.Same(dropDown, item.Parent);
+        Assert.Same(owner, item.Owner);
+        Assert.Same(c, Assert.Single(owner.Controls));
+        Assert.Empty(dropDown.Controls);
+    }
+
+    [WinFormsFact]
+    public void ToolStripControlHost_Parent_SetToToolStripDropDownWithoutOwner_ControlNotAddedToDropDown()
+    {
+        // When a ToolStripControlHost's Parent is set to a ToolStripDropDown and there's no Owner,
+        // the hosted control should not be added to the dropdown's Controls collection.
+        using ToolStripDropDown dropDown = new();
+        using Control c = new();
+        using SubToolStripControlHost item = new(c);
+
+        // Set Parent to the dropdown
+        item.Parent = dropDown;
+        Assert.Same(dropDown, item.Parent);
+        Assert.Null(item.Owner);
+
+        // Control should not be in the dropdown's Controls collection
+        Assert.Empty(dropDown.Controls);
+    }
+
+    [WinFormsFact]
     public void ToolStripControlHost_Parent_SetDisposed_GetReturnsExpected()
     {
         using ToolStrip parent = new();
