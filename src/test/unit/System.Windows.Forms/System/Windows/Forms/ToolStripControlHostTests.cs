@@ -1531,7 +1531,10 @@ public class ToolStripControlHostTests
         // This test verifies the fix for https://github.com/dotnet/winforms/issues/14077
         // When a ToolStripControlHost's Parent is set to a ToolStripDropDown (e.g., overflow dropdown),
         // the hosted control should remain parented to the Owner ToolStrip, not the dropdown.
-        // This prevents Win32Exception when the dropdown shows.
+        // ToolStripDropDown is a TopLevel popup window, and when controls are added to its Controls
+        // collection, CreateControl tries to SetParent to the popup window. This can fail with
+        // Win32Exception due to DPI awareness mismatches or window hierarchy constraints between
+        // the popup and the hosted controls.
         using ToolStrip owner = new();
         using ToolStripDropDown dropDown = new();
         using Control c = new();
