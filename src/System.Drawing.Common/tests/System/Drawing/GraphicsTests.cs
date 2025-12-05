@@ -3003,8 +3003,13 @@ public partial class GraphicsTests
         VerifyBitmapNotEmpty(bitmap);
     }
 
-    [Fact]
-    public void FillRectangle_AntiAlias_24bppRgb_OutOfBounds_ThrowsArgumentException()
+    [Theory]
+    [InlineData(190.5f, 180.5f, 100, 100)] // Out of bounds (bottom-right)
+    [InlineData(-10, 10, 100, 100)]        // Out of bounds (left)
+    [InlineData(10, -10, 100, 100)]        // Out of bounds (top)
+    [InlineData(200, 10, 100, 100)]        // Out of bounds (right)
+    [InlineData(10, 200, 100, 100)]        // Out of bounds (bottom)
+    public void FillRectangle_AntiAlias_24bppRgb_OutOfBounds_ThrowsArgumentException(float x, float y, float width, float height)
     {
         using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
         using Graphics graphics = Graphics.FromImage(bmp);
@@ -3014,7 +3019,41 @@ public partial class GraphicsTests
         // and AccessViolationException on .NET 8.
         // We expect our fix to throw ArgumentException instead.
         Assert.Throws<ArgumentException>(() =>
-            graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100)));
+            graphics.FillRectangle(Brushes.Green, new RectangleF(x, y, width, height)));
+    }
+
+    [Theory]
+    [InlineData(0, 0, 100, 100)]           // Within bounds
+    [InlineData(156, 156, 100, 100)]       // Exactly on bounds (256 - 100 = 156)
+    public void FillRectangle_AntiAlias_24bppRgb_WithinBounds_Success(float x, float y, float width, float height)
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        graphics.FillRectangle(Brushes.Green, new RectangleF(x, y, width, height));
+    }
+
+    [Fact]
+    public void FillRectangle_DefaultSmoothing_24bppRgb_OutOfBounds_Success()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        // Default SmoothingMode is None (or Invalid/Default which maps to None behavior for this check)
+
+        // Should not throw
+        graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100));
+    }
+
+    [Fact]
+    public void FillRectangle_AntiAlias_32bppArgb_OutOfBounds_Success()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format32bppArgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Should not throw
+        graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100));
     }
 #endif
 }
