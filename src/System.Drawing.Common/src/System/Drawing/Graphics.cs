@@ -1222,6 +1222,16 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(brush);
 
+        // GDI+ has a bug where it writes out of bounds when using AntiAlias smoothing mode
+        // on a 24bppRgb bitmap, causing an AccessViolationException (or ExecutionEngineException in .NET 9+).
+        // We validate the parameters here to prevent the crash.
+        if (SmoothingMode == System.Drawing.Drawing2D.SmoothingMode.AntiAlias &&
+            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb } &&
+            (x < 0 || y < 0 || x + width > _backingImage.Width || y + height > _backingImage.Height))
+        {
+            throw new ArgumentException("Drawing operation exceeds the bounds of the image. This is a known GDI+ limitation with AntiAlias smoothing mode and Format24bppRgb pixel format.");
+        }
+
         CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangle(
             NativeGraphics,
             brush.NativeBrush,
