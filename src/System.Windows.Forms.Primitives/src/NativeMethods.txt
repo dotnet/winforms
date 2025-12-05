@@ -150,7 +150,6 @@ GetCurrentThread
 GetCursor
 GetCursorPos
 GetDIBits
-GetDlgCtrlID
 GetDlgItem
 GetDlgItemInt
 GetDoubleClickTime
