@@ -20,7 +20,7 @@ public partial class StatusStrip : ToolStrip
     private static readonly int s_stateSizingGrip = BitVector32.CreateMask();
     private static readonly int s_stateCalledSpringTableLayout = BitVector32.CreateMask(s_stateSizingGrip);
 
-    private const int GripWidth = 12;
+    private const int GripWidth = 15;
     private const int GripHeight = 22;
 
     private RightToLeftLayoutGrip? _rtlLayoutGrip;
@@ -72,14 +72,22 @@ public partial class StatusStrip : ToolStrip
         {
             if (Orientation == Orientation.Horizontal)
             {
-                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 2, 0) : new Padding(2, 0, 1, 0);
+                int gripPaddingWidth = SizeGripBounds.Width < GripWidth + 2
+                    ? GripWidth + 2
+                    : SizeGripBounds.Width;
+                return RightToLeft == RightToLeft.No
+                    ? new Padding(1, 0, gripPaddingWidth, 0)
+                    : new Padding(gripPaddingWidth, 0, 1, 0);
             }
             else
             {
                 // vertical
                 // the difference in symmetry here is that the grip does not actually rotate, it remains the same height it
                 // was before, so the DisplayRectangle needs to shrink up by its height.
-                return new Padding(1, 3, 1, 0);
+                int gripPaddingHeight = SizeGripBounds.Height < DefaultSize.Height
+                    ? DefaultSize.Height
+                    : SizeGripBounds.Height;
+                return new Padding(1, 3, 1, gripPaddingHeight);
             }
         }
     }
@@ -307,49 +315,6 @@ public partial class StatusStrip : ToolStrip
         }
 
         return base.GetPreferredSizeCore(proposedSize);
-    }
-
-    /// <summary>
-    ///  Returns the client rect of the display area of the control.
-    ///  When SizingGrip is enabled, `DisplayRectangle` excludes the sizing grip width.
-    /// </summary>
-    public override Rectangle DisplayRectangle
-    {
-        get
-        {
-            Rectangle rect = base.DisplayRectangle;
-
-            if (!SizingGrip)
-            {
-                return rect;
-            }
-
-            Rectangle grip = SizeGripBounds;
-
-            if (grip.IsEmpty)
-            {
-                return rect;
-            }
-
-            int scaledGripWidth = grip.Width;
-
-            if (Orientation == Orientation.Horizontal)
-            {
-                // Reduce width to account for sizing grip
-                rect.Width = Math.Max(0, rect.Width - scaledGripWidth);
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    rect.X += scaledGripWidth;
-                }
-            }
-            else
-            {
-                // Reduce height to account for sizing grip (vertical orientation)
-                rect.Height = Math.Max(0, rect.Height - grip.Height);
-            }
-
-            return rect;
-        }
     }
 
     protected override void OnPaintBackground(PaintEventArgs e)

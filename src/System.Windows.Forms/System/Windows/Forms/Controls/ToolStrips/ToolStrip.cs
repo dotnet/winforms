@@ -728,11 +728,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             Rectangle rect = base.DisplayRectangle;
 
-            if (this is StatusStrip)
-            {
-                return rect;
-            }
-
             if ((LayoutEngine is ToolStripSplitStackLayout) && (GripStyle == ToolStripGripStyle.Visible))
             {
                 if (Orientation == Orientation.Horizontal)
