@@ -3009,6 +3009,8 @@ public partial class GraphicsTests
     [InlineData(10, -10, 100, 100)]        // Out of bounds (top)
     [InlineData(200, 10, 100, 100)]        // Out of bounds (right)
     [InlineData(10, 200, 100, 100)]        // Out of bounds (bottom)
+    [InlineData(10, 10, -100, 100)]        // Out of bounds (negative width extending left)
+    [InlineData(10, 10, 100, -100)]        // Out of bounds (negative height extending top)
     public void FillRectangle_AntiAlias_24bppRgb_OutOfBounds_ThrowsArgumentException(float x, float y, float width, float height)
     {
         using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
@@ -3025,6 +3027,7 @@ public partial class GraphicsTests
     [Theory]
     [InlineData(0, 0, 100, 100)]           // Within bounds
     [InlineData(156, 156, 100, 100)]       // Exactly on bounds (256 - 100 = 156)
+    [InlineData(100, 100, -50, -50)]       // Within bounds (negative width/height)
     public void FillRectangle_AntiAlias_24bppRgb_WithinBounds_Success(float x, float y, float width, float height)
     {
         using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);

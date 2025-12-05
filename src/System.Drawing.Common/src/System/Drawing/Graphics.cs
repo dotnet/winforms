@@ -1226,10 +1226,29 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         // on a 24bppRgb bitmap, causing an AccessViolationException (or ExecutionEngineException in .NET 9+).
         // We validate the parameters here to prevent the crash.
         if (SmoothingMode == Drawing2D.SmoothingMode.AntiAlias &&
-            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb } &&
-            (x < 0 || y < 0 || x + width > _backingImage.Width || y + height > _backingImage.Height))
+            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb })
         {
-            throw new ArgumentException(SR.ArgumentException_GdiPlus_AntiAlias24bppRgbBounds);
+            float left = x;
+            float right = x + width;
+            float top = y;
+            float bottom = y + height;
+
+            if (width < 0)
+            {
+                left = right;
+                right = x;
+            }
+
+            if (height < 0)
+            {
+                top = bottom;
+                bottom = y;
+            }
+
+            if (left < 0 || top < 0 || right > _backingImage.Width || bottom > _backingImage.Height)
+            {
+                throw new ArgumentException(SR.ArgumentException_GdiPlus_AntiAlias24bppRgbBounds);
+            }
         }
 
         CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangle(
