@@ -3002,5 +3002,19 @@ public partial class GraphicsTests
         graphics.FillRoundedRectangle(Brushes.Green, new RectangleF(0, 0, 10, 10), new(2, 2));
         VerifyBitmapNotEmpty(bitmap);
     }
+
+    [Fact]
+    public void FillRectangle_AntiAlias_24bppRgb_OutOfBounds_ThrowsArgumentException()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // This combination causes a crash in GDI+ on .NET 9+ (ExecutionEngineException)
+        // and AccessViolationException on .NET 8.
+        // We expect our fix to throw ArgumentException instead.
+        Assert.Throws<ArgumentException>(() =>
+            graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100)));
+    }
 #endif
 }
