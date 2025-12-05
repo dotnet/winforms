@@ -3,17 +3,17 @@
 
 #nullable disable
 
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests.Mocks
 {
     public class MockSite
     {
-        public static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
+        public static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost, MockBehavior mockBehavior = MockBehavior.Strict)
         {
-            Mock<ISite> mockSite = new(MockBehavior.Strict);
+            Mock<ISite> mockSite = new(mockBehavior);
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(designerHost);
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design.Tests.Mocks
                 .Setup(s => s.GetService(typeof(ToolStripMenuItem)))
                 .Returns(null);
 
-            Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
+            Mock<IServiceProvider> mockServiceProvider = new(mockBehavior);
 
             mockSite
                 .Setup(s => s.GetService(typeof(IServiceProvider)))

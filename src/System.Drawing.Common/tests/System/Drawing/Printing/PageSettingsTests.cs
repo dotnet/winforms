@@ -31,7 +31,7 @@ namespace System.Drawing.Printing.Tests;
 
 public class PageSettingsTests
 {
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void Clone_Success()
     {
         PageSettings ps = new()
@@ -64,7 +64,7 @@ public class PageSettingsTests
         Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)]
+    [Fact(Skip = "Condition not met", SkipType = typeof(Helpers), SkipUnless = nameof(Helpers.AnyInstalledPrinters))]
     public void PrintToPDF_DefaultPageSettings_IsColor()
     {
         // Regression test for https://github.com/dotnet/winforms/issues/13367

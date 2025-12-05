@@ -1,0 +1,26 @@
+static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
+static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterScreen) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
+System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
+System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
+System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
+System.Windows.Forms.VisualStyles.ComboBoxState.Focused = 5 -> System.Windows.Forms.VisualStyles.ComboBoxState
+virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void

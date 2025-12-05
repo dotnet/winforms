@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 
 public class TASKDIALOG_BUTTONTests
 {
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void TASKDIALOG_BUTTON_x32_Size()
     {
         if (Environment.Is64BitProcess)
@@ -18,7 +18,7 @@ public class TASKDIALOG_BUTTONTests
         Assert.Equal(8, sizeof(TASKDIALOG_BUTTON));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public unsafe void TASKDIALOG_BUTTON_x32_ensure_layout()
     {
         if (Environment.Is64BitProcess)
@@ -33,7 +33,7 @@ public class TASKDIALOG_BUTTONTests
         Assert.Equal(4, (byte*)&sut.pszButtonText - addr);            // 4, PCWSTR
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void TASKDIALOG_BUTTON_x64_Size()
     {
         if (!Environment.Is64BitProcess)
@@ -44,7 +44,7 @@ public class TASKDIALOG_BUTTONTests
         Assert.Equal(12, sizeof(TASKDIALOG_BUTTON));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public unsafe void TASKDIALOG_BUTTON_x64_ensure_layout()
     {
         if (!Environment.Is64BitProcess)

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31808.319
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11019.13 main
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\test\integration\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
 EndProject
@@ -57,7 +57,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		docs\coding-style.md = docs\coding-style.md
 		CONTRIBUTING.md = CONTRIBUTING.md
-		.github\copilot-instructions.md = .github\copilot-instructions.md
 		docs\debugging.md = docs\debugging.md
 		docs\developer-guide.md = docs\developer-guide.md
 		docs\getting-started.md = docs\getting-started.md
@@ -102,15 +101,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "interop", "interop", "{A31B1F6F-4880-45DE-9845-EE3EF67C2FCC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesignSurface", "DesignSurface", "{43E46506-7DF8-4E7A-A579-996CA43041EB}"
-	ProjectSection(SolutionItems) = preProject
-		src\test\integration\DesignSurface\README.md = src\test\integration\DesignSurface\README.md
-		src\test\integration\DesignSurface\Directory.Build.props = src\test\integration\DesignSurface\Directory.Build.props
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoConsole", "src\test\integration\DesignSurface\DemoConsole\DemoConsole.csproj", "{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignSurfaceExt", "src\test\integration\DesignSurface\DesignSurfaceExt\DesignSurfaceExt.csproj", "{E96C74BA-9F74-4289-BF72-45CAD472D3D2}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Microsoft.VisualBasic.Forms.Tests", "src\Microsoft.VisualBasic.Forms\tests\UnitTests\Microsoft.VisualBasic.Forms.Tests.vbproj", "{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D}"
 EndProject
@@ -160,6 +151,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
+		eng\Localize\LocProject.json = eng\Localize\LocProject.json
 		NuGet.Config = NuGet.Config
 		eng\packageContent.targets = eng\packageContent.targets
 		eng\Publishing.props = eng\Publishing.props
@@ -208,6 +200,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Private.Windows.GdiPlus", "src\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj", "{442C867C-51C0-8CE5-F067-DF065008E3DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GDI", "GDI", "{D619FF8C-D99A-48AB-B16B-2F0E819B46D5}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot\GDI\DarkModeButtonRendererCodeGenerationInstructions.md = .github\copilot\GDI\DarkModeButtonRendererCodeGenerationInstructions.md
+		.github\copilot\GDI\GDIPlus-copilot-instructions.md = .github\copilot\GDI\GDIPlus-copilot-instructions.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Async", "Async", "{7BFA3A16-A19A-4FCE-AE1E-D1187BD92D4C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot\Async\invokeAsync_generate_test_instructions.md = .github\copilot\Async\invokeAsync_generate_test_instructions.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -669,22 +677,6 @@ Global
 		{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}.Release|x64.Build.0 = Release|Any CPU
 		{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}.Release|x86.ActiveCfg = Release|Any CPU
 		{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4}.Release|x86.Build.0 = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|arm64.ActiveCfg = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|arm64.Build.0 = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|x64.Build.0 = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Debug|x86.Build.0 = Debug|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|arm64.ActiveCfg = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|arm64.Build.0 = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|x64.ActiveCfg = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|x64.Build.0 = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|x86.ActiveCfg = Release|Any CPU
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2}.Release|x86.Build.0 = Release|Any CPU
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D}.Debug|arm64.ActiveCfg = Debug|Any CPU
@@ -1162,9 +1154,7 @@ Global
 		{1976540D-65A6-45D7-95D2-13106DE6D5BB} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{6EE57002-9965-46E7-A48B-B449969738BB} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{A31B1F6F-4880-45DE-9845-EE3EF67C2FCC} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
-		{43E46506-7DF8-4E7A-A579-996CA43041EB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
-		{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4} = {43E46506-7DF8-4E7A-A579-996CA43041EB}
-		{E96C74BA-9F74-4289-BF72-45CAD472D3D2} = {43E46506-7DF8-4E7A-A579-996CA43041EB}
+		{93310A19-DDCA-4BCD-AEDE-5C5D788DAFB4} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{05FD23CE-60AE-44A8-8DD6-1688F04BE385} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{3596BDE6-B211-4BE7-810D-DC7A4315E296} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
@@ -1195,6 +1185,8 @@ Global
 		{656C66A4-59CD-4E14-8AE4-1F5BCEECB553} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{442C867C-51C0-8CE5-F067-DF065008E3DA} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
+		{D619FF8C-D99A-48AB-B16B-2F0E819B46D5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7BFA3A16-A19A-4FCE-AE1E-D1187BD92D4C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

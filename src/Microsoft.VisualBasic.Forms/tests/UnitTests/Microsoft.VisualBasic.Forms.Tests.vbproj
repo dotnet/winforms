@@ -12,7 +12,6 @@
     <OptionStrict>On</OptionStrict>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
-    <OutputType>Library</OutputType>
     <RootNamespace></RootNamespace>
   </PropertyGroup>
 

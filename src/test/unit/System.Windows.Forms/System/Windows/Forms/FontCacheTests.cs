@@ -33,7 +33,7 @@ public class FontCacheTests
 
                     Assert.False(hfont.Object.IsNull);
                     Thread.Sleep(random.Next(10));
-                });
+                }, TestContext.Current.CancellationToken);
             }
         }
         finally

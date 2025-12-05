@@ -181,11 +181,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             Debug.Assert(value is null || !Disposed, "Why are we putting new children in after we are disposed?");
             if (_children != value)
             {
-                if (_children is not null)
-                {
-                    _children.Dispose();
-                    _children = null;
-                }
+                _children?.Dispose();
+                _children = null;
 
                 _children = value;
             }

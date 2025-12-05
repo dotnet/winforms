@@ -7,7 +7,6 @@ using FluentAssertions;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.WindowsAndMessaging;
-using Xunit.Abstractions;
 using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
 namespace System.Windows.Forms.UITests;

@@ -27,12 +27,6 @@ internal class DataMemberFieldEditor : UITypeEditor
         }
 
         object? dataSource = property.GetValue(instance);
-
-        if (dataSource is null )
-        {
-            return value;
-        }
-
         _designBindingPicker ??= new();
 
         DesignBinding oldSelection = new DesignBinding(dataSource, (string?)value);
@@ -47,12 +41,7 @@ internal class DataMemberFieldEditor : UITypeEditor
             initialSelectedItem: oldSelection
         );
 
-        if (newSelection is null)
-        {
-            return value;
-        }
-
-        return newSelection.DataMember;
+        return dataSource is null || newSelection is null ? value : newSelection.DataMember;
     }
 
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;

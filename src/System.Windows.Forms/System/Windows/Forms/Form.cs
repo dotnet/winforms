@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -137,6 +136,7 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -205,10 +205,6 @@ public partial class Form : ContainerControl
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -1026,11 +1022,8 @@ public partial class Form : ContainerControl
                 _formState[s_formStateIconSet] = value is null ? 0 : 1;
                 _icon = value;
 
-                if (_smallIcon is not null)
-                {
-                    _smallIcon.Dispose();
-                    _smallIcon = null;
-                }
+                _smallIcon?.Dispose();
+                _smallIcon = null;
 
                 UpdateWindowIcon(true);
             }
@@ -1371,7 +1364,7 @@ public partial class Form : ContainerControl
                     Location.Y,
                     Size.Width,
                     Size.Height,
-                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
 
@@ -1721,6 +1714,90 @@ public partial class Form : ContainerControl
 
             base.ParentInternal = value;
         }
+    }
+
+    /// <summary>
+    ///  Gets or sets how the form’s content is protected from screen capture or video recording
+    ///  using Windows-based screen capture APIs.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This property controls how the form’s content is handled when a screen capture or screenshot
+    ///   is attempted. Each capture mode offers different levels of protection for sensitive information.
+    ///  </para>
+    ///  <para>
+    ///   By default, forms permit their content to be captured. Choosing a more restrictive mode
+    ///   can block screenshots or recordings that include confidential data.
+    ///  </para>
+    ///  <para>
+    ///   Changes to this property take effect immediately for any form that is already visible. For
+    ///   forms not yet displayed, the selected mode is applied as soon as the form appears.
+    ///  </para>
+    ///  <para>
+    ///   Note that this setting applies only to the form itself. Any additional top-level windows—such
+    ///   as pop-ups, message boxes, context menus, or dropdown menus—are not affected and can still be
+    ///   captured. Similarly, other application windows remain unaffected by this property.
+    ///  </para>
+    ///  <para>
+    ///   This also influences video-streaming or conferencing applications that rely on the same
+    ///   Windows capture APIs. However, it cannot prevent tools that bypass these APIs or use
+    ///   hardware-level capture methods from recording the screen.
+    ///   See the remarks for the Windows API <a href="https://aka.ms/AAwi872">SetWindowDisplayAffinity</a>
+    ///   for more details.
+    ///  </para>
+    /// </remarks>
+    /// <value>
+    ///  A <see cref="ScreenCaptureMode"/> enumeration value indicating the desired capture restriction.
+    ///  The default is <see cref="ScreenCaptureMode.Allow"/>.
+    /// </value>
+
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormScreenCaptureModeDescr))]
+    public ScreenCaptureMode FormScreenCaptureMode
+    {
+        get => Properties.GetValueOrDefault(s_propFormScreenCaptureMode, ScreenCaptureMode.Allow);
+        set
+        {
+            if (FormScreenCaptureMode == value)
+            {
+                return;
+            }
+
+            if (!TopLevel && !DesignMode)
+            {
+                throw new InvalidOperationException(SR.FormScreenCaptureModeRequiresTopLevel);
+            }
+
+            SourceGenerated.EnumValidator.Validate(value);
+            Properties.AddOrRemoveValue(s_propFormScreenCaptureMode, value);
+
+            if (IsHandleCreated)
+            {
+                SetScreenCaptureModeInternal(value);
+            }
+        }
+    }
+
+    private bool ShouldSerializeFormScreenCaptureMode() =>
+        FormScreenCaptureMode != ScreenCaptureMode.Allow;
+
+    private void ResetFormScreenCaptureMode() =>
+        FormScreenCaptureMode = ScreenCaptureMode.Allow;
+
+    private void SetScreenCaptureModeInternal(ScreenCaptureMode value)
+    {
+        // Always reset to NONE before setting new affinity.
+        PInvoke.SetWindowDisplayAffinity(HWND, WINDOW_DISPLAY_AFFINITY.WDA_NONE);
+
+        WINDOW_DISPLAY_AFFINITY affinity = value switch
+        {
+            ScreenCaptureMode.Allow => WINDOW_DISPLAY_AFFINITY.WDA_NONE,
+            ScreenCaptureMode.HideWindow => WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE,
+            ScreenCaptureMode.HideContent => WINDOW_DISPLAY_AFFINITY.WDA_MONITOR,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+        };
+
+        PInvoke.SetWindowDisplayAffinity(HWND, affinity);
     }
 
     /// <summary>
@@ -2183,7 +2260,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public FormCornerPreference FormCornerPreference
     {
         get => Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
@@ -2221,7 +2297,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
         if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
@@ -2230,9 +2305,7 @@ public partial class Form : ContainerControl
         }
     }
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
-#pragma warning restore WFO5001
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -2275,7 +2348,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormBorderColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormBorderColor
     {
         get => Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
@@ -2303,7 +2375,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
         if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
@@ -2337,7 +2408,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionBackColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
@@ -2366,7 +2436,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2400,7 +2469,6 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionTextColor
     {
         get => Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
@@ -2429,7 +2497,6 @@ public partial class Form : ContainerControl
     /// <param name="e">
     ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
     /// </param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionTextColorChanged] is EventHandler eventHandler)
@@ -2608,7 +2675,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2620,7 +2686,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2632,7 +2697,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2644,7 +2708,6 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
@@ -3368,7 +3431,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    // Deactivates active MDI child and temporarily marks it as unfocusable,
+    // Deactivates active MDI child and temporarily marks it as un-focusable,
     // so that WM_SETFOCUS sent to MDIClient does not activate that child.
     private void DeactivateMdiChild()
     {
@@ -3459,17 +3522,11 @@ public partial class Form : ContainerControl
             Properties.RemoveValue(s_propDefaultButton);
             Properties.RemoveValue(s_propActiveMdiChild);
 
-            if (MdiWindowListStrip is not null)
-            {
-                MdiWindowListStrip.Dispose();
-                MdiWindowListStrip = null;
-            }
+            MdiWindowListStrip?.Dispose();
+            MdiWindowListStrip = null;
 
-            if (MdiControlStrip is not null)
-            {
-                MdiControlStrip.Dispose();
-                MdiControlStrip = null;
-            }
+            MdiControlStrip?.Dispose();
+            MdiControlStrip = null;
 
             if (MainMenuStrip is not null)
             {
@@ -3494,11 +3551,8 @@ public partial class Form : ContainerControl
                 }
             }
 
-            if (_smallIcon is not null)
-            {
-                _smallIcon.Dispose();
-                _smallIcon = null;
-            }
+            _smallIcon?.Dispose();
+            _smallIcon = null;
 
             base.Dispose(disposing);
             _ctlClient = null;
@@ -4136,29 +4190,25 @@ public partial class Form : ContainerControl
         _formStateEx[s_formStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
         base.OnHandleCreated(e);
 
-        if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
-        }
-
-        if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
-        }
-
-        if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
-        {
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
-        }
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
-        {
-            SetFormCornerPreferenceInternal(cornerPreference.Value);
-        }
-#pragma warning restore WFO5001
-
         UpdateLayered();
+
+        // Normally, we update the form's title properties here after the handle is created.
+        // However, during handle recreation (ReCreateHandle), this method is invoked as part
+        // of the base class chain—before the new handle is fully established and before
+        // other required updates are complete. In that scenario, SetFormTitleProperties
+        // must be called *after* all recreation steps have finished, which is handled by a
+        // dedicated call at the end of ReCreateHandle. Therefore, to avoid updating the
+        // title properties too early or twice, we skip the call here if we are in the
+        // middle of handle recreation.
+        if (!_inRecreateHandle)
+        {
+            SetFormTitleProperties();
+        }
+
+        if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
+        {
+            SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        }
     }
 
     /// <summary>
@@ -4268,16 +4318,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (Application.IsDarkModeEnabled)
-            {
-                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-            }
-#pragma warning restore WFO5001
-
+            // Finally fire the new OnShown(unless the form has already been closed).
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
     }
@@ -4454,7 +4497,7 @@ public partial class Form : ContainerControl
         if (e.DeviceDpiNew != e.DeviceDpiOld)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
-            _oldDeviceDpi = e.DeviceDpiOld;
+            OriginalDeviceDpiInternal = e.DeviceDpiOld;
 
             // call any additional handlers
             ((DpiChangedEventHandler?)Events[s_dpiChangedEvent])?.Invoke(this, e);
@@ -4488,6 +4531,7 @@ public partial class Form : ContainerControl
                     _processingDpiChanged = true;
                 }
 
+                UpdateWindowIcon(redrawFrame: true, dpi: e.DeviceDpiNew);
                 ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
             }
             finally
@@ -4516,8 +4560,8 @@ public partial class Form : ContainerControl
     {
         DefWndProc(ref m);
 
-        DpiChangedEventArgs e = new(_deviceDpi, m);
-        _deviceDpi = e.DeviceDpiNew;
+        DpiChangedEventArgs e = new(DeviceDpiInternal, m);
+        DeviceDpiInternal = e.DeviceDpiNew;
 
         OnDpiChanged(e);
     }
@@ -4569,7 +4613,7 @@ public partial class Form : ContainerControl
 
         Size desiredSize = default;
         if ((_dpiFormSizes is not null && _dpiFormSizes.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
-            || OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            || OnGetDpiScaledSize(DeviceDpiInternal, m.WParamInternal.LOWORD, ref desiredSize))
         {
             SIZE* size = (SIZE*)m.LParamInternal;
             size->cx = desiredSize.Width;
@@ -4907,7 +4951,40 @@ public partial class Form : ContainerControl
             Debug.Assert(result);
         }
 
+        SetFormTitleProperties();
+
+        if (FormScreenCaptureMode != ScreenCaptureMode.Allow)
+        {
+            SetScreenCaptureModeInternal(FormScreenCaptureMode);
+        }
+
         GC.KeepAlive(this);
+    }
+
+    private void SetFormTitleProperties()
+    {
+        if (TopLevel && IsHandleCreated)
+        {
+            if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
+            }
+
+            if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
+            {
+                SetFormCornerPreferenceInternal(cornerPreference.Value);
+            }
+        }
     }
 
     /// <summary>
@@ -5461,6 +5538,43 @@ public partial class Form : ContainerControl
     ///   There is no need to marshal the call to the UI thread manually if the call
     ///   originates from a different thread than the UI-Thread. This is handled automatically.
     ///  </para>
+    ///  <para>
+    ///   The returned <see cref="Task"/> carries a <see cref="WeakReference{T}"/> to the <see cref="Form"/> in its
+    ///   <see cref="Task.AsyncState"/> property. This is particularly useful when managing multiple forms (such as tool windows)
+    ///   in a task-based window manager, as it eliminates the need for a separate lookup table to synchronize between tasks and forms.
+    ///  </para>
+    ///  <para>
+    ///   The following example shows how to retrieve the form from a completed task when managing multiple forms:
+    ///  </para>
+    ///  <code>
+    ///  // Wait for any of the forms to complete
+    ///  Task completedShowAsyncTask = await Task
+    ///      .WhenAny(formAsyncTasks)
+    ///      .ConfigureAwait(false);
+    ///
+    ///  // Retrieve the form using an extension method
+    ///  if (completedShowAsyncTask.ToForm() is Form form)
+    ///  {
+    ///      // Handle the completed form
+    ///  }
+    ///  </code>
+    ///  <para>
+    ///   Where the extension method can be implemented as:
+    ///  </para>
+    ///  <code>
+    ///  public static Form? ToForm(this Task task)
+    ///  {
+    ///      ArgumentNullException.ThrowIfNull(task);
+    ///
+    ///      if (task.AsyncState is WeakReference&lt;Form&gt; weakRefToForm
+    ///          &amp;&amp; weakRefToForm.TryGetTarget(out Form? form))
+    ///      {
+    ///          return form;
+    ///      }
+    ///
+    ///      return null;
+    ///  }
+    ///  </code>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
     ///  <para>Thrown if:</para>
@@ -5479,19 +5593,21 @@ public partial class Form : ContainerControl
     /// <exception cref="ArgumentException">
     ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public async Task ShowAsync(IWin32Window? owner = null)
+    public Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
         // multiple calls to ShowAsync from interfering with each other.
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _nonModalFormCompletion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            _nonModalFormCompletion = new(
+                new WeakReference<Form>(this),
+                TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5504,20 +5620,7 @@ public partial class Form : ContainerControl
 
         syncContext.Post((state) => ShowFormInternally(owner), null);
 
-        // Wait until the form is closed or disposed.
-        try
-        {
-            await _nonModalFormCompletion.Task.ConfigureAwait(true);
-        }
-        catch (Exception ex)
-        {
-            // We need to rethrow the exception on the caller's context.
-            Application.OnThreadException(ex);
-        }
-        finally
-        {
-            _nonModalFormCompletion = null;
-        }
+        return _nonModalFormCompletion.Task;
 
         void ShowFormInternally(IWin32Window? owner)
         {
@@ -5529,6 +5632,7 @@ public partial class Form : ContainerControl
             catch (Exception ex)
             {
                 _nonModalFormCompletion.TrySetException(ex);
+                _nonModalFormCompletion = null;
             }
         }
     }
@@ -5749,7 +5853,6 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if no
     ///  <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
 
     /// <summary>
@@ -5790,19 +5893,21 @@ public partial class Form : ContainerControl
     ///  Thrown if the form is already displayed asynchronously or if
     ///  no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
     {
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            if (_nonModalFormCompletion is not null
+                || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _modalFormCompletion = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _modalFormCompletion = new TaskCompletionSource<DialogResult>(
+                state: new WeakReference<Form>(this),
+                creationOptions: TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5824,11 +5929,11 @@ public partial class Form : ContainerControl
             try
             {
                 DialogResult result = ShowDialog(owner);
-                modalFormCompletion.SetResult(result);
+                modalFormCompletion.TrySetResult(result);
             }
             catch (Exception ex)
             {
-                modalFormCompletion.SetException(ex);
+                modalFormCompletion.TrySetException(ex);
             }
             finally
             {
@@ -6324,11 +6429,16 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Updates the window icon.
     /// </summary>
-    private unsafe void UpdateWindowIcon(bool redrawFrame)
+    private unsafe void UpdateWindowIcon(bool redrawFrame, int dpi = 0)
     {
         if (IsHandleCreated)
         {
             Icon? icon;
+
+            if (dpi == 0)
+            {
+                dpi = DeviceDpi;
+            }
 
             // Preserve Win32 behavior by keeping the icon we set NULL if
             // the user hasn't specified an icon and we are a dialog frame.
@@ -6343,15 +6453,17 @@ public partial class Form : ContainerControl
 
             if (icon is not null)
             {
-                if (_smallIcon is null)
+                try
                 {
-                    try
-                    {
-                        _smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
-                    }
-                    catch
-                    {
-                    }
+                    // As we dispose the _smallIcon in multiple places, we'd need to track when we've
+                    // actually created a scaled icon to know when we should free it selectively (so we
+                    // don't free user provided Icons. For now, just always create a new scaled icon.
+                    _smallIcon?.Dispose();
+                    _smallIcon = null;
+                    _smallIcon = ScaleHelper.ScaleSmallIconToDpi(icon, dpi, alwaysCreateNew: true);
+                }
+                catch
+                {
                 }
 
                 if (_smallIcon is not null)
@@ -6870,11 +6982,8 @@ public partial class Form : ContainerControl
         // that point our handle is not actually destroyed so
         // destroying our parent actually causes a recursive
         // WM_DESTROY.
-        if (_ownerWindow is not null)
-        {
-            _ownerWindow.DestroyHandle();
-            _ownerWindow = null;
-        }
+        _ownerWindow?.DestroyHandle();
+        _ownerWindow = null;
 
         if (Modal && _dialogResult == DialogResult.None)
         {

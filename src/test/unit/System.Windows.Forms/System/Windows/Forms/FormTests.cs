@@ -9,7 +9,7 @@ using Moq;
 
 namespace System.Windows.Forms.Tests;
 
-public class FormTests
+public partial class FormTests
 {
     [WinFormsFact]
     public void Form_Ctor_Default()
@@ -165,6 +165,7 @@ public class FormTests
         Assert.False(control.VScroll);
         Assert.Equal(300, control.Width);
         Assert.Equal(FormWindowState.Normal, control.WindowState);
+        Assert.Equal(ScreenCaptureMode.Allow, control.FormScreenCaptureMode);
 
         Assert.False(control.IsHandleCreated);
     }
@@ -1029,6 +1030,43 @@ public class FormTests
 
         Assert.Equal(new Point(20, 21), form.Location);
         Assert.Equal(new Size(300, 310), form.Size);
+    }
+
+    [WinFormsFact]
+    public void Form_FormScreenCaptureMode_ThrowIfFormIsNotTopLevel()
+    {
+        if (!OsVersion.IsWindows11_OrGreater())
+        {
+            return;
+        }
+
+        using Form mainForm = new();
+        mainForm.Show();
+
+        using Form formAsControl = new()
+        {
+            TopLevel = false
+        };
+
+        // formIsControl is now a hybrid between control and MDI window.
+        mainForm.Controls.Add(formAsControl);
+        mainForm.Show();
+
+        // Assert that the form is not top-level and cannot be used for screen capture mode,
+        // because it would throw:
+        Assert.Throws<InvalidOperationException>(
+            () => formAsControl.FormScreenCaptureMode = ScreenCaptureMode.HideContent);
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(3)]
+    [InlineData(int.MinValue)]
+    [InlineData(int.MaxValue)]
+    public void Form_FormScreenCaptureMode_TestInvalidEnumValues(int invalidValue)
+    {
+        using Form form = new();
+        Assert.Throws<InvalidEnumArgumentException>(() => form.FormScreenCaptureMode = (ScreenCaptureMode)invalidValue);
     }
 
     [WinFormsTheory]
@@ -2619,6 +2657,69 @@ public class FormTests
     }
 
     [WinFormsFact]
+    public async Task Form_ShowAsync_GeneralTaskTests()
+    {
+        using Form mainForm = new();
+
+        Task frmTask = mainForm.ShowAsync();
+
+        Task closerTask = Task.Run(async () =>
+        {
+            await Task.Delay(100).ConfigureAwait(false);
+            mainForm.Close();
+        });
+
+        await Task.WhenAll(frmTask, closerTask)
+            .ConfigureAwait(false);
+    }
+
+    [WinFormsFact]
+    public async Task Form_ShowAsync_GetFormFromReturnedTask()
+    {
+        Dictionary<Task, Form> formControlTasks = [];
+        Random random = new();
+
+        for (int i = 0; i < 5; i++)
+        {
+            Form form = new()
+            {
+                Text = $"Form {i}",
+                Size = new Size(200, 200),
+            };
+
+            form.Load += async (sender, e) =>
+            {
+                await Task.Delay(random.Next(20, 100))
+                    .ConfigureAwait(true);
+
+                ((Form)sender).Close();
+            };
+
+            formControlTasks.Add(
+                key: form.ShowAsync(),
+                value: form);
+        }
+
+        while (formControlTasks.Count > 0)
+        {
+            Task finishedTask = await Task
+                .WhenAny(formControlTasks.Keys)
+                .ConfigureAwait(false);
+
+            if (finishedTask.ToForm() is Form form)
+            {
+                Assert.Same(
+                    // The form, which we got through the task's AsyncState.
+                    form,
+                    // The form, which got through the lookup.
+                    formControlTasks[finishedTask]);
+            }
+
+            formControlTasks.Remove(finishedTask);
+        }
+    }
+
+    [WinFormsFact]
     public void Form_ParentThenSetShowInTaskbarToFalse()
     {
         // Regression test for https://github.com/dotnet/winforms/issues/8803
@@ -2645,6 +2746,21 @@ public class FormTests
         var message = Message.Create(HWND.Null, PInvokeCore.WM_QUERYENDSESSION, wparam: default, lparam: default);
         form.WndProc(ref message);
         Assert.True((BOOL)message.ResultInternal);
+    }
+
+    [WinFormsFact]
+    public void Form_DoesNot_DisposeUserIcon()
+    {
+        // https://github.com/dotnet/winforms/issues/13963
+        using Form form = new();
+        int dpi = form.DeviceDpi;
+        using Icon icon = new(typeof(Form), "wfc");
+        int smallDpi = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON, (uint)dpi);
+        using Icon smallIcon = new(icon, new Size(smallDpi, smallDpi));
+        form.Icon = smallIcon;
+        form.Show();
+        form.Close();
+        smallIcon.Handle.Should().NotBe(0);
     }
 
     public partial class ParentedForm : Form

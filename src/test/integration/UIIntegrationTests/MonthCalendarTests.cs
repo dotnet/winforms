@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.UITests;

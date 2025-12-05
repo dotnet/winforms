@@ -7033,10 +7033,16 @@ Stack trace where the illegal operation occurred was:
   <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
     <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
   </data>
-  <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+  <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject" xml:space="preserve">
     <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
   </data>
-  <data name="NotSupportedExceptionOnClipboard">
+  <data name="NotSupportedExceptionOnClipboard" xml:space="preserve">
     <value>Clipboard contains a 'NotSupportedException' that indicates that write operation failed. '{0}'.</value>
+  </data>
+  <data name="FormScreenCaptureModeDescr" xml:space="preserve">
+    <value>Gets or sets the behavior for preventing screen capture/video recording of the form's content via screen capture applications based on the Windows APIs.</value>
+  </data>
+  <data name="FormScreenCaptureModeRequiresTopLevel" xml:space="preserve">
+    <value>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using Microsoft.Office;
@@ -22,9 +23,7 @@ public sealed partial class Application
         private bool _inThreadException;
         private bool _filterSnapshotValid;
 
-        private static readonly Dictionary<uint, ThreadContext> s_contextHash = [];
-
-        private static readonly Lock s_lock = new();
+        private static readonly ConcurrentDictionary<uint, ThreadContext> s_contextHash = [];
         private readonly Lock _marshallingControlLock = new();
 
         private static int s_totalMessageLoopCount;
@@ -87,11 +86,7 @@ public sealed partial class Application
             _id = PInvokeCore.GetCurrentThreadId();
             _messageLoopCount = 0;
             t_currentThreadContext = this;
-
-            lock (s_lock)
-            {
-                s_contextHash[_id] = this;
-            }
+            s_contextHash[_id] = this;
         }
 
         public ApplicationContext? ApplicationContext { get; private set; }
@@ -316,10 +311,7 @@ public sealed partial class Application
                 }
                 finally
                 {
-                    lock (s_lock)
-                    {
-                        s_contextHash.Remove(_id);
-                    }
+                    s_contextHash.Remove(_id, out _);
 
                     if (t_currentThreadContext == this)
                     {
@@ -439,27 +431,17 @@ public sealed partial class Application
         /// <summary>
         ///  Exits the program by disposing of all thread contexts and message loops.
         /// </summary>
-        internal static void ExitApplication() => ExitCommon(disposing: true);
-
-        private static void ExitCommon(bool disposing)
+        internal static void ExitApplication()
         {
-            lock (s_lock)
+            foreach ((_, var threadContext) in s_contextHash)
             {
-                if (s_contextHash is not null)
+                if (threadContext.ApplicationContext is ApplicationContext applicationContext)
                 {
-                    ThreadContext[] contexts = new ThreadContext[s_contextHash.Values.Count];
-                    s_contextHash.Values.CopyTo(contexts, 0);
-                    for (int i = 0; i < contexts.Length; ++i)
-                    {
-                        if (contexts[i].ApplicationContext is ApplicationContext context)
-                        {
-                            context.ExitThread();
-                        }
-                        else
-                        {
-                            contexts[i].Dispose(disposing);
-                        }
-                    }
+                    applicationContext.ExitThread();
+                }
+                else
+                {
+                    threadContext.Dispose(disposing: true);
                 }
             }
         }
@@ -510,9 +492,15 @@ public sealed partial class Application
         /// </summary>
         internal static ThreadContext? FromId(uint id)
         {
-            if (!s_contextHash.TryGetValue(id, out ThreadContext? context) && id == PInvokeCore.GetCurrentThreadId())
+            if (s_contextHash.TryGetValue(id, out ThreadContext? context))
+            {
+                return context;
+            }
+
+            if (id == PInvokeCore.GetCurrentThreadId())
             {
                 context = Create();
+                Debug.Assert(context._id == id);
             }
 
             return context;

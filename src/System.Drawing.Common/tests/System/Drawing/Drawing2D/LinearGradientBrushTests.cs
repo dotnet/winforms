@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.InteropServices;
+
 namespace System.Drawing.Drawing2D.Tests;
 
 public class LinearGradientBrushTests
@@ -64,10 +66,10 @@ public class LinearGradientBrushTests
     [Theory]
     [InlineData(0, 0)]
     [InlineData(1, 1)]
-    public void Ctor_EqualPoints_ThrowsOutOfMemoryException(int x, int y)
+    public void Ctor_EqualPoints_ThrowsExternalException(int x, int y)
     {
-        Assert.Throws<OutOfMemoryException>(() => new LinearGradientBrush(new Point(x, y), new Point(x, y), Color.Fuchsia, Color.GhostWhite));
-        Assert.Throws<OutOfMemoryException>(() => new LinearGradientBrush(new PointF(x, y), new PointF(x, y), Color.Fuchsia, Color.GhostWhite));
+        Assert.Throws<ExternalException>(() => new LinearGradientBrush(new Point(x, y), new Point(x, y), Color.Fuchsia, Color.GhostWhite));
+        Assert.Throws<ExternalException>(() => new LinearGradientBrush(new PointF(x, y), new PointF(x, y), Color.Fuchsia, Color.GhostWhite));
     }
 
     public static IEnumerable<object[]> Ctor_Rectangle_LinearGradientMode_TestData()

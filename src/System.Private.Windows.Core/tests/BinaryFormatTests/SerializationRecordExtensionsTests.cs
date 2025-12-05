@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Nrbf.Tests;
 
 public class SerializationRecordExtensionsTests
 {
-    public static IEnumerable<object[]> TryGetFrameworkObject_SupportedObjects_TestData =>
+    public static IEnumerable<ITheoryDataRow> TryGetFrameworkObject_SupportedObjects_TestData =>
         BinaryFormatWriterTests.TryWriteFrameworkObject_SupportedObjects_TestData;
 
     [Theory]
@@ -50,7 +50,7 @@ public class SerializationRecordExtensionsTests
         }
     }
 
-    public static IEnumerable<object[]?> TryGetDrawingPrimitives_SupportedObjects_TestData =>
+    public static IEnumerable<TheoryDataRow<object>> TryGetDrawingPrimitives_SupportedObjects_TestData =>
         BinaryFormatWriterTests.DrawingPrimitives_TestData;
 
     [Theory]

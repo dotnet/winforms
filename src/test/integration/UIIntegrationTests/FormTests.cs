@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 
@@ -152,5 +151,27 @@ public class FormTests : ControlTestBase
                 return form;
             },
             testDriverAsync);
+    }
+
+    [WinFormsFact]
+    public void Form_MinimumSize_DoesNotChangeDisplayOrder()
+    {
+        // Initialize Form1 and Form2.
+        using Form form1 = new Form { Text = "Form1" };
+        using Form form2 = new Form { Text = "Form2" };
+
+        // Display the forms.
+        form1.Show();
+        form2.Show();
+
+        // Set initial hierarchy: Form2 should be displayed in front of Form1.
+        form2.BringToFront();
+        Assert.True(form2.TopMost || form2.Focused, "Form2 should be displayed in front of Form1");
+
+        // Set the MinimumSize property of Form1.
+        form1.MinimumSize = new Size(300, 300);
+
+        // Verify the hierarchy remains unchanged.
+        Assert.True(form2.TopMost || form2.Focused, "Form2 should still be displayed in front after setting MinimumSize");
     }
 }

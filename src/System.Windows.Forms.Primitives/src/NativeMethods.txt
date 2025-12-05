@@ -222,10 +222,12 @@ GetUpdateRgn
 GetUserObjectInformation
 GetViewportExtEx
 GetWindow
+GetWindowDisplayAffinity
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWindowTheme
 GetWorldTransform
+GetWindowRgn
 GMR_*
 HC_*
 HDHITTESTINFO
@@ -561,6 +563,7 @@ SetThreadDpiHostingBehavior
 SetTimer
 SetViewportExtEx
 SetViewportOrgEx
+SetWindowDisplayAffinity
 SetWindowExtEx
 SetWindowOrgEx
 SetWindowPlacement

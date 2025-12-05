@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 

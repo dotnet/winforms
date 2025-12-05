@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Controls.RichEdit;
-using Xunit.Abstractions;
 using static Interop;
 
 namespace System.Windows.Forms.UITests;

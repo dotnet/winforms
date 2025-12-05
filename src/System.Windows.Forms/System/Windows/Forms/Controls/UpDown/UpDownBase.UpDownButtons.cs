@@ -2,16 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms.VisualStyles;
+using static System.Windows.Forms.ControlPaint;
 
 namespace System.Windows.Forms;
 
 public abstract partial class UpDownBase
 {
     /// <summary>
-    ///  A control representing the pair of buttons on the end of the upDownEdit control. This class handles
-    ///  drawing the updown buttons, and detecting mouse actions on these buttons. Acceleration on the buttons is
-    ///  handled. The control sends UpDownEventArgss to the parent UpDownBase class when a button is pressed, or
+    ///  A control representing the pair of buttons on the end of the up-down edit control. This class handles
+    ///  drawing the up-down buttons, and detecting mouse actions on these buttons. Acceleration on the buttons is
+    ///  handled. The control sends UpDownEventArgs to the parent UpDownBase class when a button is pressed, or
     ///  when the acceleration determines that another event should be generated.
     /// </summary>
     internal partial class UpDownButtons : Control
@@ -28,22 +30,23 @@ public abstract partial class UpDownBase
         private Timer? _timer; // generates UpDown events
         private int _timerInterval; // milliseconds between events
 
+        private Bitmap? _cachedBitmap;
+
         private bool _doubleClickFired;
 
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="UpDownButtons"/> class.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="UpDownBase"/> control.</param>
         internal UpDownButtons(UpDownBase parent) : base()
         {
             SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
             SetStyle(ControlStyles.Selectable, false);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
             _parent = parent;
         }
 
         /// <summary>
-        ///  Adds a handler for the updown button event.
+        ///  Adds a handler for the UpDown button event.
         /// </summary>
         public event UpDownEventHandler? UpDown
         {
@@ -51,9 +54,10 @@ public abstract partial class UpDownBase
             remove => _upDownEventHandler -= value;
         }
 
-        /// <remarks>
-        ///  <para>Called when the mouse button is pressed - we need to start spinning the value of the updown.</para>
-        /// </remarks>
+        /// <summary>
+        ///  Called when the mouse button is pressed - we need to start spinning the value of the up-down control.
+        /// </summary>
+        /// <param name="e">The mouse event arguments.</param>
         private void BeginButtonPress(MouseEventArgs e)
         {
             int half_height = Size.Height / 2;
@@ -77,16 +81,17 @@ public abstract partial class UpDownBase
             // Generate UpDown event
             OnUpDown(new UpDownEventArgs((int)_pushed));
 
-            // Start the timer for new updown events
+            // Start the timer for new up-down events
             StartTimer();
         }
 
+        /// <inheritdoc/>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new UpDownButtonsAccessibleObject(this);
 
-        /// <remarks>
-        ///  <para>Called when the mouse button is released - we need to stop spinning the value of the updown.</para>
-        /// </remarks>
+        /// <summary>
+        ///  Called when the mouse button is released - we need to stop spinning the value of the up-down control.
+        /// </summary>
         private void EndButtonPress()
         {
             _pushed = ButtonID.None;
@@ -104,9 +109,10 @@ public abstract partial class UpDownBase
 
         /// <summary>
         ///  Handles detecting mouse hits on the buttons. This method detects
-        ///  which button was hit (up or down), fires a updown event, captures
-        ///  the mouse, and starts a timer for repeated updown events.
+        ///  which button was hit (up or down), fires an up-down event, captures
+        ///  the mouse, and starts a timer for repeated up-down events.
         /// </summary>
+        /// <param name="e">The mouse event arguments.</param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // Begin spinning the value
@@ -132,9 +138,10 @@ public abstract partial class UpDownBase
             _parent.OnMouseDown(_parent.TranslateMouseEvent(this, e));
         }
 
+        /// <inheritdoc/>
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            // If the mouse is captured by the buttons (i.e. an updown button
+            // If the mouse is captured by the buttons (i.e. an up-down button
             // was pushed, and the mouse button has not yet been released),
             // determine the new state of the buttons depending on where
             // the mouse pointer has moved.
@@ -153,7 +160,7 @@ public abstract partial class UpDownBase
                 // Test if the mouse has moved outside the button area
                 if (rect.Contains(e.X, e.Y))
                 {
-                    // Inside button, repush the button if necessary
+                    // Inside button, re-push the button if necessary
                     if (_pushed != _captured)
                     {
                         // Restart the timer
@@ -167,11 +174,11 @@ public abstract partial class UpDownBase
                 {
                     // Outside button
                     //
-                    // Retain the capture, but pop the button up whilst the mouse
+                    // Retain the capture, but pop the button up while the mouse
                     // remains outside the button and the mouse button remains pressed.
                     if (_pushed != ButtonID.None)
                     {
-                        // Stop the timer for updown events
+                        // Stop the timer for up-down events
                         StopTimer();
 
                         _pushed = ButtonID.None;
@@ -208,6 +215,7 @@ public abstract partial class UpDownBase
         /// <summary>
         ///  Handles detecting when the mouse button is released.
         /// </summary>
+        /// <param name="e">The mouse event arguments.</param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (!_parent.ValidationCancelled && e.Button == MouseButtons.Left)
@@ -243,6 +251,7 @@ public abstract partial class UpDownBase
             _parent.OnMouseUp(me);
         }
 
+        /// <inheritdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             _mouseOver = ButtonID.None;
@@ -254,12 +263,44 @@ public abstract partial class UpDownBase
         /// <summary>
         ///  Handles painting the buttons on the control.
         /// </summary>
+        /// <param name="e">The paint event arguments.</param>
+
         protected override void OnPaint(PaintEventArgs e)
         {
             int half_height = ClientSize.Height / 2;
 
             // Draw the up and down buttons
-            if (Application.RenderWithVisualStyles)
+            if (Application.IsDarkModeEnabled || !Application.RenderWithVisualStyles)
+            {
+                Graphics cachedGraphics = EnsureCachedBitmap(
+                    _parent._defaultButtonsWidth,
+                    ClientSize.Height);
+
+                DrawModernControlButton(
+                    cachedGraphics,
+                    new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
+                    ModernControlButtonStyle.Up | ModernControlButtonStyle.SingleBorder,
+                    _pushed == ButtonID.Up
+                        ? ModernControlButtonState.Pressed
+                        : (Enabled ? (_mouseOver == ButtonID.Up ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
+                                   : ModernControlButtonState.Disabled),
+                    true);
+
+                DrawModernControlButton(
+                    cachedGraphics,
+                    new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
+                    ModernControlButtonStyle.Down | ModernControlButtonStyle.SingleBorder,
+                    _pushed == ButtonID.Down
+                        ? ModernControlButtonState.Pressed
+                        : (Enabled ? (_mouseOver == ButtonID.Down ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
+                                   : ModernControlButtonState.Disabled),
+                    true);
+
+                e.GraphicsInternal.DrawImageUnscaled(
+                    _cachedBitmap,
+                    new Point(0, 0));
+            }
+            else
             {
                 VisualStyleRenderer vsr = new(_mouseOver == ButtonID.Up
                     ? VisualStyleElement.Spin.Up.Hot
@@ -300,20 +341,6 @@ public abstract partial class UpDownBase
                     new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                     HWNDInternal);
             }
-            else
-            {
-                ControlPaint.DrawScrollButton(
-                    e.GraphicsInternal,
-                    new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                    ScrollButton.Up,
-                    _pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
-
-                ControlPaint.DrawScrollButton(
-                    e.GraphicsInternal,
-                    new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                    ScrollButton.Down,
-                    _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
-            }
 
             if (half_height != (ClientSize.Height + 1) / 2)
             {
@@ -334,11 +361,44 @@ public abstract partial class UpDownBase
         }
 
         /// <summary>
+        ///  Ensures that the Bitmap has the correct size and returns the Graphics object from that Bitmap.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        [MemberNotNull(nameof(_cachedBitmap))]
+        private Graphics EnsureCachedBitmap(int width, int height)
+        {
+            if (_cachedBitmap is null || _cachedBitmap.Size != new Size(width, height))
+            {
+                _cachedBitmap?.Dispose();
+                _cachedBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            }
+
+            return Graphics.FromImage(_cachedBitmap);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                _cachedBitmap?.Dispose();
+                _cachedBitmap = null;
+                _timer?.Dispose();
+                _timer = null;
+                _upDownEventHandler = null;
+            }
+        }
+
+        /// <summary>
         ///  Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
         /// </summary>
+        /// <param name="upevent">The up-down event arguments.</param>
         protected virtual void OnUpDown(UpDownEventArgs upevent)
             => _upDownEventHandler?.Invoke(this, upevent);
 
+        /// <inheritdoc/>
         internal override void ReleaseUiaProvider(HWND handle)
         {
             if (IsAccessibilityObjectCreated
@@ -352,7 +412,7 @@ public abstract partial class UpDownBase
         }
 
         /// <summary>
-        ///  Starts the timer for generating updown events
+        ///  Starts the timer for generating up-down events.
         /// </summary>
         protected void StartTimer()
         {
@@ -373,7 +433,7 @@ public abstract partial class UpDownBase
         }
 
         /// <summary>
-        ///  Stops the timer for generating updown events
+        ///  Stops the timer for generating up-down events.
         /// </summary>
         protected void StopTimer()
         {
@@ -387,11 +447,14 @@ public abstract partial class UpDownBase
             _parent.OnStopTimer();
         }
 
+        /// <inheritdoc/>
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///  Generates updown events when the timer calls this function.
+        ///  Generates up-down events when the timer calls this function.
         /// </summary>
+        /// <param name="source">The source of the event.</param>
+        /// <param name="args">The event arguments.</param>
         private void TimerHandler(object? source, EventArgs args)
         {
             // Make sure we've got mouse capture
@@ -401,7 +464,7 @@ public abstract partial class UpDownBase
                 return;
             }
 
-            // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and
+            // OnUpDown method calls customer's ValueChanged event handler which might enter the message loop and
             // process the mouse button up event, which results in timer being disposed
             OnUpDown(new UpDownEventArgs((int)_pushed));
 

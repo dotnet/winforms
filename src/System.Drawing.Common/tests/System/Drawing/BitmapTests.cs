@@ -25,7 +25,6 @@
 
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Microsoft.DotNet.XUnitExtensions;
 
 namespace System.Drawing.Tests;
 
@@ -434,11 +433,11 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(0, 1, 1, 3)]
     [InlineData(4, 1, 1, 1)]
     [InlineData(1, 4, 1, 1)]
-    public void Clone_InvalidRect_ThrowsOutOfMemoryException(int x, int y, int width, int height)
+    public void Clone_InvalidRect_ThrowsExternalException(int x, int y, int width, int height)
     {
         using Bitmap bitmap = new(3, 3);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(x, y, width, height), bitmap.PixelFormat));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(x, y, width, height), bitmap.PixelFormat));
     }
 
     [Theory]
@@ -450,19 +449,19 @@ public class BitmapTests : FileCleanupTestBase
     [InlineData(PixelFormat.Extended)]
     [InlineData(PixelFormat.Format16bppGrayScale)]
     [InlineData(PixelFormat.Canonical)]
-    public void Clone_InvalidPixelFormat_ThrowsOutOfMemoryException(PixelFormat format)
+    public void Clone_InvalidPixelFormat_ThrowsExternalException(PixelFormat format)
     {
         using Bitmap bitmap = new(1, 1);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), format));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), format));
     }
 
     [Fact]
-    public void Clone_GrayscaleFormat_ThrowsOutOfMemoryException()
+    public void Clone_GrayscaleFormat_ThrowsExternalException()
     {
         using Bitmap bitmap = new(1, 1, PixelFormat.Format16bppGrayScale);
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
-        Assert.Throws<OutOfMemoryException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new Rectangle(0, 0, 1, 1), PixelFormat.Format32bppArgb));
+        Assert.Throws<ExternalException>(() => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
     }
 
     [Fact]
@@ -727,13 +726,13 @@ public class BitmapTests : FileCleanupTestBase
     {
         if (PlatformDetection.IsWindows7)
         {
-            throw new SkipTestException("GDI+ 1.1 is not supported");
+            Assert.Skip("GDI+ 1.1 is not supported");
         }
 
         if (PlatformDetection.IsArmOrArm64Process)
         {
             // https://github.com/dotnet/winforms/issues/8817
-            throw new SkipTestException("Arm precision");
+            Assert.Skip("Arm precision");
         }
 
         string output = $"{GetTestFilePath()}.png";
@@ -1057,7 +1056,7 @@ public class BitmapTests : FileCleanupTestBase
         yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb, 300, 65538 };
     }
 
-    [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Theory(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     [MemberData(nameof(LockBits_TestData))]
     public void LockBits_Invoke_Success(Bitmap bitmap, Rectangle rectangle, ImageLockMode lockMode, PixelFormat pixelFormat, int expectedStride, int expectedReserved)
     {
@@ -1459,7 +1458,7 @@ public class BitmapTests : FileCleanupTestBase
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Size);
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void LockBits_Marshalling_Success()
     {
         Color red = Color.FromArgb(Color.Red.ToArgb());

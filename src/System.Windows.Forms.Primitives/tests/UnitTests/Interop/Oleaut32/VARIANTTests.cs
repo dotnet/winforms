@@ -31,7 +31,7 @@ public unsafe class VARIANTTests
             data = new() { boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE }
         };
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is32bit))]
     public void VARIANT_Sizeof_InvokeX86_ReturnsExpected()
     {
         if (Environment.Is64BitProcess)
@@ -43,7 +43,7 @@ public unsafe class VARIANTTests
         Assert.Equal(16, sizeof(VARIANT));
     }
 
-    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(ArchitectureDetection), SkipUnless = nameof(ArchitectureDetection.Is64bit))]
     public void VARIANT_Sizeof_InvokeX64_ReturnsExpected()
     {
         if (!Environment.Is64BitProcess)

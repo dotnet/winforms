@@ -11,7 +11,9 @@ public class MouseTests
 
     public static bool NoMouseWheelPresent => NoMousePresent || !SystemInformation.MouseWheelPresent;
 
-    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
+    public static bool MousePresentAndMouseWheelPresent => SystemInformation.MousePresent && SystemInformation.MouseWheelPresent;
+
+    [Fact(Skip = "Condition not met", SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
     public void Mouse_ButtonsSwapped_Get_ReturnsExpected()
     {
         Mouse mouse = new();
@@ -19,7 +21,7 @@ public class MouseTests
         Assert.Equal(mouse.ButtonsSwapped, mouse.ButtonsSwapped);
     }
 
-    [ConditionalFact(nameof(NoMousePresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMousePresent))]
     public void Mouse_ButtonsSwapped_GetNoMousePresent_ThrowsInvalidOperationException()
     {
         if (NoMousePresent)
@@ -29,7 +31,7 @@ public class MouseTests
         }
     }
 
-    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(SystemInformation), SkipUnless = nameof(SystemInformation.MousePresent))]
     public void Mouse_WheelExists_Get_ReturnsExpected()
     {
         Mouse mouse = new();
@@ -37,7 +39,7 @@ public class MouseTests
         Assert.Equal(mouse.WheelExists, mouse.WheelExists);
     }
 
-    [ConditionalFact(nameof(NoMousePresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMousePresent))]
     public void Mouse_WheelExists_GetNoMousePresent_ThrowsInvalidOperationException()
     {
         if (NoMousePresent)
@@ -47,7 +49,7 @@ public class MouseTests
         }
     }
 
-    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent), nameof(SystemInformation.MouseWheelPresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(MousePresentAndMouseWheelPresent))]
     public void Mouse_WheelScrollLines_Get_ReturnsExpected()
     {
         if (SystemInformation.MouseWheelPresent)
@@ -58,7 +60,7 @@ public class MouseTests
         }
     }
 
-    [ConditionalFact(nameof(NoMouseWheelPresent))]
+    [Fact(Skip = "Condition not met", SkipUnless = nameof(NoMouseWheelPresent))]
     public void Mouse_WheelScrollLines_GetNoMouseWheelPresent_ThrowsInvalidOperationException()
     {
         if (NoMouseWheelPresent)

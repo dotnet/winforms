@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.IO.Compression;
-using System.Runtime.Serialization;
 using System.Private.Windows.BinaryFormat;
+using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;

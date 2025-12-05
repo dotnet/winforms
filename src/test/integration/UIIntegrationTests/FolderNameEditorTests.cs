@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Windows.Forms.Design;
 using FluentAssertions;
 using Moq;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 

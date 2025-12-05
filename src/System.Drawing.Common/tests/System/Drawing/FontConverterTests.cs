@@ -79,7 +79,7 @@ public class FontConverterTest
         Assert.Null(font);
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotBuiltWithAggressiveTrimming))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotBuiltWithAggressiveTrimming))]
     public void GetFontPropsSorted()
     {
         // The order provided since .NET Framework

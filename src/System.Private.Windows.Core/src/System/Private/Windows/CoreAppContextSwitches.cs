@@ -11,11 +11,18 @@ internal static class CoreAppContextSwitches
 {
     // Enabling switches in Core is different from Framework. See https://learn.microsoft.com/dotnet/core/runtime-config/
     // for details on how to set switches.
-    internal const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName = "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
-    internal const string ClipboardDragDropEnableNrbfSerializationSwitchName = "Windows.ClipboardDragDrop.EnableNrbfSerialization";
+    internal const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName =
+        "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
+
+    internal const string ClipboardDragDropEnableNrbfSerializationSwitchName =
+        "Windows.ClipboardDragDrop.EnableNrbfSerialization";
+
+    internal const string DragDropDisableSyncOverAsyncSwitchName =
+        "Windows.DragDrop.DisableSyncOverAsync";
 
     private static int s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization;
     private static int s_clipboardDragDropEnableNrbfSerialization;
+    private static int s_dragDropDisableSyncOverAsync;
 
     private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
     {
@@ -44,7 +51,7 @@ internal static class CoreAppContextSwitches
         AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
         if (!disableCaching)
         {
-            cachedSwitchValue = isSwitchEnabled ? 1 /*true*/ : -1 /*false*/;
+            cachedSwitchValue = isSwitchEnabled ? 1 /* true */ : -1 /* false */;
         }
         else if (!hasSwitch)
         {
@@ -94,5 +101,22 @@ internal static class CoreAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(ClipboardDragDropEnableNrbfSerializationSwitchName, ref s_clipboardDragDropEnableNrbfSerialization);
+    }
+
+    /// <summary>
+    ///  If <see langword="true"/>, then async capable drag/drop operations will not be performed in a synchronous manner.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Some drag sources only support async operations. Notably, Chromium-based applications with file drop (the
+    ///   new Outlook is one example). To enable applications to accept filenames from these sources we use the interface
+    ///   when available and just do the operation synchronously. This isn't expected to be a problem, but if it is we'll
+    ///   provide a way to opt out of this behavior. The flag may also be useful for testing purposes.
+    ///  </para>
+    /// </remarks>
+    public static bool DragDropDisableSyncOverAsync
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(DragDropDisableSyncOverAsyncSwitchName, ref s_dragDropDisableSyncOverAsync);
     }
 }

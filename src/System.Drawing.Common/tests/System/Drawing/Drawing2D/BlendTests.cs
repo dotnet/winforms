@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Drawing2D.Tests;
@@ -29,7 +29,7 @@ public class BlendTests
         Assert.Throws<OverflowException>(() => new Blend(-1));
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotIntMaxValueArrayIndexSupported))]
     public void Ctor_LargeCount_ThrowsOutOfMemoryException()
     {
         Assert.Throws<OutOfMemoryException>(() => new Blend(int.MaxValue));

@@ -98,10 +98,6 @@ public abstract partial class TextBoxBase : Control
                 | ControlStyles.UseTextForAccessibility
                 | ControlStyles.UserPaint, false);
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
-
         // cache requestedHeight. Note: Control calls DefaultSize (overridable) in the constructor
         // to set the control's cached height that is returned when calling Height, so we just
         // need to get the cached height here.
@@ -287,15 +283,18 @@ public abstract partial class TextBoxBase : Control
             {
                 return base.BackColor;
             }
-            else if (ReadOnly)
-            {
-                return SystemColors.Control;
-            }
             else
             {
-                return SystemColors.Window;
+                return ReadOnly
+                    // If we're ReadOnly and in DarkMode, we are using a different background color.
+                    ? Application.IsDarkModeEnabled
+                        && DarkModeRequestState is true
+                            ? SystemColors.ControlDarkDark
+                            : SystemColors.Control
+                    : SystemColors.Window;
             }
         }
+
         set => base.BackColor = value;
     }
 
@@ -401,6 +400,8 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
@@ -800,7 +801,7 @@ public abstract partial class TextBoxBase : Control
             int height = FontHeight;
             if (_borderStyle != BorderStyle.None)
             {
-                height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
+                height += SystemInformation.GetBorderSizeForDpi(DeviceDpiInternal).Height * 4 + 3;
             }
 
             return height;
@@ -930,15 +931,29 @@ public abstract partial class TextBoxBase : Control
             if (_textBoxFlags[s_readOnly] != value)
             {
                 _textBoxFlags[s_readOnly] = value;
+
                 if (IsHandleCreated)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.EM_SETREADONLY, (WPARAM)(BOOL)value);
+                    EnsureReadonlyBackgroundColor(value);
                 }
 
                 OnReadOnlyChanged(EventArgs.Empty);
 
                 VerifyImeRestrictedModeChanged();
             }
+        }
+    }
+
+    private void EnsureReadonlyBackgroundColor(bool value)
+    {
+        // If we have no specifically defined back color, we set the back color in case we're in dark mode.
+        if (Application.IsDarkModeEnabled
+            && DarkModeRequestState is true
+            && !ShouldSerializeBackColor())
+        {
+            base.BackColor = value ? SystemColors.ControlLight : SystemColors.Window;
+            Invalidate();
         }
     }
 
@@ -1371,6 +1386,8 @@ public abstract partial class TextBoxBase : Control
         {
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMODIFY, (WPARAM)(BOOL)true);
         }
+
+        EnsureReadonlyBackgroundColor(true);
 
         if (_textBoxFlags[s_scrollToCaretOnHandleCreated])
         {

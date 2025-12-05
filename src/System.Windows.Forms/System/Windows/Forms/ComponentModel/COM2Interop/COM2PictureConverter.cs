@@ -87,7 +87,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
 
     public override VARIANT ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor property, ref bool cancelSet)
     {
-        if (managedValue == _lastManaged)
+        if (managedValue is not null && managedValue == _lastManaged)
         {
             // There should be no point in setting the same object back for this property.
             cancelSet = true;

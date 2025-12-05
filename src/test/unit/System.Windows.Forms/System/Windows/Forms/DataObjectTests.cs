@@ -1213,8 +1213,8 @@ public partial class DataObjectTests
 
     public static TheoryData<object> SetData_ObjectITheoryData() => new()
     {
-        { new() },
-        { null }
+        { new(new()) },
+        { new(null) }
     };
 
     [Theory]

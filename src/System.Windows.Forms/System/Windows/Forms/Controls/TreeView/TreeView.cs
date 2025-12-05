@@ -170,9 +170,6 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -294,7 +291,7 @@ public partial class TreeView : Control
 
                         // Reset the Checked state after setting the checkboxes (this was Everett behavior)
                         // The implementation of the TreeNode.Checked property has changed in Whidbey
-                        // So we need to explicit set the Checked state to false to keep the everett behavior.
+                        // So we need to explicit set the Checked state to false to keep the Everett behavior.
                         UpdateCheckedState(_root, false);
                         RecreateHandle();
                     }
@@ -307,11 +304,12 @@ public partial class TreeView : Control
     {
         get
         {
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_TREEVIEW;
 
             // Keep the scrollbar if we are just updating styles...
-            //
             if (IsHandleCreated)
             {
                 int currentStyle = unchecked((int)((long)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
@@ -1881,7 +1879,7 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
@@ -1893,7 +1891,6 @@ public partial class TreeView : Control
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
-#pragma warning restore WFO5001
 
         // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
@@ -2030,11 +2027,8 @@ public partial class TreeView : Control
 
         // for the case when we are NOT being disposed, we'll be recreating the internal state imageList
         // in OnHandleCreate, so it is ok to completely Dispose here
-        if (_internalStateImageList is not null)
-        {
-            _internalStateImageList.Dispose();
-            _internalStateImageList = null;
-        }
+        _internalStateImageList?.Dispose();
+        _internalStateImageList = null;
 
         base.OnHandleDestroyed(e);
     }
@@ -2562,11 +2556,8 @@ public partial class TreeView : Control
         Debug.Assert(_labelEdit is null,
             "A new label editing shouldn't start before the previous one ended");
 
-        if (_labelEdit is not null)
-        {
-            _labelEdit.ReleaseHandle();
-            _labelEdit = null;
-        }
+        _labelEdit?.ReleaseHandle();
+        _labelEdit = null;
 
         TreeNode? editingNode = NodeFromHandle(nmtvdi.item.hItem);
         NodeLabelEditEventArgs e = new(editingNode);
@@ -2574,10 +2565,6 @@ public partial class TreeView : Control
         if (!e.CancelEdit)
         {
             _editNode = editingNode;
-        }
-
-        if (!e.CancelEdit)
-        {
             _labelEdit = new TreeViewLabelEditNativeWindow(this);
             _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
         }
@@ -2595,15 +2582,15 @@ public partial class TreeView : Control
             return (LRESULT)1;
         }
 
-        if (_labelEdit is not null)
-        {
-            _labelEdit.ReleaseHandle();
-            _labelEdit = null;
-        }
+        _labelEdit?.ReleaseHandle();
+        _labelEdit = null;
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();
-        NodeLabelEditEventArgs e = new(node, newText);
+        string? editedText = null;
+        if (node is not null && newText != node.Text)
+            editedText = newText;
+        NodeLabelEditEventArgs e = new(node, editedText);
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
         {

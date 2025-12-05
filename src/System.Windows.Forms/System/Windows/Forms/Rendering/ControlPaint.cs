@@ -67,6 +67,34 @@ public static unsafe partial class ControlPaint
     // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
     private const int MaximumLuminosityDifference = 20;
 
+    // Dark mode color constants
+    private static readonly Color s_darkModeBackgroundPressed = Color.FromArgb(255, 70, 70, 70);
+    private static readonly Color s_darkModeBackgroundDisabled = Color.FromArgb(255, 45, 45, 45);
+    private static readonly Color s_darkModeBackgroundNormal = Color.FromArgb(255, 60, 60, 60);
+    private static readonly Color s_darkModeBackgroundHover = Color.FromArgb(255, 80, 80, 80);
+
+    private static readonly Color s_darkModeBorderPressed = Color.FromArgb(255, 80, 80, 80);
+    private static readonly Color s_darkModeBorderDisabled = Color.FromArgb(255, 50, 50, 50);
+    private static readonly Color s_darkModeBorderNormal = Color.FromArgb(255, 90, 90, 90);
+    private static readonly Color s_darkModeBorderHover = Color.FromArgb(255, 110, 110, 110);
+
+    private static readonly Color s_darkModeArrowDisabled = Color.FromArgb(255, 100, 100, 100);
+    private static readonly Color s_darkModeArrowNormal = Color.FromArgb(255, 220, 220, 220);
+
+    // Light mode color constants
+    private static readonly Color s_lightModeBackgroundPressed = Color.FromArgb(255, 218, 218, 218);
+    private static readonly Color s_lightModeBackgroundDisabled = Color.FromArgb(255, 244, 244, 244);
+    private static readonly Color s_lightModeBackgroundNormal = Color.FromArgb(255, 241, 241, 241);
+    private static readonly Color s_lightModeBackgroundHover = Color.FromArgb(255, 220, 220, 220);
+
+    private static readonly Color s_lightModeBorderPressed = Color.FromArgb(255, 166, 166, 166);
+    private static readonly Color s_lightModeBorderDisabled = Color.FromArgb(255, 205, 205, 205);
+    private static readonly Color s_lightModeBorderNormal = Color.FromArgb(255, 195, 195, 195);
+    private static readonly Color s_lightModeBorderHover = Color.FromArgb(255, 170, 170, 170);
+
+    private static readonly Color s_lightModeArrowDisabled = Color.FromArgb(255, 170, 170, 170);
+    private static readonly Color s_lightModeArrowNormal = Color.FromArgb(255, 68, 68, 68);
+
     internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Size imageSize, ImageLayout imageLayout)
     {
         Rectangle result = bounds;
@@ -434,6 +462,13 @@ public static unsafe partial class ControlPaint
             }
 
             g.FillRectangle(textureBrush, clipRect);
+
+            // If the Graphics backing HDC has an offset origin (SetViewportOrgEx), drawing with a texture brush will
+            // reset it. Getting the HDC and releasing it will restore the offset.
+            //
+            // See https://github.com/dotnet/winforms/issues/13784 for a repro.
+            g.GetHdc();
+            g.ReleaseHdc();
         }
         else
         {
@@ -1356,11 +1391,8 @@ public static unsafe partial class ControlPaint
         {
             if (t_checkImage is null || t_checkImage.Width != rectangle.Width || t_checkImage.Height != rectangle.Height)
             {
-                if (t_checkImage is not null)
-                {
-                    t_checkImage.Dispose();
-                    t_checkImage = null;
-                }
+                t_checkImage?.Dispose();
+                t_checkImage = null;
 
                 // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
                 RECT rcCheck = new(rectangle.Size);
@@ -1515,11 +1547,8 @@ public static unsafe partial class ControlPaint
         if (t_gridBrush is null || s_gridSize.Width != pixelsBetweenDots.Width
             || s_gridSize.Height != pixelsBetweenDots.Height || invert != s_gridInvert)
         {
-            if (t_gridBrush is not null)
-            {
-                t_gridBrush.Dispose();
-                t_gridBrush = null;
-            }
+            t_gridBrush?.Dispose();
+            t_gridBrush = null;
 
             s_gridSize = pixelsBetweenDots;
             int idealSize = 16;
@@ -1848,13 +1877,48 @@ public static unsafe partial class ControlPaint
         Graphics graphics,
         int x, int y, int width, int height,
         ScrollButton button,
-        ButtonState state) => DrawFrameControl(
-            graphics,
-            x, y, width, height,
-            DFC_TYPE.DFC_SCROLL,
-            (DFCS_STATE)button | (DFCS_STATE)state,
-            Color.Empty,
-            Color.Empty);
+        ButtonState state)
+    {
+        // If dark mode is enabled, use the new modern rendering
+        if (Application.IsDarkModeEnabled)
+        {
+            ModernControlButtonState controlButtonState = state switch
+            {
+                ButtonState.Pushed => ModernControlButtonState.Pressed,
+                ButtonState.Inactive => ModernControlButtonState.Disabled,
+                _ => ModernControlButtonState.Normal
+            };
+
+            Rectangle bounds = new(x, y, width, height);
+
+            ModernControlButtonStyle modernControlButton = button switch
+            {
+                ScrollButton.Up => ModernControlButtonStyle.Up,
+                ScrollButton.Down => ModernControlButtonStyle.Down,
+                ScrollButton.Left => ModernControlButtonStyle.Left,
+                ScrollButton.Right => ModernControlButtonStyle.Right,
+                _ => throw new ArgumentOutOfRangeException(nameof(button), button, null)
+            };
+
+            DrawModernControlButton(
+                graphics,
+                bounds,
+                modernControlButton,
+                controlButtonState,
+                isDarkMode: true);
+        }
+        else
+        {
+            // Fall back to classic Windows rendering
+            DrawFrameControl(
+                graphics,
+                x, y, width, height,
+                DFC_TYPE.DFC_SCROLL,
+                (DFCS_STATE)button | (DFCS_STATE)state,
+                Color.Empty,
+                Color.Empty);
+        }
+    }
 
     /// <summary>
     ///  Draws a standard selection frame. A selection frame is a frame that is
@@ -2079,11 +2143,8 @@ public static unsafe partial class ControlPaint
 
         if (t_frameBrushActive is null || !s_frameColorActive.Equals(brushColor))
         {
-            if (t_frameBrushActive is not null)
-            {
-                t_frameBrushActive.Dispose();
-                t_frameBrushActive = null;
-            }
+            t_frameBrushActive?.Dispose();
+            t_frameBrushActive = null;
 
             s_frameColorActive = brushColor;
 
@@ -2209,11 +2270,8 @@ public static unsafe partial class ControlPaint
 
         if (t_frameBrushSelected is null || !s_frameColorSelected.Equals(brushColor))
         {
-            if (t_frameBrushSelected is not null)
-            {
-                t_frameBrushSelected.Dispose();
-                t_frameBrushSelected = null;
-            }
+            t_frameBrushSelected?.Dispose();
+            t_frameBrushSelected = null;
 
             s_frameColorSelected = brushColor;
 

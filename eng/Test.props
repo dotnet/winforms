@@ -3,6 +3,8 @@
   <!-- Making all tests run sequentially until we regroup tests. Tracked under issue https://github.com/dotnet/winforms/issues/8810. -->
   <PropertyGroup>
     <XUnitCoreSettingsFile>$(RepositoryEngineeringDir)xunit.runner.json</XUnitCoreSettingsFile>
+
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

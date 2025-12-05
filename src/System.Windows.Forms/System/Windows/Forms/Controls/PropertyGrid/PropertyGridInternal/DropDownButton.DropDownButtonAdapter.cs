@@ -66,7 +66,8 @@ internal sealed partial class DropDownButton : Button
         internal override void PaintUp(PaintEventArgs pevent, CheckState state)
         {
             base.PaintUp(pevent, state);
-            if (!Application.RenderWithVisualStyles)
+
+            if (!Application.RenderWithVisualStyles || Application.IsDarkModeEnabled)
             {
                 DDB_Draw3DBorder(pevent, Control.ClientRectangle, raised: true);
             }

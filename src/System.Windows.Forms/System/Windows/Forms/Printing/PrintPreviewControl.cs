@@ -592,7 +592,7 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
-        Color brushColor = SystemColors.ControlText;
+        Color brushColor = ShouldSerializeForeColor() ? ForeColor : SystemColors.ControlText;
         if (SystemInformation.HighContrast && Parent is Control parent)
         {
             brushColor = parent.BackColor;

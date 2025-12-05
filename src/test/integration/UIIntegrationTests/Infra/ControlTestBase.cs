@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
 
@@ -33,9 +31,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     protected ControlTestBase(ITestOutputHelper testOutputHelper)
     {
         TestOutputHelper = testOutputHelper;
-        DataCollectionService.CurrentTest = GetTest();
+        DataCollectionService.CurrentTest = TestContext.Current.Test;
         testOutputHelper.WriteLine($" Previous run test: {s_previousRunTestName}");
-        s_previousRunTestName = DataCollectionService.CurrentTest.DisplayName;
+        s_previousRunTestName = TestContext.Current.Test!.TestDisplayName;
 
         Application.EnableVisualStyles();
 
@@ -43,13 +41,6 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         bool disabled = false;
         Assert.True(PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
         Assert.True(PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
-
-        ITest GetTest()
-        {
-            var type = testOutputHelper.GetType();
-            var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            return (ITest)testMember.GetValue(testOutputHelper)!;
-        }
     }
 
     protected ITestOutputHelper TestOutputHelper { get; }
@@ -60,7 +51,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected SendInput InputSimulator => new(WaitForIdleAsync);
 
-    public virtual Task InitializeAsync()
+    public virtual ValueTask InitializeAsync()
     {
         // Verify keyboard and mouse state at the start of the test
         VerifyKeyStates(isStartOfTest: true, TestOutputHelper);
@@ -80,10 +71,10 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         _joinableTaskCollection = JoinableTaskContext.CreateCollection();
         JoinableTaskFactory = JoinableTaskContext.CreateFactory(_joinableTaskCollection);
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public virtual async Task DisposeAsync()
+    public virtual async ValueTask DisposeAsync()
     {
         await _joinableTaskCollection.JoinTillEmptyAsync();
 

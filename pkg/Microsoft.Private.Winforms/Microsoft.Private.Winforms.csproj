@@ -66,7 +66,7 @@
 
   <!-- Any projects referenced here will have their outputs automatically put into the package -->
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
-  <ItemGroup>
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
     <!-- Facade for System.Drawing -->
     <ProjectReference Include="..\..\src\System.Drawing\src\System.Drawing.Facade.csproj" />
 
@@ -114,6 +114,7 @@
     <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CodeFixes.CSharp\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.vbproj" />
 
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Templating" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- Force the output item type for all project references to "TfmSpecificPackageFile", which makes them get packed -->
@@ -127,9 +128,44 @@
     </ItemGroup>
   </Target>
 
-  <!-- Call custom targets (defined below) when creating the package -->
   <PropertyGroup>
+    <!-- Call custom targets (defined below) when creating the package -->
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);ResolveReferences</TargetsForTfmSpecificContentInPackage>
+    <BeforePack>$(BeforePack);GenerateTransportPropsFile</BeforePack>
+
+    <TransportPropsFileInputPath>$(MSBuildThisFileDirectory)build\$(MSBuildProjectName).props</TransportPropsFileInputPath>
+    <TransportPropsFileOutputPath>$(IntermediateOutputPath)$(MSBuildProjectName).props</TransportPropsFileOutputPath>
   </PropertyGroup>
+
+  <Target Name="GenerateTransportPropsFile"
+          Condition="'@(ProjectReference)' != ''"
+          DependsOnTargets="BuildOnlySettings;ResolveReferences"
+          Inputs="$(MSBuildThisFileFullPath);$(TransportPropsFileInputPath)"
+          Outputs="$(TransportPropsFileOutputPath)">
+    <ItemGroup>
+      <WinformsWindowsDesktopPackageLibrary Include="@(TfmSpecificPackageFile->WithMetadataValue('Extension', '.dll')->WithMetadataValue('IsPackable', 'true'))" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <WinformsWindowsDesktopPackageLibraries>@(WinformsWindowsDesktopPackageLibrary->'&lt;WinformsWindowsDesktopPackageLibrary Include=&quot;%(Filename)%(Extension)&quot; PackageId=&quot;%(PackageId)&quot; PackageVersion=&quot;%(PackageVersion)&quot; /&gt;', '
+    ')</WinformsWindowsDesktopPackageLibraries>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <TransportPropsTemplateProperty Include="WinformsWindowsDesktopPackageLibraries=$(WinformsWindowsDesktopPackageLibraries)" />
+    </ItemGroup>
+
+    <Error Condition="'@(WinformsWindowsDesktopPackageLibrary)' == ''"
+           Text="Unexpected build error: No packable references were found." />
+
+    <GenerateFileFromTemplate
+      TemplateFile="$(TransportPropsFileInputPath)"
+      Properties="@(TransportPropsTemplateProperty)"
+      OutputPath="$(TransportPropsFileOutputPath)" />
+
+    <ItemGroup>
+      <None Include="$(TransportPropsFileOutputPath)" Pack="true" PackagePath="build/" />
+    </ItemGroup>
+  </Target>
 
 </Project>

@@ -124,7 +124,7 @@ public class IconCodecTest
         Assert.Equal(0, bmp.GetPixel(12, 12).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap16Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
@@ -320,7 +320,7 @@ public class IconCodecTest
         Assert.Equal(0, bmp.GetPixel(28, 28).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap32Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
@@ -538,7 +538,7 @@ public class IconCodecTest
         Assert.Equal(0, bmp.GetPixel(24, 16).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap48Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
@@ -742,7 +742,7 @@ public class IconCodecTest
         Assert.Equal(-33664, bmp.GetPixel(12, 40).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap64Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
@@ -1517,7 +1517,7 @@ public class IconCodecTest
         Assert.Equal(-65383, bmp.GetPixel(92, 92).ToArgb());
     }
 
-    [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
+    [Fact(Skip = "Condition not met", SkipType = typeof(PlatformDetection), SkipUnless = nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
     public void Bitmap96Data()
     {
         string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");

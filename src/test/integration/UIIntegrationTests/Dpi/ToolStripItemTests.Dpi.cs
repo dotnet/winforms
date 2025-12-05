@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.HiDpi;
-using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests.Dpi;
 

@@ -8,12 +8,12 @@
     <FrameworkListFileClass Include="Microsoft.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Design.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms;WPF" />
     <FrameworkListFileClass Include="System.Drawing.Design.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Drawing.dll" Profile="WindowsForms" />
     <!-- System.Private.Windows.Core is now used by both WPF and Windows Forms -->
     <FrameworkListFileClass Include="System.Private.Windows.Core.dll" Profile="WindowsForms;WPF" />
-    <FrameworkListFileClass Include="System.Private.Windows.GdiPlus.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Private.Windows.GdiPlus.dll" Profile="WindowsForms;WPF" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <!-- File classifications that should only be included for the ref pack. -->
-  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+  <ItemGroup Condition="'$(PlatformPackageType)' == 'TargetingPack'">
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CSharp.dll" Profile="WindowsForms" />
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <!-- File classifications that should only be included for the runtime pack. Note analyzers should not be included in the runtime pack. -->
-  <ItemGroup Condition="'$(PackageTargetRuntime)' != ''">
+  <ItemGroup Condition="'$(PlatformPackageType)' == 'RuntimePack'">
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.resources.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.resources.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Primitives.resources.dll" Profile="WindowsForms" />

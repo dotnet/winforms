@@ -28,7 +28,7 @@ public abstract partial class AxHost
         IDisposable,
         IManagedWrapper<IDispatch, IDispatchEx, IOleControlSite, IOleClientSite, IOleWindow, IOleInPlaceSite, ISimpleFrameSite, IVBGetControl, IGetVBAObject, IPropertyNotifySink>
     {
-        private readonly AxHost _host;
+        private AxHost _host;
         private ConnectionPointCookie? _connectionPoint;
 
         internal OleInterfaces(AxHost host) => _host = host.OrThrowIfNull();
@@ -41,6 +41,9 @@ public abstract partial class AxHost
             {
                 StopEvents();
             }
+
+            // If we don't null this out, this will indirectly root the container control.
+            _host = null!;
         }
 
         internal AxHost GetAxHost() => _host;
@@ -251,7 +254,7 @@ public abstract partial class AxHost
         // IOleClientSite methods:
         HRESULT IOleClientSite.Interface.SaveObject() => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT IOleClientSite.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
+        HRESULT IOleClientSite.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
         {
             if (ppmk is null)
             {
@@ -262,7 +265,7 @@ public abstract partial class AxHost
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleClientSite.Interface.GetContainer(IOleContainer** ppContainer)
+        HRESULT IOleClientSite.Interface.GetContainer(IOleContainer** ppContainer)
         {
             if (ppContainer is null)
             {
@@ -273,7 +276,7 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleClientSite.Interface.ShowObject()
+        HRESULT IOleClientSite.Interface.ShowObject()
         {
             if (_host.GetAxState(s_fOwnWindow))
             {

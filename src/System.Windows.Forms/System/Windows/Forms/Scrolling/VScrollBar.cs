@@ -30,7 +30,9 @@ public partial class VScrollBar : ScrollBar
         {
             if (ScaleHelper.IsScalingRequirementMet)
             {
-                return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi), LogicalToDeviceUnits(DefaultHeight));
+                return new Size(
+                    SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal),
+                    LogicalToDeviceUnits(DefaultHeight));
             }
 
             return new Size(SystemInformation.VerticalScrollBarWidth, DefaultHeight);

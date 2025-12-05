@@ -3,8 +3,8 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace Microsoft.Office;
 

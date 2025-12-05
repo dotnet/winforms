@@ -138,17 +138,11 @@ public partial class ErrorProvider
         /// </summary>
         private void EnsureDestroyed()
         {
-            if (_timer is not null)
-            {
-                _timer.Dispose();
-                _timer = null;
-            }
+            _timer?.Dispose();
+            _timer = null;
 
-            if (_tipWindow is not null)
-            {
-                _tipWindow.DestroyHandle();
-                _tipWindow = null;
-            }
+            _tipWindow?.DestroyHandle();
+            _tipWindow = null;
 
             // Hide the window and invalidate the parent to ensure that we leave no visual artifacts.
             // Given that we have an unusual region window, this is needed.
@@ -449,12 +443,12 @@ public partial class ErrorProvider
             base.WmDpiChangedBeforeParent(ref m);
 
             int currentDpi = (int)PInvoke.GetDpiForWindow(this);
-            if (currentDpi == _parent._deviceDpi)
+            if (currentDpi == _parent.DeviceDpiInternal)
             {
                 return;
             }
 
-            double factor = ((double)currentDpi) / _parent._deviceDpi;
+            double factor = ((double)currentDpi) / _parent.DeviceDpiInternal;
             Icon icon = _provider.Icon;
             _provider.CurrentDpi = currentDpi;
             _provider.Icon = new Icon(icon, (int)(icon.Width * factor), (int)(icon.Height * factor));

@@ -7,7 +7,6 @@ using System.Windows.Forms.CSharp.Analyzers.Diagnostics;
 using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Xunit.Abstractions;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;

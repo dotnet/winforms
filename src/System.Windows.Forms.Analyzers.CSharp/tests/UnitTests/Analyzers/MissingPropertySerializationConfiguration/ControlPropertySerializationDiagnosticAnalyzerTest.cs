@@ -183,7 +183,7 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
 
         context.TestState.Sources.Add(GlobalUsingCode);
 
-        await context.RunAsync();
+        await context.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -204,7 +204,7 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
 
         context.TestState.Sources.Add(GlobalUsingCode);
 
-        await context.RunAsync();
+        await context.RunAsync(TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -231,6 +231,6 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
                 },
         };
 
-        await context.RunAsync();
+        await context.RunAsync(TestContext.Current.CancellationToken);
     }
 }

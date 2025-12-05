@@ -14,7 +14,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public partial class ToolStripTests
+public partial class ToolStripTests : IDisposable
 {
     [WinFormsFact]
     public void ToolStrip_Ctor_Default()
@@ -7427,6 +7427,13 @@ public partial class ToolStripTests
         var defaultGripMargin = (Padding)toolStrip.TestAccessor().Dynamic.DefaultGripMargin;
         toolStrip.GripMargin = defaultGripMargin;
         ((bool)toolStrip.TestAccessor().Dynamic.ShouldSerializeGripMargin()).Should().BeFalse();
+    }
+
+    public void Dispose()
+    {
+        // LastKeyData is a static state read and written by tests.
+        // To ensure tests are isolated correctly, we reset it after each test.
+        typeof(ToolStrip).TestAccessor().Dynamic.LastKeyData = Keys.None;
     }
 
     private class SubAxHost : AxHost

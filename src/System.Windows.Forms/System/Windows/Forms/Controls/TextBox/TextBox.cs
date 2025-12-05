@@ -404,12 +404,12 @@ public partial class TextBox : TextBoxBase
 
         if (Multiline && !WordWrap && (ScrollBars & ScrollBars.Horizontal) != 0)
         {
-            scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
+            scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
         }
 
         if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
         {
-            scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
+            scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
         }
 
         // Subtract the scroll bar padding before measuring
@@ -517,11 +517,8 @@ public partial class TextBox : TextBoxBase
                 _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
-            if (_stringSource is not null)
-            {
-                _stringSource.ReleaseAutoComplete();
-                _stringSource = null;
-            }
+            _stringSource?.ReleaseAutoComplete();
+            _stringSource = null;
         }
 
         base.Dispose(disposing);
@@ -638,11 +635,8 @@ public partial class TextBox : TextBoxBase
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        if (_stringSource is not null)
-        {
-            _stringSource.ReleaseAutoComplete();
-            _stringSource = null;
-        }
+        _stringSource?.ReleaseAutoComplete();
+        _stringSource = null;
 
         base.OnHandleDestroyed(e);
     }
