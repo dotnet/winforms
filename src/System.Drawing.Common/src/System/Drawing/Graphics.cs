@@ -1245,10 +1245,36 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
                 bottom = y;
             }
 
-            if (left < 0 || top < 0 || right > _backingImage.Width || bottom > _backingImage.Height)
+            if (left < 0)
             {
-                throw new ArgumentException(SR.ArgumentException_GdiPlus_AntiAlias24bppRgbBounds);
+                left = 0;
             }
+
+            if (right > _backingImage.Width)
+            {
+                right = _backingImage.Width;
+            }
+
+            if (top < 0)
+            {
+                top = 0;
+            }
+
+            if (bottom > _backingImage.Height)
+            {
+                bottom = _backingImage.Height;
+            }
+
+            if (left >= right || top >= bottom)
+            {
+                // The rectangle is completely outside the image bounds.
+                return;
+            }
+
+            x = left;
+            y = top;
+            width = right - left;
+            height = bottom - top;
         }
 
         CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangle(
@@ -1289,6 +1315,92 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     void FillRectangles(Brush brush, params ReadOnlySpan<RectangleF> rects)
     {
         ArgumentNullException.ThrowIfNull(brush);
+
+        if (SmoothingMode == Drawing2D.SmoothingMode.AntiAlias &&
+            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb })
+        {
+            RectangleF[]? clippedRects = null;
+            int clippedCount = 0;
+
+            for (int i = 0; i < rects.Length; i++)
+            {
+                RectangleF rect = rects[i];
+                float left = rect.X;
+                float right = rect.X + rect.Width;
+                float top = rect.Y;
+                float bottom = rect.Y + rect.Height;
+
+                if (rect.Width < 0)
+                {
+                    left = right;
+                    right = rect.X;
+                }
+
+                if (rect.Height < 0)
+                {
+                    top = bottom;
+                    bottom = rect.Y;
+                }
+
+                if (left < 0 || top < 0 || right > _backingImage.Width || bottom > _backingImage.Height)
+                {
+                    if (clippedRects is null)
+                    {
+                        clippedRects = new RectangleF[rects.Length];
+                        // Copy previous valid rects
+                        for (int j = 0; j < i; j++)
+                        {
+                            clippedRects[clippedCount++] = rects[j];
+                        }
+                    }
+
+                    // Clip
+                    if (left < 0)
+                    {
+                        left = 0;
+                    }
+
+                    if (right > _backingImage.Width)
+                    {
+                        right = _backingImage.Width;
+                    }
+
+                    if (top < 0)
+                    {
+                        top = 0;
+                    }
+
+                    if (bottom > _backingImage.Height)
+                    {
+                        bottom = _backingImage.Height;
+                    }
+
+                    if (left < right && top < bottom)
+                    {
+                        clippedRects[clippedCount++] = new RectangleF(left, top, right - left, bottom - top);
+                    }
+                }
+                else if (clippedRects is not null)
+                {
+                    clippedRects[clippedCount++] = rect;
+                }
+                else
+                {
+                    clippedCount++;
+                }
+            }
+
+            if (clippedRects is not null)
+            {
+                fixed (RectangleF* r = clippedRects)
+                {
+                    CheckErrorStatus(PInvokeGdiPlus.GdipFillRectangles(NativeGraphics, brush.NativeBrush, (RectF*)r, clippedCount));
+                }
+
+                GC.KeepAlive(brush);
+                return;
+            }
+        }
 
         fixed (RectangleF* r = rects)
         {
@@ -2037,6 +2149,76 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, float x, float y, float width, float height)
     {
         ArgumentNullException.ThrowIfNull(image);
+
+        if (SmoothingMode == Drawing2D.SmoothingMode.AntiAlias &&
+            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb })
+        {
+            float left = x;
+            float right = x + width;
+            float top = y;
+            float bottom = y + height;
+
+            if (width < 0)
+            {
+                left = right;
+                right = x;
+            }
+
+            if (height < 0)
+            {
+                top = bottom;
+                bottom = y;
+            }
+
+            if (left < 0 || top < 0 || right > _backingImage.Width || bottom > _backingImage.Height)
+            {
+                float clippedLeft = left;
+                float clippedRight = right;
+                float clippedTop = top;
+                float clippedBottom = bottom;
+
+                if (clippedLeft < 0)
+                {
+                    clippedLeft = 0;
+                }
+
+                if (clippedRight > _backingImage.Width)
+                {
+                    clippedRight = _backingImage.Width;
+                }
+
+                if (clippedTop < 0)
+                {
+                    clippedTop = 0;
+                }
+
+                if (clippedBottom > _backingImage.Height)
+                {
+                    clippedBottom = _backingImage.Height;
+                }
+
+                if (clippedLeft >= clippedRight || clippedTop >= clippedBottom)
+                {
+                    return;
+                }
+
+                float destW = right - left;
+                float destH = bottom - top;
+
+                if (Math.Abs(destW) > float.Epsilon && Math.Abs(destH) > float.Epsilon)
+                {
+                    float srcX = (clippedLeft - left) / destW * image.Width;
+                    float srcY = (clippedTop - top) / destH * image.Height;
+                    float srcW = (clippedRight - clippedLeft) / destW * image.Width;
+                    float srcH = (clippedBottom - clippedTop) / destH * image.Height;
+
+                    DrawImage(image, new RectangleF(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop),
+                              new RectangleF(srcX, srcY, srcW, srcH), GraphicsUnit.Pixel);
+                    return;
+                }
+            }
+        }
+
         Status status = PInvokeGdiPlus.GdipDrawImageRect(NativeGraphics, image.Pointer(), x, y, width, height);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
@@ -2136,6 +2318,74 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit srcUnit)
     {
         ArgumentNullException.ThrowIfNull(image);
+
+        if (SmoothingMode == Drawing2D.SmoothingMode.AntiAlias &&
+            _backingImage is { PixelFormat: PixelFormat.Format24bppRgb })
+        {
+            float left = destRect.X;
+            float right = destRect.X + destRect.Width;
+            float top = destRect.Y;
+            float bottom = destRect.Y + destRect.Height;
+
+            if (destRect.Width < 0)
+            {
+                left = right;
+                right = destRect.X;
+            }
+
+            if (destRect.Height < 0)
+            {
+                top = bottom;
+                bottom = destRect.Y;
+            }
+
+            if (left < 0 || top < 0 || right > _backingImage.Width || bottom > _backingImage.Height)
+            {
+                float clippedLeft = left;
+                float clippedRight = right;
+                float clippedTop = top;
+                float clippedBottom = bottom;
+
+                if (clippedLeft < 0)
+                {
+                    clippedLeft = 0;
+                }
+
+                if (clippedRight > _backingImage.Width)
+                {
+                    clippedRight = _backingImage.Width;
+                }
+
+                if (clippedTop < 0)
+                {
+                    clippedTop = 0;
+                }
+
+                if (clippedBottom > _backingImage.Height)
+                {
+                    clippedBottom = _backingImage.Height;
+                }
+
+                if (clippedLeft >= clippedRight || clippedTop >= clippedBottom)
+                {
+                    return;
+                }
+
+                float destW = right - left;
+                float destH = bottom - top;
+
+                if (Math.Abs(destW) > float.Epsilon && Math.Abs(destH) > float.Epsilon)
+                {
+                    float srcX = srcRect.X + (clippedLeft - left) / destW * srcRect.Width;
+                    float srcY = srcRect.Y + (clippedTop - top) / destH * srcRect.Height;
+                    float srcW = (clippedRight - clippedLeft) / destW * srcRect.Width;
+                    float srcH = (clippedBottom - clippedTop) / destH * srcRect.Height;
+
+                    destRect = new RectangleF(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop);
+                    srcRect = new RectangleF(srcX, srcY, srcW, srcH);
+                }
+            }
+        }
 
         Status status = PInvokeGdiPlus.GdipDrawImageRectRect(
             NativeGraphics,
