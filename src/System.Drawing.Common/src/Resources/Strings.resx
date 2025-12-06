@@ -425,4 +425,7 @@
   <data name="IconCouldNotBeExtracted" xml:space="preserve">
     <value>The file path could not be opened or did not contain valid data.</value>
   </data>
+  <data name="ArgumentException_GdiPlus_AntiAlias24bppRgbBounds" xml:space="preserve">
+    <value>Drawing operation exceeds the bounds of the image. This is a known GDI+ limitation with AntiAlias smoothing mode and Format24bppRgb pixel format.</value>
+  </data>
 </root>

@@ -3002,5 +3002,124 @@ public partial class GraphicsTests
         graphics.FillRoundedRectangle(Brushes.Green, new RectangleF(0, 0, 10, 10), new(2, 2));
         VerifyBitmapNotEmpty(bitmap);
     }
+
+    [Theory]
+    [InlineData(190.5f, 180.5f, 100, 100)] // Out of bounds (bottom-right)
+    [InlineData(-10, 10, 100, 100)]        // Out of bounds (left)
+    [InlineData(10, -10, 100, 100)]        // Out of bounds (top)
+    [InlineData(200, 10, 100, 100)]        // Out of bounds (right)
+    [InlineData(10, 200, 100, 100)]        // Out of bounds (bottom)
+    [InlineData(10, 10, -100, 100)]        // Out of bounds (negative width extending left)
+    [InlineData(10, 10, 100, -100)]        // Out of bounds (negative height extending top)
+    public void FillRectangle_AntiAlias_24bppRgb_OutOfBounds_DoesNotThrow(float x, float y, float width, float height)
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // This combination causes a crash in GDI+ on .NET 9+ (ExecutionEngineException)
+        // and AccessViolationException on .NET 8.
+        // We expect our fix to clip the rectangle and not throw.
+        graphics.FillRectangle(Brushes.Green, new RectangleF(x, y, width, height));
+    }
+
+    [Theory]
+    [InlineData(0, 0, 100, 100)]           // Within bounds
+    [InlineData(156, 156, 100, 100)]       // Exactly on bounds (256 - 100 = 156)
+    [InlineData(100, 100, -50, -50)]       // Within bounds (negative width/height)
+    public void FillRectangle_AntiAlias_24bppRgb_WithinBounds_Success(float x, float y, float width, float height)
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        graphics.FillRectangle(Brushes.Green, new RectangleF(x, y, width, height));
+    }
+
+    [Fact]
+    public void FillRectangle_DefaultSmoothing_24bppRgb_OutOfBounds_Success()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        // Default SmoothingMode is None (or Invalid/Default which maps to None behavior for this check)
+
+        // Should not throw
+        graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100));
+    }
+
+    [Fact]
+    public void FillRectangle_AntiAlias_32bppArgb_OutOfBounds_Success()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format32bppArgb);
+        using Graphics graphics = Graphics.FromImage(bmp);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Should not throw
+        graphics.FillRectangle(Brushes.Green, new RectangleF(190.5f, 180.5f, 100, 100));
+    }
+
+    [Fact]
+    public void FillRectangles_AntiAlias_24bppRgb_OutOfBounds_DoesNotThrow()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        RectangleF[] rects = new[]
+        {
+            new RectangleF(190.5f, 180.5f, 100, 100), // Issue repro
+            new RectangleF(-100, 50, 50, 50),         // Fully out left
+            new RectangleF(300, 50, 50, 50),          // Fully out right
+            new RectangleF(-10, -10, 50, 50),         // Partial top-left
+            new RectangleF(200, 200, 100, 100),       // Partial bottom-right
+            new RectangleF(50, 50, 50, 50)            // Fully inside
+        };
+
+        g.FillRectangles(Brushes.Green, rects);
+    }
+
+    [Fact]
+    public void DrawImage_Float_AntiAlias_24bppRgb_OutOfBounds_DoesNotThrow()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        using Bitmap srcImg = new(50, 50);
+        using Graphics srcG = Graphics.FromImage(srcImg);
+        srcG.Clear(Color.Red);
+
+        // Issue repro equivalent
+        g.DrawImage(srcImg, 190.5f, 180.5f, 100, 100);
+
+        // Fully out of bounds
+        g.DrawImage(srcImg, -100, 50, 50, 50);
+
+        // Partially out of bounds
+        g.DrawImage(srcImg, -10, -10, 50, 50);
+    }
+
+    [Fact]
+    public void DrawImage_RectF_AntiAlias_24bppRgb_OutOfBounds_DoesNotThrow()
+    {
+        using Bitmap bmp = new(256, 256, PixelFormat.Format24bppRgb);
+        using Graphics g = Graphics.FromImage(bmp);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        using Bitmap srcImg = new(50, 50);
+        using Graphics srcG = Graphics.FromImage(srcImg);
+        srcG.Clear(Color.Red);
+
+        RectangleF srcRect = new(0, 0, 50, 50);
+
+        // Issue repro equivalent
+        g.DrawImage(srcImg, new RectangleF(190.5f, 180.5f, 100, 100), srcRect, GraphicsUnit.Pixel);
+
+        // Fully out of bounds
+        g.DrawImage(srcImg, new RectangleF(-100, 50, 50, 50), srcRect, GraphicsUnit.Pixel);
+
+        // Partially out of bounds
+        g.DrawImage(srcImg, new RectangleF(-10, -10, 50, 50), srcRect, GraphicsUnit.Pixel);
+    }
 #endif
 }
