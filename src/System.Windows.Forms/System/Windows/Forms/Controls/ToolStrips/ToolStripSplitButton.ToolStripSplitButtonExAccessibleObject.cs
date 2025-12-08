@@ -24,9 +24,10 @@ public partial class ToolStripSplitButton
                 // If we don't set a default role for the accessible object
                 // it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                // SplitButton control type requires ExpandCollapse pattern support.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     _owningToolStripSplitButton.AccessibleRole == AccessibleRole.Default
-                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_SplitButtonControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
