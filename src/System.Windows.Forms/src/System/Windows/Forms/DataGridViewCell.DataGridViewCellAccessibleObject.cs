@@ -114,7 +114,7 @@ public abstract partial class DataGridViewCell
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 
-        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZero ? 0 : 1;
+        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewUIAStartRowCountAtOne ? 1 : 0;
 
         public override AccessibleStates State
         {
