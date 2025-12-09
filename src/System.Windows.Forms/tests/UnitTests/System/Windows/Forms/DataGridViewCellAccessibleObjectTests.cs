@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Moq;
 using Moq.Protected;
 using static Interop;
@@ -1430,6 +1431,23 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         }
 
         return dataGridView;
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/7154
+    [WinFormsFact]
+    public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
+    {
+        AppContext.SetSwitch(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtOneSwitchName, true);
+
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
+
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 1)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
+
+        AppContext.SetSwitch(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtOneSwitchName, false);
+
+        Assert.Equal($"{string.Format(SR.DataGridView_AccRowName, 0)}, Not sorted.", dataGridView.Rows[0].Cells[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell

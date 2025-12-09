@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -2377,6 +2378,23 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/7154
+    [WinFormsFact]
+    public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
+    {
+        AppContext.SetSwitch(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtOneSwitchName, true);
+
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
+
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+
+        AppContext.SetSwitch(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtOneSwitchName, false);
+
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell
