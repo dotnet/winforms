@@ -291,7 +291,7 @@ public partial class MainForm : Form
                     break;
                 case 5:
                     {
-                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(900, 600));
                         rootComponent.BackColor = Color.Orange;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
 
@@ -309,6 +309,24 @@ public partial class MainForm : Form
                         DataGridViewComboBoxColumn comboBoxColumn = surface.CreateComponent<DataGridViewComboBoxColumn>();
                         comboBoxColumn.HeaderText = "Column1";
                         dataGridView.Columns.AddRange([comboBoxColumn]);
+
+                        StatusStrip statusStrip1 = surface.CreateControl<StatusStrip>(new Size(400, 50), new Point(500, 0));
+                        ToolStripStatusLabel toolStripStatusLabel1 = surface.CreateComponent<ToolStripStatusLabel>();
+                        ToolStripStatusLabel toolStripStatusLabel2 = surface.CreateComponent<ToolStripStatusLabel>();
+                        statusStrip1.Dock = DockStyle.Right;
+                        statusStrip1.AutoSize = true;
+                        statusStrip1.SizingGrip = true;
+
+                        toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+                        toolStripStatusLabel1.Size = new Size(667, 17);
+                        toolStripStatusLabel1.Spring = true;
+                        toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+
+                        toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+                        toolStripStatusLabel2.Size = new Size(118, 17);
+                        toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+
+                        statusStrip1.Items.AddRange([toolStripStatusLabel1, toolStripStatusLabel2]);
                     }
 
                     break;
