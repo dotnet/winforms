@@ -92,8 +92,8 @@ public class TypeExtensionsTests
         {
             new List<MyClass>(),
             [
-                "System.Collections.Generic.List`1[[System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                "System.Collections.Generic.List`1[[System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
             ]
         }
     };
