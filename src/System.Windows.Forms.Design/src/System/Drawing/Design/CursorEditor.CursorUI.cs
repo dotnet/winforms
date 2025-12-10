@@ -67,7 +67,7 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
-                var cursorWidth = GetCursorWidthForDpi(cursor, DeviceDpi);
+                int cursorWidth = GetCursorWidthForDpi(cursor, DeviceDpi);
 
                 e.DrawBackground();
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
@@ -80,8 +80,8 @@ public partial class CursorEditor
 
         private int GetCursorWidthForDpi(Cursor cursor, int dpi)
         {
-            var key = (cursor, dpi);
-            if (_cursorWidthCache.TryGetValue(key, out var cursorWidth))
+            (Cursor cursor, int dpi) key = (cursor, dpi);
+            if (_cursorWidthCache.TryGetValue(key, out int cursorWidth))
             {
                 return cursorWidth;
             }
