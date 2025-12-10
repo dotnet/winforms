@@ -1790,9 +1790,18 @@ public partial class TabControl : Control
         return !_padding.Equals(s_defaultPaddingPoint);
     }
 
-    private BOOL StyleChildren(HWND handle) =>
-        PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
-            .Succeeded;
+    private BOOL StyleChildren(HWND handle)
+    {
+        // Only apply theme to direct children (TabPages), not to controls within TabPages.
+        // Controls like ComboBox need their own specific dark mode themes.
+        HWND parent = PInvoke.GetParent(handle);
+        if (parent == HWND)
+        {
+            PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+        }
+
+        return true;
+    }
 
     /// <summary>
     ///  Returns a string representation for this control.
