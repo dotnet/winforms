@@ -1797,7 +1797,8 @@ public partial class TabControl : Control
         HWND parent = PInvoke.GetParent(handle);
         if (parent == HWND)
         {
-            PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+            return PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
+                .Succeeded;
         }
 
         return true;
