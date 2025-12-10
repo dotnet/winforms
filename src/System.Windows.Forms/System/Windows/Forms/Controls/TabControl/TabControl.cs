@@ -1301,7 +1301,7 @@ public partial class TabControl : Control
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
-            PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
+            PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
             PInvokeCore.EnumChildWindows(this, StyleChildren);
         }
 
