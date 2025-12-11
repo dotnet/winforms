@@ -2194,10 +2194,42 @@ public partial class TabControl : Control
                         using Graphics g = Graphics.FromHwnd(HWND);
                         // Get the display rectangle (TabPage content area)
                         Rectangle displayRect = DisplayRectangle;
-                        // Draw dark border around the content area to match dark mode
-                        using Pen pen = new(Color.FromArgb(45, 45, 48), 1);
-                        // Draw border around display rectangle
-                        g.DrawRectangle(pen, displayRect.X - 1, displayRect.Y - 1, displayRect.Width + 1, displayRect.Height + 1);
+                        
+                        // Fill the border area around the display rectangle to cover the native light border
+                        // The native control draws a border, so we need to paint over it with dark color
+                        using SolidBrush borderBrush = new(Color.FromArgb(45, 45, 48));
+                        
+                        // Calculate the border thickness (typically 2-3 pixels for TabControl)
+                        int borderThickness = 3;
+                        
+                        // Fill the border regions around the display rectangle
+                        // Top border
+                        g.FillRectangle(borderBrush, 
+                            displayRect.X - borderThickness, 
+                            displayRect.Y - borderThickness, 
+                            displayRect.Width + borderThickness * 2, 
+                            borderThickness);
+                        
+                        // Bottom border
+                        g.FillRectangle(borderBrush, 
+                            displayRect.X - borderThickness, 
+                            displayRect.Bottom, 
+                            displayRect.Width + borderThickness * 2, 
+                            borderThickness);
+                        
+                        // Left border
+                        g.FillRectangle(borderBrush, 
+                            displayRect.X - borderThickness, 
+                            displayRect.Y - borderThickness, 
+                            borderThickness, 
+                            displayRect.Height + borderThickness * 2);
+                        
+                        // Right border
+                        g.FillRectangle(borderBrush, 
+                            displayRect.Right, 
+                            displayRect.Y - borderThickness, 
+                            borderThickness, 
+                            displayRect.Height + borderThickness * 2);
                     }
                     catch
                     {
