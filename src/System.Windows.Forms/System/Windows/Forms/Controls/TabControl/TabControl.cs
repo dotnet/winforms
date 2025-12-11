@@ -2182,6 +2182,30 @@ public partial class TabControl : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_PAINT:
+                // After default paint, draw dark border around TabPage content area for vertical tabs in dark mode
+                base.WndProc(ref m);
+                if (Application.IsDarkModeEnabled &&
+                    (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+                    _drawMode != TabDrawMode.OwnerDrawFixed)
+                {
+                    try
+                    {
+                        using Graphics g = Graphics.FromHwnd(HWND);
+                        // Get the display rectangle (TabPage content area)
+                        Rectangle displayRect = DisplayRectangle;
+                        // Draw dark border around the content area to match dark mode
+                        using Pen pen = new(Color.FromArgb(45, 45, 48), 1);
+                        // Draw border around display rectangle
+                        g.DrawRectangle(pen, displayRect.X - 1, displayRect.Y - 1, displayRect.Width + 1, displayRect.Height + 1);
+                    }
+                    catch
+                    {
+                        // Ignore painting errors
+                    }
+                }
+                return;
+
             case PInvokeCore.WM_ERASEBKGND:
                 // Paint the tab strip background dark for vertical tabs in dark mode
                 if (Application.IsDarkModeEnabled &&
