@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Windows.Forms.Design.Tests;
@@ -10,7 +10,7 @@ public class MaskedTextBoxTextEditorDropDownTests
     {
         using MaskedTextBox maskedTextBox = new();
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
-        dropDown.TestAccessor().Dynamic._cancel = true;
+        dropDown.TestAccessor.Dynamic._cancel = true;
 
         dropDown.Value.Should().BeNull();
     }
@@ -21,7 +21,7 @@ public class MaskedTextBoxTextEditorDropDownTests
         using MaskedTextBox maskedTextBox = new("00000");
         maskedTextBox.Text = "12345";
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
-        dropDown.TestAccessor().Dynamic._cancel = false;
+        dropDown.TestAccessor.Dynamic._cancel = false;
 
         dropDown.Value.Should().Be("12345");
     }
@@ -31,8 +31,8 @@ public class MaskedTextBoxTextEditorDropDownTests
     {
         using MaskedTextBox maskedTextBox = new();
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
-        bool processDialogKey = dropDown.TestAccessor().Dynamic.ProcessDialogKey(Keys.Escape);
-        bool cancel = dropDown.TestAccessor().Dynamic._cancel;
+        bool processDialogKey = dropDown.TestAccessor.Dynamic.ProcessDialogKey(Keys.Escape);
+        bool cancel = dropDown.TestAccessor.Dynamic._cancel;
 
         cancel.Should().BeTrue();
         processDialogKey.Should().BeFalse();
@@ -43,10 +43,10 @@ public class MaskedTextBoxTextEditorDropDownTests
     {
         using MaskedTextBox maskedTextBox = new("00:00");
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
-        using ErrorProvider errorProvider = dropDown.TestAccessor().Dynamic._errorProvider;
+        using ErrorProvider errorProvider = dropDown.TestAccessor.Dynamic._errorProvider;
 
         // No error when setting a correct format value.
-        using MaskedTextBox dropDownMaskedTextBox = dropDown.TestAccessor().Dynamic._cloneMtb;
+        using MaskedTextBox dropDownMaskedTextBox = dropDown.TestAccessor.Dynamic._cloneMtb;
         dropDownMaskedTextBox.Text = "12:20";
         errorProvider.GetError(dropDownMaskedTextBox).Should().Be(string.Empty);
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel.Design;
@@ -25,7 +25,7 @@ public sealed class MaskDesignerDialogTests : IDisposable
     [Fact]
     public void Constructor_ValidMaskedTextBox_UsesProvidedMaskedTextBox()
     {
-        using TextBox txtBoxMask = _dialog.TestAccessor().Dynamic._txtBoxMask;
+        using TextBox txtBoxMask = _dialog.TestAccessor.Dynamic._txtBoxMask;
 
         _dialog.Mask.Should().Be(_maskedTextBox.Mask);
         txtBoxMask.Text.Should().Be(_maskedTextBox.Mask);
@@ -34,8 +34,8 @@ public sealed class MaskDesignerDialogTests : IDisposable
     [Fact]
     public void ValidatingTypeProperty_ShouldBeSetCorrectly()
     {
-        _dialog.TestAccessor().Dynamic._maskedTextBox.ValidatingType = typeof(DateTime);
-        _dialog.TestAccessor().Dynamic.btnOK_Click(null, EventArgs.Empty);
+        _dialog.TestAccessor.Dynamic._maskedTextBox.ValidatingType = typeof(DateTime);
+        _dialog.TestAccessor.Dynamic.btnOK_Click(null, EventArgs.Empty);
 
         _dialog.ValidatingType.Should().Be(typeof(DateTime));
     }
@@ -57,11 +57,11 @@ public sealed class MaskDesignerDialogTests : IDisposable
     [Fact]
     public void DiscoverMaskDescriptors_ShouldHandleNullTypeDiscoveryService()
     {
-        List<MaskDescriptor> initialDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
+        List<MaskDescriptor> initialDescriptors = _dialog.TestAccessor.Dynamic._maskDescriptors;
 
         _dialog.DiscoverMaskDescriptors(null);
 
-        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
+        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor.Dynamic._maskDescriptors;
 
         maskDescriptors.Should().Equal(initialDescriptors);
     }
@@ -78,7 +78,7 @@ public sealed class MaskDesignerDialogTests : IDisposable
         mockDiscoveryService.Setup(ds => ds.GetTypes(typeof(MaskDescriptor), false)).Returns(types);
 
         _dialog.DiscoverMaskDescriptors(mockDiscoveryService.Object);
-        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
+        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor.Dynamic._maskDescriptors;
 
         if (shouldBeAdded)
         {

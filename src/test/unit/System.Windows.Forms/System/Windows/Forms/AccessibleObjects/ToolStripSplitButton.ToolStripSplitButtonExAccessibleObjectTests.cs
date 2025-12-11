@@ -44,7 +44,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, accessibleObject.ExpandCollapseState);
-        Assert.Equal(0, accessibleObject.TestAccessor().Dynamic.DropDownItemsCount);
+        Assert.Equal(0, accessibleObject.TestAccessor.Dynamic.DropDownItemsCount);
     }
 
     [WinFormsFact]

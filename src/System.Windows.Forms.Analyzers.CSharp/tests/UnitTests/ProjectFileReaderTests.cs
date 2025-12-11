@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Analyzers.Tests;
 public class ProjectFileReaderTests
 {
     public static readonly char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
-    private static readonly dynamic s_static = typeof(ProjectFileReader).TestAccessor().Dynamic;
+    private static readonly dynamic s_static = typeof(ProjectFileReader).TestAccessor.Dynamic;
     private readonly ITestOutputHelper _output;
 
     private static bool TryReadBool(AnalyzerConfigOptionsProvider configOptions, string propertyName, bool defaultValue, out bool value, out Diagnostic? diagnostic)

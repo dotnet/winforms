@@ -6657,7 +6657,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         treeView.Nodes.Add(treeNode);
 
-        Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
+        Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor.IsToolTracked(treeNode));
         treeView.Nodes.Remove(treeNode);
     }
 
@@ -6671,7 +6671,7 @@ public class TreeViewTests
         TreeNode treeNode1 = new();
         TreeNode treeNode2 = new();
         TreeNode treeNode3 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
 
         treeView.Nodes.AddRange([treeNode1, treeNode2, treeNode3]);
 
@@ -6690,7 +6690,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         treeView.Nodes.Add(treeNode);
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
@@ -6711,7 +6711,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);
@@ -6730,7 +6730,7 @@ public class TreeViewTests
         using TreeView treeView = new();
         treeView.ShowNodeToolTips = showNodeToolTips;
         TreeNode treeNode = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
 
         treeView.Nodes.Add(treeNode);
         Assert.True(accessor.IsToolTracked(treeNode));
@@ -6750,7 +6750,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);
@@ -6777,7 +6777,7 @@ public class TreeViewTests
 
         treeView.Nodes.Insert(0, treeNode);
 
-        Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
+        Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor.IsToolTracked(treeNode));
     }
 
     [WinFormsTheory]
@@ -6790,7 +6790,7 @@ public class TreeViewTests
         TreeNode treeNode = new();
         TreeNode treeSubNodeLevel1 = new();
         TreeNode treeSubNodeLevel2 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         treeNode.Nodes.Add(treeSubNodeLevel1);
         treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
         treeView.Nodes.Add(treeNode);
@@ -6814,7 +6814,7 @@ public class TreeViewTests
         using ToolTip toolTip = new();
         treeView.CreateControl();
 
-        dynamic listViewDynamic = treeView.TestAccessor().Dynamic;
+        dynamic listViewDynamic = treeView.TestAccessor.Dynamic;
         string actual = listViewDynamic._controlToolTipText;
 
         Assert.Null(actual);
@@ -7470,7 +7470,7 @@ public class TreeViewTests
         using TreeView treeView = new();
 
         treeView.Indent = 10;
-        var accessor = treeView.TestAccessor();
+        var accessor = treeView.TestAccessor;
         accessor.Dynamic.ResetIndent();
 
         treeView.Indent.Should().Be(19);
@@ -7482,7 +7482,7 @@ public class TreeViewTests
         using TreeView treeView = new();
 
         treeView.ItemHeight = 10;
-        var accessor = treeView.TestAccessor();
+        var accessor = treeView.TestAccessor;
         accessor.Dynamic.ResetItemHeight();
 
         treeView.ItemHeight.Should().Be(19);
@@ -7493,7 +7493,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
 
-        var accessor = treeView.TestAccessor();
+        var accessor = treeView.TestAccessor;
         bool result = accessor.Dynamic.ShouldSerializeIndent();
 
         result.Should().BeFalse();
@@ -7509,7 +7509,7 @@ public class TreeViewTests
     {
         using TreeView treeView = new();
 
-        var accessor = treeView.TestAccessor();
+        var accessor = treeView.TestAccessor;
         bool result = accessor.Dynamic.ShouldSerializeItemHeight();
 
         result.Should().BeFalse();

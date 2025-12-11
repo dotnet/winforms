@@ -35,7 +35,7 @@ public class WebBrowserContainerTests
             Name = "controlToRemove"
         };
 
-        HashSet<Control> containerCache = container.TestAccessor().Dynamic._containerCache;
+        HashSet<Control> containerCache = container.TestAccessor.Dynamic._containerCache;
 
         container.AddControl(control);
         containerCache.Contains(control).Should().BeTrue();

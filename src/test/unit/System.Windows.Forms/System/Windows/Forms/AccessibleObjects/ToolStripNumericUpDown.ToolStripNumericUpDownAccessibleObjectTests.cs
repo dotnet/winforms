@@ -17,7 +17,7 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
         using ToolStripNumericUpDown toolStripNumericUpDown = new();
         ToolStripHostedControlAccessibleObject accessibleObject = (ToolStripHostedControlAccessibleObject)toolStripNumericUpDown.Control.AccessibilityObject;
 
-        ToolStripNumericUpDown actual = accessibleObject.TestAccessor().Dynamic._toolStripControlHost;
+        ToolStripNumericUpDown actual = accessibleObject.TestAccessor.Dynamic._toolStripControlHost;
 
         Assert.Equal(toolStripNumericUpDown, actual);
     }

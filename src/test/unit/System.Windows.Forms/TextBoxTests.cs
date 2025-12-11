@@ -386,7 +386,7 @@ public partial class TextBoxTests
     {
         using SubTextBox textBox = new() { PlaceholderText = text, IsUserPaint = isUserPaint, IsFocused = isIsFocused, TextCount = textCount };
 
-        bool result = textBox.TestAccessor().Dynamic.ShouldRenderPlaceHolderText();
+        bool result = textBox.TestAccessor.Dynamic.ShouldRenderPlaceHolderText();
         Assert.Equal(expected, result);
     }
 

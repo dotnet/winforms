@@ -187,7 +187,7 @@ public class CheckBoxBaseAdapterTests : IDisposable
         Color checkColor = Color.Black;
 
         Exception? ex = Record.Exception(() =>
-            adapter.TestAccessor().Dynamic.DrawCheckOnly(
+            adapter.TestAccessor.Dynamic.DrawCheckOnly(
                 e,
                 layout,
                 colors,
@@ -279,7 +279,7 @@ public class CheckBoxBaseAdapterTests : IDisposable
             Field = new Rectangle(5, 5, 20, 20)
         };
 
-        adapter.TestAccessor().Dynamic.AdjustFocusRectangle(layout);
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
 
         if (string.IsNullOrEmpty(text))
         {

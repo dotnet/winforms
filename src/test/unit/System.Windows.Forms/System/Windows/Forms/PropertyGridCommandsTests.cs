@@ -29,7 +29,7 @@ public class PropertyGridCommandsTests
     public void WfcMenuGroup_HasExpectedGuid()
     {
         PropertyGridCommands propertyGridCommands = new();
-        Guid tests = propertyGridCommands.TestAccessor().Dynamic.wfcMenuGroup;
+        Guid tests = propertyGridCommands.TestAccessor.Dynamic.wfcMenuGroup;
 
         tests.Should().Be(new Guid("a72bd644-1979-4cbc-a620-ea4112198a66"));
     }
@@ -38,7 +38,7 @@ public class PropertyGridCommandsTests
     public void WfcMenuCommand_HasExpectedGuid()
     {
         PropertyGridCommands propertyGridCommands = new();
-        Guid tests = propertyGridCommands.TestAccessor().Dynamic.wfcMenuCommand;
+        Guid tests = propertyGridCommands.TestAccessor.Dynamic.wfcMenuCommand;
 
         tests.Should().Be(new Guid("5a51cf82-7619-4a5d-b054-47f438425aa7"));
     }

@@ -359,7 +359,7 @@ public class ComboBoxTests
         PaintEventHandler handler = (sender, e) => callCount++;
 
         comboBox.Paint += handler;
-        comboBox.TestAccessor().Dynamic.OnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), default));
+        comboBox.TestAccessor.Dynamic.OnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), default));
 
         callCount.Should().Be(1);
     }
@@ -2173,8 +2173,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2193,8 +2193,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2215,8 +2215,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2235,8 +2235,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2281,8 +2281,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2298,8 +2298,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2321,8 +2321,8 @@ public class ComboBoxTests
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
 
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");
@@ -2338,8 +2338,8 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
-        comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor.Dynamic._childEdit.HWND);
+        comboBox.TestAccessor.Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
         comboBox.Items.Add("item2");

@@ -49,7 +49,7 @@ public class DataGridViewColumnTypePickerTests : IDisposable
 
         _picker.Start(editorServiceMock.Object, discoveryServiceMock.Object, typeof(DataGridViewTextBoxColumn));
 
-        var listBox = _picker.TestAccessor().Dynamic._typesListBox;
+        var listBox = _picker.TestAccessor.Dynamic._typesListBox;
         object count = listBox.Items.Count;
         count.Should().Be(2);
     }
@@ -57,7 +57,7 @@ public class DataGridViewColumnTypePickerTests : IDisposable
     [Fact]
     public void SetBoundsCore_ShouldSetMinimumWidthAndHeight()
     {
-        var accessor = _picker.TestAccessor().Dynamic;
+        var accessor = _picker.TestAccessor.Dynamic;
         accessor.SetBoundsCore(0, 0, 50, 50, BoundsSpecified.All);
 
         _picker.Width.Should().BeGreaterThanOrEqualTo(100);
@@ -73,10 +73,10 @@ public class DataGridViewColumnTypePickerTests : IDisposable
         discoveryServiceMock.Setup(ds => ds.GetTypes(It.IsAny<Type>(), It.IsAny<bool>())).Returns(types);
 
         _picker.Start(editorServiceMock.Object, discoveryServiceMock.Object, typeof(DataGridViewTextBoxColumn));
-        var listBox = _picker.TestAccessor().Dynamic._typesListBox;
+        var listBox = _picker.TestAccessor.Dynamic._typesListBox;
         listBox.SelectedIndex = 1;
 
-        _picker.TestAccessor().Dynamic.typesListBox_SelectedIndexChanged(listBox, EventArgs.Empty);
+        _picker.TestAccessor.Dynamic.typesListBox_SelectedIndexChanged(listBox, EventArgs.Empty);
 
         _picker.SelectedType.Should().Be(typeof(DataGridViewTextBoxColumn));
     }

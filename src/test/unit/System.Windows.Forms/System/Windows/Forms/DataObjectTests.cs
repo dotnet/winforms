@@ -2782,8 +2782,8 @@ public partial class DataObjectTests
     [MemberData(nameof(DataObjectMockRoundTripData))]
     public unsafe void MockRoundTrip_OutData_IsSame(object data)
     {
-        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic controlAccessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
         if (data is CustomDataObject)
@@ -2818,8 +2818,8 @@ public partial class DataObjectTests
     [MemberData(nameof(DataObjectWithJsonMockRoundTripData))]
     public unsafe void WithJson_MockRoundTrip_OutData_IsSame(DataObject data)
     {
-        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic controlAccessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         Point point = new() { X = 1, Y = 1 };
         data.SetDataAsJson("point", point);
@@ -2839,8 +2839,8 @@ public partial class DataObjectTests
     public unsafe void StringData_MockRoundTrip_IsWrapped()
     {
         string testString = "Test";
-        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic accessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
         inData.Should().BeAssignableTo<DataObject>();
@@ -2855,8 +2855,8 @@ public partial class DataObjectTests
     public unsafe void IMockRoundTrip_IsWrapped()
     {
         CustomIDataObject data = new();
-        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic accessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeAssignableTo<DataObject>();
@@ -2871,8 +2871,8 @@ public partial class DataObjectTests
     public unsafe void ComTypesIMockRoundTrip_IsWrapped()
     {
         CustomComTypesDataObject data = new();
-        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic accessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
@@ -3109,7 +3109,7 @@ public partial class DataObjectTests
     {
         DataObject data = new();
         data.SetDataAsJson(format, 1);
-        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        object storedData = data.TestAccessor.Dynamic._innerData.GetData(format);
         storedData.Should().BeAssignableTo<IJsonData>();
         data.GetData(format).Should().Be(1);
         data.TryGetData(format, out int deserialized).Should().BeTrue();
@@ -3123,7 +3123,7 @@ public partial class DataObjectTests
         DataObject data = new();
         SimpleTestData testData = new() { X = 1, Y = 1 };
         data.SetDataAsJson(format, testData);
-        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        object storedData = data.TestAccessor.Dynamic._innerData.GetData(format);
         storedData.Should().BeOfType<JsonData<SimpleTestData>>();
 
         // We don't expose JsonData<T> in public legacy API

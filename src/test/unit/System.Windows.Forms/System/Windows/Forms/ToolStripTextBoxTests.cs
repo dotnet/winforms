@@ -125,7 +125,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.TextBoxTextAlignChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.HandleTextBoxTextAlignChanged(null, EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.HandleTextBoxTextAlignChanged(null, EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -135,7 +135,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.AcceptsTabChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.OnAcceptsTabChanged(EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.OnAcceptsTabChanged(EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -145,7 +145,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.BorderStyleChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.OnBorderStyleChanged(EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.OnBorderStyleChanged(EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -155,7 +155,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.HideSelectionChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.OnHideSelectionChanged(EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.OnHideSelectionChanged(EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -165,7 +165,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.ModifiedChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.OnModifiedChanged(EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.OnModifiedChanged(EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -175,7 +175,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         bool eventRaised = false;
         _toolStripTextBox.MultilineChanged += (sender, e) => eventRaised = true;
-        _toolStripTextBox.TestAccessor().Dynamic.OnMultilineChanged(EventArgs.Empty);
+        _toolStripTextBox.TestAccessor.Dynamic.OnMultilineChanged(EventArgs.Empty);
 
         eventRaised.Should().BeTrue();
     }
@@ -184,11 +184,11 @@ public partial class ToolStripTextBoxTests : IDisposable
     public void ToolStripTextBox_ShouldSerializeFont_ReturnsExpected()
     {
         _toolStripTextBox.Font = ToolStripManager.DefaultFont;
-        bool result = _toolStripTextBox.TestAccessor().Dynamic.ShouldSerializeFont();
+        bool result = _toolStripTextBox.TestAccessor.Dynamic.ShouldSerializeFont();
         result.Should().BeFalse();
 
         _toolStripTextBox.Font = new Font("Arial", 8.25f);
-        result = _toolStripTextBox.TestAccessor().Dynamic.ShouldSerializeFont();
+        result = _toolStripTextBox.TestAccessor.Dynamic.ShouldSerializeFont();
         result.Should().BeTrue();
     }
 

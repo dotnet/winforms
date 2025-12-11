@@ -200,8 +200,8 @@ public class DataGridViewComboBoxCellTests : IDisposable
     {
         StubPropertyDescriptor prop = new("Name", typeof(string));
 
-        _dataGridViewComboBoxCell.TestAccessor().Dynamic.DisplayMemberProperty = prop;
-        _dataGridViewComboBoxCell.TestAccessor().Dynamic.ValueMemberProperty = null;
+        _dataGridViewComboBoxCell.TestAccessor.Dynamic.DisplayMemberProperty = prop;
+        _dataGridViewComboBoxCell.TestAccessor.Dynamic.ValueMemberProperty = null;
 
         _dataGridViewComboBoxCell.ValueType.Should().Be(typeof(string));
     }
@@ -213,7 +213,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         DataGridViewCellStyle style = new();
 
-        Rectangle result = _dataGridViewComboBoxCell.TestAccessor().Dynamic.GetContentBounds(g, style, 0);
+        Rectangle result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetContentBounds(g, style, 0);
 
         result.Should().Be(Rectangle.Empty);
     }
@@ -228,7 +228,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         DataGridViewCellStyle style = new();
 
-        Rectangle result = _dataGridViewComboBoxCell.TestAccessor().Dynamic.GetContentBounds(g, style, -1);
+        Rectangle result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetContentBounds(g, style, -1);
 
         result.Should().Be(Rectangle.Empty);
     }
@@ -240,7 +240,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         DataGridViewCellStyle style = new();
 
-        Rectangle result = _dataGridViewComboBoxCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, 0);
+        Rectangle result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetErrorIconBounds(g, style, 0);
 
         result.Should().Be(Rectangle.Empty);
     }
@@ -255,7 +255,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         DataGridViewCellStyle style = new();
 
-        Rectangle result = _dataGridViewComboBoxCell.TestAccessor().Dynamic.GetErrorIconBounds(g, style, -1);
+        Rectangle result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetErrorIconBounds(g, style, -1);
 
         result.Should().Be(Rectangle.Empty);
     }
@@ -267,7 +267,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         using Graphics g = Graphics.FromImage(bmp);
         DataGridViewCellStyle style = new();
 
-        Size result = _dataGridViewComboBoxCell.TestAccessor().Dynamic.GetPreferredSize(
+        Size result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetPreferredSize(
             g,
             style,
             0,
@@ -336,7 +336,7 @@ public class DataGridViewComboBoxCellTests : IDisposable
         DataGridViewCellStyle style = new();
 
         StubPropertyDescriptor prop = new("Id", typeof(string));
-        _dataGridViewComboBoxCell.TestAccessor().Dynamic.ValueMemberProperty = prop;
+        _dataGridViewComboBoxCell.TestAccessor.Dynamic.ValueMemberProperty = prop;
 
         object? result = _dataGridViewComboBoxCell.ParseFormattedValue("abc", style, null, null);
 

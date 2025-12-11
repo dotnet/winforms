@@ -1235,7 +1235,7 @@ public partial class ControlTests
         }
 
         public Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
-            => this.TestAccessor().Dynamic.GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
+            => this.TestAccessor.Dynamic.GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
 
         public new bool CanEnableIme => base.CanEnableIme;
 

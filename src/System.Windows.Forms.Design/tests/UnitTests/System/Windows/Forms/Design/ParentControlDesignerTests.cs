@@ -79,9 +79,9 @@ public class ParentControlDesignerTests : IDisposable
         mockServiceProvider.Setup(sp => sp.GetService(typeof(BehaviorService))).Returns(() => behaviorService);
         mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
 
-        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
-        _designer.TestAccessor().Dynamic._host = mockDesignerHost.Object;
-        _designer.TestAccessor().Dynamic._changeService = mockChangeService.Object;
+        _designer.TestAccessor.Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor.Dynamic._host = mockDesignerHost.Object;
+        _designer.TestAccessor.Dynamic._changeService = mockChangeService.Object;
 
         GlyphSelectionType selectionType = GlyphSelectionType.Selected;
 
@@ -117,7 +117,7 @@ public class ParentControlDesignerTests : IDisposable
         mockDesignerHost.Setup(h => h.GetDesigner(parentComponent)).Returns(_designer);
 
         _designer.Initialize(testComponent);
-        _designer.TestAccessor().Dynamic._changeService = mockChangeService.Object;
+        _designer.TestAccessor.Dynamic._changeService = mockChangeService.Object;
 
         Dictionary<string, object> defaultValues = new()
         {
@@ -174,14 +174,14 @@ public class ParentControlDesignerTests : IDisposable
     [Fact]
     public void EnableDragRect_ReturnsTrue()
     {
-        bool enableDragRect = _designer.TestAccessor().Dynamic.EnableDragRect;
+        bool enableDragRect = _designer.TestAccessor.Dynamic.EnableDragRect;
         enableDragRect.Should().BeTrue();
     }
 
     [Fact]
     public void GridSize_DefaultValue_ReturnsExpected()
     {
-        Size gridSize = _designer.TestAccessor().Dynamic.GridSize;
+        Size gridSize = _designer.TestAccessor.Dynamic.GridSize;
         gridSize.Should().Be(new Size(8, 8));
     }
 
@@ -189,20 +189,20 @@ public class ParentControlDesignerTests : IDisposable
     public void GridSize_SetValue_UpdatesGridSize()
     {
         Size newSize = new Size(10, 10);
-        _designer.TestAccessor().Dynamic.GridSize = newSize;
-        Size gridSize = _designer.TestAccessor().Dynamic.GridSize;
+        _designer.TestAccessor.Dynamic.GridSize = newSize;
+        Size gridSize = _designer.TestAccessor.Dynamic.GridSize;
         gridSize.Should().Be(newSize);
     }
 
     [Fact]
     public void GridSize_SetValue_InvalidSize_ThrowsArgumentException()
     {
-        Action action = () => _designer.TestAccessor().Dynamic.GridSize = new Size(1, 1);
+        Action action = () => _designer.TestAccessor.Dynamic.GridSize = new Size(1, 1);
         action.Should().Throw<TargetInvocationException>()
             .WithInnerException<ArgumentException>()
             .WithMessage("*'GridSize'*");
 
-        action = () => _designer.TestAccessor().Dynamic.GridSize = new Size(201, 201);
+        action = () => _designer.TestAccessor.Dynamic.GridSize = new Size(201, 201);
         action.Should().Throw<TargetInvocationException>()
             .WithInnerException<ArgumentException>()
             .WithMessage("*'GridSize'*");
@@ -211,7 +211,7 @@ public class ParentControlDesignerTests : IDisposable
     [Fact]
     public void MouseDragTool_DefaultValue_ReturnsNull()
     {
-        ToolboxItem mouseDragTool = _designer.TestAccessor().Dynamic.MouseDragTool;
+        ToolboxItem mouseDragTool = _designer.TestAccessor.Dynamic.MouseDragTool;
         mouseDragTool.Should().BeNull();
     }
 
@@ -219,8 +219,8 @@ public class ParentControlDesignerTests : IDisposable
     public void MouseDragTool_SetValue_ReturnsExpected()
     {
         ToolboxItem toolboxItem = new(typeof(Button));
-        _designer.TestAccessor().Dynamic._mouseDragTool = toolboxItem;
-        ToolboxItem mouseDragTool = _designer.TestAccessor().Dynamic.MouseDragTool;
+        _designer.TestAccessor.Dynamic._mouseDragTool = toolboxItem;
+        ToolboxItem mouseDragTool = _designer.TestAccessor.Dynamic.MouseDragTool;
         mouseDragTool.Should().Be(toolboxItem);
     }
 
@@ -228,7 +228,7 @@ public class ParentControlDesignerTests : IDisposable
     public void GetParentForComponent_ReturnsControl()
     {
         Mock<IComponent> mockComponent = new();
-        Control parentControl = _designer.TestAccessor().Dynamic.GetParentForComponent(mockComponent.Object);
+        Control parentControl = _designer.TestAccessor.Dynamic.GetParentForComponent(mockComponent.Object);
         parentControl.Should().Be(_control);
     }
 }

@@ -11,7 +11,7 @@ public partial class PropertyGridViewTests
     public void PropertyGridView_Ctor_Default()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
 
         // TODO: validate properties
 

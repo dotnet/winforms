@@ -40,13 +40,13 @@ public class TabPage_TabAccessibleObjectTests
 
         tabPage.ReleaseUiaProvider(tabPage.HWND);
 
-        Assert.Null(tabPage.TestAccessor().Dynamic._tabAccessibilityObject);
+        Assert.Null(tabPage.TestAccessor.Dynamic._tabAccessibilityObject);
         Assert.True(tabPage.IsHandleCreated);
 
         static void EnforceTabAccessibilityObjectCreation(TabPage tabPage)
         {
             _ = tabPage.TabAccessibilityObject;
-            Assert.NotNull(tabPage.TestAccessor().Dynamic._tabAccessibilityObject);
+            Assert.NotNull(tabPage.TestAccessor.Dynamic._tabAccessibilityObject);
         }
     }
 
@@ -616,7 +616,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new() { Enabled = tabPageEnabled }]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -639,7 +639,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -661,7 +661,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         pages[0].TabAccessibilityObject.DoDefaultAction();
 
@@ -683,7 +683,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new() { Enabled = tabPageEnabled }]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -707,7 +707,7 @@ public class TabPage_TabAccessibleObjectTests
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         tabControl.SelectedTab = pages[1];
         Application.DoEvents();
@@ -728,7 +728,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         tabControl.SelectedTab = pages[1];
 
@@ -748,7 +748,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -770,7 +770,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -793,7 +793,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         tabControl.SelectedIndex = 1;
 
@@ -813,7 +813,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -835,7 +835,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -855,7 +855,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         tabControl.OnGotFocus();
 
@@ -875,7 +875,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new() { Enabled = tabPageEnabled }]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -898,7 +898,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         pages[0].TabAccessibilityObject.AddToSelection();
 
@@ -918,7 +918,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         pages[0].TabAccessibilityObject.AddToSelection();
 
@@ -940,7 +940,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new() { Enabled = tabPageEnabled }, new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -964,7 +964,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new() { Enabled = tabPageEnabled }]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -987,7 +987,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         pages[0].TabAccessibilityObject.SelectItem();
 
@@ -1007,7 +1007,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new()]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[0]);
-        pages[0].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[0].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
@@ -1031,7 +1031,7 @@ public class TabPage_TabAccessibleObjectTests
         pages.AddRange([new(), new() { Enabled = tabPageEnabled }]);
 
         SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
-        pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
+        pages[1].TestAccessor.Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 

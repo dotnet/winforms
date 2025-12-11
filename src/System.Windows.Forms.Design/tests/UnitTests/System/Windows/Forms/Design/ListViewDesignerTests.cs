@@ -38,7 +38,7 @@ public class ListViewDesignerTests : IDisposable
     {
         _listView.View = View.LargeIcon;
 
-        bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(new Point(10, 10));
+        bool result = _listViewDesigner.TestAccessor.Dynamic.GetHitTest(new Point(10, 10));
 
         result.Should().BeFalse();
     }
@@ -49,7 +49,7 @@ public class ListViewDesignerTests : IDisposable
         _listView.View = View.Details;
         _listView.Columns.Add("Column1");
 
-        bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(new Point(10, 10));
+        bool result = _listViewDesigner.TestAccessor.Dynamic.GetHitTest(new Point(10, 10));
 
         result.Should().BeFalse();
     }
@@ -61,7 +61,7 @@ public class ListViewDesignerTests : IDisposable
         _listView.Columns.Add("Column1");
 
         Point point = new(10, 5);
-        bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(point);
+        bool result = _listViewDesigner.TestAccessor.Dynamic.GetHitTest(point);
 
         result.Should().BeFalse();
     }
@@ -73,7 +73,7 @@ public class ListViewDesignerTests : IDisposable
         _listView.Columns.Add("Column1");
 
         Point outsidePoint = new(-10, -10);
-        bool result = _listViewDesigner.TestAccessor().Dynamic.GetHitTest(outsidePoint);
+        bool result = _listViewDesigner.TestAccessor.Dynamic.GetHitTest(outsidePoint);
 
         result.Should().BeFalse();
     }

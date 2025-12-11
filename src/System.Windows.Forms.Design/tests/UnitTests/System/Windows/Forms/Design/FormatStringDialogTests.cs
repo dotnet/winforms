@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -76,9 +76,9 @@ public class FormatStringDialogTests : IDisposable
     [Fact]
     public void FormatControlFinishedLoading_AdjustsButtonPositionsCorrectly()
     {
-        dynamic? okButtonField = _formatStringDialog.TestAccessor().Dynamic._okButton;
-        dynamic? cancelButtonField = _formatStringDialog.TestAccessor().Dynamic._cancelButton;
-        dynamic? formatControlField = _formatStringDialog.TestAccessor().Dynamic._formatControl1;
+        dynamic? okButtonField = _formatStringDialog.TestAccessor.Dynamic._okButton;
+        dynamic? cancelButtonField = _formatStringDialog.TestAccessor.Dynamic._cancelButton;
+        dynamic? formatControlField = _formatStringDialog.TestAccessor.Dynamic._formatControl1;
 
         int okButtonLeftOriginalState = okButtonField.Left;
         int cancelButtonLeftOriginalState = cancelButtonField.Left;

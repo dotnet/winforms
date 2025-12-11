@@ -13,7 +13,7 @@ public class ListView_IconComparerTests
     {
         ListView.IconComparer comparer = new(order);
 
-        ((SortOrder)comparer.TestAccessor().Dynamic._sortOrder).Should().Be(order);
+        ((SortOrder)comparer.TestAccessor.Dynamic._sortOrder).Should().Be(order);
     }
 
     [WinFormsTheory]
@@ -27,7 +27,7 @@ public class ListView_IconComparerTests
             SortOrder = updatedOrder
         };
 
-        ((SortOrder)comparer.TestAccessor().Dynamic._sortOrder).Should().Be(updatedOrder);
+        ((SortOrder)comparer.TestAccessor.Dynamic._sortOrder).Should().Be(updatedOrder);
     }
 
     [WinFormsTheory]
