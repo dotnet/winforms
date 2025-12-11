@@ -1365,6 +1365,7 @@ public partial class TabControl : Control
     private void DrawDarkModeTab(DrawItemEventArgs e)
     {
         // Define dark mode colors - use darker/black backgrounds for better dark mode appearance
+        Color tabStripBackColor = Color.FromArgb(45, 45, 48);  // Tab strip background (matches WM_ERASEBKGND)
         Color backColor = (e.State & DrawItemState.Selected) != 0
             ? Color.FromArgb(37, 37, 38)   // Selected tab: darker gray (almost black)
             : Color.FromArgb(28, 28, 28);  // Normal tab: very dark gray (almost black)
@@ -1389,6 +1390,14 @@ public partial class TabControl : Control
         {
             TabPage page = TabPages[e.Index];
             string text = page.Text;
+
+            // Create StringFormat for text alignment (reused for both horizontal and vertical)
+            using StringFormat format = new()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center,
+                Trimming = StringTrimming.EllipsisCharacter
+            };
 
             // For vertical tabs (Left/Right alignment), rotate the text 90/-90 degrees
             if (_alignment is TabAlignment.Left or TabAlignment.Right)
@@ -1423,13 +1432,6 @@ public partial class TabControl : Control
                     // Use Graphics.DrawString for proper rotation support (TextRenderer doesn't respect transforms)
                     using (SolidBrush textBrush = new(textColor))
                     {
-                        StringFormat format = new StringFormat
-                        {
-                            Alignment = StringAlignment.Center,
-                            LineAlignment = StringAlignment.Center,
-                            Trimming = StringTrimming.EllipsisCharacter
-                        };
-
                         e.Graphics.DrawString(text, Font, textBrush, textBounds, format);
                     }
                 }
@@ -1444,13 +1446,6 @@ public partial class TabControl : Control
                 // Horizontal tabs - no rotation needed
                 using (SolidBrush textBrush = new(textColor))
                 {
-                    StringFormat format = new StringFormat
-                    {
-                        Alignment = StringAlignment.Center,
-                        LineAlignment = StringAlignment.Center,
-                        Trimming = StringTrimming.EllipsisCharacter
-                    };
-
                     e.Graphics.DrawString(text, Font, textBrush, e.Bounds, format);
                 }
             }
@@ -2191,13 +2186,22 @@ public partial class TabControl : Control
                 // Paint the tab strip background dark for vertical tabs in dark mode
                 if (Application.IsDarkModeEnabled &&
                     (_alignment is TabAlignment.Left or TabAlignment.Right) &&
-                    _drawMode != TabDrawMode.OwnerDrawFixed)
+                    _drawMode != TabDrawMode.OwnerDrawFixed &&
+                    m.WParamInternal != IntPtr.Zero)
                 {
-                    using Graphics g = Graphics.FromHdc(m.WParamInternal);
-                    using SolidBrush brush = new(Color.FromArgb(45, 45, 48)); // Dark background for tab strip
-                    g.FillRectangle(brush, ClientRectangle);
-                    m.ResultInternal = (LRESULT)1;
-                    return;
+                    try
+                    {
+                        using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                        // Use the same dark background color as defined in DrawDarkModeTab
+                        using SolidBrush brush = new(Color.FromArgb(45, 45, 48));
+                        g.FillRectangle(brush, ClientRectangle);
+                        m.ResultInternal = (LRESULT)1;
+                        return;
+                    }
+                    catch
+                    {
+                        // If Graphics creation fails, fall through to default handling
+                    }
                 }
                 break;
 
