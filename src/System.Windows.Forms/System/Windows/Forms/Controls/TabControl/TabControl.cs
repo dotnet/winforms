@@ -1410,7 +1410,11 @@ public partial class TabControl : Control
                     e.Graphics.RotateTransform(angle);
                     e.Graphics.TranslateTransform(-centerX, -centerY);
 
-                    // For rotated text, swap width and height for text bounds
+                    // For rotated text, swap width and height since the text will be rendered vertically
+                    // The offset calculation centers the rotated text rectangle within the original tab bounds:
+                    // - X offset: (Width - Height) / 2 shifts the narrower dimension to center
+                    // - Y offset: (Height - Width) / 2 shifts the longer dimension to center
+                    // - Width/Height are swapped to match the 90-degree rotation
                     Rectangle textBounds = new Rectangle(
                         e.Bounds.X + (e.Bounds.Width - e.Bounds.Height) / 2,
                         e.Bounds.Y + (e.Bounds.Height - e.Bounds.Width) / 2,
