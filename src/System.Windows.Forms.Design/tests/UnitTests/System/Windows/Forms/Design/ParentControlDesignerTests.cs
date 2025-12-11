@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Reflection;
 using System.Windows.Forms.Design.Behavior;
 using Moq;
 
@@ -198,13 +197,11 @@ public class ParentControlDesignerTests : IDisposable
     public void GridSize_SetValue_InvalidSize_ThrowsArgumentException()
     {
         Action action = () => _designer.TestAccessor.Dynamic.GridSize = new Size(1, 1);
-        action.Should().Throw<TargetInvocationException>()
-            .WithInnerException<ArgumentException>()
+        action.Should().Throw<ArgumentException>()
             .WithMessage("*'GridSize'*");
 
         action = () => _designer.TestAccessor.Dynamic.GridSize = new Size(201, 201);
-        action.Should().Throw<TargetInvocationException>()
-            .WithInnerException<ArgumentException>()
+        action.Should().Throw<ArgumentException>()
             .WithMessage("*'GridSize'*");
     }
 
