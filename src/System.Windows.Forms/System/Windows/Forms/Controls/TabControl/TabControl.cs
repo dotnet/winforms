@@ -287,6 +287,12 @@ public partial class TabControl : Control
             {
                 cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
             }
+            // Enable owner-draw for vertical tabs in dark mode since standard themes don't support it
+            else if (Application.IsDarkModeEnabled &&
+                     (_alignment is TabAlignment.Left or TabAlignment.Right))
+            {
+                cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
+            }
 
             if (ShowToolTips && !DesignMode)
             {
@@ -1301,27 +1307,15 @@ public partial class TabControl : Control
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
-            // For vertical tabs (Left/Right alignment), try using DarkMode::Explorer theme
-            // For horizontal tabs (Top/Bottom alignment), use DarkMode::FileExplorerBannerContainer
-            if (_alignment is TabAlignment.Left or TabAlignment.Right)
+            // For horizontal tabs, apply the standard dark mode theme
+            // For vertical tabs, we use owner-draw mode (set in CreateParams) so don't apply theme to main control
+            if (_alignment is TabAlignment.Top or TabAlignment.Bottom)
             {
-                // Try Explorer with :: separator for vertical tabs
-                PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{ExplorerThemeIdentifier}");
-            }
-            else
-            {
-                // Apply BannerContainer theme for horizontal tabs
                 PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
             }
 
-            // Apply Explorer theme to child windows (scrollers, buttons, etc.)
+            // Apply theme to child windows for both horizontal and vertical tabs
             PInvokeCore.EnumChildWindows(this, StyleChildren);
-
-            // Send WM_THEMECHANGED to force the control to update its appearance
-            if (IsHandleCreated)
-            {
-                PInvokeCore.SendMessage(this, PInvokeCore.WM_THEMECHANGED);
-            }
         }
 
         _suspendDarkModeChange = false;
@@ -1353,7 +1347,71 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        _onDrawItem?.Invoke(this, e);
+        // If we're in automatic owner-draw mode for dark mode vertical tabs,
+        // provide default rendering if user hasn't attached a handler
+        if (Application.IsDarkModeEnabled &&
+            (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+            _drawMode != TabDrawMode.OwnerDrawFixed &&
+            _onDrawItem is null)
+        {
+            DrawDarkModeTab(e);
+        }
+        else
+        {
+            _onDrawItem?.Invoke(this, e);
+        }
+    }
+
+    private void DrawDarkModeTab(DrawItemEventArgs e)
+    {
+        // Define dark mode colors
+        Color backColor = (e.State & DrawItemState.Selected) != 0
+            ? Color.FromArgb(62, 62, 64)  // Selected tab background
+            : Color.FromArgb(45, 45, 48); // Normal tab background
+
+        Color borderColor = Color.FromArgb(63, 63, 70);
+        Color textColor = Color.FromArgb(241, 241, 241);
+
+        // Draw tab background
+        using (SolidBrush brush = new(backColor))
+        {
+            e.Graphics.FillRectangle(brush, e.Bounds);
+        }
+
+        // Draw tab border
+        using (Pen pen = new(borderColor))
+        {
+            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
+        }
+
+        // Draw tab text
+        if (e.Index >= 0 && e.Index < TabPages.Count)
+        {
+            TabPage page = TabPages[e.Index];
+            string text = page.Text;
+
+            TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
+                                   TextFormatFlags.VerticalCenter |
+                                   TextFormatFlags.SingleLine;
+
+            // For vertical tabs, we may need to rotate the text rendering
+            if (_alignment is TabAlignment.Left or TabAlignment.Right)
+            {
+                // Use VerticalCenter and HorizontalCenter for vertical tabs
+                Rectangle textBounds = e.Bounds;
+                TextRenderer.DrawText(e.Graphics, text, Font, textBounds, textColor, flags);
+            }
+            else
+            {
+                TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
+            }
+
+            // Draw focus rectangle if needed
+            if ((e.State & DrawItemState.Focus) != 0)
+            {
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+            }
+        }
     }
 
     /// <summary>
