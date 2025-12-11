@@ -419,7 +419,9 @@ namespace System.Windows.Forms.Design
             FillTree(initialSelectedItem);
 
             // Set initial state of the various sub-panels
-            // addNewPanel.Visible = (showDataSources && dspSvc is not null && dspSvc.SupportsAddNewDataSource);
+             _addNewPanel.Visible = (showDataSources
+                && _dataSourceProviderService is not null
+                && _dataSourceProviderService.SupportsAddNewDataSource);
             _helpTextPanel.Visible = (showDataSources);
 
             // Set initial help text in help pane
