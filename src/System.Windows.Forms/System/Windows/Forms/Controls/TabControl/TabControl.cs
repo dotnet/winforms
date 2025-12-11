@@ -1364,13 +1364,13 @@ public partial class TabControl : Control
 
     private void DrawDarkModeTab(DrawItemEventArgs e)
     {
-        // Define dark mode colors
+        // Define dark mode colors - use darker/black backgrounds for better dark mode appearance
         Color backColor = (e.State & DrawItemState.Selected) != 0
-            ? Color.FromArgb(62, 62, 64)  // Selected tab background
-            : Color.FromArgb(45, 45, 48); // Normal tab background
+            ? Color.FromArgb(37, 37, 38)   // Selected tab: darker gray (almost black)
+            : Color.FromArgb(28, 28, 28);  // Normal tab: very dark gray (almost black)
 
-        Color borderColor = Color.FromArgb(63, 63, 70);
-        Color textColor = Color.FromArgb(241, 241, 241);
+        Color borderColor = Color.FromArgb(51, 51, 51);  // Dark border
+        Color textColor = Color.FromArgb(241, 241, 241); // Light text
 
         // Draw tab background
         using (SolidBrush brush = new(backColor))
@@ -1390,12 +1390,54 @@ public partial class TabControl : Control
             TabPage page = TabPages[e.Index];
             string text = page.Text;
 
-            TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
-                                   TextFormatFlags.VerticalCenter |
-                                   TextFormatFlags.SingleLine;
+            // For vertical tabs (Left/Right alignment), rotate the text 90/-90 degrees
+            if (_alignment is TabAlignment.Left or TabAlignment.Right)
+            {
+                // Save the current graphics state
+                System.Drawing.Drawing2D.GraphicsState state = e.Graphics.Save();
 
-            // Draw tab text (Windows handles vertical text orientation automatically)
-            TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
+                try
+                {
+                    // Calculate rotation angle based on alignment
+                    float angle = _alignment == TabAlignment.Left ? -90 : 90;
+                    
+                    // Calculate the center point for rotation
+                    float centerX = e.Bounds.X + e.Bounds.Width / 2;
+                    float centerY = e.Bounds.Y + e.Bounds.Height / 2;
+
+                    // Translate to center, rotate, then translate back
+                    e.Graphics.TranslateTransform(centerX, centerY);
+                    e.Graphics.RotateTransform(angle);
+                    e.Graphics.TranslateTransform(-centerX, -centerY);
+
+                    // For rotated text, swap width and height for text bounds
+                    Rectangle textBounds = new Rectangle(
+                        e.Bounds.X + (e.Bounds.Width - e.Bounds.Height) / 2,
+                        e.Bounds.Y + (e.Bounds.Height - e.Bounds.Width) / 2,
+                        e.Bounds.Height,
+                        e.Bounds.Width);
+
+                    TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
+                                           TextFormatFlags.VerticalCenter |
+                                           TextFormatFlags.SingleLine;
+
+                    TextRenderer.DrawText(e.Graphics, text, Font, textBounds, textColor, flags);
+                }
+                finally
+                {
+                    // Restore the graphics state
+                    e.Graphics.Restore(state);
+                }
+            }
+            else
+            {
+                // Horizontal tabs - no rotation needed
+                TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
+                                       TextFormatFlags.VerticalCenter |
+                                       TextFormatFlags.SingleLine;
+
+                TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
+            }
 
             // Draw focus rectangle if needed
             if ((e.State & DrawItemState.Focus) != 0)
