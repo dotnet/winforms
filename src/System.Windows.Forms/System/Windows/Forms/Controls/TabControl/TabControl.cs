@@ -1394,17 +1394,8 @@ public partial class TabControl : Control
                                    TextFormatFlags.VerticalCenter |
                                    TextFormatFlags.SingleLine;
 
-            // For vertical tabs, we may need to rotate the text rendering
-            if (_alignment is TabAlignment.Left or TabAlignment.Right)
-            {
-                // Use VerticalCenter and HorizontalCenter for vertical tabs
-                Rectangle textBounds = e.Bounds;
-                TextRenderer.DrawText(e.Graphics, text, Font, textBounds, textColor, flags);
-            }
-            else
-            {
-                TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
-            }
+            // Draw tab text (Windows handles vertical text orientation automatically)
+            TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
 
             // Draw focus rectangle if needed
             if ((e.State & DrawItemState.Focus) != 0)
