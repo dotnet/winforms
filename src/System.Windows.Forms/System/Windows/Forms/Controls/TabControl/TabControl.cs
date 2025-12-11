@@ -1301,12 +1301,12 @@ public partial class TabControl : Control
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
-            // For vertical tabs (Left/Right alignment), apply DarkMode_Explorer theme
+            // For vertical tabs (Left/Right alignment), try using DarkMode::Explorer theme
             // For horizontal tabs (Top/Bottom alignment), use DarkMode::FileExplorerBannerContainer
             if (_alignment is TabAlignment.Left or TabAlignment.Right)
             {
-                // Apply Explorer theme to main control for vertical tabs
-                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+                // Try Explorer with :: separator for vertical tabs
+                PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{ExplorerThemeIdentifier}");
             }
             else
             {
