@@ -1301,18 +1301,27 @@ public partial class TabControl : Control
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
-            // For vertical tabs (Left/Right alignment), use DarkMode_Explorer theme
-            // For horizontal tabs (Top/Bottom alignment), use DarkMode::FileExplorerBannerContainer theme
+            // For vertical tabs (Left/Right alignment), apply DarkMode_Explorer theme
+            // For horizontal tabs (Top/Bottom alignment), use DarkMode::FileExplorerBannerContainer
             if (_alignment is TabAlignment.Left or TabAlignment.Right)
             {
+                // Apply Explorer theme to main control for vertical tabs
                 PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
             }
             else
             {
+                // Apply BannerContainer theme for horizontal tabs
                 PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
             }
 
+            // Apply Explorer theme to child windows (scrollers, buttons, etc.)
             PInvokeCore.EnumChildWindows(this, StyleChildren);
+
+            // Send WM_THEMECHANGED to force the control to update its appearance
+            if (IsHandleCreated)
+            {
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_THEMECHANGED);
+            }
         }
 
         _suspendDarkModeChange = false;
