@@ -1399,33 +1399,39 @@ public partial class TabControl : Control
                 try
                 {
                     // Calculate rotation angle based on alignment
+                    // Left: text reads bottom-to-top (-90°)
+                    // Right: text reads top-to-bottom (90°)
                     float angle = _alignment == TabAlignment.Left ? -90 : 90;
                     
                     // Calculate the center point for rotation
-                    float centerX = e.Bounds.X + e.Bounds.Width / 2;
-                    float centerY = e.Bounds.Y + e.Bounds.Height / 2;
+                    float centerX = e.Bounds.X + e.Bounds.Width / 2f;
+                    float centerY = e.Bounds.Y + e.Bounds.Height / 2f;
 
-                    // Translate to center, rotate, then translate back
+                    // Apply rotation transform around center point
                     e.Graphics.TranslateTransform(centerX, centerY);
                     e.Graphics.RotateTransform(angle);
                     e.Graphics.TranslateTransform(-centerX, -centerY);
 
                     // For rotated text, swap width and height since the text will be rendered vertically
-                    // The offset calculation centers the rotated text rectangle within the original tab bounds:
-                    // - X offset: (Width - Height) / 2 shifts the narrower dimension to center
-                    // - Y offset: (Height - Width) / 2 shifts the longer dimension to center
-                    // - Width/Height are swapped to match the 90-degree rotation
+                    // The offset calculation centers the rotated text rectangle within the original tab bounds
                     Rectangle textBounds = new Rectangle(
                         e.Bounds.X + (e.Bounds.Width - e.Bounds.Height) / 2,
                         e.Bounds.Y + (e.Bounds.Height - e.Bounds.Width) / 2,
                         e.Bounds.Height,
                         e.Bounds.Width);
 
-                    TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
-                                           TextFormatFlags.VerticalCenter |
-                                           TextFormatFlags.SingleLine;
+                    // Use Graphics.DrawString for proper rotation support (TextRenderer doesn't respect transforms)
+                    using (SolidBrush textBrush = new(textColor))
+                    {
+                        StringFormat format = new StringFormat
+                        {
+                            Alignment = StringAlignment.Center,
+                            LineAlignment = StringAlignment.Center,
+                            Trimming = StringTrimming.EllipsisCharacter
+                        };
 
-                    TextRenderer.DrawText(e.Graphics, text, Font, textBounds, textColor, flags);
+                        e.Graphics.DrawString(text, Font, textBrush, textBounds, format);
+                    }
                 }
                 finally
                 {
@@ -1436,11 +1442,17 @@ public partial class TabControl : Control
             else
             {
                 // Horizontal tabs - no rotation needed
-                TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
-                                       TextFormatFlags.VerticalCenter |
-                                       TextFormatFlags.SingleLine;
+                using (SolidBrush textBrush = new(textColor))
+                {
+                    StringFormat format = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center,
+                        Trimming = StringTrimming.EllipsisCharacter
+                    };
 
-                TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, textColor, flags);
+                    e.Graphics.DrawString(text, Font, textBrush, e.Bounds, format);
+                }
             }
 
             // Draw focus rectangle if needed
@@ -2175,6 +2187,20 @@ public partial class TabControl : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_ERASEBKGND:
+                // Paint the tab strip background dark for vertical tabs in dark mode
+                if (Application.IsDarkModeEnabled &&
+                    (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+                    _drawMode != TabDrawMode.OwnerDrawFixed)
+                {
+                    using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                    using SolidBrush brush = new(Color.FromArgb(45, 45, 48)); // Dark background for tab strip
+                    g.FillRectangle(brush, ClientRectangle);
+                    m.ResultInternal = (LRESULT)1;
+                    return;
+                }
+                break;
+
             case MessageId.WM_REFLECT_DRAWITEM:
                 WmReflectDrawItem(ref m);
                 break;
