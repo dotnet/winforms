@@ -578,6 +578,12 @@ public partial class CollectionEditor
 
                 Color backColor = SystemColors.Window;
                 Color textColor = SystemColors.WindowText;
+
+                using (SolidBrush backBrush = new(backColor))
+                {
+                    g.FillRectangle(backBrush, button);
+                }
+
                 if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
                     backColor = SystemColors.Highlight;
