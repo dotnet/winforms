@@ -5830,8 +5830,8 @@ public partial class Form : ContainerControl
             }
         }
 
-            return DialogResult;
-        }
+        return DialogResult;
+    }
 
     /// <summary>
     ///  Shows the form as a modal dialog box asynchronously.
