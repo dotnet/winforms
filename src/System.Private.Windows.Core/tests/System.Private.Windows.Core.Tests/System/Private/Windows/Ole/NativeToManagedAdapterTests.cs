@@ -120,7 +120,7 @@ public unsafe class NativeToManagedAdapterTests
 
         Action action = () =>
         {
-            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(HGLOBAL.Null, unicode);
+            string result = type.TestAccessor.Dynamic.ReadStringFromHGLOBAL(HGLOBAL.Null, unicode);
         };
 
         action.Should().Throw<Win32Exception>().And.HResult.Should().Be((int)HRESULT.E_FAIL);
@@ -145,7 +145,7 @@ public unsafe class NativeToManagedAdapterTests
                 span.Fill(0x20);
             }
 
-            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(global, unicode);
+            string result = type.TestAccessor.Dynamic.ReadStringFromHGLOBAL(global, unicode);
             result.Should().BeEmpty();
         }
         finally
@@ -173,7 +173,7 @@ public unsafe class NativeToManagedAdapterTests
                 span[..^2].Fill(0x20);
             }
 
-            string result = type.TestAccessor().Dynamic.ReadStringFromHGLOBAL(global, unicode);
+            string result = type.TestAccessor.Dynamic.ReadStringFromHGLOBAL(global, unicode);
             result.Should().NotBeEmpty();
         }
         finally

@@ -189,10 +189,10 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
         }
 
         public new ScrollBar VerticalScrollBar
-            => this.TestAccessor().Dynamic._vScrollBar;
+            => this.TestAccessor.Dynamic._vScrollBar;
 
         public new ScrollBar HorizontalScrollBar
-            => this.TestAccessor().Dynamic._hScrollBar;
+            => this.TestAccessor.Dynamic._hScrollBar;
 
         public void MakeNoScrollBarsVisible()
         {

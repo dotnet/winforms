@@ -10,7 +10,7 @@ public static partial class TestAccessors
     internal class UiaTextRangeTestAccessor : TestAccessor<UiaTextRange>
     {
         // Accessor for static members
-        private static readonly dynamic s_static = typeof(UiaTextRange).TestAccessor().Dynamic;
+        private static readonly dynamic s_static = typeof(UiaTextRange).TestAccessor.Dynamic;
 
         public UiaTextRangeTestAccessor(UiaTextRange instance)
             : base(instance) { }
@@ -63,6 +63,8 @@ public static partial class TestAccessors
         public TextDecorationLineStyle GetUnderlineStyle(LOGFONTW logfont) => (TextDecorationLineStyle)s_static.GetUnderlineStyle(logfont);
     }
 
-    internal static UiaTextRangeTestAccessor TestAccessor(this UiaTextRange textRange)
-        => new(textRange);
+    extension(UiaTextRange textRange)
+    {
+        internal UiaTextRangeTestAccessor TestAccessor => new(textRange);
+    }
 }

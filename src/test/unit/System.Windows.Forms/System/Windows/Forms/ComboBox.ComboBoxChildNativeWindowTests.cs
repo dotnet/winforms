@@ -18,8 +18,8 @@ public class ComboBox_ComboBoxChildNativeWindowTests
 
         foreach (object childWindowType in Enum.GetValues(childWindowTypeEnum))
         {
-            childNativeWindow.TestAccessor().Dynamic._childWindowType = childWindowType;
-            Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
+            childNativeWindow.TestAccessor.Dynamic._childWindowType = childWindowType;
+            Assert.True(childNativeWindow.TestAccessor.Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
         }
     }
 }

@@ -34,6 +34,6 @@ public readonly ref struct NoClientNotificationsScope
     }
 
     public static bool GetDefaultValue() =>
-        typeof(LocalAppContextSwitches).TestAccessor()
+        typeof(LocalAppContextSwitches).TestAccessor
             .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.NoClientNotifications);
 }

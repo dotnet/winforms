@@ -15,6 +15,8 @@ public static partial class TestAccessors
         internal bool IsToolTracked(IKeyboardToolTip sender) => (bool)Dynamic.IsToolTracked(sender);
     }
 
-    internal static KeyboardToolTipStateMachineTestAccessor TestAccessor(this KeyboardToolTipStateMachine instance)
-        => new(instance);
+    extension(KeyboardToolTipStateMachine instance)
+    {
+        internal KeyboardToolTipStateMachineTestAccessor TestAccessor => new(instance);
+    }
 }

@@ -11,7 +11,7 @@ public class WindowsFormsApplicationBaseTests
 {
     private static string GetAppID(Assembly assembly)
     {
-        var testAccessor = typeof(WindowsFormsApplicationBase).TestAccessor();
+        var testAccessor = typeof(WindowsFormsApplicationBase).TestAccessor;
         return testAccessor.Dynamic.GetApplicationInstanceID(assembly);
     }
 

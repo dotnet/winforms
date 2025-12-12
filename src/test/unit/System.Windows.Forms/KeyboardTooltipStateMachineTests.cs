@@ -66,13 +66,13 @@ public class KeyboardTooltipStateMachineTests
 
         // Simulate that the toolTip is shown.
         KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
-        instance.TestAccessor().Dynamic._currentTool = control;
-        instance.TestAccessor().Dynamic._currentState = KeyboardToolTipStateMachine.SmState.Shown;
+        instance.TestAccessor.Dynamic._currentTool = control;
+        instance.TestAccessor.Dynamic._currentState = KeyboardToolTipStateMachine.SmState.Shown;
 
         control.SimulateKeyUp(keys);
 
-        IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
-        string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+        IKeyboardToolTip currentTool = instance.TestAccessor.Dynamic._currentTool;
+        string currentState = instance.TestAccessor.Dynamic._currentState.ToString();
 
         Assert.Equal(control, currentTool);
         Assert.Equal("Shown", currentState);
@@ -98,13 +98,13 @@ public class KeyboardTooltipStateMachineTests
 
         // Simulate that the toolTip is shown.
         KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
-        instance.TestAccessor().Dynamic._currentTool = control;
-        instance.TestAccessor().Dynamic._currentState = KeyboardToolTipStateMachine.SmState.Shown;
+        instance.TestAccessor.Dynamic._currentTool = control;
+        instance.TestAccessor.Dynamic._currentState = KeyboardToolTipStateMachine.SmState.Shown;
 
         control.SimulateKeyUp(keys);
 
-        IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
-        string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+        IKeyboardToolTip currentTool = instance.TestAccessor.Dynamic._currentTool;
+        string currentState = instance.TestAccessor.Dynamic._currentState.ToString();
 
         Assert.Equal(isPersistent && OsVersion.IsWindows11_OrGreater() ? "Hidden" : "Shown", currentState);
     }

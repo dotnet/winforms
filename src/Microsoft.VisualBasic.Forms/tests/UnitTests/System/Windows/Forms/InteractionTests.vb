@@ -19,12 +19,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim xPos As Integer = -1
             Dim yPos As Integer = -1
             Dim inputHandler As New InputBoxHandler(prompt, title, defaultResponse, xPos, yPos, ParentWindow:=Nothing)
-            CType(inputHandler.TestAccessor.Dynamic()._prompt, String).Should.Be(prompt)
-            CType(inputHandler.TestAccessor.Dynamic()._title, String).Should.Be(title)
-            CType(inputHandler.TestAccessor.Dynamic()._defaultResponse, String).Should.Be(defaultResponse)
-            CType(inputHandler.TestAccessor.Dynamic()._xPos, String).Should.Be(xPos)
-            CType(inputHandler.TestAccessor.Dynamic()._yPos, String).Should.Be(yPos)
-            CType(inputHandler.TestAccessor.Dynamic()._parentWindow, IWin32Window).Should.Be(Nothing)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._prompt, String).Should.Be(prompt)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._title, String).Should.Be(title)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._defaultResponse, String).Should.Be(defaultResponse)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._xPos, String).Should.Be(xPos)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._yPos, String).Should.Be(yPos)
+            CType(TestAccessors.get_TestAccessor(inputHandler).Dynamic()._parentWindow, IWin32Window).Should.Be(Nothing)
             inputHandler.Exception.Should.BeNull()
             inputHandler.Result.Should.BeNull()
         End Sub

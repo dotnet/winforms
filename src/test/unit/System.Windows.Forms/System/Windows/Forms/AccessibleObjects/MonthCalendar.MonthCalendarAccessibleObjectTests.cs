@@ -170,7 +170,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         using MonthCalendar monthCalendar = new();
         var accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
 
-        DayOfWeek actual = accessibleObject.TestAccessor().Dynamic.CastDayToDayOfWeek(day);
+        DayOfWeek actual = accessibleObject.TestAccessor.Dynamic.CastDayToDayOfWeek(day);
 
         Assert.Equal(expected, actual);
         Assert.False(monthCalendar.IsHandleCreated);

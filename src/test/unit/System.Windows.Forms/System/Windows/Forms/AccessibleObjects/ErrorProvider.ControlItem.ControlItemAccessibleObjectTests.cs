@@ -20,10 +20,10 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null, null, null, null]);
 
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._controlItem);
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._window);
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._control);
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._provider);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._controlItem);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._window);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._control);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._provider);
         Assert.Equal(AccessibleRole.Alert, accessibleObject.Role);
     }
 
@@ -153,7 +153,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [item, window, control, provider]);
 
-        Assert.NotNull(accessibleObject.TestAccessor().Dynamic._controlItem);
+        Assert.NotNull(accessibleObject.TestAccessor.Dynamic._controlItem);
         Assert.True(accessibleObject.IsIAccessibleExSupported());
         Assert.False(control.IsHandleCreated);
     }
@@ -240,14 +240,14 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         AccessibleObject accessibleObject3 = item3.AccessibilityObject;
 
         // Window is null while controlItem isn't added to window.
-        Assert.Null(accessibleObject1.TestAccessor().Dynamic._window);
-        Assert.Null(accessibleObject2.TestAccessor().Dynamic._window);
-        Assert.Null(accessibleObject3.TestAccessor().Dynamic._window);
+        Assert.Null(accessibleObject1.TestAccessor.Dynamic._window);
+        Assert.Null(accessibleObject2.TestAccessor.Dynamic._window);
+        Assert.Null(accessibleObject3.TestAccessor.Dynamic._window);
 
         // So add the reference manually.
-        accessibleObject1.TestAccessor().Dynamic._window = window;
-        accessibleObject2.TestAccessor().Dynamic._window = window;
-        accessibleObject3.TestAccessor().Dynamic._window = window;
+        accessibleObject1.TestAccessor.Dynamic._window = window;
+        accessibleObject2.TestAccessor.Dynamic._window = window;
+        accessibleObject3.TestAccessor.Dynamic._window = window;
 
         Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
@@ -273,14 +273,14 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         AccessibleObject accessibleObject3 = item3.AccessibilityObject;
 
         // Window is null while controlItem isn't added to window.
-        Assert.Null(accessibleObject1.TestAccessor().Dynamic._window);
-        Assert.Null(accessibleObject2.TestAccessor().Dynamic._window);
-        Assert.Null(accessibleObject3.TestAccessor().Dynamic._window);
+        Assert.Null(accessibleObject1.TestAccessor.Dynamic._window);
+        Assert.Null(accessibleObject2.TestAccessor.Dynamic._window);
+        Assert.Null(accessibleObject3.TestAccessor.Dynamic._window);
 
         // So add the reference manually.
-        accessibleObject1.TestAccessor().Dynamic._window = window;
-        accessibleObject2.TestAccessor().Dynamic._window = window;
-        accessibleObject3.TestAccessor().Dynamic._window = window;
+        accessibleObject1.TestAccessor.Dynamic._window = window;
+        accessibleObject2.TestAccessor.Dynamic._window = window;
+        accessibleObject3.TestAccessor.Dynamic._window = window;
 
         Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));

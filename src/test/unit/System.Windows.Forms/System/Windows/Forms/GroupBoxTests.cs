@@ -607,7 +607,7 @@ public class GroupBoxTests
 
         groupBox.Font = newFont;
         Rectangle result = groupBox.DisplayRectangle;
-        var accessor = groupBox.TestAccessor();
+        var accessor = groupBox.TestAccessor;
 
         int updatedFontHeight = accessor.Dynamic._fontHeight;
         Font updatedCachedFont = accessor.Dynamic._cachedFont;

@@ -319,7 +319,7 @@ public class DataGridViewLinkCellTests : IDisposable
         using DataGridView dataGridView = CreateGridWithColumn();
         dataGridView.Rows[0].Cells[0] = _cell;
 
-        string? errorText = _cell.TestAccessor().Dynamic.GetErrorText(0);
+        string? errorText = _cell.TestAccessor.Dynamic.GetErrorText(0);
         errorText.Should().BeNullOrEmpty();
         Rectangle result = _cell.GetErrorIconBounds(0);
 
@@ -337,7 +337,7 @@ public class DataGridViewLinkCellTests : IDisposable
         object testValue = "TestValue";
         _cell.Value = testValue;
 
-        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+        object? result = _cell.TestAccessor.Dynamic.GetValue(0);
 
         result.Should().Be(testValue);
     }
@@ -352,7 +352,7 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.UseColumnTextForLinkValue = true;
         dataGridView.Rows[0].Cells[0] = _cell;
 
-        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+        object? result = _cell.TestAccessor.Dynamic.GetValue(0);
 
         result.Should().Be("ColumnText");
     }
@@ -366,7 +366,7 @@ public class DataGridViewLinkCellTests : IDisposable
         object testValue = "TestValue";
         _cell.Value = testValue;
 
-        object? result = _cell.TestAccessor().Dynamic.GetValue(0);
+        object? result = _cell.TestAccessor.Dynamic.GetValue(0);
 
         result.Should().Be(testValue);
     }
@@ -384,7 +384,7 @@ public class DataGridViewLinkCellTests : IDisposable
         object testValue = "TestValue";
         _cell.Value = testValue;
 
-        object? result = _cell.TestAccessor().Dynamic.GetValue(newRowIndex);
+        object? result = _cell.TestAccessor.Dynamic.GetValue(newRowIndex);
 
         result.Should().Be(testValue);
     }
@@ -402,7 +402,7 @@ public class DataGridViewLinkCellTests : IDisposable
         _cell.TrackVisitedState = trackVisitedState;
         _cell.LinkVisited = linkVisited;
 
-        bool result = _cell.TestAccessor().Dynamic.KeyUpUnsharesRow(keyEvent, 0);
+        bool result = _cell.TestAccessor.Dynamic.KeyUpUnsharesRow(keyEvent, 0);
 
         result.Should().Be(expected);
     }
@@ -415,7 +415,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseDownUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseDownUnsharesRow(args);
 
         result.Should().BeFalse();
     }
@@ -428,7 +428,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseDownUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseDownUnsharesRow(args);
 
         result.Should().BeFalse();
     }
@@ -436,12 +436,12 @@ public class DataGridViewLinkCellTests : IDisposable
     [WinFormsFact]
     public void MouseMoveUnsharesRow_ReturnsTrue_WhenPointInLinkBounds_AndHoverSet()
     {
-        _cell.TestAccessor().Dynamic.LinkState = LinkState.Hover;
+        _cell.TestAccessor.Dynamic.LinkState = LinkState.Hover;
 
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseMoveUnsharesRow(args);
 
         result.Should().BeTrue();
     }
@@ -449,7 +449,7 @@ public class DataGridViewLinkCellTests : IDisposable
     [WinFormsFact]
     public void MouseMoveUnsharesRow_CanSetLinkBehaviorInternal()
     {
-        _cell.TestAccessor().Dynamic.LinkBehaviorInternal = LinkBehavior.AlwaysUnderline;
+        _cell.TestAccessor.Dynamic.LinkBehaviorInternal = LinkBehavior.AlwaysUnderline;
 
         _cell.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
     }
@@ -457,12 +457,12 @@ public class DataGridViewLinkCellTests : IDisposable
     [WinFormsFact]
     public void MouseMoveUnsharesRow_ReturnsTrue_WhenPointNotInLinkBounds_AndHoverSet()
     {
-        _cell.TestAccessor().Dynamic.LinkState = LinkState.Hover;
+        _cell.TestAccessor.Dynamic.LinkState = LinkState.Hover;
 
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseMoveUnsharesRow(args);
 
         result.Should().BeTrue();
     }
@@ -473,7 +473,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseMoveUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseMoveUnsharesRow(args);
 
         result.Should().BeFalse();
     }
@@ -486,7 +486,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseUpUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseUpUnsharesRow(args);
 
         result.Should().BeFalse();
     }
@@ -499,7 +499,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
 
-        bool result = _cell.TestAccessor().Dynamic.MouseUpUnsharesRow(args);
+        bool result = _cell.TestAccessor.Dynamic.MouseUpUnsharesRow(args);
 
         result.Should().BeFalse();
     }
@@ -509,7 +509,7 @@ public class DataGridViewLinkCellTests : IDisposable
     {
         KeyEventArgs keyEvent = new(Keys.Space);
 
-        _cell.Invoking(c => c.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0)).Should().NotThrow();
+        _cell.Invoking(c => c.TestAccessor.Dynamic.OnKeyUp(keyEvent, 0)).Should().NotThrow();
         keyEvent.Handled.Should().BeFalse();
     }
 
@@ -533,7 +533,7 @@ public class DataGridViewLinkCellTests : IDisposable
         };
         KeyEventArgs keyEvent = new(Keys.Space);
 
-        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+        _cell.TestAccessor.Dynamic.OnKeyUp(keyEvent, 0);
 
         cellClickRaised.Should().BeTrue();
         contentClickRaised.Should().BeTrue();
@@ -561,7 +561,7 @@ public class DataGridViewLinkCellTests : IDisposable
         };
         KeyEventArgs keyEvent = new(Keys.Space);
 
-        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+        _cell.TestAccessor.Dynamic.OnKeyUp(keyEvent, 0);
 
         cellClickRaised.Should().BeTrue();
         contentClickRaised.Should().BeTrue();
@@ -580,7 +580,7 @@ public class DataGridViewLinkCellTests : IDisposable
         dataGridView.CellContentClick += (s, e) => contentClickRaised = true;
         KeyEventArgs keyEvent = new(Keys.Enter);
 
-        _cell.TestAccessor().Dynamic.OnKeyUp(keyEvent, 0);
+        _cell.TestAccessor.Dynamic.OnKeyUp(keyEvent, 0);
 
         cellClickRaised.Should().BeFalse();
         contentClickRaised.Should().BeFalse();
@@ -593,12 +593,12 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseDown(args)).Should().NotThrow();
+        _cell.Invoking(c => c.TestAccessor.Dynamic.OnMouseDown(args)).Should().NotThrow();
     }
 
     [WinFormsFact]
     public void OnMouseLeave_DoesNothing_WhenDataGridViewIsNull() =>
-        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseLeave(0)).Should().NotThrow();
+        _cell.Invoking(c => c.TestAccessor.Dynamic.OnMouseLeave(0)).Should().NotThrow();
 
     [WinFormsFact]
     public void OnMouseMove_DoesNothing_WhenDataGridViewIsNull()
@@ -606,7 +606,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseMove(args)).Should().NotThrow();
+        _cell.Invoking(c => c.TestAccessor.Dynamic.OnMouseMove(args)).Should().NotThrow();
     }
 
     [WinFormsFact]
@@ -615,7 +615,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        _cell.Invoking(c => c.TestAccessor().Dynamic.OnMouseUp(args)).Should().NotThrow();
+        _cell.Invoking(c => c.TestAccessor.Dynamic.OnMouseUp(args)).Should().NotThrow();
     }
 
     [WinFormsFact]
@@ -628,7 +628,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 100, 100, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 100, 100, mouseEventArgs);
 
-        _cell.TestAccessor().Dynamic.OnMouseUp(args);
+        _cell.TestAccessor.Dynamic.OnMouseUp(args);
 
         _cell.LinkVisited.Should().BeFalse();
     }
@@ -643,7 +643,7 @@ public class DataGridViewLinkCellTests : IDisposable
         MouseEventArgs mouseEventArgs = new(MouseButtons.None, 0, 1, 1, 0);
         DataGridViewCellMouseEventArgs args = new(0, 0, 1, 1, mouseEventArgs);
 
-        _cell.TestAccessor().Dynamic.OnMouseUp(args);
+        _cell.TestAccessor.Dynamic.OnMouseUp(args);
 
         _cell.LinkVisited.Should().BeFalse();
     }
@@ -655,7 +655,7 @@ public class DataGridViewLinkCellTests : IDisposable
         using Graphics graphics = Graphics.FromImage(bitmap);
 
         ((Action)(() =>
-            _cell.TestAccessor().Dynamic.Paint(
+            _cell.TestAccessor.Dynamic.Paint(
                 graphics,
                 new Rectangle(0, 0, 10, 10),
                 new Rectangle(0, 0, 10, 10),

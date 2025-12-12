@@ -19,7 +19,7 @@ public class PropertyGridView_GridViewListBoxTests
         };
         propertyGrid.CreateControl();
 
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
 
         using PropertyGridView.GridViewListBox gridViewListBox = new(propertyGridView);
         AccessibleObject gridViewListBoxAccessibleObject = gridViewListBox.AccessibilityObject;

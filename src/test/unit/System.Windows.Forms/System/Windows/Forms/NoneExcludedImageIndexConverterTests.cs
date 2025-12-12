@@ -11,6 +11,6 @@ public class NoneExcludedImageIndexConverterTests
     [Fact]
     public void NoneExcludedImageIndexConverter_IncludeNoneAsStandardValue_ReturnsFalse()
     {
-        Assert.False(new NoneExcludedImageIndexConverter().TestAccessor().Dynamic.IncludeNoneAsStandardValue);
+        Assert.False(new NoneExcludedImageIndexConverter().TestAccessor.Dynamic.IncludeNoneAsStandardValue);
     }
 }

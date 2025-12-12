@@ -22,7 +22,7 @@ public partial class PropertyGridViewTests
             Visible = true
         };
 
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
 
         // For us to be able to render PropertyGridView and its values
         // PropertyGrid must be visible and have a valid handle.

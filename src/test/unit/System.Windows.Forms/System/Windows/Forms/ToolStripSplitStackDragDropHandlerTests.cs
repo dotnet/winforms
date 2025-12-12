@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -114,7 +114,7 @@ public class ToolStripSplitStackDragDropHandlerTests : IDisposable
         using ToolStripButton newToolStripItem = new();
         Point point = new(10, 10);
 
-        _toolStripSplitStackDragDropHandler.TestAccessor().Dynamic.OnDropItem(newToolStripItem, point);
+        _toolStripSplitStackDragDropHandler.TestAccessor.Dynamic.OnDropItem(newToolStripItem, point);
 
         _toolStrip.Items[0].Should().Be(newToolStripItem);
     }
@@ -123,7 +123,7 @@ public class ToolStripSplitStackDragDropHandlerTests : IDisposable
     public void ShowItemDropPoint_ReturnsTrue_WhenToolStripIsEmpty()
     {
         Point point = new(10, 10);
-        var result = _toolStripSplitStackDragDropHandler.TestAccessor().Dynamic.ShowItemDropPoint(point);
+        var result = _toolStripSplitStackDragDropHandler.TestAccessor.Dynamic.ShowItemDropPoint(point);
 
         ((bool)result).Should().BeTrue();
     }

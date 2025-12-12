@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -14,7 +14,7 @@ public class ImageListImageEditorTests
     public void ImageListImageEditor_LoadImageFromStream_BitmapStream_ReturnsExpected()
     {
         ImageListImageEditor editor = new();
-        var editor_LoadImageFromStream = editor.TestAccessor().CreateDelegate<Func<Stream, bool, ImageListImage>>("LoadImageFromStream");
+        var editor_LoadImageFromStream = editor.TestAccessor.CreateDelegate<Func<Stream, bool, ImageListImage>>("LoadImageFromStream");
 
         using MemoryStream stream = new();
         using Bitmap image = new(10, 10);

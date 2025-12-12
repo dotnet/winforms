@@ -161,10 +161,10 @@ public class MdiControlStripTests
 
         Assert.Equal(4, mdiControlStrip.Items.Count);
 
-        ToolStripMenuItem system = mdiControlStrip.TestAccessor().Dynamic._system;
-        ToolStripMenuItem close = mdiControlStrip.TestAccessor().Dynamic._close;
-        ToolStripMenuItem minimize = mdiControlStrip.TestAccessor().Dynamic._minimize;
-        ToolStripMenuItem restore = mdiControlStrip.TestAccessor().Dynamic._restore;
+        ToolStripMenuItem system = mdiControlStrip.TestAccessor.Dynamic._system;
+        ToolStripMenuItem close = mdiControlStrip.TestAccessor.Dynamic._close;
+        ToolStripMenuItem minimize = mdiControlStrip.TestAccessor.Dynamic._minimize;
+        ToolStripMenuItem restore = mdiControlStrip.TestAccessor.Dynamic._restore;
         Assert.Equal(minimize, mdiControlStrip.Items[0]);
         Assert.Equal(restore, mdiControlStrip.Items[1]);
         Assert.Equal(close, mdiControlStrip.Items[2]);
@@ -179,10 +179,10 @@ public class MdiControlStripTests
 
         ToolStripMenuItem[] items =
         [
-            mdiControlStrip.TestAccessor().Dynamic._system,
-            mdiControlStrip.TestAccessor().Dynamic._close,
-            mdiControlStrip.TestAccessor().Dynamic._minimize,
-            mdiControlStrip.TestAccessor().Dynamic._restore
+            mdiControlStrip.TestAccessor.Dynamic._system,
+            mdiControlStrip.TestAccessor.Dynamic._close,
+            mdiControlStrip.TestAccessor.Dynamic._minimize,
+            mdiControlStrip.TestAccessor.Dynamic._restore
         ];
 
         foreach (ToolStripMenuItem item in items)
@@ -217,7 +217,7 @@ public class MdiControlStripTests
         mdiParent.Show();
         mdiChild.Show();
         AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
-        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor.Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
@@ -263,7 +263,7 @@ public class MdiControlStripTests
         mdiParent.Show();
         mdiChild.Show();
         AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
-        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor.Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
         ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
@@ -325,7 +325,7 @@ public class MdiControlStripTests
         mdiChild.Show();
         mdiChild.WindowState = FormWindowState.Maximized;
 
-        MdiControlStrip originalMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;
+        MdiControlStrip originalMdiControlStrip = mdiParent.TestAccessor.Dynamic.MdiControlStrip;
 
         // Force size change with large icon
         HICON hicon = (HICON)new Bitmap(256, 256).GetHicon();
@@ -333,7 +333,7 @@ public class MdiControlStripTests
         PInvokeCore.DestroyIcon(hicon);
         mdiChild.Icon = largeIcon;
 
-        MdiControlStrip currentMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;
+        MdiControlStrip currentMdiControlStrip = mdiParent.TestAccessor.Dynamic.MdiControlStrip;
         Assert.NotEqual(originalMdiControlStrip, currentMdiControlStrip);
     }
 

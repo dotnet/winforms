@@ -26,16 +26,16 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             SelectedObject = testEntity
         };
 
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
         int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
         PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
-        PropertyDescriptorGridEntry selectedGridEntry = propertyGridView.TestAccessor().Dynamic._selectedGridEntry;
+        PropertyDescriptorGridEntry selectedGridEntry = propertyGridView.TestAccessor.Dynamic._selectedGridEntry;
 
         Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
         // Force the entry edit control Handle creation.
         // GridViewEditAccessibleObject exists, if its control is already created.
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
-        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
+        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor.Dynamic.EditTextBox.Handle);
 
         AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
         IRawElementProviderFragment.Interface editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
@@ -53,17 +53,17 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         };
 
         propertyGrid.CreateControl();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
 
         int firstPropertyIndex = 2; // Index of Text property which has a RichEdit control as an editor.
         PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
-        propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
+        propertyGridView.TestAccessor.Dynamic._selectedGridEntry = gridEntry;
 
         // Force the entry edit control Handle creation.
         // GridViewEditAccessibleObject exists, if its control is already created.
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
-        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
+        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor.Dynamic.EditTextBox.Handle);
 
         IRawElementProviderFragment.Interface editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
@@ -71,9 +71,9 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         // The case with drop down holder:
         using PropertyGridView.DropDownHolder dropDownHolder = new(propertyGridView);
         dropDownHolder.CreateControl();
-        propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
+        propertyGridView.TestAccessor.Dynamic._dropDownHolder = dropDownHolder;
 
-        dropDownHolder.TestAccessor().Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
+        dropDownHolder.TestAccessor.Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
         IRawElementProviderFragment.Interface dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         Assert.Equal("DropDownHolderAccessibleObject", dropDownHolderAccessibleObject.GetType().Name);
@@ -93,7 +93,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_ctor_default()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         Type gridViewTextBoxType = typeof(PropertyGridView).GetNestedType("GridViewTextBox", BindingFlags.NonPublic);
         Assert.NotNull(gridViewTextBoxType);
         TextBox gridViewTextBox = (TextBox)Activator.CreateInstance(gridViewTextBoxType, gridView);
@@ -107,7 +107,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_ctor_ThrowsException_IfOwnerIsNull()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         Type gridViewTextBoxType = typeof(PropertyGridView).GetNestedType("GridViewTextBox", BindingFlags.NonPublic);
         Assert.NotNull(gridViewTextBoxType);
         TextBox gridViewTextBox = (TextBox)Activator.CreateInstance(gridViewTextBoxType, gridView);
@@ -123,7 +123,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
         Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
     }
@@ -135,7 +135,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
         Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
@@ -144,7 +144,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
         // AccessibleRole is not set = Default
@@ -159,7 +159,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_GetPropertyValue_FrameworkIdPropertyId_ReturnsExpected()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
         Assert.Equal("WinForm", ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId)).ToStringAndFree());
@@ -172,13 +172,13 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
 
         // AccessibleRole is not set = Default
 
         if (createControl)
         {
-            gridView.TestAccessor().Dynamic.EditTextBox.CreateControl(true); // "true" means ignoring Visible value
+            gridView.TestAccessor.Dynamic.EditTextBox.CreateControl(true); // "true" means ignoring Visible value
         }
 
         AccessibleRole actual = gridView.EditAccessibleObject.Role;
@@ -192,17 +192,17 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         using PropertyGrid propertyGrid = new() { SelectedObject = new TestEntityWithTextField() { TextProperty = "Test" } };
 
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
         int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
         PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
         // Force the entry edit control Handle creation.
         // GridViewEditAccessibleObject exists, if its control is already created.
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
-        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
+        Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor.Dynamic.EditTextBox.Handle);
 
         AccessibleObject editFieldAccessibleObject = (AccessibleObject)gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
-        propertyGridView.TestAccessor().Dynamic._selectedGridEntry = null;
+        propertyGridView.TestAccessor.Dynamic._selectedGridEntry = null;
 
         Assert.NotNull(editFieldAccessibleObject.RuntimeId);
     }
@@ -211,7 +211,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     public void GridViewTextBoxAccessibleObject_FragmentRoot_ReturnsExpected()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView gridView = propertyGrid.TestAccessor.GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
         Assert.Equal(propertyGrid.AccessibilityObject, accessibleObject.FragmentRoot);

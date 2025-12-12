@@ -20,6 +20,8 @@ public static partial class TestAccessors
         internal Dictionary<int, int> _designerSelections => Dynamic._designerSelections;
     }
 
-    public static PropertyGridTestAccessor TestAccessor(this PropertyGrid propertyGrid)
-        => new(propertyGrid);
+    extension(PropertyGrid propertyGrid)
+    {
+        public PropertyGridTestAccessor TestAccessor => new(propertyGrid);
+    }
 }

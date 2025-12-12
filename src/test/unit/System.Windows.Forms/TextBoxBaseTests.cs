@@ -757,12 +757,12 @@ public partial class TextBoxBaseTests
         using TextBox control = new();
         control.CreateControl();
         var textBoxBaseAccessibleObject = (TextBoxBase.TextBoxBaseAccessibleObject)control.AccessibilityObject;
-        TextBoxBase.TextBoxBaseUiaTextProvider provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
+        TextBoxBase.TextBoxBaseUiaTextProvider provider = textBoxBaseAccessibleObject.TestAccessor.Dynamic._textProvider;
 
         Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
 
         control.Dispose();
-        provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
+        provider = textBoxBaseAccessibleObject.TestAccessor.Dynamic._textProvider;
 
         Assert.Null(provider);
     }
@@ -772,12 +772,12 @@ public partial class TextBoxBaseTests
     {
         using TextBox control = new();
         control.CreateControl();
-        TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+        TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor.Dynamic._textProvider;
 
         Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
 
         control.RecreateHandleCore();
-        provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+        provider = control.AccessibilityObject.TestAccessor.Dynamic._textProvider;
 
         // The control's accessible object and its providers shouldn't be cleaned when recreating of the control
         // because this object and all its providers will continue to be used.

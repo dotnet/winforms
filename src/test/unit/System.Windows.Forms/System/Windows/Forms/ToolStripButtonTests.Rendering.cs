@@ -29,7 +29,7 @@ public partial class ToolStripButtonTests
         Rectangle bounds = toolStripButton.Bounds;
 
         using PaintEventArgs e = new(emf, bounds);
-        toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
             state,
@@ -52,7 +52,7 @@ public partial class ToolStripButtonTests
         DeviceContextState state = new(emf);
         Rectangle bounds = toolStripButton.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
            state,
@@ -77,7 +77,7 @@ public partial class ToolStripButtonTests
         DeviceContextState state = new(emf);
         Rectangle bounds = toolStripButton.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
            state,
@@ -103,7 +103,7 @@ public partial class ToolStripButtonTests
         DeviceContextState state = new(emf);
         Rectangle bounds = toolStripButton.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStripButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
            state,
@@ -129,7 +129,7 @@ public partial class ToolStripButtonTests
         DeviceContextState state = new(emf);
         Rectangle bounds = toolStripDropDownButton.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStripDropDownButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripDropDownButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
            state,
@@ -156,7 +156,7 @@ public partial class ToolStripButtonTests
         DeviceContextState state = new(emf);
         Rectangle bounds = toolStripDropDownButton.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStripDropDownButton.TestAccessor().Dynamic.OnPaint(e);
+        toolStripDropDownButton.TestAccessor.Dynamic.OnPaint(e);
 
         emf.Validate(
            state,

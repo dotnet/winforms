@@ -1623,7 +1623,7 @@ public class ListView_ListViewAccessibleObjectTests
         AccessibleObject accessibleObject = listView.AccessibilityObject;
         Assert.Equal(2, accessibleObject.GetChildCount());
 
-        listView.Groups[1].TestAccessor().Dynamic._accessibilityObject = new AccessibleObject();
+        listView.Groups[1].TestAccessor.Dynamic._accessibilityObject = new AccessibleObject();
 
         Assert.Equal(1, accessibleObject.GetChildCount());
         Assert.True(listView.IsHandleCreated);

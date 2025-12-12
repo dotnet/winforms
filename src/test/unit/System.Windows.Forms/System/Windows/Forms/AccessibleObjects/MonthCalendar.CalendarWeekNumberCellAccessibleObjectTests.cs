@@ -16,9 +16,9 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
 
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._calendarIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._rowIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._columnIndex);
+        Assert.Equal(0, cellAccessibleObject.TestAccessor.Dynamic._calendarIndex);
+        Assert.Equal(0, cellAccessibleObject.TestAccessor.Dynamic._rowIndex);
+        Assert.Equal(0, cellAccessibleObject.TestAccessor.Dynamic._columnIndex);
         Assert.False(control.IsHandleCreated);
     }
 

@@ -115,7 +115,7 @@ public class DataGridViewTests : ControlTestBase
                 inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(TimeSpan.FromMilliseconds(1000)));
 
             // DataGridViewToolTip is private so use the reflection
-            object toolTip = dataGridView.TestAccessor().Dynamic._toolTipControl;
+            object toolTip = dataGridView.TestAccessor.Dynamic._toolTipControl;
             object? actual = toolTip.GetType().GetProperty("Activated")?.GetValue(toolTip);
 
             Assert.Equal(expected, actual);

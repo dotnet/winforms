@@ -3,6 +3,7 @@
 
 using System.Dynamic;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace System;
 
@@ -63,7 +64,7 @@ public class TestAccessor<T> : ITestAccessor
     {
         Type type = typeof(TDelegate);
         MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
-        Type[] types = invokeMethodInfo is null ? [] : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+        Type[] types = invokeMethodInfo is null ? [] : [.. invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType)];
 
         // To make it easier to write a class wrapper with a number of delegates,
         // we'll take the name from the delegate itself when unspecified.
@@ -86,14 +87,14 @@ public class TestAccessor<T> : ITestAccessor
     {
         private readonly object? _instance;
 
-        public DynamicWrapper(object? instance)
-            => _instance = instance;
+        public DynamicWrapper(object? instance) => _instance = instance;
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result)
         {
-            result = null;
             ArgumentNullException.ThrowIfNull(args);
             ArgumentNullException.ThrowIfNull(binder);
+
+            result = null;
 
             MethodInfo? methodInfo = null;
             Type? type = s_type;
@@ -115,7 +116,7 @@ public class TestAccessor<T> : ITestAccessor
                         binder.Name,
                         BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
                         binder: null,
-                        args.Select(a => a!.GetType()).ToArray(),
+                        [.. args.Select(a => a!.GetType())],
                         modifiers: null);
                 }
 
@@ -131,7 +132,9 @@ public class TestAccessor<T> : ITestAccessor
             while (true);
 
             if (methodInfo is null)
+            {
                 return false;
+            }
 
             try
             {
@@ -140,7 +143,7 @@ public class TestAccessor<T> : ITestAccessor
             catch (TargetInvocationException ex) when (ex.InnerException is not null)
             {
                 // Unwrap the inner exception to make it easier for callers to handle.
-                throw ex.InnerException;
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
             }
 
             return true;
@@ -148,11 +151,32 @@ public class TestAccessor<T> : ITestAccessor
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
-            if (info is null)
+            MemberInfo? memberInfo = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
+            if (memberInfo is null)
+            {
                 return false;
+            }
 
-            SetValue(info, value);
+            try
+            {
+                switch (memberInfo)
+                {
+                    case FieldInfo fieldInfo:
+                        fieldInfo.SetValue(_instance, value);
+                        break;
+                    case PropertyInfo propertyInfo:
+                        propertyInfo.SetValue(_instance, value);
+                        break;
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+            catch (TargetInvocationException ex) when (ex.InnerException is not null)
+            {
+                // Unwrap the inner exception to make it easier for callers to handle.
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+
             return true;
         }
 
@@ -160,11 +184,27 @@ public class TestAccessor<T> : ITestAccessor
         {
             result = null;
 
-            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
-            if (info is null)
+            MemberInfo? memberInfo = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
+            if (memberInfo is null)
+            {
                 return false;
+            }
 
-            result = GetValue(info);
+            try
+            {
+                result = memberInfo switch
+                {
+                    FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
+                    PropertyInfo propertyInfo => propertyInfo.GetValue(_instance),
+                    _ => throw new InvalidOperationException()
+                };
+            }
+            catch (TargetInvocationException ex) when (ex.InnerException is not null)
+            {
+                // Unwrap the inner exception to make it easier for callers to handle.
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            }
+
             return true;
         }
 
@@ -194,29 +234,6 @@ public class TestAccessor<T> : ITestAccessor
             while (true);
 
             return info;
-        }
-
-        private object? GetValue(MemberInfo memberInfo)
-            => memberInfo switch
-            {
-                FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
-                PropertyInfo propertyInfo => propertyInfo.GetValue(_instance),
-                _ => throw new InvalidOperationException()
-            };
-
-        private void SetValue(MemberInfo memberInfo, object? value)
-        {
-            switch (memberInfo)
-            {
-                case FieldInfo fieldInfo:
-                    fieldInfo.SetValue(_instance, value);
-                    break;
-                case PropertyInfo propertyInfo:
-                    propertyInfo.SetValue(_instance, value);
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
         }
     }
 }

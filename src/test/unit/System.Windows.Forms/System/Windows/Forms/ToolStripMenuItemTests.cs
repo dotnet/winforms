@@ -114,7 +114,7 @@ public class ToolStripMenuItemTests
         HMENU hmenu = PInvoke.GetSystemMenu(form, bRevert: false);
         using SubToolStripMenuItem menuItem = new(hmenu, nativeMenuCommandID, form);
 
-        using Bitmap bitmap = menuItem.TestAccessor().Dynamic.GetNativeMenuItemImage();
+        using Bitmap bitmap = menuItem.TestAccessor.Dynamic.GetNativeMenuItemImage();
         Assert.NotNull(bitmap);
     }
 
@@ -212,7 +212,7 @@ public class ToolStripMenuItemTests
         item.Text.Should().Be(text);
         item.Image.Should().Be(image);
         item.Name.Should().Be(name);
-        item.TestAccessor().Dynamic.OnClick(null);
+        item.TestAccessor.Dynamic.OnClick(null);
         wasClicked.Should().BeTrue();
     }
 
@@ -229,7 +229,7 @@ public class ToolStripMenuItemTests
 
         item.Text.Should().Be(text);
         item.Image.Should().Be(image);
-        item.TestAccessor().Dynamic.OnClick(null);
+        item.TestAccessor.Dynamic.OnClick(null);
         wasClicked.Should().BeTrue();
         item.ShortcutKeys.Should().Be(shortcutKeys);
     }
@@ -355,7 +355,7 @@ public class ToolStripMenuItemTests
     public void ToolStripMenuItem_SetDeviceDpi_ShouldUpdateDpiAndDisposeImages()
     {
         using ToolStripMenuItem item = new();
-        dynamic accessor = item.TestAccessor().Dynamic;
+        dynamic accessor = item.TestAccessor.Dynamic;
 
         accessor.DeviceDpi = 96;
 

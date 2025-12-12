@@ -4869,7 +4869,7 @@ public class ListViewTests
         ListViewItem listViewItem = new();
         listView.Items.Add(listViewItem);
 
-        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(listViewItem));
     }
 
     [WinFormsTheory]
@@ -4882,7 +4882,7 @@ public class ListViewTests
         ListViewItem listViewItem1 = new();
         ListViewItem listViewItem2 = new();
         ListViewItem listViewItem3 = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
 
         listView.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2, listViewItem3]);
 
@@ -4901,7 +4901,7 @@ public class ListViewTests
         ListViewItem listViewItem = new();
         listView.Items.Insert(0, listViewItem);
 
-        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(listViewItem));
     }
 
     [WinFormsTheory]
@@ -4912,7 +4912,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
@@ -4929,7 +4929,7 @@ public class ListViewTests
         using ListView listView = new();
         listView.ShowItemToolTips = showItemToolTips;
         ListViewItem listViewItem = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.Dynamic.IsToolTracked(listViewItem));
@@ -4943,8 +4943,8 @@ public class ListViewTests
     {
         using ListView listView = new();
         ListViewItem listViewItem = new();
-        listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
-        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        listView.TestAccessor.Dynamic.NotifyAboutGotFocus(listViewItem);
+        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(listViewItem));
     }
 
     [WinFormsFact]
@@ -4952,8 +4952,8 @@ public class ListViewTests
     {
         using ListView listView = new() { VirtualMode = true };
         ListViewItem listViewItem = new();
-        listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
-        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        listView.TestAccessor.Dynamic.NotifyAboutGotFocus(listViewItem);
+        Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(listViewItem));
     }
 
     [WinFormsFact]
@@ -4961,12 +4961,12 @@ public class ListViewTests
     {
         using ListView listView = new();
         ListViewItem listViewItem = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
         listView.Items.Add(listViewItem);
 
         Assert.True(accessor.IsToolTracked(listViewItem));
 
-        listView.TestAccessor().Dynamic.NotifyAboutLostFocus(listViewItem);
+        listView.TestAccessor.Dynamic.NotifyAboutLostFocus(listViewItem);
         Assert.True(accessor.IsToolTracked(listViewItem));
     }
 
@@ -4975,12 +4975,12 @@ public class ListViewTests
     {
         using ListView listView = new() { VirtualMode = true };
         ListViewItem listViewItem = new();
-        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+        var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor;
 
-        listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
+        listView.TestAccessor.Dynamic.NotifyAboutGotFocus(listViewItem);
         Assert.True(accessor.IsToolTracked(listViewItem));
 
-        listView.TestAccessor().Dynamic.NotifyAboutLostFocus(listViewItem);
+        listView.TestAccessor.Dynamic.NotifyAboutLostFocus(listViewItem);
         Assert.False(accessor.IsToolTracked(listViewItem));
     }
 
@@ -5119,7 +5119,7 @@ public class ListViewTests
         using ToolTip toolTip = new();
         listView.CreateControl();
 
-        dynamic listViewDynamic = listView.TestAccessor().Dynamic;
+        dynamic listViewDynamic = listView.TestAccessor.Dynamic;
         string actual = listViewDynamic._toolTipCaption;
 
         Assert.Empty(actual);
@@ -5152,7 +5152,7 @@ public class ListViewTests
         listView.Items.Add(new ListViewItem("Test"));
         SubListViewAccessibleObject accessibleObject = new(listView);
 
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        int accessibilityProperty = listView.TestAccessor.Dynamic.s_accessibilityProperty;
         listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(15, 40));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
@@ -5177,7 +5177,7 @@ public class ListViewTests
         listView.Items.Add(new ListViewItem("Test"));
         SubListViewAccessibleObject accessibleObject = new(listView);
 
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        int accessibilityProperty = listView.TestAccessor.Dynamic.s_accessibilityProperty;
         listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(15, 40));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
@@ -5202,7 +5202,7 @@ public class ListViewTests
         listView.Items.Add(new ListViewItem("Test"));
         SubListViewAccessibleObject accessibleObject = new(listView);
 
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        int accessibilityProperty = listView.TestAccessor.Dynamic.s_accessibilityProperty;
         listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(10, 20));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
@@ -5229,7 +5229,7 @@ public class ListViewTests
         listView.Items.Add(new ListViewItem("Test"));
         SubListViewAccessibleObject accessibleObject = new(listView);
 
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        int accessibilityProperty = listView.TestAccessor.Dynamic.s_accessibilityProperty;
         listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(x, y));
 
@@ -5350,7 +5350,7 @@ public class ListViewTests
         Assert.NotNull(listViewItem.AccessibilityObject);
 
         SubListViewItemAccessibleObject accessibleObject = new(listViewItem);
-        listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
+        listViewItem.TestAccessor.Dynamic._accessibilityObject = accessibleObject;
         listView.CreateControl();
         listViewItem.Focused = true;
         listViewItem.Selected = true;
@@ -5403,7 +5403,7 @@ public class ListViewTests
     {
         using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl);
         SubListViewAccessibleObject accessibleObject = new(listView);
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        int accessibilityProperty = listView.TestAccessor.Dynamic.s_accessibilityProperty;
         listView.Properties.AddValue(accessibilityProperty, accessibleObject);
 
         listView.OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(groupId));
@@ -5453,7 +5453,7 @@ public class ListViewTests
         PInvokeCore.SendMessage(listView, PInvokeCore.WM_LBUTTONDOWN, 1, PARAM.FromPoint(subItemLocation));
 
         // Start editing immediately (if it was queued).
-        PInvokeCore.SendMessage(listView, PInvokeCore.WM_TIMER, (WPARAM)(nint)listView.TestAccessor().Dynamic.LVLABELEDITTIMER);
+        PInvokeCore.SendMessage(listView, PInvokeCore.WM_TIMER, (WPARAM)(nint)listView.TestAccessor.Dynamic.LVLABELEDITTIMER);
 
         nint editControlHandle = PInvokeCore.SendMessage(listView, PInvoke.LVM_GETEDITCONTROL);
 
@@ -5863,7 +5863,7 @@ public class ListViewTests
 
         listView.ReleaseUiaProvider(listView.HWND);
 
-        Assert.Null(listView.TestAccessor().Dynamic._defaultGroup);
+        Assert.Null(listView.TestAccessor.Dynamic._defaultGroup);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -5995,7 +5995,7 @@ public class ListViewTests
         // Add first handler and simulate the column click event
         listView.ColumnClick += firstHandler;
         ColumnClickEventArgs args = new(1);
-        listView.TestAccessor().Dynamic.OnColumnClick(args);
+        listView.TestAccessor.Dynamic.OnColumnClick(args);
 
         firstHandlerInvokeCount.Should().Be(1);
         secondHandlerInvokeCount.Should().Be(0);
@@ -6004,14 +6004,14 @@ public class ListViewTests
 
         // Add second handler and simulate the event again
         listView.ColumnClick += secondHandler;
-        listView.TestAccessor().Dynamic.OnColumnClick(args);
+        listView.TestAccessor.Dynamic.OnColumnClick(args);
 
         firstHandlerInvokeCount.Should().Be(2); // First handler called again
         secondHandlerInvokeCount.Should().Be(1); // Second handler called for the first time
 
         // Remove first handler and simulate the event again
         listView.ColumnClick -= firstHandler;
-        listView.TestAccessor().Dynamic.OnColumnClick(args);
+        listView.TestAccessor.Dynamic.OnColumnClick(args);
 
         // First handler should not be called again, second handler should be called again
         firstHandlerInvokeCount.Should().Be(2);
@@ -6038,7 +6038,7 @@ public class ListViewTests
         // Test adding and invoking first handler.
         listView.GroupTaskLinkClick += handler1;
         ListViewGroupEventArgs expectedEventArgs = new(1);
-        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(expectedEventArgs);
+        listView.TestAccessor.Dynamic.OnGroupTaskLinkClick(expectedEventArgs);
 
         callCount.Should().Be(1);
         eventSender.Should().Be(listView);
@@ -6046,21 +6046,21 @@ public class ListViewTests
 
         // Test adding and invoking both handlers.
         listView.GroupTaskLinkClick += handler2;
-        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(2));
+        listView.TestAccessor.Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(2));
 
         // Expect callCount to be 3 because both handlers should be called.
         callCount.Should().Be(3);
 
         // Test removing first handler and invoking.
         listView.GroupTaskLinkClick -= handler1;
-        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(3));
+        listView.TestAccessor.Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(3));
 
         // Expect callCount to be 4 because only second handler should be called.
         callCount.Should().Be(4);
 
         // Test removing second handler and ensuring no invocation.
         listView.GroupTaskLinkClick -= handler2;
-        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(4));
+        listView.TestAccessor.Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(4));
 
         // Expect callCount to remain 4 because no handlers should be called.
         callCount.Should().Be(4);

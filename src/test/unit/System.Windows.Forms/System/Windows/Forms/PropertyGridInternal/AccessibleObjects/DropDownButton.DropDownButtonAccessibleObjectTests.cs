@@ -87,7 +87,7 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
         control.SelectedObject = button;
         control.SelectedGridItem = control.GetCurrentEntries()[1].GridItems[5]; // FlatStyle property
 
-        PropertyGridView gridView = control.TestAccessor().GridView;
+        PropertyGridView gridView = control.TestAccessor.GridView;
         DropDownButton dropDownButton = gridView.DropDownButton;
         dropDownButton.Visible = true;
 

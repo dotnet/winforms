@@ -15,12 +15,12 @@ public class PrintPreviewControlTests
     {
         PrintPreviewControl control = new();
 
-        int actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(false).ToArgb();
+        int actualBackColorArgb = control.TestAccessor.Dynamic.GetBackColor(false).ToArgb();
         Assert.Equal(SystemColors.AppWorkspace.ToArgb(), actualBackColorArgb);
 
         control.BackColor = Color.Green;
 
-        actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(false).ToArgb();
+        actualBackColorArgb = control.TestAccessor.Dynamic.GetBackColor(false).ToArgb();
         Assert.Equal(Color.Green.ToArgb(), actualBackColorArgb);
     }
 
@@ -29,7 +29,7 @@ public class PrintPreviewControlTests
     {
         PrintPreviewControl control = new();
 
-        int actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(true).ToArgb();
+        int actualBackColorArgb = control.TestAccessor.Dynamic.GetBackColor(true).ToArgb();
 
         Assert.Equal(SystemColors.ControlDarkDark.ToArgb(), actualBackColorArgb);
         // Default AppWorkSpace color in HC theme does not allow to follow HC standards.
@@ -37,7 +37,7 @@ public class PrintPreviewControlTests
 
         control.BackColor = Color.Green;
 
-        actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(true).ToArgb();
+        actualBackColorArgb = control.TestAccessor.Dynamic.GetBackColor(true).ToArgb();
 
         Assert.Equal(Color.Green.ToArgb(), actualBackColorArgb);
         Assert.False(SystemColors.AppWorkspace.ToArgb().Equals(actualBackColorArgb));

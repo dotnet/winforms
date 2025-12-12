@@ -19,7 +19,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._owner);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._owner);
         Assert.Equal(AccessibleRole.Grouping, accessibleObject.Role);
     }
 

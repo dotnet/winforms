@@ -122,7 +122,7 @@ public class CheckBoxFlatAdapterTests : IDisposable
     {
         (TestCheckBoxFlatAdapter checkBoxFlatAdapter, _) = CreateAdapter(Appearance.Normal, true);
 
-        ButtonBaseAdapter result = checkBoxFlatAdapter.TestAccessor().Dynamic.CreateButtonAdapter();
+        ButtonBaseAdapter result = checkBoxFlatAdapter.TestAccessor.Dynamic.CreateButtonAdapter();
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ButtonFlatAdapter>();

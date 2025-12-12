@@ -102,7 +102,7 @@ public class ListBoxAccessibleObjectTests
 
         listBox.ReleaseUiaProvider(listBox.HWND);
 
-        Assert.Equal(0, accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+        Assert.Equal(0, accessibleObject.TestAccessor.Dynamic._itemAccessibleObjects.Count);
     }
 
     [WinFormsFact]
@@ -113,7 +113,7 @@ public class ListBoxAccessibleObjectTests
 
         listBox.Items.Clear();
 
-        Assert.Equal(0, accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+        Assert.Equal(0, accessibleObject.TestAccessor.Dynamic._itemAccessibleObjects.Count);
     }
 
     [WinFormsFact]
@@ -122,11 +122,11 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = InitializeListBoxWithItems();
         ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
         ItemArray.Entry? item = listBox.Items.InnerArray.Entries[0];
-        Assert.True(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
+        Assert.True(accessibleObject.TestAccessor.Dynamic._itemAccessibleObjects.ContainsKey(item));
 
         listBox.Items.Remove(item!);
 
-        Assert.False(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
+        Assert.False(accessibleObject.TestAccessor.Dynamic._itemAccessibleObjects.ContainsKey(item));
     }
 
     [WinFormsFact]
@@ -243,7 +243,7 @@ public class ListBoxAccessibleObjectTests
             accessibilityObject.GetChild(i);
         }
 
-        Assert.Equal(childCount, accessibilityObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+        Assert.Equal(childCount, accessibilityObject.TestAccessor.Dynamic._itemAccessibleObjects.Count);
 
         return accessibilityObject;
     }

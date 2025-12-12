@@ -1356,8 +1356,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         listView.ReleaseUiaProvider(listView.HWND);
 
-        Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
-        Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(group.TestAccessor.Dynamic._accessibilityObject);
+        Assert.Null(listView.DefaultGroup.TestAccessor.Dynamic._accessibilityObject);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -1371,7 +1371,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         listView.Groups.Clear();
 
-        Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(group.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1385,14 +1385,14 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         listView.Groups.Remove(group);
 
-        Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(group.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
     private static void EnforceAccessibleObjectCreation(ListViewGroup group)
     {
         _ = group.AccessibilityObject;
-        Assert.NotNull(group.TestAccessor().Dynamic._accessibilityObject);
+        Assert.NotNull(group.TestAccessor.Dynamic._accessibilityObject);
     }
 
     private ListView GetListViewItemWithInvisibleItems(View view)

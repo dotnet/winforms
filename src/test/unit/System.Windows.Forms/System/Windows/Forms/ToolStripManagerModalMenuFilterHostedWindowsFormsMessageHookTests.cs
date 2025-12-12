@@ -32,13 +32,13 @@ public class ToolStripManagerModalMenuFilterHostedWindowsFormsMessageHookTests
 
         object? hook = Activator.CreateInstance(hookType, nonPublic: true);
 
-        hook?.TestAccessor().Dynamic.UninstallMessageHook();
-        hook?.TestAccessor().Dynamic.UninstallMessageHook();
+        hook?.TestAccessor.Dynamic.UninstallMessageHook();
+        hook?.TestAccessor.Dynamic.UninstallMessageHook();
 
-        bool isHooked = hook?.TestAccessor().Dynamic._isHooked;
+        bool isHooked = hook?.TestAccessor.Dynamic._isHooked;
         isHooked.Should().BeFalse();
 
-        IntPtr messageHookHandle = hook?.TestAccessor().Dynamic._messageHookHandle;
+        IntPtr messageHookHandle = hook?.TestAccessor.Dynamic._messageHookHandle;
         messageHookHandle.Should().Be(IntPtr.Zero);
     }
 }

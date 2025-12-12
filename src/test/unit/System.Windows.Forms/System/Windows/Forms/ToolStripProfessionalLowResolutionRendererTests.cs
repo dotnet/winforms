@@ -25,7 +25,7 @@ public class ToolStripProfessionalLowResolutionRendererTests
         using Graphics g = Graphics.FromImage(bmp);
         ToolStripRenderEventArgs args = new(g, toolStrip);
 
-        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBackground(args);
+        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor.Dynamic.OnRenderToolStripBackground(args);
 
         action.Should().NotThrow();
     }
@@ -38,7 +38,7 @@ public class ToolStripProfessionalLowResolutionRendererTests
         using Graphics g = Graphics.FromImage(bmp);
         ToolStripRenderEventArgs args = new(g, dropDown);
 
-        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBackground(args);
+        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor.Dynamic.OnRenderToolStripBackground(args);
 
         action.Should().NotThrow();
     }
@@ -55,7 +55,7 @@ public class ToolStripProfessionalLowResolutionRendererTests
         using Graphics g = Graphics.FromImage(bmp);
         ToolStripRenderEventArgs args = new(g, toolStrip);
 
-        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor().Dynamic.OnRenderToolStripBorder(args);
+        Action action = () => _toolStripProfessionalLowResolutionRenderer.TestAccessor.Dynamic.OnRenderToolStripBorder(args);
 
         action.Should().NotThrow();
     }

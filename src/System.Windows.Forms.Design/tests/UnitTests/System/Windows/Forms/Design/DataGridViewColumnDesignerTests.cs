@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -42,7 +42,7 @@ public class DataGridViewColumnDesignerTests
         designer.Initialize(column);
         column.Site = siteMock.Object;
 
-        designer.TestAccessor().Dynamic.Name = "NewColumnName";
+        designer.TestAccessor.Dynamic.Name = "NewColumnName";
 
         column.Name.Should().Be("NewColumnName");
     }
@@ -54,7 +54,7 @@ public class DataGridViewColumnDesignerTests
         using DataGridViewColumnDesigner designer = new();
         designer.Initialize(column);
 
-        designer.TestAccessor().Dynamic.Width = 150;
+        designer.TestAccessor.Dynamic.Width = 150;
 
         column.Width.Should().Be(150);
     }
@@ -67,6 +67,6 @@ public class DataGridViewColumnDesignerTests
 
         designer.LiveDataGridView = dataGridView;
 
-        ((DataGridView)designer.TestAccessor().Dynamic._liveDataGridView).Should().Be(dataGridView);
+        ((DataGridView)designer.TestAccessor.Dynamic._liveDataGridView).Should().Be(dataGridView);
     }
 }

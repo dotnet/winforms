@@ -59,7 +59,7 @@ public class TabOrderTests : IDisposable
     [WinFormsFact]
     public void TabOrder_Constructor_InitializesFieldsCorrectly()
     {
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
 
         _tabOrder.Should().NotBeNull();
         ((Font)accessor._tabFont).Should().Be(new Font(_dialogFont, FontStyle.Bold));
@@ -97,7 +97,7 @@ public class TabOrderTests : IDisposable
         _tabOrder.CreateControl();
         _tabOrder.IsHandleCreated.Should().BeTrue();
 
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._ctlHover = ControlMock.Object;
 
         _tabOrder.OnMouseDown(ComponentMock.Object, MouseButtons.Left, 0, 0);
@@ -122,7 +122,7 @@ public class TabOrderTests : IDisposable
         _tabOrder.IsHandleCreated.Should().BeTrue();
 
         List<Control> tabControls = new() { ControlMock.Object };
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._tabControls = tabControls;
 
         _tabOrder.OnMouseMove(ComponentMock.Object, 10, 10);
@@ -154,7 +154,7 @@ public class TabOrderTests : IDisposable
         _tabOrder.CreateControl();
         _tabOrder.IsHandleCreated.Should().BeTrue();
 
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
 
         _tabOrder.OnSetCursor(ComponentMock.Object);
 
@@ -173,7 +173,7 @@ public class TabOrderTests : IDisposable
 
         CommandID commandID = new(Guid.NewGuid(), 1);
         MenuCommand menuCommand = new((sender, e) => { }, commandID);
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._commands = new MenuCommand[]
         {
             menuCommand
@@ -191,7 +191,7 @@ public class TabOrderTests : IDisposable
 
         CommandID commandID = new(Guid.NewGuid(), 1);
         Mock<MenuCommand> mockCommand = new(null!, commandID);
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._commands = new MenuCommand[]
         {
             new MenuCommand((sender, e) => { }, new CommandID(Guid.NewGuid(), 2))
@@ -209,7 +209,7 @@ public class TabOrderTests : IDisposable
 
         CommandID commandID = new(Guid.NewGuid(), 1);
         Mock<MenuCommand> mockCommand = new(null!, commandID);
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._commands = new MenuCommand[]
         {
             new MenuCommand((sender, e) => { }, new CommandID(Guid.NewGuid(), 2)) { Enabled = true }
@@ -227,7 +227,7 @@ public class TabOrderTests : IDisposable
 
         CommandID commandID = StandardCommands.TabOrder;
         Mock<MenuCommand> mockCommand = new(null!, commandID);
-        dynamic accessor = _tabOrder.TestAccessor().Dynamic;
+        dynamic accessor = _tabOrder.TestAccessor.Dynamic;
         accessor._commands = new MenuCommand[]
         {
             new MenuCommand((sender, e) => { }, new CommandID(Guid.NewGuid(), 2)) { Enabled = true }

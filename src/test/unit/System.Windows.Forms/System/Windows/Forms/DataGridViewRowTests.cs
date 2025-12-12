@@ -2023,7 +2023,7 @@ public class DataGridViewRowTests
         var oldApplicationDefaultFont = Application.DefaultFont;
         using Font font = new("Times New Roman", 12);
         using TestDataGridViewRow row = new();
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
 
         try
         {
@@ -5820,6 +5820,6 @@ internal class TestDataGridViewRow : DataGridViewRow
 {
     internal int GetDefaultHeight()
     {
-        return this.TestAccessor().Dynamic.DefaultHeight;
+        return this.TestAccessor.Dynamic.DefaultHeight;
     }
 }

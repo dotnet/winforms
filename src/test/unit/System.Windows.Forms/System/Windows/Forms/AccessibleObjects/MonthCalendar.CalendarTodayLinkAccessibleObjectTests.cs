@@ -17,13 +17,13 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
-        controlAccessibleObject.Should().BeEquivalentTo(todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
+        controlAccessibleObject.Should().BeEquivalentTo(todayLinkAccessibleObject.TestAccessor.Dynamic._monthCalendarAccessibleObject);
         control.IsHandleCreated.Should().BeFalse();
 
-        bool canGetDescriptionInternalResult = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetDescriptionInternal;
+        bool canGetDescriptionInternalResult = todayLinkAccessibleObject.TestAccessor.Dynamic.CanGetDescriptionInternal;
         canGetDescriptionInternalResult.Should().BeFalse();
 
-        bool CanGetNameInternalResult = todayLinkAccessibleObject.TestAccessor().Dynamic.CanGetNameInternal;
+        bool CanGetNameInternalResult = todayLinkAccessibleObject.TestAccessor.Dynamic.CanGetNameInternal;
         CanGetNameInternalResult.Should().BeFalse();
     }
 

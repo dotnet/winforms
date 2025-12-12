@@ -57,7 +57,7 @@ public sealed class InheritanceUITests : IDisposable
             _inheritanceUI.AddInheritedControl(trayControl, inheritanceLevel);
         }
 
-        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor.Dynamic._toolTip;
         string? text = toolTip.GetToolTip(trayControl);
         text.Should().Be(expectedText);
     }
@@ -82,7 +82,7 @@ public sealed class InheritanceUITests : IDisposable
 
         _inheritanceUI.RemoveInheritedControl(trayControl);
 
-        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor.Dynamic._toolTip;
         string? text = toolTip.GetToolTip(trayControl);
         text.Should().BeEmpty();
     }
@@ -104,7 +104,7 @@ public sealed class InheritanceUITests : IDisposable
     public void AddInheritedControl_ShouldSetToolTipText_And_InitializeToolTip(InheritanceLevel inheritanceLevel, string expectedText)
     {
         _inheritanceUI.AddInheritedControl(_control, inheritanceLevel);
-        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor.Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
         toolTip.ShowAlways.Should().BeTrue();
@@ -116,7 +116,7 @@ public sealed class InheritanceUITests : IDisposable
     public void AddAndRemoveInheritedControl_ShouldSetAndUnsetToolTipText_ForNonSitedChildren()
     {
         _inheritanceUI.AddInheritedControl(_control, InheritanceLevel.Inherited);
-        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor.Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
         toolTip.GetToolTip(_control).Should().Be("Inherited control");
@@ -136,7 +136,7 @@ public sealed class InheritanceUITests : IDisposable
         Mock<ToolTip> mockToolTip = new();
         mockToolTip.Protected().Setup("Dispose", ItExpr.IsAny<bool>());
 
-        _inheritanceUI.TestAccessor().Dynamic._toolTip = mockToolTip.Object;
+        _inheritanceUI.TestAccessor.Dynamic._toolTip = mockToolTip.Object;
 
         _inheritanceUI.Invoking(ui => ui.Dispose()).Should().NotThrow();
         mockToolTip.Protected().Verify("Dispose", Times.Once(), ItExpr.IsAny<bool>());
@@ -150,7 +150,7 @@ public sealed class InheritanceUITests : IDisposable
         _inheritanceUI.AddInheritedControl(_control, InheritanceLevel.Inherited);
         _inheritanceUI.RemoveInheritedControl(_control);
 
-        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor.Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
         toolTip.GetToolTip(_control).Should().BeEmpty();

@@ -3093,8 +3093,8 @@ public class AxHostTests
         using SubAxHost control = new(WebBrowserClsidString);
         control.CreateControl();
 
-        object site = control.TestAccessor().Dynamic._oleSite;
-        AxHost.ConnectionPointCookie cookie = site.TestAccessor().Dynamic._connectionPoint;
+        object site = control.TestAccessor.Dynamic._oleSite;
+        AxHost.ConnectionPointCookie cookie = site.TestAccessor.Dynamic._connectionPoint;
         cookie.Should().NotBeNull();
         cookie.Connected.Should().BeTrue();
     }

@@ -63,6 +63,6 @@ public readonly ref struct AppContextSwitchScope
         Type type = Type.GetType($"{typeName}, {assemblyName}")
             ?? throw new InvalidOperationException($"Could not find {typeName} type in {assemblyName} assembly.");
 
-        return type.TestAccessor().Dynamic.GetSwitchDefaultValue(switchName);
+        return type.TestAccessor.Dynamic.GetSwitchDefaultValue(switchName);
     }
 }

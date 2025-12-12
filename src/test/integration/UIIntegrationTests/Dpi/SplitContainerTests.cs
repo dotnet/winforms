@@ -38,7 +38,7 @@ public class SplitContainerTests : ControlTestBase
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();

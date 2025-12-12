@@ -54,7 +54,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         Action columnCountAct = () => _designer.ColumnCount = 0;
         columnCountAct.Should().Throw<ArgumentException>();
 
-        _designer.TestAccessor().Dynamic.Undoing = true;
+        _designer.TestAccessor.Dynamic.Undoing = true;
         _designer.ColumnCount = 0;
         _tableLayoutPanel.ColumnCount.Should().Be(0);
     }
@@ -81,7 +81,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         _tableLayoutPanel.ColumnCount = 1;
         _tableLayoutPanel.RowCount = 1;
 
-        _designer.TestAccessor().Dynamic.CheckVerbStatus();
+        _designer.TestAccessor.Dynamic.CheckVerbStatus();
         List<DesignerVerb> verbs = _designer.Verbs.Cast<DesignerVerb>().ToList();
 
         verbs.Should().ContainSingle(v => v.Text == SR.TableLayoutPanelDesignerRemoveColumn && !v.Enabled);
@@ -90,7 +90,7 @@ public class TableLayoutPanelDesignerTests : IDisposable
         _tableLayoutPanel.ColumnCount = 2;
         _tableLayoutPanel.RowCount = 2;
 
-        _designer.TestAccessor().Dynamic.CheckVerbStatus();
+        _designer.TestAccessor.Dynamic.CheckVerbStatus();
         verbs = _designer.Verbs.Cast<DesignerVerb>().ToList();
 
         verbs.Should().ContainSingle(v => v.Text == SR.TableLayoutPanelDesignerRemoveColumn && v.Enabled);
@@ -100,8 +100,8 @@ public class TableLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void ActionLists_Should_Be_Initialized_Correctly()
     {
-        _designer.TestAccessor().Dynamic._actionLists = null;
-        _designer.TestAccessor().Dynamic.BuildActionLists();
+        _designer.TestAccessor.Dynamic._actionLists = null;
+        _designer.TestAccessor.Dynamic.BuildActionLists();
 
         DesignerActionListCollection actionLists = _designer.ActionLists;
 
@@ -144,13 +144,13 @@ public class TableLayoutPanelDesignerTests : IDisposable
         _tableLayoutPanel.ControlAdded += It.IsAny<ControlEventHandler>();
         _tableLayoutPanel.ControlRemoved += It.IsAny<ControlEventHandler>();
 
-        PropertyDescriptor rowStyleProp = (PropertyDescriptor)designer.TestAccessor().Dynamic._rowStyleProp;
-        PropertyDescriptor colStyleProp = (PropertyDescriptor)designer.TestAccessor().Dynamic._colStyleProp;
+        PropertyDescriptor rowStyleProp = (PropertyDescriptor)designer.TestAccessor.Dynamic._rowStyleProp;
+        PropertyDescriptor colStyleProp = (PropertyDescriptor)designer.TestAccessor.Dynamic._colStyleProp;
 
         rowStyleProp.Should().NotBeNull();
         colStyleProp.Should().NotBeNull();
 
-        InheritanceAttribute inheritanceAttribute = _designer.TestAccessor().Dynamic.InheritanceAttribute;
+        InheritanceAttribute inheritanceAttribute = _designer.TestAccessor.Dynamic.InheritanceAttribute;
 
         if (inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
         {

@@ -73,9 +73,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.TraceOutputOptions = TraceOptions.Callstack
                         listener.TraceOutputOptions.Should.Be(TraceOptions.Callstack)
 
-                        CStr(listener.TestAccessor().Dynamic.HostName).Should.NotBeEmpty()
+                        CStr(TestAccessors.get_TestAccessor(listener).Dynamic.HostName).Should.NotBeEmpty()
 
-                        Dim listenerStream As FileLogTraceListener.ReferencedStream = CType(listener.TestAccessor().Dynamic.ListenerStream, FileLogTraceListener.ReferencedStream)
+                        Dim listenerStream As FileLogTraceListener.ReferencedStream = CType(TestAccessors.get_TestAccessor(listener).Dynamic.ListenerStream, FileLogTraceListener.ReferencedStream)
                         listenerStream.Should.NotBeNull()
                         listenerStream.IsInUse.Should.BeTrue()
                         listenerStream.FileSize.Should.Be(0)

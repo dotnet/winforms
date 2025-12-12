@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -241,12 +241,12 @@ public class ToolStripComboBoxTests : IDisposable
         EventHandler handler = (sender, e) => eventCount++;
 
         _toolStripComboBox.DropDown += handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDown(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDown(EventArgs.Empty);
         eventCount.Should().Be(1);
 
         eventCount = 0;
         _toolStripComboBox.DropDown -= handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDown(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDown(EventArgs.Empty);
         eventCount.Should().Be(0);
     }
 
@@ -257,12 +257,12 @@ public class ToolStripComboBoxTests : IDisposable
         EventHandler handler = (sender, e) => eventCount++;
 
         _toolStripComboBox.DropDownClosed += handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownClosed(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDownClosed(EventArgs.Empty);
         eventCount.Should().Be(1);
 
         eventCount = 0;
         _toolStripComboBox.DropDownClosed -= handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownClosed(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDownClosed(EventArgs.Empty);
         eventCount.Should().Be(0);
     }
 
@@ -275,12 +275,12 @@ public class ToolStripComboBoxTests : IDisposable
         EventHandler handler = (sender, e) => eventCount++;
 
         _toolStripComboBox.DropDownStyleChanged += handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
         eventCount.Should().Be(1);
 
         eventCount = 0;
         _toolStripComboBox.DropDownStyleChanged -= handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
         eventCount.Should().Be(0);
 
         _toolStripComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -312,12 +312,12 @@ public class ToolStripComboBoxTests : IDisposable
         EventHandler handler = (sender, e) => eventCount++;
 
         _toolStripComboBox.TextUpdate += handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnTextUpdate(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnTextUpdate(EventArgs.Empty);
         eventCount.Should().Be(1);
 
         eventCount = 0;
         _toolStripComboBox.TextUpdate -= handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnTextUpdate(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnTextUpdate(EventArgs.Empty);
         eventCount.Should().Be(0);
     }
 
@@ -360,12 +360,12 @@ public class ToolStripComboBoxTests : IDisposable
         EventHandler handler = (sender, e) => eventCount++;
 
         _toolStripComboBox.DoubleClick += handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDoubleClick(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDoubleClick(EventArgs.Empty);
         eventCount.Should().Be(1);
 
         eventCount = 0;
         _toolStripComboBox.DoubleClick -= handler;
-        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDoubleClick(EventArgs.Empty);
+        _toolStripComboBox.ComboBox.TestAccessor.Dynamic.OnDoubleClick(EventArgs.Empty);
         eventCount.Should().Be(0);
     }
 

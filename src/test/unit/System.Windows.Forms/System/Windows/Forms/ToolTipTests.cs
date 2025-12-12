@@ -900,7 +900,7 @@ public class ToolTipTests
     {
         TTTOOLINFOW toolInfo = default;
         int size = (int)&toolInfo.lParam - (int)&toolInfo + sizeof(LPARAM);
-        int expected = (int)default(ToolInfoWrapper<Control>).TestAccessor().Dynamic.TTTOOLINFO_V2_Size;
+        int expected = (int)default(ToolInfoWrapper<Control>).TestAccessor.Dynamic.TTTOOLINFO_V2_Size;
         size.Should().Be(expected);
     }
 

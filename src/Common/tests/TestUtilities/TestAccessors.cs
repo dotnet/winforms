@@ -17,53 +17,53 @@ public static partial class TestAccessors
     // the array here.
     private static readonly object?[] s_nullObjectParam = [null];
 
-    /// <summary>
-    ///  Extension that creates a generic internals test accessor for a
-    ///  given instance or Type class (if only accessing statics).
-    /// </summary>
     /// <param name="instanceOrType">
     ///  Instance or Type class (if only accessing statics).
     /// </param>
-    /// <remarks>
-    ///  <para>
-    ///   Use <see cref="ITestAccessor.CreateDelegate">CreateDelegate</see> to deal with methods that take spans or
-    ///   other ref structs. For other members, use the dynamic accessor:
-    ///  </para>
-    ///  <code>
-    ///   <![CDATA[
-    ///   Version version = new Version(4, 1);
-    ///    Assert.Equal(4, version.TestAccessor().Dynamic._Major));
-    ///
-    ///    // Or
-    ///
-    ///    dynamic accessor = version.TestAccessor().Dynamic;
-    ///    Assert.Equal(4, accessor._Major));
-    ///
-    ///    // Or
-    ///
-    ///    Version version2 = new Version("4.1");
-    ///    dynamic accessor = typeof(Version).TestAccessor().Dynamic;
-    ///    Assert.Equal(version2, accessor.Parse("4.1")));
-    ///   ]]>
-    ///  </code>
-    ///  <para>
-    ///   When attempting to get nested private types that are generic (nested types in a generic type
-    ///   are always generic, and inherit the type specifiers of the the parent type), use the extension
-    ///   <see cref="ReflectionHelper.GetFullNestedType(Type, string, Span{Type})"/> to get a fully
-    ///   instantiated type for the nested type, then pass that Type to this method.
-    ///  </para>
-    /// </remarks>
-    public static ITestAccessor TestAccessor(this object instanceOrType)
+    extension(object instanceOrType)
     {
-        ITestAccessor? testAccessor = instanceOrType is Type type
-            ? (ITestAccessor?)Activator.CreateInstance(
-                typeof(TestAccessor<>).MakeGenericType(type),
-                s_nullObjectParam)
-            : (ITestAccessor?)Activator.CreateInstance(
-                typeof(TestAccessor<>).MakeGenericType(instanceOrType.GetType()),
-                instanceOrType);
+        /// <summary>
+        ///  Extension that creates a generic internals test accessor for a
+        ///  given instance or Type class (if only accessing statics).
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   Use <see cref="ITestAccessor.CreateDelegate">CreateDelegate</see> to deal with methods that take spans or
+        ///   other ref structs. For other members, use the dynamic accessor:
+        ///  </para>
+        ///  <code>
+        ///   <![CDATA[
+        ///   Version version = new Version(4, 1);
+        ///    Assert.Equal(4, version.TestAccessor.Dynamic._Major));
+        ///
+        ///    // Or
+        ///
+        ///    dynamic accessor = version.TestAccessor.Dynamic;
+        ///    Assert.Equal(4, accessor._Major));
+        ///
+        ///    // Or
+        ///
+        ///    Version version2 = new Version("4.1");
+        ///    dynamic accessor = typeof(Version).TestAccessor.Dynamic;
+        ///    Assert.Equal(version2, accessor.Parse("4.1")));
+        ///   ]]>
+        ///  </code>
+        /// </remarks>
+        public ITestAccessor TestAccessor
+        {
+            get
+            {
+                ITestAccessor? testAccessor = instanceOrType is Type type
+                    ? (ITestAccessor?)Activator.CreateInstance(
+                        typeof(TestAccessor<>).MakeGenericType(type),
+                        s_nullObjectParam)
+                    : (ITestAccessor?)Activator.CreateInstance(
+                        typeof(TestAccessor<>).MakeGenericType(instanceOrType.GetType()),
+                        instanceOrType);
 
-        return testAccessor
-            ?? throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
+                return testAccessor
+                    ?? throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
+            }
+        }
     }
 }

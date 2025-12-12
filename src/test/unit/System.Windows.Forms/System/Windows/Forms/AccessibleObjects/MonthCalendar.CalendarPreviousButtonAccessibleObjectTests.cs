@@ -17,7 +17,7 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarPreviousButtonAccessibleObject previousButtonAccessibleObject = new(controlAccessibleObject);
 
-        controlAccessibleObject.Should().BeEquivalentTo(previousButtonAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
+        controlAccessibleObject.Should().BeEquivalentTo(previousButtonAccessibleObject.TestAccessor.Dynamic._monthCalendarAccessibleObject);
         control.IsHandleCreated.Should().BeFalse();
         previousButtonAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
         previousButtonAccessibleObject.CanGetNameInternal.Should().BeFalse();

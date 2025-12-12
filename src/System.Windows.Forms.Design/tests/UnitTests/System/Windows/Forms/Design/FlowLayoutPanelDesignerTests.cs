@@ -67,7 +67,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             { nameof(FlowLayoutPanel.FlowDirection), TypeDescriptor.CreateProperty(typeof(FlowLayoutPanel), nameof(FlowLayoutPanel.FlowDirection), typeof(FlowDirection)) }
         };
 
-        _designer.TestAccessor().Dynamic.PreFilterProperties(properties);
+        _designer.TestAccessor.Dynamic.PreFilterProperties(properties);
 
         properties[nameof(FlowLayoutPanel.FlowDirection)].Should().NotBeNull();
         properties[nameof(FlowLayoutPanel.FlowDirection)].Should().BeAssignableTo<PropertyDescriptor>();
@@ -80,7 +80,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     [Fact]
     public void AllowGenericDragBox_ShouldReturnFalse()
     {
-        bool result = _designer.TestAccessor().Dynamic.AllowGenericDragBox;
+        bool result = _designer.TestAccessor.Dynamic.AllowGenericDragBox;
 
         result.Should().BeFalse();
     }
@@ -94,7 +94,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     {
         _flowLayoutPanel.FlowDirection = flowDirection;
 
-        bool result = _designer.TestAccessor().Dynamic.HorizontalFlow;
+        bool result = _designer.TestAccessor.Dynamic.HorizontalFlow;
 
         result.Should().Be(expected);
     }
@@ -108,7 +108,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     {
         _flowLayoutPanel.RightToLeft = RightToLeft.Yes;
 
-        FlowDirection result = _designer.TestAccessor().Dynamic.RTLTranslateFlowDirection(input);
+        FlowDirection result = _designer.TestAccessor.Dynamic.RTLTranslateFlowDirection(input);
 
         result.Should().Be(expected);
     }
@@ -120,7 +120,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
     {
         _flowLayoutPanel.RightToLeft = rightToLeft;
 
-        bool result = _designer.TestAccessor().Dynamic.IsRtl;
+        bool result = _designer.TestAccessor.Dynamic.IsRtl;
 
         result.Should().Be(expected);
     }
@@ -134,7 +134,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             Margin = new Padding(5, 6, 7, 8)
         };
 
-        Rectangle result = _designer.TestAccessor().Dynamic.GetMarginBounds(control);
+        Rectangle result = _designer.TestAccessor.Dynamic.GetMarginBounds(control);
 
         result.Should().Be(new Rectangle(5, 14, 42, 54));
     }
@@ -150,21 +150,21 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             DragDropEffects.Copy,
             DragDropEffects.Copy);
 
-        _designer.TestAccessor().Dynamic.OnDragEnter(dragEventArgs);
+        _designer.TestAccessor.Dynamic.OnDragEnter(dragEventArgs);
 
-        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        int insertionIndex = _designer.TestAccessor.Dynamic._insertionIndex;
         insertionIndex.Should().Be(-1);
 
-        Point lastMouseLocation = _designer.TestAccessor().Dynamic._lastMouseLocation;
+        Point lastMouseLocation = _designer.TestAccessor.Dynamic._lastMouseLocation;
         lastMouseLocation.Should().Be(Point.Empty);
     }
 
     [Fact]
     public void OnDragLeave_ShouldClearDragState()
     {
-        _designer.TestAccessor().Dynamic.OnDragLeave(EventArgs.Empty);
+        _designer.TestAccessor.Dynamic.OnDragLeave(EventArgs.Empty);
 
-        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        int insertionIndex = _designer.TestAccessor.Dynamic._insertionIndex;
         insertionIndex.Should().Be(-1);
     }
 
@@ -179,9 +179,9 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             DragDropEffects.Copy,
             DragDropEffects.Copy);
 
-        _designer.TestAccessor().Dynamic.OnDragOver(dragEventArgs);
+        _designer.TestAccessor.Dynamic.OnDragOver(dragEventArgs);
 
-        int insertionIndex = _designer.TestAccessor().Dynamic._insertionIndex;
+        int insertionIndex = _designer.TestAccessor.Dynamic._insertionIndex;
         insertionIndex.Should().Be(-1);
     }
 
@@ -200,7 +200,7 @@ public class FlowLayoutPanelDesignerTests : IDisposable
             DragDropEffects.Move,
             DragDropEffects.Move);
 
-        _designer.TestAccessor().Dynamic.OnDragDrop(dragEventArgs);
+        _designer.TestAccessor.Dynamic.OnDragDrop(dragEventArgs);
 
         _flowLayoutPanel.Controls[0].Should().Be(control1);
         _flowLayoutPanel.Controls[1].Should().Be(control2);

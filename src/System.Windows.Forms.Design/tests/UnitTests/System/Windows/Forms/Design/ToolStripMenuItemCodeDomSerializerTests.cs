@@ -43,7 +43,7 @@ public class ToolStripMenuItemCodeDomSerializerTests
         using ToolStripMenuItem dummyItem = new();
         Mock<ToolStrip> mockParent = new();
         mockParent.Setup(p => p.Site).Returns((ISite?)null);
-        dummyItem.TestAccessor().Dynamic.Parent = mockParent.Object;
+        dummyItem.TestAccessor.Dynamic.Parent = mockParent.Object;
 
         object? result = _serializer.Serialize(_mockManager.Object, dummyItem);
 

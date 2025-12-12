@@ -110,7 +110,7 @@ public class StandardMenuStripVerbTests : IDisposable
     {
         StandardMenuStripVerb standardMenuStripVerb = new(_designer);
         standardMenuStripVerb.Should().BeOfType<StandardMenuStripVerb>();
-        ToolStripDesigner toolStripDesigner = standardMenuStripVerb.TestAccessor().Dynamic._designer;
+        ToolStripDesigner toolStripDesigner = standardMenuStripVerb.TestAccessor.Dynamic._designer;
         toolStripDesigner.Should().Be(_designer);
     }
 
@@ -139,8 +139,8 @@ public class StandardMenuStripVerbTests : IDisposable
     public void Ctor_AssignsHostAndChangeServiceIfAvailable()
     {
         StandardMenuStripVerb standardMenuStripVerb = new(_designer);
-        IDesignerHost host = standardMenuStripVerb.TestAccessor().Dynamic._host;
-        IComponentChangeService changeService = standardMenuStripVerb.TestAccessor().Dynamic._changeService;
+        IDesignerHost host = standardMenuStripVerb.TestAccessor.Dynamic._host;
+        IComponentChangeService changeService = standardMenuStripVerb.TestAccessor.Dynamic._changeService;
 
         host.Should().BeSameAs(_designerHostMock.Object);
         changeService.Should().BeSameAs(_componentChangeServiceMock.Object);

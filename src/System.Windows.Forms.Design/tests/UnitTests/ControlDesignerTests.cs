@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -187,7 +187,7 @@ public class ControlDesignerTests : IDisposable
         Action action = () =>
         {
             Message m = new Message { Msg = (int)PInvokeCore.WM_PAINT };
-            _designer.TestAccessor().Dynamic.WndProc(ref m);
+            _designer.TestAccessor.Dynamic.WndProc(ref m);
         };
 
         action.Should().NotThrow();
@@ -229,8 +229,8 @@ public class ControlDesignerTests : IDisposable
         Mock<DesignerFrame> mockDesignerFrame = new(_designer._control.Site!) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
-        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
-        _designer.TestAccessor().Dynamic.Locked = true;
+        _designer.TestAccessor.Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor.Dynamic.Locked = true;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
@@ -250,7 +250,7 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void GetGlyphs_WithNullBehaviorService_ThrowsException()
     {
-        _designer.TestAccessor().Dynamic._behaviorService = null;
+        _designer.TestAccessor.Dynamic._behaviorService = null;
 
         Action action = () => _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
         action.Should().Throw<InvalidOperationException>();
@@ -267,20 +267,20 @@ public class ControlDesignerTests : IDisposable
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
         _designer._mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
 
-        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor.Dynamic._behaviorService = behaviorService;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
         glyphs[0].Should().BeOfType<NoResizeHandleGlyph>();
-        ((SelectionRules)glyphs[0].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
+        ((SelectionRules)glyphs[0].TestAccessor.Dynamic.rules).Should().Be(SelectionRules.None);
         glyphs[1].Should().BeOfType<NoResizeSelectionBorderGlyph>();
-        ((SelectionRules)glyphs[1].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
+        ((SelectionRules)glyphs[1].TestAccessor.Dynamic.rules).Should().Be(SelectionRules.None);
         glyphs[2].Should().BeOfType<NoResizeSelectionBorderGlyph>();
-        ((SelectionRules)glyphs[2].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
+        ((SelectionRules)glyphs[2].TestAccessor.Dynamic.rules).Should().Be(SelectionRules.None);
         glyphs[3].Should().BeOfType<NoResizeSelectionBorderGlyph>();
-        ((SelectionRules)glyphs[3].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
+        ((SelectionRules)glyphs[3].TestAccessor.Dynamic.rules).Should().Be(SelectionRules.None);
         glyphs[4].Should().BeOfType<NoResizeSelectionBorderGlyph>();
-        ((SelectionRules)glyphs[4].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
+        ((SelectionRules)glyphs[4].TestAccessor.Dynamic.rules).Should().Be(SelectionRules.None);
     }
 
     [Fact]
@@ -296,7 +296,7 @@ public class ControlDesignerTests : IDisposable
         Mock<DesignerFrame> mockDesignerFrame = new(_designer._mockSite.Object) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
-        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
+        _designer.TestAccessor.Dynamic._behaviorService = behaviorService;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
@@ -319,7 +319,7 @@ public class ControlDesignerTests : IDisposable
         for (int i = 0; i < expectedGlyphs.Length; i++)
         {
             glyphs[i].Should().BeOfType(expectedGlyphs[i].glyphType);
-            ((SelectionRules)glyphs[i].TestAccessor().Dynamic.rules).Should().Be(expectedGlyphs[i].rules);
+            ((SelectionRules)glyphs[i].TestAccessor.Dynamic.rules).Should().Be(expectedGlyphs[i].rules);
         }
     }
 
@@ -372,7 +372,7 @@ public class ControlDesignerTests : IDisposable
 
         _designer.OnMouseDragEndCalled.Should().BeTrue();
 
-        bool _ctrlSelect = (bool)_designer.TestAccessor().Dynamic._ctrlSelect;
+        bool _ctrlSelect = (bool)_designer.TestAccessor.Dynamic._ctrlSelect;
         _ctrlSelect.Should().BeFalse();
     }
 }

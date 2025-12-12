@@ -35,9 +35,9 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ToolStripKeyboardHandlingService))).Returns(_mockToolStripKeyboardHandlingService.Object);
 
         _inSituService = new(_mockServiceProvider.Object);
-        _inSituService.TestAccessor().Dynamic._toolDesigner = _mockToolStripDesigner.Object;
-        _inSituService.TestAccessor().Dynamic._toolItemDesigner = _mockToolStripItemDesigner.Object;
-        _inSituService.TestAccessor().Dynamic._componentChangeService = _mockComponentChangeService.Object;
+        _inSituService.TestAccessor.Dynamic._toolDesigner = _mockToolStripDesigner.Object;
+        _inSituService.TestAccessor.Dynamic._toolItemDesigner = _mockToolStripItemDesigner.Object;
+        _inSituService.TestAccessor.Dynamic._componentChangeService = _mockComponentChangeService.Object;
     }
 
     public void Dispose()
@@ -51,46 +51,46 @@ public sealed class ToolStripInSituServiceTests : IDisposable
     [Fact]
     public void Dispose_DisposesToolDesigner()
     {
-        object toolDesignerValue = _inSituService.TestAccessor().Dynamic._toolDesigner;
+        object toolDesignerValue = _inSituService.TestAccessor.Dynamic._toolDesigner;
         toolDesignerValue.Should().NotBeNull();
 
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        toolDesignerValue = _inSituService.TestAccessor().Dynamic._toolDesigner;
+        toolDesignerValue = _inSituService.TestAccessor.Dynamic._toolDesigner;
         toolDesignerValue.Should().BeNull();
     }
 
     [Fact]
     public void Dispose_DisposesToolItemDesigner()
     {
-        object toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
+        object toolItemDesignerValue = _inSituService.TestAccessor.Dynamic._toolItemDesigner;
         toolItemDesignerValue.Should().NotBeNull();
 
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        toolItemDesignerValue = _inSituService.TestAccessor().Dynamic._toolItemDesigner;
+        toolItemDesignerValue = _inSituService.TestAccessor.Dynamic._toolItemDesigner;
         toolItemDesignerValue.Should().BeNull();
     }
 
     [Fact]
     public void Dispose_UnsubscribesFromComponentChangeService()
     {
-        object componentChangeServiceValue = _inSituService.TestAccessor().Dynamic._componentChangeService;
+        object componentChangeServiceValue = _inSituService.TestAccessor.Dynamic._componentChangeService;
         componentChangeServiceValue.Should().NotBeNull();
 
         _inSituService.Dispose();
         _isInSituServiceDisposed = true;
 
-        componentChangeServiceValue = _inSituService.TestAccessor().Dynamic._componentChangeService;
+        componentChangeServiceValue = _inSituService.TestAccessor.Dynamic._componentChangeService;
         componentChangeServiceValue.Should().BeNull();
     }
 
     [Fact]
     public void ToolStripKeyBoardService_ReturnsServiceInstance()
     {
-        object toolStripKeyBoardService = _inSituService.TestAccessor().Dynamic.ToolStripKeyBoardService;
+        object toolStripKeyBoardService = _inSituService.TestAccessor.Dynamic.ToolStripKeyBoardService;
 
         toolStripKeyBoardService.Should().BeAssignableTo<ToolStripKeyboardHandlingService>();
         toolStripKeyBoardService.Should().Be(_mockToolStripKeyboardHandlingService.Object);
@@ -114,7 +114,7 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISupportInSituService))).Returns(_inSituService);
 
         using Component component = new();
-        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
+        _inSituService.TestAccessor.Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
 
         _mockDesignerHost.Verify(dh => dh.RemoveService(typeof(ISupportInSituService)), Times.Once);
     }
@@ -131,7 +131,7 @@ public sealed class ToolStripInSituServiceTests : IDisposable
         _mockServiceProvider.Setup(sp => sp.GetService(typeof(ISupportInSituService))).Returns(_inSituService);
 
         using Component component = new();
-        _inSituService.TestAccessor().Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
+        _inSituService.TestAccessor.Dynamic.OnComponentRemoved(null, new ComponentEventArgs(component));
 
         _mockDesignerHost.Verify(dh => dh.RemoveService(typeof(ISupportInSituService)), Times.Never);
     }
@@ -155,7 +155,7 @@ public sealed class ToolStripInSituServiceTests : IDisposable
     [Fact]
     public void IgnoreMessages_WhenPrimarySelectionIsNotIComponentAndSelectedDesignerControlIsNull_ReturnsFalse()
     {
-        _inSituService.TestAccessor().Dynamic._toolDesigner = _mockToolStripDesigner.Object;
+        _inSituService.TestAccessor.Dynamic._toolDesigner = _mockToolStripDesigner.Object;
         bool result = _inSituService.IgnoreMessages;
         result.Should().BeFalse();
     }
@@ -185,7 +185,7 @@ public sealed class ToolStripInSituServiceTests : IDisposable
     [Fact]
     public void HandleKeyChar_WhenToolItemDesignerIsNotMenuDesigner_CallsShowEditNode()
     {
-        _inSituService.TestAccessor().Dynamic._toolDesigner = null;
+        _inSituService.TestAccessor.Dynamic._toolDesigner = null;
 
         _inSituService.HandleKeyChar();
 

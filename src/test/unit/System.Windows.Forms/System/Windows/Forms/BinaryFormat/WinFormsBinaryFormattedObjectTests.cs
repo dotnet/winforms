@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -127,7 +127,7 @@ public class WinFormsBinaryFormattedObjectTests
         root.TypeName.AssemblyName!.FullName.Should().Be(Assemblies.SystemDrawing);
         ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
-        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor.Dynamic.TryGetBitmap(rootRecord, out object? result);
         success.Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
@@ -143,7 +143,7 @@ public class WinFormsBinaryFormattedObjectTests
         stream.Position = 0;
         SerializationRecord rootRecord = NrbfDecoder.Decode(stream);
 
-        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetBitmap(rootRecord, out object? result);
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor.Dynamic.TryGetBitmap(rootRecord, out object? result);
         success.Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
@@ -183,7 +183,7 @@ public class WinFormsBinaryFormattedObjectTests
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
         root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();
 
-        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor.Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
         success.Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
         using ImageList newList = new();
@@ -206,7 +206,7 @@ public class WinFormsBinaryFormattedObjectTests
         memoryStream.Position = 0;
         SerializationRecord rootRecord = NrbfDecoder.Decode(memoryStream);
 
-        bool success = typeof(WinFormsNrbfSerializer).TestAccessor().Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
+        bool success = typeof(WinFormsNrbfSerializer).TestAccessor.Dynamic.TryGetImageListStreamer(rootRecord, out object? result);
         success.Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
         using ImageList newList = new();

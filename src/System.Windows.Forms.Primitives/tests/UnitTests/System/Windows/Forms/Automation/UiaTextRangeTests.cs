@@ -32,7 +32,7 @@ public unsafe class UiaTextRangeTests
         Assert.True(((ITextRangeProvider.Interface)textRange).GetEnclosingElement(elementProviderScope).Succeeded);
         Assert.Equal(enclosingElement, ComHelpers.GetObjectForIUnknown(elementProviderScope));
 
-        object actual = textRange.TestAccessor()._provider;
+        object actual = textRange.TestAccessor._provider;
 
         Assert.Equal(provider, actual);
     }
@@ -156,7 +156,7 @@ public unsafe class UiaTextRangeTests
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, 3, 10);
 
-        var testAccessor = textRange.TestAccessor();
+        var testAccessor = textRange.TestAccessor;
         testAccessor._start = start;
         testAccessor._end = end;
 
@@ -173,7 +173,7 @@ public unsafe class UiaTextRangeTests
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, start: 0, end: 0);
 
-        textRange.TestAccessor()._start = start;
+        textRange.TestAccessor._start = start;
 
         Assert.Equal(start, textRange.Start);
     }
@@ -1079,7 +1079,7 @@ This is the line 3";
     [InlineData("1d??sf'21gj", 6, false)]
     public void UiaTextRange_private_AtParagraphBoundary_ReturnsCorrectValue(string text, int index, bool expected)
     {
-        bool actual = StaticNullTextRange.TestAccessor().AtParagraphBoundary(text, index);
+        bool actual = StaticNullTextRange.TestAccessor.AtParagraphBoundary(text, index);
         Assert.Equal(expected, actual);
     }
 
@@ -1100,7 +1100,7 @@ This is the line 3";
     [InlineData("1d??sf'21gj", 6, false)]
     public void UiaTextRange_private_AtWordBoundary_ReturnsCorrectValue(string text, int index, bool expected)
     {
-        bool actual = StaticNullTextRange.TestAccessor().AtWordBoundary(text, index);
+        bool actual = StaticNullTextRange.TestAccessor.AtWordBoundary(text, index);
         Assert.Equal(expected, actual);
     }
 
@@ -1111,7 +1111,7 @@ This is the line 3";
     [InlineData('t', false)]
     public void UiaTextRange_private_IsApostrophe_ReturnsCorrectValue(char ch, bool expected)
     {
-        bool actual = StaticNullTextRange.TestAccessor().IsApostrophe(ch);
+        bool actual = StaticNullTextRange.TestAccessor.IsApostrophe(ch);
         Assert.Equal(expected, actual);
     }
 
@@ -1125,7 +1125,7 @@ This is the line 3";
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
-        HorizontalTextAlignment actual = textRange.TestAccessor().GetHorizontalTextAlignment((WINDOW_STYLE)style);
+        HorizontalTextAlignment actual = textRange.TestAccessor.GetHorizontalTextAlignment((WINDOW_STYLE)style);
 
         Assert.Equal((HorizontalTextAlignment)expected, actual);
     }
@@ -1139,7 +1139,7 @@ This is the line 3";
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
-        CapStyle actual = textRange.TestAccessor().GetCapStyle((WINDOW_STYLE)editStyle);
+        CapStyle actual = textRange.TestAccessor.GetCapStyle((WINDOW_STYLE)editStyle);
 
         Assert.Equal((CapStyle)expected, actual);
     }
@@ -1155,7 +1155,7 @@ This is the line 3";
         UiaTextProvider provider = providerMock.Object;
         UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
-        bool actual = textRange.TestAccessor().GetReadOnly();
+        bool actual = textRange.TestAccessor.GetReadOnly();
 
         Assert.Equal(readOnly, actual);
     }
@@ -1163,7 +1163,7 @@ This is the line 3";
     [StaFact]
     public void UiaTextRange_private_GetBackgroundColor_ReturnsExpectedValue()
     {
-        COLORREF actual = StaticNullTextRange.TestAccessor().GetBackgroundColor();
+        COLORREF actual = StaticNullTextRange.TestAccessor.GetBackgroundColor();
         uint expected = 0x00ffffff; // WINDOW system color
         Assert.Equal(expected, actual);
     }
@@ -1180,7 +1180,7 @@ This is the line 3";
             FaceName = faceName
         };
 
-        string actual = StaticNullTextRange.TestAccessor().GetFontName(logfont);
+        string actual = StaticNullTextRange.TestAccessor.GetFontName(logfont);
 
         Assert.Equal(faceName ?? "", actual);
     }
@@ -1202,7 +1202,7 @@ This is the line 3";
         UiaTextProvider provider = providerMock.Object;
         UiaTextRange textRange = new(enclosingElement, provider, 5, 20);
 
-        double actual = textRange.TestAccessor().GetFontSize(provider.Logfont);
+        double actual = textRange.TestAccessor.GetFontSize(provider.Logfont);
 
         Assert.Equal(expected, actual);
     }
@@ -1221,14 +1221,14 @@ This is the line 3";
     public void UiaTextRange_private_GetFontWeight_ReturnsCorrectValue(object fontWeight)
     {
         LOGFONTW logfont = new() { lfWeight = (int)fontWeight };
-        FW actual = StaticNullTextRange.TestAccessor().GetFontWeight(logfont);
+        FW actual = StaticNullTextRange.TestAccessor.GetFontWeight(logfont);
         Assert.Equal(fontWeight, actual);
     }
 
     [StaFact]
     public void UiaTextRange_private_GetForegroundColor_ReturnsCorrectValue()
     {
-        COLORREF actual = StaticNullTextRange.TestAccessor().GetForegroundColor();
+        COLORREF actual = StaticNullTextRange.TestAccessor.GetForegroundColor();
         Assert.Equal(default, actual);
     }
 
@@ -1239,7 +1239,7 @@ This is the line 3";
     {
         LOGFONTW logfont = new() { lfItalic = ifItalic };
 
-        bool actual = StaticNullTextRange.TestAccessor().GetItalic(logfont);
+        bool actual = StaticNullTextRange.TestAccessor.GetItalic(logfont);
 
         Assert.Equal(expected, actual);
     }
@@ -1250,7 +1250,7 @@ This is the line 3";
     public void UiaTextRange_private_GetStrikethroughStyle_ReturnsCorrectValue(byte ifStrikeOut, int expected)
     {
         LOGFONTW logfont = new() { lfStrikeOut = ifStrikeOut };
-        TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor().GetStrikethroughStyle(logfont);
+        TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor.GetStrikethroughStyle(logfont);
 
         Assert.Equal((TextDecorationLineStyle)expected, actual);
     }
@@ -1261,7 +1261,7 @@ This is the line 3";
     public void UiaTextRange_private_GetUnderlineStyle_ReturnsCorrectValue(byte ifUnderline, int expected)
     {
         LOGFONTW logfont = new() { lfUnderline = ifUnderline };
-        TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor().GetUnderlineStyle(logfont);
+        TextDecorationLineStyle actual = StaticNullTextRange.TestAccessor.GetUnderlineStyle(logfont);
 
         Assert.Equal((TextDecorationLineStyle)expected, actual);
     }
@@ -1279,7 +1279,7 @@ This is the line 3";
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
-        textRange.TestAccessor().MoveTo(start, end);
+        textRange.TestAccessor.MoveTo(start, end);
 
         Assert.Equal(start, textRange.Start);
         Assert.Equal(end, textRange.End);
@@ -1296,7 +1296,7 @@ This is the line 3";
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new(enclosingElement, provider, 0, 0);
 
-        Assert.ThrowsAny<Exception>(() => textRange.TestAccessor().MoveTo(start, end));
+        Assert.ThrowsAny<Exception>(() => textRange.TestAccessor.MoveTo(start, end));
     }
 
     [StaTheory]
@@ -1315,7 +1315,7 @@ This is the line 3";
         UiaTextProvider provider = providerMock.Object;
         UiaTextRange textRange = new(enclosingElement, provider, start, end);
 
-        textRange.TestAccessor().ValidateEndpoints();
+        textRange.TestAccessor.ValidateEndpoints();
 
         Assert.Equal(expectedStart, textRange.Start);
         Assert.Equal(expectedEnd, textRange.End);

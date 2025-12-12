@@ -46,12 +46,12 @@ public interface ITestAccessor
     ///
     ///   public int InternalGetDirectoryNameOffset(ReadOnlySpan<char> path)
     ///   {
-    ///       var accessor = typeof(System.IO.Path).TestAccessor();
+    ///       var accessor = typeof(System.IO.Path).TestAccessor;
     ///       return accessor.CreateDelegate<GetDirectoryNameOffset>()(@"C:\Foo");
     ///   }
     ///
     ///   // Without ref structs you can just use Func/Action
-    ///   var accessor = typeof(Color).TestAccessor();
+    ///   var accessor = typeof(Color).TestAccessor;
     ///   bool result = accessor.CreateDelegate<Func<KnownColor, bool>>("IsKnownColorSystem")(KnownColor.Window);
     ///  ]]>
     /// </example>

@@ -4630,8 +4630,8 @@ public class TreeNodeTests
         TreeNode treeSubNode = new();
         treeNode.Nodes.Add(treeSubNode);
 
-        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNode));
+        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(treeNode));
+        Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor.Dynamic.IsToolTracked(treeSubNode));
     }
 
     [WinFormsTheory]

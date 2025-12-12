@@ -36,7 +36,7 @@ public class StandardCommandToolStripMenuItemTests : IDisposable
     public void Constructor_InitializesPropertiesCorrectly()
     {
         _item.MenuService?.FindCommand(_commandID)?.CommandID.Should().Be(_commandID);
-        string name = _item.TestAccessor().Dynamic._name;
+        string name = _item.TestAccessor.Dynamic._name;
 
         _item.Text.Should().Be("Test Text");
         name.Should().BeSameAs("TestImage");

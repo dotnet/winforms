@@ -551,7 +551,7 @@ public partial class AccessibleObjectTests
 
         AccessibleObject firstChild = form.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild);
         Assert.NotNull(firstChild);
-        Assert.Equal((AccessibleObject)first.TestAccessor().Dynamic.NcAccessibilityObject, firstChild);
+        Assert.Equal((AccessibleObject)first.TestAccessor.Dynamic.NcAccessibilityObject, firstChild);
 
         AccessibleObject next = firstChild.Navigate(AccessibleNavigation.Next);
         Assert.NotNull(next);
@@ -580,7 +580,7 @@ public partial class AccessibleObjectTests
         Assert.Equal(returnsObject, target is not null);
         if (target is not null)
         {
-            Assert.Equal(isSystemAccessible, (bool)target.TestAccessor().Dynamic._isSystemWrapper);
+            Assert.Equal(isSystemAccessible, (bool)target.TestAccessor.Dynamic._isSystemWrapper);
         }
     }
 
@@ -599,7 +599,7 @@ public partial class AccessibleObjectTests
         Assert.Equal(returnsObject, target is not null);
         if (target is not null)
         {
-            Assert.True((bool)target.TestAccessor().Dynamic._isSystemWrapper);
+            Assert.True((bool)target.TestAccessor.Dynamic._isSystemWrapper);
         }
     }
 
@@ -2163,7 +2163,7 @@ public partial class AccessibleObjectTests
         using Control control = new();
         control.CreateControl();
 
-        AccessibleObject accessibleObject = control.TestAccessor().Dynamic.NcAccessibilityObject;
+        AccessibleObject accessibleObject = control.TestAccessor.Dynamic.NcAccessibilityObject;
 
         IAccessible iAccessible = accessibleObject;
         Assert.Equal((int)AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
@@ -2769,7 +2769,7 @@ public partial class AccessibleObjectTests
         AccessibleObject accessibleObject =
             (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, [null], null);
 
-        Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
+        Assert.NotEmpty(accessibleObject.TestAccessor.Dynamic.RuntimeId);
     }
 
     private class SubAccessibleObject : AccessibleObject

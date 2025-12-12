@@ -51,7 +51,7 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         listView.ReleaseUiaProvider(listView.HWND);
 
-        Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(columnHeader.TestAccessor.Dynamic._accessibilityObject);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -65,7 +65,7 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         listView.Clear();
 
-        Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(columnHeader.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -79,7 +79,7 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         listView.Columns.Clear();
 
-        Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(columnHeader.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -93,13 +93,13 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         listView.Columns.Remove(columnHeader);
 
-        Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(columnHeader.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
     private static void EnforceAccessibleObjectCreation(ColumnHeader columnHeader)
     {
         _ = columnHeader.AccessibilityObject;
-        Assert.NotNull(columnHeader.TestAccessor().Dynamic._accessibilityObject);
+        Assert.NotNull(columnHeader.TestAccessor.Dynamic._accessibilityObject);
     }
 }

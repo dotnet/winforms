@@ -407,7 +407,7 @@ public partial class ControlTests
         using Control control = new();
         CreateAndDispose(control);
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-        Assert.Null(control.TestAccessor().Dynamic.ReflectParent);
+        Assert.Null(control.TestAccessor.Dynamic.ReflectParent);
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         static void CreateAndDispose(Control control)
@@ -418,7 +418,7 @@ public partial class ControlTests
             form.Controls.Add(control);
             form.Show();
             form.Controls.Remove(control);
-            Assert.NotNull(control.TestAccessor().Dynamic.ReflectParent);
+            Assert.NotNull(control.TestAccessor.Dynamic.ReflectParent);
         }
     }
 }

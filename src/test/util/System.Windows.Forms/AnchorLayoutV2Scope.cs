@@ -34,6 +34,6 @@ public readonly ref struct AnchorLayoutV2Scope
     }
 
     public static bool GetDefaultValue() =>
-        typeof(LocalAppContextSwitches).TestAccessor()
+        typeof(LocalAppContextSwitches).TestAccessor
             .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.AnchorLayoutV2);
 }

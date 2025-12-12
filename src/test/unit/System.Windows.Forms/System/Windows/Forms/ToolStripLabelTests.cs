@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -93,7 +93,7 @@ public class ToolStripLabelTests : IDisposable
     [WinFormsFact]
     public void ToolStripLabel_ActiveLinkColor_DefaultValue()
     {
-        var defaultColor = _toolStripLabel.TestAccessor().Dynamic.IEActiveLinkColor;
+        var defaultColor = _toolStripLabel.TestAccessor.Dynamic.IEActiveLinkColor;
 
         _toolStripLabel.ActiveLinkColor.Should().Be(defaultColor);
     }
@@ -148,7 +148,7 @@ public class ToolStripLabelTests : IDisposable
     [WinFormsFact]
     public void ToolStripLabel_VisitedLinkColor_DefaultValue()
     {
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         Color defaultColor = accessor.IEVisitedLinkColor;
 
         _toolStripLabel.VisitedLinkColor.Should().Be(defaultColor);
@@ -166,7 +166,7 @@ public class ToolStripLabelTests : IDisposable
     [WinFormsFact]
     public void ToolStripLabel_InvalidateLinkFonts_DisposesFonts()
     {
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         accessor._linkFont = new Font("Arial", 10);
         accessor._hoverLinkFont = new Font("Arial", 10, FontStyle.Underline);
 
@@ -179,7 +179,7 @@ public class ToolStripLabelTests : IDisposable
     [WinFormsFact]
     public void ToolStripLabel_OnFontChanged_InvokesInvalidateLinkFonts()
     {
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         accessor._linkFont = new Font("Arial", 10);
         accessor._hoverLinkFont = new Font("Arial", 10, FontStyle.Underline);
 
@@ -194,7 +194,7 @@ public class ToolStripLabelTests : IDisposable
     {
         _toolStripLabel.ActiveLinkColor = Color.Red;
 
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         accessor.ResetActiveLinkColor();
 
         Color defaultColor = accessor.IEActiveLinkColor;
@@ -207,7 +207,7 @@ public class ToolStripLabelTests : IDisposable
     {
         _toolStripLabel.LinkColor = Color.Blue;
 
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         accessor.ResetLinkColor();
 
         Color defaultColor = accessor.IELinkColor;
@@ -233,7 +233,7 @@ public class ToolStripLabelTests : IDisposable
         var property = typeof(ToolStripLabel).GetProperty(propertyName);
         property!.SetValue(_toolStripLabel, color);
 
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
+        var accessor = _toolStripLabel.TestAccessor.Dynamic;
         bool result = propertyName switch
         {
             nameof(ToolStripLabel.ActiveLinkColor) => accessor.ShouldSerializeActiveLinkColor(),

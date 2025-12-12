@@ -173,7 +173,7 @@ public class MonthCalendarTests : ControlTestBase
     private Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
     {
         MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
-        CalendarCellAccessibleObject cell = accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date);
+        CalendarCellAccessibleObject cell = accessibleObject.TestAccessor.Dynamic.GetCellByDate(dateTime.Date);
         return cell.Bounds.Location + (cell.Bounds.Size / 2);
     }
 

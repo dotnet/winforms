@@ -66,10 +66,10 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     {
         _editorManager.Should().BeOfType<ToolStripEditorManager>();
 
-        BehaviorService? behaviorService = _editorManager.TestAccessor().Dynamic._behaviorService;
+        BehaviorService? behaviorService = _editorManager.TestAccessor.Dynamic._behaviorService;
         behaviorService.Should().Be(_behaviorService);
 
-        IDesignerHost? designerHost = _editorManager.TestAccessor().Dynamic._designerHost;
+        IDesignerHost? designerHost = _editorManager.TestAccessor.Dynamic._designerHost;
         designerHost.Should().Be(_mockDesignerHost.Object);
     }
 
@@ -83,38 +83,38 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     [WinFormsFact]
     public void ActivateEditor_ShouldReturn_WhenItemIsSameAsCurrentItem()
     {
-        _editorManager.TestAccessor().Dynamic._behaviorService = _behaviorService;
-        _editorManager.TestAccessor().Dynamic._currentItem = _toolStripItem;
+        _editorManager.TestAccessor.Dynamic._behaviorService = _behaviorService;
+        _editorManager.TestAccessor.Dynamic._currentItem = _toolStripItem;
 
         Action action = () => _editorManager.ActivateEditor(_toolStripItem);
         action.Should().NotThrow();
 
-        ToolStripItem currentItem = _editorManager.TestAccessor().Dynamic._currentItem;
+        ToolStripItem currentItem = _editorManager.TestAccessor.Dynamic._currentItem;
         currentItem.Should().Be(_toolStripItem);
     }
 
     [WinFormsFact]
     public void ActivateEditor_ShouldDeactivateCurrentEditor_WhenEditorIsNotNull()
     {
-        _editorManager.TestAccessor().Dynamic._behaviorService = _behaviorService;
-        _editorManager.TestAccessor().Dynamic._editor = _toolStripEditorControl;
-        _editorManager.TestAccessor().Dynamic._itemDesigner = new Mock<ToolStripItemDesigner>().Object;
-        _editorManager.TestAccessor().Dynamic._currentItem = new ToolStripButton();
+        _editorManager.TestAccessor.Dynamic._behaviorService = _behaviorService;
+        _editorManager.TestAccessor.Dynamic._editor = _toolStripEditorControl;
+        _editorManager.TestAccessor.Dynamic._itemDesigner = new Mock<ToolStripItemDesigner>().Object;
+        _editorManager.TestAccessor.Dynamic._currentItem = new ToolStripButton();
 
         _editorManager.ActivateEditor(null);
 
         _behaviorService.AdornerWindowControl.Controls.Cast<Control>().Should().NotContain((Control)_toolStripEditorControl);
 
-        ToolStripTemplateNode editorUI = _editorManager.TestAccessor().Dynamic._editorUI;
+        ToolStripTemplateNode editorUI = _editorManager.TestAccessor.Dynamic._editorUI;
         editorUI.Should().BeNull();
 
-        object? editor = _editorManager.TestAccessor().Dynamic._editor;
+        object? editor = _editorManager.TestAccessor.Dynamic._editor;
         editor.Should().BeNull();
 
-        ToolStripItem currentItem = _editorManager.TestAccessor().Dynamic._currentItem;
+        ToolStripItem currentItem = _editorManager.TestAccessor.Dynamic._currentItem;
         currentItem.Should().BeNull();
 
-        bool? isEditorActive = _editorManager.TestAccessor().Dynamic._itemDesigner.IsEditorActive;
+        bool? isEditorActive = _editorManager.TestAccessor.Dynamic._itemDesigner.IsEditorActive;
         isEditorActive.Should().BeFalse();
     }
 
@@ -141,13 +141,13 @@ public sealed class ToolStripEditorManagerTests : IDisposable
 
         _editorManager.ActivateEditor(_toolStripItem);
 
-        ToolStripItem currentItem = _editorManager.TestAccessor().Dynamic._currentItem;
+        ToolStripItem currentItem = _editorManager.TestAccessor.Dynamic._currentItem;
         currentItem.Should().Be(_toolStripItem);
 
-        ToolStripTemplateNode editorUI = _editorManager.TestAccessor().Dynamic._editorUI;
+        ToolStripTemplateNode editorUI = _editorManager.TestAccessor.Dynamic._editorUI;
         editorUI.Should().Be(mockToolStripTemplateNode.Object);
 
-        ToolStripItemDesigner itemDesigner = _editorManager.TestAccessor().Dynamic._itemDesigner;
+        ToolStripItemDesigner itemDesigner = _editorManager.TestAccessor.Dynamic._itemDesigner;
         itemDesigner.Should().Be(mockToolStripItemDesigner.Object);
 
         _mockDesignerHost.Verify(dh => dh.GetDesigner(_toolStripItem), Times.Once);
@@ -164,10 +164,10 @@ public sealed class ToolStripEditorManagerTests : IDisposable
     [WinFormsFact]
     public void OnEditorResize_ShouldInvalidateAndUpdateBounds()
     {
-        _editorManager.TestAccessor().Dynamic._editor = _toolStripEditorControl;
-        _editorManager.TestAccessor().Dynamic.OnEditorResize(_editorManager, EventArgs.Empty);
+        _editorManager.TestAccessor.Dynamic._editor = _toolStripEditorControl;
+        _editorManager.TestAccessor.Dynamic.OnEditorResize(_editorManager, EventArgs.Empty);
 
-        Rectangle _editorManagerBounds = _editorManager.TestAccessor().Dynamic._lastKnownEditorBounds;
+        Rectangle _editorManagerBounds = _editorManager.TestAccessor.Dynamic._lastKnownEditorBounds;
         _editorManagerBounds.X.Should().Be(_bounds.X);
         _editorManagerBounds.Y.Should().Be(_bounds.Y);
     }
@@ -184,7 +184,7 @@ public sealed class ToolStripEditorManagerTests : IDisposable
 
     private void VerifyProperty<T>(string propertyName, object targetObject, T expectedValue)
     {
-        PropertyInfo? propertyInfo = targetObject.TestAccessor().Dynamic.GetType().GetProperty(propertyName);
+        PropertyInfo? propertyInfo = targetObject.TestAccessor.Dynamic.GetType().GetProperty(propertyName);
         object? propertyValue = propertyInfo?.GetValue(targetObject);
         propertyValue?.Should().Be(expectedValue);
     }

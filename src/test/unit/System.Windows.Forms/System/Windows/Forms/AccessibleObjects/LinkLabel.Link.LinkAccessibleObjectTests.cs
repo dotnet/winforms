@@ -39,7 +39,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         for (int index = 0; index < 4; index++)
         {
             LinkAccessibleObject linkAccessibleObject = linkLabel.Links[index].AccessibleObject;
-            int actual = linkAccessibleObject.TestAccessor().Dynamic.CurrentIndex;
+            int actual = linkAccessibleObject.TestAccessor.Dynamic.CurrentIndex;
 
             Assert.Equal(index, actual);
         }

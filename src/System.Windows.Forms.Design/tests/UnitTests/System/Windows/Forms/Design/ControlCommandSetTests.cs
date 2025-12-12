@@ -50,14 +50,14 @@ public class ControlCommandSetTests : IDisposable
     {
         _controlCommandSet.Should().NotBeNull();
 
-        StatusCommandUI statusCommandUI = _controlCommandSet.TestAccessor().Dynamic._statusCommandUI;
+        StatusCommandUI statusCommandUI = _controlCommandSet.TestAccessor.Dynamic._statusCommandUI;
         statusCommandUI.Should().NotBeNull();
 
-        MenuCommand[] commandSet = _controlCommandSet.TestAccessor().Dynamic._commandSet;
+        MenuCommand[] commandSet = _controlCommandSet.TestAccessor.Dynamic._commandSet;
         commandSet.Should().NotBeNull();
         commandSet.Should().NotBeEmpty();
 
-        TabOrder tabOrder = _controlCommandSet.TestAccessor().Dynamic._tabOrder;
+        TabOrder tabOrder = _controlCommandSet.TestAccessor.Dynamic._tabOrder;
         tabOrder.Should().BeNull();
     }
 
@@ -83,7 +83,7 @@ public class ControlCommandSetTests : IDisposable
         CommandID commandID = new(Guid.NewGuid(), 0);
         MenuCommand menuCommand = new(null, commandID) { Checked = false };
 
-        _controlCommandSet.TestAccessor().Dynamic.OnMenuLockControls(menuCommand, EventArgs.Empty);
+        _controlCommandSet.TestAccessor.Dynamic.OnMenuLockControls(menuCommand, EventArgs.Empty);
 
         menuCommand.Checked.Should().BeTrue();
     }
@@ -118,7 +118,7 @@ public class ControlCommandSetTests : IDisposable
 
         try
         {
-            _controlCommandSet.TestAccessor().Dynamic.GetSnapInformation(
+            _controlCommandSet.TestAccessor.Dynamic.GetSnapInformation(
                 _designerHostMock.Object,
                 childComponent,
                 out Size snapSize,

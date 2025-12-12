@@ -461,7 +461,7 @@ public class PropertyGridTests : IDisposable
         _propertyGrid.PropertyTabs.Should().NotBeNull();
 
         PropertyTabCollection propertyTabCollection = _propertyGrid.PropertyTabs;
-        PropertyGrid propertyGrid = propertyTabCollection.TestAccessor().Dynamic._ownerPropertyGrid;
+        PropertyGrid propertyGrid = propertyTabCollection.TestAccessor.Dynamic._ownerPropertyGrid;
         propertyGrid.Should().Be(_propertyGrid);
     }
 

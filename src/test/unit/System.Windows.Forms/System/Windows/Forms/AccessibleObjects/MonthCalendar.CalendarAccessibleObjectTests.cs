@@ -21,7 +21,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         CalendarAccessibleObject calendar = new(controlAccessibleObject, calendarIndex, name);
 
         Assert.Equal(controlAccessibleObject, calendar.Parent);
-        Assert.Equal(calendarIndex, calendar.TestAccessor().Dynamic._calendarIndex);
+        Assert.Equal(calendarIndex, calendar.TestAccessor.Dynamic._calendarIndex);
         Assert.Equal(name, calendar.Name);
         Assert.False(control.IsHandleCreated);
     }

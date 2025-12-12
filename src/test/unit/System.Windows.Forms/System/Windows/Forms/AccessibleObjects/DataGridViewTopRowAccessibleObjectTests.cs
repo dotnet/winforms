@@ -17,7 +17,7 @@ public class DataGridViewTopRowAccessibleObjectTests
 
         dataGridView.Columns.Add(dataGridViewColumn);
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject expectedNextSibling = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject expectedFirstChild = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject expectedLastChild = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
@@ -38,7 +38,7 @@ public class DataGridViewTopRowAccessibleObjectTests
 
         dataGridView.Columns.Add(dataGridViewColumn);
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject expectedFirstChild = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject expectedLastChild = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -55,7 +55,7 @@ public class DataGridViewTopRowAccessibleObjectTests
     {
         using DataGridView dataGridView = new();
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
 
         Assert.Equal(dataGridView.AccessibilityObject, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -74,7 +74,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -92,7 +92,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -110,7 +110,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -128,7 +128,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -148,7 +148,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
@@ -164,7 +164,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -182,7 +182,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -200,7 +200,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -220,7 +220,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
 
         Assert.Equal(topLeftAccessibilityObject, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
@@ -239,7 +239,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -260,7 +260,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -281,7 +281,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -302,7 +302,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -322,7 +322,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -343,7 +343,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -364,7 +364,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -385,7 +385,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -402,7 +402,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -420,7 +420,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -438,7 +438,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -456,7 +456,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -476,7 +476,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
         Assert.Null(topRowAccessibleObject.Navigate(AccessibleNavigation.LastChild));
@@ -492,7 +492,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -510,7 +510,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -528,7 +528,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -548,7 +548,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
 
         Assert.Equal(topLeftAccessibilityObject, topRowAccessibleObject.Navigate(AccessibleNavigation.FirstChild));
@@ -567,7 +567,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -588,7 +588,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -609,7 +609,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -630,7 +630,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -650,7 +650,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -671,7 +671,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -692,7 +692,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -713,7 +713,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -733,7 +733,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Null(topRowAccessibleObject.GetChild(0));
         Assert.Null(topRowAccessibleObject.GetChild(1));
@@ -749,7 +749,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
@@ -770,7 +770,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -789,7 +789,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
 
@@ -808,7 +808,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -826,7 +826,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
@@ -851,7 +851,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
 
         Assert.Equal(topLeftAccessibilityObject, topRowAccessibleObject.GetChild(0));
@@ -869,7 +869,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
@@ -890,7 +890,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
@@ -911,7 +911,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
@@ -934,7 +934,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
@@ -958,7 +958,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
 
@@ -980,7 +980,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -1002,7 +1002,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
 
@@ -1023,7 +1023,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].DisplayIndex = 1;
         dataGridView.Columns[2].DisplayIndex = 0;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
@@ -1049,7 +1049,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
@@ -1073,7 +1073,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject1 = dataGridView.Columns[2].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
@@ -1097,7 +1097,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[2].DisplayIndex = 0;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.TopLeftHeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Columns[1].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Columns[0].HeaderCell.AccessibilityObject;
@@ -1117,7 +1117,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(4, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1132,7 +1132,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(3, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1148,7 +1148,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[0].Visible = false;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(2, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1165,7 +1165,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(1, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1179,7 +1179,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 2", "Column 2");
         dataGridView.Columns.Add("Column 3", "Column 3");
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(3, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1194,7 +1194,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns.Add("Column 3", "Column 3");
         dataGridView.Columns[0].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(2, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1210,7 +1210,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[0].Visible = false;
         dataGridView.Columns[1].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(1, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1227,7 +1227,7 @@ public class DataGridViewTopRowAccessibleObjectTests
         dataGridView.Columns[1].Visible = false;
         dataGridView.Columns[2].Visible = false;
 
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.Equal(0, topRowAccessibleObject.GetChildCount());
         Assert.False(dataGridView.IsHandleCreated);
@@ -1237,7 +1237,7 @@ public class DataGridViewTopRowAccessibleObjectTests
     public void DataGridViewTopRowAccessibleObject_GetPropertyValue_ReturnsExpected()
     {
         using DataGridView dataGridView = new();
-        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+        AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor.Dynamic.TopRowAccessibilityObject;
 
         Assert.True((bool)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
         Assert.Equal(string.Empty, ((BSTR)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree());

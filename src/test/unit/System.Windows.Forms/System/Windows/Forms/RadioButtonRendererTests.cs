@@ -311,7 +311,7 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
         HWND hwnd = HWND.Null;
 
         typeof(RadioButtonRenderer)
-            .TestAccessor()
+            .TestAccessor
             .Dynamic
             .DrawRadioButton(
                 g,

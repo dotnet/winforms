@@ -21,7 +21,7 @@ public class ComboBox_ChildAccessibleObjectTests
 
         var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
 
-        Assert.NotNull(accessibleObject.TestAccessor().Dynamic._owner);
+        Assert.NotNull(accessibleObject.TestAccessor.Dynamic._owner);
         Assert.True(control.IsHandleCreated);
     }
 

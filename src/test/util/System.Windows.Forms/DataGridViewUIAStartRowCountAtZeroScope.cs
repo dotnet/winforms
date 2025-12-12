@@ -33,6 +33,6 @@ public readonly ref struct DataGridViewUIAStartRowCountAtZeroScope
     }
 
     public static bool GetDefaultValue() =>
-        typeof(LocalAppContextSwitches).TestAccessor()
+        typeof(LocalAppContextSwitches).TestAccessor
             .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.DataGridViewUIAStartRowCountAtZero);
 }

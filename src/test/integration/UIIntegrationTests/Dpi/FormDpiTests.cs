@@ -23,7 +23,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -60,7 +60,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
@@ -94,7 +94,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             var minSize = new Drawing.Size(100, 100);
@@ -130,7 +130,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -166,7 +166,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -175,7 +175,7 @@ public class FormDpiTests : ControlTestBase
 
             DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
 
-            dynamic fomrTestAccessor = form.TestAccessor().Dynamic;
+            dynamic fomrTestAccessor = form.TestAccessor.Dynamic;
             Assert.NotNull(fomrTestAccessor._dpiFormSizes);
             Assert.Equal(2, fomrTestAccessor._dpiFormSizes.Count);
             form.Close();
@@ -198,7 +198,7 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
@@ -206,7 +206,7 @@ public class FormDpiTests : ControlTestBase
             form.Show();
 
             DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
-            Assert.Null(form.TestAccessor().Dynamic._dpiFormSizes);
+            Assert.Null(form.TestAccessor.Dynamic._dpiFormSizes);
             form.Close();
         }
         finally
@@ -226,14 +226,14 @@ public class FormDpiTests : ControlTestBase
         }
 
         DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
-        typeof(ScaleHelper).TestAccessor().Dynamic.InitializeStatics();
+        typeof(ScaleHelper).TestAccessor.Dynamic.InitializeStatics();
         try
         {
             using Form form = new();
             form.AutoScaleMode = AutoScaleMode.Font;
             form.Show();
 
-            Assert.Null(form.TestAccessor().Dynamic._dpiFormSizes);
+            Assert.Null(form.TestAccessor.Dynamic._dpiFormSizes);
             form.Close();
         }
         finally

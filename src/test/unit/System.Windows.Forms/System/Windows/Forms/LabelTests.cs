@@ -228,7 +228,7 @@ public class LabelTests
         using ToolTip toolTip = new();
         label.CreateControl();
 
-        dynamic labelDynamic = label.TestAccessor().Dynamic;
+        dynamic labelDynamic = label.TestAccessor.Dynamic;
         bool actual = labelDynamic._controlToolTip;
 
         Assert.False(actual);

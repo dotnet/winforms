@@ -5692,7 +5692,7 @@ public class TabControlTests
         using ToolTip toolTip = new();
         control.CreateControl();
 
-        dynamic tabControl = control.TestAccessor().Dynamic;
+        dynamic tabControl = control.TestAccessor.Dynamic;
         string actual = tabControl._controlTipText;
 
         Assert.Empty(actual);
@@ -5718,7 +5718,7 @@ public class TabControlTests
         form.Show();
         control.SelectedIndex = 0;
 
-        Action act = () => control.TestAccessor().Dynamic.WmSelChange();
+        Action act = () => control.TestAccessor.Dynamic.WmSelChange();
         act.Should().NotThrow();
 
         control.TabPages.Clear();

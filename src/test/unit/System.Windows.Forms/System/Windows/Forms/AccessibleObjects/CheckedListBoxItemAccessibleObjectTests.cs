@@ -72,9 +72,9 @@ public class CheckedListBoxItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = checkedListBox.AccessibilityObject;
 
-        Assert.Equal(0, accessibleObject.GetChild(0).TestAccessor().Dynamic.CurrentIndex);
-        Assert.Equal(1, accessibleObject.GetChild(1).TestAccessor().Dynamic.CurrentIndex);
-        Assert.Equal(2, accessibleObject.GetChild(2).TestAccessor().Dynamic.CurrentIndex);
+        Assert.Equal(0, accessibleObject.GetChild(0).TestAccessor.Dynamic.CurrentIndex);
+        Assert.Equal(1, accessibleObject.GetChild(1).TestAccessor.Dynamic.CurrentIndex);
+        Assert.Equal(2, accessibleObject.GetChild(2).TestAccessor.Dynamic.CurrentIndex);
 
         Assert.False(checkedListBox.IsHandleCreated);
     }

@@ -18,7 +18,7 @@ public class DesignBindingValueUIHandlerTests
     public void Dispose_DisposesDataBitmap_WhenDataBitmapIsNotNull()
     {
         using Bitmap bitmap = new(10, 10);
-        _handler.TestAccessor().Dynamic._dataBitmap = bitmap;
+        _handler.TestAccessor.Dynamic._dataBitmap = bitmap;
 
         _handler.Dispose();
 

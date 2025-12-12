@@ -1322,12 +1322,12 @@ public class ContainerControlTests
 
         // Simulate that a keyboard toolTip is shown
         KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
-        instance.TestAccessor().Dynamic._currentTool = control;
-        instance.TestAccessor().Dynamic._currentState = (byte)2;
+        instance.TestAccessor.Dynamic._currentTool = control;
+        instance.TestAccessor.Dynamic._currentState = (byte)2;
 
         container.MoveContainer();
-        IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
-        string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+        IKeyboardToolTip currentTool = instance.TestAccessor.Dynamic._currentTool;
+        string currentState = instance.TestAccessor.Dynamic._currentState.ToString();
 
         Assert.Null(currentTool);
         Assert.Equal("Hidden", currentState);
@@ -1347,12 +1347,12 @@ public class ContainerControlTests
 
         // Simulate that a keyboard toolTip is shown
         KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
-        instance.TestAccessor().Dynamic._currentTool = control;
-        instance.TestAccessor().Dynamic._currentState = (byte)2;
+        instance.TestAccessor.Dynamic._currentTool = control;
+        instance.TestAccessor.Dynamic._currentState = (byte)2;
 
         container.ResizeContainer();
-        IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
-        string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+        IKeyboardToolTip currentTool = instance.TestAccessor.Dynamic._currentTool;
+        string currentState = instance.TestAccessor.Dynamic._currentState.ToString();
 
         Assert.Null(currentTool);
         Assert.Equal("Hidden", currentState);

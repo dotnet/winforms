@@ -30,7 +30,7 @@ public partial class ToolStripTests
 
         Rectangle bounds = toolStrip.Bounds;
         using PaintEventArgs e = new(emf, bounds);
-        toolStrip.TestAccessor().Dynamic.OnPaintBackground(e);
+        toolStrip.TestAccessor.Dynamic.OnPaintBackground(e);
 
         Rectangle bitBltBounds = new(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 

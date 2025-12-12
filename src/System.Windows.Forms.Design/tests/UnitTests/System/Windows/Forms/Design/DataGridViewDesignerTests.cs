@@ -148,7 +148,7 @@ public class DataGridViewDesignerTests : IDisposable
             { "DataSource", TypeDescriptor.GetProperties(typeof(DataGridView))["DataSource"]!}
         };
 
-        _designer.TestAccessor().Dynamic.PreFilterProperties(properties);
+        _designer.TestAccessor.Dynamic.PreFilterProperties(properties);
 
         properties["AutoSizeColumnsMode"].ComponentType.Should().Be(typeof(DataGridViewDesigner));
         properties["DataSource"].ComponentType.Should().Be(typeof(DataGridViewDesigner));

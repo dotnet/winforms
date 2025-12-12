@@ -31,7 +31,7 @@ public partial class TextBoxTests
         using EmfScope emf = new();
         DeviceContextState state = new(emf);
 
-        textBox.TestAccessor().Dynamic.DrawPlaceholderText(emf.HDC);
+        textBox.TestAccessor.Dynamic.DrawPlaceholderText(emf.HDC);
 
         emf.Validate(
             state,

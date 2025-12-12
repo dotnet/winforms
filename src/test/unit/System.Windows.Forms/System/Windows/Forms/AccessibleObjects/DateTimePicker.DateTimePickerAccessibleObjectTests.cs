@@ -126,7 +126,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
 
         var expected = (ExpandCollapseState)expandCollapseState;
         var accessibleObject = (DateTimePickerAccessibleObject)dateTimePicker.AccessibilityObject;
-        dateTimePicker.TestAccessor().Dynamic._expandCollapseState = expected;
+        dateTimePicker.TestAccessor.Dynamic._expandCollapseState = expected;
 
         ExpandCollapseState actual = accessibleObject.ExpandCollapseState;
 
@@ -160,7 +160,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         // ExpandCollapseState is Collapsed before some actions
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, accessibleObject.ExpandCollapseState);
 
-        dateTimePicker.TestAccessor().Dynamic._expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
+        dateTimePicker.TestAccessor.Dynamic._expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
 
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, accessibleObject.ExpandCollapseState);
 
@@ -181,7 +181,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         // ExpandCollapseState is Collapsed before some actions
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, accessibleObject.ExpandCollapseState);
 
-        dateTimePicker.TestAccessor().Dynamic._expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
+        dateTimePicker.TestAccessor.Dynamic._expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
 
         Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, accessibleObject.ExpandCollapseState);
 

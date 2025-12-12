@@ -120,7 +120,7 @@ public class MultiPropertyDescriptorGridEntryTests
         object[] objects = [button];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
-        multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.SetFlag(Flags.Expandable, true);
+        multiPropertyDescriptorGridEntry.TestAccessor.Dynamic.SetFlag(Flags.Expandable, true);
 
         string? description = propertyDescriptors[0].Description;
         description.Should().NotBeNull();
@@ -138,7 +138,7 @@ public class MultiPropertyDescriptorGridEntryTests
         object[] objects = [button];
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
-        multiPropertyDescriptorGridEntry.TestAccessor().Dynamic.SetFlag(Flags.ExpandableFailed, true);
+        multiPropertyDescriptorGridEntry.TestAccessor.Dynamic.SetFlag(Flags.ExpandableFailed, true);
 
         bool result = multiPropertyDescriptorGridEntry.Expandable;
 
@@ -199,7 +199,7 @@ public class MultiPropertyDescriptorGridEntryTests
         MultiPropertyDescriptorGridEntry multiPropertyDescriptorGridEntry = CreateEntryWithObjects(objects, propertyDescriptors);
 
         Action action = () => multiPropertyDescriptorGridEntry
-            .TestAccessor()
+            .TestAccessor
             .Dynamic
             .NotifyParentsOfChanges(multiPropertyDescriptorGridEntry);
 
@@ -230,7 +230,7 @@ public class MultiPropertyDescriptorGridEntryTests
         object o1 = new();
         object o2 = new();
 
-        var accessor = typeof(MultiPropertyDescriptorGridEntry).TestAccessor();
+        var accessor = typeof(MultiPropertyDescriptorGridEntry).TestAccessor;
         bool result1 = accessor.Dynamic.OwnersEqual(o1, o1);
         bool result2 = accessor.Dynamic.OwnersEqual(new[] { o1, o2 }, new[] { o1, o2 });
         bool result3 = accessor.Dynamic.OwnersEqual(new[] { o1 }, new[] { o2 });
