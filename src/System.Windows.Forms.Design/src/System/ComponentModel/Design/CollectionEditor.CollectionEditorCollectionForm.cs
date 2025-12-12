@@ -578,10 +578,18 @@ public partial class CollectionEditor
 
                 Color backColor = SystemColors.Window;
                 Color textColor = SystemColors.WindowText;
+
+                using (SolidBrush backBrush = new(backColor))
+                {
+                    g.FillRectangle(backBrush, button);
+                }
+
                 if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
                     backColor = SystemColors.Highlight;
-                    textColor = SystemColors.HighlightText;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    textColor = Application.IsDarkModeEnabled ? SystemColors.ControlText : SystemColors.HighlightText;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
 
                 Rectangle res = e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset };
