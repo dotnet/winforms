@@ -574,15 +574,15 @@ public partial class CollectionEditor
                 ControlPaint.DrawButton(g, button, ButtonState.Normal);
                 button.Inflate(-SystemInformation.BorderSize.Width * 2, -SystemInformation.BorderSize.Height * 2);
 
+                using (SolidBrush backBrush = new(SystemColors.Window))
+                {
+                    g.FillRectangle(backBrush, button);
+                }
+
                 int offset = w;
 
                 Color backColor = SystemColors.Window;
                 Color textColor = SystemColors.WindowText;
-
-                using (SolidBrush backBrush = new(backColor))
-                {
-                    g.FillRectangle(backBrush, button);
-                }
 
                 if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 {
