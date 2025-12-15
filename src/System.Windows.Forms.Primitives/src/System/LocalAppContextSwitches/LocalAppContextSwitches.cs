@@ -26,6 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
+    internal const string PreserveUnassignedTreeNodeImagesSwitchName = "System.Windows.Forms.TreeView.PreserveUnassignedTreeNodeImages";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -39,6 +40,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
     private static int s_moveTreeViewTextLocationOnePixel;
+    private static int s_preserveUnassignedTreeNodeImages;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -230,5 +232,14 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
+    }
+
+    /// <summary>
+    ///  Indicates whether keep the node image that has not set an image when the ImageList changes dynamically.
+    /// </summary>
+    public static bool PreserveUnassignedTreeNodeImages
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(PreserveUnassignedTreeNodeImagesSwitchName, ref s_preserveUnassignedTreeNodeImages);
     }
 }
