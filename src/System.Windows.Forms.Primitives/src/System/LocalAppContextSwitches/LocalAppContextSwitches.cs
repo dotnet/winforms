@@ -26,7 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
-    internal const string MirrorTopMostForModalDialogsSwitchName = "System.Windows.Forms.TreeView.MirrorTopMostForModalDialogs";
+    internal const string MirrorTopMostForModalDialogsSwitchName = "System.Windows.Forms.MirrorTopMostForModalDialogs";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;

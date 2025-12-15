@@ -5824,7 +5824,7 @@ public partial class Form : ContainerControl
             Properties.RemoveValue(s_propDialogOwner);
             GC.KeepAlive(ownerHwnd.Wrapper);
 
-            if (mirrored && TopMost != originalTopMost)
+            if (mirrored)
             {
                 TopMost = originalTopMost;
             }
