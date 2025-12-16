@@ -17,7 +17,7 @@ public class DataGridViewSelectedCellsAccessibleObjectTests
             .GetNestedType("DataGridViewSelectedCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, [null]);
 
-        Assert.Null(accessibleObject.TestAccessor().Dynamic._parentAccessibleObject);
+        Assert.Null(accessibleObject.TestAccessor.Dynamic._parentAccessibleObject);
         Assert.Equal(AccessibleRole.Grouping, accessibleObject.Role);
     }
 

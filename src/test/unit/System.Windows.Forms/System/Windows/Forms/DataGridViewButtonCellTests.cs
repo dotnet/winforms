@@ -52,7 +52,7 @@ public class DataGridViewButtonCellTests : IDisposable
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -66,7 +66,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Columns.Add(new DataGridViewButtonColumn());
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, -1);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, -1);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -81,7 +81,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
         dataGridView.Columns.Clear();
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -91,7 +91,7 @@ public class DataGridViewButtonCellTests : IDisposable
     {
         DataGridViewCellStyle dataGridViewCellStyle = new();
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -105,7 +105,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Columns.Add(new DataGridViewButtonColumn());
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, -1);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, -1);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -120,7 +120,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
         dataGridView.Columns.Clear();
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -135,7 +135,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView.ShowCellErrors = false;
         dataGridView[0, 0] = _dataGridViewButtonCell;
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -149,7 +149,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Columns.Add(new DataGridViewButtonColumn());
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().Be(Rectangle.Empty);
     }
@@ -165,7 +165,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView[0, 0] = _dataGridViewButtonCell;
         _dataGridViewButtonCell.ErrorText = "Error!";
 
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         ((Rectangle)result).Should().NotBe(Rectangle.Empty);
     }
@@ -178,7 +178,7 @@ public class DataGridViewButtonCellTests : IDisposable
             Font = SystemFonts.DefaultFont
         };
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetPreferredSize(g, dataGridViewCellStyle, 0, new Size(100, 100));
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetPreferredSize(g, dataGridViewCellStyle, 0, new Size(100, 100));
 
         ((Size)result).Should().Be(new Size(-1, -1));
     }
@@ -192,7 +192,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        Action action = () => _dataGridViewButtonCell.TestAccessor().Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
+        Action action = () => _dataGridViewButtonCell.TestAccessor.Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
         action.Should().Throw<NullReferenceException>();
     }
 
@@ -213,7 +213,7 @@ public class DataGridViewButtonCellTests : IDisposable
         if (!DataGridView.ApplyVisualStylesToInnerCells)
             return;
 
-        var result = _dataGridViewButtonCell.TestAccessor().Dynamic.GetPreferredSize(
+        var result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetPreferredSize(
             g, dataGridView.Rows[0].Cells[0].Style, 0, Size.Empty);
 
         ((Size)result).Width.Should().BeGreaterThan(0);
@@ -230,7 +230,7 @@ public class DataGridViewButtonCellTests : IDisposable
         _dataGridViewButtonCell.UseColumnTextForButtonValue = true;
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        var value = _dataGridViewButtonCell.TestAccessor().Dynamic.GetValue(0);
+        var value = _dataGridViewButtonCell.TestAccessor.Dynamic.GetValue(0);
 
         ((string)value).Should().Be("ColumnText");
     }
@@ -246,7 +246,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView[0, 0] = _dataGridViewButtonCell;
         _dataGridViewButtonCell.Value = "CellValue";
 
-        var value = _dataGridViewButtonCell.TestAccessor().Dynamic.GetValue(0);
+        var value = _dataGridViewButtonCell.TestAccessor.Dynamic.GetValue(0);
 
         ((string)value).Should().Be("CellValue");
     }
@@ -263,7 +263,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView[0, 0] = _dataGridViewButtonCell;
         _dataGridViewButtonCell.Value = "CellValue";
 
-        var value = _dataGridViewButtonCell.TestAccessor().Dynamic.GetValue(0);
+        var value = _dataGridViewButtonCell.TestAccessor.Dynamic.GetValue(0);
 
         ((string)value).Should().Be("CellValue");
     }
@@ -285,7 +285,7 @@ public class DataGridViewButtonCellTests : IDisposable
             keyData |= Keys.Shift;
         KeyEventArgs e = new(keyData);
 
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.KeyDownUnsharesRow(e, 0);
+        bool result = _dataGridViewButtonCell.TestAccessor.Dynamic.KeyDownUnsharesRow(e, 0);
 
         result.Should().Be(expected);
     }
@@ -297,7 +297,7 @@ public class DataGridViewButtonCellTests : IDisposable
     {
         KeyEventArgs e = new(key);
 
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.KeyUpUnsharesRow(e, 0);
+        bool result = _dataGridViewButtonCell.TestAccessor.Dynamic.KeyUpUnsharesRow(e, 0);
 
         result.Should().Be(expected);
     }
@@ -311,7 +311,7 @@ public class DataGridViewButtonCellTests : IDisposable
     {
         DataGridViewCellMouseEventArgs e = new(0, 0, 0, 0, new MouseEventArgs(button, 1, 0, 0, 0));
 
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseDownUnsharesRow(e);
+        bool result = _dataGridViewButtonCell.TestAccessor.Dynamic.MouseDownUnsharesRow(e);
         result.Should().Be(expected);
     }
 
@@ -328,9 +328,9 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = buttonState;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState = buttonState;
 
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseLeaveUnsharesRow(0);
+        bool result = _dataGridViewButtonCell.TestAccessor.Dynamic.MouseLeaveUnsharesRow(0);
         result.Should().Be(expected);
     }
 
@@ -348,7 +348,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView[0, 0] = _dataGridViewButtonCell;
         DataGridViewCellMouseEventArgs dataGridViewCellMouseEventArgs = new(0, 0, 0, 0, new MouseEventArgs(button, 1, 0, 0, 0));
 
-        bool result = _dataGridViewButtonCell.TestAccessor().Dynamic.MouseUpUnsharesRow(dataGridViewCellMouseEventArgs);
+        bool result = _dataGridViewButtonCell.TestAccessor.Dynamic.MouseUpUnsharesRow(dataGridViewCellMouseEventArgs);
         result.Should().Be(expected);
     }
 
@@ -363,11 +363,11 @@ public class DataGridViewButtonCellTests : IDisposable
 
         KeyEventArgs keyEventArgs = new(Keys.Space);
 
-        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
         buttonState.Should().Be(ButtonState.Normal);
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnKeyDown(keyEventArgs, 0);
-        buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.OnKeyDown(keyEventArgs, 0);
+        buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
 
         buttonState.HasFlag(ButtonState.Checked).Should().BeTrue();
         keyEventArgs.Handled.Should().BeTrue();
@@ -388,11 +388,11 @@ public class DataGridViewButtonCellTests : IDisposable
 
         KeyEventArgs keyEventArgs = new(keyData);
 
-        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
         buttonState.Should().Be(ButtonState.Normal);
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnKeyDown(keyEventArgs, 0);
-        buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.OnKeyDown(keyEventArgs, 0);
+        buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
 
         (buttonState & ButtonState.Checked).Should().Be(0);
         keyEventArgs.Handled.Should().BeFalse();
@@ -411,12 +411,12 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Checked;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState = ButtonState.Checked;
 
         KeyEventArgs keyEventArgs = new(keyData);
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnKeyUp(keyEventArgs, 0);
+        _dataGridViewButtonCell.TestAccessor.Dynamic.OnKeyUp(keyEventArgs, 0);
 
-        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
         buttonState.HasFlag(ButtonState.Checked).Should().BeFalse();
         keyEventArgs.Handled.Should().Be(expectedHandled);
     }
@@ -430,11 +430,11 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Pushed | ButtonState.Checked;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState = ButtonState.Pushed | ButtonState.Checked;
 
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnLeave(0, false);
+        _dataGridViewButtonCell.TestAccessor.Dynamic.OnLeave(0, false);
 
-        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState;
+        ButtonState buttonState = _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState;
         buttonState.Should().Be(ButtonState.Normal);
     }
 
@@ -446,12 +446,12 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView.Columns.Add(dataGridViewButtonColumn);
         dataGridView.Rows.Add();
         dataGridView[0, 0] = _dataGridViewButtonCell;
-        _dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState = ButtonState.Pushed;
+        _dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState = ButtonState.Pushed;
 
         DataGridViewCellMouseEventArgs dataGridViewCellMouseEventArgs = new(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
-        _dataGridViewButtonCell.TestAccessor().Dynamic.OnMouseUp(dataGridViewCellMouseEventArgs);
+        _dataGridViewButtonCell.TestAccessor.Dynamic.OnMouseUp(dataGridViewCellMouseEventArgs);
 
-        ((ButtonState)_dataGridViewButtonCell.TestAccessor().Dynamic.ButtonState).HasFlag(ButtonState.Pushed).Should().BeFalse();
+        ((ButtonState)_dataGridViewButtonCell.TestAccessor.Dynamic.ButtonState).HasFlag(ButtonState.Pushed).Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -464,7 +464,7 @@ public class DataGridViewButtonCellTests : IDisposable
         dataGridView[0, 0] = _dataGridViewButtonCell;
         DataGridViewCellStyle dataGridViewCellStyle = new() { Font = SystemFonts.DefaultFont };
         DataGridViewAdvancedBorderStyle advancedBorderStyle = new();
-        _dataGridViewButtonCell.TestAccessor().Dynamic.Paint(
+        _dataGridViewButtonCell.TestAccessor.Dynamic.Paint(
             g,
             new Rectangle(0, 0, 10, 10),
             new Rectangle(0, 0, 10, 10),

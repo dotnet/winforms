@@ -16,13 +16,13 @@ public class MonthCalendar_CalendarDayOfWeekCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarDayOfWeekCellAccessibleObject cellAccessibleObject = CreateCalendarDayOfWeekCellCellAccessibleObject(control);
 
-        int columnIndexResult = cellAccessibleObject.TestAccessor().Dynamic._columnIndex;
+        int columnIndexResult = cellAccessibleObject.TestAccessor.Dynamic._columnIndex;
         columnIndexResult.Should().Be(0);
 
-        int rowIndexResult = cellAccessibleObject.TestAccessor().Dynamic._rowIndex;
+        int rowIndexResult = cellAccessibleObject.TestAccessor.Dynamic._rowIndex;
         rowIndexResult.Should().Be(0);
 
-        int calendarIndexResult = cellAccessibleObject.TestAccessor().Dynamic._calendarIndex;
+        int calendarIndexResult = cellAccessibleObject.TestAccessor.Dynamic._calendarIndex;
         calendarIndexResult.Should().Be(0);
 
         cellAccessibleObject.Name.Should().Be("Test name");

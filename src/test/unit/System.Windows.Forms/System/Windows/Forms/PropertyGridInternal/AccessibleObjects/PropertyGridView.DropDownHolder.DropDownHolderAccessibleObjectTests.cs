@@ -15,7 +15,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
     public void DropDownHolder_AccessibilityObject_Constructor_initializes_fields()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
 
         using PropertyGridView.DropDownHolder dropDownHolderControl = new(propertyGridView);
         PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject dropDownHolderControlAccessibilityObject =
@@ -23,7 +23,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
                 dropDownHolderControl.AccessibilityObject);
 
         PropertyGridView.DropDownHolder dropDownHolder =
-            dropDownHolderControlAccessibilityObject.TestAccessor().Dynamic._owningDropDownHolder;
+            dropDownHolderControlAccessibilityObject.TestAccessor.Dynamic._owningDropDownHolder;
         Assert.NotNull(dropDownHolder);
         Assert.Same(dropDownHolder, dropDownHolderControl);
     }
@@ -41,7 +41,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
     public void DropDownHolder_AccessibilityObject_ReturnsExpected()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
         using PropertyGridView.DropDownHolder ownerControl = new(propertyGridView);
         Control.ControlAccessibleObject accessibilityObject = ownerControl.AccessibilityObject as Control.ControlAccessibleObject;
 
@@ -54,7 +54,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
 
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
         PropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, property, false);
-        propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
+        propertyGridView.TestAccessor.Dynamic._selectedGridEntry = gridEntry;
 
         ownerControl.Visible = true;
 
@@ -68,7 +68,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
     public void DropDownHolderAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
     {
         using PropertyGrid propertyGrid = new();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.GridView;
         using PropertyGridView.DropDownHolder dropDownControlHolder = new(propertyGridView);
         // AccessibleRole is not set = Default
 

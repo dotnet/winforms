@@ -14,7 +14,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
         AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
 
@@ -31,7 +31,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     public void PropertyGridToolStripButtonAccessibleObject_Role_IsRadiButton()
     {
         using PropertyGrid propertyGrid = new();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
         Assert.Equal(AccessibleRole.RadioButton, accessibleObject.Role);
@@ -41,8 +41,8 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     public void PropertyGridToolStripButtonAccessibleObject_SelectionItemPatternSupported_ReturnsExpected()
     {
         using PropertyGrid propertyGrid = new();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
-        ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
+        ToolStripButton propertyPagesButton = propertyGrid.TestAccessor.Dynamic._viewPropertyPagesButton;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
         AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
         AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;
@@ -59,7 +59,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     public void PropertyGridToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsRadioButton()
     {
         using PropertyGrid propertyGrid = new();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
         UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
@@ -72,7 +72,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
         AccessibleObject alphaButtonAccessibleObject = alphaButton.AccessibilityObject;
@@ -100,7 +100,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
         AccessibleObject alphaButtonAccessibleObject = alphaButton.AccessibilityObject;
@@ -128,7 +128,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
         AccessibleObject alphaButtonAccessibleObject = alphaButton.AccessibilityObject;
@@ -150,7 +150,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     {
         using PropertyGrid propertyGrid = new();
         propertyGrid.CreateControl();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
         AccessibleObject alphaButtonAccessibleObject = alphaButton.AccessibilityObject;
@@ -177,8 +177,8 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
     public void PropertyGridToolStripButtonAccessibleObject_IsTogglePatternSupported_ReturnsExpected()
     {
         using PropertyGrid propertyGrid = new();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
-        ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
+        ToolStripButton propertyPagesButton = propertyGrid.TestAccessor.Dynamic._viewPropertyPagesButton;
         AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
         AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
         AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;

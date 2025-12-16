@@ -80,7 +80,7 @@ public class LayoutEventArgsTests
             }
 
             // Check the cachedLayoutEventArgs
-            ITestAccessor tableLayoutPanelTestAccessor = tableLayoutPanel.TestAccessor();
+            ITestAccessor tableLayoutPanelTestAccessor = tableLayoutPanel.TestAccessor;
             LayoutEventArgs layoutEventArgs = (LayoutEventArgs)tableLayoutPanelTestAccessor.Dynamic._cachedLayoutEventArgs;
 
             tableLayoutPanel.ResumeLayout();

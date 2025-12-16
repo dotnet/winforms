@@ -34,6 +34,6 @@ public readonly ref struct ServicePointManagerCheckCrlScope
     }
 
     public static bool GetDefaultValue() =>
-        typeof(LocalAppContextSwitches).TestAccessor()
+        typeof(LocalAppContextSwitches).TestAccessor
             .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.ServicePointManagerCheckCrl);
 }

@@ -77,7 +77,7 @@ public class ParkingWindowTests
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
-                ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE);
+                ParkingWindow parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE);
                 Assert.NotNull(parkingWindow);
 
                 DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
@@ -112,7 +112,7 @@ public class ParkingWindowTests
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
-                ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+                ParkingWindow parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                 Assert.NotNull(parkingWindow);
 
                 DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
@@ -146,7 +146,7 @@ public class ParkingWindowTests
             ThreadContext ctx = GetContextForHandle(control);
             Assert.NotNull(ctx);
 
-            ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            ParkingWindow parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
             DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
@@ -178,7 +178,7 @@ public class ParkingWindowTests
             using Control control = new();
             ThreadContext ctx = GetContextForHandle(control);
             Assert.NotNull(ctx);
-            ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            ParkingWindow parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
             DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
@@ -189,14 +189,14 @@ public class ParkingWindowTests
                 using Control systemControl = new();
                 ctx = GetContextForHandle(systemControl);
                 Assert.NotNull(ctx);
-                parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+                parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                 Assert.NotNull(parkingWindow);
 
                 dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
                 Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE));
 
                 // check PMv2 parking window still available.
-                parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                parkingWindow = ctx.TestAccessor.Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 Assert.NotNull(parkingWindow);
 
                 dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);

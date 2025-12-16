@@ -15629,7 +15629,7 @@ public class ToolStripItemTests
 
         public bool IsAccessibleObjectCleared()
         {
-            var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
+            var key = this.TestAccessor.Dynamic.s_accessibilityProperty;
             return !Properties.ContainsKey(key);
         }
     }

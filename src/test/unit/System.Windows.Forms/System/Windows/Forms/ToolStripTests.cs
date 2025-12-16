@@ -4817,7 +4817,7 @@ public partial class ToolStripTests : IDisposable
 
         if (useTabKey)
         {
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Tab;
+            toolStrip.TestAccessor.Dynamic.LastKeyData = Keys.Tab;
         }
 
         ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Right);
@@ -4838,7 +4838,7 @@ public partial class ToolStripTests : IDisposable
 
         if (useTabKey)
         {
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Tab;
+            toolStrip.TestAccessor.Dynamic.LastKeyData = Keys.Tab;
         }
 
         ToolStripItem nextToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Right);
@@ -4863,7 +4863,7 @@ public partial class ToolStripTests : IDisposable
 
         if (useTabKey)
         {
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            toolStrip.TestAccessor.Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
         }
 
         ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Left);
@@ -4884,7 +4884,7 @@ public partial class ToolStripTests : IDisposable
 
         if (useTabKey)
         {
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            toolStrip.TestAccessor.Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
         }
 
         ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Left);
@@ -7296,7 +7296,7 @@ public partial class ToolStripTests : IDisposable
         using ToolStripMenuItem toolStripMenuItem3 = new();
         toolStrip.Items.AddRange((ToolStripItem[])[toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3]);
 
-        toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Left;
+        toolStrip.TestAccessor.Dynamic.LastKeyData = Keys.Left;
         ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(start: null, ArrowDirection.Left);
         Assert.Equal(toolStrip.Items[2], previousToolStripItem1);
 
@@ -7313,7 +7313,7 @@ public partial class ToolStripTests : IDisposable
         using MenuStrip menuStrip = new();
         using ToolStripItem toolStripItem = menuStrip.Items.Add("toolStripItem");
         toolStripItem.MouseHover += (sender, e) => cancellationTokenSource.Cancel();
-        ((MouseHoverTimer)menuStrip.TestAccessor().Dynamic.MouseHoverTimer).Start(toolStripItem);
+        ((MouseHoverTimer)menuStrip.TestAccessor.Dynamic.MouseHoverTimer).Start(toolStripItem);
         await Assert.ThrowsAsync<TaskCanceledException>(() => Task.Delay(SystemInformation.MouseHoverTime * 2, cancellationTokenSource.Token));
     }
 
@@ -7322,7 +7322,7 @@ public partial class ToolStripTests : IDisposable
     {
         WeakReference<ToolStripItem> currentItemWR;
         using MenuStrip menuStrip = new();
-        MouseHoverTimer mouseHoverTimer = (MouseHoverTimer)menuStrip.TestAccessor().Dynamic.MouseHoverTimer;
+        MouseHoverTimer mouseHoverTimer = (MouseHoverTimer)menuStrip.TestAccessor.Dynamic.MouseHoverTimer;
         TimerStartAndItemDispose();
         GC.Collect();
         GC.WaitForPendingFinalizers();
@@ -7334,7 +7334,7 @@ public partial class ToolStripTests : IDisposable
         {
             using ToolStripItem toolStripItem = menuStrip.Items.Add("toolStripItem");
             mouseHoverTimer.Start(toolStripItem);
-            currentItemWR = mouseHoverTimer.TestAccessor().Dynamic._currentItem;
+            currentItemWR = mouseHoverTimer.TestAccessor.Dynamic._currentItem;
             Assert.True(currentItemWR.TryGetTarget(out _));
         }
     }
@@ -7383,7 +7383,7 @@ public partial class ToolStripTests : IDisposable
         var defaultMargin = toolStrip.Grip.DefaultMargin;
         toolStrip.GripMargin = new Padding(10, 10, 10, 10);
 
-        toolStrip.TestAccessor().Dynamic.ResetGripMargin();
+        toolStrip.TestAccessor.Dynamic.ResetGripMargin();
 
         toolStrip.GripMargin.Should().Be(defaultMargin);
     }
@@ -7422,18 +7422,18 @@ public partial class ToolStripTests : IDisposable
     public void ToolStrip_ShouldSerializeGripMargin_Invoke_ReturnsExpected()
     {
         using ToolStrip toolStrip = new() { GripMargin = new Padding(1) };
-        ((bool)toolStrip.TestAccessor().Dynamic.ShouldSerializeGripMargin()).Should().BeTrue();
+        ((bool)toolStrip.TestAccessor.Dynamic.ShouldSerializeGripMargin()).Should().BeTrue();
 
-        var defaultGripMargin = (Padding)toolStrip.TestAccessor().Dynamic.DefaultGripMargin;
+        var defaultGripMargin = (Padding)toolStrip.TestAccessor.Dynamic.DefaultGripMargin;
         toolStrip.GripMargin = defaultGripMargin;
-        ((bool)toolStrip.TestAccessor().Dynamic.ShouldSerializeGripMargin()).Should().BeFalse();
+        ((bool)toolStrip.TestAccessor.Dynamic.ShouldSerializeGripMargin()).Should().BeFalse();
     }
 
     public void Dispose()
     {
         // LastKeyData is a static state read and written by tests.
         // To ensure tests are isolated correctly, we reset it after each test.
-        typeof(ToolStrip).TestAccessor().Dynamic.LastKeyData = Keys.None;
+        typeof(ToolStrip).TestAccessor.Dynamic.LastKeyData = Keys.None;
     }
 
     private class SubAxHost : AxHost

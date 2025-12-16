@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using static System.Windows.Forms.ToolStripPanel;
@@ -34,7 +34,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_ConstructorWithOwner_SetsOwner()
     {
-        using ToolStripPanel toolStripPanel = _toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
+        using ToolStripPanel toolStripPanel = _toolStripPanelRowCollection.TestAccessor.Dynamic._owner;
         toolStripPanel.Should().BeSameAs(_toolStripPanel);
     }
 
@@ -44,7 +44,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
         using ToolStripPanelRow toolStripPanelRow1 = new(_toolStripPanel);
         ToolStripPanelRow[] toolStripPanelRowArray = [toolStripPanelRow1];
         ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel, toolStripPanelRowArray);
-        ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
+        ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor.Dynamic._owner;
 
         toolStripPanel.Should().BeSameAs(_toolStripPanel);
         toolStripPanelRowCollection.Count.Should().Be(1);

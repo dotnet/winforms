@@ -18,11 +18,11 @@ public class DesignBindingPickerTests : IDisposable
     public DesignBindingPickerTests()
     {
         _picker = new DesignBindingPicker();
-        _treeViewCtrl = _picker.TestAccessor().Dynamic._treeViewCtrl;
-        _addNewCtrl = _picker.TestAccessor().Dynamic._addNewCtrl;
-        _addNewPanel = _picker.TestAccessor().Dynamic._addNewPanel;
-        _helpTextCtrl = _picker.TestAccessor().Dynamic._helpTextCtrl;
-        _helpTextPanel = _picker.TestAccessor().Dynamic._helpTextPanel;
+        _treeViewCtrl = _picker.TestAccessor.Dynamic._treeViewCtrl;
+        _addNewCtrl = _picker.TestAccessor.Dynamic._addNewCtrl;
+        _addNewPanel = _picker.TestAccessor.Dynamic._addNewPanel;
+        _helpTextCtrl = _picker.TestAccessor.Dynamic._helpTextCtrl;
+        _helpTextPanel = _picker.TestAccessor.Dynamic._helpTextPanel;
     }
 
     public void Dispose() => _picker.Dispose();

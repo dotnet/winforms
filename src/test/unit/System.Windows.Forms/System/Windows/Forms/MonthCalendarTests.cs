@@ -4193,14 +4193,14 @@ public class MonthCalendarTests
         calendar.CreateControl();
         // Set a visible range (08/29/2021 - 09/10/2022) to have a stable test case
         calendar.SetSelectionRange(new DateTime(2021, 9, 1), new DateTime(2022, 8, 31));
-        MONTH_CALDENDAR_MESSAGES_VIEW view = calendar.TestAccessor().Dynamic._mcCurView;
+        MONTH_CALDENDAR_MESSAGES_VIEW view = calendar.TestAccessor.Dynamic._mcCurView;
         SelectionRange displayRange = calendar.GetDisplayRange(visible: false);
 
         Assert.Equal(MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, view);
         Assert.Equal(new DateTime(2021, 8, 29), displayRange.Start);
         Assert.Equal(new DateTime(2022, 9, 10), displayRange.End);
 
-        int monthsCount = calendar.TestAccessor().Dynamic.GetMonthsCountOfRange(displayRange);
+        int monthsCount = calendar.TestAccessor.Dynamic.GetMonthsCountOfRange(displayRange);
         int currentMonthIndex = (currentDate.Year - displayRange.Start.Year) * MonthsInYear + currentDate.Month - displayRange.Start.Month;
         calendar.AddBoldedDate(currentDate);
         Span<uint> boldedDates = stackalloc uint[monthsCount];
@@ -4239,7 +4239,7 @@ public class MonthCalendarTests
     {
         DateTime startDate = new(2021, 8, 1);
         using MonthCalendar calendar = new();
-        int actualIndex = calendar.TestAccessor().Dynamic.GetIndexInMonths(startDate, currentDate);
+        int actualIndex = calendar.TestAccessor.Dynamic.GetIndexInMonths(startDate, currentDate);
 
         Assert.Equal(expectedIndex, actualIndex);
     }
@@ -4385,7 +4385,7 @@ public class MonthCalendarTests
 
         DateTime startDate = new(2022, 10, 1);
         DateTime endDate = new(2022, 10, 7);
-        cellAccessibleObject.TestAccessor().Dynamic._dateRange = new SelectionRange(startDate, endDate);
+        cellAccessibleObject.TestAccessor.Dynamic._dateRange = new SelectionRange(startDate, endDate);
 
         cellAccessibleObject.Select(AccessibleSelection.TakeSelection);
 
@@ -4513,15 +4513,15 @@ public class MonthCalendarTests
         using MonthCalendar calendar = new();
         calendar.MaxDate = DateTime.MaxValue;
 
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTodayDate(), () => calendar.TodayDate = DateTime.Now);
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeAnnuallyBoldedDates(), () => calendar.AddAnnuallyBoldedDate(DateTime.Now));
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeBoldedDates(), () => calendar.AddBoldedDate(DateTime.Now));
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMonthlyBoldedDates(), () => calendar.AddMonthlyBoldedDate(DateTime.Now));
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMaxDate(), () => calendar.MaxDate = DateTime.Now.AddYears(2));
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMinDate(), () => calendar.MinDate = DateTime.Now);
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTrailingForeColor(), () => calendar.TrailingForeColor = Color.Red);
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleForeColor(), () => calendar.TitleForeColor = Color.Red);
-        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleBackColor(), () => calendar.TitleBackColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeTodayDate(), () => calendar.TodayDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeAnnuallyBoldedDates(), () => calendar.AddAnnuallyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeBoldedDates(), () => calendar.AddBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeMonthlyBoldedDates(), () => calendar.AddMonthlyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeMaxDate(), () => calendar.MaxDate = DateTime.Now.AddYears(2));
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeMinDate(), () => calendar.MinDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeTrailingForeColor(), () => calendar.TrailingForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeTitleForeColor(), () => calendar.TitleForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor.Dynamic.ShouldSerializeTitleBackColor(), () => calendar.TitleBackColor = Color.Red);
     }
 
     private void ShouldSerializeProperty(Func<bool> shouldSerializeFunc, Action setPropertyAction)
@@ -4548,7 +4548,7 @@ public class MonthCalendarTests
         }
 
         DateTime todayDateBeforeReset = calendar.TodayDate;
-        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        calendar.TestAccessor.Dynamic.ResetTodayDate();
         DateTime todayDateAfterReset = calendar.TodayDate;
 
         todayDateBeforeReset.Should().NotBe(todayDateAfterReset);
@@ -4567,7 +4567,7 @@ public class MonthCalendarTests
         }
 
         DateTime todayDateBeforeReset = calendar.TodayDate;
-        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        calendar.TestAccessor.Dynamic.ResetTodayDate();
         DateTime todayDateAfterReset = calendar.TodayDate;
 
         todayDateBeforeReset.Should().Be(todayDateAfterReset);
@@ -4576,7 +4576,7 @@ public class MonthCalendarTests
     private void TestResetColorProperty(Func<MonthCalendar, Color> getColor, Action<MonthCalendar, Color> setColor, Action<dynamic> resetColor)
     {
         using MonthCalendar calendar = new();
-        var testAccessor = calendar.TestAccessor();
+        var testAccessor = calendar.TestAccessor;
 
         Color originalColor = getColor(calendar);
 
@@ -4627,7 +4627,7 @@ public class MonthCalendarTests
         setProperty(calendar, testValue);
         getProperty(calendar).Should().Be(testValue);
 
-        resetProperty(calendar.TestAccessor().Dynamic);
+        resetProperty(calendar.TestAccessor.Dynamic);
         getProperty(calendar).Should().Be(expectedValue);
     }
 
@@ -4666,7 +4666,7 @@ public class MonthCalendarTests
         using MonthCalendar calendar = new();
         calendar.MaxDate = new DateTime(2022, 12, 31);
 
-        calendar.TestAccessor().Dynamic.ResetMaxDate();
+        calendar.TestAccessor.Dynamic.ResetMaxDate();
 
         calendar.MaxDate.Should().Be(new DateTime(9998, 12, 31));
     }
@@ -4677,7 +4677,7 @@ public class MonthCalendarTests
         using MonthCalendar calendar = new();
         calendar.CalendarDimensions = new Size(2, 2);
 
-        calendar.TestAccessor().Dynamic.ResetCalendarDimensions();
+        calendar.TestAccessor.Dynamic.ResetCalendarDimensions();
 
         calendar.CalendarDimensions.Should().Be(new Size(1, 1));
     }
@@ -4688,7 +4688,7 @@ public class MonthCalendarTests
         using MonthCalendar calendar = new();
         calendar.AddAnnuallyBoldedDate(DateTime.Now);
 
-        calendar.TestAccessor().Dynamic.ResetAnnuallyBoldedDates();
+        calendar.TestAccessor.Dynamic.ResetAnnuallyBoldedDates();
 
         calendar.AnnuallyBoldedDates.Should().BeEmpty();
     }
@@ -4699,7 +4699,7 @@ public class MonthCalendarTests
         using MonthCalendar calendar = new();
         calendar.AddBoldedDate(DateTime.Now);
 
-        calendar.TestAccessor().Dynamic.ResetBoldedDates();
+        calendar.TestAccessor.Dynamic.ResetBoldedDates();
 
         calendar.BoldedDates.Should().BeEmpty();
     }
@@ -4716,12 +4716,12 @@ public class MonthCalendarTests
             callCount++;
         };
 
-        calendar.TestAccessor().Dynamic._onCalendarViewChanged += handler;
-        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        calendar.TestAccessor.Dynamic._onCalendarViewChanged += handler;
+        calendar.TestAccessor.Dynamic.OnCalendarViewChanged(EventArgs.Empty);
         callCount.Should().Be(1);
 
-        calendar.TestAccessor().Dynamic._onCalendarViewChanged -= handler;
-        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        calendar.TestAccessor.Dynamic._onCalendarViewChanged -= handler;
+        calendar.TestAccessor.Dynamic.OnCalendarViewChanged(EventArgs.Empty);
         callCount.Should().Be(1);
     }
 

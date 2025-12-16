@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -48,7 +48,7 @@ public class SelectionUIHandlerTests : IDisposable
 
         result.Should().BeTrue();
 
-        Control[] dragControls = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragControls;
+        Control[] dragControls = _selectionUIHandlerMock.Object.TestAccessor.Dynamic._dragControls;
 
         dragControls.Should().NotBeNull();
         dragControls.Should().HaveCount(1);
@@ -66,7 +66,7 @@ public class SelectionUIHandlerTests : IDisposable
 
         _selectionUIHandlerMock.Object.DragMoved(components, offset);
 
-        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragOffset;
+        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor.Dynamic._dragOffset;
 
         dragOffset.Should().Be(offset);
     }
@@ -81,9 +81,9 @@ public class SelectionUIHandlerTests : IDisposable
 
         _selectionUIHandlerMock.Object.EndDrag(components, cancel: false);
 
-        Control[]? dragControls = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragControls;
-        object? originalCoordinates = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._originalCoordinates;
-        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor().Dynamic._dragOffset;
+        Control[]? dragControls = _selectionUIHandlerMock.Object.TestAccessor.Dynamic._dragControls;
+        object? originalCoordinates = _selectionUIHandlerMock.Object.TestAccessor.Dynamic._originalCoordinates;
+        Rectangle dragOffset = _selectionUIHandlerMock.Object.TestAccessor.Dynamic._dragOffset;
 
         dragControls.Should().BeNull();
         originalCoordinates.Should().BeNull();

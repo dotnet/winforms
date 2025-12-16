@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -29,7 +29,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     {
         using ToolStripComboBox.ToolStripComboBoxControl comboBox = new();
         bool result = (bool)typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
-            .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
+            .TestAccessor.Dynamic.UseBaseAdapter(comboBox);
 
         result.Should().BeTrue();
     }
@@ -37,7 +37,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     [WinFormsFact]
     public void GetColorTable_ReturnsExpected()
     {
-        var colorTable = (ProfessionalColorTable)_adapter.TestAccessor().Dynamic.GetColorTable(_comboBox);
+        var colorTable = (ProfessionalColorTable)_adapter.TestAccessor.Dynamic.GetColorTable(_comboBox);
 
         colorTable.Should().NotBeNull();
         colorTable.Should().BeOfType<ProfessionalColorTable>();
@@ -50,7 +50,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     {
         _comboBox.Enabled = enabled;
 
-        Color result = (Color)_adapter.TestAccessor().Dynamic.GetOuterBorderColor(_comboBox);
+        Color result = (Color)_adapter.TestAccessor.Dynamic.GetOuterBorderColor(_comboBox);
 
         result.Should().Be(Color.FromKnownColor(expectedColor));
     }
@@ -64,7 +64,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     {
         _comboBox.Enabled = enabled;
 
-        Color result = (Color)_adapter.TestAccessor().Dynamic.GetPopupOuterBorderColor(_comboBox, focused);
+        Color result = (Color)_adapter.TestAccessor.Dynamic.GetPopupOuterBorderColor(_comboBox, focused);
 
         result.Should().Be(Color.FromKnownColor(expectedColor));
     }
@@ -76,7 +76,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
         using Graphics graphics = Graphics.FromImage(bitmap);
         Rectangle dropDownRect = new(0, 0, 100, 100);
 
-        _adapter.TestAccessor().Dynamic.DrawFlatComboDropDown(_comboBox, graphics, dropDownRect);
+        _adapter.TestAccessor.Dynamic.DrawFlatComboDropDown(_comboBox, graphics, dropDownRect);
 
         bitmap.GetPixel(50, 50).Should().NotBe(Color.Empty);
     }

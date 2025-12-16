@@ -98,7 +98,7 @@ public class DataGridViewImageCellTests : IDisposable
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
         _dataGridViewImageCell.DataGridView = null;
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -110,7 +110,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, -1);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, -1);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -125,7 +125,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.OwningColumn = null;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetContentBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -135,7 +135,7 @@ public class DataGridViewImageCellTests : IDisposable
     {
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -149,7 +149,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, -1);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, -1);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -164,7 +164,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.OwningColumn = null;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -180,7 +180,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.DataGridView = dataGridView;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -198,7 +198,7 @@ public class DataGridViewImageCellTests : IDisposable
         _dataGridViewImageCell.OwningColumn = null;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor().Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
+        Rectangle bounds = (Rectangle)_dataGridViewImageCell.TestAccessor.Dynamic.GetErrorIconBounds(g, dataGridViewCellStyle, 0);
 
         bounds.Should().Be(Rectangle.Empty);
     }
@@ -209,7 +209,7 @@ public class DataGridViewImageCellTests : IDisposable
         using DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
         DataGridViewCellStyle dataGridViewCellStyle = new();
-        Size size = (Size)dataGridViewImageCell.TestAccessor().Dynamic.GetPreferredSize(g, dataGridViewCellStyle, 0, new Size(100, 100));
+        Size size = (Size)dataGridViewImageCell.TestAccessor.Dynamic.GetPreferredSize(g, dataGridViewCellStyle, 0, new Size(100, 100));
 
         size.Should().Be(new Size(-1, -1));
     }
@@ -219,7 +219,7 @@ public class DataGridViewImageCellTests : IDisposable
     {
         using DataGridViewImageCell dataGridViewImageCell = _dataGridViewImageCell;
         using Graphics g = Graphics.FromImage(new Bitmap(10, 10));
-        Action action = () => dataGridViewImageCell.TestAccessor().Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
+        Action action = () => dataGridViewImageCell.TestAccessor.Dynamic.GetPreferredSize(g, null, 0, new Size(100, 100));
 
         action.Should().Throw<NullReferenceException>();
     }
@@ -237,7 +237,7 @@ public class DataGridViewImageCellTests : IDisposable
         DataGridViewCellStyle dataGridViewCellStyle = new();
         DataGridViewAdvancedBorderStyle borderStyle = new();
 
-        Action action = () => dataGridViewImageCell.TestAccessor().Dynamic.Paint(
+        Action action = () => dataGridViewImageCell.TestAccessor.Dynamic.Paint(
         g,
         new Rectangle(0, 0, 10, 10),
         new Rectangle(0, 0, 10, 10),

@@ -36,7 +36,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, true);
 
         toolStrip.Items.Add(ownerItem);
-        ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
+        ownerItem.TestAccessor.Dynamic._dropDown = dropDownMenu;
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 3"));
@@ -98,7 +98,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, false);
 
         toolStrip.Items.Add(ownerItem);
-        ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
+        ownerItem.TestAccessor.Dynamic._dropDown = dropDownMenu;
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
 
@@ -136,7 +136,7 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         SubToolStripDropDownMenu dropDownMenu = new(ownerItem, true, true);
 
         toolStrip.Items.Add(ownerItem);
-        ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
+        ownerItem.TestAccessor.Dynamic._dropDown = dropDownMenu;
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
         ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
         dropDownMenu.UpdateDisplayedItems();

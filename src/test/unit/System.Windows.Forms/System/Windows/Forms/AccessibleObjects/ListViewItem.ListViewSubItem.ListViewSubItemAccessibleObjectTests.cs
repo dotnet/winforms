@@ -1069,7 +1069,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.ReleaseUiaProvider(listView.HWND);
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -1085,7 +1085,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.Clear();
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1101,7 +1101,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.Items.RemoveAt(0);
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1117,7 +1117,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.Items[0].SubItems.Remove(listViewSubItem);
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1133,7 +1133,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.Items[0].SubItems.Clear();
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1149,7 +1149,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         listView.Items[0] = new ListViewItem();
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1166,18 +1166,18 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         int subItemIndex = listView.Items[0].SubItems.IndexOf(listViewSubItem);
         listView.Items[0].SubItems[subItemIndex] = new ListViewItem.ListViewSubItem();
 
-        Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
+        Assert.Null(listViewSubItem.TestAccessor.Dynamic._accessibilityObject);
         Assert.False(listView.IsHandleCreated);
     }
 
     private static void EnforceAccessibleObjectCreation(ListViewItem item)
     {
         _ = item.AccessibilityObject;
-        Assert.NotNull(item.TestAccessor().Dynamic._accessibilityObject);
+        Assert.NotNull(item.TestAccessor.Dynamic._accessibilityObject);
         foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
         {
             _ = subItem.AccessibilityObject;
-            Assert.NotNull(subItem.TestAccessor().Dynamic._accessibilityObject);
+            Assert.NotNull(subItem.TestAccessor.Dynamic._accessibilityObject);
         }
     }
 }
