@@ -794,7 +794,7 @@ public class FileDialogTests
     public void FileDialog_GetMultiselectFiles_ReturnsExpected()
     {
         // Test with directory
-        var accessor = typeof(FileDialog).TestAccessor();
+        var accessor = typeof(FileDialog).TestAccessor;
         string buffer = "C:\\test\0testfile.txt\0testfile2.txt\0";
         string[] expected = ["C:\\test\\testfile.txt", "C:\\test\\testfile2.txt"];
         string[] result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);

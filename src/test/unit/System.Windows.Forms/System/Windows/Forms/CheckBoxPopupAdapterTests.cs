@@ -73,7 +73,7 @@ public class CheckBoxPopupAdapterTests : AbstractButtonBaseTests
         using Graphics graphics = Graphics.FromImage(bitmap);
         PaintEventArgs e = new(graphics, checkBox.ClientRectangle);
 
-        Action action = () => adapter.TestAccessor().Dynamic.Layout(e);
+        Action action = () => adapter.TestAccessor.Dynamic.Layout(e);
 
         action.Should().NotThrow();
     }
@@ -84,7 +84,7 @@ public class CheckBoxPopupAdapterTests : AbstractButtonBaseTests
         using CheckBox checkBox = new();
         CheckBoxPopupAdapter adapter = new(checkBox);
 
-        Action action = () => adapter.TestAccessor().Dynamic.CreateButtonAdapter();
+        Action action = () => adapter.TestAccessor.Dynamic.CreateButtonAdapter();
 
         action.Should().NotThrow();
     }

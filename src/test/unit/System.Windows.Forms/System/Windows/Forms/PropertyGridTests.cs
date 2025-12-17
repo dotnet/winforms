@@ -167,7 +167,7 @@ public partial class PropertyGridTests
         Assert.False(control.VScroll);
         Assert.Equal(130, control.Width);
 
-        PropertyGridView propertyGridView = control.TestAccessor().GridView;
+        PropertyGridView propertyGridView = control.TestAccessor.GridView;
         Assert.NotNull(propertyGridView);
 
         Assert.False(control.IsHandleCreated);
@@ -2741,7 +2741,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_Site_ShouldSaveSelectedTabIndex()
     {
         using PropertyGrid propertyGrid = new();
-        var propertyGridTestAccessor = propertyGrid.TestAccessor();
+        var propertyGridTestAccessor = propertyGrid.TestAccessor;
 
         propertyGrid.Site = CreateISiteObject();
         Assert.NotNull(propertyGrid.ActiveDesigner);
@@ -2764,7 +2764,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_SiteChange_ShouldNotSaveSelectedTabIndex()
     {
         using PropertyGrid propertyGrid = new();
-        var propertyGridTestAccessor = propertyGrid.TestAccessor();
+        var propertyGridTestAccessor = propertyGrid.TestAccessor;
         propertyGrid.Site = CreateISiteObject();
         var previousActiveDesigner = propertyGrid.ActiveDesigner;
         propertyGridTestAccessor.SaveSelectedTabIndex();
@@ -3876,7 +3876,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_Buttons_AccessibleRole_IsRadiButton()
     {
         using PropertyGrid propertyGrid = new();
-        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+        ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor.Dynamic._viewSortButtons;
         ToolStripButton categoryButton = toolStripButtons[0];
         ToolStripButton alphaButton = toolStripButtons[1];
 
@@ -3889,13 +3889,13 @@ public partial class PropertyGridTests
     {
         using SubPropertyGrid propertyGrid = new();
 
-        ImageList normalButtons = propertyGrid.TestAccessor().Dynamic._normalButtonImages;
+        ImageList normalButtons = propertyGrid.TestAccessor.Dynamic._normalButtonImages;
 
         Assert.NotNull(normalButtons);
 
         propertyGrid.OnSystemColorsChanged(EventArgs.Empty);
 
-        ImageList newNormalButtons = propertyGrid.TestAccessor().Dynamic._normalButtonImages;
+        ImageList newNormalButtons = propertyGrid.TestAccessor.Dynamic._normalButtonImages;
         Assert.NotNull(newNormalButtons);
         Assert.NotSame(normalButtons, newNormalButtons);
 
@@ -3940,7 +3940,7 @@ public partial class PropertyGridTests
         Type propertyType = gridEntry.PropertyType;
         Assert.True(propertyType == typeof(object));
 
-        AttributeCollection attributes = gridEntry.TestAccessor().Dynamic.Attributes;
+        AttributeCollection attributes = gridEntry.TestAccessor.Dynamic.Attributes;
         bool foundTypeForward = false;
         foreach (object attribute in attributes)
         {
@@ -3999,7 +3999,7 @@ public partial class PropertyGridTests
         shortcutKeyEntry.PropertyDescriptor.GetValue(menuItem).Should().Be(Keys.None);
 
         propertyGrid.SelectedGridItem = shortcutKeyEntry;
-        var gridViewAccessor = propertyGridView.TestAccessor();
+        var gridViewAccessor = propertyGridView.TestAccessor;
 
         bool result = gridViewAccessor.Dynamic.ProcessEnumUpAndDown(shortcutKeyEntry, Keys.Down, closeDropDown: true);
         // Current value indicates the shortcut property is not set, thus up/down keys are ignored.
@@ -4026,7 +4026,7 @@ public partial class PropertyGridTests
         };
 
         propertyGrid.PropertyValueChanged += handler;
-        var accessor = propertyGrid.TestAccessor();
+        var accessor = propertyGrid.TestAccessor;
         var gridItem = new Mock<GridItem>().Object;
         accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
         callCount.Should().Be(1);
@@ -4122,7 +4122,7 @@ public partial class PropertyGridTests
 
         var oldTab = tab2;
         var newTab = tab1;
-        var accessor = propertyGrid.TestAccessor();
+        var accessor = propertyGrid.TestAccessor;
         accessor.Dynamic.OnPropertyTabChanged(new PropertyTabChangedEventArgs(oldTab, newTab));
 
         eventCallCount.Should().Be(1);
@@ -4149,7 +4149,7 @@ public partial class PropertyGridTests
         Mock<GridItem> gridItemMock = new();
         var gridItem = gridItemMock.Object;
 
-        var accessor = propertyGrid.TestAccessor();
+        var accessor = propertyGrid.TestAccessor;
         accessor.Dynamic.OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(null, gridItem));
 
         eventCallCount.Should().Be(1);
@@ -4166,7 +4166,7 @@ public partial class PropertyGridTests
         {
             SelectedObject = new SelectedObject()
         };
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor.Dynamic._gridView;
 
         MyTypeConverter.GetPropertiesInvokeCount = 0;
         propertyGridView.Refresh(true);

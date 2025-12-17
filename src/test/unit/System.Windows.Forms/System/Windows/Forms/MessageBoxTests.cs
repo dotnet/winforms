@@ -147,7 +147,7 @@ public class MessageBoxTests
     {
         try
         {
-            return typeof(MessageBox).TestAccessor().Dynamic.GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
+            return typeof(MessageBox).TestAccessor.Dynamic.GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
         }
         catch (TargetInvocationException ex)
         {

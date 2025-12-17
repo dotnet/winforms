@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -18,14 +18,14 @@ public class ToolStripCollectionEditorTests
     [Fact]
     public void ToolStripCollectionEditor_CreateCollectionForm_DoesNotThrowException()
     {
-        Action act = () => _editor.TestAccessor().Dynamic.CreateCollectionForm();
+        Action act = () => _editor.TestAccessor.Dynamic.CreateCollectionForm();
         act.Should().NotThrow();
     }
 
     [Fact]
     public void ToolStripCollectionEditor_HelpTopic_ReturnsExpectedValue()
     {
-        string helpTopic = _editor.TestAccessor().Dynamic.HelpTopic;
+        string helpTopic = _editor.TestAccessor.Dynamic.HelpTopic;
         helpTopic.Should().Be("net.ComponentModel.ToolStripCollectionEditor");
     }
 

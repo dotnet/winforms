@@ -68,7 +68,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
 
         AccessibleObject accessibilityObject = gridView.TopLevelGridEntries[0].AccessibilityObject;
 
@@ -83,7 +83,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
 
         AccessibleObject accessibilityObjectCategory1 = gridView.TopLevelGridEntries[0].AccessibilityObject;
         AccessibleObject accessibilityObjectCategory2 = gridView.TopLevelGridEntries[1].AccessibilityObject;
@@ -101,7 +101,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
 
         AccessibleObject accessibilityObjectCategory1 = gridView.TopLevelGridEntries[0].AccessibilityObject;
         AccessibleObject accessibilityObjectCategory2 = gridView.TopLevelGridEntries[1].AccessibilityObject;
@@ -118,7 +118,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
         var category = (CategoryGridEntry)gridView.TopLevelGridEntries[0];
         var gridViewAccessibilityObject = (PropertyGridViewAccessibleObject)gridView.AccessibilityObject;
 
@@ -136,7 +136,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
         var category = (CategoryGridEntry)gridView.TopLevelGridEntries[0];
         var gridViewAccessibilityObject = (PropertyGridViewAccessibleObject)gridView.AccessibilityObject;
 
@@ -178,7 +178,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using PropertyGrid control = new();
         using Button button = new();
         control.SelectedObject = button;
-        PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+        PropertyGridView gridView = control.TestAccessor.Dynamic._gridView;
         var category = (CategoryGridEntry)gridView.TopLevelGridEntries[0];
         var gridViewAccessibilityObject = (PropertyGridViewAccessibleObject)gridView.AccessibilityObject;
         AccessibleObject accessibilityObject = category.AccessibilityObject;

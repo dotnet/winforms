@@ -183,7 +183,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
         Assert.Null(Application.DefaultFont);
@@ -192,7 +192,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_Returns_DefaultFont_IfNotScaled()
     {
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
@@ -215,7 +215,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_DefaultFont_Returns_ScaledDefaultFont_IfScaled()
     {
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
         Assert.Null(applicationTestAccessor.s_defaultFont);
         Assert.Null(applicationTestAccessor.s_defaultFontScaled);
 
@@ -256,7 +256,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_SetDefaultFont_SystemFont()
     {
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
         Font font = applicationTestAccessor.s_defaultFont;
         font.Should().BeNull();
         font = applicationTestAccessor.s_defaultFontScaled;
@@ -264,7 +264,7 @@ public class ApplicationTests
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
-        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor.Dynamic;
         bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
         try
         {
@@ -282,7 +282,7 @@ public class ApplicationTests
             // create fake system font
             using Font fakeSysFont = sysFont.WithSize(sysFont.Size * 1.25f);
             // set IsSystemFont flag
-            fakeSysFont.TestAccessor().Dynamic.SetSystemFontName(sysFont.SystemFontName);
+            fakeSysFont.TestAccessor.Dynamic.SetSystemFontName(sysFont.SystemFontName);
             fakeSysFont.IsSystemFont.Should().BeTrue();
             Application.SetDefaultFont(fakeSysFont);
             font = applicationTestAccessor.s_defaultFontScaled;
@@ -303,7 +303,7 @@ public class ApplicationTests
     [WinFormsFact]
     public void Application_SetDefaultFont_NonSystemFont()
     {
-        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        var applicationTestAccessor = typeof(Application).TestAccessor.Dynamic;
         Font font = applicationTestAccessor.s_defaultFont;
         font.Should().BeNull();
         font = applicationTestAccessor.s_defaultFontScaled;
@@ -314,7 +314,7 @@ public class ApplicationTests
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
-        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor.Dynamic;
         bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
         try
         {

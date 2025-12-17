@@ -13,7 +13,7 @@ public class ListViewItemStateImageIndexConverterTests
     [Fact]
     public void ListViewItemStateImageIndexConverter_IncludeNoneAsStandardValue_ReturnsFalse()
     {
-        Assert.False(new ListViewItemStateImageIndexConverter().TestAccessor().Dynamic.IncludeNoneAsStandardValue);
+        Assert.False(new ListViewItemStateImageIndexConverter().TestAccessor.Dynamic.IncludeNoneAsStandardValue);
     }
 
     [Fact]

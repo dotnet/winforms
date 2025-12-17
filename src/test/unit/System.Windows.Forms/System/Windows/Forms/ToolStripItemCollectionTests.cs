@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -258,7 +258,7 @@ public class ToolStripItemCollectionTests
         ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
-        dynamic accessor = collection.TestAccessor().Dynamic;
+        dynamic accessor = collection.TestAccessor.Dynamic;
 
         ((bool)accessor.IsValidIndex(0)).Should().BeTrue();
         ((bool)accessor.IsValidIndex(1)).Should().BeTrue();
@@ -271,7 +271,7 @@ public class ToolStripItemCollectionTests
         ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
-        dynamic accessor = collection.TestAccessor().Dynamic;
+        dynamic accessor = collection.TestAccessor.Dynamic;
 
         ((bool)accessor.IsValidIndex(-1)).Should().BeFalse();
         ((bool)accessor.IsValidIndex(2)).Should().BeFalse();

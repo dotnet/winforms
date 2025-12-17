@@ -130,7 +130,7 @@ public class BindingNavigatorDesignerTests : IDisposable
         getter(_bindingNavigator).Should().Be(item);
 
         ComponentEventArgs args = new(item);
-        _designer.TestAccessor().Dynamic.ComponentChangeService_ComponentRemoved(null, args);
+        _designer.TestAccessor.Dynamic.ComponentChangeService_ComponentRemoved(null, args);
 
         getter(_bindingNavigator).Should().BeNull();
     }
@@ -143,7 +143,7 @@ public class BindingNavigatorDesignerTests : IDisposable
         _bindingNavigator.DeleteItem = deleteItem;
 
         ComponentEventArgs args = new(otherItem);
-        _designer.TestAccessor().Dynamic.ComponentChangeService_ComponentRemoved(null, args);
+        _designer.TestAccessor.Dynamic.ComponentChangeService_ComponentRemoved(null, args);
 
         _bindingNavigator.DeleteItem.Should().Be(deleteItem);
     }
@@ -159,7 +159,7 @@ public class BindingNavigatorDesignerTests : IDisposable
         PropertyDescriptor? textProperty = TypeDescriptor.GetProperties(otherItem)["Text"];
         ComponentChangedEventArgs args = new(otherItem, textProperty, "old text", "Other text");
 
-        _designer.TestAccessor().Dynamic.ComponentChangeService_ComponentChanged(null, args);
+        _designer.TestAccessor.Dynamic.ComponentChangeService_ComponentChanged(null, args);
 
         _bindingNavigator.CountItemFormat.Should().Be("Original format");
     }
@@ -174,7 +174,7 @@ public class BindingNavigatorDesignerTests : IDisposable
         PropertyDescriptor? visibleProperty = TypeDescriptor.GetProperties(countItem)["Visible"];
         ComponentChangedEventArgs args = new(countItem, visibleProperty, false, true);
 
-        _designer.TestAccessor().Dynamic.ComponentChangeService_ComponentChanged(null, args);
+        _designer.TestAccessor.Dynamic.ComponentChangeService_ComponentChanged(null, args);
 
         _bindingNavigator.CountItemFormat.Should().Be("Original format");
     }

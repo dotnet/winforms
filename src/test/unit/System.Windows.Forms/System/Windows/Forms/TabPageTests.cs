@@ -5002,7 +5002,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        ToolTip internalToolTip = control.TestAccessor().Dynamic._internalToolTip;
+        ToolTip internalToolTip = control.TestAccessor.Dynamic._internalToolTip;
         string actual = internalToolTip.GetCaptionForTool(control);
 
         Assert.Equal(text, actual);
@@ -5020,7 +5020,7 @@ public class TabPageTests
         Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the tooltip native window Handle
 
         toolTip.SetToolTip(control, text);
-        ToolTip internalToolTip = control.TestAccessor().Dynamic._internalToolTip;
+        ToolTip internalToolTip = control.TestAccessor.Dynamic._internalToolTip;
         string actual = internalToolTip.GetCaptionForTool(control);
 
         Assert.Null(actual);
@@ -5058,7 +5058,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+        dynamic tabPageDynamic = control.TestAccessor.Dynamic;
         ToolTip internalToolTip = tabPageDynamic._internalToolTip;
         ToolTip externalToolTip = tabPageDynamic._externalToolTip;
         List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
@@ -5090,7 +5090,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+        dynamic tabPageDynamic = control.TestAccessor.Dynamic;
         ToolTip internalToolTip = tabPageDynamic._internalToolTip;
         ToolTip externalToolTip = tabPageDynamic._externalToolTip;
         List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
@@ -5126,7 +5126,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+        dynamic tabPageDynamic = control.TestAccessor.Dynamic;
         ToolTip internalToolTip = tabPageDynamic._internalToolTip;
         ToolTip externalToolTip = tabPageDynamic._externalToolTip;
 
@@ -5157,7 +5157,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+        dynamic tabPageDynamic = control.TestAccessor.Dynamic;
         ToolTip internalToolTip = tabPageDynamic._internalToolTip;
 
         using ToolTip toolTip1 = new();
@@ -5183,7 +5183,7 @@ public class TabPageTests
         string text = "Some test text";
         control.ToolTipText = text;
 
-        dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+        dynamic tabPageDynamic = control.TestAccessor.Dynamic;
         ToolTip internalToolTip = tabPageDynamic._internalToolTip;
         ToolTip externalToolTip = tabPageDynamic._externalToolTip;
 

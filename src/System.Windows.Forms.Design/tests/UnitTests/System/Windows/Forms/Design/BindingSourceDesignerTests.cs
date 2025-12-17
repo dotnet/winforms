@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -14,11 +14,11 @@ public class BindingSourceDesignerTests
     {
         using BindingSourceDesigner designer = new();
 
-        bool originalValue = designer.TestAccessor().Dynamic._bindingUpdatedByUser;
+        bool originalValue = designer.TestAccessor.Dynamic._bindingUpdatedByUser;
         originalValue.Should().BeFalse();
 
         designer.BindingUpdatedByUser = true;
-        bool updatedValue = designer.TestAccessor().Dynamic._bindingUpdatedByUser;
+        bool updatedValue = designer.TestAccessor.Dynamic._bindingUpdatedByUser;
         updatedValue.Should().BeTrue();
     }
 
@@ -40,6 +40,6 @@ public class BindingSourceDesignerTests
 
         ComponentEventArgs args = new(componentMock.Object);
 
-        designer.TestAccessor().Dynamic.OnComponentRemoving(null, args);
+        designer.TestAccessor.Dynamic.OnComponentRemoving(null, args);
     }
 }

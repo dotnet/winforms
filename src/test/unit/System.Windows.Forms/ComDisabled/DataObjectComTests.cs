@@ -15,8 +15,8 @@ public unsafe partial class DataObjectTests
     [WinFormsFact]
     public void DataObject_WithJson_MockRoundTrip()
     {
-        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic controlAccessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         SimpleTestData testData = new() { X = 1, Y = 1 };
         DataObject data = new();
@@ -37,8 +37,8 @@ public unsafe partial class DataObjectTests
     public void DataObject_CustomIDataObject_MockRoundTrip()
     {
         CustomIDataObject data = new();
-        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic accessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
@@ -55,8 +55,8 @@ public unsafe partial class DataObjectTests
     public void DataObject_ComTypesIDataObject_MockRoundTrip()
     {
         CustomComTypesDataObject data = new();
-        dynamic accessor = typeof(Control).TestAccessor().Dynamic;
-        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+        dynamic accessor = typeof(Control).TestAccessor.Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor;
 
         DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);

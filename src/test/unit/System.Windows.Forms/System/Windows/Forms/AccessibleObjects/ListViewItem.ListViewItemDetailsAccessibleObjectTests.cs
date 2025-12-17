@@ -122,11 +122,11 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         Assert.NotNull(item.AccessibilityObject.GetChild(0));
         Assert.NotNull(item.AccessibilityObject.GetChild(1));
         Assert.NotNull(item.AccessibilityObject.GetChild(2));
-        Assert.NotEmpty(item.AccessibilityObject.TestAccessor().Dynamic._listViewSubItemAccessibleObjects);
+        Assert.NotEmpty(item.AccessibilityObject.TestAccessor.Dynamic._listViewSubItemAccessibleObjects);
 
         item.ReleaseUiaProvider();
 
-        Assert.Empty(item.AccessibilityObject.TestAccessor().Dynamic._listViewSubItemAccessibleObjects);
+        Assert.Empty(item.AccessibilityObject.TestAccessor.Dynamic._listViewSubItemAccessibleObjects);
         Assert.False(control.IsHandleCreated);
     }
 

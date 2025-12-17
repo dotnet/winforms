@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -20,7 +20,7 @@ public class TreeNodeCollectionEditorTests
     {
         Type type = typeof(TreeNode);
         TreeNodeCollectionEditor collectionEditor = new(type);
-        string helpTopic = collectionEditor.TestAccessor().Dynamic.HelpTopic;
+        string helpTopic = collectionEditor.TestAccessor.Dynamic.HelpTopic;
         helpTopic.Should().Be("net.ComponentModel.TreeNodeCollectionEditor");
     }
 
@@ -32,7 +32,7 @@ public class TreeNodeCollectionEditorTests
         Form colletionForm;
         using (new NoAssertContext())
         {
-            colletionForm = collectionEditor.TestAccessor().Dynamic.CreateCollectionForm();
+            colletionForm = collectionEditor.TestAccessor.Dynamic.CreateCollectionForm();
         }
 
         colletionForm.Should().NotBeNull();

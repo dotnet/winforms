@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -36,7 +36,7 @@ public class DataGridViewComponentPropertyGridSiteTests
         Mock<IServiceProvider> serviceProviderMock = new();
         DataGridViewComponentPropertyGridSite site = new(serviceProviderMock.Object, component);
 
-        site.TestAccessor().Dynamic._inGetService = true;
+        site.TestAccessor.Dynamic._inGetService = true;
 
         var service = site.GetService(typeof(object));
 

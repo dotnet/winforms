@@ -22,12 +22,12 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
 
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
 
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -49,7 +49,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.False(provider.IsMultiline);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -65,7 +65,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.False(provider.IsReadOnly);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -80,7 +80,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.True(provider.IsScrollable);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -95,7 +95,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.False(provider.IsScrollable);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -111,7 +111,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -128,7 +128,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(expectedResult, provider.IsReadingRTL);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -145,7 +145,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.False(provider.IsReadingRTL);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -164,8 +164,8 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             using ComScope<IRawElementProviderSimple> elementProvider = new(range.Value->GetEnclosingElement());
             Assert.Equal(comboBox.ChildEditAccessibleObject, ComHelpers.GetObjectForIUnknown(elementProvider));
             UiaTextRange rangeObj = ComHelpers.GetObjectForIUnknown(range) as UiaTextRange;
-            Assert.Equal(provider, rangeObj?.TestAccessor().Dynamic._provider);
-            Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Equal(provider, rangeObj?.TestAccessor.Dynamic._provider);
+            Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -195,7 +195,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(SupportedTextSelection.SupportedTextSelection_Single, uiaTextRange);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -214,7 +214,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.False(uiaTextRange.IsNull);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -233,7 +233,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.True(uiaTextRange.IsNull);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -249,7 +249,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(-1, provider.LinesPerPage);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -264,7 +264,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(1, provider.LinesPerPage);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -292,7 +292,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(0, actualLine);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -315,7 +315,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(-1, actualLine);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -354,7 +354,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(0, actualIndex);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -376,7 +376,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(-1, actualIndex);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -396,7 +396,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.False(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);
             Assert.True(comboBox.IsHandleCreated);
-            Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -416,7 +416,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.True(string.IsNullOrEmpty(actual.FaceName.ToString()));
             Assert.Equal(expected, actual);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -444,7 +444,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.True(actualPoint.X >= expectedPoint.X - 1 || actualPoint.X <= expectedPoint.X + 1);
         Assert.True(actualPoint.Y >= expectedPoint.Y - 1 || actualPoint.Y <= expectedPoint.Y + 1);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHandle_TestData()
@@ -471,7 +471,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(Point.Empty, actualPoint);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -510,7 +510,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.True(actualPoint.X >= expectedPoint.X - 1 || actualPoint.X <= expectedPoint.X + 1);
         Assert.True(actualPoint.Y >= expectedPoint.Y - 1 || actualPoint.Y <= expectedPoint.Y + 1);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromCharForUpperRightCorner_ReturnsCorrectValue_WithoutHandle_TestData()
@@ -548,7 +548,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(Point.Empty, actualPoint);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -581,7 +581,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(expectedRectangle, providerRectangle);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -598,7 +598,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(Rectangle.Empty, providerRectangle);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -633,7 +633,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(expected, actual);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -651,7 +651,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(string.Empty, actual);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -667,7 +667,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal(comboBox.Text.Length, provider.TextLength);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -683,7 +683,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(-1, provider.TextLength);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -698,7 +698,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         WINDOW_EX_STYLE actual = provider.WindowExStyle;
         Assert.Equal((WINDOW_EX_STYLE)0, actual);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -715,7 +715,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(WINDOW_EX_STYLE.WS_EX_LEFT, actual);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -734,7 +734,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.NotEqual(0, ((int)actual & PInvoke.ES_NOHIDESEL));
         Assert.NotEqual(0, ((int)actual & PInvoke.ES_AUTOHSCROLL));
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -751,7 +751,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.Equal(PInvoke.ES_LEFT, (int)actual);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -794,7 +794,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.Equal(expectedStart, providerVisibleStart);
         Assert.Equal(expectedEnd, providerVisibleEnd);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     public static IEnumerable<object[]> ComboBox_GetVisibleRangePoints_ForSinglelineComboBox_WithoutHandle_TestData()
@@ -830,7 +830,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.Equal(0, providerVisibleStart);
             Assert.Equal(0, providerVisibleEnd);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -857,7 +857,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.False(result.IsEmpty);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -876,7 +876,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.True(result.IsEmpty);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -920,7 +920,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.False(range.IsNull);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -937,7 +937,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
             Assert.True(range.IsNull);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -967,7 +967,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.Equal(start, comboBox.SelectionStart);
         Assert.Equal(end, comboBox.SelectionStart + comboBox.SelectionLength);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -985,18 +985,18 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             provider.SetSelection(start, end);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
 
             using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
             Assert.True(provider.GetSelection(selection).Succeeded);
 
             Assert.True(selection.IsNull);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
             Assert.Equal(0, comboBox.SelectionStart);
             Assert.Equal(0, comboBox.SelectionStart + comboBox.SelectionLength);
             Assert.True(comboBox.IsHandleCreated);
-            Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -1029,7 +1029,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.Equal(0, comboBox.SelectionStart);
             Assert.Equal(0, comboBox.SelectionStart + comboBox.SelectionLength);
             Assert.True(comboBox.IsHandleCreated);
-            Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -1049,7 +1049,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         Assert.False(provider.LineScroll(0, newLine));
         Assert.Equal(0, provider.FirstVisibleLine);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -1069,7 +1069,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             Assert.False(provider.LineScroll(0, newLine));
             Assert.Equal(-1, provider.FirstVisibleLine);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
         }
     }
 
@@ -1087,7 +1087,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         Assert.Equal("Segoe UI", actual);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -1100,7 +1100,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             using ComboBox comboBox = new() { DropDownStyle = dropDownStyle, Size = new(50, 100) };
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             Assert.False(comboBox.IsHandleCreated);
-            Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
+            Assert.Null(comboBox.TestAccessor.Dynamic._childEdit);
             Assert.Equal(default, provider.Logfont);
         }
     }
@@ -1114,7 +1114,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_GETFIRSTVISIBLELINE);
+        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor.Dynamic._childEdit, PInvokeCore.EM_GETFIRSTVISIBLELINE);
 
         Assert.Equal(actualValue, provider.FirstVisibleLine);
     }
@@ -1128,7 +1128,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_GETLINECOUNT);
+        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor.Dynamic._childEdit, PInvokeCore.EM_GETLINECOUNT);
 
         Assert.Equal(actualValue, provider.LinesCount);
     }
@@ -1154,12 +1154,12 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int expectedLine = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_LINEFROMCHAR, (WPARAM)charIndex);
+        int expectedLine = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor.Dynamic._childEdit, PInvokeCore.EM_LINEFROMCHAR, (WPARAM)charIndex);
         int actualLine = provider.GetLineFromCharIndex(charIndex);
 
         Assert.Equal(expectedLine, actualLine);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 
     [WinFormsTheory]
@@ -1175,10 +1175,10 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        bool expectedValue = PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_LINESCROLL, 0, newLine) != 0;
+        bool expectedValue = PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor.Dynamic._childEdit, PInvokeCore.EM_LINESCROLL, 0, newLine) != 0;
 
         Assert.Equal(expectedValue, provider.LineScroll(0, newLine));
         Assert.True(comboBox.IsHandleCreated);
-        Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
+        Assert.NotNull(comboBox.TestAccessor.Dynamic._childEdit);
     }
 }

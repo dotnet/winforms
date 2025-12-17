@@ -19,7 +19,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
 
         buttonAccessibleObject.Parent.Should().Be(controlAccessibleObject);
 
-        bool canGetDefaultActionInternal = buttonAccessibleObject.TestAccessor().Dynamic.CanGetDefaultActionInternal;
+        bool canGetDefaultActionInternal = buttonAccessibleObject.TestAccessor.Dynamic.CanGetDefaultActionInternal;
         canGetDefaultActionInternal.Should().BeFalse();
         control.IsHandleCreated.Should().BeFalse();
     }
@@ -123,7 +123,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         SubCalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        Action action = () => buttonAccessibleObject.TestAccessor().Dynamic.RaiseMouseClick();
+        Action action = () => buttonAccessibleObject.TestAccessor.Dynamic.RaiseMouseClick();
 
         action.Should().NotThrow();
         control.IsHandleCreated.Should().BeTrue();

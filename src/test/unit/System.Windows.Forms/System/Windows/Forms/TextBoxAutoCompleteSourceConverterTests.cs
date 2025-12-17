@@ -20,7 +20,7 @@ public class TextBoxAutoCompleteSourceConverterTests
 
         valuesCollection.Count.Should().Be(8);
 
-        List<object> value = valuesCollection.TestAccessor().Dynamic._values;
+        List<object> value = valuesCollection.TestAccessor.Dynamic._values;
         value.Should().Contain(AutoCompleteSource.AllUrl);
         value.Should().Contain(AutoCompleteSource.AllSystemSources);
         value.Should().Contain(AutoCompleteSource.CustomSource);

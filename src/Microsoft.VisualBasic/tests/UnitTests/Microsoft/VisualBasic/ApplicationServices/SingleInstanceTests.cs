@@ -35,7 +35,7 @@ public class SingleInstanceTests
     {
         var assembly = typeof(WindowsFormsApplicationBase).Assembly;
         var type = assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
-        return type.TestAccessor().Dynamic;
+        return type.TestAccessor.Dynamic;
     }
 
     private bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
