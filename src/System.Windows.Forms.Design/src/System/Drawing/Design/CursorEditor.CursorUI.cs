@@ -64,7 +64,14 @@ public partial class CursorEditor
                 Cursor cursor = (Cursor)Items[e.Index];
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
-                using var brushText = e.ForeColor.GetCachedSolidBrushScope();
+
+                Color textColor = e.ForeColor;
+                if (Application.IsDarkModeEnabled && e.State.HasFlag(DrawItemState.Selected))
+                {
+                    textColor = SystemColors.ControlText;
+                }
+
+                using var brushText = textColor.GetCachedSolidBrushScope();
                 var cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(cursor.Handle), DeviceDpi).Size.Width;
 
                 e.DrawBackground();
