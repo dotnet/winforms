@@ -5757,8 +5757,6 @@ public partial class Form : ContainerControl
                 // So, it is necessary to not set the owner before creating the handle. Otherwise,
                 // the window may never receive Dpi changed event even if its parent has different Dpi.
                 // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
-
-                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
                 if (owner is Form form && owner != oldOwner)
                 {
                     Owner = form;
