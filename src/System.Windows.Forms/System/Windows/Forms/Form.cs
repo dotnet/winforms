@@ -5731,6 +5731,13 @@ public partial class Form : ContainerControl
             // to CreateControl().
             _dialogResult = DialogResult.None;
 
+            // Set dialog owner before CreateControl() so that
+            // FillInCreateParamsStartPosition can access it when positioning maximized forms
+            if (owner is not null && !ownerHwnd.IsNull)
+            {
+                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
+            }
+
             // If "this" is an MDI parent then the window gets activated,
             // causing GetActiveWindow to return "this.handle"... to prevent setting
             // the owner of this to this, we must create the control AFTER calling
