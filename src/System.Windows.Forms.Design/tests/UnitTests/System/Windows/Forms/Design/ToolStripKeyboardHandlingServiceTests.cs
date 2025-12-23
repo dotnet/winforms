@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using Moq;
 
@@ -63,22 +64,36 @@ public class ToolStripKeyboardHandlingServiceTests
     public void RemoveCommands_DoesNotThrow_WhenNoMenuService() =>
         ((Action)_service.RemoveCommands).Should().NotThrow();
 
-    [Fact]
-    public void OnContextMenu_ReturnsTrue_WhenTemplateNodeActive()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void OnContextMenu_ReturnsExpectedResult_BasedOnTemplateNodeActive(bool isActive)
     {
-        _service.TemplateNodeActive = true;
+        _service.TemplateNodeActive = isActive;
 
         bool result = _service.OnContextMenu(10, 10);
 
-        result.Should().BeTrue();
+        result.Should().Be(isActive);
     }
 
-    [Fact]
-    public void OnContextMenu_ReturnsFalse_WhenNotTemplateNodeActive()
+    [Theory]
+    [InlineData(typeof(ToolStripItem))]
+    [InlineData(typeof(Component))]
+    public void OnContextMenu_ReturnsFalse_WhenInvalidSelection(Type mockType)
     {
-        _service.TemplateNodeActive = false;
+        if (mockType == typeof(ToolStripItem))
+        {
+            Mock<ToolStripItem> toolStripItemMock = new();
+            _selectionServiceMock.Setup(s => s.PrimarySelection).Returns((Component?)null);
+            _service.SelectedDesignerControl = toolStripItemMock.Object;
+        }
+        else
+        {
+            Mock<Component> componentMock = new();
+            _selectionServiceMock.Setup(s => s.PrimarySelection).Returns(componentMock.Object);
+        }
 
-        bool result = _service.OnContextMenu(10, 10);
+        bool result = _service.OnContextMenu(100, 200);
 
         result.Should().BeFalse();
     }
