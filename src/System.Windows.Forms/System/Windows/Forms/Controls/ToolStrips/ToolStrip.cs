@@ -4586,7 +4586,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             SnapFocus((HWND)(nint)m.WParamInternal);
 
             // For fix https://github.com/dotnet/winforms/issues/12916
-            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            // Skip this in design mode to avoid modal menu mode intercepting keyboard input
+            // which would prevent typing in the design surface (e.g., DemoConsole).
+            if (!IsInDesignMode)
+            {
+                ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            }
         }
 
         if (!AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE)
