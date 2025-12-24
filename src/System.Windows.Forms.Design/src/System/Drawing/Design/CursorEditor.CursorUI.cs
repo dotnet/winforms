@@ -14,6 +14,7 @@ public partial class CursorEditor
     /// </summary>
     private class CursorUI : ListBox
     {
+        private const int LogicalItemPadding = 4; // 2 pixels top + 2 pixels bottom at 96 DPI
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
 
@@ -21,7 +22,7 @@ public partial class CursorEditor
         {
             Height = ScaleHelper.IsScalingRequired ? ScaleHelper.ScaleToInitialSystemDpi(310) : 310;
 
-            ItemHeight = Math.Max(4 + Cursors.Default.Size.Height, Font.Height);
+            UpdateItemHeight();
             DrawMode = DrawMode.OwnerDrawFixed;
             BorderStyle = BorderStyle.None;
 
@@ -41,6 +42,21 @@ public partial class CursorEditor
         }
 
         public object? Value { get; private set; }
+
+        private void UpdateItemHeight()
+        {
+            // Get the cursor (small icon) height at the current device DPI
+            int cursorHeight = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)DeviceDpi);
+            int scaledPadding = ScaleHelper.ScaleToDpi(LogicalItemPadding, DeviceDpi);
+
+            ItemHeight = Math.Max(scaledPadding + cursorHeight, Font.Height);
+        }
+
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            UpdateItemHeight();
+        }
 
         public void End()
         {
