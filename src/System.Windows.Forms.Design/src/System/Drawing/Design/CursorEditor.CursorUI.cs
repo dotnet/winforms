@@ -96,7 +96,7 @@ public partial class CursorEditor
                 e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth - 1, e.Bounds.Height - padding - 1));
 
                 cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth, e.Bounds.Height - padding));
-                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + textSpacing, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
+                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + margin + cursorWidth + textSpacing, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
 
