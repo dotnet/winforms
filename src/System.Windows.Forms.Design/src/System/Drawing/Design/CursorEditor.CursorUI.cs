@@ -14,7 +14,11 @@ public partial class CursorEditor
     /// </summary>
     private class CursorUI : ListBox
     {
-        private const int LogicalItemPadding = 4; // 2 pixels top + 2 pixels bottom at 96 DPI
+        // Logical (96 DPI) padding values
+        private const int LogicalItemPadding = 4; // 2 pixels top + 2 pixels bottom
+        private const int LogicalItemMargin = 2; // Margin on each side
+        private const int LogicalTextSpacing = 4; // Spacing between cursor and text
+
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
 
@@ -83,12 +87,16 @@ public partial class CursorEditor
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
                 var cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(cursor.Handle), DeviceDpi).Size.Width;
 
-                e.DrawBackground();
-                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
-                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth - 1, e.Bounds.Height - 4 - 1));
+                int margin = ScaleHelper.ScaleToDpi(LogicalItemMargin, DeviceDpi);
+                int padding = ScaleHelper.ScaleToDpi(LogicalItemPadding, DeviceDpi);
+                int textSpacing = ScaleHelper.ScaleToDpi(LogicalTextSpacing, DeviceDpi);
 
-                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
-                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
+                e.DrawBackground();
+                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth, e.Bounds.Height - padding));
+                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth - 1, e.Bounds.Height - padding - 1));
+
+                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth, e.Bounds.Height - padding));
+                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + textSpacing, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
 
