@@ -15,7 +15,7 @@ public partial class CursorEditor
     private class CursorUI : ListBox
     {
         // Logical (96 DPI) padding values
-        private const int LogicalItemPadding = 4; // 2 pixels top + 2 pixels bottom
+        private const int LogicalItemPadding = 4; // Total vertical padding (2 top + 2 bottom)
         private const int LogicalItemMargin = 2; // Margin on each side
         private const int LogicalTextSpacing = 4; // Spacing between cursor and text
 
