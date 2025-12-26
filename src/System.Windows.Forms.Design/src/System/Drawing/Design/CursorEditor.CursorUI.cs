@@ -14,19 +14,15 @@ public partial class CursorEditor
     /// </summary>
     private class CursorUI : ListBox
     {
-        // Logical (96 DPI) padding values
-        private const int LogicalItemPadding = 4; // Total vertical padding (2 top + 2 bottom)
-        private const int LogicalItemMargin = 2; // Margin on each side
-        private const int LogicalTextSpacing = 4; // Spacing between cursor and text
-
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
+        private readonly int _cursorWidth;
 
         public CursorUI()
         {
             Height = ScaleHelper.IsScalingRequired ? ScaleHelper.ScaleToInitialSystemDpi(310) : 310;
 
-            UpdateItemHeight();
+            ItemHeight = Math.Max(4 + Cursors.Default.Size.Height, Font.Height);
             DrawMode = DrawMode.OwnerDrawFixed;
             BorderStyle = BorderStyle.None;
 
@@ -43,24 +39,11 @@ public partial class CursorEditor
                     Items.Add(obj);
                 }
             }
+
+            _cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(Cursors.Default.Handle), DeviceDpi).Size.Width;
         }
 
         public object? Value { get; private set; }
-
-        private void UpdateItemHeight()
-        {
-            // Get the cursor (small icon) height at the current device DPI
-            int cursorHeight = PInvoke.GetCurrentSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON, (uint)DeviceDpi);
-            int scaledPadding = ScaleHelper.ScaleToDpi(LogicalItemPadding, DeviceDpi);
-
-            ItemHeight = Math.Max(scaledPadding + cursorHeight, Font.Height);
-        }
-
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
-        {
-            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            UpdateItemHeight();
-        }
 
         public void End()
         {
@@ -85,18 +68,13 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
-                var cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(cursor.Handle), DeviceDpi).Size.Width;
-
-                int margin = ScaleHelper.ScaleToDpi(LogicalItemMargin, DeviceDpi);
-                int padding = ScaleHelper.ScaleToDpi(LogicalItemPadding, DeviceDpi);
-                int textSpacing = ScaleHelper.ScaleToDpi(LogicalTextSpacing, DeviceDpi);
 
                 e.DrawBackground();
-                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth, e.Bounds.Height - padding));
-                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth - 1, e.Bounds.Height - padding - 1));
+                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth - 1, e.Bounds.Height - 4 - 1));
 
-                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, cursorWidth, e.Bounds.Height - padding));
-                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + margin + cursorWidth + textSpacing, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
+                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + _cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
 
