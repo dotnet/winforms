@@ -253,14 +253,14 @@ internal sealed partial class KeyboardToolTipStateMachine
         try
         {
             ToolTip? toolTip = null;
-            if (source != null)
+            if (source is object)
             {
                 toolTip = _toolToTip[source];
             }
 
             if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip is not null)
             {
-                _currentState = Transition(source, toolTip, @event);
+                _currentState = Transition(source!, toolTip, @event);
             }
             else
             {
