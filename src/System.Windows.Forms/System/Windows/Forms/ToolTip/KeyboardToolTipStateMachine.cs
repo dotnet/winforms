@@ -247,12 +247,17 @@ internal sealed partial class KeyboardToolTipStateMachine
         return wrapper;
     }
 
-    private void Transit(SmEvent @event, IKeyboardToolTip source)
+    private void Transit(SmEvent @event, IKeyboardToolTip? source)
     {
         bool fullFsmResetRequired = false;
         try
         {
-            ToolTip? toolTip = _toolToTip[source];
+            ToolTip? toolTip = null;
+            if (source != null)
+            {
+                toolTip = _toolToTip[source];
+            }
+
             if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip is not null)
             {
                 _currentState = Transition(source, toolTip, @event);
