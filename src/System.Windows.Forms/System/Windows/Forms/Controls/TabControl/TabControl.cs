@@ -287,6 +287,7 @@ public partial class TabControl : Control
             {
                 cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
             }
+
             // Enable owner-draw for vertical tabs in dark mode since standard themes don't support it
             else if (Application.IsDarkModeEnabled &&
                      (_alignment is TabAlignment.Left or TabAlignment.Right))
@@ -1364,14 +1365,12 @@ public partial class TabControl : Control
 
     private void DrawDarkModeTab(DrawItemEventArgs e)
     {
-        // Define dark mode colors - use darker/black backgrounds for better dark mode appearance
-        Color tabStripBackColor = Color.FromArgb(45, 45, 48);  // Tab strip background (matches WM_ERASEBKGND)
         Color backColor = (e.State & DrawItemState.Selected) != 0
-            ? Color.FromArgb(37, 37, 38)   // Selected tab: darker gray (almost black)
-            : Color.FromArgb(28, 28, 28);  // Normal tab: very dark gray (almost black)
+            ? SystemColors.ControlDark
+            : SystemColors.ControlLight;
 
-        Color borderColor = Color.FromArgb(51, 51, 51);  // Dark border
-        Color textColor = Color.FromArgb(241, 241, 241); // Light text
+        Color borderColor = SystemColors.ControlDark;
+        Color textColor = SystemColors.ControlText;
 
         // Draw tab background
         using (SolidBrush brush = new(backColor))
@@ -1382,7 +1381,7 @@ public partial class TabControl : Control
         // Draw tab border
         using (Pen pen = new(borderColor))
         {
-            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
+            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
         }
 
         // Draw tab text
@@ -1403,15 +1402,12 @@ public partial class TabControl : Control
             if (_alignment is TabAlignment.Left or TabAlignment.Right)
             {
                 // Save the current graphics state
-                System.Drawing.Drawing2D.GraphicsState state = e.Graphics.Save();
+                var state = e.Graphics.Save();
 
                 try
                 {
-                    // Calculate rotation angle based on alignment
-                    // Left: text reads bottom-to-top (-90°)
-                    // Right: text reads top-to-bottom (90°)
                     float angle = _alignment == TabAlignment.Left ? -90 : 90;
-                    
+
                     // Calculate the center point for rotation
                     float centerX = e.Bounds.X + e.Bounds.Width / 2f;
                     float centerY = e.Bounds.Y + e.Bounds.Height / 2f;
@@ -1430,10 +1426,8 @@ public partial class TabControl : Control
                         e.Bounds.Width);
 
                     // Use Graphics.DrawString for proper rotation support (TextRenderer doesn't respect transforms)
-                    using (SolidBrush textBrush = new(textColor))
-                    {
-                        e.Graphics.DrawString(text, Font, textBrush, textBounds, format);
-                    }
+                    using SolidBrush textBrush = new(textColor);
+                    e.Graphics.DrawString(text, Font, textBrush, textBounds, format);
                 }
                 finally
                 {
@@ -1444,10 +1438,8 @@ public partial class TabControl : Control
             else
             {
                 // Horizontal tabs - no rotation needed
-                using (SolidBrush textBrush = new(textColor))
-                {
-                    e.Graphics.DrawString(text, Font, textBrush, e.Bounds, format);
-                }
+                using SolidBrush textBrush = new(textColor);
+                e.Graphics.DrawString(text, Font, textBrush, e.Bounds, format);
             }
 
             // Draw focus rectangle if needed
@@ -2192,43 +2184,33 @@ public partial class TabControl : Control
                     try
                     {
                         using Graphics g = Graphics.FromHwnd(HWND);
-                        // Get the display rectangle (TabPage content area)
                         Rectangle displayRect = DisplayRectangle;
-                        
-                        // Fill the border area around the display rectangle to cover the native light border
-                        // The native control draws a border, so we need to paint over it with dark color
-                        using SolidBrush borderBrush = new(Color.FromArgb(45, 45, 48));
-                        
-                        // Calculate the border thickness (typically 2-3 pixels for TabControl)
-                        int borderThickness = 3;
-                        
-                        // Fill the border regions around the display rectangle
+                        using SolidBrush borderBrush = new(SystemColors.ControlDark);
+
+                        int borderThickness = 4;
                         // Top border
-                        g.FillRectangle(borderBrush, 
-                            displayRect.X - borderThickness, 
-                            displayRect.Y - borderThickness, 
-                            displayRect.Width + borderThickness * 2, 
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Y - borderThickness,
+                            displayRect.Width + borderThickness * 2,
                             borderThickness);
-                        
                         // Bottom border
-                        g.FillRectangle(borderBrush, 
-                            displayRect.X - borderThickness, 
-                            displayRect.Bottom, 
-                            displayRect.Width + borderThickness * 2, 
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Bottom,
+                            displayRect.Width + borderThickness * 2,
                             borderThickness);
-                        
                         // Left border
-                        g.FillRectangle(borderBrush, 
-                            displayRect.X - borderThickness, 
-                            displayRect.Y - borderThickness, 
-                            borderThickness, 
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Y - borderThickness,
+                            borderThickness,
                             displayRect.Height + borderThickness * 2);
-                        
                         // Right border
-                        g.FillRectangle(borderBrush, 
-                            displayRect.Right, 
-                            displayRect.Y - borderThickness, 
-                            borderThickness, 
+                        g.FillRectangle(borderBrush,
+                            displayRect.Right,
+                            displayRect.Y - borderThickness,
+                            0,
                             displayRect.Height + borderThickness * 2);
                     }
                     catch
@@ -2236,6 +2218,7 @@ public partial class TabControl : Control
                         // Ignore painting errors
                     }
                 }
+
                 return;
 
             case PInvokeCore.WM_ERASEBKGND:
@@ -2243,13 +2226,13 @@ public partial class TabControl : Control
                 if (Application.IsDarkModeEnabled &&
                     (_alignment is TabAlignment.Left or TabAlignment.Right) &&
                     _drawMode != TabDrawMode.OwnerDrawFixed &&
-                    m.WParamInternal != IntPtr.Zero)
+                    m.WParamInternal != (WPARAM)0)
                 {
                     try
                     {
-                        using Graphics g = Graphics.FromHdc(m.WParamInternal);
-                        // Use the same dark background color as defined in DrawDarkModeTab
-                        using SolidBrush brush = new(Color.FromArgb(45, 45, 48));
+                        using Graphics g = Graphics.FromHdc((nint)m.WParamInternal);
+                        // Use darker background color for tab strip (was used for content area)
+                        using SolidBrush brush = new(SystemColors.Control);
                         g.FillRectangle(brush, ClientRectangle);
                         m.ResultInternal = (LRESULT)1;
                         return;
@@ -2259,6 +2242,7 @@ public partial class TabControl : Control
                         // If Graphics creation fails, fall through to default handling
                     }
                 }
+
                 break;
 
             case MessageId.WM_REFLECT_DRAWITEM:
