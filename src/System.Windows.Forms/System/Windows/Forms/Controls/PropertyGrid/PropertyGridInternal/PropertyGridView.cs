@@ -1298,6 +1298,12 @@ internal sealed partial class PropertyGridView :
             {
                 object[] values = gridEntry.GetPropertyValueList();
 
+                // If values.Length is 0, we can't cycle through anything.
+                if (values.Length == 0)
+                {
+                    return;
+                }
+
                 if (index >= (values.Length - 1))
                 {
                     index = 0;
