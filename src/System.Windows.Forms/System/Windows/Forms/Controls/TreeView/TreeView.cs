@@ -2771,6 +2771,7 @@ public partial class TreeView : Control
                 // TreeViewDrawMode.Normal case
                 // In dark mode with an ImageList, we need to draw the selection ourselves to exclude the icon.
                 // The native TreeView with DarkMode_Explorer theme incorrectly includes the icon in the selection.
+                // This is checked in both ITEMPREPAINT (to hide text and request postpaint) and ITEMPOSTPAINT (to draw text).
                 if (ShouldUseCustomDrawForDarkMode)
                 {
                     // Hide the text by setting text color to background color, similar to OwnerDrawText mode
