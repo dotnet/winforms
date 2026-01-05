@@ -3183,6 +3183,12 @@ internal sealed partial class PropertyGridView :
                 int delta = e.Delta > 0 ? -1 : 1;
                 object[] values = _selectedGridEntry.GetPropertyValueList();
 
+                // Prevent out-of-range access
+                if (values.Length == 0)
+                {
+                    return;
+                }
+
                 if (delta > 0 && index >= (values.Length - 1))
                 {
                     index = 0;
