@@ -2686,6 +2686,13 @@ public partial class TreeView : Control
     }
 
     /// <summary>
+    ///  Gets a value indicating whether the TreeView should use custom drawing for dark mode
+    ///  to fix the selection rectangle incorrectly including the icon.
+    /// </summary>
+    private bool ShouldUseCustomDrawForDarkMode =>
+        _drawMode == TreeViewDrawMode.Normal && Application.IsDarkModeEnabled && ImageList is not null;
+
+    /// <summary>
     ///  Performs custom draw handling
     /// </summary>
     private unsafe void CustomDraw(ref Message m)
@@ -2764,7 +2771,7 @@ public partial class TreeView : Control
                 // TreeViewDrawMode.Normal case
                 // In dark mode with an ImageList, we need to draw the selection ourselves to exclude the icon.
                 // The native TreeView with DarkMode_Explorer theme incorrectly includes the icon in the selection.
-                if (_drawMode == TreeViewDrawMode.Normal && Application.IsDarkModeEnabled && ImageList is not null)
+                if (ShouldUseCustomDrawForDarkMode)
                 {
                     // Hide the text by setting text color to background color, similar to OwnerDrawText mode
                     nmtvcd->clrText = nmtvcd->clrTextBk;
@@ -2806,8 +2813,7 @@ public partial class TreeView : Control
             case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPOSTPAINT:
                 // User draws only the text in OwnerDrawText mode, as explained in comments above
                 // Also handle Normal mode in dark mode with ImageList to draw selection correctly
-                if (_drawMode == TreeViewDrawMode.OwnerDrawText 
-                    || (_drawMode == TreeViewDrawMode.Normal && Application.IsDarkModeEnabled && ImageList is not null))
+                if (_drawMode == TreeViewDrawMode.OwnerDrawText || ShouldUseCustomDrawForDarkMode)
                 {
                     Debug.Assert(nmtvcd->nmcd.dwItemSpec != 0, "Invalid node handle in ITEMPOSTPAINT");
 
