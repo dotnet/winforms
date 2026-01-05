@@ -10,9 +10,8 @@ internal static class Program
     [STAThread]
     public static void Main()
     {
-        Application.EnableVisualStyles();
-        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
-        Form1 form = new();
-        Application.Run(form);
+        ApplicationConfiguration.Initialize();
+        Application.SetColorMode(SystemColorMode.Dark);
+        Application.Run(new Form1());
     }
 }
