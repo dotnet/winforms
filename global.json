@@ -1,6 +1,6 @@
 {
   "sdk": {
-    "version": "10.0.100",
+    "version": "11.0.100-alpha.1.25618.104",
     "allowPrerelease": true,
     "rollForward": "latestFeature",
     "paths": [
@@ -10,7 +10,7 @@
     "errorMessage": "The required .NET SDK wasn't found. Please run ./eng/common/dotnet.cmd/sh to install it."
   },
   "tools": {
-    "dotnet": "10.0.100",
+    "dotnet": "11.0.100-alpha.1.25618.104",
     "runtimes": {
       "dotnet/x64": [
         "$(MicrosoftNETCorePlatformsPackageVersion)"
@@ -24,11 +24,11 @@
     "runner": "Microsoft.Testing.Platform"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.25619.109",
-    "Microsoft.DotNet.CMake.Sdk": "11.0.0-beta.25619.109",
-    "Microsoft.DotNet.Helix.Sdk": "11.0.0-beta.25619.109",
+    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.26055.102",
+    "Microsoft.DotNet.CMake.Sdk": "11.0.0-beta.26055.102",
+    "Microsoft.DotNet.Helix.Sdk": "11.0.0-beta.26055.102",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "11.0.0-alpha.1.25619.109"
+    "Microsoft.NET.Sdk.IL": "11.0.0-alpha.1.26055.102"
   },
   "native-tools": {
     "cmake": "latest"
