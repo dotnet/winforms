@@ -46,10 +46,31 @@ internal partial class MultiSelectRootGridEntry
                 }
                 else
                 {
-                    List<PropertyDescriptor[]>? properties = GetCommonProperties(objects.AsSpan(1), presort: true, tab, parentEntry);
+                    if (objects.Length == 0)
+                    {
+                        return null;
+                    }
 
-                    // This will work for just one as well.
-                    List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(objects.AsSpan(0, 1), presort: false, tab, parentEntry);
+                    // Handle typed arrays that don't support Span<T> covariance.
+                    // When objects is a typed array (e.g., ItemTypeDescriptor[]), AsSpan() throws
+                    // ArrayTypeMismatchException because Span<T> enforces exact type matching.
+                    // Solution: Create intermediate object?[] arrays to enable proper type covariance.
+                    List<PropertyDescriptor[]>? properties = null;
+                    if (objects.Length > 1)
+                    {
+                        object?[] restObjects = new object?[objects.Length - 1];
+                        Array.Copy(objects, 1, restObjects, 0, objects.Length - 1);
+                        properties = GetCommonProperties(restObjects.AsSpan(), presort: true, tab, parentEntry);
+                    }
+
+                    // Process just the first object
+                    object?[] firstObject = [objects[0]];
+                    List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(firstObject.AsSpan(), presort: false, tab, parentEntry);
+
+                    if (objects.Length == 1)
+                    {
+                        properties = firstProperties;
+                    }
 
                     if (properties is not null && firstProperties is not null)
                     {
