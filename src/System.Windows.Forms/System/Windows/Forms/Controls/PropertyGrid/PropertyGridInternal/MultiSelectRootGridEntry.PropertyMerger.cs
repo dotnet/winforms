@@ -63,7 +63,8 @@ internal partial class MultiSelectRootGridEntry
                         properties = GetCommonProperties(restObjects.AsSpan(), presort: true, tab, parentEntry);
                     }
 
-                    // Process just the first object
+                    // Process the first object separately to get its properties in the original declaration order(presort: false),
+                    // which we then use as the baseline when merging properties for both single- and multi-object cases.
                     object?[] firstObject = [objects[0]];
                     List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(firstObject.AsSpan(), presort: false, tab, parentEntry);
 
