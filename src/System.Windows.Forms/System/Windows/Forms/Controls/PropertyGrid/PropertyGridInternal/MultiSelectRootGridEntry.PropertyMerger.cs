@@ -69,10 +69,25 @@ internal partial class MultiSelectRootGridEntry
 
                     if (objects.Length == 1)
                     {
-                        properties = firstProperties;
-                    }
+                        if (firstProperties is null)
+                        {
+                            return null;
+                        }
 
-                    if (properties is not null && firstProperties is not null)
+                        var entries = new MultiPropertyDescriptorGridEntry[firstProperties.Count];
+                        for (int i = 0; i < entries.Length; i++)
+                        {
+                            entries[i] = new MultiPropertyDescriptorGridEntry(
+                                parentEntry.OwnerGrid,
+                                parentEntry,
+                                objects!, // all elements are not null if firstProperties is not null
+                                firstProperties[i],
+                                hide: false);
+                        }
+
+                        result = SortParenEntries(entries);
+                    }
+                    else if (properties is not null && firstProperties is not null)
                     {
                         var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
                         for (int i = 0; i < firstProperties.Count; i++)
