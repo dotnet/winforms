@@ -91,7 +91,6 @@ public partial class RadioButton : ButtonBase
                     _appearance = value;
 
                     // UpdateOwnerDraw checks if OwnerDraw state changed and calls RecreateHandle if needed.
-                    // The transition between Normal and Button appearance affects the OwnerDraw flag in Dark Mode.
                     UpdateOwnerDraw();
 
                     // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
