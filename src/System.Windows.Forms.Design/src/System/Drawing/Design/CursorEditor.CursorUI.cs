@@ -40,7 +40,9 @@ public partial class CursorEditor
                 }
             }
 
-            _cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(Cursors.Default.Handle), DeviceDpi).Size.Width;
+            using Icon defaultIcon = Icon.FromHandle(Cursors.Default.Handle);
+            using Icon scaledDefaultIcon = ScaleHelper.ScaleSmallIconToDpi(defaultIcon, DeviceDpi);
+            _cursorWidth = scaledDefaultIcon.Size.Width;
         }
 
         public object? Value { get; private set; }
