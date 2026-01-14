@@ -31,7 +31,7 @@ There can be various reasons why the server process may be taking longer than th
 
 ### Antivirus is blocking the server process executables
 
-Some customers have reported that the connection timeouts were caused by configurations of their antivirus services. In such cases it is recommended to add exclusion rules for `devevn.exe` and `DesignToolsServer.exe`, and this can unblock these executables and can increase the I/O of the shadow cache. For example, to add an exception to the Windows Defender so that it is not slowed down by the system call hooks Defender uses to provide real-time protection can be done with the following PowerShell command:
+Some customers have reported that the connection timeouts were caused by configurations of their antivirus services. In such cases it is recommended to add exclusion rules for `devenv.exe` and `DesignToolsServer.exe`, and this can unblock these executables and can increase the I/O of the shadow cache. For example, to add an exception to the Windows Defender so that it is not slowed down by the system call hooks Defender uses to provide real-time protection can be done with the following PowerShell command:
 
 ```powershell
 Add-MpPreference -ExclusionProcess 'devenv.exe'
