@@ -89,6 +89,11 @@ public partial class RadioButton : ButtonBase
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                 {
                     _appearance = value;
+
+                    // UpdateOwnerDraw checks if OwnerDraw state changed and calls RecreateHandle if needed.
+                    UpdateOwnerDraw();
+
+                    // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
                     if (OwnerDraw)
                     {
                         Refresh();
@@ -96,9 +101,6 @@ public partial class RadioButton : ButtonBase
                     else
                     {
                         UpdateStyles();
-
-                        // UpdateStyles should also update the UserDraw flag, but it doesn't.
-                        UpdateOwnerDraw();
                     }
 
                     OnAppearanceChanged(EventArgs.Empty);
