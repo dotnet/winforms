@@ -16,6 +16,7 @@ public partial class CursorEditor
     {
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
+        private readonly Dictionary<(Cursor cursor, int dpi), int> _cursorWidthCache = new();
 
         public CursorUI()
         {
@@ -46,6 +47,7 @@ public partial class CursorEditor
         {
             _editorService = null;
             Value = null;
+            _cursorWidthCache.Clear();
         }
 
         protected override void OnClick(EventArgs e)
@@ -65,7 +67,7 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
-                var cursorWidth = ScaleHelper.ScaleSmallIconToDpi(Icon.FromHandle(cursor.Handle), DeviceDpi).Size.Width;
+                int cursorWidth = GetCursorWidthForDpi(cursor, DeviceDpi);
 
                 e.DrawBackground();
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
@@ -74,6 +76,23 @@ public partial class CursorEditor
                 cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
                 e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
+        }
+
+        private int GetCursorWidthForDpi(Cursor cursor, int dpi)
+        {
+            (Cursor cursor, int dpi) key = (cursor, dpi);
+            if (_cursorWidthCache.TryGetValue(key, out int cursorWidth))
+            {
+                return cursorWidth;
+            }
+
+            using Icon wrapper = Icon.FromHandle(cursor.Handle);
+            using Icon clone = (Icon)wrapper.Clone();
+            using Icon scaled = ScaleHelper.ScaleSmallIconToDpi(clone, dpi, alwaysCreateNew: true);
+
+            cursorWidth = scaled.Size.Width;
+            _cursorWidthCache[key] = cursorWidth;
+            return cursorWidth;
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
