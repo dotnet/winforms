@@ -918,10 +918,7 @@ public partial class LinkLabel : Label, IButtonControl
             return;
         }
 
-        if (hoverLink is not null)
-        {
-            hoverLink.State &= ~LinkState.Hover;
-        }
+        hoverLink?.State &= ~LinkState.Hover;
 
         if (pointIn is not null)
         {

@@ -164,11 +164,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         if (disposing)
         {
             PopBehavior();
-            if (_selectionService is not null)
-            {
-                _selectionService.SelectionChanged -= selectionService_SelectionChanged;
-            }
-
+            _selectionService?.SelectionChanged -= selectionService_SelectionChanged;
             _selectionService = null;
             _behaviorService = null;
         }

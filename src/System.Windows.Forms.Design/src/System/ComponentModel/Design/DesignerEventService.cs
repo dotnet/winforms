@@ -240,10 +240,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
         if (sink)
         {
-            if (ss is not null)
-            {
-                ss.SelectionChanged += OnSelectionChanged;
-            }
+            ss?.SelectionChanged += OnSelectionChanged;
 
             if (cs is not null)
             {
@@ -267,10 +264,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         }
         else
         {
-            if (ss is not null)
-            {
-                ss.SelectionChanged -= OnSelectionChanged;
-            }
+            ss?.SelectionChanged -= OnSelectionChanged;
 
             if (cs is not null)
             {

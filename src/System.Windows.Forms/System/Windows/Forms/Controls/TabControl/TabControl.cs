@@ -1019,10 +1019,7 @@ public partial class TabControl : Control
     {
         if (disposing)
         {
-            if (_imageList is not null)
-            {
-                _imageList.Disposed -= DetachImageList;
-            }
+            _imageList?.Disposed -= DetachImageList;
         }
 
         base.Dispose(disposing);

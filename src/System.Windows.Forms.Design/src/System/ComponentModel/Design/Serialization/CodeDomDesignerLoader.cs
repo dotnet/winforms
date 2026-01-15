@@ -593,13 +593,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // our own.
         if (!TryGetService(out ITypeResolutionService? typeResolutionService))
         {
-            typeResolutionService = TypeResolutionService;
-
-            if (typeResolutionService is null)
-            {
-                throw new InvalidOperationException(SR.CodeDomDesignerLoaderNoTypeResolution);
-            }
-
+            typeResolutionService = TypeResolutionService ?? throw new InvalidOperationException(SR.CodeDomDesignerLoaderNoTypeResolution);
             LoaderHost.AddService(typeResolutionService);
             _state[s_stateOwnTypeResolution] = true;
         }

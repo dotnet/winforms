@@ -13,10 +13,7 @@ public partial class ControlDesigner
         public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
         {
             _designer = designer;
-            if (designer is not null)
-            {
-                designer.DisposingHandler += OnDesignerDisposing;
-            }
+            designer?.DisposingHandler += OnDesignerDisposing;
 
             AssignHandle(hwnd);
         }

@@ -70,10 +70,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         Text = "SelectionUIOverlay";
 
         _selSvc = host.GetService<ISelectionService>();
-        if (_selSvc is not null)
-        {
-            _selSvc.SelectionChanged += OnSelectionChanged;
-        }
+        _selSvc?.SelectionChanged += OnSelectionChanged;
 
         // And configure the events we want to listen to.
         host.TransactionOpened += OnTransactionOpened;
@@ -145,10 +142,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     {
         if (disposing)
         {
-            if (_selSvc is not null)
-            {
-                _selSvc.SelectionChanged -= OnSelectionChanged;
-            }
+            _selSvc?.SelectionChanged -= OnSelectionChanged;
 
             if (_host is not null)
             {

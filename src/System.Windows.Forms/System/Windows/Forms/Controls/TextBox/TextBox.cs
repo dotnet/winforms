@@ -197,18 +197,9 @@ public partial class TextBox : TextBoxBase
         {
             if (_autoCompleteCustomSource != value)
             {
-                if (_autoCompleteCustomSource is not null)
-                {
-                    _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
-                }
-
+                _autoCompleteCustomSource?.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
                 _autoCompleteCustomSource = value;
-
-                if (_autoCompleteCustomSource is not null)
-                {
-                    _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
-                }
-
+                _autoCompleteCustomSource?.CollectionChanged += OnAutoCompleteCustomSourceChanged;
                 SetAutoComplete(false);
             }
         }
@@ -512,11 +503,7 @@ public partial class TextBox : TextBoxBase
             // so this will undo it, but on a dispose we'll be Destroying the window anyway.
 
             ResetAutoComplete(true);
-            if (_autoCompleteCustomSource is not null)
-            {
-                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
-            }
-
+            _autoCompleteCustomSource?.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             _stringSource?.ReleaseAutoComplete();
             _stringSource = null;
         }

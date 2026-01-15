@@ -1804,11 +1804,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                     _designerEventService is not null,
                     "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
 
-                if (_designerEventService is not null)
-                {
-                    _designerEventService.ActiveDesignerChanged -= OnActiveDesignerChanged;
-                }
-
+                _designerEventService?.ActiveDesignerChanged -= OnActiveDesignerChanged;
                 _designerEventService = null;
                 SetFlag(Flags.GotDesignerEventService, false);
             }

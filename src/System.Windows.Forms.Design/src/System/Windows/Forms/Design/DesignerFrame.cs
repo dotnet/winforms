@@ -74,10 +74,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 designerHolder.Parent = null;
             }
 
-            if (_splitter is not null)
-            {
-                _splitter.SplitterMoved -= OnSplitterMoved;
-            }
+            _splitter?.SplitterMoved -= OnSplitterMoved;
         }
 
         base.Dispose(disposing);

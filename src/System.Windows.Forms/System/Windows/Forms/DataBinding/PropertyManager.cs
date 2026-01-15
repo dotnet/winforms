@@ -36,12 +36,8 @@ public class PropertyManager : BindingManagerBase
 
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
         {
-            _propInfo = TypeDescriptor.GetProperties(_dataSource).Find(_propName, true);
-            if (_propInfo is null)
-            {
+            _propInfo = TypeDescriptor.GetProperties(_dataSource).Find(_propName, true) ??
                 throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource));
-            }
-
             _propInfo.AddValueChanged(_dataSource, PropertyChanged);
         }
     }

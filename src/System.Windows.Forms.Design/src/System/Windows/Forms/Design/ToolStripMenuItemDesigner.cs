@@ -961,10 +961,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         if (disposing)
         {
             // clean up
-            if (_selectionService is not null)
-            {
-                _selectionService.SelectionChanged -= OnSelectionChanged;
-            }
+            _selectionService?.SelectionChanged -= OnSelectionChanged;
 
             if (_undoEngine is not null)
             {
@@ -1974,10 +1971,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     {
         if (MenuItem is not null)
         {
-            if (MenuItem.DropDown is not null)
-            {
-                MenuItem.DropDown.Disposed -= OnDropDownDisposed;
-            }
+            MenuItem.DropDown?.Disposed -= OnDropDownDisposed;
 
             // This is necessary when the MenuItem's DropDown property is SET to something other than the default DropDown.
             MenuItem.DropDown = null;

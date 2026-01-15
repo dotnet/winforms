@@ -64,10 +64,10 @@ After completing both steps above, Visual Studio will be able to debug both mana
 
 ## Running the Project Against .NET Framework
 
-This project targets multiple frameworks, including .NET Framework 4.8.1. To run or debug it against the .NET Framework instead of .NET (e.g., net10.0-windows), follow the steps below:
+This project targets multiple frameworks, including .NET Framework 4.8.1. To run or debug it against the .NET Framework instead of .NET (e.g., net11.0-windows), follow the steps below:
 
 1. In Visual Studio, locate the Debug dropdown on the top toolbar (next to the green **Start** button).
-2. Click the small downward arrow next to the active configuration. You will see the currently selected framework (typically something like `Framework (net10.0-windows)`).
+2. Click the small downward arrow next to the active configuration. You will see the currently selected framework (typically something like `Framework (net11.0-windows)`).
 3. Click the displayed framework name to open a submenu showing all target frameworks for this project.
 4. Select **net481** from the list.
 5. Build and run the project using any of the usual commands:

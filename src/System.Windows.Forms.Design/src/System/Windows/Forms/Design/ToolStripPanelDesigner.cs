@@ -216,10 +216,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
                 _selectionService = null;
             }
 
-            if (_componentChangeService is not null)
-            {
-                _componentChangeService.ComponentChanged -= OnComponentChanged;
-            }
+            _componentChangeService?.ComponentChanged -= OnComponentChanged;
 
             if (HasComponent)
             {
@@ -335,10 +332,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             _componentChangeService = _designerHost.GetService<IComponentChangeService>();
         }
 
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentChanged += OnComponentChanged;
-        }
+        _componentChangeService?.ComponentChanged += OnComponentChanged;
 
         // Hook up the ControlAdded Event
         Control.ControlAdded += OnControlAdded;

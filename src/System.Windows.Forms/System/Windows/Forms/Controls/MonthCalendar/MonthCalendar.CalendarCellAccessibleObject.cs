@@ -140,7 +140,7 @@ public partial class MonthCalendar
 
         internal override IRawElementProviderSimple.Interface[]? GetRowHeaderItems()
             => _calendarRowAccessibleObject.WeekNumberCellAccessibleObject is AccessibleObject weekNumber
-                ? new IRawElementProviderSimple.Interface[1] { weekNumber }
+                ? [weekNumber]
                 : null;
 
         private protected override bool HasKeyboardFocus
