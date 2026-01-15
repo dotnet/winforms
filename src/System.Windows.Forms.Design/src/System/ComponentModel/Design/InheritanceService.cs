@@ -74,10 +74,7 @@ public class InheritanceService : IInheritanceService, IDisposable
         {
             ncs = site.GetService<INameCreationService>();
             cs = site.GetService<IComponentChangeService>();
-            if (cs is not null)
-            {
-                cs.ComponentAdding += OnComponentAdding;
-            }
+            cs?.ComponentAdding += OnComponentAdding;
         }
 
         try
@@ -223,10 +220,7 @@ public class InheritanceService : IInheritanceService, IDisposable
         }
         finally
         {
-            if (cs is not null)
-            {
-                cs.ComponentAdding -= OnComponentAdding;
-            }
+            cs?.ComponentAdding -= OnComponentAdding;
         }
     }
 

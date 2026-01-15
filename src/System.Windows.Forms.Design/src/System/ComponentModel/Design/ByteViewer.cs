@@ -171,10 +171,10 @@ public class ByteViewer : TableLayoutPanel
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);
         return uc is not UnicodeCategory.Control
-            or UnicodeCategory.Format
-            or UnicodeCategory.LineSeparator
-            or UnicodeCategory.ParagraphSeparator
-            or UnicodeCategory.OtherNotAssigned;
+            and not UnicodeCategory.Format
+            and not UnicodeCategory.LineSeparator
+            and not UnicodeCategory.ParagraphSeparator
+            and not UnicodeCategory.OtherNotAssigned;
     }
 
     /// <summary>

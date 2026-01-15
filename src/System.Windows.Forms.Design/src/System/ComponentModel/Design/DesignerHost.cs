@@ -244,15 +244,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // Otherwise, we search for a normal designer, which can be optionally provided.
         if (_rootComponent is null)
         {
-            designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
-            if (designer is null)
-            {
+            designer = _surface!.CreateDesigner(component, true) as IRootDesigner ??
                 throw new InvalidOperationException(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                 {
                     HelpLink = SR.DesignerHostNoTopLevelDesigner
                 };
-            }
-
             _rootComponent = component;
 
             // Check and see if anyone has set the class name of the root component. We default to the component name.
@@ -446,10 +442,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
             if (_surface is not null)
             {
-                if (_designerEventService is not null)
-                {
-                    _designerEventService.ActiveDesignerChanged -= OnActiveDesignerChanged;
-                }
+                _designerEventService?.ActiveDesignerChanged -= OnActiveDesignerChanged;
 
                 if (this.TryGetService(out DesignSurfaceServiceContainer? dsc))
                 {

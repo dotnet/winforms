@@ -86,20 +86,14 @@ public static partial class ToolStripManager
                     if (_activeHwnd.Handle != IntPtr.Zero)
                     {
                         control = Control.FromHandle(_activeHwnd.Handle);
-                        if (control is not null)
-                        {
-                            control.HandleCreated -= OnActiveHwndHandleCreated;
-                        }
+                        control?.HandleCreated -= OnActiveHwndHandleCreated;
                     }
 
                     _activeHwnd = value;
 
                     // make sure we watch out for handle recreates.
                     control = Control.FromHandle(_activeHwnd.Handle);
-                    if (control is not null)
-                    {
-                        control.HandleCreated += OnActiveHwndHandleCreated;
-                    }
+                    control?.HandleCreated += OnActiveHwndHandleCreated;
                 }
             }
         }
@@ -195,10 +189,7 @@ public static partial class ToolStripManager
                 {
                     // Unsubscribe from handle creates
                     Control? control = Control.FromHandle(ActiveHwnd.Handle);
-                    if (control is not null)
-                    {
-                        control.HandleCreated -= OnActiveHwndHandleCreated;
-                    }
+                    control?.HandleCreated -= OnActiveHwndHandleCreated;
 
                     ActiveHwndInternal = default;
                 }

@@ -449,10 +449,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
             _editorNode?.CloseEditor();
             _editorNode = null;
 
-            if (ToolStripItem is not null)
-            {
-                ToolStripItem.Paint -= OnItemPaint;
-            }
+            ToolStripItem?.Paint -= OnItemPaint;
 
             // Now, unhook the component rename event
             if (TryGetService(out IComponentChangeService cs))
@@ -460,10 +457,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 cs.ComponentRename -= OnComponentRename;
             }
 
-            if (_selectionService is not null)
-            {
-                _selectionService.SelectionChanged -= OnSelectionChanged;
-            }
+            _selectionService?.SelectionChanged -= OnSelectionChanged;
 
             // Clean up the ToolStripItem Glyph if Any
             if (_bodyGlyph is not null && TryGetService(out ToolStripAdornerWindowService toolStripAdornerWindowService)

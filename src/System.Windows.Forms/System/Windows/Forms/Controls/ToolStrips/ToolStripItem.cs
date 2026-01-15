@@ -3190,17 +3190,9 @@ public abstract partial class ToolStripItem :
         {
             Font f = Font;
 
-            if (_owner is not null)
-            {
-                _owner._rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
-            }
-
+            _owner?._rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
             _owner = newOwner;
-
-            if (_owner is not null)
-            {
-                _owner._rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
-            }
+            _owner?._rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
 
             // clear the parent if the owner is null.
             if (newOwner is null)

@@ -100,10 +100,7 @@ internal partial class DataGridViewDesigner : ControlDesigner
             }
 
             // unhook MetaDataChanged handler from the currency manager
-            if (_currencyManager is not null)
-            {
-                _currencyManager.MetaDataChanged -= dataGridViewMetaDataChanged;
-            }
+            _currencyManager?.MetaDataChanged -= dataGridViewMetaDataChanged;
 
             _currencyManager = null;
         }
@@ -227,18 +224,12 @@ internal partial class DataGridViewDesigner : ControlDesigner
         if (newCM != _currencyManager)
         {
             // unwire cm
-            if (_currencyManager is not null)
-            {
-                _currencyManager.MetaDataChanged -= dataGridViewMetaDataChanged;
-            }
+            _currencyManager?.MetaDataChanged -= dataGridViewMetaDataChanged;
 
             _currencyManager = newCM;
 
             // wire cm
-            if (_currencyManager is not null)
-            {
-                _currencyManager.MetaDataChanged += dataGridViewMetaDataChanged;
-            }
+            _currencyManager?.MetaDataChanged += dataGridViewMetaDataChanged;
         }
 
         if (dataGridView.BindingContext is null)

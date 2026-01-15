@@ -16,7 +16,7 @@
     <IsShippingPackage>true</IsShippingPackage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!-- This should point to the last stable released version of this package. -->
-    <PackageValidationBaselineVersion>8.0.0</PackageValidationBaselineVersion>
+    <PackageValidationBaselineVersion>10.0.0</PackageValidationBaselineVersion>
     <AddXamarinPlaceholderFilesToPackage>true</AddXamarinPlaceholderFilesToPackage>
     <PackageDescription>
       Provides access to GDI+ graphics functionality.

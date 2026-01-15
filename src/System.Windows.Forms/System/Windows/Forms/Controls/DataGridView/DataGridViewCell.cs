@@ -119,16 +119,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             ContextMenuStrip? oldValue = Properties.AddOrRemoveValue(s_propCellContextMenuStrip, value);
             if (oldValue != value)
             {
-                if (oldValue is not null)
-                {
-                    oldValue.Disposed -= DetachContextMenuStrip;
-                }
-
-                if (value is not null)
-                {
-                    value.Disposed += DetachContextMenuStrip;
-                }
-
+                oldValue?.Disposed -= DetachContextMenuStrip;
+                value?.Disposed += DetachContextMenuStrip;
                 DataGridView?.OnCellContextMenuStripChanged(this);
             }
         }
@@ -1135,10 +1127,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         if (disposing)
         {
             ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
-            if (contextMenuStrip is not null)
-            {
-                contextMenuStrip.Disposed -= DetachContextMenuStrip;
-            }
+            contextMenuStrip?.Disposed -= DetachContextMenuStrip;
         }
 
         // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this

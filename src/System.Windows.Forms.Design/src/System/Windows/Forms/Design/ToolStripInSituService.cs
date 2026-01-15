@@ -34,10 +34,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
 
         _componentChangeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentRemoved += OnComponentRemoved;
-        }
+        _componentChangeService?.ComponentRemoved += OnComponentRemoved;
     }
 
     /// <summary>
@@ -51,11 +48,8 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
         _toolItemDesigner?.Dispose();
         _toolItemDesigner = null;
 
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
-            _componentChangeService = null;
-        }
+        _componentChangeService?.ComponentRemoved -= OnComponentRemoved;
+        _componentChangeService = null;
     }
 
     private ToolStripKeyboardHandlingService ToolStripKeyBoardService

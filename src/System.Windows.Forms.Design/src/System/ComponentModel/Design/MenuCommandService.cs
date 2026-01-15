@@ -142,11 +142,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     {
         if (disposing)
         {
-            if (_selectionService is not null)
-            {
-                _selectionService.SelectionChanging -= OnSelectionChanging;
-                _selectionService = null;
-            }
+            _selectionService?.SelectionChanging -= OnSelectionChanging;
+            _selectionService = null;
 
             if (_serviceProvider is not null)
             {

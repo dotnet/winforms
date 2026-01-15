@@ -67,11 +67,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
         // unhook the event
         IDesignerSerializationManager? manager = sender as IDesignerSerializationManager;
         Debug.Assert(manager is not null, "manager should not be null!");
-
-        if (manager is not null)
-        {
-            manager.SerializationComplete -= OnSerializationComplete;
-        }
+        manager?.SerializationComplete -= OnSerializationComplete;
     }
 
     /// <summary>

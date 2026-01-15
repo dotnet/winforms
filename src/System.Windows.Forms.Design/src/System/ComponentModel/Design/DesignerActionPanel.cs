@@ -432,10 +432,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         {
             Debug.Assert(TopLevelControl is Form, "DesignerActionPanel must be hosted on a Form.");
             Form form = (Form)TopLevelControl;
-            if (form is not null)
-            {
-                form.FormClosing -= OnFormClosing;
-            }
+            form?.FormClosing -= OnFormClosing;
         }
     }
 

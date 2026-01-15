@@ -91,10 +91,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             if (_activeDesignSurfaceChanged is null)
             {
                 IDesignerEventService? eventService = EventService;
-                if (eventService is not null)
-                {
-                    eventService.ActiveDesignerChanged += OnActiveDesignerChanged;
-                }
+                eventService?.ActiveDesignerChanged += OnActiveDesignerChanged;
             }
 
             _activeDesignSurfaceChanged += value;
@@ -108,10 +105,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             }
 
             IDesignerEventService? eventService = EventService;
-            if (eventService is not null)
-            {
-                eventService.ActiveDesignerChanged -= OnActiveDesignerChanged;
-            }
+            eventService?.ActiveDesignerChanged -= OnActiveDesignerChanged;
         }
     }
 
@@ -126,10 +120,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             if (_designSurfaceCreated is null)
             {
                 IDesignerEventService? eventService = EventService;
-                if (eventService is not null)
-                {
-                    eventService.DesignerCreated += OnDesignerCreated;
-                }
+                eventService?.DesignerCreated += OnDesignerCreated;
             }
 
             _designSurfaceCreated += value;
@@ -143,10 +134,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             }
 
             IDesignerEventService? eventService = EventService;
-            if (eventService is not null)
-            {
-                eventService.DesignerCreated -= OnDesignerCreated;
-            }
+            eventService?.DesignerCreated -= OnDesignerCreated;
         }
     }
 
@@ -161,10 +149,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             if (_designSurfaceDisposed is null)
             {
                 IDesignerEventService? eventService = EventService;
-                if (eventService is not null)
-                {
-                    eventService.DesignerDisposed += OnDesignerDisposed;
-                }
+                eventService?.DesignerDisposed += OnDesignerDisposed;
             }
 
             _designSurfaceDisposed += value;
@@ -178,10 +163,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             }
 
             IDesignerEventService? eventService = EventService;
-            if (eventService is not null)
-            {
-                eventService.DesignerDisposed -= OnDesignerDisposed;
-            }
+            eventService?.DesignerDisposed -= OnDesignerDisposed;
         }
     }
 
@@ -197,10 +179,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             if (_selectionChanged is null)
             {
                 IDesignerEventService? eventService = EventService;
-                if (eventService is not null)
-                {
-                    eventService.SelectionChanged += OnSelectionChanged;
-                }
+                eventService?.SelectionChanged += OnSelectionChanged;
             }
 
             _selectionChanged += value;
@@ -214,10 +193,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             }
 
             IDesignerEventService? eventService = EventService;
-            if (eventService is not null)
-            {
-                eventService.SelectionChanged -= OnSelectionChanged;
-            }
+            eventService?.SelectionChanged -= OnSelectionChanged;
         }
     }
 

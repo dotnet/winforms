@@ -233,18 +233,9 @@ public partial class ComboBox : ListControl
                 return;
             }
 
-            if (_autoCompleteCustomSource is not null)
-            {
-                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
-            }
-
+            _autoCompleteCustomSource?.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             _autoCompleteCustomSource = value;
-
-            if (_autoCompleteCustomSource is not null)
-            {
-                _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
-            }
-
+            _autoCompleteCustomSource?.CollectionChanged += OnAutoCompleteCustomSourceChanged;
             SetAutoComplete(false, true);
         }
     }
@@ -1850,11 +1841,7 @@ public partial class ComboBox : ListControl
     {
         if (disposing)
         {
-            if (_autoCompleteCustomSource is not null)
-            {
-                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
-            }
-
+            _autoCompleteCustomSource?.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             _stringSource?.ReleaseAutoComplete();
             _stringSource = null;
         }

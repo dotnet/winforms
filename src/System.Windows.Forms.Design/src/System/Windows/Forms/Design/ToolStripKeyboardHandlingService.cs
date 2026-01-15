@@ -65,10 +65,7 @@ internal class ToolStripKeyboardHandlingService
 
         _componentChangeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentRemoved += OnComponentRemoved;
-        }
+        _componentChangeService?.ComponentRemoved += OnComponentRemoved;
     }
 
     // Currently active TemplateNode
@@ -1632,11 +1629,8 @@ internal class ToolStripKeyboardHandlingService
             _selectionService = null;
         }
 
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
-            _componentChangeService = null;
-        }
+        _componentChangeService?.ComponentRemoved -= OnComponentRemoved;
+        _componentChangeService = null;
 
         _currentSelection = null;
         _shiftPrimary = null;

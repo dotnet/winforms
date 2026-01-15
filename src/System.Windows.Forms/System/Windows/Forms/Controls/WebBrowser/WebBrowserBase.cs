@@ -748,10 +748,7 @@ public unsafe partial class WebBrowserBase : Control
             SetAXHostState(WebBrowserHelper.s_addedSelectionHandler, true);
 
             ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
-            if (iss is not null)
-            {
-                iss.SelectionChanging += SelectionChangeHandler;
-            }
+            iss?.SelectionChanging += SelectionChangeHandler;
         }
     }
 
@@ -763,10 +760,7 @@ public unsafe partial class WebBrowserBase : Control
             SetAXHostState(WebBrowserHelper.s_addedSelectionHandler, false);
 
             ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
-            if (iss is not null)
-            {
-                iss.SelectionChanging -= SelectionChangeHandler;
-            }
+            iss?.SelectionChanging -= SelectionChangeHandler;
         }
 
         return retVal;

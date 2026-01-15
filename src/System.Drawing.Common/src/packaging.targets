@@ -17,10 +17,10 @@
     <PlaceholderFile>$(MSBuildThisFileDirectory)_._</PlaceholderFile>
   </PropertyGroup>
 
-  <!-- Main packages don't include assets for net6.0 and net7.0 anymore. -->
+  <!-- Main packages don't include assets for net8.0 and net9.0 anymore. -->
   <ItemGroup>
-    <PackageValidationBaselineFrameworkToIgnore Include="net6.0" />
-    <PackageValidationBaselineFrameworkToIgnore Include="net7.0" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net8.0" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net9.0" />
   </ItemGroup>
 
   <ItemGroup>

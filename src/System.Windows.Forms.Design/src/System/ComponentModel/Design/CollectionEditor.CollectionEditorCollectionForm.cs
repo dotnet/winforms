@@ -957,10 +957,7 @@ public partial class CollectionEditor
             DialogResult result = DialogResult.OK;
             try
             {
-                if (changeService is not null)
-                {
-                    changeService.ComponentChanged += OnComponentChanged;
-                }
+                changeService?.ComponentChanged += OnComponentChanged;
 
                 // This is cached across requests, so reset the initial focus.
                 ActiveControl = _listBox;
@@ -968,10 +965,7 @@ public partial class CollectionEditor
             }
             finally
             {
-                if (changeService is not null)
-                {
-                    changeService.ComponentChanged -= OnComponentChanged;
-                }
+                changeService?.ComponentChanged -= OnComponentChanged;
             }
 
             return result;

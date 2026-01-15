@@ -408,10 +408,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             ParentInternal.CreateControl(true);
 
             ContainerControl? containingControl = ContainingControl;
-            if (containingControl is not null)
-            {
-                containingControl.VisibleChanged += _onContainerVisibleChanged;
-            }
+            containingControl?.VisibleChanged += _onContainerVisibleChanged;
         }
     }
 

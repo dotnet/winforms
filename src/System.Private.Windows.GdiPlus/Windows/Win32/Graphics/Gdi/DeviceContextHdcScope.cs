@@ -131,12 +131,7 @@ internal readonly ref struct DeviceContextHdcScope
 
             if (HDC.IsNull)
             {
-                graphics = provider.GetGraphics(createIfNeeded: true);
-                if (graphics is null)
-                {
-                    throw new InvalidOperationException();
-                }
-
+                graphics = provider.GetGraphics(createIfNeeded: true) ?? throw new InvalidOperationException();
                 DeviceContext = graphics;
             }
         }

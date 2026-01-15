@@ -61,16 +61,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
             ContextMenuStrip? oldValue = Properties.AddOrRemoveValue(s_propContextMenuStrip, value);
             if (oldValue != value)
             {
-                if (oldValue is not null)
-                {
-                    oldValue.Disposed -= DetachContextMenuStrip;
-                }
-
-                if (value is not null)
-                {
-                    value.Disposed += DetachContextMenuStrip;
-                }
-
+                oldValue?.Disposed -= DetachContextMenuStrip;
+                value?.Disposed += DetachContextMenuStrip;
                 DataGridView?.OnBandContextMenuStripChanged(this);
             }
         }
@@ -762,10 +754,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         if (disposing)
         {
             ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
-            if (contextMenuStrip is not null)
-            {
-                contextMenuStrip.Disposed -= DetachContextMenuStrip;
-            }
+            contextMenuStrip?.Disposed -= DetachContextMenuStrip;
         }
 
         // If you are adding releasing unmanaged resources code here (disposing == false),
