@@ -46,12 +46,49 @@ internal partial class MultiSelectRootGridEntry
                 }
                 else
                 {
-                    List<PropertyDescriptor[]>? properties = GetCommonProperties(objects.AsSpan(1), presort: true, tab, parentEntry);
+                    if (objects.Length == 0)
+                    {
+                        return null;
+                    }
 
-                    // This will work for just one as well.
-                    List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(objects.AsSpan(0, 1), presort: false, tab, parentEntry);
+                    // Handle typed arrays that don't support Span<T> covariance.
+                    // When objects is a typed array (e.g., ItemTypeDescriptor[]), AsSpan() throws
+                    // ArrayTypeMismatchException because Span<T> enforces exact type matching.
+                    // Solution: Create intermediate object?[] arrays to enable proper type covariance.
+                    List<PropertyDescriptor[]>? properties = null;
+                    if (objects.Length > 1)
+                    {
+                        object?[] restObjects = new object?[objects.Length - 1];
+                        Array.Copy(objects, 1, restObjects, 0, objects.Length - 1);
+                        properties = GetCommonProperties(restObjects.AsSpan(), presort: true, tab, parentEntry);
+                    }
 
-                    if (properties is not null && firstProperties is not null)
+                    // Process the first object separately to get its properties in the original declaration order(presort: false),
+                    // which we then use as the baseline when merging properties for both single- and multi-object cases.
+                    object?[] firstObject = [objects[0]];
+                    List<PropertyDescriptor[]>? firstProperties = GetCommonProperties(firstObject.AsSpan(), presort: false, tab, parentEntry);
+
+                    if (objects.Length == 1)
+                    {
+                        if (firstProperties is null)
+                        {
+                            return null;
+                        }
+
+                        var entries = new MultiPropertyDescriptorGridEntry[firstProperties.Count];
+                        for (int i = 0; i < entries.Length; i++)
+                        {
+                            entries[i] = new MultiPropertyDescriptorGridEntry(
+                                parentEntry.OwnerGrid,
+                                parentEntry,
+                                objects!, // all elements are not null if firstProperties is not null
+                                firstProperties[i],
+                                hide: false);
+                        }
+
+                        result = SortParenEntries(entries);
+                    }
+                    else if (properties is not null && firstProperties is not null)
                     {
                         var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
                         for (int i = 0; i < firstProperties.Count; i++)

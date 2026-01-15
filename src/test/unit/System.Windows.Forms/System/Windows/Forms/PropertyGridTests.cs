@@ -4175,6 +4175,82 @@ public partial class PropertyGridTests
         getPropertiesInvokeCount2.Should().Be(1);
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/14187
+    [WinFormsFact]
+    public void PropertyGrid_SelectedObjects_TypedArray_DisplaysPropertiesCorrectly()
+    {
+        using PropertyGrid propertyGrid = new();
+
+        propertyGrid.PropertySort = PropertySort.NoSort;
+
+        using Button button1 = new() { Name = "Button1", Text = "Button1", Visible = true };
+        using CheckBox checkbox1 = new() { Name = "CheckBox1", Text = "CheckBox1", Visible = true };
+
+        var descriptors = new CustomTypeDescriptor[]
+        {
+            new ItemTypeDescriptor(checkbox1, TypeDescriptor.GetProvider(checkbox1).GetTypeDescriptor(checkbox1)!),
+            new ItemTypeDescriptor(button1, TypeDescriptor.GetProvider(button1).GetTypeDescriptor(button1)!)
+        };
+
+        propertyGrid.SelectedObjects = descriptors;
+        propertyGrid.SelectedObjects.Should().HaveCount(2);
+
+        PropertyGridView propertyGridView = propertyGrid.Controls.OfType<PropertyGridView>().FirstOrDefault()!;
+        propertyGridView.Should().NotBeNull();
+
+        GridEntryCollection topLevelEntries = propertyGridView.TopLevelGridEntries;
+
+        topLevelEntries.Should().NotBeNull("TopLevelGridEntries should not be null when properties are merged correctly");
+        topLevelEntries!.Count.Should().BeGreaterThan(0, "PropertyGrid should display properties when typed array is used");
+
+        propertyGrid.SelectedGridItem.Should().NotBeNull("SelectedGridItem should be set when properties exist");
+    }
+
+    private class ItemTypeDescriptor : CustomTypeDescriptor
+    {
+        private readonly WeakReference _component;
+
+        public object Component => _component.Target;
+
+        public ItemTypeDescriptor(object component, ICustomTypeDescriptor parent)
+            : base(parent)
+        {
+            _component = new WeakReference(component);
+        }
+
+#pragma warning disable IL2046 // 'RequiresUnreferencedCodeAttribute' annotations must match across all interface implementations or overrides.
+        public override PropertyDescriptorCollection GetProperties()
+#pragma warning restore IL2046 // 'RequiresUnreferencedCodeAttribute' annotations must match across all interface implementations or overrides.
+        {
+            var properties = base.GetProperties();
+            return ProcessProperties(properties);
+        }
+
+#pragma warning disable IL2046 // 'RequiresUnreferencedCodeAttribute' annotations must match across all interface implementations or overrides.
+        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
+#pragma warning restore IL2046 // 'RequiresUnreferencedCodeAttribute' annotations must match across all interface implementations or overrides.
+        {
+            var properties = base.GetProperties(attributes);
+            return ProcessProperties(properties);
+        }
+
+        public override object GetPropertyOwner(PropertyDescriptor pd)
+        {
+            return Component;
+        }
+
+        private static PropertyDescriptorCollection ProcessProperties(PropertyDescriptorCollection props)
+        {
+            var properties = new PropertyDescriptor[props.Count];
+            for (var i = 0; i < props.Count; i++)
+            {
+                properties[i] = props[i];
+            }
+
+            return new PropertyDescriptorCollection(properties);
+        }
+    }
+
     #region classes used for PropertyGrid_FullRefreshShouldTriggerTypeConverterGetProperties
     [TypeConverter(typeof(MyTypeConverter))]
     private class SelectedObject
