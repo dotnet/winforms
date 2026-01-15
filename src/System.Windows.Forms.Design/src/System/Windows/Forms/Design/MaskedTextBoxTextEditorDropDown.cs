@@ -48,8 +48,8 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
         BackColor = Drawing.SystemColors.Control;
         BorderStyle = BorderStyle.FixedSingle;
         Name = "MaskedTextBoxTextEditorDropDown";
-        Padding = new Padding(16);
-        Size = new Drawing.Size(100, 52);
+        Padding = new Padding(LogicalToDeviceUnits(16));
+        Size = LogicalToDeviceUnits(new Drawing.Size(100, 52));
         ((System.ComponentModel.ISupportInitialize)(_errorProvider)).EndInit();
         ResumeLayout(false);
         PerformLayout();
