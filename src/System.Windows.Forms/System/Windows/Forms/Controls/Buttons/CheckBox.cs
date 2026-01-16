@@ -75,6 +75,13 @@ public partial class CheckBox : ButtonBase
             using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
             {
                 _appearance = value;
+
+                // UpdateOwnerDraw synchronizes control styles with the OwnerDraw state and recreates
+                // the handle if they differ. Since we hijack FlatStyle.Standard for DarkMode, the transition
+                // between Normal and Button appearance is critical for updating the OwnerDraw flag.
+                UpdateOwnerDraw();
+
+                // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
                 if (OwnerDraw)
                 {
                     Refresh();
@@ -82,11 +89,6 @@ public partial class CheckBox : ButtonBase
                 else
                 {
                     UpdateStyles();
-
-                    // UpdateStyles should also update the UserDraw flag, but it doesn't.
-                    // Since we hijack FlatStyle.Standard for DarkMode and let that SystemRender,
-                    // the threshold from Normal to Button is important to update the OwnerDraw flag.
-                    UpdateOwnerDraw();
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
