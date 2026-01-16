@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.CompilerServices;
 using Windows.Win32.System.Variant;
 
 namespace Windows.Win32.System.Com;
@@ -67,7 +68,8 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T : unmanaged, IC
 
     public void Dispose() => _value.Dispose();
 
-    public static implicit operator SAFEARRAY**(in ComSafeArrayScope<T> scope) => scope._value;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator SAFEARRAY**(in ComSafeArrayScope<T> scope) => (SAFEARRAY**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 
     public static implicit operator SAFEARRAY*(in ComSafeArrayScope<T> scope) => scope._value;
 }
