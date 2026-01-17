@@ -3,6 +3,8 @@
 
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Drawing.Imaging;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -319,14 +321,34 @@ public unsafe class ClipboardCoreTests
         outData1.GetData(format, autoConvert: false).Should().Be(outData2.GetData(format, autoConvert: false));
     }
 
-    [Fact]
-    public void SetData_Int_GetReturnsExpected()
+    public static TheoryData<object, Type?> TestData => new()
     {
-        ClipboardCore.SetData(new DataObject(SomeDataObject.Format, 1), copy: false, retryTimes: 1, retryDelay: 0);
+        { Color.Black, null },
+        { new FileNotFoundException(), typeof(FileNotFoundException) },
+        { 1, null }
+    };
+
+    [Theory]
+    [MemberData(nameof(TestData))]
+    public void SetData_CustomFormat_GetReturnsExpected(object inputData, Type? expectedExceptionType)
+    {
+        string format = nameof(SetData_CustomFormat_GetReturnsExpected);
+        DataObject dataObject = new(format, inputData);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
         ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
         outData.Should().NotBeNull();
-        outData.GetDataPresent("SomeDataObjectId").Should().BeTrue();
-        outData.GetData("SomeDataObjectId").Should().Be(1);
+        outData.GetDataPresent(format).Should().BeTrue();
+
+        if (expectedExceptionType is null)
+        {
+            outData.GetData(format).Should().Be(inputData);
+        }
+        else
+        {
+            outData.GetData(format).Should().BeOfType(expectedExceptionType);
+        }
     }
 
     [Theory]
@@ -433,5 +455,103 @@ public unsafe class ClipboardCoreTests
         outData.Should().NotBeNull();
         outData.GetDataPresent(DataFormatNames.WaveAudio).Should().BeTrue();
         outData.GetData(DataFormatNames.WaveAudio).Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
+    }
+
+    [Theory]
+    [InlineData(1, true, 0, 0)]
+    [InlineData(1, false, 1, 2)]
+    [InlineData("data", true, 0, 0)]
+    [InlineData("data", false, 1, 2)]
+    public void SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
+    {
+        DataObject dataObject = new(data);
+        if (copy)
+        {
+            Assert.Throws<NotImplementedException>(() => ClipboardCore.SetData(dataObject, copy, retryTimes, retryDelay));
+        }
+        else
+        {
+            HRESULT result = ClipboardCore.SetData(dataObject, copy, retryTimes, retryDelay);
+            result.Should().Be(HRESULT.S_OK);
+
+            ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes, retryDelay);
+            outData.Should().NotBeNull();
+            outData.GetDataPresent(data.GetType()).Should().BeTrue();
+            outData.GetData(data.GetType().FullName!).Should().Be(data);
+        }
+    }
+
+    [Fact]
+    public void SetFileDropList_Invoke_GetReturnsExpected()
+    {
+        StringCollection filePaths =
+        [
+            "filePath",
+            "filePath2"
+        ];
+
+        DataObject dataObject = new(DataFormatNames.FileDrop, filePaths);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.FileDrop).Should().BeTrue();
+        outData.GetData(DataFormatNames.FileDrop).Should().BeEquivalentTo(filePaths);
+    }
+
+    [Fact]
+    public void SetImage_InvokeBitmap_GetReturnsExpected()
+    {
+        using Bitmap bitmap = new(10, 10);
+        bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+        DataObject dataObject = new(DataFormatNames.Bitmap, bitmap);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.Bitmap).Should().BeTrue();
+
+        var getDataResult = outData.GetData(DataFormatNames.Bitmap).Should().BeOfType<Bitmap>().Subject;
+        getDataResult.Size.Should().Be(bitmap.Size);
+        getDataResult.GetPixel(1, 2).Should().Be(Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+    }
+
+    [Theory]
+    [InlineData("bitmaps/telescope_01.wmf")]
+    [InlineData("bitmaps/milkmateya01.emf")]
+    public void SetImage_InvokeMetafile_and_EnhancedMetafile_GetReturnsExpected(string metafilePath)
+    {
+        using Metafile metafile = new(metafilePath);
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
+        DataObject dataObject = new(DataFormatNames.Bitmap, metafile);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(DataFormatNames.Bitmap).Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(DataFormatNames.Text)]
+    [InlineData(DataFormatNames.UnicodeText)]
+    [InlineData(DataFormatNames.Rtf)]
+    [InlineData(DataFormatNames.Html)]
+    [InlineData(DataFormatNames.Xaml)]
+    [InlineData(DataFormatNames.Csv)]
+    public void SetText_InvokeStringTextDataFormat_GetReturnsExpected(string dataFormatName)
+    {
+        DataObject dataObject = new(dataFormatName, "text");
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
+        outData.Should().NotBeNull();
+        outData.GetDataPresent(dataFormatName).Should().BeTrue();
+        outData.GetData(dataFormatName).Should().Be("text");
     }
 }
