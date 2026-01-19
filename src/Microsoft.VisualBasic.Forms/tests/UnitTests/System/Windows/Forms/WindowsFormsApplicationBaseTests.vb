@@ -70,12 +70,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using splashScreenForm As New Form
                 Using form2 As New Form
                     SplashScreen = form2
-                    splashScreenForm.Name = NameOf(splashScreenForm)
                     MainForm = splashScreenForm
                     MainForm.Should.Be(splashScreenForm)
                     SplashScreen.Should.Be(form2)
                     ApplicationContext.Should.NotBeNull()
-                    ApplicationContext.MainForm.Name.Should.Be(NameOf(splashScreenForm))
 
                     testCode = Sub() SplashScreen = splashScreenForm
                     testCode.Should.Throw(Of ArgumentException)()
@@ -83,6 +81,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     OpenForms.Count.Should.Be(0)
                     SplashScreen.Show()
                     OpenForms.Count.Should.Be(1)
+
+                    splashScreenForm.Name = NameOf(splashScreenForm)
+                    ApplicationContext.MainForm.Name.Should.Be(NameOf(splashScreenForm))
                     SplashScreen = Nothing
                 End Using
             End Using
@@ -117,11 +118,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testCode As Action
             Using form1 As New Form
                 SplashScreen = form1
+                Dim handle As IntPtr = form1.Handle
                 testCode = Sub() ShowSplashScreen()
                 testCode.Should.NotThrow()
+
+                testCode = Sub() HideSplashScreen()
+                testCode.Should.NotThrow()
             End Using
-            testCode = Sub() HideSplashScreen()
-            testCode.Should.NotThrow()
             SplashScreen = Nothing
         End Sub
 
