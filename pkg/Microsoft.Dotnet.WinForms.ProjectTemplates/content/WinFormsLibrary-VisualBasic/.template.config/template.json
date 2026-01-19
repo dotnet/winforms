@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a class library that targets .NET Windows Forms (WinForms).",
   "groupIdentity": "Microsoft.Common.WinForms.Library",
-  "precedence": "10000",
-  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.10.0",
+  "precedence": "11000",
+  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.11.0",
   "shortName": "winformslib",
   "tags": {
     "language": "VB",

@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a .NET Windows Forms (WinForms) App.",
   "groupIdentity": "Microsoft.Common.WinForms",
-  "precedence": "10000",
-  "identity": "Microsoft.Common.WinForms.CSharp.10.0",
+  "precedence": "11000",
+  "identity": "Microsoft.Common.WinForms.CSharp.11.0",
   "shortName": "winforms",
   "tags": {
     "language": "C#",
