@@ -42,10 +42,7 @@ public partial class MainForm : Form
             // - try to get a ptr to ISelectionService interface
             // - if we obtain it then hook the SelectionChanged event
             _selectionService = (ISelectionService)designSurfaceExtended.GetIDesignerHost().GetService(typeof(ISelectionService));
-            if (_selectionService is not null)
-            {
-                _selectionService.SelectionChanged += OnSelectionChanged;
-            }
+            _selectionService?.SelectionChanged += OnSelectionChanged;
 
             ((Control)(designSurfaceExtended as DesignSurface).View).KeyUp += (s, e) =>
             {

@@ -139,16 +139,10 @@ internal class TabControlDesigner : ParentControlDesigner
         if (disposing)
         {
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
-            if (svc is not null)
-            {
-                svc.SelectionChanged -= OnSelectionChanged;
-            }
+            svc?.SelectionChanged -= OnSelectionChanged;
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs is not null)
-            {
-                cs.ComponentChanged -= OnComponentChanged;
-            }
+            cs?.ComponentChanged -= OnComponentChanged;
 
             if (HasComponent && Control is TabControl tabControl)
             {
@@ -210,16 +204,10 @@ internal class TabControlDesigner : ParentControlDesigner
         Debug.Assert(control is not null, "Component must be a tab control, it is a: " + component.GetType().FullName);
 
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
-        if (svc is not null)
-        {
-            svc.SelectionChanged += OnSelectionChanged;
-        }
+        svc?.SelectionChanged += OnSelectionChanged;
 
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (cs is not null)
-        {
-            cs.ComponentChanged += OnComponentChanged;
-        }
+        cs?.ComponentChanged += OnComponentChanged;
 
         if (control is not null)
         {

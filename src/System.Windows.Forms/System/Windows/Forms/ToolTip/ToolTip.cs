@@ -1760,10 +1760,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             // Find the Form for associated Control and hook up to the Deactivated event
             // to hide the shown tooltip.
             Form? baseFrom = tool.FindForm();
-            if (baseFrom is not null)
-            {
-                baseFrom.Deactivate -= BaseFormDeactivate;
-            }
+            baseFrom?.Deactivate -= BaseFormDeactivate;
         }
 
         // Clear off the toplevel control.
@@ -1863,10 +1860,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             // Lets find the Form for associated Control
             // and hook up to the Deactivated event to Hide the Shown tooltip.
             Form? baseFrom = tool.FindForm();
-            if (baseFrom is not null)
-            {
-                baseFrom.Deactivate += BaseFormDeactivate;
-            }
+            baseFrom?.Deactivate += BaseFormDeactivate;
         }
     }
 

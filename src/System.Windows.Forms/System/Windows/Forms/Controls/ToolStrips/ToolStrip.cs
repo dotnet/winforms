@@ -958,18 +958,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 EventHandler handler = new(ImageListRecreateHandle);
 
                 // Remove the previous imagelist handle recreate handler.
-                if (_imageList is not null)
-                {
-                    _imageList.RecreateHandle -= handler;
-                }
+                _imageList?.RecreateHandle -= handler;
 
                 _imageList = value;
 
                 // Add the new imagelist handle recreate handler.
-                if (value is not null)
-                {
-                    value.RecreateHandle += handler;
-                }
+                value?.RecreateHandle += handler;
 
                 foreach (ToolStripItem item in Items)
                 {

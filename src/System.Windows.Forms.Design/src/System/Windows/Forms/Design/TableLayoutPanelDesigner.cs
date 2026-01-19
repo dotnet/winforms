@@ -794,10 +794,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         if (disposing)
         {
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host is not null)
-            {
-                host.TransactionClosing -= OnTransactionClosing;
-            }
+            host?.TransactionClosing -= OnTransactionClosing;
 
             if (_undoEngine is not null)
             {
@@ -1496,11 +1493,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if (!Undoing)
         {
-            if (_undoEngine is not null)
-            {
-                _undoEngine.Undone += OnUndone;
-            }
-
+            _undoEngine?.Undone += OnUndone;
             Undoing = true;
         }
     }
@@ -1509,15 +1502,10 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         if (Undoing)
         {
-            if (_undoEngine is not null)
-            {
-                _undoEngine.Undone -= OnUndone;
-            }
-
+            _undoEngine?.Undone -= OnUndone;
             Undoing = false;
 
             bool isSafeToRefresh = EnsureAvailableStyles();
-
             if (isSafeToRefresh)
             {
                 Refresh();

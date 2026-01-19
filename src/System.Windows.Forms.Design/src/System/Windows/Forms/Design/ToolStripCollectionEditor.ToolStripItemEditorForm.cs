@@ -161,11 +161,7 @@ internal partial class ToolStripCollectionEditor
                     }
                     else
                     {
-                        if (_componentChangeSvc is not null)
-                        {
-                            _componentChangeSvc.ComponentChanged -= OnComponentChanged;
-                        }
-
+                        _componentChangeSvc?.ComponentChanged -= OnComponentChanged;
                         _componentChangeSvc = null;
                         _selectedItemProps.Site = null;
                     }

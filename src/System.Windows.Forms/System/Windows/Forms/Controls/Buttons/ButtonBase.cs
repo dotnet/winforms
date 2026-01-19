@@ -835,11 +835,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         if (disposing)
         {
             StopAnimate();
-            if (_imageList is not null)
-            {
-                _imageList.Disposed -= DetachImageList;
-            }
-
+            _imageList?.Disposed -= DetachImageList;
             _textToolTip?.Dispose();
             _textToolTip = null;
         }

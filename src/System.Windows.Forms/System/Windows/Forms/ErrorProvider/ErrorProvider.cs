@@ -173,17 +173,9 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 return;
             }
 
-            if (_parentControl is not null)
-            {
-                _parentControl.BindingContextChanged -= _propChangedEvent;
-            }
-
+            _parentControl?.BindingContextChanged -= _propChangedEvent;
             _parentControl = value;
-
-            if (_parentControl is not null)
-            {
-                _parentControl.BindingContextChanged += _propChangedEvent;
-            }
+            _parentControl?.BindingContextChanged += _propChangedEvent;
 
             SetErrorManager(DataSource, DataMember, force: true);
         }
@@ -646,11 +638,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         Debug.Assert(dsInit is not null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
         Debug.Assert(dsInit.IsInitialized, "ErrorProvider: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
 
-        if (dsInit is not null)
-        {
-            dsInit.Initialized -= DataSource_Initialized;
-        }
-
+        dsInit?.Initialized -= DataSource_Initialized;
         EndInitCore();
     }
 

@@ -442,10 +442,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void HookComponentChangedEventHandler(IComponentChangeService componentChangeService)
     {
-        if (componentChangeService is not null)
-        {
-            componentChangeService.ComponentChanged += componentChanged;
-        }
+        componentChangeService?.ComponentChanged += componentChanged;
     }
 
     #region Windows Form Designer generated code
@@ -1166,10 +1163,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void UnhookComponentChangedEventHandler(IComponentChangeService componentChangeService)
     {
-        if (componentChangeService is not null)
-        {
-            componentChangeService.ComponentChanged -= componentChanged;
-        }
+        componentChangeService?.ComponentChanged -= componentChanged;
     }
 
     private static bool ValidateName(IContainer container, string siteName, IComponent component)

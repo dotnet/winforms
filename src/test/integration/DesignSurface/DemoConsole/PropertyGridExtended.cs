@@ -26,10 +26,7 @@ public class PropertyGridExtended : PropertyGrid
 
     protected override void Dispose(bool disposing)
     {
-        if (_componentChangeService is not null)
-        {
-            _componentChangeService.ComponentChanged -= OnComponentChanged;
-        }
+        _componentChangeService?.ComponentChanged -= OnComponentChanged;
 
         base.Dispose(disposing);
     }

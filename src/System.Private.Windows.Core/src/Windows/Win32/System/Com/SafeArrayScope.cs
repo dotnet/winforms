@@ -45,7 +45,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
         else if (typeof(T) == typeof(int))
         {
-            if (value->VarType is not VARENUM.VT_I4 or VARENUM.VT_INT)
+            if (value->VarType is not VARENUM.VT_I4 and not VARENUM.VT_INT)
             {
                 throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
             }

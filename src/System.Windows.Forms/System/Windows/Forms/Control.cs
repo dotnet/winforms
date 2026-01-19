@@ -1333,15 +1333,8 @@ public unsafe partial class Control :
                 return;
             }
 
-            if (oldValue is not null)
-            {
-                oldValue.Disposed -= DetachContextMenuStrip;
-            }
-
-            if (value is not null)
-            {
-                value.Disposed += DetachContextMenuStrip;
-            }
+            oldValue?.Disposed -= DetachContextMenuStrip;
+            value?.Disposed += DetachContextMenuStrip;
 
             OnContextMenuStripChanged(EventArgs.Empty);
         }

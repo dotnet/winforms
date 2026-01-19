@@ -249,10 +249,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 _dummyToolStripGlyph = null;
             }
 
-            if (_undoEngine is not null)
-            {
-                _undoEngine.Undone -= OnUndone;
-            }
+            _undoEngine?.Undone -= OnUndone;
         }
 
         base.Dispose(disposing);

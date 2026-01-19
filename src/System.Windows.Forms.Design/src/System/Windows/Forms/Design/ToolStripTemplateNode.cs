@@ -123,10 +123,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         _designerHost = component.Site.GetService<IDesignerHost>();
         _designer = _designerHost.GetDesigner(component);
         _designSurface = component.Site.GetService<DesignSurface>();
-        if (_designSurface is not null)
-        {
-            _designSurface.Flushed += OnLoaderFlushed;
-        }
+        _designSurface?.Flushed += OnLoaderFlushed;
 
         if (!s_isScalingInitialized)
         {
@@ -698,11 +695,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             _miniToolStrip = null;
 
             // Surface can be null. VS Whidbey #572862
-            if (_designSurface is not null)
-            {
-                _designSurface.Flushed -= OnLoaderFlushed;
-                _designSurface = null;
-            }
+            _designSurface?.Flushed -= OnLoaderFlushed;
+            _designSurface = null;
 
             _designer = null;
             OnClosed(new EventArgs());

@@ -55,17 +55,9 @@ public class ApplicationContext : IDisposable
         set
         {
             EventHandler onClose = OnMainFormDestroy;
-            if (_mainForm is not null)
-            {
-                _mainForm.HandleDestroyed -= onClose;
-            }
-
+            _mainForm?.HandleDestroyed -= onClose;
             _mainForm = value;
-
-            if (_mainForm is not null)
-            {
-                _mainForm.HandleDestroyed += onClose;
-            }
+            _mainForm?.HandleDestroyed += onClose;
         }
     }
 

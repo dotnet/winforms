@@ -831,16 +831,8 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
             return;
         }
 
-        if (oldButton is not null)
-        {
-            oldButton.Click -= clickHandler;
-        }
-
-        if (newButton is not null)
-        {
-            newButton.Click += clickHandler;
-        }
-
+        oldButton?.Click -= clickHandler;
+        newButton?.Click += clickHandler;
         oldButton = newButton;
         RefreshItemsInternal();
     }

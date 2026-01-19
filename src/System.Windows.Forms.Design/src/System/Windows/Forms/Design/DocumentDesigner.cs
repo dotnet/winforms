@@ -388,10 +388,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             }
 
             ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-            if (ss is not null)
-            {
-                ss.SelectionChanged -= OnSelectionChanged;
-            }
+            ss?.SelectionChanged -= OnSelectionChanged;
 
             _behaviorService?.Dispose();
             _behaviorService = null;

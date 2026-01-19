@@ -113,10 +113,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
 
         IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (componentChangeService is not null)
-        {
-            componentChangeService.ComponentRemoved += OnComponentRemoved;
-        }
+        componentChangeService?.ComponentRemoved += OnComponentRemoved;
 
         if (GetService(typeof(IUIService)) is IUIService uiService)
         {
@@ -158,10 +155,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
 
         ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-        if (selSvc is not null)
-        {
-            selSvc.SelectionChanged += OnSelectionChanged;
-        }
+        selSvc?.SelectionChanged += OnSelectionChanged;
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
         SystemEvents.DisplaySettingsChanged += OnSystemSettingChanged;
@@ -868,10 +862,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             }
 
             IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (componentChangeService is not null)
-            {
-                componentChangeService.ComponentRemoved -= OnComponentRemoved;
-            }
+            componentChangeService?.ComponentRemoved -= OnComponentRemoved;
 
             SystemEvents.DisplaySettingsChanged -= OnSystemSettingChanged;
             SystemEvents.InstalledFontsChanged -= OnSystemSettingChanged;
@@ -1919,10 +1910,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             UpdateIconInfo();
 
             IComponentChangeService cs = (IComponentChangeService)tray.GetService(typeof(IComponentChangeService));
-            if (cs is not null)
-            {
-                cs.ComponentRename += OnComponentRename;
-            }
+            cs?.ComponentRename += OnComponentRename;
 
             ISite site = component.Site;
             string name = null;
