@@ -3445,16 +3445,12 @@ public partial class RichTextBox : TextBoxBase
                     // Paint the background
                     g.FillRectangle(SystemBrushes.ControlDark, ClientRectangle);
 
-                    RECT formattingRect = default;
-                    PInvokeCore.SendMessage(this, PInvokeCore.EM_GETRECT, (WPARAM)0, ref formattingRect);
-                    Rectangle textBounds = formattingRect;
-
                     // Paint the text
                     TextRenderer.DrawText(
                         g,
                         Text,
                         Font,
-                        textBounds,
+                        ClientRectangle,
                         SystemColors.GrayText,
                         TextFormatFlags.Left
                         | TextFormatFlags.Top
