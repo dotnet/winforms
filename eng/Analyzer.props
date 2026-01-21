@@ -6,6 +6,9 @@
     <!-- Only upgrade NuGetAudit warnings to errors for official builds. -->
     <WarningsNotAsErrors Condition="'$(OfficialBuild)' != 'true'">$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
 
+    <!-- Suppress NU1507 (Package source mapping is not compatible with VMR backflow operations) -->
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
+
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
     <!--
