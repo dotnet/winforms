@@ -5,8 +5,6 @@
   "symbols/TargetFrameworkOverride/description": "Hedef çerçeveyi geçersiz kılar",
   "symbols/TargetFrameworkOverride/displayName": "Hedef çerçeveyi geçersiz kılma",
   "symbols/Framework/description": "Projenin hedef çerçevesi.",
-  "symbols/Framework/choices/net6.0/description": "Hedef net6.0",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net8.0/description": "Hedef net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/choices/net9.0/description": "Hedef net9.0",

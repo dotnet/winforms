@@ -6,8 +6,6 @@
   "symbols/TargetFrameworkOverride/displayName": "Переопределение целевой платформы",
   "symbols/UseAppFramework/description": "Приложение должно использовать платформу приложений Visual Basic",
   "symbols/Framework/description": "Целевая платформа для проекта.",
-  "symbols/Framework/choices/net6.0/description": "Целевая платформа: net6.0",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net8.0/description": "Целевая net8.0",
   "symbols/Framework/choices/net8.0/displayName": "NET 8.0",
   "symbols/Framework/choices/net9.0/description": "Целевая среда net9.0",

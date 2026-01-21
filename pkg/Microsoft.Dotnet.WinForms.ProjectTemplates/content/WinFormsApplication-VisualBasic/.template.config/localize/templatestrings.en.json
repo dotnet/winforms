@@ -6,8 +6,6 @@
   "symbols/TargetFrameworkOverride/displayName": "Target framework override",
   "symbols/UseAppFramework/description": "The application should use the Visual Basic Application Framework",
   "symbols/Framework/description": "The target framework for the project.",
-  "symbols/Framework/choices/net6.0/description": "Target net6.0",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net8.0/description": "Target net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/choices/net9.0/description": "Target net9.0",

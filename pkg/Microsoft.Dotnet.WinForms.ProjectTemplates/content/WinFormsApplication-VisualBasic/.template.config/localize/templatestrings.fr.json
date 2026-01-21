@@ -6,8 +6,6 @@
   "symbols/TargetFrameworkOverride/displayName": "Remplacement de l’infrastructure cible",
   "symbols/UseAppFramework/description": "L’application doit utiliser l’Infrastructure d’Application Visual Basic",
   "symbols/Framework/description": "Framework cible du projet.",
-  "symbols/Framework/choices/net6.0/description": "net6.0 cible",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net8.0/description": "Cible Net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/choices/net9.0/description": "Net9.0 cible",
