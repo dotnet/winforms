@@ -30,11 +30,6 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "net6.0",
-          "description": "Target net6.0",
-          "displayName": ".NET 6.0"
-        },
-        {
           "choice": "net8.0",
           "description": "Target net8.0",
           "displayName": ".NET 8.0"
@@ -100,11 +95,11 @@
     },
     "csharpFeature_ImplicitUsings": {
       "type": "computed",
-      "value": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net6.0\") && csharp10orLater == \"true\""
+      "value": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\") && csharp10orLater == \"true\""
     },
     "csharpFeature_FileScopedNamespaces": {
       "type": "computed",
-      "value": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
+      "value": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || langVersion != \"\") && csharp10orLater == \"true\""
     }
   },
   "primaryOutputs": [
@@ -117,7 +112,7 @@
   "sources": [
     {
       "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
-      "condition": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net6.0\")",
+      "condition": "(Framework == \"net11.0\" || Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\")",
       "source": "./net6.0",
       "target": "./"
     }

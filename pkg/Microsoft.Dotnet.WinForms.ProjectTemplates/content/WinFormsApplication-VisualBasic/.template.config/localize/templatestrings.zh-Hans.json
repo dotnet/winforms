@@ -6,8 +6,6 @@
   "symbols/TargetFrameworkOverride/displayName": "目标框架替代",
   "symbols/UseAppFramework/description": "应用程序应使用 Visual Basic 应用程序框架",
   "symbols/Framework/description": "项目的目标框架。",
-  "symbols/Framework/choices/net6.0/description": "目标 net6.0",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net8.0/description": "目标 net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/choices/net9.0/description": "目标 net9.0",
