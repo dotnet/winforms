@@ -222,6 +222,39 @@ public class ToolStripControlHostTests
         Assert.Throws<ObjectDisposedException>(() => item.AccessibleName = "value");
     }
 
+    [WinFormsFact]
+    public void ToolStripControlHost_ReparentToOverflowWithCreatedControl_DoesNotThrow()
+    {
+        using Form form = new();
+        using ToolStrip toolStrip = new()
+        {
+            CanOverflow = true
+        };
+        using ToolStripComboBox comboBox = new();
+        using ToolStripProgressBar progressBar = new();
+
+        toolStrip.Items.AddRange([comboBox, progressBar]);
+        form.Controls.Add(toolStrip);
+
+        form.Show();
+
+        Assert.True(toolStrip.IsHandleCreated);
+        _ = comboBox.Control.Handle;
+        _ = progressBar.Control.Handle;
+        Assert.True(comboBox.Control.IsHandleCreated);
+        Assert.True(progressBar.Control.IsHandleCreated);
+
+        toolStrip.AutoSize = false;
+        toolStrip.Width = 10;
+        toolStrip.PerformLayout();
+
+        Assert.True(toolStrip.OverflowButton.Visible);
+
+        toolStrip.OverflowButton.DropDown.CreateControl(ignoreVisible: true);
+
+        Assert.True(toolStrip.OverflowButton.DropDown.IsHandleCreated);
+    }
+
     [WinFormsTheory]
     [EnumData<AccessibleRole>]
     public void ToolStripControlHost_AccessibleRole_Set_GetReturnsExpected(AccessibleRole value)
