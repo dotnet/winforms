@@ -246,6 +246,7 @@ public class ToolStripControlHostTests
 
         toolStrip.AutoSize = false;
         toolStrip.Width = 10;
+        toolStrip.Dock = DockStyle.None;
         toolStrip.PerformLayout();
 
         Assert.True(toolStrip.OverflowButton.Visible);
