@@ -223,7 +223,7 @@ public class ToolStripControlHostTests
     }
 
     [WinFormsFact]
-    public void ToolStripControlHost_ReparentToOverflowWithCreatedControl_DoesNotThrow()
+    public void ToolStripControlHost_ReparentToOverflowWithCreatedControl()
     {
         using Form form = new();
         using ToolStrip toolStrip = new()
