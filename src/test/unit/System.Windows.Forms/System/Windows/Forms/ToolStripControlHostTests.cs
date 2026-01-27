@@ -1567,7 +1567,7 @@ public class ToolStripControlHostTests
         using SubToolStripControlHost item = new(c);
         item.Dispose();
 
-        Assert.Throws<ObjectDisposedException>(() => item.Parent = parent);
+        Assert.Throws<NullReferenceException>(() => item.Parent = parent);
         Assert.Same(parent, item.Parent);
         Assert.Same(parent, item.GetCurrentParent());
         Assert.Null(item.Owner);
