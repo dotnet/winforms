@@ -801,6 +801,7 @@ public partial class ToolStripControlHost : ToolStripItem
     /// </remarks>
     private void SyncControlParent()
     {
+        ObjectDisposedException.ThrowIf(_control is null, _control);
         ToolStrip? parent = ParentInternal;
 
         if (parent is null)
