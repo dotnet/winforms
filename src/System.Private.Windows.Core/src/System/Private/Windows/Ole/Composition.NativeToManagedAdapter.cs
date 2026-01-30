@@ -226,7 +226,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
         }
 
-        private static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
+        private static string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
         {
             void* buffer = PInvokeCore.GlobalLock(hglobal);
             if (buffer is null)
@@ -237,9 +237,22 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 int size = checked((int)PInvokeCore.GlobalSize(hglobal));
-                return size == 0
-                    ? throw new Win32Exception()
-                    : Encoding.UTF8.GetString((byte*)buffer, size - 1);
+                if (size == 0)
+                {
+                    throw new Win32Exception();
+                }
+
+                ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
+
+                int nullIndex = bytes.IndexOf((byte)0);
+                if (nullIndex < 0)
+                {
+                    // Malformed, return empty string.
+                    return string.Empty;
+                }
+
+                bytes = bytes[..nullIndex];
+                return Encoding.UTF8.GetString(bytes);
             }
             finally
             {
@@ -247,7 +260,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
         }
 
-        private static unsafe string[]? ReadFileListFromHDROP(HDROP hdrop)
+        private static string[]? ReadFileListFromHDROP(HDROP hdrop)
         {
             uint count = PInvokeCore.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
             if (count == 0)
@@ -256,7 +269,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
 
             Span<char> fileName = stackalloc char[(int)PInvokeCore.MAX_PATH + 1];
-            string[] files = new string[count];
+            List<string> files = new((int)count);
 
             fixed (char* buffer = fileName)
             {
@@ -268,12 +281,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                         continue;
                     }
 
-                    string s = fileName[..(int)charactersCopied].ToString();
-                    files[i] = s;
+                    files.Add(fileName[..(int)charactersCopied].ToString());
                 }
             }
 
-            return files;
+            return [.. files];
         }
 
         /// <summary>
@@ -365,10 +377,17 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             Debug.WriteLineIf(hr == HRESULT.COR_E_SERIALIZATION,
                 "COR_E_SERIALIZATION returned when trying to get clipboard data, for example, BinaryFormatter threw SerializationException.");
 
+            // If GetData failed, don't try to read from the medium - it may contain uninitialized data.
+            // (This can easily happen when the clipboard content changes between QueryGetData and GetData calls.)
+            if (hr.Failed)
+            {
+                return false;
+            }
+
             bool result = false;
             try
             {
-                if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull && hr != HRESULT.COR_E_SERIALIZATION)
+                if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull)
                 {
                     result = TryGetDataFromHGLOBAL(medium.hGlobal, in request, out data);
                 }
@@ -391,7 +410,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             return result;
         }
 
-        private static unsafe bool TryGetIStreamData<T>(
+        private static bool TryGetIStreamData<T>(
             Com.IDataObject* dataObject,
             ref readonly DataRequest request,
             [NotNullWhen(true)] out T? data)
@@ -420,8 +439,9 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     return false;
                 }
 
-                using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.hGlobal);
-                pStream.Value->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
+                // Don't wrap in ComScope - ReleaseStgMedium will release the stream.
+                Com.IStream* pStream = (Com.IStream*)medium.hGlobal;
+                pStream->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
 
                 hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT, (uint)sstg.cbSize);
 
@@ -433,7 +453,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 }
 
                 void* ptr = PInvokeCore.GlobalLock(hglobal);
-                pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
+                pStream->Read((byte*)ptr, (uint)sstg.cbSize, null);
                 PInvokeCore.GlobalUnlock(hglobal);
 
                 return TryGetDataFromHGLOBAL(hglobal, in request, out data);
