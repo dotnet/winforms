@@ -181,4 +181,198 @@ public unsafe class NativeToManagedAdapterTests
             PInvokeCore.GlobalFree(global);
         }
     }
+
+    [Fact]
+    public void ReadUtf8StringFromHGLOBAL_InvalidHGLOBAL_Throws()
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        Action action = () =>
+        {
+            string result = type.TestAccessor.Dynamic.ReadUtf8StringFromHGLOBAL(HGLOBAL.Null);
+        };
+
+        action.Should().Throw<Win32Exception>().And.HResult.Should().Be((int)HRESULT.E_FAIL);
+    }
+
+    [Fact]
+    public void ReadUtf8StringFromHGLOBAL_NoTerminator_ReturnsEmptyString()
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        HGLOBAL global = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, 6);
+        nuint size = PInvokeCore.GlobalSize(global);
+
+        try
+        {
+            using (GlobalBuffer buffer = new(global, (uint)size))
+            {
+                Span<byte> span = buffer.AsSpan();
+                // Fill with non-null bytes (UTF-8 compatible ASCII)
+                span.Fill(0x41); // 'A'
+            }
+
+            string result = type.TestAccessor.Dynamic.ReadUtf8StringFromHGLOBAL(global);
+
+            // Should return empty string when no null terminator is found (consistent with ReadStringFromHGLOBAL)
+            result.Should().BeEmpty();
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(global);
+        }
+    }
+
+    [Fact]
+    public void ReadUtf8StringFromHGLOBAL_WithTerminator_ReturnsString()
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        HGLOBAL global = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT, 6);
+        nuint size = PInvokeCore.GlobalSize(global);
+
+        try
+        {
+            using (GlobalBuffer buffer = new(global, (uint)size))
+            {
+                Span<byte> span = buffer.AsSpan();
+                // Write "Hello" with null terminator
+                span[0] = (byte)'H';
+                span[1] = (byte)'e';
+                span[2] = (byte)'l';
+                span[3] = (byte)'l';
+                span[4] = (byte)'o';
+                span[5] = 0; // null terminator
+            }
+
+            string result = type.TestAccessor.Dynamic.ReadUtf8StringFromHGLOBAL(global);
+            result.Should().Be("Hello");
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(global);
+        }
+    }
+
+    [Fact]
+    public void ReadUtf8StringFromHGLOBAL_WithEarlyTerminator_ReturnsPartialString()
+    {
+        Type type = typeof(Composition).GetFullNestedType("NativeToManagedAdapter");
+
+        HGLOBAL global = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, 10);
+        nuint size = PInvokeCore.GlobalSize(global);
+
+        try
+        {
+            using (GlobalBuffer buffer = new(global, (uint)size))
+            {
+                Span<byte> span = buffer.AsSpan();
+                // Write "Hi" with null terminator in the middle, followed by garbage
+                span[0] = (byte)'H';
+                span[1] = (byte)'i';
+                span[2] = 0; // null terminator
+                span[3] = (byte)'X'; // garbage after terminator
+                span[4] = (byte)'Y';
+            }
+
+            string result = type.TestAccessor.Dynamic.ReadUtf8StringFromHGLOBAL(global);
+
+            // Should stop at the first null terminator
+            result.Should().Be("Hi");
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(global);
+        }
+    }
+
+    [Fact]
+    public void TryGetIStreamData_DoesNotDoubleReleaseStream()
+    {
+        // This test verifies the fix for double-releasing the IStream.
+        // https://github.com/dotnet/wpf/issues/11401
+        //
+        // Previously, the code wrapped the IStream in a ComScope which would Release it,
+        // and then ReleaseStgMedium would also try to Release it, causing a double-release.
+
+        MemoryStream stream = new([0xBE, 0xAD, 0xCA, 0xFE]);
+        using IStreamNativeDataObject dataObject = new(stream, (ushort)_format.Id);
+
+        IDataObject* pDataObject = ComHelpers.GetComPointer<IDataObject>(dataObject);
+
+        // GetComPointer returns a pointer with ref count of 1.
+        // Add an extra reference so we can track the ref count throughout the test.
+        uint initialRefCount = pDataObject->AddRef();
+        initialRefCount.Should().Be(2);
+
+        object? data;
+        uint refCountBeforeGetData;
+        uint refCountAfterGetData;
+
+        // Scope the Composition so we can observe ref count changes.
+        {
+            // Composition.Create calls AddRef twice (once for NativeToManagedAdapter, once for NativeToRuntimeAdapter)
+            // and takes ownership of the original ref from GetComPointer.
+            var composition = Composition.Create(pDataObject);
+
+            // After Create: original(1) + our AddRef(1) + Composition's two AddRefs(2) = 4
+            refCountBeforeGetData = pDataObject->AddRef();
+            pDataObject->Release(); // Undo our test AddRef
+
+            // Try to get data - this should not crash due to CFG violation
+            // The IStream data object will return data via TYMED_ISTREAM
+            data = composition.GetData(nameof(NativeToManagedAdapterTests));
+
+            // Verify data was retrieved successfully
+            data.Should().BeOfType<MemoryStream>();
+
+            // Check ref count after GetData - should be unchanged from before
+            // (the IStream from GetData should be properly released by ReleaseStgMedium only once)
+            refCountAfterGetData = pDataObject->AddRef();
+            pDataObject->Release(); // Undo our test AddRef
+
+            refCountAfterGetData.Should().Be(
+                refCountBeforeGetData,
+                "GetData should not leak or double-release the IDataObject");
+        }
+
+        // Note: Composition doesn't implement IDisposable, so refs are released via GC.
+        // We still hold our extra ref, so the object won't be collected.
+
+        // Release our extra ref from the start of the test.
+        uint finalRefCount = pDataObject->Release();
+
+        // We should still have refs from Composition's adapters (they're not disposed yet).
+        // The important thing is that GetData didn't corrupt the ref count.
+        finalRefCount.Should().BeGreaterThan(0);
+
+        MemoryStream result = (MemoryStream)data!;
+        result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);
+    }
+
+    [Fact]
+    public void GetData_WhenGetDataFails_ReturnsNullInsteadOfCorruptedData()
+    {
+        // This test verifies the fix for returning corrupted data when GetData fails.
+        // https://github.com/dotnet/wpf/issues/11402
+        //
+        // Previously, if IDataObject::GetData returned a failure HRESULT, the code would still
+        // try to read from the STGMEDIUM which could contain uninitialized data, leading to:
+        // - Empty strings (if garbage memory happened to have null at the start)
+        // - Mojibake/corrupted text (if garbage memory was interpreted as characters)
+        //
+        // This can happen in practice when there's clipboard contention - QueryGetData succeeds
+        // but GetData fails because another application modified the clipboard in between.
+
+        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        // GetData should return null when the underlying GetData call fails,
+        // not corrupted data from uninitialized memory.
+        object? data = composition.GetData(nameof(NativeToManagedAdapterTests));
+
+        // Should return null, not corrupted data
+        data.Should().BeNull();
+    }
 }
