@@ -85,19 +85,34 @@ internal sealed class WinFormsOleServices : IOleServices
                 tymed = (uint)TYMED.TYMED_GDI
             };
 
-            HRESULT result = dataObject->QueryGetData(formatEtc);
+            HRESULT result = HRESULT.S_OK;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                result = dataObject->QueryGetData(formatEtc);
+                return result == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
+
             if (result.Failed)
             {
                 return false;
             }
 
-            result = dataObject->GetData(formatEtc, out STGMEDIUM medium);
+            result = HRESULT.S_OK;
+            STGMEDIUM medium = default;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                result = dataObject->GetData(formatEtc, out medium);
+                return result == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
             // The data state, however, is not good, and this error will be returned by Windows when asking to
             // get the data out.
             Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
+            Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_CANT_OPEN, "CLIPBRD_E_CANT_OPEN returned when clipboard was in locked state.");
 
             try
             {
