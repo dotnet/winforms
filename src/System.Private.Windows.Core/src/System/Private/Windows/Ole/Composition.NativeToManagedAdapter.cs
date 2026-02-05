@@ -359,12 +359,27 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_HGLOBAL
             };
 
-            if (dataObject->QueryGetData(formatetc).Failed)
+            HRESULT hr = HRESULT.S_OK;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                hr = dataObject->QueryGetData(formatetc);
+                return hr == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
+
+            if (hr.Failed)
             {
                 return false;
             }
 
-            HRESULT hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+            Com.STGMEDIUM medium = default;
+            hr = HRESULT.S_OK;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                hr = dataObject->GetData(formatetc, out medium);
+                return hr == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
@@ -376,6 +391,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             Debug.WriteLineIf(hr == HRESULT.E_UNEXPECTED, "E_UNEXPECTED returned when trying to get clipboard data.");
             Debug.WriteLineIf(hr == HRESULT.COR_E_SERIALIZATION,
                 "COR_E_SERIALIZATION returned when trying to get clipboard data, for example, BinaryFormatter threw SerializationException.");
+            Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_CANT_OPEN, "CLIPBRD_E_CANT_OPEN returned when clipboard was in locked state.");
 
             // If GetData failed, don't try to read from the medium - it may contain uninitialized data.
             // (This can easily happen when the clipboard content changes between QueryGetData and GetData calls.)
@@ -424,9 +440,30 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
             };
 
+            HRESULT result = HRESULT.S_OK;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                result = dataObject->QueryGetData(formatEtc);
+                return result == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
+
+            if (result.Failed)
+            {
+                return false;
+            }
+
+            Com.STGMEDIUM medium = default;
+            result = HRESULT.S_OK;
+
+            Utilities.ExecuteWithRetry(() =>
+            {
+                result = dataObject->GetData(formatEtc, out medium);
+                return result == HRESULT.CLIPBRD_E_CANT_OPEN;
+            });
+
             // Limit the # of exceptions we may throw below.
-            if (dataObject->QueryGetData(formatEtc).Failed
-                || dataObject->GetData(formatEtc, out Com.STGMEDIUM medium).Failed)
+            if (result.Failed)
             {
                 return false;
             }
