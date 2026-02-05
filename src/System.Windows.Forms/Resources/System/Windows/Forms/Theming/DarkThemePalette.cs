@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Theming;
 /// <summary>
 /// A minimal, immutable palette for Dark Mode theming of DataGridView.
 /// </summary>
-public readonly struct DarkThemePalette
+public class DarkThemePalette
 {
     public Color Surface { get; }
     public Color OnSurface { get; }
