@@ -4,27 +4,25 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Enumeration defining the behavior when a form or control is captured in a screenshot.
+///  Enumeration defining the behavior when a form is attempted to be captured in a screen capture (clipboard, image file),
+///  in a screen sharing video conference scenario, a video recording or the alike.
 /// </summary>
 public enum ScreenCaptureMode
 {
     /// <summary>
-    ///  The form or control can be captured normally in screenshots. Default.
+    ///  The form can be captured normally in screen captures.
+    ///  Default setting.
     /// </summary>
     Allow = 0,
 
     /// <summary>
-    ///  The form or control appears blacked out in screenshots.
+    ///  Only the form's content is hidden in screenshots.
+    ///  The form's borders and title bar remain visible.
     /// </summary>
     HideContent = 1,
 
     /// <summary>
-    ///  The form or control appears blurred in screenshots.
+    ///  The whole form is invisible in screenshots.
     /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   Using this option requires Windows 10 version 2004 or higher.
-    ///  </para>
-    /// </remarks>
     HideWindow = 2
 }
