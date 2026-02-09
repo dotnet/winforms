@@ -2853,6 +2853,20 @@ public partial class DataGridView
             inheritedCellStyle.SelectionForeColor = dataGridViewStyle.SelectionForeColor;
         }
 
+        // Inherit SortGlyphColor for column header sort arrow
+        if (cellStyle is not null && !cellStyle.SortGlyphColor.IsEmpty)
+        {
+            inheritedCellStyle.SortGlyphColor = cellStyle.SortGlyphColor;
+        }
+        else if (!columnHeadersStyle.SortGlyphColor.IsEmpty)
+        {
+            inheritedCellStyle.SortGlyphColor = columnHeadersStyle.SortGlyphColor;
+        }
+        else if (!dataGridViewStyle.SortGlyphColor.IsEmpty)
+        {
+            inheritedCellStyle.SortGlyphColor = dataGridViewStyle.SortGlyphColor;
+        }
+
         inheritedCellStyle.Font = cellStyle?.Font ?? columnHeadersStyle.Font ?? dataGridViewStyle.Font;
 
         if (cellStyle is not null && !cellStyle.IsNullValueDefault)
