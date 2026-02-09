@@ -10,13 +10,45 @@ namespace System.Windows.Forms.Theming;
 /// </summary>
 public class DarkThemePalette
 {
+    /// <summary>
+    ///  Gets the surface (background) color.
+    /// </summary>
     public Color Surface { get; }
+
+    /// <summary>
+    ///  Gets the on-surface (foreground/text) color.
+    /// </summary>
     public Color OnSurface { get; }
+
+    /// <summary>
+    ///  Gets the header background color.
+    /// </summary>
     public Color HeaderBackgroundColor { get; }
+
+    /// <summary>
+    ///  Gets the header foreground color.
+    /// </summary>
     public Color HeaderForegroundColor { get; }
+
+    /// <summary>
+    ///  Gets the selection background color.
+    /// </summary>
     public Color SelectionBackgroundColor { get; }
+
+    /// <summary>
+    ///  Gets the selection foreground color.
+    /// </summary>
     public Color SelectionForegroundColor { get; }
+
+    /// <summary>
+    ///  Gets the grid line color.
+    /// </summary>
     public Color Grid { get; }
+
+    /// <summary>
+    ///  Gets the sort glyph (arrow) color for column headers.
+    /// </summary>
+    public Color SortGlyphColor { get; }
 
     public DarkThemePalette(
         Color surface,
@@ -25,7 +57,8 @@ public class DarkThemePalette
         Color headerForegroundColor,
         Color selectionBackgroundColor,
         Color selectionForegroundColor,
-        Color grid)
+        Color grid,
+        Color sortGlyphColor)
     {
         Surface = surface;
         OnSurface = onSurface;
@@ -34,6 +67,7 @@ public class DarkThemePalette
         SelectionBackgroundColor = selectionBackgroundColor;
         SelectionForegroundColor = selectionForegroundColor;
         Grid = grid;
+        SortGlyphColor = sortGlyphColor;
     }
 
     /// <summary>
@@ -50,7 +84,10 @@ public class DarkThemePalette
         var selectionFg = Color.White;
         var grid = ControlPaint.Dark(surface, 0.6f);
 
+        // Use a light gray color for sort glyph that provides good contrast on dark backgrounds
+        Color sortGlyph = Color.White;
+
         return new DarkThemePalette(
-            surface, onSurface, headerBg, headerFg, selectionBg, selectionFg, grid);
+            surface, onSurface, headerBg, headerFg, selectionBg, selectionFg, grid, sortGlyph);
     }
 }

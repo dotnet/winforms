@@ -7,6 +7,11 @@ public static class DarkThemeExtensions
 {
     public static void ApplyDarkTheme(this DataGridView dataGridView)
     {
+        if (!Application.IsDarkModeEnabled)
+        {
+            return;
+        }
+
         ArgumentNullException.ThrowIfNull(dataGridView);
 
         var palette = DarkThemePalette.CreateDefault();
@@ -22,6 +27,7 @@ public static class DarkThemeExtensions
         // Column header
         dataGridView.ColumnHeadersDefaultCellStyle.BackColor = palette.HeaderBackgroundColor;
         dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = palette.HeaderForegroundColor;
+        dataGridView.ColumnHeadersDefaultCellStyle.SortGlyphColor = palette.SortGlyphColor;
 
         // Light-colored dividing line
         dataGridView.GridColor = ControlPaint.Light(palette.Surface, 0.50f);

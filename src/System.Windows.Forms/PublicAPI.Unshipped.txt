@@ -5,6 +5,8 @@ static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.Task
 static System.Windows.Forms.Theming.DarkThemeExtensions.ApplyDarkTheme(this System.Windows.Forms.DataGridView! dataGridView) -> void
 static System.Windows.Forms.Theming.DarkThemePalette.CreateDefault() -> System.Windows.Forms.Theming.DarkThemePalette!
 System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.get -> System.Drawing.Color
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.set -> void
 System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
@@ -23,13 +25,14 @@ System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColo
 System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.Theming.DarkThemeExtensions
 System.Windows.Forms.Theming.DarkThemePalette
-System.Windows.Forms.Theming.DarkThemePalette.DarkThemePalette(System.Drawing.Color surface, System.Drawing.Color onSurface, System.Drawing.Color headerBackgroundColor, System.Drawing.Color headerForegroundColor, System.Drawing.Color selectionBackgroundColor, System.Drawing.Color selectionForegroundColor, System.Drawing.Color grid) -> void
+System.Windows.Forms.Theming.DarkThemePalette.DarkThemePalette(System.Drawing.Color surface, System.Drawing.Color onSurface, System.Drawing.Color headerBackgroundColor, System.Drawing.Color headerForegroundColor, System.Drawing.Color selectionBackgroundColor, System.Drawing.Color selectionForegroundColor, System.Drawing.Color grid, System.Drawing.Color sortGlyphColor) -> void
 System.Windows.Forms.Theming.DarkThemePalette.Grid.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.HeaderBackgroundColor.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.HeaderForegroundColor.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.OnSurface.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.SelectionBackgroundColor.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.SelectionForegroundColor.get -> System.Drawing.Color
+System.Windows.Forms.Theming.DarkThemePalette.SortGlyphColor.get -> System.Drawing.Color
 System.Windows.Forms.Theming.DarkThemePalette.Surface.get -> System.Drawing.Color
 System.Windows.Forms.VisualStyles.ComboBoxState.Focused = 5 -> System.Windows.Forms.VisualStyles.ComboBoxState
 virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
