@@ -801,7 +801,19 @@ public partial class ToolStripControlHost : ToolStripItem
     /// </remarks>
     private void SyncControlParent()
     {
-        ReadOnlyControlCollection? newControls = GetControlCollection(ParentInternal);
+        ToolStrip? parent = ParentInternal;
+
+        if (parent is null)
+        {
+            return;
+        }
+
+        if (_control.IsHandleCreated && !parent.IsHandleCreated)
+        {
+            parent.CreateControl(ignoreVisible: true);
+        }
+
+        ReadOnlyControlCollection? newControls = GetControlCollection(parent);
         newControls?.AddInternal(_control);
     }
 
