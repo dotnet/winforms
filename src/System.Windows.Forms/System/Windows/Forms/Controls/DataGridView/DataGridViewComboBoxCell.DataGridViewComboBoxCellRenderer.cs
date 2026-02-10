@@ -17,6 +17,11 @@ public partial class DataGridViewComboBoxCell
         private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
         private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
 
+        // Dark Mode element for drop-down button (same as ComboBoxRenderer uses)
+        private static VisualStyleElement ComboBoxDropDownButtonElement => Application.IsDarkModeEnabled
+            ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::{Control.ComboboxClassIdentifier}", 1, 1)
+            : VisualStyleElement.ComboBox.DropDownButton.Normal;
+
         public static VisualStyleRenderer VisualStyleRenderer
         {
             get
@@ -54,7 +59,12 @@ public partial class DataGridViewComboBoxCell
 
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
         {
-            if (rightToLeft)
+            // Use Dark Mode element when enabled
+            if (Application.IsDarkModeEnabled)
+            {
+                InitializeRenderer(ComboBoxDropDownButtonElement, (int)state);
+            }
+            else if (rightToLeft)
             {
                 InitializeRenderer(s_comboBoxDropDownButtonLeft, (int)state);
             }
@@ -68,6 +78,20 @@ public partial class DataGridViewComboBoxCell
 
         public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
+            // Use Dark Mode element when enabled
+            if (Application.IsDarkModeEnabled)
+            {
+                // Draw dark background similar to ComboBox in Dark Mode
+                using var brush = new SolidBrush(Color.FromArgb(45, 45, 45));
+                g.FillRectangle(brush, bounds);
+
+                // Draw border
+                using var pen = new Pen(Color.FromArgb(100, 100, 100));
+                g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+
+                return;
+            }
+
             InitializeRenderer(s_comboBoxReadOnlyButton, (int)state);
 
             t_visualStyleRenderer.DrawBackground(g, bounds);
