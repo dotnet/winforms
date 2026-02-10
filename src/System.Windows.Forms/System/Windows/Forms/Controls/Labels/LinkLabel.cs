@@ -69,7 +69,21 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
     public Color ActiveLinkColor
     {
-        get => _activeLinkColor.IsEmpty ? IEActiveLinkColor : _activeLinkColor;
+        get
+        {
+            if (!_activeLinkColor.IsEmpty)
+            {
+                return _activeLinkColor;
+            }
+
+            if (Application.IsDarkModeEnabled)
+            {
+                // Use red color for active state in dark mode (similar to IE's hover color)
+                return Color.FromArgb(0xFF, 0x60, 0x60);
+            }
+
+            return IEActiveLinkColor;
+        }
         set
         {
             if (_activeLinkColor != value)
@@ -234,9 +248,26 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
     public Color LinkColor
     {
-        get => _linkColor.IsEmpty
-            ? SystemInformation.HighContrast ? SystemColors.HotTrack : IELinkColor
-            : _linkColor;
+        get
+        {
+            if (!_linkColor.IsEmpty)
+            {
+                return _linkColor;
+            }
+
+            if (SystemInformation.HighContrast)
+            {
+                return SystemColors.HotTrack;
+            }
+
+            if (Application.IsDarkModeEnabled)
+            {
+                // Use a bright blue color that contrasts well with dark backgrounds
+                return Color.FromArgb(0x60, 0xA0, 0xE0);
+            }
+
+            return IELinkColor;
+        }
         set
         {
             if (_linkColor != value)
@@ -346,7 +377,9 @@ public partial class LinkLabel : Label, IButtonControl
     public Color VisitedLinkColor
     {
         get => _visitedLinkColor.IsEmpty
-            ? SystemInformation.HighContrast ? LinkUtilities.GetVisitedLinkColor() : IEVisitedLinkColor
+            ? SystemInformation.HighContrast || Application.IsDarkModeEnabled
+                ? LinkUtilities.GetVisitedLinkColor()
+                : IEVisitedLinkColor
             : _visitedLinkColor;
         set
         {
