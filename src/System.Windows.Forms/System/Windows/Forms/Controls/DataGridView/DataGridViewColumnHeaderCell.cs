@@ -1111,7 +1111,6 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                 sortGlyphLocation.X + s_sortGlyphWidth - 2,
                                 sortGlyphLocation.Y + s_sortGlyphHeight - 1);
                             break;
-
                     }
                 }
             }
