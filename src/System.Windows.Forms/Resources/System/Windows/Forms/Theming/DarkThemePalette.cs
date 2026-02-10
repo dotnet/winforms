@@ -76,13 +76,13 @@ public class DarkThemePalette
     /// </summary>
     public static DarkThemePalette CreateDefault()
     {
-        var surface = SystemColors.Window;
-        var onSurface = SystemColors.WindowText;
-        var headerBg = SystemColors.ControlDarkDark;
-        var headerFg = SystemColors.ActiveCaptionText;
-        var selectionBg = Color.FromArgb(0x33, 0x66, 0xCC);
-        var selectionFg = Color.White;
-        var grid = ControlPaint.Dark(surface, 0.6f);
+        Color surface = SystemColors.Window;
+        Color onSurface = SystemColors.WindowText;
+        Color headerBg = SystemColors.ControlDarkDark;
+        Color headerFg = SystemColors.ActiveCaptionText;
+        Color selectionBg = Color.FromArgb(0x33, 0x66, 0xCC);
+        Color selectionFg = Color.White;
+        Color grid = ControlPaint.Dark(surface, 0.6f);
 
         // Use a light gray color for sort glyph that provides good contrast on dark backgrounds
         Color sortGlyph = Color.White;
