@@ -2024,7 +2024,7 @@ public partial class TreeView : Control
         imageList.Images.Add(uncheckedBitmap);
         imageList.Images.Add(checkedBitmap);
 
-        PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)PInvoke.TVSIL_STATE, (LPARAM)imageList.Handle);
+        SetStateImageList(imageList.Handle);
 
         _internalStateImageList?.Dispose();
         _internalStateImageList = imageList;
