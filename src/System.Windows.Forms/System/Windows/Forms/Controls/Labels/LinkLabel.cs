@@ -69,21 +69,11 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
     public Color ActiveLinkColor
     {
-        get
-        {
-            if (!_activeLinkColor.IsEmpty)
-            {
-                return _activeLinkColor;
-            }
-
-            if (Application.IsDarkModeEnabled)
-            {
-                // Use red color for active state in dark mode (similar to IE's hover color)
-                return Color.FromArgb(0xFF, 0x60, 0x60);
-            }
-
-            return IEActiveLinkColor;
-        }
+        get => !_activeLinkColor.IsEmpty
+            ? _activeLinkColor
+            : Application.IsDarkModeEnabled
+                ? LinkUtilities.DarkModeActiveLinkColor
+                : IEActiveLinkColor;
         set
         {
             if (_activeLinkColor != value)
@@ -248,26 +238,13 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
     public Color LinkColor
     {
-        get
-        {
-            if (!_linkColor.IsEmpty)
-            {
-                return _linkColor;
-            }
-
-            if (SystemInformation.HighContrast)
-            {
-                return SystemColors.HotTrack;
-            }
-
-            if (Application.IsDarkModeEnabled)
-            {
-                // Use a bright blue color that contrasts well with dark backgrounds
-                return Color.FromArgb(0x60, 0xA0, 0xE0);
-            }
-
-            return IELinkColor;
-        }
+        get => !_linkColor.IsEmpty
+            ? _linkColor
+            : SystemInformation.HighContrast
+                ? SystemColors.HotTrack
+                : Application.IsDarkModeEnabled
+                    ? LinkUtilities.DarkModeLinkColor
+                    : IELinkColor;
         set
         {
             if (_linkColor != value)
@@ -376,11 +353,13 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))]
     public Color VisitedLinkColor
     {
-        get => _visitedLinkColor.IsEmpty
-            ? SystemInformation.HighContrast || Application.IsDarkModeEnabled
+        get => !_visitedLinkColor.IsEmpty
+            ? _visitedLinkColor
+            : SystemInformation.HighContrast
                 ? LinkUtilities.GetVisitedLinkColor()
-                : IEVisitedLinkColor
-            : _visitedLinkColor;
+                : Application.IsDarkModeEnabled
+                    ? LinkUtilities.DarkModeVisitedLinkColor
+                    : IEVisitedLinkColor;
         set
         {
             if (_visitedLinkColor != value)
