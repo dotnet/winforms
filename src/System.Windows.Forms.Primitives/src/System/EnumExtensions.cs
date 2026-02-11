@@ -18,51 +18,49 @@ internal static class EnumExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe void ChangeFlags<T>(ref this T value, T flags, bool set) where T : unmanaged, Enum
     {
-        T* v = (T*)Unsafe.AsPointer(ref value);
-
         // These conditions get optimized away by the JIT.
         if (sizeof(T) == sizeof(byte))
         {
             if (set)
             {
-                *(byte*)v |= *(byte*)&flags;
+                Unsafe.As<T, byte>(ref value) |= *(byte*)&flags;
             }
             else
             {
-                *(byte*)v &= (byte)~*(byte*)&flags;
+                Unsafe.As<T, byte>(ref value) &= (byte)~*(byte*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(ushort))
         {
             if (set)
             {
-                *(ushort*)v |= *(ushort*)&flags;
+                Unsafe.As<T, ushort>(ref value) |= *(ushort*)&flags;
             }
             else
             {
-                *(ushort*)v &= (ushort)~*(ushort*)&flags;
+                Unsafe.As<T, ushort>(ref value) &= (ushort)~*(ushort*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(uint))
         {
             if (set)
             {
-                *(uint*)v |= *(uint*)&flags;
+                Unsafe.As<T, uint>(ref value) |= *(uint*)&flags;
             }
             else
             {
-                *(uint*)v &= ~*(uint*)&flags;
+                Unsafe.As<T, uint>(ref value) &= ~*(uint*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(ulong))
         {
             if (set)
             {
-                *(ulong*)v |= *(ulong*)&flags;
+                Unsafe.As<T, ulong>(ref value) |= *(ulong*)&flags;
             }
             else
             {
-                *(ulong*)v &= ~*(ulong*)&flags;
+                Unsafe.As<T, ulong>(ref value) &= ~*(ulong*)&flags;
             }
         }
     }
