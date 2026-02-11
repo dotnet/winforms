@@ -288,6 +288,13 @@ public partial class TabControl : Control
                 cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
             }
 
+            // Enable owner-draw for vertical tabs in dark mode since standard themes don't support it
+            else if (Application.IsDarkModeEnabled &&
+                     (_alignment is TabAlignment.Left or TabAlignment.Right))
+            {
+                cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
+            }
+
             if (ShowToolTips && !DesignMode)
             {
                 cp.Style |= (int)PInvoke.TCS_TOOLTIPS;
@@ -1298,7 +1305,14 @@ public partial class TabControl : Control
         // We need to avoid to apply the DarkMode theme twice on handle recreate.
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
-            PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
+            // For horizontal tabs, apply the standard dark mode theme
+            // For vertical tabs, we use owner-draw mode (set in CreateParams) so don't apply theme to main control
+            if (_alignment is TabAlignment.Top or TabAlignment.Bottom)
+            {
+                PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
+            }
+
+            // Apply theme to child windows for both horizontal and vertical tabs
             PInvokeCore.EnumChildWindows(this, StyleChildren);
         }
 
@@ -1331,7 +1345,106 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        _onDrawItem?.Invoke(this, e);
+        // If we're in automatic owner-draw mode for dark mode vertical tabs,
+        // provide default rendering if user hasn't attached a handler
+        if (Application.IsDarkModeEnabled &&
+            (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+            _drawMode != TabDrawMode.OwnerDrawFixed &&
+            _onDrawItem is null)
+        {
+            DrawDarkModeTab(e);
+        }
+        else
+        {
+            _onDrawItem?.Invoke(this, e);
+        }
+    }
+
+    private void DrawDarkModeTab(DrawItemEventArgs e)
+    {
+        Color backColor = (e.State & DrawItemState.Selected) != 0
+            ? SystemColors.ControlDark
+            : SystemColors.ControlLight;
+
+        Color borderColor = SystemColors.ControlDark;
+        Color textColor = SystemColors.ControlText;
+
+        // Draw tab background
+        using (SolidBrush brush = new(backColor))
+        {
+            e.Graphics.FillRectangle(brush, e.Bounds);
+        }
+
+        // Draw tab border
+        using (Pen pen = new(borderColor))
+        {
+            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+        }
+
+        // Draw tab text
+        if (e.Index >= 0 && e.Index < TabPages.Count)
+        {
+            TabPage page = TabPages[e.Index];
+            string text = page.Text;
+
+            // Create StringFormat for text alignment (reused for both horizontal and vertical)
+            using StringFormat format = new()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center,
+                Trimming = StringTrimming.EllipsisCharacter
+            };
+
+            // For vertical tabs (Left/Right alignment), rotate the text 90/-90 degrees
+            if (_alignment is TabAlignment.Left or TabAlignment.Right)
+            {
+                // Save the current graphics state
+                var state = e.Graphics.Save();
+
+                try
+                {
+                    float angle = _alignment == TabAlignment.Left ? -90 : 90;
+
+                    // Calculate the center point for rotation
+                    float centerX = e.Bounds.X + e.Bounds.Width / 2f;
+                    float centerY = e.Bounds.Y + e.Bounds.Height / 2f;
+
+                    // Apply rotation transform around center point
+                    e.Graphics.TranslateTransform(centerX, centerY);
+                    e.Graphics.RotateTransform(angle);
+                    e.Graphics.TranslateTransform(-centerX, -centerY);
+
+                    // For rotated text, swap width and height since the text will be rendered vertically
+                    // The offset calculation centers the rotated text rectangle within the original tab bounds
+                    Rectangle textBounds = new Rectangle(
+                        e.Bounds.X + (e.Bounds.Width - e.Bounds.Height) / 2,
+                        e.Bounds.Y + (e.Bounds.Height - e.Bounds.Width) / 2,
+                        e.Bounds.Height,
+                        e.Bounds.Width);
+
+                    // Use Graphics.DrawString for proper rotation support (TextRenderer doesn't respect transforms)
+                    using SolidBrush textBrush = new(textColor);
+                    e.Graphics.DrawString(text, Font, textBrush, textBounds, format);
+                }
+                finally
+                {
+                    // Restore the graphics state
+                    e.Graphics.Restore(state);
+                }
+            }
+            else
+            {
+                // Horizontal tabs - no rotation needed
+                using SolidBrush textBrush = new(textColor);
+                e.Graphics.DrawString(text, Font, textBrush, e.Bounds, format);
+            }
+
+            // Draw focus rectangle if needed
+            if ((e.State & DrawItemState.Focus) != 0)
+            {
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+            }
+        }
     }
 
     /// <summary>
@@ -2058,6 +2171,77 @@ public partial class TabControl : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_PAINT:
+                // After default paint, draw dark border around TabPage content area for vertical tabs in dark mode
+                base.WndProc(ref m);
+                if (Application.IsDarkModeEnabled &&
+                    (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+                    _drawMode != TabDrawMode.OwnerDrawFixed)
+                {
+                    try
+                    {
+                        using Graphics g = Graphics.FromHwnd(HWND);
+                        Rectangle displayRect = DisplayRectangle;
+                        using SolidBrush borderBrush = new(SystemColors.ControlDark);
+
+                        int borderThickness = 4;
+                        // Top border
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Y - borderThickness,
+                            displayRect.Width + borderThickness * 2,
+                            borderThickness);
+                        // Bottom border
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Bottom,
+                            displayRect.Width + borderThickness * 2,
+                            borderThickness);
+                        // Left border
+                        g.FillRectangle(borderBrush,
+                            displayRect.X - borderThickness,
+                            displayRect.Y - borderThickness,
+                            borderThickness,
+                            displayRect.Height + borderThickness * 2);
+                        // Right border
+                        g.FillRectangle(borderBrush,
+                            displayRect.Right,
+                            displayRect.Y - borderThickness,
+                            0,
+                            displayRect.Height + borderThickness * 2);
+                    }
+                    catch
+                    {
+                        // Ignore painting errors
+                    }
+                }
+
+                return;
+
+            case PInvokeCore.WM_ERASEBKGND:
+                // Paint the tab strip background dark for vertical tabs in dark mode
+                if (Application.IsDarkModeEnabled &&
+                    (_alignment is TabAlignment.Left or TabAlignment.Right) &&
+                    _drawMode != TabDrawMode.OwnerDrawFixed &&
+                    m.WParamInternal != (WPARAM)0)
+                {
+                    try
+                    {
+                        using Graphics g = Graphics.FromHdc((nint)m.WParamInternal);
+                        // Use darker background color for tab strip (was used for content area)
+                        using SolidBrush brush = new(SystemColors.Control);
+                        g.FillRectangle(brush, ClientRectangle);
+                        m.ResultInternal = (LRESULT)1;
+                        return;
+                    }
+                    catch
+                    {
+                        // If Graphics creation fails, fall through to default handling
+                    }
+                }
+
+                break;
+
             case MessageId.WM_REFLECT_DRAWITEM:
                 WmReflectDrawItem(ref m);
                 break;
