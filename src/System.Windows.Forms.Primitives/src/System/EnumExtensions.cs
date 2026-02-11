@@ -16,51 +16,51 @@ internal static class EnumExtensions
     ///  </para>
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void ChangeFlags<T>(ref this T value, T flags, bool set) where T : unmanaged, Enum
+    public static unsafe void ChangeFlags<T>(ref this T value, T flags, bool set) where T : unmanaged, Enum
     {
         // These conditions get optimized away by the JIT.
         if (sizeof(T) == sizeof(byte))
         {
             if (set)
             {
-                Unsafe.As<T, byte>(ref value) |= Unsafe.As<T, byte>(ref flags);
+                Unsafe.As<T, byte>(ref value) |= *(byte*)&flags;
             }
             else
             {
-                Unsafe.As<T, byte>(ref value) &= (byte)~Unsafe.As<T, byte>(ref flags);
+                Unsafe.As<T, byte>(ref value) &= (byte)~*(byte*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(ushort))
         {
             if (set)
             {
-                Unsafe.As<T, ushort>(ref value) |= Unsafe.As<T, ushort>(ref flags);
+                Unsafe.As<T, ushort>(ref value) |= *(ushort*)&flags;
             }
             else
             {
-                Unsafe.As<T, ushort>(ref value) &= (ushort)~Unsafe.As<T, ushort>(ref flags);
+                Unsafe.As<T, ushort>(ref value) &= (ushort)~*(ushort*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(uint))
         {
             if (set)
             {
-                Unsafe.As<T, uint>(ref value) |= Unsafe.As<T, uint>(ref flags);
+                Unsafe.As<T, uint>(ref value) |= *(uint*)&flags;
             }
             else
             {
-                Unsafe.As<T, uint>(ref value) &= ~Unsafe.As<T, uint>(ref flags);
+                Unsafe.As<T, uint>(ref value) &= ~*(uint*)&flags;
             }
         }
         else if (sizeof(T) == sizeof(ulong))
         {
             if (set)
             {
-                Unsafe.As<T, ulong>(ref value) |= Unsafe.As<T, ulong>(ref flags);
+                Unsafe.As<T, ulong>(ref value) |= *(ulong*)&flags;
             }
             else
             {
-                Unsafe.As<T, ulong>(ref value) &= ~Unsafe.As<T, ulong>(ref flags);
+                Unsafe.As<T, ulong>(ref value) &= ~*(ulong*)&flags;
             }
         }
     }
