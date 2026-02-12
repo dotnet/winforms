@@ -148,6 +148,21 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
+    public override Image? BackgroundImage
+    {
+        set
+        {
+            base.BackgroundImage = value;
+
+            if (Application.IsDarkModeEnabled)
+            {
+                // BackgroundImage changes may affect rendering logic,
+                // so we manually update the OwnerDraw flag to ensure correct visual behavior.
+                UpdateOwnerDraw();
+            }
+        }
+    }
+
     /// <summary>
     ///  Defines, whether the control is owner-drawn. Based on this,
     ///  the UserPaint flags get set, which in turn makes it later
@@ -161,7 +176,6 @@ public partial class Button : ButtonBase, IButtonControl
         get
         {
             if (Application.IsDarkModeEnabled
-
                 // The SystemRenderer cannot render images. So, we flip to our
                 // own DarkMode renderer, if we need to render images, except if...
                 && Image is null
