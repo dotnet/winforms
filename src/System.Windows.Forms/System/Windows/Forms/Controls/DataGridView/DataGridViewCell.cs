@@ -1435,6 +1435,18 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 ? ControlPaint.LightLight(baseline)
                 : SystemColors.ControlLightLight;
         }
+        else if (Application.IsDarkModeEnabled)
+        {
+            // In Dark Mode, use higher contrast colors for better visibility.
+            // For dark backgrounds, we need lighter colors that stand out.
+            darkColor = darkDistance < ContrastThreshold
+                ? ControlPaint.Light(baseline, 0.5f)
+                : SystemColors.ControlLight;
+
+            lightColor = lightDistance < ContrastThreshold
+                ? ControlPaint.LightLight(baseline)
+                : SystemColors.ControlLightLight;
+        }
         else
         {
             darkColor = darkDistance < ContrastThreshold

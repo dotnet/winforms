@@ -1001,175 +1001,202 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
         if (paint && displaySortGlyph && PaintContentBackground(paintParts))
         {
-            (Color darkColor, Color lightColor) = GetContrastedColors(cellStyle.BackColor);
+            Color darkColor;
+            Color lightColor;
+            bool useFlatStyle = false;
+
+            // In Dark Mode with quirk enabled, use a solid white glyph for better visibility
+            if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
+            {
+                darkColor = Color.White;
+                lightColor = Color.White;
+                useFlatStyle = true;
+            }
+            else
+            {
+                (darkColor, lightColor) = GetContrastedColors(cellStyle.BackColor);
+            }
+
             using var penControlDark = darkColor.GetCachedPenScope();
             using var penControlLightLight = lightColor.GetCachedPenScope();
 
+            // Determine if we should use flat style (solid fill) or 3D style (outline)
+            bool isFlatLook = useFlatStyle || (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetPartial &&
+                advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetDouble &&
+                advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.Outset &&
+                advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.Inset);
+
             if (SortGlyphDirection == SortOrder.Ascending)
             {
-                switch (advancedBorderStyle.Right)
+                if (isFlatLook)
                 {
-                    case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
-                    case DataGridViewAdvancedCellBorderStyle.Outset:
-                        // Sunken look
+                    // Flat look - solid filled triangle
+                    for (int line = 0; line < s_sortGlyphWidth / 2; line++)
+                    {
                         g.DrawLine(penControlDark,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 3,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        break;
+                            sortGlyphLocation.X + line,
+                            sortGlyphLocation.Y + s_sortGlyphHeight - line - 1,
+                            sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
+                            sortGlyphLocation.Y + s_sortGlyphHeight - line - 1);
+                    }
 
-                    case DataGridViewAdvancedCellBorderStyle.Inset:
-                        // Raised look
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 3,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 2);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        break;
-
-                    default:
-                        // Flat look
-                        for (int line = 0; line < s_sortGlyphWidth / 2; line++)
-                        {
+                    g.DrawLine(penControlDark,
+                        sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                        sortGlyphLocation.Y + s_sortGlyphHeight - s_sortGlyphWidth / 2 - 1,
+                        sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                        sortGlyphLocation.Y + s_sortGlyphHeight - s_sortGlyphWidth / 2);
+                }
+                else
+                {
+                    switch (advancedBorderStyle.Right)
+                    {
+                        case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
+                        case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
+                        case DataGridViewAdvancedCellBorderStyle.Outset:
+                            // Sunken look
                             g.DrawLine(penControlDark,
-                                sortGlyphLocation.X + line,
-                                sortGlyphLocation.Y + s_sortGlyphHeight - line - 1,
-                                sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
-                                sortGlyphLocation.Y + s_sortGlyphHeight - line - 1);
-                        }
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 3,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            break;
 
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - s_sortGlyphWidth / 2);
-                        break;
+                        case DataGridViewAdvancedCellBorderStyle.Inset:
+                            // Raised look
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 3,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 2);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            break;
+                    }
                 }
             }
             else
             {
                 Debug.Assert(SortGlyphDirection == SortOrder.Descending);
-                switch (advancedBorderStyle.Right)
+                if (isFlatLook)
                 {
-                    case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                    case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
-                    case DataGridViewAdvancedCellBorderStyle.Outset:
-                        // Sunken look
+                    // Flat look - solid filled triangle (pointing down)
+                    for (int line = 0; line < s_sortGlyphWidth / 2; line++)
+                    {
                         g.DrawLine(penControlDark,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + 1,
-                            sortGlyphLocation.Y + 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + 1);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 3,
-                            sortGlyphLocation.Y + 1);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y);
-                        break;
+                            sortGlyphLocation.X + line,
+                            sortGlyphLocation.Y + line + 2,
+                            sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
+                            sortGlyphLocation.Y + line + 2);
+                    }
 
-                    case DataGridViewAdvancedCellBorderStyle.Inset:
-                        // Raised look
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y + 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        g.DrawLine(penControlLightLight,
-                            sortGlyphLocation.X + 1,
-                            sortGlyphLocation.Y + 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y + 1);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphHeight - 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 3,
-                            sortGlyphLocation.Y + 1);
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X,
-                            sortGlyphLocation.Y,
-                            sortGlyphLocation.X + s_sortGlyphWidth - 2,
-                            sortGlyphLocation.Y);
-                        break;
-
-                    default:
-                        // Flat look
-                        for (int line = 0; line < s_sortGlyphWidth / 2; line++)
-                        {
+                    g.DrawLine(penControlDark,
+                        sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                        sortGlyphLocation.Y + s_sortGlyphWidth / 2 + 1,
+                        sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                        sortGlyphLocation.Y + s_sortGlyphWidth / 2 + 2);
+                }
+                else
+                {
+                    switch (advancedBorderStyle.Right)
+                    {
+                        case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
+                        case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
+                        case DataGridViewAdvancedCellBorderStyle.Outset:
+                            // Sunken look
                             g.DrawLine(penControlDark,
-                                sortGlyphLocation.X + line,
-                                sortGlyphLocation.Y + line + 2,
-                                sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
-                                sortGlyphLocation.Y + line + 2);
-                        }
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + 1,
+                                sortGlyphLocation.Y + 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + 1);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 3,
+                                sortGlyphLocation.Y + 1);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y);
+                            break;
 
-                        g.DrawLine(penControlDark,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphWidth / 2 + 1,
-                            sortGlyphLocation.X + s_sortGlyphWidth / 2,
-                            sortGlyphLocation.Y + s_sortGlyphWidth / 2 + 2);
-                        break;
+                        case DataGridViewAdvancedCellBorderStyle.Inset:
+                            // Raised look
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y + 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            g.DrawLine(penControlLightLight,
+                                sortGlyphLocation.X + 1,
+                                sortGlyphLocation.Y + 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2 - 1,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y + 1);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X + s_sortGlyphWidth / 2,
+                                sortGlyphLocation.Y + s_sortGlyphHeight - 1,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 3,
+                                sortGlyphLocation.Y + 1);
+                            g.DrawLine(penControlDark,
+                                sortGlyphLocation.X,
+                                sortGlyphLocation.Y,
+                                sortGlyphLocation.X + s_sortGlyphWidth - 2,
+                                sortGlyphLocation.Y);
+                            break;
+                    }
                 }
             }
         }
