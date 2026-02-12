@@ -2,8 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.InteropServices;
-
+using Windows.Win32.Graphics.Dwm;
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -13,10 +14,220 @@ public class MessageBox
 {
     [ThreadStatic]
     private static HelpInfo[]? t_helpInfoTable;
-
+    // see
+    // https://devblogs.microsoft.com/oldnewthing/20140224-00/?p=1683
+    // and https://learn.microsoft.com/archive/msdn-magazine/2002/november/cutting-edge-using-windows-hooks-to-enhance-messagebox-in-net
+    // Unique ID for static Edit in MessageBox, This ID has not changed since Windows 95 and will remain so.
+    private const int MBTextId = ushort.MaxValue; // 0xFFFF
+    private static HHOOK s_messageBoxHook;
+    private static bool s_isMessageBoxHooked;
+    private static readonly HOOKPROC s_hookCallBack = HookProc;
+    private static readonly Lock s_lock = new();
+    private static readonly nint s_hookPointer = Marshal.GetFunctionPointerForDelegate(s_hookCallBack);
+    private static HWND s_hWndInternal;
+    private static nint s_priorDlgProc;
+    private static readonly PInvokeCore.EnumChildWindowsCallback s_childWindowsCallback = new PInvokeCore.EnumChildWindowsCallback(EnumChildProc);
+    private static LRESULT DlgProcInternal(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
+        => DlgProc(hWnd, (int)msg, (nint)wParam, lParam);
     // This is meant to be a static class, but predates that feature.
     private MessageBox()
     {
+    }
+
+    private static LRESULT OnWmCtlColor(uint msg, IntPtr wParam)
+    {
+        switch (msg)
+        {
+            case PInvokeCore.WM_CTLCOLORBTN:
+                return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.Control));
+            case PInvokeCore.WM_CTLCOLORDLG:
+            case PInvokeCore.WM_CTLCOLORSTATIC:
+                HDC hdc = new HDC(wParam);
+                PInvokeCore.SetBkMode(hdc, BACKGROUND_MODE.TRANSPARENT);
+                PInvokeCore.SetTextColor(hdc, SystemColors.ControlText);
+                return new LRESULT(PInvokeCore.CreateSolidBrush(SystemColors.Window));
+        }
+
+        return new LRESULT(0);
+    }
+
+    private static LRESULT OnWmPaint(HWND hWnd, IntPtr wParam)
+    {
+        HDC hdc = (HDC)wParam;
+        bool usingBeginPaint = hdc.IsNull;
+        using var paintScope = usingBeginPaint ? new BeginPaintScope(hWnd) : default;
+        RECT clipRect;
+        PInvokeCore.GetClientRect(hWnd, out clipRect);
+        if (usingBeginPaint)
+        {
+            hdc = paintScope!.HDC;
+        }
+
+        // Fill the background with the BackColor
+        using CreateBrushScope backGroundBrushScope = new CreateBrushScope(SystemColors.Window);
+        hdc.FillRectangle(clipRect, backGroundBrushScope);
+        RECT FooterRect = clipRect;
+        FooterRect.top = clipRect.Height - SystemInformation.CaptionHeight * 2;
+        // Fill the footer with the FooterBackColor
+        using CreateBrushScope FooterBrushScope = new CreateBrushScope(SystemColors.Control);
+        hdc.FillRectangle(FooterRect, FooterBrushScope);
+        return new LRESULT(0);
+    }
+
+    private static unsafe BOOL EnumChildProc(HWND handle)
+    {
+        string className = string.Empty;
+        Span<char> buffer = stackalloc char[PInvokeCore.MaxClassName];
+        int length = 0;
+        fixed (char* lpClassName = buffer)
+        {
+            length = PInvoke.GetClassName(handle, lpClassName, buffer.Length);
+        }
+
+        className = buffer.ToString()[..length];
+        switch (className)
+        {
+            case PInvoke.WC_BUTTON:
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                // Make sure that Uxtheme Visual Style is applied at this time to the Buttons
+                HTHEME buttonTheme = PInvoke.GetWindowTheme(handle);
+
+                if (!buttonTheme.IsNull)
+                {
+                    const string DarkModeThemeIdentifier
+                        = $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}";
+                    PInvoke.SetWindowTheme(handle,
+                        Application.IsDarkModeEnabled
+                        ? $"{DarkModeThemeIdentifier}"
+                        : PInvoke.WC_BUTTON, null);
+                }
+
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                break;
+        }
+
+        return true;
+    }
+
+    private static unsafe void AllowDarkNonClientArea(HWND hWnd, bool allow)
+    {
+        BOOL currentValue;
+        HRESULT result = PInvoke.DwmGetWindowAttribute(
+          hWnd,
+           DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+          &currentValue,
+          (uint)sizeof(BOOL));
+        if (result.Succeeded)
+        {
+            if (currentValue == allow)
+            {
+                // no need for using DwmSetWindowAttribute
+                return;
+            }
+
+            PInvoke.DwmSetWindowAttribute(
+            hWnd,
+            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &allow,
+            (uint)sizeof(BOOL)).AssertSuccess();
+        }
+    }
+
+    private static unsafe LRESULT DlgProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+    {
+        s_hWndInternal = (HWND)hWnd;
+        switch ((uint)msg)
+        {
+            case PInvokeCore.WM_INITDIALOG:
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                AllowDarkNonClientArea(s_hWndInternal, Application.IsDarkModeEnabled);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                PInvokeCore.EnumChildWindows(s_hWndInternal, s_childWindowsCallback);
+                return PInvokeCore.CallWindowProc((void*)s_priorDlgProc, s_hWndInternal, (uint)msg, (nuint)wparam, lparam);
+            case PInvokeCore.WM_PAINT:
+                return OnWmPaint(s_hWndInternal, wparam);
+            case PInvokeCore.WM_CTLCOLORBTN:
+            case PInvokeCore.WM_CTLCOLORDLG:
+            case PInvokeCore.WM_CTLCOLORSTATIC:
+                return OnWmCtlColor((uint)msg, wparam);
+            default:
+                return PInvokeCore.CallWindowProc((void*)s_priorDlgProc, s_hWndInternal, (uint)msg, (nuint)wparam, lparam);
+        }
+    }
+
+    private static unsafe void InstallHook()
+    {
+        lock (s_lock)
+        {
+            if (s_messageBoxHook != 0)
+            {
+                return;
+            }
+
+            // see https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-setwindowshookexw
+            // Installs a hook procedure that monitors messages before the system sends them to the destination.
+
+            // Handling messages from WH_CALLWNDPROC or WH_CALLWNDPROCRET does not give good results so we chose to use WH_CALLWNDPROC and support subclassing by using Setwindowlong.
+            s_messageBoxHook = PInvoke.SetWindowsHookEx(
+                WINDOWS_HOOK_ID.WH_CALLWNDPROC,
+                (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)s_hookPointer,
+                HINSTANCE.Null,
+                PInvokeCore.GetCurrentThreadId());
+
+            s_isMessageBoxHooked = s_messageBoxHook != 0;
+
+            Debug.Assert(s_isMessageBoxHooked, "Failed to install MessageBox hook.");
+        }
+    }
+
+    private static void UninstallHook()
+    {
+        lock (s_lock)
+        {
+            if (s_messageBoxHook != 0)
+            {
+                if (!PInvoke.UnhookWindowsHookEx(s_messageBoxHook))
+                {
+                    Debug.Fail("Failed to remove MessageBox hook.");
+                }
+
+                s_messageBoxHook = default;
+                s_isMessageBoxHooked = false;
+            }
+
+            if (s_priorDlgProc != 0)
+            {
+                PInvokeCore.SetWindowLong(s_hWndInternal, (WINDOW_LONG_PTR_INDEX)IntPtr.Size, s_priorDlgProc);
+            }
+
+            s_priorDlgProc = 0;
+        }
+    }
+
+    private static unsafe LRESULT HookProc(int nCode, WPARAM wParam, LPARAM lParam)
+    {
+        if (s_isMessageBoxHooked && nCode == PInvoke.HC_ACTION && lParam != 0)
+        {
+            CWPSTRUCT msg = Marshal.PtrToStructure<CWPSTRUCT>(lParam);
+            if (msg.message == PInvokeCore.WM_INITDIALOG)
+            {
+                HWND hwndText = PInvoke.GetDlgItem(msg.hwnd, MBTextId);
+                if (!hwndText.IsNull)
+                {
+                    // subclassing the DLGPROC instead of WNDPROC.
+                    // DWL_DLGPROC and DWLP_DLGPROC have the exact value of IntPtr.Size.
+                    WNDPROC ownerWindowProcedure = DlgProcInternal;
+                    nint newDlgProcPointer = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
+                    Debug.Assert(s_priorDlgProc == 0, "The previous subclass wasn't properly cleaned up");
+                    s_priorDlgProc = PInvokeCore.SetWindowLong(
+                       msg.hwnd,
+                       (WINDOW_LONG_PTR_INDEX)IntPtr.Size,
+                       newDlgProcPointer);
+                }
+            }
+        }
+
+        return PInvoke.CallNextHookEx(s_messageBoxHook, nCode, wParam, lParam);
     }
 
     internal static HelpInfo? HelpInfo
@@ -73,7 +284,7 @@ public class MessageBox
     private static void PopHelpInfo()
     {
         // we roll our own stack here because we want a pretty lightweight implementation.
-        // usually there's only going to be one message box shown at a time. But if
+        // usually there's only going to be one message box shown at a time.  But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
         if (t_helpInfoTable is null)
@@ -99,7 +310,7 @@ public class MessageBox
     private static void PushHelpInfo(HelpInfo hpi)
     {
         // we roll our own stack here because we want a pretty lightweight implementation.
-        // usually there's only going to be one message box shown at a time. But if
+        // usually there's only going to be one message box shown at a time.  But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
 
@@ -319,7 +530,7 @@ public class MessageBox
     }
 
     /// <summary>
-    ///  Displays a message box with specified text, caption, and style.
+    ///  Displays a message box with specified text, caption, style .
     /// </summary>
     public static DialogResult Show(string? text, string? caption, MessageBoxButtons buttons)
     {
@@ -475,14 +686,26 @@ public class MessageBox
         // Activate theming scope to get theming for controls at design time and when hosted in browser.
         // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
         using ThemingScope scope = new(Application.UseVisualStyles);
-
         Application.BeginModalMessageLoop();
+
         try
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                InstallHook();
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             return (DialogResult)PInvoke.MessageBox(handle.Handle, text, caption, style);
         }
         finally
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                UninstallHook();
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Application.EndModalMessageLoop();
 
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
