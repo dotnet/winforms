@@ -110,6 +110,21 @@ internal static class LinkUtilities
         }
     }
 
+    /// <summary>
+    ///  Gets a light blue link color suitable for dark mode backgrounds.
+    /// </summary>
+    public static Color DarkModeLinkColor => Color.FromArgb(102, 178, 255);
+
+    /// <summary>
+    ///  Gets a light red active link color suitable for dark mode backgrounds.
+    /// </summary>
+    public static Color DarkModeActiveLinkColor => Color.FromArgb(255, 128, 128);
+
+    /// <summary>
+    ///  Gets a light purple visited link color suitable for dark mode backgrounds.
+    /// </summary>
+    public static Color DarkModeVisitedLinkColor => Color.FromArgb(200, 162, 255);
+
     /// Produces a color for visited links using SystemColors
     public static Color GetVisitedLinkColor()
     {

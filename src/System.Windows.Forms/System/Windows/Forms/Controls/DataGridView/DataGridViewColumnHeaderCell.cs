@@ -1005,13 +1005,11 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             Color lightColor;
             bool useFlatStyle = false;
 
-            // Use explicit SortGlyphColor if set, otherwise calculate contrasted colors
-            if (!cellStyle.SortGlyphColor.IsEmpty)
+            // In Dark Mode with quirk enabled, use a solid white glyph for better visibility
+            if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
-                // Use the same color for both to create a flat (non-3D) appearance
-                darkColor = cellStyle.SortGlyphColor;
-                lightColor = cellStyle.SortGlyphColor;
-                // Force flat style when custom SortGlyphColor is set for solid fill
+                darkColor = Color.White;
+                lightColor = Color.White;
                 useFlatStyle = true;
             }
             else
@@ -1137,7 +1135,6 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                 }
                 else
                 {
-                    Debug.Assert(SortGlyphDirection == SortOrder.Descending);
                     switch (advancedBorderStyle.Right)
                     {
                         case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
