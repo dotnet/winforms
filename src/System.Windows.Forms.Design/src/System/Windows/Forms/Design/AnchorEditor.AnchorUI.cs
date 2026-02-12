@@ -274,7 +274,9 @@ public sealed partial class AnchorEditor
 
                 if (_solid)
                 {
-                    e.Graphics.FillRectangle(SystemBrushes.ControlDark, rc);
+                    e.Graphics.FillRectangle(
+                        Application.IsDarkModeEnabled ? SystemBrushes.ControlText : SystemBrushes.ControlDark,
+                        rc);
                     e.Graphics.DrawRectangle(SystemPens.WindowFrame, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
                 }
                 else
