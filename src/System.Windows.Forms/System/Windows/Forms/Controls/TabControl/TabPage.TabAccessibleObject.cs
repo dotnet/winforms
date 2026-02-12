@@ -95,12 +95,24 @@ public partial class TabPage
                 return null;
             }
 
+            int index = OwningTabControl.TabPages.IndexOf(_owningTabPage);
+
             return direction switch
             {
                 NavigateDirection.NavigateDirection_Parent => OwningTabControl.AccessibilityObject,
-                NavigateDirection.NavigateDirection_NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
-                NavigateDirection.NavigateDirection_PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
-                _ => null
+                NavigateDirection.NavigateDirection_FirstChild =>
+                    index == OwningTabControl.SelectedIndex
+                        ? _owningTabPage.AccessibilityObject // Panel
+                        : null,
+                NavigateDirection.NavigateDirection_NextSibling =>
+                    index < OwningTabControl.TabPages.Count - 1
+                        ? OwningTabControl.TabPages[index + 1].TabAccessibilityObject
+                        : null,
+                NavigateDirection.NavigateDirection_PreviousSibling =>
+                    index > 0
+                        ? OwningTabControl.TabPages[index - 1].TabAccessibilityObject
+                        : null,
+                _ => base.FragmentNavigate(direction)
             };
         }
 
