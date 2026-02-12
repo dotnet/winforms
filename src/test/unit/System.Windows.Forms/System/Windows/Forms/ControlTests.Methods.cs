@@ -14388,8 +14388,6 @@ public partial class ControlTests
         Assert.Equal(0, createdCallCount);
     }
 
-
-
     private class NoCreateControl : Control
     {
         protected override void WndProc(ref Message m)
