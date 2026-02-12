@@ -17,6 +17,48 @@ namespace System.Windows.Forms;
 
 public partial class DataGridView
 {
+    /// <summary>
+    ///  Applies dark mode theming to the DataGridView when the application is running
+    ///  in dark mode. This is called automatically from <see cref="OnHandleCreated"/>
+    ///  when the <c>System.Windows.Forms.DataGridViewDarkModeTheming</c> AppContext switch
+    ///  is enabled (default for .NET 10+).
+    /// </summary>
+    private void ApplyDarkModeTheming()
+    {
+        Color surface = SystemColors.Window;
+        Color onSurface = SystemColors.WindowText;
+        Color headerBg = SystemColors.ControlDarkDark;
+        Color headerFg = SystemColors.ActiveCaptionText;
+        Color selectionBg = Color.FromArgb(0x33, 0x66, 0xCC);
+        Color selectionFg = Color.White;
+
+        // Disable the header's system theme so that our custom styles are not overridden by the system.
+        EnableHeadersVisualStyles = false;
+
+        // Table body
+        BackgroundColor = surface;
+        DefaultCellStyle.BackColor = surface;
+        DefaultCellStyle.ForeColor = onSurface;
+
+        // Column headers
+        ColumnHeadersDefaultCellStyle.BackColor = headerBg;
+        ColumnHeadersDefaultCellStyle.ForeColor = headerFg;
+
+        // Light-colored dividing line
+        GridColor = ControlPaint.Light(surface, 0.50f);
+
+        // Row headers
+        RowHeadersDefaultCellStyle.BackColor = headerBg;
+        RowHeadersDefaultCellStyle.ForeColor = headerFg;
+
+        // Selected state - use Color.Empty so header selection follows body selection
+        RowHeadersDefaultCellStyle.SelectionBackColor = Color.Empty;
+        ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.Empty;
+
+        DefaultCellStyle.SelectionBackColor = selectionBg;
+        DefaultCellStyle.SelectionForeColor = selectionFg;
+    }
+
     protected virtual void AccessibilityNotifyCurrentCellChanged(Point cellAddress)
     {
         if (cellAddress.X < 0 || cellAddress.X >= Columns.Count)
@@ -15254,6 +15296,12 @@ public partial class DataGridView
         {
             _dataGridViewState2[State2_AutoSizedWithoutHandle] = false;
             OnGlobalAutoSize();
+        }
+
+        // Automatically apply dark mode theming when enabled via quirk switch.
+        if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
+        {
+            ApplyDarkModeTheming();
         }
 
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
