@@ -13,22 +13,12 @@ internal static unsafe class ClipboardCore<TOleServices>
     where TOleServices : IOleServices
 {
     /// <summary>
-    ///  The number of times to retry OLE clipboard operations.
-    /// </summary>
-    private const int OleRetryCount = 10;
-
-    /// <summary>
-    ///  The amount of time in milliseconds to sleep between retrying OLE clipboard operations.
-    /// </summary>
-    private const int OleRetryDelay = 100;
-
-    /// <summary>
     ///  Removes all data from the Clipboard.
     /// </summary>
     /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
     internal static HRESULT Clear(
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
@@ -53,8 +43,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     /// <returns>An <see cref="HRESULT"/> indicating the success or failure of the operation.</returns>
     internal static HRESULT Flush(
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
@@ -85,8 +75,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     internal static HRESULT SetData(
         IComVisibleDataObject dataObject,
         bool copy,
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
@@ -134,8 +124,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     internal static HRESULT TryGetData(
         out ComScope<IDataObject> proxyDataObject,
         out object? originalObject,
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
     {
         TOleServices.EnsureThreadState();
 
@@ -184,8 +174,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// <inheritdoc cref="SetData(IComVisibleDataObject, bool, int, int)"/>
     internal static bool IsObjectOnClipboard(
         object @object,
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
     {
         if (@object is null)
         {
@@ -210,8 +200,8 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     internal static HRESULT GetDataObject<TDataObject, TIDataObject>(
         out TIDataObject? dataObject,
-        int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryTimes = ClipboardConstants.OleRetryCount,
+        int retryDelay = ClipboardConstants.OleRetryDelay)
         where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
         where TIDataObject : class
     {
