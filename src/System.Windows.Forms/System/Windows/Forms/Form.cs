@@ -5731,6 +5731,13 @@ public partial class Form : ContainerControl
             // to CreateControl().
             _dialogResult = DialogResult.None;
 
+            // Set dialog owner before CreateControl() so that
+            // FillInCreateParamsStartPosition can access it when positioning maximized forms
+            if (owner is not null && !ownerHwnd.IsNull)
+            {
+                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
+            }
+
             // If "this" is an MDI parent then the window gets activated,
             // causing GetActiveWindow to return "this.handle"... to prevent setting
             // the owner of this to this, we must create the control AFTER calling
@@ -5750,8 +5757,6 @@ public partial class Form : ContainerControl
                 // So, it is necessary to not set the owner before creating the handle. Otherwise,
                 // the window may never receive Dpi changed event even if its parent has different Dpi.
                 // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
-
-                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
                 if (owner is Form form && owner != oldOwner)
                 {
                     Owner = form;
