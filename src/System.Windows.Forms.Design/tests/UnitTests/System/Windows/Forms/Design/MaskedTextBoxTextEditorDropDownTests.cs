@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.Design.Tests;
 
 public class MaskedTextBoxTextEditorDropDownTests
@@ -53,5 +55,21 @@ public class MaskedTextBoxTextEditorDropDownTests
         // Incorrectly formatted values will result in the error "Error at position 0: expected number".
         dropDownMaskedTextBox.Text = "invalid";
         errorProvider.GetError(dropDownMaskedTextBox).Should().Contain(SR.MaskedTextBoxHintDigitExpected);
+    }
+
+    [Fact]
+    public void DropDown_SizeAndPadding_ScalesWithDPI()
+    {
+        using MaskedTextBox maskedTextBox = new();
+        using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
+
+        // The size and padding should be scaled based on DPI
+        // At 96 DPI (100%), Size should be (100, 52) and Padding should be (16, 16, 16, 16)
+        // At higher DPI, these values should scale proportionally
+        Size expectedSize = dropDown.LogicalToDeviceUnits(new Size(100, 52));
+        Padding expectedPadding = new(dropDown.LogicalToDeviceUnits(16));
+
+        dropDown.Size.Should().Be(expectedSize);
+        dropDown.Padding.Should().Be(expectedPadding);
     }
 }
