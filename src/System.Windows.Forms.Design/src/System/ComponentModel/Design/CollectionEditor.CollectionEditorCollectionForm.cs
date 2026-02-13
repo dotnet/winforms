@@ -1024,8 +1024,8 @@ public partial class CollectionEditor
 
             bool editEnabled = (_listBox.SelectedItem is not null) && CollectionEditable;
             _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listBox.SelectedItem!).Value);
-            _upButton.Enabled = editEnabled && _listBox.Items.Count > 1;
-            _downButton.Enabled = editEnabled && _listBox.Items.Count > 1;
+            _upButton.Enabled = editEnabled && _listBox.Items.Count > 1 && _listBox.SelectedIndex > 0;
+            _downButton.Enabled = editEnabled && _listBox.Items.Count > 1 && _listBox.SelectedIndex < _listBox.Items.Count - 1;
             _propertyGrid.Enabled = editEnabled;
             _addButton.Enabled = CollectionEditable;
 
