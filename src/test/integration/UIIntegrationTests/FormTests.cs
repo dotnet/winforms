@@ -35,25 +35,18 @@ public class FormTests : ControlTestBase
 
             form.WindowState = windowState;
 
+            // Snap left using Win+Left shortcut. This directly snaps the window
+            // to the left half of the screen without requiring snap layout panel navigation.
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_Z));
-
-            // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
-            await Task.Delay(SnapLayoutDelayMS);
-
-            // Snap left
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT)
-                                                         .KeyPress(VIRTUAL_KEY.VK_RETURN));
+                inputSimulator => inputSimulator.Keyboard
+                    .ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_LEFT));
 
             await Task.Delay(SnapLayoutDelayMS);
 
-            // At this point, Windows displays a panel containing all running applications so the
-            // user can select one to dock next to our form. It also takes the keyboard focus away.
-            // If left in this state, subsequently run tests will fail since keyboard focus is not
-            // given to any newly launched window until this panel is dismissed.
+            // After snapping left, Windows may display a panel containing all running
+            // applications so the user can select one to dock next to our form. It also
+            // takes the keyboard focus away. Dismiss it with Escape.
             await InputSimulator.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
@@ -94,26 +87,18 @@ public class FormTests : ControlTestBase
 
             form.WindowState = windowState;
 
+            // Snap right using Win+Right shortcut. This directly snaps the window
+            // to the right half of the screen without requiring snap layout panel navigation.
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_Z));
-
-            // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
-            await Task.Delay(SnapLayoutDelayMS);
-
-            // Snap right
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT)
-                                                         .KeyPress(VIRTUAL_KEY.VK_RIGHT)
-                                                         .KeyPress(VIRTUAL_KEY.VK_RETURN));
+                inputSimulator => inputSimulator.Keyboard
+                    .ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_RIGHT));
 
             await Task.Delay(SnapLayoutDelayMS);
 
-            // At this point, Windows displays a panel containing all running applications so the
-            // user can select one to dock next to our form. It also takes the keyboard focus away.
-            // If left in this state, subsequently run tests will fail since keyboard focus is not
-            // given to any newly launched window until this panel is dismissed.
+            // After snapping right, Windows may display a panel containing all running
+            // applications so the user can select one to dock next to our form. It also
+            // takes the keyboard focus away. Dismiss it with Escape.
             await InputSimulator.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
