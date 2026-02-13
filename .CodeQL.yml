@@ -7,7 +7,7 @@ queries:
   # REPO-WIDE RULE EXCLUSIONS
   #
   - exclude:
-      queryId:
+      queryid:
         # [Serializable] doesn't imply that a type is *safe* to [de]serialize; only that it is
         # *possible* to do so. The rules below incorrectly assume we're trying to make a safety
         # guarantee.
@@ -17,3 +17,4 @@ queries:
         # APIs. Those call sites are well-reviewed and don't benefit from extra alerts regarding
         # the possibility of loading malicious code.
         - "cs/deserialization-unexpected-subtypes"
+
