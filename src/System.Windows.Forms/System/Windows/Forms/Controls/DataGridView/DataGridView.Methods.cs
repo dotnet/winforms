@@ -25593,6 +25593,23 @@ public partial class DataGridView
         Capture = false;
     }
 
+    private static void ReleaseRowUiaProviders(DataGridViewRow row)
+    {
+        if (!row.IsAccessibilityObjectCreated)
+        {
+            return;
+        }
+
+        DataGridViewCellCollection cells = row.Cells;
+        for (int cellIndex = 0; cellIndex < cells.Count; cellIndex++)
+        {
+            cells[cellIndex].ReleaseUiaProvider();
+        }
+
+        row.HeaderCell.ReleaseUiaProvider();
+        row.ReleaseUiaProvider();
+    }
+
     internal override void ReleaseUiaProvider(HWND handle)
     {
         if (!IsAccessibilityObjectCreated)
@@ -25602,17 +25619,22 @@ public partial class DataGridView
 
         if (OsVersion.IsWindows8OrGreater())
         {
-            foreach (DataGridViewRow row in Rows)
+            // Collect unique rows from SharedList using HashSet for deduplication.
+            // SharedList may have several hundred thousand entries, but most point to the same shared row instances.
+            HashSet<DataGridViewRow> uniqueRows = [];
+            List<DataGridViewRow> sharedList = Rows.SharedList;
+            for (int i = 0; i < sharedList.Count; i++)
             {
-                foreach (DataGridViewCell cell in row.Cells)
-                {
-                    cell.ReleaseUiaProvider();
-                }
-
-                row.HeaderCell.ReleaseUiaProvider();
-                row.ReleaseUiaProvider();
+                uniqueRows.Add(sharedList[i]);
             }
 
+            // Release UIA providers for unique rows
+            foreach (DataGridViewRow row in uniqueRows)
+            {
+                ReleaseRowUiaProviders(row);
+            }
+
+            // Release column header accessibility objects
             foreach (DataGridViewColumn column in Columns)
             {
                 column.HeaderCell.ReleaseUiaProvider();
@@ -25621,7 +25643,6 @@ public partial class DataGridView
             _editingPanel?.ReleaseUiaProvider(HWND.Null);
             _editingPanelAccessibleObject = null;
             _topLeftHeaderCell?.ReleaseUiaProvider();
-
             if (AccessibilityObject is DataGridViewAccessibleObject accessibleObject)
             {
                 accessibleObject.ReleaseChildUiaProviders();

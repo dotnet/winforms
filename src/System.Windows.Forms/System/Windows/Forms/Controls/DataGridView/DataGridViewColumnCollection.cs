@@ -1064,7 +1064,16 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         if (DataGridView.IsAccessibilityObjectCreated && OsVersion.IsWindows8OrGreater())
         {
-            foreach (DataGridViewRow row in DataGridView.Rows)
+            // Collect unique rows from SharedList using HashSet for deduplication.
+            HashSet<DataGridViewRow> uniqueRows = [];
+            List<DataGridViewRow> sharedList = DataGridView.Rows.SharedList;
+            for (int i = 0; i < sharedList.Count; i++)
+            {
+                uniqueRows.Add(sharedList[i]);
+            }
+
+            // Release UIA providers for the cell at the removed column index
+            foreach (DataGridViewRow row in uniqueRows.Where(row => row.IsAccessibilityObjectCreated))
             {
                 row.Cells[index].ReleaseUiaProvider();
             }
