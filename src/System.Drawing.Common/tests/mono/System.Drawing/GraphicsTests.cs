@@ -2189,12 +2189,6 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void VisibleClipBound()
     {
-        if (PlatformDetection.IsArmOrArm64Process)
-        {
-            // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
-            Assert.Skip("Precision on float numbers");
-        }
-
         // see #78958
         using Bitmap bmp = new(100, 100);
         using Graphics g = Graphics.FromImage(bmp);
@@ -2214,7 +2208,7 @@ public class GraphicsTest : IDisposable
 
         g.RotateTransform(90);
         RectangleF rotclip = g.VisibleClipBounds;
-        Assert.Equal(0, rotclip.X);
+        Assert.Equal(0.0, rotclip.X, 4);
         Assert.Equal(-32.0, rotclip.Y, 4);
         Assert.Equal(32.0, rotclip.Width, 4);
         Assert.Equal(32.0, rotclip.Height, 4);
@@ -2223,12 +2217,6 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void VisibleClipBound_BigClip()
     {
-        if (PlatformDetection.IsArmOrArm64Process)
-        {
-            // ActiveIssue: 35744
-            Assert.Skip("Precision on float numbers");
-        }
-
         using Bitmap bmp = new(100, 100);
         using Graphics g = Graphics.FromImage(bmp);
         RectangleF noclip = g.VisibleClipBounds;
@@ -2253,13 +2241,13 @@ public class GraphicsTest : IDisposable
 
         g.RotateTransform(90);
         RectangleF rotclipbound = g.ClipBounds;
-        Assert.Equal(0, rotclipbound.X);
+        Assert.Equal(0.0, rotclipbound.X, 4);
         Assert.Equal(-200.0, rotclipbound.Y, 4);
         Assert.Equal(200.0, rotclipbound.Width, 4);
         Assert.Equal(200.0, rotclipbound.Height, 4);
 
         RectangleF rotclip = g.VisibleClipBounds;
-        Assert.Equal(0, rotclip.X);
+        Assert.Equal(0.0, rotclip.X, 4);
         Assert.Equal(-100.0, rotclip.Y, 4);
         Assert.Equal(100.0, rotclip.Width, 4);
         Assert.Equal(100.0, rotclip.Height, 4);
@@ -2268,12 +2256,6 @@ public class GraphicsTest : IDisposable
     [Fact]
     public void Rotate()
     {
-        if (PlatformDetection.IsArmOrArm64Process)
-        {
-            // ActiveIssue: 35744
-            Assert.Skip("Precision on float numbers");
-        }
-
         using Bitmap bmp = new(100, 50);
         using Graphics g = Graphics.FromImage(bmp);
         RectangleF vcb = g.VisibleClipBounds;
@@ -2284,7 +2266,7 @@ public class GraphicsTest : IDisposable
 
         g.RotateTransform(90);
         RectangleF rvcb = g.VisibleClipBounds;
-        Assert.Equal(0, rvcb.X);
+        Assert.Equal(0.0, rvcb.X, 4);
         Assert.Equal(-100.0, rvcb.Y, 4);
         Assert.Equal(50.0, rvcb.Width, 4);
         Assert.Equal(100.0, rvcb.Height, 4);
