@@ -2348,30 +2348,22 @@ public class GraphicsPathTests
     {
         using GraphicsPath path = new();
         path.AddRoundedRectangle(new Rectangle(10, 10, 20, 20), new(5, 5));
-        path.PathPoints.Should().BeApproximatelyEquivalentTo(
-            new PointF[]
-            {
-                new(27.499994f, 10),
-                new(28.880707f, 9.999997f),
-                new(29.999996f, 11.119284f),
-                new(29.999998f, 12.499999f),
-                new(29.999998f, 12.499999f),
-                new(29.999998f, 12.5f),
-                new(29.999998f, 12.5f),
-                new(29.999998f, 27.499998f),
-                new(29.999998f, 28.88071f),
-                new(28.88071f, 29.999998f),
-                new(27.5f, 29.999998f),
-                new(12.500001f, 29.999998f),
-                new(11.119289f, 30),
-                new(10.000001f, 28.880713f),
-                new(10f, 27.5f),
-                new(9.999999f, 12.500001f),
-                new(9.999998f, 11.119289f),
-                new(11.119286f, 10.000001f),
-                new(12.499997f, 9.999999f),
-            },
-            0.000001f);
+
+        // The number of points (19 or 25) can vary by GDI+ implementation.
+        path.PointCount.Should().BeOneOf(19, 25);
+        path.GetBounds().Should().BeApproximately(new RectangleF(10f, 10f, 20f, 20f), 0.01f);
+
+        PointF[] points = path.PathPoints;
+        PointF first = points[0];
+        PointF last = points[^1];
+
+        // First point should be on the top edge near top-right corner.
+        first.X.Should().BeApproximately(27.5f, 0.001f);
+        first.Y.Should().BeApproximately(10f, 0.001f);
+
+        // Last point should be on the top edge near top-left corner.
+        last.X.Should().BeApproximately(12.5f, 0.001f);
+        last.Y.Should().BeApproximately(10f, 0.001f);
     }
 
     [Fact]
@@ -2379,30 +2371,22 @@ public class GraphicsPathTests
     {
         using GraphicsPath path = new();
         path.AddRoundedRectangle(new RectangleF(10, 10, 20, 20), new(5, 5));
-        path.PathPoints.Should().BeApproximatelyEquivalentTo(
-            new PointF[]
-            {
-                new(27.499994f, 10),
-                new(28.880707f, 9.999997f),
-                new(29.999996f, 11.119284f),
-                new(29.999998f, 12.499999f),
-                new(29.999998f, 12.499999f),
-                new(29.999998f, 12.5f),
-                new(29.999998f, 12.5f),
-                new(29.999998f, 27.499998f),
-                new(29.999998f, 28.88071f),
-                new(28.88071f, 29.999998f),
-                new(27.5f, 29.999998f),
-                new(12.500001f, 29.999998f),
-                new(11.119289f, 30),
-                new(10.000001f, 28.880713f),
-                new(10f, 27.5f),
-                new(9.999999f, 12.500001f),
-                new(9.999998f, 11.119289f),
-                new(11.119286f, 10.000001f),
-                new(12.499997f, 9.999999f),
-            },
-            0.000001f);
+
+        // The number of points can vary by GDI+ implementation (19 or 25).
+        path.PointCount.Should().BeOneOf(19, 25);
+        path.GetBounds().Should().BeApproximately(new RectangleF(10f, 10f, 20f, 20f), 0.01f);
+
+        PointF[] points = path.PathPoints;
+        PointF first = points[0];
+        PointF last = points[^1];
+
+        // First point should be on the top edge near top-right corner.
+        first.X.Should().BeApproximately(27.5f, 0.001f);
+        first.Y.Should().BeApproximately(10f, 0.001f);
+
+        // Last point should be on the top edge near top-left corner.
+        last.X.Should().BeApproximately(12.5f, 0.001f);
+        last.Y.Should().BeApproximately(10f, 0.001f);
     }
 
 #endif
