@@ -308,8 +308,14 @@ public partial class MatrixTests
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity), MatrixOrder.Prepend, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity } };
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity), MatrixOrder.Append, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity } };
 
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue), MatrixOrder.Prepend, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue), MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
+        // On x86, multiplying matrix coefficients (10-60) by MaxValue overflows float to infinity
+        // due to x87 FPU 80-bit intermediate precision behavior.
+        float expectedMaxMultiply = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            ? float.PositiveInfinity
+            : float.MaxValue;
+
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue), MatrixOrder.Prepend, new float[] { expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply } };
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue), MatrixOrder.Append, new float[] { expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply, expectedMaxMultiply } };
     }
 
     [Theory]
@@ -531,8 +537,14 @@ public partial class MatrixTests
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Prepend, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, 50, 60 } };
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Append, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity } };
 
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, 50, 60 } };
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
+        // On x86, scaling matrix coefficients (10-60) by MaxValue overflows float to infinity
+        // due to x87 FPU 80-bit intermediate precision behavior.
+        float expectedMaxScale = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            ? float.PositiveInfinity
+            : float.MaxValue;
+
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { expectedMaxScale, expectedMaxScale, expectedMaxScale, expectedMaxScale, 50, 60 } };
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { expectedMaxScale, expectedMaxScale, expectedMaxScale, expectedMaxScale, expectedMaxScale, expectedMaxScale } };
     }
 
     [Theory]
@@ -597,8 +609,14 @@ public partial class MatrixTests
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Prepend, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, 50, 60 } };
         yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Append, new float[] { float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity } };
 
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, 50, 60 } };
-        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
+        // On x86, shearing matrix coefficients (10-60) by MaxValue overflows float to infinity
+        // due to x87 FPU 80-bit intermediate precision behavior.
+        float expectedMaxShear = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            ? float.PositiveInfinity
+            : float.MaxValue;
+
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { expectedMaxShear, expectedMaxShear, expectedMaxShear, expectedMaxShear, 50, 60 } };
+        yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { expectedMaxShear, expectedMaxShear, expectedMaxShear, expectedMaxShear, expectedMaxShear, expectedMaxShear } };
     }
 
     [Theory]
@@ -654,7 +672,12 @@ public partial class MatrixTests
         yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Prepend, new float[] { 1, 2, 3, 4, float.NegativeInfinity, float.NegativeInfinity } };
         yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.NegativeInfinity, float.NegativeInfinity, MatrixOrder.Append, new float[] { 1, 2, 3, 4, float.NegativeInfinity, float.NegativeInfinity } };
 
-        yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { 1, 2, 3, 4, float.MaxValue, float.MaxValue } };
+        // On x86, Prepend operation causes float overflow to infinity due to x87 FPU behavior.
+        float expectedMaxTranslation = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            ? float.PositiveInfinity
+            : float.MaxValue;
+
+        yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.MaxValue, float.MaxValue, MatrixOrder.Prepend, new float[] { 1, 2, 3, 4, expectedMaxTranslation, expectedMaxTranslation } };
         yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { 1, 2, 3, 4, float.MaxValue, float.MaxValue } };
     }
 
