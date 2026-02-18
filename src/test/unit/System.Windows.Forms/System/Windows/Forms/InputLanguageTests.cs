@@ -190,7 +190,10 @@ public class InputLanguageTests
 
         if (CultureInfo.InstalledUICulture.Name.StartsWith("en-", StringComparison.OrdinalIgnoreCase))
         {
-            language.LayoutName.Should().Be(layoutName);
+            // Layout display names may include OS-specific suffixes e.g. "French" became
+            // "French (Legacy, AZERTY)" in Windows 11.0. Due to this reason we are using StartsWith
+            // instead of equality check for layout name.
+            language.LayoutName.Should().StartWith(layoutName);
         }
         else
         {

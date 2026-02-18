@@ -17,10 +17,10 @@ jobs:
     pool:
       ${{ if eq(variables['System.TeamProject'], 'public') }}:
         name: $(DncEngPublicBuildPool)
-        demands: ImageOverride -equals windows.vs2022preview.amd64.open
+        demands: ImageOverride -equals windows.vs2026preview.scout.amd64.open
       ${{ if ne(variables['System.TeamProject'], 'public') }}:
         name: $(DncEngInternalBuildPool)
-        demands: ImageOverride -equals windows.vs2022preview.amd64
+        demands: ImageOverride -equals windows.vs2026preview.scout.amd64
     strategy:
       matrix:
         Debug:
