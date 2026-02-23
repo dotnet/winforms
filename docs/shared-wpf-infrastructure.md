@@ -109,9 +109,8 @@ if (hr.Failed)
 
 1. **Coupling:** Changes in dotnet/winforms can break WPF, and vice versa (though WPF changes rarely touch these components)
 2. **Regressions affect both stacks:** A bug introduced in shared code will impact both WinForms and WPF
-3. **Servicing complexity:** Backporting fixes requires coordination across repositories and understanding of version dependencies
-4. **Validation requirements:** Changes must be tested in both WinForms and WPF scenarios
-5. **Discoverability:** It may not be obvious to contributors that code changes impact WPF
+3. **Validation requirements:** Changes must be tested in both WinForms and WPF scenarios
+4. **Discoverability:** It may not be obvious to contributors that code changes impact WPF
 
 ## Guidance for Contributors
 
@@ -144,14 +143,20 @@ if (hr.Failed)
   - Copy/paste images
   - Try custom data formats if your change affects them
   - Test drag-and-drop scenarios
-- If possible, validate with a WPF application (requires setting up a local WPF build or asking for help)
+- If possible, validate with a WPF application
+  - WPF development follows the same patterns (`build.cmd`, `start-vs.cmd`, etc.)
+  - Consider testing via manual insertion of the updated shared DLL or repointing to a locally built transport package
 - Check for memory leaks or COM reference counting issues in loops or stress scenarios
 
 **Code review considerations:**
 - Ensure error handling is robust (null checks, HRESULT validation, etc.)
 - Look for potential double-release or use-after-free patterns in COM/OLE code
-- Verify that `ComScope` usage is correct and that `ReleaseStgMedium` isn't called redundantly
+- Verify that `ComScope` disposal is correct and that different release mechanisms don't overlap
 - Consider thread safety and race conditions (clipboard content can change at any time)
+- Look for changes in state return (different values, exceptions). Changes must be carefully considered and have strong justification to minimize breaking changes.
+- Document all breaking changes.
+- OLE / clipboard state is shared machine wide. It is expected that state can change at any time. Handle state change gracefully.
+- Avoid second guessing application intent and shared OLE state. If the data is not retrieved successfully just accept the result, don't retry. Existing retry logic can be kept- if API users want retry logic they should either implement their own wrappers or present new API requests where intent can be made explicit.
 
 ### Backporting to Release Branches
 
