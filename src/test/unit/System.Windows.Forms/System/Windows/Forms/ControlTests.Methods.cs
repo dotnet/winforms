@@ -421,7 +421,8 @@ public partial class ControlTests
         };
 
         AccessibleObject accessibleObject = control.AccessibilityObject;
-        control.InvokeOnHandleDestroyed(EventArgs.Empty);
+        Action action = () => control.InvokeOnHandleDestroyed(EventArgs.Empty);
+        action.Should().NotThrow();
     }
 
     [WinFormsFact]
