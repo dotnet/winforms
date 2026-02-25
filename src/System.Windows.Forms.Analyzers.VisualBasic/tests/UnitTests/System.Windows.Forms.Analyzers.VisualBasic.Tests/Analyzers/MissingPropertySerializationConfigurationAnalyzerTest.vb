@@ -4,7 +4,8 @@ Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
-
+
+
 <ForceGC()>
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
 
