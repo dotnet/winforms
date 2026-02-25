@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 #if DEBUG
-using System.Runtime.InteropServices;
 #endif
 
 namespace Windows.Win32;

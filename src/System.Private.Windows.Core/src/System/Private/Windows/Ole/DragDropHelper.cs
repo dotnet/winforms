@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Private.Windows.Graphics;
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Shell;

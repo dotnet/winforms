@@ -5,7 +5,6 @@ using System.Collections;
 using System.Drawing;
 using System.Private.Windows.BinaryFormat.Serializer;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace System.Private.Windows.BinaryFormat;
