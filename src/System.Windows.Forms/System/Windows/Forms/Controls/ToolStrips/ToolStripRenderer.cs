@@ -865,13 +865,7 @@ public abstract class ToolStripRenderer
 
             if (image is Bitmap bitmap)
             {
-                if (Application.IsDarkModeEnabled)
-                {
-                    // In dark mode, the check mark icons are dark glyphs designed for light
-                    // backgrounds. Invert the foreground color so they are visible on dark backgrounds.
-                    image = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
-                }
-                else if (SystemInformation.HighContrast)
+                if (SystemInformation.HighContrast)
                 {
                     Color backgroundColor = e.Item.Selected ? SystemColors.Highlight : e.Item.BackColor;
 
@@ -879,6 +873,12 @@ public abstract class ToolStripRenderer
                     {
                         image = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
                     }
+                }
+                else if (Application.IsDarkModeEnabled)
+                {
+                    // In dark mode, the check mark icons are dark glyphs designed for light
+                    // backgrounds. Invert the foreground color so they are visible on dark backgrounds.
+                    image = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
                 }
             }
         }
