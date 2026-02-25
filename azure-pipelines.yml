@@ -89,7 +89,7 @@ extends:
       ${{ else }}:
         name: NetCore1ESPool-Internal
 # image is described here - https://helix.dot.net/#1ESHostedPoolImagesWestUS-rg-Internal
-      image: windows.vs2022preview.amd64
+      image: windows.vs2022.amd64
       os: windows
     customBuildTags:
     - ES365AIMigrationTooling
@@ -151,7 +151,7 @@ extends:
           publishUsingPipelines: true
           pool:
             name: $(DncEngInternalBuildPool)
-            demands: ImageOverride -equals windows.vs2022preview.amd64
+            demands: ImageOverride -equals windows.vs2022.amd64
 
     # Copied from the arcade repo and modified for winforms
     - template: /eng/common/templates-official/post-build/post-build.yml@self
