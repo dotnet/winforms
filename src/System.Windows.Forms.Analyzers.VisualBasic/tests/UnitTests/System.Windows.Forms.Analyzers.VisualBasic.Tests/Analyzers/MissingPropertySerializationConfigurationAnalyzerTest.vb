@@ -5,6 +5,7 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
+<ForceGC()>
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
 
     Private Const ProblematicCode As String =

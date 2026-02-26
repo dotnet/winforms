@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
+[ForceGC]
 public sealed class AvoidPassingTaskWithoutCancellationTokenTests
 {
     private const string TestCode = """

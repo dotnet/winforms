@@ -10,6 +10,7 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
+<ForceGC()>
 Public Class AvoidPassingTaskWithoutCancellationTokenTests
 
     Private Const TestCode As String = "

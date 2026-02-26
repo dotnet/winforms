@@ -11,6 +11,7 @@ using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
+[ForceGC]
 public partial class ApplicationConfigurationGeneratorTests
 {
     private const string SourceCompilable = """
