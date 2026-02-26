@@ -856,11 +856,16 @@ public abstract class ToolStripRenderer
             return;
         }
 
+        // Track images we allocate so they can be disposed after drawing.
+        Image? disabledImage = null;
+        Image? invertedImage = null;
+
         if (e.Item is not null)
         {
             if (!e.Item.Enabled)
             {
-                image = CreateDisabledImage(image, e.ImageAttributes);
+                disabledImage = CreateDisabledImage(image, e.ImageAttributes);
+                image = disabledImage;
             }
 
             if (image is Bitmap bitmap)
@@ -871,20 +876,30 @@ public abstract class ToolStripRenderer
 
                     if (ControlPaint.IsDark(backgroundColor))
                     {
-                        image = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        image = invertedImage;
                     }
                 }
                 else if (Application.IsDarkModeEnabled)
                 {
-                    // In dark mode, the check mark icons are dark glyphs designed for light
-                    // backgrounds. Invert the foreground color so they are visible on dark backgrounds.
-                    image = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                    Color backgroundColor = e.Item.Selected ? SystemColors.Highlight : e.Item.BackColor;
+
+                    if (ControlPaint.IsDark(backgroundColor))
+                    {
+                        // In dark mode, the check mark icons are dark glyphs designed for light
+                        // backgrounds. Invert the foreground color so they are visible on dark backgrounds.
+                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        image = invertedImage;
+                    }
                 }
             }
         }
 
         e.Graphics.DrawImage(image, imageRect, 0, 0, imageRect.Width,
         imageRect.Height, GraphicsUnit.Pixel, e.ImageAttributes);
+
+        disabledImage?.Dispose();
+        invertedImage?.Dispose();
     }
 
     /// <summary>
