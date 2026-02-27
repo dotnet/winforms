@@ -8,7 +8,6 @@ using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
 using System.Reflection;
 using System.Reflection.Metadata;
-using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
 using System.Text.Json;
 
@@ -32,31 +31,6 @@ internal static class SerializationRecordExtensions
         {
             // Make the exception easier to catch, but retain the original stack trace.
             throw ex.ConvertToSerializationException();
-        }
-    }
-
-    /// <summary>
-    ///  Deserializes the <see cref="SerializationRecord"/> to an object.
-    /// </summary>
-    [RequiresUnreferencedCode("Ultimately calls resolver for type names in the data.")]
-    public static object? Deserialize(
-        this SerializationRecord rootRecord,
-        IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap,
-        ITypeResolver typeResolver)
-    {
-        DeserializationOptions options = new()
-        {
-            TypeResolver = typeResolver
-        };
-
-        try
-        {
-            return Deserializer.Deserialize(rootRecord.Id, recordMap, options);
-        }
-        catch (SerializationException ex)
-        {
-            throw ExceptionDispatchInfo.SetRemoteStackTrace(
-                new NotSupportedException(ex.Message, ex), ex.StackTrace ?? string.Empty);
         }
     }
 
