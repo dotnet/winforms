@@ -8,6 +8,7 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
+<ForceGC()>
 Public NotInheritable Class ImplementITypedDataObjectTests
 
     Private Const DiagnosticId As String = DiagnosticIDs.ImplementITypedDataObject
