@@ -876,7 +876,7 @@ public abstract class ToolStripRenderer
 
                     if (ControlPaint.IsDark(backgroundColor))
                     {
-                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, backgroundColor);
                         image = invertedImage;
                     }
                 }
@@ -888,7 +888,7 @@ public abstract class ToolStripRenderer
                     {
                         // In dark mode, the check mark icons are dark glyphs designed for light
                         // backgrounds. Invert the foreground color so they are visible on dark backgrounds.
-                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, backgroundColor);
                         image = invertedImage;
                     }
                 }
