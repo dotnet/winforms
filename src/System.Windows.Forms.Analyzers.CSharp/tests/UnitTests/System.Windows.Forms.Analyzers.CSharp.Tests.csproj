@@ -3,6 +3,8 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/TestData/*.cs</DefaultItemExcludesInProjectFolder>
+    <!-- Skip running tests on x86 - analyzer tests hit OutOfMemoryException due to memory-mapped NuGet package extraction in 32-bit processes -->
+    <TestArchitectures>x64</TestArchitectures>
   </PropertyGroup>
 
   <ItemGroup>
