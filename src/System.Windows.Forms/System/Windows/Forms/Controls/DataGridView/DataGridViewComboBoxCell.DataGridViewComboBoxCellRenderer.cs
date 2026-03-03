@@ -60,7 +60,7 @@ public partial class DataGridViewComboBoxCell
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
         {
             // Use Dark Mode element when enabled
-            if (Application.IsDarkModeEnabled)
+            if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
                 InitializeRenderer(ComboBoxDropDownButtonElement, (int)state);
             }
@@ -79,7 +79,7 @@ public partial class DataGridViewComboBoxCell
         public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
             // Use Dark Mode element when enabled
-            if (Application.IsDarkModeEnabled)
+            if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
                 // Draw dark background similar to ComboBox in Dark Mode
                 using var brush = new SolidBrush(Color.FromArgb(45, 45, 45));
