@@ -1435,7 +1435,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 ? ControlPaint.LightLight(baseline)
                 : SystemColors.ControlLightLight;
         }
-        else if (Application.IsDarkModeEnabled)
+        else if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
         {
             // In Dark Mode, use higher contrast colors for better visibility.
             // For dark backgrounds, we need lighter colors that stand out.

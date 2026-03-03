@@ -1008,8 +1008,15 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             // In Dark Mode with quirk enabled, use a solid white glyph for better visibility
             if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
-                darkColor = Color.White;
-                lightColor = Color.White;
+                Color sortGlyphColor = cellStyle.SortGlyphColor;
+
+                if (sortGlyphColor.IsEmpty)
+                {
+                    sortGlyphColor = Color.White;
+                }
+
+                darkColor = sortGlyphColor;
+                lightColor = sortGlyphColor;
                 useFlatStyle = true;
             }
             else
@@ -1202,7 +1209,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         }
 
         return contentBounds;
-    }
+    }}
 
     private bool IsHighlighted()
     {

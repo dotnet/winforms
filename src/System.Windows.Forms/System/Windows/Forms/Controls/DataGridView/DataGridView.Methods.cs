@@ -17,6 +17,9 @@ namespace System.Windows.Forms;
 
 public partial class DataGridView
 {
+    // A medium accent blue commonly used for selection highlights in dark UI.
+    private static readonly Color s_darkModeSelectionBackground = Color.FromArgb(0x33, 0x66, 0xCC);
+
     /// <summary>
     ///  Applies dark mode theming to the DataGridView when the application is running
     ///  in dark mode. This is called automatically from <see cref="OnHandleCreated"/>
@@ -29,7 +32,7 @@ public partial class DataGridView
         Color onSurface = SystemColors.WindowText;
         Color headerBg = SystemColors.ControlDarkDark;
         Color headerFg = SystemColors.ActiveCaptionText;
-        Color selectionBg = Color.FromArgb(0x33, 0x66, 0xCC);
+        Color selectionBg = s_darkModeSelectionBackground;
         Color selectionFg = Color.White;
 
         // Disable the header's system theme so that our custom styles are not overridden by the system.
