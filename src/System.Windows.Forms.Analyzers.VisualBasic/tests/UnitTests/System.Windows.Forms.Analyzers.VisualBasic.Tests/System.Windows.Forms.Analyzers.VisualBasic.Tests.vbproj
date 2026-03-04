@@ -5,8 +5,6 @@
     <LangVersion>15.5</LangVersion>
     <RootNamespace>System.Windows.Forms.Analyzers.Tests</RootNamespace>
     <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);**/TestData/*.vb</DefaultItemExcludesInProjectFolder>
-    <!-- Skip running tests on x86 - analyzer tests hit OutOfMemoryException due to memory-mapped NuGet package extraction in 32-bit processes -->
-    <IsTestProject Condition="'$(Platform)' == 'x86' Or '$(PlatformTarget)' == 'x86'">false</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>

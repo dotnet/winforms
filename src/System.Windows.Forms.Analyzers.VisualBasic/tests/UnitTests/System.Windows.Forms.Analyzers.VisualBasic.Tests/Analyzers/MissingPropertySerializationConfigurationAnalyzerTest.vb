@@ -5,8 +5,10 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
+'<SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")>
 <ForceGC()>
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
+    Inherits XUnit.SkipOnX86TestBase
 
     Private Const ProblematicCode As String =
 "Imports System.Drawing
