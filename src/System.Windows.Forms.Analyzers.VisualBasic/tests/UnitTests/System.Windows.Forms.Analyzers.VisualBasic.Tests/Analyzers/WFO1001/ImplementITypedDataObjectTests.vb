@@ -11,7 +11,6 @@ Imports Xunit
 '<SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")>
 <ForceGC()>
 Public NotInheritable Class ImplementITypedDataObjectTests
-    Inherits XUnit.SkipOnX86TestBase
 
     Private Const DiagnosticId As String = DiagnosticIDs.ImplementITypedDataObject
 
