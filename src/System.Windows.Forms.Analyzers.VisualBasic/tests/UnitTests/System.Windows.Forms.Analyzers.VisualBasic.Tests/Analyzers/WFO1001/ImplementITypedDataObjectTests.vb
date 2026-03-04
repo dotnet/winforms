@@ -8,8 +8,8 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
-'<SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")>
 <ForceGC()>
+<SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")>
 Public NotInheritable Class ImplementITypedDataObjectTests
 
     Private Const DiagnosticId As String = DiagnosticIDs.ImplementITypedDataObject
