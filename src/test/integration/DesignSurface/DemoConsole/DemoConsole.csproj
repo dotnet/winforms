@@ -23,8 +23,6 @@
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
     <IsTestUtilityProject>true</IsTestUtilityProject>
     <TargetFrameworks>$(NetCurrent)-windows;net481</TargetFrameworks>
-    <!-- Unset TargetFramework as this property gets set in the repo's root. This is necessary to  avoid over-building. -->
-    <TargetFramework />
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net481'">
