@@ -910,12 +910,15 @@ public class BindingContextTests
         Assert.Single(context1);
         Assert.Empty(context2);
 
+        // Obtain a reference to the manager1 before updating the binding to context2 to prevent context1 from GC collection.
+        // GC is more aggressive on x86 platform.
+        CurrencyManager manager1 = Assert.IsType<CurrencyManager>(context1[dataSource]);
+
         // Update.
         BindingContext.UpdateBinding(context2, binding);
         Assert.Single(context1);
         Assert.Single(context2);
 
-        CurrencyManager manager1 = Assert.IsType<CurrencyManager>(context1[dataSource]);
         Assert.Empty(manager1.Bindings);
         Assert.Same(dataSource, manager1.List);
         Assert.Equal(1, manager1.Current);
