@@ -6,6 +6,7 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
+    <TargetFramework>$(NetCurrent)</TargetFramework>
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <OptionExplicit>On</OptionExplicit>

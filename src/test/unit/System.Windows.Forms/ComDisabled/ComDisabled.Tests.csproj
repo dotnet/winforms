@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
-    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <SourceTargetFramework>$(NetCurrent)</SourceTargetFramework>
+    <TargetFramework>$(NetCurrent)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>

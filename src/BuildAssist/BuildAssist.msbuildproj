@@ -8,6 +8,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <TargetFramework>$(NetCurrent)</TargetFramework>
     <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'test', 'unit', '.NET Framework', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
     <_ProjectArgs>/p:BuildWithNetFrameworkHostedCompiler=false /p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
   </PropertyGroup>
