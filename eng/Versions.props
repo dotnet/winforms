@@ -15,7 +15,7 @@
 
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <PropertyGroup>
-    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
+    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.2</SystemRuntimeCompilerServicesUnsafePackageVersion>
     <MicrosoftWindowsCsWin32PackageVersion>0.3.151</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 

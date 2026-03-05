@@ -78,5 +78,8 @@
     <PackageVersion Include="Microsoft.ManifestTool.CrossPlatform" Version="$(MicrosoftManifestToolCrossPlatformVersion)" />
     <PackageVersion Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="$(MicrosoftVisualStudioEngMicroBuildCoreVersion)" />
     <PackageVersion Include="Microsoft.VisualStudioEng.MicroBuild.Plugins.SwixBuild" Version="$(MicrosoftVisualStudioEngMicroBuildPluginsSwixBuildVersion)" />
+
+    <!-- .NET Framework polyfills -->
+    <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="$(SystemDiagnosticsDiagnosticSourcePackageVersion)" />
   </ItemGroup>
 </Project>
