@@ -26,6 +26,7 @@ public partial class ProgressBar : Control
     private int _marqueeAnimationSpeed = 100;
 
     private static readonly Color s_defaultForeColor = SystemColors.Highlight;
+    private static readonly Color s_darkModeBackColor = SystemColors.ControlDarkDark;
 
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
@@ -81,8 +82,15 @@ public partial class ProgressBar : Control
 
         if (Application.IsDarkModeEnabled)
         {
-            // Disables Visual Styles for the ProgressBar.
+            // Disables Visual Styles for the ProgressBar so we can control its colors in dark mode.
             PInvoke.SetWindowTheme(HWND, " ", " ");
+
+            // Apply dark mode colors explicitly. In classic mode, Visual Styles override user-set
+            // BackColor/ForeColor, making them ineffective. In dark mode, we enforce the same behavior
+            // by using fixed colors to maintain consistent theming and prevent user customizations
+            // from breaking the dark appearance.
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)s_darkModeBackColor);
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)s_defaultForeColor);
         }
     }
 
@@ -337,7 +345,10 @@ public partial class ProgressBar : Control
     protected override void OnBackColorChanged(EventArgs e)
     {
         base.OnBackColorChanged(e);
-        if (IsHandleCreated)
+
+        // BackColor changes are ignored in dark mode to maintain theme consistency,
+        // matching classic mode behavior where Visual Styles override this property.
+        if (IsHandleCreated && !Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
         }
@@ -346,7 +357,10 @@ public partial class ProgressBar : Control
     protected override void OnForeColorChanged(EventArgs e)
     {
         base.OnForeColorChanged(e);
-        if (IsHandleCreated)
+
+        // ForeColor changes are ignored in dark mode to maintain theme consistency,
+        // matching classic mode behavior where Visual Styles override this property.
+        if (IsHandleCreated && !Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
         }
@@ -598,8 +612,14 @@ public partial class ProgressBar : Control
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETSTEP, (WPARAM)_step);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETPOS, (WPARAM)_value);
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)ForeColor);
+
+            // In dark mode, use fixed colors to maintain theme consistency (matching classic mode
+            // where Visual Styles override these properties). These colors are set here and will be
+            // overridden in OnCreateControl after SetWindowTheme disables Visual Styles.
+            Color initialBkColor = Application.IsDarkModeEnabled ? s_darkModeBackColor : BackColor;
+            Color initialBarColor = Application.IsDarkModeEnabled ? s_defaultForeColor : ForeColor;
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)initialBkColor);
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)initialBarColor);
         }
 
         StartMarquee();
@@ -693,8 +713,12 @@ public partial class ProgressBar : Control
     {
         if (IsHandleCreated)
         {
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
+            // In dark mode, use the fixed dark mode colors to maintain consistent appearance.
+            Color barColor = Application.IsDarkModeEnabled ? s_defaultForeColor : ForeColor;
+            Color bkColor = Application.IsDarkModeEnabled ? s_darkModeBackColor : BackColor;
+
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, barColor.ToWin32());
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, bkColor.ToWin32());
         }
     }
 

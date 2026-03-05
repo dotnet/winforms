@@ -105,9 +105,10 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
         }
     }
 
-    private new ButtonStandardAdapter ButtonAdapter => (ButtonStandardAdapter)base.ButtonAdapter;
-
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonStandardAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() =>
+        Application.IsDarkModeEnabled
+            ? new ButtonDarkModeAdapter(Control)
+            : new ButtonStandardAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

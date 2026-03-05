@@ -77,8 +77,8 @@ public partial class CheckBox : ButtonBase
                 _appearance = value;
 
                 // UpdateOwnerDraw synchronizes control styles with the OwnerDraw state and recreates
-                // the handle if they differ. Since we hijack FlatStyle.Standard for DarkMode, the transition
-                // between Normal and Button appearance is critical for updating the OwnerDraw flag.
+                // the handle if they differ. For FlatStyle.System, the OwnerDraw state changes between
+                // Normal and Button appearances, so we need to ensure the handle is recreated.
                 UpdateOwnerDraw();
 
                 // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
@@ -96,17 +96,7 @@ public partial class CheckBox : ButtonBase
         }
     }
 
-    private protected override bool OwnerDraw =>
-            // We want NO owner draw ONLY when we're
-            // * In Dark Mode
-            // * When _then_ the Appearance is Button
-            // * But then ONLY when we're rendering with FlatStyle.Standard
-            //   (because that would let us usually let us draw with the VisualStyleRenderers,
-            //   which cause HighDPI issues in Dark Mode).
-            (!Application.IsDarkModeEnabled
-                || Appearance != Appearance.Button
-                || FlatStyle != FlatStyle.Standard)
-                && base.OwnerDraw;
+    private protected override bool OwnerDraw => base.OwnerDraw;
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
