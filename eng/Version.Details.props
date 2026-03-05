@@ -23,6 +23,7 @@ This file should be imported by eng/Versions.props
     <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.3.26153.117</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <SystemCodeDomPackageVersion>11.0.0-preview.3.26153.117</SystemCodeDomPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>11.0.0-preview.3.26153.117</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDiagnosticsDiagnosticSourcePackageVersion>11.0.0-preview.3.26153.117</SystemDiagnosticsDiagnosticSourcePackageVersion>
     <SystemFormatsNrbfPackageVersion>11.0.0-preview.3.26153.117</SystemFormatsNrbfPackageVersion>
     <SystemIOHashingPackageVersion>11.0.0-preview.3.26153.117</SystemIOHashingPackageVersion>
     <SystemReflectionMetadataLoadContextPackageVersion>11.0.0-preview.3.26153.117</SystemReflectionMetadataLoadContextPackageVersion>
