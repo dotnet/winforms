@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
+Imports System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
 Imports System.Windows.Forms.VisualBasic.CodeFixes.AddDesignerSerializationVisibility
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
