@@ -16,6 +16,17 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <b>IMPORTANT:</b> This code is shared between WinForms and WPF via the System.Private.Windows.Core assembly.
+    ///   Changes to this class and related OLE/clipboard code affect both UI stacks. When modifying this code,
+    ///   consider the impact on WPF and ensure appropriate test coverage for both frameworks.
+    ///  </para>
+    ///  <para>
+    ///   For more information about the shared infrastructure and contributor guidance, see:
+    ///   <c>docs/shared-wpf-infrastructure.md</c>
+    ///  </para>
+    /// </remarks>
     private sealed unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
