@@ -261,6 +261,13 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
     private bool UseTransparentColor => TransparentColor.A > 0;
 
+    /// <summary>
+    ///  Gets or sets whether to use a mask for transparency.
+    /// </summary>
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ImageListUseMaskForTransparencyDescr))]
+    public bool UseMaskForTransparency { get; set; } = true;
+
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))]
@@ -370,21 +377,37 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
     {
         Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
 
-        // Calls GDI to create Bitmap.
-        HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
-
-        // Calls GDI+ to create Bitmap
-        HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
-
         int index;
-        try
+        if (!UseMaskForTransparency)
         {
-            index = PInvoke.ImageList.Add(this, hBitmap, hMask);
+            HBITMAP hBitmap = (HBITMAP)bitmap.GetHbitmap();
+            try
+            {
+                using var ilHandle = new DeleteObjectSafeHandle(Handle, ownsHandle: false);
+                index = PInvoke.ImageList_Add(ilHandle, hBitmap, default);
+            }
+            finally
+            {
+                PInvokeCore.DeleteObject(hBitmap);
+            }
         }
-        finally
+        else
         {
-            PInvokeCore.DeleteObject(hBitmap);
-            PInvokeCore.DeleteObject(hMask);
+            // Calls GDI to create Bitmap.
+            HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+
+            // Calls GDI+ to create Bitmap
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
+
+            try
+            {
+                index = PInvoke.ImageList.Add(this, hBitmap, hMask);
+            }
+            finally
+            {
+                PInvokeCore.DeleteObject(hBitmap);
+                PInvokeCore.DeleteObject(hMask);
+            }
         }
 
         return index == -1 ? throw new InvalidOperationException(SR.ImageListAddFailed) : index;
