@@ -181,4 +181,68 @@ public unsafe class NativeToManagedAdapterTests
             PInvokeCore.GlobalFree(global);
         }
     }
+
+    [Fact]
+    public void TryGetIStreamData_DoesNotDoubleReleaseStream()
+    {
+        // This test verifies the fix for double-releasing the IStream.
+        // https://github.com/dotnet/wpf/issues/11401
+        //
+        // Previously, the code wrapped the IStream in a ComScope which would Release it,
+        // and then ReleaseStgMedium would also try to Release it, causing a double-release.
+
+        MemoryStream stream = new([0xBE, 0xAD, 0xCA, 0xFE]);
+        using IStreamNativeDataObject dataObject = new(stream, (ushort)_format.Id);
+
+        IDataObject* pDataObject = ComHelpers.GetComPointer<IDataObject>(dataObject);
+
+        // GetComPointer returns a pointer with ref count of 1.
+        // Add an extra reference so we can track the ref count throughout the test.
+        uint initialRefCount = pDataObject->AddRef();
+        initialRefCount.Should().Be(2);
+
+        object? data;
+        uint refCountBeforeGetData;
+        uint refCountAfterGetData;
+
+        // Scope the Composition so we can observe ref count changes.
+        {
+            // Composition.Create calls AddRef twice (once for NativeToManagedAdapter, once for NativeToRuntimeAdapter)
+            // and takes ownership of the original ref from GetComPointer.
+            var composition = Composition.Create(pDataObject);
+
+            // After Create: original(1) + our AddRef(1) + Composition's two AddRefs(2) = 4
+            refCountBeforeGetData = pDataObject->AddRef();
+            pDataObject->Release(); // Undo our test AddRef
+
+            // Try to get data - this should not crash due to CFG violation
+            // The IStream data object will return data via TYMED_ISTREAM
+            data = composition.GetData(nameof(NativeToManagedAdapterTests));
+
+            // Verify data was retrieved successfully
+            data.Should().BeOfType<MemoryStream>();
+
+            // Check ref count after GetData - should be unchanged from before
+            // (the IStream from GetData should be properly released by ReleaseStgMedium only once)
+            refCountAfterGetData = pDataObject->AddRef();
+            pDataObject->Release(); // Undo our test AddRef
+
+            refCountAfterGetData.Should().Be(
+                refCountBeforeGetData,
+                "GetData should not leak or double-release the IDataObject");
+        }
+
+        // Note: Composition doesn't implement IDisposable, so refs are released via GC.
+        // We still hold our extra ref, so the object won't be collected.
+
+        // Release our extra ref from the start of the test.
+        uint finalRefCount = pDataObject->Release();
+
+        // We should still have refs from Composition's adapters (they're not disposed yet).
+        // The important thing is that GetData didn't corrupt the ref count.
+        finalRefCount.Should().BeGreaterThan(0);
+
+        MemoryStream result = (MemoryStream)data!;
+        result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);
+    }
 }

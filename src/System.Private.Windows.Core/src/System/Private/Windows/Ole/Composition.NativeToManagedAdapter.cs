@@ -420,8 +420,9 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     return false;
                 }
 
-                using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.hGlobal);
-                pStream.Value->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
+                // Don't wrap in ComScope - ReleaseStgMedium will release the stream.
+                Com.IStream* pStream = (Com.IStream*)medium.hGlobal;
+                pStream->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
 
                 hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT, (uint)sstg.cbSize);
 
@@ -433,7 +434,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 }
 
                 void* ptr = PInvokeCore.GlobalLock(hglobal);
-                pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
+                pStream->Read((byte*)ptr, (uint)sstg.cbSize, null);
                 PInvokeCore.GlobalUnlock(hglobal);
 
                 return TryGetDataFromHGLOBAL(hglobal, in request, out data);
