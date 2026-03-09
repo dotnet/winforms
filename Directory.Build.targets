@@ -6,9 +6,9 @@
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
-  <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
+  <!-- CA1416 Validate platform compatibility. Do not apply to netstandard or .NET Framework as they do not have the attribute. -->
   <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform" Condition="!$(TargetFramework.StartsWith('netstandard'))">
+    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform" Condition="!$(TargetFramework.StartsWith('netstandard')) and !$(TargetFramework.StartsWith('net4'))">
       <!-- This tells the analyzer that we are targeting windows6.1 (windows 7). -->
       <_Parameter1>windows6.1</_Parameter1>
     </AssemblyAttribute>
