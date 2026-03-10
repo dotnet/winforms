@@ -24,11 +24,11 @@
     "runner": "Microsoft.Testing.Platform"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.26156.119",
-    "Microsoft.DotNet.CMake.Sdk": "11.0.0-beta.26156.119",
-    "Microsoft.DotNet.Helix.Sdk": "11.0.0-beta.26156.119",
+    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.26159.106",
+    "Microsoft.DotNet.CMake.Sdk": "11.0.0-beta.26159.106",
+    "Microsoft.DotNet.Helix.Sdk": "11.0.0-beta.26159.106",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "11.0.0-preview.3.26156.119"
+    "Microsoft.NET.Sdk.IL": "11.0.0-preview.3.26159.106"
   },
   "native-tools": {
     "cmake": "latest"
