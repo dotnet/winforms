@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -102,6 +102,16 @@ public class CollectionEditorTests
         Assert.NotSame(form, editor.CreateCollectionForm());
     }
 
+    [Fact]
+    public void CollectionEditor_CreateCollectionForm_Caption_UnwrapsControlProxy()
+    {
+        SubCollectionEditor editor = new(typeof(List<ControlProxy<TestChildControl>>));
+        using Form form = editor.CreateCollectionForm();
+
+        Assert.Contains(nameof(TestChildControl), form.Text);
+        Assert.DoesNotContain("ControlProxy`1", form.Text);
+    }
+
     [Theory]
     [InlineData(typeof(object), typeof(object))]
     [InlineData(typeof(int[]), typeof(object))]
@@ -118,6 +128,14 @@ public class CollectionEditorTests
         Type itemType = editor.CreateCollectionItemType();
         Assert.Equal(expected, itemType);
         Assert.Same(itemType, editor.CreateCollectionItemType());
+    }
+
+    private sealed class ControlProxy<TControl>
+    {
+    }
+
+    private sealed class TestChildControl : Control
+    {
     }
 
     public static IEnumerable<object[]> InvalidDesignerHost_TestData()
