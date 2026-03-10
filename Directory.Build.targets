@@ -40,10 +40,10 @@
     <_ProjectDirectoryRelativePath>$([MSBuild]::MakeRelative($(RepoRoot), $(MSBuildProjectDirectory)))</_ProjectDirectoryRelativePath>
     <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
     <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
-	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
+    <RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
+  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
       Path="$(TargetPath)"
@@ -60,7 +60,7 @@
     </Coverlet.MSbuild.Tasks.InstrumentationTask>
   </Target>
 
-  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
+  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
     <Coverlet.MSbuild.Tasks.CoverageResultTask
       Condition="'$(CollectCoverage)' == 'true'"
       Output="$(CoverletOutput)"

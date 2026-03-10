@@ -5,6 +5,7 @@
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <CollectCoverage>false</CollectCoverage>
   </PropertyGroup>
   
   <ItemGroup>
