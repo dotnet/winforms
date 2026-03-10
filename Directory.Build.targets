@@ -43,7 +43,7 @@
     <RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
+  <Target Name="InstrumentModulesNoBuild" AfterTargets="GetTargetPath" BeforeTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
       Path="$(TargetPath)"
