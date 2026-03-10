@@ -16,6 +16,11 @@
     <NoWarn>$(NoWarn);CA1822</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCurrent)'">
+    <!-- We're not testing any of our code on .NET, just validating that the tests have the same results. -->
+    <CollectCoverage>false</CollectCoverage>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
   </ItemGroup>
@@ -44,7 +49,7 @@
 
   <Import
     Condition="'$(TargetFramework)' == 'net481'"
-    Project="..\..\..\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills.projitems"
+    Project="..\..\..\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills.projitems"
     Label="Shared" />
 
 </Project>
