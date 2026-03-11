@@ -1870,6 +1870,17 @@ public partial class TreeView : Control
             int style = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             style |= (int)PInvoke.TVS_CHECKBOXES;
             PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
+
+            if (Application.IsDarkModeEnabled
+                && DarkModeRequestState is true
+                && RecreatingHandle)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+
             UpdateCheckBoxImages();
         }
 
