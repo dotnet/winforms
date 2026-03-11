@@ -8,6 +8,8 @@ namespace System.Private.Windows.BinaryFormat.Serializer;
 /// </summary>
 internal sealed class MessageEnd : IRecord<MessageEnd>
 {
+    public Id Id => Id.Null;
+
     public static MessageEnd Instance { get; } = new();
 
     private MessageEnd() { }

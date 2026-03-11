@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Microsoft.Private.Windows.Core</AssemblyName>
+    <TargetFrameworks>net472</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <!--
+      We align casing and naming with Win32 API. As such some types have all lower case names, which
+      in theory may conflict with new C# keywords in the future. Our types here are internal so end
+      users won't be impacted. If some name becomes difficult to adapt to with the @ symbol we can
+      cross that bridge when we hit it (if ever).
+    -->
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
+
+    <!--
+      CS3016: We don't care about CLS compliance since everything here is internal and we want to match native types.
+      SYSLIB5005: System.Formats.Nrbf is experimental
+    -->
+    <NoWarn>$(NoWarn);CS3016;SYSLIB5005</NoWarn>
+
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't currently properly recognize this.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+    <Deterministic>true</Deterministic>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+    <RootNamespace />
+    <HasNoPublicIntellisense>true</HasNoPublicIntellisense>
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+
+    <!--
+      Windows 10 Anniversary Update (1607) is the base for Server 2016.
+    -->
+    <WindowsPlatformVersion>windows10.0.14393.0</WindowsPlatformVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" PrivateAssets="all" />
+    <PackageReference Include="System.Formats.Nrbf" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Windows\Win32\System\Com\WinFormsComWrappers.cs" />
+    <Compile Remove="Windows\Win32\System\Com\IUnknown.CCW.cs" />
+    <Compile Remove="Windows\Win32\System\Com\IManagedWrapper.cs" />
+    <Compile Remove="Windows\Win32\System\Com\ComInterfaceTable.cs" />
+    <Compile Remove="Windows\Win32\System\Com\WinFormsComStrategy.cs" />
+    <Compile Remove="System\Private\Windows\JsonData.cs" />
+    <Compile Remove="Windows\Win32\System\Com\IDispatch.Interface.cs" />
+    <Compile Remove="Windows\Win32\System\Com\GlobalInterfaceTable.UnknownStrategy.cs" />
+    <Compile Remove="Windows\Win32\System\Com\IComCallableWrapper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SR.resx">
+      <WithCulture>false</WithCulture>
+      <ManifestResourceName>System.Private.Windows.Core.Resources.SR</ManifestResourceName>
+      <GenerateSource>true</GenerateSource>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!--
+    PolySharp related (source generated polyfills for .NET Framework)
+  -->
+  <PropertyGroup>
+    <PolySharpUsePublicAccessibilityForGeneratedTypes>false</PolySharpUsePublicAccessibilityForGeneratedTypes>
+    <!--
+      CsWin32 also polyfills some types because were making the PolySharp polyfill internal.
+    -->
+    <PolySharpExcludeGeneratedTypes>
+      System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute;
+      System.Diagnostics.CodeAnalysis.UnscopedRefAttribute
+    </PolySharpExcludeGeneratedTypes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Import Project="..\..\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills.projitems" Label="Shared" />
+
+</Project>

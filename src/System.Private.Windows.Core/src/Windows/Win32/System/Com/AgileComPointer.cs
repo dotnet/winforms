@@ -17,7 +17,7 @@ namespace Windows.Win32.Foundation;
 ///  <para>
 ///   Fields should be nulled out before calling <see cref="Dispose()"/>. Releasing the COM pointer during disposal
 ///   can result in callbacks to containing classes. Rather than evaluate the risk of this for every class, always
-///   follow this pattern. <see cref="M:System.DisposeHelper.NullAndDispose``1(``0@)"/> facilitates doing this safely.
+///   follow this pattern. <see cref="DisposeHelper.NullAndDispose"/> facilitates doing this safely.
 ///  </para>
 /// </remarks>
 internal unsafe class AgileComPointer<TInterface> :
@@ -46,7 +46,7 @@ internal unsafe class AgileComPointer<TInterface> :
     ///  <para>
     ///   Setting <paramref name="takeOwnership"/> to `<see langword="true"/>` will ensure that this object takes
     ///   responsibility for releasing the COM interface when it is no longer needed. This is done by calling
-    ///   <see cref="IUnknown.Release"/> after the GIT adds a ref to the interface.
+    ///   IUnknown.Release after the GIT adds a ref to the interface.
     ///  </para>
     /// </remarks>
     /// <devdoc>

@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCurrent)-windows7.0</TargetFramework>
+    <!-- Need 481 for tests for GC APIs -->
+    <TargetFrameworks>$(NetCurrent)-windows7.0;net481</TargetFrameworks>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--
@@ -13,14 +14,23 @@
     <RootNamespace />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't properly recognize this on .NET Framework.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" />
+    <PackageReference Condition="'$(TargetFramework)' != 'net481'" Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
-    <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
+    <ProjectReference Condition="'$(TargetFramework)' != 'net481'" Include="..\..\src\System.Private.Windows.Core.csproj" />
+    <ProjectReference Condition="'$(TargetFramework)' == 'net481'" Include="..\..\src\Microsoft.Private.Windows.Core.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

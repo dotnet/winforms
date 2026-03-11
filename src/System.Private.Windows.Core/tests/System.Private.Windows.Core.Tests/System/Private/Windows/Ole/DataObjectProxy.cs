@@ -1,11 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
+
+#if NET
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Lifetime = Windows.Win32.System.Com.Lifetime<Windows.Win32.System.Com.IDataObject.Vtbl, System.Private.Windows.Ole.DataObjectProxy>;
+#else
+using Windows.Win32;
+#endif
 
 namespace System.Private.Windows.Ole;
 
@@ -33,7 +38,12 @@ internal unsafe class DataObjectProxy : IDataObject.Interface, IDisposable
 #endif
             );
 
-        Proxy = CCW.Create(this);
+        Proxy =
+#if NET
+            CCW.Create(this);
+#else
+            ComHelpers.GetComPointer<IDataObject>(this);
+#endif
 
         _agileProxy = new(
 #if DEBUG
@@ -60,11 +70,12 @@ internal unsafe class DataObjectProxy : IDataObject.Interface, IDisposable
         _agileProxy.Dispose();
     }
 
+#if NET
     internal static class CCW
     {
         private static readonly IDataObject.Vtbl* s_vtable = AllocateVTable();
 
-        private static unsafe IDataObject.Vtbl* AllocateVTable()
+        private static IDataObject.Vtbl* AllocateVTable()
         {
             // Allocate and create a singular VTable for this type projection.
             IDataObject.Vtbl* vtable = (IDataObject.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(CCW), sizeof(IDataObject.Vtbl));
@@ -88,11 +99,11 @@ internal unsafe class DataObjectProxy : IDataObject.Interface, IDisposable
         /// <summary>
         ///  Creates a manual COM Callable Wrapper for the given <paramref name="object"/>.
         /// </summary>
-        public static unsafe IDataObject* Create(DataObjectProxy @object) =>
+        public static IDataObject* Create(DataObjectProxy @object) =>
             (IDataObject*)Lifetime.Allocate(@object, s_vtable);
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT QueryInterface(IDataObject* @this, Guid* iid, void** ppObject)
+        private static HRESULT QueryInterface(IDataObject* @this, Guid* iid, void** ppObject)
         {
             if (iid is null || ppObject is null)
             {
@@ -119,45 +130,46 @@ internal unsafe class DataObjectProxy : IDataObject.Interface, IDisposable
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe uint AddRef(IDataObject* @this) => Lifetime.AddRef(@this);
+        private static uint AddRef(IDataObject* @this) => Lifetime.AddRef(@this);
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe uint Release(IDataObject* @this) => Lifetime.Release(@this);
+        private static uint Release(IDataObject* @this) => Lifetime.Release(@this);
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT GetData(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium) =>
+        private static HRESULT GetData(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium) =>
             Lifetime.GetObject(@this)?.GetData(pFormatetc, pMedium) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT GetDataHere(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium) =>
+        private static HRESULT GetDataHere(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium) =>
             Lifetime.GetObject(@this)?.GetDataHere(pFormatetc, pMedium) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT QueryGetData(IDataObject* @this, FORMATETC* pFormatetc) =>
+        private static HRESULT QueryGetData(IDataObject* @this, FORMATETC* pFormatetc) =>
             Lifetime.GetObject(@this)?.QueryGetData(pFormatetc) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT GetCanonicalFormatEtc(IDataObject* @this, FORMATETC* pFormatetcIn, FORMATETC* pFormatetcOut) =>
+        private static HRESULT GetCanonicalFormatEtc(IDataObject* @this, FORMATETC* pFormatetcIn, FORMATETC* pFormatetcOut) =>
             Lifetime.GetObject(@this)?.GetCanonicalFormatEtc(pFormatetcIn, pFormatetcOut) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT SetData(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium, BOOL fRelease) =>
+        private static HRESULT SetData(IDataObject* @this, FORMATETC* pFormatetc, STGMEDIUM* pMedium, BOOL fRelease) =>
             Lifetime.GetObject(@this)?.SetData(pFormatetc, pMedium, fRelease) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT EnumFormatEtc(IDataObject* @this, uint dwDirection, IEnumFORMATETC** ppEnumFormatEtc) =>
+        private static HRESULT EnumFormatEtc(IDataObject* @this, uint dwDirection, IEnumFORMATETC** ppEnumFormatEtc) =>
             Lifetime.GetObject(@this)?.EnumFormatEtc(dwDirection, ppEnumFormatEtc) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT DAdvise(IDataObject* @this, FORMATETC* pFormatetc, uint advf, IAdviseSink* pAdvSink, uint* pdwConnection) =>
+        private static HRESULT DAdvise(IDataObject* @this, FORMATETC* pFormatetc, uint advf, IAdviseSink* pAdvSink, uint* pdwConnection) =>
             Lifetime.GetObject(@this)?.DAdvise(pFormatetc, advf, pAdvSink, pdwConnection) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT DUnadvise(IDataObject* @this, uint dwConnection) =>
+        private static HRESULT DUnadvise(IDataObject* @this, uint dwConnection) =>
             Lifetime.GetObject(@this)?.DUnadvise(dwConnection) ?? HRESULT.COR_E_OBJECTDISPOSED;
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe HRESULT EnumDAdvise(IDataObject* @this, IEnumSTATDATA** ppEnumAdvise) =>
+        private static HRESULT EnumDAdvise(IDataObject* @this, IEnumSTATDATA** ppEnumAdvise) =>
             Lifetime.GetObject(@this)?.EnumDAdvise(ppEnumAdvise) ?? HRESULT.COR_E_OBJECTDISPOSED;
     }
+#endif
 }

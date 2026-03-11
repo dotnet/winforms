@@ -13,10 +13,15 @@ namespace System.Private.Windows.Ole;
 
 internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
+#if NET
+    // Workaround SA1001 white space warnings.
+    private sealed partial class ManagedToNativeAdapter : IManagedWrapper<IDataObject> { }
+#endif
+
     /// <summary>
     ///  Maps <see cref="IDataObject"/> to <see cref="IDataObject.Interface"/>.
     /// </summary>
-    private sealed unsafe class ManagedToNativeAdapter : IDataObject.Interface, IManagedWrapper<IDataObject>
+    private sealed unsafe partial class ManagedToNativeAdapter : IDataObject.Interface
     {
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
@@ -111,12 +116,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
 
-            if (!_dataObject.GetDataPresent(format))
+            if (!_dataObject.GetDataPresent(format, autoConvert: false))
             {
                 return HRESULT.DV_E_FORMATETC;
             }
 
-            if (_dataObject.GetData(format) is not object data)
+            if (_dataObject.GetData(format, autoConvert: false) is not object data)
             {
                 return HRESULT.E_UNEXPECTED;
             }
@@ -147,7 +152,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 }
             }
 
+#if NET
             return TOleServices.GetDataHere(format, data, pformatetc, pmedium);
+#else
+            return s_oleServices.GetDataHere(format, data, pformatetc, pmedium);
+#endif
         }
 
         public HRESULT QueryGetData(FORMATETC* pformatetc)
@@ -172,7 +181,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.S_FALSE;
             }
 
-            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name))
+            // The NativeToManagedAdapter handles the autoConvert behavior.
+            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name, autoConvert: false))
             {
                 return HRESULT.DV_E_FORMATETC;
             }
@@ -310,7 +320,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     return HRESULT.S_OK;
                 }
 
-                if (hglobal == 0)
+                if (hglobal == (nint)0)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -412,6 +422,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 }
 
                 Span<byte> span = buffer.AsSpan();
+
                 byteCount = Encoding.UTF8.GetBytes(value, span);
 
                 // Null terminate

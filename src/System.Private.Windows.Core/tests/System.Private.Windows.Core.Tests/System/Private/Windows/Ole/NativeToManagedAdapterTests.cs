@@ -4,11 +4,14 @@
 using System.ComponentModel;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
-using System.Text.Json;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Memory;
+
+#if NET
+using System.Text.Json;
+#endif
 
 using Composition = System.Private.Windows.Ole.Composition<
     System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.NativeToManagedAdapterTests>,
@@ -96,6 +99,7 @@ public unsafe class NativeToManagedAdapterTests
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
     }
 
+#if NET
     [Fact]
     public void GetData_CustomType_BinaryFormattedJson_AsSerializationRecord()
     {
@@ -111,6 +115,7 @@ public unsafe class NativeToManagedAdapterTests
         composition.TryGetData(nameof(NativeToManagedAdapterTests), out SerializationRecord? data).Should().BeTrue();
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Private.Windows.JsonData, System.Private.Windows.VirtualJson");
     }
+#endif
 
     [Theory]
     [BoolData]

@@ -15,6 +15,8 @@ namespace System.Private.Windows.BinaryFormat.Serializer;
 /// </remarks>
 internal sealed class SerializationHeader : IRecord<SerializationHeader>
 {
+    public Id Id => Id.Null;
+
     /// <summary>
     ///  The id of the root object record.
     /// </summary>
