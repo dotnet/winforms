@@ -3,7 +3,7 @@
 
 namespace System;
 
-public static partial class SpanExtensions
+internal static partial class SpanExtensions
 {
     /// <typeparam name="T">The type of the span and values.</typeparam>
     /// <param name="span">The target span.</param>

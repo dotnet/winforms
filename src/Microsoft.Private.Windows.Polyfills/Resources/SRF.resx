@@ -27,4 +27,7 @@
   <data name="ArgumentOutOfRange_Generic_MustBeGreaterOrEqual" xml:space="preserve">
     <value>{0} ('{1}') must be greater than or equal to '{2}'.</value>
   </data>
+  <data name="String_DestinationSpanTooSmall" xml:space="preserve">
+    <value>"Destination span is too short to copy the string."</value>
+  </data>
 </root>

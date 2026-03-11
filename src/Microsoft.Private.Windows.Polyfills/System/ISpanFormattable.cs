@@ -4,7 +4,7 @@
 namespace System;
 
 /// <summary>Provides functionality to format the string representation of an object into a span.</summary>
-public interface ISpanFormattable : IFormattable
+internal interface ISpanFormattable : IFormattable
 {
     /// <summary>Tries to format the value of the current instance into the provided span of characters.</summary>
     /// <param name="destination">When this method returns, this instance's value formatted as a span of characters.</param>

@@ -1,9 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Microsoft.Private.Windows.Polyfills.Resources;
+
 namespace System;
 
-public static partial class StringExtensions
+internal static partial class StringExtensions
 {
     extension(string stringValue)
     {
@@ -17,7 +19,7 @@ public static partial class StringExtensions
         {
             if (destination.Length < stringValue.Length)
             {
-                throw new ArgumentException("Destination span is too short to copy the string.", nameof(destination));
+                throw new ArgumentException(SRF.String_DestinationSpanTooSmall, nameof(destination));
             }
 
             stringValue.AsSpan().CopyTo(destination);
