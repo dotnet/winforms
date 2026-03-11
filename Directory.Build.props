@@ -56,7 +56,7 @@
     <!-- https://github.com/tonerdo/coverlet/issues/618 -->
     <IncludeTestAssembly>true</IncludeTestAssembly>
 
-    <CollectCoverage>true</CollectCoverage>
+    <CollectCoverage Condition="'$(CollectCoverage)' == '' and '$(IsTestProject)' == 'true' and '$(TargetFramework)' != ''">true</CollectCoverage>
     <SingleHit>true</SingleHit>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>

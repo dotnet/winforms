@@ -6,9 +6,9 @@
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
-  <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
+  <!-- CA1416 Validate platform compatibility. Do not apply to netstandard or .NET Framework as they do not have the attribute. -->
   <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform" Condition="!$(TargetFramework.StartsWith('netstandard'))">
+    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform" Condition="!$(TargetFramework.StartsWith('netstandard')) and !$(TargetFramework.StartsWith('net4'))">
       <!-- This tells the analyzer that we are targeting windows6.1 (windows 7). -->
       <_Parameter1>windows6.1</_Parameter1>
     </AssemblyAttribute>
@@ -40,10 +40,10 @@
     <_ProjectDirectoryRelativePath>$([MSBuild]::MakeRelative($(RepoRoot), $(MSBuildProjectDirectory)))</_ProjectDirectoryRelativePath>
     <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
     <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
-	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
+    <RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
+  <Target Name="InstrumentModulesNoBuild" AfterTargets="Build" BeforeTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
       Path="$(TargetPath)"
@@ -60,7 +60,7 @@
     </Coverlet.MSbuild.Tasks.InstrumentationTask>
   </Target>
 
-  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsTestProject)' == 'true'">
+  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(CollectCoverage)' == 'true'">
     <Coverlet.MSbuild.Tasks.CoverageResultTask
       Condition="'$(CollectCoverage)' == 'true'"
       Output="$(CoverletOutput)"

@@ -70,6 +70,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Design" />
+    <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
 
