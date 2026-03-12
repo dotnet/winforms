@@ -26,15 +26,12 @@ public readonly ref struct AppContextSwitchScope
     {
         bool isEnabled;
 
-#if NET
-        // .NET Framework doesn't cache switches.
         if (!AppContext.TryGetSwitch(AppContextSwitchNames.LocalAppContext_DisableCaching, out isEnabled)
             || !isEnabled)
         {
             // It doesn't make sense to try messing with AppContext switches if they are going to be cached.
             throw new InvalidOperationException("LocalAppContext switch caching is not disabled.");
         }
-#endif
 
         // AppContext won't have any switch value until it is explicitly set.
         if (!AppContext.TryGetSwitch(switchName, out _originalState))
