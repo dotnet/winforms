@@ -731,7 +731,8 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Setting the max width has the added benefit of enabling multiline tool tips.
         PInvokeCore.SendMessage(this, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-        if (Application.IsDarkModeEnabled)
+        Form? activeForm = Form.ActiveForm;
+        if (Application.IsDarkModeEnabled && !SystemInformation.HighContrast && activeForm is not null && activeForm.DarkModeRequestState is true)
         {
             PInvoke.SetWindowTheme(HWND, $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}", null);
         }
