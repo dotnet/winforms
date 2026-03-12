@@ -156,7 +156,7 @@ public class TypeBinderTests
 
     internal sealed class AlwaysDefaultSerializer : INrbfSerializer
     {
-        private AlwaysDefaultSerializer() { }
+        public AlwaysDefaultSerializer() { }
 
 #if NET
         public static

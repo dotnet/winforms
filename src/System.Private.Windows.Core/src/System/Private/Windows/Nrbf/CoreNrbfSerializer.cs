@@ -18,7 +18,7 @@ internal class CoreNrbfSerializer : INrbfSerializer
 
     public static bool TryWriteObject(Stream stream, object value) =>
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value)
-#if NET
+#if OLE_JSON
         || BinaryFormatWriter.TryWriteJsonData(stream, value)
 #endif
         || BinaryFormatWriter.TryWriteDrawingPrimitivesObject(stream, value);

@@ -8,7 +8,7 @@ using System.Formats.Nrbf;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-#if NET
+#if OLE_JSON
 using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
 using System.Text.Json;

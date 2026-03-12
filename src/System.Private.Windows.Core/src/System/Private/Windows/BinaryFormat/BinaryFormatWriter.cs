@@ -752,7 +752,7 @@ internal static class BinaryFormatWriter
         }
     }
 
-#if NET
+#if OLE_JSON
     public static bool TryWriteJsonData(Stream stream, object value)
     {
         if (value is not IJsonData jsonData)

@@ -24,9 +24,7 @@ public readonly ref struct AppContextSwitchScope
 
     public AppContextSwitchScope(string switchName, Func<bool>? getDefaultValue, bool enable)
     {
-        bool isEnabled;
-
-        if (!AppContext.TryGetSwitch(AppContextSwitchNames.LocalAppContext_DisableCaching, out isEnabled)
+        if (!AppContext.TryGetSwitch(AppContextSwitchNames.LocalAppContext_DisableCaching, out bool isEnabled)
             || !isEnabled)
         {
             // It doesn't make sense to try messing with AppContext switches if they are going to be cached.

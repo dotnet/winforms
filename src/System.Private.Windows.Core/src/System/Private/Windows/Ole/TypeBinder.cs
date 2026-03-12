@@ -29,10 +29,14 @@ namespace System.Private.Windows.Ole;
 ///  </para>
 /// </remarks>
 internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeResolver
+#if NET
     where TNrbfSerializer : INrbfSerializer
+#else
+    where TNrbfSerializer : INrbfSerializer, new()
+#endif
 {
 #if NETFRAMEWORK
-    private static readonly INrbfSerializer s_nrbfSerializer = Activator.CreateInstance<TNrbfSerializer>();
+    private static readonly INrbfSerializer s_nrbfSerializer = new TNrbfSerializer();
 #endif
 
     private readonly Type _rootType;
