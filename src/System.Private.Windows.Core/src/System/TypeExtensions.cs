@@ -40,12 +40,7 @@ internal static partial class TypeExtensions
             || type.IsConstructedGenericType != typeName.IsConstructedGenericType
             || type.IsNested != typeName.IsNested
             || (type.IsArray && type.GetArrayRank() != typeName.GetArrayRank())
-#if NET
-            || type.IsSZArray != typeName.IsSZArray
-#else
-            || IsSZArray(type) != typeName.IsSZArray
-#endif
-            )
+            || type.IsSZArray != typeName.IsSZArray)
         {
             return false;
         }
@@ -287,37 +282,4 @@ internal static partial class TypeExtensions
             }
         }
     }
-
-#if NETFRAMEWORK
-    /// <summary>
-    ///  Determines whether the given <paramref name="type"/> is a single-dimensional, zero-indexed (SZ) array,
-    ///  equivalent to Type.IsSZArray which is not available on .NET Framework.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   The CLR distinguishes two kinds of array types at the metadata level:
-    ///  </para>
-    ///  <list type="bullet">
-    ///   <item><c>ELEMENT_TYPE_SZARRAY</c><description> the "vector" type (e.g. <c>int[]</c>), single-dimensional
-    ///   and always zero-indexed.</description></item>
-    ///   <item><c>ELEMENT_TYPE_ARRAY</c><description> with rank 1 — a general array that happens to have one dimension
-    ///   (e.g. <c>int[*]</c>), which can have a non-zero lower bound.</description></item>
-    ///  </list>
-    ///  <para>
-    ///   Both return <see langword="true"/> for <see cref="Type.IsArray"/> and <c>1</c> for
-    ///   <see cref="Type.GetArrayRank"/>, so those properties alone cannot distinguish them.
-    ///  </para>
-    ///  <para>
-    ///   The trick here exploits <see cref="Type.MakeArrayType()"/> (parameterless), which always
-    ///   produces the SZ array type for the element type. If the resulting type is reference-equal
-    ///   to the original, the original is an SZ array. If it is not (as would be the case for
-    ///   <c>int[*]</c>, whose <c>MakeArrayType()</c> yields <c>int[]</c>), the original is a
-    ///   general rank-1 array. The comparison resolves to a <c>RuntimeTypeHandle</c> identity
-    ///   check on cached <see cref="Type"/> objects — no reflection metadata walking or string
-    ///   parsing is involved.
-    ///  </para>
-    /// </remarks>
-    private static bool IsSZArray(Type type) =>
-        type.IsArray && type.GetElementType()!.MakeArrayType() == type;
-#endif
 }

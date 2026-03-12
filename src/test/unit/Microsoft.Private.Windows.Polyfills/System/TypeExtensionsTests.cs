@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Tests;
@@ -87,5 +87,50 @@ public class TypeExtensionsTests
     public void IsTypeDefinition_Interface_ReturnsTrue()
     {
         typeof(IDisposable).IsTypeDefinition.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSZArray_SingleDimensionalArray_ReturnsTrue()
+    {
+        typeof(int[]).IsSZArray.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSZArray_ReferenceTypeArray_ReturnsTrue()
+    {
+        typeof(string[]).IsSZArray.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSZArray_MultiDimensionalArray_ReturnsFalse()
+    {
+        typeof(int[,]).IsSZArray.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSZArray_JaggedArray_ReturnsTrue()
+    {
+        typeof(int[][]).IsSZArray.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSZArray_NonArrayType_ReturnsFalse()
+    {
+        typeof(int).IsSZArray.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSZArray_NonArrayClassType_ReturnsFalse()
+    {
+        typeof(string).IsSZArray.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSZArray_Rank1GeneralArray_ReturnsFalse()
+    {
+        // Array.CreateInstance with a lower bound creates a general rank-1 array (int[*]),
+        // which is distinct from an SZ array (int[]).
+        Type rank1General = Array.CreateInstance(typeof(int), [1], [1]).GetType();
+        rank1General.IsSZArray.Should().BeFalse();
     }
 }

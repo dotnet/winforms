@@ -20,15 +20,16 @@ namespace System.Private.Windows.Ole;
 ///  (via <see cref="IComVisibleDataObject"/>) currently.
 /// </devdoc>
 internal static unsafe class DragDropHelper<TOleServices, TDataFormat>
-    where TOleServices : IOleServices
 #if NET
+    where TOleServices : IOleServices
     where TDataFormat : IDataFormat<TDataFormat>
 #else
+    where TOleServices : IOleServices, new()
     where TDataFormat : IDataFormat<TDataFormat>, new()
 #endif
 {
 #if NETFRAMEWORK
-    private static readonly TOleServices s_oleServices = Activator.CreateInstance<TOleServices>();
+    private static readonly TOleServices s_oleServices = new TOleServices();
 #endif
 
     /// <summary>

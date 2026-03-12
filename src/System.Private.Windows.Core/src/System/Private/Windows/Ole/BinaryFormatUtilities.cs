@@ -10,10 +10,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Private.Windows.Ole;
 
-internal static partial class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializer : INrbfSerializer
+internal static partial class BinaryFormatUtilities<TNrbfSerializer>
+#if NET
+    where TNrbfSerializer : INrbfSerializer
+#else
+    where TNrbfSerializer : INrbfSerializer, new()
+#endif
 {
 #if NETFRAMEWORK
-    private static readonly INrbfSerializer s_nrbfSerializer = Activator.CreateInstance<TNrbfSerializer>();
+    private static readonly INrbfSerializer s_nrbfSerializer = new TNrbfSerializer();
 #endif
 
     /// <summary>
@@ -158,7 +163,7 @@ internal static partial class BinaryFormatUtilities<TNrbfSerializer> where TNrbf
                 }
             }
 
-#if NET
+#if OLE_JSON
             if (type is null)
             {
                 // Serializer didn't recognize the type, look for and deserialize a JSON object.

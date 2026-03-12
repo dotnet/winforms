@@ -294,8 +294,7 @@ internal static unsafe partial class ComHelpers
         where TInterface : unmanaged, IComIID => GetObjectForIUnknown(comScope.Value);
 
     /// <summary>
-    ///  Gets a runtime capable wrapper for <see cref="Marshal.GetObjectForIUnknown(IntPtr)"/>.
-    ///  Will attempt to unwrap ComWrapper RCWs if available.
+    ///  Gets a runtime callable wrapper for the given IUnknown. Will attempt to unwrap ComWrapper RCWs if available.
     /// </summary>
     /// <exception cref="ArgumentNullException"><paramref name="unknown"/> is <see langword="null"/>.</exception>
     internal static object GetObjectForIUnknown(ComUnknown* unknown)

@@ -6,7 +6,7 @@ using System.Reflection.Metadata;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
-#if NET
+#if OLE_JSON
 using System.Text.Json;
 #endif
 
@@ -161,7 +161,7 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
 
         // Avoid exposing our internal JsonData<T>
         return
-#if NET
+#if OLE_JSON
             result is IJsonData json ? json.Deserialize() :
 #endif
             result;

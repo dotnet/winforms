@@ -11,7 +11,7 @@ namespace Windows.Win32;
 ///   On .NET 6 and later, this is provided by CSWin32 as an abstract static.
 ///  </para>
 /// </remarks>
-public interface IComIID
+internal interface IComIID
 {
     /// <summary>
     ///  The identifier (IID) GUID for this interface.

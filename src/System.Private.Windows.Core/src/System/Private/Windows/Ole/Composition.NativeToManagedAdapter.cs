@@ -11,25 +11,6 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal static class ThreadOleServices
-{
-    [ThreadStatic]
-#pragma warning disable IDE1006 // Naming Styles
-    public static IOleServices? OleServices;
-
-    [ThreadStatic]
-    public static Nrbf.INrbfSerializer? NrbfSerializer;
-
-    [ThreadStatic]
-    public static DataFormatFactory? DataFormatFactory;
-#pragma warning restore IDE1006 // Naming Styles
-}
-
-internal abstract class DataFormatFactory
-{
-    public abstract object CreateDataFormat(string format);
-}
-
 internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
     /// <summary>
