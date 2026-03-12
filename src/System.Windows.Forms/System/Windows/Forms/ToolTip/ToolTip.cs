@@ -718,6 +718,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
+            else if (Application.IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(HWND, $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}", null);
+            }
         }
 
         // If in OwnerDraw mode, we don't want the default border.
@@ -730,12 +734,6 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         // Setting the max width has the added benefit of enabling multiline tool tips.
         PInvokeCore.SendMessage(this, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
-
-        Form? activeForm = Form.ActiveForm;
-        if (Application.IsDarkModeEnabled && !SystemInformation.HighContrast && activeForm is not null && activeForm.DarkModeRequestState is true)
-        {
-            PInvoke.SetWindowTheme(HWND, $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}", null);
-        }
 
         if (_auto)
         {
