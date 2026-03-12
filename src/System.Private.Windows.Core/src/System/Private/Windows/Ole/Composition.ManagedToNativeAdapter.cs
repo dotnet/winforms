@@ -116,12 +116,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
 
-            if (!_dataObject.GetDataPresent(format, autoConvert: false))
+            if (!_dataObject.GetDataPresent(format))
             {
                 return HRESULT.DV_E_FORMATETC;
             }
 
-            if (_dataObject.GetData(format, autoConvert: false) is not object data)
+            if (_dataObject.GetData(format) is not object data)
             {
                 return HRESULT.E_UNEXPECTED;
             }
@@ -181,8 +181,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.S_FALSE;
             }
 
-            // The NativeToManagedAdapter handles the autoConvert behavior.
-            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name, autoConvert: false))
+            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name))
             {
                 return HRESULT.DV_E_FORMATETC;
             }

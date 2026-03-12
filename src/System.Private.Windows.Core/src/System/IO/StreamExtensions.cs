@@ -28,13 +28,6 @@ internal static partial class StreamExtensions
     {
         int size = checked((int)stream.Length);
 
-        if (size == 0)
-        {
-            // A zero-size GMEM_MOVEABLE allocation creates a discarded handle
-            // that cannot be locked. Leave the existing HGLOBAL as-is.
-            return HRESULT.S_OK;
-        }
-
         if (!hglobal.IsNull)
         {
             HGLOBAL freed = PInvokeCore.GlobalFree(hglobal);
@@ -42,6 +35,14 @@ internal static partial class StreamExtensions
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
+        }
+
+        if (size == 0)
+        {
+            // A zero-size GMEM_MOVEABLE allocation creates a discarded handle
+            // that cannot be locked. Set to null so the caller knows there's no data.
+            hglobal = HGLOBAL.Null;
+            return HRESULT.S_OK;
         }
 
         hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);

@@ -131,8 +131,14 @@ public unsafe class ClipboardCoreTests
 
         data.GetDataPresent(DataFormatNames.UnicodeText).Should().BeTrue();
         data.GetData(DataFormatNames.UnicodeText).Should().Be("Hello, World!");
+
+#if NET
+        // On .NET the original DataObject is unwrapped, so the DataStore distinguishes between
+        // explicitly stored and auto-converted formats. On .NET Framework, a NativeToManagedAdapter
+        // wraps the COM pointer, and the COM round-trip does not preserve that distinction.
         data.GetDataPresent(DataFormatNames.UnicodeText, autoConvert: false).Should().BeFalse();
         data.GetData(DataFormatNames.UnicodeText, autoConvert: false).Should().BeNull();
+#endif
 
         IDataObjectInternal iDataObject = data.Should().BeAssignableTo<IDataObjectInternal>().Subject;
         iDataObject.TryGetData(out string? text).Should().BeTrue();
@@ -142,8 +148,10 @@ public unsafe class ClipboardCoreTests
         text.Should().Be("Hello, World!");
         iDataObject.TryGetData(DataFormatNames.UnicodeText, out text).Should().BeTrue();
         text.Should().Be("Hello, World!");
+#if NET
         iDataObject.TryGetData(DataFormatNames.UnicodeText, autoConvert: false, out text).Should().BeFalse();
         text.Should().BeNull();
+#endif
     }
 
     [Fact]
