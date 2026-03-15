@@ -35,6 +35,7 @@ You first need to [fork][fork] then [clone][clone] this Windows Forms repository
 
 ## More Information
 
+* [Shared WinForms/WPF Infrastructure](shared-wpf-infrastructure.md) - Important guidance for contributors working on clipboard/OLE code
 * [How to write good docs for .NET](https://review.docs.microsoft.com/help/contribute-ref/how-to-write-net-docs?branch=main)
 * [.NET Docs and Guidelines][net-runtime-instructions]
 * ["help wanted" issues][help wanted]
