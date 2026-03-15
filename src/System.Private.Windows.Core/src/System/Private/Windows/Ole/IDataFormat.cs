@@ -28,5 +28,8 @@ internal interface IDataFormat<T> : IDataFormat
     /// <summary>
     ///  Creates a new instance of the data format.
     /// </summary>
-    static abstract T Create(string name, int id);
+#if NET
+    static abstract
+#endif
+    T Create(string name, int id);
 }

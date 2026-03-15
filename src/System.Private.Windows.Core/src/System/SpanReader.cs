@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Buffers;
-
 namespace System;
 
 /// <summary>
@@ -15,7 +13,7 @@ namespace System;
 ///   <see langword="ulong"/> field.
 ///  </para>
 ///  <para>
-///   Inspired by <see cref="SequenceReader{T}"/> patterns.
+///   Inspired by SequenceReader{T} patterns.
 ///  </para>
 /// </remarks>
 internal unsafe ref struct SpanReader<T>(ReadOnlySpan<T> span) where T : unmanaged, IEquatable<T>
@@ -177,7 +175,12 @@ internal unsafe ref struct SpanReader<T>(ReadOnlySpan<T> span) where T : unmanag
         else
         {
             success = true;
+#if NETFRAMEWORK
+            ReadOnlySpan<T> current = _unread[..(sizeof(TValue) / sizeof(T) * count)];
+            value = MemoryMarshal.Cast<T, TValue>(current);
+#else
             value = MemoryMarshal.CreateReadOnlySpan(ref Unsafe.As<T, TValue>(ref MemoryMarshal.GetReference(_unread)), count);
+#endif
             UnsafeAdvance((sizeof(TValue) / sizeof(T)) * count);
         }
 
@@ -258,23 +261,25 @@ internal unsafe ref struct SpanReader<T>(ReadOnlySpan<T> span) where T : unmanag
         UncheckedSlice(ref _unread, count, _unread.Length - count);
     }
 
-    /// <summary>
-    ///  Slicing without bounds checking.
-    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void UncheckedSliceTo(ref ReadOnlySpan<T> span, int length)
     {
         Debug.Assert((uint)length <= (uint)span.Length);
+#if NETFRAMEWORK
+        span = span[..length];
+#else
         span = MemoryMarshal.CreateReadOnlySpan(ref MemoryMarshal.GetReference(span), length);
+#endif
     }
 
-    /// <summary>
-    ///  Slicing without bounds checking.
-    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void UncheckedSlice(ref ReadOnlySpan<T> span, int start, int length)
     {
         Debug.Assert((uint)start <= (uint)span.Length && (uint)length <= (uint)(span.Length - start));
+#if NETFRAMEWORK
+        span = span.Slice(start, length);
+#else
         span = MemoryMarshal.CreateReadOnlySpan(ref Unsafe.Add(ref MemoryMarshal.GetReference(span), (nint)(uint)start), length);
+#endif
     }
 }

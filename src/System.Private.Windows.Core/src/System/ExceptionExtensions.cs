@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection;
+#if NET
 using System.Runtime.ExceptionServices;
+#endif
 using System.Runtime.Serialization;
 
 namespace System;
@@ -34,8 +36,12 @@ internal static class ExceptionExtensions
 
         return ex is SerializationException serializationException
             ? serializationException
+#if NET
             : (SerializationException)ExceptionDispatchInfo.SetRemoteStackTrace(
                 new SerializationException(ex.Message, ex),
                 ex.StackTrace ?? string.Empty);
+#else
+            : new SerializationException(ex.Message, ex);
+#endif
     }
 }

@@ -6,7 +6,7 @@ using Windows.Win32.System.Memory;
 
 namespace System.IO;
 
-internal static class StreamExtensions
+internal static partial class StreamExtensions
 {
     /// <summary>
     ///  Get a <see cref="IStream"/> wrapper around the given <paramref name="stream"/>. Use the return value
@@ -26,6 +26,8 @@ internal static class StreamExtensions
     /// <returns><see cref="HRESULT.S_OK"/> if successful.</returns>
     internal static unsafe HRESULT SaveStreamToHGLOBAL(this Stream stream, ref HGLOBAL hglobal)
     {
+        int size = checked((int)stream.Length);
+
         if (!hglobal.IsNull)
         {
             HGLOBAL freed = PInvokeCore.GlobalFree(hglobal);
@@ -35,7 +37,14 @@ internal static class StreamExtensions
             }
         }
 
-        int size = checked((int)stream.Length);
+        if (size == 0)
+        {
+            // A zero-size GMEM_MOVEABLE allocation creates a discarded handle
+            // that cannot be locked. Set to null so the caller knows there's no data.
+            hglobal = HGLOBAL.Null;
+            return HRESULT.S_OK;
+        }
+
         hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
         if (hglobal.IsNull)
         {

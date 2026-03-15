@@ -42,5 +42,9 @@ internal interface IHandle<THandle> where THandle : unmanaged
     ///   <see cref="IHandle{THandle}"/> is on a struct. See <see cref="HandleRef{THandle}"/> for a concrete usage.
     ///  </para>
     /// </remarks>
+#if NET
     object? Wrapper => this;
+#else
+    object? Wrapper { get; }
+#endif
 }

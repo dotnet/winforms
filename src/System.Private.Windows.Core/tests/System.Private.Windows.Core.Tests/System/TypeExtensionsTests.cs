@@ -18,12 +18,26 @@ public class TypeExtensionsTests
         { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName), (int)TypeNameComparison.AssemblyCultureName, true },
         { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName), (int)TypeNameComparison.AssemblyName, true },
         { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName), (int)TypeNameComparison.AssemblyPublicKeyToken, true },
-        { typeof(int), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), (int)TypeNameComparison.AllButAssemblyVersion, false },
+        {
+            typeof(int), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), (int)TypeNameComparison.AllButAssemblyVersion,
+#if NET
+            false
+#else
+            true
+#endif
+        },
         { typeof(int), TypeName.Parse($"System.Int32, {Assemblies.Mscorlib}"), (int)TypeNameComparison.TypeFullName, true },
         { typeof(int), TypeName.Parse($"Int32, {Assemblies.Mscorlib}"), (int)TypeNameComparison.TypeFullName, false },
         { typeof(int?), TypeName.Parse(typeof(int).AssemblyQualifiedName), (int)TypeNameComparison.AllButAssemblyVersion, false },
         { typeof(int?), TypeName.Parse(typeof(int?).AssemblyQualifiedName), (int)TypeNameComparison.All, true },
-        { typeof(int?[]), TypeName.Parse($"System.Nullable`1[[System.Int32, {Assemblies.Mscorlib}]][], {Assemblies.Mscorlib}"), (int)TypeNameComparison.AllButAssemblyVersion, false},
+        {
+            typeof(int?[]), TypeName.Parse($"System.Nullable`1[[System.Int32, {Assemblies.Mscorlib}]][], {Assemblies.Mscorlib}"), (int)TypeNameComparison.AllButAssemblyVersion,
+#if NET
+            false
+#else
+            true
+#endif
+        },
         { typeof(DayOfWeek), TypeName.Parse($"System.Nullable`1[[System.DayOfWeek, {Assemblies.Mscorlib}]], {Assemblies.Mscorlib}"), (int)TypeNameComparison.AllButAssemblyVersion, false },
         // Culture is incorrect.
         { typeof(int), TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace("neutral", "en-US")), (int)TypeNameComparison.AssemblyCultureName, false },
@@ -50,8 +64,17 @@ public class TypeExtensionsTests
     {
         // We assert here as we're not expecting to see this exception in normal usage.
         using NoAssertContext noAsserts = new();
+
+        // On .NET Framework:
+        // System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
         bool success = typeof(int).Matches(
-            TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace("7cec85d7bea7798e", "7cec00000ea7798e")),
+            TypeName.Parse(typeof(int).AssemblyQualifiedName!.Replace(
+#if NET
+                "7cec85d7bea7798e",
+#else
+                "b77a5c561934e089",
+#endif
+                "7cec00000ea7798e")),
             TypeNameComparison.AllButAssemblyVersion);
         success.Should().BeFalse();
     }
@@ -111,7 +134,7 @@ public class TypeExtensionsTests
         _ = BinarySerialization.DeserializeFromStream(
             stream,
             binder: new BindToTypeBinder(
-                (string assembly, string type) =>
+                (assembly, type) =>
                 {
                     bindings.Add($"{type}, {assembly}");
                     return null;

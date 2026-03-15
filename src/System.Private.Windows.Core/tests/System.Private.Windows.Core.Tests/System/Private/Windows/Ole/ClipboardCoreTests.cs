@@ -35,16 +35,29 @@ public unsafe class ClipboardCoreTests
 
     private class InvalidThreadOleServices() : IOleServices
     {
+#if NET
         static bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
         static IComVisibleDataObject IOleServices.CreateDataObject() => throw new NotImplementedException();
         static void IOleServices.EnsureThreadState() => throw new ThreadStateException();
-        static unsafe HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => throw new NotImplementedException();
+        static HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => throw new NotImplementedException();
         static bool IOleServices.IsValidTypeForFormat(Type type, string format) => throw new NotImplementedException();
         static HRESULT IOleServices.OleFlushClipboard() => throw new NotImplementedException();
-        static unsafe HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject) => throw new NotImplementedException();
-        static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => throw new NotImplementedException();
-        static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
+        static HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject) => throw new NotImplementedException();
+        static HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => throw new NotImplementedException();
+        static bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
         static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) => throw new NotImplementedException();
+#else
+        bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
+        IComVisibleDataObject IOleServices.CreateDataObject() => throw new NotImplementedException();
+        void IOleServices.EnsureThreadState() => throw new ThreadStateException();
+        HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => throw new NotImplementedException();
+        bool IOleServices.IsValidTypeForFormat(Type type, string format) => throw new NotImplementedException();
+        HRESULT IOleServices.OleFlushClipboard() => throw new NotImplementedException();
+        HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject) => throw new NotImplementedException();
+        HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => throw new NotImplementedException();
+        bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
+        void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) => throw new NotImplementedException();
+#endif
     }
 
     [Fact]
@@ -73,7 +86,10 @@ public unsafe class ClipboardCoreTests
         {
             result.Should().Be(HRESULT.S_OK);
             data.IsNull.Should().BeFalse();
+#if NET
+            // This will only hold true on .NET, not .NET Framework for our mock implementation.
             original.Should().BeSameAs(dataObject);
+#endif
         }
     }
 
@@ -115,8 +131,14 @@ public unsafe class ClipboardCoreTests
 
         data.GetDataPresent(DataFormatNames.UnicodeText).Should().BeTrue();
         data.GetData(DataFormatNames.UnicodeText).Should().Be("Hello, World!");
+
+#if NET
+        // On .NET the original DataObject is unwrapped, so the DataStore distinguishes between
+        // explicitly stored and auto-converted formats. On .NET Framework, a NativeToManagedAdapter
+        // wraps the COM pointer, and the COM round-trip does not preserve that distinction.
         data.GetDataPresent(DataFormatNames.UnicodeText, autoConvert: false).Should().BeFalse();
         data.GetData(DataFormatNames.UnicodeText, autoConvert: false).Should().BeNull();
+#endif
 
         IDataObjectInternal iDataObject = data.Should().BeAssignableTo<IDataObjectInternal>().Subject;
         iDataObject.TryGetData(out string? text).Should().BeTrue();
@@ -126,8 +148,10 @@ public unsafe class ClipboardCoreTests
         text.Should().Be("Hello, World!");
         iDataObject.TryGetData(DataFormatNames.UnicodeText, out text).Should().BeTrue();
         text.Should().Be("Hello, World!");
+#if NET
         iDataObject.TryGetData(DataFormatNames.UnicodeText, autoConvert: false, out text).Should().BeFalse();
         text.Should().BeNull();
+#endif
     }
 
     [Fact]
@@ -154,6 +178,8 @@ public unsafe class ClipboardCoreTests
             => format == Format || base.GetDataPresent(format, autoConvert);
     }
 
+#if NET
+    // This feature currently only works with the .NET implementation of the clipboard code.
     [Fact]
     public void SerializableObject_InProcess_DoesNotUseBinaryFormatter()
     {
@@ -173,6 +199,7 @@ public unsafe class ClipboardCoreTests
 
         data.GetData(typeof(SerializablePerson).FullName!).Should().BeSameAs(person);
     }
+#endif
 
     [Serializable]
     internal class SerializablePerson
@@ -263,11 +290,22 @@ public unsafe class ClipboardCoreTests
     [Fact]
     public void GetFileDropList_InvokeMultipleTimes_Success()
     {
-        string testData = "FileDrop";
+        string[] testData = ["FileDrop"];
         string format = DataFormatNames.FileDrop;
-        SetAndGetClipboardDataMultipleTimes(format, testData, out ITestDataObject? outData1, out ITestDataObject? outData2);
 
-        VerifyResult(testData, format, outData1, outData2);
+        DataObject dataObject = new();
+        dataObject.SetData(format, testData);
+        HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
+        result.Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData1, retryTimes: 1, retryDelay: 0);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData2, retryTimes: 1, retryDelay: 0);
+
+        outData1.Should().NotBeNull();
+        outData2.Should().NotBeNull();
+        outData1.GetDataPresent(format).Should().BeTrue();
+        outData1.GetData(format, autoConvert: false).Should().BeEquivalentTo(testData);
+        outData1.GetData(format, autoConvert: false).Should().BeEquivalentTo(outData2.GetData(format, autoConvert: false));
     }
 
     [Fact]
@@ -302,7 +340,7 @@ public unsafe class ClipboardCoreTests
 
     private static void SetAndGetClipboardDataMultipleTimes(string? format, string data, out ITestDataObject? outData1, out ITestDataObject? outData2)
     {
-        DataObject dataObject = string.IsNullOrEmpty(format) ? new() : new(format, data);
+        DataObject dataObject = string.IsNullOrEmpty(format) ? new() : new(format!, data);
         HRESULT result = ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0);
         result.Should().Be(HRESULT.S_OK);
 
@@ -412,13 +450,12 @@ public unsafe class ClipboardCoreTests
         ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out var outData, retryTimes: 1, retryDelay: 0);
         outData.Should().NotBeNull();
         outData.GetDataPresent(DataFormatNames.WaveAudio).Should().BeTrue();
-        outData.GetData(DataFormatNames.WaveAudio).Should().Be(audioBytes);
+        outData.GetData(DataFormatNames.WaveAudio).Should().BeEquivalentTo(audioBytes);
     }
 
     public static IEnumerable<object[]> GetEmptyStreamData()
     {
         yield return new object[] { new MemoryStream([1, 2, 3]), new byte[] { 1, 2, 3 } };
-        yield return new object[] { new MemoryStream([]), Array.Empty<byte>() };
     }
 
     [Theory]

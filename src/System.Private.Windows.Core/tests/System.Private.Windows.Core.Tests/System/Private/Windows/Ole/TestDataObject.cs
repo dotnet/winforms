@@ -13,17 +13,32 @@ internal unsafe class TestDataObject<TOleServices> :
     IComVisibleDataObject,
     ITestDataObject,
     IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>
-    where TOleServices : IOleServices
+    where TOleServices : IOleServices, new()
 {
     private readonly Composition<TOleServices, CoreNrbfSerializer, TestFormat> _innerData;
 
-    static TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create() =>
+#if NET
+    static
+#endif
+    TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create() =>
         new();
-    static TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(IDataObject* dataObject) =>
+
+#if NET
+    static
+#endif
+    TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(IDataObject* dataObject) =>
         new(dataObject);
-    static TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(object data) =>
+
+#if NET
+    static
+#endif
+    TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(object data) =>
         new(data);
-    static IDataObjectInternal IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Wrap(ITestDataObject data) =>
+
+#if NET
+    static
+#endif
+    IDataObjectInternal IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Wrap(ITestDataObject data) =>
         new TestDataObjectAdapter(data);
 
     bool IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.TryUnwrapUserDataObject([NotNullWhen(true)] out ITestDataObject? dataObject)
@@ -32,7 +47,7 @@ internal unsafe class TestDataObject<TOleServices> :
     internal TestDataObject(IDataObject* data) =>
         _innerData = Composition<TOleServices, CoreNrbfSerializer, TestFormat>.Create(data);
 
-    internal TestDataObject() =>
+    public TestDataObject() =>
         _innerData = Composition<TOleServices, CoreNrbfSerializer, TestFormat>.Create();
 
     internal TestDataObject(object data) =>
@@ -114,13 +129,13 @@ internal unsafe class TestDataObject<TOleServices> :
 
     // Native callbacks follow
 
-    public unsafe HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium) => _innerData.GetData(pformatetcIn, pmedium);
-    public unsafe HRESULT GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium) => _innerData.GetDataHere(pformatetc, pmedium);
-    public unsafe HRESULT QueryGetData(FORMATETC* pformatetc) => _innerData.QueryGetData(pformatetc);
-    public unsafe HRESULT GetCanonicalFormatEtc(FORMATETC* pformatectIn, FORMATETC* pformatetcOut) => _innerData.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
-    public unsafe HRESULT SetData(FORMATETC* pformatetc, STGMEDIUM* pmedium, BOOL fRelease) => _innerData.SetData(pformatetc, pmedium, fRelease);
-    public unsafe HRESULT EnumFormatEtc(uint dwDirection, IEnumFORMATETC** ppenumFormatEtc) => _innerData.EnumFormatEtc(dwDirection, ppenumFormatEtc);
-    public unsafe HRESULT DAdvise(FORMATETC* pformatetc, uint advf, IAdviseSink* pAdvSink, uint* pdwConnection) => _innerData.DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
+    public HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium) => _innerData.GetData(pformatetcIn, pmedium);
+    public HRESULT GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium) => _innerData.GetDataHere(pformatetc, pmedium);
+    public HRESULT QueryGetData(FORMATETC* pformatetc) => _innerData.QueryGetData(pformatetc);
+    public HRESULT GetCanonicalFormatEtc(FORMATETC* pformatectIn, FORMATETC* pformatetcOut) => _innerData.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
+    public HRESULT SetData(FORMATETC* pformatetc, STGMEDIUM* pmedium, BOOL fRelease) => _innerData.SetData(pformatetc, pmedium, fRelease);
+    public HRESULT EnumFormatEtc(uint dwDirection, IEnumFORMATETC** ppenumFormatEtc) => _innerData.EnumFormatEtc(dwDirection, ppenumFormatEtc);
+    public HRESULT DAdvise(FORMATETC* pformatetc, uint advf, IAdviseSink* pAdvSink, uint* pdwConnection) => _innerData.DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
     public HRESULT DUnadvise(uint dwConnection) => _innerData.DUnadvise(dwConnection);
-    public unsafe HRESULT EnumDAdvise(IEnumSTATDATA** ppenumAdvise) => _innerData.EnumDAdvise(ppenumAdvise);
+    public HRESULT EnumDAdvise(IEnumSTATDATA** ppenumAdvise) => _innerData.EnumDAdvise(ppenumAdvise);
 }

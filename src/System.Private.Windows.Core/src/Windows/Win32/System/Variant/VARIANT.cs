@@ -3,8 +3,13 @@
 
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
+
+#if NET
 using Windows.Win32.System.Ole;
+#endif
+
 using static Windows.Win32.System.Variant.VARENUM;
+using FILETIME = Windows.Win32.Foundation.FILETIME;
 
 namespace Windows.Win32.System.Variant;
 
@@ -75,6 +80,9 @@ internal unsafe partial struct VARIANT : IDisposable
 
         fixed (VARIANT* thisVariant = &this)
         {
+#if NETFRAMEWORK
+            return Marshal.GetObjectForNativeVariant((nint)thisVariant);
+#else
             void* data = &thisVariant->Anonymous.Anonymous.Anonymous;
             if (Byref)
             {
@@ -105,9 +113,11 @@ internal unsafe partial struct VARIANT : IDisposable
             }
 
             return ToObject(Type, Byref, data);
+#endif
         }
     }
 
+#if NET
     private static object? ToObject(VARENUM type, bool byRef, void* data)
     {
         switch (type)
@@ -864,6 +874,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
     private static Span<T> GetSpan<T>(Array array)
         => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer()), array.Length);
+#endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator bool(VARIANT value)
