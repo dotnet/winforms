@@ -2911,6 +2911,13 @@ public partial class ListView : Control
 
                         _odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
                         PInvokeCore.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
+                        // ListView is the underlying control—so when it's in DarkMode and Enable=false,
+                        // we need to change the font to a darker color so that the content in the ListView can be displayed correctly.
+                        if (Application.IsDarkModeEnabled && !Enabled && DarkModeRequestState is true)
+                        {
+                            nmcd->clrText = (COLORREF)ColorTranslator.ToWin32(SystemColors.ControlDarkDark);
+                            nmcd->clrTextBk = (COLORREF)ColorTranslator.ToWin32(Color.FromArgb(255, 240, 240, 240));
+                        }
                     }
 
                     if (!lockReturnValue)
