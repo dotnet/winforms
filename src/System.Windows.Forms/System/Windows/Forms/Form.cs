@@ -4589,8 +4589,39 @@ public partial class Form : ContainerControl
         SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
         SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
 
-        desiredSize.Width = (int)(Size.Width * autoScaleFactor.Width);
-        desiredSize.Height = (int)(Size.Height * autoScaleFactor.Height);
+        // We should not include the window adornments (non-client area) in the autoScaleFactor calculation,
+        // because Windows scales them linearly by DPI ratio. We need to:
+        // 1. Get the non-client area size at both old and new DPI
+        // 2. Subtract old non-client area from current Size to get client area
+        // 3. Scale client area by autoScaleFactor
+        // 4. Add new non-client area to get the final desired size
+        CreateParams cp = CreateParams;
+        RECT adornmentsAtOldDpi = default;
+        RECT adornmentsAtNewDpi = default;
+
+        WINDOW_STYLE style = (WINDOW_STYLE)cp.Style;
+        WINDOW_EX_STYLE exStyle = (WINDOW_EX_STYLE)cp.ExStyle;
+
+        if (OsVersion.IsWindows10_1703OrGreater())
+        {
+            PInvoke.AdjustWindowRectExForDpi(ref adornmentsAtOldDpi, style, false, exStyle, (uint)deviceDpiOld);
+            PInvoke.AdjustWindowRectExForDpi(ref adornmentsAtNewDpi, style, false, exStyle, (uint)deviceDpiNew);
+        }
+        else
+        {
+            PInvoke.AdjustWindowRectEx(ref adornmentsAtOldDpi, style, false, exStyle);
+            adornmentsAtNewDpi = adornmentsAtOldDpi;
+        }
+
+        // Calculate client area at old DPI
+        int clientWidth = Size.Width - adornmentsAtOldDpi.Width;
+        int clientHeight = Size.Height - adornmentsAtOldDpi.Height;
+
+        // Scale client area by autoScaleFactor and add new DPI's non-client area.
+        // Use Math.Round to minimize rounding errors during DPI transitions.
+        desiredSize.Width = (int)Math.Round(clientWidth * autoScaleFactor.Width) + adornmentsAtNewDpi.Width;
+        desiredSize.Height = (int)Math.Round(clientHeight * autoScaleFactor.Height) + adornmentsAtNewDpi.Height;
+
         Debug.WriteLine($"AutoScaleFactor computed for new DPI = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
 
         // Notify Windows that the top-level window size should be based on AutoScaleMode value.
