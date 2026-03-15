@@ -20,7 +20,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\..\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj" />
     <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bitmaps\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
