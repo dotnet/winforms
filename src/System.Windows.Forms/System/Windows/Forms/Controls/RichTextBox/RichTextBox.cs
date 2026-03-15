@@ -3455,7 +3455,7 @@ public partial class RichTextBox : TextBoxBase
                         TextFormatFlags.Left
                         | TextFormatFlags.Top
                         | TextFormatFlags.WordBreak
-                        | TextFormatFlags.EndEllipsis);
+                        | TextFormatFlags.TextBoxControl);
 
                     return;
                 }
