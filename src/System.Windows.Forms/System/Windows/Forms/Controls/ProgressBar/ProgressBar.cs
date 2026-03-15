@@ -81,6 +81,12 @@ public partial class ProgressBar : Control
 
         if (Application.IsDarkModeEnabled)
         {
+            if (!ShouldSerializeBackColor())
+            {
+                BackColor = SystemColors.ControlDarkDark;
+                ForeColor = SystemColors.Highlight;
+            }
+
             // Disables Visual Styles for the ProgressBar.
             PInvoke.SetWindowTheme(HWND, " ", " ");
         }
