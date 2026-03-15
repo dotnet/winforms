@@ -113,6 +113,7 @@ public partial class ListView : Control
     private ImageList? _imageListSmall;
     private ImageList? _imageListState;
     private ImageList? _imageListGroup;
+    private ImageList? _darkModeStateImageList;
 
     private MouseButtons _downButton;
     private int _itemCount;
@@ -3066,6 +3067,9 @@ public partial class ListView : Control
             DetachGroupImageListHandlers();
             _imageListGroup = null;
 
+            _darkModeStateImageList?.Dispose();
+            _darkModeStateImageList = null;
+
             // Remove any ColumnHeaders contained in this control
             if (_columnHeaders is not null)
             {
@@ -4703,7 +4707,82 @@ public partial class ListView : Control
                 columnHeaderHandle,
                 $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}",
                 null);
+
+            if (CheckBoxes)
+            {
+                UpdateDarkModeCheckBoxImages();
+            }
         }
+    }
+
+    private void UpdateDarkModeCheckBoxImages()
+    {
+        if (_imageListState is not null || !CheckBoxes || !IsHandleCreated)
+        {
+            return;
+        }
+
+        _darkModeStateImageList?.Dispose();
+
+        int size = ScaleHelper.ScaleToInitialSystemDpi(16);
+
+        ImageList imageList = new()
+        {
+            ImageSize = new Size(size, size),
+            ColorDepth = ColorDepth.Depth32Bit,
+            TransparentColor = Color.Transparent
+        };
+
+        imageList.Images.Add(CreateDarkModeCheckBoxBitmap(isChecked: false, size));
+        imageList.Images.Add(CreateDarkModeCheckBoxBitmap(isChecked: true, size));
+
+        // Ensure the checkbox extended style is active before assigning our custom state imagelist,
+        // otherwise the style refresh may overwrite the list with the default light-themed images.
+        ForceCheckBoxUpdate();
+
+        PInvokeCore.SendMessage(
+            this,
+            PInvoke.LVM_SETIMAGELIST,
+            (WPARAM)PInvoke.LVSIL_STATE,
+            (LPARAM)imageList.Handle);
+
+        _darkModeStateImageList = imageList;
+
+        if (VirtualMode)
+        {
+            return;
+        }
+
+        if (Items.Count > 0)
+        {
+            const LIST_VIEW_ITEM_STATE_FLAGS stateMask = LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK;
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                bool isChecked = Items[i].Checked;
+                int stateIndex = isChecked ? 2 : 1;
+
+                SetItemState(i, (LIST_VIEW_ITEM_STATE_FLAGS)(stateIndex << 12), stateMask);
+            }
+
+            PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_REDRAWITEMS,
+                (WPARAM)0,
+                (LPARAM)(Items.Count - 1));
+        }
+    }
+
+    private Bitmap CreateDarkModeCheckBoxBitmap(bool isChecked, int size)
+    {
+        Bitmap bitmap = new(size, size);
+
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Transparent);
+        CheckBoxState state = isChecked ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
+        CheckBoxRenderer.DrawCheckBoxWithVisualStyles(graphics, new Point(0, 0), state, HWNDInternal);
+
+        return bitmap;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
