@@ -173,18 +173,7 @@ public partial class RadioButton : ButtonBase
         }
     }
 
-    private protected override bool OwnerDraw =>
-        // Order is key here - do NOT change!
-        // We want NO owner draw ONLY when we're
-        // * in Dark Mode
-        // * when _then_ the Appearance is Button
-        // * but then ONLY when we're rendering with FlatStyle.Standard
-        //   (because that would let us usually let us draw with the VisualStyleRenderers,
-        //   which cause HighDPI issues in Dark Mode).
-        (!Application.IsDarkModeEnabled
-            || Appearance != Appearance.Button
-            || FlatStyle != FlatStyle.Standard)
-            && base.OwnerDraw;
+    private protected override bool OwnerDraw => base.OwnerDraw;
 
     /// <hideinheritance/>
     [Browsable(false)]
