@@ -7518,14 +7518,16 @@ public unsafe partial class Control :
         ((EventHandler?)Events[s_handleDestroyedEvent])?.Invoke(this, e);
 
         // The Accessibility Object for this Control
-        if (Properties.TryGetValue(s_accessibilityProperty, out ControlAccessibleObject? accObj))
+        if (Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accObj)
+            && accObj is ControlAccessibleObject controlAccObj)
         {
-            accObj.Handle = IntPtr.Zero;
+            controlAccObj.Handle = IntPtr.Zero;
         }
 
         // Private accessibility object for control, used to wrap the object that
         // OLEACC.DLL creates to represent the control's non-client (NC) region.
-        if (Properties.TryGetValue(s_ncAccessibilityProperty, out ControlAccessibleObject? nonClientAccessibleObject))
+        if (Properties.TryGetValue(s_ncAccessibilityProperty, out AccessibleObject? ncAccObj)
+            && ncAccObj is ControlAccessibleObject nonClientAccessibleObject)
         {
             nonClientAccessibleObject.Handle = IntPtr.Zero;
         }

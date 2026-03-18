@@ -100,6 +100,8 @@ public partial class ControlTests
         public AccessibleObject CreateAccessibilityResult { get; set; }
 
         protected override AccessibleObject CreateAccessibilityInstance() => CreateAccessibilityResult;
+
+        public void InvokeOnHandleDestroyed(EventArgs eventArgs) => OnHandleDestroyed(eventArgs);
     }
 
     [WinFormsTheory]
