@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if NET
 using System.Numerics;
 
 namespace System;
@@ -110,3 +111,4 @@ public static class ComparisonHelpers
         static unsafe bool IsPositiveZero(T value) => T.IsZero(value) && T.IsPositive(value);
     }
 }
+#endif

@@ -8,10 +8,15 @@ namespace System.Private.Windows.Ole;
 
 internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
 {
+#if NET
+    // Workaround SA1001 white space warnings.
+    private sealed partial class RuntimeToNativeAdapter : Com.IManagedWrapper<Com.IDataObject> { }
+#endif
+
     /// <summary>
     ///  Maps the runtime <see cref="IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
     /// </summary>
-    private sealed class RuntimeToNativeAdapter : Com.IDataObject.Interface, IDataObject, Com.IManagedWrapper<Com.IDataObject>
+    private sealed partial class RuntimeToNativeAdapter : Com.IDataObject.Interface, IDataObject
     {
         private readonly IDataObject _runtimeDataObject;
 

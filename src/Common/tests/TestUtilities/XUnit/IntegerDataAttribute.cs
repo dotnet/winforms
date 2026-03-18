@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if NET
 using System.Numerics;
 
 namespace Xunit;
@@ -15,3 +16,4 @@ public class IntegerDataAttribute<TNumber> : CommonMemberDataAttribute
 
     public static ReadOnlyTheoryData TheoryData { get; } = new(TestData.GetIntegerData<TNumber>());
 }
+#endif

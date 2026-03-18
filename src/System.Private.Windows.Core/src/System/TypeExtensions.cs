@@ -11,7 +11,7 @@ namespace System;
 /// <summary>
 ///  Helper methods for comparing <see cref="Type"/>s and <see cref="TypeName"/>s.
 /// </summary>
-internal static class TypeExtensions
+internal static partial class TypeExtensions
 {
     /// <summary>
     ///  Match type <paramref name="type"/> against <paramref name="typeName"/>.
@@ -40,8 +40,7 @@ internal static class TypeExtensions
             || type.IsConstructedGenericType != typeName.IsConstructedGenericType
             || type.IsNested != typeName.IsNested
             || (type.IsArray && type.GetArrayRank() != typeName.GetArrayRank())
-            || type.IsSZArray != typeName.IsSZArray // int[] vs int[*]
-            )
+            || type.IsSZArray != typeName.IsSZArray)
         {
             return false;
         }

@@ -6,9 +6,11 @@ namespace System.Private.Windows.BinaryFormat.Serializer;
 /// <summary>
 ///  Base class for null records.
 /// </summary>
-internal abstract partial class NullRecord
+internal abstract partial class NullRecord : IRecord
 {
     private Count _count;
+
+    public Id Id => Id.Null;
 
     public virtual Count NullCount
     {

@@ -96,7 +96,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             [NotNullWhen(true)] out T? data)
         {
             data = default;
-            if (hglobal == 0)
+            if (hglobal == (nint)0)
             {
                 return false;
             }
@@ -147,7 +147,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 int size = checked((int)PInvokeCore.GlobalSize(hglobal));
-                byte[] bytes = GC.AllocateUninitializedArray<byte>(size);
+                byte[] bytes =
+#if NET
+                    GC.AllocateUninitializedArray<byte>(size);
+#else
+                    new byte[size];
+#endif
+
                 Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
 
@@ -204,7 +210,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     }
 
                     chars = chars[..nullIndex];
-                    return new string(chars);
+                    return chars.ToString();
                 }
                 else
                 {
@@ -319,7 +325,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 // Try to get platform specific data first.
+#if NET
                 if (TOleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
+#else
+                if (s_oleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
+#endif
                 {
                     return true;
                 }
@@ -472,7 +482,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
             if (!DataFormatNames.IsPredefinedFormat(format)
+#if NET
                 && !TOleServices.AllowTypeWithoutResolver<T>()
+#else
+                && !s_oleServices.AllowTypeWithoutResolver<T>()
+#endif
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
@@ -586,6 +600,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         public bool GetDataPresent(string format, bool autoConvert)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                return false;
+            }
+
             bool dataPresent = GetDataPresentInner(format);
 
             if (dataPresent || !autoConvert)

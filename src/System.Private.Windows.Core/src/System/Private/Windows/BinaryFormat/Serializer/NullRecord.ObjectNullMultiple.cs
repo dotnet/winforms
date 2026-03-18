@@ -15,9 +15,7 @@ internal abstract partial class NullRecord
     ///   </see>
     ///  </para>
     /// </remarks>
-    internal sealed class ObjectNullMultiple :
-        NullRecord,
-        IRecord<ObjectNullMultiple>
+    internal sealed class ObjectNullMultiple : NullRecord
     {
         public static RecordType RecordType => RecordType.ObjectNullMultiple;
 

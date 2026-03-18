@@ -11,17 +11,41 @@ namespace System.Private.Windows.Ole;
 ///  Mock implementation of <see cref="IOleServices"/> for testing purposes.
 /// </summary>
 /// <typeparam name="TTestClass">Used to get an instance for each test class so test classes can run asynchronously.</typeparam>
-internal class MockOleServices<TTestClass> : IOleServices
+internal unsafe class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
 
-    static bool IOleServices.AllowTypeWithoutResolver<T>() => true;
-    static void IOleServices.EnsureThreadState() { }
-    static unsafe HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => HRESULT.DV_E_TYMED;
-    static bool IOleServices.IsValidTypeForFormat(Type type, string format) => true;
-    static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) { }
+#if NET
+    static
+#endif
+    bool IOleServices.AllowTypeWithoutResolver<T>() => true;
 
-    static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(
+#if NET
+    static
+#endif
+    void IOleServices.EnsureThreadState()
+    { }
+
+#if NET
+    static
+#endif
+    HRESULT IOleServices.GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium) => HRESULT.DV_E_TYMED;
+
+#if NET
+    static
+#endif
+    bool IOleServices.IsValidTypeForFormat(Type type, string format) => true;
+
+#if NET
+    static
+#endif
+    void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data)
+    { }
+
+#if NET
+    static
+#endif
+    bool IOleServices.TryGetObjectFromDataObject<T>(
         IDataObject* dataObject,
         string requestedFormat,
         [NotNullWhen(true)] out T data)
@@ -30,13 +54,19 @@ internal class MockOleServices<TTestClass> : IOleServices
         return false;
     }
 
-    static HRESULT IOleServices.OleFlushClipboard()
+#if NET
+    static
+#endif
+    HRESULT IOleServices.OleFlushClipboard()
     {
         // Would need to implement copying the raw TYMED data into a new object to mimic the real behavior.
         throw new NotImplementedException();
     }
 
-    static unsafe HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject)
+#if NET
+    static
+#endif
+    HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject)
     {
         if (dataObject is null)
         {
@@ -54,7 +84,10 @@ internal class MockOleServices<TTestClass> : IOleServices
         return HRESULT.S_OK;
     }
 
-    static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
+#if NET
+    static
+#endif
+    HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
     {
         if (dataObject is null)
         {
@@ -73,5 +106,8 @@ internal class MockOleServices<TTestClass> : IOleServices
         return HRESULT.S_OK;
     }
 
-    static IComVisibleDataObject IOleServices.CreateDataObject() => new TestDataObject<MockOleServices<TTestClass>>();
+#if NET
+    static
+#endif
+    IComVisibleDataObject IOleServices.CreateDataObject() => new TestDataObject<MockOleServices<TTestClass>>();
 }

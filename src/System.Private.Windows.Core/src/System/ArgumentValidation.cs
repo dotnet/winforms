@@ -26,6 +26,12 @@ internal static class ArgumentValidation
         return argument;
     }
 
+    // .NET Framework analyzer is confused by the use of [NotNull] on the parameter of these methods, and thinks
+    // that the parameter must be non-null when exiting the method, which is not the case as these methods throw
+    // when the parameter is null. Suppress the warning for these methods.
+
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
+
     internal static void ThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {
         if (string.IsNullOrEmpty(argument))
@@ -41,6 +47,8 @@ internal static class ArgumentValidation
             throw new ArgumentNullException(paramName, message);
         }
     }
+
+#pragma warning restore CS8777
 
     internal static void ThrowIfNull(HDC argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {

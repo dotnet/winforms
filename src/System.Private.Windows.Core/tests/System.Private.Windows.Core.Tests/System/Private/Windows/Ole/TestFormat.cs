@@ -5,6 +5,10 @@ namespace System.Private.Windows.Ole;
 
 internal class TestFormat : IDataFormat<TestFormat>
 {
+    public TestFormat() : this(string.Empty, 0)
+    {
+    }
+
     public TestFormat(string name, int id)
     {
         Name = name;
@@ -13,5 +17,9 @@ internal class TestFormat : IDataFormat<TestFormat>
 
     public string Name { get; }
     public int Id { get; }
-    static TestFormat IDataFormat<TestFormat>.Create(string name, int id) => new(name, id);
+
+#if NET
+    static
+#endif
+    TestFormat IDataFormat<TestFormat>.Create(string name, int id) => new(name, id);
 }

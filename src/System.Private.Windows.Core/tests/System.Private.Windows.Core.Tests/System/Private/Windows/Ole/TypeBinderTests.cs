@@ -77,7 +77,7 @@ public class TypeBinderTests
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeof(MyClass).Matches(typeName) ? typeof(MyClass) : null
+            Resolver = typeName => typeof(MyClass).Matches(typeName) ? typeof(MyClass) : null
         };
 
         TypeBinder<CoreNrbfSerializer> binder = new(typeof(MyClass), in request);
@@ -115,7 +115,7 @@ public class TypeBinderTests
         DataRequest request = new("test")
         {
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeof(MyClass)
+            Resolver = typeName => typeof(MyClass)
         };
 
         // Shouldn't fall back to the core serializer.
@@ -130,7 +130,7 @@ public class TypeBinderTests
         DataRequest request = new("test")
         {
             TypedRequest = true,
-            Resolver = (TypeName typeName) => throw new NotSupportedException()
+            Resolver = typeName => throw new NotSupportedException()
         };
 
         // Shouldn't fall back to the core serializer.
@@ -145,7 +145,7 @@ public class TypeBinderTests
         DataRequest request = new("test")
         {
             TypedRequest = true,
-            Resolver = (TypeName typeName) => null!
+            Resolver = typeName => null!
         };
 
         // Shouldn't fall back to the core serializer.
@@ -156,44 +156,85 @@ public class TypeBinderTests
 
     internal sealed class AlwaysDefaultSerializer : INrbfSerializer
     {
-        private AlwaysDefaultSerializer() { }
+        public AlwaysDefaultSerializer() { }
 
-        public static bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
         {
             type = null;
             return false;
         }
 
-        public static bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
         {
             value = null;
             return false;
         }
 
-        public static bool TryWriteObject(Stream stream, object value) => false;
+#if NET
+        public static
+#else
+        public
+#endif
 
-        public static bool IsFullySupportedType(Type type) => false;
+        bool TryWriteObject(Stream stream, object value) => false;
+
+#if NET
+        public static
+#else
+        public
+#endif
+        bool IsFullySupportedType(Type type) => false;
     }
 
     internal sealed class BindingAlwaysSucceedsSerializer : INrbfSerializer
     {
         private BindingAlwaysSucceedsSerializer() { }
 
-        public static bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
         {
             type = Type.GetType(typeName.AssemblyQualifiedName);
             return type is not null;
         }
 
-        public static bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
         {
             value = null;
             return false;
         }
 
-        public static bool TryWriteObject(Stream stream, object value) => false;
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryWriteObject(Stream stream, object value) => false;
 
-        public static bool IsFullySupportedType(Type type) => true;
+#if NET
+        public static
+#else
+        public
+#endif
+        bool IsFullySupportedType(Type type) => true;
     }
 
     internal sealed class AlwaysReturnsTypeSerializer<T> : INrbfSerializer
@@ -201,21 +242,41 @@ public class TypeBinderTests
     {
         private AlwaysReturnsTypeSerializer() { }
 
-        public static bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type)
         {
             type = typeof(T);
             return true;
         }
 
-        public static bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value)
         {
             value = null;
             return false;
         }
 
-        public static bool TryWriteObject(Stream stream, object value) => false
-        ;
-        public static bool IsFullySupportedType(Type type) => true;
+#if NET
+        public static
+#else
+        public
+#endif
+        bool TryWriteObject(Stream stream, object value) => false;
+
+#if NET
+        public static
+#else
+        public
+#endif
+        bool IsFullySupportedType(Type type) => true;
     }
 
     private class MyClass { }

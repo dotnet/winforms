@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCurrent)-windows7.0</TargetFramework>
+    <!-- Need 481 for tests for GC APIs -->
+    <TargetFrameworks>$(NetCurrent)-windows7.0;net481</TargetFrameworks>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--
@@ -13,14 +14,31 @@
     <RootNamespace />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't properly recognize this on .NET Framework.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+
+    <!--
+      Prevent the .NET SDK from inferring a RuntimeIdentifier for net481 Exe projects. The SDK infers the
+      RID from PlatformTarget and this causes a mismatch between NuGet restore (which evaluates with the
+      global Platform property, e.g. x64) and the solution build (which maps Platform to "Any CPU" via the
+      solution configuration). Setting PlatformTarget=AnyCPU prevents the inference for all architectures.
+    -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" />
+    <PackageReference Condition="'$(TargetFramework)' != 'net481'" Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
-    <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
+    <ProjectReference Condition="'$(TargetFramework)' != 'net481'" Include="..\..\src\System.Private.Windows.Core.csproj" />
+    <ProjectReference Condition="'$(TargetFramework)' == 'net481'" Include="..\..\src\Microsoft.Private.Windows.Core.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

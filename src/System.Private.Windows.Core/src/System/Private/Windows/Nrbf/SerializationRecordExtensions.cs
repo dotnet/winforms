@@ -5,11 +5,14 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
-using System.Private.Windows.BinaryFormat;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Runtime.Serialization;
+
+#if OLE_JSON
+using System.Private.Windows.BinaryFormat;
+using System.Reflection.Metadata;
 using System.Text.Json;
+#endif
 
 namespace System.Private.Windows.Nrbf;
 
@@ -235,7 +238,11 @@ internal static class SerializationRecordExtensions
             }
 
             ConstructorInfo? ctor = typeof(Color).GetConstructor(
-                BindingFlags.Instance | BindingFlags.NonPublic, [typeof(long), typeof(short), typeof(string), typeof(KnownColor)]);
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                binder: null,
+                [typeof(long), typeof(short), typeof(string), typeof(KnownColor)],
+                modifiers: null);
+
             if (ctor is null)
             {
                 return false;
@@ -543,6 +550,7 @@ internal static class SerializationRecordExtensions
     private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord) =>
         serializationRecord.RecordType is SerializationRecordType.ArraySingleString or SerializationRecordType.ArraySinglePrimitive;
 
+#if OLE_JSON
     /// <summary>
     ///  Tries to deserialize this object if it was serialized as JSON.
     /// </summary>
@@ -615,4 +623,5 @@ internal static class SerializationRecordExtensions
 
         return (isJsonData: true, isValidType: @object is not null);
     }
+#endif
 }

@@ -67,6 +67,7 @@ internal static unsafe partial class GlobalInterfaceTable
         return hr;
     }
 
+#if NET
     /// <summary>
     ///  Creates a new instance of an <see cref="IIUnknownStrategy"/> for <see cref="StrategyBasedComWrappers"/>
     ///  that uses the Global Interface Table.
@@ -77,4 +78,5 @@ internal static unsafe partial class GlobalInterfaceTable
     ///  </para>
     /// </remarks>
     public static IIUnknownStrategy CreateUnknownStrategy() => new UnknownStrategy();
+#endif
 }
