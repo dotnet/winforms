@@ -1209,7 +1209,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         }
 
         return contentBounds;
-    }}
+    }
 
     private bool IsHighlighted()
     {
