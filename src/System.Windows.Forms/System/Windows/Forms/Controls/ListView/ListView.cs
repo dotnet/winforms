@@ -10,11 +10,14 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
+
 using NMHEADERW = Windows.Win32.UI.Controls.NMHEADERW;
 using NMLVLINK = Windows.Win32.UI.Controls.NMLVLINK;
 
@@ -133,7 +136,7 @@ public partial class ListView : Control
 
     private void DrawDarkModeGroupSubtitleAndFooterOverlay()
     {
-        if (!Application.IsDarkModeEnabled || !GroupsEnabled || OwnerDraw || !IsHandleCreated)
+        if (!Application.IsDarkModeEnabled || !GroupsEnabled || !GroupsDisplayed || OwnerDraw || !IsHandleCreated)
         {
             return;
         }
@@ -155,34 +158,56 @@ public partial class ListView : Control
                 continue;
             }
 
+            Rectangle clientRect = ClientRectangle;
+            if (!clientRect.IntersectsWith(headerRect) && !clientRect.IntersectsWith(groupRect))
+            {
+                continue;
+            }
+
+            bool isRtl = RightToLeft == RightToLeft.Yes && RightToLeftLayout;
+            int horizontalPadding = LogicalToDeviceUnits(8);
+            int totalHorizontalPadding = LogicalToDeviceUnits(32);
+            int headerVerticalPadding = LogicalToDeviceUnits(6);
+            int verticalSpacing = LogicalToDeviceUnits(2);
+            int footerCollapsedAdditionalOffset = LogicalToDeviceUnits(4);
+            int headerTextWidth = Math.Max(0, headerRect.Width - totalHorizontalPadding);
+            int headerTextX = isRtl ? headerRect.Right - horizontalPadding - headerTextWidth
+                : headerRect.Left + horizontalPadding;
+
             Rectangle headerRectText = new(
-                headerRect.Left + 8,
+                headerTextX,
                 headerRect.Top,
-                Math.Max(0, headerRect.Width - 32),
-                headerFont.Height + 6);
+                headerTextWidth,
+                headerFont.Height + headerVerticalPadding);
+
+            TextFormatFlags baseTextFlags = TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis;
+            TextFormatFlags headerTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
 
             if (!string.IsNullOrEmpty(group.Header))
             {
-
                 using (Brush backBrush = new SolidBrush(BackColor))
                 {
                     g.FillRectangle(backBrush, headerRectText);
                 }
 
-                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis);
+                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, headerTextFlags);
             }
 
             DrawDarkModeGroupChevron(g, headerRect, headerRectText, group.Header, headerFont, collapsed, headerColor, chevronColor, BackColor);
+            TextFormatFlags bodyTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
 
             if (!string.IsNullOrEmpty(group.Subtitle))
             {
+                int subtitleWidth = Math.Max(0, groupRect.Width - totalHorizontalPadding);
+                int subtitleX = isRtl ? headerRect.Right - horizontalPadding - subtitleWidth
+                    : headerRect.Left + horizontalPadding;
                 Rectangle subtitleRect = new(
-                    headerRect.Left + 8,
-                    headerRect.Top + Font.Height + 2,
-                    Math.Max(0, groupRect.Width - 32),
-                    Font.Height + 6);
+                    subtitleX,
+                    headerRect.Top + Font.Height + verticalSpacing,
+                    subtitleWidth,
+                    Font.Height + headerVerticalPadding);
 
-                TextRenderer.DrawText(g, group.Subtitle, Font, subtitleRect, textColor, TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis);
+                TextRenderer.DrawText(g, group.Subtitle, Font, subtitleRect, textColor, bodyTextFlags);
             }
 
             if (!string.IsNullOrEmpty(group.Footer))
@@ -192,21 +217,25 @@ public partial class ListView : Control
                 if (!collapsed && group.Items.Count > 0)
                 {
                     Rectangle lastItemBounds = group.Items[^1].Bounds;
-                    footerY = lastItemBounds.Bottom + 2;
+                    footerY = lastItemBounds.Bottom + verticalSpacing;
                 }
                 else
                 {
                     int subtitleOffset = string.IsNullOrEmpty(group.Subtitle) ? 1 : 2;
-                    footerY = headerRect.Top + (Font.Height * subtitleOffset) + 4;
+                    footerY = headerRect.Top + (Font.Height * subtitleOffset) + footerCollapsedAdditionalOffset;
                 }
 
-                Rectangle footerRect = new(
-                    headerRect.Left + 8,
-                    footerY,
-                    Math.Max(0, groupRect.Width - 32),
-                    Font.Height + 6);
+                int footerWidth = Math.Max(0, groupRect.Width - totalHorizontalPadding);
+                int footerX = isRtl ? headerRect.Right - horizontalPadding - footerWidth
+                    : headerRect.Left + horizontalPadding;
 
-                TextRenderer.DrawText(g, group.Footer, Font, footerRect, textColor, TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis);
+                Rectangle footerRect = new(
+                    footerX,
+                    footerY,
+                    footerWidth,
+                    Font.Height + headerVerticalPadding);
+
+                TextRenderer.DrawText(g, group.Footer, Font, footerRect, textColor, bodyTextFlags);
             }
         }
     }
@@ -4914,7 +4943,7 @@ public partial class ListView : Control
 
     private unsafe void UpdateDarkModeGroupTextColors()
     {
-        if (!IsHandleCreated || !GroupsEnabled)
+        if (!IsHandleCreated || !GroupsEnabled || OwnerDraw)
         {
             return;
         }
@@ -7361,7 +7390,6 @@ public partial class ListView : Control
 
             case PInvokeCore.WM_PAINT:
                 base.WndProc(ref m);
-
                 DrawDarkModeGroupSubtitleAndFooterOverlay();
 
                 // win32 ListView
