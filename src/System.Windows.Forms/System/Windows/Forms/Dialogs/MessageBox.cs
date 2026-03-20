@@ -157,6 +157,11 @@ public class MessageBox
 
     private static unsafe void InstallHook()
     {
+        if (!Application.IsDarkModeEnabled)
+        {
+            return;
+        }
+
         lock (s_lock)
         {
             if (s_messageBoxHook != 0)
