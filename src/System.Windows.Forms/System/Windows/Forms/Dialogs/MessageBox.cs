@@ -182,6 +182,11 @@ public class MessageBox
 
     private static void UninstallHook()
     {
+        if (!Application.IsDarkModeEnabled)
+        {
+            return;
+        }
+
         lock (s_lock)
         {
             if (s_messageBoxHook != 0)
