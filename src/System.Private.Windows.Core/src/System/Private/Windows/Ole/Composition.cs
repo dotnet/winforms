@@ -16,6 +16,13 @@ namespace System.Private.Windows.Ole;
 ///  Contains the logic to move between <see cref="IDataObjectInternal"/>, <see cref="IDataObject.Interface"/>,
 ///  and <see cref="ComTypes.IDataObject"/> calls.
 /// </summary>
+/// <remarks>
+///  <para>
+///   <b>IMPORTANT:</b> This class is part of System.Private.Windows.Core, which is shared between WinForms and WPF.
+///   Changes to clipboard and OLE handling in this class affect both UI stacks. For contributor guidance on working
+///   with shared infrastructure, see: <c>docs/shared-wpf-infrastructure.md</c>
+///  </para>
+/// </remarks>
 internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
     : IDataObjectInternal, IDataObject.Interface, ComTypes.IDataObject
 #if NET
