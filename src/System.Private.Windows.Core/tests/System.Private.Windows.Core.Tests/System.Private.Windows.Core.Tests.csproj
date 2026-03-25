@@ -35,6 +35,11 @@
     <PackageReference Condition="'$(TargetFramework)' != 'net481'" Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <!-- Needed for `dynamic` -->
+    <Reference Include="Microsoft.CSharp"/>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
     <ProjectReference Condition="'$(TargetFramework)' != 'net481'" Include="..\..\src\System.Private.Windows.Core.csproj" />
