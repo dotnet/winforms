@@ -142,10 +142,26 @@ public partial class ListView : Control
         }
 
         using Graphics g = CreateGraphicsInternal();
+        Rectangle clipRect = Rectangle.Ceiling(g.VisibleClipBounds);
         Color textColor = ForeColor;
         Color headerColor = Color.FromArgb(120, 180, 255);
         Color chevronColor = Color.FromArgb(80, 170, 255);
         using Font headerFont = new(Font, FontStyle.Bold);
+
+        static Rectangle TrimOverlayRect(Rectangle rect, int firstItemTop)
+        {
+            if (firstItemTop <= 0 || rect.IsEmpty || rect.Top >= firstItemTop)
+            {
+                return rect;
+            }
+
+            if (rect.Bottom >= firstItemTop)
+            {
+                rect.Height = Math.Max(0, firstItemTop - rect.Top - 1);
+            }
+
+            return rect;
+        }
 
         for (int i = 0; i < Groups.Count; i++)
         {
@@ -164,7 +180,16 @@ public partial class ListView : Control
                 continue;
             }
 
+            if (!clipRect.IsEmpty && !clipRect.IntersectsWith(headerRect) && !clipRect.IntersectsWith(groupRect))
+            {
+                continue;
+            }
+
             bool isRtl = RightToLeft == RightToLeft.Yes && RightToLeftLayout;
+            Color groupBackgroundColor = _darkModeGroupBackgroundColors.TryGetValue(group.ID, out Color cachedColor)
+                ? cachedColor
+                : BackColor;
+            int firstItemTop = (!collapsed && group.Items.Count > 0) ? group.Items[0].Bounds.Top : -1;
             int horizontalPadding = LogicalToDeviceUnits(8);
             int totalHorizontalPadding = LogicalToDeviceUnits(32);
             int headerVerticalPadding = LogicalToDeviceUnits(6);
@@ -180,20 +205,44 @@ public partial class ListView : Control
                 headerTextWidth,
                 headerFont.Height + headerVerticalPadding);
 
+            Rectangle headerCoverRect = TrimOverlayRect(headerRect, firstItemTop);
+            if (!headerCoverRect.IsEmpty)
+            {
+                using Brush groupBackBrush = new SolidBrush(groupBackgroundColor);
+                g.FillRectangle(groupBackBrush, headerCoverRect);
+            }
+
             TextFormatFlags baseTextFlags = TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis;
             TextFormatFlags headerTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
 
+            DrawDarkModeGroupChevron(g, headerRect, headerRectText, group.Header, headerFont, collapsed, headerColor, chevronColor, groupBackgroundColor);
+
             if (!string.IsNullOrEmpty(group.Header))
             {
-                using (Brush backBrush = new SolidBrush(BackColor))
-                {
-                    g.FillRectangle(backBrush, headerRectText);
-                }
+                int measuredHeaderTextWidth = TextRenderer.MeasureText(
+                    g,
+                    group.Header,
+                    headerFont,
+                    Size.Empty,
+                    TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding).Width;
 
-                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, headerTextFlags);
+                int renderedHeaderTextWidth = Math.Min(Math.Max(0, measuredHeaderTextWidth), Math.Max(0, headerRectText.Width));
+                int headerTextBackgroundWidth = Math.Min(headerRectText.Width, renderedHeaderTextWidth + LogicalToDeviceUnits(2));
+                int headerTextBackgroundX = isRtl
+                    ? headerRectText.Right - headerTextBackgroundWidth
+                    : headerRectText.Left;
+
+                Rectangle headerTextBackgroundRect = new(
+                    headerTextBackgroundX,
+                    headerRectText.Top,
+                    headerTextBackgroundWidth,
+                    headerRectText.Height);
+
+                using Brush headerTextBackgroundBrush = new SolidBrush(groupBackgroundColor);
+                g.FillRectangle(headerTextBackgroundBrush, headerTextBackgroundRect);
+                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, groupBackgroundColor, headerTextFlags);
             }
 
-            DrawDarkModeGroupChevron(g, headerRect, headerRectText, group.Header, headerFont, collapsed, headerColor, chevronColor, BackColor);
             TextFormatFlags bodyTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
 
             if (!string.IsNullOrEmpty(group.Subtitle))
@@ -206,6 +255,13 @@ public partial class ListView : Control
                     headerRect.Top + Font.Height + verticalSpacing,
                     subtitleWidth,
                     Font.Height + headerVerticalPadding);
+
+                Rectangle subtitleCoverRect = TrimOverlayRect(Rectangle.Inflate(subtitleRect, 2, 0), firstItemTop);
+                if (!subtitleCoverRect.IsEmpty)
+                {
+                    using Brush subtitleBackBrush = new SolidBrush(groupBackgroundColor);
+                    g.FillRectangle(subtitleBackBrush, subtitleCoverRect);
+                }
 
                 TextRenderer.DrawText(g, group.Subtitle, Font, subtitleRect, textColor, bodyTextFlags);
             }
@@ -235,7 +291,33 @@ public partial class ListView : Control
                     footerWidth,
                     Font.Height + headerVerticalPadding);
 
+                Rectangle footerCoverRect = TrimOverlayRect(Rectangle.Inflate(footerRect, 2, 0), firstItemTop);
+                if (!footerCoverRect.IsEmpty)
+                {
+                    using Brush footerBackBrush = new SolidBrush(groupBackgroundColor);
+                    g.FillRectangle(footerBackBrush, footerCoverRect);
+                }
+
                 TextRenderer.DrawText(g, group.Footer, Font, footerRect, textColor, bodyTextFlags);
+            }
+        }
+
+        if (View == View.Details && !GridLines && Columns.Count == 1)
+        {
+            int dividerX = Columns[0].Width;
+            if (dividerX > 0 && dividerX < ClientRectangle.Right)
+            {
+                int paintTop = 0;
+                HWND header = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER);
+                if (!header.IsNull)
+                {
+                    PInvokeCore.GetWindowRect(header, out RECT headerRect);
+                    paintTop = RectangleToClient((Rectangle)headerRect).Bottom;
+                }
+
+                Rectangle dividerCoverRect = new(dividerX, paintTop, 1, Math.Max(0, ClientRectangle.Bottom - paintTop));
+                using Brush dividerCoverBrush = new SolidBrush(BackColor);
+                g.FillRectangle(dividerCoverBrush, dividerCoverRect);
             }
         }
     }
@@ -255,10 +337,10 @@ public partial class ListView : Control
         int centerY = headerTextRect.Top + (headerTextRect.Height / 2) + 1;
 
         Rectangle nativeChevronRect = new(
-            headerRect.Right - 24,
-            headerTextRect.Top - 3,
-            24,
-            headerTextRect.Height + 8);
+            headerRect.Right - 28,
+            headerRect.Top,
+            28,
+            headerRect.Height);
         using (Brush backgroundBrush = new SolidBrush(backgroundColor))
         {
             g.FillRectangle(backgroundBrush, nativeChevronRect);
@@ -279,19 +361,23 @@ public partial class ListView : Control
 
         int lineY = centerY;
         int lineStartX = headerRect.Left + 8;
+
         if (!string.IsNullOrEmpty(headerText))
         {
-            int measuredHeaderWidth = TextRenderer.MeasureText(
+            int measuredHeaderTextWidth = TextRenderer.MeasureText(
                 g,
                 headerText,
                 headerFont,
                 Size.Empty,
                 TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding).Width;
 
-            lineStartX += measuredHeaderWidth + 8;
+            const int dividerTextSpacing = 6;
+            lineStartX = Math.Max(
+                lineStartX,
+                headerTextRect.Left + Math.Min(measuredHeaderTextWidth, headerTextRect.Width) + dividerTextSpacing);
         }
 
-        int lineEndX = centerX - 10;
+        int lineEndX = nativeChevronRect.Left - 6;
         if (lineEndX > lineStartX)
         {
             using Pen linePen = new(lineColor, 1f)
@@ -320,6 +406,7 @@ public partial class ListView : Control
     private ImageList? _imageListSmall;
     private ImageList? _imageListState;
     private ImageList? _imageListGroup;
+    private readonly Dictionary<int, Color> _darkModeGroupBackgroundColors = [];
 
     private MouseButtons _downButton;
     private int _itemCount;
@@ -2848,18 +2935,12 @@ public partial class ListView : Control
                         && !OwnerDraw
                         && nmcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP)
                     {
-                        COLORREF textColor = (COLORREF)ColorTranslator.ToWin32(BackColor);
-                        COLORREF textBackColor = (COLORREF)ColorTranslator.ToWin32(BackColor);
-                        nmcd->clrText = textColor;
-                        nmcd->clrTextBk = textBackColor;
+                        // In dark mode we fully custom draw group header/subtitle/footer overlay,
+                        // so skip native group drawing to avoid native artifacts and hover repaint flicker.
+                        COLORREF textBackColor = nmcd->clrTextBk;
+                        _darkModeGroupBackgroundColors[(int)nmcd->nmcd.dwItemSpec] = ColorTranslator.FromWin32((int)(uint)textBackColor);
 
-                        if (!nmcd->nmcd.hdc.IsNull)
-                        {
-                            PInvokeCore.SetTextColor(nmcd->nmcd.hdc, textColor);
-                            PInvokeCore.SetBkColor(nmcd->nmcd.hdc, textBackColor);
-                        }
-
-                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         return;
                     }
 
@@ -6273,9 +6354,15 @@ public partial class ListView : Control
             }
             else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
             {
-                Color textColor = nmlvcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP
-                    ? BackColor
-                    : ForeColor;
+                Color textColor;
+                if (nmlvcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP)
+                {
+                    textColor = nmlvcd->clrTextBk;
+                }
+                else
+                {
+                    textColor = ForeColor;
+                }
 
                 PInvokeCore.SetTextColor(nmlvcd->nmcd.hdc, textColor);
 
@@ -7335,6 +7422,18 @@ public partial class ListView : Control
                 {
                     OnMouseUp(new MouseEventArgs(_downButton, 1, PARAM.ToPoint(m.LParamInternal)));
                     _listViewState[LISTVIEWSTATE_mouseUpFired] = true;
+                }
+
+                if (Application.IsDarkModeEnabled && GroupsDisplayed && !OwnerDraw && IsHandleCreated)
+                {
+                    // Suppress native hover processing in dark mode group overlay mode.
+                    // Native hover invalidates group headers while mouse moves over items,
+                    // causing unrelated group repaint/flicker.
+                    if (!HoverSelection && !HotTracking)
+                    {
+                        Capture = false;
+                        return;
+                    }
                 }
 
                 Capture = false;
