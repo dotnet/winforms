@@ -7607,12 +7607,9 @@ public partial class ListView : Control
                     // Suppress native hover processing in dark mode group overlay mode.
                     // Native hover invalidates group headers while mouse moves over grouped content,
                     // causing repaint jitter.
-                    bool allowNativeHover = HoverSelection || HotTracking;
-                    if (allowNativeHover)
-                    {
-                        LVHITTESTINFO lvhi = SetupHitTestInfo();
-                        allowNativeHover = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi) >= 0;
-                    }
+                    LVHITTESTINFO lvhi = SetupHitTestInfo();
+                    bool isMouseOverItem = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi) >= 0;
+                    bool allowNativeHover = isMouseOverItem || HoverSelection || HotTracking;
 
                     if (!allowNativeHover)
                     {
