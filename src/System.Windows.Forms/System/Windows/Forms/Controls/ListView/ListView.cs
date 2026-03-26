@@ -163,6 +163,26 @@ public partial class ListView : Control
             return rect;
         }
 
+        static Color BlendColor(Color background, Color overlay)
+        {
+            int alpha = overlay.A;
+            if (alpha <= 0)
+            {
+                return background;
+            }
+
+            if (alpha >= 255)
+            {
+                return Color.FromArgb(255, overlay.R, overlay.G, overlay.B);
+            }
+
+            int invAlpha = 255 - alpha;
+            int r = ((background.R * invAlpha) + (overlay.R * alpha)) / 255;
+            int g = ((background.G * invAlpha) + (overlay.G * alpha)) / 255;
+            int b = ((background.B * invAlpha) + (overlay.B * alpha)) / 255;
+            return Color.FromArgb(255, r, g, b);
+        }
+
         for (int i = 0; i < Groups.Count; i++)
         {
             ListViewGroup group = Groups[i];
@@ -189,6 +209,18 @@ public partial class ListView : Control
             Color groupBackgroundColor = _darkModeGroupBackgroundColors.TryGetValue(group.ID, out Color cachedColor)
                 ? cachedColor
                 : BackColor;
+            NMCUSTOMDRAW_DRAW_STATE_FLAGS groupDrawState = _darkModeGroupStateFlags.TryGetValue(group.ID, out NMCUSTOMDRAW_DRAW_STATE_FLAGS cachedState)
+                ? cachedState
+                : 0;
+            bool isHovered = _darkModeHoveredGroupId == group.ID;
+            bool isSelected = _darkModeSelectedGroupId == group.ID
+                || (groupDrawState & (NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED | NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS)) != 0;
+            Color groupInteractionOverlayColor = isSelected
+                ? Color.FromArgb(64, 90, 150, 255)
+                : (isHovered ? Color.FromArgb(28, 255, 255, 255) : Color.Empty);
+            Color groupContentBackgroundColor = groupInteractionOverlayColor.IsEmpty
+                ? groupBackgroundColor
+                : BlendColor(groupBackgroundColor, groupInteractionOverlayColor);
             int firstItemTop = (!collapsed && group.Items.Count > 0) ? group.Items[0].Bounds.Top : -1;
             int horizontalPadding = LogicalToDeviceUnits(8);
             int totalHorizontalPadding = LogicalToDeviceUnits(32);
@@ -205,17 +237,47 @@ public partial class ListView : Control
                 headerTextWidth,
                 headerFont.Height + headerVerticalPadding);
 
-            Rectangle headerCoverRect = TrimOverlayRect(headerRect, firstItemTop);
-            if (!headerCoverRect.IsEmpty)
+            int interactionBottom = headerRect.Bottom;
+            if (!string.IsNullOrEmpty(group.Subtitle))
             {
-                using Brush groupBackBrush = new SolidBrush(groupBackgroundColor);
-                g.FillRectangle(groupBackBrush, headerCoverRect);
+                interactionBottom = headerRect.Top + Font.Height + verticalSpacing + Font.Height + headerVerticalPadding;
+            }
+
+            if (!string.IsNullOrEmpty(group.Footer) && (collapsed || group.Items.Count == 0))
+            {
+                int subtitleOffset = string.IsNullOrEmpty(group.Subtitle) ? 1 : 2;
+                int collapsedFooterY = headerRect.Top + (Font.Height * subtitleOffset) + footerCollapsedAdditionalOffset;
+                interactionBottom = Math.Min(interactionBottom, Math.Max(headerRect.Top, collapsedFooterY - LogicalToDeviceUnits(1)));
+            }
+
+            Rectangle interactionRect = Rectangle.Intersect(
+                groupRect,
+                new Rectangle(
+                    groupRect.Left,
+                    headerRect.Top,
+                    groupRect.Width,
+                    Math.Max(0, interactionBottom - headerRect.Top)));
+
+            Rectangle interactionCoverRect = TrimOverlayRect(interactionRect, firstItemTop);
+            if (!interactionCoverRect.IsEmpty)
+            {
+                using Brush groupBackBrush = new SolidBrush(groupContentBackgroundColor);
+                g.FillRectangle(groupBackBrush, interactionCoverRect);
+
+                Rectangle interactionSeamRect = TrimOverlayRect(
+                    new Rectangle(groupRect.Left, interactionCoverRect.Bottom - 1, groupRect.Width, 2),
+                    firstItemTop);
+
+                if (!interactionSeamRect.IsEmpty)
+                {
+                    g.FillRectangle(groupBackBrush, interactionSeamRect);
+                }
             }
 
             TextFormatFlags baseTextFlags = TextFormatFlags.NoPrefix | TextFormatFlags.EndEllipsis;
             TextFormatFlags headerTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
 
-            DrawDarkModeGroupChevron(g, headerRect, headerRectText, group.Header, headerFont, collapsed, headerColor, chevronColor, groupBackgroundColor);
+            DrawDarkModeGroupChevron(g, headerRect, headerRectText, group.Header, headerFont, collapsed, headerColor, chevronColor, groupContentBackgroundColor);
 
             if (!string.IsNullOrEmpty(group.Header))
             {
@@ -238,9 +300,9 @@ public partial class ListView : Control
                     headerTextBackgroundWidth,
                     headerRectText.Height);
 
-                using Brush headerTextBackgroundBrush = new SolidBrush(groupBackgroundColor);
+                using Brush headerTextBackgroundBrush = new SolidBrush(groupContentBackgroundColor);
                 g.FillRectangle(headerTextBackgroundBrush, headerTextBackgroundRect);
-                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, groupBackgroundColor, headerTextFlags);
+                TextRenderer.DrawText(g, group.Header, headerFont, headerRectText, headerColor, groupContentBackgroundColor, headerTextFlags);
             }
 
             TextFormatFlags bodyTextFlags = baseTextFlags | (isRtl ? (TextFormatFlags.RightToLeft | TextFormatFlags.Right) : TextFormatFlags.Left);
@@ -259,7 +321,7 @@ public partial class ListView : Control
                 Rectangle subtitleCoverRect = TrimOverlayRect(Rectangle.Inflate(subtitleRect, 2, 0), firstItemTop);
                 if (!subtitleCoverRect.IsEmpty)
                 {
-                    using Brush subtitleBackBrush = new SolidBrush(groupBackgroundColor);
+                    using Brush subtitleBackBrush = new SolidBrush(groupContentBackgroundColor);
                     g.FillRectangle(subtitleBackBrush, subtitleCoverRect);
                 }
 
@@ -291,7 +353,9 @@ public partial class ListView : Control
                     footerWidth,
                     Font.Height + headerVerticalPadding);
 
-                Rectangle footerCoverRect = TrimOverlayRect(Rectangle.Inflate(footerRect, 2, 0), firstItemTop);
+                Rectangle footerCoverRect = TrimOverlayRect(
+                    new Rectangle(groupRect.Left, footerRect.Top, groupRect.Width, footerRect.Height),
+                    firstItemTop);
                 if (!footerCoverRect.IsEmpty)
                 {
                     using Brush footerBackBrush = new SolidBrush(groupBackgroundColor);
@@ -407,6 +471,9 @@ public partial class ListView : Control
     private ImageList? _imageListState;
     private ImageList? _imageListGroup;
     private readonly Dictionary<int, Color> _darkModeGroupBackgroundColors = [];
+    private readonly Dictionary<int, NMCUSTOMDRAW_DRAW_STATE_FLAGS> _darkModeGroupStateFlags = [];
+    private int _darkModeHoveredGroupId = -1;
+    private int _darkModeSelectedGroupId = -1;
 
     private MouseButtons _downButton;
     private int _itemCount;
@@ -2894,6 +2961,9 @@ public partial class ListView : Control
                         return;
                     }
 
+                    _darkModeGroupBackgroundColors.Clear();
+                    _darkModeGroupStateFlags.Clear();
+
                     // We want custom draw for this paint cycle.
                     // CDRF_NOTIFYITEMDRAW is required for group items (LVCDI_GROUP) so that
                     // CDDS_ITEMPREPAINT notifications are raised for group header/subtitle/footer.
@@ -2939,6 +3009,7 @@ public partial class ListView : Control
                         // so skip native group drawing to avoid native artifacts and hover repaint flicker.
                         COLORREF textBackColor = nmcd->clrTextBk;
                         _darkModeGroupBackgroundColors[(int)nmcd->nmcd.dwItemSpec] = ColorTranslator.FromWin32((int)(uint)textBackColor);
+                        _darkModeGroupStateFlags[(int)nmcd->nmcd.dwItemSpec] = nmcd->nmcd.uItemState;
 
                         m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         return;
@@ -6739,6 +6810,96 @@ public partial class ListView : Control
         return lvhi;
     }
 
+    private int GetDarkModeGroupHeaderHitId()
+    {
+        if (!IsHandleCreated || !GroupsDisplayed)
+        {
+            return -1;
+        }
+
+        LVHITTESTINFO lvhi = SetupHitTestInfo();
+        int groupId = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)(-1), ref lvhi);
+        if (groupId == -1)
+        {
+            Point cursorPoint = PointToClient(Cursor.Position);
+            for (int i = 0; i < Groups.Count; i++)
+            {
+                ListViewGroup group = Groups[i];
+                if (TryGetDarkModeGroupInteractionRect(group, out Rectangle interactionRect)
+                    && interactionRect.Contains(cursorPoint))
+                {
+                    return group.ID;
+                }
+            }
+
+            return -1;
+        }
+
+        bool groupHeaderHovered = lvhi.flags == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_HEADER;
+        bool groupChevronHovered = (lvhi.flags & LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE) == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE;
+        return groupHeaderHovered || groupChevronHovered ? groupId : -1;
+    }
+
+    private bool TryGetDarkModeGroupInteractionRect(ListViewGroup group, out Rectangle interactionRect)
+    {
+        interactionRect = Rectangle.Empty;
+        if (!TryGetGroupRect(group.ID, PInvoke.LVGGR_HEADER, out Rectangle headerRect)
+            || !TryGetGroupRect(group.ID, PInvoke.LVGGR_GROUP, out Rectangle groupRect))
+        {
+            return false;
+        }
+
+        bool collapsed = group.GetNativeCollapsedState() == ListViewGroupCollapsedState.Collapsed;
+        int headerVerticalPadding = LogicalToDeviceUnits(6);
+        int verticalSpacing = LogicalToDeviceUnits(2);
+        int footerCollapsedAdditionalOffset = LogicalToDeviceUnits(4);
+        int interactionBottom = headerRect.Bottom;
+        if (!string.IsNullOrEmpty(group.Subtitle))
+        {
+            interactionBottom = headerRect.Top + Font.Height + verticalSpacing + Font.Height + headerVerticalPadding;
+        }
+
+        if (!string.IsNullOrEmpty(group.Footer) && (collapsed || group.Items.Count == 0))
+        {
+            int subtitleOffset = string.IsNullOrEmpty(group.Subtitle) ? 1 : 2;
+            int collapsedFooterY = headerRect.Top + (Font.Height * subtitleOffset) + footerCollapsedAdditionalOffset;
+            interactionBottom = Math.Min(interactionBottom, Math.Max(headerRect.Top, collapsedFooterY - LogicalToDeviceUnits(1)));
+        }
+
+        interactionRect = Rectangle.Intersect(
+            groupRect,
+            new Rectangle(
+                groupRect.Left,
+                headerRect.Top,
+                groupRect.Width,
+                Math.Max(0, interactionBottom - headerRect.Top)));
+
+        return !interactionRect.IsEmpty;
+    }
+
+    private void InvalidateDarkModeGroupHeader(int groupId)
+    {
+        if (groupId < 0 || !IsHandleCreated)
+        {
+            return;
+        }
+
+        ListViewGroup? group = null;
+        for (int i = 0; i < Groups.Count; i++)
+        {
+            if (Groups[i].ID == groupId)
+            {
+                group = Groups[i];
+                break;
+            }
+        }
+
+        if (group is not null && TryGetDarkModeGroupInteractionRect(group, out Rectangle interactionRect))
+        {
+            Invalidate(interactionRect, invalidateChildren: false);
+        }
+    }
+
     private void Unhook()
     {
         foreach (ListViewItem listViewItem in Items)
@@ -7370,6 +7531,14 @@ public partial class ListView : Control
                 ItemCollectionChangedInMouseDown = false;
                 WmMouseDown(ref m, MouseButtons.Left, 1);
 
+                if (Application.IsDarkModeEnabled && GroupsDisplayed && !OwnerDraw && IsHandleCreated)
+                {
+                    int oldSelectedGroupId = _darkModeSelectedGroupId;
+                    _darkModeSelectedGroupId = GetDarkModeGroupHeaderHitId();
+                    InvalidateDarkModeGroupHeader(oldSelectedGroupId);
+                    InvalidateDarkModeGroupHeader(_darkModeSelectedGroupId);
+                }
+
                 if (cancelLabelEdit)
                 {
                     CancelPendingLabelEdit();
@@ -7426,10 +7595,26 @@ public partial class ListView : Control
 
                 if (Application.IsDarkModeEnabled && GroupsDisplayed && !OwnerDraw && IsHandleCreated)
                 {
+                    int oldHoveredGroupId = _darkModeHoveredGroupId;
+                    int hoveredGroupId = GetDarkModeGroupHeaderHitId();
+                    if (_darkModeHoveredGroupId != hoveredGroupId)
+                    {
+                        _darkModeHoveredGroupId = hoveredGroupId;
+                        InvalidateDarkModeGroupHeader(oldHoveredGroupId);
+                        InvalidateDarkModeGroupHeader(_darkModeHoveredGroupId);
+                    }
+
                     // Suppress native hover processing in dark mode group overlay mode.
-                    // Native hover invalidates group headers while mouse moves over items,
-                    // causing unrelated group repaint/flicker.
-                    if (!HoverSelection && !HotTracking)
+                    // Native hover invalidates group headers while mouse moves over grouped content,
+                    // causing repaint jitter.
+                    bool allowNativeHover = HoverSelection || HotTracking;
+                    if (allowNativeHover)
+                    {
+                        LVHITTESTINFO lvhi = SetupHitTestInfo();
+                        allowNativeHover = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi) >= 0;
+                    }
+
+                    if (!allowNativeHover)
                     {
                         Capture = false;
                         return;
@@ -7483,6 +7668,13 @@ public partial class ListView : Control
                 // if the mouse leaves and then re-enters the ListView
                 // ItemHovered events should be raised.
                 _prevHoveredItem = null;
+                if (_darkModeHoveredGroupId != -1)
+                {
+                    int oldHoveredGroupId = _darkModeHoveredGroupId;
+                    _darkModeHoveredGroupId = -1;
+                    InvalidateDarkModeGroupHeader(oldHoveredGroupId);
+                }
+
                 base.WndProc(ref m);
 
                 break;
