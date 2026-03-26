@@ -25,6 +25,32 @@ public class PrintPreviewControlTests
     }
 
     [Fact]
+    public void PrintPreviewControl_ForeColor_DefaultIsWhite()
+    {
+        PrintPreviewControl control = new();
+
+        Assert.Equal(Color.White.ToArgb(), control.ForeColor.ToArgb());
+    }
+
+    [Fact]
+    public void PrintPreviewControl_ForeColorWhite_ShouldSerializeReturnsFalse()
+    {
+        PrintPreviewControl control = new();
+
+        // White is the default, so ShouldSerializeForeColor should return false.
+        Assert.False(control.TestAccessor.Dynamic.ShouldSerializeForeColor());
+    }
+
+    [Fact]
+    public void PrintPreviewControl_ForeColorNonDefault_ShouldSerializeReturnsTrue()
+    {
+        PrintPreviewControl control = new();
+        control.ForeColor = Color.Red;
+
+        Assert.True(control.TestAccessor.Dynamic.ShouldSerializeForeColor());
+    }
+
+    [Fact]
     public void ShowPrintPreviewControlHighContrast_BackColorIsCorrect()
     {
         PrintPreviewControl control = new();
