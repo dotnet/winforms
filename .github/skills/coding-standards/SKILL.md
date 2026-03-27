@@ -140,7 +140,7 @@ var (nodes, images) = viewModel.UpdateTreeView(displayStyle);
 var (key, value) = dictionary.First();
 ```
 
-7. Using Cllection initializers:
+7. Using Collection expressions:
 
 ```csharp
 // Before
@@ -150,7 +150,7 @@ List<string> items = new List<string>();
 List<string> items = [];
 ```
 
-* Consider collection initializers also for methods that return collections, e.g.:
+* Consider collection expressions also for methods that return collections, e.g.:
 
 ```csharp
 // Before
@@ -160,7 +160,7 @@ Control[] controls = _view.Controls.Cast<Control>().ToArray();
 Control[] controls = [.. _view.Controls.Cast<Control>()];
 ```
 
-* Avoid, however, collection initializers, when constructable array/collection
+* Avoid, however, collection expressions, when constructable array/collection
   type are necessary in the context, e.g.:
 
 ```csharp

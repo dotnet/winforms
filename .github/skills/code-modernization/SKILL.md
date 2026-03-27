@@ -276,7 +276,7 @@ Size deviceSize = image.Size.LogicalToDeviceUnits();
 
 2. **Prefer inline `#pragma` or `[SuppressMessage]`**
 
-Prefer inline `#pragma` or `[SuppressMessage]` at the call site** over global suppressions in `GlobalSuppressions.cs`, so justification is visible in context. Only use global suppressions for truly project-wide rules (e.g., legacy threading model decisions that apply everywhere).
+Prefer inline `#pragma` or `[SuppressMessage]` at the call site over global suppressions in `GlobalSuppressions.cs`, so justification is visible in context. Only use global suppressions for truly project-wide rules (e.g., legacy threading model decisions that apply everywhere).
 
 3. **Named arguments**
 
@@ -423,7 +423,7 @@ Also: `ArgumentOutOfRangeException.ThrowIfNegative`,
 
 // Original comment:
 
-// Ensure API lke Type.GetType(...) use the UserAssemblyLoadContext if runtime
+// Ensure API like Type.GetType(...) use the UserAssemblyLoadContext if runtime
 // needs to load assemblies. See https://github.com/dotnet/coreclr/blob/master/Documentation/design-docs/AssemblyLoadContext.ContextualReflection.md
 // for more information.
 
