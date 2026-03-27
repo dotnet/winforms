@@ -6,4 +6,9 @@
     <ProjectToBuild Include="$(RepoRoot)pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/Microsoft.Dotnet.Winforms.ProjectTemplates.csproj" />
   </ItemGroup>
 
+  <!-- Only build the Microsoft.Private.Windows.Core package on Windows. -->
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <ProjectToBuild Include="$(RepoRoot)pkg/Microsoft.Private.Windows.Core/Microsoft.Private.Windows.Core.Package.csproj" />
+  </ItemGroup>
+
 </Project>
