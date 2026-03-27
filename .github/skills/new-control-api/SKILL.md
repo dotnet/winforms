@@ -468,12 +468,60 @@ protected virtual void OnMyPropertyChanged(EventArgs e)
 
 ---
 
-## 7. Checklist Before Submitting
+## 7. .NET Version Guard — Mandatory
+
+All new public APIs **must** be guarded with a preprocessor directive for the
+target .NET version. Currently, new APIs target at least **.NET 11**:
+
+```csharp
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Gets or sets the corner radius for the control's border.
+    /// </summary>
+    public int CornerRadius
+    {
+        get => Properties.GetValueOrDefault(s_cornerRadiusProperty, 0);
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+            if (Properties.GetValueOrDefault(s_cornerRadiusProperty, 0) != value)
+            {
+                Properties.AddOrRemoveValue(s_cornerRadiusProperty, value, defaultValue: 0);
+                OnCornerRadiusChanged(EventArgs.Empty);
+            }
+        }
+    }
+#endif
+```
+
+> **Why?** Version guards ensure new APIs are only available on the .NET version
+> they were approved for, preventing accidental use on older runtimes. The guard
+> applies to the entire API surface: property, event, `On` method, and any
+> associated types.
+
+The matching tests must use the **same** preprocessor guard:
+
+```csharp
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void MyControl_CornerRadius_Set_GetReturnsExpected()
+    {
+        using MyControl control = new() { CornerRadius = 5 };
+        Assert.Equal(5, control.CornerRadius);
+    }
+#endif
+```
+
+---
+
+## 8. Checklist Before Submitting
 
 Before considering the implementation complete, verify:
 
 * [ ] API proposal issue exists (upstream or fork) with full proposal format
 * [ ] All new public/protected members are in `PublicAPI.Unshipped.txt`
+* [ ] New APIs guarded with `#if NET11_0_OR_GREATER` (or appropriate version)
 * [ ] Property values stored via `PropertyStore` (not backing fields)
 * [ ] Every property has a CodeDOM serialization strategy
 * [ ] Every property has `On[Property]Changed` + `[Property]Changed` event
@@ -485,9 +533,9 @@ Before considering the implementation complete, verify:
 * [ ] XML documentation on every new public/protected member
 * [ ] Naming follows precedent on the control and its base classes
 * [ ] Publicly accessible interface members are tracked in PublicAPI files
-* [ ] Unit tests cover the new API surface
+* [ ] Unit tests cover the new API surface (with matching version guard)
 
-### 7.1 API issue checklist
+### 8.1 API issue checklist
 
 The API proposal issue itself should contain the following checklist at the
 bottom (to be maintained as part of the issue, not just at PR time):
@@ -506,12 +554,12 @@ bottom (to be maintained as part of the issue, not just at PR time):
 
 ---
 
-## 8. Resource Strings and Localization
+## 9. Resource Strings and Localization
 
 All user-facing strings — categories, descriptions, exception messages — must
 be added as resource entries, never hard-coded.
 
-### 8.1 Adding entries to `SR.resx`
+### 9.1 Adding entries to `SR.resx`
 
 Add new entries as XML to the `SR.resx` file in the project. Follow the
 existing naming conventions:
@@ -523,7 +571,7 @@ existing naming conventions:
 | Event description | `[Event]Descr` | `CommandChangedEventDescr` |
 | Exception message | `[Context]_[Error]` | `InvalidArgument_OutOfRange` |
 
-### 8.2 Generating localization files
+### 9.2 Generating localization files
 
 After adding English entries to `SR.resx`, **build the solution once**. The
 build automatically generates `.xlf` translation files for all supported
