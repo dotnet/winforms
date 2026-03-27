@@ -47,34 +47,131 @@ Use **C# 14** features and patterns. Key features to prefer:
 
 ## Type Usage and `var` Policy
 
-Prefer explicit type names. Use `var` only when the type is either:
+Apply the following rules **in priority order**:
 
-1. **Obviously redundant** with the right-hand side (e.g., factory methods
-   whose return type is clear from the variable name), or
-
-2. **Overly complex** — deeply nested generics, generic tuples, or similarly
-   unwieldy type expressions.
+1. **Never use `var` for primitive types.** Always spell out `int`, `string`,
+   `bool`, `double`, `float`, `decimal`, `char`, `byte`, `long`, etc.
 
 ```csharp
-// REQUIRED — explicit types for primitives and clear declarations
+// REQUIRED — explicit types for primitives
 int count = 5;
 string name = "Button";
 bool isVisible = true;
-Button okButton = new();            // target-typed new — preferred
-
-// ACCEPTABLE — var when type is obvious or complex
-var items = GetComplexGenericResult(); // long generic return type
-var (key, value) = dictionary.First(); // tuple deconstruction
 ```
 
-**Never** use `var` for primitive types (`int`, `string`, `bool`, `double`,
-`float`, `decimal`, `char`, `byte`, `long`, etc.).
+2. **Use `var` when the type is already visible or clearly implied on the
+   same line.** Repeating the type degrades readability. This applies to:
 
-When combining declaration and instantiation, prefer **target-typed `new()`**:
+   * **Casts:** `var foo = (SomeType) bar;`
+   * **`as` casts:** `var button = item as ToolStripDropDownButton;`
+   * **Generic methods with explicit type argument(s):** Assume the return
+     type matches the generic type parameter — even when the method
+     signature technically returns a base type — because the `<T>` already
+     tells the reader what they are getting back:
+     `var host = this.GetService<IDesignerHost>();`
+     `var session = provider.GetRequiredService<DesignerSession>();`
+   * **`out var` in generic methods that name the type:**
+     `site.TryGetService<INestedContainer>(out var container)` — the `<T>`
+     already specifies the type.
+   * **Methods whose name contains or implies the return type:** When the
+     method name clearly communicates the type being returned, `var` is
+     preferred because the type is already readable from the call itself:
+     `var componentType = component.GetType();`
+     `var resourceStream = BitmapSelector.GetResourceStream(type, name);`
+     `TryLoadBitmapFromStream(stream, out var resourceBitmap)`
 
 ```csharp
-Dictionary<string, List<int>> map = new();   // preferred
-List<string> items = [];                      // collection expression — also preferred
+// GOOD — var when type is visible or implied on the line
+var designerHostShim = (IDesignerHostShim)designerHost;
+var host = this.GetService<IDesignerHost>();
+var manager = host.GetExport<ViewModelClientFactoryManager>();
+var componentType = component.GetType();
+var resourceStream = BitmapSelector.GetResourceStream(componentType, componentType.Name + ".bmp");
+service.TryGetValue<AppSettings>(out var settings);
+```
+
+3. **Use `var` for deeply nested or complex generic types** where the full type
+   name is unwieldy:
+
+```csharp
+using var pooledList = ListPool<IComponent>.GetPooledObject();
+var result = pooledList.Object;
+var (key, value) = dictionary.First();   // tuple deconstruction
+```
+
+4. **Use explicit types when neither the variable name nor the surrounding
+   context reveals the type.** If a reader would need to navigate to a method
+   signature to understand what a variable holds, spell the type out.
+
+```csharp
+// REQUIRED — explicit when type is not obvious
+CreateViewModelResponse response = session.GetWinFormsEndpoints().DocumentOutline.CreateViewModel(session.Id);
+TreeViewHitTestInfo hitTestInfo = _treeView.HitTest(e.Location);
+```
+
+5. **Prefer target-typed `new()` over `var`** when the type is visible on the
+   left — clean construction without redundancy:
+
+```csharp
+// Before
+Dictionary<string, List<int>> map = new Dictionary<string, List<int>>();
+var map = new Dictionary<string, List<int>>();
+
+// After
+Dictionary<string, List<int>> map = new();
+Button saveButton = new();
+```
+
+**Do NOT use target-typed `new()` when the type isn't visible on the same line:**
+
+```csharp
+// DO — type is visible on the right, so var is fine:
+var map = new Dictionary<string, List<int>>();
+
+// DON'T — _map is a backing field declared elsewhere,
+// so the type isn't visible here. Too implicit.
+_map = new();
+```
+
+6. **`var` is always fine for tuple deconstruction:**
+
+```csharp
+var (nodes, images) = viewModel.UpdateTreeView(displayStyle);
+var (key, value) = dictionary.First();
+```
+
+7. Using Cllection initializers:
+
+```csharp
+// Before
+List<string> items = new List<string>();
+
+// After
+List<string> items = [];
+```
+
+* Consider collection initializers also for methods that return collections, e.g.:
+
+```csharp
+// Before
+Control[] controls = _view.Controls.Cast<Control>().ToArray();
+
+// After
+Control[] controls = [.. _view.Controls.Cast<Control>()];
+```
+
+* Avoid, however, collection initializers, when constructable array/collection
+  type are necessary in the context, e.g.:
+
+```csharp
+// Be careful! Will not compile, we need a constructable array type in this
+// context, so collection initializer syntax is not possible here.
+Control CreateErrorControlForMessage(string message) 
+   => CreateErrorControl([new InvalidOperationException(message)]);
+
+// In this case we need:
+Control CreateErrorControlForMessage(string message) 
+   => CreateErrorControl(new[] { new InvalidOperationException(message) });
 ```
 
 ## Null Checking
@@ -158,6 +255,60 @@ Use `and`, `or`, relational, property, tuple, type, and list patterns where they
 improve clarity. When converting `if`-chains that return or assign, a switch
 expression is almost always clearer.
 
+## Readability
+
+1. **Never sacrifice readability for brevity**
+
+Prefer extension method call syntax over static helpers when the same operation is available in both forms — extensions read more naturally and reduce visual noise:
+
+```csharp
+// Prefer
+Size deviceSize = image.Size.LogicalToDeviceUnits();
+
+// Over
+Size deviceSize = DpiHelper.LogicalToDeviceUnits(image.Size);
+```
+
+2. **Prefer inline `#pragma` or `[SuppressMessage]`**
+
+Use inline `#pragma` or `[SuppressMessage]` at the call site over global suppressions, so justification is visible in context.
+
+3. **Named arguments**
+
+Use named arguments when passing multiple literals or when the meaning of a parameter isn't clear from the argument expression itself:
+
+```csharp
+// GOOD — named arguments clarify meaning of literals
+var errorControl = CreateErrorControlForMessage(
+    message: "An unexpected error occurred. Please try again.",
+    showRetryButton: true);
+```
+
+**Note:** When method calls take a lot of space due to a long argument list, consider wrapping the individual arguments on separate lines. If you then decide to use named arguments, use them for *every* argument to improve readability and consistency:
+
+```csharp
+LongMethodWithManyNamedArguments(
+    firstArgument: value1,
+    secondArgument: value2,
+    thirdArgument: value3,
+    fourthArgument: value4);
+```
+
+4. **Wrap dot-chains with more than 2 member accesses** — each call goes on its
+   own indented line:
+
+```csharp
+// Fine — 2 or fewer:
+var names = items.Where(x => x.IsActive).ToList();
+
+// Wrap — more than 2:
+var results = collection
+    .Where(x => x.IsActive)
+    .OrderBy(x => x.Name)
+    .Select(x => x.Id)
+    .ToList();
+```
+
 ## Error Handling and Argument Validation
 
 Use **throw-helper methods** — never hand-roll null / range checks:
@@ -191,7 +342,7 @@ using Pen focusPen = new(focusColor)
 
 ## Magic Numbers
 
-Replace hard-coded literals with named constants or enums or avoid then for new code when possible. If a literal is truly self-explanatory and unlikely to change, it may be acceptable to leave it as-is.
+Replace/avoid hard-coded literals with named constants or enums for new code when possible. If a literal is truly self-explanatory and unlikely to change, it may be acceptable to leave it as-is.
 
 ```csharp
 
