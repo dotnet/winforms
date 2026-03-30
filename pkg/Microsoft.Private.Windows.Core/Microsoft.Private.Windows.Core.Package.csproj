@@ -43,6 +43,10 @@
     <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\Microsoft.Private.Windows.Core.csproj" PrivateAssets="All" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="readme.md" />
+  </ItemGroup>
+
   <PropertyGroup>
     <_SourceProjectName>Microsoft.Private.Windows.Core</_SourceProjectName>
     <_SourceRefDir>$(ArtifactsObjDir)$(_SourceProjectName)\$(Configuration)\net472\ref\</_SourceRefDir>
