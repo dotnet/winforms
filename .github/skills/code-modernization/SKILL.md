@@ -8,7 +8,7 @@ description: >-
   readability improvements.
 metadata:
   author: dotnet-winforms
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Code Modernization — Refactoring Existing Code
@@ -23,8 +23,8 @@ source files. For generating *new* files from scratch, see the
 
 ## Scope and Safety
 
-* Default target is **.NET 10.0** — but verify the project's actual target
-  before applying C# 14 syntax.
+* Default target is **.NET 10.0** — verify the project's actual target before
+  applying C# 14 syntax.
 * Multi-targeted and .NET Framework files exist — do not blindly apply modern
   syntax that would break older targets.
 * Do not edit files under `eng/common/`.
@@ -41,8 +41,19 @@ Apply the following transformations when safe:
 
 ### Nullable Reference Types
 
+* For Framework-targeted projects, only refactor to NRTs if the whole project
+  is already set up to process them, or if the code file has an explicit
+  `#nullable enable` at the top. Do not add `#nullable enable` to files that
+  do not already have it.
+* If neither condition is met, leave the file as-is — the risk of nullability
+  bugs in a non-NRT-aware codebase outweighs incremental annotation.
 * Add NRT annotations where missing. Mark `object? sender` in event handlers.
-* Replace `== null` / `!= null` with `is null` / `is not null`.
+
+### Testing for null
+
+* **Always replace `== null` / `!= null` with `is null` / `is not null`** —
+  the pattern-matching forms cannot be overridden by custom `==` / `!=`
+  operators and are preferred for consistency.
 * Introduce `??` and `??=` for null-coalescing where it simplifies the code.
 * Apply null-conditional assignment where appropriate:
 
@@ -59,26 +70,113 @@ customer?.Order = GetCurrentOrder();
 
 ### Type usage and `var` policy
 
-* Replace `var` with **explicit type names** for primitive types and any
-  declaration where the type is not immediately obvious.
+Apply the following rules **in priority order**:
 
-* **Keep `var`** only when the declared type would be overly complex (deeply
-  nested generics, generic tuples) or when it is obviously redundant with the
-  variable name — e.g., pooled list or dictionary factory methods whose return
-  type is self-evident from context.
+1. **Never use `var` for primitive types.** Always spell out `int`, `string`,
+   `bool`, `double`, `float`, `decimal`, `char`, `byte`, `long`, etc.
 
-* Convert `new TypeName()` on the right-hand side to **target-typed `new()`**
-  when the left-hand side already declares the type:
+```csharp
+// Before
+var count = items.Length;
+var name = component.Site.Name;
+var isVisible = control.Visible;
+
+// After
+int count = items.Length;
+string name = component.Site.Name;
+bool isVisible = control.Visible;
+```
+
+2. **Keep (or introduce) `var` when the type is already visible or clearly
+   implied on the same line** (repeating the type adds noise). This applies to:
+
+   * **Casts:** `var foo = (IDesignerHostShim)designerHost;`
+   * **`as` casts:** `var button = toolStripItem as ToolStripDropDownButton;`
+   * **Generic methods with explicit type argument(s):** The `<T>` already
+     tells the reader the type, even if the method signature technically
+     returns a base type:
+     `var host = this.GetService<IDesignerHost>();`
+     `var session = provider.GetRequiredService<DesignerSession>();`
+   * **`out var` in generic methods that name the type:**
+     `site.TryGetService<INestedContainer>(out var container)` — the `<T>`
+     already specifies the type.
+   * **Methods whose name implies the return type:**
+     `var componentType = component.GetType();`
+     `var resourceStream = BitmapSelector.GetResourceStream(type, name);`
+     `TryLoadBitmapFromStream(stream, out var resourceBitmap)`
+
+```csharp
+// Before (redundant repetition)
+IDesignerHostShim designerHostShim = (IDesignerHostShim)designerHost;
+IDesignerHost host = this.GetService<IDesignerHost>();
+ViewModelClientFactoryManager manager = client.CompositionHost.GetExport<ViewModelClientFactoryManager>();
+Type componentType = component.GetType();
+Stream resourceStream = BitmapSelector.GetResourceStream(componentType, componentType.Name + ".bmp");
+
+// After (var — type is visible or clearly implied on the line)
+var designerHostShim = (IDesignerHostShim)designerHost;
+var host = this.GetService<IDesignerHost>();
+var manager = client.CompositionHost.GetExport<ViewModelClientFactoryManager>();
+var componentType = component.GetType();
+var resourceStream = BitmapSelector.GetResourceStream(componentType, componentType.Name + ".bmp");
+```
+
+3. **Use `var` for deeply nested or complex generic types** where the full type
+   name is unwieldy and the variable name already communicates intent.
+
+```csharp
+// var improves readability for complex generics
+using var pooledList = ListPool<IComponent>.GetPooledObject();
+var result = pooledList.Object;
+```
+
+4. **Use explicit types when neither the variable name nor the surrounding
+   context reveals what type is in play.** If a reader would have to navigate
+   to a method signature to understand what a variable holds, spell it out.
+
+```csharp
+// Before (what is result? what does GetConfiguration return?)
+var result = ProcessInput(data);
+var config = serviceProvider.GetConfiguration();
+var response = session.GetWinFormsEndpoints().DocumentOutline.CreateViewModel(session.Id);
+
+// After
+ValidationOutcome result = ProcessInput(data);
+AppConfiguration config = serviceProvider.GetConfiguration();
+CreateViewModelResponse response = session.GetWinFormsEndpoints().DocumentOutline.CreateViewModel(session.Id);
+```
+
+5. **Prefer target-typed `new()` over `var`** when the type is visible on the
+   left — clean construction without redundancy:
 
 ```csharp
 // Before
 Dictionary<string, List<int>> map = new Dictionary<string, List<int>>();
+var map = new Dictionary<string, List<int>>();
 
 // After
 Dictionary<string, List<int>> map = new();
+Button saveButton = new();
 ```
 
-* Modernize collection initializers:
+**Do NOT use target-typed `new()` when the type isn't visible on the same line:**
+
+```csharp
+// DO — type is visible on the right, so var is fine:
+var map = new Dictionary<string, List<int>>();
+
+// DON'T — _map is a backing field declared elsewhere.
+_map = new();
+```
+
+6. **`var` is always fine for tuple deconstruction:**
+
+```csharp
+var (nodes, images) = viewModel.UpdateTreeView(displayStyle);
+var (key, value) = dictionary.First();
+```
+
+7. Modernize collection initializers:
 
 ```csharp
 // Before
@@ -86,6 +184,29 @@ List<string> items = new List<string>();
 
 // After
 List<string> items = [];
+```
+
+* Consider collection initializers also for methods that return collections:
+
+```csharp
+// Before
+Control[] controls = _view.Controls.Cast<Control>().ToArray();
+
+// After
+Control[] controls = [.. _view.Controls.Cast<Control>()];
+```
+
+* Avoid collection initializers when a constructable array type is required:
+
+```csharp
+// Will not compile — collection initializer syntax requires
+// a constructable array type here.
+Control CreateErrorControlForMessage(string message)
+   => CreateErrorControl([new InvalidOperationException(message)]);
+
+// Correct:
+Control CreateErrorControlForMessage(string message)
+   => CreateErrorControl(new[] { new InvalidOperationException(message) });
 ```
 
 ### The `field` keyword (C# 14)
@@ -137,6 +258,63 @@ public static class StringExtensions
 }
 ```
 
+### Readability
+
+1. When modernizing, **never sacrifice readability for brevity.**
+
+Do not collapse multi-line logic into a single dense expression. If the original code is easier to follow across multiple statements, keep it that way.
+
+Prefer extension method call syntax when the same operation is available as both a static call and an extension method — the extension form reads more naturally and reduces visual clutter:
+
+```csharp
+// Before (static call)
+Size deviceSize = DpiHelper.LogicalToDeviceUnits(image.Size);
+
+// After (extension method)
+Size deviceSize = image.Size.LogicalToDeviceUnits();
+```
+
+2. **Prefer inline `#pragma` or `[SuppressMessage]`**
+
+Prefer inline `#pragma` or `[SuppressMessage]` at the call site over global suppressions in `GlobalSuppressions.cs`, so justification is visible in context. Only use global suppressions for truly project-wide rules (e.g., legacy threading model decisions that apply everywhere).
+
+3. **Named arguments**
+
+Use named arguments when passing multiple literals or when the meaning of a parameter isn't clear from the argument expression itself:
+
+```csharp
+// GOOD — named arguments clarify meaning of literals
+var errorControl = CreateErrorControlForMessage(
+    message: "An unexpected error occurred. Please try again.",
+    showRetryButton: true);
+```
+
+   When method calls take a lot of space due to a long argument list, consider
+   wrapping individual arguments on separate lines. If using named arguments,
+   use them for *every* argument for consistency:
+
+```csharp
+LongMethodWithManyNamedArguments(
+    firstArgument: value1,
+    secondArgument: value2,
+    thirdArgument: value3,
+    fourthArgument: value4);
+```
+
+4. **Wrap dot-chains with more than 2 member accesses** — each call goes on its own indented line:
+
+```csharp
+// Fine — 2 or fewer:
+var names = items.Where(x => x.IsActive).ToList();
+
+// Wrap — more than 2:
+var results = collection
+    .Where(x => x.IsActive)
+    .OrderBy(x => x.Name)
+    .Select(x => x.Id)
+    .ToList();
+```
+
 ### Pattern matching and switch expressions
 
 * Convert `if`-`else if` chains that compare the same variable
@@ -170,10 +348,9 @@ private bool IsValidSize(Size size)
 
 > **Semantic hazard:** `public Foo Bar => new Foo();` creates a new instance on
 > every access, while `public Foo Bar { get; } = new Foo();` creates one
-> instance at construction time. **Never** convert between these forms unless
-> the original semantics were provably incorrect. When you encounter an
-> expression-bodied property that returns a new instance, add a comment
-> documenting that the per-access instantiation is intentional.
+> instance at construction time. Never convert between these forms unless the
+> original semantics were provably incorrect — instead, add a comment confirming
+> per-access instantiation is intentional.
 
 ### Ternary operator
 
@@ -236,9 +413,26 @@ Also: `ArgumentOutOfRangeException.ThrowIfNegative`,
   the reader — refactor them to be more precise and clear instead.
 * For long, complex code blocks, **insert concise, helpful comments** at
   strategic points (before non-obvious logic, at phase boundaries, before tricky
-  calculations) so that developers unfamiliar with the codebase can follow the
-  flow.
+  calculations).
 * Keep comments factual and professional. Avoid humor that ages poorly.
+
+* Never deconstruct class names into single words for comments.
+  **Rule:** Assume a code fragment or a member name, if a term/an expression is formatted in Pascal Case.
+
+```CSharp
+
+// Original comment:
+
+// Ensure API like Type.GetType(...) use the UserAssemblyLoadContext if runtime
+// needs to load assemblies. See https://github.com/dotnet/coreclr/blob/master/Documentation/design-docs/AssemblyLoadContext.ContextualReflection.md
+// for more information.
+
+// DO NOT:
+// Sets contextual reflection to the user assembly load context, when available.
+
+// DO:
+// Ensures APIs like Type.GetType(...) use UserAssemblyLoadContext if the runtime
+// needs to load assemblies. See https://github.com/dotnet/coreclr/blob/master/Documentation/design-docs/AssemblyLoadContext.ContextualReflection.md
 
 ## XML Documentation
 
@@ -280,8 +474,7 @@ internal class DarkModeBrushCache
 ### Member documentation
 
 * Use `<inheritdoc/>` on overridden or interface-implemented members.
-* Do **not** XML-comment local functions — use a regular `//` comment if
-  needed.
+* Do **not** XML-comment local functions — use `//` comments instead.
 * Use **Unicode characters** in XML docs, never HTML entities.
 * Indent XML structure with **1 space** per nesting level.
 
@@ -327,13 +520,26 @@ using var brush = backColor.GetCachedSolidBrushScope();
 
 Before submitting a modernized file, verify:
 
-- [ ] No `var` on primitive types
-- [ ] No `== null` / `!= null` — only `is null` / `is not null`
-- [ ] No missing access modifiers
-- [ ] No `this.` unless required for disambiguation
-- [ ] No hand-rolled null/range checks — throw helpers used
-- [ ] Comments: spelling, grammar, single space after punctuation
-- [ ] All classes have XML doc headers (including private nested types)
-- [ ] Expression-bodied `=>` wraps to next line when total exceeds 60 chars
-- [ ] Empty line before `return`, after closing braces of blocks
-- [ ] No magic numbers without named constants
+* [ ] No `var` on primitive types
+* [ ] `var` used when the type is visible or implied on the line (casts,
+      generic method calls, `out var` with generic methods, methods whose
+      name implies the return type)
+* [ ] Target-typed `new()` used only when type is visible on the same line
+* [ ] No redundant type repetition on both sides of an assignment
+* [ ] Collection initializers applied where safe (not where a constructable
+      array type is required)
+* [ ] No `== null` / `!= null` — only `is null` / `is not null`
+* [ ] `field` keyword applied where backing field is only used by one property
+* [ ] No missing access modifiers
+* [ ] No `this.` unless required for disambiguation
+* [ ] No hand-rolled null/range checks — throw helpers used
+* [ ] Extension method syntax preferred over static calls when available
+* [ ] Inline `#pragma` / `[SuppressMessage]` at call site, not in
+      GlobalSuppressions.cs (unless project-wide)
+* [ ] Named arguments used for multiple literals or unclear parameters
+* [ ] Dot-chains with more than 2 member accesses wrapped to separate lines
+* [ ] Comments: spelling, grammar, single space after punctuation
+* [ ] All classes have XML doc headers (including private nested types)
+* [ ] Expression-bodied `=>` wraps to next line when total exceeds 60 chars
+* [ ] Empty line before `return`, after closing braces of blocks
+* [ ] No magic numbers without named constants
