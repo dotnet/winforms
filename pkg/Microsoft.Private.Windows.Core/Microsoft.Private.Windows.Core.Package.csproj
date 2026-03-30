@@ -36,6 +36,7 @@
     <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
     <PackageDescription>Private Windows Core package, public consumption is not supported</PackageDescription>
     <PackageTags>WinForms Windows Core Visual Studio .NET Framework WPF</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <!-- Reference the source project for build ordering only (no output assembly reference) -->
@@ -44,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="readme.md" />
+    <None Include="readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup>
