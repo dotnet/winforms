@@ -35,7 +35,7 @@ internal partial class PropertyGridToolStrip : ToolStrip
 
     /// <summary>
     ///  Overrides WndProc to avoid keeping this inner ToolStrip as the active ToolStrip
-    ///  in ModalMenuFilter when it receives focus. 
+    ///  in ModalMenuFilter when it receives focus.
     /// </summary>
     /// <param name="m">The window message to process.</param>
     protected override void WndProc(ref Message m)
