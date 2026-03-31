@@ -11,7 +11,6 @@
     <NoWarn>$(NoWarn);NU5100;NU5131;NU5128</NoWarn>
   </PropertyGroup>
 
-  <!-- This is a Packaging Project -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <IsShippingPackage>false</IsShippingPackage>
