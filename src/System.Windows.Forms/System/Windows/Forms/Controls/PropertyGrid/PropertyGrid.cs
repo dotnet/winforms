@@ -3710,15 +3710,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private bool SelectViewTabButtonDefault(ToolStripButton? button)
     {
-        if (button is null)
-        {
-            return false;
-        }
-
         // Is this tab button checked? If so, do nothing.
         if (button == _selectedTab?.Button)
         {
-            button.Checked = true;
+            button?.Checked = true;
             return true;
         }
 
