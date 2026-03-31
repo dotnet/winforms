@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    This project packages both the implementation and reference assemblies of
+    Microsoft.Private.Windows.Core into a single nupkg.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+
+    <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
+    <NoWarn>$(NoWarn);NU5100;NU5131;NU5128</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <IsShippingPackage>false</IsShippingPackage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Don't include this project in the build output -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Disable a VS-specific target that is failing when building this csproj -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+  </PropertyGroup>
+
+  <!-- nuspec properties -->
+  <PropertyGroup>
+    <PackageId>Microsoft.Private.Windows.Core</PackageId>
+    <PackageProjectUrl>https://github.com/dotnet/winforms</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
+    <PackageDescription>Private Windows Core package, public consumption is not supported</PackageDescription>
+    <PackageTags>WinForms Windows Core Visual Studio .NET Framework WPF</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Reference the source project for build ordering only (no output assembly reference) -->
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\Microsoft.Private.Windows.Core.csproj" PrivateAssets="All" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_SourceProjectName>Microsoft.Private.Windows.Core</_SourceProjectName>
+    <_SourceRefDir>$(ArtifactsObjDir)$(_SourceProjectName)\$(Configuration)\net472\ref\</_SourceRefDir>
+    <_SourceBinDir>$(ArtifactsBinDir)$(_SourceProjectName)\$(Configuration)\net472\</_SourceBinDir>
+
+    <!-- Call custom target when creating the package -->
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddPackageContent</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <!-- Include implementation and reference assemblies in the package -->
+  <Target Name="AddPackageContent">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).dll" PackagePath="lib/net472" />
+      <TfmSpecificPackageFile Include="$(_SourceRefDir)$(_SourceProjectName).dll" PackagePath="ref/net472" />
+    </ItemGroup>
+  </Target>
+
+</Project>
