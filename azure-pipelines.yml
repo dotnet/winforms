@@ -86,8 +86,8 @@ extends:
               nuGetFeedType: external
               publishFeedCredentials: 'azure-public/vs-impl'
           steps:
-          - template: /eng/common/templates-official/steps/enable-internal-sources.yml
-          - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
+          - template: /eng/common/templates-official/steps/enable-internal-sources.yml@self
+          - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml@self
           - task: NuGetAuthenticate@1
             inputs:
               nuGetServiceConnections: azure-public/vs-impl
