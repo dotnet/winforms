@@ -7,6 +7,12 @@ trigger:
 
 pr: none
 
+parameters:
+- name: PublishWindowsCorePackage
+  type: boolean
+  default: false
+  displayName: 'Publish Microsoft.Private.Windows.Core NuGet package'
+
 variables:
   - name: _PublishUsingPipelines
     value: false
@@ -60,3 +66,37 @@ extends:
             UseCheckedInLocProjectJson: true
             LclSource: lclFilesfromPackage
             LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
+
+      # Publish Microsoft.Private.Windows.Core NuGet package (manual trigger only)
+      - ${{ if and(eq(parameters.PublishWindowsCorePackage, true), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')) }}:
+        - job: PublishWindowsCorePackage
+          displayName: 'Build and Publish Microsoft.Private.Windows.Core'
+          pool:
+            name: $(DncEngInternalBuildPool)
+            image: windows.vs2026preview.scout.amd64
+            os: windows
+          templateContext:
+            outputs:
+            - output: nuget
+              displayName: 'Publish Microsoft.Private.Windows.Core'
+              condition: succeeded()
+              packageParentPath: '$(Build.SourcesDirectory)\artifacts\packages\Release'
+              packagesToPush: '$(Build.SourcesDirectory)\artifacts\packages\Release\NonShipping\Microsoft.Private.Windows.Core.*.nupkg'
+              allowPackageConflicts: true
+              nuGetFeedType: external
+              publishFeedCredentials: 'azure-public/vs-impl'
+          steps:
+          - template: /eng/common/templates-official/steps/enable-internal-sources.yml
+          - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml
+          - task: NuGetAuthenticate@1
+            inputs:
+              nuGetServiceConnections: azure-public/vs-impl
+          - script: eng\CIBuild.cmd
+              -restore
+              -build
+              -pack
+              -configuration Release
+              /p:Platform=x64
+              /p:TargetArchitecture=x64
+              /bl:$(Build.SourcesDirectory)\artifacts\log\Release\PackWindowsCore.binlog
+            displayName: 'Build, Pack and Publish Microsoft.Private.Windows.Core'
