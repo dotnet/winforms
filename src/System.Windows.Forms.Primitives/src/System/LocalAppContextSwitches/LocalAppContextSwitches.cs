@@ -235,7 +235,7 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Indicates whether keep the node image that has not set an image when the ImageList changes dynamically.
+    ///  Indicates whether to keep the node image that has not set an image when the ImageList changes dynamically.
     /// </summary>
     public static bool PreserveUnassignedTreeNodeImages
     {

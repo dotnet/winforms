@@ -2193,7 +2193,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             => actualIndex is ImageList.Indexer.NoneIndex or ImageList.Indexer.DefaultIndex;
     }
 
-    internal unsafe void UpdateImage()
+    internal void UpdateImage()
     {
         if (TreeView is not { IsDisposed: false } treeView)
         {
@@ -2207,8 +2207,21 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             if (AppContextSwitches.PreserveUnassignedTreeNodeImages)
             {
-                imageIndex = GetEffectiveImageIndex(treeView, imageList, ImageKey);
-                selectedImageIndex = GetEffectiveImageIndex(treeView, imageList, SelectedImageKey);
+                imageIndex = GetEffectiveImageIndex(
+                    treeView,
+                    imageList,
+                    ImageKey,
+                    ImageIndexer,
+                    treeView.ImageKey,
+                    treeView.ImageIndexer);
+
+                selectedImageIndex = GetEffectiveImageIndex(
+                    treeView,
+                    imageList,
+                    SelectedImageKey,
+                    SelectedImageIndexer,
+                    treeView.SelectedImageKey,
+                    treeView.SelectedImageIndexer);
             }
             else
             {
@@ -2232,30 +2245,37 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         PInvokeCore.SendMessage(treeView, PInvoke.TVM_SETITEMW, 0, ref item);
     }
 
-    private unsafe int GetEffectiveImageIndex(TreeView treeView, ImageList imageList, string effectiveImageKey)
+    private int GetEffectiveImageIndex(
+        TreeView treeView,
+        ImageList imageList,
+        string effectiveImageKey,
+        ImageList.Indexer nodeImageIndexer,
+        string treeViewEffectiveImageKey,
+        ImageList.Indexer treeViewImageIndexer)
     {
         int imageIndex;
 
-        // If the current node does not set ImageKey, try inheriting TreeView's ImageKey
+        // If the current node does not set a key, try inheriting the TreeView key.
         if (string.IsNullOrEmpty(effectiveImageKey))
         {
-            effectiveImageKey = treeView.ImageKey;
+            effectiveImageKey = treeViewEffectiveImageKey;
         }
 
-        // If the current node has an ImageKey set, prefer using the valid ImageKey
+        // If the current node (or inherited TreeView) has a key set, prefer using
+        // the corresponding image when it exists in the ImageList.
         if (!string.IsNullOrEmpty(effectiveImageKey) && imageList.Images.ContainsKey(effectiveImageKey))
         {
             imageIndex = imageList.Images.IndexOfKey(effectiveImageKey);
         }
-        else if (ImageIndexer.ActualIndex >= 0 && ImageIndexer.ActualIndex < imageList.Images.Count)
+        else if (nodeImageIndexer.ActualIndex >= 0 && nodeImageIndexer.ActualIndex < imageList.Images.Count)
         {
-            // Otherwise use the node's own ImageIndex
-            imageIndex = ImageIndexer.ActualIndex;
+            // Otherwise use the node's own index.
+            imageIndex = nodeImageIndexer.ActualIndex;
         }
-        else if (treeView.ImageIndexer.ActualIndex >= 0 && treeView.ImageIndexer.ActualIndex < imageList.Images.Count)
+        else if (treeViewImageIndexer.ActualIndex >= 0 && treeViewImageIndexer.ActualIndex < imageList.Images.Count)
         {
-            // Then try using TreeView's ImageIndex
-            imageIndex = treeView.ImageIndexer.ActualIndex;
+            // Then try using the TreeView's index.
+            imageIndex = treeViewImageIndexer.ActualIndex;
         }
         else
         {

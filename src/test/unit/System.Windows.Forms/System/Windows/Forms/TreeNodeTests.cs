@@ -3569,6 +3569,142 @@ public class TreeNodeTests
         Assert.Equal("Key", node.SelectedImageKey);
     }
 
+    [WinFormsFact]
+    public void TreeNode_UpdateImage_PreserveUnassigned_UsesTreeViewSelectedImageKey()
+    {
+        const string SwitchName = "System.Windows.Forms.TreeView.PreserveUnassignedTreeNodeImages";
+        AppContext.TryGetSwitch(SwitchName, out bool originalValue);
+        AppContext.SetSwitch(SwitchName, true);
+
+        try
+        {
+            using Bitmap image1 = new(10, 10);
+            using Bitmap image2 = new(10, 10);
+            using ImageList imageList = new();
+            imageList.Images.Add("Image1", image1);
+            imageList.Images.Add("Image2", image2);
+
+            using TreeView control = new()
+            {
+                ImageList = imageList,
+                ImageKey = "Image1",
+                SelectedImageKey = "Image2"
+            };
+
+            TreeNode node = new();
+            control.Nodes.Add(node);
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            node.UpdateImage();
+
+            TVITEMW item = new()
+            {
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
+                hItem = node.HTREEITEM
+            };
+
+            Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+            Assert.Equal(1, item.iSelectedImage);
+        }
+        finally
+        {
+            AppContext.SetSwitch(SwitchName, originalValue);
+        }
+    }
+
+    [WinFormsFact]
+    public void TreeNode_UpdateImage_PreserveUnassigned_UsesNodeSelectedImageIndex()
+    {
+        const string SwitchName = "System.Windows.Forms.TreeView.PreserveUnassignedTreeNodeImages";
+        AppContext.TryGetSwitch(SwitchName, out bool originalValue);
+        AppContext.SetSwitch(SwitchName, true);
+
+        try
+        {
+            using Bitmap image1 = new(10, 10);
+            using Bitmap image2 = new(10, 10);
+            using ImageList imageList = new();
+            imageList.Images.Add("Image1", image1);
+            imageList.Images.Add("Image2", image2);
+
+            using TreeView control = new()
+            {
+                ImageList = imageList
+            };
+
+            TreeNode node = new()
+            {
+                ImageIndex = 0,
+                SelectedImageIndex = 1,
+                SelectedImageKey = "NoSuchImage"
+            };
+
+            control.Nodes.Add(node);
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            node.UpdateImage();
+
+            TVITEMW item = new()
+            {
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
+                hItem = node.HTREEITEM
+            };
+
+            Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+            Assert.Equal(1, item.iSelectedImage);
+        }
+        finally
+        {
+            AppContext.SetSwitch(SwitchName, originalValue);
+        }
+    }
+
+    [WinFormsFact]
+    public unsafe void TreeNode_UpdateImage_PreserveUnassigned_UsesTreeViewSelectedImageIndex()
+    {
+        const string SwitchName = "System.Windows.Forms.TreeView.PreserveUnassignedTreeNodeImages";
+        AppContext.TryGetSwitch(SwitchName, out bool originalValue);
+        AppContext.SetSwitch(SwitchName, true);
+
+        try
+        {
+            using Bitmap image1 = new(10, 10);
+            using Bitmap image2 = new(10, 10);
+            using ImageList imageList = new();
+            imageList.Images.Add(image1);
+            imageList.Images.Add(image2);
+
+            using TreeView control = new()
+            {
+                ImageList = imageList,
+                ImageIndex = 0,
+                SelectedImageIndex = 1
+            };
+
+            TreeNode node = new();
+            control.Nodes.Add(node);
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            node.UpdateImage();
+
+            TVITEMW item = new()
+            {
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
+                hItem = node.HTREEITEM
+            };
+
+            Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+            Assert.Equal(1, item.iSelectedImage);
+        }
+        finally
+        {
+            AppContext.SetSwitch(SwitchName, originalValue);
+        }
+    }
+
     [WinFormsTheory]
     [InlineData(-1, -1)]
     [InlineData(0, 0)]
