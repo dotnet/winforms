@@ -360,24 +360,25 @@ public partial class ToolStripLabel : ToolStripItem
                 {
                     font = _hoverLinkFont;
                     textColor = ActiveLinkColor;
-                    if (DisplayInformation.HighContrast)
-                    {
-                        g.FillRectangle(SystemBrushes.Highlight, textRect);
-                    }
                 }
                 else if (Selected)
                 {
                     font = _hoverLinkFont;
                     textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
-                    if (DisplayInformation.HighContrast)
-                    {
-                        g.FillRectangle(SystemBrushes.Highlight, textRect);
-                    }
                 }
                 else
                 {
                     font = _linkFont;
                     textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
+                }
+
+                if (Pressed || Selected)
+                {
+                    if (DisplayInformation.HighContrast)
+                    {
+                        g.FillRectangle(SystemBrushes.Highlight, textRect);
+                        textColor = SystemColors.HighlightText;
+                    }
                 }
             }
 
