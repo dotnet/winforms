@@ -103,6 +103,8 @@ extends:
               signType: real
               zipSources: false
               feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
+            env:
+              TeamName: DotNetCore
           - script: eng\CIBuild.cmd
               -restore
               -build
