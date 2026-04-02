@@ -77,26 +77,40 @@ extends:
             os: windows
           templateContext:
             outputs:
-            - output: nuget
-              displayName: 'Publish Microsoft.Private.Windows.Core'
+            # TODO: Re-enable NuGet feed publish once package validation is complete
+            # - output: nuget
+            #   displayName: 'Publish Microsoft.Private.Windows.Core'
+            #   condition: succeeded()
+            #   packageParentPath: '$(Build.SourcesDirectory)\artifacts\packages\Release'
+            #   packagesToPush: '$(Build.SourcesDirectory)\artifacts\packages\Release\NonShipping\Microsoft.Private.Windows.Core.*.nupkg'
+            #   allowPackageConflicts: true
+            #   nuGetFeedType: external
+            #   publishFeedCredentials: 'azure-public/vs-impl'
+            - output: pipelineArtifact
+              displayName: 'Publish Signed Package Artifact'
               condition: succeeded()
-              packageParentPath: '$(Build.SourcesDirectory)\artifacts\packages\Release'
-              packagesToPush: '$(Build.SourcesDirectory)\artifacts\packages\Release\NonShipping\Microsoft.Private.Windows.Core.*.nupkg'
-              allowPackageConflicts: true
-              nuGetFeedType: external
-              publishFeedCredentials: 'azure-public/vs-impl'
+              targetPath: '$(Build.SourcesDirectory)\artifacts\packages\Release\NonShipping'
+              artifactName: 'SignedPackage'
           steps:
           - template: /eng/common/templates-official/steps/enable-internal-sources.yml@self
           - template: /eng/common/templates-official/steps/enable-internal-runtimes.yml@self
           - task: NuGetAuthenticate@1
             inputs:
               nuGetServiceConnections: azure-public/vs-impl
+          - task: MicroBuildSigningPlugin@4
+            displayName: Install MicroBuild Signing Plugin
+            inputs:
+              signType: real
+              zipSources: false
+              feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
           - script: eng\CIBuild.cmd
               -restore
               -build
               -pack
+              -sign /p:DotNetSignType=real
               -configuration Release
               /p:Platform=x64
               /p:TargetArchitecture=x64
+              /p:OfficialBuildId=$(Build.BuildNumber)
               /bl:$(Build.SourcesDirectory)\artifacts\log\Release\PackWindowsCore.binlog
-            displayName: 'Build, Pack and Publish Microsoft.Private.Windows.Core'
+            displayName: 'Build, Sign, and Pack Microsoft.Private.Windows.Core'
