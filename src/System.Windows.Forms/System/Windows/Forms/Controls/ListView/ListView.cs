@@ -2916,7 +2916,6 @@ public partial class ListView : Control
                         if (Application.IsDarkModeEnabled && !Enabled && DarkModeRequestState is true)
                         {
                             nmcd->clrText = (COLORREF)ColorTranslator.ToWin32(SystemColors.ControlDarkDark);
-                            nmcd->clrTextBk = (COLORREF)ColorTranslator.ToWin32(Color.FromArgb(255, 240, 240, 240));
                         }
                     }
 
