@@ -3445,12 +3445,18 @@ public partial class RichTextBox : TextBoxBase
                     // Paint the background
                     g.FillRectangle(SystemBrushes.ControlDark, ClientRectangle);
 
+                    // Use EM_GETRECT to get the text formatting rectangle, which accounts
+                    // for internal borders and padding, rather than using ClientRectangle.
+                    RECT textRect = default;
+                    PInvokeCore.SendMessage(this, PInvokeCore.EM_GETRECT, (WPARAM)0, ref textRect);
+                    Rectangle textBounds = textRect;
+
                     // Paint the text
                     TextRenderer.DrawText(
                         g,
                         Text,
                         Font,
-                        ClientRectangle,
+                        textBounds,
                         SystemColors.GrayText,
                         TextFormatFlags.Left
                         | TextFormatFlags.Top
