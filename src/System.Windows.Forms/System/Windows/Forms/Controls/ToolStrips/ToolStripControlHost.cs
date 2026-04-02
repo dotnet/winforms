@@ -803,13 +803,15 @@ public partial class ToolStripControlHost : ToolStripItem
     {
         ToolStrip? parent = ParentInternal;
 
-        if (parent is null)
+        if (parent is null || _control is null)
         {
             return;
         }
 
         if (_control.IsHandleCreated && !parent.IsHandleCreated)
         {
+            // The hosted control already has a native handle (for example, when moving to the
+            // overflow dropdown). Ensure the ToolStrip parent has a handle before reparenting.
             parent.CreateControl(ignoreVisible: true);
         }
 
