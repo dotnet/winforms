@@ -84,6 +84,10 @@ public partial class ProgressBar : Control
             if (!ShouldSerializeBackColor())
             {
                 BackColor = SystemColors.ControlDarkDark;
+            }
+
+            if (!ShouldSerializeForeColor())
+            {
                 ForeColor = SystemColors.Highlight;
             }
 
