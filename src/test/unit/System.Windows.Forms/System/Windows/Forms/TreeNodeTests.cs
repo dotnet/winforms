@@ -3636,8 +3636,7 @@ public class TreeNodeTests
             TreeNode node = new()
             {
                 ImageIndex = 0,
-                SelectedImageIndex = 1,
-                SelectedImageKey = "NoSuchImage"
+                SelectedImageIndex = 1
             };
 
             control.Nodes.Add(node);
