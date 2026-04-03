@@ -2208,7 +2208,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             if (AppContextSwitches.PreserveUnassignedTreeNodeImages)
             {
                 imageIndex = GetEffectiveImageIndex(
-                    treeView,
                     imageList,
                     ImageKey,
                     ImageIndexer,
@@ -2216,7 +2215,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     treeView.ImageIndexer);
 
                 selectedImageIndex = GetEffectiveImageIndex(
-                    treeView,
                     imageList,
                     SelectedImageKey,
                     SelectedImageIndexer,
@@ -2245,8 +2243,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         PInvokeCore.SendMessage(treeView, PInvoke.TVM_SETITEMW, 0, ref item);
     }
 
-    private int GetEffectiveImageIndex(
-        TreeView treeView,
+    private static int GetEffectiveImageIndex(
         ImageList imageList,
         string effectiveImageKey,
         ImageList.Indexer nodeImageIndexer,
