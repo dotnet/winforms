@@ -131,10 +131,10 @@
 
   <ItemGroup>
     <Reference Include="AxInterop.WMPLib">
-      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\$(NetFxTFM)\AxInterop.WMPLib.dll</HintPath>
     </Reference>
     <Reference Include="Interop.WMPLib">
-      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\$(NetFxTFM)\Interop.WMPLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
