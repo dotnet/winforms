@@ -13,7 +13,10 @@ metadata:
 
 ## Prerequisites
 
-* Windows OS (WinForms is Windows-only).
+* Windows is required for WinForms runtime scenarios, test execution, and Visual
+  Studio workflows.
+* Linux is supported for command-line restore/build only; use `build.sh`
+  instead of `build.cmd` / `Restore.cmd`.
 * Visual Studio 2022 (for IDE builds) — see `WinForms.vsconfig` for required workloads.
 * The repo-local .NET SDK (specified in `global.json`) is used automatically by
   `build.cmd` and `Restore.cmd`. You do **not** need a machine-wide SDK install
@@ -85,21 +88,23 @@ eng\common\Build.ps1 -NativeToolsOnMachine -restore -build -bl
 
 ---
 
-## 3  Building a Single Project (fast inner-loop)
+## 3  Optimized Building a Single Project (fast inner-loop)
 
-After an initial full restore (`.\Restore.cmd` or `.\build.cmd`), you can
-rebuild just the project you are working on with the standard `dotnet build`
-command. This is **much** faster than building the whole solution.
+Prefer rebuilding just the project(s) with recent changes by using the
+standard `dotnet build` command, **after** at least one initial successful
+full restore (via `.\Restore.cmd` or `.\build.cmd`).
+
+This is **much** faster than building the whole solution.
 
 ```bash
 # Build a single src project
-dotnet build src\System.Windows.Forms\src\System.Windows.Forms.csproj
+dotnet build src\System.Windows.Forms\System.Windows.Forms.csproj
 
 # Build a single test project
-dotnet build src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj
+dotnet build src\test\unit\System.Windows.Forms\System.Windows.Forms.Tests.csproj
 
 # Release configuration
-dotnet build src\System.Windows.Forms\src\System.Windows.Forms.csproj -c Release
+dotnet build src\System.Windows.Forms\System.Windows.Forms.csproj -c Release
 ```
 
 > **Tip:** The repo-local SDK must be on your `PATH`. Running `.\start-code.cmd`

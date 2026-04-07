@@ -21,19 +21,27 @@ pattern below to download and install the exact version needed.
 
 ## 1  Determining the Required Version
 
-The required runtime version appears in error messages when a test executable
-cannot find its target framework. For example:
+The required runtime version can be found in multiple ways:
+
+### From an error message
+
+When a test executable cannot find its target framework, the error includes the
+version:
 
 ```
-You must install or update .NET to run this application.
-  App: artifacts\bin\System.Windows.Forms.Tests\Debug\net11.0-windows7.0\System.Windows.Forms.Tests.exe
-  Architecture: x64
-  Framework: 'Microsoft.NETCore.App', version '11.0.0-preview.4.26203.108' (x64)
+Framework: 'Microsoft.NETCore.App', version '11.0.0-preview.4.26203.108' (x64)
 ```
 
-The version string is: **`11.0.0-preview.4.26203.108`**
+### From runtimeconfig.json (programmatic — preferred)
 
-You can also find it in the test project's build output or in `global.json`.
+Each test executable has a `.runtimeconfig.json` next to it that declares the
+exact version required:
+
+```powershell
+$rc = Get-Content "artifacts\bin\System.Windows.Forms.Tests\Debug\net11.0-windows7.0\System.Windows.Forms.Tests.runtimeconfig.json" | ConvertFrom-Json
+$version = $rc.runtimeOptions.framework.version
+Write-Host "Required runtime: $version"
+```
 
 ---
 
@@ -100,33 +108,74 @@ After installation, verify the runtime is available:
 
 ```powershell
 # x64
-& "C:\Program Files\dotnet\dotnet.exe" --list-runtimes | Select-String "11.0"
+& "C:\Program Files\dotnet\dotnet.exe" --list-runtimes | Select-String $version
 
 # x86
-& "C:\Program Files (x86)\dotnet\dotnet.exe" --list-runtimes | Select-String "11.0"
+& "C:\Program Files (x86)\dotnet\dotnet.exe" --list-runtimes | Select-String $version
 
 # Or check the shared framework directory directly
-Get-ChildItem "C:\Program Files\dotnet\shared\Microsoft.NETCore.App" | Where-Object Name -like "11.*"
-Get-ChildItem "C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App" | Where-Object Name -like "11.*"
+Get-ChildItem "C:\Program Files\dotnet\shared\Microsoft.NETCore.App" -Filter "$($version.Split('-')[0])*"
+Get-ChildItem "C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App" -Filter "$($version.Split('-')[0])*"
 ```
 
 ---
 
-## 5  Alternative: Use the Repo-Local Runtime
+## 5  Fully Automated: Detect, Download, and Install
+
+This script reads the required version from any test executable's
+`runtimeconfig.json`, downloads both architectures, and installs them:
+
+```powershell
+# Auto-detect version from the first test runtimeconfig found
+$rc = Get-ChildItem "artifacts\bin\*Tests*\Debug\*\*.runtimeconfig.json" |
+    Select-Object -First 1
+$version = (Get-Content $rc | ConvertFrom-Json).runtimeOptions.framework.version
+Write-Host "Required runtime: $version"
+
+# Check if already installed
+$installed = & "C:\Program Files\dotnet\dotnet.exe" --list-runtimes 2>$null |
+    Select-String ([regex]::Escape($version))
+if ($installed) {
+    Write-Host "Runtime $version is already installed."
+    return
+}
+
+# Download
+$base = "https://ci.dot.net/public/Runtime/$version"
+$msi64 = "$env:TEMP\dotnet-runtime-$version-win-x64.msi"
+$msi86 = "$env:TEMP\dotnet-runtime-$version-win-x86.msi"
+Invoke-WebRequest "$base/dotnet-runtime-$version-win-x64.msi" -OutFile $msi64 -UseBasicParsing
+Invoke-WebRequest "$base/dotnet-runtime-$version-win-x86.msi" -OutFile $msi86 -UseBasicParsing
+
+# Install (elevated)
+Start-Process msiexec.exe -ArgumentList "/i `"$msi64`" /quiet /norestart" -Wait -Verb RunAs
+Start-Process msiexec.exe -ArgumentList "/i `"$msi86`" /quiet /norestart" -Wait -Verb RunAs
+
+# Verify
+& "C:\Program Files\dotnet\dotnet.exe" --list-runtimes | Select-String $version
+
+# Clean up
+Remove-Item $msi64, $msi86 -ErrorAction SilentlyContinue
+```
+
+---
+
+## 6  Alternative: Use the Repo-Local Runtime
 
 The repository includes a local `.dotnet` folder (populated by `.\Restore.cmd`)
 that may already have the required runtime. To use it instead of installing
 system-wide:
 
 ```powershell
-$env:DOTNET_ROOT = "Q:\g\winforms\.dotnet"
-$env:PATH = "Q:\g\winforms\.dotnet;$env:PATH"
+# From the repository root:
+$env:DOTNET_ROOT = "$PWD\.dotnet"
+$env:PATH = "$PWD\.dotnet;$env:PATH"
 ```
 
 Check available versions:
 
 ```powershell
-Get-ChildItem "Q:\g\winforms\.dotnet\shared\Microsoft.NETCore.App" | Select Name
+Get-ChildItem ".dotnet\shared\Microsoft.NETCore.App" | Select Name
 ```
 
 > **Note:** The repo-local runtime works for running test executables but may
@@ -134,7 +183,7 @@ Get-ChildItem "Q:\g\winforms\.dotnet\shared\Microsoft.NETCore.App" | Select Name
 
 ---
 
-## 6  Troubleshooting
+## 7  Troubleshooting
 
 | Problem | Solution |
 |---------|----------|

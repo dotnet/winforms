@@ -2,8 +2,8 @@
 name: running-tests
 description: >-
   Instructions for running unit tests, integration tests, and individual tests
-  in the WinForms repository. Covers command-line and Visual Studio workflows,
-  test filtering, test categories, and troubleshooting test failures.
+  in the WinForms repository. Use this when asked how to run tests, filter
+  them, use Visual Studio workflows, or troubleshoot test failures.
 metadata:
   author: dotnet-winforms
   version: "2.0"
@@ -97,12 +97,17 @@ must be installed system-wide, **or** you must set `DOTNET_ROOT` to the
 repo-local `.dotnet` folder:
 
 ```powershell
-$env:DOTNET_ROOT = "Q:\g\winforms\.dotnet"
-$env:PATH = "Q:\g\winforms\.dotnet;$env:PATH"
+# From the repository root:
+$env:DOTNET_ROOT = "$PWD\.dotnet"
+$env:PATH = "$PWD\.dotnet;$env:PATH"
 ```
 
 If the required .NET runtime is not installed, use the `download-sdk` skill to
 install it.
+
+> **Note:** The TFM in executable paths (e.g. `net11.0`) changes with each
+> major .NET version. Check `artifacts\bin\<ProjectName>\Debug\` for the
+> actual TFM directory name.
 
 ### Filter by method name (fully qualified)
 
@@ -314,9 +319,9 @@ dotnet test
 
 # --- Running individual tests via executable (preferred) ---
 
-# Set up repo-local runtime (if system runtime is not installed)
-$env:DOTNET_ROOT = "Q:\g\winforms\.dotnet"
-$env:PATH = "Q:\g\winforms\.dotnet;$env:PATH"
+# Set up repo-local runtime (from repo root, if system runtime is not installed)
+$env:DOTNET_ROOT = "$PWD\.dotnet"
+$env:PATH = "$PWD\.dotnet;$env:PATH"
 
 # Single test by fully-qualified method name
 & "artifacts\bin\System.Windows.Forms.Tests\Debug\net11.0-windows7.0\System.Windows.Forms.Tests.exe" `
