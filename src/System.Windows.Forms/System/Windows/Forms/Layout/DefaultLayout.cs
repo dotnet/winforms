@@ -242,7 +242,7 @@ internal partial class DefaultLayout : LayoutEngine
         int right = layout.Right + displayRect.X;
         int bottom = layout.Bottom + displayRect.Y;
 
-        AnchorStyles anchor = GetAnchor(element);
+        AnchorStyles anchor = TryRefreshAnchorInfoForDisplayRectangleGrowth(element, layout, displayRect);
 
         if (IsAnchored(anchor, AnchorStyles.Right))
         {
@@ -747,6 +747,10 @@ internal partial class DefaultLayout : LayoutEngine
         Rectangle parentDisplayRect = element.Container.DisplayRectangle;
         int parentWidth = parentDisplayRect.Width;
         int parentHeight = parentDisplayRect.Height;
+
+        // Keep the display rectangle that produced these V1 anchors so the compat refresh path
+        // can detect when the parent later grows and the stored positive right/bottom anchors are stale.
+        anchorInfo.DisplayRectangle = parentDisplayRect;
 
         // The anchors is relative to the parent DisplayRectangle, so offset the anchors
         // by the DisplayRect origin

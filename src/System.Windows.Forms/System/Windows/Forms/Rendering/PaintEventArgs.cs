@@ -82,7 +82,27 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     /// <summary>
     ///  Gets the <see cref="Drawing.Graphics"/> object used to paint.
     /// </summary>
-    public Graphics Graphics => _event.Graphics;
+    public Graphics Graphics
+    {
+        get
+        {
+            // When PaintEventArgs is created with an HDC and DrawingEventFlags.SaveState,
+            // SaveStateIfNeeded is normally called lazily via GraphicsInternal on first access.
+            // If user code accesses this public Graphics property before any GraphicsInternal
+            // call, the Graphics object gets created without SaveStateIfNeeded being invoked,
+            // leaving _savedGraphicsState as null. ResetGraphics() would then incorrectly
+            // trigger a Debug.Fail. We detect first-time creation here and save the state.
+            bool willBeCreated = _event.GetGraphics(create: false) is null;
+            Graphics g = _event.Graphics;
+
+            if (willBeCreated)
+            {
+                SaveStateIfNeeded(g);
+            }
+
+            return g;
+        }
+    }
 
     /// <summary>
     ///  Disposes of the resources (other than memory) used by the <see cref="PaintEventArgs"/>.

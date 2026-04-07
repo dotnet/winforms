@@ -13,12 +13,25 @@ public partial class WebBrowser
     [ClassInterface(ClassInterfaceType.None)]
     private class WebBrowserEvent : StandardOleMarshalObject, SHDocVw.DWebBrowserEvents2
     {
-        private readonly WebBrowser _parent;
+        private readonly WeakReference<WebBrowser> _parent;
+        private WebBrowser Parent
+        {
+            get
+            {
+                if (_parent.TryGetTarget(out WebBrowser? target))
+                {
+                    return target;
+                }
+
+                throw new ObjectDisposedException(nameof(WebBrowser));
+            }
+        }
+
         private bool _haveNavigated;
 
         public WebBrowserEvent(WebBrowser parent)
         {
-            _parent = parent;
+            _parent = new(parent);
         }
 
         public bool AllowNavigation { get; set; }
@@ -27,11 +40,11 @@ public partial class WebBrowser
         {
             if (command == CommandStateChangeConstants.CSC_NAVIGATEBACK)
             {
-                _parent.CanGoBackInternal = enable;
+                Parent.CanGoBackInternal = enable;
             }
             else if (command == CommandStateChangeConstants.CSC_NAVIGATEFORWARD)
             {
-                _parent.CanGoForwardInternal = enable;
+                Parent.CanGoForwardInternal = enable;
             }
         }
 
@@ -44,8 +57,7 @@ public partial class WebBrowser
             ref object? headers,
             ref bool cancel)
         {
-            Debug.Assert(_parent is not null, "Parent should have been set");
-            // Note: we want to allow navigation if we haven't already navigated.
+            Debug.Assert(Parent is not null, "Parent should have been set"); // Note: we want to allow navigation if we haven't already navigated.
             if (AllowNavigation || !_haveNavigated)
             {
                 Debug.Assert(urlObject is null or string, "invalid url type");
@@ -62,7 +74,7 @@ public partial class WebBrowser
                 string urlString = urlObject is null ? string.Empty : (string)urlObject;
                 WebBrowserNavigatingEventArgs e = new(
                     new Uri(urlString), targetFrameName is null ? string.Empty : (string)targetFrameName);
-                _parent.OnNavigating(e);
+                Parent.OnNavigating(e);
                 cancel = e.Cancel;
             }
             else
@@ -75,38 +87,38 @@ public partial class WebBrowser
         {
             Debug.Assert(urlObject is null or string, "invalid url");
             _haveNavigated = true;
-            if (_parent._documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
+            if (Parent._documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
             {
-                HtmlDocument? htmlDocument = _parent.Document;
+                HtmlDocument? htmlDocument = Parent.Document;
                 if (htmlDocument is not null)
                 {
                     IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                    using var pStream = _parent._documentStreamToSetOnLoad.ToIStream();
+                    using var pStream = Parent._documentStreamToSetOnLoad.ToIStream();
                     psi.Load(pStream);
                     htmlDocument.Encoding = "unicode";
                 }
 
-                _parent._documentStreamToSetOnLoad = null;
+                Parent._documentStreamToSetOnLoad = null;
             }
             else
             {
                 string urlString = urlObject is null ? string.Empty : urlObject.ToString()!;
                 WebBrowserDocumentCompletedEventArgs e = new(
                         new Uri(urlString));
-                _parent.OnDocumentCompleted(e);
+                Parent.OnDocumentCompleted(e);
             }
         }
 
         public void TitleChange(string text)
         {
-            _parent.OnDocumentTitleChanged(EventArgs.Empty);
+            Parent.OnDocumentTitleChanged(EventArgs.Empty);
         }
 
         public void SetSecureLockIcon(int secureLockIcon)
         {
-            _parent._encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
-            _parent.OnEncryptionLevelChanged(EventArgs.Empty);
+            Parent._encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
+            Parent.OnEncryptionLevelChanged(EventArgs.Empty);
         }
 
         public void NavigateComplete2(object pDisp, ref object? urlObject)
@@ -115,29 +127,29 @@ public partial class WebBrowser
             string urlString = urlObject is null ? string.Empty : (string)urlObject;
             WebBrowserNavigatedEventArgs e = new(
                     new Uri(urlString));
-            _parent.OnNavigated(e);
+            Parent.OnNavigated(e);
         }
 
         public void NewWindow2(ref object ppDisp, ref bool cancel)
         {
-            CancelEventArgs e = new();
-            _parent.OnNewWindow(e);
+            CancelEventArgs e = new CancelEventArgs();
+            Parent.OnNewWindow(e);
             cancel = e.Cancel;
         }
 
         public void ProgressChange(int progress, int progressMax)
         {
-            WebBrowserProgressChangedEventArgs e = new(progress, progressMax);
-            _parent.OnProgressChanged(e);
+            WebBrowserProgressChangedEventArgs e = new WebBrowserProgressChangedEventArgs(progress, progressMax);
+            Parent.OnProgressChanged(e);
         }
 
         public void StatusTextChange(string text)
         {
-            _parent._statusText = text ?? string.Empty;
-            _parent.OnStatusTextChanged(EventArgs.Empty);
+            Parent._statusText = text ?? string.Empty;
+            Parent.OnStatusTextChanged(EventArgs.Empty);
         }
 
-        public void DownloadBegin() => _parent.OnFileDownload(EventArgs.Empty);
+        public void DownloadBegin() => Parent.OnFileDownload(EventArgs.Empty);
 
         public void FileDownload(ref bool cancel)
         {

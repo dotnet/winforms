@@ -32,4 +32,10 @@ public partial class MainForm : Form
         StatusBarForm form = new();
         form.Show(this);
     }
+
+    private void AnchorLayoutHighDpiRegressionButton_Click(object? sender, EventArgs e)
+    {
+        AnchorLayoutHighDpiRegressionDemoForm form = new();
+        form.Show(this);
+    }
 }

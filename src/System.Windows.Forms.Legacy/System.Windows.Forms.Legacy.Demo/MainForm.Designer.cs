@@ -19,6 +19,8 @@ partial class MainForm
     private Label _dataGridDescriptionLabel = null!;
     private Button _statusBarButton = null!;
     private Label _statusBarDescriptionLabel = null!;
+    private Button _anchorLayoutHighDpiRegressionButton = null!;
+    private Label _anchorLayoutHighDpiRegressionDescriptionLabel = null!;
 
     protected override void Dispose(bool disposing)
     {
@@ -43,6 +45,8 @@ partial class MainForm
         _dataGridDescriptionLabel = new Label();
         _statusBarButton = new Button();
         _statusBarDescriptionLabel = new Label();
+        _anchorLayoutHighDpiRegressionButton = new Button();
+        _anchorLayoutHighDpiRegressionDescriptionLabel = new Label();
         SuspendLayout();
         // 
         // _titleLabel
@@ -136,11 +140,31 @@ partial class MainForm
         _statusBarDescriptionLabel.Text = "Simple text mode, panel layout, owner-draw rendering, border styles, and sizing grip behavior.";
         _statusBarDescriptionLabel.TextAlign = ContentAlignment.TopCenter;
         // 
+        // _anchorLayoutHighDpiRegressionButton
+        // 
+        _anchorLayoutHighDpiRegressionButton.Location = new Point(210, 378);
+        _anchorLayoutHighDpiRegressionButton.Name = "_anchorLayoutHighDpiRegressionButton";
+        _anchorLayoutHighDpiRegressionButton.Size = new Size(300, 60);
+        _anchorLayoutHighDpiRegressionButton.TabIndex = 10;
+        _anchorLayoutHighDpiRegressionButton.Text = "Anchor Layout";
+        _anchorLayoutHighDpiRegressionButton.Click += AnchorLayoutHighDpiRegressionButton_Click;
+        // 
+        // _anchorLayoutHighDpiRegressionDescriptionLabel
+        // 
+        _anchorLayoutHighDpiRegressionDescriptionLabel.Location = new Point(210, 442);
+        _anchorLayoutHighDpiRegressionDescriptionLabel.Name = "_anchorLayoutHighDpiRegressionDescriptionLabel";
+        _anchorLayoutHighDpiRegressionDescriptionLabel.Size = new Size(300, 40);
+        _anchorLayoutHighDpiRegressionDescriptionLabel.TabIndex = 11;
+        _anchorLayoutHighDpiRegressionDescriptionLabel.Text = "Launches the dedicated high-DPI anchor-layout regression repro in a separate process.";
+        _anchorLayoutHighDpiRegressionDescriptionLabel.TextAlign = ContentAlignment.TopCenter;
+        // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(720, 380);
+        ClientSize = new Size(720, 500);
+        Controls.Add(_anchorLayoutHighDpiRegressionDescriptionLabel);
+        Controls.Add(_anchorLayoutHighDpiRegressionButton);
         Controls.Add(_statusBarDescriptionLabel);
         Controls.Add(_statusBarButton);
         Controls.Add(_toolBarLabel);

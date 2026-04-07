@@ -6,7 +6,7 @@
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);SA1005;SA1028;SA1129;SA1513;SA1518;WFDEV006;CA1311;CA1507;CA1805;CA1852;CA2201;IDE0002;IDE0005;IDE0059;IDE0063;IDE0073;IDE0300;nullable</NoWarn>
+    <NoWarn>$(NoWarn);SA1005;SA1027;SA1028;SA1129;SA1507;SA1513;SA1518;WFDEV006;CA1311;CA1507;CA1805;CA1852;CA2201;IDE0002;IDE0005;IDE0017;IDE0059;IDE0063;IDE0073;IDE0300;nullable</NoWarn>
 
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
     <IsPackable>false</IsPackable>
