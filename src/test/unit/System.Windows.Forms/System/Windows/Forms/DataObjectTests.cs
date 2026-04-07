@@ -907,25 +907,6 @@ public partial class DataObjectTests
         dataObject.GetImage().Should().Be(expected);
     }
 
-    [Theory]
-    [MemberData(nameof(GetImage_TheoryData))]
-    public void GetImage_InvokeMocked_ReturnsExpected(object result, Image expected)
-    {
-        // Use Loose so that protected virtual TryGetDataCore can be invoked
-        // without an explicit setup and simply return default (false),
-        // forcing GetImage to fall back to GetData.
-        Mock<DataObject> mockDataObject = new(MockBehavior.Loose);
-        mockDataObject
-            .Setup(o => o.GetImage())
-            .CallBase();
-        mockDataObject
-            .Setup(o => o.GetData(DataFormats.Bitmap, true))
-            .Returns(result)
-            .Verifiable();
-        mockDataObject.Object.GetImage().Should().BeSameAs(expected);
-        mockDataObject.Verify(o => o.GetData(DataFormats.Bitmap, true), Times.Once());
-    }
-
     [Fact]
     public void GetText_InvokeDefault_ReturnsEmpty()
     {
