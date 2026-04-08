@@ -5,7 +5,7 @@
   -->
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>$(NetFxTFM)</TargetFramework>
 
     <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
     <NoWarn>$(NoWarn);NU5100;NU5131;NU5128</NoWarn>
@@ -49,8 +49,8 @@
 
   <PropertyGroup>
     <_SourceProjectName>Microsoft.Private.Windows.Core</_SourceProjectName>
-    <_SourceRefDir>$(ArtifactsObjDir)$(_SourceProjectName)\$(Configuration)\net472\ref\</_SourceRefDir>
-    <_SourceBinDir>$(ArtifactsBinDir)$(_SourceProjectName)\$(Configuration)\net472\</_SourceBinDir>
+    <_SourceRefDir>$(ArtifactsObjDir)$(_SourceProjectName)\$(Configuration)\$(NetFxTFM)\ref\</_SourceRefDir>
+    <_SourceBinDir>$(ArtifactsBinDir)$(_SourceProjectName)\$(Configuration)\$(NetFxTFM)\</_SourceBinDir>
 
     <!-- Call custom target when creating the package -->
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddPackageContent</TargetsForTfmSpecificContentInPackage>
@@ -59,8 +59,8 @@
   <!-- Include implementation and reference assemblies in the package -->
   <Target Name="AddPackageContent">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).dll" PackagePath="lib/net472" />
-      <TfmSpecificPackageFile Include="$(_SourceRefDir)$(_SourceProjectName).dll" PackagePath="ref/net472" />
+      <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).dll" PackagePath="lib/$(NetFxTFM)" />
+      <TfmSpecificPackageFile Include="$(_SourceRefDir)$(_SourceProjectName).dll" PackagePath="ref/$(NetFxTFM)" />
     </ItemGroup>
   </Target>
 

@@ -11,6 +11,7 @@
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dotnet/winforms</PackageProjectUrl>
+    <NetFxTFM>net481</NetFxTFM>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
