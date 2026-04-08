@@ -11583,6 +11583,7 @@ public unsafe partial class Control :
 
         Font localFont = GetCurrentFontAndDpi(out int fontDpi);
         DeviceDpiInternal = newDeviceDpi;
+        OriginalDeviceDpiInternal = oldDeviceDpi;
 
         if (fontDpi == DeviceDpiInternal)
         {
@@ -11615,7 +11616,7 @@ public unsafe partial class Control :
             // This flag is reset when scaling is done on Container in "OnParentFontChanged".
             container?.IsDpiChangeScalingRequired = true;
 
-            RescaleConstantsForDpi(oldDeviceDpi, DeviceDpiInternal);
+            RescaleConstantsForDpi(OriginalDeviceDpiInternal, DeviceDpiInternal);
         }
 
         OnDpiChangedBeforeParent(EventArgs.Empty);
