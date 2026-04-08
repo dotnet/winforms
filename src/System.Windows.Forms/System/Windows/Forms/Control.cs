@@ -469,7 +469,9 @@ public unsafe partial class Control :
     {
         get
         {
-            return s_originalDeviceDpiInternal;
+            return Properties.GetValueOrDefault(
+                s_originalDeviceDpiInternal,
+                DeviceDpiInternal);
         }
 
         set
@@ -11562,6 +11564,7 @@ public unsafe partial class Control :
         DefWndProc(ref m);
 
         OriginalDeviceDpiInternal = DeviceDpiInternal;
+        int oldDeviceDpi = DeviceDpiInternal;
 
         // In order to support tests, will be querying Dpi from the message first.
         int newDeviceDpi = (short)m.WParamInternal.LOWORD;
@@ -11612,7 +11615,7 @@ public unsafe partial class Control :
             // This flag is reset when scaling is done on Container in "OnParentFontChanged".
             container?.IsDpiChangeScalingRequired = true;
 
-            RescaleConstantsForDpi(OriginalDeviceDpiInternal, DeviceDpiInternal);
+            RescaleConstantsForDpi(oldDeviceDpi, DeviceDpiInternal);
         }
 
         OnDpiChangedBeforeParent(EventArgs.Empty);
