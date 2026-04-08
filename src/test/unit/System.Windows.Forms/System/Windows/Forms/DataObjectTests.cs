@@ -907,6 +907,68 @@ public partial class DataObjectTests
         dataObject.GetImage().Should().Be(expected);
     }
 
+    [Theory]
+    [MemberData(nameof(GetImage_TheoryData))]
+    public void GetImage_Invoke_CallsTryGetData(object result, Image expected)
+    {
+        var dataObject = new DataObjectOverridesTryGetDataForImage
+        {
+            ImageToReturn = expected,
+            ResultToReturn = expected is not null,
+        };
+
+        var image = dataObject.GetImage();
+
+        image.Should().BeSameAs(expected);
+        dataObject.CallCount.Should().Be(1);
+        dataObject.LastFormat.Should().Be(DataFormats.Bitmap);
+        dataObject.LastAutoConvert.Should().BeTrue();
+    }
+
+    private sealed class DataObjectOverridesTryGetDataForImage : DataObject
+    {
+        public int CallCount { get; private set; }
+        public string? LastFormat { get; private set; }
+        public bool LastAutoConvert { get; private set; }
+        public Image? ImageToReturn { get; set; }
+        public bool ResultToReturn { get; set; }
+
+        protected override bool TryGetDataCore<T>(
+            string format,
+            Func<TypeName, Type?>? resolver,
+            bool autoConvert,
+            out T data)
+        {
+            CallCount++;
+            LastFormat = format;
+            LastAutoConvert = autoConvert;
+
+            if (typeof(T) == typeof(Image))
+            {
+                data = (T)(object?)ImageToReturn!;
+                return ResultToReturn;
+            }
+
+            data = default!;
+            return false;
+        }
+    }
+
+    [WinFormsFact]
+    public void GetDataObject_GetImage_RoundTripsBitmap()
+    {
+        using Bitmap bitmap = new(10, 10);
+        bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+        Clipboard.SetImage(bitmap);
+
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+
+        var result = dataObject.GetImage().Should().BeOfType<Bitmap>().Subject;
+        result.Size.Should().Be(bitmap.Size);
+        result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
+        Clipboard.ContainsImage().Should().BeTrue();
+    }
+
     [Fact]
     public void GetText_InvokeDefault_ReturnsEmpty()
     {
