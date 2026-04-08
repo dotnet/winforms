@@ -469,9 +469,7 @@ public unsafe partial class Control :
     {
         get
         {
-            return Properties.GetValueOrDefault(
-                s_originalDeviceDpiInternal,
-                DeviceDpiInternal);
+            return s_originalDeviceDpiInternal;
         }
 
         set
