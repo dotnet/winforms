@@ -2006,7 +2006,7 @@ public partial class TreeView : Control
 
     private void UpdateCheckBoxImages()
     {
-        if (DesignMode || !IsHandleCreated || !CheckBoxes || _stateImageList is not null)
+        if (!Application.IsDarkModeEnabled || DesignMode || !IsHandleCreated || !CheckBoxes || _stateImageList is not null)
         {
             return;
         }
@@ -2030,8 +2030,9 @@ public partial class TreeView : Control
             CheckBoxRenderer.DrawCheckBoxWithVisualStyles(g, new Point(0, 0), CheckBoxState.CheckedNormal, HWNDInternal);
         }
 
+        using Bitmap placeholderBitmap = new(size, size);
         // TreeView uses 1-based indexing: index 0=placeholder, 1=unchecked, 2=checked
-        imageList.Images.Add(new Bitmap(size, size)); // Placeholder
+        imageList.Images.Add(placeholderBitmap); // Placeholder
         imageList.Images.Add(uncheckedBitmap);
         imageList.Images.Add(checkedBitmap);
 

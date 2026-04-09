@@ -572,6 +572,12 @@ public partial class ListView : Control
                     }
                 }
             }
+
+            if (Application.IsDarkModeEnabled
+                && DarkModeRequestState is true)
+            {
+                UpdateDarkModeCheckBoxImages();
+            }
         }
     }
 
@@ -4733,8 +4739,20 @@ public partial class ListView : Control
             TransparentColor = Color.Transparent
         };
 
-        imageList.Images.Add(CreateDarkModeCheckBoxBitmap(isChecked: false, size));
-        imageList.Images.Add(CreateDarkModeCheckBoxBitmap(isChecked: true, size));
+        using Bitmap uncheckedBitmap = new(size, size);
+        using (Graphics g = Graphics.FromImage(uncheckedBitmap))
+        {
+            CheckBoxRenderer.DrawCheckBoxWithVisualStyles(g, new Point(0, 0), CheckBoxState.UncheckedNormal, HWNDInternal);
+        }
+
+        using Bitmap checkedBitmap = new(size, size);
+        using (Graphics g = Graphics.FromImage(checkedBitmap))
+        {
+            CheckBoxRenderer.DrawCheckBoxWithVisualStyles(g, new Point(0, 0), CheckBoxState.CheckedNormal, HWNDInternal);
+        }
+
+        imageList.Images.Add(uncheckedBitmap);
+        imageList.Images.Add(checkedBitmap);
 
         // Ensure the checkbox extended style is active before assigning our custom state imagelist,
         // otherwise the style refresh may overwrite the list with the default light-themed images.
@@ -4771,18 +4789,6 @@ public partial class ListView : Control
                 (WPARAM)0,
                 (LPARAM)(Items.Count - 1));
         }
-    }
-
-    private Bitmap CreateDarkModeCheckBoxBitmap(bool isChecked, int size)
-    {
-        Bitmap bitmap = new(size, size);
-
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        graphics.Clear(Color.Transparent);
-        CheckBoxState state = isChecked ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
-        CheckBoxRenderer.DrawCheckBoxWithVisualStyles(graphics, new Point(0, 0), state, HWNDInternal);
-
-        return bitmap;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
