@@ -378,11 +378,29 @@ public partial class DataObjectTests
         // true is the default value for general purpose APIs (GetData).
         private readonly bool _autoConvert;
 
-        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert) : base()
+        private readonly Type _expectedType;
+        private readonly bool _resultToReturn;
+        private readonly object? _dataToReturn;
+
+        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert)
+            : this(format, resolver, autoConvert, typeof(string), resultToReturn: false, dataToReturn: null)
+        {
+        }
+
+        public DataObjectOverridesTryGetDataCore(
+            string format,
+            Func<TypeName, Type>? resolver,
+            bool autoConvert,
+            Type expectedType,
+            bool resultToReturn,
+            object? dataToReturn) : base()
         {
             _format = format;
             _resolver = resolver;
             _autoConvert = autoConvert;
+            _expectedType = expectedType;
+            _resultToReturn = resultToReturn;
+            _dataToReturn = dataToReturn;
         }
 
         public int Count { get; private set; }
@@ -397,9 +415,16 @@ public partial class DataObjectTests
             format.Should().Be(_format);
             resolver.Should().BeEquivalentTo(_resolver);
             autoConvert.Should().Be(_autoConvert);
-            typeof(T).Should().Be<string>();
+            typeof(T).Should().Be(_expectedType);
 
             Count++;
+
+            if (typeof(T) == _expectedType)
+            {
+                data = (T)_dataToReturn!;
+                return _resultToReturn;
+            }
+
             // This is a mock implementation that never returns anything.
             data = default;
             return false;
@@ -911,47 +936,22 @@ public partial class DataObjectTests
     [MemberData(nameof(GetImage_TheoryData))]
     public void GetImage_Invoke_CallsTryGetData(object result, Image expected)
     {
-        var dataObject = new DataObjectOverridesTryGetDataForImage
-        {
-            ImageToReturn = expected,
-            ResultToReturn = expected is not null,
-        };
+        bool autoConvert = true;
+        bool resultToReturn = result is Image;
+        Image dataToReturn = result as Image;
+        DataObjectOverridesTryGetDataCore dataObject = new(
+            DataFormats.Bitmap,
+            resolver: null,
+            autoConvert,
+            expectedType: typeof(Image),
+            resultToReturn,
+            dataToReturn);
+        dataObject.Count.Should().Be(0);
 
-        var image = dataObject.GetImage();
+        Image image = dataObject.GetImage();
 
         image.Should().BeSameAs(expected);
-        dataObject.CallCount.Should().Be(1);
-        dataObject.LastFormat.Should().Be(DataFormats.Bitmap);
-        dataObject.LastAutoConvert.Should().BeTrue();
-    }
-
-    private sealed class DataObjectOverridesTryGetDataForImage : DataObject
-    {
-        public int CallCount { get; private set; }
-        public string? LastFormat { get; private set; }
-        public bool LastAutoConvert { get; private set; }
-        public Image? ImageToReturn { get; set; }
-        public bool ResultToReturn { get; set; }
-
-        protected override bool TryGetDataCore<T>(
-            string format,
-            Func<TypeName, Type?>? resolver,
-            bool autoConvert,
-            out T data)
-        {
-            CallCount++;
-            LastFormat = format;
-            LastAutoConvert = autoConvert;
-
-            if (typeof(T) == typeof(Image))
-            {
-                data = (T)(object?)ImageToReturn!;
-                return ResultToReturn;
-            }
-
-            data = default!;
-            return false;
-        }
+        dataObject.Count.Should().Be(1);
     }
 
     [WinFormsFact]
