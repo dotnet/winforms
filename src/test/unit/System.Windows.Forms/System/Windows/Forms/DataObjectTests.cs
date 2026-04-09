@@ -957,16 +957,23 @@ public partial class DataObjectTests
     [WinFormsFact]
     public void GetDataObject_GetImage_RoundTripsBitmap()
     {
-        using Bitmap bitmap = new(10, 10);
-        bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
-        Clipboard.SetImage(bitmap);
+        try
+        {
+            using Bitmap bitmap = new(10, 10);
+            bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+            Clipboard.SetImage(bitmap);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+            DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
 
-        var result = dataObject.GetImage().Should().BeOfType<Bitmap>().Subject;
-        result.Size.Should().Be(bitmap.Size);
-        result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
-        Clipboard.ContainsImage().Should().BeTrue();
+            var result = dataObject.GetImage().Should().BeOfType<Bitmap>().Subject;
+            result.Size.Should().Be(bitmap.Size);
+            result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
+            Clipboard.ContainsImage().Should().BeTrue();
+        }
+        finally
+        {
+            Clipboard.Clear();
+        }
     }
 
     [Fact]
