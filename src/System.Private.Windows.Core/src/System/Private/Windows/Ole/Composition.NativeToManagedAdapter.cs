@@ -114,8 +114,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             object? value = request.Format switch
             {
-                DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
-                    ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Text or DataFormatNames.OemText => ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Rtf => ReadRegisteredFormatStringFromHGLOBAL(hglobal, Encoding.Default),
                 DataFormatNames.Html or DataFormatNames.Xaml => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
@@ -240,6 +240,25 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             {
                 PInvokeCore.GlobalUnlock(hglobal);
             }
+        }
+
+        private static unsafe string ReadRegisteredFormatStringFromHGLOBAL(HGLOBAL hglobal, Encoding encoding)
+        {
+            void* buffer = PInvokeCore.GlobalLock(hglobal);
+            if (buffer is null) throw new Win32Exception();
+            try
+            {
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
+                if (size == 0) throw new Win32Exception();
+                ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
+
+                // Trim trailing null bytes (optional for registered formats)
+                while (bytes.Length > 0 && bytes[^1] == 0)
+                    bytes = bytes[..^1];
+
+                return bytes.IsEmpty ? string.Empty : encoding.GetString(bytes);
+            }
+            finally { PInvokeCore.GlobalUnlock(hglobal); }
         }
 
         private static string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
