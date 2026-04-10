@@ -245,20 +245,33 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
         private static unsafe string ReadRegisteredFormatStringFromHGLOBAL(HGLOBAL hglobal, Encoding encoding)
         {
             void* buffer = PInvokeCore.GlobalLock(hglobal);
-            if (buffer is null) throw new Win32Exception();
+            if (buffer is null)
+            {
+                throw new Win32Exception();
+            }
+
             try
             {
                 int size = checked((int)PInvokeCore.GlobalSize(hglobal));
-                if (size == 0) throw new Win32Exception();
+                if (size == 0)
+                {
+                    throw new Win32Exception();
+                }
+
                 ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
 
                 // Trim trailing null bytes (optional for registered formats)
                 while (bytes.Length > 0 && bytes[^1] == 0)
+                {
                     bytes = bytes[..^1];
+                }
 
                 return bytes.IsEmpty ? string.Empty : encoding.GetString(bytes);
             }
-            finally { PInvokeCore.GlobalUnlock(hglobal); }
+            finally
+            {
+                PInvokeCore.GlobalUnlock(hglobal);
+            }
         }
 
         private static string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)

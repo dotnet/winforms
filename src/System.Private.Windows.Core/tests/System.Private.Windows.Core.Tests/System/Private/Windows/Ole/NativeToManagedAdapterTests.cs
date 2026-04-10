@@ -99,6 +99,19 @@ public unsafe class NativeToManagedAdapterTests
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
     }
 
+    [Fact]
+    public void GetData_RtfWithoutNullTerminator_ReturnsRtfText()
+    {
+        const string rtf = "{\\rtf1\\ansi Test}";
+        MemoryStream stream = new("{\\rtf1\\ansi Test}"u8.ToArray());
+        using HGlobalNativeDataObject dataObject = new(stream, (ushort)DataFormats.GetOrAddFormat(DataFormatNames.Rtf).Id);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+        object? data = composition.GetData(DataFormatNames.Rtf);
+
+        data.Should().Be(rtf);
+    }
+
 #if NET
     [Fact]
     public void GetData_CustomType_BinaryFormattedJson_AsSerializationRecord()
