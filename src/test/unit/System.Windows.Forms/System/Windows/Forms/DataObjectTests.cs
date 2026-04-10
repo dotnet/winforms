@@ -419,9 +419,9 @@ public partial class DataObjectTests
 
             Count++;
 
-            if (typeof(T) == _expectedType)
+            if (typeof(T) == _expectedType && _dataToReturn is not null)
             {
-                data = (T)_dataToReturn!;
+                data = (T)_dataToReturn;
                 return _resultToReturn;
             }
 
