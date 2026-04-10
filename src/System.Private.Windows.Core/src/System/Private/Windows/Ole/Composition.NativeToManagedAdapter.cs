@@ -197,10 +197,6 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             //
             // CF_TEXT, CF_OEMTEXT, CF_UNICODETEXT, and CFSTR_FILENAME are supposed to have a null terminator.
             // If we cannot find one in the buffer, assume it is corrupted and return an empty string.
-            //
-            // Can't find the explicit docs for CF_RTF, but we've always treated it as null terminated.
-            // The RichText control itself null terminates but looks like it doesn't require it.
-            // Given our prior and "normal" behavior, we'll continue to expect a null terminator.
 
             try
             {
@@ -260,10 +256,12 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
                 ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
 
-                // Trim trailing null bytes (optional for registered formats)
-                while (bytes.Length > 0 && bytes[^1] == 0)
+                // Registered format strings may be null-terminated, but the terminator is optional.
+                // If present, stop at the first null byte rather than decoding the entire allocation.
+                int nullIndex = bytes.IndexOf((byte)0);
+                if (nullIndex >= 0)
                 {
-                    bytes = bytes[..^1];
+                    bytes = bytes[..nullIndex];
                 }
 
                 return bytes.IsEmpty ? string.Empty : encoding.GetString(bytes);
