@@ -221,7 +221,8 @@ public unsafe partial class DataObject :
         return dropList;
     }
 
-    public virtual Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
+    public virtual Image? GetImage() =>
+        TryGetData<Image>(DataFormats.Bitmap, autoConvert: true, out Image? image) ? image : null;
 
     public virtual string GetText(TextDataFormat format)
     {
