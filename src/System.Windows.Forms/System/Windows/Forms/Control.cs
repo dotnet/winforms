@@ -11563,6 +11563,7 @@ public unsafe partial class Control :
     {
         DefWndProc(ref m);
 
+        // Cache the current DPI before updating DeviceDpiInternal.
         OriginalDeviceDpiInternal = DeviceDpiInternal;
         int oldDeviceDpi = DeviceDpiInternal;
 
@@ -11583,6 +11584,7 @@ public unsafe partial class Control :
 
         Font localFont = GetCurrentFontAndDpi(out int fontDpi);
         DeviceDpiInternal = newDeviceDpi;
+        // Preserve the old DPI as the "original" DPI for subsequent scaling logic.
         OriginalDeviceDpiInternal = oldDeviceDpi;
 
         if (fontDpi == DeviceDpiInternal)
