@@ -24,9 +24,9 @@ public partial class DataGridViewTest : Form
         InitializeComponent();
 
         dataGridView1.Rows.Add(new DataGridViewRow() { Visible = false });
-        dataGridView1.Rows.Add("DefaultCellStyle", dataGridView1.DefaultCellStyle.Font.ToString());
-        dataGridView1.Rows.Add("ColumnHeadersDefaultCellStyle", dataGridView1.ColumnHeadersDefaultCellStyle.Font.ToString());
-        dataGridView1.Rows.Add("RowHeadersDefaultCellStyle", dataGridView1.RowHeadersDefaultCellStyle.Font.ToString());
+        dataGridView1.Rows.Add("DefaultCellStyle", dataGridView1.DefaultCellStyle.Font);
+        dataGridView1.Rows.Add("ColumnHeadersDefaultCellStyle", dataGridView1.ColumnHeadersDefaultCellStyle.Font);
+        dataGridView1.Rows.Add("RowHeadersDefaultCellStyle", dataGridView1.RowHeadersDefaultCellStyle.Font);
         column6.Image = Image.FromFile("Images\\SmallA.bmp");
 
         int i = 1;
