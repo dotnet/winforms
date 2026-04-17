@@ -1,0 +1,102 @@
+name: Fix NuGet.config packageSource key in release/10.0 PRs
+
+on:
+  schedule:
+    # Run daily at 18:00 UTC (10:00 AM PST / 11:00 AM PDT)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  fix-nuget-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find and fix NuGet.config packageSource key mismatches
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'release/10.0',
+              // Pagination is not implemented; 100 is sufficient since release branches
+              // rarely have more than a handful of open PRs at any given time.
+              per_page: 100
+            });
+
+            console.log(`Found ${pullRequests.length} open PR(s) targeting release/10.0`);
+
+            for (const pr of pullRequests) {
+              console.log(`\nChecking PR #${pr.number}: ${pr.title}`);
+
+              // Skip PRs from forks — we cannot push to them
+              if (!pr.head.repo || pr.head.repo.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
+                console.log('  Skipping — PR branch is in a fork');
+                continue;
+              }
+
+              // Read NuGet.config from the PR branch
+              let fileData;
+              try {
+                const response = await github.rest.repos.getContent({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  path: 'NuGet.config',
+                  ref: pr.head.sha
+                });
+                fileData = response.data;
+              } catch (e) {
+                console.log(`  Could not read NuGet.config: ${e.message}`);
+                continue;
+              }
+
+              const nugetContent = Buffer.from(fileData.content, 'base64').toString('utf8');
+
+              // Extract the darc-pub-dotnet-dotnet-* key from <packageSources>
+              const sourcesMatch = nugetContent.match(/<add key="(darc-pub-dotnet-dotnet-[a-fA-F0-9]+)"/);
+              if (!sourcesMatch) {
+                console.log('  No darc-pub-dotnet-dotnet-* key found in packageSources, skipping');
+                continue;
+              }
+              const sourcesKey = sourcesMatch[1];
+
+              // Extract the darc-pub-dotnet-dotnet-* key from <packageSourceMapping>
+              const mappingMatch = nugetContent.match(/<packageSource key="(darc-pub-dotnet-dotnet-[a-fA-F0-9]+)"/);
+              if (!mappingMatch) {
+                console.log('  No darc-pub-dotnet-dotnet-* key found in packageSourceMapping, skipping');
+                continue;
+              }
+              const mappingKey = mappingMatch[1];
+
+              if (sourcesKey === mappingKey) {
+                console.log(`  Keys match (${sourcesKey}), no fix needed`);
+                continue;
+              }
+
+              console.log(`  Mismatch detected — packageSources: "${sourcesKey}", packageSourceMapping: "${mappingKey}"`);
+
+              // Update the packageSourceMapping key to match packageSources.
+              // replaceAll handles the unlikely case of the key appearing more than once.
+              const fixedContent = nugetContent.replaceAll(
+                `<packageSource key="${mappingKey}">`,
+                `<packageSource key="${sourcesKey}">`
+              );
+
+              // Commit the fix directly to the PR branch
+              await github.rest.repos.createOrUpdateFileContents({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                path: 'NuGet.config',
+                message: 'Update packageSource key in NuGet.config',
+                content: Buffer.from(fixedContent).toString('base64'),
+                sha: fileData.sha,
+                branch: pr.head.ref
+              });
+
+              console.log(`  Fixed NuGet.config on branch ${pr.head.ref}`);
+            }
