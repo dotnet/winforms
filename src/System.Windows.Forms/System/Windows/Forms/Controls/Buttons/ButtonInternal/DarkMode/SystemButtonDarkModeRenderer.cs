@@ -30,7 +30,8 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Draws button background with system styling (larger rounded corners).
     /// </summary>
-    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
+    public override Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state,
+        bool isDefault, Color backColor, int borderSize, Color borderColor)
     {
         // Shrink for DarkBorderGap and FocusBorderThickness
         Rectangle fillBounds = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
