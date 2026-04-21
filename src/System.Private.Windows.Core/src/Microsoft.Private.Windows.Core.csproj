@@ -39,9 +39,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.CsWin32" PrivateAssets="all" />
-    <PackageReference Include="System.Formats.Nrbf" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" />
     <PackageReference Include="System.ComponentModel.Annotations" />
+    <!-- Pin System.Formats.Nrbf and its transitive dependencies to the .NET 10. -->
+    <PackageReference Include="System.Formats.Nrbf" VersionOverride="$(SystemFormatsNrbfNetFxPackageVersion)" />
+    <PackageReference Include="System.Collections.Immutable" VersionOverride="$(SystemCollectionsImmutableNetFxPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="System.Reflection.Metadata" VersionOverride="$(SystemReflectionMetadataNetFxPackageVersion)" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
