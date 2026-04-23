@@ -4579,8 +4579,16 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             SnapFocus((HWND)(nint)m.WParamInternal);
 
-            // For fix https://github.com/dotnet/winforms/issues/12916
-            ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            // Only activate ModalMenuFilter when focus transfers
+            // between ToolStrips (to fix #12916).
+            // Do NOT activate on generic Tab focus (#14489).
+            HWND previousFocus = (HWND)(nint)m.WParamInternal;
+            Control? previousControl = FromHandle(previousFocus);
+            if (previousControl is ToolStrip
+                || previousControl?.Parent is ToolStrip)
+            {
+                ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            }
         }
 
         if (!AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE)
