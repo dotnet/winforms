@@ -3280,22 +3280,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         base.OnLostFocus(e);
         ClearAllSelections();
         ToolTip.RemoveAll();
-
-        if (!IsDropDown && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this)
-        {
-            HWND focusedHwnd = PInvoke.GetFocus();
-            Control? focusedControl = FromHandle(focusedHwnd);
-            bool focusMovedToToolStrip = focusedControl is ToolStrip || focusedControl?.Parent is ToolStrip;
-
-            if (!focusMovedToToolStrip)
-            {
-                ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
-                if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
-                {
-                    ToolStripManager.ModalMenuFilter.ExitMenuMode();
-                }
-            }
-        }
     }
 
     protected internal override void OnLeave(EventArgs e)
@@ -4599,10 +4583,24 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // between ToolStrips (to fix #12916).
             // Do NOT activate on generic Tab focus (#14489).
             HWND previousFocus = (HWND)(nint)m.WParamInternal;
-            Control? previousControl = FromHandle(previousFocus);
+            Control? previousControl = FromChildHandle(previousFocus);
             if (previousControl is ToolStrip || previousControl?.Parent is ToolStrip)
             {
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
+            }
+        }
+
+        if (m.MsgInternal == PInvokeCore.WM_KILLFOCUS)
+        {
+            // Clear modal menu tracking when focus leaves ToolStrip context so
+            // keyboard input is not incorrectly routed after tabbing away.
+            HWND nextFocus = (HWND)(nint)m.WParamInternal;
+            Control? nextControl = FromHandle(nextFocus);
+            if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this
+                && nextControl is not ToolStrip
+                && nextControl?.Parent is not ToolStrip)
+            {
+                ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
             }
         }
 

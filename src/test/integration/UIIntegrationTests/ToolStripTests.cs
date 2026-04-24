@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.UITests;
 
@@ -14,6 +15,61 @@ public class ToolStripTests : ControlTestBase
     {
         _sharedImageList = new ImageList();
         _sharedImageList.Images.Add("square", Image.FromFile("./Resources/image.png"));
+    }
+
+    // Regression test for https://github.com/dotnet/winforms/issues/14489
+    [WinFormsFact]
+    public async Task ToolStrip_TabFromTreeView_ThenBack_ArrowKeysStillGoToTreeView()
+    {
+        await RunFormAsync(
+            () =>
+            {
+                Form form = new()
+                {
+                    TopMost = true
+                };
+
+                TreeView treeView = new()
+                {
+                    Dock = DockStyle.Fill,
+                    TabIndex = 0,
+                    HideSelection = false
+                };
+                treeView.Nodes.Add("Node 1");
+                treeView.Nodes.Add("Node 2");
+                treeView.SelectedNode = treeView.Nodes[0];
+
+                ToolStrip toolStrip = new()
+                {
+                    Dock = DockStyle.Top,
+                    TabStop = true,
+                    TabIndex = 1
+                };
+                toolStrip.Items.Add(new ToolStripButton("Button"));
+
+                form.Controls.Add(treeView);
+                form.Controls.Add(toolStrip);
+
+                return (form, (treeView, toolStrip));
+            },
+            async (form, controls) =>
+            {
+                var (treeView, toolStrip) = controls;
+
+                treeView.Focus();
+                Assert.True(treeView.Focused);
+                Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
+
+                await InputSimulator.SendAsync(form, VIRTUAL_KEY.VK_TAB);
+                Assert.True(toolStrip.Focused);
+
+                await InputSimulator.SendAsync(form, input =>
+                    input.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_SHIFT, VIRTUAL_KEY.VK_TAB));
+                Assert.True(treeView.Focused);
+
+                await InputSimulator.SendAsync(form, VIRTUAL_KEY.VK_DOWN);
+                Assert.Equal(treeView.Nodes[1], treeView.SelectedNode);
+            });
     }
 
     // Regression test for https://github.com/dotnet/winforms/issues/6881
