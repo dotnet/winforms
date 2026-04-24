@@ -3280,6 +3280,22 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         base.OnLostFocus(e);
         ClearAllSelections();
         ToolTip.RemoveAll();
+
+        if (!IsDropDown && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this)
+        {
+            HWND focusedHwnd = PInvoke.GetFocus();
+            Control? focusedControl = FromHandle(focusedHwnd);
+            bool focusMovedToToolStrip = focusedControl is ToolStrip || focusedControl?.Parent is ToolStrip;
+
+            if (!focusMovedToToolStrip)
+            {
+                ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
+                if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
+                {
+                    ToolStripManager.ModalMenuFilter.ExitMenuMode();
+                }
+            }
+        }
     }
 
     protected internal override void OnLeave(EventArgs e)
@@ -4584,8 +4600,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // Do NOT activate on generic Tab focus (#14489).
             HWND previousFocus = (HWND)(nint)m.WParamInternal;
             Control? previousControl = FromHandle(previousFocus);
-            if (previousControl is ToolStrip
-                || previousControl?.Parent is ToolStrip)
+            if (previousControl is ToolStrip || previousControl?.Parent is ToolStrip)
             {
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
             }
