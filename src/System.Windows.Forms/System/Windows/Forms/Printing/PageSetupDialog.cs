@@ -287,7 +287,7 @@ public sealed class PageSetupDialog : CommonDialog
             fixed (char* pBuffer = buffer)
             {
                 result = PInvoke.GetLocaleInfoEx(
-                    PInvoke.LOCALE_NAME_SYSTEM_DEFAULT,
+                    string.Empty, // empty string == LOCALE_NAME_USER_DEFAULT, matches what the native PageSetupDlg dialog uses
                     PInvoke.LOCALE_IMEASURE,
                     pBuffer,
                     buffer.Length);
@@ -297,6 +297,19 @@ public sealed class PageSetupDialog : CommonDialog
             {
                 toUnit = PrinterUnit.HundredthsOfAMillimeter;
             }
+        }
+
+        // Explicitly pass the unit flag to the native dialog so it operates in the same unit system
+        // that WinForms used when converting margins above. This ensures that the values written into
+        // rtMargin/rtMinMargin and the values read back in UpdateSettings are always in the same unit,
+        // regardless of how system-level and user-level locale settings may differ.
+        if (toUnit == PrinterUnit.HundredthsOfAMillimeter)
+        {
+            dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS;
+        }
+        else
+        {
+            dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INTHOUSANDTHSOFINCHES;
         }
 
         if (MinMargins is not null)
