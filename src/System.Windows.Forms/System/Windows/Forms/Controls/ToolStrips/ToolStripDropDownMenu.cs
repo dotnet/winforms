@@ -835,8 +835,9 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         Rectangle displayRectangle = DisplayRectangle;
 
-        // Track the first item that intersects the viewport.
+        // Track the first and last items that intersect the viewport.
         _indexOfFirstDisplayedItem = -1;
+        int indexOfLastDisplayedItem = -1;
 
         // Track the first and last available (non-scroll-button, non-hidden) items.
         int firstAvailableItemIndex = -1;
@@ -865,10 +866,14 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
             // An item is "displayed" when it intersects the viewport (even partially),
             // so the first such item is a reliable scroll anchor regardless of height.
-            if (_indexOfFirstDisplayedItem == -1
-                && IsItemIntersectingDisplayRectangle(displayRectangle, item.Bounds))
+            if (IsItemIntersectingDisplayRectangle(displayRectangle, item.Bounds))
             {
-                _indexOfFirstDisplayedItem = i;
+                if (_indexOfFirstDisplayedItem == -1)
+                {
+                    _indexOfFirstDisplayedItem = i;
+                }
+
+                indexOfLastDisplayedItem = i;
             }
         }
 
@@ -881,10 +886,10 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         }
 
         // Up is enabled only when the first visible item is not already the first available item.
-        // Down is enabled only when the first visible item is not already the last available item.
+        // Down is enabled only when there is at least one available item below the last displayed item.
         // This ensures both buttons are disabled once there is no further content to scroll to.
         UpScrollButton.Enabled = _indexOfFirstDisplayedItem > firstAvailableItemIndex;
-        DownScrollButton.Enabled = _indexOfFirstDisplayedItem < lastAvailableItemIndex;
+        DownScrollButton.Enabled = indexOfLastDisplayedItem < lastAvailableItemIndex;
     }
 
     /// <summary>
