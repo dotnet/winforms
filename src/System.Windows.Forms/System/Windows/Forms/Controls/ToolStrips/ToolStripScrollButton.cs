@@ -32,6 +32,11 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
             stickyLabel.OwnerScrollButton = this;
         }
 
+        // Scroll buttons are navigation affordances, not actionable menu items.
+        // Suppress item-click routing so ToolStripDropDown.AutoClose doesn't dismiss
+        // the dropdown when the user scrolls to (or at) the boundary.
+        SupportsItemClick = false;
+
         _up = up;
     }
 
