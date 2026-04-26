@@ -421,4 +421,41 @@ public partial class ControlTests
             Assert.NotNull(control.TestAccessor.Dynamic.ReflectParent);
         }
     }
+
+    [WinFormsFact]
+    public void Control_WndProc_WmDpiChangedBeforeParent_DpiChanged_RescaleConstantsForDpiReceivesDistinctValues()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        using DpiRescaleTrackingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        int newDpi = control.DeviceDpi == 96 ? 120 : 96;
+        Message message = Message.Create((HWND)control.Handle, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, (WPARAM)newDpi, (LPARAM)0);
+
+        control.WndProc(ref message);
+
+        Assert.Equal(1, control.RescaleConstantsForDpiCallCount);
+        Assert.Equal(newDpi, control.DeviceDpiNew);
+        Assert.NotEqual(control.DeviceDpiOld, control.DeviceDpiNew);
+    }
+
+    private sealed class DpiRescaleTrackingControl : Control
+    {
+        public int DeviceDpiOld { get; private set; }
+
+        public int DeviceDpiNew { get; private set; }
+
+        public int RescaleConstantsForDpiCallCount { get; private set; }
+
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            DeviceDpiOld = deviceDpiOld;
+            DeviceDpiNew = deviceDpiNew;
+            RescaleConstantsForDpiCallCount++;
+
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+        }
+
+        public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
 }
