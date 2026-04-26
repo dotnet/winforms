@@ -139,6 +139,10 @@ public partial class TreeView : Control
     private Color _lineColor;
     private string? _controlToolTipText;
 
+    // Scaled ImageList for high DPI support
+    private ImageList? _scaledImageList;
+    private int _scaledImageListDpi;
+
     // Sorting
     private IComparer? _treeViewNodeSorter;
 
@@ -619,6 +623,9 @@ public partial class TreeView : Control
                 DetachImageListHandlers();
 
                 _imageList = value;
+
+                // Clear the scaled ImageList when the ImageList changes.
+                ClearScaledImageList();
 
                 AttachImageListHandlers();
 
@@ -1553,6 +1560,8 @@ public partial class TreeView : Control
                 _imageList = null;
                 DetachStateImageListHandlers();
                 _stateImageList = null;
+
+                ClearScaledImageList();
             }
         }
 
@@ -1688,6 +1697,9 @@ public partial class TreeView : Control
     {
         if (IsHandleCreated)
         {
+            // Clear the scaled ImageList so it gets recreated with the new images.
+            ClearScaledImageList();
+
             IntPtr handle = (ImageList is null) ? IntPtr.Zero : ImageList.Handle;
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, handle);
         }
@@ -1900,7 +1912,19 @@ public partial class TreeView : Control
 
         if (_imageList is not null)
         {
-            PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, _imageList.Handle);
+            // Check if we need to create a scaled ImageList for high DPI.
+            int currentDpi = DeviceDpi;
+            Size originalSize = _imageList.ImageSize;
+            Size scaledSize = ScaleHelper.ScaleToDpi(originalSize, currentDpi);
+
+            if (originalSize != scaledSize && _imageList.Images.Count > 0)
+            {
+                UpdateScaledImageList(currentDpi);
+            }
+            else
+            {
+                PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, _imageList.Handle);
+            }
         }
 
         if (_stateImageList is not null)
@@ -2031,6 +2055,98 @@ public partial class TreeView : Control
         _internalStateImageList = null;
 
         base.OnHandleDestroyed(e);
+    }
+
+    /// <summary>
+    ///  Rescales constants when the DPI changes.
+    /// </summary>
+    protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+    {
+        base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        UpdateScaledImageList(deviceDpiNew);
+    }
+
+    /// <summary>
+    ///  Creates or updates a scaled copy of the ImageList for the specified DPI.
+    /// </summary>
+    private void UpdateScaledImageList(int dpi)
+    {
+        if (_imageList is null || _imageList.Images.Count == 0)
+        {
+            ClearScaledImageList();
+            PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, IntPtr.Zero);
+
+            return;
+        }
+
+        Size originalSize = _imageList.ImageSize;
+        Size scaledSize = ScaleHelper.ScaleToDpi(originalSize, dpi);
+
+        // If the sizes are the same, no scaling is needed - use the original list.
+        if (originalSize == scaledSize)
+        {
+            ClearScaledImageList();
+            PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, _imageList.Handle);
+
+            return;
+        }
+
+        // We always recreate the scaled ImageList when rebuilding to avoid leaks
+        // and to keep it in sync with the source ImageList.
+        ClearScaledImageList();
+
+        _scaledImageList = new ImageList
+        {
+            ColorDepth = _imageList.ColorDepth,
+            ImageSize = scaledSize,
+            TransparentColor = _imageList.TransparentColor
+        };
+
+        // Copy and scale each image while preserving keys and indices.
+        for (int i = 0; i < _imageList.Images.Count; i++)
+        {
+            Image sourceImage = _imageList.Images[i];
+            string? key = _imageList.Images.Keys[i];
+
+            Image imageToAdd;
+
+            if (sourceImage is Bitmap bitmap)
+            {
+                imageToAdd = ScaleHelper.CopyAndScaleToSize(bitmap, scaledSize);
+            }
+            else
+            {
+                // Keep non-Bitmap images unscaled so indices stay aligned.
+                imageToAdd = (Image)sourceImage.Clone();
+            }
+
+            if (!string.IsNullOrEmpty(key))
+            {
+                _scaledImageList.Images.Add(key, imageToAdd);
+            }
+            else
+            {
+                _scaledImageList.Images.Add(imageToAdd);
+            }
+        }
+
+        _scaledImageListDpi = dpi;
+
+        // Send the scaled ImageList to the native control.
+        PInvokeCore.SendMessage(this, PInvoke.TVM_SETIMAGELIST, 0, _scaledImageList.Handle);
+    }
+
+    private void ClearScaledImageList()
+    {
+        _scaledImageList?.Dispose();
+        _scaledImageList = null;
+        _scaledImageListDpi = 0;
     }
 
     /// <summary>
