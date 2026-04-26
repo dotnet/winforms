@@ -793,12 +793,16 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
                     childItem.DeviceDpi = newDpi;
 
-                    if (typeof(ToolStripDropDownItem).IsAssignableFrom(childItem.GetType()))
+                    // For ToolStripControlHost, synchronize the hosted control's DeviceDpi.
+                    // This ensures WM_DPICHANGED_BEFOREPARENT will use the correct old DPI
+                    // when calculating font scaling.
+                    if (childItem is ToolStripControlHost controlHost && controlHost.Control is not null)
                     {
-                        if (((ToolStripDropDownItem)childItem)._dropDown is not null)
-                        {
-                            itemsStack.Push((ToolStripDropDownItem)childItem);
-                        }
+                        controlHost.Control.DeviceDpiInternal = newDpi;
+                    }
+                    else if (childItem is ToolStripDropDownItem dropDownItem && dropDownItem._dropDown is not null)
+                    {
+                        itemsStack.Push(dropDownItem);
                     }
                 }
             }
