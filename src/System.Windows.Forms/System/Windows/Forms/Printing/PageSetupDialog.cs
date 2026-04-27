@@ -293,23 +293,27 @@ public sealed class PageSetupDialog : CommonDialog
                     buffer.Length);
             }
 
-            if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)
+            if (result > 0)
             {
-                toUnit = PrinterUnit.HundredthsOfAMillimeter;
+                ReadOnlySpan<char> actualValue = buffer[..(result - 1)];
+                if (int.TryParse(actualValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value) && value == 0)
+                {
+                    toUnit = PrinterUnit.HundredthsOfAMillimeter;
+                }
             }
-        }
 
-        // Explicitly pass the unit flag to the native dialog so it operates in the same unit system
-        // that WinForms used when converting margins above. This ensures that the values written into
-        // rtMargin/rtMinMargin and the values read back in UpdateSettings are always in the same unit,
-        // regardless of how system-level and user-level locale settings may differ.
-        if (toUnit == PrinterUnit.HundredthsOfAMillimeter)
-        {
-            dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS;
-        }
-        else
-        {
-            dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INTHOUSANDTHSOFINCHES;
+            // Explicitly pass the unit flag to the native dialog so it operates in the unit selected
+            // by toUnit. This keeps the values written into rtMargin/rtMinMargin below and the values read
+            // back in UpdateSettings in the same unit, regardless of how system-level and user-level locale
+            // settings may differ.
+            if (toUnit == PrinterUnit.HundredthsOfAMillimeter)
+            {
+                dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS;
+            }
+            else
+            {
+                dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INTHOUSANDTHSOFINCHES;
+            }
         }
 
         if (MinMargins is not null)
