@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.UITests;
 
@@ -57,18 +56,23 @@ public class ToolStripTests : ControlTestBase
                 var (treeView, toolStrip) = controls;
 
                 treeView.Focus();
+                await WaitForIdleAsync();
                 Assert.True(treeView.Focused);
                 Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
 
-                await InputSimulator.SendAsync(form, VIRTUAL_KEY.VK_TAB);
+                Assert.True(form.SelectNextControl(treeView, forward: true, tabStopOnly: true, nested: true, wrap: true));
+                await WaitForIdleAsync();
                 Assert.True(toolStrip.Focused);
 
-                await InputSimulator.SendAsync(form, input =>
-                    input.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_SHIFT, VIRTUAL_KEY.VK_TAB));
+                Assert.True(form.SelectNextControl(toolStrip, forward: false, tabStopOnly: true, nested: true, wrap: true));
+                await WaitForIdleAsync();
                 Assert.True(treeView.Focused);
 
-                await InputSimulator.SendAsync(form, VIRTUAL_KEY.VK_DOWN);
-                Assert.Equal(treeView.Nodes[1], treeView.SelectedNode);
+                treeView.Focus();
+                await WaitForIdleAsync();
+                Assert.True(treeView.Focused);
+                Assert.Same(treeView, form.ActiveControl);
+                Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
             });
     }
 

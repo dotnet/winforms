@@ -4595,12 +4595,16 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // Clear modal menu tracking when focus leaves ToolStrip context so
             // keyboard input is not incorrectly routed after tabbing away.
             HWND nextFocus = (HWND)(nint)m.WParamInternal;
-            Control? nextControl = FromHandle(nextFocus);
+            Control? nextControl = FromChildHandle(nextFocus);
             if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this
                 && nextControl is not ToolStrip
                 && nextControl?.Parent is not ToolStrip)
             {
                 ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
+                if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
+                {
+                    ToolStripManager.ModalMenuFilter.ExitMenuMode();
+                }
             }
         }
 
