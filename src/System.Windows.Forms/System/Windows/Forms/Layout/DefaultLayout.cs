@@ -365,6 +365,11 @@ internal partial class DefaultLayout : LayoutEngine
                 continue;
             }
 
+            if (UseAnchorLayoutV2(element) && GetAnchorInfo(element) is null)
+            {
+                UpdateAnchorInfoV2((Control)element, ignoreParentSuspendState: true);
+            }
+
             Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
             SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
         }
@@ -823,7 +828,9 @@ internal partial class DefaultLayout : LayoutEngine
     ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
     ///  Developers may opt-out of this new behavior using switch <see cref="AppContextSwitches.AnchorLayoutV2"/>.
     /// </devdoc>
-    internal static void UpdateAnchorInfoV2(Control control)
+    internal static void UpdateAnchorInfoV2(Control control) => UpdateAnchorInfoV2(control, ignoreParentSuspendState: false);
+
+    private static void UpdateAnchorInfoV2(Control control, bool ignoreParentSuspendState)
     {
         if (!CommonProperties.GetNeedsAnchorLayout(control))
         {
@@ -848,8 +855,9 @@ internal partial class DefaultLayout : LayoutEngine
             // outside of serialized source and happen only in design-time scenario. Hence, checking for
             // LayoutSuspendCount > 1.
             bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
-            if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
-                || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
+            if (!ignoreParentSuspendState
+                && ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
+                    || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0)))
             {
                 // Mark parent to indicate that one of its child control requires AnchorsInfo to be calculated.
                 parent._childControlsNeedAnchorLayout = true;
