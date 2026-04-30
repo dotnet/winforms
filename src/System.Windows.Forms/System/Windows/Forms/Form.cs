@@ -5731,6 +5731,13 @@ public partial class Form : ContainerControl
             // to CreateControl().
             _dialogResult = DialogResult.None;
 
+            // Set dialog owner before CreateControl() so that
+            // FillInCreateParamsStartPosition can access it when positioning maximized forms
+            if (owner is not null && !ownerHwnd.IsNull)
+            {
+                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
+            }
+
             // If "this" is an MDI parent then the window gets activated,
             // causing GetActiveWindow to return "this.handle"... to prevent setting
             // the owner of this to this, we must create the control AFTER calling
@@ -5745,13 +5752,17 @@ public partial class Form : ContainerControl
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                 }
 
-                // In a multi Dpi environment and applications in PMV2 mode, Dpi changed events triggered
-                // only when there is a Dpi change happened for the Handle directly or via its parent.
-                // So, it is necessary to not set the owner before creating the handle. Otherwise,
-                // the window may never receive Dpi changed event even if its parent has different Dpi.
-                // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
-
-                Properties.AddOrRemoveValue(s_propDialogOwner, owner);
+                // IMPORTANT: Do not change the order in which the Win32 owner (HWND owner) is assigned.
+                // In a multi-DPI environment and applications in PMv2 mode, DPI changed events are only
+                // raised when there is a DPI change for this Handle directly or via its HWND parent.
+                // If the HWND owner were set before the Handle is created, and that owner lives in a
+                // different DPI context, this window might never receive DPI changed events until the
+                // user manually moves it between monitors.
+                //
+                // The value store in the property bag (s_propDialogOwner) is only the *logical* owner
+                // used for dialog positioning. It does not change the Win32 owner relationship and is
+                // therefore safe to assign before CreateControl(). The actual HWND owner continues to be
+                // established below via Owner = form / SetWindowLong after the Handle has been created.
                 if (owner is Form form && owner != oldOwner)
                 {
                     Owner = form;
