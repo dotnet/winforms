@@ -287,15 +287,32 @@ public sealed class PageSetupDialog : CommonDialog
             fixed (char* pBuffer = buffer)
             {
                 result = PInvoke.GetLocaleInfoEx(
-                    PInvoke.LOCALE_NAME_SYSTEM_DEFAULT,
+                    string.Empty, // empty string == LOCALE_NAME_USER_DEFAULT, matches what the native PageSetupDlg dialog uses
                     PInvoke.LOCALE_IMEASURE,
                     pBuffer,
                     buffer.Length);
             }
 
-            if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)
+            if (result > 0)
             {
-                toUnit = PrinterUnit.HundredthsOfAMillimeter;
+                ReadOnlySpan<char> actualValue = buffer[..(result - 1)];
+                if (int.TryParse(actualValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value) && value == 0)
+                {
+                    toUnit = PrinterUnit.HundredthsOfAMillimeter;
+                }
+            }
+
+            // Explicitly pass the unit flag to the native dialog so it operates in the unit selected
+            // by toUnit. This keeps the values written into rtMargin/rtMinMargin below and the values read
+            // back in UpdateSettings in the same unit, regardless of how system-level and user-level locale
+            // settings may differ.
+            if (toUnit == PrinterUnit.HundredthsOfAMillimeter)
+            {
+                dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS;
+            }
+            else
+            {
+                dialogSettings.Flags |= PAGESETUPDLG_FLAGS.PSD_INTHOUSANDTHSOFINCHES;
             }
         }
 
