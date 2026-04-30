@@ -778,6 +778,9 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             }
             else
             {
+                Debug.Assert(_indexOfFirstDisplayedItem < Items.Count - 1,
+                    "Down scroll button was enabled but _indexOfFirstDisplayedItem is at or past the last item.");
+
                 if (_indexOfFirstDisplayedItem >= Items.Count - 1)
                 {
                     return;
