@@ -7227,6 +7227,38 @@ public partial class ToolStripTests : IDisposable
     }
 
     [WinFormsFact]
+    public void ToolStrip_WndProc_InvokeSetFocusFromToolStrip_ActivatesModalMenuFilter()
+    {
+        ToolStripManager.ModalMenuFilter.ExitMenuMode();
+
+        using Form form = new();
+        using SubToolStrip previousToolStrip = new() { TabStop = true };
+        using SubToolStrip currentToolStrip = new() { TabStop = true };
+
+        form.Controls.Add(previousToolStrip);
+        form.Controls.Add(currentToolStrip);
+
+        _ = form.Handle;
+        _ = previousToolStrip.Handle;
+        _ = currentToolStrip.Handle;
+
+        try
+        {
+            Message m = Message.Create(currentToolStrip.Handle, (int)PInvokeCore.WM_SETFOCUS, previousToolStrip.Handle, IntPtr.Zero);
+            currentToolStrip.WndProc(ref m);
+
+            Assert.Same(currentToolStrip, ToolStripManager.ModalMenuFilter.GetActiveToolStrip());
+            Assert.True(ToolStripManager.ModalMenuFilter.InMenuMode);
+        }
+        finally
+        {
+            ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(currentToolStrip);
+            ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(previousToolStrip);
+            ToolStripManager.ModalMenuFilter.ExitMenuMode();
+        }
+    }
+
+    [WinFormsFact]
     public void ToolStrip_KeyboardAccelerators_ReturnsExpected()
     {
         using SubToolStripDropDown toolStrip = new();
