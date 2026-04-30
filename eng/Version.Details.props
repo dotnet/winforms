@@ -6,31 +6,31 @@ This file should be imported by eng/Versions.props
 <Project>
   <PropertyGroup>
     <!-- dotnet-dotnet dependencies -->
-    <MicrosoftDotNetArcadeSdkPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetArcadeSdkPackageVersion>
-    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
-    <MicrosoftDotNetCMakeSdkPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetCMakeSdkPackageVersion>
-    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetHelixSdkPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetHelixSdkPackageVersion>
-    <MicrosoftDotNetRemoteExecutorPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetRemoteExecutorPackageVersion>
-    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.26217.115</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
-    <MicrosoftNETSdkILPackageVersion>10.0.8</MicrosoftNETSdkILPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>10.0.8</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>10.0.8</MicrosoftNETCoreILAsmPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>10.0.8</MicrosoftNETCoreILDAsmPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.8-servicing.26217.115</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>10.0.8</MicrosoftWin32SystemEventsPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.8</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.8</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
-    <SystemCodeDomPackageVersion>10.0.8</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>10.0.8</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemFormatsNrbfPackageVersion>10.0.8</SystemFormatsNrbfPackageVersion>
-    <SystemIOHashingPackageVersion>10.0.8</SystemIOHashingPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>10.0.8</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>10.0.8</SystemResourcesExtensionsPackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>10.0.8</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>10.0.8</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.8</SystemTextJsonPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>10.0.8</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftDotNetArcadeSdkPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetArcadeSdkPackageVersion>
+    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
+    <MicrosoftDotNetCMakeSdkPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetCMakeSdkPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetHelixSdkPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetHelixSdkPackageVersion>
+    <MicrosoftDotNetRemoteExecutorPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetRemoteExecutorPackageVersion>
+    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.26229.109</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
+    <MicrosoftNETSdkILPackageVersion>10.0.9</MicrosoftNETSdkILPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>10.0.9</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>10.0.9</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>10.0.9</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>10.0.9-servicing.26229.109</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>10.0.9</MicrosoftWin32SystemEventsPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.9</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.9</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemCodeDomPackageVersion>10.0.9</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>10.0.9</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemFormatsNrbfPackageVersion>10.0.9</SystemFormatsNrbfPackageVersion>
+    <SystemIOHashingPackageVersion>10.0.9</SystemIOHashingPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>10.0.9</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>10.0.9</SystemResourcesExtensionsPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>10.0.9</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>10.0.9</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>10.0.9</SystemTextJsonPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>10.0.9</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!--Property group for alternate package version names-->
   <PropertyGroup>
