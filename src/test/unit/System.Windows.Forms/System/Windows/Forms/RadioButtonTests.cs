@@ -1665,5 +1665,30 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [InlineData(Appearance.Normal, FlatStyle.System)]
     public void RadioButton_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
 
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+    [WinFormsFact]
+    public void RadioButton_OwnerDraw_AppearanceButton_FlatStyleStandard_InDarkMode_IsTrue()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/14347:
+        // RadioButton with Appearance.Button + FlatStyle.Standard must always use owner-draw,
+        // including in dark mode. If OwnerDraw returns false the control falls back to
+        // native ComCtl32 painting which renders an invisible button on dark backgrounds.
+        Application.SetColorMode(SystemColorMode.Dark);
+        try
+        {
+            using SubRadioButton control = new()
+            {
+                Appearance = Appearance.Button,
+                FlatStyle = FlatStyle.Standard
+            };
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+        }
+        finally
+        {
+            Application.SetColorMode(SystemColorMode.Classic);
+        }
+    }
+#pragma warning restore SYSLIB5002
+
     protected override ButtonBase CreateButton() => new SubRadioButton();
 }

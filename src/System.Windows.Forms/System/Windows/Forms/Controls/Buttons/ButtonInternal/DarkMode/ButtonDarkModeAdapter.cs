@@ -158,22 +158,28 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             LayoutData layout = CommonLayout().Layout();
+
+            // A checked toggle-button must remain visually pressed even on hover.
+            PushButtonState pushButtonState = state == CheckState.Checked
+                ? PushButtonState.Pressed
+                : PushButtonState.Hot;
+
             ButtonDarkModeRenderer.RenderButton(
                 g,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                PushButtonState.Hot,
+                pushButtonState,
                 Control.IsDefault,
                 Control.Focused,
                 Control.ShowFocusCues,
                 Control.Parent?.BackColor ?? Control.BackColor,
-                GetButtonBackColor(PushButtonState.Hot),
+                GetButtonBackColor(pushButtonState),
                 _ => PaintImage(e, layout),
                 () => PaintField(
                     e,
                     layout,
                     PaintDarkModeRender(e).Calculate(),
-                    GetButtonTextColor(e, PushButtonState.Hot),
+                    GetButtonTextColor(e, pushButtonState),
                     drawFocus: false)
             );
 
