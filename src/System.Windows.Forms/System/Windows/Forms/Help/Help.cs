@@ -81,7 +81,7 @@ public static class Help
             cbStruct = sizeof(HH_POPUP),
             pt = location,
             rcMargins = new RECT(-1, -1, -1, -1),               // Ignore
-            clrForeground = new COLORREF(unchecked((uint)-1)),  // Ignore
+            clrForeground = SystemColors.WindowText,
             clrBackground = SystemColors.Window
         };
 
