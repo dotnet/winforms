@@ -49,6 +49,7 @@ public partial class PrintPreviewControl : Control
     private double _zoom = DefaultZoom;
     private bool _pageInfoCalcPending;
     private bool _exceptionPrinting;
+    private bool _isForeColorSet;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
@@ -57,6 +58,7 @@ public partial class PrintPreviewControl : Control
     {
         ResetBackColor();
         ResetForeColor();
+        ForeColorChanged += (_, _) => _isForeColorSet = true;
         Size = new Size(100, 100);
         SetStyle(ControlStyles.ResizeRedraw, false);
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -295,9 +297,13 @@ public partial class PrintPreviewControl : Control
     internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void ResetForeColor() => ForeColor = Color.White;
+    public override void ResetForeColor()
+    {
+        ForeColor = SystemColors.ControlText;
+        _isForeColorSet = false;
+    }
 
-    internal override bool ShouldSerializeForeColor() => !ForeColor.Equals(Color.White);
+    internal override bool ShouldSerializeForeColor() => _isForeColorSet;
 
     internal override bool SupportsUiaProviders => true;
 
@@ -592,7 +598,7 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
-        Color brushColor = ShouldSerializeForeColor() ? ForeColor : SystemColors.ControlText;
+        Color brushColor = _isForeColorSet ? ForeColor : SystemColors.ControlText;
         if (SystemInformation.HighContrast && Parent is Control parent)
         {
             brushColor = parent.BackColor;
