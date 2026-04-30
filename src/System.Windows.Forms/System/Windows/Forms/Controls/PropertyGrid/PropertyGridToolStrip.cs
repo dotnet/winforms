@@ -32,4 +32,26 @@ internal partial class PropertyGridToolStrip : ToolStrip
     /// <returns>The accessibility object for this control.</returns>
     protected override AccessibleObject CreateAccessibilityInstance()
         => new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
+
+    /// <summary>
+    ///  Overrides WndProc to avoid keeping this inner ToolStrip as the active ToolStrip
+    ///  in ModalMenuFilter when it receives focus.
+    /// </summary>
+    /// <param name="m">The window message to process.</param>
+    protected override void WndProc(ref Message m)
+    {
+        base.WndProc(ref m);
+
+        if (m.MsgInternal == PInvokeCore.WM_SETFOCUS)
+        {
+            bool exitMenuMode = ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this;
+
+            ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
+
+            if (exitMenuMode && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
+            {
+                ToolStripManager.ModalMenuFilter.ExitMenuMode();
+            }
+        }
+    }
 }
