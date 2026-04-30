@@ -114,8 +114,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             object? value = request.Format switch
             {
-                DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
-                    ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Text or DataFormatNames.OemText => ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Rtf => ReadRegisteredFormatStringFromHGLOBAL(hglobal, Encoding.Default),
                 DataFormatNames.Html or DataFormatNames.Xaml => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
@@ -197,10 +197,6 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             //
             // CF_TEXT, CF_OEMTEXT, CF_UNICODETEXT, and CFSTR_FILENAME are supposed to have a null terminator.
             // If we cannot find one in the buffer, assume it is corrupted and return an empty string.
-            //
-            // Can't find the explicit docs for CF_RTF, but we've always treated it as null terminated.
-            // The RichText control itself null terminates but looks like it doesn't require it.
-            // Given our prior and "normal" behavior, we'll continue to expect a null terminator.
 
             try
             {
@@ -235,6 +231,40 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
                     return new string((sbyte*)buffer, 0, nullIndex);
                 }
+            }
+            finally
+            {
+                PInvokeCore.GlobalUnlock(hglobal);
+            }
+        }
+
+        private static unsafe string ReadRegisteredFormatStringFromHGLOBAL(HGLOBAL hglobal, Encoding encoding)
+        {
+            void* buffer = PInvokeCore.GlobalLock(hglobal);
+            if (buffer is null)
+            {
+                throw new Win32Exception();
+            }
+
+            try
+            {
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
+                if (size == 0)
+                {
+                    throw new Win32Exception();
+                }
+
+                ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
+
+                // Registered format strings may be null-terminated, but the terminator is optional.
+                // If present, stop at the first null byte rather than decoding the entire allocation.
+                int nullIndex = bytes.IndexOf((byte)0);
+                if (nullIndex >= 0)
+                {
+                    bytes = bytes[..nullIndex];
+                }
+
+                return bytes.IsEmpty ? string.Empty : encoding.GetString(bytes);
             }
             finally
             {
