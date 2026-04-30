@@ -5718,6 +5718,9 @@ public partial class Form : ContainerControl
 
         Form? oldOwner = OwnerInternal;
 
+        bool originalTopMost = TopMost;
+        bool mirrored = false;
+
         try
         {
             SetState(States.Modal, true);
@@ -5755,6 +5758,12 @@ public partial class Form : ContainerControl
                 if (owner is Form form && owner != oldOwner)
                 {
                     Owner = form;
+
+                    if (AppContextSwitches.MirrorTopMostForModalDialogs && TopLevel && !IsMdiChild && Owner.TopMost && !TopMost)
+                    {
+                        TopMost = true;
+                        mirrored = true;
+                    }
                 }
                 else
                 {
@@ -5814,6 +5823,11 @@ public partial class Form : ContainerControl
             Owner = oldOwner;
             Properties.RemoveValue(s_propDialogOwner);
             GC.KeepAlive(ownerHwnd.Wrapper);
+
+            if (mirrored)
+            {
+                TopMost = originalTopMost;
+            }
         }
 
         return DialogResult;
