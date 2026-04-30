@@ -11563,7 +11563,9 @@ public unsafe partial class Control :
     {
         DefWndProc(ref m);
 
+        // Cache the current DPI before updating DeviceDpiInternal.
         OriginalDeviceDpiInternal = DeviceDpiInternal;
+        int oldDeviceDpi = DeviceDpiInternal;
 
         // In order to support tests, will be querying Dpi from the message first.
         int newDeviceDpi = (short)m.WParamInternal.LOWORD;
@@ -11582,6 +11584,8 @@ public unsafe partial class Control :
 
         Font localFont = GetCurrentFontAndDpi(out int fontDpi);
         DeviceDpiInternal = newDeviceDpi;
+        // Preserve the old DPI as the "original" DPI for subsequent scaling logic.
+        OriginalDeviceDpiInternal = oldDeviceDpi;
 
         if (fontDpi == DeviceDpiInternal)
         {
