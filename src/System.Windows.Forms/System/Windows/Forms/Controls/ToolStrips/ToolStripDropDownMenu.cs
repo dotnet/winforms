@@ -464,8 +464,10 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         if (nextItem is not null)
         {
             Rectangle displayRect = DisplayRectangle;
-            if (!displayRect.Contains(displayRect.X, nextItem.Bounds.Top)
-                || !displayRect.Contains(displayRect.X, nextItem.Bounds.Bottom))
+            // Use IsItemFullyVisible so that an item whose top or bottom edge lies exactly
+            // on the display boundary is not treated as out-of-view, preventing an
+            // unnecessary scroll when the item is already fully shown.
+            if (!IsItemFullyVisible(displayRect, nextItem.Bounds))
             {
                 int delta;
                 if (displayRect.Y > nextItem.Bounds.Top)
@@ -479,8 +481,15 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                     int index = Items.IndexOf(nextItem);
                     while (index >= 0)
                     {
+                        // Adjust the item's bounds by the prospective scroll delta so we can
+                        // test whether it would still overlap the display area after scrolling.
+                        // Using intersection (not full-containment) so that partially-visible
+                        // items are correctly identified as still being in view.
+                        Rectangle adjustedItemBounds = Items[index].Bounds;
+                        adjustedItemBounds.Y -= delta;
+
                         // we need to roll back to the index which is visible
-                        if ((Items[index].Visible && displayRect.Contains(displayRect.X, Items[index].Bounds.Top - delta))
+                        if ((Items[index].Visible && IsItemIntersectingDisplayRectangle(displayRect, adjustedItemBounds))
                             || !Items[index].Visible)
                         {
                             --index;
@@ -493,10 +502,15 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
                     if (index >= 0)
                     {
-                        if (displayRect.Contains(displayRect.X, Items[index].Bounds.Bottom - delta))
+                        // Apply the same delta-adjusted bounds used in the loop above so the
+                        // truncation check is consistent with the visibility check.
+                        Rectangle adjustedItemBounds = Items[index].Bounds;
+                        adjustedItemBounds.Y -= delta;
+
+                        if (adjustedItemBounds.Bottom > displayRect.Top && adjustedItemBounds.Bottom <= displayRect.Bottom)
                         {
                             // We found an item which is truncated at the top.
-                            delta += (Items[index].Bounds.Bottom - delta) - displayRect.Top;
+                            delta += adjustedItemBounds.Bottom - displayRect.Top;
                         }
                     }
                 }
@@ -662,8 +676,10 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 {
                     Rectangle adjustedLastItemBounds = Items[Items.Count - 1].Bounds;
                     adjustedLastItemBounds.Y -= deltaToScroll;
-                    if (displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Top)
-                        && displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Bottom))
+                    // Use IsItemFullyVisible (top >= display.Top && bottom <= display.Bottom) so
+                    // that we stop accumulating scroll distance as soon as the last item would be
+                    // completely inside the viewport — not just partially touching the edge.
+                    if (IsItemFullyVisible(displayRectangle, adjustedLastItemBounds))
                     {
                         // Scrolling this amount would make the last item visible, so don't scroll any more.
                         break;
@@ -689,8 +705,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 {
                     Rectangle adjustedLastItemBounds = Items[0].Bounds;
                     adjustedLastItemBounds.Y -= deltaToScroll;
-                    if (displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Top)
-                        && displayRectangle.Contains(displayRectangle.X, adjustedLastItemBounds.Bottom))
+                    if (IsItemFullyVisible(displayRectangle, adjustedLastItemBounds))
                     {
                         // Scrolling this amount would make the last item visible, so don't scroll any more.
                         break;
@@ -722,7 +737,17 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
     internal void ScrollInternal(bool up)
     {
+        // Refresh button state first so _indexOfFirstDisplayedItem is current.
         UpdateScrollButtonStatus();
+
+        // If the corresponding scroll button is already disabled, there is
+        // nothing more to scroll.  This prevents the out-of-range access that
+        // would otherwise occur when the last item is already at the top of the
+        // display area and the down-scroll path tries to read Items[index + 1].
+        if ((up && !UpScrollButton.Enabled) || (!up && !DownScrollButton.Enabled))
+        {
+            return;
+        }
 
         // calling this to get ScrollWindowEx. In actuality it does nothing
         // to change the display rect!
@@ -753,9 +778,12 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             }
             else
             {
-                if (_indexOfFirstDisplayedItem == Items.Count - 1)
+                Debug.Assert(_indexOfFirstDisplayedItem < Items.Count - 1,
+                    "Down scroll button was enabled but _indexOfFirstDisplayedItem is at or past the last item.");
+
+                if (_indexOfFirstDisplayedItem >= Items.Count - 1)
                 {
-                    Debug.Fail("We're trying to scroll down, but the top item is displayed!!!");
+                    return;
                 }
 
                 ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem];
@@ -810,8 +838,13 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         Rectangle displayRectangle = DisplayRectangle;
 
+        // Track the first and last items that intersect the viewport.
         _indexOfFirstDisplayedItem = -1;
-        int minY = int.MaxValue, maxY = 0;
+        int indexOfLastDisplayedItem = -1;
+
+        // Track the first and last available (non-scroll-button, non-hidden) items.
+        int firstAvailableItemIndex = -1;
+        int lastAvailableItemIndex = -1;
 
         for (int i = 0; i < Items.Count; ++i)
         {
@@ -831,16 +864,48 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 continue;
             }
 
-            if (_indexOfFirstDisplayedItem == -1 && displayRectangle.Contains(displayRectangle.X, item.Bounds.Top))
-            {
-                _indexOfFirstDisplayedItem = i;
-            }
+            firstAvailableItemIndex = firstAvailableItemIndex == -1 ? i : firstAvailableItemIndex;
+            lastAvailableItemIndex = i;
 
-            minY = Math.Min(minY, item.Bounds.Top);
-            maxY = Math.Max(maxY, item.Bounds.Bottom);
+            // An item is "displayed" when it intersects the viewport (even partially),
+            // so the first such item is a reliable scroll anchor regardless of height.
+            if (IsItemIntersectingDisplayRectangle(displayRectangle, item.Bounds))
+            {
+                if (_indexOfFirstDisplayedItem == -1)
+                {
+                    _indexOfFirstDisplayedItem = i;
+                }
+
+                indexOfLastDisplayedItem = i;
+            }
         }
 
-        UpScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, minY);
-        DownScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, maxY);
+        if (_indexOfFirstDisplayedItem == -1 || firstAvailableItemIndex == -1)
+        {
+            // No available items are visible at all — disable both buttons.
+            UpScrollButton.Enabled = false;
+            DownScrollButton.Enabled = false;
+            return;
+        }
+
+        // Up is enabled only when the first visible item is not already the first available item.
+        // Down is enabled only when there is at least one available item below the last displayed item.
+        // This ensures both buttons are disabled once there is no further content to scroll to.
+        UpScrollButton.Enabled = _indexOfFirstDisplayedItem > firstAvailableItemIndex;
+        DownScrollButton.Enabled = indexOfLastDisplayedItem < lastAvailableItemIndex;
     }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> when <paramref name="itemBounds"/> is entirely
+    ///  contained within <paramref name="displayRectangle"/> (no clipping on either edge).
+    /// </summary>
+    private static bool IsItemFullyVisible(Rectangle displayRectangle, Rectangle itemBounds)
+        => itemBounds.Top >= displayRectangle.Top && itemBounds.Bottom <= displayRectangle.Bottom;
+
+    /// <summary>
+    ///  Returns <see langword="true"/> when <paramref name="itemBounds"/> overlaps
+    ///  <paramref name="displayRectangle"/> by at least one pixel (partial visibility counts).
+    /// </summary>
+    private static bool IsItemIntersectingDisplayRectangle(Rectangle displayRectangle, Rectangle itemBounds)
+        => itemBounds.Bottom > displayRectangle.Top && itemBounds.Top < displayRectangle.Bottom;
 }
