@@ -1787,9 +1787,16 @@ public partial class TabControl : Control
         return !_padding.Equals(s_defaultPaddingPoint);
     }
 
-    private BOOL StyleChildren(HWND handle) =>
-        PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
+    private BOOL StyleChildren(HWND handle)
+    {
+        if (FromHandle(handle) is TabControl)
+        {
+            return true;
+        }
+
+        return PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
             .Succeeded;
+    }
 
     /// <summary>
     ///  Returns a string representation for this control.
