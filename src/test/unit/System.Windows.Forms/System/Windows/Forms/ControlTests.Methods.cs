@@ -1351,6 +1351,26 @@ public partial class ControlTests
         }
     }
 
+    // Regression test for dotnet/winforms#12399: Control.Dispose accessed ContextMenuStrip
+    // outside the `if (disposing)` guard, causing a NullReferenceException when a control
+    // reached the GC finalizer (Dispose(false) path).
+    [WinFormsFact]
+    public void Control_Dispose_InvokeNotDisposing_DoesNotAccessContextMenuStrip()
+    {
+        using ContextMenuStrip menu = new();
+        using TrackingContextMenuStripControl control = new()
+        {
+            ContextMenuStrip = menu
+        };
+
+        control.ContextMenuStripGetCount = 0;
+
+        control.Dispose(false);
+
+        Assert.Equal(0, control.ContextMenuStripGetCount);
+        Assert.Same(menu, control.ContextMenuStrip);
+    }
+
     [WinFormsFact]
     public void Control_Dispose_InvokeDisposingWithParent_Success()
     {

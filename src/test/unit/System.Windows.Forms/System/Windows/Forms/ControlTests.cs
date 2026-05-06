@@ -1540,6 +1540,26 @@ public partial class ControlTests
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
 
+    private class TrackingContextMenuStripControl : Control
+    {
+        private ContextMenuStrip _contextMenuStrip;
+
+        public int ContextMenuStripGetCount { get; set; }
+
+        public new void Dispose(bool disposing) => base.Dispose(disposing);
+
+        public override ContextMenuStrip ContextMenuStrip
+        {
+            get
+            {
+                ContextMenuStripGetCount++;
+
+                return _contextMenuStrip;
+            }
+            set => _contextMenuStrip = value;
+        }
+    }
+
     private class SubCheckedListBox : CheckedListBox, IParentHandleRecreationHandler
     {
         public int OnParentHandleRecreatedCalled { get; private set; }
