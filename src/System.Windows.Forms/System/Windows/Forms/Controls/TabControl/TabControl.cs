@@ -1789,13 +1789,16 @@ public partial class TabControl : Control
 
     private BOOL StyleChildren(HWND handle)
     {
+        // Skip nested TabControls - they apply their own dark-mode theme
+        // via ApplyDarkModeOnDemand and must not be overridden by the parent.
         if (FromHandle(handle) is TabControl)
         {
             return true;
         }
 
-        return PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
-            .Succeeded;
+        HRESULT hr = PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+        Debug.Assert(hr.Succeeded);
+        return true;
     }
 
     /// <summary>
