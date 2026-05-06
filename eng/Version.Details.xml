@@ -6,114 +6,114 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   And you can check these with "darc get-dependencies <dash dash>target-repo "winforms"
 -->
 <Dependencies>
-  <Source Uri="https://github.com/dotnet/dotnet" Mapping="winforms" Sha="423ddd1cabeff54b53750de2d429e6ea121c7fd1" BarId="312946" />
+  <Source Uri="https://github.com/dotnet/dotnet" Mapping="winforms" Sha="c802bb0f0b272d8547b12719c604c65f6beb1912" BarId="313071" />
   <ProductDependencies>
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Resources.Extensions" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Resources.Extensions" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Windows.Extensions" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Reflection.MetadataLoadContext" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Reflection.MetadataLoadContext" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Text.Encodings.Web" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Text.Encodings.Web" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Text.Json" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Text.Json" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Ref" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.NETCore.App.Ref" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Runtime.Serialization.Formatters" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Runtime.Serialization.Formatters" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.CodeDom" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Diagnostics.DiagnosticSource" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Diagnostics.DiagnosticSource" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.Formats.Nrbf" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.Formats.Nrbf" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="System.IO.Hashing" Version="11.0.0-preview.5.26254.103">
+    <Dependency Name="System.IO.Hashing" Version="11.0.0-preview.5.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitV3Extensions" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.XUnitV3Extensions" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Build.Tasks.Templating" Version="11.0.0-beta.26254.103">
+    <Dependency Name="Microsoft.DotNet.Build.Tasks.Templating" Version="11.0.0-beta.26255.106">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>423ddd1cabeff54b53750de2d429e6ea121c7fd1</Sha>
+      <Sha>c802bb0f0b272d8547b12719c604c65f6beb1912</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>
