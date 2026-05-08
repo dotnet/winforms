@@ -838,9 +838,8 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         Rectangle displayRectangle = DisplayRectangle;
 
-        // Track the first and last items that intersect the viewport.
+        // Track the first item that intersect the viewport.
         _indexOfFirstDisplayedItem = -1;
-        int indexOfLastDisplayedItem = -1;
 
         // Track the first and last available (non-scroll-button, non-hidden) items.
         int firstAvailableItemIndex = -1;
@@ -875,8 +874,6 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 {
                     _indexOfFirstDisplayedItem = i;
                 }
-
-                indexOfLastDisplayedItem = i;
             }
         }
 
@@ -892,7 +889,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         // Down is enabled only when there is at least one available item below the last displayed item.
         // This ensures both buttons are disabled once there is no further content to scroll to.
         UpScrollButton.Enabled = _indexOfFirstDisplayedItem > firstAvailableItemIndex;
-        DownScrollButton.Enabled = indexOfLastDisplayedItem < lastAvailableItemIndex;
+        DownScrollButton.Enabled = _indexOfFirstDisplayedItem < lastAvailableItemIndex;
     }
 
     /// <summary>
