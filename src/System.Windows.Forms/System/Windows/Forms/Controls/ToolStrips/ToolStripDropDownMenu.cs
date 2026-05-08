@@ -763,14 +763,15 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         {
             if (up)
             {
-                if (_indexOfFirstDisplayedItem == 0)
+                int previousScrollableItemIndex = FindPreviousScrollableItemIndex(_indexOfFirstDisplayedItem);
+                if (previousScrollableItemIndex < 0)
                 {
-                    Debug.Fail("We're trying to scroll up, but the top item is displayed!!!");
+                    Debug.Fail("We're trying to scroll up, but there is no previous scrollable item.");
                     delta = 0;
                 }
                 else
                 {
-                    ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem - 1];
+                    ToolStripItem itemTop = Items[previousScrollableItemIndex];
                     ToolStripItem itemBottom = Items[_indexOfFirstDisplayedItem];
                     // We use a delta between the tops, since it takes margin's and padding into account.
                     delta = itemTop.Bounds.Top - itemBottom.Bounds.Top;
@@ -778,16 +779,17 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             }
             else
             {
-                Debug.Assert(_indexOfFirstDisplayedItem < Items.Count - 1,
-                    "Down scroll button was enabled but _indexOfFirstDisplayedItem is at or past the last item.");
+                int nextScrollableItemIndex = FindNextScrollableItemIndex(_indexOfFirstDisplayedItem);
+                Debug.Assert(nextScrollableItemIndex >= 0,
+                    "Down scroll button was enabled but there is no next scrollable item.");
 
-                if (_indexOfFirstDisplayedItem >= Items.Count - 1)
+                if (nextScrollableItemIndex < 0)
                 {
                     return;
                 }
 
                 ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem];
-                ToolStripItem itemBottom = Items[_indexOfFirstDisplayedItem + 1];
+                ToolStripItem itemBottom = Items[nextScrollableItemIndex];
                 // We use a delta between the tops, since it takes margin's and padding into account.
                 delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
             }
@@ -838,33 +840,21 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         Rectangle displayRectangle = DisplayRectangle;
 
-        // Track the first item that intersect the viewport.
+        // Track the first item that intersects the viewport.
         _indexOfFirstDisplayedItem = -1;
 
         // Track the first and last available (non-scroll-button, non-hidden) items.
         int firstAvailableItemIndex = -1;
-        int lastAvailableItemIndex = -1;
 
         for (int i = 0; i < Items.Count; ++i)
         {
             ToolStripItem item = Items[i];
-            if (UpScrollButton == item)
-            {
-                continue;
-            }
-
-            if (DownScrollButton == item)
-            {
-                continue;
-            }
-
-            if (!item.Available)
+            if (!IsScrollableItem(item))
             {
                 continue;
             }
 
             firstAvailableItemIndex = firstAvailableItemIndex == -1 ? i : firstAvailableItemIndex;
-            lastAvailableItemIndex = i;
 
             // An item is "displayed" when it intersects the viewport (even partially),
             // so the first such item is a reliable scroll anchor regardless of height.
@@ -885,12 +875,41 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             return;
         }
 
-        // Up is enabled only when the first visible item is not already the first available item.
-        // Down is enabled only when there is at least one available item below the last displayed item.
-        // This ensures both buttons are disabled once there is no further content to scroll to.
-        UpScrollButton.Enabled = _indexOfFirstDisplayedItem > firstAvailableItemIndex;
-        DownScrollButton.Enabled = _indexOfFirstDisplayedItem < lastAvailableItemIndex;
+        // ScrollInternal(bool up) scrolls by moving the first displayed item to its previous/next item.
+        // Therefore, enable buttons only when such a move is possible. This keeps boundary behavior
+        // correct even when the viewport is too small to fully show a whole item.
+        UpScrollButton.Enabled = FindPreviousScrollableItemIndex(_indexOfFirstDisplayedItem) >= 0;
+        DownScrollButton.Enabled = FindNextScrollableItemIndex(_indexOfFirstDisplayedItem) >= 0;
     }
+
+    private int FindPreviousScrollableItemIndex(int startIndex)
+    {
+        for (int i = startIndex - 1; i >= 0; i--)
+        {
+            if (IsScrollableItem(Items[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private int FindNextScrollableItemIndex(int startIndex)
+    {
+        for (int i = startIndex + 1; i < Items.Count; i++)
+        {
+            if (IsScrollableItem(Items[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private bool IsScrollableItem(ToolStripItem item)
+        => item != UpScrollButton && item != DownScrollButton && item.Available;
 
     /// <summary>
     ///  Returns <see langword="true"/> when <paramref name="itemBounds"/> is entirely
