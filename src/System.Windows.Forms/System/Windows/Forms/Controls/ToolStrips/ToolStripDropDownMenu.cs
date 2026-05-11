@@ -24,6 +24,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     private ToolStripScrollButton? _downScrollButton;
     private int _scrollAmount;
     private int _indexOfFirstDisplayedItem = -1;
+    private bool _alignSelectionToTopOnNextChange;
 
     private BitVector32 _state;
 
@@ -464,10 +465,21 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         if (nextItem is not null)
         {
             Rectangle displayRect = DisplayRectangle;
+
+            // If _alignSelectionToTopOnNextChange is set (e.g., after Down arrow),
+            // and the item is below the current viewport top, scroll it to the top.
+            if (_alignSelectionToTopOnNextChange && displayRect.Y < nextItem.Bounds.Top)
+            {
+                int delta = nextItem.Bounds.Top - displayRect.Y;
+                ScrollInternal(delta);
+                UpdateScrollButtonStatus();
+                _alignSelectionToTopOnNextChange = false;
+            }
+
             // Use IsItemFullyVisible so that an item whose top or bottom edge lies exactly
             // on the display boundary is not treated as out-of-view, preventing an
             // unnecessary scroll when the item is already fully shown.
-            if (!IsItemFullyVisible(displayRect, nextItem.Bounds))
+            else if (!IsItemFullyVisible(displayRect, nextItem.Bounds))
             {
                 int delta;
                 if (displayRect.Y > nextItem.Bounds.Top)
@@ -517,6 +529,10 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
                 ScrollInternal(delta);
                 UpdateScrollButtonStatus();
+            }
+            else
+            {
+                _alignSelectionToTopOnNextChange = false;
             }
         }
 
@@ -924,4 +940,114 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     /// </summary>
     private static bool IsItemIntersectingDisplayRectangle(Rectangle displayRectangle, Rectangle itemBounds)
         => itemBounds.Bottom > displayRectangle.Top && itemBounds.Top < displayRectangle.Bottom;
+
+    /// <summary>
+    ///  Overrides Up/Down arrow handling to use the logical <see cref="ToolStrip.Items"/> order
+    ///  rather than the geometry-based search over <see cref="ToolStrip.DisplayedItems"/>.
+    ///  This prevents invisible items from causing the navigation to skip visible siblings.
+    /// </summary>
+    internal override bool ProcessArrowKey(Keys keyCode)
+    {
+        if (keyCode is not Keys.Up and not Keys.Down)
+        {
+            return base.ProcessArrowKey(keyCode);
+        }
+
+        bool down = keyCode == Keys.Down;
+
+        if (RequiresScrollButtons)
+        {
+            UpdateScrollButtonStatus();
+        }
+
+        ToolStripItem? current = GetSelectedItem();
+        ToolStripItem? next = GetAdjacentKeyboardSelectableItem(current, down, out _);
+        if (next is not null)
+        {
+            // When scroll buttons are visible, align the focused item to the top of the viewport
+            // so focus progresses visually through the list in both directions (Up/Down).
+            // When all items fit (no scroll buttons), only update focus without repositioning.
+            if (RequiresScrollButtons)
+            {
+                _alignSelectionToTopOnNextChange = true;
+            }
+
+            ChangeSelection(next);
+        }
+
+        // Always consume the key.
+        return true;
+    }
+
+    protected override bool ProcessDialogKey(Keys keyData)
+    {
+        // Map Tab to Down and Shift+Tab to Up when scroll buttons are visible,
+        // with the same alignment behavior as arrow keys.
+        if (RequiresScrollButtons && (keyData == Keys.Tab || keyData == (Keys.Tab | Keys.Shift)))
+        {
+            bool down = keyData == Keys.Tab;
+            UpdateScrollButtonStatus();
+
+            ToolStripItem? current = GetSelectedItem();
+            ToolStripItem? next = GetAdjacentKeyboardSelectableItem(current, down, out _);
+            if (next is not null)
+            {
+                _alignSelectionToTopOnNextChange = true;
+                ChangeSelection(next);
+                return true;
+            }
+        }
+
+        return base.ProcessDialogKey(keyData);
+    }
+
+    /// <summary>
+    ///  Walks the logical <see cref="ToolStrip.Items"/> collection (not the transient
+    ///  <see cref="ToolStrip.DisplayedItems"/> snapshot) to find the nearest keyboard-selectable
+    ///  item in the requested direction. Wraps around when the boundary is reached.
+    ///  <paramref name="wrapped"/> is set to <see langword="true"/> when the result came
+    ///  from the wrap-around pass.
+    /// </summary>
+    private ToolStripItem? GetAdjacentKeyboardSelectableItem(ToolStripItem? start, bool forward, out bool wrapped)
+    {
+        wrapped = false;
+
+        if (Items.Count == 0)
+        {
+            return null;
+        }
+
+        int startIndex = start is null ? -1 : Items.IndexOf(start);
+        int delta = forward ? 1 : -1;
+
+        // First pass: search from current position toward the boundary.
+        for (int i = startIndex + delta; i >= 0 && i < Items.Count; i += delta)
+        {
+            ToolStripItem item = Items[i];
+            if (item.CanKeyboardSelect && item.Available)
+            {
+                return item;
+            }
+        }
+
+        // Boundary reached — wrap around from the opposite end.
+        wrapped = true;
+        int wrapStart = forward ? 0 : Items.Count - 1;
+        for (int i = wrapStart; i >= 0 && i < Items.Count; i += delta)
+        {
+            // Stop before we reach the original item again.
+            if (i == startIndex)
+            {
+                break;
+            }
+
+            ToolStripItem item = Items[i];
+            if (item.CanKeyboardSelect && item.Available)
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
 }
