@@ -553,5 +553,4 @@ public class ApplicationTests
         Assert.Equal(expected.GdiCharSet, actual.GdiCharSet);
         Assert.Equal(expected.Style, actual.Style);
     }
-
 }

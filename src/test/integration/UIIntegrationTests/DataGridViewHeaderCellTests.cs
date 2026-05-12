@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
-using System.Windows.Forms.VisualStyles;
-
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500. Remaining skipped tests in this file deferred to a follow-up PR.
