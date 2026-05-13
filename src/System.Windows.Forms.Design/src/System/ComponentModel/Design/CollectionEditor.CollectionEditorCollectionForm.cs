@@ -56,7 +56,7 @@ public partial class CollectionEditor
                 ScaleButtonImageLogicalToDevice(_upButton);
             }
 
-            Text = string.Format(SR.CollectionEditorCaption, CollectionItemType.Name);
+            Text = string.Format(SR.CollectionEditorCaption, GetCollectionItemTypeNameForCaption(CollectionItemType));
 
             HookEvents();
 
@@ -74,6 +74,20 @@ public partial class CollectionEditor
             }
 
             AdjustListBoxItemHeight();
+        }
+
+        private static string GetCollectionItemTypeNameForCaption(Type collectionItemType)
+        {
+            string itemTypeName = collectionItemType.Name;
+
+            if (collectionItemType is { IsGenericType: true, GenericTypeArguments: [Type innerType] }
+                && typeof(Control).IsAssignableFrom(innerType)
+                && collectionItemType.GetGenericTypeDefinition().Name.StartsWith("ControlProxy", StringComparison.Ordinal))
+            {
+                itemTypeName = innerType.Name;
+            }
+
+            return itemTypeName;
         }
 
         private bool IsImmutable
