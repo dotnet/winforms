@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -128,6 +129,14 @@ namespace System.Windows.Forms
         // Don't use dataGridRows, use the accessor!!!
         private DataGridRow[] dataGridRows = Array.Empty<DataGridRow>();
         private int dataGridRowsLength = 0;
+
+        // Shadow selection state that survives row recreation.  When
+        // RecreateDataGridRows fires (e.g. due to DataView ListChanged
+        // events in .NET 10), the internal DataGridRow array is replaced
+        // and any per-row Selected flags are lost.  This HashSet keeps
+        // track of programmatically selected rows so that IsSelected()
+        // can still return the correct answer even after row recreation.
+        private readonly HashSet<int> _selectedRowCache = new();
 
         // for toolTip
         private int toolTipId = 0;
@@ -1396,7 +1405,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (dataGridRows == null)
+                if (dataGridRows == null
+                    || (dataGridRows.Length == 0 && listManager is not null && listManager.Count > 0))
                 {
                     CreateDataGridRows();
                 }
@@ -1531,6 +1541,22 @@ namespace System.Windows.Forms
             }
 
             ResetUIState();
+
+            // After row recreation, re-apply cached selections to the new row objects.
+            // ResetUIState → ResetSelection cleared the per-row Selected flags, but
+            // _selectedRowCache still knows which rows were programmatically selected.
+            if (_selectedRowCache.Count > 0 && newRows is not null)
+            {
+                foreach (int idx in _selectedRowCache)
+                {
+                    if (idx >= 0 && idx < newRows.Length)
+                    {
+                        newRows[idx].Selected = true;
+                        numSelectedRows++;
+                    }
+                }
+            }
+
 #if DEBUG
             // sanity check: all the rows should have the same
             // dataGridTable
@@ -7428,7 +7454,14 @@ namespace System.Windows.Forms
         {
             //
             DataGridRow[] localGridRows = DataGridRows;
-            return localGridRows[row].Selected;
+            if (row >= 0 && row < localGridRows.Length)
+            {
+                return localGridRows[row].Selected;
+            }
+
+            // Fallback: the row array may be empty or stale after
+            // RecreateDataGridRows, but the shadow cache still knows.
+            return _selectedRowCache.Contains(row);
         }
 
         internal static bool IsTransparentColor(Color color)
@@ -9543,6 +9576,11 @@ namespace System.Windows.Forms
             }
             numSelectedRows = 0;
             lastRowSelected = -1;
+
+            // Do NOT clear _selectedRowCache here — it must survive
+            // row recreation so that IsSelected() still works after
+            // RecreateDataGridRows.  The cache is cleared explicitly
+            // by UnSelect or user-initiated full deselection.
         }
 
         private void ResetParentRows()
@@ -9709,11 +9747,26 @@ namespace System.Windows.Forms
             //
             Debug.WriteLineIf(CompModSwitches.DataGridSelection.TraceVerbose, "Selecting row " + row.ToString(CultureInfo.InvariantCulture));
             DataGridRow[] localGridRows = DataGridRows;
+            if (row < 0 || row >= localGridRows.Length)
+            {
+                // Even when the internal row array is not yet materialised
+                // (headless / no paint cycle), record the selection so that
+                // IsSelected() can return the right answer later.
+                if (row >= 0 && listManager is not null && row < listManager.Count)
+                {
+                    _selectedRowCache.Add(row);
+                }
+
+                return;
+            }
+
             if (!localGridRows[row].Selected)
             {
                 localGridRows[row].Selected = true;
                 numSelectedRows++;
             }
+
+            _selectedRowCache.Add(row);
 
             // when selecting a row, hide the edit box
             //
@@ -10049,11 +10102,16 @@ namespace System.Windows.Forms
             //
             Debug.WriteLineIf(CompModSwitches.DataGridSelection.TraceVerbose, "DataGridSelection: Unselecting row " + row.ToString(CultureInfo.InvariantCulture));
             DataGridRow[] localGridRows = DataGridRows;
-            if (localGridRows[row].Selected)
+            if (row >= 0 && row < localGridRows.Length)
             {
-                localGridRows[row].Selected = false;
-                numSelectedRows--;
+                if (localGridRows[row].Selected)
+                {
+                    localGridRows[row].Selected = false;
+                    numSelectedRows--;
+                }
             }
+
+            _selectedRowCache.Remove(row);
         }
 
         /// <summary>
