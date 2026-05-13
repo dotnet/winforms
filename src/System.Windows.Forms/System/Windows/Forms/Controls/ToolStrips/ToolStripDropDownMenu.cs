@@ -755,7 +755,8 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             {
                 if (_indexOfFirstDisplayedItem == Items.Count - 1)
                 {
-                    Debug.Fail("We're trying to scroll down, but the top item is displayed!!!");
+                    Debug.Fail("We're trying to scroll down, but the last item is displayed!!!");
+                    return;
                 }
 
                 ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem];
