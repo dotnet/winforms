@@ -102,6 +102,10 @@ public partial class ListView : Control
     private const uint LVM_SETGROUPMETRICS = PInvoke.LVM_FIRST + 155;
     private const uint LVGMF_TEXTCOLOR = 0x00000004;
 
+    /// <summary>
+    ///  Managed counterpart of the Win32 <c>LVGROUPMETRICS</c> structure used with <see cref="LVM_SETGROUPMETRICS"/>
+    ///  to customize group rendering metrics (margins and header/footer text colors).
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     private struct LVGROUPMETRICS
     {
@@ -119,6 +123,17 @@ public partial class ListView : Control
         public COLORREF crFooter;
     }
 
+    /// <summary>
+    ///  Retrieves the bounding rectangle of a group identified by <paramref name="groupId"/> by sending
+    ///  <c>LVM_GETGROUPRECT</c> to the native ListView control.
+    /// </summary>
+    /// <param name="groupId">The identifier of the group to query.</param>
+    /// <param name="rectType">
+    ///  The portion of the group to retrieve (for example <see cref="PInvoke.LVGGR_GROUP"/> or
+    ///  <see cref="PInvoke.LVGGR_HEADER"/>).
+    /// </param>
+    /// <param name="rect">When this method returns, contains the requested rectangle, or <see cref="Rectangle.Empty"/> if not found.</param>
+    /// <returns><see langword="true"/> if the rectangle was retrieved successfully; otherwise, <see langword="false"/>.</returns>
     private unsafe bool TryGetGroupRect(int groupId, uint rectType, out Rectangle rect)
     {
         RECT nativeRect = default;
@@ -134,6 +149,18 @@ public partial class ListView : Control
         return true;
     }
 
+    /// <summary>
+    ///  Renders the dark-mode overlay for each group, including the header, subtitle, footer, chevron, and the
+    ///  hover/selection background. This compensates for the native ListView's poor visual contrast for group
+    ///  headers when running in dark mode.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The overlay is painted on top of the native control after <see cref="PInvokeCore.WM_PAINT"/> has been
+    ///   handled by the base class. The method is a no-op when dark mode is disabled, groups are not displayed,
+    ///   the control is owner drawn, or the handle has not been created.
+    ///  </para>
+    /// </remarks>
     private void DrawDarkModeGroupSubtitleAndFooterOverlay()
     {
         if (!Application.IsDarkModeEnabled || !GroupsEnabled || !GroupsDisplayed || OwnerDraw || !IsHandleCreated)
@@ -386,6 +413,22 @@ public partial class ListView : Control
         }
     }
 
+    /// <summary>
+    ///  Draws the dark-mode expand/collapse chevron at the right side of a group header along with the divider
+    ///  line that visually separates the header text from the chevron.
+    /// </summary>
+    /// <param name="g">The <see cref="Graphics"/> surface used for drawing.</param>
+    /// <param name="headerRect">The full header rectangle of the group.</param>
+    /// <param name="headerTextRect">The rectangle that contains the header text.</param>
+    /// <param name="headerText">The header text used to determine where the divider line should start.</param>
+    /// <param name="headerFont">The font used to render the header text.</param>
+    /// <param name="collapsed">
+    ///  <see langword="true"/> to draw a chevron pointing to the right (collapsed state);
+    ///  <see langword="false"/> to draw a chevron pointing down (expanded state).
+    /// </param>
+    /// <param name="lineColor">The color of the divider line between the header text and the chevron.</param>
+    /// <param name="chevronColor">The color used to draw the chevron strokes.</param>
+    /// <param name="backgroundColor">The background color used to clear the native chevron area before redrawing.</param>
     private static void DrawDarkModeGroupChevron(
         Graphics g,
         Rectangle headerRect,
@@ -5093,6 +5136,16 @@ public partial class ListView : Control
         }
     }
 
+    /// <summary>
+    ///  Pushes dark-mode friendly group text colors to the native ListView by sending
+    ///  <see cref="LVM_SETGROUPMETRICS"/> with the <see cref="LVGMF_TEXTCOLOR"/> mask.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The native control would otherwise draw group header/footer text in colors optimized for light mode,
+    ///   which produces poor contrast on dark backgrounds.
+    ///  </para>
+    /// </remarks>
     private unsafe void UpdateDarkModeGroupTextColors()
     {
         if (!IsHandleCreated || !GroupsEnabled || OwnerDraw)
@@ -6810,6 +6863,17 @@ public partial class ListView : Control
         return lvhi;
     }
 
+    /// <summary>
+    ///  Returns the identifier of the group whose interactive header area (header, subtitle, footer or chevron)
+    ///  is currently under the mouse cursor, or <c>-1</c> if no such group is hovered.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Falls back to a manual hit test against <see cref="TryGetDarkModeGroupInteractionRect"/> when the native
+    ///   <c>LVM_HITTEST</c> message does not report a group hit (for example, when hovering over the custom
+    ///   subtitle or footer overlay).
+    ///  </para>
+    /// </remarks>
     private int GetDarkModeGroupHeaderHitId()
     {
         if (!IsHandleCreated || !GroupsDisplayed)
@@ -6840,6 +6904,16 @@ public partial class ListView : Control
         return groupHeaderHovered || groupChevronHovered ? groupId : -1;
     }
 
+    /// <summary>
+    ///  Computes the interactive rectangle that covers the dark-mode group header overlay (header, optional
+    ///  subtitle and, for collapsed/empty groups, the footer) used for hit-testing and invalidation.
+    /// </summary>
+    /// <param name="group">The group whose interactive rectangle should be computed.</param>
+    /// <param name="interactionRect">
+    ///  When this method returns, contains the rectangle clipped to the group bounds, or
+    ///  <see cref="Rectangle.Empty"/> if it cannot be determined.
+    /// </param>
+    /// <returns><see langword="true"/> if a non-empty rectangle could be computed; otherwise, <see langword="false"/>.</returns>
     private bool TryGetDarkModeGroupInteractionRect(ListViewGroup group, out Rectangle interactionRect)
     {
         interactionRect = Rectangle.Empty;
@@ -6877,6 +6951,14 @@ public partial class ListView : Control
         return !interactionRect.IsEmpty;
     }
 
+    /// <summary>
+    ///  Invalidates the interactive area of the dark-mode group header identified by <paramref name="groupId"/>
+    ///  so that the hover/selection overlay is repainted.
+    /// </summary>
+    /// <param name="groupId">
+    ///  The group identifier to invalidate. Negative values and identifiers that do not match any existing
+    ///  group are ignored.
+    /// </param>
     private void InvalidateDarkModeGroupHeader(int groupId)
     {
         if (groupId < 0 || !IsHandleCreated)
