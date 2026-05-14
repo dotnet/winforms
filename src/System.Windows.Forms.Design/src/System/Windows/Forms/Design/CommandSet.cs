@@ -1916,6 +1916,7 @@ internal partial class CommandSet : IDisposable
                         if (tree is IOleDragClient oleDragClient)
                         {
                             designer = oleDragClient;
+                            dragClient = true;
                             break;
                         }
 

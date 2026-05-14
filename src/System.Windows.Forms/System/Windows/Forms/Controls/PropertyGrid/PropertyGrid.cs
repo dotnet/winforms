@@ -3710,15 +3710,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private bool SelectViewTabButtonDefault(ToolStripButton? button)
     {
-        if (button is null)
-        {
-            return false;
-        }
-
         // Is this tab button checked? If so, do nothing.
         if (button == _selectedTab?.Button)
         {
-            button.Checked = true;
+            button?.Checked = true;
             return true;
         }
 
@@ -3755,7 +3750,6 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         // Select the first tab if we didn't find that one.
         _selectedTab = _tabs[PropertiesTabIndex];
-        Debug.Assert(_tabs[PropertiesTabIndex].Tab.GetType() == DefaultTabType, "First item is not property tab!");
         SelectViewTabButton(_tabs[PropertiesTabIndex].Button, updateSelection: false);
         return false;
     }
