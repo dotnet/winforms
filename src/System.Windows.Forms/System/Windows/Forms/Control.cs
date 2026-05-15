@@ -11279,6 +11279,25 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Handles the WM_INITMENUPOPUP message. Dispatches to the legacy <see cref="ContextMenu"/> so
+    ///  that <see cref="MenuItem.Popup"/> events fire for submenus. Without this, controls that own
+    ///  a <see cref="ContextMenu"/> (e.g. via <c>TrackPopupMenuEx</c>) would never receive submenu
+    ///  init notifications and dynamic placeholder items would never be replaced.
+    /// </summary>
+    private void WmInitMenuPopup(ref Message m)
+    {
+#pragma warning disable WFDEV006 // Type or member is obsolete
+        if (Properties.TryGetValue(s_contextMenuProperty, out ContextMenu? contextMenu)
+            && contextMenu.ProcessInitMenuPopup((nint)m.WParamInternal))
+        {
+            return;
+        }
+#pragma warning restore WFDEV006
+
+        DefWndProc(ref m);
+    }
+
+    /// <summary>
     ///  Handles the WM_CTLCOLOR message
     /// </summary>
     private void WmCtlColorControl(ref Message m)
@@ -12742,8 +12761,11 @@ public unsafe partial class Control :
 
                 break;
 
-            case PInvokeCore.WM_EXITMENULOOP:
             case PInvokeCore.WM_INITMENUPOPUP:
+                WmInitMenuPopup(ref m);
+                break;
+
+            case PInvokeCore.WM_EXITMENULOOP:
             case PInvokeCore.WM_MENUSELECT:
             default:
 
