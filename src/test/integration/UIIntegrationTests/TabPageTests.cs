@@ -6,14 +6,17 @@ using System.Drawing;
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500.
-public class TabPageTests
+public class TabPageTests : ControlTestBase
 {
+    public TabPageTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     [WinFormsTheory]
     [BoolData]
-    public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColor)
+    public void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColor)
     {
-        Application.EnableVisualStyles();
-
         using TabPage control = new()
         {
             UseVisualStyleBackColor = useVisualStyleBackColor
@@ -33,10 +36,8 @@ public class TabPageTests
 
     [WinFormsTheory]
     [MemberData(nameof(BackColor_GetVisualStylesWithParent_TestData))]
-    public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColor, TabAppearance parentAppearance, Color expected)
+    public void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColor, TabAppearance parentAppearance, Color expected)
     {
-        Application.EnableVisualStyles();
-
         using TabControl parent = new()
         {
             Appearance = parentAppearance

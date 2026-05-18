@@ -6,8 +6,13 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500. Remaining skipped tests in this file deferred to a follow-up PR.
-public class DataGridViewHeaderCellTests
+public class DataGridViewHeaderCellTests : ControlTestBase
 {
+    public DataGridViewHeaderCellTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     public static IEnumerable<object[]> MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData()
     {
         ButtonState expected = VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal;
@@ -25,8 +30,6 @@ public class DataGridViewHeaderCellTests
     [MemberData(nameof(MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData))]
     public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStyles, int rowIndex, ButtonState expectedButtonState)
     {
-        Application.EnableVisualStyles();
-
         using SubDataGridViewHeaderCell cellTemplate = new();
         using DataGridViewColumn column = new()
         {
@@ -47,8 +50,6 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseDown_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
     {
-        Application.EnableVisualStyles();
-
         using SubDataGridViewHeaderCell cellTemplate = new();
         using DataGridViewColumn column = new()
         {
@@ -68,8 +69,6 @@ public class DataGridViewHeaderCellTests
     [WinFormsFact]
     public void DataGridViewHeaderCell_OnMouseUp_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
     {
-        Application.EnableVisualStyles();
-
         using SubDataGridViewHeaderCell cellTemplate = new();
         using DataGridViewColumn column = new()
         {

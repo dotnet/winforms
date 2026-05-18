@@ -4,8 +4,13 @@
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500.
-public class ParkingWindowTests
+public class ParkingWindowTests : ControlTestBase
 {
+    public ParkingWindowTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     [WinFormsFact]
     public void ParkingWindow_DoesNotThrowOnGarbageCollecting()
     {

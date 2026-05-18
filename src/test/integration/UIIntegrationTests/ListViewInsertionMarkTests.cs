@@ -6,15 +6,17 @@ using System.Drawing;
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500.
-public class ListViewInsertionMarkTests
+public class ListViewInsertionMarkTests : ControlTestBase
 {
+    public ListViewInsertionMarkTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     [WinFormsFact]
     public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMark_Success()
     {
-        Application.EnableVisualStyles();
-
         using ListView control = new();
-        ListViewInsertionMark insertionMark = control.InsertionMark;
 
         // Set same.
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -57,10 +59,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMarkWithColor_Success()
     {
-        Application.EnableVisualStyles();
-
         using ListView control = new();
-        ListViewInsertionMark insertionMark = control.InsertionMark;
         control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
 
         // Set same.
@@ -104,10 +103,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public unsafe void ListViewInsertionMark_Color_GetInsertMarkColor_Success()
     {
-        Application.EnableVisualStyles();
-
         using ListView control = new();
-        ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
         // Set same.
@@ -140,10 +136,7 @@ public class ListViewInsertionMarkTests
     [InlineData(1)]
     public unsafe void ListViewInsertionMark_Index_GetInsertMark_Success(int index)
     {
-        Application.EnableVisualStyles();
-
         using ListView control = new();
-        ListViewInsertionMark insertionMark = control.InsertionMark;
 
         // Set same.
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -189,8 +182,6 @@ public class ListViewInsertionMarkTests
     [InlineData(1)]
     public unsafe void ListViewInsertionMark_Index_GetInsertMarkWithColor_Success(int index)
     {
-        Application.EnableVisualStyles();
-
         using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         insertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);

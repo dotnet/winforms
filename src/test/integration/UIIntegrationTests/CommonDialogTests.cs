@@ -6,15 +6,18 @@ using Moq;
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500.
-public class CommonDialogTests
+public class CommonDialogTests : ControlTestBase
 {
+    public CommonDialogTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     [WinFormsTheory]
     [InlineData(true, DialogResult.OK)]
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
     {
-        Application.EnableVisualStyles();
-
         using SubCommonDialog dialog = new()
         {
             RunDialogResult = runDialogResult
@@ -31,8 +34,6 @@ public class CommonDialogTests
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
     {
-        Application.EnableVisualStyles();
-
         using SubCommonDialog dialog = new()
         {
             RunDialogResult = runDialogResult
@@ -46,8 +47,6 @@ public class CommonDialogTests
     [InlineData(false, DialogResult.Cancel)]
     public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
     {
-        Application.EnableVisualStyles();
-
         using SubCommonDialog dialog = new()
         {
             RunDialogResult = runDialogResult

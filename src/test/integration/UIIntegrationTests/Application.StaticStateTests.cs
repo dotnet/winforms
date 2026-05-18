@@ -7,8 +7,13 @@ using System.Windows.Forms.VisualStyles;
 namespace System.Windows.Forms.UITests;
 
 // Migrated from unit tests; see issue #4500.
-public class ApplicationStaticStateTests
+public class ApplicationStaticStateTests : ControlTestBase
 {
+    public ApplicationStaticStateTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
+    {
+    }
+
     public static IEnumerable<object[]> CurrentCulture_Set_TestData()
     {
         yield return new object[] { CultureInfo.InvariantCulture };
@@ -81,6 +86,7 @@ public class ApplicationStaticStateTests
     [InvalidEnumData<VisualStyleState>]
     public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
     {
+        // Serial execution in UIIntegrationTests prevents WM_THEMECHANGED cross-test interference.
         VisualStyleState state = Application.VisualStyleState;
         try
         {
