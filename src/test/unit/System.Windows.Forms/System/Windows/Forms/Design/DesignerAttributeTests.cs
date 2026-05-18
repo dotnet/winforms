@@ -6,6 +6,7 @@
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Drawing;
 using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -38,16 +39,30 @@ public class DesignerAttributeTests
         _output = output;
     }
 
+    /// <summary>
+    ///  Resolves .NET Framework assembly names to the actual implementation assemblies.
+    ///  On .NET Core, the old names (e.g. "System.Drawing") resolve to small facade assemblies
+    ///  that contain only type-forwards and no actual types. This helper maps them to the real
+    ///  implementation assemblies via well-known type anchors.
+    /// </summary>
+    private static Assembly ResolveAssembly(string assemblyName) => assemblyName switch
+    {
+        Assemblies.SystemWindowsForms => typeof(Control).Assembly,
+        Assemblies.SystemDrawing => typeof(Image).Assembly,
+        Assemblies.SystemDesign => typeof(ControlDesigner).Assembly,
+        _ => Assembly.Load(assemblyName),
+    };
+
     public static IEnumerable<object[]> GetAttributeOfType_TestData(string assembly, Type attributeType)
     {
-        foreach (var type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in ResolveAssembly(assembly).GetTypes())
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
     public static IEnumerable<object[]> GetAttributeOfTypeAndProperty_TestData(string assembly, Type attributeType)
     {
-        foreach (var type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in ResolveAssembly(assembly).GetTypes())
         {
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type.FullName, attribute };
@@ -60,14 +75,14 @@ public class DesignerAttributeTests
 
     public static IEnumerable<object[]> GetAttributeWithType_TestData(string assembly, Type attributeType)
     {
-        foreach (var type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in ResolveAssembly(assembly).GetTypes())
             foreach (object attribute in type.GetCustomAttributes(attributeType, false))
                 yield return new[] { type, attribute };
     }
 
     public static IEnumerable<object[]> GetAttributeWithProperty_TestData(string assembly, Type attributeType)
     {
-        foreach (var type in Assembly.Load(assembly).GetTypes())
+        foreach (var type in ResolveAssembly(assembly).GetTypes())
             foreach (var property in type.GetProperties())
                 foreach (object attribute in property.GetCustomAttributes(attributeType, false))
                     yield return new[] { property, attribute };
@@ -90,8 +105,8 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemDrawing, typeof(DesignerSerializerAttribute))]
     [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemWindowsForms, typeof(DesignerSerializerAttribute))]
+    [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemDrawing, typeof(DesignerSerializerAttribute))]
     [MemberData(nameof(GetAttributeOfType_TestData), Assemblies.SystemDesign, typeof(DesignerSerializerAttribute))]
     public void DesignerSerializerAttribute_TypeExists(Type annotatedType, DesignerSerializerAttribute attribute)
     {
@@ -149,8 +164,8 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(TypeConverterAttribute))]
     [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(TypeConverterAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(TypeConverterAttribute))]
     public void TypeConverterAttribute_TypeExists(string subject, TypeConverterAttribute attribute)
     {
         var type = Type.GetType(attribute.ConverterTypeName, false);
@@ -166,8 +181,8 @@ public class DesignerAttributeTests
     }
 
     [Theory]
-    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(EditorAttribute))]
     [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemWindowsForms, typeof(EditorAttribute))]
+    [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), Assemblies.SystemDrawing, typeof(EditorAttribute))]
     public void EditorAttribute_TypeExists(string subject, EditorAttribute attribute)
     {
         var type = Type.GetType(attribute.EditorTypeName, throwOnError: false);
