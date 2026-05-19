@@ -15,6 +15,7 @@ using Composition = System.Private.Windows.Ole.Composition<
     System.Private.Windows.Nrbf.CoreNrbfSerializer,
     System.Private.Windows.Ole.TestFormat>;
 using DataFormats = System.Private.Windows.Ole.DataFormatsCore<System.Private.Windows.Ole.TestFormat>;
+using System.Text;
 
 namespace System.Private.Windows.Ole;
 
@@ -94,6 +95,19 @@ public unsafe class NativeToManagedAdapterTests
         var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
         composition.TryGetData(nameof(NativeToManagedAdapterTests), out SerializationRecord? data).Should().BeTrue();
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+    }
+
+    [Fact]
+    public void GetData_RtfWithoutNullTerminator_ReturnsRtfText()
+    {
+        const string rtf = "{\\rtf1\\ansi Test}";
+        MemoryStream stream = new(Encoding.Default.GetBytes(rtf));
+        using HGlobalNativeDataObject dataObject = new(stream, (ushort)DataFormats.GetOrAddFormat(DataFormatNames.Rtf).Id);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+        object? data = composition.GetData(DataFormatNames.Rtf);
+
+        data.Should().Be(rtf);
     }
 
     [Fact]
