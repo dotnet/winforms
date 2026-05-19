@@ -31,6 +31,6 @@
     "Microsoft.NET.Sdk.IL": "12.0.0-alpha.1.26519.114"
   },
   "native-tools": {
-    "cmake": "latest"
+    "cmake": "3.21.0"
   }
 }
