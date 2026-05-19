@@ -4529,6 +4529,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">ListView, TreeView 또는 ToolStrip과 같은 다른 컨트롤에서 일반적으로 사용하는 이미지 컬렉션을 관리합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="new">Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">컨트롤에 대한 설명 텍스트나 런타임 정보를 제공합니다.</target>
@@ -6117,6 +6122,66 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">키 조합이 잘못되었습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="new">Occurs when the ContainerControl property value changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="new">The container whose containing form is controlled by the kiosk mode manager.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="new">Indicates whether pressing Escape exits fullscreen mode.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="new">Gets or sets a value indicating whether the resolved form is currently fullscreen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="new">Occurs when the fullscreen state changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerHideTaskbarDescr">
+        <source>Indicates whether fullscreen mode covers the Windows taskbar.</source>
+        <target state="new">Indicates whether fullscreen mode covers the Windows taskbar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerSuppressPowerSavingDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeyDescr">
+        <source>The key that toggles between fullscreen and restored mode.</source>
+        <target state="new">The key that toggles between fullscreen and restored mode.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="new">Indicates whether the form is topmost while fullscreen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerWakeupDescr">
+        <source>Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</source>
+        <target state="new">Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerWakeUpCommandDescr">
+        <source>The command that is executed whenever the kiosk experience is woken.</source>
+        <target state="new">The command that is executed whenever the kiosk experience is woken.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

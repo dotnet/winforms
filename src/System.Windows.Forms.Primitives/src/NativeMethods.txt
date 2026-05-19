@@ -699,6 +699,8 @@ WC_TABCONTROL
 WC_TREEVIEW
 WHEEL_DELTA
 WindowFromPoint
+WTSRegisterSessionNotification
+WTSUnRegisterSessionNotification
 WINDOWPOS
 WINEVENT_INCONTEXT
 WSF_VISIBLE
