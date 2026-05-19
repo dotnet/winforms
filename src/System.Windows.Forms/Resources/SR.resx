@@ -2691,6 +2691,45 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DescriptionImageList" xml:space="preserve">
     <value>Manages a collection of images that are typically used by other controls such as ListView, TreeView, or ToolStrip.</value>
   </data>
+  <data name="DescriptionKioskModeManager" xml:space="preserve">
+    <value>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlDescr" xml:space="preserve">
+    <value>The container whose containing form is controlled by the kiosk mode manager.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlChangedDescr" xml:space="preserve">
+    <value>Occurs when the ContainerControl property value changes.</value>
+  </data>
+  <data name="KioskModeManagerEscapeExitsFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether pressing Escape exits fullscreen mode.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenDescr" xml:space="preserve">
+    <value>Gets or sets a value indicating whether the resolved form is currently fullscreen.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenChangedDescr" xml:space="preserve">
+    <value>Occurs when the fullscreen state changes.</value>
+  </data>
+  <data name="KioskModeManagerHideTaskbarDescr" xml:space="preserve">
+    <value>Indicates whether fullscreen mode covers the Windows taskbar.</value>
+  </data>
+  <data name="KioskModeManagerMousePointerAutoHideDelayDescr" xml:space="preserve">
+    <value>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</value>
+  </data>
+  <data name="KioskModeManagerSuppressPowerSavingDescr" xml:space="preserve">
+    <value>Indicates whether Windows should keep the display and system awake while this component is active.</value>
+  </data>
+  <data name="KioskModeManagerToggleFullScreenKeyDescr" xml:space="preserve">
+    <value>The key that toggles between fullscreen and restored mode.</value>
+  </data>
+  <data name="KioskModeManagerTopMostInFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether the form is topmost while fullscreen.</value>
+  </data>
+  <data name="KioskModeManagerWakeupDescr" xml:space="preserve">
+    <value>Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</value>
+  </data>
+  <data name="KioskModeManagerWakeUpCommandDescr" xml:space="preserve">
+    <value>The command that is executed whenever the kiosk experience is woken.</value>
+  </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Provides run-time information or descriptive text for a control.</value>
   </data>
