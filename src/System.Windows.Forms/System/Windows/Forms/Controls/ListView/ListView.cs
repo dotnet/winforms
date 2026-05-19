@@ -51,6 +51,16 @@ public partial class ListView : Control
     private static readonly object s_groupCollapsedStateChangedEvent = new();
     private static readonly object s_groupTaskLinkClickEvent = new();
 
+    // Colors and blend alphas used by the dark-mode group overlay
+    // (see DrawDarkModeGroupSubtitleAndFooterOverlay). Centralized so the palette
+    // can be tuned in one place if the Windows dark-mode accent guidance evolves.
+    // The selected/hovered overlays are blended on top of SystemColors so they
+    // automatically follow the user's active accent; the header/chevron tones are
+    // the Win11 dark-mode accent blues, which currently have no SystemColors analogue.
+    private static readonly Color s_darkModeGroupHeaderColor = SystemColors.MenuHighlight;
+    private const int DarkModeGroupSelectedOverlayAlpha = 64;
+    private const int DarkModeGroupHoveredOverlayAlpha = 28;
+
     private ItemActivation _activation = ItemActivation.Standard;
     private ListViewAlignment _alignStyle = ListViewAlignment.Top;
     private BorderStyle _borderStyle = BorderStyle.Fixed3D;
@@ -129,8 +139,8 @@ public partial class ListView : Control
     /// </summary>
     /// <param name="groupId">The identifier of the group to query.</param>
     /// <param name="rectType">
-    ///  The portion of the group to retrieve (for example <see cref="PInvoke.LVGGR_GROUP"/> or
-    ///  <see cref="PInvoke.LVGGR_HEADER"/>).
+    ///  The portion of the group to retrieve (for example <c>LVGGR_GROUP</c> or
+    ///  <c>LVGGR_HEADER</c>).
     /// </param>
     /// <param name="rect">When this method returns, contains the requested rectangle, or <see cref="Rectangle.Empty"/> if not found.</param>
     /// <returns><see langword="true"/> if the rectangle was retrieved successfully; otherwise, <see langword="false"/>.</returns>
@@ -171,8 +181,8 @@ public partial class ListView : Control
         using Graphics g = CreateGraphicsInternal();
         Rectangle clipRect = Rectangle.Ceiling(g.VisibleClipBounds);
         Color textColor = ForeColor;
-        Color headerColor = Color.FromArgb(120, 180, 255);
-        Color chevronColor = Color.FromArgb(80, 170, 255);
+        Color headerColor = s_darkModeGroupHeaderColor;
+        Color chevronColor = s_darkModeGroupHeaderColor;
         using Font headerFont = new(Font, FontStyle.Bold);
 
         static Rectangle TrimOverlayRect(Rectangle rect, int firstItemTop)
@@ -243,8 +253,8 @@ public partial class ListView : Control
             bool isSelected = _darkModeSelectedGroupId == group.ID
                 || (groupDrawState & (NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED | NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS)) != 0;
             Color groupInteractionOverlayColor = isSelected
-                ? Color.FromArgb(64, 90, 150, 255)
-                : (isHovered ? Color.FromArgb(28, 255, 255, 255) : Color.Empty);
+                ? Color.FromArgb(DarkModeGroupSelectedOverlayAlpha, SystemColors.Highlight)
+                : (isHovered ? Color.FromArgb(DarkModeGroupHoveredOverlayAlpha, SystemColors.Highlight) : Color.Empty);
             Color groupContentBackgroundColor = groupInteractionOverlayColor.IsEmpty
                 ? groupBackgroundColor
                 : BlendColor(groupBackgroundColor, groupInteractionOverlayColor);
@@ -264,26 +274,7 @@ public partial class ListView : Control
                 headerTextWidth,
                 headerFont.Height + headerVerticalPadding);
 
-            int interactionBottom = headerRect.Bottom;
-            if (!string.IsNullOrEmpty(group.Subtitle))
-            {
-                interactionBottom = headerRect.Top + Font.Height + verticalSpacing + Font.Height + headerVerticalPadding;
-            }
-
-            if (!string.IsNullOrEmpty(group.Footer) && (collapsed || group.Items.Count == 0))
-            {
-                int subtitleOffset = string.IsNullOrEmpty(group.Subtitle) ? 1 : 2;
-                int collapsedFooterY = headerRect.Top + (Font.Height * subtitleOffset) + footerCollapsedAdditionalOffset;
-                interactionBottom = Math.Min(interactionBottom, Math.Max(headerRect.Top, collapsedFooterY - LogicalToDeviceUnits(1)));
-            }
-
-            Rectangle interactionRect = Rectangle.Intersect(
-                groupRect,
-                new Rectangle(
-                    groupRect.Left,
-                    headerRect.Top,
-                    groupRect.Width,
-                    Math.Max(0, interactionBottom - headerRect.Top)));
+            TryGetDarkModeGroupInteractionRect(group, out Rectangle interactionRect);
 
             Rectangle interactionCoverRect = TrimOverlayRect(interactionRect, firstItemTop);
             if (!interactionCoverRect.IsEmpty)
@@ -429,7 +420,7 @@ public partial class ListView : Control
     /// <param name="lineColor">The color of the divider line between the header text and the chevron.</param>
     /// <param name="chevronColor">The color used to draw the chevron strokes.</param>
     /// <param name="backgroundColor">The background color used to clear the native chevron area before redrawing.</param>
-    private static void DrawDarkModeGroupChevron(
+    private void DrawDarkModeGroupChevron(
         Graphics g,
         Rectangle headerRect,
         Rectangle headerTextRect,
@@ -440,13 +431,23 @@ public partial class ListView : Control
         Color chevronColor,
         Color backgroundColor)
     {
-        int centerX = headerRect.Right - 9;
-        int centerY = headerTextRect.Top + (headerTextRect.Height / 2) + 1;
+        int chevronAreaWidth = LogicalToDeviceUnits(28);
+        int chevronCenterInset = LogicalToDeviceUnits(9);
+        int chevronOffsetSmall = LogicalToDeviceUnits(2);
+        int chevronOffsetMedium = LogicalToDeviceUnits(3);
+        int chevronOffsetLarge = LogicalToDeviceUnits(5);
+        int dividerLeftPadding = LogicalToDeviceUnits(8);
+        int dividerHorizontalSpacing = LogicalToDeviceUnits(6);
+        int verticalOpticalNudge = LogicalToDeviceUnits(1);
+        float chevronPenWidth = 2.6f;
+
+        int centerX = headerRect.Right - chevronCenterInset;
+        int centerY = headerTextRect.Top + (headerTextRect.Height / 2) + verticalOpticalNudge;
 
         Rectangle nativeChevronRect = new(
-            headerRect.Right - 28,
+            headerRect.Right - chevronAreaWidth,
             headerRect.Top,
-            28,
+            chevronAreaWidth,
             headerRect.Height);
         using (Brush backgroundBrush = new SolidBrush(backgroundColor))
         {
@@ -454,10 +455,14 @@ public partial class ListView : Control
         }
 
         Point[] points = collapsed
-            ? [new Point(centerX - 3, centerY - 5), new Point(centerX + 2, centerY), new Point(centerX - 3, centerY + 5)]
-            : [new Point(centerX - 5, centerY - 2), new Point(centerX, centerY + 3), new Point(centerX + 5, centerY - 2)];
+            ? [new Point(centerX - chevronOffsetMedium, centerY - chevronOffsetLarge),
+               new Point(centerX + chevronOffsetSmall, centerY),
+               new Point(centerX - chevronOffsetMedium, centerY + chevronOffsetLarge)]
+            : [new Point(centerX - chevronOffsetLarge, centerY - chevronOffsetSmall),
+               new Point(centerX, centerY + chevronOffsetMedium),
+               new Point(centerX + chevronOffsetLarge, centerY - chevronOffsetSmall)];
 
-        using Pen chevronPen = new(chevronColor, 2.6f)
+        using Pen chevronPen = new(chevronColor, chevronPenWidth)
         {
             StartCap = Drawing.Drawing2D.LineCap.Round,
             EndCap = Drawing.Drawing2D.LineCap.Round,
@@ -467,7 +472,7 @@ public partial class ListView : Control
         g.DrawLines(chevronPen, points);
 
         int lineY = centerY;
-        int lineStartX = headerRect.Left + 8;
+        int lineStartX = headerRect.Left + dividerLeftPadding;
 
         if (!string.IsNullOrEmpty(headerText))
         {
@@ -478,13 +483,12 @@ public partial class ListView : Control
                 Size.Empty,
                 TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding).Width;
 
-            const int dividerTextSpacing = 6;
             lineStartX = Math.Max(
                 lineStartX,
-                headerTextRect.Left + Math.Min(measuredHeaderTextWidth, headerTextRect.Width) + dividerTextSpacing);
+                headerTextRect.Left + Math.Min(measuredHeaderTextWidth, headerTextRect.Width) + dividerHorizontalSpacing);
         }
 
-        int lineEndX = nativeChevronRect.Left - 6;
+        int lineEndX = nativeChevronRect.Left - dividerHorizontalSpacing;
         if (lineEndX > lineStartX)
         {
             using Pen linePen = new(lineColor, 1f)
@@ -6481,6 +6485,10 @@ public partial class ListView : Control
                 Color textColor;
                 if (nmlvcd->dwItemType == NMLVCUSTOMDRAW_ITEM_TYPE.LVCDI_GROUP)
                 {
+                    // For LVCDI_GROUP items, clrTextBk carries the value we previously pushed
+                    // via LVGROUPMETRICS.crHeader (= BackColor). Forwarding it to SetTextColor
+                    // makes the native group header text invisible, so our managed overlay in
+                    // DrawDarkModeGroupSubtitleAndFooterOverlay can render the visible text.
                     textColor = nmlvcd->clrTextBk;
                 }
                 else
@@ -7555,6 +7563,7 @@ public partial class ListView : Control
 
     protected override void WndProc(ref Message m)
     {
+        int oldHoveredGroupId = _darkModeHoveredGroupId;
         switch (m.MsgInternal)
         {
             case MessageId.WM_REFLECT_NOTIFY:
@@ -7677,7 +7686,6 @@ public partial class ListView : Control
 
                 if (Application.IsDarkModeEnabled && GroupsDisplayed && !OwnerDraw && IsHandleCreated)
                 {
-                    int oldHoveredGroupId = _darkModeHoveredGroupId;
                     int hoveredGroupId = GetDarkModeGroupHeaderHitId();
                     if (_darkModeHoveredGroupId != hoveredGroupId)
                     {
@@ -7696,7 +7704,6 @@ public partial class ListView : Control
                     if (!allowNativeHover)
                     {
                         Capture = false;
-                        return;
                     }
                 }
 
@@ -7749,7 +7756,6 @@ public partial class ListView : Control
                 _prevHoveredItem = null;
                 if (_darkModeHoveredGroupId != -1)
                 {
-                    int oldHoveredGroupId = _darkModeHoveredGroupId;
                     _darkModeHoveredGroupId = -1;
                     InvalidateDarkModeGroupHeader(oldHoveredGroupId);
                 }
