@@ -10,8 +10,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Private.Windows.Ole;
 
-internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializer : INrbfSerializer
+internal static partial class BinaryFormatUtilities<TNrbfSerializer>
+#if NET
+    where TNrbfSerializer : INrbfSerializer
+#else
+    where TNrbfSerializer : INrbfSerializer, new()
+#endif
 {
+#if NETFRAMEWORK
+    private static readonly INrbfSerializer s_nrbfSerializer = new TNrbfSerializer();
+#endif
+
     /// <summary>
     ///  Writes an object to the provided memory stream.
     /// </summary>
@@ -28,7 +37,11 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
 
         try
         {
+#if NET
             if (TNrbfSerializer.TryWriteObject(stream, data))
+#else
+            if (s_nrbfSerializer.TryWriteObject(stream, data!))
+#endif
             {
                 return;
             }
@@ -116,7 +129,11 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
         if (record is not null)
         {
             // Try our implicit deserialization.
+#if NET
             if (TNrbfSerializer.TryBindToType(record.TypeName, out Type? type))
+#else
+            if (s_nrbfSerializer.TryBindToType(record.TypeName, out Type? type))
+#endif
             {
                 if (request.TypedRequest
                     // If we can't match the root exactly, then we fall back to the binder.
@@ -125,12 +142,20 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
                     return false;
                 }
 
+#if NET
                 if (TNrbfSerializer.TryGetObject(record, out value))
+#else
+                if (s_nrbfSerializer.TryGetObject(record, out value))
+#endif
                 {
                     @object = (T)value;
                     return true;
                 }
+#if NET
                 else if (TNrbfSerializer.IsFullySupportedType(type))
+#else
+                else if (s_nrbfSerializer.IsFullySupportedType(type))
+#endif
                 {
                     // The serializer fully supports this type, but can't deserialize it.
                     // Don't let it fall through to the BinaryFormatter.
@@ -138,6 +163,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
                 }
             }
 
+#if OLE_JSON
             if (type is null)
             {
                 // Serializer didn't recognize the type, look for and deserialize a JSON object.
@@ -147,6 +173,7 @@ internal static class BinaryFormatUtilities<TNrbfSerializer> where TNrbfSerializ
                     return isValidType;
                 }
             }
+#endif
 
             // JSON type info is nested, so this has to come after the JSON attempt.
             if (request.TypedRequest && !typeof(T).Matches(record.TypeName, TypeNameComparison.AllButAssemblyVersion))

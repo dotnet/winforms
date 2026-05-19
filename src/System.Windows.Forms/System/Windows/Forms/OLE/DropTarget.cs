@@ -172,6 +172,11 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
         return HRESULT.S_OK;
     }
 
+#pragma warning disable CA1416 // Validate platform compatibility
+    // IDataObjectAsyncCapability is only available on Windows 8 and later. Our baseline is beyond that and this
+    // will fail gracefully in any case as we won't be able to query it successfully, which is always a possibility
+    // as most objects will not support it anyway.
+
     HRESULT OleIDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
     {
         if (pdwEffect is null)
@@ -298,6 +303,7 @@ internal unsafe class DropTarget : OleIDropTarget.Interface, IManagedWrapper<Ole
 
         return HRESULT.S_OK;
     }
+#pragma warning restore CA1416 // Validate platform compatibility
 
     private void UpdateDropDescription(DragEventArgs e)
     {

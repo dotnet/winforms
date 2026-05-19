@@ -29,8 +29,16 @@ namespace System.Private.Windows.Ole;
 ///  </para>
 /// </remarks>
 internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeResolver
+#if NET
     where TNrbfSerializer : INrbfSerializer
+#else
+    where TNrbfSerializer : INrbfSerializer, new()
+#endif
 {
+#if NETFRAMEWORK
+    private static readonly INrbfSerializer s_nrbfSerializer = new TNrbfSerializer();
+#endif
+
     private readonly Type _rootType;
     private readonly Func<TypeName, Type?>? _resolver;
     private readonly bool _isTypedRequest;
@@ -133,8 +141,13 @@ internal sealed class TypeBinder<TNrbfSerializer> : SerializationBinder, ITypeRe
         if (type is null
             && _rootType != typeof(object)
             && !_rootType.IsInterface
+#if NET
             && TNrbfSerializer.TryBindToType(typeName, out type)
             && !TNrbfSerializer.IsFullySupportedType(type))
+#else
+            && s_nrbfSerializer.TryBindToType(typeName, out type)
+            && !s_nrbfSerializer.IsFullySupportedType(type))
+#endif
         {
             // Don't allow automatic binding for open-ended root types. This is to prevent surprising behavior
             // with "primitive" types such as `int` binding to `IComparable`, etc. It also prevents leaking out

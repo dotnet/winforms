@@ -752,6 +752,7 @@ internal static class BinaryFormatWriter
         }
     }
 
+#if OLE_JSON
     public static bool TryWriteJsonData(Stream stream, object value)
     {
         if (value is not IJsonData jsonData)
@@ -772,6 +773,7 @@ internal static class BinaryFormatWriter
 
         return true;
     }
+#endif
 
     /// <summary>
     ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to its original position if the

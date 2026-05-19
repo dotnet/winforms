@@ -3,7 +3,12 @@
 
 namespace Windows.Win32.System.Com;
 
-internal sealed unsafe class ComManagedStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
+#if NET
+// Workaround SA1001 white space warnings.
+internal sealed partial class ComManagedStream : IManagedWrapper<IStream, ISequentialStream> { }
+#endif
+
+internal sealed unsafe partial class ComManagedStream : IStream.Interface
 {
     private readonly Stream _dataStream;
 

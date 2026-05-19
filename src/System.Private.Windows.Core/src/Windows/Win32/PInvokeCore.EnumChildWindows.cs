@@ -3,11 +3,18 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvokeCore
+internal static unsafe partial class PInvokeCore
 {
     public delegate BOOL EnumChildWindowsCallback(HWND hWnd);
 
-    public static unsafe BOOL EnumChildWindows<T>(T hwndParent, EnumChildWindowsCallback callback)
+#if NETFRAMEWORK
+    private delegate BOOL EnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam);
+    private static readonly EnumChildWindowsNativeCallback s_enumChildWindowsNativeCallback = HandleEnumChildWindowsNativeCallback;
+    private static readonly delegate* unmanaged[Stdcall]<HWND, LPARAM, BOOL> s_enumChildWindowsNativeCallbackFunctionPointer =
+        (delegate* unmanaged[Stdcall]<HWND, LPARAM, BOOL>)Marshal.GetFunctionPointerForDelegate(s_enumChildWindowsNativeCallback);
+#endif
+
+    public static BOOL EnumChildWindows<T>(T hwndParent, EnumChildWindowsCallback callback)
         where T : IHandle<HWND>
     {
         // We pass a function pointer to the native function and supply the callback as
@@ -16,7 +23,11 @@ internal static partial class PInvokeCore
         GCHandle gcHandle = GCHandle.Alloc(callback);
         try
         {
-            return EnumChildWindows(hwndParent.Handle, &EnumChildWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+#if NET
+            return EnumChildWindows(hwndParent.Handle, &HandleEnumChildWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+#else
+            return EnumChildWindows(hwndParent.Handle, s_enumChildWindowsNativeCallbackFunctionPointer, (LPARAM)(nint)gcHandle);
+#endif
         }
         finally
         {
@@ -25,8 +36,10 @@ internal static partial class PInvokeCore
         }
     }
 
+#if NET
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-    private static BOOL EnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam)
+#endif
+    private static BOOL HandleEnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
         return ((EnumChildWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
     }

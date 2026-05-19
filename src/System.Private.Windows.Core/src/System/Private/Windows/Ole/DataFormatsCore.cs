@@ -6,8 +6,16 @@ using Windows.Win32.System.Ole;
 
 namespace System.Private.Windows.Ole;
 
-internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
+#if NET
+internal static class DataFormatsCore<T> where T : IDataFormat<T>
+#else
+internal static class DataFormatsCore<T> where T : IDataFormat<T>, new()
+#endif
 {
+#if NETFRAMEWORK
+    private static readonly IDataFormat<T> s_dataFormat = new T();
+#endif
+
     private static List<T>? s_formatList;
     private static T[]? s_predefinedFormatList;
 
@@ -41,7 +49,7 @@ internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
             }
 
             s_formatList ??= [];
-            T newFormat = T.Create(format, (int)formatId);
+            T newFormat = Create(format, (int)formatId);
             s_formatList.Add(newFormat);
             return newFormat;
         }
@@ -106,7 +114,7 @@ internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
             name ??= $"Format{shortId}";
 
             s_formatList ??= [];
-            T newFormat = T.Create(name, shortId);
+            T newFormat = Create(name, shortId);
             s_formatList.Add(newFormat);
             return newFormat;
 
@@ -143,22 +151,29 @@ internal static partial class DataFormatsCore<T> where T : IDataFormat<T>
         s_predefinedFormatList ??=
         [
             // Text name                                    Win32 format ID
-            T.Create(DataFormatNames.UnicodeText,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
-            T.Create(DataFormatNames.Text,              (int)CLIPBOARD_FORMAT.CF_TEXT),
-            T.Create(DataFormatNames.Bitmap,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
-            T.Create(DataFormatNames.Wmf,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
-            T.Create(DataFormatNames.Emf,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
-            T.Create(DataFormatNames.Dif,               (int)CLIPBOARD_FORMAT.CF_DIF),
-            T.Create(DataFormatNames.Tiff,              (int)CLIPBOARD_FORMAT.CF_TIFF),
-            T.Create(DataFormatNames.OemText,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
-            T.Create(DataFormatNames.Dib,               (int)CLIPBOARD_FORMAT.CF_DIB),
-            T.Create(DataFormatNames.Palette,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
-            T.Create(DataFormatNames.PenData,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
-            T.Create(DataFormatNames.Riff,              (int)CLIPBOARD_FORMAT.CF_RIFF),
-            T.Create(DataFormatNames.WaveAudio,         (int)CLIPBOARD_FORMAT.CF_WAVE),
-            T.Create(DataFormatNames.SymbolicLink,      (int)CLIPBOARD_FORMAT.CF_SYLK),
-            T.Create(DataFormatNames.FileDrop,          (int)CLIPBOARD_FORMAT.CF_HDROP),
-            T.Create(DataFormatNames.Locale,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
+            Create(DataFormatNames.UnicodeText,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
+            Create(DataFormatNames.Text,              (int)CLIPBOARD_FORMAT.CF_TEXT),
+            Create(DataFormatNames.Bitmap,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
+            Create(DataFormatNames.Wmf,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
+            Create(DataFormatNames.Emf,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
+            Create(DataFormatNames.Dif,               (int)CLIPBOARD_FORMAT.CF_DIF),
+            Create(DataFormatNames.Tiff,              (int)CLIPBOARD_FORMAT.CF_TIFF),
+            Create(DataFormatNames.OemText,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
+            Create(DataFormatNames.Dib,               (int)CLIPBOARD_FORMAT.CF_DIB),
+            Create(DataFormatNames.Palette,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
+            Create(DataFormatNames.PenData,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
+            Create(DataFormatNames.Riff,              (int)CLIPBOARD_FORMAT.CF_RIFF),
+            Create(DataFormatNames.WaveAudio,         (int)CLIPBOARD_FORMAT.CF_WAVE),
+            Create(DataFormatNames.SymbolicLink,      (int)CLIPBOARD_FORMAT.CF_SYLK),
+            Create(DataFormatNames.FileDrop,          (int)CLIPBOARD_FORMAT.CF_HDROP),
+            Create(DataFormatNames.Locale,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
         ];
     }
+
+    private static T Create(string name, int id) =>
+#if NET
+        T.Create(name, id);
+#else
+        s_dataFormat.Create(name, id);
+#endif
 }

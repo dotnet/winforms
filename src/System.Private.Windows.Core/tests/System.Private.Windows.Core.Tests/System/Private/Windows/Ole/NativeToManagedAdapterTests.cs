@@ -4,17 +4,23 @@
 using System.ComponentModel;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
-using System.Text.Json;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Memory;
+
+#if NET
+using System.Text.Json;
+#endif
 
 using Composition = System.Private.Windows.Ole.Composition<
     System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.NativeToManagedAdapterTests>,
     System.Private.Windows.Nrbf.CoreNrbfSerializer,
     System.Private.Windows.Ole.TestFormat>;
 using DataFormats = System.Private.Windows.Ole.DataFormatsCore<System.Private.Windows.Ole.TestFormat>;
+
+using System.Text;
 
 namespace System.Private.Windows.Ole;
 
@@ -97,6 +103,20 @@ public unsafe class NativeToManagedAdapterTests
     }
 
     [Fact]
+    public void GetData_RtfWithoutNullTerminator_ReturnsRtfText()
+    {
+        const string rtf = "{\\rtf1\\ansi Test}";
+        MemoryStream stream = new(Encoding.Default.GetBytes(rtf));
+        using HGlobalNativeDataObject dataObject = new(stream, (ushort)DataFormats.GetOrAddFormat(DataFormatNames.Rtf).Id);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+        object? data = composition.GetData(DataFormatNames.Rtf);
+
+        data.Should().Be(rtf);
+    }
+
+#if NET
+    [Fact]
     public void GetData_CustomType_BinaryFormattedJson_AsSerializationRecord()
     {
         // Write the serialized prefix to the stream.
@@ -111,6 +131,7 @@ public unsafe class NativeToManagedAdapterTests
         composition.TryGetData(nameof(NativeToManagedAdapterTests), out SerializationRecord? data).Should().BeTrue();
         data!.TypeName.AssemblyQualifiedName.Should().Be("System.Private.Windows.JsonData, System.Private.Windows.VirtualJson");
     }
+#endif
 
     [Theory]
     [BoolData]

@@ -4,7 +4,6 @@
 		<type fullname="System.Windows.Forms.PictureBox" feature="System.Windows.Forms.PictureBox.UseWebRequest" featurevalue="false">
 			<method signature="System.Boolean UseWebRequest()" body="stub" value="false" />
 			<method signature="System.Void StartLoadViaWebRequest()" body="stub" />
-			<method signature="System.Void LoadImageViaWebClient()" body="stub" />
 		</type>
 	</assembly>
 </linker>

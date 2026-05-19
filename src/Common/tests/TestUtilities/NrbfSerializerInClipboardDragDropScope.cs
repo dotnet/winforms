@@ -14,7 +14,11 @@ public readonly ref struct NrbfSerializerInClipboardDragDropScope
             AppContextSwitchNames.ClipboardDragDropEnableNrbfSerializationSwitchName,
             () => AppContextSwitchScope.GetDefaultValueForSwitchInAssembly(
                 AppContextSwitchNames.ClipboardDragDropEnableNrbfSerializationSwitchName,
+#if NET
                 "System.Private.Windows.Core",
+#else
+                "Microsoft.Private.Windows.Core",
+#endif
                 "System.Private.Windows.CoreAppContextSwitches"),
             enable);
     }

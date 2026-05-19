@@ -16,6 +16,17 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
     /// <summary>
     ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <b>IMPORTANT:</b> This code is shared between WinForms and WPF via the System.Private.Windows.Core assembly.
+    ///   Changes to this class and related OLE/clipboard code affect both UI stacks. When modifying this code,
+    ///   consider the impact on WPF and ensure appropriate test coverage for both frameworks.
+    ///  </para>
+    ///  <para>
+    ///   For more information about the shared infrastructure and contributor guidance, see:
+    ///   <c>docs/shared-wpf-infrastructure.md</c>
+    ///  </para>
+    /// </remarks>
     private sealed unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
@@ -96,15 +107,15 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             [NotNullWhen(true)] out T? data)
         {
             data = default;
-            if (hglobal == 0)
+            if (hglobal == (nint)0)
             {
                 return false;
             }
 
             object? value = request.Format switch
             {
-                DataFormatNames.Text or DataFormatNames.Rtf or DataFormatNames.OemText =>
-                    ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Text or DataFormatNames.OemText => ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormatNames.Rtf => ReadRegisteredFormatStringFromHGLOBAL(hglobal, Encoding.Default),
                 DataFormatNames.Html or DataFormatNames.Xaml => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormatNames.UnicodeText => ReadStringFromHGLOBAL(hglobal, unicode: true),
                 DataFormatNames.FileDrop => ReadFileListFromHDROP((HDROP)(nint)hglobal),
@@ -147,7 +158,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 int size = checked((int)PInvokeCore.GlobalSize(hglobal));
-                byte[] bytes = GC.AllocateUninitializedArray<byte>(size);
+                byte[] bytes =
+#if NET
+                    GC.AllocateUninitializedArray<byte>(size);
+#else
+                    new byte[size];
+#endif
+
                 Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
 
@@ -180,10 +197,6 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             //
             // CF_TEXT, CF_OEMTEXT, CF_UNICODETEXT, and CFSTR_FILENAME are supposed to have a null terminator.
             // If we cannot find one in the buffer, assume it is corrupted and return an empty string.
-            //
-            // Can't find the explicit docs for CF_RTF, but we've always treated it as null terminated.
-            // The RichText control itself null terminates but looks like it doesn't require it.
-            // Given our prior and "normal" behavior, we'll continue to expect a null terminator.
 
             try
             {
@@ -204,7 +217,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     }
 
                     chars = chars[..nullIndex];
-                    return new string(chars);
+                    return chars.ToString();
                 }
                 else
                 {
@@ -218,6 +231,40 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
                     return new string((sbyte*)buffer, 0, nullIndex);
                 }
+            }
+            finally
+            {
+                PInvokeCore.GlobalUnlock(hglobal);
+            }
+        }
+
+        private static unsafe string ReadRegisteredFormatStringFromHGLOBAL(HGLOBAL hglobal, Encoding encoding)
+        {
+            void* buffer = PInvokeCore.GlobalLock(hglobal);
+            if (buffer is null)
+            {
+                throw new Win32Exception();
+            }
+
+            try
+            {
+                int size = checked((int)PInvokeCore.GlobalSize(hglobal));
+                if (size == 0)
+                {
+                    throw new Win32Exception();
+                }
+
+                ReadOnlySpan<byte> bytes = new((byte*)buffer, size);
+
+                // Registered format strings may be null-terminated, but the terminator is optional.
+                // If present, stop at the first null byte rather than decoding the entire allocation.
+                int nullIndex = bytes.IndexOf((byte)0);
+                if (nullIndex >= 0)
+                {
+                    bytes = bytes[..nullIndex];
+                }
+
+                return bytes.IsEmpty ? string.Empty : encoding.GetString(bytes);
             }
             finally
             {
@@ -319,7 +366,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             try
             {
                 // Try to get platform specific data first.
+#if NET
                 if (TOleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
+#else
+                if (s_oleServices.TryGetObjectFromDataObject(dataObject, request.Format, out data))
+#endif
                 {
                     return true;
                 }
@@ -472,7 +523,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
         {
             // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
             if (!DataFormatNames.IsPredefinedFormat(format)
+#if NET
                 && !TOleServices.AllowTypeWithoutResolver<T>()
+#else
+                && !s_oleServices.AllowTypeWithoutResolver<T>()
+#endif
                 // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                 && IsUnboundedType())
             {
@@ -586,6 +641,11 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         public bool GetDataPresent(string format, bool autoConvert)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                return false;
+            }
+
             bool dataPresent = GetDataPresentInner(format);
 
             if (dataPresent || !autoConvert)

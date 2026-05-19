@@ -1,19 +1,21 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if NET
 using System.Buffers.Binary;
+#endif
 using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace System.IO;
 
-internal static class BinaryReaderExtensions
+internal static partial class BinaryReaderExtensions
 {
     /// <summary>
     ///  Reads a binary formatted <see cref="DateTime"/> from the given <paramref name="reader"/>.
     /// </summary>
     /// <exception cref="SerializationException">The data was invalid.</exception>
-    internal static unsafe DateTime ReadDateTime(this BinaryReader reader)
+    internal static DateTime ReadDateTime(this BinaryReader reader)
         => CreateDateTimeFromData(reader.ReadInt64());
 
     /// <summary>
@@ -124,6 +126,7 @@ internal static class BinaryReaderExtensions
                 throw new SerializationException("Not enough data to fill array.");
             }
 
+#if NET
             if (sizeof(T) != 1 && !BitConverter.IsLittleEndian)
             {
                 if (sizeof(T) == 2)
@@ -146,6 +149,7 @@ internal static class BinaryReaderExtensions
                     throw new InvalidOperationException($"Cannot read primitives of {typeof(T).Name}.");
                 }
             }
+#endif
         }
 
         return array;
@@ -226,6 +230,12 @@ internal static class BinaryReaderExtensions
             throw new ArgumentException($"Cannot write primitives of {typeof(T).Name}.", nameof(T));
         }
 
+#if NETFRAMEWORK
+        // Always take the slow path on .NET Framework. This could be optimized further if necessary as the
+        // endianness is guaranteed to be little endian, but it's not clear if it's worth the effort without
+        // a demonstrated need.
+        WritePrimitiveCollection(writer, values);
+#else
         ReadOnlySpan<T> span;
         if (values is T[] array)
         {
@@ -263,6 +273,7 @@ internal static class BinaryReaderExtensions
         // endianness in one pass with BinaryPrimitives.ReverseEndianness (see ReadPrimitiveArray). Probably not
         // worth doing without measuring to see how much of a difference it actualy makes.
         WritePrimitiveCollection(writer, values);
+#endif
 
         static void WritePrimitiveCollection(BinaryWriter writer, IReadOnlyList<T> values)
         {

@@ -23,6 +23,8 @@ internal sealed class HdcHandle : IDisposable, IHandle<HDC>
 
     public HDC Handle { get; private set; }
 
+    public object? Wrapper => this;
+
     public static implicit operator HDC(in HdcHandle handle) => handle.Handle;
     public static implicit operator nint(in HdcHandle handle) => handle.Handle;
 

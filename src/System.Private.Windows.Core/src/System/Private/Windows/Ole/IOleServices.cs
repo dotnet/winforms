@@ -15,7 +15,10 @@ internal unsafe interface IOleServices
     ///  that the current thread is a single-threaded apartment (STA).
     /// </summary>
     /// <exception cref="ThreadStateException">Current thread is not in the right state for OLE.</exception>
-    static abstract void EnsureThreadState();
+#if NET
+    static abstract
+#endif
+    void EnsureThreadState();
 
     /// <summary>
     ///  Called after unsuccessfully performing clipboard <see cref="TYMED.TYMED_HGLOBAL"/> serialization.
@@ -27,7 +30,10 @@ internal unsafe interface IOleServices
     /// </remarks>
     /// <param name="format">The data format that is being serialized.</param>
     /// <inheritdoc cref="IDataObject.GetDataHere(FORMATETC*, STGMEDIUM*)"/>
-    static abstract HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
+#if NET
+    static abstract
+#endif
+    HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
 
     /// <summary>
     ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
@@ -40,7 +46,10 @@ internal unsafe interface IOleServices
     ///  </para>
     /// </remarks>
     /// <returns><see langword="true"/> if a bitmap was extracted.</returns>
-    static abstract bool TryGetObjectFromDataObject<T>(
+#if NET
+    static abstract
+#endif
+    bool TryGetObjectFromDataObject<T>(
         IDataObject* dataObject,
         string format,
         [NotNullWhen(true)] out T data);
@@ -53,12 +62,18 @@ internal unsafe interface IOleServices
     ///   Basic predefined formats that map to <see langword="string"/> are checked before this call.
     ///  </para>
     /// </remarks>
-    static abstract bool IsValidTypeForFormat(Type type, string format);
+#if NET
+    static abstract
+#endif
+    bool IsValidTypeForFormat(Type type, string format);
 
     /// <summary>
     ///  Allows the given <typeparamref name="T"/> to pass pre-validation without a resolver.
     /// </summary>
-    static abstract bool AllowTypeWithoutResolver<T>();
+#if NET
+    static abstract
+#endif
+    bool AllowTypeWithoutResolver<T>();
 
     /// <summary>
     ///  Allows custom validation or adapting of <see cref="DataStore{TOleServices}"/> data and formats.
@@ -68,19 +83,34 @@ internal unsafe interface IOleServices
     ///  <paramref name="autoConvert"/> is true.
     /// </param>
     /// <param name="data">The data to be checked against <paramref name="data"/>.</param>
-    static abstract void ValidateDataStoreData(ref string format, bool autoConvert, object? data);
+#if NET
+    static abstract
+#endif
+    void ValidateDataStoreData(ref string format, bool autoConvert, object? data);
 
     /// <summary>
     ///  Creates an <see cref="IComVisibleDataObject"/> instance.
     /// </summary>
-    static abstract IComVisibleDataObject CreateDataObject();
+#if NET
+    static abstract
+#endif
+    IComVisibleDataObject CreateDataObject();
 
-    /// <inheritdoc cref="PInvokeCore.OleGetClipboard(IDataObject**)"/>/>
-    static abstract HRESULT OleGetClipboard(IDataObject** dataObject);
+    /// <inheritdoc cref="PInvokeCore.OleGetClipboard(IDataObject**)"/>
+#if NET
+    static abstract
+#endif
+    HRESULT OleGetClipboard(IDataObject** dataObject);
 
     /// <inheritdoc cref="PInvokeCore.OleSetClipboard(IDataObject*)"/>
-    static abstract HRESULT OleSetClipboard(IDataObject* dataObject);
+#if NET
+    static abstract
+#endif
+    HRESULT OleSetClipboard(IDataObject* dataObject);
 
     /// <inheritdoc cref="PInvokeCore.OleFlushClipboard"/>
-    static abstract HRESULT OleFlushClipboard();
+#if NET
+    static abstract
+#endif
+    HRESULT OleFlushClipboard();
 }

@@ -378,11 +378,29 @@ public partial class DataObjectTests
         // true is the default value for general purpose APIs (GetData).
         private readonly bool _autoConvert;
 
-        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert) : base()
+        private readonly Type _expectedType;
+        private readonly bool _resultToReturn;
+        private readonly object? _dataToReturn;
+
+        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert)
+            : this(format, resolver, autoConvert, typeof(string), resultToReturn: false, dataToReturn: null)
+        {
+        }
+
+        public DataObjectOverridesTryGetDataCore(
+            string format,
+            Func<TypeName, Type>? resolver,
+            bool autoConvert,
+            Type expectedType,
+            bool resultToReturn,
+            object? dataToReturn) : base()
         {
             _format = format;
             _resolver = resolver;
             _autoConvert = autoConvert;
+            _expectedType = expectedType;
+            _resultToReturn = resultToReturn;
+            _dataToReturn = dataToReturn;
         }
 
         public int Count { get; private set; }
@@ -397,9 +415,16 @@ public partial class DataObjectTests
             format.Should().Be(_format);
             resolver.Should().BeEquivalentTo(_resolver);
             autoConvert.Should().Be(_autoConvert);
-            typeof(T).Should().Be<string>();
+            typeof(T).Should().Be(_expectedType);
 
             Count++;
+
+            if (typeof(T) == _expectedType && _dataToReturn is not null)
+            {
+                data = (T)_dataToReturn;
+                return _resultToReturn;
+            }
+
             // This is a mock implementation that never returns anything.
             data = default;
             return false;
@@ -909,18 +934,46 @@ public partial class DataObjectTests
 
     [Theory]
     [MemberData(nameof(GetImage_TheoryData))]
-    public void GetImage_InvokeMocked_ReturnsExpected(object result, Image expected)
+    public void GetImage_Invoke_CallsTryGetData(object result, Image expected)
     {
-        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
-        mockDataObject
-            .Setup(o => o.GetImage())
-            .CallBase();
-        mockDataObject
-            .Setup(o => o.GetData(DataFormats.Bitmap, true))
-            .Returns(result)
-            .Verifiable();
-        mockDataObject.Object.GetImage().Should().BeSameAs(expected);
-        mockDataObject.Verify(o => o.GetData(DataFormats.Bitmap, true), Times.Once());
+        bool autoConvert = true;
+        bool resultToReturn = result is Image;
+        Image dataToReturn = result as Image;
+        DataObjectOverridesTryGetDataCore dataObject = new(
+            DataFormats.Bitmap,
+            resolver: null,
+            autoConvert,
+            expectedType: typeof(Image),
+            resultToReturn,
+            dataToReturn);
+        dataObject.Count.Should().Be(0);
+
+        Image image = dataObject.GetImage();
+
+        image.Should().BeSameAs(expected);
+        dataObject.Count.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void GetDataObject_GetImage_RoundTripsBitmap()
+    {
+        try
+        {
+            using Bitmap bitmap = new(10, 10);
+            bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+            Clipboard.SetImage(bitmap);
+
+            DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+
+            var result = dataObject.GetImage().Should().BeOfType<Bitmap>().Subject;
+            result.Size.Should().Be(bitmap.Size);
+            result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
+            Clipboard.ContainsImage().Should().BeTrue();
+        }
+        finally
+        {
+            Clipboard.Clear();
+        }
     }
 
     [Fact]

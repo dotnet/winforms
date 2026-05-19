@@ -238,7 +238,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => Type.GetType(typeName.FullName)
+            Resolver = typeName => Type.GetType(typeName.FullName)
         };
 
         BinaryFormatUtilities.TryReadObjectFromStream(stream, in request, out Array? result).Should().BeTrue();
@@ -296,7 +296,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeof(int[]).Matches(typeName, TypeNameComparison.TypeFullName)
+            Resolver = typeName => typeof(int[]).Matches(typeName, TypeNameComparison.TypeFullName)
                 ? typeof(int[])
                 : throw new NotSupportedException()
         };
@@ -343,6 +343,8 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         result.Should().BeEquivalentTo(value);
     }
 
+#if NET
+    // There isn't a way to actually turn off the BinaryFormatter in .NET Framework.
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
     public void RoundTrip_Unsupported(IList value)
@@ -370,6 +372,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         // Binary format deserializers in Clipboard/DragDrop scenarios are not opted in.
         reader.Should().Throw<NotSupportedException>();
     }
+#endif
 
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
@@ -490,7 +493,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeName.FullName == typeof(DerivedClass).FullName
+            Resolver = typeName => typeName.FullName == typeof(DerivedClass).FullName
                 ? typeof(DerivedClass)
                 : throw new NotSupportedException()
         };
@@ -529,7 +532,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeName.FullName == typeof(MyStruct).FullName
+            Resolver = typeName => typeName.FullName == typeof(MyStruct).FullName
                 ? typeof(MyStruct?)
                 : throw new NotSupportedException()
         };
@@ -578,7 +581,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeName.FullName == typeof(int).FullName
+            Resolver = typeName => typeName.FullName == typeof(int).FullName
                 ? typeof(int?)
                 : throw new NotSupportedException()
         };
@@ -617,7 +620,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) => typeName.FullName == typeof(int).FullName
+            Resolver = typeName => typeName.FullName == typeof(int).FullName
                 ? typeof(float)
                 : throw new NotSupportedException()
         };
@@ -844,7 +847,7 @@ public sealed partial class BinaryFormatUtilitiesTests : BinaryFormatUtilitesTes
         {
             Format = "test",
             TypedRequest = true,
-            Resolver = (TypeName typeName) =>
+            Resolver = typeName =>
             {
                 if (typeof(MyClass1).Matches(typeName))
                 {

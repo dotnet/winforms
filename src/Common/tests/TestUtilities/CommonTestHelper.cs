@@ -51,9 +51,9 @@ public static class CommonTestHelper
     public static TheoryData<IntPtr> GetIntPtrTheoryData()
         => new()
         {
-            -1,
+            (nint)(-1),
             IntPtr.Zero,
-            1
+            (nint)1
         };
 
     public static TheoryData<Color> GetColorTheoryData()

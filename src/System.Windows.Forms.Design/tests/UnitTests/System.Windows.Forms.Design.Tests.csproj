@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
-    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <SourceTargetFramework>$(NetCurrent)</SourceTargetFramework>
+    <TargetFramework>$(NetCurrent)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -57,10 +57,10 @@
 
   <ItemGroup>
     <Reference Include="AxInterop.WMPLib">
-      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\$(NetFxTFM)\AxInterop.WMPLib.dll</HintPath>
     </Reference>
     <Reference Include="Interop.WMPLib">
-      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\$(NetFxTFM)\Interop.WMPLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

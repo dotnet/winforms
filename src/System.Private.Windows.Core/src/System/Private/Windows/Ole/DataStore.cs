@@ -7,8 +7,17 @@ using System.Runtime.Serialization;
 
 namespace System.Private.Windows.Ole;
 
-internal sealed partial class DataStore<TOleServices> : IDataObjectInternal where TOleServices : IOleServices
+internal sealed partial class DataStore<TOleServices>
+#if NET
+    : IDataObjectInternal where TOleServices : IOleServices
+#else
+    : IDataObjectInternal where TOleServices : IOleServices, new()
+#endif
 {
+#if NETFRAMEWORK
+    private static readonly TOleServices s_oleServices = new();
+#endif
+
     private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
 
     private bool TryGetDataInternal<T>(
@@ -57,11 +66,13 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
                     data = value;
                     return true;
                 }
+#if OLE_JSON
                 else if (entry.Data is JsonData<T> jsonData)
                 {
                     data = (T)jsonData.Deserialize();
                     return true;
                 }
+#endif
             }
 
             data = default;
@@ -82,7 +93,11 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
     public void SetData(string format, bool autoConvert, object? data)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format, nameof(format));
+#if NET
         TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
+#else
+        s_oleServices.ValidateDataStoreData(ref format, autoConvert, data);
+#endif
         _mappedData[format] = new DataStoreEntry(data, autoConvert);
     }
 
@@ -150,7 +165,13 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         {
             // Since we are only adding elements to the HashSet, the order will be preserved.
             int definedCount = definedFormats.Length;
-            HashSet<string> distinctFormats = new(definedCount);
+            HashSet<string> distinctFormats =
+#if NET
+                new(definedCount);
+#else
+                new();
+#endif
+
             for (int i = 0; i < definedCount; i++)
             {
                 string current = definedFormats[i];

@@ -202,6 +202,65 @@ public class AnchorLayoutTests : ControlTestBase
     }
 
     [WinFormsFact]
+    public void AnchorLayoutV2_ReplaceParentWhileAncestorLayoutSuspended_AnchorsRemainConsistent()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/14500
+        using AnchorLayoutV2Scope scope = new(enable: true);
+        using Form form = new() { ClientSize = new Size(400, 300) };
+        using Panel originalPanel = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Location = new Point(20, 30),
+            Size = new Size(100, 120)
+        };
+        using Panel replacementPanel = new();
+
+        form.Controls.Add(originalPanel);
+        form.ResumeLayout(performLayout: true);
+
+        form.ClientSize = new Size(500, 350);
+        Assert.Equal(new Rectangle(20, 30, 200, 170), originalPanel.Bounds);
+
+        ReplaceControl(originalPanel, replacementPanel);
+        Assert.Equal(originalPanel.Anchor, replacementPanel.Anchor);
+        Assert.Equal(new Rectangle(20, 30, 200, 170), replacementPanel.Bounds);
+
+        form.ClientSize = new Size(600, 400);
+        Assert.Equal(new Rectangle(20, 30, 300, 220), replacementPanel.Bounds);
+
+        static void ReplaceControl(Control controlToRemove, Control controlToAdd)
+        {
+            controlToRemove.SuspendLayout();
+            controlToAdd.SuspendLayout();
+            controlToAdd.Anchor = controlToRemove.Anchor;
+            controlToAdd.Dock = controlToRemove.Dock;
+            controlToAdd.Location = controlToRemove.Location;
+            controlToAdd.Size = controlToRemove.Size;
+            controlToRemove.ResumeLayout(true);
+            controlToAdd.ResumeLayout(true);
+
+            Control parentOfControlToRemove = controlToRemove.Parent!;
+            Control? parentOfControlToAdd = controlToAdd.Parent;
+            int index = parentOfControlToRemove.Controls.IndexOf(controlToRemove);
+            parentOfControlToRemove.SuspendLayout();
+            if (parentOfControlToAdd is { } parentToSuspend)
+            {
+                parentToSuspend.SuspendLayout();
+            }
+
+            parentOfControlToRemove.Controls.Remove(controlToRemove);
+            parentOfControlToRemove.Controls.Add(controlToAdd);
+            parentOfControlToRemove.Controls.SetChildIndex(controlToAdd, index);
+            parentOfControlToRemove.ResumeLayout(true);
+
+            if (parentOfControlToAdd is { } parentToResume)
+            {
+                parentToResume.ResumeLayout(true);
+            }
+        }
+    }
+
+    [WinFormsFact]
     public void SetBoundsOnAnchoredControl_BoundsChanged()
     {
         using AnchorLayoutV2Scope scope = new(enable: true);

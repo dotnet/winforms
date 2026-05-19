@@ -161,10 +161,25 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
     where TDataObject : class, TIDataObject
     where TIDataObject : class
 {
-    static abstract TDataObject Create();
-    static abstract TDataObject Create(IDataObject* dataObject);
-    static abstract TDataObject Create(object data);
-    static abstract IDataObjectInternal Wrap(TIDataObject data);
+#if NET
+    static abstract
+#endif
+    TDataObject Create();
+
+#if NET
+    static abstract
+#endif
+    TDataObject Create(IDataObject* dataObject);
+
+#if NET
+    static abstract
+#endif
+    TDataObject Create(object data);
+
+#if NET
+    static abstract
+#endif
+    IDataObjectInternal Wrap(TIDataObject data);
 
     /// <summary>
     ///  Unwraps the user IDataObject instance when applicable.

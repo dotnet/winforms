@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetCurrent);net481</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't properly recognize this on .NET Framework.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCurrent)'">
+    <!-- We're not testing any of our code on .NET, just validating that the tests have the same results. -->
+    <CollectCoverage>false</CollectCoverage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AwesomeAssertions" />
+  </ItemGroup>
+
+  <!--
+    PolySharp related (source generated polyfills for .NET Framework)
+  -->
+  <PropertyGroup>
+    <PolySharpUsePublicAccessibilityForGeneratedTypes>false</PolySharpUsePublicAccessibilityForGeneratedTypes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!--
+    Global usings needed by the Polyfills shared project files.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <Using Include="System.Diagnostics" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.Runtime.CompilerServices" />
+  </ItemGroup>
+
+  <Import
+    Condition="'$(TargetFramework)' == 'net481'"
+    Project="..\..\..\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills.projitems"
+    Label="Shared" />
+
+</Project>

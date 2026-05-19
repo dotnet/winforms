@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+#if NET
 using FluentAssertions.Collections;
+#endif
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
 using FluentAssertions.Primitives;
@@ -43,6 +45,7 @@ public static class FluentAssertExtensions
         return new(parent);
     }
 
+#if NET
     /// <summary>
     ///  Asserts that two <see cref="RectangleF"/> collections contain the same items in the same order
     ///  within the given <paramref name="precision"/>.
@@ -63,6 +66,7 @@ public static class FluentAssertExtensions
                     && ComparisonHelpers.EqualsFloating(expected.Height, actual.Height, precision),
             because,
             becauseArgs);
+#endif
 
     /// <summary>
     ///  Asserts a <see cref="PointF"/> value approximates another value as close as possible.
@@ -82,6 +86,7 @@ public static class FluentAssertExtensions
         return new AndConstraint<PointFAssertions>(parent);
     }
 
+#if NET
     /// <summary>
     ///  Asserts that two <see cref="PointF"/> collections contain the same items in the same order
     ///  within the given <paramref name="precision"/>.
@@ -100,6 +105,7 @@ public static class FluentAssertExtensions
                     && ComparisonHelpers.EqualsFloating(expected.Y, actual.Y, precision),
             because,
             becauseArgs);
+#endif
 
     /// <summary>
     ///  Asserts a <see cref="Rectangle"/> is empty.

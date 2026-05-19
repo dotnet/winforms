@@ -6,7 +6,11 @@ using Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
-internal abstract unsafe class NativeDataObjectMock : DisposableBase, IDataObject.Interface, IManagedWrapper<IDataObject>
+#if NET
+internal abstract unsafe partial class NativeDataObjectMock : IManagedWrapper<IDataObject> { }
+#endif
+
+internal abstract unsafe partial class NativeDataObjectMock : DisposableBase, IDataObject.Interface
 {
     public virtual HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium) => throw new NotImplementedException();
     public virtual HRESULT GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium) => throw new NotImplementedException();

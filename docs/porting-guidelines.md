@@ -132,7 +132,7 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 
 ### Additional Types and Namespaces
 
-You can search for additional types which you may need in porting your apps to .NET on [APIs of DotNet][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET 2.0.
+You can search for additional types which you may need in porting your apps to .NET on [.NET API Catalog][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET 2.0.
 
 [comment]: <> (URI Links)
 
@@ -146,4 +146,4 @@ You can search for additional types which you may need in porting your apps to .
 [dataviz]: https://github.com/dotnet/winforms-datavisualization
 [compat-pack]: https://docs.microsoft.com/dotnet/core/porting/windows-compat-pack
 [wcf-supported]: https://github.com/dotnet/wcf/blob/master/release-notes/SupportedFeatures-v2.1.0.md
-[apisofnet]: https://apisof.net/
+[apisofnet]: https://catalog.apireview.net/

@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Collections.Immutable
@@ -11,6 +11,7 @@ Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
 <ForceGC()>
+<SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")>
 Public Class AvoidPassingTaskWithoutCancellationTokenTests
 
     Private Const TestCode As String = "

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>$(NetCurrent)</TargetFramework>
     <AssemblyName>Microsoft.VisualBasic</AssemblyName>
     <!-- Set PackageId to something different than the assembly name as NuGet prunes package and project
          references for dependencies that are inbox in the framework. NuGet uses the PackageId information

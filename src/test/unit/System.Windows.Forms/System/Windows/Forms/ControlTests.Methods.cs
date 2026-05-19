@@ -413,6 +413,19 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_OnHandleDestroyed_CustomAccessibleObject_DoesNotThrow1()
+    {
+        using CustomCreateAccessibilityInstanceControl control = new()
+        {
+            CreateAccessibilityResult = new AccessibleObject()
+        };
+
+        AccessibleObject accessibleObject = control.AccessibilityObject;
+        Action action = () => control.InvokeOnHandleDestroyed(EventArgs.Empty);
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
     public void Control_CreateControl_Invoke_Success()
     {
         using SubControl control = new();

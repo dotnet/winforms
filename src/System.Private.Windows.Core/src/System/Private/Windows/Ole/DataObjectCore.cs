@@ -3,9 +3,10 @@
 
 namespace System.Private.Windows.Ole;
 
-internal static unsafe class DataObjectCore<TDataObject>
+internal static class DataObjectCore<TDataObject>
     where TDataObject : IComVisibleDataObject
 {
+#if OLE_JSON
     /// <summary>
     ///  JSON serialize the data only if the format is not a restricted deserialization format and the data is not an intrinsic type.
     /// </summary>
@@ -31,4 +32,5 @@ internal static unsafe class DataObjectCore<TDataObject>
 
         return IJsonData.Create(data);
     }
+#endif
 }

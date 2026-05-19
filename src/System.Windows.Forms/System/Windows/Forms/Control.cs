@@ -7518,14 +7518,16 @@ public unsafe partial class Control :
         ((EventHandler?)Events[s_handleDestroyedEvent])?.Invoke(this, e);
 
         // The Accessibility Object for this Control
-        if (Properties.TryGetValue(s_accessibilityProperty, out ControlAccessibleObject? accObj))
+        if (Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accObj)
+            && accObj is ControlAccessibleObject controlAccObj)
         {
-            accObj.Handle = IntPtr.Zero;
+            controlAccObj.Handle = IntPtr.Zero;
         }
 
         // Private accessibility object for control, used to wrap the object that
         // OLEACC.DLL creates to represent the control's non-client (NC) region.
-        if (Properties.TryGetValue(s_ncAccessibilityProperty, out ControlAccessibleObject? nonClientAccessibleObject))
+        if (Properties.TryGetValue(s_ncAccessibilityProperty, out AccessibleObject? ncAccObj)
+            && ncAccObj is ControlAccessibleObject nonClientAccessibleObject)
         {
             nonClientAccessibleObject.Handle = IntPtr.Zero;
         }
@@ -11561,7 +11563,9 @@ public unsafe partial class Control :
     {
         DefWndProc(ref m);
 
+        // Cache the current DPI before updating DeviceDpiInternal.
         OriginalDeviceDpiInternal = DeviceDpiInternal;
+        int oldDeviceDpi = DeviceDpiInternal;
 
         // In order to support tests, will be querying Dpi from the message first.
         int newDeviceDpi = (short)m.WParamInternal.LOWORD;
@@ -11580,6 +11584,8 @@ public unsafe partial class Control :
 
         Font localFont = GetCurrentFontAndDpi(out int fontDpi);
         DeviceDpiInternal = newDeviceDpi;
+        // Preserve the old DPI as the "original" DPI for subsequent scaling logic.
+        OriginalDeviceDpiInternal = oldDeviceDpi;
 
         if (fontDpi == DeviceDpiInternal)
         {

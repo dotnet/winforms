@@ -18,8 +18,20 @@ public readonly ref struct ClipboardBinaryFormatterFullCompatScope : IDisposable
 
     public void Dispose()
     {
-        _binaryFormatterScope.Dispose();
-        _binaryFormatterInClipboardDragDropScope.Dispose();
-        _nrbfSerializerInClipboardDragDropScope.Dispose();
+        try
+        {
+            _nrbfSerializerInClipboardDragDropScope.Dispose();
+        }
+        finally
+        {
+            try
+            {
+                _binaryFormatterInClipboardDragDropScope.Dispose();
+            }
+            finally
+            {
+                _binaryFormatterScope.Dispose();
+            }
+        }
     }
 }

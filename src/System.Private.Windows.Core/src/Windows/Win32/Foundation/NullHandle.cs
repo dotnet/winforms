@@ -10,4 +10,6 @@ internal class NullHandle<T> : IHandle<T> where T : unmanaged
     public static NullHandle<T> Instance { get; } = new();
 
     public T Handle => default;
+
+    public object? Wrapper => null;
 }

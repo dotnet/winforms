@@ -2,8 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Private.Windows.BinaryFormat;
 using System.Reflection.Metadata;
+
+#if NET
+using System.Private.Windows.BinaryFormat;
+#endif
 
 namespace System.Private.Windows.Ole.Tests;
 
@@ -11,18 +14,23 @@ public abstract class BinaryFormatUtilitesTestsBase : IDisposable
 {
     public enum DataType
     {
+#if NET
         Json,
+#endif
         BinaryFormat
     }
 
     public MemoryStream CreateStream<T>(DataType dataType, T data) where T : notnull
     {
         MemoryStream stream = new();
+
+#if NET
         if (dataType == DataType.Json)
         {
             BinaryFormatWriter.TryWriteJsonData(stream, IJsonData.Create(data));
         }
         else
+#endif
         {
             WriteObjectToStream(stream, data, "test");
         }

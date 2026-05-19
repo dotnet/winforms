@@ -18,7 +18,9 @@ internal class CoreNrbfSerializer : INrbfSerializer
 
     public static bool TryWriteObject(Stream stream, object value) =>
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value)
+#if OLE_JSON
         || BinaryFormatWriter.TryWriteJsonData(stream, value)
+#endif
         || BinaryFormatWriter.TryWriteDrawingPrimitivesObject(stream, value);
 
     public static bool TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value) =>
@@ -158,4 +160,11 @@ internal class CoreNrbfSerializer : INrbfSerializer
             || type == typeof(Point)
             || type == typeof(Size)
             || type == typeof(Color);
+
+#if NETFRAMEWORK
+    bool INrbfSerializer.TryWriteObject(Stream stream, object value) => TryWriteObject(stream, value);
+    bool INrbfSerializer.TryGetObject(SerializationRecord record, [NotNullWhen(true)] out object? value) => TryGetObject(record, out value);
+    bool INrbfSerializer.TryBindToType(TypeName typeName, [NotNullWhen(true)] out Type? type) => TryBindToType(typeName, out type);
+    bool INrbfSerializer.IsFullySupportedType(Type type) => IsFullySupportedType(type);
+#endif
 }

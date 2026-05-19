@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>$(NetCurrent)</TargetFramework>
     <AssemblyName>System.Drawing</AssemblyName>
     <NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
   </PropertyGroup>

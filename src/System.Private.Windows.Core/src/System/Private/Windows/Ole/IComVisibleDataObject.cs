@@ -5,9 +5,15 @@ using Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
+#if NET
+internal partial interface IComVisibleDataObject : IManagedWrapper<IDataObject>
+{
+}
+#endif
+
 /// <summary>
 ///  Used to filter to fully COM visible data objects. Notably the platform specific DataObject class.
 /// </summary>
-internal interface IComVisibleDataObject : IDataObject.Interface, IManagedWrapper<IDataObject>, IDataObjectInternal
+internal partial interface IComVisibleDataObject : IDataObject.Interface, IDataObjectInternal
 {
 }

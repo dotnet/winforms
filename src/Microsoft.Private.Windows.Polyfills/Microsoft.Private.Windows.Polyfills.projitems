@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>799cc0c2-236b-4a76-8ce3-65c346182cc1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Microsoft.Private.Windows.Polyfills</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ArgumentExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ArgumentNullExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ArgumentOutOfRangeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\DecimalExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Diagnostics\CodeAnalysis\DynamicallyAccessedMembersAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Diagnostics\CodeAnalysis\DynamicallyAccessedMemberTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Diagnostics\CodeAnalysis\DynamicDependencyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Diagnostics\CodeAnalysis\RequiresUnreferencedCodeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Diagnostics\CodeAnalysis\UnconditionalSuppressMessageAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\EnumExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\IO\BinaryReaderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\IO\PathExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\IO\StreamExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ISpanFormattable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)system\NativeIntExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)system\NativeUintExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\OperatingSystemExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Runtime\Versioning\PlatformAttributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\SpanExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Text\EncodingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Threading\InterlockedExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\TypeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\SRF.resx">
+      <WithCulture>false</WithCulture>
+      <ManifestResourceName>Microsoft.Private.Windows.Polyfills.Resources.SRF</ManifestResourceName>
+      <GenerateSource>true</GenerateSource>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

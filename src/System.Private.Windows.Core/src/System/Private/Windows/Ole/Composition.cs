@@ -3,9 +3,12 @@
 
 using System.Private.Windows.Nrbf;
 using System.Reflection.Metadata;
-using System.Text.Json;
 using Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+
+#if OLE_JSON
+using System.Text.Json;
+#endif
 
 namespace System.Private.Windows.Ole;
 
@@ -13,12 +16,29 @@ namespace System.Private.Windows.Ole;
 ///  Contains the logic to move between <see cref="IDataObjectInternal"/>, <see cref="IDataObject.Interface"/>,
 ///  and <see cref="ComTypes.IDataObject"/> calls.
 /// </summary>
+/// <remarks>
+///  <para>
+///   <b>IMPORTANT:</b> This class is part of System.Private.Windows.Core, which is shared between WinForms and WPF.
+///   Changes to clipboard and OLE handling in this class affect both UI stacks. For contributor guidance on working
+///   with shared infrastructure, see: <c>docs/shared-wpf-infrastructure.md</c>
+///  </para>
+/// </remarks>
 internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFormat>
     : IDataObjectInternal, IDataObject.Interface, ComTypes.IDataObject
+#if NET
     where TDataFormat : IDataFormat<TDataFormat>
     where TOleServices : IOleServices
     where TNrbfSerializer : INrbfSerializer
+#else
+    where TDataFormat : IDataFormat<TDataFormat>, new()
+    where TOleServices : IOleServices, new()
+    where TNrbfSerializer : INrbfSerializer, new()
+#endif
 {
+#if NETFRAMEWORK
+    private static readonly TOleServices s_oleServices = new();
+#endif
+
     private const TYMED AllowedTymeds = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
 
     // We use this to identify that a stream is actually a serialized object. On read, we don't know if the contents
@@ -47,7 +67,11 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create() => Create(new DataStore<TOleServices>());
 
     internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create<TDataObject, TIDataObject>(object data)
+#if NET
         where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
+#else
+        where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject, new()
+#endif
         where TIDataObject : class
     {
         if (data is IDataObjectInternal internalDataObject)
@@ -56,7 +80,11 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
         }
         else if (data is TIDataObject iDataObject)
         {
+#if NET
             return Create(TDataObject.Wrap(iDataObject));
+#else
+            return Create(DataObjectFactory<TDataObject, TIDataObject>.Instance.Wrap(iDataObject));
+#endif
         }
         else if (data is ComTypes.IDataObject comDataObject)
         {
@@ -96,6 +124,7 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
         return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
     }
 
+#if NET
     /// <summary>
     ///  Stores the data in the specified format using the <see cref="JsonSerializer"/>.
     /// </summary>
@@ -130,6 +159,7 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
             autoConvert: false,
             DataObjectCore<TDataObject>.TryJsonSerialize(format, data));
     }
+#endif
 
     #region IDataObjectInternal
     public object? GetData(string format, bool autoConvert)
@@ -137,7 +167,11 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
         object? result = ManagedDataObject.GetData(format, autoConvert);
 
         // Avoid exposing our internal JsonData<T>
-        return result is IJsonData json ? json.Deserialize() : result;
+        return
+#if OLE_JSON
+            result is IJsonData json ? json.Deserialize() :
+#endif
+            result;
     }
 
     public object? GetData(string format) => ManagedDataObject.GetData(format);

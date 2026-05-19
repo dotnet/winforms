@@ -14,7 +14,11 @@ public readonly ref struct BinaryFormatterInClipboardDragDropScope
             AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
             () => AppContextSwitchScope.GetDefaultValueForSwitchInAssembly(
                 AppContextSwitchNames.ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName,
+#if NET
                 "System.Private.Windows.Core",
+#else
+                "Microsoft.Private.Windows.Core",
+#endif
                 "System.Private.Windows.CoreAppContextSwitches"),
             enable);
     }

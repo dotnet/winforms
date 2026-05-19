@@ -7,11 +7,11 @@
   <Import Project="$(RepositoryEngineeringDir)Test.props" Condition="'$(IsTestProject)' == 'true'"/>
 
   <PropertyGroup>
-    <TargetFramework>$(NetCurrent)</TargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dotnet/winforms</PackageProjectUrl>
+    <NetFxTFM>net481</NetFxTFM>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -57,7 +57,7 @@
     <!-- https://github.com/tonerdo/coverlet/issues/618 -->
     <IncludeTestAssembly>true</IncludeTestAssembly>
 
-    <CollectCoverage>true</CollectCoverage>
+    <CollectCoverage Condition="'$(CollectCoverage)' == '' and '$(IsTestProject)' == 'true' and '$(TargetFramework)' != ''">true</CollectCoverage>
     <SingleHit>true</SingleHit>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>

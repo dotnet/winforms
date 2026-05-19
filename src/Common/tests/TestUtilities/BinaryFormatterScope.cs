@@ -17,7 +17,7 @@ public readonly ref struct BinaryFormatterScope
         // Prevent multiple BinaryFormatterScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(BinaryFormatterScope));
-        _switchScope = new(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, GetDefaultValue, enable);
+        _switchScope = new(AppContextSwitchNames.EnableUnsafeBinaryFormatterSerialization, () => false, enable);
     }
 
     public void Dispose()
@@ -31,6 +31,4 @@ public readonly ref struct BinaryFormatterScope
             Monitor.Exit(typeof(BinaryFormatterScope));
         }
     }
-
-    public static bool GetDefaultValue() => false;
 }

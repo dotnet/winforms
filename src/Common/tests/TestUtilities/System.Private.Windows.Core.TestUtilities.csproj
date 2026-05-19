@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFrameworks>$(NetCurrent);net481</TargetFrameworks>
     <AssemblyName>System.Private.Windows.Core.TestUtilities</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>System</RootNamespace>
@@ -8,6 +9,14 @@
     <IsPackable>true</IsPackable>
     <IsShipping>false</IsShipping>
     <IsTestUtilityProject>true</IsTestUtilityProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't properly recognize this on .NET Framework.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,5 +28,33 @@
     <PackageReference Include="Microsoft.DotNet.XUnitV3Extensions" />
     <PackageReference Include="System.Formats.Nrbf" />
   </ItemGroup>
+
+  <!--
+    PolySharp related (source generated polyfills for .NET Framework)
+  -->
+  <PropertyGroup>
+    <PolySharpUsePublicAccessibilityForGeneratedTypes>false</PolySharpUsePublicAccessibilityForGeneratedTypes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!--
+    Global usings needed by the Polyfills shared project files.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <!-- Needed for `dynamic` -->
+    <Reference Include="Microsoft.CSharp"/>
+  </ItemGroup>
+
+  <Import
+    Condition="'$(TargetFramework)' == 'net481'"
+    Project="..\..\..\Microsoft.Private.Windows.Polyfills\Microsoft.Private.Windows.Polyfills.projitems"
+    Label="Shared" />
 
 </Project>

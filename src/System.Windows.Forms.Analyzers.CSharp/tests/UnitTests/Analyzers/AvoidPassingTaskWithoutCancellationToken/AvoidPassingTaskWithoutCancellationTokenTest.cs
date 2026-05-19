@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Analyzers.Diagnostics;
@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Testing;
 namespace System.Windows.Forms.Analyzers.Tests;
 
 [ForceGC]
+[SkipOnArchitecture(TestArchitectures.X86, "Analyzer tests hit OutOfMemoryException on x86 due to memory-mapped NuGet package extraction")]
 public sealed class AvoidPassingTaskWithoutCancellationTokenTests
 {
     private const string TestCode = """

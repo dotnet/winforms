@@ -287,7 +287,7 @@ public partial class ComboBox
 
             for (int i = 0; i < count; i++)
             {
-                destination.SetValue(InnerList[i], i + index);
+                destination.SetValue(InnerList[i].Item, i + index);
             }
         }
 

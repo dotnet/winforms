@@ -3,8 +3,6 @@
   <PropertyGroup>
     <AssemblyName>System.Private.Windows.Core</AssemblyName>
     <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum)</TargetFrameworks>
-    <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
-    <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <!--
@@ -14,17 +12,29 @@
       cross that bridge when we hit it (if ever).
     -->
     <NoWarn>$(NoWarn);CS8981</NoWarn>
+
     <!--
       CS3016: We don't care about CLS compliance since everything here is internal and we want to match native types.
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
     <NoWarn>$(NoWarn);CS3016;SYSLIB5005</NoWarn>
+
+    <!--
+      CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
+      doesn't currently properly recognize this.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+    
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
     <RootNamespace />
     <HasNoPublicIntellisense>true</HasNoPublicIntellisense>
     <EnableXlfLocalization>false</EnableXlfLocalization>
+    <DefineConstants>$(DefineConstants);OLE_JSON</DefineConstants>
+
+    <!-- Exclude Framework folder from non .NET Framework builds -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/Framework/**/*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

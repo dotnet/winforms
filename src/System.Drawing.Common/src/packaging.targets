@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ApiCompatExcludeAttributesFile Include="ApiCompatExcludeAttributes.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="$(LicenseFile)"
           PackagePath="$([System.IO.Path]::GetFileName('$(LicenseFile)'))"
           Pack="true" />

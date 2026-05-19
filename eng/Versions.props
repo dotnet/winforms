@@ -7,7 +7,7 @@
     <MinorVersion>0</MinorVersion>
     <PatchVersion>0</PatchVersion>
     <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
-    <PreReleaseVersionIteration>2</PreReleaseVersionIteration>
+    <PreReleaseVersionIteration>5</PreReleaseVersionIteration>
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <!-- Allowed values: '', 'prerelease', 'release'. Set to 'release' when stabilizing. -->
     <DotNetFinalVersionKind></DotNetFinalVersionKind>
@@ -15,7 +15,7 @@
 
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <PropertyGroup>
-    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
+    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.2</SystemRuntimeCompilerServicesUnsafePackageVersion>
     <MicrosoftWindowsCsWin32PackageVersion>0.3.151</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
 
   <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <XUnitStaFactPackageVersion>3.0.13</XUnitStaFactPackageVersion>
+    <XUnitStaFactPackageVersion>4.0.5-beta</XUnitStaFactPackageVersion>
   </PropertyGroup>
 
   <!-- Test related -->
@@ -44,7 +44,7 @@
 
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>6.0.0</CoverletMSBuildPackageVersion>
+    <CoverletMSBuildPackageVersion>8.0.0</CoverletMSBuildPackageVersion>
     <CodecovVersion>1.12.3</CodecovVersion>
     <ReportGeneratorVersion>4.3.6</ReportGeneratorVersion>
   </PropertyGroup>
@@ -70,15 +70,15 @@
   <PropertyGroup>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
-    <NewtonsoftJsonVersion>13.0.3</NewtonsoftJsonVersion>
+    <NewtonsoftJsonVersion>13.0.4</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
     <!-- Pin transitive dependency to avoid vulnerable 8.0.0 version. -->
     <SystemFormatsAsn1PackageVersion>8.0.1</SystemFormatsAsn1PackageVersion>
+    <!-- Pin versions consumed on .NET Framework to the .NET 10 servicing release. -->
+    <SystemFormatsNrbfNetFxPackageVersion>10.0.4</SystemFormatsNrbfNetFxPackageVersion>
+    <SystemCollectionsImmutableNetFxPackageVersion>10.0.4</SystemCollectionsImmutableNetFxPackageVersion>
+    <SystemReflectionMetadataNetFxPackageVersion>10.0.4</SystemReflectionMetadataNetFxPackageVersion>
+    <SystemResourcesExtensionsNetFxPackageVersion>10.0.4</SystemResourcesExtensionsNetFxPackageVersion>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
-    <PackageReference Include="System.Collections.Immutable" VersionOverride="9.0.2" />
-    <PackageReference Include="System.Resources.Extensions" VersionOverride="5.0.0" />
-  </ItemGroup>
 
 </Project>

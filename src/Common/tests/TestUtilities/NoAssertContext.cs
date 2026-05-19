@@ -18,7 +18,12 @@ public sealed class NoAssertContext : IDisposable
     // We do, however need to lock around hooking/unhooking our custom listener to make sure that we
     // are rerouting correctly if multiple threads are creating/disposing this class concurrently.
 
+#if NET
     private static readonly Lock s_lock = new();
+#else
+    private static readonly object s_lock = new();
+#endif
+
     private static bool s_hooked;
     private static bool s_hasDefaultListener;
     private static bool s_hasThrowingListener;
@@ -31,6 +36,10 @@ public sealed class NoAssertContext : IDisposable
 
     public NoAssertContext()
     {
+#if NETFRAMEWORK
+        ModuleInitializer.EnsureInitialized();
+#endif
+
         s_suppressedThreads.AddOrUpdate(Environment.CurrentManagedThreadId, 1, (key, oldValue) => oldValue + 1);
 
         // Lock to make sure we are hooked properly if two threads come into the constructor/dispose at the same time.
