@@ -3,6 +3,8 @@ static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Wi
 static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterScreen) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.get -> System.Drawing.Color
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.set -> void
 System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
