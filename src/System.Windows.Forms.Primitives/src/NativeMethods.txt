@@ -512,6 +512,9 @@ PD_RESULT_*
 PostQuitMessage
 PostQuitMessage
 PostThreadMessage
+PowerCreateRequest
+PowerClearRequest
+PowerSetRequest
 PRF_*
 PROGRESS_CLASS
 PROPERTYKEY
