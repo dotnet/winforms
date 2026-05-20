@@ -27,3 +27,51 @@ System.Windows.Forms.TreeView.NodeLeading.get -> float
 System.Windows.Forms.TreeView.NodeLeading.set -> void
 System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
 virtual System.Windows.Forms.TreeView.OnNodeLeadingChanged(System.EventArgs! e) -> void
+System.Windows.Forms.ControlMutationExtensions
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.Windows.Forms.SuspendPaintingScope
+static System.Windows.Forms.ControlMutationExtensions.SuspendRelocation(this System.Windows.Forms.ISupportSuspendRelocation! target) -> System.Windows.Forms.SuspendRelocationScope
+System.Windows.Forms.FormAppearanceMode
+System.Windows.Forms.FormAppearanceMode.Classic = 0 -> System.Windows.Forms.FormAppearanceMode
+System.Windows.Forms.FormAppearanceMode.Deferred = 1 -> System.Windows.Forms.FormAppearanceMode
+System.Windows.Forms.ISupportSuspendPainting
+System.Windows.Forms.ISupportSuspendPainting.BeginSuspendPainting() -> void
+System.Windows.Forms.ISupportSuspendPainting.EndSuspendPainting() -> void
+System.Windows.Forms.ISupportSuspendRelocation
+System.Windows.Forms.ISupportSuspendRelocation.BeginSuspendRelocation() -> void
+System.Windows.Forms.ISupportSuspendRelocation.EndSuspendRelocation() -> void
+System.Windows.Forms.SuspendPaintingScope
+System.Windows.Forms.SuspendPaintingScope.Dispose() -> void
+System.Windows.Forms.SuspendPaintingScope.SuspendPaintingScope() -> void
+System.Windows.Forms.SuspendPaintingScope.SuspendPaintingScope(System.Windows.Forms.ISupportSuspendPainting? target) -> void
+System.Windows.Forms.SuspendRelocationScope
+System.Windows.Forms.SuspendRelocationScope.Dispose() -> void
+System.Windows.Forms.SuspendRelocationScope.SuspendRelocationScope() -> void
+System.Windows.Forms.SuspendRelocationScope.SuspendRelocationScope(System.Windows.Forms.ISupportSuspendRelocation? target) -> void
+override System.Windows.Forms.ComboBox.BeginSuspendPainting() -> void
+override System.Windows.Forms.ComboBox.EndSuspendPainting() -> void
+override System.Windows.Forms.ListBox.BeginSuspendPainting() -> void
+override System.Windows.Forms.ListBox.EndSuspendPainting() -> void
+override System.Windows.Forms.ListView.BeginSuspendPainting() -> void
+override System.Windows.Forms.ListView.EndSuspendPainting() -> void
+override System.Windows.Forms.RichTextBox.BeginSuspendPainting() -> void
+override System.Windows.Forms.RichTextBox.EndSuspendPainting() -> void
+override System.Windows.Forms.TreeView.BeginSuspendPainting() -> void
+override System.Windows.Forms.TreeView.EndSuspendPainting() -> void
+static System.Windows.Forms.Application.FormAppearanceMode.get -> System.Windows.Forms.FormAppearanceMode
+static System.Windows.Forms.Application.SetFormAppearanceMode(System.Windows.Forms.FormAppearanceMode mode) -> void
+System.Windows.Forms.Control.DeferLocationChange() -> System.Windows.Forms.DeferLocationChangeScope
+System.Windows.Forms.Control.DeferLocationChange(bool suppressRender) -> System.Windows.Forms.DeferLocationChangeScope
+System.Windows.Forms.Control.DeferLocationChange(bool suppressRender, bool suspendLayout) -> System.Windows.Forms.DeferLocationChangeScope
+System.Windows.Forms.DeferLocationChangeScope
+System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope() -> void
+System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, int x, int y) -> void
+System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, int x, int y, int width, int height) -> void
+System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, System.Drawing.Rectangle bounds) -> void
+System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent) -> void
+System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent, bool suppressRender) -> void
+System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent, bool suppressRender, bool suspendLayout) -> void
+System.Windows.Forms.DeferLocationChangeScope.Dispose() -> void
+virtual System.Windows.Forms.Control.BeginSuspendPainting() -> void
+virtual System.Windows.Forms.Control.BeginSuspendRelocation() -> void
+virtual System.Windows.Forms.Control.EndSuspendPainting() -> void
+virtual System.Windows.Forms.Control.EndSuspendRelocation() -> void

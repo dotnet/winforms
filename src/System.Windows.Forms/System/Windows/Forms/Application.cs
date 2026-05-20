@@ -44,6 +44,9 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
     private static SystemColorMode? s_colorMode;
+#if NET11_0_OR_GREATER
+    private static FormAppearanceMode? s_formAppearanceMode;
+#endif
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -249,6 +252,21 @@ public sealed partial class Application
     /// </remarks>
     public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Gets the configured form appearance mode for the application.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If no mode has been configured with <see cref="SetFormAppearanceMode(FormAppearanceMode)"/>,
+    ///   WinForms uses <see cref="FormAppearanceMode.Deferred"/>.
+    ///  </para>
+    /// </remarks>
+    public static FormAppearanceMode FormAppearanceMode
+        => s_formAppearanceMode ?? FormAppearanceMode.Deferred;
+
+#endif
+
     /// <summary>
     ///  True if the <see cref="ColorMode"/> has been set at least once.
     /// </summary>
@@ -380,6 +398,28 @@ public sealed partial class Application
             }
         }
     }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Sets the process-wide form appearance mode.
+    /// </summary>
+    /// <param name="mode">The form appearance mode to use for newly created forms.</param>
+    /// <remarks>
+    ///  <para>
+    ///   Set the form appearance mode before creating UI to ensure newly created forms use the intended
+    ///   startup presentation behavior.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  <paramref name="mode"/> is not a valid <see cref="FormAppearanceMode"/> value.
+    /// </exception>
+    public static void SetFormAppearanceMode(FormAppearanceMode mode)
+    {
+        SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
+        s_formAppearanceMode = mode;
+    }
+
+#endif
 
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
