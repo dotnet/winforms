@@ -39,6 +39,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         Color parentBackgroundColor,
         Color backColor,
         Action<Rectangle> paintImage,
+        Action<Rectangle> paintBackgroundImage,
         Action paintField)
     {
         ArgumentNullException.ThrowIfNull(graphics);
@@ -62,6 +63,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
 
             // Draw button background and get content bounds
             Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor);
+
+            paintBackgroundImage(paddedBounds);
 
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
