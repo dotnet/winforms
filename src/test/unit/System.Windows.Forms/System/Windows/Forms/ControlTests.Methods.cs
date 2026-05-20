@@ -15,6 +15,57 @@ namespace System.Windows.Forms.Tests;
 
 public partial class ControlTests
 {
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Control_BeginEndSuspendPainting_InvokeWithoutHandle_Success()
+    {
+        using SubControl control = new();
+
+        control.BeginSuspendPainting();
+        control.EndSuspendPainting();
+        control.EndSuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_ScopeDisposes_Success()
+    {
+        using SubControl control = new();
+
+        using SuspendPaintingScope scope = control.SuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_BeginEndSuspendRelocation_Invoke_SuspendsLayout()
+    {
+        using SubControl control = new();
+
+        control.BeginSuspendRelocation();
+        control.EndSuspendRelocation();
+        control.EndSuspendRelocation();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_DeferLocationChange_DisposeWithoutHandles_AppliesBounds()
+    {
+        using SubControl parent = new();
+        using SubControl child = new();
+        parent.Controls.Add(child);
+
+        using (DeferLocationChangeScope scope = parent.DeferLocationChange())
+        {
+            scope.Defer(child, new Rectangle(1, 2, 3, 4));
+        }
+
+        Assert.Equal(new Rectangle(1, 2, 3, 4), child.Bounds);
+    }
+#endif
+
     public static IEnumerable<object[]> AccessibilityNotifyClients_AccessibleEvents_Int_TestData()
     {
         yield return new object[] { AccessibleEvents.DescriptionChange, int.MinValue };
