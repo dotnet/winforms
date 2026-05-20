@@ -180,6 +180,31 @@ public class ApplicationTests
 
 #pragma warning restore SYSLIB5002
 
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Application_FormAppearanceMode_Default_ReturnsDeferred()
+    {
+        Assert.Equal(FormAppearanceMode.Deferred, Application.FormAppearanceMode);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FormAppearanceMode.Classic)]
+    [InlineData(FormAppearanceMode.Deferred)]
+    public void Application_SetFormAppearanceMode_GetReturnsExpected(FormAppearanceMode mode)
+    {
+        Application.SetFormAppearanceMode(mode);
+        Assert.Equal(mode, Application.FormAppearanceMode);
+    }
+
+    [WinFormsFact]
+    public void Application_SetFormAppearanceMode_Invalid_ThrowsInvalidEnumArgumentException()
+    {
+        Assert.Throws<InvalidEnumArgumentException>(
+            "mode",
+            () => Application.SetFormAppearanceMode((FormAppearanceMode)int.MaxValue));
+    }
+#endif
+
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {
