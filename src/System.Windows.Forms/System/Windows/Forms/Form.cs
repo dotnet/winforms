@@ -137,6 +137,9 @@ public partial class Form : ContainerControl
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
     private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
+#if NET11_0_OR_GREATER
+    private static readonly int s_propFormAppearanceCloaked = PropertyStore.CreateKey();
+#endif
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -4209,6 +4212,10 @@ public partial class Form : ContainerControl
         {
             SetScreenCaptureModeInternal(FormScreenCaptureMode);
         }
+
+#if NET11_0_OR_GREATER
+        CloakForDeferredAppearanceIfNeeded();
+#endif
     }
 
     /// <summary>
@@ -4219,6 +4226,9 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnHandleDestroyed(EventArgs e)
     {
+#if NET11_0_OR_GREATER
+        ClearDeferredAppearanceCloakState();
+#endif
         base.OnHandleDestroyed(e);
         _formStateEx[s_formStateExUseMdiChildProc] = 0;
 
@@ -7174,6 +7184,12 @@ public partial class Form : ContainerControl
                 break;
             case PInvokeCore.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
+                break;
+            case PInvokeCore.WM_PAINT:
+                base.WndProc(ref m);
+#if NET11_0_OR_GREATER
+                UncloakDeferredAppearanceIfNeeded();
+#endif
                 break;
 
             case PInvokeCore.WM_NCDESTROY:
