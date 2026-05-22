@@ -72,11 +72,6 @@ public partial class ProgressBar : Control
         }
     }
 
-    protected override void OnCreateControl()
-    {
-        base.OnCreateControl();
-    }
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool AllowDrop
@@ -332,7 +327,6 @@ public partial class ProgressBar : Control
         base.OnBackColorChanged(e);
         if (IsHandleCreated)
         {
-            ApplyTheming();
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
         }
     }
@@ -342,7 +336,6 @@ public partial class ProgressBar : Control
         base.OnForeColorChanged(e);
         if (IsHandleCreated)
         {
-            ApplyTheming();
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
         }
     }
@@ -706,17 +699,12 @@ public partial class ProgressBar : Control
             return BackColor;
         }
 
-        return Application.IsDarkModeEnabled ? s_defaultDarkModeBackColor : SystemColors.Control;
+        return Application.IsDarkModeEnabled ? s_defaultDarkModeBackColor : BackColor;
     }
 
     private Color GetEffectiveForeColor()
     {
-        if (ShouldSerializeForeColor())
-        {
-            return ForeColor;
-        }
-
-        return s_defaultForeColor;
+        return ShouldSerializeForeColor() ? ForeColor : s_defaultForeColor;
     }
 
     private void ApplyTheming()
@@ -726,12 +714,17 @@ public partial class ProgressBar : Control
             return;
         }
 
-        if (Application.IsDarkModeEnabled || ShouldSerializeBackColor() || ShouldSerializeForeColor())
+        if (Application.IsDarkModeEnabled)
         {
             // In dark mode on newer Windows builds, style switching can produce mixed rendering
             // across Blocks/Continuous/Marquee. Disable visual styles and drive colors via PBM_SET*COLOR
             // for consistent appearance.
             PInvoke.SetWindowTheme(HWND, " ", " ");
+        }
+        else
+        {
+            // Restore default theming when dark mode and custom colors are no longer active.
+            PInvoke.SetWindowTheme(HWND, (PCWSTR)null, (PCWSTR)null);
         }
     }
 
