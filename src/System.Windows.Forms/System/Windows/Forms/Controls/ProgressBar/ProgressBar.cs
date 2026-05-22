@@ -683,13 +683,21 @@ public partial class ProgressBar : Control
     /// </remarks>
     private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
     {
-        if (IsHandleCreated)
+        if (!IsHandleCreated)
         {
-            ApplyTheming();
-
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
+            return;
         }
+
+        // Only react to changes that can affect colors or theme changes.
+        if (e.Category is not UserPreferenceCategory.Color and not UserPreferenceCategory.General)
+        {
+            return;
+        }
+
+        ApplyTheming();
+
+        PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
+        PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
     }
 
     private Color GetEffectiveBackColor()
