@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Point = System.Drawing.Point;
@@ -2654,6 +2655,56 @@ public class PictureBoxTests
         pictureBox.OnPaint(eventArgs);
         Bitmap secondCache = GetStretchedImageCache(pictureBox);
         Assert.NotNull(secondCache);
+        Assert.NotSame(firstCache, secondCache);
+    }
+
+    [WinFormsFact]
+    public void PictureBox_OnPaint_StretchImage_WithOversizedTarget_DoesNotCreateScaledImageCache()
+    {
+        using Bitmap sourceImage = new(16, 16);
+        using SubPictureBox pictureBox = new()
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage,
+            Image = sourceImage,
+            Size = new Size(3000, 2000)
+        };
+
+        using Bitmap canvas = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(canvas);
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(Point.Empty, canvas.Size));
+
+        pictureBox.OnPaint(eventArgs);
+
+        Assert.Null(pictureBox.TestAccessor.Dynamic._stretchedImageCache);
+    }
+
+    [WinFormsFact]
+    public void PictureBox_OnPaint_StretchImage_WithInterpolationModeChanged_RecreatesScaledImageCache()
+    {
+        using Bitmap sourceImage = new(16, 16);
+        using SubPictureBox pictureBox = new()
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage,
+            Image = sourceImage,
+            Size = new Size(100, 50)
+        };
+
+        using Bitmap firstCanvas = new(100, 50);
+        using Graphics firstGraphics = Graphics.FromImage(firstCanvas);
+        firstGraphics.InterpolationMode = InterpolationMode.Bilinear;
+        using PaintEventArgs firstEventArgs = new(firstGraphics, new Rectangle(Point.Empty, firstCanvas.Size));
+
+        pictureBox.OnPaint(firstEventArgs);
+        Bitmap firstCache = GetStretchedImageCache(pictureBox);
+
+        using Bitmap secondCanvas = new(100, 50);
+        using Graphics secondGraphics = Graphics.FromImage(secondCanvas);
+        secondGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+        using PaintEventArgs secondEventArgs = new(secondGraphics, new Rectangle(Point.Empty, secondCanvas.Size));
+
+        pictureBox.OnPaint(secondEventArgs);
+        Bitmap secondCache = GetStretchedImageCache(pictureBox);
+
         Assert.NotSame(firstCache, secondCache);
     }
 

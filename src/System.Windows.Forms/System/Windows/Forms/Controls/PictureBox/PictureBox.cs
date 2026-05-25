@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -59,10 +60,11 @@ public partial class PictureBox : Control, ISupportInitialize
     private int _totalBytesRead;
     private MemoryStream? _tempDownloadStream;
     private const int ReadBlockSize = 4096;
+    private const int MaxCachedStretchImageBytes = 16 * 1024 * 1024;
     private byte[]? _readBuffer;
     private Bitmap? _stretchedImageCache;
-    private Image? _stretchedImageCacheSource;
     private Size _stretchedImageCacheSize;
+    private InterpolationMode _stretchedImageCacheInterpolationMode;
     private ImageInstallationType _imageInstallationType;
     private SendOrPostCallback? _loadCompletedDelegate;
     private SendOrPostCallback? _loadProgressDelegate;
@@ -1135,7 +1137,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                 : ImageRectangle;
 
-            if (TryGetStretchImageCache(drawingRect, out Bitmap? stretchedImage) && stretchedImage is not null)
+            if (TryGetStretchImageCache(drawingRect, pe.Graphics.InterpolationMode, out Bitmap? stretchedImage))
             {
                 pe.Graphics.DrawImageUnscaled(stretchedImage, drawingRect.Location);
             }
@@ -1149,45 +1151,56 @@ public partial class PictureBox : Control, ISupportInitialize
         base.OnPaint(pe!);
     }
 
-    private bool TryGetStretchImageCache(Rectangle drawingRect, out Bitmap? stretchedImage)
+    private bool TryGetStretchImageCache(
+        Rectangle drawingRect,
+        InterpolationMode interpolationMode,
+        [NotNullWhen(true)] out Bitmap? stretchedImage)
     {
         stretchedImage = null;
+
+        // This cache tracks control state (size/mode/image assignment), but not in-place pixel edits on
+        // the same Image instance. Callers that mutate pixels should reassign Image or invalidate explicitly.
 
         if (_sizeMode != PictureBoxSizeMode.StretchImage
             || _image is null
             || _imageInstallationType == ImageInstallationType.ErrorOrInitial
             || drawingRect.Width <= 0
             || drawingRect.Height <= 0
-            || ImageAnimator.CanAnimate(_image))
+            || ImageAnimator.CanAnimate(_image)
+            || !CanCacheStretchImage(drawingRect.Size))
         {
             return false;
         }
 
         Size drawingSize = drawingRect.Size;
         if (_stretchedImageCache is null
-            || _stretchedImageCacheSource != _image
-            || _stretchedImageCacheSize != drawingSize)
+            || _stretchedImageCacheSize != drawingSize
+            || _stretchedImageCacheInterpolationMode != interpolationMode)
         {
             DisposeStretchedImageCache();
 
             _stretchedImageCache = new Bitmap(drawingSize.Width, drawingSize.Height, PixelFormat.Format32bppPArgb);
             using Graphics cacheGraphics = Graphics.FromImage(_stretchedImageCache);
+            cacheGraphics.InterpolationMode = interpolationMode;
             cacheGraphics.DrawImage(_image, new Rectangle(Point.Empty, drawingSize));
 
-            _stretchedImageCacheSource = _image;
             _stretchedImageCacheSize = drawingSize;
+            _stretchedImageCacheInterpolationMode = interpolationMode;
         }
 
         stretchedImage = _stretchedImageCache;
         return true;
     }
 
+    private static bool CanCacheStretchImage(Size drawingSize)
+        => (long)drawingSize.Width * drawingSize.Height * sizeof(uint) <= MaxCachedStretchImageBytes;
+
     private void DisposeStretchedImageCache()
     {
         _stretchedImageCache?.Dispose();
         _stretchedImageCache = null;
-        _stretchedImageCacheSource = null;
         _stretchedImageCacheSize = Size.Empty;
+        _stretchedImageCacheInterpolationMode = InterpolationMode.Invalid;
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -1208,11 +1221,6 @@ public partial class PictureBox : Control, ISupportInitialize
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-
-        if (_sizeMode == PictureBoxSizeMode.StretchImage)
-        {
-            DisposeStretchedImageCache();
-        }
 
         if (_sizeMode == PictureBoxSizeMode.Zoom
             || _sizeMode == PictureBoxSizeMode.StretchImage
