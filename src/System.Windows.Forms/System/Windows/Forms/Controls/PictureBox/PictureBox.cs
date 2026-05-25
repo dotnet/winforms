@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
@@ -59,6 +60,9 @@ public partial class PictureBox : Control, ISupportInitialize
     private MemoryStream? _tempDownloadStream;
     private const int ReadBlockSize = 4096;
     private byte[]? _readBuffer;
+    private Bitmap? _stretchedImageCache;
+    private Image? _stretchedImageCacheSource;
+    private Size _stretchedImageCacheSize;
     private ImageInstallationType _imageInstallationType;
     private SendOrPostCallback? _loadCompletedDelegate;
     private SendOrPostCallback? _loadProgressDelegate;
@@ -417,6 +421,7 @@ public partial class PictureBox : Control, ISupportInitialize
     private void InstallNewImage(Image? value, ImageInstallationType installationType)
     {
         StopAnimate();
+        DisposeStretchedImageCache();
         _image = value;
 
         LayoutTransaction.DoLayoutIf(AutoSize, this, this, PropertyNames.Image);
@@ -841,6 +846,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 }
 
                 _sizeMode = value;
+                DisposeStretchedImageCache();
                 AdjustSize();
                 Invalidate();
                 OnSizeModeChanged(EventArgs.Empty);
@@ -1001,6 +1007,7 @@ public partial class PictureBox : Control, ISupportInitialize
         if (disposing)
         {
             StopAnimate();
+            DisposeStretchedImageCache();
         }
 
         DisposeImageStream();
@@ -1128,11 +1135,59 @@ public partial class PictureBox : Control, ISupportInitialize
                 ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                 : ImageRectangle;
 
-            pe.Graphics.DrawImage(_image, drawingRect);
+            if (TryGetStretchImageCache(drawingRect, out Bitmap? stretchedImage) && stretchedImage is not null)
+            {
+                pe.Graphics.DrawImageUnscaled(stretchedImage, drawingRect.Location);
+            }
+            else
+            {
+                pe.Graphics.DrawImage(_image, drawingRect);
+            }
         }
 
         // Windows draws the border for us (see CreateParams)
         base.OnPaint(pe!);
+    }
+
+    private bool TryGetStretchImageCache(Rectangle drawingRect, out Bitmap? stretchedImage)
+    {
+        stretchedImage = null;
+
+        if (_sizeMode != PictureBoxSizeMode.StretchImage
+            || _image is null
+            || _imageInstallationType == ImageInstallationType.ErrorOrInitial
+            || drawingRect.Width <= 0
+            || drawingRect.Height <= 0
+            || ImageAnimator.CanAnimate(_image))
+        {
+            return false;
+        }
+
+        Size drawingSize = drawingRect.Size;
+        if (_stretchedImageCache is null
+            || _stretchedImageCacheSource != _image
+            || _stretchedImageCacheSize != drawingSize)
+        {
+            DisposeStretchedImageCache();
+
+            _stretchedImageCache = new Bitmap(drawingSize.Width, drawingSize.Height, PixelFormat.Format32bppPArgb);
+            using Graphics cacheGraphics = Graphics.FromImage(_stretchedImageCache);
+            cacheGraphics.DrawImage(_image, new Rectangle(Point.Empty, drawingSize));
+
+            _stretchedImageCacheSource = _image;
+            _stretchedImageCacheSize = drawingSize;
+        }
+
+        stretchedImage = _stretchedImageCache;
+        return true;
+    }
+
+    private void DisposeStretchedImageCache()
+    {
+        _stretchedImageCache?.Dispose();
+        _stretchedImageCache = null;
+        _stretchedImageCacheSource = null;
+        _stretchedImageCacheSize = Size.Empty;
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -1153,6 +1208,12 @@ public partial class PictureBox : Control, ISupportInitialize
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
+
+        if (_sizeMode == PictureBoxSizeMode.StretchImage)
+        {
+            DisposeStretchedImageCache();
+        }
+
         if (_sizeMode == PictureBoxSizeMode.Zoom
             || _sizeMode == PictureBoxSizeMode.StretchImage
             || _sizeMode == PictureBoxSizeMode.CenterImage

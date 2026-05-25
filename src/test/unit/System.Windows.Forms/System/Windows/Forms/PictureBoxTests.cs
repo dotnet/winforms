@@ -2608,6 +2608,55 @@ public class PictureBoxTests
         Assert.Equal(1, callCount);
     }
 
+    [WinFormsFact]
+    public void PictureBox_OnPaint_StretchImage_CachesScaledImage()
+    {
+        using Bitmap sourceImage = new(16, 16);
+        using SubPictureBox pictureBox = new()
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage,
+            Image = sourceImage,
+            Size = new Size(100, 50)
+        };
+        using Bitmap canvas = new(100, 50);
+        using Graphics graphics = Graphics.FromImage(canvas);
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(Point.Empty, canvas.Size));
+
+        pictureBox.OnPaint(eventArgs);
+        Bitmap firstCache = GetStretchedImageCache(pictureBox);
+        Assert.NotNull(firstCache);
+
+        pictureBox.OnPaint(eventArgs);
+        Bitmap secondCache = GetStretchedImageCache(pictureBox);
+        Assert.Same(firstCache, secondCache);
+    }
+
+    [WinFormsFact]
+    public void PictureBox_OnPaint_StretchImage_WithNewImage_RecreatesScaledImageCache()
+    {
+        using Bitmap firstImage = new(16, 16);
+        using Bitmap secondImage = new(16, 16);
+        using SubPictureBox pictureBox = new()
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage,
+            Image = firstImage,
+            Size = new Size(100, 50)
+        };
+        using Bitmap canvas = new(100, 50);
+        using Graphics graphics = Graphics.FromImage(canvas);
+        using PaintEventArgs eventArgs = new(graphics, new Rectangle(Point.Empty, canvas.Size));
+
+        pictureBox.OnPaint(eventArgs);
+        Bitmap firstCache = GetStretchedImageCache(pictureBox);
+        Assert.NotNull(firstCache);
+
+        pictureBox.Image = secondImage;
+        pictureBox.OnPaint(eventArgs);
+        Bitmap secondCache = GetStretchedImageCache(pictureBox);
+        Assert.NotNull(secondCache);
+        Assert.NotSame(firstCache, secondCache);
+    }
+
     [WinFormsTheory]
     [NewAndDefaultData<EventArgs>]
     public void PictureBox_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
@@ -2928,5 +2977,10 @@ public class PictureBoxTests
         public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+    }
+
+    private static Bitmap GetStretchedImageCache(PictureBox pictureBox)
+    {
+        return Assert.IsType<Bitmap>(pictureBox.TestAccessor.Dynamic._stretchedImageCache);
     }
 }
