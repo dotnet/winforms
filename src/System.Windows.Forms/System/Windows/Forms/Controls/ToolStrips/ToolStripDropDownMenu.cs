@@ -751,7 +751,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
 
         // calling this to get ScrollWindowEx. In actuality it does nothing
         // to change the display rect!
-        int delta;
+        int delta = 0;
         if (_indexOfFirstDisplayedItem == -1 || _indexOfFirstDisplayedItem >= Items.Count)
         {
             Debug.Fail("Why wasn't 'UpdateScrollButtonStatus called'? We don't have the item to scroll by");
@@ -770,10 +770,11 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 }
                 else
                 {
-                    ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem - 1];
+                    ToolStripItem itemTop = GetPreviousVisibleItem(_indexOfFirstDisplayedItem);
                     ToolStripItem itemBottom = Items[_indexOfFirstDisplayedItem];
                     // We use a delta between the tops, since it takes margin's and padding into account.
-                    delta = itemTop.Bounds.Top - itemBottom.Bounds.Top;
+                    if (itemTop is not null && itemBottom is not null)
+                        delta = itemTop.Bounds.Top - itemBottom.Bounds.Top;
                 }
             }
             else
@@ -787,14 +788,37 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 }
 
                 ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem];
-                ToolStripItem itemBottom = Items[_indexOfFirstDisplayedItem + 1];
+                ToolStripItem itemBottom = GetNextVisibleItem(_indexOfFirstDisplayedItem);
                 // We use a delta between the tops, since it takes margin's and padding into account.
-                delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
+                if (itemTop is not null && itemBottom is not null)
+                    delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
             }
         }
 
         ScrollInternal(delta);
         UpdateScrollButtonLocations();
+    }
+
+    private ToolStripItem GetNextVisibleItem(int index)
+    {
+        for (int i = index + 1; i < Items.Count; i++)
+        {
+            if (Items[i].Available)
+                return Items[i];
+        }
+
+        return null;
+    }
+
+    private ToolStripItem GetPreviousVisibleItem(int index)
+    {
+        for (int i = index - 1; i >= 0; i--)
+        {
+            if (Items[i].Available)
+                return Items[i];
+        }
+
+        return null;
     }
 
     protected override void SetDisplayedItems()
