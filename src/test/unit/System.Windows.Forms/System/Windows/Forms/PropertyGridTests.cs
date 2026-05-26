@@ -4504,4 +4504,160 @@ public partial class PropertyGridTests
             }
         }
     }
+
+    #region OnComponentRemoved Tests
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_ThrowsWhenComponentIsNull()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        Assert.Throws<InvalidOperationException>(() =>
+            mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(null)));
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_RemovesComponentFromSelectedObjects()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+
+        using TestComponent component1 = new();
+        using TestComponent component2 = new();
+        using TestComponent component3 = new();
+
+        propertyGrid.SelectedObjects = [component1, component2, component3];
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component2));
+
+        Assert.Equal(2, propertyGrid.SelectedObjects.Length);
+        Assert.Contains(component1, propertyGrid.SelectedObjects);
+        Assert.Contains(component3, propertyGrid.SelectedObjects);
+        Assert.DoesNotContain(component2, propertyGrid.SelectedObjects);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_HandlesOnlyComponent()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+
+        using TestComponent component = new();
+
+        propertyGrid.SelectedObject = component;
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+
+        Assert.Empty(propertyGrid.SelectedObjects);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_BatchMode_UpdatesSelectedObjectsWithoutRefresh()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+        Mock<IDesignerHostTransactionState> mockTransaction = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        mockDesignerHost.Setup(h => h.InTransaction).Returns(true);
+
+        using TestComponent component1 = new();
+        using TestComponent component2 = new();
+
+        propertyGrid.SelectedObjects = [component1, component2];
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        // Enter batch mode by starting a transaction
+        mockDesignerHost.Raise(h => h.TransactionOpened += null, mockDesignerHost.Object, EventArgs.Empty);
+
+        mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component1));
+
+        // In batch mode, the component should be removed from internal list
+        dynamic testAccessor = propertyGrid.TestAccessor.Dynamic;
+        object[] selectedObjects = testAccessor._selectedObjects;
+
+        Assert.Single(selectedObjects);
+        Assert.Equal(component2, selectedObjects[0]);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_DoesNotRemoveNonExistentComponent()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+
+        using TestComponent component1 = new();
+        using TestComponent component2 = new();
+        using TestComponent component3 = new();
+
+        propertyGrid.SelectedObjects = [component1, component2];
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        // Try to remove a component that is not in the selection
+        mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component3));
+
+        Assert.Equal(2, propertyGrid.SelectedObjects.Length);
+        Assert.Contains(component1, propertyGrid.SelectedObjects);
+        Assert.Contains(component2, propertyGrid.SelectedObjects);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_NullSelectedObjects_DoesNotThrow()
+    {
+        using PropertyGrid propertyGrid = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        Mock<IComponentChangeService> mockChangeService = new();
+
+        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+
+        TestComponent component = new();
+
+        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        // Should not throw when _selectedObjects is null
+        mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+    }
+
+    [PropertyTab(typeof(DocumentScopePropertyTab), PropertyTabScope.Component)]
+    private class TestComponent : Component, IDisposable
+    {
+        public string TestProperty { get; set; } = "Test";
+    }
+
+    private class DocumentScopePropertyTab : PropertyTab
+    {
+        private Bitmap _bitmap;
+        public override string TabName => "Document Tab";
+        public override Bitmap Bitmap => _bitmap ??= new(1, 1);
+        public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
+            => TypeDescriptor.GetProperties(component, attributes);
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _bitmap?.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    #endregion
 }
