@@ -1139,7 +1139,11 @@ public partial class PictureBox : Control, ISupportInitialize
 
             if (TryGetStretchImageCache(drawingRect, pe.Graphics.InterpolationMode, out Bitmap? stretchedImage))
             {
-                pe.Graphics.DrawImageUnscaled(stretchedImage, drawingRect.Location);
+                pe.Graphics.DrawImage(
+                    stretchedImage,
+                    drawingRect,
+                    new Rectangle(Point.Empty, drawingRect.Size),
+                    GraphicsUnit.Pixel);
             }
             else
             {
