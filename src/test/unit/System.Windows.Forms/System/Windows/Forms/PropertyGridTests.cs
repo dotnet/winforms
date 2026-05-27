@@ -4565,12 +4565,11 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
-    public void PropertyGrid_OnComponentRemoved_BatchMode_UpdatesSelectedObjectsWithoutRefresh()
+    public void PropertyGrid_OnComponentRemoved_BatchMode_UpdatesSelectionWithoutRaisingSelectedObjectsChanged()
     {
         using PropertyGrid propertyGrid = new();
         Mock<IDesignerHost> mockDesignerHost = new();
         Mock<IComponentChangeService> mockChangeService = new();
-        Mock<IDesignerHostTransactionState> mockTransaction = new();
 
         mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
         mockDesignerHost.Setup(h => h.InTransaction).Returns(true);
@@ -4581,17 +4580,23 @@ public partial class PropertyGridTests
         propertyGrid.SelectedObjects = [component1, component2];
         propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
 
+        int selectedObjectsChangedCallCount = 0;
+        propertyGrid.SelectedObjectsChanged += (sender, e) => selectedObjectsChangedCallCount++;
+
         // Enter batch mode by starting a transaction
         mockDesignerHost.Raise(h => h.TransactionOpened += null, mockDesignerHost.Object, EventArgs.Empty);
 
         mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component1));
 
-        // In batch mode, the component should be removed from internal list
+        // In batch mode, the internal selection updates immediately without invoking the refresh path.
         dynamic testAccessor = propertyGrid.TestAccessor.Dynamic;
         object[] selectedObjects = testAccessor._selectedObjects;
 
         Assert.Single(selectedObjects);
         Assert.Equal(component2, selectedObjects[0]);
+        Assert.Single(propertyGrid.SelectedObjects);
+        Assert.Equal(component2, propertyGrid.SelectedObjects[0]);
+        Assert.Equal(0, selectedObjectsChangedCallCount);
     }
 
     [WinFormsFact]
