@@ -291,7 +291,8 @@ public partial class Control
                 return;     // Don't do anything
             }
 
-            if (value.ParentInternal == Owner)
+            // AssignParent may throw (e.g., TabPage invalid parent) leaving the control in the collection without a parent; remove/handle it to avoid half-parented state and Clear/Remove hangs.
+            if (value.ParentInternal == Owner || (value.ParentInternal is null && InnerList.Contains(value)))
             {
                 value.SetParentHandle(default);
 
