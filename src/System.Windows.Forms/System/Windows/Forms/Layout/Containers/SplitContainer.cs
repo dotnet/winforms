@@ -1550,16 +1550,24 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         if (IsHandleCreated)
         {
-            using Graphics g = CreateGraphicsInternal();
-            if (BackgroundImage is not null)
+            try
             {
-                using TextureBrush textureBrush = new(BackgroundImage, WrapMode.Tile);
-                g.FillRectangle(textureBrush, ClientRectangle);
+                using Graphics g = CreateGraphicsInternal();
+                if (BackgroundImage is not null)
+                {
+                    using TextureBrush textureBrush = new(BackgroundImage, WrapMode.Tile);
+                    g.FillRectangle(textureBrush, ClientRectangle);
+                }
+                else
+                {
+                    using var solidBrush = BackColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(solidBrush, _splitterRect);
+                }
             }
-            else
+            catch (ExternalException)
             {
-                using var solidBrush = BackColor.GetCachedSolidBrushScope();
-                g.FillRectangle(solidBrush, _splitterRect);
+                // GDI+ can transiently fail while the display session is transitioning (for example, lock/unlock).
+                // Ignore repaint failures here and let normal painting recover once graphics resources are available.
             }
         }
     }
