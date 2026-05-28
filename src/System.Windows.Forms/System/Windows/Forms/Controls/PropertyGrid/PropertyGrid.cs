@@ -3628,7 +3628,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void ResetHelpBackColor() => _helpPane.ResetBackColor();
 
-    private void ResetHelpForeColor() => _helpPane.ResetBackColor();
+    private void ResetHelpForeColor() => _helpPane.ResetForeColor();
 
     /// <summary>
     ///  This method is intended for use in replacing a specific selected root object with another object of the
