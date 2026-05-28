@@ -7,19 +7,34 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class DefaultLayout
 {
+    private const int MinimumSignificantStretchDelta = 16;
+
     private static AnchorStyles TryRefreshAnchorInfoForDisplayRectangleGrowth(IArrangedElement element, AnchorInfo anchorInfo, Rectangle displayRect)
     {
         AnchorStyles anchor = GetAnchor(element);
         Rectangle bounds = GetCachedBounds(element);
-        bool shouldRefreshStretchAnchors = ShouldRefreshAnchorInfoForStaleStretchAnchors(element, anchorInfo, bounds, displayRect, anchor);
+        bool shouldRefreshStretchAnchors = ShouldRefreshAnchorInfoForStaleStretchAnchors(
+            element,
+            anchorInfo,
+            bounds,
+            displayRect,
+            anchor,
+            out bool useSpecifiedDisplayRectangleForStretchRefresh);
+        bool shouldRefreshPositiveAnchors = ShouldRefreshAnchorInfoForStalePositiveAnchors(anchorInfo, bounds, displayRect, anchor);
 
         if (!shouldRefreshStretchAnchors
-            && !ShouldRefreshAnchorInfoForStalePositiveAnchors(anchorInfo, bounds, displayRect, anchor))
+            && !shouldRefreshPositiveAnchors)
         {
             return anchor;
         }
 
-        RefreshAnchorInfoForDisplayRectangleGrowth(element, anchorInfo, displayRect, anchor, shouldRefreshStretchAnchors);
+        RefreshAnchorInfoForDisplayRectangleGrowth(
+            element,
+            anchorInfo,
+            displayRect,
+            anchor,
+            shouldRefreshStretchAnchors,
+            useSpecifiedDisplayRectangleForStretchRefresh);
 
         return anchor;
     }
@@ -41,8 +56,16 @@ internal partial class DefaultLayout
         return hasStaleRightAnchor || hasStaleBottomAnchor;
     }
 
-    private static bool ShouldRefreshAnchorInfoForStaleStretchAnchors(IArrangedElement element, AnchorInfo anchorInfo, Rectangle bounds, Rectangle displayRect, AnchorStyles anchor)
+    private static bool ShouldRefreshAnchorInfoForStaleStretchAnchors(
+        IArrangedElement element,
+        AnchorInfo anchorInfo,
+        Rectangle bounds,
+        Rectangle displayRect,
+        AnchorStyles anchor,
+        out bool useSpecifiedDisplayRectangleForStretchRefresh)
     {
+        useSpecifiedDisplayRectangleForStretchRefresh = false;
+
         if (!ScaleHelper.IsScalingRequirementMet || element.Container is not { } container)
         {
             return false;
@@ -56,28 +79,76 @@ internal partial class DefaultLayout
             return false;
         }
 
-        if (!HasDisplayRectangleGrowth(anchorInfo.DisplayRectangle, displayRect))
+        Rectangle specifiedDisplayRect = GetDisplayRectangleForSpecifiedContainerBounds(container, displayRect, specifiedContainerBounds);
+        bool hasDisplayRectangleGrowth = HasDisplayRectangleGrowth(anchorInfo.DisplayRectangle, displayRect);
+
+        int effectiveSpecifiedWidth = GetEffectiveSpecifiedSizeForStretchRefresh(
+            anchorInfo.DisplayRectangle.Width,
+            anchorInfo.Left,
+            anchorInfo.Right,
+            specifiedElementBounds.Width);
+        int effectiveSpecifiedHeight = GetEffectiveSpecifiedSizeForStretchRefresh(
+            anchorInfo.DisplayRectangle.Height,
+            anchorInfo.Top,
+            anchorInfo.Bottom,
+            specifiedElementBounds.Height);
+
+        if (hasDisplayRectangleGrowth
+            && IsSpecifiedDisplayRectangleLikelyStale(specifiedDisplayRect, anchorInfo.DisplayRectangle))
         {
             return false;
         }
 
-        Rectangle specifiedDisplayRect = GetDisplayRectangleForSpecifiedContainerBounds(container, displayRect, specifiedContainerBounds);
         bool hasStaleHorizontalStretchAnchor = IsAnchored(anchor, AnchorStyles.Left)
             && IsAnchored(anchor, AnchorStyles.Right)
             && anchorInfo.Right < 0
-            && IsSmallerThanExpectedStretchedSize(bounds.Width, specifiedElementBounds.Width, displayRect.Width, specifiedDisplayRect.Width);
+            && hasDisplayRectangleGrowth
+            && IsProjectedStretchAnchorSmallerThanExpected(
+                displayRect.Width,
+                anchorInfo.Left,
+                anchorInfo.Right,
+                effectiveSpecifiedWidth,
+                specifiedDisplayRect.Width);
 
         bool hasStaleVerticalStretchAnchor = IsAnchored(anchor, AnchorStyles.Top)
             && IsAnchored(anchor, AnchorStyles.Bottom)
             && anchorInfo.Bottom < 0
-            && IsSmallerThanExpectedStretchedSize(bounds.Height, specifiedElementBounds.Height, displayRect.Height, specifiedDisplayRect.Height);
+            && hasDisplayRectangleGrowth
+            && IsProjectedStretchAnchorSmallerThanExpected(
+                displayRect.Height,
+                anchorInfo.Top,
+                anchorInfo.Bottom,
+                effectiveSpecifiedHeight,
+                specifiedDisplayRect.Height);
 
-        return hasStaleHorizontalStretchAnchor || hasStaleVerticalStretchAnchor;
+        bool hasOversizedHorizontalStretchAnchor = IsAnchored(anchor, AnchorStyles.Left)
+            && IsAnchored(anchor, AnchorStyles.Right)
+            && anchorInfo.Right > 0
+            && IsLargerThanExpectedStretchedSize(bounds.Width, specifiedElementBounds.Width, displayRect.Width, specifiedDisplayRect.Width);
+
+        bool hasOversizedVerticalStretchAnchor = IsAnchored(anchor, AnchorStyles.Top)
+            && IsAnchored(anchor, AnchorStyles.Bottom)
+            && anchorInfo.Bottom > 0
+            && IsLargerThanExpectedStretchedSize(bounds.Height, specifiedElementBounds.Height, displayRect.Height, specifiedDisplayRect.Height);
+
+        useSpecifiedDisplayRectangleForStretchRefresh = hasOversizedHorizontalStretchAnchor || hasOversizedVerticalStretchAnchor;
+
+        return hasStaleHorizontalStretchAnchor
+            || hasStaleVerticalStretchAnchor
+            || hasOversizedHorizontalStretchAnchor
+            || hasOversizedVerticalStretchAnchor;
     }
 
-    internal static void RefreshAnchorInfoForDisplayRectangleGrowth(IArrangedElement element, AnchorInfo anchorInfo, Rectangle displayRect, AnchorStyles anchor, bool isStretchAnchorRefresh)
+    internal static void RefreshAnchorInfoForDisplayRectangleGrowth(
+        IArrangedElement element,
+        AnchorInfo anchorInfo,
+        Rectangle displayRect,
+        AnchorStyles anchor,
+        bool isStretchAnchorRefresh,
+        bool useSpecifiedDisplayRectangleForStretchRefresh = false)
     {
-        Rectangle elementBounds = GetCachedBounds(element);
+        Rectangle cachedElementBounds = GetCachedBounds(element);
+        Rectangle elementBounds = cachedElementBounds;
         Rectangle anchorDisplayRect = displayRect;
         Rectangle originalDisplayRect = anchorInfo.DisplayRectangle;
 
@@ -88,14 +159,46 @@ internal partial class DefaultLayout
 
             if (HasValidSpecifiedBounds(specifiedContainerBounds, specifiedElementBounds))
             {
-                elementBounds = specifiedElementBounds;
-                anchorDisplayRect = isStretchAnchorRefresh
+                anchorDisplayRect = isStretchAnchorRefresh && !useSpecifiedDisplayRectangleForStretchRefresh
                     ? originalDisplayRect
                     : GetDisplayRectangleForSpecifiedContainerBounds(container, displayRect, specifiedContainerBounds);
+
+                bool useCachedBoundsForStretchRefresh = isStretchAnchorRefresh
+                    && ShouldUseCachedBoundsForStretchRefresh(anchor, cachedElementBounds, specifiedElementBounds, anchorDisplayRect);
+
+                elementBounds = useCachedBoundsForStretchRefresh
+                    ? cachedElementBounds
+                    : specifiedElementBounds;
             }
         }
 
         ResetAnchorInfo(anchorInfo, elementBounds, anchorDisplayRect, anchor);
+    }
+
+    private static bool ShouldUseCachedBoundsForStretchRefresh(
+        AnchorStyles anchor,
+        Rectangle cachedElementBounds,
+        Rectangle specifiedElementBounds,
+        Rectangle anchorDisplayRect)
+    {
+        bool isHorizontalStretch = IsAnchored(anchor, AnchorStyles.Left)
+            && IsAnchored(anchor, AnchorStyles.Right);
+        bool isVerticalStretch = IsAnchored(anchor, AnchorStyles.Top)
+            && IsAnchored(anchor, AnchorStyles.Bottom);
+
+        bool specifiedIsSignificantlyWiderThanDisplay = specifiedElementBounds.Width > anchorDisplayRect.Width + GetSignificantStretchDelta(anchorDisplayRect.Width);
+        bool specifiedIsSignificantlyTallerThanDisplay = specifiedElementBounds.Height > anchorDisplayRect.Height + GetSignificantStretchDelta(anchorDisplayRect.Height);
+        bool cachedWidthFitsDisplay = cachedElementBounds.Width <= anchorDisplayRect.Width + 1;
+        bool cachedHeightFitsDisplay = cachedElementBounds.Height <= anchorDisplayRect.Height + 1;
+
+        return (isHorizontalStretch && specifiedIsSignificantlyWiderThanDisplay && cachedWidthFitsDisplay)
+            || (isVerticalStretch && specifiedIsSignificantlyTallerThanDisplay && cachedHeightFitsDisplay);
+    }
+
+    private static int GetSignificantStretchDelta(int size)
+    {
+        // Ignore tiny differences caused by borders/rounding, but treat large drifts as stale metadata.
+        return Math.Max(MinimumSignificantStretchDelta, size / MinimumSignificantStretchDelta);
     }
 
     private static void ResetAnchorInfo(AnchorInfo anchorInfo, Rectangle elementBounds, Rectangle displayRect, AnchorStyles anchor)
@@ -162,6 +265,64 @@ internal partial class DefaultLayout
 
         // Allow 1-pixel tolerance for integer rounding.
         return actualSize + 1 < expectedSize;
+    }
+
+    private static bool IsProjectedStretchAnchorSmallerThanExpected(
+        int currentDisplaySize,
+        int leadingAnchor,
+        int trailingAnchor,
+        int specifiedSize,
+        int specifiedDisplaySize)
+    {
+        if (specifiedSize <= 0 || currentDisplaySize <= 0 || specifiedDisplaySize <= 0)
+        {
+            return false;
+        }
+
+        int projectedSize = Math.Max(0, currentDisplaySize + trailingAnchor - leadingAnchor);
+
+        return IsSmallerThanExpectedStretchedSize(projectedSize, specifiedSize, currentDisplaySize, specifiedDisplaySize);
+    }
+
+    private static int GetEffectiveSpecifiedSizeForStretchRefresh(
+        int anchorDisplaySize,
+        int leadingAnchor,
+        int trailingAnchor,
+        int specifiedSize)
+    {
+        if (anchorDisplaySize <= 0 || specifiedSize <= 0)
+        {
+            return specifiedSize;
+        }
+
+        int baselineProjectedSize = Math.Max(0, anchorDisplaySize + trailingAnchor - leadingAnchor);
+        int staleSpecifiedDelta = GetSignificantStretchDelta(baselineProjectedSize);
+
+        return specifiedSize > baselineProjectedSize + staleSpecifiedDelta
+            ? baselineProjectedSize
+            : specifiedSize;
+    }
+
+    private static bool IsLargerThanExpectedStretchedSize(int actualSize, int specifiedSize, int currentDisplaySize, int specifiedDisplaySize)
+    {
+        if (specifiedSize <= 0 || currentDisplaySize <= 0 || specifiedDisplaySize <= 0)
+        {
+            return false;
+        }
+
+        int expectedSize = Math.Max(0, specifiedSize + currentDisplaySize - specifiedDisplaySize);
+
+        // Allow 1-pixel tolerance for integer rounding.
+        return actualSize > expectedSize + 1;
+    }
+
+    private static bool IsSpecifiedDisplayRectangleLikelyStale(Rectangle specifiedDisplayRect, Rectangle anchorDisplayRect)
+    {
+        int widthDelta = GetSignificantStretchDelta(anchorDisplayRect.Width);
+        int heightDelta = GetSignificantStretchDelta(anchorDisplayRect.Height);
+
+        return specifiedDisplayRect.Width > anchorDisplayRect.Width + widthDelta
+            || specifiedDisplayRect.Height > anchorDisplayRect.Height + heightDelta;
     }
 
     private static Rectangle GetDisplayRectangleForSpecifiedContainerBounds(IArrangedElement container, Rectangle displayRect, Rectangle specifiedContainerBounds)

@@ -369,6 +369,279 @@ public class AnchorLayoutHighDpiRegressionTests
             + $"RecoveredBounds={recoveredBounds}, RecoveredBottom={anchorInfo.Bottom}, RecoveredDisplayRect={anchorInfo.DisplayRectangle}");
     }
 
+    [StaFact]
+    public void StretchAnchoredControl_WithOversizedPositiveOffsets_RefreshesUsingSpecifiedDisplayRectangle()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 1458, 712),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 1458, 712)
+        };
+        using CargoWiseLikeGroupBox stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(3, 160, 1530, 840)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // Designer-time (specified) geometry captured by the layout engine.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 651, 474));
+        SetSpecifiedBounds(stretchControl, new Rectangle(3, 160, 645, 311));
+
+        // Stale V1 anchor info: positive trailing offsets make the control larger than parent.
+        DefaultLayout.AnchorInfo anchorInfo = CreateAnchorInfo(
+            left: 3,
+            top: 160,
+            right: 75,
+            bottom: 50,
+            displayRectangle: new Rectangle(0, 0, 576, 400));
+
+        Rectangle currentDisplayRectangle = parent.DisplayRectangle;
+
+        RefreshAnchorInfoForDisplayRectangleGrowth(
+            stretchControl,
+            anchorInfo,
+            currentDisplayRectangle,
+            stretchControl.Anchor,
+            isStretchAnchorRefresh: true,
+            useSpecifiedDisplayRectangleForStretchRefresh: true);
+
+        Rectangle refreshedBounds = ComputeAnchoredBounds(anchorInfo, currentDisplayRectangle, stretchControl.Anchor);
+
+        Assert.True(anchorInfo.Right < 0, $"Expected negative right anchor after refresh but got {anchorInfo.Right}.");
+        Assert.True(anchorInfo.Bottom < 0, $"Expected negative bottom anchor after refresh but got {anchorInfo.Bottom}.");
+        Assert.True(
+            parent.DisplayRectangle.Contains(refreshedBounds),
+            $"Refreshed stretch bounds should fit in parent display area. "
+            + $"ParentDisplayRect={parent.DisplayRectangle}, RefreshedBounds={refreshedBounds}");
+    }
+
+    [StaFact]
+    public void StretchAnchoredControl_WithSpecifiedBoundsMuchLargerThanBaseline_UsesCachedBoundsDuringStretchRefresh()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 1526, 453),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 1526, 453)
+        };
+        using CargoWiseLikeGroupBox stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(7, 400, 1477, 0)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // CargoWise trace shape: runtime bounds fit the baseline while specified bounds are much larger.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 1492, 405));
+        SetSpecifiedBounds(stretchControl, new Rectangle(7, 400, 1612, 777));
+
+        DefaultLayout.AnchorInfo anchorInfo = CreateAnchorInfo(
+            left: 7,
+            top: 400,
+            right: -8,
+            bottom: -5,
+            displayRectangle: new Rectangle(0, 0, 1492, 405));
+
+        RefreshAnchorInfoForDisplayRectangleGrowth(
+            stretchControl,
+            anchorInfo,
+            parent.DisplayRectangle,
+            stretchControl.Anchor,
+            isStretchAnchorRefresh: true,
+            useSpecifiedDisplayRectangleForStretchRefresh: false);
+
+        Rectangle refreshedBounds = ComputeAnchoredBounds(anchorInfo, parent.DisplayRectangle, stretchControl.Anchor);
+
+        Assert.True(
+            anchorInfo.Right < 0,
+            $"Expected negative right anchor after refresh but got {anchorInfo.Right}.");
+        Assert.True(
+            anchorInfo.Bottom < 0,
+            $"Expected negative bottom anchor after refresh but got {anchorInfo.Bottom}.");
+        Assert.True(
+            parent.DisplayRectangle.Contains(refreshedBounds),
+            $"Refreshed stretch bounds should fit in parent display area. "
+            + $"ParentDisplayRect={parent.DisplayRectangle}, RefreshedBounds={refreshedBounds}");
+    }
+
+    [StaFact]
+    public void StretchAnchoredControl_WithStaleSpecifiedDisplayRectangle_DoesNotRefreshStretchAnchors()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 1492, 405),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 1492, 405)
+        };
+        using CargoWiseLikeGroupBox stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(7, 400, 1477, 0)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // Stale specified metadata still points at the pre-shrink baseline.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 1627, 1185));
+        SetSpecifiedBounds(stretchControl, new Rectangle(7, 400, 1612, 777));
+
+        DefaultLayout.SetAnchorInfo(
+            stretchControl,
+            CreateAnchorInfo(
+                left: 7,
+                top: 400,
+                right: -8,
+                bottom: -5,
+                displayRectangle: new Rectangle(0, 0, 1492, 405)));
+
+        parent.Bounds = new Rectangle(0, 0, 1526, 453);
+        parent.SimulatedDisplayRectangle = new Rectangle(0, 0, 1526, 453);
+
+        parent.PerformLayout();
+
+        DefaultLayout.AnchorInfo refreshedAnchorInfo = DefaultLayout.GetAnchorInfo(stretchControl)!;
+
+        Assert.Equal(-8, refreshedAnchorInfo.Right);
+        Assert.Equal(-5, refreshedAnchorInfo.Bottom);
+        Assert.Equal(new Rectangle(7, 400, 1511, 48), stretchControl.Bounds);
+    }
+
+    [StaFact]
+    public void StretchAnchoredControl_WithHealthyNegativeTrailingAnchor_StretchesWithoutRefreshingAnchors()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 1492, 405),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 1492, 405)
+        };
+        using Panel stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(7, 175, 1477, 217)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // Baseline metadata is healthy; a growth pass should stretch using existing anchors.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 1492, 405));
+        SetSpecifiedBounds(stretchControl, new Rectangle(7, 175, 1477, 217));
+
+        DefaultLayout.SetAnchorInfo(
+            stretchControl,
+            CreateAnchorInfo(
+                left: 7,
+                top: 175,
+                right: -8,
+                bottom: 392,
+                displayRectangle: new Rectangle(0, 0, 1492, 405)));
+
+        parent.Bounds = new Rectangle(0, 0, 1526, 453);
+        parent.SimulatedDisplayRectangle = new Rectangle(0, 0, 1526, 453);
+
+        parent.PerformLayout();
+
+        DefaultLayout.AnchorInfo refreshedAnchorInfo = DefaultLayout.GetAnchorInfo(stretchControl)!;
+
+        Assert.Equal(-8, refreshedAnchorInfo.Right);
+        Assert.Equal(392, refreshedAnchorInfo.Bottom);
+        Assert.Equal(new Rectangle(7, 175, 1511, 217), stretchControl.Bounds);
+    }
+
+    [StaFact]
+    public void StretchAnchoredControl_WithStaleSpecifiedSizeAndHealthyAnchors_DoesNotRefreshAnchors()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 1492, 405),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 1492, 405)
+        };
+        using Panel stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(7, 175, 1477, 217)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // Parent specified metadata is current, but child specified size is stale and oversized.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 1492, 405));
+        SetSpecifiedBounds(stretchControl, new Rectangle(7, 175, 1612, 217));
+
+        DefaultLayout.SetAnchorInfo(
+            stretchControl,
+            CreateAnchorInfo(
+                left: 7,
+                top: 175,
+                right: -8,
+                bottom: 392,
+                displayRectangle: new Rectangle(0, 0, 1492, 405)));
+
+        parent.Bounds = new Rectangle(0, 0, 1526, 453);
+        parent.SimulatedDisplayRectangle = new Rectangle(0, 0, 1526, 453);
+
+        parent.PerformLayout();
+
+        DefaultLayout.AnchorInfo refreshedAnchorInfo = DefaultLayout.GetAnchorInfo(stretchControl)!;
+
+        Assert.Equal(-8, refreshedAnchorInfo.Right);
+        Assert.Equal(392, refreshedAnchorInfo.Bottom);
+        Assert.Equal(new Rectangle(7, 175, 1511, 217), stretchControl.Bounds);
+    }
+
+    [StaFact]
+    public void StretchAnchoredControl_WithOversizedPositiveOffsetsAndNoDisplayGrowth_RefreshesUsingSpecifiedDisplayRectangle()
+    {
+        using StretchTestContainer parent = new()
+        {
+            Bounds = new Rectangle(0, 0, 576, 400),
+            SimulatedDisplayRectangle = new Rectangle(0, 0, 576, 400)
+        };
+        using CargoWiseLikeGroupBox stretchControl = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(3, 160, 645, 311)
+        };
+
+        parent.Controls.Add(stretchControl);
+
+        // Designer-time (specified) geometry from the CargoWise layout shape.
+        SetSpecifiedBounds(parent, new Rectangle(0, 0, 651, 474));
+        SetSpecifiedBounds(stretchControl, new Rectangle(3, 160, 645, 311));
+
+        // Stale V1 anchors captured against the current display rectangle already contain
+        // positive trailing offsets, so there is no display-rectangle growth signal.
+        DefaultLayout.AnchorInfo anchorInfo = CreateAnchorInfo(
+            left: 3,
+            top: 160,
+            right: 72,
+            bottom: 71,
+            displayRectangle: parent.DisplayRectangle);
+
+        Rectangle currentDisplayRectangle = parent.DisplayRectangle;
+
+        RefreshAnchorInfoForDisplayRectangleGrowth(
+            stretchControl,
+            anchorInfo,
+            currentDisplayRectangle,
+            stretchControl.Anchor,
+            isStretchAnchorRefresh: true,
+            useSpecifiedDisplayRectangleForStretchRefresh: true);
+
+        Rectangle refreshedBounds = ComputeAnchoredBounds(anchorInfo, currentDisplayRectangle, stretchControl.Anchor);
+
+        Assert.True(
+            anchorInfo.Right < 0,
+            $"Expected negative right anchor after refresh but got {anchorInfo.Right}.");
+        Assert.True(
+            anchorInfo.Bottom < 0,
+            $"Expected negative bottom anchor after refresh but got {anchorInfo.Bottom}.");
+        Assert.True(
+            parent.DisplayRectangle.Contains(refreshedBounds),
+            $"Refreshed stretch bounds should fit in parent display area. "
+            + $"ParentDisplayRect={parent.DisplayRectangle}, RefreshedBounds={refreshedBounds}");
+    }
+
     private static DefaultLayout.AnchorInfo CreateAnchorInfo(int left, int top, int right, int bottom, Rectangle displayRectangle) =>
         new()
         {
@@ -385,8 +658,20 @@ public class AnchorLayoutHighDpiRegressionTests
     private static bool ShouldRefreshAnchorInfoForStalePositiveAnchors(DefaultLayout.AnchorInfo anchorInfo, Rectangle bounds, Rectangle displayRectangle, AnchorStyles anchor) =>
         DefaultLayout.ShouldRefreshAnchorInfoForStalePositiveAnchors(anchorInfo, bounds, displayRectangle, anchor);
 
-    private static void RefreshAnchorInfoForDisplayRectangleGrowth(Control control, DefaultLayout.AnchorInfo anchorInfo, Rectangle displayRectangle, AnchorStyles anchor, bool isStretchAnchorRefresh) =>
-        DefaultLayout.RefreshAnchorInfoForDisplayRectangleGrowth(control, anchorInfo, displayRectangle, anchor, isStretchAnchorRefresh);
+    private static void RefreshAnchorInfoForDisplayRectangleGrowth(
+        Control control,
+        DefaultLayout.AnchorInfo anchorInfo,
+        Rectangle displayRectangle,
+        AnchorStyles anchor,
+        bool isStretchAnchorRefresh,
+        bool useSpecifiedDisplayRectangleForStretchRefresh = false) =>
+        DefaultLayout.RefreshAnchorInfoForDisplayRectangleGrowth(
+            control,
+            anchorInfo,
+            displayRectangle,
+            anchor,
+            isStretchAnchorRefresh,
+            useSpecifiedDisplayRectangleForStretchRefresh);
 
     private static Rectangle ComputeAnchoredBounds(DefaultLayout.AnchorInfo anchorInfo, Rectangle displayRectangle, AnchorStyles anchor)
     {
