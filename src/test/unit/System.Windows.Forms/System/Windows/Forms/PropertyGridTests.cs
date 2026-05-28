@@ -4507,15 +4507,26 @@ public partial class PropertyGridTests
 
     #region OnComponentRemoved Tests
 
-    [WinFormsFact]
-    public void PropertyGrid_OnComponentRemoved_ThrowsWhenComponentIsNull()
+    private static PropertyGrid CreatePropertyGridWithActiveDesigner(
+        out Mock<IDesignerHost> mockDesignerHost,
+        out Mock<IComponentChangeService> mockChangeService)
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
+        PropertyGrid propertyGrid = new();
+        mockDesignerHost = new();
+        mockChangeService = new();
 
         mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
         propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
+
+        return propertyGrid;
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentRemoved_ThrowsWhenComponentIsNull()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
 
         Assert.Throws<InvalidOperationException>(() =>
             mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(null)));
@@ -4524,18 +4535,15 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnComponentRemoved_RemovesComponentFromSelectedObjects()
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
-
-        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
 
         using TestComponent component1 = new();
         using TestComponent component2 = new();
         using TestComponent component3 = new();
 
         propertyGrid.SelectedObjects = [component1, component2, component3];
-        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
 
         mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component2));
 
@@ -4548,16 +4556,13 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnComponentRemoved_HandlesOnlyComponent()
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
-
-        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
 
         using TestComponent component = new();
 
         propertyGrid.SelectedObject = component;
-        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
 
         mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component));
 
@@ -4565,20 +4570,17 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
-    public void PropertyGrid_OnComponentRemoved_BatchMode_UpdatesSelectionWithoutRaisingSelectedObjectsChanged()
+    public void PropertyGrid_OnComponentRemoved_BatchMode_UpdatesSelectedObjectsWithoutRefresh()
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
-
-        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
         mockDesignerHost.Setup(h => h.InTransaction).Returns(true);
 
         using TestComponent component1 = new();
         using TestComponent component2 = new();
 
         propertyGrid.SelectedObjects = [component1, component2];
-        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
 
         int selectedObjectsChangedCallCount = 0;
         propertyGrid.SelectedObjectsChanged += (sender, e) => selectedObjectsChangedCallCount++;
@@ -4602,18 +4604,15 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnComponentRemoved_DoesNotRemoveNonExistentComponent()
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
-
-        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
 
         using TestComponent component1 = new();
         using TestComponent component2 = new();
         using TestComponent component3 = new();
 
         propertyGrid.SelectedObjects = [component1, component2];
-        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
 
         // Try to remove a component that is not in the selection
         mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component3));
@@ -4626,18 +4625,16 @@ public partial class PropertyGridTests
     [WinFormsFact]
     public void PropertyGrid_OnComponentRemoved_NullSelectedObjects_DoesNotThrow()
     {
-        using PropertyGrid propertyGrid = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        Mock<IComponentChangeService> mockChangeService = new();
-
-        mockDesignerHost.Setup(h => h.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
 
         TestComponent component = new();
 
-        propertyGrid.TestAccessor.Dynamic.ActiveDesigner = mockDesignerHost.Object;
-
         // Should not throw when _selectedObjects is null
         mockChangeService.Raise(s => s.ComponentRemoved += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+
+        Assert.Empty(propertyGrid.SelectedObjects);
     }
 
     [PropertyTab(typeof(DocumentScopePropertyTab), PropertyTabScope.Component)]
