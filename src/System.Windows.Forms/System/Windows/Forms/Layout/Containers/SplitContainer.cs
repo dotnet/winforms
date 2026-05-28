@@ -1564,10 +1564,11 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                     g.FillRectangle(solidBrush, _splitterRect);
                 }
             }
-            catch (ExternalException)
+            catch (ExternalException ex)
             {
                 // GDI+ can transiently fail while the display session is transitioning (for example, lock/unlock).
                 // Ignore repaint failures here and let normal painting recover once graphics resources are available.
+                Debug.Fail($"{nameof(RepaintSplitterRect)} failed with hr={ex.ErrorCode}, message={ex}");
             }
         }
     }
