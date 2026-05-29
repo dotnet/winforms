@@ -2387,6 +2387,62 @@ public partial class PropertyGridTests
         Assert.Single(grid.PropertyTabs);
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_AddTab_NewTabType_AddsTabAtEnd()
+    {
+        using PropertyGrid control = new();
+        int initialCount = control.PropertyTabs.Count;
+
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Static);
+
+        Assert.Equal(initialCount + 1, control.PropertyTabs.Count);
+        Assert.IsType<TestPropertyTab>(control.PropertyTabs[initialCount]);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_AddTab_ExistingTabType_DoesNotAddDuplicate()
+    {
+        using PropertyGrid control = new();
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Static);
+        int countAfterFirst = control.PropertyTabs.Count;
+
+        // Adding the same tab type a second time should be a no-op for tab insertion.
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Static);
+
+        Assert.Equal(countAfterFirst, control.PropertyTabs.Count);
+        Assert.Single(control.PropertyTabs.Cast<PropertyTab>(), t => t is TestPropertyTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_AddTab_WithComponent_AddsComponentToTab()
+    {
+        using PropertyGrid control = new();
+        using Button component = new();
+
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Component, component, setupToolbar: false);
+
+        PropertyTab tab = control.PropertyTabs.Cast<PropertyTab>().Single(t => t is TestPropertyTab);
+        Assert.NotNull(tab.Components);
+        Assert.Single(tab.Components);
+        Assert.Same(component, tab.Components[0]);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_AddTab_SameTypeMultipleComponents_AccumulatesComponents()
+    {
+        using PropertyGrid control = new();
+        using Button first = new();
+        using Button second = new();
+
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Component, first, setupToolbar: false);
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Component, second, setupToolbar: false);
+
+        PropertyTab tab = control.PropertyTabs.Cast<PropertyTab>().Single(t => t is TestPropertyTab);
+        Assert.Equal(2, tab.Components.Length);
+        Assert.Same(first, tab.Components[0]);
+        Assert.Same(second, tab.Components[1]);
+    }
+
     private class TestPropertyTab : PropertyTab
     {
         public override string TabName => "TestTabName";
