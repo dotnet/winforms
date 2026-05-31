@@ -20,6 +20,10 @@ on:
         required: true
         default: "ACTIVE"
 
+
+permissions:
+  contents: read
+
 env:
   CACHE_KEY: ${{ inputs.cache_key || 'ACTIVE' }}
 
