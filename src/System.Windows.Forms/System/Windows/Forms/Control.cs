@@ -11283,9 +11283,11 @@ public unsafe partial class Control :
     ///  <see cref="ContextMenu"/> sub-menu so dynamic items can be populated before display.
     /// </summary>
     /// <remarks>
-    ///  Restored from net8.0_legacy — this handler was omitted when legacy <see cref="ContextMenu"/>
-    ///  support was ported to .NET 10 (PR #17).
-    ///  Source location: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L12355-L12371
+    ///  <para>
+    ///   Restored from net8.0_legacy — this handler was omitted when legacy <see cref="ContextMenu"/>
+    ///   support was ported to .NET 10 (PR #17).
+    ///   Source location: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L12355-L12371
+    ///  </para>
     /// </remarks>
     private void WmInitMenuPopup(ref Message m)
     {
