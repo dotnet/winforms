@@ -11279,6 +11279,26 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Handles the WM_INITMENUPOPUP message. Fires <see cref="MenuItem.Popup"/> on the matching
+    ///  <see cref="ContextMenu"/> sub-menu so dynamic items can be populated before display.
+    /// </summary>
+    /// <remarks>
+    ///  Restored from net8.0_legacy — this handler was omitted when legacy <see cref="ContextMenu"/>
+    ///  support was ported to .NET 10 (PR #17).
+    ///  Source location: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L12355-L12371
+    /// </remarks>
+    private void WmInitMenuPopup(ref Message m)
+    {
+        ContextMenu? contextMenu = Properties.GetValueOrDefault<ContextMenu>(s_contextMenuProperty);
+        if (contextMenu is not null && contextMenu.ProcessInitMenuPopup((nint)m.WParamInternal))
+        {
+            return;
+        }
+
+        DefWndProc(ref m);
+    }
+
+    /// <summary>
     ///  Handles the WM_CTLCOLOR message
     /// </summary>
     private void WmCtlColorControl(ref Message m)
@@ -12742,8 +12762,13 @@ public unsafe partial class Control :
 
                 break;
 
-            case PInvokeCore.WM_EXITMENULOOP:
+            // Originally at net8.0_legacy Control.cs line 13330.
+            // See: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L13330
             case PInvokeCore.WM_INITMENUPOPUP:
+                WmInitMenuPopup(ref m);
+                break;
+
+            case PInvokeCore.WM_EXITMENULOOP:
             case PInvokeCore.WM_MENUSELECT:
             default:
 
