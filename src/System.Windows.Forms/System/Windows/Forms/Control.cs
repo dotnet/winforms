@@ -11279,23 +11279,20 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Handles the WM_INITMENUPOPUP message. Fires <see cref="MenuItem.Popup"/> on the matching
-    ///  <see cref="ContextMenu"/> sub-menu so dynamic items can be populated before display.
+    ///  Handles the WM_INITMENUPOPUP message. Dispatches to the legacy <see cref="ContextMenu"/> so
+    ///  that <see cref="MenuItem.Popup"/> events fire for submenus. Without this, controls that own
+    ///  a <see cref="ContextMenu"/> (e.g. via <c>TrackPopupMenuEx</c>) would never receive submenu
+    ///  init notifications and dynamic placeholder items would never be replaced.
     /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   Restored from net8.0_legacy — this handler was omitted when legacy <see cref="ContextMenu"/>
-    ///   support was ported to .NET 10 (PR #17).
-    ///   Source location: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L12355-L12371
-    ///  </para>
-    /// </remarks>
     private void WmInitMenuPopup(ref Message m)
     {
-        ContextMenu? contextMenu = Properties.GetValueOrDefault<ContextMenu>(s_contextMenuProperty);
-        if (contextMenu is not null && contextMenu.ProcessInitMenuPopup((nint)m.WParamInternal))
+#pragma warning disable WFDEV006 // Type or member is obsolete
+        if (Properties.TryGetValue(s_contextMenuProperty, out ContextMenu? contextMenu)
+            && contextMenu.ProcessInitMenuPopup((nint)m.WParamInternal))
         {
             return;
         }
+#pragma warning restore WFDEV006
 
         DefWndProc(ref m);
     }
@@ -12764,8 +12761,6 @@ public unsafe partial class Control :
 
                 break;
 
-            // Originally at net8.0_legacy Control.cs line 13330.
-            // See: https://github.com/WiseTechGlobal/winforms/blob/net8.0_legacy/src/System.Windows.Forms/src/System/Windows/Forms/Control.cs#L13330
             case PInvokeCore.WM_INITMENUPOPUP:
                 WmInitMenuPopup(ref m);
                 break;

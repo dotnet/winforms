@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Demo;
@@ -8,6 +9,9 @@ public partial class MenuStackForm : Form
     private readonly ContextMenu _surfaceContextMenu;
     private readonly ContextMenu _treeViewContextMenu;
     private int _dynamicMenuGeneration;
+    private int _documentsMenuGeneration;
+    private readonly DataTable _logDataTable = new DataTable("EventLog");
+    private ContextMenu _gridContextMenu = null!;
 
     public MenuStackForm()
     {
@@ -22,6 +26,7 @@ public partial class MenuStackForm : Form
         _menuTreeView.ContextMenu = _treeViewContextMenu;
 
         InitializeTreeView();
+        SetUpLogDataGrid();
         AppendLog("Menu stack demo ready.");
     }
 
@@ -71,7 +76,7 @@ public partial class MenuStackForm : Form
 
         MenuItem contextActionsItem = new("Context Actions");
         contextActionsItem.MenuItems.Add(new MenuItem("Show Surface Menu", ShowSurfaceMenuMenuItem_Click));
-        contextActionsItem.MenuItems.Add(new MenuItem("Clear Log", (_, _) => _eventLog.Items.Clear()));
+        contextActionsItem.MenuItems.Add(new MenuItem("Clear Log", (_, _) => { _logDataTable.Rows.Clear(); AppendLog("Log cleared."); }));
 
         AttachMenuTracing(fileMenuItem);
         AttachMenuTracing(viewMenuItem);
@@ -346,7 +351,7 @@ public partial class MenuStackForm : Form
 
     private void ClearLogButton_Click(object? sender, EventArgs e)
     {
-        _eventLog.Items.Clear();
+        _logDataTable.Rows.Clear();
         AppendLog("Log cleared.");
     }
 
@@ -371,13 +376,134 @@ public partial class MenuStackForm : Form
         _surfaceContextMenu.Show(_demoSurface, menuPoint);
     }
 
+    private void SetUpLogDataGrid()
+    {
+        _logDataTable.Columns.Add(new DataColumn("Time", typeof(string)));
+        _logDataTable.Columns.Add(new DataColumn("Event", typeof(string)));
+
+        DataGridTableStyle tableStyle = new() { MappingName = "EventLog" };
+        tableStyle.GridColumnStyles.Add(new DataGridTextBoxColumn { MappingName = "Time", HeaderText = "Time", Width = 72, ReadOnly = true });
+        tableStyle.GridColumnStyles.Add(new DataGridTextBoxColumn { MappingName = "Event", HeaderText = "Event", Width = 680, ReadOnly = true });
+        _demoDataGrid.TableStyles.Add(tableStyle);
+        _demoDataGrid.DataSource = _logDataTable;
+
+        _gridContextMenu = CreateGridContextMenu();
+        _demoDataGrid.ContextMenu = _gridContextMenu;
+    }
+
+    // Repro for WM_INITMENUPOPUP not firing on a non-Form control (DataGrid):
+    // Right-click the grid and hover any dynamic submenu. Without the fix in Control.WmInitMenuPopup,
+    // WM_INITMENUPOPUP is never dispatched to ContextMenu.ProcessInitMenuPopup, so Popup never fires
+    // and the submenu always shows "<PlaceHolder>" — exactly as seen in the product.
+    private ContextMenu CreateGridContextMenu()
+    {
+        ContextMenu contextMenu = new();
+
+        contextMenu.MenuItems.Add(new MenuItem("View", OnGridContextMenuActionClicked));
+        contextMenu.MenuItems.Add(new MenuItem("Copy Row", OnGridContextMenuActionClicked));
+        contextMenu.MenuItems.Add(new MenuItem("-"));
+        contextMenu.MenuItems.Add(new MenuItem("Customize Columns", OnGridContextMenuActionClicked));
+        contextMenu.MenuItems.Add(new MenuItem("-"));
+
+        MenuItem actionsItem = new("Actions");
+        actionsItem.Popup += ActionsMenuItem_Popup;
+        actionsItem.MenuItems.Add(new MenuItem("<PlaceHolder>"));
+        contextMenu.MenuItems.Add(actionsItem);
+
+        MenuItem tasksItem = new("Tasks");
+        tasksItem.Popup += TasksMenuItem_Popup;
+        tasksItem.MenuItems.Add(new MenuItem("<PlaceHolder>"));
+        contextMenu.MenuItems.Add(tasksItem);
+
+        MenuItem supportTasksItem = new("Support's Tasks");
+        supportTasksItem.Popup += SupportTasksMenuItem_Popup;
+        supportTasksItem.MenuItems.Add(new MenuItem("<PlaceHolder>"));
+        contextMenu.MenuItems.Add(supportTasksItem);
+
+        // Primary repro target: hover "Documents" and the Popup event should replace <PlaceHolder>
+        // with real items. Without Control.WmInitMenuPopup dispatching the message, it stays as-is.
+        MenuItem documentsItem = new("Documents");
+        documentsItem.Popup += DocumentsMenuItem_Popup;
+        documentsItem.MenuItems.Add(new MenuItem("<PlaceHolder>"));
+        contextMenu.MenuItems.Add(documentsItem);
+
+        return contextMenu;
+    }
+
+    private void ActionsMenuItem_Popup(object? sender, EventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        menuItem.MenuItems.Clear();
+        menuItem.MenuItems.Add(new MenuItem("Clear Log", (_, _) => { _logDataTable.Rows.Clear(); AppendLog("Log cleared via context menu."); }));
+        menuItem.MenuItems.Add(new MenuItem("Export Log", OnGridContextMenuActionClicked));
+        AppendLog("Actions submenu rebuilt.");
+    }
+
+    private void TasksMenuItem_Popup(object? sender, EventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        menuItem.MenuItems.Clear();
+        menuItem.MenuItems.Add(new MenuItem("My Tasks", OnGridContextMenuActionClicked));
+        menuItem.MenuItems.Add(new MenuItem("All Tasks", OnGridContextMenuActionClicked));
+        AppendLog("Tasks submenu rebuilt.");
+    }
+
+    private void SupportTasksMenuItem_Popup(object? sender, EventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        menuItem.MenuItems.Clear();
+        menuItem.MenuItems.Add(new MenuItem("Open Support Ticket", OnGridContextMenuActionClicked));
+        menuItem.MenuItems.Add(new MenuItem("View Support History", OnGridContextMenuActionClicked));
+        AppendLog("Support's Tasks submenu rebuilt.");
+    }
+
+    private void DocumentsMenuItem_Popup(object? sender, EventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        _documentsMenuGeneration++;
+        menuItem.MenuItems.Clear();
+        menuItem.MenuItems.Add(new MenuItem($"Document {_documentsMenuGeneration}.1", OnGridContextMenuActionClicked));
+        menuItem.MenuItems.Add(new MenuItem($"Document {_documentsMenuGeneration}.2", OnGridContextMenuActionClicked));
+        menuItem.MenuItems.Add(new MenuItem($"Document {_documentsMenuGeneration}.3", OnGridContextMenuActionClicked));
+        AppendLog($"Documents submenu rebuilt #{_documentsMenuGeneration}.");
+    }
+
+    private void OnGridContextMenuActionClicked(object? sender, EventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        AppendLog($"Grid context action: {menuItem.Text}");
+    }
+
     private void AppendLog(string message)
     {
-        _eventLog.Items.Insert(0, $"[{DateTime.Now:HH:mm:ss}] {message}");
+        DataRow row = _logDataTable.NewRow();
+        row["Time"] = DateTime.Now.ToString("HH:mm:ss");
+        row["Event"] = message;
+        _logDataTable.Rows.InsertAt(row, 0);
 
-        if (_eventLog.Items.Count > 200)
+        if (_logDataTable.Rows.Count > 200)
         {
-            _eventLog.Items.RemoveAt(_eventLog.Items.Count - 1);
+            _logDataTable.Rows.RemoveAt(_logDataTable.Rows.Count - 1);
         }
     }
 }

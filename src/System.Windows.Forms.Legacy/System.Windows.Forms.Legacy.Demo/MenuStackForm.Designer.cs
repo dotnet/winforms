@@ -15,7 +15,7 @@ partial class MenuStackForm
     private Panel _demoSurface = null!;
     private Label _surfaceMessageLabel = null!;
     private TreeView _menuTreeView = null!;
-    private ListBox _eventLog = null!;
+    private DataGrid _demoDataGrid = null!;
     private Label _treeViewLabel = null!;
     private Label _logLabel = null!;
 
@@ -38,7 +38,7 @@ partial class MenuStackForm
         _demoSurface = new Panel();
         _surfaceMessageLabel = new Label();
         _menuTreeView = new TreeView();
-        _eventLog = new ListBox();
+        _demoDataGrid = new DataGrid();
         _treeViewLabel = new Label();
         _logLabel = new Label();
         _demoSurface.SuspendLayout();
@@ -99,14 +99,14 @@ partial class MenuStackForm
         _menuTreeView.TabIndex = 7;
         _menuTreeView.NodeMouseClick += MenuTreeView_NodeMouseClick;
         // 
-        // _eventLog
+        // _demoDataGrid
         // 
-        _eventLog.FormattingEnabled = true;
-        _eventLog.HorizontalScrollbar = true;
-        _eventLog.Location = new Point(18, 368);
-        _eventLog.Name = "_eventLog";
-        _eventLog.Size = new Size(774, 184);
-        _eventLog.TabIndex = 9;
+        _demoDataGrid.CaptionVisible = false;
+        _demoDataGrid.Location = new Point(18, 368);
+        _demoDataGrid.Name = "_demoDataGrid";
+        _demoDataGrid.ReadOnly = true;
+        _demoDataGrid.Size = new Size(774, 184);
+        _demoDataGrid.TabIndex = 9;
         // 
         // _treeViewLabel
         // 
@@ -120,9 +120,9 @@ partial class MenuStackForm
         // 
         _logLabel.Location = new Point(18, 346);
         _logLabel.Name = "_logLabel";
-        _logLabel.Size = new Size(180, 18);
+        _logLabel.Size = new Size(600, 18);
         _logLabel.TabIndex = 8;
-        _logLabel.Text = "Menu event log";
+        _logLabel.Text = "DataGrid context menu repro — right-click a row for dynamic ContextMenu (submenus show <PlaceHolder> without the fix)";
         // 
         // MenuStackForm
         // 
@@ -131,7 +131,7 @@ partial class MenuStackForm
         ClientSize = new Size(810, 572);
         Controls.Add(_logLabel);
         Controls.Add(_treeViewLabel);
-        Controls.Add(_eventLog);
+        Controls.Add(_demoDataGrid);
         Controls.Add(_menuTreeView);
         Controls.Add(_demoSurface);
         Controls.Add(_clearLogButton);
