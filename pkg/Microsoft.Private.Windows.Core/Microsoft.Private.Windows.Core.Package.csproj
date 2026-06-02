@@ -83,6 +83,7 @@
   <Target Name="AddPackageSymbols">
     <ItemGroup>
       <TfmSpecificDebugSymbolsFile Include="$(_SourceBinDir)$(_SourceProjectName).pdb"
+                                   Condition="Exists('$(_SourceBinDir)$(_SourceProjectName).pdb')"
                                    TargetPath="$(_SourceProjectName).pdb"
                                    TargetFramework="$(NetFxTFM)" />
     </ItemGroup>
