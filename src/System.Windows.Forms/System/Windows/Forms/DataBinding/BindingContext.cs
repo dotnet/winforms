@@ -276,13 +276,12 @@ public partial class BindingContext : ICollection
         if (wRef is null)
         {
             _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
+            OnListManagerAdded(bindingManagerBase);
         }
         else
         {
             wRef.Target = bindingManagerBase;
         }
-
-        OnListManagerAdded(bindingManagerBase);
 
         ScrubWeakRefs();
         // Return the final binding manager
@@ -290,15 +289,16 @@ public partial class BindingContext : ICollection
     }
 
     /// <summary>
-    ///  Invoked from <see cref="EnsureListManager"/> whenever a newly-created <see cref="BindingManagerBase"/>
-    ///  has just been added to (or refreshed in) the internal collection. The base implementation is a no-op;
-    ///  subclasses can override to customise behaviour at the Add point without subclassing the backing store.
+    ///  Invoked from <see cref="EnsureListManager"/> immediately after a newly-created
+    ///  <see cref="BindingManagerBase"/> has been inserted into the internal collection. The base implementation
+    ///  is a no-op; subclasses can override to customize behavior equivalent to intercepting the backing store's
+    ///  Add operation.
     /// </summary>
     /// <remarks>
-    ///  <para>WiseTech: introduced to host the parent-handler swap that <c>ZBindingContext</c> previously injected
-    ///  via a <see cref="System.Collections.Hashtable"/> subclass on .NET Framework. The Dictionary-typed
-    ///  <c>_listManagers</c> on .NET 10 cannot be replaced wholesale, so the behaviour is opted into here by
-    ///  overriders rather than baked into the base type.</para>
+    ///  <para>WiseTech: introduced for code that previously replaced the .NET Framework
+    ///  <see cref="System.Collections.Hashtable"/> backing store with a subclass and intercepted add operations.
+    ///  In .NET 10, <see cref="_listManagers"/> is Dictionary-typed, so this hook preserves that extension point
+    ///  without changing the base behavior.</para>
     /// </remarks>
     protected virtual void OnListManagerAdded(BindingManagerBase bindingManagerBase)
     {
@@ -306,11 +306,11 @@ public partial class BindingContext : ICollection
 
     /// <summary>
     ///  Helper for subclasses overriding <see cref="OnListManagerAdded"/>: if the supplied manager is a
-    ///  child currency manager, detaches its parent's <c>CurrentItemChanged</c> subscription and re-attaches
-    ///  it to <c>CurrentChanged</c>, then primes the child once with the parent's current state. No-op for
-    ///  managers that are not <see cref="RelatedCurrencyManager"/> instances. Exposed because
-    ///  <see cref="RelatedCurrencyManager"/> is internal and cannot be referenced from subclasses in other
-    ///  assemblies.
+    ///  child currency manager, detaches its parent's <see cref="BindingManagerBase.CurrentItemChanged"/>
+    ///  subscription and re-attaches it to <see cref="BindingManagerBase.CurrentChanged"/>, then primes the child
+    ///  once with the parent's current state. No-op for managers that are not <see cref="RelatedCurrencyManager"/>
+    ///  instances. Exposed because <see cref="RelatedCurrencyManager"/> is internal and cannot be referenced from
+    ///  subclasses in other assemblies.
     /// </summary>
     protected static void RewireRelatedCurrencyManagerParent(BindingManagerBase bindingManagerBase)
     {

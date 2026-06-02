@@ -135,11 +135,9 @@ internal class RelatedCurrencyManager : CurrencyManager
         OnMetaDataChanged(e);
     }
 
-    // WiseTech: mirrors the legacy BindingContextHashtable.Add intercept used by ZBindingContext on .NET Framework.
-    // Re-wires the parent's CurrentItemChanged subscription onto CurrentChanged so child refreshes fire on
-    // parent position changes rather than on current-item edits, then primes the child once with the
-    // parent's current state. Invoked by BindingContext.EnsureListManager immediately after the manager
-    // is added to the internal collection.
+    // WiseTech: gives BindingContext subclasses a non-reflection path to apply the parent-handler swap that
+    // ZBindingContext previously performed from its BindingContextHashtable.Add override on .NET Framework.
+    // Called only for a newly-added manager, after the manager has been inserted into BindingContext._listManagers.
     internal void RewireParentChangeHandler()
     {
         if (_parentManager is CurrencyManager parentCurrencyManager)
