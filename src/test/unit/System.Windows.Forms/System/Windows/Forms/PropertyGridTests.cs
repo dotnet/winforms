@@ -4047,6 +4047,66 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
+    public void PropertyGrid_ExpandAllGridItems_ExpandsNestedGridItems()
+    {
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.SelectedObject = new MyClass();
+
+        GridItem nested = FindExpandableProperty(propertyGrid.SelectedGridItem);
+        nested.Should().NotBeNull();
+
+        propertyGrid.ExpandAllGridItems();
+
+        nested.Expanded.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_CollapseAllGridItems_CollapsesNestedGridItems()
+    {
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.SelectedObject = new MyClass();
+
+        GridItem nested = FindExpandableProperty(propertyGrid.SelectedGridItem);
+        nested.Should().NotBeNull();
+
+        propertyGrid.ExpandAllGridItems();
+        nested.Expanded.Should().BeTrue();
+
+        propertyGrid.CollapseAllGridItems();
+        nested.Expanded.Should().BeFalse();
+    }
+
+    private static GridItem FindExpandableProperty(GridItem item)
+    {
+        GridItem root = item;
+        while (root.Parent is not null)
+        {
+            root = root.Parent;
+        }
+
+        return Find(root.GridItems);
+
+        static GridItem Find(GridItemCollection items)
+        {
+            foreach (GridItem item in items)
+            {
+                if (item.GridItemType == GridItemType.Property && item.GridItems.Count > 0)
+                {
+                    return item;
+                }
+
+                GridItem found = Find(item.GridItems);
+                if (found is not null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    [WinFormsFact]
     public void PropertyGrid_PropertyValueChanged_Invoke_CallsPropertyValueChanged()
     {
         using PropertyGrid propertyGrid = new();
