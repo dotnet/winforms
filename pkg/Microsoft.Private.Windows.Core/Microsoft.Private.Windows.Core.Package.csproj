@@ -69,8 +69,8 @@
   <Target Name="AddPackageContent">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).dll" PackagePath="lib/$(NetFxTFM)" />
-      <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).xml" PackagePath="lib/$(NetFxTFM)" />
       <TfmSpecificPackageFile Include="$(_SourceRefDir)$(_SourceProjectName).dll" PackagePath="ref/$(NetFxTFM)" />
+      <TfmSpecificPackageFile Include="$(_SourceBinDir)$(_SourceProjectName).xml" PackagePath="ref/$(NetFxTFM)" />
     </ItemGroup>
   </Target>
 
