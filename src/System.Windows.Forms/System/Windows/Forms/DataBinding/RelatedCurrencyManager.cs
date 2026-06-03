@@ -135,9 +135,14 @@ internal class RelatedCurrencyManager : CurrencyManager
         OnMetaDataChanged(e);
     }
 
-    // WiseTech: gives BindingContext subclasses a non-reflection path to apply the parent-handler swap that
-    // ZBindingContext previously performed from its BindingContextHashtable.Add override on .NET Framework.
-    // Called only for a newly-added manager, after the manager has been inserted into BindingContext._listManagers.
+    // WiseTech: RelatedCurrencyManager normally refreshes its child list whenever the parent manager raises
+    // CurrentItemChanged. In CargoWise that can be too broad: item-change notifications may be raised while
+    // bindings/business collections are already reacting to the same edit or AddNew flow, and refreshing the
+    // child list from that path can re-enter the same notification chain until the stack overflows. ZBindingContext
+    // avoided this on .NET Framework by intercepting BindingContextHashtable.Add, removing the default
+    // CurrentItemChanged subscription, and refreshing the child only when the parent's CurrentChanged event fires.
+    // BindingContext uses a Dictionary on .NET 10, so this helper gives subclasses the same event swap without
+    // reflecting over RelatedCurrencyManager internals.
     internal void RewireParentChangeHandler()
     {
         if (_parentManager is CurrencyManager parentCurrencyManager)
