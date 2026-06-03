@@ -4505,6 +4505,76 @@ public partial class PropertyGridTests
         }
     }
 
+    #region OnComponentAdded Tests
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentAdded_NullComponent_ThrowsInvalidOperationException()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
+
+        Assert.Throws<InvalidOperationException>(() =>
+            mockChangeService.Raise(s => s.ComponentAdded += null, mockDesignerHost.Object, new ComponentEventArgs(null)));
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentAdded_ComponentWithoutPropertyTabAttribute_DoesNotAddTab()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
+
+        using Control component = new();
+        int initialTabCount = propertyGrid.PropertyTabs.Count;
+
+        mockChangeService.Raise(s => s.ComponentAdded += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+
+        Assert.Equal(initialTabCount, propertyGrid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentAdded_ComponentWithDocumentScopeTab_AddsTab()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
+
+        using ComponentWithDocumentTab component = new();
+        int initialTabCount = propertyGrid.PropertyTabs.Count;
+
+        mockChangeService.Raise(s => s.ComponentAdded += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+
+        Assert.Equal(initialTabCount + 1, propertyGrid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_OnComponentAdded_ComponentWithNonDocumentScopeTab_DoesNotAddTab()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out Mock<IComponentChangeService> mockChangeService);
+
+        using ComponentWithNonDocumentTab component = new();
+        int initialTabCount = propertyGrid.PropertyTabs.Count;
+
+        mockChangeService.Raise(s => s.ComponentAdded += null, mockDesignerHost.Object, new ComponentEventArgs(component));
+
+        Assert.Equal(initialTabCount, propertyGrid.PropertyTabs.Count);
+    }
+
+    [PropertyTab(typeof(DocumentScopePropertyTab), PropertyTabScope.Document)]
+    private class ComponentWithDocumentTab : Component
+    {
+    }
+
+    [PropertyTab(typeof(DocumentScopePropertyTab), PropertyTabScope.Component)]
+    private class ComponentWithNonDocumentTab : Component
+    {
+    }
+
+    #endregion
+
     #region OnComponentRemoved Tests
 
     private static PropertyGrid CreatePropertyGridWithActiveDesigner(
