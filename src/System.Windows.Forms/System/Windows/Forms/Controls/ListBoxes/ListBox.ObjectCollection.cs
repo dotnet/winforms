@@ -94,6 +94,11 @@ public partial class ListBox
         {
             ArgumentNullException.ThrowIfNull(item);
 
+            if (item is string s)
+            {
+                item = s.Trim().Length == 0 ? string.Empty : s.Trim();
+            }
+            
             int index = -1;
             if (!_owner._sorted)
             {
