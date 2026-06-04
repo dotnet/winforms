@@ -25,6 +25,26 @@ public partial class ComboBox
                 case PInvokeCore.WM_GETOBJECT:
                     WmGetObject(ref m);
                     return;
+                case PInvokeCore.WM_WINDOWPOSCHANGING:
+                    if (_childWindowType == ChildWindowType.DropDownList)
+                    {
+                        // The native ComboBox sizes the dropdown list during its own layout
+                        // pass (after CBN_DROPDOWN fires). Intercept here to enforce the
+                        // managed computed height before the OS commits the final size.
+                        // This ensures the UI reflects Items.Count (or explicit DropDownHeight)
+                        // even when the list is empty or items are cleared at runtime.
+                        WINDOWPOS* pos = (WINDOWPOS*)(nint)m.LParamInternal;
+                        if (pos is not null && (pos->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0)
+                        {
+                            var height = _owner.GetCalculatedDropDownHeight();
+                            if (pos->cy != height)
+                            {
+                                pos->cy = height;
+                            }
+                        }
+                    }
+
+                    return;
                 case PInvokeCore.WM_MOUSEMOVE:
                     if (_childWindowType == ChildWindowType.DropDownList)
                     {
