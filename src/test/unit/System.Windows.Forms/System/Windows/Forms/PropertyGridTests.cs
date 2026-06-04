@@ -2388,15 +2388,18 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
-    public void PropertyGrid_AddTab_NewTabType_AddsTabAtEnd()
+    public void PropertyGrid_AddTab_NewTabType_AddsTabToCollection()
     {
         using PropertyGrid control = new();
         int initialCount = control.PropertyTabs.Count;
 
         control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Static);
 
+        // AddTab does not unconditionally append; it picks an insertion index
+        // based on tab kind and alphabetical order. Insertion order is verified
+        // separately by PropertyGrid_AddTab_OrdersCustomTabsAlphabetically.
         Assert.Equal(initialCount + 1, control.PropertyTabs.Count);
-        Assert.IsType<TestPropertyTab>(control.PropertyTabs[initialCount]);
+        Assert.Contains(control.PropertyTabs.Cast<PropertyTab>(), t => t is TestPropertyTab);
     }
 
     [WinFormsFact]
@@ -2411,6 +2414,47 @@ public partial class PropertyGridTests
 
         Assert.Equal(countAfterFirst, control.PropertyTabs.Count);
         Assert.Single(control.PropertyTabs.Cast<PropertyTab>(), t => t is TestPropertyTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_AddTab_ExistingTabType_RetainsOriginalScopeAndComponents()
+    {
+        using PropertyGrid control = new();
+        using Button originalComponent = new();
+
+        // First call: attach a component with PropertyTabScope.Component.
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Component, originalComponent, setupToolbar: false);
+        int countAfterFirst = control.PropertyTabs.Count;
+
+        // Second call uses a different scope and no component. This must not
+        // replace the existing tab or wipe out the previously-attached component,
+        // and the originally recorded scope must be preserved.
+        control.AddTab(typeof(TestPropertyTab), PropertyTabScope.Static, @object: null, setupToolbar: false);
+
+        Assert.Equal(countAfterFirst, control.PropertyTabs.Count);
+
+        PropertyTab tab = control.PropertyTabs.Cast<PropertyTab>().Single(t => t is TestPropertyTab);
+        Assert.NotNull(tab.Components);
+        Assert.Single(tab.Components);
+        Assert.Same(originalComponent, tab.Components[0]);
+
+        // Verify the original scope is preserved (TabInfo.Scope is read via
+        // reflection because TabInfo is a private nested record).
+        Collections.IList tabs = control.TestAccessor.Dynamic._tabs;
+        object matchingTabInfo = null;
+        foreach (object tabInfo in tabs)
+        {
+            PropertyTab candidate = (PropertyTab)tabInfo.GetType().GetProperty("Tab").GetValue(tabInfo);
+            if (candidate is TestPropertyTab)
+            {
+                matchingTabInfo = tabInfo;
+                break;
+            }
+        }
+
+        Assert.NotNull(matchingTabInfo);
+        PropertyTabScope actualScope = (PropertyTabScope)matchingTabInfo.GetType().GetProperty("Scope").GetValue(matchingTabInfo);
+        Assert.Equal(PropertyTabScope.Component, actualScope);
     }
 
     [WinFormsFact]
