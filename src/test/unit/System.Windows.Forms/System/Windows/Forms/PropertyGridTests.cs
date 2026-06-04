@@ -2387,6 +2387,96 @@ public partial class PropertyGridTests
         Assert.Single(grid.PropertyTabs);
     }
 
+    [WinFormsTheory]
+    [InlineData(PropertyTabScope.Static)]
+    [InlineData(PropertyTabScope.Global)]
+    public void PropertyGrid_ClearTabs_InvalidScope_ThrowsArgumentException(PropertyTabScope tabScope)
+    {
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        Assert.Throws<ArgumentException>(() => grid.PropertyTabs.Clear(tabScope));
+
+        // The tab collection should be unchanged when the call throws.
+        Assert.Equal(initialTabCount, grid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ClearTabs_DocumentScope_RemovesDocumentScopedTabs()
+    {
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Document);
+        Assert.Equal(initialTabCount + 1, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.Clear(PropertyTabScope.Document);
+
+        // Only the default Static-scoped PropertiesTab should remain.
+        Assert.Equal(initialTabCount, grid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ClearTabs_ComponentScope_DoesNotRemoveDocumentScopedTabs()
+    {
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Document);
+        Assert.Equal(initialTabCount + 1, grid.PropertyTabs.Count);
+
+        // Component is a tighter scope than Document, so the Document-scoped tab must survive.
+        grid.PropertyTabs.Clear(PropertyTabScope.Component);
+
+        Assert.Equal(initialTabCount + 1, grid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ClearTabs_DocumentScope_PreservesGlobalAndStaticTabs()
+    {
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Global);
+        grid.PropertyTabs.AddTabType(typeof(ReplacementPropertyTab), PropertyTabScope.Document);
+        Assert.Equal(initialTabCount + 2, grid.PropertyTabs.Count);
+
+        grid.PropertyTabs.Clear(PropertyTabScope.Document);
+
+        // Static (default PropertiesTab) + Global (TestPropertyTab) remain; Document tab is removed.
+        Assert.Equal(initialTabCount + 1, grid.PropertyTabs.Count);
+        Assert.Contains(grid.PropertyTabs.Cast<PropertyTab>(), t => t is TestPropertyTab);
+        Assert.DoesNotContain(grid.PropertyTabs.Cast<PropertyTab>(), t => t is ReplacementPropertyTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ClearTabs_WhenNoMatchingTabs_PreservesDefaultStaticTab()
+    {
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        // Only a Static-scoped default tab exists; clearing Document should be a no-op.
+        grid.PropertyTabs.Clear(PropertyTabScope.Document);
+
+        Assert.Equal(initialTabCount, grid.PropertyTabs.Count);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ClearTabs_DirectInternalCall_RemovesDocumentScopedTabs()
+    {
+        // Exercises the internal ClearTabs(PropertyTabScope) method directly via TestAccessor
+        // to provide explicit coverage of the targeted internal entry point.
+        using PropertyGrid grid = new();
+        int initialTabCount = grid.PropertyTabs.Count;
+
+        grid.PropertyTabs.AddTabType(typeof(TestPropertyTab), PropertyTabScope.Document);
+        Assert.Equal(initialTabCount + 1, grid.PropertyTabs.Count);
+
+        grid.TestAccessor.Dynamic.ClearTabs(PropertyTabScope.Document);
+
+        Assert.Equal(initialTabCount, grid.PropertyTabs.Count);
+    }
+
     private class TestPropertyTab : PropertyTab
     {
         public override string TabName => "TestTabName";
