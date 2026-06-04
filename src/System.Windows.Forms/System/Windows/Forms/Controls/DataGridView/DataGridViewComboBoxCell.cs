@@ -1574,6 +1574,18 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return true;
         }
 
+        // When editing, use the actual selected item from the editing ComboBox.
+        // This avoids ambiguous lookup when DisplayMember values are duplicated.
+        if (OwnsEditingComboBox(RowIndex))
+        {
+            object? selectedItem = EditingComboBox.SelectedItem;
+            if (selectedItem is not null)
+            {
+                value = GetItemValue(selectedItem);
+                return true;
+            }
+        }
+
         Debug.Assert(DisplayMemberProperty is not null || ValueMemberProperty is not null ||
                      !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember));
 
