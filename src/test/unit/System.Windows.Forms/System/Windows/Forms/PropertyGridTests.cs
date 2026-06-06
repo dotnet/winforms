@@ -4050,10 +4050,12 @@ public partial class PropertyGridTests
     public void PropertyGrid_ExpandAllGridItems_ExpandsNestedGridItems()
     {
         using PropertyGrid propertyGrid = new();
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
         propertyGrid.SelectedObject = new MyClass();
 
         GridItem nested = FindExpandableProperty(propertyGrid.SelectedGridItem);
         nested.Should().NotBeNull();
+        nested.Expanded.Should().BeFalse();
 
         propertyGrid.ExpandAllGridItems();
 
@@ -4064,6 +4066,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_CollapseAllGridItems_CollapsesNestedGridItems()
     {
         using PropertyGrid propertyGrid = new();
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
         propertyGrid.SelectedObject = new MyClass();
 
         GridItem nested = FindExpandableProperty(propertyGrid.SelectedGridItem);
@@ -4084,7 +4087,8 @@ public partial class PropertyGridTests
             root = root.Parent;
         }
 
-        return Find(root.GridItems);
+        return Find(root.GridItems)
+            ?? throw new InvalidOperationException("No expandable property found on the selected object.");
 
         static GridItem Find(GridItemCollection items)
         {
