@@ -1574,24 +1574,30 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return true;
         }
 
-        // When editing, use the actual selected item from the editing ComboBox.
-        // This avoids ambiguous lookup when DisplayMember values are duplicated.
-        if (OwnsEditingComboBox(RowIndex))
-        {
-            object? selectedItem = EditingComboBox.SelectedItem;
-            if (selectedItem is not null)
-            {
-                value = GetItemValue(selectedItem);
-                return true;
-            }
-        }
-
         Debug.Assert(DisplayMemberProperty is not null || ValueMemberProperty is not null ||
                      !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember));
 
         object? item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
+            // When the cell is in edit mode, check the item the user actually selected first.
+            // A linear search through the data source would return the first item whose display
+            // property matches, which is wrong when multiple items share the same display text.
+            if (OwnsEditingComboBox(RowIndex))
+            {
+                object? selectedItem = EditingComboBox.SelectedItem;
+                if (selectedItem is not null)
+                {
+                    PropertyDescriptor displayProp = DisplayMemberProperty ?? ValueMemberProperty!;
+                    object? selectedDisplayValue = displayProp.GetValue(selectedItem);
+                    if (selectedDisplayValue is not null && selectedDisplayValue.Equals(formattedValue))
+                    {
+                        value = GetItemValue(selectedItem);
+                        return true;
+                    }
+                }
+            }
+
             // Now look up the item in the DataGridViewComboBoxCell datasource - this can be horribly inefficient
             // and it uses reflection which makes it expensive - ripe for optimization
             item = ItemFromComboBoxDataSource((DisplayMemberProperty ?? ValueMemberProperty)!, formattedValue);
