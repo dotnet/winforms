@@ -421,6 +421,9 @@ public partial class GroupBox : Control
                 textFlags |= (TextFormatFlags.Right | TextFormatFlags.RightToLeft);
             }
 
+            var form = FindForm();
+            Color foreColor = form is not null ? form.ForeColor : SystemColors.ControlText;
+
             // We only pass in the text color if it is explicitly set, else we let the renderer use the color
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
@@ -435,6 +438,17 @@ public partial class GroupBox : Control
                     Text,
                     Font,
                     textColor,
+                    textFlags,
+                    gbState);
+            }
+            else if (!ShouldSerializeForeColor() && foreColor != SystemColors.ControlText)
+            {
+                GroupBoxRenderer.DrawGroupBox(
+                    e,
+                    new Rectangle(0, 0, Width, Height),
+                    Text,
+                    Font,
+                    foreColor,
                     textFlags,
                     gbState);
             }
