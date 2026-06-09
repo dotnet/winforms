@@ -799,23 +799,29 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         UpdateScrollButtonLocations();
     }
 
-    private ToolStripItem GetNextVisibleItem(int index)
+    private ToolStripItem? GetNextVisibleItem(int index)
     {
         for (int i = index + 1; i < Items.Count; i++)
         {
-            if (Items[i].Available)
-                return Items[i];
+            ToolStripItem item = Items[i];
+            if (item.Available)
+            {
+                return item;
+            }
         }
 
         return null;
     }
 
-    private ToolStripItem GetPreviousVisibleItem(int index)
+    private ToolStripItem? GetPreviousVisibleItem(int index)
     {
         for (int i = index - 1; i >= 0; i--)
         {
-            if (Items[i].Available)
-                return Items[i];
+            ToolStripItem item = Items[i];
+            if (item.Available)
+            {
+                return item;
+            }
         }
 
         return null;
