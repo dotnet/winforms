@@ -33,15 +33,8 @@ public partial class ComboBox
                         // managed computed height before the OS commits the final size.
                         // This ensures the UI reflects Items.Count (or explicit DropDownHeight)
                         // even when the list is empty or items are cleared at runtime.
-                        WINDOWPOS* wp = (WINDOWPOS*)(nint)m.LParamInternal;
-                        if (wp is not null && (wp->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0)
-                        {
-                            var height = _owner.GetCalculatedDropDownHeight();
-                            if (wp->cy != height)
-                            {
-                                wp->cy = height;
-                            }
-                        }
+                        WmWindowPosChanging(ref m);
+                        DefWndProc(ref m);
                     }
                     else
                     {
@@ -175,6 +168,19 @@ public partial class ComboBox
             catch (Exception e)
             {
                 throw new InvalidOperationException(SR.RichControlLresult, e);
+            }
+        }
+
+        private unsafe void WmWindowPosChanging(ref Message m)
+        {
+            WINDOWPOS* pos = (WINDOWPOS*)(nint)m.LParamInternal;
+            if (pos is not null && (pos->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0)
+            {
+                int height = _owner.GetCalculatedDropDownHeight();
+                if (pos->cy != height)
+                {
+                    pos->cy = height;
+                }
             }
         }
     }
