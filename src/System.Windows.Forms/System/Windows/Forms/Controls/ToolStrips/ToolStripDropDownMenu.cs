@@ -774,7 +774,9 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                     ToolStripItem itemBottom = Items[_indexOfFirstDisplayedItem];
                     // We use a delta between the tops, since it takes margin's and padding into account.
                     if (itemTop is not null && itemBottom is not null)
+                    {
                         delta = itemTop.Bounds.Top - itemBottom.Bounds.Top;
+                    }
                 }
             }
             else
@@ -791,7 +793,9 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 ToolStripItem itemBottom = GetNextVisibleItem(_indexOfFirstDisplayedItem);
                 // We use a delta between the tops, since it takes margin's and padding into account.
                 if (itemTop is not null && itemBottom is not null)
+                {
                     delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
+                }
             }
         }
 
