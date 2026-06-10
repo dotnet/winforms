@@ -2742,6 +2742,60 @@ public class ComboBoxTests
         handleCreatedInvoked.Should().Be(2);
     }
 
+    [WinFormsFact]
+    public void ComboBox_GetCalculatedDropDownHeight_Reflects_Items_Clear()
+    {
+        using ComboBox combo = new();
+        combo.DropDownStyle = ComboBoxStyle.DropDown;
+
+        // Add items to influence calculated height and create handle.
+        for (int i = 0; i < 20; i++)
+        {
+            combo.Items.Add($"item{i}");
+        }
+
+        Assert.NotEqual(IntPtr.Zero, combo.Handle);
+
+        MethodInfo mi = typeof(ComboBox).GetMethod("GetCalculatedDropDownHeight", BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(mi);
+
+        int heightWithItems = (int)mi.Invoke(combo, null);
+
+        combo.Items.Clear();
+
+        mi = typeof(ComboBox).GetMethod("GetCalculatedDropDownHeight", BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(mi);
+        int heightAfterClear = (int)mi.Invoke(combo, null);
+
+        // After clearing items the calculated height should change and not remain the previous items height.
+        Assert.NotEqual(heightWithItems, heightAfterClear);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_GetCalculatedDropDownHeight_Uses_DropDownHeight_When_NoItems()
+    {
+        using ComboBox combo = new();
+        combo.DropDownStyle = ComboBoxStyle.DropDown;
+
+        // Add items to influence calculated height and create handle.
+        for (int i = 0; i < 2; i++)
+        {
+            combo.Items.Add($"item{i}");
+        }
+
+        // Ensure handle exists and items are empty.
+        Assert.NotEqual(IntPtr.Zero, combo.Handle);
+        combo.Items.Clear();
+
+        MethodInfo mi = typeof(ComboBox).GetMethod("GetCalculatedDropDownHeight", BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(mi);
+
+        int calculated = (int)mi.Invoke(combo, null);
+
+        // Calculated height should not exceed the explicit DropDownHeight when there are no items.
+        Assert.InRange(calculated, 0, combo.DropDownHeight);
+    }
+
     private void InitializeItems(ComboBox comboBox, int numItems)
     {
         for (int i = 0; i < numItems; i++)
