@@ -4637,6 +4637,59 @@ public partial class PropertyGridTests
         Assert.Empty(propertyGrid.SelectedObjects);
     }
 
+    [WinFormsTheory]
+    [InlineData(PropertyTabScope.Static)]
+    [InlineData(PropertyTabScope.Global)]
+    public void PropertyGrid_RefreshTabs_ScopeBelowDocument_ThrowsArgumentException(PropertyTabScope tabScope)
+    {
+        using PropertyGrid propertyGrid = new();
+
+        Assert.Throws<ArgumentException>(() => propertyGrid.RefreshTabs(tabScope));
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_RefreshTabs_ComponentScope_AddsCommonComponentTabs()
+    {
+        using PropertyGrid propertyGrid = new();
+        using TestComponent component = new();
+        propertyGrid.SelectedObjects = [component];
+
+        propertyGrid.RefreshTabs(PropertyTabScope.Component);
+
+        // TestComponent declares a Component-scoped DocumentScopePropertyTab.
+        bool found = false;
+        foreach (PropertyTab tab in propertyGrid.PropertyTabs)
+        {
+            if (tab is DocumentScopePropertyTab)
+            {
+                found = true;
+                break;
+            }
+        }
+
+        Assert.True(found);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_RefreshTabs_DocumentScope_EnumeratesContainerComponents()
+    {
+        using PropertyGrid propertyGrid = CreatePropertyGridWithActiveDesigner(
+            out Mock<IDesignerHost> mockDesignerHost,
+            out _);
+
+        using TestComponent component = new();
+        ComponentCollection components = new(new IComponent[] { component });
+        Mock<IContainer> mockContainer = new();
+        mockContainer.Setup(c => c.Components).Returns(components);
+        mockDesignerHost.Setup(h => h.Container).Returns(mockContainer.Object);
+
+        // Walks the container components; the collection type has no document-scoped
+        // PropertyTabAttribute, so only the default tab remains.
+        propertyGrid.RefreshTabs(PropertyTabScope.Document);
+
+        Assert.Single(propertyGrid.PropertyTabs);
+    }
+
     [PropertyTab(typeof(DocumentScopePropertyTab), PropertyTabScope.Component)]
     private class TestComponent : Component, IDisposable
     {
