@@ -30,7 +30,7 @@ public class FolderNameEditorTests : ControlTestBase
 
     private class TestFolderNameEditor : FolderNameEditor
     {
-        private FolderBrowser? _folderBrowser;
+        private FolderBrowserDialog? _folderBrowser;
 
         public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
@@ -38,13 +38,13 @@ public class FolderNameEditorTests : ControlTestBase
 
             if (_folderBrowser is null)
             {
-                _folderBrowser = new FolderBrowser();
+                _folderBrowser = new FolderBrowserDialog();
                 InitializeDialog(_folderBrowser);
             }
 
             if (_folderBrowser.ShowDialog(dialogOwnerForm) == DialogResult.OK)
             {
-                return _folderBrowser.DirectoryPath;
+                return _folderBrowser.SelectedPath;
             }
 
             return value;

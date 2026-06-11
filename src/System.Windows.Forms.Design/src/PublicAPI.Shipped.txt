@@ -1278,7 +1278,7 @@ virtual System.Windows.Forms.Design.DesignerOptions.UseSmartTags.set -> void
 virtual System.Windows.Forms.Design.DesignerOptions.UseSnapLines.get -> bool
 virtual System.Windows.Forms.Design.DesignerOptions.UseSnapLines.set -> void
 virtual System.Windows.Forms.Design.FileNameEditor.InitializeDialog(System.Windows.Forms.OpenFileDialog! openFileDialog) -> void
-virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.Design.FolderNameEditor.FolderBrowser! folderBrowser) -> void
+virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.FolderBrowserDialog! folderBrowserDialog) -> void
 virtual System.Windows.Forms.Design.MaskDescriptor.Culture.get -> System.Globalization.CultureInfo!
 virtual System.Windows.Forms.Design.ParentControlDesigner.AllowControlLasso.get -> bool
 virtual System.Windows.Forms.Design.ParentControlDesigner.AllowGenericDragBox.get -> bool

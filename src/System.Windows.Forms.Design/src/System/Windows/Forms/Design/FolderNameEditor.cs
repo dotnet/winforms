@@ -12,19 +12,21 @@ namespace System.Windows.Forms.Design;
 [CLSCompliant(false)]
 public partial class FolderNameEditor : UITypeEditor
 {
-    private FolderBrowser? _folderBrowser;
+    private FolderBrowserDialog? _folderBrowserDialog;
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (_folderBrowser is null)
+        if (_folderBrowserDialog is null)
         {
-            _folderBrowser = new FolderBrowser();
-            InitializeDialog(_folderBrowser);
+            _folderBrowserDialog = new FolderBrowserDialog();
+            InitializeDialog(_folderBrowserDialog);
         }
 
-        if (_folderBrowser.ShowDialog() == DialogResult.OK)
+        _folderBrowserDialog.SelectedPath = value as string ?? string.Empty;
+
+        if (_folderBrowserDialog.ShowDialog() == DialogResult.OK)
         {
-            return _folderBrowser.DirectoryPath;
+            return _folderBrowserDialog.SelectedPath;
         }
 
         return value;
@@ -37,7 +39,7 @@ public partial class FolderNameEditor : UITypeEditor
     ///  Initializes the folder browser dialog when it is created. This gives you an opportunity
     ///  to configure the dialog as you please. The default implementation provides a generic folder browser.
     /// </summary>
-    protected virtual void InitializeDialog(FolderBrowser folderBrowser)
+    protected virtual void InitializeDialog(FolderBrowserDialog folderBrowserDialog)
     {
     }
 }

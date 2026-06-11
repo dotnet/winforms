@@ -8,8 +8,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class InitialDirectoryEditor : FolderNameEditor
 {
-    protected override void InitializeDialog(FolderBrowser folderBrowser)
+    protected override void InitializeDialog(FolderBrowserDialog folderBrowserDialog)
     {
-        folderBrowser.Description = SR.InitialDirectoryEditorLabel;
+        folderBrowserDialog.Description = SR.InitialDirectoryEditorLabel;
     }
 }
