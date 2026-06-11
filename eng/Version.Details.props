@@ -6,18 +6,18 @@ This file should be imported by eng/Versions.props
 <Project>
   <PropertyGroup>
     <!-- dotnet-dotnet dependencies -->
-    <MicrosoftDotNetArcadeSdkPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetArcadeSdkPackageVersion>
-    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
-    <MicrosoftDotNetCMakeSdkPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetCMakeSdkPackageVersion>
-    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetHelixSdkPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetHelixSdkPackageVersion>
-    <MicrosoftDotNetRemoteExecutorPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetRemoteExecutorPackageVersion>
-    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.26309.104</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
+    <MicrosoftDotNetArcadeSdkPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetArcadeSdkPackageVersion>
+    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
+    <MicrosoftDotNetCMakeSdkPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetCMakeSdkPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetHelixSdkPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetHelixSdkPackageVersion>
+    <MicrosoftDotNetRemoteExecutorPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetRemoteExecutorPackageVersion>
+    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>10.0.0-beta.26310.111</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
     <MicrosoftNETSdkILPackageVersion>10.0.10</MicrosoftNETSdkILPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>10.0.10</MicrosoftNETCoreAppRefPackageVersion>
     <MicrosoftNETCoreILAsmPackageVersion>10.0.10</MicrosoftNETCoreILAsmPackageVersion>
     <MicrosoftNETCoreILDAsmPackageVersion>10.0.10</MicrosoftNETCoreILDAsmPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>10.0.10-servicing.26309.104</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>10.0.10-servicing.26310.111</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>10.0.10</MicrosoftWin32SystemEventsPackageVersion>
     <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>10.0.10</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
     <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>10.0.10</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
