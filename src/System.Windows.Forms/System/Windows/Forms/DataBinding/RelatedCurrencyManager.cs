@@ -140,18 +140,52 @@ internal class RelatedCurrencyManager : CurrencyManager
     // bindings/business collections are already reacting to the same edit or AddNew flow, and refreshing the
     // child list from that path can re-enter the same notification chain until the stack overflows. ZBindingContext
     // avoided this on .NET Framework by intercepting BindingContextHashtable.Add, removing the default
-    // CurrentItemChanged subscription, and refreshing the child only when the parent's CurrentChanged event fires.
-    // BindingContext uses a Dictionary on .NET 10, so this helper gives subclasses the same event swap without
-    // reflecting over RelatedCurrencyManager internals.
+    // CurrentItemChanged subscription, and refreshing the child only when the parent's CurrentChanged event fires
+    // (via ZBindingContext.ParentCurrentChangedHandler). BindingContext uses a Dictionary on .NET 10, so this
+    // helper gives subclasses the same event swap without reflecting over RelatedCurrencyManager internals.
+    //
+    // Because EnsureListManager is recursive, every parent manager is registered (and rewired through
+    // BindingContext.OnListManagerAdded) before the next child manager down is constructed. Replacing an empty
+    // parent's data source with the read-only placeholder list at this point therefore also protects the child's
+    // constructor-time priming: by the time the child primes, the parent holds the placeholder (AllowNew false),
+    // so the Everett AddNew branch in ParentManager_CurrentItemChanged is skipped — matching the .NET Framework
+    // ordering where BindingContextHashtable.Add performed the replacement between the two constructions.
     internal void RewireParentChangeHandler()
     {
         if (_parentManager is CurrencyManager parentCurrencyManager)
         {
             parentCurrencyManager.CurrentItemChanged -= ParentManager_CurrentItemChanged;
             parentCurrencyManager.CurrentChanged -= ParentManager_CurrentItemChanged;
-            parentCurrencyManager.CurrentChanged += ParentManager_CurrentItemChanged;
-            ParentManager_CurrentItemChanged(parentCurrencyManager, EventArgs.Empty);
+            parentCurrencyManager.CurrentChanged -= ParentManager_CurrentChanged;
+            parentCurrencyManager.CurrentChanged += ParentManager_CurrentChanged;
+            ParentManager_CurrentChanged(parentCurrencyManager, EventArgs.Empty);
         }
+    }
+
+    // WiseTech (WI01068460): .NET 10 port of ZBindingContext.ParentCurrentChangedHandler.ParentCurrentChanged
+    // from .NET Framework. When the parent has a current row, the child refreshes through the standard
+    // ParentManager_CurrentItemChanged path (unchanged above). When the parent is EMPTY, the .NET Framework
+    // handler did SetDataSource(new TempList()); listposition = -1; and raised the position/current events —
+    // it never let the standard path run the Everett AddNew()/CancelCurrentEdit() dance. On CargoWise
+    // business-object collections that dummy AddNew materialises an orphaned business object whose
+    // SetDefaultsForNewChild/property getters dereference a null parent navigation (NullReferenceException).
+    // The placeholder list reports AllowNew=false, so any standard-path refresh that still sees it also skips
+    // the AddNew branch. Child column metadata is unaffected: GetItemProperties resolves through _fieldInfo and
+    // the parent manager, not through the bound list instance.
+    private void ParentManager_CurrentChanged(object? sender, EventArgs e)
+    {
+        if (_parentManager is CurrencyManager parentCurrencyManager && parentCurrencyManager.Count == 0)
+        {
+            SetDataSource(new BindingList<object> { AllowNew = false, AllowEdit = false, AllowRemove = false });
+            listposition = -1;
+
+            OnPositionChanged(EventArgs.Empty);
+            OnCurrentChanged(EventArgs.Empty);
+            OnCurrentItemChanged(EventArgs.Empty);
+            return;
+        }
+
+        ParentManager_CurrentItemChanged(sender, e);
     }
 
     private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)
@@ -182,8 +216,13 @@ internal class RelatedCurrencyManager : CurrencyManager
                 SetDataSource(_fieldInfo.GetValue(currencyManager.Current));
                 listposition = (Count > 0 ? 0 : -1);
             }
-            else
+            else if (currencyManager.List is IBindingList { AllowNew: true })
             {
+                // WiseTech: the AllowNew guard above limits the Everett dance to lists that actually allow
+                // AddNew. Read-only lists (including the empty placeholder bound by ParentManager_CurrentChanged
+                // for rewired managers) must not be AddNew'd — on CargoWise collections that throws or
+                // materialises orphaned business objects.
+                //
                 // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and
                 // then it cancels the addition.
                 //
