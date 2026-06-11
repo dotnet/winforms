@@ -12,7 +12,7 @@ public class ShellItemTests
     public unsafe void SHParseDisplayName_ValidPath()
     {
         string path = Path.GetTempPath();
-        HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, out _);
+        HRESULT result = PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0);
         try
         {
             Assert.Equal(HRESULT.S_OK, result);
