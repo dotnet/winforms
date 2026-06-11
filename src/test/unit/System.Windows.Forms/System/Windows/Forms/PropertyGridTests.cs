@@ -4525,7 +4525,7 @@ public partial class PropertyGridTests
             out Mock<IDesignerHost> mockDesignerHost,
             out Mock<IComponentChangeService> mockChangeService);
 
-        using Control component = new();
+        using Component component = new();
         int initialTabCount = propertyGrid.PropertyTabs.Count;
 
         mockChangeService.Raise(s => s.ComponentAdded += null, mockDesignerHost.Object, new ComponentEventArgs(component));
