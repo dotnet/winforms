@@ -127,10 +127,12 @@ public static class Help
                 {
                     // It's able to make it a short path.
                     using BufferScope<char> shortName = new((int)requiredStringSize);
-                    requiredStringSize = PInvoke.GetShortPathName(localPath, shortName);
+                    uint written = PInvoke.GetShortPathName(localPath, shortName);
                     // If it can't make it a short path, just leave the path we had.
-                    pathAndFileName = shortName[..(int)requiredStringSize].ToString();
-                }
+                    if (written > 0)
+                    {
+                        pathAndFileName = shortName[..(int)written].ToString();
+                    }
             }
         }
 
