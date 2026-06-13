@@ -33,6 +33,8 @@ public partial class CheckBox : ButtonBase
     private Rendering.CheckBox.AnimatedCheckGlyphRenderer? _checkGlyphRenderer;
     private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
 
+    private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
+
     private int _flatSystemStylePaddingWidth;
     private int _flatSystemStyleMinimumHeight;
 

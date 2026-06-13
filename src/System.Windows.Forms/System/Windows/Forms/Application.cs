@@ -1134,6 +1134,13 @@ public sealed partial class Application
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
         s_comCtlSupportsVisualStylesInitialized = false;
+
+        // Keep the default visual styles mode in sync when EnableVisualStyles is called after
+        // SetDefaultVisualStylesMode(VisualStylesMode.Disabled): an explicitly disabled mode becomes Classic.
+        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
+        {
+            s_defaultVisualStylesMode = VisualStylesMode.Classic;
+        }
     }
 
     /// <summary>

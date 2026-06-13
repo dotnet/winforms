@@ -87,6 +87,17 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     }
 
     /// <summary>
+    ///  The device DPI of the control being rendered. Set by the adapter before each paint so renderers
+    ///  can DPI-scale their logical (96-DPI) constants. Defaults to 96 (100%).
+    /// </summary>
+    internal int DeviceDpi { get; set; } = 96;
+
+    /// <summary>
+    ///  Scales a logical (96-DPI) value to the current <see cref="DeviceDpi"/>.
+    /// </summary>
+    private protected int Scale(int logicalValue) => (int)Math.Round(logicalValue * (DeviceDpi / 96.0));
+
+    /// <summary>
     ///  Clears the background with the parent's background color or the control's background color if no parent is available.
     /// </summary>
     /// <param name="graphics">Graphics context to draw on</param>

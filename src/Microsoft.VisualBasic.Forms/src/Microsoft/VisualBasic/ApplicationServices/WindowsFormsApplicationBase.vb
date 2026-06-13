@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Collections.ObjectModel
@@ -790,6 +790,31 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
 
+            ' Rationale for how we process the default values and how we let the user modify
+            ' them on demand via the ApplyApplicationDefaults event.
+            ' ===========================================================================================
+            ' a) Users used to be able to set MinimumSplashScreenDisplayTime _only_ by overriding OnInitialize
+            '    in a derived class and setting `MyBase.MinimumSplashScreenDisplayTime` there.
+            '    We are picking this (probably) changed value up, and pass it to the ApplyDefaultsEvents
+            '    where it could be modified (again). So event wins over Override over default value (2 seconds).
+            ' b) We feed the defaults for HighDpiMode, ColorMode, VisualStylesMode to the EventArgs.
+            '    With the introduction of the HighDpiMode property, we changed Project System the chance to reflect
+            '    those default values in the App Designer UI and have it code-generated based on a modified
+            '    Application.myapp, which would result it to be set in the derived constructor.
+            '    (See the hidden file in the Solution Explorer "My Project\Application.myapp\Application.Designer.vb
+            '     for how those UI-set values get applied.)
+            '    Once all this is done, we give the User another chance to change the value by code through
+            '    the ApplyDefaults event.
+            ' Note: Overriding MinimumSplashScreenDisplayTime needs still to keep working!
+            Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
+                MinimumSplashScreenDisplayTime,
+                HighDpiMode,
+                ColorMode) With
+            {
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime,
+                .VisualStylesMode = VisualStylesMode
+            }
+
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If applicationDefaultsEventArgs.Font IsNot Nothing Then
@@ -1122,6 +1147,45 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End If ' Single-Instance application
         End Sub
+
+        ' The FormRevealMode the user assigned to the ApplyApplicationsDefault event.
+        Private _formRevealMode As FormRevealMode = FormRevealMode.Classic
+
+        ''' <summary>
+        '''  Gets or sets the <see cref="FormRevealMode"/> for the Application.
+        ''' </summary>
+        ''' <value>
+        '''  The <see cref="FormRevealMode"/> that newly created top-level forms use by
+        '''  default.
+        ''' </value>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property FormRevealMode As FormRevealMode
+            Get
+                Return _formRevealMode
+            End Get
+            Set(value As FormRevealMode)
+                _formRevealMode = value
+            End Set
+        End Property
+
+        ' The VisualStylesMode (renderer version) the user assigned to the ApplyApplicationDefaults event.
+        Private _visualStylesMode As VisualStylesMode = VisualStylesMode.Classic
+
+        ''' <summary>
+        '''  Gets or sets the <see cref="VisualStylesMode"/> (renderer version) for the application.
+        ''' </summary>
+        ''' <value>
+        '''  The <see cref="VisualStylesMode"/> that the application uses to render its controls.
+        ''' </value>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property VisualStylesMode As VisualStylesMode
+            Get
+                Return _visualStylesMode
+            End Get
+            Set(value As VisualStylesMode)
+                _visualStylesMode = value
+            End Set
+        End Property
 
     End Class
 End Namespace
