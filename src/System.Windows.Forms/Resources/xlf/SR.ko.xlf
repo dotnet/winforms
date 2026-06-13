@@ -242,6 +242,11 @@
         <target state="translated">스레드에서 컨트롤이 만들어진 이후에는 스레드 예외 모드를 변경할 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">적용(&amp;A)</target>
@@ -2170,6 +2175,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">컨트롤을 표시할지 여부를 결정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">

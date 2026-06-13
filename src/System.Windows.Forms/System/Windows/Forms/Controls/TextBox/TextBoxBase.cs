@@ -755,14 +755,19 @@ public abstract partial class TextBoxBase : Control
         remove => Events.RemoveHandler(s_multilineChangedEvent, value);
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
     public new Padding Padding
     {
         get => base.Padding;
         set => base.Padding = value;
     }
+
+    private new bool ShouldSerializePadding()
+        => Padding != DefaultPadding;
+
+    private void ResetPadding()
+        => Padding = DefaultPadding;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
