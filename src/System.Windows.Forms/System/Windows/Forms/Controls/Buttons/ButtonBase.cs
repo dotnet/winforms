@@ -1256,6 +1256,22 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         base.OnPaint(pevent);
     }
 
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        base.OnVisualStylesModeChanged(e);
+
+        // The button adapter is selected based on VisualStylesMode, so drop the cached adapter and
+        // force it to be recreated (and the button repainted) on the next paint.
+        _adapter = null;
+        _cachedAdapterType = (FlatStyle)(-1);
+
+        if (IsHandleCreated)
+        {
+            Invalidate();
+        }
+    }
+
     protected override void OnParentChanged(EventArgs e)
     {
         base.OnParentChanged(e);

@@ -242,6 +242,11 @@
         <target state="translated">スレッドでコントロールが作成された後、スレッド例外モードを変更することはできません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">適用(&amp;A)</target>
@@ -2170,6 +2175,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">コントロールの表示、非表示を示します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">

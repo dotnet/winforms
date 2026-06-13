@@ -242,6 +242,11 @@
         <target state="translated">Trybu wyjątków wątku nie można zmienić po utworzeniu jakichkolwiek formantów w aplikacji.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Zastosuj</target>
@@ -2170,6 +2175,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Określa, czy formant jest widoczny, czy ukryty.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">

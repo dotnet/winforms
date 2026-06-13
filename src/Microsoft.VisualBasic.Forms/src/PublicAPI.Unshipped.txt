@@ -1,0 +1,4 @@
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode(AutoPropertyValue As System.Windows.Forms.VisualStylesMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode(value As System.Windows.Forms.VisualStylesMode) -> Void

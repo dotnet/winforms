@@ -45,6 +45,8 @@ public sealed partial class Application
 
     private static SystemColorMode? s_colorMode;
 
+    private static VisualStylesMode? s_defaultVisualStylesMode;
+
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
     private const int SystemDarkModeDisabled = 1;
@@ -593,6 +595,54 @@ public sealed partial class Application
         => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
 
     /// <summary>
+    ///  Gets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="VisualStylesMode"/> used as the rendering style guideline for the application's
+    ///  controls. This is <see cref="VisualStylesMode.Classic"/> when visual styles are enabled and
+    ///  <see cref="VisualStylesMode.Disabled"/> otherwise, unless it has been changed by a call to
+    ///  <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The default value is <see cref="VisualStylesMode.Classic"/> so that applications that simply
+    ///   recompile against a newer framework keep their existing look. Opt in to a newer renderer by
+    ///   calling <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    /// </remarks>
+    public static VisualStylesMode DefaultVisualStylesMode
+        => s_defaultVisualStylesMode ??=
+            UseVisualStyles ? VisualStylesMode.Classic : VisualStylesMode.Disabled;
+
+    /// <summary>
+    ///  Sets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <param name="styleSetting">The version of the visual styles renderer to use by default.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  The default visual styles mode has already been set to a different value. It can only be set once.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   Call this method before creating any window. If visual styles have not been enabled through
+    ///   <see cref="EnableVisualStyles"/>, the effective mode remains <see cref="VisualStylesMode.Disabled"/>.
+    ///   Passing <see cref="VisualStylesMode.Disabled"/> has the same effect as not calling
+    ///   <see cref="EnableVisualStyles"/>.
+    ///  </para>
+    /// </remarks>
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        if (s_defaultVisualStylesMode is { } current && current != styleSetting)
+        {
+            throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
+        }
+
+        // Without visual styles enabled, the only effective mode is Disabled.
+        s_defaultVisualStylesMode = UseVisualStyles ? styleSetting : VisualStylesMode.Disabled;
+    }
+
+    /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
     ///  when they are displayed with a warning banner.
     /// </summary>
@@ -980,6 +1030,13 @@ public sealed partial class Application
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
         s_comCtlSupportsVisualStylesInitialized = false;
+
+        // Keep the default visual styles mode in sync when EnableVisualStyles is called after
+        // SetDefaultVisualStylesMode(VisualStylesMode.Disabled): an explicitly disabled mode becomes Classic.
+        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
+        {
+            s_defaultVisualStylesMode = VisualStylesMode.Classic;
+        }
     }
 
     /// <summary>
