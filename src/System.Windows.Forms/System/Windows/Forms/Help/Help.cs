@@ -133,6 +133,7 @@ public static class Help
                     {
                         pathAndFileName = shortName[..(int)written].ToString();
                     }
+                }
             }
         }
 
