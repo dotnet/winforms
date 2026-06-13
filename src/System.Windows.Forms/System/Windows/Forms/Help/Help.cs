@@ -119,17 +119,20 @@ public static class Help
         {
             string? localPath = (file is not null && file.IsFile) ? file.LocalPath : url;
 
-            // If this is a local path, convert it to a short path name. Pass 0 as the length the first time
-            uint requiredStringSize = PInvoke.GetShortPathName(localPath, null, 0);
-            if (requiredStringSize > 0)
+            // If this is a local path, convert it to a short path name. Pass an empty buffer the first time to get the size.
+            if (localPath is not null)
             {
-                // It's able to make it a short path.
-                using BufferScope<char> shortName = new((int)requiredStringSize);
-                fixed (char* pShortName = shortName)
+                uint requiredStringSize = PInvoke.GetShortPathName(localPath, default);
+                if (requiredStringSize > 0)
                 {
-                    requiredStringSize = PInvoke.GetShortPathName(localPath, pShortName, requiredStringSize);
-                    // If it can't make it a  short path, just leave the path we had.
-                    pathAndFileName = shortName[..(int)requiredStringSize].ToString();
+                    // It's able to make it a short path.
+                    using BufferScope<char> shortName = new((int)requiredStringSize);
+                    uint written = PInvoke.GetShortPathName(localPath, shortName);
+                    // If it can't make it a short path, just leave the path we had.
+                    if (written > 0)
+                    {
+                        pathAndFileName = shortName[..(int)written].ToString();
+                    }
                 }
             }
         }
