@@ -72,6 +72,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' The FormRevealMode the user assigned to the ApplyApplicationsDefault event.
         Private _formRevealMode As FormRevealMode = FormRevealMode.Classic
 
+        ' The VisualStylesMode (renderer version) the user assigned to the ApplyApplicationDefaults event.
+        Private _visualStylesMode As VisualStylesMode = VisualStylesMode.Classic
+
         ' We only need to show the splash screen once.
         ' Protect the user from himself if they are overriding our app model.
         Private _didSplashScreen As Boolean
@@ -217,6 +220,22 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As FormRevealMode)
                 _formRevealMode = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the <see cref="VisualStylesMode"/> (renderer version) for the application.
+        ''' </summary>
+        ''' <value>
+        '''  The <see cref="VisualStylesMode"/> that the application uses to render its controls.
+        ''' </value>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property VisualStylesMode As VisualStylesMode
+            Get
+                Return _visualStylesMode
+            End Get
+            Set(value As VisualStylesMode)
+                _visualStylesMode = value
             End Set
         End Property
 
@@ -769,7 +788,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ColorMode,
                 FormRevealMode) With
             {
-                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime,
+                .VisualStylesMode = VisualStylesMode
             }
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
@@ -787,6 +807,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
             _colorMode = applicationDefaultsEventArgs.ColorMode
             _formRevealMode = applicationDefaultsEventArgs.FormRevealMode
+            _visualStylesMode = applicationDefaultsEventArgs.VisualStylesMode
 
             ' Then, it's applying what we got back as HighDpiMode.
             Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
@@ -801,6 +822,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If _enableVisualStyles Then
                 Application.EnableVisualStyles()
             End If
+
+            Application.SetDefaultVisualStylesMode(_visualStylesMode)
 
             Application.SetColorMode(_colorMode)
             Application.SetDefaultFormRevealMode(_formRevealMode)

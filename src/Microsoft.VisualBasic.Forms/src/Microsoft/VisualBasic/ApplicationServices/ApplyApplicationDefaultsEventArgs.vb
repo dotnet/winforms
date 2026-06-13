@@ -41,6 +41,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property FormRevealMode As FormRevealMode
 
         ''' <summary>
+        '''  Setting this property inside the event handler determines the
+        '''  <see cref="Application.DefaultVisualStylesMode"/> for the application.
+        ''' </summary>
+        Public Property VisualStylesMode As VisualStylesMode
+
+        ''' <summary>
         '''  Setting this property inside the event handler causes a
         '''  new default <see cref="Font"/> for Forms and UserControls to be set.
         ''' </summary>
