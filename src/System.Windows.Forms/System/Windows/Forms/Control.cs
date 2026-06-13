@@ -147,6 +147,7 @@ public unsafe partial class Control :
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
     private static readonly object s_systemVisualSettingsChangedEvent = new();
+    private static readonly object s_visualStylesModeChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -226,6 +227,7 @@ public unsafe partial class Control :
     private static readonly int s_cacheTextFieldProperty = PropertyStore.CreateKey();
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
+    private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static readonly int s_deviceDpiInternal = PropertyStore.CreateKey();
     private static readonly int s_originalDeviceDpiInternal = PropertyStore.CreateKey();
@@ -863,6 +865,80 @@ public unsafe partial class Control :
 
     private void ResetDataContext()
         => Properties.RemoveValue(s_dataContextProperty);
+
+    /// <summary>
+    ///  Gets or sets how the control renders itself when visual styles are applied. This is an ambient property.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="Forms.VisualStylesMode"/> for the control. When not explicitly set, the value is inherited
+    ///  from the parent control, or, for a top-level control, from <see cref="Application.DefaultVisualStylesMode"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   As an ambient property, a control that does not have its <see cref="VisualStylesMode"/> set explicitly
+    ///   inherits the value from its parent, or, if it has no parent, from
+    ///   <see cref="Application.DefaultVisualStylesMode"/>. Derived controls can override
+    ///   <see cref="DefaultVisualStylesMode"/> to pin themselves to a specific renderer version for backward
+    ///   compatibility (see <see cref="TextBoxBase"/> for an example).
+    ///  </para>
+    /// </remarks>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
+    public VisualStylesMode VisualStylesMode
+    {
+        get => Properties.TryGetValue(s_visualStylesModeProperty, out VisualStylesMode value)
+            ? value
+            : ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
+        set
+        {
+            // Can't use the source generated enum validator here, since it cannot deal with [Experimental].
+            _ = value switch
+            {
+                VisualStylesMode.Classic => value,
+                VisualStylesMode.Disabled => value,
+                VisualStylesMode.Net11 => value,
+                VisualStylesMode.Latest => value,
+                _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
+            };
+
+            if (value == VisualStylesMode)
+            {
+                return;
+            }
+
+            // When VisualStylesMode differed from its parent before but is about to become the same,
+            // we remove it altogether so it can again inherit the value from its parent.
+            if (Properties.ContainsKey(s_visualStylesModeProperty) && ParentInternal?.VisualStylesMode == value)
+            {
+                Properties.RemoveValue(s_visualStylesModeProperty);
+                OnVisualStylesModeChanged(EventArgs.Empty);
+                return;
+            }
+
+            Properties.AddValue(s_visualStylesModeProperty, value);
+            OnVisualStylesModeChanged(EventArgs.Empty);
+        }
+    }
+
+    private bool ShouldSerializeVisualStylesMode()
+        => Properties.ContainsKey(s_visualStylesModeProperty);
+
+    private void ResetVisualStylesMode()
+        => Properties.RemoveValue(s_visualStylesModeProperty);
+
+    /// <summary>
+    ///  Gets the default <see cref="Forms.VisualStylesMode"/> for the control, which is ambient to
+    ///  <see cref="Application.DefaultVisualStylesMode"/>.
+    /// </summary>
+    /// <value>The default visual styles mode for the control.</value>
+    /// <remarks>
+    ///  <para>
+    ///   Derived controls can override this property to pin themselves to a specific renderer version when their
+    ///   rendering or layout depends on it, independent of the application-wide default.
+    ///  </para>
+    /// </remarks>
+    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     /// <summary>
     ///  The background color of this control. This is an ambient property and
@@ -3745,6 +3821,19 @@ public unsafe partial class Control :
     {
         add => Events.AddHandler(s_dataContextEvent, value);
         remove => Events.RemoveHandler(s_dataContextEvent, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the value of the <see cref="VisualStylesMode"/> property changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
+    public event EventHandler? VisualStylesModeChanged
+    {
+        add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_visualStylesModeChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatDragDrop))]
@@ -6863,6 +6952,34 @@ public unsafe partial class Control :
         }
     }
 
+    /// <summary>
+    ///  Raises the <see cref="VisualStylesModeChanged"/> event. Inheriting classes should override this method
+    ///  to handle the event, and call <see langword="base"/>.<see cref="OnVisualStylesModeChanged(EventArgs)"/>
+    ///  to forward the event to any registered listeners.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnVisualStylesModeChanged(EventArgs e)
+    {
+        if (GetAnyDisposingInHierarchy())
+        {
+            return;
+        }
+
+        if (Events[s_visualStylesModeChangedEvent] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+
+        if (ChildControls is { } children)
+        {
+            for (int i = 0; i < children.Count; i++)
+            {
+                children[i].OnParentVisualStylesModeChanged(e);
+            }
+        }
+    }
+
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnDockChanged(EventArgs e)
     {
@@ -7074,6 +7191,29 @@ public unsafe partial class Control :
 
         // In every other case we're going to raise the event.
         OnDataContextChanged(e);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changes.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
+    {
+        if (Properties.ContainsKey(s_visualStylesModeProperty)
+            && Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty) == Parent?.VisualStylesMode)
+        {
+            // Same as the parent value, make it ambient again by removing it.
+            Properties.RemoveValue(s_visualStylesModeProperty);
+
+            // Even though internally we don't store it any longer, and the value we had stored
+            // therefore changed, technically the value remains the same, so we don't raise the
+            // VisualStylesModeChanged event.
+            return;
+        }
+
+        // In every other case we're going to raise the event.
+        OnVisualStylesModeChanged(e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
