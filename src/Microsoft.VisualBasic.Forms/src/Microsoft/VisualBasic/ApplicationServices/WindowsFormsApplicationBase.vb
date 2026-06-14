@@ -3,7 +3,6 @@
 
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
-Imports System.Diagnostics.CodeAnalysis
 Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -11,7 +10,6 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
-Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
