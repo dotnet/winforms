@@ -498,14 +498,9 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            if (ShouldSerializeForeColor())
-            {
-                return base.ForeColor;
-            }
-            else
-            {
-                return SystemColors.WindowText;
-            }
+            return ShouldSerializeForeColor()
+                ? base.ForeColor
+                : SystemColors.WindowText;
         }
         set => base.ForeColor = value;
     }
@@ -613,14 +608,9 @@ public abstract partial class TextBoxBase : Control
         set
         {
             // unparse this string list...
-            if (value is not null && value.Length > 0)
-            {
-                Text = string.Join(Environment.NewLine, value);
-            }
-            else
-            {
-                Text = string.Empty;
-            }
+            Text = value is not null && value.Length > 0
+                ? string.Join(Environment.NewLine, value)
+                : string.Empty;
         }
     }
 
@@ -903,14 +893,9 @@ public abstract partial class TextBoxBase : Control
 
             end = start + length - 1;
 
-            if (t is null)
-            {
-                len = 0;
-            }
-            else
-            {
-                len = t.Length;
-            }
+            len = t is null
+                ? 0
+                : t.Length;
 
             Debug.Assert(end <= len,
                 $"SelectionEnd is outside the set of valid caret positions for the current WindowText (end ={end}, WindowText.Length ={len})");
@@ -1721,14 +1706,10 @@ public abstract partial class TextBoxBase : Control
             // We shouldn't allow positive length if you're starting at the end, but
             // should allow negative length.
             long longLength = Math.Min(0, (long)length + start - textLen);
-            if (longLength < int.MinValue)
-            {
-                length = int.MinValue;
-            }
-            else
-            {
-                length = (int)longLength;
-            }
+
+            length = longLength < int.MinValue
+                ? int.MinValue
+                : (int)longLength;
 
             start = textLen;
         }
@@ -1815,16 +1796,9 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            int textLength;
-
-            if (textLen >= 0)
-            {
-                textLength = textLen;
-            }
-            else
-            {
-                textLength = TextLength;
-            }
+            int textLength = textLen >= 0
+                ? textLen
+                : TextLength;
 
             if (start > textLength)
             {
@@ -2042,8 +2016,8 @@ public abstract partial class TextBoxBase : Control
     {
         base.WndProc(ref m);
         m.ResultInternal = AcceptsTab
-            ? (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB)
-            : (LRESULT)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB | PInvoke.DLGC_WANTALLKEYS));
+            ? (LRESULT)(nint)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB)
+            : (LRESULT)(nint)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB | PInvoke.DLGC_WANTALLKEYS));
     }
 
     /// <summary>
