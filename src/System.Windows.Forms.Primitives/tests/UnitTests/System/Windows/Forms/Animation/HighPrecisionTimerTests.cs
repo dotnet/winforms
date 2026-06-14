@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Concurrent;
@@ -111,7 +111,7 @@ public sealed class HighPrecisionTimerTests : IDisposable
             {
                 ticks.Add(tick);
                 // Simulate slow rendering (well over one frame time).
-                await Task.Delay((int)(HighPrecisionTimer.TargetFrameTimeMs * 3), ct);
+                await Task.Delay((int)(HighPrecisionTimer.TargetFrameTimeMs * 3), ct).ConfigureAwait(false);
             });
 
         await WaitForAsync(() => ticks.Sum(t => t.DroppedFrames) > 0, timeoutMs: 4000);
@@ -214,7 +214,7 @@ public sealed class HighPrecisionTimerTests : IDisposable
                 throw new TimeoutException("Timed out waiting for the expected timer ticks.");
             }
 
-            await Task.Delay(25, TestContext.Current.CancellationToken);
+            await Task.Delay(25, TestContext.Current.CancellationToken).ConfigureAwait(false);
         }
     }
 }
