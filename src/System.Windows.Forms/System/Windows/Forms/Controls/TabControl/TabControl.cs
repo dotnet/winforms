@@ -1378,7 +1378,7 @@ public partial class TabControl : Control
         // Draw tab border
         using (Pen pen = new(borderColor))
         {
-            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+            e.Graphics.DrawRectangle(pen, e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
         }
 
         // Draw tab text
@@ -2176,7 +2176,8 @@ public partial class TabControl : Control
                 base.WndProc(ref m);
                 if (Application.IsDarkModeEnabled &&
                     (_alignment is TabAlignment.Left or TabAlignment.Right) &&
-                    _drawMode != TabDrawMode.OwnerDrawFixed)
+                    _drawMode != TabDrawMode.OwnerDrawFixed &&
+                    _onDrawItem is null)
                 {
                     try
                     {
@@ -2207,7 +2208,7 @@ public partial class TabControl : Control
                         g.FillRectangle(borderBrush,
                             displayRect.Right,
                             displayRect.Y - borderThickness,
-                            0,
+                            borderThickness,
                             displayRect.Height + borderThickness * 2);
                     }
                     catch
@@ -2223,6 +2224,7 @@ public partial class TabControl : Control
                 if (Application.IsDarkModeEnabled &&
                     (_alignment is TabAlignment.Left or TabAlignment.Right) &&
                     _drawMode != TabDrawMode.OwnerDrawFixed &&
+                    _onDrawItem is null &&
                     m.WParamInternal != (WPARAM)0)
                 {
                     try
