@@ -17,7 +17,7 @@ public partial class CursorEditor
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
         private readonly Dictionary<(Cursor cursor, int dpi), int> _cursorWidthCache = new();
-        private readonly int _cursorWidth;
+        private int _cursorWidth;
 
         public CursorUI()
         {
@@ -41,9 +41,7 @@ public partial class CursorEditor
                 }
             }
 
-            using Icon defaultIcon = Icon.FromHandle(Cursors.Default.Handle);
-            using Icon scaledDefaultIcon = ScaleHelper.ScaleSmallIconToDpi(defaultIcon, DeviceDpi);
-            _cursorWidth = scaledDefaultIcon.Size.Width;
+            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, DeviceDpi);
         }
 
         public object? Value { get; private set; }
@@ -72,7 +70,6 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
-                int cursorWidth = GetCursorWidthForDpi(cursor, DeviceDpi);
 
                 e.DrawBackground();
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
@@ -128,6 +125,15 @@ public partial class CursorEditor
                     }
                 }
             }
+        }
+
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            // Recalculate the representative width using the new DPI; all rows continue to share it to avoid the layout issues seen in #14167.
+            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, deviceDpiNew);
+            Invalidate();
         }
     }
 }
