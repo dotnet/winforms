@@ -5,6 +5,11 @@ namespace System.Windows.Forms.Design;
 
 internal class MaskedTextBoxTextEditorDropDown : UserControl
 {
+    // Logical (96 DPI) constants. The actual device-pixel values are recomputed in
+    // RescaleConstantsForDpi so that PerMonitorV2 DPI changes are honoured.
+    private const int LogicalPadding = 16;
+    private static readonly Drawing.Size s_logicalSize = new(100, 52);
+
     private bool _cancel;
     private readonly MaskedTextBox _cloneMtb;
     private readonly ErrorProvider _errorProvider;
@@ -48,8 +53,11 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
         BackColor = Drawing.SystemColors.Control;
         BorderStyle = BorderStyle.FixedSingle;
         Name = "MaskedTextBoxTextEditorDropDown";
-        Padding = new Padding(LogicalToDeviceUnits(16));
-        Size = LogicalToDeviceUnits(new Drawing.Size(100, 52));
+
+        // Apply the initial DPI-scaled padding/size. Subsequent DPI changes are
+        // picked up automatically through RescaleConstantsForDpi.
+        RescaleConstantsForDpi(DeviceDpi, DeviceDpi);
+
         ((System.ComponentModel.ISupportInitialize)(_errorProvider)).EndInit();
         ResumeLayout(false);
         PerformLayout();
@@ -78,6 +86,16 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
         }
 
         return base.ProcessDialogKey(keyData);
+    }
+
+    protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+    {
+        base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+        // DeviceDpi has already been updated to deviceDpiNew by the framework before
+        // this call, so LogicalToDeviceUnits returns values scaled to the new DPI.
+        Padding = new Padding(LogicalToDeviceUnits(LogicalPadding));
+        Size = LogicalToDeviceUnits(s_logicalSize);
     }
 
     private void maskedTextBox_MaskInputRejected(object? sender, MaskInputRejectedEventArgs e)

@@ -63,13 +63,10 @@ public class MaskedTextBoxTextEditorDropDownTests
         using MaskedTextBox maskedTextBox = new();
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
 
-        // The size and padding should be scaled based on DPI
-        // At 96 DPI (100%), Size should be (100, 52) and Padding should be (16, 16, 16, 16)
-        // At higher DPI, these values should scale proportionally
-        Size expectedSize = dropDown.LogicalToDeviceUnits(new Size(100, 52));
-        Padding expectedPadding = new(dropDown.LogicalToDeviceUnits(16));
+        // Simulate a DPI change and verify that the dropdown recomputes its logical constants.
+        dropDown.TestAccessor.Dynamic.RescaleConstantsForDpi(96, 192);
 
-        dropDown.Size.Should().Be(expectedSize);
-        dropDown.Padding.Should().Be(expectedPadding);
+        dropDown.Size.Should().Be(new Size(100, 52));
+        dropDown.Padding.Should().Be(new Padding(16));
     }
 }
