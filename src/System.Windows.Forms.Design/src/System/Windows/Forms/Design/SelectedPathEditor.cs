@@ -10,6 +10,7 @@ internal class SelectedPathEditor : FolderNameEditor
 {
     protected override void InitializeDialog(FolderBrowserDialog folderBrowserDialog)
     {
-        folderBrowserDialog.Description = SR.SelectedPathEditorLabel;
+        folderBrowserDialog.UseDescriptionForTitle = true;
+        folderBrowserDialog.Description = SR.SelectedPathTitle;
     }
 }

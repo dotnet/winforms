@@ -10,6 +10,7 @@ internal class InitialDirectoryEditor : FolderNameEditor
 {
     protected override void InitializeDialog(FolderBrowserDialog folderBrowserDialog)
     {
-        folderBrowserDialog.Description = SR.InitialDirectoryEditorLabel;
+        folderBrowserDialog.UseDescriptionForTitle = true;
+        folderBrowserDialog.Description = SR.InitialDirectoryTitle;
     }
 }
