@@ -5626,7 +5626,7 @@ public partial class Form : ContainerControl
         {
             try
             {
-                if (owner == null)
+                if (owner is null)
                     Show();
                 else
                     Show(owner);
