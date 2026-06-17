@@ -5626,8 +5626,10 @@ public partial class Form : ContainerControl
         {
             try
             {
-                // Show the form with an optional owner.
-                Show(owner);
+                if (owner == null)
+                    Show();
+                else
+                    Show(owner);
             }
             catch (Exception ex)
             {
