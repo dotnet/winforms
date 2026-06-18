@@ -176,10 +176,13 @@ public partial class ComboBox
             WINDOWPOS* pos = (WINDOWPOS*)(nint)m.LParamInternal;
             if (pos is not null && (pos->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0)
             {
-                int height = _owner.GetCalculatedDropDownHeight();
-                if (pos->cy != height)
+                int calculatedHeight = _owner.GetCalculatedDropDownHeight();
+
+                // Only shrink stale native height. Never grow over USER32's proposed height,
+                // because USER32 may have clamped it to fit the monitor work area.
+                if (calculatedHeight > 0 && pos->cy > calculatedHeight)
                 {
-                    pos->cy = height;
+                    pos->cy = calculatedHeight;
                 }
             }
         }
