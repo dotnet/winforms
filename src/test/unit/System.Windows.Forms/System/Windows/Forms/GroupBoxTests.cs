@@ -1958,6 +1958,97 @@ public class GroupBoxTests
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
+    [WinFormsFact]
+    public void GroupBox_OnPaint_VisualStyles_on_AmbientForeColor_FromForm_UsedWhenNotExplicitlySet()
+    {
+        if (!Application.RenderWithVisualStyles)
+        {
+            return;
+        }
+
+        using Bitmap image = new(100, 100);
+        using Graphics graphics = Graphics.FromImage(image);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        using Form form = new()
+        {
+            ForeColor = Color.Red
+        };
+        using SubGroupBox control = new()
+        {
+            Size = new Size(100, 100),
+            Text = "Test",
+            Parent = form
+        };
+
+        control.OnPaint(eventArgs);
+
+        Assert.False(control.ShouldSerializeForeColor());
+        Assert.Equal(Color.Red, control.ForeColor);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_OnPaint_VisualStyles_on_AmbientForeColor_FromIntermediatePanel_UsedWhenNotExplicitlySet()
+    {
+        if (!Application.RenderWithVisualStyles)
+        {
+            return;
+        }
+
+        using Bitmap image = new(100, 100);
+        using Graphics graphics = Graphics.FromImage(image);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        using Form form = new()
+        {
+            ForeColor = SystemColors.ControlText
+        };
+        using Panel panel = new()
+        {
+            ForeColor = Color.Lime,
+            Parent = form
+        };
+        using SubGroupBox control = new()
+        {
+            Size = new Size(100, 100),
+            Text = "Test",
+            Parent = panel
+        };
+
+        control.OnPaint(eventArgs);
+        Assert.False(control.ShouldSerializeForeColor());
+        Assert.Equal(Color.Lime, control.ForeColor);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_OnPaint_VisualStyles_on_ExplicitForeColor_TakesPrecedenceOverAmbient()
+    {
+        if (!Application.RenderWithVisualStyles)
+        {
+            return;
+        }
+
+        using Bitmap image = new(100, 100);
+        using Graphics graphics = Graphics.FromImage(image);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        using Form form = new()
+        {
+            ForeColor = Color.Red
+        };
+        using SubGroupBox control = new()
+        {
+            Size = new Size(100, 100),
+            Text = "Test",
+            ForeColor = Color.Blue,
+            Parent = form
+        };
+
+        control.OnPaint(eventArgs);
+        Assert.True(control.ShouldSerializeForeColor());
+        Assert.Equal(Color.Blue, control.ForeColor);
+    }
+
     public static IEnumerable<object[]> ProcessMnemonic_TestData()
     {
         yield return new object[] { null, 'a', false };

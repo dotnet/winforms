@@ -425,7 +425,7 @@ public partial class GroupBox : Control
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
 
-            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled || !Enabled)
+            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled || !Enabled || ForeColor != DefaultForeColor)
             {
                 Color textColor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
 
@@ -440,27 +440,13 @@ public partial class GroupBox : Control
             }
             else
             {
-                if (FindForm() is Form form && form.ForeColor != SystemColors.ControlText)
-                {
-                    GroupBoxRenderer.DrawGroupBox(
-                        e,
-                        new Rectangle(0, 0, Width, Height),
-                        Text,
-                        Font,
-                        form.ForeColor,
-                        textFlags,
-                        gbState);
-                }
-                else
-                {
-                    GroupBoxRenderer.DrawGroupBox(
+                GroupBoxRenderer.DrawGroupBox(
                     e,
                     new Rectangle(0, 0, Width, Height),
                     Text,
                     Font,
                     textFlags,
                     gbState);
-                }
             }
         }
 
