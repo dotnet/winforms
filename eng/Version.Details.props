@@ -6,31 +6,31 @@ This file should be imported by eng/Versions.props
 <Project>
   <PropertyGroup>
     <!-- dotnet-dotnet dependencies -->
-    <MicrosoftDotNetArcadeSdkPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetArcadeSdkPackageVersion>
-    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
-    <MicrosoftDotNetCMakeSdkPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetCMakeSdkPackageVersion>
-    <MicrosoftDotNetGenFacadesPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetHelixSdkPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetHelixSdkPackageVersion>
-    <MicrosoftDotNetRemoteExecutorPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetRemoteExecutorPackageVersion>
-    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>11.0.0-beta.26318.105</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
-    <MicrosoftNETSdkILPackageVersion>11.0.0-preview.6.26318.105</MicrosoftNETSdkILPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>11.0.0-preview.6.26318.105</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26318.105</MicrosoftNETCoreILAsmPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>11.0.0-preview.6.26318.105</MicrosoftNETCoreILDAsmPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>11.0.0-preview.6.26318.105</MicrosoftWin32SystemEventsPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26318.105</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26318.105</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
-    <SystemCodeDomPackageVersion>11.0.0-preview.6.26318.105</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>11.0.0-preview.6.26318.105</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDiagnosticsDiagnosticSourcePackageVersion>11.0.0-preview.6.26318.105</SystemDiagnosticsDiagnosticSourcePackageVersion>
-    <SystemFormatsNrbfPackageVersion>11.0.0-preview.6.26318.105</SystemFormatsNrbfPackageVersion>
-    <SystemIOHashingPackageVersion>11.0.0-preview.6.26318.105</SystemIOHashingPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>11.0.0-preview.6.26318.105</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>11.0.0-preview.6.26318.105</SystemResourcesExtensionsPackageVersion>
-    <SystemRuntimeSerializationFormattersPackageVersion>11.0.0-preview.6.26318.105</SystemRuntimeSerializationFormattersPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>11.0.0-preview.6.26318.105</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>11.0.0-preview.6.26318.105</SystemTextJsonPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>11.0.0-preview.6.26318.105</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftDotNetArcadeSdkPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetArcadeSdkPackageVersion>
+    <MicrosoftDotNetBuildTasksTemplatingPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetBuildTasksTemplatingPackageVersion>
+    <MicrosoftDotNetCMakeSdkPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetCMakeSdkPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetHelixSdkPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetHelixSdkPackageVersion>
+    <MicrosoftDotNetRemoteExecutorPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetRemoteExecutorPackageVersion>
+    <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>11.0.0-beta.26319.103</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
+    <MicrosoftNETSdkILPackageVersion>11.0.0-preview.6.26319.103</MicrosoftNETSdkILPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>11.0.0-preview.6.26319.103</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26319.103</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>11.0.0-preview.6.26319.103</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>11.0.0-preview.6.26319.103</MicrosoftWin32SystemEventsPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26319.103</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>11.0.0-preview.6.26319.103</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemCodeDomPackageVersion>11.0.0-preview.6.26319.103</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>11.0.0-preview.6.26319.103</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDiagnosticsDiagnosticSourcePackageVersion>11.0.0-preview.6.26319.103</SystemDiagnosticsDiagnosticSourcePackageVersion>
+    <SystemFormatsNrbfPackageVersion>11.0.0-preview.6.26319.103</SystemFormatsNrbfPackageVersion>
+    <SystemIOHashingPackageVersion>11.0.0-preview.6.26319.103</SystemIOHashingPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>11.0.0-preview.6.26319.103</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>11.0.0-preview.6.26319.103</SystemResourcesExtensionsPackageVersion>
+    <SystemRuntimeSerializationFormattersPackageVersion>11.0.0-preview.6.26319.103</SystemRuntimeSerializationFormattersPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>11.0.0-preview.6.26319.103</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>11.0.0-preview.6.26319.103</SystemTextJsonPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>11.0.0-preview.6.26319.103</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!--Property group for alternate package version names-->
   <PropertyGroup>
