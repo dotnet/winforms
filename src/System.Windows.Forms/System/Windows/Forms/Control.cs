@@ -7434,7 +7434,7 @@ public unsafe partial class Control :
 
             Properties.AddOrRemoveValue(s_deviceDpiInternal, (int)PInvoke.GetDpiForWindow(this));
             // If form is set to start at center parent, we should need to apply DPI scaling.
-            if (old == DeviceDpiInternal && (this is Form formPage && formPage.TopLevel && formPage.StartPosition != FormStartPosition.CenterParent))
+            if (old == DeviceDpiInternal)
             {
                 return;
             }

@@ -4290,7 +4290,7 @@ public partial class Form : ContainerControl
 
         // Also, at this time we can now locate the form on the correct area of the screen.
         // We must do this after applying any autoscaling.
-        if (GetState(States.Modal))
+        if (GetState(States.Modal) || (FormStartPosition)_formState[s_formStateStartPos] == FormStartPosition.CenterParent)
         {
             AdjustFormPosition();
         }
@@ -4564,6 +4564,10 @@ public partial class Form : ContainerControl
         DeviceDpiInternal = e.DeviceDpiNew;
 
         OnDpiChanged(e);
+        if (!Visible && (FormStartPosition)_formState[s_formStateStartPos] == FormStartPosition.CenterParent)
+        {
+            AdjustFormPosition();
+        }
     }
 
     /// <summary>
