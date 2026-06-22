@@ -7433,7 +7433,6 @@ public unsafe partial class Control :
             Font localFont = GetCurrentFontAndDpi(out int fontDpi);
 
             Properties.AddOrRemoveValue(s_deviceDpiInternal, (int)PInvoke.GetDpiForWindow(this));
-            // If form is set to start at center parent, we should need to apply DPI scaling.
             if (old == DeviceDpiInternal)
             {
                 return;
