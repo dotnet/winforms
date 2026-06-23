@@ -15,6 +15,41 @@ namespace System.ComponentModel.Design.Tests;
 
 public class CollectionEditorTests
 {
+    [Fact]
+    public void CollectionEditor_CollectionForm_UpdateEnabled_FirstMiddleLastNone_SetsUpDownExpected()
+    {
+        SubCollectionEditor editor = new(typeof(List<int>));
+        using Form form = editor.CreateCollectionForm();
+
+        dynamic a = form.TestAccessor.Dynamic;
+        a.AddItems(new object[] { 1, 2, 3 });
+
+        ListBox listBox = (ListBox)a._listBox;
+        Button up = (Button)a._upButton;
+        Button down = (Button)a._downButton;
+
+        up.Enabled.Should().BeTrue();
+        down.Enabled.Should().BeFalse();
+
+        listBox.SelectedIndex = 0;
+        up.Enabled.Should().BeFalse();
+        down.Enabled.Should().BeTrue();
+
+        listBox.ClearSelected();
+        listBox.SelectedIndex = 1;
+        up.Enabled.Should().BeTrue();
+        down.Enabled.Should().BeTrue();
+
+        listBox.ClearSelected();
+        up.Enabled.Should().BeFalse();
+        down.Enabled.Should().BeFalse();
+
+        listBox.Items.Clear();
+        a.AddItems(new object[] { 42 });
+        up.Enabled.Should().BeFalse();
+        down.Enabled.Should().BeFalse();
+    }
+
     [Theory]
     [InlineData(typeof(object), typeof(object))]
     [InlineData(typeof(string), typeof(object))]
