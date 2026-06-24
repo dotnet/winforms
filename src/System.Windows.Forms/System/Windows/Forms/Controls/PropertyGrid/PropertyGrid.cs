@@ -2066,12 +2066,15 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             AddLargeImage(_alphaBitmap);
             AddLargeImage(_categoryBitmap);
 
-            AddLargeImage(_propertyPageBitmap);
-
-            foreach (var tab in _tabs)
+            if (_tabs.Count > 1)
             {
-                AddLargeImage(tab.Tab.Bitmap);
+                foreach (var tab in _tabs)
+                {
+                    AddLargeImage(tab.Tab.Bitmap);
+                }
             }
+
+            AddLargeImage(_propertyPageBitmap);
         }
         else
         {
