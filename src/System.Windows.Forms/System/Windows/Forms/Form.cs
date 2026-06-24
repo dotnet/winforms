@@ -5626,10 +5626,10 @@ public partial class Form : ContainerControl
         {
             try
             {
-                if (owner is null)
-                    Show();
-                else
+                if (owner is not null && !IsMdiChild)
                     Show(owner);
+                else
+                    Show();
             }
             catch (Exception ex)
             {
