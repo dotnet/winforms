@@ -2591,7 +2591,7 @@ public class ScrollableControlTests
             fMask = SCROLLINFO_MASK.SIF_POS
         };
 
-        PInvoke.GetScrollInfo(control, SCROLLBAR_CONSTANTS.SB_HORZ, ref info);
+        Assert.True(PInvoke.GetScrollInfo(control, SCROLLBAR_CONSTANTS.SB_HORZ, ref info));
         return info.nPos;
     }
 
