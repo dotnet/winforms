@@ -67,6 +67,8 @@ DestroyAcceleratorTable
 DestroyCursor
 DestroyMenu
 DestroyWindow
+DFC_TYPE
+DFCS_STATE
 DISPATCH_CONSTRUCT
 DISPATCH_FLAGS
 DispatchMessage
