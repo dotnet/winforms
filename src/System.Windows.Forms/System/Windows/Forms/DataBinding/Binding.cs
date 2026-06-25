@@ -960,17 +960,6 @@ public partial class Binding
 
     internal bool PushData(bool force)
     {
-        // Skip push if the target component is not created.
-        //
-        // Binding becomes active only after the component is created and has a valid
-        // BindingContext. Pushing values earlier may result in incorrect default
-        // assignments, as the target is not yet ready to receive updates.
-
-        if (!ComponentCreated && !force)
-        {
-            return false;
-        }
-        
         object? dataSourceValue;
         Exception? lastException = null;
 
@@ -997,7 +986,7 @@ public partial class Binding
                 SetPropValue(controlValue);
                 _state.ChangeFlags(BindingStates.Modified, false);
             }
-            else
+            else if (ComponentCreated)
             {
                 SetPropValue(null);
             }
