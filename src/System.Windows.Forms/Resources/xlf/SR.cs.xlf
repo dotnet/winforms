@@ -907,6 +907,16 @@
         <target state="translated">Určuje, zda je součást v zaškrtnutém stavu. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti Appearance prvku CheckBox</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Určuje, zda prvek CheckBox umožňuje tři stavy zaškrtnutí místo dvou.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ Ladění není podporováno. Další informace jsou uvedeny na konci této zprá
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Informace o vyvolání ladění JIT najdete na konci této zprávy,
+        <target state="needs-review-translation">Informace o vyvolání ladění JIT najdete na konci této zprávy,
 nikoli v tomto dialogovém okně.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, zda přepínač je nebo není vybrán.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti Appearance ovládacího prvku RadioButton</target>
@@ -8712,6 +8732,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Vyvolá se při změně hodnoty vlastnosti TextAlign.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

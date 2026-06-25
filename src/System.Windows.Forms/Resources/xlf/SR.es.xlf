@@ -907,6 +907,16 @@
         <target state="translated">Indica si el componente se encuentra en el estado de activación. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Evento que se desencadena cuando se cambia el valor de la propiedad Appearance de CheckBox.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Indica si CheckBox permitirá tres estados de activación en lugar de dos.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ depuración. Consulte el final de este mensaje para obtener más información.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Consulte el final de este mensaje para obtener más detalles sobre cómo invocar a la depuración 
+        <target state="needs-review-translation">Consulte el final de este mensaje para obtener más detalles sobre cómo invocar a la depuración 
 Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Indica si el botón de radio está activado o no.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Evento que se desencadena cuando se cambia el valor de la propiedad Appearance de RadioButton.</target>
@@ -8712,6 +8732,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Tiene lugar cuando el valor de la propiedad TextAlign cambia</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

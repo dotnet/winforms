@@ -907,6 +907,16 @@
         <target state="translated">Indica se o componente está no estado de ativação. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Evento gerado quando o valor da propriedade Appearance é alterado em CheckBox.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Indica se a CheckBox permitirá três estados de seleção em vez de dois.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ depuração. Consulte o final dessa mensagem para obter detalhes.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Consulte o final dessa mensagem para obter detalhes sobre como chamar a 
+        <target state="needs-review-translation">Consulte o final dessa mensagem para obter detalhes sobre como chamar a 
 depuração just-in-time (JIT) em vez dessa caixa de diálogo.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
         <target state="translated">Indica se o botão de opção está ou não selecionado.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Evento gerado quando o valor da propriedade Appearance é alterado em RadioButton.</target>
@@ -8712,6 +8732,11 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Ocorre quando o valor da propriedade TextAlign é alterado</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

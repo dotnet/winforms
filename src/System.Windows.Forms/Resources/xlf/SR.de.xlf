@@ -907,6 +907,16 @@
         <target state="translated">Gibt an, ob sich die Komponente im aktivierten Zustand befindet. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn der Wert der Appearance-Eigenschaft für CheckBox geändert wird.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Gibt an, ob CheckBox drei statt zwei aktivierte Zustände zulässt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Weitere Informationen zum Aufrufen des 
+        <target state="needs-review-translation">Weitere Informationen zum Aufrufen des 
 JIT-Debuggens finden Sie am Ende dieser Nachricht, anstelle dieses Dialogfelds.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Zeigt an, ob das Optionsfeld markiert ist oder nicht.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Das ausgelöste Ereignis, wenn der Wert der Appearance-Eigenschaft für RadioButton geändert wird.</target>
@@ -8712,6 +8732,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Tritt auf, wenn sich der Wert der TextAlign-Eigenschaft ändert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

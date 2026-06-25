@@ -907,6 +907,16 @@
         <target state="translated">Указывает, находится ли компонент в состоянии проверки. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Событие вызывается при изменении значения свойства Appearance для CheckBox.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Определяет, позволяет ли CheckBox использование трех состояний переключателя вместо двух.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Подробная информация о вызове 
+        <target state="needs-review-translation">Подробная информация о вызове 
 отладки JIT вместо данного диалогового окна содержится в конце этого сообщения.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Указывает состояние переключателя.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Событие создается, когда для RadioButton изменяется значение свойства Appearance</target>
@@ -8712,6 +8732,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Происходит при изменении значения свойства TextBoxTextAlign.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

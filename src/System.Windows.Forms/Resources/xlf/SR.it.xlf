@@ -907,6 +907,16 @@
         <target state="translated">Indica se il componente è selezionato. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Evento generato quando il valore della proprietà Appearance di CheckBox viene modificato</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Indica se per il controllo CheckBox saranno disponibili tre stati di selezione anziché due.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ di Windows Forms. Per i dettagli, vedi la fine di questo messaggio.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Vedi la fine di questo messaggio per i dettagli sul richiamo del 
+        <target state="needs-review-translation">Vedi la fine di questo messaggio per i dettagli sul richiamo del 
 debug JIT (just-in-time) invece di questa finestra di dialogo.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ Analisi dello stack dove si è verificata l'operazione non valida:
         <target state="translated">Indica se il pulsante di opzione è selezionato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Evento generato quando il valore della proprietà Appearance di RadioButton viene modificato.</target>
@@ -8712,6 +8732,11 @@ Analisi dello stack dove si è verificata l'operazione non valida:
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Generato quando il valore della proprietà TextAlign cambia</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">

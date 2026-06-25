@@ -907,6 +907,16 @@
         <target state="translated">Indique si le composant a un état activé. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Événement déclenché lorsque la valeur de la propriété Appearance du CheckBox est modifiée.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Indique si CheckBox autorise trois états d'activation plutôt que deux.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>not checked</source>
+        <target state="new">not checked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
@@ -4898,10 +4913,10 @@ juste-à-temps (JIT). Consultez la fin de ce message pour plus de détails.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking 
+        <source>See the end of this message for details on invoking
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="translated">Consultez la fin de ce message pour plus de détails sur l'appel du débogage
+        <target state="needs-review-translation">Consultez la fin de ce message pour plus de détails sur l'appel du débogage
 juste-à-temps (JIT) à la place de cette boîte de dialogue.
 </target>
         <note />
@@ -8694,6 +8709,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Indique si la case d'option est activée ou non.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RadioButtonCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on RadioButton.</source>
         <target state="translated">Événement déclenché lorsque la valeur de la propriété Appearance du RadioButton est modifiée.</target>
@@ -8712,6 +8732,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="RadioButtonOnTextAlignChangedDescr">
         <source>Occurs when the value of the TextAlign property changes</source>
         <target state="translated">Se produit lorsque la valeur de la propriété TextAlign change</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RadioButtonPressedNotificationText">
+        <source>pressed</source>
+        <target state="new">pressed</target>
         <note />
       </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
