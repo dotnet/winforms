@@ -4913,10 +4913,10 @@ Ladění není podporováno. Další informace jsou uvedeny na konci této zprá
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Informace o vyvolání ladění JIT najdete na konci této zprávy,
+        <target state="translated">Informace o vyvolání ladění JIT najdete na konci této zprávy,
 nikoli v tomto dialogovém okně.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Určuje, zda přepínač je nebo není vybrán.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

@@ -4913,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">이 대화 상자 대신 JIT(Just-in-time) 디버깅을 호출하는
+        <target state="translated">이 대화 상자 대신 JIT(Just-in-time) 디버깅을 호출하는
 방법에 대한 자세한 내용은 이 메시지의 뒷부분을 참조하십시오.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">라디오 단추의 선택 상태를 나타냅니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

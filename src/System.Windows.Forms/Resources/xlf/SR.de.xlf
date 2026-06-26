@@ -4913,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Weitere Informationen zum Aufrufen des 
+        <target state="translated">Weitere Informationen zum Aufrufen des 
 JIT-Debuggens finden Sie am Ende dieser Nachricht, anstelle dieses Dialogfelds.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Zeigt an, ob das Optionsfeld markiert ist oder nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

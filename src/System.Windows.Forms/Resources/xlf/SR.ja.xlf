@@ -4913,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">このダイアログ ボックスの代わりに Just-In-Time (JIT) デバッグを呼び出すための詳細については、
+        <target state="translated">このダイアログ ボックスの代わりに Just-In-Time (JIT) デバッグを呼び出すための詳細については、
 このメッセージの最後を参照してください。
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">オプション ボタンがオンなっているかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

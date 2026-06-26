@@ -4913,10 +4913,10 @@ depuração. Consulte o final dessa mensagem para obter detalhes.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Consulte o final dessa mensagem para obter detalhes sobre como chamar a 
+        <target state="translated">Consulte o final dessa mensagem para obter detalhes sobre como chamar a 
 depuração just-in-time (JIT) em vez dessa caixa de diálogo.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Indica se o botão de opção está ou não selecionado.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

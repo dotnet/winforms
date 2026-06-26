@@ -4913,10 +4913,10 @@ debugging. Zobacz koniec tej wiadomości, aby uzyskać szczegółowe informacje.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Szczegółowe informacje na temat wywoływania debugowania w trybie JIT (just in time)
+        <target state="translated">Szczegółowe informacje na temat wywoływania debugowania w trybie JIT (just in time)
 zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Wskazuje, czy przycisk radiowy jest zaznaczony, czy nie.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

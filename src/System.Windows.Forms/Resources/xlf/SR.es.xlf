@@ -4913,10 +4913,10 @@ depuración. Consulte el final de este mensaje para obtener más información.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Consulte el final de este mensaje para obtener más detalles sobre cómo invocar a la depuración 
+        <target state="translated">Consulte el final de este mensaje para obtener más detalles sobre cómo invocar a la depuración 
 Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Indica si el botón de radio está activado o no.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

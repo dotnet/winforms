@@ -4913,10 +4913,10 @@ di Windows Forms. Per i dettagli, vedi la fine di questo messaggio.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Vedi la fine di questo messaggio per i dettagli sul richiamo del 
+        <target state="translated">Vedi la fine di questo messaggio per i dettagli sul richiamo del 
 debug JIT (just-in-time) invece di questa finestra di dialogo.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Analisi dello stack dove si è verificata l'operazione non valida:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Indica se il pulsante di opzione è selezionato.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

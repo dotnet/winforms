@@ -4913,10 +4913,10 @@ debugging. See the end of this message for details.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">请查看此消息的结尾，以了解有关调用有关调用 
+        <target state="translated">请查看此消息的结尾，以了解有关调用有关调用 
 即时(JIT)调试而不是此对话框的详细信息。
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">指示单选按钮是否已选中。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

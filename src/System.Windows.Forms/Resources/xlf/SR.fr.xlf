@@ -4913,10 +4913,10 @@ juste-à-temps (JIT). Consultez la fin de ce message pour plus de détails.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Consultez la fin de ce message pour plus de détails sur l'appel du débogage
+        <target state="translated">Consultez la fin de ce message pour plus de détails sur l'appel du débogage
 juste-à-temps (JIT) à la place de cette boîte de dialogue.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Indique si la case d'option est activée ou non.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">

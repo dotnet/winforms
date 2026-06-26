@@ -438,8 +438,8 @@ public partial class CheckBox : ButtonBase
         if (IsAccessibilityObjectCreated)
         {
             // A fix for https://github.com/dotnet/winforms/issues/14669.
-            // Unfortunately NVDA does not receive PropertyChange messages raised via RaiseAutomationEvent.
-            // Use RaiseAutomationNotification instead to announce a custom notification.
+            // Unfortunately we cannot use RaiseAutomationEvent method here since the control does not respond to
+            // State messages. Use RaiseAutomationNotification instead to announce a custom notification.
             // See https://docs.microsoft.com/dotnet/api/system.windows.forms.accessibleobject.raiseautomationnotification.
             string notificationText = _checkState switch
             {

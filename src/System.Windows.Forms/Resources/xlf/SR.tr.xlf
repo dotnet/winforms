@@ -4913,10 +4913,10 @@ desteklemiyor. Ayrıntılı bilgi için bu iletinin sonuna bakın.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking
+        <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Bu iletişim kutusu yerine tam zamanında (JIT) hata ayıklamanın 
+        <target state="translated">Bu iletişim kutusu yerine tam zamanında (JIT) hata ayıklamanın 
 çağrılmasıyla ilgili ayrıntılar için bu mesajın sonuna bakın.
 </target>
         <note />
@@ -8707,11 +8707,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="RadioButtonCheckedDescr">
         <source>Indicates whether the radio button is checked or not.</source>
         <target state="translated">Radyo düğmesinin işaretli olup olmadığını gösterir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RadioButtonCheckedNotificationText">
-        <source>checked</source>
-        <target state="new">checked</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonOnAppearanceChangedDescr">
