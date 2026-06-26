@@ -8734,11 +8734,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">TextAlign özelliğinin değeri değiştiğinde gerçekleşir</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Koleksiyon salt okunur.</target>

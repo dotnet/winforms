@@ -618,9 +618,6 @@
   <data name="RadioButtonCheckedNotificationText" xml:space="preserve">
     <value>checked</value>
   </data>
-  <data name="RadioButtonPressedNotificationText" xml:space="preserve">
-    <value>pressed</value>
-  </data>
   <data name="CheckBoxThreeStateDescr" xml:space="preserve">
     <value>Indicates whether the CheckBox will allow three check states rather than two.</value>
   </data>

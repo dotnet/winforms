@@ -8734,11 +8734,6 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
         <target state="translated">Ocorre quando o valor da propriedade TextAlign é alterado</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">A coleção é somente leitura.</target>

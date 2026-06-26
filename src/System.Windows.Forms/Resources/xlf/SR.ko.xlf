@@ -8734,11 +8734,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">TextAlign 속성 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">컬렉션이 읽기 전용입니다.</target>

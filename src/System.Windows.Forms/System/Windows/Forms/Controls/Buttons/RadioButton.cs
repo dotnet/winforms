@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -358,12 +360,11 @@ public partial class RadioButton : ButtonBase
         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
         // UIA events:
-        if (IsAccessibilityObjectCreated && _isChecked)
+        if (IsAccessibilityObjectCreated)
         {
-            AccessibilityObject.InternalRaiseAutomationNotification(
-                Automation.AutomationNotificationKind.ActionCompleted,
-                Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
-                SR.RadioButtonCheckedNotificationText);
+            using var nameVariant = (VARIANT)Name;
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
         }
 
         ((EventHandler?)Events[s_checkedChangedEvent])?.Invoke(this, e);
@@ -371,21 +372,9 @@ public partial class RadioButton : ButtonBase
 
     protected override void OnClick(EventArgs e)
     {
-        bool wasChecked = _isChecked;
-
         if (_autoCheck)
         {
             Checked = true;
-        }
-
-        // Align with native behavior: activating an already-selected radio button
-        // should still announce the press action for screen readers.
-        if (wasChecked && IsAccessibilityObjectCreated)
-        {
-            AccessibilityObject.InternalRaiseAutomationNotification(
-                Automation.AutomationNotificationKind.ActionCompleted,
-                Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
-                SR.RadioButtonPressedNotificationText);
         }
 
         base.OnClick(e);

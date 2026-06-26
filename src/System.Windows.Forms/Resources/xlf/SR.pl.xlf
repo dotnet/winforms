@@ -8734,11 +8734,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Występuje, gdy wartość właściwości TextAlign zostanie zmieniona</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Kolekcja jest tylko do odczytu.</target>

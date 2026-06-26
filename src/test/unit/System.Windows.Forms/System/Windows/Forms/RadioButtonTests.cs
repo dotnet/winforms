@@ -1487,31 +1487,8 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         radioButton.PerformClick();
 
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallsCount);
-        Assert.Equal(SR.RadioButtonCheckedNotificationText, accessibleObject.LastNotificationText);
-        Assert.False(radioButton.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void RadioButton_RaiseAutomationEvent_InvokeWhenAlreadyChecked_RaisesPressedNotification()
-    {
-        using TestRadioButton radioButton = new();
-        Assert.False(radioButton.IsHandleCreated);
-
-        var accessibleObject = (SubRadioButtonAccessibleObject)radioButton.AccessibilityObject;
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallsCount);
-
-        radioButton.Checked = true;
-        radioButton.PerformClick();
-
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-        Assert.Equal(2, accessibleObject.RaiseAutomationNotificationCallsCount);
-        Assert.Equal(SR.RadioButtonPressedNotificationText, accessibleObject.LastNotificationText);
+        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
+        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
         Assert.False(radioButton.IsHandleCreated);
     }
 
@@ -1664,10 +1641,6 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
-        public int RaiseAutomationNotificationCallsCount { get; private set; }
-
-        public string LastNotificationText { get; private set; }
-
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
@@ -1678,16 +1651,6 @@ public class RadioButtonTests : AbstractButtonBaseTests
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
-        }
-
-        internal override bool InternalRaiseAutomationNotification(
-            Automation.AutomationNotificationKind notificationKind,
-            Automation.AutomationNotificationProcessing notificationProcessing,
-            string notificationText)
-        {
-            RaiseAutomationNotificationCallsCount++;
-            LastNotificationText = notificationText;
-            return base.InternalRaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
     }
 

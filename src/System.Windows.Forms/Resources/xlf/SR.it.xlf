@@ -8734,11 +8734,6 @@ Analisi dello stack dove si è verificata l'operazione non valida:
         <target state="translated">Generato quando il valore della proprietà TextAlign cambia</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">Raccolta in sola lettura.</target>

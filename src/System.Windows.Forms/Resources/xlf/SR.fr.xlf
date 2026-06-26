@@ -8734,11 +8734,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Se produit lorsque la valeur de la propriété TextAlign change</target>
         <note />
       </trans-unit>
-      <trans-unit id="RadioButtonPressedNotificationText">
-        <source>pressed</source>
-        <target state="new">pressed</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ReadonlyControlsCollection">
         <source>Collection is read only.</source>
         <target state="translated">La collection est en lecture seule.</target>
