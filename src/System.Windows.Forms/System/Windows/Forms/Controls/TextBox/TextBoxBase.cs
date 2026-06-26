@@ -745,8 +745,32 @@ public abstract partial class TextBoxBase : Control
         remove => Events.RemoveHandler(s_multilineChangedEvent, value);
     }
 
+    /// <summary>
+    ///  Gets or sets the distance, in pixels, between the text displayed in a text box control and the top, bottom and side edges of the control.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Note: While shadowing this property may seem redundant at first glance, it is necessary for binary compatibility.
+    ///   Prior to .NET 11, this property was marked with <see cref="BrowsableAttribute">Browsable(false)</see> and
+    ///   <see cref="EditorBrowsableAttribute">EditorBrowsable(EditorBrowsableState.Never)</see>,
+    ///   and was never serialized. Effectively, <see cref="Control.Padding"/> did not work before .NET 11. While this changed in .NET 11,
+    ///   removing the property shadowing would constitute a binary breaking change. Therefore, the shadowing is retained
+    ///   with updated attributes to ensure <c>Padding</c> now functions as expected.
+    ///  </para>
+    ///  <para>
+    ///   As long as the default value for the <c>Padding</c> property is not modified, <see cref="TextBoxBase"/>-derived
+    ///   controls (<see cref="TextBox"/>, <see cref="RichTextBox"/>) will behave as they always have. However, if you
+    ///   opt into modern styling by calling <see cref="Application.EnableVisualStyles"/> and set
+    ///   <see cref="VisualStylesMode"/> to a value other than <see cref="VisualStylesMode.Classic"/> or
+    ///   <see cref="VisualStylesMode.Disabled"/>, the control will automatically apply styling that conforms to the
+    ///   Windows 10+ Fluent Design Language. This provides both stylistic improvements (such as Dark Mode support) and
+    ///   functional enhancements (including increased touch targets for easier mouse and touch interaction), thereby
+    ///   meeting the accessibility requirements of modern high-resolution displays.
+    ///  </para>
+    /// </remarks>
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public new Padding Padding
     {
         get => base.Padding;
