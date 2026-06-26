@@ -23,4 +23,38 @@ public class Form_ControlCollection
     {
         Assert.Throws<ArgumentNullException>("owner", () => new Form.ControlCollection(null));
     }
+
+    [WinFormsFact]
+    public void ControlCollection_Add_InvalidTabPageParent_DoesNotLeaveHalfAddedControl()
+    {
+        using Form form = new();
+        using TabPage tabPage = new();
+
+        int oldCount = form.Controls.Count;
+
+        Assert.ThrowsAny<Exception>(() => form.Controls.Add(tabPage));
+
+        Assert.Equal(oldCount, form.Controls.Count);
+        Assert.False(form.Controls.Contains(tabPage));
+        Assert.Null(tabPage.Parent);
+    }
+
+    [WinFormsFact]
+    public void ControlCollection_Clear_AfterFailedTabPageAdd_DoesNotHang()
+    {
+        using Form form = new();
+        using Button button = new() { Name = "button1" };
+        using TabPage tabPage = new();
+
+        form.Controls.Add(button);
+
+        Assert.ThrowsAny<Exception>(() => form.Controls.Add(tabPage));
+
+        // If the failed add left the TabPage half-added,
+        // Clear() could hang. After the fix, it should complete normally.
+        form.Controls.Clear();
+
+        Assert.Empty(form.Controls);
+        Assert.Null(tabPage.Parent);
+    }
 }
