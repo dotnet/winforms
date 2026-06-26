@@ -28,15 +28,20 @@ public class CollectionEditorTests
         Button up = (Button)a._upButton;
         Button down = (Button)a._downButton;
 
+        listBox.SelectedIndex = 2;
+        a.UpdateEnabled();
         up.Enabled.Should().BeTrue();
         down.Enabled.Should().BeFalse();
 
+        listBox.ClearSelected();
         listBox.SelectedIndex = 0;
+        a.UpdateEnabled();
         up.Enabled.Should().BeFalse();
         down.Enabled.Should().BeTrue();
 
         listBox.ClearSelected();
         listBox.SelectedIndex = 1;
+        a.UpdateEnabled();
         up.Enabled.Should().BeTrue();
         down.Enabled.Should().BeTrue();
 
@@ -46,6 +51,7 @@ public class CollectionEditorTests
 
         listBox.Items.Clear();
         a.AddItems(new object[] { 42 });
+        a.UpdateEnabled();
         up.Enabled.Should().BeFalse();
         down.Enabled.Should().BeFalse();
     }
