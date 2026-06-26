@@ -938,8 +938,8 @@
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxUncheckedNotificationText">
-        <source>not checked</source>
-        <target state="new">not checked</target>
+        <source>unchecked</source>
+        <target state="new">unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">

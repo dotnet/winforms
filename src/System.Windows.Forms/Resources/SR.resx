@@ -610,7 +610,7 @@
     <value>checked</value>
   </data>
   <data name="CheckBoxUncheckedNotificationText" xml:space="preserve">
-    <value>not checked</value>
+    <value>unchecked</value>
   </data>
   <data name="CheckBoxIndeterminateNotificationText" xml:space="preserve">
     <value>indeterminate</value>
