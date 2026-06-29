@@ -2781,16 +2781,18 @@ public partial class FormTests
         };
 
         Point capturedLocation = Point.Empty;
+        Size capturedSize = Size.Empty;
         childForm.Load += (sender, e) =>
         {
             capturedLocation = childForm.Location;
+            capturedSize = childForm.Size;
             childForm.Close();
         };
 
         childForm.ShowDialog(parentForm);
-        // Expected center: parentForm center minus half of childForm size.
-        int expectedX = parentForm.Left + (parentForm.Width - childForm.Width) / 2;
-        int expectedY = parentForm.Top + (parentForm.Height - childForm.Height) / 2;
+        // Expected center: parentForm center minus half of captured childForm size.
+        int expectedX = parentForm.Left + (parentForm.Width - capturedSize.Width) / 2;
+        int expectedY = parentForm.Top + (parentForm.Height - capturedSize.Height) / 2;
         int deltaX = SystemInformation.Border3DSize.Width + 1;
         int deltaY = SystemInformation.Border3DSize.Height + 1;
 

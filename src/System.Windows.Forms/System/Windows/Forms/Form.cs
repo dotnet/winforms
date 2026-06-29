@@ -3928,6 +3928,13 @@ public partial class Form : ContainerControl
                 p.Y = screenRect.Y + screenRect.Height - s.Height;
             }
 
+            // Skip updating the Location if it is already at the calculated position
+            // to avoid unnecessary UI refresh or layout processing.
+            if (p == Location)
+            {
+                return;
+            }
+
             Location = p;
         }
         else
@@ -4288,9 +4295,10 @@ public partial class Form : ContainerControl
 #pragma warning restore CS0618
         }
 
-        // Also, at this time we can now locate the form on the correct area of the screen.
-        // We must do this after applying any autoscaling.
-        if (GetState(States.Modal) || (FormStartPosition)_formState[s_formStateStartPos] == FormStartPosition.CenterParent)
+        // At this stage, after autoscaling is applied, position the form correctly on screen.
+        // For modal dialogs, or when the start position is CenterParent with a valid owner,
+        // we must recalculate and apply the appropriate location before the form is shown.
+        if (GetState(States.Modal) || ((FormStartPosition)_formState[s_formStateStartPos] == FormStartPosition.CenterParent && Owner is not null))
         {
             AdjustFormPosition();
         }
@@ -4564,6 +4572,9 @@ public partial class Form : ContainerControl
         DeviceDpiInternal = e.DeviceDpiNew;
 
         OnDpiChanged(e);
+        // Only adjust the form position before it becomes visible. Once visible,
+        // the user may have moved the window, so we should not override its position.
+        // This also ensures centering logic is applied correctly during initial layout.
         if (!Visible && (FormStartPosition)_formState[s_formStateStartPos] == FormStartPosition.CenterParent)
         {
             AdjustFormPosition();
