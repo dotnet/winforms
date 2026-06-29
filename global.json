@@ -13,10 +13,10 @@
     "dotnet": "11.0.100-preview.5.26227.104",
     "runtimes": {
       "dotnet/x64": [
-        "$(MicrosoftNETCorePlatformsPackageVersion)"
+        "$(MicrosoftNETCoreAppRefPackageVersion)"
       ],
       "dotnet/x86": [
-        "$(MicrosoftNETCorePlatformsPackageVersion)"
+        "$(MicrosoftNETCoreAppRefPackageVersion)"
       ]
     }
   },
