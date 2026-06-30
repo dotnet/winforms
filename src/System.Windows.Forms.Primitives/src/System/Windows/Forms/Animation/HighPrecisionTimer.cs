@@ -239,7 +239,12 @@ internal static partial class HighPrecisionTimer
         {
             await registration.Callback(tick, cancellationToken).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is not OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // Cancellation while the timer is shutting down is a benign, expected outcome. Swallow it
+            // here so it does not fault this fire-and-forget task into an unobserved task exception.
+        }
+        catch (Exception ex)
         {
             Debug.Fail($"HighPrecisionTimer: Unhandled exception in callback: {ex.Message}");
         }
