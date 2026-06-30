@@ -826,6 +826,18 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatData))]
     [Browsable(false)]
     [Bindable(true)]
+    // Note: unlike Font/Cursor (which use [AmbientValue(null)]) or RightToLeft (which uses
+    // [AmbientValue(RightToLeft.Inherit)]), DataContext intentionally has NO [AmbientValue].
+    // [AmbientValue] only matters for the designer's CodeDOM serializer: when it is forced to emit an
+    // otherwise-ambient property (inherited/"difference" forms, member relationships, absolute
+    // serialization), it writes the AmbientValue as the "reset to ambient" sentinel. That only works
+    // when the setter treats that sentinel as "clear the local override." Font does (its setter uses
+    // AddOrRemoveValue, so Font = null re-inherits); RightToLeft does (the getter resolves Inherit to
+    // the parent). DataContext's setter instead stores an explicit null when the parent value differs
+    // (see below), so null would SUPPRESS inheritance rather than restore it - making [AmbientValue(null)]
+    // a leaky, incorrect sentinel. Combined with this property being [Browsable(false)], runtime-oriented,
+    // and typically holding a non-CodeDOM-serializable object, the forced-serialization "bake-in" is a
+    // non-issue, so we deliberately leave it off rather than introduce a setter behavior change.
     public virtual object? DataContext
     {
         get => Properties.TryGetValue(s_dataContextProperty, out object? value)
@@ -876,17 +888,27 @@ public unsafe partial class Control :
     /// </remarks>
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
+    [AmbientValue(VisualStylesMode.Inherit)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
     public VisualStylesMode VisualStylesMode
     {
-        get => Properties.TryGetValue(s_visualStylesModeProperty, out VisualStylesMode value)
-            ? value
-            : ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
+        get
+        {
+            if (!Properties.TryGetValue(s_visualStylesModeProperty, out VisualStylesMode value)
+                || value == VisualStylesMode.Inherit)
+            {
+                value = ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
+            }
+
+            return value;
+        }
         set
         {
-            // Can't use the source generated enum validator here, since it cannot deal with [Experimental].
+            // Can't use the source generated enum validator here, since it cannot deal with the
+            // non-contiguous Inherit (-1) and Latest (short.MaxValue) members.
             _ = value switch
             {
+                VisualStylesMode.Inherit => value,
                 VisualStylesMode.Classic => value,
                 VisualStylesMode.Disabled => value,
                 VisualStylesMode.Net11 => value,
@@ -894,22 +916,24 @@ public unsafe partial class Control :
                 _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
             };
 
-            if (value == VisualStylesMode)
-            {
-                return;
-            }
+            VisualStylesMode oldValue = VisualStylesMode;
 
-            // When VisualStylesMode differed from its parent before but is about to become the same,
-            // we remove it altogether so it can again inherit the value from its parent.
-            if (Properties.ContainsKey(s_visualStylesModeProperty) && ParentInternal?.VisualStylesMode == value)
+            // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
+            // drop any local override so the value is inherited again.
+            if (value == VisualStylesMode.Inherit
+                || (ParentInternal is { } parent && parent.VisualStylesMode == value))
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
-                OnVisualStylesModeChanged(EventArgs.Empty);
-                return;
+            }
+            else
+            {
+                Properties.AddValue(s_visualStylesModeProperty, value);
             }
 
-            Properties.AddValue(s_visualStylesModeProperty, value);
-            OnVisualStylesModeChanged(EventArgs.Empty);
+            if (oldValue != VisualStylesMode)
+            {
+                OnVisualStylesModeChanged(EventArgs.Empty);
+            }
         }
     }
 
