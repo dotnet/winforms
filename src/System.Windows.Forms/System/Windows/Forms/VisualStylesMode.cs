@@ -16,6 +16,20 @@ namespace System.Windows.Forms;
 public enum VisualStylesMode : short
 {
     /// <summary>
+    ///  The control inherits its <see cref="Control.VisualStylesMode"/> from its parent, or, for a
+    ///  top-level control, from <see cref="Application.DefaultVisualStylesMode"/>. This is the ambient
+    ///  default and is never returned by <see cref="Control.VisualStylesMode"/> after resolution.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This value is the ambient sentinel: assigning it to <see cref="Control.VisualStylesMode"/>
+    ///   clears any local override so the value is inherited again. It is not valid as the application
+    ///   default and is rejected by <see cref="Application.SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    /// </remarks>
+    Inherit = -1,
+
+    /// <summary>
     ///  The classic version of the visual renderer (.NET 8 and earlier), based on version 6 of the
     ///  common controls library.
     /// </summary>
