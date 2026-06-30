@@ -905,5 +905,7 @@ public class CheckedListBoxTests
         public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
         public new void OnMeasureItem(MeasureItemEventArgs e) => base.OnMeasureItem(e);
+
+        public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
     }
 }
