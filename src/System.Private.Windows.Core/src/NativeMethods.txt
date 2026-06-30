@@ -119,6 +119,7 @@ GetSystemMetrics
 GetThreadLocale
 GetViewportExtEx
 GetViewportOrgEx
+GetWindowDC
 GetWindowOrgEx
 GetWindowRect
 GetWindowText
@@ -188,6 +189,7 @@ MonitorFromWindow
 MONITORINFOEXW
 MONITORINFOF_*
 MultiByteToWideChar
+NCCALCSIZE_PARAMS
 NONCLIENTMETRICSW
 NS_E_WMP_CANNOT_FIND_FILE
 NS_E_WMP_DSHOW_UNSUPPORTED_FORMAT
