@@ -738,8 +738,8 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     {
         Size horizontalOverflowSize = new(70, 30);
         Size horizontalOverflowGripSize = new(80, 30);
-        Size verticalOverflowSize = new(80, 55);
-        Size verticalOverflowGripSize = new(80, 65);
+        Size verticalOverflowSize = new(80, 77);
+        Size verticalOverflowGripSize = new(80, 87);
         Size bothOverflowSize = new(70, 25);
 
         yield return new object[] { ToolStripGripStyle.Visible, ToolStripLayoutStyle.HorizontalStackWithOverflow, null, horizontalOverflowGripSize };
@@ -777,8 +777,8 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     {
         Size horizontalOverflowSize = new(70, 30);
         Size horizontalOverflowGripSize = new(80, 30);
-        Size verticalOverflowSize = new(30, 55);
-        Size verticalOverflowGripSize = new(30, 65);
+        Size verticalOverflowSize = new(30, 77);
+        Size verticalOverflowGripSize = new(30, 87);
         Size bothOverflowSize = new(70, 30);
 
         yield return new object[] { ToolStripGripStyle.Visible, ToolStripLayoutStyle.HorizontalStackWithOverflow, null, horizontalOverflowGripSize };
@@ -820,8 +820,8 @@ public class StatusStrip_StatusStripAccessibleObjectTests
     {
         Size horizontalOverflowSize = new(70, 30);
         Size horizontalOverflowGripSize = new(80, 30);
-        Size verticalOverflowSize = new(60, 60);
-        Size verticalOverflowGripSize = new(70, 70);
+        Size verticalOverflowSize = new(60, 82);
+        Size verticalOverflowGripSize = new(70, 92);
 
         yield return new object[] { ToolStripGripStyle.Visible, ToolStripLayoutStyle.HorizontalStackWithOverflow, null, horizontalOverflowGripSize };
         yield return new object[] { ToolStripGripStyle.Hidden, ToolStripLayoutStyle.HorizontalStackWithOverflow, null, horizontalOverflowSize };
@@ -933,7 +933,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
             return new ToolStripStatusLabel()
             {
                 AutoSize = false,
-                Size = new Size(50, 25)
+                Size = new Size(40, 25)
             };
         }
     }
