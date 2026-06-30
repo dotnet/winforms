@@ -34,12 +34,51 @@ public partial class ControlTests
     }
 
     [WinFormsTheory]
-    [InlineData((VisualStylesMode)(-1))]
+    [InlineData((VisualStylesMode)(-2))]
+    [InlineData((VisualStylesMode)3)]
     [InlineData((VisualStylesMode)999)]
     public void Control_VisualStylesMode_SetInvalid_ThrowsInvalidEnumArgumentException(VisualStylesMode value)
     {
         using SubControlWithVisualStyles control = new();
         Assert.Throws<InvalidEnumArgumentException>(() => control.VisualStylesMode = value);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_SetInherit_ReinheritsFromParent()
+    {
+        using SubControlWithVisualStyles parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using SubControlWithVisualStyles child = new();
+        parent.Controls.Add(child);
+
+        child.VisualStylesMode = VisualStylesMode.Disabled;
+        Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
+
+        // Setting Inherit clears the local override so the child inherits from the parent again.
+        child.VisualStylesMode = VisualStylesMode.Inherit;
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+
+        // The child is ambient again, so a later change on the parent flows through.
+        parent.VisualStylesMode = VisualStylesMode.Classic;
+        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_GetNeverReturnsInherit()
+    {
+        using SubControlWithVisualStyles control = new();
+
+        // Inherit is an assignable sentinel, but the resolved value is never Inherit.
+        control.VisualStylesMode = VisualStylesMode.Inherit;
+        Assert.NotEqual(VisualStylesMode.Inherit, control.VisualStylesMode);
+        Assert.Equal(Application.DefaultVisualStylesMode, control.VisualStylesMode);
+    }
+
+    [Fact]
+    public void Application_SetDefaultVisualStylesMode_Inherit_ThrowsArgumentException()
+    {
+        // Inherit is the ambient sentinel and is rejected before any global state is mutated, so this
+        // is safe to assert regardless of whether the default has already been set.
+        Assert.Throws<ArgumentException>(() => Application.SetDefaultVisualStylesMode(VisualStylesMode.Inherit));
     }
 
     [WinFormsFact]

@@ -695,6 +695,13 @@ public sealed partial class Application
     /// <exception cref="InvalidOperationException">
     ///  The default visual styles mode has already been set to a different value. It can only be set once.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="styleSetting"/> is <see cref="VisualStylesMode.Inherit"/>, which is not valid as
+    ///  the application-wide default because the application root has no parent to inherit from.
+    /// </exception>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///  <paramref name="styleSetting"/> is not a defined <see cref="VisualStylesMode"/> value.
+    /// </exception>
     /// <remarks>
     ///  <para>
     ///   Call this method before creating any window. If visual styles have not been enabled through
@@ -705,6 +712,21 @@ public sealed partial class Application
     /// </remarks>
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
+        // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
+        // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
+        // Latest) prevent using the source generated enum validator.
+        _ = styleSetting switch
+        {
+            VisualStylesMode.Classic => styleSetting,
+            VisualStylesMode.Disabled => styleSetting,
+            VisualStylesMode.Net11 => styleSetting,
+            VisualStylesMode.Latest => styleSetting,
+            VisualStylesMode.Inherit => throw new ArgumentException(
+                SR.Application_VisualStylesModeInheritInvalidAsDefault,
+                nameof(styleSetting)),
+            _ => throw new InvalidEnumArgumentException(nameof(styleSetting), (int)styleSetting, typeof(VisualStylesMode))
+        };
+
         if (s_defaultVisualStylesMode is { } current && current != styleSetting)
         {
             throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
