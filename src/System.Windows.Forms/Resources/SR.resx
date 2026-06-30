@@ -174,6 +174,9 @@
   <data name="Application_VisualStylesModeCanOnlyBeSetOnce" xml:space="preserve">
     <value>The default visual styles mode can only be set once and cannot be changed afterwards.</value>
   </data>
+  <data name="Application_VisualStylesModeInheritInvalidAsDefault" xml:space="preserve">
+    <value>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</value>
+  </data>
   <data name="ApplyCaption" xml:space="preserve">
     <value>&amp;Apply</value>
   </data>
