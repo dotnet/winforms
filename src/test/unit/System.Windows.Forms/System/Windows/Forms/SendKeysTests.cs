@@ -3,10 +3,32 @@
 
 #nullable disable
 
+using System.Reflection;
+
 namespace System.Windows.Forms.Tests;
 
 public class SendKeysTests
 {
+    [WinFormsTheory]
+    [InlineData("^a^c")]
+    [InlineData("+a+c")]
+    [InlineData("%f%t")]
+    public void SendKeys_ParseKeys_SequentialImmediateModifiers_DoesNotThrow(string keys)
+    {
+        MethodInfo parseKeysMethod = typeof(SendKeys).GetMethod("ParseKeys", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(parseKeysMethod);
+
+        ParameterInfo[] parameters = parseKeysMethod.GetParameters();
+        object hwnd = Activator.CreateInstance(parameters[1].ParameterType);
+
+        Exception exception = Record.Exception(() => parseKeysMethod.Invoke(null, [keys, hwnd]));
+        Exception parseException = exception is TargetInvocationException { InnerException: { } innerException }
+            ? innerException
+            : exception;
+
+        Assert.Null(parseException);
+    }
+
     [WinFormsFact(Skip = "This test depends on focus and should be run manually.")]
     public void SendKeysGrouping()
     {
