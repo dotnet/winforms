@@ -270,7 +270,7 @@ public abstract partial class UpDownBase
             int half_height = ClientSize.Height / 2;
 
             // Draw the up and down buttons
-            if (Application.IsDarkModeEnabled || !Application.RenderWithVisualStyles)
+            if (Application.IsDarkModeEnabled)
             {
                 Graphics cachedGraphics = EnsureCachedBitmap(
                     _parent._defaultButtonsWidth,
@@ -300,7 +300,7 @@ public abstract partial class UpDownBase
                     _cachedBitmap,
                     new Point(0, 0));
             }
-            else
+            else if (Application.RenderWithVisualStyles)
             {
                 VisualStyleRenderer vsr = new(_mouseOver == ButtonID.Up
                     ? VisualStyleElement.Spin.Up.Hot
@@ -340,6 +340,20 @@ public abstract partial class UpDownBase
                     hdc,
                     new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                     HWNDInternal);
+            }
+            else
+            {
+                DrawScrollButton(
+                    e.GraphicsInternal,
+                    new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
+                    ScrollButton.Up,
+                    _pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
+
+                DrawScrollButton(
+                    e.GraphicsInternal,
+                    new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
+                    ScrollButton.Down,
+                    _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
             }
 
             if (half_height != (ClientSize.Height + 1) / 2)
