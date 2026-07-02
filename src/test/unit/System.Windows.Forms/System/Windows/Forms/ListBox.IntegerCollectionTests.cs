@@ -30,7 +30,7 @@ public class ListBoxIntegerCollectionTests
         using ListBox owner = new();
         ICollection collection = new ListBox.IntegerCollection(owner);
         Assert.Empty(collection);
-        Assert.True(collection.IsSynchronized);
+        Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
 
@@ -42,7 +42,7 @@ public class ListBoxIntegerCollectionTests
         Assert.Empty(collection);
         Assert.False(collection.IsFixedSize);
         Assert.False(collection.IsReadOnly);
-        Assert.True(collection.IsSynchronized);
+        Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
 
