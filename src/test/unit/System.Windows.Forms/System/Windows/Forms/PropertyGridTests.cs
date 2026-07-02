@@ -1972,6 +1972,36 @@ public partial class PropertyGridTests
         Assert.False(property.ShouldSerializeValue(control));
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_ResetHelpForeColor_Invoke_ResetsForeColorOnly()
+    {
+        using PropertyGrid control = new()
+        {
+            HelpForeColor = Color.Red,
+            HelpBackColor = Color.Yellow
+        };
+
+        control.TestAccessor.Dynamic.ResetHelpForeColor();
+
+        Assert.Equal(SystemColors.ControlText, control.HelpForeColor);
+        Assert.Equal(Color.Yellow, control.HelpBackColor);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ResetHelpBackColor_Invoke_ResetsBackColorOnly()
+    {
+        using PropertyGrid control = new()
+        {
+            HelpForeColor = Color.Red,
+            HelpBackColor = Color.Yellow
+        };
+
+        control.TestAccessor.Dynamic.ResetHelpBackColor();
+
+        Assert.Equal(SystemColors.Control, control.HelpBackColor);
+        Assert.Equal(Color.Red, control.HelpForeColor);
+    }
+
     [WinFormsTheory]
     [InlineData(true, true, 0, 0, 1)]
     [InlineData(true, false, 1, 1, 2)]
