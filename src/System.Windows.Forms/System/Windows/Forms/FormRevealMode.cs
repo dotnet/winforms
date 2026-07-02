@@ -5,12 +5,26 @@ namespace System.Windows.Forms;
 
 #if NET11_0_OR_GREATER
 /// <summary>
-///  Specifies how WinForms presents a form while its initial appearance is prepared.
+///  Specifies how WinForms presents a top-level <see cref="Form"/> while its initial appearance is
+///  prepared.
 /// </summary>
-public enum FormAppearanceMode
+public enum FormRevealMode
 {
     /// <summary>
-    ///  Uses the classic WinForms form presentation behavior.
+    ///  The form inherits its effective reveal behavior from <see cref="Application.DefaultFormRevealMode"/>.
+    ///  This is the ambient default and is never returned by <see cref="Form.FormRevealMode"/> after
+    ///  resolution.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This value is the ambient sentinel: assigning it to <see cref="Form.FormRevealMode"/> clears any
+    ///   local override so the value is inherited from <see cref="Application.DefaultFormRevealMode"/> again.
+    ///  </para>
+    /// </remarks>
+    Inherit = -1,
+
+    /// <summary>
+    ///  Uses the classic WinForms form presentation behavior. The form is never cloaked.
     /// </summary>
     Classic = 0,
 
