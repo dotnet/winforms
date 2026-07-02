@@ -12,7 +12,7 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms.Tests;
 
-public class ApplicationTests
+public partial class ApplicationTests
 {
     [WinFormsFact]
     public void Application_CurrentCulture_Get_ReturnsExpected()
