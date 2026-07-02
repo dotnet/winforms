@@ -5600,6 +5600,11 @@ Czy chcesz zastąpić?</target>
         <target state="translated">Występuje zawsze, gdy formant jest pokazywany jako pierwszy.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnSystemTextSizeChangedDescr">
+        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
+        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOpacityDescr">
         <source>The opacity percentage of the control. </source>
         <target state="translated">Stopień nieprzezroczystości formantu. </target>
