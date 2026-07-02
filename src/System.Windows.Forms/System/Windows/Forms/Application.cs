@@ -682,10 +682,19 @@ public sealed partial class Application
     ///   recompile against a newer framework keep their existing look. Opt in to a newer renderer by
     ///   calling <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
     ///  </para>
+    ///  <para>
+    ///   While visual styles are disabled, the effective value remains <see cref="VisualStylesMode.Disabled"/>,
+    ///   even if a different default has already been requested through
+    ///   <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
     /// </remarks>
     public static VisualStylesMode DefaultVisualStylesMode
-        => s_defaultVisualStylesMode ??=
-            UseVisualStyles ? VisualStylesMode.Classic : VisualStylesMode.Disabled;
+        => s_defaultVisualStylesMode switch
+        {
+            { } visualStylesMode when UseVisualStyles => visualStylesMode,
+            { } => VisualStylesMode.Disabled,
+            _ => UseVisualStyles ? VisualStylesMode.Classic : VisualStylesMode.Disabled
+        };
 
     /// <summary>
     ///  Sets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
@@ -714,12 +723,13 @@ public sealed partial class Application
     {
         // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
         // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
-        // Latest) prevent using the source generated enum validator.
+        // LatestPreview, Latest) prevent using the source generated enum validator.
         _ = styleSetting switch
         {
             VisualStylesMode.Classic => styleSetting,
             VisualStylesMode.Disabled => styleSetting,
             VisualStylesMode.Net11 => styleSetting,
+            VisualStylesMode.LatestPreview => styleSetting,
             VisualStylesMode.Latest => styleSetting,
             VisualStylesMode.Inherit => throw new ArgumentException(
                 SR.Application_VisualStylesModeInheritInvalidAsDefault,
@@ -732,8 +742,7 @@ public sealed partial class Application
             throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
         }
 
-        // Without visual styles enabled, the only effective mode is Disabled.
-        s_defaultVisualStylesMode = UseVisualStyles ? styleSetting : VisualStylesMode.Disabled;
+        s_defaultVisualStylesMode = styleSetting;
     }
 
     /// <summary>
@@ -1124,13 +1133,6 @@ public sealed partial class Application
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
         s_comCtlSupportsVisualStylesInitialized = false;
-
-        // Keep the default visual styles mode in sync when EnableVisualStyles is called after
-        // SetDefaultVisualStylesMode(VisualStylesMode.Disabled): an explicitly disabled mode becomes Classic.
-        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
-        {
-            s_defaultVisualStylesMode = VisualStylesMode.Classic;
-        }
     }
 
     /// <summary>
