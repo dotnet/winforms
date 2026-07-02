@@ -907,6 +907,16 @@
         <target state="translated">指示组件是否处于选中状态。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">在 CheckBox 的 Appearance 属性值更改时引发的事件。</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">指示 CheckBox 是否会允许三种选中状态，而不是两种状态。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>unchecked</source>
+        <target state="new">unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">

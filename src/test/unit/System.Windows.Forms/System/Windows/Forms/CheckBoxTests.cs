@@ -542,8 +542,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         checkBox.Checked = true;
 
-        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallsCount);
+        Assert.Equal(SR.CheckBoxCheckedNotificationText, accessibleObject.LastNotificationText);
         Assert.False(checkBox.IsHandleCreated);
     }
 
@@ -736,6 +738,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
+        public int RaiseAutomationNotificationCallsCount { get; private set; }
+
+        public string LastNotificationText { get; private set; }
+
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
@@ -746,6 +752,16 @@ public class CheckBoxTests : AbstractButtonBaseTests
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+        }
+
+        internal override bool InternalRaiseAutomationNotification(
+            Automation.AutomationNotificationKind notificationKind,
+            Automation.AutomationNotificationProcessing notificationProcessing,
+            string notificationText)
+        {
+            RaiseAutomationNotificationCallsCount++;
+            LastNotificationText = notificationText;
+            return base.InternalRaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
     }
 
@@ -874,10 +890,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {

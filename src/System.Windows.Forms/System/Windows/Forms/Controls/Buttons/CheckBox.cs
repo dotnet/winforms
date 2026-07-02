@@ -5,8 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
-using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -439,9 +437,21 @@ public partial class CheckBox : ButtonBase
         // UIA events:
         if (IsAccessibilityObjectCreated)
         {
-            using var nameVariant = (VARIANT)Name;
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
-            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
+            // A fix for https://github.com/dotnet/winforms/issues/14669.
+            // Unfortunately we cannot use RaiseAutomationEvent method here since the control does not respond to
+            // State messages. Use RaiseAutomationNotification instead to announce a custom notification.
+            // See https://docs.microsoft.com/dotnet/api/system.windows.forms.accessibleobject.raiseautomationnotification.
+            string notificationText = _checkState switch
+            {
+                CheckState.Checked => SR.CheckBoxCheckedNotificationText,
+                CheckState.Indeterminate => SR.CheckBoxIndeterminateNotificationText,
+                _ => SR.CheckBoxUncheckedNotificationText,
+            };
+
+            AccessibilityObject.InternalRaiseAutomationNotification(
+                Automation.AutomationNotificationKind.ActionCompleted,
+                Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+                notificationText);
         }
 
         if (FlatStyle == FlatStyle.System)

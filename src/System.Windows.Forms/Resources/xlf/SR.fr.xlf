@@ -907,6 +907,16 @@
         <target state="translated">Indique si le composant a un état activé. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Événement déclenché lorsque la valeur de la propriété Appearance du CheckBox est modifiée.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">Indique si CheckBox autorise trois états d'activation plutôt que deux.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>unchecked</source>
+        <target state="new">unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">

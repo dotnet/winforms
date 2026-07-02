@@ -606,6 +606,15 @@
   <data name="CheckBoxOnCheckStateChangedDescr" xml:space="preserve">
     <value>Occurs whenever the CheckState property is changed.</value>
   </data>
+  <data name="CheckBoxCheckedNotificationText" xml:space="preserve">
+    <value>checked</value>
+  </data>
+  <data name="CheckBoxUncheckedNotificationText" xml:space="preserve">
+    <value>unchecked</value>
+  </data>
+  <data name="CheckBoxIndeterminateNotificationText" xml:space="preserve">
+    <value>indeterminate</value>
+  </data>
   <data name="CheckBoxThreeStateDescr" xml:space="preserve">
     <value>Indicates whether the CheckBox will allow three check states rather than two.</value>
   </data>

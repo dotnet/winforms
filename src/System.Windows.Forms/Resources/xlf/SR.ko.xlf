@@ -907,6 +907,16 @@
         <target state="translated">구성 요소가 선택된 상태인지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">Appearance 속성 값이 CheckBox에서 변경되면 이벤트가 발생합니다.</target>
@@ -925,6 +935,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">CheckBox에 두 가지가 아닌 세 가지 선택 상태를 사용할 수 있는지 여부를 나타냅니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>unchecked</source>
+        <target state="new">unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
