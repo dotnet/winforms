@@ -781,22 +781,17 @@ public partial class TrackBar : Control, ISupportInitialize
 
         int drawnTickFrequency = _tickFrequency;
         // Divide by 2 because otherwise the ticks appear as a solid line.
-        int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
         uint range = (uint)(_maximum - _minimum);
-        if (range > maxTickCount && maxTickCount != 0)
-        {
-            int calculatedTickFrequency = (int)(range / maxTickCount);
-            if (calculatedTickFrequency > drawnTickFrequency)
-            {
-                drawnTickFrequency = calculatedTickFrequency;
-            }
-        }
+        int maxTickCount = range == 0
+            ? 1
+            : (int)range / drawnTickFrequency + 1;
 
         PInvokeCore.SendMessage(this, PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-        for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
+
+        for (int i = 1; i <= maxTickCount; i++)
         {
-            LRESULT lresult = PInvokeCore.SendMessage(this, PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
-            Debug.Assert((bool)(BOOL)lresult);
+            int tickValue = Minimum + i * drawnTickFrequency;
+            PInvokeCore.SendMessage(this, PInvoke.TBM_SETTIC, (WPARAM)0, (LPARAM)tickValue);
         }
     }
 
