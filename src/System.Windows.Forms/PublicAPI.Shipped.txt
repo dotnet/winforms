@@ -2402,6 +2402,7 @@ override System.Windows.Forms.TrackBar.IsInputKey(System.Windows.Forms.Keys keyD
 override System.Windows.Forms.TrackBar.OnBackColorChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.TrackBar.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.TrackBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TrackBar.OnSizeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.TrackBar.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.TrackBar.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.TrackBar.Text.get -> string!
