@@ -155,17 +155,34 @@ public sealed partial class ImageList
 
                 try
                 {
-                    HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
-                    HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
                     bool ok;
-                    try
+                    if (!_owner.UseMaskForTransparency)
                     {
-                        ok = PInvoke.ImageList.Replace(_owner, index, hBitmap, hMask);
+                        HBITMAP hBitmap = (HBITMAP)bitmap.GetHbitmap();
+                        try
+                        {
+                            using var ilHandle = new DeleteObjectSafeHandle(_owner.Handle, ownsHandle: false);
+                            ok = PInvoke.ImageList_Replace(ilHandle, index, hBitmap, default);
+                        }
+                        finally
+                        {
+                            PInvokeCore.DeleteObject(hBitmap);
+                        }
                     }
-                    finally
+                    else
                     {
-                        PInvokeCore.DeleteObject((HGDIOBJ)hBitmap);
-                        PInvokeCore.DeleteObject((HGDIOBJ)hMask);
+                        HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+                        HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
+                        bool ok;
+                        try
+                        {
+                            ok = PInvoke.ImageList.Replace(_owner, index, hBitmap, hMask);
+                        }
+                        finally
+                        {
+                            PInvokeCore.DeleteObject((HGDIOBJ)hBitmap);
+                            PInvokeCore.DeleteObject((HGDIOBJ)hMask);
+                        }
                     }
 
                     if (!ok)
