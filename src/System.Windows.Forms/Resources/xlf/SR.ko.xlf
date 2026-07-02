@@ -5620,6 +5620,11 @@ Do you want to replace it?</source>
         <target state="translated">폼이 처음 표시될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnSystemTextSizeChangedDescr">
+        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
+        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOpacityDescr">
         <source>The opacity percentage of the control. </source>
         <target state="translated">컨트롤의 불투명도(%)입니다.</target>
