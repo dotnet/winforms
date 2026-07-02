@@ -10597,7 +10597,7 @@ public partial class RichTextBoxTests
     public void RichTextBox_OnGotFocus_DoesNotRaiseAutomationNotification(EventArgs eventArgs)
     {
         // NVDA and JAWS already announce the focused line via native MSAA on focus; an additional
-        // UIA automation notification caused the line to be read twice. The correct behaviour is
+        // UIA automation notification caused the line to be read twice. The correct behavior is
         // to let the native accessibility infrastructure handle the announcement.
         Mock<Control> mockParent = new() { CallBase = true };
         Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockParent.Object);
