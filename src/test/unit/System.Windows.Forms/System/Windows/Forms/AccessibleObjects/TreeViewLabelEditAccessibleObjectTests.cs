@@ -133,6 +133,56 @@ public class TreeViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
+    public void LabelEditNativeWindow_OnHandleChange_DuringRelease_DoesNotReinstallHooks()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+
+        labelEdit.TestAccessor.Dynamic._isReleasing = true;
+        labelEdit.TestAccessor.Dynamic.OnHandleChange();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+    }
+
+    [WinFormsFact]
+    public void TreeViewLabelEditNativeWindow_ReleaseHandle_UnhooksAndCleansUpState()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+
+        // Simulate hooks installed
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+        labelEdit.ReleaseHandle();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+        Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
+    }
+
+    [WinFormsFact]
+    public void TreeViewLabelEditNativeWindow_ReleaseHandle_PreventsReentrantHookInstallation()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+
+        labelEdit.TestAccessor.Dynamic._isReleasing = true;
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = false;
+
+        // Simulates OnHandleChange being triggered mid-release
+        labelEdit.TestAccessor.Dynamic.OnHandleChange();
+
+        // Hooks must NOT be reinstalled while releasing
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+    }
+
+    [WinFormsFact]
     public void TreeViewLabelEditUiaTextProvider_Ctor_NullOwningTreeView_ThrowsArgumentNullException()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
