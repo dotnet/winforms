@@ -182,26 +182,53 @@ public class ApplicationTests
 
 #if NET11_0_OR_GREATER
     [WinFormsFact]
-    public void Application_FormAppearanceMode_Default_ReturnsDeferred()
+    public void Application_DefaultFormRevealMode_Default_ReturnsInherit()
     {
-        Assert.Equal(FormAppearanceMode.Deferred, Application.FormAppearanceMode);
+        // Run in an isolated child process: DefaultFormRevealMode is process-wide state, and other tests
+        // in this shared-process test binary may have already called SetDefaultFormRevealMode.
+        RemoteExecutor.Invoke(() =>
+        {
+            Assert.Equal(FormRevealMode.Inherit, Application.DefaultFormRevealMode);
+        }).Dispose();
     }
 
     [WinFormsTheory]
-    [InlineData(FormAppearanceMode.Classic)]
-    [InlineData(FormAppearanceMode.Deferred)]
-    public void Application_SetFormAppearanceMode_GetReturnsExpected(FormAppearanceMode mode)
+    [InlineData(FormRevealMode.Classic)]
+    [InlineData(FormRevealMode.Deferred)]
+    [InlineData(FormRevealMode.Inherit)]
+    public void Application_SetDefaultFormRevealMode_GetReturnsExpected(FormRevealMode mode)
     {
-        Application.SetFormAppearanceMode(mode);
-        Assert.Equal(mode, Application.FormAppearanceMode);
+        Application.SetDefaultFormRevealMode(mode);
+        Assert.Equal(mode, Application.DefaultFormRevealMode);
     }
 
     [WinFormsFact]
-    public void Application_SetFormAppearanceMode_Invalid_ThrowsInvalidEnumArgumentException()
+    public void Application_SetDefaultFormRevealMode_Invalid_ThrowsInvalidEnumArgumentException()
     {
         Assert.Throws<InvalidEnumArgumentException>(
             "mode",
-            () => Application.SetFormAppearanceMode((FormAppearanceMode)int.MaxValue));
+            () => Application.SetDefaultFormRevealMode((FormRevealMode)int.MaxValue));
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Classic_ReturnsFalse()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Classic);
+        Assert.False(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Deferred_ReturnsTrue()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
+        Assert.True(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Inherit_MatchesIsDarkModeEnabled()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Inherit);
+        Assert.Equal(Application.IsDarkModeEnabled, Application.IsFormRevealDeferred);
     }
 #endif
 
