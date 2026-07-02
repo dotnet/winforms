@@ -284,6 +284,7 @@ public partial class TreeView : Control
                     if (CheckBoxes)
                     {
                         UpdateStyles();
+                        UpdateCheckBoxImages();
                     }
                     else
                     {
@@ -1869,6 +1870,18 @@ public partial class TreeView : Control
             int style = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             style |= (int)PInvoke.TVS_CHECKBOXES;
             PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
+
+            if (Application.IsDarkModeEnabled
+                && DarkModeRequestState is true
+                && RecreatingHandle)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+
+            UpdateCheckBoxImages();
         }
 
         if (ShowNodeToolTips && !DesignMode)
@@ -1989,6 +2002,44 @@ public partial class TreeView : Control
 
         _internalStateImageList?.Dispose();
         _internalStateImageList = newImageList;
+    }
+
+    private void UpdateCheckBoxImages()
+    {
+        if (!Application.IsDarkModeEnabled || DesignMode || !IsHandleCreated || !CheckBoxes || _stateImageList is not null)
+        {
+            return;
+        }
+
+        int size = StateImageSize?.Width ?? ScaleHelper.ScaleToInitialSystemDpi(16);
+        ImageList imageList = new()
+        {
+            ImageSize = new Size(size, size),
+            ColorDepth = ColorDepth.Depth32Bit
+        };
+
+        using Bitmap uncheckedBitmap = new(size, size);
+        using (Graphics g = Graphics.FromImage(uncheckedBitmap))
+        {
+            CheckBoxRenderer.DrawCheckBoxWithVisualStyles(g, new Point(0, 0), CheckBoxState.UncheckedNormal, HWNDInternal);
+        }
+
+        using Bitmap checkedBitmap = new(size, size);
+        using (Graphics g = Graphics.FromImage(checkedBitmap))
+        {
+            CheckBoxRenderer.DrawCheckBoxWithVisualStyles(g, new Point(0, 0), CheckBoxState.CheckedNormal, HWNDInternal);
+        }
+
+        using Bitmap placeholderBitmap = new(size, size);
+        // TreeView uses 1-based indexing: index 0=placeholder, 1=unchecked, 2=checked
+        imageList.Images.Add(placeholderBitmap); // Placeholder
+        imageList.Images.Add(uncheckedBitmap);
+        imageList.Images.Add(checkedBitmap);
+
+        SetStateImageList(imageList.Handle);
+
+        _internalStateImageList?.Dispose();
+        _internalStateImageList = imageList;
     }
 
     private void SetStateImageList(IntPtr handle)
@@ -3385,6 +3436,7 @@ public partial class TreeView : Control
             case PInvokeCore.WM_SYSCOLORCHANGE:
                 PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)Indent);
                 base.WndProc(ref m);
+                UpdateCheckBoxImages();
                 break;
             case PInvokeCore.WM_SETFOCUS:
                 // If we get focus through the LButtonDown .. we might have done the validation...
