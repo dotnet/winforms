@@ -11,6 +11,7 @@ using Moq;
 
 namespace System.Windows.Forms.Tests;
 
+#if NET11_0_OR_GREATER
 public class KioskModeManagerTests
 {
     [WinFormsFact]
@@ -330,6 +331,50 @@ public class KioskModeManagerTests
     }
 
     [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void KioskModeManager_OnContainerControlChanged_Invoke_CallsContainerControlChanged(EventArgs eventArgs)
+    {
+        using SubKioskModeManager manager = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(manager, sender);
+            Assert.Same(eventArgs, e);
+            callCount++;
+        };
+
+        manager.ContainerControlChanged += handler;
+        manager.OnContainerControlChanged(eventArgs);
+        Assert.Equal(1, callCount);
+
+        manager.ContainerControlChanged -= handler;
+        manager.OnContainerControlChanged(eventArgs);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void KioskModeManager_OnFullScreenChanged_Invoke_CallsFullScreenChanged(EventArgs eventArgs)
+    {
+        using SubKioskModeManager manager = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            Assert.Same(manager, sender);
+            Assert.Same(eventArgs, e);
+            callCount++;
+        };
+
+        manager.FullScreenChanged += handler;
+        manager.OnFullScreenChanged(eventArgs);
+        Assert.Equal(1, callCount);
+
+        manager.FullScreenChanged -= handler;
+        manager.OnFullScreenChanged(eventArgs);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsTheory]
     [EnumData<KioskModeWakeupSource>]
     public void KioskModeManager_WakeUpCommand_ExecutedOnWakeup_WithSourceName(KioskModeWakeupSource source)
     {
@@ -341,6 +386,8 @@ public class KioskModeManagerTests
 
         manager.OnWakeup(new KioskModeWakeupEventArgs(source));
 
+        Assert.Equal(1, command.CanExecuteCount);
+        Assert.Equal(source.ToString(), command.LastCanExecuteParameter);
         Assert.Equal(1, command.ExecuteCount);
         Assert.Equal(source.ToString(), command.LastParameter);
     }
@@ -353,6 +400,24 @@ public class KioskModeManagerTests
         Assert.Null(manager.WakeUpCommand);
 
         manager.OnWakeup(new KioskModeWakeupEventArgs(KioskModeWakeupSource.Keyboard));
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_WakeUpCommand_CanExecuteFalse_DoesNotExecute()
+    {
+        using SubKioskModeManager manager = new();
+        TestCommand command = new()
+        {
+            CanExecuteResult = false
+        };
+
+        manager.WakeUpCommand = command;
+        manager.OnWakeup(new KioskModeWakeupEventArgs(KioskModeWakeupSource.Mouse));
+
+        Assert.Equal(1, command.CanExecuteCount);
+        Assert.Equal(KioskModeWakeupSource.Mouse.ToString(), command.LastCanExecuteParameter);
+        Assert.Equal(0, command.ExecuteCount);
+        Assert.Null(command.LastParameter);
     }
 
     [WinFormsFact]
@@ -392,8 +457,201 @@ public class KioskModeManagerTests
         Assert.Same(explicitForm, manager.ContainerControl);
     }
 
+    [WinFormsFact]
+    public void KioskModeManager_Site_SetWithExplicitNull_DoesNotAssignRootComponent()
+    {
+        using Form form = new();
+        Mock<IDesignerHost> host = new();
+        host.Setup(h => h.RootComponent).Returns(form);
+
+        Mock<ISite> site = new();
+        site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(host.Object);
+
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = null
+        };
+
+        manager.Site = site.Object;
+
+        Assert.Null(manager.ContainerControl);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_Site_SetWithoutExplicitContainerControl_UpdatesResolvedRootComponent()
+    {
+        using Form firstForm = new();
+        using Form secondForm = new();
+
+        Mock<IDesignerHost> firstHost = new();
+        firstHost.Setup(h => h.RootComponent).Returns(firstForm);
+        Mock<IDesignerHost> secondHost = new();
+        secondHost.Setup(h => h.RootComponent).Returns(secondForm);
+
+        Mock<ISite> firstSite = new();
+        firstSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(firstHost.Object);
+        Mock<ISite> secondSite = new();
+        secondSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(secondHost.Object);
+
+        using KioskModeManager manager = new();
+        manager.Site = firstSite.Object;
+        Assert.Same(firstForm, manager.ContainerControl);
+
+        manager.Site = secondSite.Object;
+        Assert.Same(secondForm, manager.ContainerControl);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_BeginInit_FullScreenSet_DoesNotEnterUntilEndInit()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            WindowState = FormWindowState.Normal
+        };
+
+        using KioskModeManager manager = new();
+        ISupportInitialize supportInitialize = manager;
+
+        supportInitialize.BeginInit();
+        manager.ContainerControl = form;
+        manager.FullScreen = true;
+
+        Assert.Equal(FormBorderStyle.FixedDialog, form.FormBorderStyle);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+
+        supportInitialize.EndInit();
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
+        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_DisposeWhileFullScreen_RestoresExpected()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            WindowState = FormWindowState.Normal,
+            TopMost = false
+        };
+
+        KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            TopMostInFullScreen = true,
+            FullScreen = true
+        };
+        manager.Dispose();
+
+        Assert.Equal(FormBorderStyle.FixedDialog, form.FormBorderStyle);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(new Rectangle(10, 20, 300, 200), form.Bounds);
+        Assert.False(form.TopMost);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ProcessMessage_KeyDownThenKeyUp_TogglesOnce()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        Message keyDownMessage = Message.Create(form.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.F11, 0);
+        Message keyUpMessage = Message.Create(form.Handle, (int)PInvokeCore.WM_KEYUP, (nint)Keys.F11, 0);
+
+        manager.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        Assert.True(manager.FullScreen);
+
+        manager.TestAccessor.Dynamic.ProcessMessage(keyUpMessage);
+        Assert.True(manager.FullScreen);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ProcessMessage_MouseMove_CallsWakeup()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        int callCount = 0;
+        KioskModeWakeupEventArgs lastEventArgs = null;
+        manager.Wakeup += (sender, e) =>
+        {
+            Assert.Same(manager, sender);
+            callCount++;
+            lastEventArgs = e;
+        };
+
+        Message message = Message.Create(form.Handle, (int)PInvokeCore.WM_MOUSEMOVE, 0, 0);
+        manager.TestAccessor.Dynamic.ProcessMessage(message);
+
+        Assert.Equal(1, callCount);
+        Assert.NotNull(lastEventArgs);
+        Assert.Equal(KioskModeWakeupSource.Mouse, lastEventArgs.Source);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ProcessPowerBroadcast_Resume_CallsWakeup()
+    {
+        using SubKioskModeManager manager = new();
+        int callCount = 0;
+        KioskModeWakeupEventArgs lastEventArgs = null;
+        manager.Wakeup += (sender, e) =>
+        {
+            Assert.Same(manager, sender);
+            callCount++;
+            lastEventArgs = e;
+        };
+
+        Message message = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0012, 0);
+        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(message.WParamInternal);
+
+        Assert.Equal(1, callCount);
+        Assert.NotNull(lastEventArgs);
+        Assert.Equal(KioskModeWakeupSource.PowerResume, lastEventArgs.Source);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0x0001)]
+    [InlineData(0x0003)]
+    [InlineData(0x0005)]
+    [InlineData(0x0008)]
+    public void KioskModeManager_ProcessSessionChange_RecognizedReason_CallsWakeup(nint sessionReason)
+    {
+        using SubKioskModeManager manager = new();
+        int callCount = 0;
+        KioskModeWakeupEventArgs lastEventArgs = null;
+        manager.Wakeup += (sender, e) =>
+        {
+            Assert.Same(manager, sender);
+            callCount++;
+            lastEventArgs = e;
+        };
+
+        Message message = Message.Create(IntPtr.Zero, 0, sessionReason, 0);
+        manager.TestAccessor.Dynamic.ProcessSessionChange(message.WParamInternal);
+
+        Assert.Equal(1, callCount);
+        Assert.NotNull(lastEventArgs);
+        Assert.Equal(KioskModeWakeupSource.Session, lastEventArgs.Source);
+    }
+
     private class TestCommand : ICommand
     {
+        public bool CanExecuteResult { get; set; } = true;
+
+        public int CanExecuteCount { get; private set; }
+
+        public object LastCanExecuteParameter { get; private set; }
+
         public int ExecuteCount { get; private set; }
 
         public object LastParameter { get; private set; }
@@ -404,7 +662,12 @@ public class KioskModeManagerTests
             remove { }
         }
 
-        public bool CanExecute(object parameter) => true;
+        public bool CanExecute(object parameter)
+        {
+            CanExecuteCount++;
+            LastCanExecuteParameter = parameter;
+            return CanExecuteResult;
+        }
 
         public void Execute(object parameter)
         {
@@ -417,7 +680,14 @@ public class KioskModeManagerTests
     {
         public new bool DesignMode => base.DesignMode;
 
+        public new void OnContainerControlChanged(EventArgs e)
+            => base.OnContainerControlChanged(e);
+
+        public new void OnFullScreenChanged(EventArgs e)
+            => base.OnFullScreenChanged(e);
+
         public new void OnWakeup(KioskModeWakeupEventArgs e)
             => base.OnWakeup(e);
     }
 }
+#endif
