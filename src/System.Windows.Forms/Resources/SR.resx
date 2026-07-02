@@ -3289,6 +3289,9 @@ Do you want to replace it?</value>
   <data name="FormTopMostDescr" xml:space="preserve">
     <value>Indicates whether the form always appears above all other forms that do not have this property set to true.</value>
   </data>
+  <data name="FormFormRevealModeDescr" xml:space="preserve">
+    <value>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</value>
+  </data>
   <data name="FormTransparencyKeyDescr" xml:space="preserve">
     <value>A color which will appear transparent when painted on the form.</value>
   </data>
