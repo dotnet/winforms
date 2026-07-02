@@ -3,8 +3,6 @@
 
 #nullable disable
 
-using System.Reflection;
-
 namespace System.Windows.Forms.Tests;
 
 public class SendKeysTests
@@ -15,18 +13,9 @@ public class SendKeysTests
     [InlineData("%f%t")]
     public void SendKeys_ParseKeys_SequentialImmediateModifiers_DoesNotThrow(string keys)
     {
-        MethodInfo parseKeysMethod = typeof(SendKeys).GetMethod("ParseKeys", BindingFlags.NonPublic | BindingFlags.Static);
-        Assert.NotNull(parseKeysMethod);
-
-        ParameterInfo[] parameters = parseKeysMethod.GetParameters();
-        object hwnd = Activator.CreateInstance(parameters[1].ParameterType);
-
-        Exception exception = Record.Exception(() => parseKeysMethod.Invoke(null, [keys, hwnd]));
-        Exception parseException = exception is TargetInvocationException { InnerException: { } innerException }
-            ? innerException
-            : exception;
-
-        Assert.Null(parseException);
+        dynamic accessor = typeof(SendKeys).TestAccessor.Dynamic;
+        Exception exception = Record.Exception(() => accessor.ParseKeys(keys, default(HWND)));
+        Assert.Null(exception);
     }
 
     [WinFormsFact(Skip = "This test depends on focus and should be run manually.")]
