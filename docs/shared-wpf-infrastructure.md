@@ -48,7 +48,20 @@ The sharing mechanism involves packaging, transport, and ingestion into the Wind
 
 ## Concrete Examples and Case Studies
 
-### Case Study 1: IStream Double-Release (WPF #11401, WinForms #14257/#14296)
+### Case Study 1: Customer-visible CFG Crash in WPF Clipboard Calls (WinForms #14308)
+
+**Issue:** A WPF application targeting .NET 10 intermittently crashed in `Clipboard.ContainsText()` with a native Control Flow Guard violation (`Indirect call guard check detected invalid control transfer`).
+
+**Cross-repo impact path:**
+- The customer reported the crash as a WPF scenario in **WinForms issue #14308**
+- Root cause was in shared clipboard/OLE code from `System.Private.Windows.Core`
+- The fix was implemented in **WinForms PR #14257** and backported in **WinForms PR #14296**
+
+**Outcome:** A single fix in shared code removed the crash path for both WinForms and WPF callers.
+
+**Lesson:** Customer reports may surface in one UI stack even when the defect lives in shared transport code owned in this repository.
+
+### Case Study 2: IStream Double-Release (WPF #11401, WinForms #14257/#14296)
 
 **Issue:** When clipboard data was stored using `TYMED_ISTREAM`, the code would wrap the `IStream` pointer in a `ComScope` and then call `ReleaseStgMedium`. This caused a double-release: `ComScope.Dispose()` would release the stream, and then `ReleaseStgMedium` would release it again, leading to crashes or undefined behavior.
 
@@ -68,7 +81,7 @@ Com.IStream* pStream = (Com.IStream*)medium.hGlobal;
 
 **Lesson:** Bugs in shared clipboard/OLE code often surface in both stacks. When WPF reports a clipboard or data transfer issue, check `System.Private.Windows.Core` code in this repository.
 
-### Case Study 2: GetData Failure and Uninitialized STGMEDIUM (WPF #11402, WinForms #14257)
+### Case Study 3: GetData Failure and Uninitialized STGMEDIUM (WPF #11402, WinForms #14257)
 
 **Issue:** When clipboard content changed between `QueryGetData` (which checks availability) and `GetData` (which retrieves the data), `GetData` would fail but the code would still attempt to read from the uninitialized `STGMEDIUM` structure. This led to reading garbage data or crashing.
 
@@ -111,6 +124,7 @@ if (hr.Failed)
 2. **Regressions affect both stacks:** A bug introduced in shared code will impact both WinForms and WPF
 3. **Validation requirements:** Changes must be tested in both WinForms and WPF scenarios
 4. **Discoverability:** It may not be obvious to contributors that code changes impact WPF
+5. **Ownership ambiguity:** Code is implemented in `dotnet/winforms`, but behavior is jointly experienced by WinForms and WPF callers
 
 ## Guidance for Contributors
 
