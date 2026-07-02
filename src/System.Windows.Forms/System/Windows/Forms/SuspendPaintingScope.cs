@@ -7,12 +7,20 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Suspends painting for a target until the scope is disposed.
 /// </summary>
-public readonly ref struct SuspendPaintingScope
+/// <remarks>
+///  <para>
+///   This is a sealed class rather than a <c>ref struct</c> so the scope can span an
+///   <see langword="await"/> in an asynchronous UI event handler (for example, suspending painting for
+///   the duration of an async data reload). <see cref="Dispose"/> is idempotent: disposing the scope more
+///   than once only resumes painting once.
+///  </para>
+/// </remarks>
+public sealed class SuspendPaintingScope : IDisposable
 {
-    private readonly ISupportSuspendPainting? _target;
+    private ISupportSuspendPainting? _target;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="SuspendPaintingScope"/> struct.
+    ///  Initializes a new instance of the <see cref="SuspendPaintingScope"/> class.
     /// </summary>
     /// <param name="target">The target whose painting should be suspended.</param>
     public SuspendPaintingScope(ISupportSuspendPainting? target)
@@ -24,6 +32,12 @@ public readonly ref struct SuspendPaintingScope
     /// <summary>
     ///  Resumes painting for the target associated with this scope.
     /// </summary>
-    public void Dispose() => _target?.EndSuspendPainting();
+    public void Dispose()
+    {
+        // Idempotent: only the first Dispose call should resume painting, since the underlying
+        // refcount on the target was only incremented once, in the constructor.
+        _target?.EndSuspendPainting();
+        _target = null;
+    }
 }
 #endif

@@ -59,18 +59,6 @@ override System.Windows.Forms.TreeView.BeginSuspendPainting() -> void
 override System.Windows.Forms.TreeView.EndSuspendPainting() -> void
 static System.Windows.Forms.Application.FormAppearanceMode.get -> System.Windows.Forms.FormAppearanceMode
 static System.Windows.Forms.Application.SetFormAppearanceMode(System.Windows.Forms.FormAppearanceMode mode) -> void
-System.Windows.Forms.Control.DeferLocationChange() -> System.Windows.Forms.DeferLocationChangeScope
-System.Windows.Forms.Control.DeferLocationChange(bool suppressRender) -> System.Windows.Forms.DeferLocationChangeScope
-System.Windows.Forms.Control.DeferLocationChange(bool suppressRender, bool suspendLayout) -> System.Windows.Forms.DeferLocationChangeScope
-System.Windows.Forms.DeferLocationChangeScope
-System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope() -> void
-System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, int x, int y) -> void
-System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, int x, int y, int width, int height) -> void
-System.Windows.Forms.DeferLocationChangeScope.Defer(System.Windows.Forms.Control! control, System.Drawing.Rectangle bounds) -> void
-System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent) -> void
-System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent, bool suppressRender) -> void
-System.Windows.Forms.DeferLocationChangeScope.DeferLocationChangeScope(System.Windows.Forms.Control! parent, bool suppressRender, bool suspendLayout) -> void
-System.Windows.Forms.DeferLocationChangeScope.Dispose() -> void
 virtual System.Windows.Forms.Control.BeginSuspendPainting() -> void
 virtual System.Windows.Forms.Control.BeginSuspendRelocation() -> void
 virtual System.Windows.Forms.Control.EndSuspendPainting() -> void

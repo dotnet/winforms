@@ -13,51 +13,46 @@ public unsafe partial class Control
 {
 #if NET11_0_OR_GREATER
     /// <summary>
-    ///  Defers child-control location changes until the returned scope is disposed.
-    /// </summary>
-    /// <returns>A scope that applies deferred location changes when disposed.</returns>
-    public DeferLocationChangeScope DeferLocationChange()
-        => new(this);
-
-    /// <summary>
-    ///  Defers child-control location changes until the returned scope is disposed.
-    /// </summary>
-    /// <param name="suppressRender">
-    ///  <see langword="true"/> to suppress rendering while changes are deferred; otherwise,
-    ///  <see langword="false"/>.
-    /// </param>
-    /// <returns>A scope that applies deferred location changes when disposed.</returns>
-    public DeferLocationChangeScope DeferLocationChange(bool suppressRender)
-        => new(this, suppressRender);
-
-    /// <summary>
-    ///  Defers child-control location changes until the returned scope is disposed.
-    /// </summary>
-    /// <param name="suppressRender">
-    ///  <see langword="true"/> to suppress rendering while changes are deferred; otherwise,
-    ///  <see langword="false"/>.
-    /// </param>
-    /// <param name="suspendLayout">
-    ///  <see langword="true"/> to suspend layout while changes are deferred; otherwise,
-    ///  <see langword="false"/>.
-    /// </param>
-    /// <returns>A scope that applies deferred location changes when disposed.</returns>
-    public DeferLocationChangeScope DeferLocationChange(bool suppressRender, bool suspendLayout)
-        => new(this, suppressRender, suspendLayout);
-
-    /// <summary>
     ///  Begins a painting suspension region for this control.
     /// </summary>
-    public virtual void BeginSuspendPainting()
+    void ISupportSuspendPainting.BeginSuspendPainting() => BeginSuspendPaintingCore();
+
+    /// <summary>
+    ///  Ends a painting suspension region for this control.
+    /// </summary>
+    void ISupportSuspendPainting.EndSuspendPainting() => EndSuspendPaintingCore();
+
+    /// <summary>
+    ///  Begins a relocation suspension region for this control.
+    /// </summary>
+    void ISupportSuspendRelocation.BeginSuspendRelocation() => BeginSuspendRelocationCore();
+
+    /// <summary>
+    ///  Ends a relocation suspension region for this control.
+    /// </summary>
+    void ISupportSuspendRelocation.EndSuspendRelocation() => EndSuspendRelocationCore();
+
+    /// <summary>
+    ///  When overridden in a derived class, begins a painting suspension region for this control.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The default implementation suppresses native painting through <see cref="BeginUpdateInternal"/>.
+    ///   Controls that already have a public update mechanism (such as <see cref="ListView.BeginUpdate"/>)
+    ///   should override this method to route through that existing mechanism instead of introducing a
+    ///   second, competing suspension path.
+    ///  </para>
+    /// </remarks>
+    protected virtual void BeginSuspendPaintingCore()
     {
         BeginSuspendPaintingScope();
         BeginUpdateInternal();
     }
 
     /// <summary>
-    ///  Ends a painting suspension region for this control.
+    ///  When overridden in a derived class, ends a painting suspension region for this control.
     /// </summary>
-    public virtual void EndSuspendPainting()
+    protected virtual void EndSuspendPaintingCore()
     {
         if (EndSuspendPaintingScope())
         {
@@ -66,14 +61,14 @@ public unsafe partial class Control
     }
 
     /// <summary>
-    ///  Begins a relocation suspension region for this control.
+    ///  When overridden in a derived class, begins a relocation suspension region for this control.
     /// </summary>
-    public virtual void BeginSuspendRelocation() => SuspendLayout();
+    protected virtual void BeginSuspendRelocationCore() => SuspendLayout();
 
     /// <summary>
-    ///  Ends a relocation suspension region for this control.
+    ///  When overridden in a derived class, ends a relocation suspension region for this control.
     /// </summary>
-    public virtual void EndSuspendRelocation() => ResumeLayout();
+    protected virtual void EndSuspendRelocationCore() => ResumeLayout();
 
     internal bool BeginSuspendPaintingScope()
     {

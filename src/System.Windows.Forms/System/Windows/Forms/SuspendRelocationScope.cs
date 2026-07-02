@@ -7,12 +7,19 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Suspends relocation work for a target until the scope is disposed.
 /// </summary>
-public readonly ref struct SuspendRelocationScope
+/// <remarks>
+///  <para>
+///   This is a sealed class rather than a <c>ref struct</c> so the scope can span an
+///   <see langword="await"/> in an asynchronous UI event handler. <see cref="Dispose"/> is idempotent:
+///   disposing the scope more than once only resumes relocation work once.
+///  </para>
+/// </remarks>
+public sealed class SuspendRelocationScope : IDisposable
 {
-    private readonly ISupportSuspendRelocation? _target;
+    private ISupportSuspendRelocation? _target;
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref="SuspendRelocationScope"/> struct.
+    ///  Initializes a new instance of the <see cref="SuspendRelocationScope"/> class.
     /// </summary>
     /// <param name="target">The target whose relocation work should be suspended.</param>
     public SuspendRelocationScope(ISupportSuspendRelocation? target)
@@ -24,6 +31,10 @@ public readonly ref struct SuspendRelocationScope
     /// <summary>
     ///  Resumes relocation work for the target associated with this scope.
     /// </summary>
-    public void Dispose() => _target?.EndSuspendRelocation();
+    public void Dispose()
+    {
+        _target?.EndSuspendRelocation();
+        _target = null;
+    }
 }
 #endif
