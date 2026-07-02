@@ -2763,6 +2763,79 @@ public partial class FormTests
         smallIcon.Handle.Should().NotBe(0);
     }
 
+    [WinFormsFact]
+    public void Form_ShowDialog_WithCenterParent_PositionsCenteredOnParent()
+    {
+        using Form parentForm = new()
+        {
+            Size = new Size(400, 400),
+            StartPosition = FormStartPosition.Manual,
+            Location = new Point(200, 200)
+        };
+
+        parentForm.Show();
+        using Form childForm = new()
+        {
+            Size = new Size(200, 200),
+            StartPosition = FormStartPosition.CenterParent
+        };
+
+        Point capturedLocation = Point.Empty;
+        Size capturedSize = Size.Empty;
+        childForm.Load += (sender, e) =>
+        {
+            capturedLocation = childForm.Location;
+            capturedSize = childForm.Size;
+            childForm.Close();
+        };
+
+        childForm.ShowDialog(parentForm);
+        // Expected center: parentForm center minus half of captured childForm size.
+        int expectedX = parentForm.Left + (parentForm.Width - capturedSize.Width) / 2;
+        int expectedY = parentForm.Top + (parentForm.Height - capturedSize.Height) / 2;
+        int deltaX = SystemInformation.Border3DSize.Width + 1;
+        int deltaY = SystemInformation.Border3DSize.Height + 1;
+
+        capturedLocation.X.Should().BeInRange(expectedX - deltaX, expectedX + deltaX);
+        capturedLocation.Y.Should().BeInRange(expectedY - deltaY, expectedY + deltaY);
+    }
+
+    [WinFormsFact]
+    public void Form_Show_WithCenterParent_PositionsCenteredOnParent()
+    {
+        using Form parentForm = new()
+        {
+            Size = new Size(400, 400),
+            StartPosition = FormStartPosition.Manual,
+            Location = new Point(200, 200)
+        };
+
+        parentForm.Show();
+        using Form childForm = new()
+        {
+            Size = new Size(200, 200),
+            StartPosition = FormStartPosition.CenterParent
+        };
+
+        Point capturedLocation = Point.Empty;
+        childForm.Load += (sender, e) =>
+        {
+            capturedLocation = childForm.Location;
+        };
+
+        childForm.Show(parentForm);
+        childForm.Close();
+
+        // Expected center: parentForm center minus half of childForm size.
+        int expectedX = parentForm.Left + (parentForm.Width - childForm.Width) / 2;
+        int expectedY = parentForm.Top + (parentForm.Height - childForm.Height) / 2;
+        int deltaX = SystemInformation.Border3DSize.Width + 1;
+        int deltaY = SystemInformation.Border3DSize.Height + 1;
+
+        capturedLocation.X.Should().BeInRange(expectedX - deltaX, expectedX + deltaX);
+        capturedLocation.Y.Should().BeInRange(expectedY - deltaY, expectedY + deltaY);
+    }
+
     public partial class ParentedForm : Form
     {
         private ParentingForm _parentForm;
