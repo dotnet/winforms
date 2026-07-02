@@ -1348,6 +1348,23 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool ShouldSerializeUseVisualStyleBackColor() => _isEnableVisualStyleBackgroundSet;
 
+    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
+    {
+        // In dark mode with FlatStyle.System, the control is rendered by the system with a dark
+        // theme applied via SetWindowTheme. The default SystemColors (ControlText, Control) don't
+        // reflect the dark theme, causing dark text on a dark background. Return default to let
+        // the dark theme handle text and background colors correctly.
+        if (FlatStyle == FlatStyle.System
+            && Application.IsDarkModeEnabled
+            && !ShouldSerializeForeColor()
+            && !ShouldSerializeBackColor())
+        {
+            return default;
+        }
+
+        return base.InitializeDCForWmCtlColor(dc, msg);
+    }
+
     protected override void WndProc(ref Message m)
     {
         switch (m.MsgInternal)
