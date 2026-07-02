@@ -5626,8 +5626,14 @@ public partial class Form : ContainerControl
         {
             try
             {
-                // Show the form with an optional owner.
-                Show(owner);
+                if (owner is not null && !IsMdiChild)
+                {
+                    Show(owner);
+                }
+                else
+                {
+                    Show();
+                }
             }
             catch (Exception ex)
             {

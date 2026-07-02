@@ -191,6 +191,57 @@ public partial class FormTests
     }
 
     [WinFormsFact]
+    public async Task Form_ShowAsync_WithoutOwner_ChildCanGoBehindMainForm()
+    {
+        using Form main = new();
+        using Form child = new();
+
+        main.Show();
+
+        bool childShown = false;
+        child.Shown += (sender, e) => childShown = true;
+
+        await child.ShowAsync().ConfigureAwait(false);
+
+        Assert.True(childShown);
+
+        WINDOW_EX_STYLE childExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(child, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        Assert.False(childExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST),
+            "Child form should not have WS_EX_TOPMOST when shown without an owner.");
+
+        child.Close();
+    }
+
+    [WinFormsFact]
+    public async Task Form_ShowAsync_WithMdiChild_DoesNotThrow_AndShows()
+    {
+        using Form mdiParent = new();
+        mdiParent.IsMdiContainer = true;
+        mdiParent.Text = "Parent";
+
+        using Form child = new();
+        child.Text = "Child";
+        child.MdiParent = mdiParent;
+
+        Assert.True(child.IsMdiChild);
+        Assert.Same(mdiParent, child.MdiParent);
+
+        mdiParent.Show();
+
+        bool childShown = false;
+        child.Shown += (s, e) => childShown = true;
+        await child.ShowAsync().ConfigureAwait(false);
+
+        Assert.True(childShown);
+        Assert.True(child.Visible);
+        Assert.True(child.IsMdiChild);
+        Assert.Same(mdiParent, child.MdiParent);
+
+        child.Close();
+        mdiParent.Close();
+    }
+
+    [WinFormsFact]
     public static void Form_Ctor_show_icon_by_default()
     {
         using Form form = new();
