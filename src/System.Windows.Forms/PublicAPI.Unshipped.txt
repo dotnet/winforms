@@ -1,0 +1,4 @@
+System.Windows.Forms.TreeView.NodeLeading.get -> float
+System.Windows.Forms.TreeView.NodeLeading.set -> void
+System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
+virtual System.Windows.Forms.TreeView.OnNodeLeadingChanged(System.EventArgs! e) -> void
