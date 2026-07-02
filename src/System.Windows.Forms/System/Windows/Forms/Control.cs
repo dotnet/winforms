@@ -905,13 +905,15 @@ public unsafe partial class Control :
         set
         {
             // Can't use the source generated enum validator here, since it cannot deal with the
-            // non-contiguous Inherit (-1) and Latest (short.MaxValue) members.
+            // non-contiguous Inherit (-1), LatestPreview (short.MaxValue - 1), and Latest
+            // (short.MaxValue) members.
             _ = value switch
             {
                 VisualStylesMode.Inherit => value,
                 VisualStylesMode.Classic => value,
                 VisualStylesMode.Disabled => value,
                 VisualStylesMode.Net11 => value,
+                VisualStylesMode.LatestPreview => value,
                 VisualStylesMode.Latest => value,
                 _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
             };
