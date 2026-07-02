@@ -725,12 +725,13 @@ public sealed partial class Application
     {
         // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
         // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
-        // Latest) prevent using the source generated enum validator.
+        // LatestPreview, Latest) prevent using the source generated enum validator.
         _ = styleSetting switch
         {
             VisualStylesMode.Classic => styleSetting,
             VisualStylesMode.Disabled => styleSetting,
             VisualStylesMode.Net11 => styleSetting,
+            VisualStylesMode.LatestPreview => styleSetting,
             VisualStylesMode.Latest => styleSetting,
             VisualStylesMode.Inherit => throw new ArgumentException(
                 SR.Application_VisualStylesModeInheritInvalidAsDefault,
@@ -1134,13 +1135,6 @@ public sealed partial class Application
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
         s_comCtlSupportsVisualStylesInitialized = false;
-
-        // Keep the default visual styles mode in sync when EnableVisualStyles is called after
-        // SetDefaultVisualStylesMode(VisualStylesMode.Disabled): an explicitly disabled mode becomes Classic.
-        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
-        {
-            s_defaultVisualStylesMode = VisualStylesMode.Classic;
-        }
     }
 
     /// <summary>
