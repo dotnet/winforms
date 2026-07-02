@@ -7279,6 +7279,11 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_DPICHANGED:
                 WmDpiChanged(ref m);
                 break;
+#if NET11_0_OR_GREATER
+            case PInvokeCore.WM_SETTINGCHANGE:
+                WmSettingChange(ref m);
+                break;
+#endif
             default:
                 base.WndProc(ref m);
                 break;

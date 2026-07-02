@@ -5640,6 +5640,11 @@ Do you want to replace it?</source>
         <target state="translated">每当窗体第一次显示时发生。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnSystemTextSizeChangedDescr">
+        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
+        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOpacityDescr">
         <source>The opacity percentage of the control. </source>
         <target state="translated">控件的不透明度百分比。</target>
