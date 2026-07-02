@@ -20,12 +20,15 @@ public class CheckBoxToggleSwitchTests
         Assert.Equal(Appearance.ToggleSwitch, checkBox.Appearance);
     }
 
-    [WinFormsFact]
-    public void CheckBox_ToggleSwitch_WithVisualStylesNet11_HasPositivePreferredSize()
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.LatestPreview)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void CheckBox_ToggleSwitch_WithModernVisualStyles_HasPositivePreferredSize(VisualStylesMode visualStylesMode)
     {
         using CheckBox checkBox = new()
         {
-            VisualStylesMode = VisualStylesMode.Net11,
+            VisualStylesMode = visualStylesMode,
             Appearance = Appearance.ToggleSwitch,
             Text = "Toggle"
         };
@@ -34,6 +37,30 @@ public class CheckBoxToggleSwitchTests
 
         Assert.True(preferred.Width > 0);
         Assert.True(preferred.Height > 0);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Classic)]
+    [InlineData(VisualStylesMode.Disabled)]
+    public void CheckBox_ToggleSwitch_WithoutModernVisualStyles_UsesClassicPreferredSize(VisualStylesMode visualStylesMode)
+    {
+        using CheckBox classicCheckBox = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Appearance = Appearance.Normal,
+            Text = "Toggle"
+        };
+
+        using CheckBox toggleSwitchCheckBox = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Appearance = Appearance.ToggleSwitch,
+            Text = "Toggle"
+        };
+
+        Assert.Equal(
+            classicCheckBox.GetPreferredSize(Size.Empty),
+            toggleSwitchCheckBox.GetPreferredSize(Size.Empty));
     }
 
     [WinFormsFact]
