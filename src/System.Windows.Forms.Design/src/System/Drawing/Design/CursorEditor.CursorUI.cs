@@ -17,6 +17,7 @@ public partial class CursorEditor
         private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
         private readonly Dictionary<(Cursor cursor, int dpi), int> _cursorWidthCache = new();
+        private int _cursorWidth;
 
         public CursorUI()
         {
@@ -39,6 +40,8 @@ public partial class CursorEditor
                     Items.Add(obj);
                 }
             }
+
+            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, DeviceDpi);
         }
 
         public object? Value { get; private set; }
@@ -67,14 +70,13 @@ public partial class CursorEditor
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
-                int cursorWidth = GetCursorWidthForDpi(cursor, DeviceDpi);
 
                 e.DrawBackground();
-                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
-                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth - 1, e.Bounds.Height - 4 - 1));
+                e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth - 1, e.Bounds.Height - 4 - 1));
 
-                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, cursorWidth, e.Bounds.Height - 4));
-                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
+                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
+                e.Graphics.DrawString(text, font, brushText, e.Bounds.X + _cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
 
@@ -123,6 +125,15 @@ public partial class CursorEditor
                     }
                 }
             }
+        }
+
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            // Recalculate the representative width using the new DPI; all rows continue to share it to avoid the layout issues seen in #14167.
+            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, deviceDpiNew);
+            Invalidate();
         }
     }
 }
