@@ -7,14 +7,14 @@ public partial class RichTextBox
 {
 #if NET11_0_OR_GREATER
     /// <inheritdoc/>
-    public override void BeginSuspendPainting()
+    protected override void BeginSuspendPaintingCore()
     {
         BeginSuspendPaintingScope();
         BeginUpdateInternal();
     }
 
     /// <inheritdoc/>
-    public override void EndSuspendPainting()
+    protected override void EndSuspendPaintingCore()
     {
         if (EndSuspendPaintingScope())
         {
