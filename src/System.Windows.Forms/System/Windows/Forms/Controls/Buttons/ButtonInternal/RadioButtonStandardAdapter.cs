@@ -50,9 +50,9 @@ internal class RadioButtonStandardAdapter : RadioButtonBaseAdapter
         }
     }
 
-    private new ButtonStandardAdapter ButtonAdapter => (ButtonStandardAdapter)base.ButtonAdapter;
+    private new ButtonBaseAdapter ButtonAdapter => base.ButtonAdapter;
 
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonStandardAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreateStandardAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

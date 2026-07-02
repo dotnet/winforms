@@ -96,17 +96,7 @@ public partial class CheckBox : ButtonBase
         }
     }
 
-    private protected override bool OwnerDraw =>
-            // We want NO owner draw ONLY when we're
-            // * In Dark Mode
-            // * When _then_ the Appearance is Button
-            // * But then ONLY when we're rendering with FlatStyle.Standard
-            //   (because that would let us usually let us draw with the VisualStyleRenderers,
-            //   which cause HighDPI issues in Dark Mode).
-            (!Application.IsDarkModeEnabled
-                || Appearance != Appearance.Button
-                || FlatStyle != FlatStyle.Standard)
-                && base.OwnerDraw;
+    private protected override bool OwnerDraw => base.OwnerDraw;
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]

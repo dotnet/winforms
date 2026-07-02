@@ -89,7 +89,7 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonStandardAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreateStandardAdapter(Control);
             return adapter.GetPreferredSizeCore(proposedSize);
         }
         else
@@ -105,9 +105,9 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
         }
     }
 
-    private new ButtonStandardAdapter ButtonAdapter => (ButtonStandardAdapter)base.ButtonAdapter;
+    private new ButtonBaseAdapter ButtonAdapter => base.ButtonAdapter;
 
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonStandardAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreateStandardAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

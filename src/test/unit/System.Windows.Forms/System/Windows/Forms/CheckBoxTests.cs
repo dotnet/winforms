@@ -631,6 +631,31 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Equal(expected, actual);
     }
 
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+    [WinFormsFact]
+    public void CheckBox_OwnerDraw_AppearanceButton_FlatStyleStandard_InDarkMode_IsTrue()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/14347:
+        // CheckBox with Appearance.Button + FlatStyle.Standard must always use owner-draw,
+        // including in dark mode. If OwnerDraw returns false the control falls back to
+        // native ComCtl32 painting which renders an invisible button on dark backgrounds.
+        Application.SetColorMode(SystemColorMode.Dark);
+        try
+        {
+            using SubCheckBox control = new()
+            {
+                Appearance = Appearance.Button,
+                FlatStyle = FlatStyle.Standard
+            };
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+        }
+        finally
+        {
+            Application.SetColorMode(SystemColorMode.Classic);
+        }
+    }
+#pragma warning restore SYSLIB5002
+
     public class SubCheckBox : CheckBox
     {
         public new bool CanEnableIme => base.CanEnableIme;
