@@ -92,11 +92,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Public Property FormRevealMode As FormRevealMode
 
-        ''' <summary>
-        '''  Setting this property inside the event handler determines the
-        '''  <see cref="Application.DefaultVisualStylesMode"/> for the application.
-        ''' </summary>
-        Public Property VisualStylesMode As VisualStylesMode
+        Friend Sub New(minimumSplashScreenDisplayTime As Integer,
+                highDpiMode As HighDpiMode,
+                colorMode As SystemColorMode,
+                visualStylesMode As VisualStylesMode)
+
+            Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
+            Me.HighDpiMode = highDpiMode
+            Me.ColorMode = colorMode
+            Me.VisualStylesMode = visualStylesMode
+        End Sub
 
     End Class
 End Namespace
