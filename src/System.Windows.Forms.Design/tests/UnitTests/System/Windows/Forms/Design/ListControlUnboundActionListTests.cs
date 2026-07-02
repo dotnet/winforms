@@ -10,24 +10,28 @@ namespace System.Windows.Forms.Design.Tests;
 public sealed class ListControlUnboundActionListTests : IDisposable
 {
     private readonly ComponentDesigner _designer;
-    private readonly Mock<IComponent> _componentMock;
+    private readonly ListBox _listBox;
     private readonly ListControlUnboundActionList _actionList;
 
     public ListControlUnboundActionListTests()
     {
         _designer = new();
-        _componentMock = new();
-        _designer.Initialize(_componentMock.Object);
+        _listBox = new();
+        _designer.Initialize(_listBox);
         _actionList = new(_designer);
     }
 
-    public void Dispose() => _designer.Dispose();
+    public void Dispose()
+    {
+        _designer.Dispose();
+        _listBox.Dispose();
+    }
 
     [Fact]
     public void Constructor_ShouldInitializeDesigner() => _actionList.Should().NotBeNull();
 
     [Fact]
-    public void GetSortedActionItems_ShouldReturnCorrectItems()
+    public void GetSortedActionItems_ShouldReturnCorrectItems_WhenDataSourceIsNull()
     {
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
 
@@ -38,5 +42,16 @@ public sealed class ListControlUnboundActionListTests : IDisposable
         methodItem.DisplayName.Should().Be(SR.ListControlUnboundActionListEditItemsDisplayName);
         methodItem.Category.Should().Be(SR.ItemsCategoryName);
         methodItem.Description.Should().Be(SR.ListControlUnboundActionListEditItemsDescription);
+    }
+
+    [Fact]
+    public void GetSortedActionItems_ShouldReturnEmpty_WhenDataSourceIsSet()
+    {
+        _listBox.DataSource = new List<string> { "Item1", "Item2" };
+
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+
+        items.Should().NotBeNull();
+        items.Count.Should().Be(0);
     }
 }

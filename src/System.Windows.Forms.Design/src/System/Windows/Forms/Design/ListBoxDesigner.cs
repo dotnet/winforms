@@ -72,6 +72,12 @@ internal class ListBoxDesigner : ControlDesigner
             properties[nameof(Dock)] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
         }
 
+        // Wrap Items property to control editor availability based on DataSource
+        if (properties["Items"] is PropertyDescriptor itemsProp && Component is ListBox listBox)
+        {
+            properties["Items"] = new ItemsPropertyDescriptor(itemsProp, listBox);
+        }
+
         base.PreFilterProperties(properties);
     }
 
@@ -216,6 +222,49 @@ internal class ListBoxDesigner : ControlDesigner
             }
 
             return _actionLists;
+        }
+    }
+
+    /// <summary>
+    ///  Custom property descriptor that removes the editor when DataSource is set.
+    /// </summary>
+    private sealed class ItemsPropertyDescriptor : PropertyDescriptor
+    {
+        private readonly PropertyDescriptor _baseDescriptor;
+        private readonly ListBox _listBox;
+
+        public ItemsPropertyDescriptor(PropertyDescriptor baseDescriptor, ListBox listBox)
+            : base(baseDescriptor)
+        {
+            _baseDescriptor = baseDescriptor;
+            _listBox = listBox;
+        }
+
+        public override Type ComponentType => _baseDescriptor.ComponentType;
+
+        public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
+
+        public override Type PropertyType => _baseDescriptor.PropertyType;
+
+        public override bool CanResetValue(object component) => _baseDescriptor.CanResetValue(component);
+
+        public override object? GetValue(object? component) => _baseDescriptor.GetValue(component);
+
+        public override void ResetValue(object component) => _baseDescriptor.ResetValue(component);
+
+        public override void SetValue(object? component, object? value) => _baseDescriptor.SetValue(component, value);
+
+        public override bool ShouldSerializeValue(object component) => _baseDescriptor.ShouldSerializeValue(component);
+
+        public override object? GetEditor(Type editorBaseType)
+        {
+            // Don't provide an editor if DataSource is set
+            if (_listBox.DataSource is not null)
+            {
+                return null;
+            }
+
+            return _baseDescriptor.GetEditor(editorBaseType);
         }
     }
 }
