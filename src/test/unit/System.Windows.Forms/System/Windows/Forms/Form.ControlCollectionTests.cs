@@ -32,7 +32,7 @@ public class Form_ControlCollection
 
         int oldCount = form.Controls.Count;
 
-        Assert.ThrowsAny<Exception>(() => form.Controls.Add(tabPage));
+        Assert.ThrowsAny<ArgumentException>(() => form.Controls.Add(tabPage));
 
         Assert.Equal(oldCount, form.Controls.Count);
         Assert.False(form.Controls.Contains(tabPage));
@@ -42,19 +42,48 @@ public class Form_ControlCollection
     [WinFormsFact]
     public void ControlCollection_Clear_AfterFailedTabPageAdd_DoesNotHang()
     {
-        using Form form = new();
-        using Button button = new() { Name = "button1" };
-        using TabPage tabPage = new();
+        Exception threadException = null;
+        using ManualResetEventSlim completed = new(false);
 
-        form.Controls.Add(button);
+        Thread thread = new(() =>
+        {
+            try
+            {
+                using Form form = new();
+                using Button button = new() { Name = "button1" };
+                using TabPage tabPage = new();
 
-        Assert.ThrowsAny<Exception>(() => form.Controls.Add(tabPage));
+                form.Controls.Add(button);
 
-        // If the failed add left the TabPage half-added,
-        // Clear() could hang. After the fix, it should complete normally.
-        form.Controls.Clear();
+                Assert.ThrowsAny<ArgumentException>(() => form.Controls.Add(tabPage));
 
-        Assert.Empty(form.Controls);
-        Assert.Null(tabPage.Parent);
+                // This is the operation that previously could hang.
+                form.Controls.Clear();
+
+                Assert.Empty(form.Controls);
+                Assert.Null(tabPage.Parent);
+            }
+            catch (Exception ex)
+            {
+                threadException = ex;
+            }
+            finally
+            {
+                completed.Set();
+            }
+        });
+
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.IsBackground = true;
+        thread.Start();
+
+        Assert.True(
+            completed.Wait(TimeSpan.FromSeconds(5)),
+            "ControlCollection.Clear() appears to hang after a failed TabPage add.");
+
+        if (threadException is not null)
+        {
+            ExceptionDispatchInfo.Capture(threadException).Throw();
+        }
     }
 }

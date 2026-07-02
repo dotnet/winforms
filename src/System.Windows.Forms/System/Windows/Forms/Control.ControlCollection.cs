@@ -72,7 +72,7 @@ public partial class Control
             // Add the control
             InnerList.Add(value);
 
-            int _savedTabIndex = value._tabIndex;
+            int savedTabIndex = value._tabIndex;
 
             if (value._tabIndex == -1)
             {
@@ -119,7 +119,7 @@ public partial class Control
                         value._parent = oldParent;
                     }
 
-                    value._tabIndex = _savedTabIndex;
+                    value._tabIndex = savedTabIndex;
                     throw;
                 }
                 finally
