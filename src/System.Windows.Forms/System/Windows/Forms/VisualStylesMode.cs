@@ -49,7 +49,19 @@ public enum VisualStylesMode : short
     Net11 = 2,
 
     /// <summary>
-    ///  The latest version of the visual renderer available in the running framework.
+    ///  The latest preview version of the visual renderer available in the running framework.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This value intentionally tracks unreleased or experimental renderer behavior ahead of
+    ///   <see cref="Latest"/>. Tooling should therefore avoid treating it as a long-term stable
+    ///   serialization target.
+    ///  </para>
+    /// </remarks>
+    LatestPreview = short.MaxValue - 1,
+
+    /// <summary>
+    ///  The latest stable version of the visual renderer available in the running framework.
     /// </summary>
     Latest = short.MaxValue
 }

@@ -20,16 +20,25 @@ public partial class ControlTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [WinFormsFact]
-    public void Control_VisualStylesMode_Set_GetReturnsExpected()
+    [Fact]
+    public void VisualStylesMode_LatestPreview_HasExpectedValue()
     {
-        using SubControlWithVisualStyles control = new() { VisualStylesMode = VisualStylesMode.Net11 };
-        Assert.Equal(VisualStylesMode.Net11, control.VisualStylesMode);
+        Assert.Equal(short.MaxValue - 1, (short)VisualStylesMode.LatestPreview);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.LatestPreview)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void Control_VisualStylesMode_Set_GetReturnsExpected(VisualStylesMode value)
+    {
+        using SubControlWithVisualStyles control = new() { VisualStylesMode = value };
+        Assert.Equal(value, control.VisualStylesMode);
         Assert.False(control.IsHandleCreated);
 
         // Set the same value again - idempotent, no handle forced.
-        control.VisualStylesMode = VisualStylesMode.Net11;
-        Assert.Equal(VisualStylesMode.Net11, control.VisualStylesMode);
+        control.VisualStylesMode = value;
+        Assert.Equal(value, control.VisualStylesMode);
         Assert.False(control.IsHandleCreated);
     }
 
