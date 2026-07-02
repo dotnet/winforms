@@ -69,6 +69,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _colorMode As SystemColorMode = SystemColorMode.Classic
 
+        ' The FormRevealMode the user assigned to the ApplyApplicationsDefault event.
+        Private _formRevealMode As FormRevealMode = FormRevealMode.Classic
+
         ' We only need to show the splash screen once.
         ' Protect the user from himself if they are overriding our app model.
         Private _didSplashScreen As Boolean
@@ -197,6 +200,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As SystemColorMode)
                 _colorMode = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the <see cref="FormRevealMode"/> for the Application.
+        ''' </summary>
+        ''' <value>
+        '''  The <see cref="FormRevealMode"/> that newly created top-level forms use by
+        '''  default.
+        ''' </value>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property FormRevealMode As FormRevealMode
+            Get
+                Return _formRevealMode
+            End Get
+            Set(value As FormRevealMode)
+                _formRevealMode = value
             End Set
         End Property
 
@@ -734,7 +754,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    in a derived class and setting `MyBase.MinimumSplashScreenDisplayTime` there.
             '    We are picking this (probably) changed value up, and pass it to the ApplyDefaultsEvents
             '    where it could be modified (again). So event wins over Override over default value (2 seconds).
-            ' b) We feed the defaults for HighDpiMode, ColorMode, VisualStylesMode to the EventArgs.
+            ' b) We feed the defaults for HighDpiMode, ColorMode, FormRevealMode to the EventArgs.
             '    With the introduction of the HighDpiMode property, we changed Project System the chance to reflect
             '    those default values in the App Designer UI and have it code-generated based on a modified
             '    Application.myapp, which would result it to be set in the derived constructor.
@@ -746,7 +766,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode,
-                ColorMode) With
+                ColorMode,
+                FormRevealMode) With
             {
                 .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
@@ -765,6 +786,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
             _colorMode = applicationDefaultsEventArgs.ColorMode
+            _formRevealMode = applicationDefaultsEventArgs.FormRevealMode
 
             ' Then, it's applying what we got back as HighDpiMode.
             Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
@@ -781,6 +803,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
 
             Application.SetColorMode(_colorMode)
+            Application.SetDefaultFormRevealMode(_formRevealMode)
 
             ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
