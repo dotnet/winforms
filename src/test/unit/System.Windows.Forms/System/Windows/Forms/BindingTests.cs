@@ -615,6 +615,115 @@ public class BindingTests
         Assert.Equal(0, callCount);
     }
 
+    [WinFormsFact]
+    public void Binding_PushData_InactiveTabPageNumericUpDown_DoesNotThrow()
+    {
+        BindableData data = new();
+        using Form form = new();
+        using TabControl tabControl = new() { Dock = DockStyle.Fill };
+        using TabPage tabPage1 = new() { Text = "tabPage1" };
+        using TabPage tabPage2 = new() { Text = "tabPage2" };
+        using NumericUpDown num1 = new();
+        using NumericUpDown num2 = new();
+
+        form.Controls.Add(tabControl);
+        tabControl.TabPages.Add(tabPage1);
+        tabControl.TabPages.Add(tabPage2);
+
+        tabPage1.Controls.Add(num1);
+        tabPage2.Controls.Add(num2);
+
+        num2.Minimum = 8;
+
+        num1.DataBindings.Add(
+            nameof(num1.Value),
+            data,
+            nameof(BindableData.TestInt),
+            formattingEnabled: false,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        num2.DataBindings.Add(
+            nameof(num2.Value),
+            data,
+            nameof(BindableData.TestInt2),
+            formattingEnabled: false,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        form.Show();
+
+        Assert.Equal(tabPage1, tabControl.SelectedTab);
+
+        Exception exception = Record.Exception(() => num1.Value = 41);
+
+        Assert.Null(exception);
+    }
+
+    [WinFormsFact]
+    public void Binding_PushData_InactiveTabPageNumericUpDown_BindsCorrectlyAfterPageActivation()
+    {
+        BindableData data = new();
+        using Form form = new();
+        using TabControl tabControl = new() { Dock = DockStyle.Fill };
+        using TabPage tabPage1 = new() { Text = "tabPage1" };
+        using TabPage tabPage2 = new() { Text = "tabPage2" };
+        using NumericUpDown num1 = new();
+        using NumericUpDown num2 = new();
+
+        form.Controls.Add(tabControl);
+        tabControl.TabPages.Add(tabPage1);
+        tabControl.TabPages.Add(tabPage2);
+
+        tabPage1.Controls.Add(num1);
+        tabPage2.Controls.Add(num2);
+
+        num2.Minimum = 8;
+
+        num1.DataBindings.Add(
+            nameof(num1.Value),
+            data,
+            nameof(BindableData.TestInt),
+            formattingEnabled: false,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        num2.DataBindings.Add(
+            nameof(num2.Value),
+            data,
+            nameof(BindableData.TestInt2),
+            formattingEnabled: false,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        form.Show();
+
+        Exception exception = Record.Exception(() => num1.Value = 41);
+        Assert.Null(exception);
+
+        tabControl.SelectedTab = tabPage2;
+
+        Assert.Equal(18M, num2.Value);
+    }
+
+    [WinFormsFact]
+    public void Binding_ReadValue_UncreatedNumericUpDownWithMinimum_DoesNotThrow()
+    {
+        BindableData data = new();
+        using NumericUpDown num = new();
+
+        num.Minimum = 8;
+
+        Binding binding = num.DataBindings.Add(
+            nameof(num.Value),
+            data,
+            nameof(BindableData.TestInt2),
+            formattingEnabled: false,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        Assert.False(num.Created);
+
+        Exception exception = Record.Exception(binding.ReadValue);
+
+        Assert.Null(exception);
+    }
+
     private class SubBinding : Binding
     {
         public SubBinding(string propertyName, object dataSource, string dataMember) : base(propertyName, dataSource, dataMember)
@@ -626,5 +735,39 @@ public class BindingTests
         public new void OnFormat(ConvertEventArgs cevent) => base.OnFormat(cevent);
 
         public new void OnParse(ConvertEventArgs cevent) => base.OnParse(cevent);
+    }
+
+    private sealed class BindableData : INotifyPropertyChanged
+    {
+        private int _testInt = 42;
+        private int _testInt2 = 18;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int TestInt
+        {
+            get => _testInt;
+            set
+            {
+                if (_testInt != value)
+                {
+                    _testInt = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TestInt)));
+                }
+            }
+        }
+
+        public int TestInt2
+        {
+            get => _testInt2;
+            set
+            {
+                if (_testInt2 != value)
+                {
+                    _testInt2 = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TestInt2)));
+                }
+            }
+        }
     }
 }
