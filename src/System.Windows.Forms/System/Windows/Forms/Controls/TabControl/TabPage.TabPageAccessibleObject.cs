@@ -11,14 +11,19 @@ public partial class TabPage
 {
     internal sealed class TabPageAccessibleObject : ControlAccessibleObject
     {
-        public TabPageAccessibleObject(TabPage owningTabPage) : base(owningTabPage) { }
+        private readonly TabPage _owningTabPage;
+
+        public TabPageAccessibleObject(TabPage owningTabPage) : base(owningTabPage)
+        {
+            _owningTabPage = owningTabPage;
+        }
 
         internal override Rectangle BoundingRectangle => this.IsOwnerHandleCreated(out TabPage? owner) ?
             owner.GetPageRectangle() : Rectangle.Empty;
 
         public override AccessibleStates State => SystemIAccessible.TryGetState(GetChildId());
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => OwningTabControl?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningTabPage?.TabAccessibilityObject;
 
         private TabControl? OwningTabControl =>
             this.TryGetOwnerAs(out TabPage? owningTabPage) ? owningTabPage.ParentInternal as TabControl : null;
@@ -52,9 +57,7 @@ public partial class TabPage
 
             return direction switch
             {
-                NavigateDirection.NavigateDirection_Parent => OwningTabControl?.AccessibilityObject,
-                NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
-                NavigateDirection.NavigateDirection_PreviousSibling => null,
+                NavigateDirection.NavigateDirection_Parent => _owningTabPage?.TabAccessibilityObject,
                 _ => base.FragmentNavigate(direction)
             };
         }
@@ -78,15 +81,5 @@ public partial class TabPage
                 UIA_PATTERN_ID.UIA_ValuePatternId => false,
                 _ => base.IsPatternSupported(patternId)
             };
-
-        private TabAccessibleObject? GetNextSibling()
-        {
-            if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || OwningTabControl is null || owningTabPage != OwningTabControl.SelectedTab)
-            {
-                return null;
-            }
-
-            return OwningTabControl.TabPages.Count > 0 ? OwningTabControl.TabPages[0].TabAccessibilityObject : null;
-        }
     }
 }
