@@ -20,12 +20,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
                 colorMode As SystemColorMode,
-                formRevealMode As FormRevealMode)
+                formRevealMode As FormRevealMode,
+                visualStylesMode As VisualStylesMode)
 
             Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
             Me.HighDpiMode = highDpiMode
             Me.ColorMode = colorMode
             Me.FormRevealMode = formRevealMode
+            Me.VisualStylesMode = visualStylesMode
         End Sub
 
         ''' <summary>

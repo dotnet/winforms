@@ -784,10 +784,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode,
                 ColorMode,
-                FormRevealMode) With
+                FormRevealMode,
+                VisualStylesMode) With
             {
-                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime,
-                .VisualStylesMode = VisualStylesMode
+                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
