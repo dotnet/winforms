@@ -2388,20 +2388,7 @@ public partial class RichTextBox : TextBoxBase
         ((ContentsResizedEventHandler?)Events[s_requestSizeEvent])?.Invoke(this, e);
     }
 
-    protected override void OnGotFocus(EventArgs e)
-    {
-        base.OnGotFocus(e);
-
-        // Use parent's accessible object because RichTextBox doesn't support UIA Providers, and its
-        // AccessibilityObject doesn't get created even when assistive tech (e.g. Narrator) is used
-        if (Parent?.IsAccessibilityObjectCreated == true)
-        {
-            Parent.AccessibilityObject.InternalRaiseAutomationNotification(
-                Automation.AutomationNotificationKind.Other,
-                Automation.AutomationNotificationProcessing.MostRecent,
-                Text);
-        }
-    }
+    protected override void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
     protected override void OnHandleCreated(EventArgs e)
     {
