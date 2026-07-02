@@ -37,33 +37,59 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         callCount.Should().Be(1);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/10244")]
-    [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/10244")]
-    [SkipOnArchitecture(TestArchitectures.X86 | TestArchitectures.X64,
-        "InvokePattern.Invoke blocks on a menu item")]
+    [WinFormsFact]
     public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_WithPopUpDialog()
     {
         int callCount = 0;
+
+        using Form form = new();
+        using MenuStrip menuStrip = new();
+        using ToolStripMenuItem item1 = new();
+
+        form.Controls.Add(menuStrip);
+        menuStrip.Items.Add(item1);
+
         EventHandler handler = (sender, e) =>
         {
-            MessageBox.Show("TestDialog");
+            using Form dialog = new() { Text = "TestDialog" };
+            dialog.Shown += (_, _) => dialog.BeginInvoke(dialog.Close);
+            dialog.ShowDialog(form);
             callCount++;
         };
 
-        using ToolStripMenuItem item1 = new();
         item1.Click += handler;
-        item1.AccessibilityObject.Invoke();
 
-        foreach (Form form in Application.OpenForms)
-        {
-            if (form.Text == "TestDialog")
-            {
-                form.Close();
-                break;
-            }
-        }
+        form.Show();
+        Application.DoEvents();
+
+        item1.AccessibilityObject.Invoke();
+        Application.DoEvents();
 
         callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItemAccessibleObject_InvokePattern_Invoke_IsAsynchronous_WhenHasOwner()
+    {
+        using Form form = new();
+        using MenuStrip menuStrip = new();
+        using ToolStripMenuItem item = new();
+
+        form.Controls.Add(menuStrip);
+        menuStrip.Items.Add(item);
+
+        bool handlerCalled = false;
+        item.Click += (_, _) => handlerCalled = true;
+
+        form.Show();
+        Application.DoEvents();
+
+        item.AccessibilityObject.Invoke();
+
+        handlerCalled.Should().BeFalse();
+        Application.DoEvents();
+
+        handlerCalled.Should().BeTrue();
     }
 
     [WinFormsFact]
