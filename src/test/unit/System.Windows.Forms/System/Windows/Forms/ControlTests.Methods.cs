@@ -20,10 +20,11 @@ public partial class ControlTests
     public void Control_BeginEndSuspendPainting_InvokeWithoutHandle_Success()
     {
         using SubControl control = new();
+        ISupportSuspendPainting suspendPainting = control;
 
-        control.BeginSuspendPainting();
-        control.EndSuspendPainting();
-        control.EndSuspendPainting();
+        suspendPainting.BeginSuspendPainting();
+        suspendPainting.EndSuspendPainting();
+        suspendPainting.EndSuspendPainting();
 
         Assert.False(control.IsHandleCreated);
     }
@@ -39,30 +40,39 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
-    public void Control_BeginEndSuspendRelocation_Invoke_SuspendsLayout()
+    public void Control_SuspendPainting_ScopeDispose_IsIdempotent()
     {
         using SubControl control = new();
 
-        control.BeginSuspendRelocation();
-        control.EndSuspendRelocation();
-        control.EndSuspendRelocation();
+        SuspendPaintingScope scope = control.SuspendPainting();
+        scope.Dispose();
+        scope.Dispose();
 
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsFact]
-    public void Control_DeferLocationChange_DisposeWithoutHandles_AppliesBounds()
+    public async Task Control_SuspendPainting_ScopeSpansAwait_Success()
     {
-        using SubControl parent = new();
-        using SubControl child = new();
-        parent.Controls.Add(child);
+        using SubControl control = new();
 
-        using (DeferLocationChangeScope scope = parent.DeferLocationChange())
-        {
-            scope.Defer(child, new Rectangle(1, 2, 3, 4));
-        }
+        using SuspendPaintingScope scope = control.SuspendPainting();
+        await Task.Yield();
 
-        Assert.Equal(new Rectangle(1, 2, 3, 4), child.Bounds);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_BeginEndSuspendRelocation_Invoke_SuspendsLayout()
+    {
+        using SubControl control = new();
+        ISupportSuspendRelocation suspendRelocation = control;
+
+        suspendRelocation.BeginSuspendRelocation();
+        suspendRelocation.EndSuspendRelocation();
+        suspendRelocation.EndSuspendRelocation();
+
+        Assert.False(control.IsHandleCreated);
     }
 #endif
 
