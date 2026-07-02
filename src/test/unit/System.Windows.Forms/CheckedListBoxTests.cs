@@ -858,6 +858,34 @@ public class CheckedListBoxTests
         actRemove.Should().NotThrow();
     }
 
+    [WinFormsFact]
+    public void CheckedListBox_OnKeyPress_Space_SetsHandled_WhenSelectionModeIsNotNone()
+    {
+        using SubCheckedListBox control = new();
+        KeyPressEventArgs e = new(' ');
+
+        control.OnKeyPress(e);
+
+        e.Handled.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_OnKeyPress_Space_TogglesCheckState_OnSelectedItem()
+    {
+        using SubCheckedListBox control = new();
+        control.Items.Add("Item1");
+        control.Items.Add(string.Empty);
+        control.Items.Add(string.Empty);
+        control.CheckOnClick = true;
+        control.SelectedIndex = 1;
+        KeyPressEventArgs e = new(' ');
+
+        control.OnKeyPress(e);
+
+        control.GetItemCheckState(1).Should().Be(CheckState.Checked);
+        e.Handled.Should().BeTrue();
+    }
+
     private class SubCheckedListBox : CheckedListBox
     {
         public new int _listItemBordersHeight => base._listItemBordersHeight;
@@ -877,5 +905,7 @@ public class CheckedListBoxTests
         public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
         public new void OnMeasureItem(MeasureItemEventArgs e) => base.OnMeasureItem(e);
+
+        public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
     }
 }
