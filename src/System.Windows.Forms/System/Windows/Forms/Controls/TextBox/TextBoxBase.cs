@@ -980,28 +980,31 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
+            // Keep the pre-.NET 11 layout contract for classic or disabled visual styles. In these
+            // modes we retain the historic border sizing, but user Padding does not participate in
+            // preferred-size calculations until a modern visual styles mode is selected explicitly.
+            Size borders = SizeFromClientSize(Size.Empty);
 
             if (BorderStyle != BorderStyle.None)
             {
-                bordersAndPadding += new Size(0, 3);
+                borders += new Size(0, 3);
             }
 
             if (BorderStyle == BorderStyle.FixedSingle)
             {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-                bordersAndPadding.Width += 2;
-                bordersAndPadding.Height += 2;
+                borders.Width += 2;
+                borders.Height += 2;
             }
 
-            // We used to add the borders and padding to the returned size - this remains effectively the same:
+            // Preserve the classic border-only measurement contract until a modern visual styles mode is selected.
             padding.Left = 0;
             padding.Top = 0;
-            padding.Right = bordersAndPadding.Width;
-            padding.Bottom = bordersAndPadding.Height;
+            padding.Right = borders.Width;
+            padding.Bottom = borders.Height;
 
-            // Reduce constraints by border/padding size
-            proposedConstraints -= bordersAndPadding;
+            // Reduce constraints by the classic border size.
+            proposedConstraints -= borders;
         }
 
         Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
