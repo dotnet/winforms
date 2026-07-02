@@ -763,11 +763,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode,
-                ColorMode) With
-            {
-                .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime,
-                .VisualStylesMode = VisualStylesMode
-            }
+                ColorMode,
+                VisualStylesMode)
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
