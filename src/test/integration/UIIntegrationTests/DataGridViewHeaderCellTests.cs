@@ -15,20 +15,19 @@ public class DataGridViewHeaderCellTests : ControlTestBase
 
     public static IEnumerable<object[]> MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData()
     {
-        ButtonState expected = VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal;
-        yield return new object[] { true, -2, expected };
-        yield return new object[] { true, -1, expected };
-        yield return new object[] { true, 0, expected };
-        yield return new object[] { true, 1, expected };
-        yield return new object[] { false, -2, ButtonState.Normal };
-        yield return new object[] { false, -1, ButtonState.Normal };
-        yield return new object[] { false, 0, ButtonState.Normal };
-        yield return new object[] { false, 1, ButtonState.Normal };
+        yield return new object[] { true, -2 };
+        yield return new object[] { true, -1 };
+        yield return new object[] { true, 0 };
+        yield return new object[] { true, 1 };
+        yield return new object[] { false, -2 };
+        yield return new object[] { false, -1 };
+        yield return new object[] { false, 0 };
+        yield return new object[] { false, 1 };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(MouseLeaveUnsharesRow_WithDataGridViewMouseDown_TestData))]
-    public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStyles, int rowIndex, ButtonState expectedButtonState)
+    public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStyles, int rowIndex)
     {
         using SubDataGridViewHeaderCell cellTemplate = new();
         using DataGridViewColumn column = new()
@@ -42,8 +41,12 @@ public class DataGridViewHeaderCellTests : ControlTestBase
         control.Columns.Add(column);
         SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
         cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
-        Assert.Equal(enableHeadersVisualStyles && VisualStyleRenderer.IsSupported, cell.MouseLeaveUnsharesRow(rowIndex));
-        Assert.Equal(expectedButtonState, cell.ButtonState);
+
+        // Compute expected after the base ctor enabled visual styles; reading IsSupported during
+        // MemberData enumeration can run too early and silently degrade the visual-styles cases.
+        bool expectPushed = enableHeadersVisualStyles && VisualStyleRenderer.IsSupported;
+        Assert.Equal(expectPushed, cell.MouseLeaveUnsharesRow(rowIndex));
+        Assert.Equal(expectPushed ? ButtonState.Pushed : ButtonState.Normal, cell.ButtonState);
         Assert.False(control.IsHandleCreated);
     }
 

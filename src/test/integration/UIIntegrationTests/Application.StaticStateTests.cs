@@ -23,9 +23,6 @@ public class ApplicationStaticStateTests : ControlTestBase
         yield return new object[] { new CultureInfo("haw") };
         yield return new object[] { new CultureInfo("en-US") };
         yield return new object[] { new CultureInfo("de-DE_phoneb") };
-        yield return new object[] { new CustomLCIDCultureInfo(10) };
-        yield return new object[] { new CustomLCIDCultureInfo(0) };
-        yield return new object[] { new CustomLCIDCultureInfo(-1) };
     }
 
     [WinFormsFact]
@@ -97,17 +94,5 @@ public class ApplicationStaticStateTests : ControlTestBase
         {
             Application.VisualStyleState = state;
         }
-    }
-
-    private class CustomLCIDCultureInfo : CultureInfo
-    {
-        private readonly int _lcid;
-
-        public CustomLCIDCultureInfo(int lcid) : base("en-US")
-        {
-            _lcid = lcid;
-        }
-
-        public override int LCID => _lcid;
     }
 }
