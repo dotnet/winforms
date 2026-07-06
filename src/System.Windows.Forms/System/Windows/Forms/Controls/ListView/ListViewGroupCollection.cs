@@ -315,7 +315,7 @@ public class ListViewGroupCollection : IList
     {
         if (group.ListView is not null && group.ListView != _listView)
         {
-            throw new ArgumentException(SR.ListViewGroupBelongsToAnotherListView, nameof(group));
+            throw new ArgumentException(string.Format(SR.OnlyOneControl, group.Header), nameof(group));
         }
     }
 }

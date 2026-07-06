@@ -7045,7 +7045,4 @@ Stack trace where the illegal operation occurred was:
   <data name="FormScreenCaptureModeRequiresTopLevel" xml:space="preserve">
     <value>The FormScreenCaptureMode property can only be changed on top-level Forms with their TopLevel property set to true.</value>
   </data>
-  <data name="ListViewGroupBelongsToAnotherListView" xml:space="preserve">
-    <value>Cannot add or insert a ListViewGroup that already belongs to another ListView.</value>
-  </data>
 </root>

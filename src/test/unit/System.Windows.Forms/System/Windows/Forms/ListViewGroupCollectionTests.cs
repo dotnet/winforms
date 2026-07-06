@@ -1133,4 +1133,76 @@ public class ListViewGroupCollectionTests
         Assert.Throws<InvalidOperationException>(() => listView.Groups.Insert(0, new ListViewGroup()));
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void ListViewGroupCollection_Add_GroupAlreadyInOtherCollection_ThrowsArgumentException()
+    {
+        using ListView listView = new();
+        ListViewGroupCollection collection = listView.Groups;
+
+        using ListView otherListView = new();
+        ListViewGroupCollection otherCollection = otherListView.Groups;
+
+        ListViewGroup group = new("Group");
+        otherCollection.Add(group);
+
+        Assert.Throws<ArgumentException>("group", () => collection.Add(group));
+        Assert.Empty(collection);
+        Assert.Same(otherListView, group.ListView);
+        Assert.Same(group, Assert.Single(otherCollection));
+    }
+
+    [WinFormsFact]
+    public void ListViewGroupCollection_Insert_GroupAlreadyInOtherCollection_ThrowsArgumentException()
+    {
+        using ListView listView = new();
+        ListViewGroupCollection collection = listView.Groups;
+
+        using ListView otherListView = new();
+        ListViewGroupCollection otherCollection = otherListView.Groups;
+
+        ListViewGroup group = new("Group");
+        otherCollection.Add(group);
+
+        Assert.Throws<ArgumentException>("group", () => collection.Insert(0, group));
+        Assert.Empty(collection);
+        Assert.Same(otherListView, group.ListView);
+        Assert.Same(group, Assert.Single(otherCollection));
+    }
+
+    [WinFormsFact]
+    public void ListViewGroupCollection_IListAdd_GroupAlreadyInOtherCollection_ThrowsArgumentException()
+    {
+        using ListView listView = new();
+        IList collection = listView.Groups;
+
+        using ListView otherListView = new();
+        ListViewGroupCollection otherCollection = otherListView.Groups;
+
+        ListViewGroup group = new("Group");
+        otherCollection.Add(group);
+
+        Assert.Throws<ArgumentException>("group", () => collection.Add(group));
+        Assert.Empty(collection);
+        Assert.Same(otherListView, group.ListView);
+        Assert.Same(group, Assert.Single(otherCollection));
+    }
+
+    [WinFormsFact]
+    public void ListViewGroupCollection_AddRange_GroupAlreadyInOtherCollection_ThrowsArgumentException()
+    {
+        using ListView listView = new();
+        ListViewGroupCollection collection = listView.Groups;
+
+        using ListView otherListView = new();
+        ListViewGroupCollection otherCollection = otherListView.Groups;
+
+        ListViewGroup group = new("Group");
+        otherCollection.Add(group);
+
+        Assert.Throws<ArgumentException>("group", () => collection.AddRange(group));
+        Assert.Empty(collection);
+        Assert.Same(otherListView, group.ListView);
+        Assert.Same(group, Assert.Single(otherCollection));
+    }
 }
