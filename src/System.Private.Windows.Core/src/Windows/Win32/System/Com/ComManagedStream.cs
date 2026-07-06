@@ -122,7 +122,20 @@ internal sealed unsafe partial class ComManagedStream : IStream.Interface
         ActualizeVirtualPosition();
 
         Span<byte> buffer = new(pv, checked((int)cb));
-        int read = _dataStream.Read(buffer);
+
+        // Stream.Read can legally return fewer bytes than requested (e.g. chunked/network streams).
+        // Some callers (GDI+) treat a short read as failure, so fill the buffer until EOF.
+        int read = 0;
+        while (read < buffer.Length)
+        {
+            int bytesRead = _dataStream.Read(buffer[read..]);
+            if (bytesRead == 0)
+            {
+                break;
+            }
+
+            read += bytesRead;
+        }
 
         if (pcbRead is not null)
             *pcbRead = (uint)read;
