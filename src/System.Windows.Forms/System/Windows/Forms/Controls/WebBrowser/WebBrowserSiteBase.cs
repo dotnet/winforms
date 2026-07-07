@@ -29,7 +29,7 @@ public unsafe class WebBrowserSiteBase :
     IPropertyNotifySink.Interface,
     IDisposable
 {
-    private readonly WeakReference<WebBrowserBase> _host;
+    private readonly WebBrowserBase _host;
     private AxHost.ConnectionPointCookie? _connectionPoint;
 
     //
@@ -37,10 +37,7 @@ public unsafe class WebBrowserSiteBase :
     // this cannot be used as a standalone site. It has to be used in conjunction
     // with WebBrowserBase. Perhaps we can change it in future.
     //
-    internal WebBrowserSiteBase(WebBrowserBase h)
-    {
-        _host = new(h.OrThrowIfNull());
-    }
+    internal WebBrowserSiteBase(WebBrowserBase h) => _host = h.OrThrowIfNull();
 
     /// <summary>
     ///  Dispose(release the cookie)
@@ -64,18 +61,7 @@ public unsafe class WebBrowserSiteBase :
     /// <summary>
     ///  Retrieves the WebBrowserBase object set in the constructor.
     /// </summary>
-    internal WebBrowserBase Host
-    {
-        get
-        {
-            if (_host.TryGetTarget(out WebBrowserBase? target))
-            {
-                return target;
-            }
-
-            throw new ObjectDisposedException(nameof(WebBrowserBase));
-        }
-    }
+    internal WebBrowserBase Host => _host;
 
     // IOleControlSite methods:
     HRESULT IOleControlSite.Interface.OnControlInfoChanged() => HRESULT.S_OK;
