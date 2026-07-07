@@ -52,7 +52,8 @@ public class ComManagedStreamTests
     [Fact]
     public unsafe void Read_RequestPastEndOfStream_ReturnsOnlyAvailableBytes()
     {
-        // When more bytes are requested than remain, only the available bytes are returned (no throw on EOF).
+        // When more bytes are requested than remain, only the available bytes are returned (no throw on EOF),
+        // and a short read caused by EOF is reported with S_FALSE. See issue #14064.
         byte[] sourceBytes = new byte[50];
         for (int index = 0; index < sourceBytes.Length; index++)
         {
@@ -66,10 +67,11 @@ public class ComManagedStreamTests
         uint bytesReadCount;
         fixed (byte* destinationPointer = destinationBuffer)
         {
-            ((IStream.Interface)comManagedStream).Read(destinationPointer, (uint)destinationBuffer.Length, &bytesReadCount).Should().Be(HRESULT.S_OK);
+            ((IStream.Interface)comManagedStream).Read(destinationPointer, (uint)destinationBuffer.Length, &bytesReadCount).Should().Be(HRESULT.S_FALSE);
         }
 
         bytesReadCount.Should().Be((uint)sourceBytes.Length);
+        destinationBuffer.Take(sourceBytes.Length).Should().Equal(sourceBytes);
     }
 
     private class TestStream : MemoryStream

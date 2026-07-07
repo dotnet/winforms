@@ -140,7 +140,8 @@ internal sealed unsafe partial class ComManagedStream : IStream.Interface
         if (pcbRead is not null)
             *pcbRead = (uint)read;
 
-        return HRESULT.S_OK;
+        // Per IStream::Read, a short read caused by reaching EOF is signaled with S_FALSE.
+        return read < buffer.Length ? HRESULT.S_FALSE : HRESULT.S_OK;
     }
 
     HRESULT IStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
