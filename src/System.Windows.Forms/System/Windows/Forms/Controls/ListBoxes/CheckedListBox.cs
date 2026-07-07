@@ -779,7 +779,6 @@ public partial class CheckedListBox : ListBox
         if (e.KeyChar == ' ' && SelectionMode != SelectionMode.None)
         {
             LbnSelChange();
-            e.Handled = true;
         }
 
         if (FormattingEnabled) // We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
