@@ -90,6 +90,7 @@ virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.Even
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.VisualStylesMode.set -> void
+static System.Windows.Forms.Application.GetWindowsAccentColor() -> System.Drawing.Color
 static System.Windows.Forms.Application.SetSystemTextSizeAwareness(System.Windows.Forms.SystemTextSizeAwareness awareness) -> void
 static System.Windows.Forms.Application.SystemTextSize.get -> double
 static System.Windows.Forms.Application.SystemTextSizeAwareness.get -> System.Windows.Forms.SystemTextSizeAwareness
