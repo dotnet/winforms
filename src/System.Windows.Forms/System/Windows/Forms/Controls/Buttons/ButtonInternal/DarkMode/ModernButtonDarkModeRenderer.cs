@@ -23,7 +23,6 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     // Logical (96-DPI) layout constants. DPI-scaled via the base Scale() helper.
     private const int FocusRingThicknessLogical = 2;
     private const int FocusGapThicknessLogical = 1;
-    private const int OuterBreathingLogical = 1;
     private const int CornerRadiusLogical = 6;
     private const int ContentInsetLogical = 4;
 
@@ -64,8 +63,16 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private int CornerRadius => Math.Max(1, Scale(CornerRadiusLogical));
 
+    // When focused, the body is inset just enough to leave room for the focus ring and a single-pixel gap,
+    // keeping that gap tight so the rounded body claims as much real estate as possible.
     private protected override Padding PaddingCore
-        => new(FocusRingThickness + FocusGapThickness + Math.Max(0, Scale(OuterBreathingLogical)));
+        => new(FocusRingThickness + FocusGapThickness);
+
+    // When the focus ring is not drawn there is nothing to inset for, so the rounded body expands to fill the
+    // whole client area - covering the band the ring and its gap would otherwise occupy. This gives the button
+    // a more generous, less cramped background without changing the control's own Padding.
+    private protected override Padding GetContentPadding(bool focusRingVisible)
+        => focusRingVisible ? PaddingCore : Padding.Empty;
 
     public override Rectangle DrawButtonBackground(
         Graphics graphics,

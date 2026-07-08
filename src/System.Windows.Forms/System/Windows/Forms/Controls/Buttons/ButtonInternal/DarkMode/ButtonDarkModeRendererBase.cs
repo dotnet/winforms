@@ -15,6 +15,21 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     private protected abstract Padding PaddingCore { get; }
 
     /// <summary>
+    ///  Gets the padding that insets the button body from the control bounds for the given focus state.
+    /// </summary>
+    /// <param name="focusRingVisible">
+    ///  <see langword="true"/> when the focus ring will be drawn for this paint; otherwise <see langword="false"/>.
+    /// </param>
+    /// <remarks>
+    ///  <para>
+    ///   By default this returns <see cref="PaddingCore"/> regardless of focus. Renderers that reserve room for
+    ///   an outer focus ring can override this to return a smaller padding when the ring is not drawn, letting
+    ///   the button body grow into the space the ring and its gap would otherwise occupy.
+    ///  </para>
+    /// </remarks>
+    private protected virtual Padding GetContentPadding(bool focusRingVisible) => PaddingCore;
+
+    /// <summary>
     ///  The device DPI of the control being rendered. Set by the adapter before each paint so renderers
     ///  can DPI-scale their logical (96-DPI) constants. Defaults to 96 (100%).
     /// </summary>
@@ -62,8 +77,9 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             // Clear the background over the whole button area.
             ClearBackground(graphics, parentBackgroundColor);
 
-            // Use padding from ButtonDarkModeRenderer
-            Padding padding = PaddingCore;
+            // Use padding from the renderer. When the focus ring is not drawn, renderers may return a smaller
+            // padding so the button body expands into the space the ring and its gap would otherwise occupy.
+            Padding padding = GetContentPadding(focused && showFocusCues);
 
             Rectangle paddedBounds = new(
                 x: bounds.X + padding.Left,
