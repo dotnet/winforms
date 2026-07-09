@@ -153,12 +153,20 @@ public partial class Button : ButtonBase, IButtonControl
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseEnter"/> event.
     /// </summary>
-    protected override void OnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        base.OnMouseEnter(e);
+        UpdatePopupKeyCapInteractionState();
+    }
 
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseLeave"/> event.
     /// </summary>
-    protected override void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        base.OnMouseLeave(e);
+        UpdatePopupKeyCapInteractionState();
+    }
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -244,6 +252,7 @@ public partial class Button : ButtonBase, IButtonControl
         }
 
         base.OnMouseUp(mevent);
+        UpdatePopupKeyCapInteractionState();
     }
 
     protected override void OnTextChanged(EventArgs e)
