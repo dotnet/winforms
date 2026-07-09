@@ -110,4 +110,157 @@ public class ThreadContextTests
         mockContext2.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(3));
         mockContext3.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(2));
     }
+
+    [WinFormsFact]
+    public void ThreadContext_CurrentForm_ReflectsChangedMainForm()
+    {
+        RunOnStaThread(() =>
+        {
+            using Form form1 = new()
+            {
+                Text = "Form1"
+            };
+
+            using Form form2 = new()
+            {
+                Text = "Form2"
+            };
+
+            using ApplicationContext context = new(form1);
+
+            Form currentFormBeforeChange = null;
+            Form currentFormAfterChange = null;
+
+            form1.Shown += (_, _) =>
+            {
+                currentFormBeforeChange = GetThreadContextCurrentForm();
+
+                context.MainForm = form2;
+
+                currentFormAfterChange = GetThreadContextCurrentForm();
+
+                context.ExitThread();
+            };
+
+            Application.Run(context);
+
+            Assert.Same(form1, currentFormBeforeChange);
+            Assert.Same(form2, currentFormAfterChange);
+        });
+    }
+
+    [WinFormsFact]
+    public void ThreadContext_CurrentForm_ReflectsNullMainForm()
+    {
+        RunOnStaThread(() =>
+        {
+            using Form form = new()
+            {
+                Text = "Form1"
+            };
+
+            using ApplicationContext context = new(form);
+
+            Form currentFormBeforeChange = null;
+            Form currentFormAfterChange = null;
+
+            form.Shown += (_, _) =>
+            {
+                currentFormBeforeChange = GetThreadContextCurrentForm();
+
+                context.MainForm = null;
+
+                currentFormAfterChange = GetThreadContextCurrentForm();
+
+                context.ExitThread();
+            };
+
+            Application.Run(context);
+
+            Assert.Same(form, currentFormBeforeChange);
+            Assert.Null(currentFormAfterChange);
+        });
+    }
+
+    [WinFormsFact]
+    public void ThreadContext_CurrentForm_ReflectsMultipleMainFormChanges()
+    {
+        RunOnStaThread(() =>
+        {
+            using Form form1 = new()
+            {
+                Text = "Form1"
+            };
+
+            using Form form2 = new()
+            {
+                Text = "Form2"
+            };
+
+            using Form form3 = new()
+            {
+                Text = "Form3"
+            };
+
+            using ApplicationContext context = new(form1);
+
+            Form currentFormAfterFirstChange = null;
+            Form currentFormAfterSecondChange = null;
+
+            form1.Shown += (_, _) =>
+            {
+                context.MainForm = form2;
+                currentFormAfterFirstChange = GetThreadContextCurrentForm();
+
+                context.MainForm = form3;
+                currentFormAfterSecondChange = GetThreadContextCurrentForm();
+
+                context.ExitThread();
+            };
+
+            Application.Run(context);
+
+            Assert.Same(form2, currentFormAfterFirstChange);
+            Assert.Same(form3, currentFormAfterSecondChange);
+        });
+    }
+
+    private static void RunOnStaThread(Action action)
+    {
+        Exception exception = null;
+
+        Thread thread = new(() =>
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+        });
+
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.IsBackground = true;
+        thread.Start();
+
+        Assert.True(thread.Join(TimeSpan.FromSeconds(30)), "The STA test thread timed out.");
+
+        if (exception is not null)
+        {
+            throw exception;
+        }
+    }
+
+    private static Form GetThreadContextCurrentForm()
+    {
+        Application.ThreadContext threadContext = Application.ThreadContext.FromCurrent();
+
+        PropertyInfo currentFormProperty = typeof(Application.ThreadContext).GetProperty(
+            "CurrentForm",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+
+        return (Form)currentFormProperty.GetValue(threadContext);
+    }
 }
