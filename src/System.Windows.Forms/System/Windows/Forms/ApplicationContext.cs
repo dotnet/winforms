@@ -54,18 +54,10 @@ public class ApplicationContext : IDisposable
         get => _mainForm;
         set
         {
-            if (ReferenceEquals(_mainForm, value))
-            {
-                return;
-            }
-
-            Form? oldMainForm = _mainForm;
             EventHandler onClose = OnMainFormDestroy;
             _mainForm?.HandleDestroyed -= onClose;
             _mainForm = value;
             _mainForm?.HandleDestroyed += onClose;
-
-            Application.ThreadContext.Current?.OnMainFormChanged(this, oldMainForm, value);
         }
     }
 

@@ -62,7 +62,14 @@ public sealed partial class Application
         // A private field on Application that stores the callback delegate
         private MessageLoopCallback? _messageLoopCallback;
 
-        protected Form? CurrentForm { get; private set; }
+        private Form? _currentFormOverride;
+
+        protected Form? CurrentForm
+        {
+            get => _currentFormOverride ?? ApplicationContext?.MainForm;
+            private set => _currentFormOverride = value;
+        }
+
         protected bool PostedQuit { get; private set; }
 
         /// <summary>
@@ -94,23 +101,6 @@ public sealed partial class Application
         public virtual void EnsureReadyForIdle() { }
 
         internal bool CustomThreadExceptionHandlerAttached => _threadExceptionHandler is not null;
-
-        internal static ThreadContext? Current => t_currentThreadContext;
-
-        internal void OnMainFormChanged(ApplicationContext applicationContext, Form? oldMainForm, Form? newMainForm)
-        {
-            if (!ReferenceEquals(ApplicationContext, applicationContext))
-            {
-                return;
-            }
-
-            // Only update the cached form if it is still tracking the previous MainForm.
-            // This avoids clobbering unrelated state such as a current modal form.
-            if (ReferenceEquals(CurrentForm, oldMainForm))
-            {
-                CurrentForm = newMainForm;
-            }
-        }
 
         /// <summary>
         ///  Retrieves the actual parking form. This will demand create the parking window if it needs to.
@@ -736,8 +726,8 @@ public sealed partial class Application
                 ApplicationContext.MainForm?.Visible = true;
             }
 
-            Form? oldForm = CurrentForm;
-            if (context is not null)
+            Form? oldFormOverride = _currentFormOverride;
+            if (context is not null && reason != msoloop.Main)
             {
                 CurrentForm = context.MainForm;
             }
@@ -821,7 +811,7 @@ public sealed partial class Application
                     }
                 }
 
-                CurrentForm = oldForm;
+                _currentFormOverride = oldFormOverride;
                 s_totalMessageLoopCount--;
                 _messageLoopCount--;
 

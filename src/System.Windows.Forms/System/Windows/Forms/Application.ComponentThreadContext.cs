@@ -260,11 +260,11 @@ public sealed partial class Application
             }
             else if (reason is msoloop.DoEvents or msoloop.DoEventsModal)
             {
-                result = LocalModalMessageLoop(form: null, resolveMainFormDynamically: false);
+                result = LocalModalMessageLoop(null);
             }
             else
             {
-                result = LocalModalMessageLoop(form: null, resolveMainFormDynamically: true);
+                result = LocalModalMessageLoop(CurrentForm);
             }
 
             return result;
@@ -279,7 +279,7 @@ public sealed partial class Application
             }
         }
 
-        private bool LocalModalMessageLoop(Form? form, bool resolveMainFormDynamically = false)
+        private bool LocalModalMessageLoop(Form? form)
         {
             try
             {
@@ -289,10 +289,6 @@ public sealed partial class Application
 
                 while (continueLoop)
                 {
-                    Form? currentForm = resolveMainFormDynamically
-                                    ? ApplicationContext?.MainForm ?? CurrentForm
-                                    : form;
-
                     if (PInvoke.GetMessage(&msg, HWND.Null, 0, 0))
                     {
                         if (!PreTranslateMessage(ref msg))
@@ -301,12 +297,12 @@ public sealed partial class Application
                             PInvoke.DispatchMessage(&msg);
                         }
 
-                        if (currentForm is not null)
+                        if (form is not null)
                         {
-                            continueLoop = !currentForm.CheckCloseDialog(false);
+                            continueLoop = !form .CheckCloseDialog(false);
                         }
                     }
-                    else if (currentForm is null)
+                    else if (form is null)
                     {
                         break;
                     }
