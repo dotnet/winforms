@@ -1429,5 +1429,54 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                     break;
             }
         }
+
+        // WM_SETTINGCHANGE is handled outside the OwnerDraw branches so that theme updates
+        // are applied regardless of the current FlatStyle or dark-mode render path.
+        if (m.MsgInternal == PInvokeCore.WM_SETTINGCHANGE && IsImmersiveColorSet(m.LParamInternal))
+        {
+            ApplyDarkModeOnDemand();
+        }
+
+        base.WndProc(ref m);
+    }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if the <see cref="PInvokeCore.WM_SETTINGCHANGE"/>
+    ///  message signals an immersive color-set change (i.e. the user toggled dark/light mode).
+    /// </summary>
+    private static unsafe bool IsImmersiveColorSet(IntPtr lParam)
+        => lParam != IntPtr.Zero
+            && new string((char*)lParam).Equals("ImmersiveColorSet", StringComparison.Ordinal);
+
+    /// <summary>
+    ///  Applies the button theme for the current color mode and repaints the control.
+    /// </summary>
+    private void ApplyDarkModeOnDemand()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        PInvoke.SetWindowTheme(
+            HWND,
+            Application.IsDarkModeEnabled ? $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}" : null,
+            pszSubIdList: null);
+
+        Invalidate();
+    }
+
+    /// <inheritdoc cref="Control.OnHandleCreated(EventArgs)"/>
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+
+        // base.OnHandleCreated already applies SetWindowTheme for dark mode (both initial
+        // creation and handle recreation). Only call ApplyDarkModeOnDemand when in light
+        // mode to ensure a previously applied dark theme is reset on handle recreation.
+        if (!Application.IsDarkModeEnabled)
+        {
+            ApplyDarkModeOnDemand();
+        }
     }
 }
