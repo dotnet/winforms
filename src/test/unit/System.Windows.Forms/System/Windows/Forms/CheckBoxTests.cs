@@ -486,6 +486,49 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.NotNull(checkBoxSndAdptr);
     }
 
+    public static TheoryData<FlatStyle> ModernButtonFlatStyles => new()
+    {
+        FlatStyle.Standard,
+        FlatStyle.Flat,
+        FlatStyle.Popup
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void CheckBox_AppearanceButton_ModernVisualStyles_PaintsWithoutThrow(FlatStyle flatStyle)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            Size = new Size(120, 40),
+            Checked = true
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => box.CreateStandardAdapter(),
+            FlatStyle.Popup => box.CreatePopupAdapter(),
+            _ => box.CreateFlatAdapter()
+        };
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(Point.Empty, box.Size));
+
+        // Appearance.Button under modern visual styles is delegated to the shared modern button renderer.
+        Exception exception = Record.Exception(() =>
+        {
+            adapter.PaintUp(e, CheckState.Checked);
+            adapter.PaintOver(e, CheckState.Checked);
+            adapter.PaintDown(e, CheckState.Checked);
+        });
+
+        Assert.Null(exception);
+    }
+
     [WinFormsFact]
     public void CheckBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
