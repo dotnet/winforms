@@ -529,6 +529,101 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Null(exception);
     }
 
+    [WinFormsTheory]
+    [InlineData(ContentAlignment.MiddleLeft, false)]
+    [InlineData(ContentAlignment.TopLeft, false)]
+    [InlineData(ContentAlignment.BottomLeft, false)]
+    [InlineData(ContentAlignment.MiddleCenter, false)]
+    [InlineData(ContentAlignment.TopCenter, false)]
+    [InlineData(ContentAlignment.MiddleRight, true)]
+    [InlineData(ContentAlignment.TopRight, true)]
+    [InlineData(ContentAlignment.BottomRight, true)]
+    public void CheckBox_ToggleSwitch_CheckAlign_PositionsSwitch(ContentAlignment checkAlign, bool switchOnRight)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = "x",
+            CheckAlign = checkAlign,
+            Checked = true,
+            Size = new Size(180, 30),
+            BackColor = Color.White
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+        box.CreateControl();
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        // The modern toggle switch is owner-painted from CheckBox.OnPaint via the animated renderer.
+        Exception exception = Record.Exception(() => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+        Assert.Null(exception);
+
+        // Locate the switch's solid band (tall columns). Its rounded end caps are symmetric, so the only
+        // horizontal asymmetry in the non-background pixels comes from the caption: whichever side of the
+        // switch has more non-background pixels is the side the caption sits on.
+        (int switchLeft, int switchRight) = FindSwitchColumnBand(bitmap);
+        Assert.True(switchLeft >= 0, "The toggle switch was not found in the rendered bitmap.");
+
+        int pixelsLeftOfSwitch = CountNonBackgroundPixels(bitmap, 0, switchLeft);
+        int pixelsRightOfSwitch = CountNonBackgroundPixels(bitmap, switchRight + 1, box.Width);
+        bool captionOnLeft = pixelsLeftOfSwitch > pixelsRightOfSwitch;
+
+        // Caption on the left means the switch is on the right, and vice versa.
+        Assert.Equal(switchOnRight, captionOnLeft);
+    }
+
+    private static (int Left, int Right) FindSwitchColumnBand(Bitmap bitmap)
+    {
+        // Only the switch fills most of a column's height; caption glyph columns do not.
+        int threshold = bitmap.Height / 2;
+        int left = -1;
+        int right = -1;
+
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            int columnCount = 0;
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() != Color.White.ToArgb())
+                {
+                    columnCount++;
+                }
+            }
+
+            if (columnCount >= threshold)
+            {
+                if (left < 0)
+                {
+                    left = x;
+                }
+
+                right = x;
+            }
+        }
+
+        return (left, right);
+    }
+
+    private static int CountNonBackgroundPixels(Bitmap bitmap, int xStart, int xEnd)
+    {
+        int background = Color.White.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = xStart; x < xEnd; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() != background)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     [WinFormsFact]
     public void CheckBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
