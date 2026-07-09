@@ -652,7 +652,7 @@ public class BindingTests
         form.Show();
 
         Assert.Equal(tabPage1, tabControl.SelectedTab);
-
+        Assert.False(num2.Created);
         Exception exception = Record.Exception(() => num1.Value = 41);
 
         Assert.Null(exception);
@@ -694,6 +694,8 @@ public class BindingTests
 
         form.Show();
 
+        Assert.Equal(tabPage1, tabControl.SelectedTab);
+        Assert.False(num2.Created);
         Exception exception = Record.Exception(() => num1.Value = 41);
         Assert.Null(exception);
 
