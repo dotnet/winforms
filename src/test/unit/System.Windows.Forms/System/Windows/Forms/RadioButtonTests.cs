@@ -15,6 +15,49 @@ namespace System.Windows.Forms.Tests;
 
 public class RadioButtonTests : AbstractButtonBaseTests
 {
+    public static TheoryData<FlatStyle> ModernButtonFlatStyles => new()
+    {
+        FlatStyle.Standard,
+        FlatStyle.Flat,
+        FlatStyle.Popup
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void RadioButton_AppearanceButton_ModernVisualStyles_PaintsWithoutThrow(FlatStyle flatStyle)
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            Size = new Size(120, 40),
+            Checked = true
+        };
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => control.CreateStandardAdapter(),
+            FlatStyle.Popup => control.CreatePopupAdapter(),
+            _ => control.CreateFlatAdapter()
+        };
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(Point.Empty, control.Size));
+
+        // Appearance.Button under modern visual styles is delegated to the shared modern button renderer.
+        Exception exception = Record.Exception(() =>
+        {
+            adapter.PaintUp(e, CheckState.Checked);
+            adapter.PaintOver(e, CheckState.Checked);
+            adapter.PaintDown(e, CheckState.Checked);
+        });
+
+        Assert.Null(exception);
+    }
+
     [WinFormsFact]
     public void RadioButton_Ctor_Default()
     {
