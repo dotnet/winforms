@@ -299,7 +299,7 @@ public sealed partial class Application
 
                         if (form is not null)
                         {
-                            continueLoop = !form .CheckCloseDialog(false);
+                            continueLoop = !form.CheckCloseDialog(false);
                         }
                     }
                     else if (form is null)
