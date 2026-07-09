@@ -42,7 +42,7 @@ if ($isArm64Platform) {
     }
 }
 
-$buildScript = Join-Path $PSScriptRoot 'common\Build.ps1'
+$buildScript = Join-Path $PSScriptRoot 'common\build.ps1'
 $baseArgs = @()
 
 if ($useNativeTools) {
