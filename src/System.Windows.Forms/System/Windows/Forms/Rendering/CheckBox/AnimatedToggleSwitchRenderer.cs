@@ -64,21 +64,27 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         graphics.Clear(Control.BackColor);
 
-        switch (CheckBox.TextAlign)
+        // The switch position follows CheckAlign (as the caption sits opposite the check), so the default
+        // MiddleLeft places the switch on the left and the caption on the right. Only the horizontal component
+        // is honored; the switch stays vertically centered.
+        if (IsSwitchOnRight(CheckBox.CheckAlign))
         {
-            case ContentAlignment.MiddleLeft:
-            case ContentAlignment.TopLeft:
-            case ContentAlignment.BottomLeft:
-                RenderSwitch(graphics, new Rectangle(textSize.Width + textGap, switchY, switchWidth, switchHeight), circleDiameter);
-                RenderText(graphics, new Point(0, textY));
-                break;
-
-            default:
-                RenderSwitch(graphics, new Rectangle(0, switchY, switchWidth, switchHeight), circleDiameter);
-                RenderText(graphics, new Point(switchWidth + textGap, textY));
-                break;
+            RenderSwitch(graphics, new Rectangle(textSize.Width + textGap, switchY, switchWidth, switchHeight), circleDiameter);
+            RenderText(graphics, new Point(0, textY));
+        }
+        else
+        {
+            RenderSwitch(graphics, new Rectangle(0, switchY, switchWidth, switchHeight), circleDiameter);
+            RenderText(graphics, new Point(switchWidth + textGap, textY));
         }
     }
+
+    // The switch is drawn on the right only for the right-aligned CheckAlign values; left- and center-aligned
+    // values (including the MiddleLeft default) keep the switch on the left.
+    private static bool IsSwitchOnRight(ContentAlignment checkAlign) => checkAlign is
+        ContentAlignment.TopRight or
+        ContentAlignment.MiddleRight or
+        ContentAlignment.BottomRight;
 
     private void RenderText(Graphics graphics, Point position) =>
         TextRenderer.DrawText(graphics, CheckBox.Text, CheckBox.Font, position, CheckBox.ForeColor);
