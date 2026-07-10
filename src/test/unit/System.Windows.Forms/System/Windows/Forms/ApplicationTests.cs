@@ -179,23 +179,24 @@ public class ApplicationTests
     }
 
     [Fact]
-    public void Application_SetDefaultVisualStylesMode_LatestPreview_IsWriteOnce()
+    public void Application_SetDefaultVisualStylesMode_IsWriteOnce()
     {
         using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
         {
-            Assert.Equal(short.MaxValue - 1, (short)VisualStylesMode.LatestPreview);
-
             VisualStylesMode expectedInitialMode = Application.UseVisualStyles
                 ? VisualStylesMode.Classic
                 : VisualStylesMode.Disabled;
             Assert.Equal(expectedInitialMode, Application.DefaultVisualStylesMode);
 
-            Application.SetDefaultVisualStylesMode(VisualStylesMode.LatestPreview);
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
             Assert.Equal(
-                Application.UseVisualStyles ? VisualStylesMode.LatestPreview : VisualStylesMode.Disabled,
+                Application.UseVisualStyles ? VisualStylesMode.Net11 : VisualStylesMode.Disabled,
                 Application.DefaultVisualStylesMode);
-            Application.SetDefaultVisualStylesMode(VisualStylesMode.LatestPreview);
 
+            // Setting the same value again is allowed.
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+
+            // Setting a different value after the mode has been established throws.
             Assert.Throws<InvalidOperationException>(
                 () => Application.SetDefaultVisualStylesMode(VisualStylesMode.Latest));
         });
