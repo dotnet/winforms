@@ -3043,6 +3043,47 @@ public class UpDownBaseTests
         actualButtonsToolTipText.Should().BeEmpty();
     }
 
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_LaysOutButtonsSideBySide()
+    {
+        using SubUpDownBase upDownBase = new();
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+        upDownBase.Size = new Size(120, 30);
+        upDownBase.CreateControl();
+
+        // Skip when the environment forces Classic (for example High Contrast), since the modern
+        // side-by-side layout only applies under an effective modern mode.
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Rectangle editBounds = upDownBase._upDownEdit.Bounds;
+        Rectangle buttonsBounds = upDownBase._upDownButtons.Bounds;
+
+        // The modern button band is twice as wide as the classic (stacked) band.
+        buttonsBounds.Width.Should().Be(upDownBase._defaultButtonsWidth * 2);
+
+        // Edit and buttons are laid out horizontally (side by side), not stacked, and do not overlap.
+        buttonsBounds.Left.Should().BeGreaterThanOrEqualTo(editBounds.Right);
+        buttonsBounds.Height.Should().BeGreaterThan(0);
+        editBounds.Width.Should().BeGreaterThan(0);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_DrawToBitmap_DoesNotThrow()
+    {
+        using SubUpDownBase upDownBase = new();
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+        upDownBase.Size = new Size(120, 30);
+        upDownBase.CreateControl();
+
+        using Bitmap bitmap = new(upDownBase.Width, upDownBase.Height);
+        Action drawToBitmap = () => upDownBase.DrawToBitmap(bitmap, new Rectangle(Point.Empty, upDownBase.Size));
+
+        drawToBitmap.Should().NotThrow();
+    }
+
     private class CustomValidateUpDownBase : UpDownBase
     {
         public new bool ChangingText
