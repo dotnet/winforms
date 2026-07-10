@@ -4399,13 +4399,8 @@ public unsafe partial class Control :
 
     internal void BeginUpdateInternal()
     {
-        if (!IsHandleCreated)
-        {
-            return;
-        }
-
         int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
-        if (updateCount == 0)
+        if (updateCount == 0 && IsHandleCreated)
         {
             PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
         }
@@ -5102,14 +5097,13 @@ public unsafe partial class Control :
         int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
         if (updateCount > 0)
         {
-            Debug.Assert(IsHandleCreated, "Handle should be created by now");
             updateCount--;
             Properties.AddOrRemoveValue(
                 s_updateCountProperty,
                 updateCount,
                 defaultValue: 0);
 
-            if (updateCount == 0)
+            if (updateCount == 0 && IsHandleCreated)
             {
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 if (invalidate)
@@ -7444,6 +7438,11 @@ public unsafe partial class Control :
                     hwnd: HWND,
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
+            }
+
+            if (IsUpdating())
+            {
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
             }
         }
 
