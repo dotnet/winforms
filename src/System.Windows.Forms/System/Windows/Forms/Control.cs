@@ -913,7 +913,6 @@ public unsafe partial class Control :
                 VisualStylesMode.Classic => value,
                 VisualStylesMode.Disabled => value,
                 VisualStylesMode.Net11 => value,
-                VisualStylesMode.LatestPreview => value,
                 VisualStylesMode.Latest => value,
                 _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
             };
@@ -944,6 +943,36 @@ public unsafe partial class Control :
 
     private void ResetVisualStylesMode()
         => Properties.RemoveValue(s_visualStylesModeProperty);
+
+    /// <summary>
+    ///  Gets the <see cref="Forms.VisualStylesMode"/> that controls should actually honor when deciding
+    ///  <see cref="CreateParams"/> or paint behavior, after applying the Windows High Contrast clamp.
+    /// </summary>
+    /// <value>
+    ///  <see cref="VisualStylesMode.Disabled"/> when visual styles are explicitly disabled;
+    ///  <see cref="VisualStylesMode.Classic"/> when Windows High Contrast is active (so custom non-client
+    ///  painting, which does not honor the High Contrast palette, is bypassed); otherwise the raw
+    ///  <see cref="VisualStylesMode"/> value.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   In-box controls <b>MUST</b> read this property, not the raw <see cref="VisualStylesMode"/>, whenever they
+    ///   decide their <see cref="CreateParams"/> or paint behavior. The raw <see cref="VisualStylesMode"/> stays
+    ///   pure so that before/after comparisons across a High Contrast transition remain meaningful; the High
+    ///   Contrast clamp lives here instead.
+    ///  </para>
+    ///  <para>
+    ///   Windows High Contrast can be toggled while the application is running, so this value is <b>not stable</b>
+    ///   across such a transition and <b>must not be cached</b>. Affected controls rebuild their handles on the
+    ///   transition (see <see cref="Form.OnSystemColorsChanged(EventArgs)"/>), which re-reads this value.
+    ///  </para>
+    /// </remarks>
+    private protected VisualStylesMode EffectiveVisualStylesMode
+        => VisualStylesMode is VisualStylesMode.Disabled
+            ? VisualStylesMode.Disabled
+            : SystemInformation.HighContrast
+                ? VisualStylesMode.Classic
+                : VisualStylesMode;
 
     /// <summary>
     ///  Gets the default <see cref="Forms.VisualStylesMode"/> for the control, which is ambient to

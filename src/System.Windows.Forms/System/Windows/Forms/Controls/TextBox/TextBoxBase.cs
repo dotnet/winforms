@@ -447,6 +447,16 @@ public abstract partial class TextBoxBase : Control
                 }
             }
 
+            if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            {
+                // Under a modern VisualStylesMode we custom-draw the frame in the non-client area (see OnNcPaint),
+                // so the natively drawn border must be suppressed to avoid a double frame. Only the effective
+                // Win32 styles are stripped here; the public BorderStyle property remains authoritative for what
+                // the custom non-client paint draws.
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
+            }
+
             return cp;
         }
     }
@@ -826,7 +836,7 @@ public abstract partial class TextBoxBase : Control
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
     public int PreferredHeight =>
-        VisualStylesMode switch
+        EffectiveVisualStylesMode switch
         {
             VisualStylesMode.Disabled => PreferredHeightClassic,
             VisualStylesMode.Classic => PreferredHeightClassic,
@@ -992,7 +1002,7 @@ public abstract partial class TextBoxBase : Control
             format |= TextFormatFlags.WordBreak;
         }
 
-        if (VisualStylesMode >= VisualStylesMode.Net11)
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
             // For modern Visual Styles we take the carved adorner band (including scrollbars
             // and the user Padding) into account when measuring.
@@ -1663,7 +1673,7 @@ public abstract partial class TextBoxBase : Control
 
     protected override unsafe void OnGotFocus(EventArgs e)
     {
-        if (VisualStylesMode >= VisualStylesMode.Net11)
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
             // We need to invalidate the non-client area so the focused adorners are drawn.
             PInvoke.RedrawWindow(
@@ -1678,7 +1688,7 @@ public abstract partial class TextBoxBase : Control
 
     protected override unsafe void OnLostFocus(EventArgs e)
     {
-        if (VisualStylesMode >= VisualStylesMode.Net11)
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
             // We need to invalidate the non-client area so the un-focused adorners are drawn.
             PInvoke.RedrawWindow(
@@ -1693,7 +1703,7 @@ public abstract partial class TextBoxBase : Control
 
     protected override unsafe void OnSizeChanged(EventArgs e)
     {
-        if (VisualStylesMode >= VisualStylesMode.Net11)
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
             // Invalidate the non-client area to ensure the border chrome is drawn correctly after a resize.
             PInvoke.RedrawWindow(
@@ -2255,7 +2265,7 @@ public abstract partial class TextBoxBase : Control
     /// </remarks>
     private protected virtual unsafe void InitializeClientArea(HDC hDC, HWND hwnd)
     {
-        if (VisualStylesMode < VisualStylesMode.Net11
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11
             || _triggerNewClientSizeRequest)
         {
             return;
@@ -2337,7 +2347,7 @@ public abstract partial class TextBoxBase : Control
     /// </remarks>
     private void WmNcPaint(ref Message m)
     {
-        if (VisualStylesMode < VisualStylesMode.Net11)
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11)
         {
             base.WndProc(ref m);
             return;
