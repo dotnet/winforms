@@ -72,7 +72,6 @@ public class KioskModeManager : Component, ISupportInitialize
     private const uint PowerRequestContextVersion = 0;
     private const POWER_REQUEST_CONTEXT_FLAGS PowerRequestContextSimpleString = (POWER_REQUEST_CONTEXT_FLAGS)0x00000001;
     private const uint NotifyForThisSession = 0;
-    private const nint PbtApmResumeSuspend = 0x0007;
     private const nint PbtApmResumeAutomatic = 0x0012;
     private const nint WtsConsoleConnect = 0x0001;
     private const nint WtsRemoteConnect = 0x0003;
@@ -91,6 +90,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private bool _pendingFullScreen;
     private bool _initializing;
     private bool _isCursorHidden;
+    private readonly List<Control> _parentChain = [];
     private KioskModeMessageFilter? _messageFilter;
     private KioskModeFormObserver? _formObserver;
     private Timer? _mousePointerAutoHideTimer;
@@ -364,8 +364,18 @@ public class KioskModeManager : Component, ISupportInitialize
                 return;
             }
 
+            bool previousValue = _suppressPowerSaving;
             _suppressPowerSaving = value;
-            UpdatePowerRequest();
+
+            try
+            {
+                UpdatePowerRequest();
+            }
+            catch
+            {
+                _suppressPowerSaving = previousValue;
+                throw;
+            }
         }
     }
 
@@ -715,6 +725,7 @@ public class KioskModeManager : Component, ISupportInitialize
             return;
         }
 
+        UpdateParentChangedSubscriptions();
         EnsureMessageMonitoring();
         ResolveTargetForm();
         if (_pendingFullScreen && _targetForm is not null)
@@ -725,6 +736,8 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void DetachFromForm()
     {
+        ClearParentChangedSubscriptions();
+
         if (_messageFilter is not null)
         {
             Application.RemoveMessageFilter(_messageFilter);
@@ -735,6 +748,52 @@ public class KioskModeManager : Component, ISupportInitialize
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
         _targetForm = null;
+    }
+
+    private void OnContainerControlParentChanged(object? sender, EventArgs e)
+    {
+        UpdateParentChangedSubscriptions();
+
+        Form? newTarget = _containerControl as Form ?? _containerControl?.FindForm();
+        if (ReferenceEquals(_targetForm, newTarget))
+        {
+            return;
+        }
+
+        bool restoreFullScreen = _pendingFullScreen || _isFullScreen;
+
+        if (_isFullScreen)
+        {
+            ExitFullScreen();
+        }
+
+        ResolveTargetForm();
+
+        if (restoreFullScreen)
+        {
+            FullScreen = true;
+        }
+    }
+
+    private void UpdateParentChangedSubscriptions()
+    {
+        ClearParentChangedSubscriptions();
+
+        for (Control? current = _containerControl; current is not null; current = current.Parent)
+        {
+            current.ParentChanged += OnContainerControlParentChanged;
+            _parentChain.Add(current);
+        }
+    }
+
+    private void ClearParentChangedSubscriptions()
+    {
+        foreach (Control control in _parentChain)
+        {
+            control.ParentChanged -= OnContainerControlParentChanged;
+        }
+
+        _parentChain.Clear();
     }
 
     private Form? ResolveTargetForm()
@@ -769,10 +828,7 @@ public class KioskModeManager : Component, ISupportInitialize
         form.WindowState = FormWindowState.Normal;
         form.FormBorderStyle = FormBorderStyle.None;
 
-        if (_topMostInFullScreen)
-        {
-            form.TopMost = true;
-        }
+        form.TopMost = _topMostInFullScreen;
 
         if (_hideTaskbar)
         {
@@ -815,8 +871,7 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void ProcessPowerBroadcast(WPARAM powerEvent)
     {
-        nint value = (nint)powerEvent.Value;
-        if (value is PbtApmResumeAutomatic or PbtApmResumeSuspend)
+        if ((nint)powerEvent.Value == PbtApmResumeAutomatic)
         {
             RaiseWakeup(KioskModeWakeupSource.PowerResume);
         }
@@ -864,11 +919,16 @@ public class KioskModeManager : Component, ISupportInitialize
         }
     }
 
-    private void ProcessKeyboardActivity(Keys keyData, Keys modifiers)
+    private void ProcessKeyboardActivity(Keys keyData, Keys modifiers, bool isRepeat)
     {
         // Any keyboard input wakes the kiosk experience, even when it does not
         // match one of the configured fullscreen control keys.
         RaiseWakeup(KioskModeWakeupSource.Keyboard);
+
+        if (isRepeat)
+        {
+            return;
+        }
 
         Keys keyCode = keyData & Keys.KeyCode;
 
@@ -1005,7 +1065,11 @@ public class KioskModeManager : Component, ISupportInitialize
         if (message.MsgInternal == PInvokeCore.WM_KEYDOWN
             || message.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
         {
-            ProcessKeyboardActivity((Keys)(nint)message.WParamInternal, Control.ModifierKeys & Keys.Modifiers);
+            bool isRepeat = ((nuint)(nint)message.LParamInternal & (1u << 30)) != 0;
+            ProcessKeyboardActivity(
+                (Keys)(nint)message.WParamInternal,
+                Control.ModifierKeys & Keys.Modifiers,
+                isRepeat);
         }
         else if (message.MsgInternal >= PInvokeCore.WM_MOUSEFIRST
             && message.MsgInternal <= PInvokeCore.WM_MOUSELAST)
