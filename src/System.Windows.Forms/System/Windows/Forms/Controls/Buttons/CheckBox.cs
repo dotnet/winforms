@@ -122,7 +122,7 @@ public partial class CheckBox : ButtonBase
         get
         {
             return Appearance == Appearance.ToggleSwitch
-                && VisualStylesMode >= VisualStylesMode.Net11
+                && EffectiveVisualStylesMode >= VisualStylesMode.Net11
                 && !ThreeState;
         }
     }

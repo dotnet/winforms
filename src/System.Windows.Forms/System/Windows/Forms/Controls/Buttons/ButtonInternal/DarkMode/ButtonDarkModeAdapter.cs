@@ -12,7 +12,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
     internal ButtonDarkModeAdapter(ButtonBase control) : base(control)
     {
-        bool modern = control.VisualStylesMode >= VisualStylesMode.Net11;
+        bool modern = control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
 
         _buttonDarkModeRenderer = control.FlatStyle switch
         {

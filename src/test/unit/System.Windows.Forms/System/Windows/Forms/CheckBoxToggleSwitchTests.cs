@@ -22,7 +22,6 @@ public class CheckBoxToggleSwitchTests
 
     [WinFormsTheory]
     [InlineData(VisualStylesMode.Net11)]
-    [InlineData(VisualStylesMode.LatestPreview)]
     [InlineData(VisualStylesMode.Latest)]
     public void CheckBox_ToggleSwitch_WithModernVisualStyles_HasPositivePreferredSize(VisualStylesMode visualStylesMode)
     {

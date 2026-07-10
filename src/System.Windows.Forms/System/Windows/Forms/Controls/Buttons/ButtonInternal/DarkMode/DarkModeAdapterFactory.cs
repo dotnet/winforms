@@ -9,7 +9,7 @@ internal static class DarkModeAdapterFactory
     // the control opts into the modern .NET 11 visual styles (modern renderer, in either dark or light scheme).
     private static bool UseOwnerDrawnAdapter(ButtonBase control)
     {
-        return Application.IsDarkModeEnabled || control.VisualStylesMode >= VisualStylesMode.Net11;
+        return Application.IsDarkModeEnabled || control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
     }
 
     public static ButtonBaseAdapter CreateFlatAdapter(ButtonBase control) =>
