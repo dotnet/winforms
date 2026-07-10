@@ -228,6 +228,90 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_FullScreen_SetBeforeUserControlIsParented_EntersWhenParented()
+    {
+        using Form form = new();
+        using UserControl userControl = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = userControl,
+            FullScreen = true
+        };
+
+        form.Controls.Add(userControl);
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_UserControlReparented_TransfersToNewForm()
+    {
+        using Form firstForm = new()
+        {
+            FormBorderStyle = FormBorderStyle.FixedDialog
+        };
+        using Form secondForm = new();
+        using UserControl userControl = new();
+        firstForm.Controls.Add(userControl);
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = userControl,
+            FullScreen = true
+        };
+
+        secondForm.Controls.Add(userControl);
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormBorderStyle.FixedDialog, firstForm.FormBorderStyle);
+        Assert.Equal(FormBorderStyle.None, secondForm.FormBorderStyle);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_AncestorReparented_TransfersToNewForm()
+    {
+        using Form firstForm = new()
+        {
+            FormBorderStyle = FormBorderStyle.FixedDialog
+        };
+        using Form secondForm = new();
+        using Panel panel = new();
+        using UserControl userControl = new();
+        panel.Controls.Add(userControl);
+        firstForm.Controls.Add(panel);
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = userControl,
+            FullScreen = true
+        };
+
+        secondForm.Controls.Add(panel);
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormBorderStyle.FixedDialog, firstForm.FormBorderStyle);
+        Assert.Equal(FormBorderStyle.None, secondForm.FormBorderStyle);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_SetBeforeAncestorIsParented_EntersWhenParented()
+    {
+        using Form form = new();
+        using Panel panel = new();
+        using UserControl userControl = new();
+        panel.Controls.Add(userControl);
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = userControl,
+            FullScreen = true
+        };
+
+        form.Controls.Add(panel);
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_ContainerControl_SetWhileFullScreen_RestoresPreviousForm()
     {
         using Form form = new()
@@ -295,6 +379,28 @@ public class KioskModeManagerTests
         Assert.Equal(FormBorderStyle.FixedDialog, form.FormBorderStyle);
         Assert.Equal(FormWindowState.Normal, form.WindowState);
         Assert.Equal(new Rectangle(10, 20, 300, 200), form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_TopMostDisabled_OverridesAndRestoresFormTopMost()
+    {
+        using Form form = new()
+        {
+            TopMost = true
+        };
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            TopMostInFullScreen = false
+        };
+
+        manager.FullScreen = true;
+
+        Assert.False(form.TopMost);
+
+        manager.FullScreen = false;
+
+        Assert.True(form.TopMost);
     }
 
     [WinFormsFact]
@@ -573,6 +679,28 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_ProcessMessage_RepeatedKeyDown_DoesNotToggleAgain()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        Message keyDownMessage = Message.Create(form.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.F11, 0);
+        Message repeatedKeyDownMessage = Message.Create(
+            form.Handle,
+            (int)PInvokeCore.WM_KEYDOWN,
+            (nint)Keys.F11,
+            1 << 30);
+
+        manager.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        manager.TestAccessor.Dynamic.ProcessMessage(repeatedKeyDownMessage);
+
+        Assert.True(manager.FullScreen);
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_ProcessMessage_MouseMove_CallsWakeup()
     {
         using Form form = new();
@@ -599,7 +727,7 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
-    public void KioskModeManager_ProcessPowerBroadcast_Resume_CallsWakeup()
+    public void KioskModeManager_ProcessPowerBroadcast_InteractiveResume_CallsWakeupOnce()
     {
         using SubKioskModeManager manager = new();
         int callCount = 0;
@@ -611,8 +739,10 @@ public class KioskModeManagerTests
             lastEventArgs = e;
         };
 
-        Message message = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0012, 0);
-        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(message.WParamInternal);
+        Message automaticResume = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0012, 0);
+        Message interactiveResume = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0007, 0);
+        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(automaticResume.WParamInternal);
+        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(interactiveResume.WParamInternal);
 
         Assert.Equal(1, callCount);
         Assert.NotNull(lastEventArgs);
