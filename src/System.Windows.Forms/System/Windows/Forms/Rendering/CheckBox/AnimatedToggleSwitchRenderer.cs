@@ -49,12 +49,10 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     /// <param name="graphics">The graphics object to render into.</param>
     public override void RenderControl(Graphics graphics)
     {
-        int dpiScale = DpiScale;
-
-        int switchWidth = SwitchWidthLogical * dpiScale;
-        int switchHeight = SwitchHeightLogical * dpiScale;
-        int circleDiameter = CircleDiameterLogical * dpiScale;
-        int textGap = TextGapLogical * dpiScale;
+        int switchWidth = Control.LogicalToDeviceUnits(SwitchWidthLogical);
+        int switchHeight = Control.LogicalToDeviceUnits(SwitchHeightLogical);
+        int circleDiameter = Control.LogicalToDeviceUnits(CircleDiameterLogical);
+        int textGap = Control.LogicalToDeviceUnits(TextGapLogical);
 
         Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
 
@@ -67,15 +65,27 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         // The switch position follows CheckAlign (as the caption sits opposite the check), so the default
         // MiddleLeft places the switch on the left and the caption on the right. Only the horizontal component
         // is honored; the switch stays vertically centered.
-        if (IsSwitchOnRight(CheckBox.CheckAlign))
+        if (IsSwitchOnRight(CheckBox.RtlTranslatedCheckAlign))
         {
-            RenderSwitch(graphics, new Rectangle(textSize.Width + textGap, switchY, switchWidth, switchHeight), circleDiameter);
-            RenderText(graphics, new Point(0, textY));
+            int switchX = Math.Max(0, CheckBox.ClientRectangle.Right - switchWidth);
+            int textX = Math.Max(0, switchX - textGap - textSize.Width);
+            RenderSwitch(graphics, new Rectangle(switchX, switchY, switchWidth, switchHeight), circleDiameter);
+            RenderText(graphics, new Point(textX, textY));
         }
         else
         {
             RenderSwitch(graphics, new Rectangle(0, switchY, switchWidth, switchHeight), circleDiameter);
             RenderText(graphics, new Point(switchWidth + textGap, textY));
+        }
+
+        if (CheckBox.Focused && CheckBox.ShowFocusCuesInternal)
+        {
+            Rectangle focusBounds = Rectangle.Inflate(CheckBox.ClientRectangle, -1, -1);
+            ControlPaint.DrawFocusRectangle(
+                graphics,
+                focusBounds,
+                CheckBox.ForeColor,
+                CheckBox.BackColor);
         }
     }
 
@@ -86,17 +96,26 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         ContentAlignment.MiddleRight or
         ContentAlignment.BottomRight;
 
-    private void RenderText(Graphics graphics, Point position) =>
-        TextRenderer.DrawText(graphics, CheckBox.Text, CheckBox.Font, position, CheckBox.ForeColor);
+    private void RenderText(Graphics graphics, Point position)
+        => TextRenderer.DrawText(
+            graphics,
+            CheckBox.Text,
+            CheckBox.Font,
+            position,
+            CheckBox.Enabled ? CheckBox.ForeColor : SystemColors.GrayText);
 
     private void RenderSwitch(Graphics graphics, Rectangle rect, int circleDiameter)
     {
         // The background color flips at 80% of the animation so the thumb travels visibly before the color change.
-        Color backgroundColor = CheckBox.Checked ^ (AnimationProgress < 0.8f)
-            ? SystemColors.Highlight
-            : SystemColors.ControlDark;
+        Color backgroundColor = !CheckBox.Enabled
+            ? SystemColors.Control
+            : CheckBox.Checked ^ (AnimationProgress < 0.8f)
+                ? SystemColors.Highlight
+                : SystemColors.ControlDark;
 
-        Color circleColor = SystemColors.ControlText;
+        Color circleColor = CheckBox.Enabled
+            ? SystemColors.ControlText
+            : SystemColors.GrayText;
 
         // Works both for the running and settled states (settled progress is 1, so the thumb rests in place).
         float circlePosition = CheckBox.Checked
@@ -105,7 +124,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
         using var circleBrush = circleColor.GetCachedSolidBrushScope();
-        using var backgroundPen = SystemColors.WindowFrame.GetCachedPenScope(2 * DpiScale);
+        using var backgroundPen =
+            SystemColors.WindowFrame.GetCachedPenScope(Control.LogicalToDeviceUnits(2));
 
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -129,7 +149,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             graphics.DrawRectangle(backgroundPen, rect);
         }
 
-        graphics.FillEllipse(circleBrush, rect.X + circlePosition, rect.Y + (2.5f * DpiScale), circleDiameter, circleDiameter);
+        float circleTop = rect.Y + ((rect.Height - circleDiameter) / 2f);
+        graphics.FillEllipse(circleBrush, rect.X + circlePosition, circleTop, circleDiameter, circleDiameter);
 
         static float EaseOut(float t) => (1 - t) * (1 - t);
     }
@@ -141,6 +162,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     protected override void OnAnimationEnded()
     {
+        StopAnimation();
         AnimationProgress = 1;
+        Invalidate();
     }
 }
