@@ -12262,36 +12262,6 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Called when the system default font has changed (e.g. via Accessibility → Text Size in Windows Settings).
-    ///  Notifies this control and all descendants that use the default font so that they update their font handle
-    ///  and raise <see cref="OnFontChanged"/>, which in turn causes <see cref="ContainerControl"/> to invoke
-    ///  <see cref="ContainerControl.PerformAutoScale"/> and resize controls immediately without an app restart.
-    ///  Controls that have an explicitly set font are intentionally skipped.
-    /// </summary>
-    private void OnSystemFontChanged()
-    {
-        // Only notify controls that are using the ambient/default font — i.e., no explicit font was set.
-        if (!IsFontSet())
-        {
-            // Discard the per-control cached font handle so it is recreated from the updated default font.
-            DisposeFontHandle();
-
-            // Raising OnFontChanged will clear _currentAutoScaleDimensions in ContainerControl and trigger
-            // PerformAutoScale, which recalculates AutoScaleFactor and resizes all child controls.
-            OnFontChanged(EventArgs.Empty);
-        }
-
-        // Propagate to all immediate children regardless; each child decides for itself whether to act.
-        if (ChildControls is { } children)
-        {
-            for (int i = 0; i < children.Count; i++)
-            {
-                children[i].OnSystemFontChanged();
-            }
-        }
-    }
-
-    /// <summary>
     ///  Processes Windows messages.
     /// </summary>
     /// <remarks>
@@ -12656,7 +12626,7 @@ public unsafe partial class Control :
                         // s_defaultFont = Application.DefaultFont ?? SystemFonts.MessageBoxFont;
                         // So we need to check both variants - manually set font (Application.DefaultFont is not null) and auto system font
 
-                        bool fontChanged = false;
+                        bool defaultFontChanged = false;
                         if (Application.DefaultFont is null) // auto system font
                         {
                             if (s_defaultFont is not null) // we need to check only if s_defaultFont already set
@@ -12665,7 +12635,7 @@ public unsafe partial class Control :
                                 if (!s_defaultFont.Equals(font)) // the font has changed
                                 {
                                     s_defaultFont = font;
-                                    fontChanged = true;
+                                    defaultFontChanged = true;
                                 }
                                 else
                                 {
@@ -12675,22 +12645,25 @@ public unsafe partial class Control :
                         }
                         else // manually set font
                         {
-                            Font? oldFont = s_defaultFont;
+                            Font? previousDefaultFont = s_defaultFont;
                             Application.ScaleDefaultFont(); // will update Application.s_defaultFont or Application.s_defaultFontScaled only if needed
                             s_defaultFont = Application.DefaultFont; // Application.s_defaultFontScaled ?? Application.s_defaultFont
-                            fontChanged = oldFont != s_defaultFont;
+                            defaultFontChanged = !s_defaultFont.Equals(previousDefaultFont);
                         }
 
                         // When the system default font changes and controls are using it, notify them so that
                         // AutoScaleMode.Font can immediately re-scale controls and update their sizes without
                         // requiring an application restart.
-                        if (fontChanged)
+                        if (defaultFontChanged)
                         {
-                            // Invalidate the cached default font handle so it gets recreated from the new font.
                             s_defaultFontHandleWrapper?.Dispose();
                             s_defaultFontHandleWrapper = null;
+                        }
 
-                            OnSystemFontChanged();
+                        if (defaultFontChanged && !TryGetExplicitlySetFont(out _))
+                        {
+                            DisposeFontHandle();
+                            OnFontChanged(EventArgs.Empty);
                         }
                     }
                 }
