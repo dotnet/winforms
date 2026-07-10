@@ -63,6 +63,41 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_SuspendPainting_HandleCreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+
+        SuspendPaintingScope scope = control.SuspendPainting();
+        Assert.True(control.IsUpdating());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_HandleRecreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        SuspendPaintingScope scope = control.SuspendPainting();
+        control.RedrawStates.Clear();
+        control.RecreateHandle();
+
+        Assert.True(control.IsUpdating());
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
     public void Control_BeginEndSuspendRelocation_Invoke_SuspendsLayout()
     {
         using SubControl control = new();
@@ -73,6 +108,26 @@ public partial class ControlTests
         suspendRelocation.EndSuspendRelocation();
 
         Assert.False(control.IsHandleCreated);
+    }
+
+    /// <summary>
+    ///  Records redraw-state messages sent while painting is suspended.
+    /// </summary>
+    private sealed class RedrawTrackingControl : Control
+    {
+        public List<bool> RedrawStates { get; } = [];
+
+        public new void RecreateHandle() => base.RecreateHandle();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.MsgInternal == PInvokeCore.WM_SETREDRAW)
+            {
+                RedrawStates.Add((nint)m.WParamInternal != 0);
+            }
+
+            base.WndProc(ref m);
+        }
     }
 #endif
 
