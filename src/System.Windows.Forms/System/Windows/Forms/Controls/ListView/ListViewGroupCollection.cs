@@ -45,6 +45,7 @@ public class ListViewGroupCollection : IList
                 return;
             }
 
+            ThrowArgumentExceptionIfOtherListView(value);
             CheckListViewItems(value);
             value.ListView = _listView;
             List[index] = value;
@@ -92,6 +93,7 @@ public class ListViewGroupCollection : IList
 
             if (index != -1)
             {
+                ThrowArgumentExceptionIfOtherListView(value);
                 _list[index] = value;
             }
         }
