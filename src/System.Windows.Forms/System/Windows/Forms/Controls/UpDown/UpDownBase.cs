@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -19,6 +20,16 @@ public abstract partial class UpDownBase : ContainerControl
     private const int DefaultButtonsWidth = 16;
     private const int DefaultControlWidth = 120;
     private const int ThemedBorderWidth = 1; // width of custom border we draw when themed
+
+    // Modern (Net11+) chrome geometry, mirrored from TextBoxBase so the frame we draw around the
+    // whole control matches the look of a stand-alone modern TextBox. The padding values determine how
+    // far the edit and the buttons are inset from the outer edge so they clear the drawn border and the
+    // rounded corners; the border thickness and corner radius drive the frame itself.
+    private const int ModernFixed3DBorderPadding = 5;
+    private const int ModernFixedSingleBorderPadding = 4;
+    private const int ModernNoBorderPadding = 3;
+    private const int ModernBorderThickness = 1;
+    private const int ModernCornerRadius = 15;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -521,6 +532,14 @@ public abstract partial class UpDownBase : ContainerControl
     {
         base.OnPaint(e);
 
+        if (UseSideBySideButtons)
+        {
+            // In modern mode we draw a single frame around the whole control (edit and buttons); the
+            // themed/classic single-textbox border below does not apply.
+            DrawModernBorder(e);
+            return;
+        }
+
         Rectangle editBounds = _upDownEdit.Bounds;
         Color backColor = BackColor;
 
@@ -837,6 +856,12 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     private void PositionControls()
     {
+        if (UseSideBySideButtons)
+        {
+            PositionControlsModern();
+            return;
+        }
+
         Rectangle upDownEditBounds = Rectangle.Empty;
         Rectangle upDownButtonsBounds = Rectangle.Empty;
 
@@ -844,9 +869,6 @@ public abstract partial class UpDownBase : ContainerControl
         int totalClientWidth = clientArea.Width;
         bool themed = Application.RenderWithVisualStyles;
         BorderStyle borderStyle = BorderStyle;
-
-        // In modern mode the buttons sit side by side, so the band is twice as wide.
-        int buttonsWidth = UseSideBySideButtons ? _defaultButtonsWidth * 2 : _defaultButtonsWidth;
 
         // Determine how much to squish in - Fixed3D and FixedSingle have 2PX border
         int borderWidth = (borderStyle == BorderStyle.None) ? 0 : 2;
@@ -856,7 +878,7 @@ public abstract partial class UpDownBase : ContainerControl
         if (_upDownEdit is not null)
         {
             upDownEditBounds = clientArea;
-            upDownEditBounds.Size = new Size(clientArea.Width - buttonsWidth, clientArea.Height);
+            upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
         }
 
         // Reposition and resize the updown buttons
@@ -869,9 +891,9 @@ public abstract partial class UpDownBase : ContainerControl
             }
 
             upDownButtonsBounds = new Rectangle(
-                clientArea.Right - buttonsWidth + borderFixup,
+                clientArea.Right - _defaultButtonsWidth + borderFixup,
                 clientArea.Top - borderFixup,
-                buttonsWidth,
+                _defaultButtonsWidth,
                 clientArea.Height + (borderFixup * 2));
         }
 
@@ -894,6 +916,128 @@ public abstract partial class UpDownBase : ContainerControl
         {
             _upDownButtons.Bounds = upDownButtonsBounds;
             _upDownButtons.Invalidate();
+        }
+    }
+
+    /// <summary>
+    ///  The inset, in device units, of the edit and the buttons from the outer edge when a modern
+    ///  <see cref="VisualStylesMode"/> is in effect. It matches the band a stand-alone modern TextBox
+    ///  reserves for its border so the frame we draw in <see cref="OnPaint"/> looks consistent and the
+    ///  child controls clear the rounded corners.
+    /// </summary>
+    private int ModernBorderPadding => LogicalToDeviceUnits(_borderStyle switch
+    {
+        BorderStyle.Fixed3D => ModernFixed3DBorderPadding + ModernBorderThickness,
+        BorderStyle.FixedSingle => ModernFixedSingleBorderPadding + ModernBorderThickness,
+        _ => ModernNoBorderPadding,
+    });
+
+    /// <summary>
+    ///  Calculates the size and position of the upDownEdit control and the side-by-side updown buttons
+    ///  when a modern <see cref="VisualStylesMode"/> is in effect. Both the edit and the buttons are
+    ///  inset by <see cref="ModernBorderPadding"/> so they sit inside the frame drawn by
+    ///  <see cref="OnPaint"/> and clear its rounded corners.
+    /// </summary>
+    private void PositionControlsModern()
+    {
+        Rectangle clientArea = new(Point.Empty, ClientSize);
+        int totalClientWidth = clientArea.Width;
+
+        int pad = ModernBorderPadding;
+        int buttonsWidth = _defaultButtonsWidth * 2;
+
+        Rectangle inner = clientArea;
+        inner.Inflate(-pad, -pad);
+
+        Rectangle upDownEditBounds = inner;
+        upDownEditBounds.Width = Math.Max(0, inner.Width - buttonsWidth);
+
+        Rectangle upDownButtonsBounds = new(
+            inner.Right - buttonsWidth,
+            inner.Top,
+            buttonsWidth,
+            inner.Height);
+
+        // Left/right updown align translation (also honors RTL).
+        if (RtlTranslateLeftRight(UpDownAlign) == LeftRightAlignment.Left)
+        {
+            upDownButtonsBounds.X = totalClientWidth - upDownButtonsBounds.Right;
+            upDownEditBounds.X = totalClientWidth - upDownEditBounds.Right;
+        }
+
+        _upDownEdit?.Bounds = upDownEditBounds;
+
+        if (_upDownButtons is not null)
+        {
+            _upDownButtons.Bounds = upDownButtonsBounds;
+            _upDownButtons.Invalidate();
+        }
+    }
+
+    /// <summary>
+    ///  Draws the modern frame around the whole control (edit and side-by-side buttons) using the same
+    ///  rounded/flat chrome a stand-alone modern TextBox paints in its non-client area. The corners are
+    ///  filled with the parent's back color so the rounded frame blends against it.
+    /// </summary>
+    private void DrawModernBorder(PaintEventArgs e)
+    {
+        Rectangle bounds = ClientRectangle;
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return;
+        }
+
+        int cornerRadius = LogicalToDeviceUnits(ModernCornerRadius);
+        int borderThickness = LogicalToDeviceUnits(ModernBorderThickness);
+
+        // The adorner (border) color matches the modern TextBox chrome, which uses the fore color.
+        Color adornerColor = ForeColor;
+        Color parentBackColor = Parent?.BackColor ?? BackColor;
+        Color clientBackColor = BackColor;
+
+        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+
+        Rectangle deflatedBounds = bounds;
+        deflatedBounds.Width -= 1;
+        deflatedBounds.Height -= 1;
+
+        Graphics graphics = e.Graphics;
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Fill the whole client with the parent's back color; the rounded corners then blend against it.
+        graphics.FillRectangle(parentBackgroundBrush, bounds);
+
+        // Below roughly 2 * cornerRadius + thickness the rounded chrome renders as a broken lozenge; fall
+        // back to a flat rectangle in that case. This mirrors TextBoxBase.OnNcPaint.
+        bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
+
+        switch (_borderStyle)
+        {
+            case BorderStyle.None:
+                graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                break;
+
+            case BorderStyle.FixedSingle:
+                graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                graphics.DrawRectangle(adornerPen, deflatedBounds);
+                break;
+
+            case BorderStyle.Fixed3D:
+                if (canRenderRoundedChrome)
+                {
+                    Size radius = new(cornerRadius, cornerRadius);
+                    graphics.FillRoundedRectangle(clientBackgroundBrush, deflatedBounds, radius);
+                    graphics.DrawRoundedRectangle(adornerPen, deflatedBounds, radius);
+                }
+                else
+                {
+                    graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                    graphics.DrawRectangle(adornerPen, deflatedBounds);
+                }
+
+                break;
         }
     }
 
