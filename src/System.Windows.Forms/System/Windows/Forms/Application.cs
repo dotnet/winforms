@@ -725,7 +725,7 @@ public sealed partial class Application
     {
         // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
         // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
-        // LatestPreview, Latest) prevent using the source generated enum validator.
+        // Latest) prevent using the source generated enum validator.
         _ = styleSetting switch
         {
             VisualStylesMode.Classic => styleSetting,
