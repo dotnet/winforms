@@ -890,7 +890,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Always)]
     [AmbientValue(VisualStylesMode.Inherit)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
-    public VisualStylesMode VisualStylesMode
+    public virtual VisualStylesMode VisualStylesMode
     {
         get
         {
