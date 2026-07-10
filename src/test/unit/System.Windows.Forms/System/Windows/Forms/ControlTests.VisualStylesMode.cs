@@ -168,6 +168,67 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_ReparentingToDifferentMode_RaisesChanged()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubControlWithVisualStyles child = new();
+        int callCount = 0;
+        child.VisualStylesModeChanged += (sender, e) => callCount++;
+
+        child.AssignParent(parent);
+
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_ResetValue_ReinheritsAndRaisesChanged()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubControlWithVisualStyles child = new()
+        {
+            VisualStylesMode = VisualStylesMode.Disabled
+        };
+        parent.Controls.Add(child);
+        int callCount = 0;
+        child.VisualStylesModeChanged += (sender, e) => callCount++;
+        PropertyDescriptor property = TypeDescriptor.GetProperties(child)[nameof(Control.VisualStylesMode)];
+
+        property.ResetValue(child);
+
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.False(property.ShouldSerializeValue(child));
+        Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_ParentChangeWithLocalValue_DoesNotRaiseChanged()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using SubControlWithVisualStyles child = new()
+        {
+            VisualStylesMode = VisualStylesMode.Disabled
+        };
+        parent.Controls.Add(child);
+        int callCount = 0;
+        child.VisualStylesModeChanged += (sender, e) => callCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
+        Assert.Equal(0, callCount);
+    }
+
+    [WinFormsFact]
     public void Appearance_ToggleSwitch_HasExpectedValue()
     {
         Assert.Equal(2, (int)Appearance.ToggleSwitch);
@@ -176,6 +237,8 @@ public partial class ControlTests
     private class SubControlWithVisualStyles : Control
     {
         public VisualStylesMode DefaultVisualStylesModeAccessor => base.DefaultVisualStylesMode;
+
+        public new void AssignParent(Control value) => base.AssignParent(value);
 
         public new void OnVisualStylesModeChanged(EventArgs e) => base.OnVisualStylesModeChanged(e);
 
