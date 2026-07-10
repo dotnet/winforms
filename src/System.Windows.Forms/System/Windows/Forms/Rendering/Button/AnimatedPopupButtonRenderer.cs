@@ -7,7 +7,7 @@ using System.Windows.Forms.Rendering.Animation;
 namespace System.Windows.Forms.Rendering.Button;
 
 /// <summary>
-///  Drives and renders a <see cref="Forms.Button"/> whose <see cref="Control.FlatStyle"/> is
+///  Drives and renders a <see cref="Forms.Button"/> whose <see cref="Forms.ButtonBase.FlatStyle"/> is
 ///  <see cref="FlatStyle.Popup"/> when modern visual styles or dark mode are active, using the concave key-cap
 ///  look of <see cref="PopupButtonKeyCapRenderer"/>.
 /// </summary>
@@ -21,8 +21,6 @@ namespace System.Windows.Forms.Rendering.Button;
 internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 {
     private const int AnimationDurationMilliseconds = 160;
-
-    private readonly PopupButtonKeyCapRenderer _renderer = PopupButtonKeyCapRenderer.Default;
 
     private float _hoverCurrent;
     private float _hoverStart;
@@ -149,7 +147,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             };
         }
 
-        _renderer.Render(graphics, context, paintImage);
+        PopupButtonKeyCapRenderer.Render(graphics, context, paintImage);
     }
 
     private static float Lerp(float start, float end, float amount) => start + ((end - start) * amount);
