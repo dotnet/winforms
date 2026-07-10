@@ -2934,6 +2934,27 @@ public class TreeViewTests
     }
 
     [WinFormsFact]
+    public void TreeView_NodeLeading_OnDpiChangedAfterParentWithHandle_UpdatesItemHeight()
+    {
+        using SubTreeView control = new()
+        {
+            NodeLeading = 1.25f
+        };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        int expectedItemHeight = GetExpectedNodeLeadingItemHeight(control.Font, control.NodeLeading);
+
+        PInvokeCore.SendMessage(
+            control,
+            PInvoke.TVM_SETITEMHEIGHT,
+            (WPARAM)(expectedItemHeight + 1));
+        Assert.Equal(expectedItemHeight + 1, control.ItemHeight);
+
+        control.OnDpiChangedAfterParent(EventArgs.Empty);
+
+        Assert.Equal(expectedItemHeight, control.ItemHeight);
+    }
+
+    [WinFormsFact]
     public void TreeView_ResetNodeLeading_Invoke_Success()
     {
         using TreeView treeView = new()
@@ -7902,6 +7923,10 @@ public class TreeViewTests
         public new void OnBeforeSelect(TreeViewCancelEventArgs e) => base.OnBeforeSelect(e);
 
         public new void OnDrawNode(DrawTreeNodeEventArgs e) => base.OnDrawNode(e);
+
+#if NET11_0_OR_GREATER
+        public new void OnDpiChangedAfterParent(EventArgs e) => base.OnDpiChangedAfterParent(e);
+#endif
 
         public new void OnItemDrag(ItemDragEventArgs e) => base.OnItemDrag(e);
 
