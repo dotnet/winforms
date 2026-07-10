@@ -55,25 +55,51 @@ public abstract partial class UpDownBase
         }
 
         /// <summary>
+        ///  When <see langword="true"/> the two buttons are laid out side by side (see
+        ///  <see cref="UpDownBase.UseSideBySideButtons"/>); otherwise they are stacked vertically.
+        /// </summary>
+        internal bool UseSideBySideButtons => _parent.UseSideBySideButtons;
+
+        /// <summary>
+        ///  Returns the client-area rectangle occupied by the requested button. In the classic (stacked)
+        ///  layout the up button is the top half and the down button the bottom half. In the modern
+        ///  (side-by-side) layout the increment (up) button is on the trailing edge and the decrement
+        ///  (down) button on the leading edge, mirrored under right-to-left.
+        /// </summary>
+        internal Rectangle GetButtonRectangle(ButtonID button)
+        {
+            Rectangle client = ClientRectangle;
+
+            if (UseSideBySideButtons)
+            {
+                int half = client.Width / 2;
+                Rectangle leadingRect = new(client.X, client.Y, half, client.Height);
+                Rectangle trailingRect = new(client.X + half, client.Y, client.Width - half, client.Height);
+
+                bool rightToLeft = _parent.RightToLeft == RightToLeft.Yes;
+                Rectangle upRect = rightToLeft ? leadingRect : trailingRect;
+                Rectangle downRect = rightToLeft ? trailingRect : leadingRect;
+
+                return button == ButtonID.Up ? upRect : downRect;
+            }
+
+            int halfHeight = client.Height / 2;
+            Rectangle topRect = new(client.X, client.Y, client.Width, halfHeight);
+            Rectangle bottomRect = new(client.X, client.Y + halfHeight, client.Width, client.Height - halfHeight);
+
+            return button == ButtonID.Up ? topRect : bottomRect;
+        }
+
+        /// <summary>
         ///  Called when the mouse button is pressed - we need to start spinning the value of the up-down control.
         /// </summary>
         /// <param name="e">The mouse event arguments.</param>
         private void BeginButtonPress(MouseEventArgs e)
         {
-            int half_height = Size.Height / 2;
-
-            if (e.Y < half_height)
-            {
-                // Up button
-                _pushed = _captured = ButtonID.Up;
-                Invalidate();
-            }
-            else
-            {
-                // Down button
-                _pushed = _captured = ButtonID.Down;
-                Invalidate();
-            }
+            _pushed = _captured = GetButtonRectangle(ButtonID.Up).Contains(e.Location)
+                ? ButtonID.Up
+                : ButtonID.Down;
+            Invalidate();
 
             // Capture the mouse
             Capture = true;
@@ -148,14 +174,8 @@ public abstract partial class UpDownBase
 
             if (Capture)
             {
-                // Determine button area
-                Rectangle rect = ClientRectangle;
-                rect.Height /= 2;
-
-                if (_captured == ButtonID.Down)
-                {
-                    rect.Y += rect.Height;
-                }
+                // Determine the captured button area
+                Rectangle rect = GetButtonRectangle(_captured);
 
                 // Test if the mouse has moved outside the button area
                 if (rect.Contains(e.X, e.Y))
@@ -188,9 +208,8 @@ public abstract partial class UpDownBase
             }
 
             // Logic for seeing which button is Hot if any
-            Rectangle rectUp = ClientRectangle, rectDown = ClientRectangle;
-            rectUp.Height /= 2;
-            rectDown.Y += rectDown.Height / 2;
+            Rectangle rectUp = GetButtonRectangle(ButtonID.Up);
+            Rectangle rectDown = GetButtonRectangle(ButtonID.Down);
 
             // Check if the mouse is on the upper or lower button. Note that it could be in neither.
             if (rectUp.Contains(e.X, e.Y))
@@ -270,7 +289,32 @@ public abstract partial class UpDownBase
             int half_height = ClientSize.Height / 2;
 
             // Draw the up and down buttons
-            if (Application.IsDarkModeEnabled)
+            if (UseSideBySideButtons)
+            {
+                // Modern side-by-side layout: decrement (down) on the leading edge, increment (up) on
+                // the trailing edge (mirrored under right-to-left via GetButtonRectangle). Rendered with
+                // the modern control-button renderer, which adapts to both light and dark modes.
+                bool isDarkMode = Application.IsDarkModeEnabled;
+
+                Graphics cachedGraphics = EnsureCachedBitmap(ClientSize.Width, ClientSize.Height);
+
+                DrawModernControlButton(
+                    cachedGraphics,
+                    GetButtonRectangle(ButtonID.Down),
+                    ModernControlButtonStyle.Down | ModernControlButtonStyle.SingleBorder,
+                    GetButtonState(ButtonID.Down),
+                    isDarkMode);
+
+                DrawModernControlButton(
+                    cachedGraphics,
+                    GetButtonRectangle(ButtonID.Up),
+                    ModernControlButtonStyle.Up | ModernControlButtonStyle.SingleBorder,
+                    GetButtonState(ButtonID.Up),
+                    isDarkMode);
+
+                e.GraphicsInternal.DrawImageUnscaled(_cachedBitmap, new Point(0, 0));
+            }
+            else if (Application.IsDarkModeEnabled)
             {
                 Graphics cachedGraphics = EnsureCachedBitmap(
                     _parent._defaultButtonsWidth,
@@ -356,7 +400,7 @@ public abstract partial class UpDownBase
                     _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
             }
 
-            if (half_height != (ClientSize.Height + 1) / 2)
+            if (!UseSideBySideButtons && half_height != (ClientSize.Height + 1) / 2)
             {
                 // When control has odd height, a line needs to be drawn below the buttons with the BackColor.
                 Color color = _parent.BackColor;
@@ -372,6 +416,27 @@ public abstract partial class UpDownBase
 
             // Raise the paint event, just in case this inner class goes public some day
             base.OnPaint(e);
+        }
+
+        /// <summary>
+        ///  Computes the modern rendering state for the requested button from the current enabled,
+        ///  pushed, and hot states.
+        /// </summary>
+        private ModernControlButtonState GetButtonState(ButtonID button)
+        {
+            if (!Enabled)
+            {
+                return ModernControlButtonState.Disabled;
+            }
+
+            if (_pushed == button)
+            {
+                return ModernControlButtonState.Pressed;
+            }
+
+            return _mouseOver == button
+                ? ModernControlButtonState.Hover
+                : ModernControlButtonState.Normal;
         }
 
         /// <summary>

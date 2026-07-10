@@ -238,6 +238,14 @@ public abstract partial class UpDownBase : ContainerControl
     }
 
     /// <summary>
+    ///  When <see langword="true"/>, the up/down buttons are laid out side by side (decrement on the
+    ///  leading edge, increment on the trailing edge) rather than stacked. This provides a larger,
+    ///  more accessible click target and is used when a modern <see cref="VisualStylesMode"/>
+    ///  (<see cref="VisualStylesMode.Net11"/> or above) is in effect.
+    /// </summary>
+    internal bool UseSideBySideButtons => EffectiveVisualStylesMode >= VisualStylesMode.Net11;
+
+    /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
@@ -837,6 +845,9 @@ public abstract partial class UpDownBase : ContainerControl
         bool themed = Application.RenderWithVisualStyles;
         BorderStyle borderStyle = BorderStyle;
 
+        // In modern mode the buttons sit side by side, so the band is twice as wide.
+        int buttonsWidth = UseSideBySideButtons ? _defaultButtonsWidth * 2 : _defaultButtonsWidth;
+
         // Determine how much to squish in - Fixed3D and FixedSingle have 2PX border
         int borderWidth = (borderStyle == BorderStyle.None) ? 0 : 2;
         clientArea.Inflate(-borderWidth, -borderWidth);
@@ -845,7 +856,7 @@ public abstract partial class UpDownBase : ContainerControl
         if (_upDownEdit is not null)
         {
             upDownEditBounds = clientArea;
-            upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
+            upDownEditBounds.Size = new Size(clientArea.Width - buttonsWidth, clientArea.Height);
         }
 
         // Reposition and resize the updown buttons
@@ -858,9 +869,9 @@ public abstract partial class UpDownBase : ContainerControl
             }
 
             upDownButtonsBounds = new Rectangle(
-                clientArea.Right - _defaultButtonsWidth + borderFixup,
+                clientArea.Right - buttonsWidth + borderFixup,
                 clientArea.Top - borderFixup,
-                _defaultButtonsWidth,
+                buttonsWidth,
                 clientArea.Height + (borderFixup * 2));
         }
 
