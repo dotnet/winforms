@@ -22,8 +22,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             ColorMode.Should.Be(SystemColorMode.Dark)
 
             VisualStylesMode.Should.Be(VisualStylesMode.Classic)
-            VisualStylesMode = VisualStylesMode.LatestPreview
-            VisualStylesMode.Should.Be(VisualStylesMode.LatestPreview)
 
             EnableVisualStyles.Should.Be(False)
             EnableVisualStyles = True
@@ -129,11 +127,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                         AddHandler appModel.ApplyApplicationDefaults,
                             Sub(sender, e)
-                                e.VisualStylesMode = VisualStylesMode.LatestPreview
+                                e.VisualStylesMode = VisualStylesMode.Latest
                             End Sub
 
                         appModel.CallOnInitialize(Array.Empty(Of String)()).Should.BeTrue()
-                        System.Windows.Forms.Application.DefaultVisualStylesMode.Should.Be(VisualStylesMode.LatestPreview)
+                        System.Windows.Forms.Application.DefaultVisualStylesMode.Should.Be(VisualStylesMode.Latest)
                     End Sub
 
                 Using handle As RemoteInvokeHandle = RemoteExecutor.Invoke(test)
