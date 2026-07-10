@@ -1779,6 +1779,13 @@ public abstract partial class TextBoxBase : Control
     {
         base.OnPaddingChanged(e);
         AdjustHeight(false);
+
+        // The carved modern Visual Styles padding band includes the user Padding, so a runtime change
+        // has to re-provoke the non-client calculation for it to be reflected in the client rectangle.
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            RecalculateVisualStylesClientArea();
+        }
     }
 
     protected virtual void OnReadOnlyChanged(EventArgs e)
@@ -2271,6 +2278,21 @@ public abstract partial class TextBoxBase : Control
             return;
         }
 
+        RecalculateVisualStylesClientArea();
+    }
+
+    /// <summary>
+    ///  Sets the latch and provokes the <c>WM_NCCALCSIZE</c> round trip that carves the modern Visual
+    ///  Styles padding band from the client area. Safe to call repeatedly; it re-carves against the
+    ///  current <see cref="Padding"/> and scrollbar state.
+    /// </summary>
+    private protected void RecalculateVisualStylesClientArea()
+    {
+        if (!IsHandleCreated || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
         _triggerNewClientSizeRequest = true;
 
         // Call SetWindowPos with the current bounds and the SWP_FRAMECHANGED flag. We do not change the
@@ -2292,6 +2314,16 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
+    ///  When <see langword="true"/>, the native window reserves its own non-client metrics (border and
+    ///  scrollbars) during <c>WM_NCCALCSIZE</c>, so the modern Visual Styles padding band is carved from
+    ///  the client rectangle the default handler produces rather than from the raw proposed window
+    ///  rectangle. The default is <see langword="false"/>: the managed carve is authoritative and the
+    ///  default handler is not invoked (a plain <c>EDIT</c> control keeps its scrollbars inside the
+    ///  managed <see cref="GetScrollBarPadding"/> allowance).
+    /// </summary>
+    private protected virtual bool ReservesNativeNonClientArea => false;
+
+    /// <summary>
     ///  Handles <c>WM_NCCALCSIZE</c> by carving the modern Visual Styles padding band from the client
     ///  rectangle. The carve is floored so the client rectangle can never invert.
     /// </summary>
@@ -2304,6 +2336,16 @@ public abstract partial class TextBoxBase : Control
 
             if (ncCalcSizeParams is not null)
             {
+                // Controls whose native window reserves its own non-client metrics (RichEdit reserves its
+                // border and scrollbars) must run the default handler first, so we carve the modern padding
+                // band from the already-adjusted client rectangle rather than the raw proposed window
+                // rectangle. Those controls report an empty GetScrollBarPadding so the scrollbar space the
+                // native handler already reserved is not counted twice.
+                if (ReservesNativeNonClientArea)
+                {
+                    base.WndProc(ref m);
+                }
+
                 Padding padding = GetVisualStylesPadding(includeScrollbars: true);
 
                 ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;

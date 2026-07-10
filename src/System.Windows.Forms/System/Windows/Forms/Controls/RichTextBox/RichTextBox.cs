@@ -319,7 +319,19 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    // public bool CanUndo {}; <-- inherited from TextBoxBase
+    /// <summary>
+    ///  RichEdit (<c>MSFTEDIT</c>) reserves its own border and scrollbar space during
+    ///  <c>WM_NCCALCSIZE</c>, so the modern Visual Styles padding band is carved on top of the client
+    ///  rectangle the native handler produces.
+    /// </summary>
+    private protected override bool ReservesNativeNonClientArea => true;
+
+    /// <summary>
+    ///  RichEdit reserves the scrollbar space itself while processing <c>WM_NCCALCSIZE</c> (see
+    ///  <see cref="ReservesNativeNonClientArea"/>), so no additional managed scrollbar allowance is
+    ///  added on top; otherwise the space would be counted twice.
+    /// </summary>
+    private protected override Padding GetScrollBarPadding() => Padding.Empty;
 
     /// <summary>
     ///  Controls whether or not the rich edit control will automatically highlight URLs.
@@ -2561,6 +2573,11 @@ public partial class RichTextBox : TextBoxBase
         ClearUndo();
 
         SendZoomFactor(_zoomMultiplier);
+
+        // RichEdit does not send the WM_CTLCOLOR messages that a plain EDIT control uses to lazily trigger
+        // the modern Visual Styles client-area carve, so provoke it explicitly once the handle exists.
+        // This is a no-op unless EffectiveVisualStylesMode is Net11 or above.
+        RecalculateVisualStylesClientArea();
 
         SystemEvents.UserPreferenceChanged += UserPreferenceChangedHandler;
     }
