@@ -4,6 +4,8 @@ override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
