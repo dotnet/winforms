@@ -504,8 +504,8 @@ public sealed partial class Application
         return systemColorMode;
     }
 
-    private static bool IsSystemDarkModeAvailable =>
-        !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
+    private static bool IsSystemDarkModeAvailable
+        => !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
@@ -693,7 +693,9 @@ public sealed partial class Application
         {
             { } visualStylesMode when UseVisualStyles => visualStylesMode,
             { } => VisualStylesMode.Disabled,
-            _ => UseVisualStyles ? VisualStylesMode.Classic : VisualStylesMode.Disabled
+            _ => UseVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled
         };
 
     /// <summary>
@@ -729,7 +731,6 @@ public sealed partial class Application
             VisualStylesMode.Classic => styleSetting,
             VisualStylesMode.Disabled => styleSetting,
             VisualStylesMode.Net11 => styleSetting,
-            VisualStylesMode.LatestPreview => styleSetting,
             VisualStylesMode.Latest => styleSetting,
             VisualStylesMode.Inherit => throw new ArgumentException(
                 SR.Application_VisualStylesModeInheritInvalidAsDefault,

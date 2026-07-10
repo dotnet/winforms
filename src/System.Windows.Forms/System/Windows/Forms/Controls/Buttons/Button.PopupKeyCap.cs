@@ -18,7 +18,7 @@ public partial class Button
     /// </summary>
     internal bool IsPopupKeyCapAppearance =>
         FlatStyle == FlatStyle.Popup
-            && (Application.IsDarkModeEnabled || VisualStylesMode >= VisualStylesMode.Net11);
+            && (Application.IsDarkModeEnabled || EffectiveVisualStylesMode >= VisualStylesMode.Net11);
 
     /// <inheritdoc/>
     protected override void OnPaint(PaintEventArgs pevent)

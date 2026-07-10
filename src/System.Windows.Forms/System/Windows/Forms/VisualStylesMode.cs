@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Windows.Forms;
@@ -47,18 +47,6 @@ public enum VisualStylesMode : short
     ///  has been improved based on the latest accessibility requirements.
     /// </summary>
     Net11 = 2,
-
-    /// <summary>
-    ///  The latest preview version of the visual renderer available in the running framework.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This value intentionally tracks unreleased or experimental renderer behavior ahead of
-    ///   <see cref="Latest"/>. Tooling should therefore avoid treating it as a long-term stable
-    ///   serialization target.
-    ///  </para>
-    /// </remarks>
-    LatestPreview = short.MaxValue - 1,
 
     /// <summary>
     ///  The latest stable version of the visual renderer available in the running framework.

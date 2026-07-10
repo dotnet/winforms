@@ -5057,7 +5057,6 @@ public partial class TextBoxBaseTests
 
     [WinFormsTheory]
     [InlineData(VisualStylesMode.Net11)]
-    [InlineData(VisualStylesMode.LatestPreview)]
     [InlineData(VisualStylesMode.Latest)]
     public void TextBoxBase_Padding_WithModernVisualStyles_ChangesPreferredSize(VisualStylesMode visualStylesMode)
     {
@@ -5084,7 +5083,6 @@ public partial class TextBoxBaseTests
 
     [WinFormsTheory]
     [InlineData(VisualStylesMode.Net11)]
-    [InlineData(VisualStylesMode.LatestPreview)]
     [InlineData(VisualStylesMode.Latest)]
     public void TextBoxBase_Padding_WithModernVisualStyles_ChangesVisualStylesPadding(VisualStylesMode visualStylesMode)
     {
