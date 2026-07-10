@@ -70,8 +70,6 @@ override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) ->
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
-System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.Control.VisualStylesMode.set -> void
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
@@ -82,3 +80,5 @@ System.Windows.Forms.VisualStylesMode.Net11 = 2 -> System.Windows.Forms.VisualSt
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+virtual System.Windows.Forms.Control.VisualStylesMode.set -> void
