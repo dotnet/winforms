@@ -108,9 +108,11 @@ System.Windows.Forms.KioskModeWakeupSource.Session = 3 -> System.Windows.Forms.K
 override System.Windows.Forms.Button.Dispose(bool disposing) -> void
 override System.Windows.Forms.Button.OnMouseDown(System.Windows.Forms.MouseEventArgs! mevent) -> void
 override System.Windows.Forms.Button.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.ButtonBase.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode

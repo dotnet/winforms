@@ -108,11 +108,6 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
     protected abstract void OnAnimationStopped();
 
     /// <summary>
-    ///  Gets the DPI scale of the control.
-    /// </summary>
-    protected int DpiScale => (int)(control.DeviceDpi / 96f);
-
-    /// <summary>
     ///  Gets a value indicating whether the animation is running.
     /// </summary>
     public bool IsRunning { get; private set; }

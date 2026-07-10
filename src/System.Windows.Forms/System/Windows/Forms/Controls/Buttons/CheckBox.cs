@@ -334,11 +334,10 @@ public partial class CheckBox : ButtonBase
     {
         if (IsToggleSwitchAppearance)
         {
-            int dpiScale = (int)(DeviceDpi / 96f);
             Size toggleTextSize = TextRenderer.MeasureText(Text, Font);
-            int switchWidth = 50 * dpiScale;
-            int switchHeight = 25 * dpiScale;
-            int totalWidth = toggleTextSize.Width + switchWidth + (20 * dpiScale);
+            int switchWidth = LogicalToDeviceUnits(50);
+            int switchHeight = LogicalToDeviceUnits(25);
+            int totalWidth = toggleTextSize.Width + switchWidth + LogicalToDeviceUnits(20);
             int totalHeight = Math.Max(toggleTextSize.Height, switchHeight);
             return new Size(totalWidth, totalHeight);
         }
@@ -583,6 +582,19 @@ public partial class CheckBox : ButtonBase
             Invalidate();
         }
     }
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        base.OnSystemColorsChanged(e);
+        UpdateOwnerDraw();
+        UpdateToggleSwitchStyles();
+    }
+
+    internal ContentAlignment RtlTranslatedCheckAlign
+        => RtlTranslateContent(CheckAlign);
+
+    internal bool ShowFocusCuesInternal => ShowFocusCues;
 
     protected override void Dispose(bool disposing)
     {

@@ -949,7 +949,7 @@ public unsafe partial class Control :
         => Properties.ContainsKey(s_visualStylesModeProperty);
 
     private void ResetVisualStylesMode()
-        => Properties.RemoveValue(s_visualStylesModeProperty);
+        => VisualStylesMode = VisualStylesMode.Inherit;
 
     /// <summary>
     ///  Gets the <see cref="Forms.VisualStylesMode"/> that controls should actually honor when deciding
@@ -4415,6 +4415,7 @@ public unsafe partial class Control :
             RightToLeft oldRtl = RightToLeft;
             bool oldEnabled = Enabled;
             bool oldVisible = Visible;
+            VisualStylesMode oldVisualStylesMode = VisualStylesMode;
 
             // Update the parent
             _parent = value;
@@ -4458,6 +4459,11 @@ public unsafe partial class Control :
             if (oldRtl != RightToLeft)
             {
                 OnRightToLeftChanged(EventArgs.Empty);
+            }
+
+            if (oldVisualStylesMode != VisualStylesMode)
+            {
+                OnVisualStylesModeChanged(EventArgs.Empty);
             }
 
             if (!Properties.ContainsKey(s_bindingManagerProperty) && Created)
@@ -7254,15 +7260,16 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
     {
-        if (Properties.ContainsKey(s_visualStylesModeProperty)
-            && Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty) == Parent?.VisualStylesMode)
+        if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            // Same as the parent value, make it ambient again by removing it.
-            Properties.RemoveValue(s_visualStylesModeProperty);
+            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty) == Parent?.VisualStylesMode)
+            {
+                // Same as the parent value, make it ambient again by removing it.
+                Properties.RemoveValue(s_visualStylesModeProperty);
+            }
 
-            // Even though internally we don't store it any longer, and the value we had stored
-            // therefore changed, technically the value remains the same, so we don't raise the
-            // VisualStylesModeChanged event.
+            // A local value isolates this subtree from parent changes. If the local value matched the
+            // parent's new value, removing it preserves the effective value while making it ambient again.
             return;
         }
 
