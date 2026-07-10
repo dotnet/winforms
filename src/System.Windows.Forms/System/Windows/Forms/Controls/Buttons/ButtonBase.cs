@@ -1272,6 +1272,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        _adapter = null;
+        _cachedAdapterType = (FlatStyle)(-1);
+        base.OnSystemColorsChanged(e);
+    }
+
     /// <summary>
     ///  Exposes the (otherwise <c>private protected</c>) <see cref="Control.EffectiveVisualStylesMode"/>
     ///  to the owner-drawn button adapters in the <c>ButtonInternal</c> namespace, so that renderer selection

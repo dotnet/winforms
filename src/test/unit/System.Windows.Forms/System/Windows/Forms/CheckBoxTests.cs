@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -530,21 +531,27 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(ContentAlignment.MiddleLeft, false)]
-    [InlineData(ContentAlignment.TopLeft, false)]
-    [InlineData(ContentAlignment.BottomLeft, false)]
-    [InlineData(ContentAlignment.MiddleCenter, false)]
-    [InlineData(ContentAlignment.TopCenter, false)]
-    [InlineData(ContentAlignment.MiddleRight, true)]
-    [InlineData(ContentAlignment.TopRight, true)]
-    [InlineData(ContentAlignment.BottomRight, true)]
-    public void CheckBox_ToggleSwitch_CheckAlign_PositionsSwitch(ContentAlignment checkAlign, bool switchOnRight)
+    [InlineData(ContentAlignment.MiddleLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.TopLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.BottomLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.MiddleCenter, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.TopCenter, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.MiddleRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.TopRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.BottomRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.MiddleLeft, RightToLeft.Yes, true)]
+    [InlineData(ContentAlignment.MiddleRight, RightToLeft.Yes, false)]
+    public void CheckBox_ToggleSwitch_CheckAlign_PositionsSwitch(
+        ContentAlignment checkAlign,
+        RightToLeft rightToLeft,
+        bool switchOnRight)
     {
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
             Text = "x",
             CheckAlign = checkAlign,
+            RightToLeft = rightToLeft,
             Checked = true,
             Size = new Size(180, 30),
             BackColor = Color.White
@@ -571,6 +578,50 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         // Caption on the left means the switch is on the right, and vice versa.
         Assert.Equal(switchOnRight, captionOnLeft);
+        Assert.True(
+            switchOnRight ? switchRight >= box.ClientRectangle.Right - 5 : switchLeft <= 5,
+            "The toggle switch was not aligned to the expected client edge.");
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(120)]
+    [InlineData(144)]
+    public void CheckBox_ToggleSwitch_GetPreferredSize_ScalesWithDeviceDpi(int deviceDpi)
+    {
+        using SubCheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        box.DeviceDpiInternal = deviceDpi;
+
+        Size preferredSize = box.GetPreferredSizeCore(Size.Empty);
+
+        Assert.Equal(box.LogicalToDeviceUnits(70), preferredSize.Width);
+        Assert.Equal(box.LogicalToDeviceUnits(25), preferredSize.Height);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_OnAnimationEnded_StopsAnimation()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        box.Checked = true;
+        var renderer = (Rendering.CheckBox.AnimatedToggleSwitchRenderer)box.TestAccessor.Dynamic._toggleSwitchRenderer;
+        Assert.True(renderer.IsRunning);
+
+        typeof(Rendering.CheckBox.AnimatedToggleSwitchRenderer)
+            .GetMethod("OnAnimationEnded", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .Invoke(renderer, null);
+
+        Assert.False(renderer.IsRunning);
     }
 
     private static (int Left, int Right) FindSwitchColumnBand(Bitmap bitmap)

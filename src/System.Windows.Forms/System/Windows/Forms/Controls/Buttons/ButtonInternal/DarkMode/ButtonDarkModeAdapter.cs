@@ -33,8 +33,14 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         _buttonDarkModeRenderer.DeviceDpi = control.DeviceDpi;
     }
 
-    private ButtonDarkModeRendererBase ButtonDarkModeRenderer =>
-        _buttonDarkModeRenderer;
+    private ButtonDarkModeRendererBase ButtonDarkModeRenderer
+    {
+        get
+        {
+            _buttonDarkModeRenderer.DeviceDpi = Control.DeviceDpi;
+            return _buttonDarkModeRenderer;
+        }
+    }
 
     private Color GetButtonTextColor(IDeviceContext deviceContext, PushButtonState state)
     {
