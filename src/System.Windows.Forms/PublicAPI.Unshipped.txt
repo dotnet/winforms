@@ -62,6 +62,9 @@ override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
 #nullable enable
+override System.Windows.Forms.Button.Dispose(bool disposing) -> void
+override System.Windows.Forms.Button.OnMouseDown(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.Button.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void

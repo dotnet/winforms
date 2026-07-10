@@ -27,13 +27,8 @@ namespace System.Windows.Forms.Rendering.Button;
 ///   material emulation.
 ///  </para>
 /// </remarks>
-internal sealed class PopupButtonKeyCapRenderer
+internal static class PopupButtonKeyCapRenderer
 {
-    /// <summary>
-    ///  Gets a shared default renderer instance. The renderer is stateless and thread-safe.
-    /// </summary>
-    public static PopupButtonKeyCapRenderer Default { get; } = new();
-
     /// <summary>
     ///  Renders the key into the given <see cref="Graphics"/>.
     /// </summary>
@@ -43,7 +38,7 @@ internal sealed class PopupButtonKeyCapRenderer
     ///  Optional callback used to paint an image onto the key surface. It is invoked after the key chrome and
     ///  before the caption, and receives the bowl (content) rectangle.
     /// </param>
-    public void Render(Graphics graphics, PopupButtonRenderContext context, Action<Rectangle>? paintImage = null)
+    public static void Render(Graphics graphics, PopupButtonRenderContext context, Action<Rectangle>? paintImage = null)
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(context);
