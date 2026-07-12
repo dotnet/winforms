@@ -28,6 +28,7 @@ public partial class CheckBox : ButtonBase
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private CheckState _checkState;
     private Appearance _appearance;
+    private bool _threeState;
 
     private Rendering.CheckBox.AnimatedCheckGlyphRenderer? _checkGlyphRenderer;
     private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
@@ -141,6 +142,11 @@ public partial class CheckBox : ButtonBase
         {
             // Owner-paint with WinForms double buffering for a flicker-free, fluent animation.
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            _toggleSwitchRenderer?.SynchronizeState();
+        }
+        else
+        {
+            _toggleSwitchRenderer?.StopAnimation();
         }
     }
 
@@ -240,7 +246,7 @@ public partial class CheckBox : ButtonBase
             bool animateToggleSwitch = IsToggleSwitchAppearance && IsHandleCreated;
             if (animateToggleSwitch)
             {
-                ToggleSwitchRenderer.StopAnimation();
+                ToggleSwitchRenderer.PrepareStateChange();
             }
 
             bool oldChecked = Checked;
@@ -339,12 +345,7 @@ public partial class CheckBox : ButtonBase
     {
         if (IsToggleSwitchAppearance)
         {
-            Size toggleTextSize = TextRenderer.MeasureText(Text, Font);
-            int switchWidth = LogicalToDeviceUnits(50);
-            int switchHeight = LogicalToDeviceUnits(25);
-            int totalWidth = toggleTextSize.Width + switchWidth + LogicalToDeviceUnits(20);
-            int totalHeight = Math.Max(toggleTextSize.Height, switchHeight);
-            return new Size(totalWidth, totalHeight);
+            return Rendering.CheckBox.ToggleSwitchMetrics.Create(this).GetPreferredSize(this);
         }
 
         if (Appearance == Appearance.Button)
@@ -424,7 +425,29 @@ public partial class CheckBox : ButtonBase
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.CheckBoxThreeStateDescr))]
-    public bool ThreeState { get; set; }
+    public bool ThreeState
+    {
+        get => _threeState;
+        set
+        {
+            if (_threeState == value)
+            {
+                return;
+            }
+
+            _toggleSwitchRenderer?.StopAnimation();
+            _threeState = value;
+            ResetAdapter();
+            UpdateOwnerDraw();
+            UpdateToggleSwitchStyles();
+            LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, nameof(ThreeState));
+
+            if (IsHandleCreated)
+            {
+                Invalidate();
+            }
+        }
+    }
 
     /// <summary>
     ///  Occurs when the value of the <see cref="Checked"/> property changes.

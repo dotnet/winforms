@@ -17,6 +17,88 @@ public partial class TextBoxBaseTests
 {
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
+    public static IEnumerable<object[]> NonClientPaintBands_TestData()
+    {
+        yield return
+        [
+            new Rectangle(0, 0, 10, 8),
+            new Rectangle(2, 2, 6, 4)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 1, 1),
+            new Rectangle(0, 0, 1, 1)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 2, 2),
+            new Rectangle(1, 1, 0, 0)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 20, 15),
+            new Rectangle(3, 2, 10, 9)
+        ];
+        yield return [Rectangle.Empty, Rectangle.Empty];
+    }
+
+    [Theory]
+    [MemberData(nameof(NonClientPaintBands_TestData))]
+    public void TextBoxBase_GetNonClientPaintBands_ReturnsCompleteNonOverlappingBands(
+        Rectangle bounds,
+        Rectangle clientBounds)
+    {
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+        Rectangle[] bands = accessor.GetNonClientPaintBands(bounds, clientBounds);
+        Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        Assert.Equal(4, bands.Length);
+
+        for (int i = 0; i < bands.Length; i++)
+        {
+            Rectangle band = bands[i];
+
+            if (band.Width <= 0 || band.Height <= 0)
+            {
+                continue;
+            }
+
+            Assert.Equal(band, Rectangle.Intersect(bounds, band));
+            if (protectedBounds.Width > 0 && protectedBounds.Height > 0)
+            {
+                Assert.False(band.IntersectsWith(protectedBounds));
+            }
+
+            for (int j = i + 1; j < bands.Length; j++)
+            {
+                if (bands[j].Width > 0 && bands[j].Height > 0)
+                {
+                    Assert.False(band.IntersectsWith(bands[j]));
+                }
+            }
+        }
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                Point point = new(x, y);
+                bool isProtected = protectedBounds.Contains(point);
+                int containingBands = 0;
+
+                foreach (Rectangle band in bands)
+                {
+                    if (band.Contains(point))
+                    {
+                        containingBands++;
+                    }
+                }
+
+                Assert.Equal(isProtected ? 0 : 1, containingBands);
+            }
+        }
+    }
+
     [WinFormsFact]
     public void TextBoxBase_CreateParams_GetDefault_ReturnsExpected()
     {

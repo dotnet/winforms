@@ -74,6 +74,11 @@ internal sealed class PopupButtonRenderContext
     public bool IsDefault { get; init; }
 
     /// <summary>
+    ///  Gets a value indicating whether the application is using its dark color scheme.
+    /// </summary>
+    public bool IsDarkMode { get; init; }
+
+    /// <summary>
     ///  Gets the animation progress snapshot.
     /// </summary>
     public PopupButtonAnimationState AnimationState { get; init; }
@@ -82,6 +87,21 @@ internal sealed class PopupButtonRenderContext
     ///  Gets the caption alignment within the key top.
     /// </summary>
     public ContentAlignment TextAlign { get; init; } = ContentAlignment.MiddleCenter;
+
+    /// <summary>
+    ///  Gets the size of the image rendered with the caption.
+    /// </summary>
+    public Size ImageSize { get; init; }
+
+    /// <summary>
+    ///  Gets the alignment of the image within the key surface.
+    /// </summary>
+    public ContentAlignment ImageAlign { get; init; } = ContentAlignment.MiddleCenter;
+
+    /// <summary>
+    ///  Gets the positional relationship between the image and caption.
+    /// </summary>
+    public TextImageRelation TextImageRelation { get; init; } = TextImageRelation.Overlay;
 
     /// <summary>
     ///  Gets the right-to-left setting for text rendering.

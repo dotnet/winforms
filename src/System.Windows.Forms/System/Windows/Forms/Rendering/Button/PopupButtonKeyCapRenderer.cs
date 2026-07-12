@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms.Rendering.Button;
 
@@ -44,6 +45,7 @@ internal static class PopupButtonKeyCapRenderer
         ArgumentNullException.ThrowIfNull(context);
 
         Rectangle bounds = context.Bounds;
+        Color surfaceBackColor = GetSurfaceBackColor(context);
 
         if (bounds.Width <= 0 || bounds.Height <= 0)
         {
@@ -53,7 +55,7 @@ internal static class PopupButtonKeyCapRenderer
         // Degenerate bounds: just fill, never throw.
         if (bounds.Width < 8 || bounds.Height < 8)
         {
-            using SolidBrush tinyBrush = new(context.BackColor);
+            using SolidBrush tinyBrush = new(surfaceBackColor);
             graphics.FillRectangle(tinyBrush, bounds);
 
             return;
@@ -61,13 +63,17 @@ internal static class PopupButtonKeyCapRenderer
 
         if (context.HighContrast)
         {
-            RenderHighContrast(graphics, context, paintImage);
+            RenderHighContrast(graphics, context, surfaceBackColor, paintImage);
 
             return;
         }
 
         Metrics metrics = Metrics.Create(context);
-        Palette palette = Palette.Create(context, metrics);
+        Palette palette = Palette.Create(context, metrics, surfaceBackColor);
+        (Rectangle textBounds, Rectangle imageBounds) = CreateContentLayout(
+            context,
+            metrics.BowlRect,
+            applySurfaceInset: true);
 
         GraphicsState state = graphics.Save();
 
@@ -82,14 +88,17 @@ internal static class PopupButtonKeyCapRenderer
             DrawBorder(graphics, metrics, palette);
             DrawStateCues(graphics, context, metrics, palette);
 
-            paintImage?.Invoke(metrics.BowlRect);
+            if (imageBounds.Width > 0 && imageBounds.Height > 0)
+            {
+                paintImage?.Invoke(imageBounds);
+            }
         }
         finally
         {
             graphics.Restore(state);
         }
 
-        DrawText(graphics, context, metrics, palette);
+        DrawText(graphics, context, metrics, palette, textBounds);
     }
 
     private static void DrawAmbientShadow(Graphics graphics, Metrics metrics, Palette palette)
@@ -231,33 +240,16 @@ internal static class PopupButtonKeyCapRenderer
         Metrics metrics,
         Palette palette)
     {
-        if (context.IsDefault && context.Enabled)
-        {
-            // Default-button cue: an additional discreet ring just inside the border.
-            int inset = metrics.BorderWidth + Math.Max(1, (int)metrics.Scale);
-            Rectangle cueRect = Rectangle.Inflate(metrics.KeyRect, -inset, -inset);
-
-            if (cueRect.Width > 4 && cueRect.Height > 4)
-            {
-                using GraphicsPath cuePath = CreateRoundedPath(
-                    cueRect,
-                    Math.Max(1f, metrics.CornerRadius - inset));
-                using Pen cuePen = new(palette.DefaultCue, Math.Max(1f, metrics.Scale * 0.75f));
-
-                graphics.DrawPath(cuePen, cuePath);
-            }
-        }
-
         if (context.Focused)
         {
-            int inset = Math.Max(2, (int)MathF.Round(2.5f * metrics.Scale));
-            Rectangle focusRect = Rectangle.Inflate(metrics.BowlRect, -inset, -inset);
+            int inset = metrics.BorderWidth + Math.Max(2, (int)MathF.Round(2f * metrics.Scale));
+            Rectangle focusRect = Rectangle.Inflate(metrics.KeyRect, -inset, -inset);
 
             if (focusRect.Width > 4 && focusRect.Height > 4)
             {
                 using GraphicsPath focusPath = CreateRoundedPath(
                     focusRect,
-                    Math.Max(1f, metrics.BowlRadius - inset));
+                    Math.Max(1f, metrics.CornerRadius - inset));
                 using Pen focusPen = new(palette.Focus, Math.Max(1f, metrics.Scale * 0.75f))
                 {
                     DashStyle = DashStyle.Dot
@@ -272,7 +264,8 @@ internal static class PopupButtonKeyCapRenderer
         Graphics graphics,
         PopupButtonRenderContext context,
         Metrics metrics,
-        Palette palette)
+        Palette palette,
+        Rectangle textRect)
     {
         string? text = context.Text;
 
@@ -280,10 +273,6 @@ internal static class PopupButtonKeyCapRenderer
         {
             return;
         }
-
-        int inset = Math.Max(1, (int)MathF.Round(1.5f * metrics.Scale));
-        Rectangle textRect = Rectangle.Inflate(metrics.BowlRect, -inset, -inset);
-        textRect = ApplyPadding(textRect, context.Padding);
 
         if (textRect.Width <= 0 || textRect.Height <= 0)
         {
@@ -330,13 +319,17 @@ internal static class PopupButtonKeyCapRenderer
         TextRenderer.DrawText(graphics, text, context.Font, textRect, palette.Text, flags);
     }
 
-    private static void RenderHighContrast(Graphics graphics, PopupButtonRenderContext context, Action<Rectangle>? paintImage)
+    private static void RenderHighContrast(
+        Graphics graphics,
+        PopupButtonRenderContext context,
+        Color surfaceBackColor,
+        Action<Rectangle>? paintImage)
     {
         Rectangle bounds = context.Bounds;
         bool pressed = context.Pressed;
         float scale = context.DeviceDpi / 96f;
 
-        Color back = context.BackColor;
+        Color back = surfaceBackColor;
         Color fore = context.Enabled ? context.ForeColor : SystemColors.GrayText;
         Color border = context.Enabled ? context.ForeColor : SystemColors.GrayText;
 
@@ -345,7 +338,12 @@ internal static class PopupButtonKeyCapRenderer
             graphics.FillRectangle(backBrush, bounds);
         }
 
-        int borderWidth = Math.Max(Math.Max(1, context.BorderWidth), pressed ? (int)(2 * scale) : 1);
+        int defaultBorderIncrease = context.IsDefault && context.Enabled
+            ? Math.Max(1, (int)MathF.Round(scale))
+            : 0;
+        int borderWidth = Math.Max(
+            Math.Max(1, context.BorderWidth + defaultBorderIncrease),
+            pressed ? (int)(2 * scale) : 1);
         Rectangle borderRect = bounds;
         borderRect.Width -= 1;
         borderRect.Height -= 1;
@@ -362,9 +360,14 @@ internal static class PopupButtonKeyCapRenderer
             contentRect.Offset((int)scale, (int)scale);
         }
 
-        paintImage?.Invoke(contentRect);
-
-        Rectangle textRect = ApplyPadding(contentRect, context.Padding);
+        (Rectangle textRect, Rectangle imageRect) = CreateContentLayout(
+            context,
+            contentRect,
+            applySurfaceInset: false);
+        if (imageRect.Width > 0 && imageRect.Height > 0)
+        {
+            paintImage?.Invoke(imageRect);
+        }
 
         if (textRect.Width > 0 && textRect.Height > 0)
         {
@@ -376,6 +379,118 @@ internal static class PopupButtonKeyCapRenderer
             Rectangle focusRect = Rectangle.Inflate(bounds, -(int)(3 * scale), -(int)(3 * scale));
             ControlPaint.DrawFocusRectangle(graphics, focusRect, fore, back);
         }
+    }
+
+    private static Color GetSurfaceBackColor(PopupButtonRenderContext context)
+    {
+        if (context.HighContrast || !context.IsDefault || !context.Enabled)
+        {
+            return context.BackColor;
+        }
+
+        return context.IsDarkMode
+            ? PopupButtonColorMath.Lighten(context.BackColor, 0.1f)
+            : PopupButtonColorMath.Darken(context.BackColor, 0.1f);
+    }
+
+    private static (Rectangle TextBounds, Rectangle ImageBounds) CreateContentLayout(
+        PopupButtonRenderContext context,
+        Rectangle contentBounds,
+        bool applySurfaceInset)
+    {
+        if (applySurfaceInset)
+        {
+            int inset = Math.Max(1, (int)MathF.Round(1.5f * context.DeviceDpi / 96f));
+            contentBounds = Rectangle.Inflate(contentBounds, -inset, -inset);
+        }
+
+        contentBounds = ApplyPadding(contentBounds, context.Padding);
+        bool hasText = !string.IsNullOrEmpty(context.Text);
+        bool hasImage = !context.ImageSize.IsEmpty;
+
+        if (!hasImage)
+        {
+            return (hasText ? contentBounds : Rectangle.Empty, Rectangle.Empty);
+        }
+
+        Size imageSize = new(
+            Math.Min(contentBounds.Width, context.ImageSize.Width),
+            Math.Min(contentBounds.Height, context.ImageSize.Height));
+
+        if (!hasText || context.TextImageRelation == TextImageRelation.Overlay)
+        {
+            return (
+                hasText ? contentBounds : Rectangle.Empty,
+                AlignInRectangle(contentBounds, imageSize, context.ImageAlign));
+        }
+
+        TextImageRelation relation = context.RightToLeft == RightToLeft.Yes
+            ? LayoutUtils.GetOppositeTextImageRelation(context.TextImageRelation)
+            : context.TextImageRelation;
+        int gap = Math.Max(2, (int)MathF.Round(4f * context.DeviceDpi / 96f));
+
+        return relation switch
+        {
+            TextImageRelation.ImageBeforeText => CreateHorizontalLayout(imageFirst: true),
+            TextImageRelation.TextBeforeImage => CreateHorizontalLayout(imageFirst: false),
+            TextImageRelation.ImageAboveText => CreateVerticalLayout(imageFirst: true),
+            TextImageRelation.TextAboveImage => CreateVerticalLayout(imageFirst: false),
+            _ => (contentBounds, AlignInRectangle(contentBounds, imageSize, context.ImageAlign))
+        };
+
+        (Rectangle TextBounds, Rectangle ImageBounds) CreateHorizontalLayout(bool imageFirst)
+        {
+            int imageWidth = Math.Min(imageSize.Width, Math.Max(0, contentBounds.Width - gap));
+            Rectangle imageSlot = imageFirst
+                ? new Rectangle(contentBounds.Left, contentBounds.Top, imageWidth, contentBounds.Height)
+                : new Rectangle(contentBounds.Right - imageWidth, contentBounds.Top, imageWidth, contentBounds.Height);
+            Rectangle textBounds = imageFirst
+                ? Rectangle.FromLTRB(imageSlot.Right + gap, contentBounds.Top, contentBounds.Right, contentBounds.Bottom)
+                : Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, imageSlot.Left - gap, contentBounds.Bottom);
+
+            return (
+                textBounds,
+                AlignInRectangle(imageSlot, imageSize with { Width = imageWidth }, context.ImageAlign));
+        }
+
+        (Rectangle TextBounds, Rectangle ImageBounds) CreateVerticalLayout(bool imageFirst)
+        {
+            int imageHeight = Math.Min(imageSize.Height, Math.Max(0, contentBounds.Height - gap));
+            Rectangle imageSlot = imageFirst
+                ? new Rectangle(contentBounds.Left, contentBounds.Top, contentBounds.Width, imageHeight)
+                : new Rectangle(contentBounds.Left, contentBounds.Bottom - imageHeight, contentBounds.Width, imageHeight);
+            Rectangle textBounds = imageFirst
+                ? Rectangle.FromLTRB(contentBounds.Left, imageSlot.Bottom + gap, contentBounds.Right, contentBounds.Bottom)
+                : Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, contentBounds.Right, imageSlot.Top - gap);
+
+            return (
+                textBounds,
+                AlignInRectangle(imageSlot, imageSize with { Height = imageHeight }, context.ImageAlign));
+        }
+    }
+
+    private static Rectangle AlignInRectangle(
+        Rectangle container,
+        Size size,
+        ContentAlignment alignment)
+    {
+        int x = alignment switch
+        {
+            ContentAlignment.TopLeft or ContentAlignment.MiddleLeft or ContentAlignment.BottomLeft => container.Left,
+            ContentAlignment.TopRight or ContentAlignment.MiddleRight or ContentAlignment.BottomRight
+                => container.Right - size.Width,
+            _ => container.Left + ((container.Width - size.Width) / 2)
+        };
+
+        int y = alignment switch
+        {
+            ContentAlignment.TopLeft or ContentAlignment.TopCenter or ContentAlignment.TopRight => container.Top,
+            ContentAlignment.BottomLeft or ContentAlignment.BottomCenter or ContentAlignment.BottomRight
+                => container.Bottom - size.Height,
+            _ => container.Top + ((container.Height - size.Height) / 2)
+        };
+
+        return new Rectangle(x, y, size.Width, size.Height);
     }
 
     /// <summary>
@@ -519,7 +634,10 @@ internal static class PopupButtonKeyCapRenderer
 
             int ambient = Math.Max(1, (int)MathF.Round(2.5f * scale));
             int maxBorder = Math.Max(0, (Math.Min(bounds.Width, bounds.Height) / 4) - 1);
-            int borderWidth = Math.Clamp(context.BorderWidth, 0, maxBorder);
+            int defaultBorderIncrease = context.IsDefault && context.Enabled
+                ? Math.Max(1, (int)MathF.Round(scale))
+                : 0;
+            int borderWidth = Math.Clamp(context.BorderWidth + defaultBorderIncrease, 0, maxBorder);
 
             Rectangle keyRect = Rectangle.Inflate(bounds, -ambient, -ambient);
 
@@ -599,18 +717,17 @@ internal static class PopupButtonKeyCapRenderer
         public Color TextHighlight { get; init; }
         public Color TextShadow { get; init; }
         public Color Focus { get; init; }
-        public Color DefaultCue { get; init; }
         public int AmbientAlpha { get; init; }
         public int InnerShadowAlpha { get; init; }
         public int InnerLightAlpha { get; init; }
 
-        public static Palette Create(PopupButtonRenderContext context, Metrics metrics)
+        public static Palette Create(PopupButtonRenderContext context, Metrics metrics, Color surfaceBackColor)
         {
             bool enabled = context.Enabled;
 
             // Disabled keys mute the material but keep the concave form readable - reduced contrast rather than
             // flat gray.
-            Color back = enabled ? context.BackColor : PopupButtonColorMath.Mute(context.BackColor, 0.55f);
+            Color back = enabled ? surfaceBackColor : PopupButtonColorMath.Mute(surfaceBackColor, 0.55f);
             float contrast = enabled ? 1f : 0.35f;
             float luminance = PopupButtonColorMath.GetLuminance(back);
 
@@ -640,8 +757,10 @@ internal static class PopupButtonKeyCapRenderer
                 Text = text,
                 TextHighlight = PopupButtonColorMath.GetTextHighlight(bowlCenter, reliefStrength),
                 TextShadow = PopupButtonColorMath.GetTextShadow(bowlCenter, reliefStrength),
-                Focus = PopupButtonColorMath.TowardsContrast(back, 0.55f),
-                DefaultCue = PopupButtonColorMath.TowardsContrast(border, 0.3f),
+                Focus = PopupButtonColorMath.EnsureContrast(
+                    PopupButtonColorMath.TowardsContrast(back, 0.55f),
+                    back,
+                    0.45f),
                 AmbientAlpha = (int)((luminance > 0.5f ? 55f : 85f)
                     * (1f - (metrics.Press * 0.6f))
                     * (enabled ? 1f : 0.5f)),

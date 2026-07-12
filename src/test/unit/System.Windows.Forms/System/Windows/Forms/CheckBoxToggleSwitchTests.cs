@@ -8,10 +8,33 @@ using System.Drawing;
 namespace System.Windows.Forms.Tests;
 
 // Behavioral tests for the modern toggle-switch CheckBox (Appearance.ToggleSwitch + VisualStylesMode.Net11).
-// These use only public surface so they remain stable; the rendering/animation itself is verified through
-// the WinformsControlsTest exploratory harness.
+// These cover public behavior and the shared metrics without depending on pixel-level rendering details.
 public class CheckBoxToggleSwitchTests
 {
+    [WinFormsTheory]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(10)]
+    [InlineData(11)]
+    public void CheckBox_ToggleSwitch_FontSize_DerivesPreferredGeometry(float fontSize)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, fontSize);
+        using CheckBox checkBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Appearance = Appearance.ToggleSwitch,
+            Font = font,
+            Text = "Toggle",
+            Padding = new Padding(2)
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(checkBox);
+
+        Assert.Equal(font.Height, metrics.SwitchHeight);
+        Assert.Equal(2 * font.Height, metrics.SwitchWidth);
+        Assert.Equal(metrics.GetPreferredSize(checkBox), checkBox.GetPreferredSize(Size.Empty));
+    }
+
     [WinFormsFact]
     public void CheckBox_Appearance_ToggleSwitch_RoundTrips()
     {
@@ -100,6 +123,22 @@ public class CheckBoxToggleSwitchTests
         // Setting the same value does not raise the event.
         checkBox.CheckState = CheckState.Checked;
         Assert.Equal(1, callCount);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_ThreeState_PreservesClassicCheckStateBehavior()
+    {
+        using CheckBox checkBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Appearance = Appearance.ToggleSwitch,
+            ThreeState = true
+        };
+
+        checkBox.CheckState = CheckState.Indeterminate;
+
+        Assert.Equal(CheckState.Indeterminate, checkBox.CheckState);
+        Assert.True(checkBox.GetPreferredSize(Size.Empty).Width > 0);
     }
 
     [WinFormsFact]
