@@ -46,6 +46,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private ButtonBaseAdapter? _adapter;
     private FlatStyle _cachedAdapterType;
+    private ButtonBackColorAnimator? _backColorAnimator;
 
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
@@ -838,6 +839,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _imageList?.Disposed -= DetachImageList;
             _textToolTip?.Dispose();
             _textToolTip = null;
+            _backColorAnimator?.Dispose();
+            _backColorAnimator = null;
         }
 
         base.Dispose(disposing);
@@ -1067,6 +1070,15 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return null;
     }
 
+    internal ButtonBackColorAnimator BackColorAnimator
+        => _backColorAnimator ??= new(this);
+
+    private protected void ResetAdapter()
+    {
+        _adapter = null;
+        _cachedAdapterType = (FlatStyle)(-1);
+    }
+
     internal virtual StringFormat CreateStringFormat()
     {
         if (Adapter is null)
@@ -1259,24 +1271,29 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     /// <inheritdoc/>
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
-        base.OnVisualStylesModeChanged(e);
-
-        // The button adapter is selected based on VisualStylesMode, so drop the cached adapter and
-        // force it to be recreated (and the button repainted) on the next paint.
-        _adapter = null;
-        _cachedAdapterType = (FlatStyle)(-1);
-
-        if (IsHandleCreated)
+        using (LayoutTransaction.CreateTransactionIf(
+            AutoSize,
+            ParentInternal,
+            this,
+            PropertyNames.VisualStylesMode))
         {
-            Invalidate();
+            base.OnVisualStylesModeChanged(e);
+
+            // Renderer padding can change with VisualStylesMode, so recreate the adapter before layout
+            // recomputes the preferred size.
+            ResetAdapter();
+
+            if (IsHandleCreated)
+            {
+                Invalidate();
+            }
         }
     }
 
     /// <inheritdoc/>
     protected override void OnSystemColorsChanged(EventArgs e)
     {
-        _adapter = null;
-        _cachedAdapterType = (FlatStyle)(-1);
+        ResetAdapter();
         base.OnSystemColorsChanged(e);
     }
 

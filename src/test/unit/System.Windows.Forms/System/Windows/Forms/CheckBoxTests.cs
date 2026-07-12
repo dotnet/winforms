@@ -531,6 +531,84 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void CheckBox_AppearanceNormal_ModernVisualStyles_UsesModernAdapter(FlatStyle flatStyle)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Normal,
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => box.CreateStandardAdapter(),
+            FlatStyle.Popup => box.CreatePopupAdapter(),
+            _ => box.CreateFlatAdapter()
+        };
+
+        Assert.IsType<ButtonInternal.CheckBoxModernAdapter>(adapter);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_AppearanceChanged_RecreatesModernAdapter()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Button,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.IsNotType<ButtonInternal.CheckBoxModernAdapter>(box.Adapter);
+
+        box.Appearance = Appearance.Normal;
+
+        Assert.IsType<ButtonInternal.CheckBoxModernAdapter>(box.Adapter);
+    }
+
+    [WinFormsTheory]
+    [InlineData(CheckState.Unchecked, false)]
+    [InlineData(CheckState.Checked, true)]
+    [InlineData(CheckState.Indeterminate, true)]
+    public void CheckBox_ModernGlyph_RendersAccentForCheckedStates(CheckState checkState, bool expectedAccent)
+    {
+        using Panel parent = new() { BackColor = Color.White };
+        using CheckBox box = new()
+        {
+            BackColor = Color.Red,
+            CheckState = checkState,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(box);
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, checkState);
+
+        Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_EndAnimation_StopsAndSettles()
+    {
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.NotifyCheckStateChanged(CheckState.Unchecked);
+        renderer.NotifyCheckStateChanged(CheckState.Checked);
+        Assert.True(renderer.IsRunning);
+
+        renderer.EndAnimation();
+
+        Assert.False(renderer.IsRunning);
+    }
+
+    [WinFormsTheory]
     [InlineData(ContentAlignment.MiddleLeft, RightToLeft.No, false)]
     [InlineData(ContentAlignment.TopLeft, RightToLeft.No, false)]
     [InlineData(ContentAlignment.BottomLeft, RightToLeft.No, false)]
@@ -666,6 +744,25 @@ public class CheckBoxTests : AbstractButtonBaseTests
             for (int x = xStart; x < xEnd; x++)
             {
                 if (bitmap.GetPixel(x, y).ToArgb() != background)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static int CountPixels(Bitmap bitmap, Color color)
+    {
+        int argb = color.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() == argb)
                 {
                     count++;
                 }
