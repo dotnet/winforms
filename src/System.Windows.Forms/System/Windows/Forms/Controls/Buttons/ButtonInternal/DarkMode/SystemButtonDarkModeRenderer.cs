@@ -27,6 +27,16 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private protected override Padding PaddingCore { get; } = new Padding(SystemStylePadding);
 
+    private protected override GraphicsPath? CreateBackgroundPath(Rectangle bounds, bool isDefault, bool focused)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return null;
+        }
+
+        return CreateRoundedPath(GetPathBounds(bounds), CornerRadius - DarkBorderGapThickness);
+    }
+
     /// <summary>
     ///  Draws button background with system styling (larger rounded corners).
     /// </summary>
@@ -38,17 +48,26 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
         bool focused,
         Color backColor)
     {
-        // Shrink for DarkBorderGap and FocusBorderThickness
-        Rectangle fillBounds = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
+        GraphicsState? saved = graphics.Save();
+        try
+        {
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        using GraphicsPath fillPath = CreateRoundedRectanglePath(fillBounds, CornerRadius - DarkBorderGapThickness);
-
-        // Fill the background using cached brush
-        using var brush = backColor.GetCachedSolidBrushScope();
-        graphics.FillPath(brush, fillPath);
+            RectangleF pathBounds = GetPathBounds(bounds);
+            using GraphicsPath fillPath = CreateRoundedPath(pathBounds, FocusIndicatorCornerRadius);
+            using var brush = backColor.GetCachedSolidBrushScope();
+            graphics.FillPath(brush, fillPath);
+        }
+        finally
+        {
+            if (saved is not null)
+            {
+                graphics.Restore(saved);
+            }
+        }
 
         // Return content bounds (area inside the button for text/image)
-        return fillBounds;
+        return bounds;
     }
 
     /// <summary>
@@ -56,20 +75,28 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// </summary>
     public override void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault)
     {
-        // We need the bottom and the right border one pixel inside the button
-        Rectangle focusRect = new(
-            x: contentBounds.X,
-            y: contentBounds.Y,
-            width: contentBounds.Width - 1,
-            height: contentBounds.Height - 1);
+        GraphicsState? saved = graphics.Save();
+        try
+        {
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Create path for the focus outline
-        using GraphicsPath focusPath = CreateRoundedRectanglePath(focusRect, FocusIndicatorCornerRadius);
-
-        // System style uses a solid white border instead of dotted lines
-        using var focusPen = Color.White.GetCachedPenScope(FocusedButtonBorderThickness);
-
-        graphics.DrawPath(focusPen, focusPath);
+            RectangleF outerBounds = GetPathBounds(contentBounds);
+            float outerRadius = FocusIndicatorCornerRadius + (2 * SystemStylePadding);
+            Color focusColor = ResolveBorderColor(Color.White);
+            using var focusBrush = focusColor.GetCachedSolidBrushScope();
+            using GraphicsPath focusPath = CreateRingPath(
+                outerBounds,
+                outerRadius,
+                FocusedButtonBorderThickness);
+            graphics.FillPath(focusBrush, focusPath);
+        }
+        finally
+        {
+            if (saved is not null)
+            {
+                graphics.Restore(saved);
+            }
+        }
     }
 
     /// <summary>
@@ -139,7 +166,9 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
         // Outer border path
         Rectangle borderRect = Rectangle.Inflate(bounds, -SystemStylePadding, -SystemStylePadding);
 
-        using GraphicsPath borderPath = CreateRoundedRectanglePath(borderRect, CornerRadius);
+        using GraphicsPath borderPath = CreateRoundedPath(
+            GetPathBounds(borderRect),
+            CornerRadius);
 
         // We need to implement a subtle 3d effect around the already
         // painted filling. We do this by drawing a border with a 1px pen,
@@ -274,15 +303,39 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
         return path;
     }
 
-    /// <summary>
-    ///  Creates a GraphicsPath for a rounded rectangle.
-    /// </summary>
-    private static GraphicsPath CreateRoundedRectanglePath(Rectangle bounds, int radius)
+    private static RectangleF GetPathBounds(Rectangle bounds)
+        => new(
+            bounds.X,
+            bounds.Y,
+            Math.Max(1, bounds.Width - 1),
+            Math.Max(1, bounds.Height - 1));
+
+    private static RectangleF Inset(RectangleF bounds, float inset)
+        => new(
+            bounds.X + inset,
+            bounds.Y + inset,
+            Math.Max(1, bounds.Width - (2 * inset)),
+            Math.Max(1, bounds.Height - (2 * inset)));
+
+    private static GraphicsPath CreateRoundedPath(RectangleF bounds, float radius)
     {
         GraphicsPath path = new();
+        float clampedRadius = Math.Clamp(radius, 1, Math.Min(bounds.Width, bounds.Height));
+        path.AddRoundedRectangle(bounds, new SizeF(clampedRadius, clampedRadius));
+        return path;
+    }
 
-        path.AddRoundedRectangle(bounds, new Size(radius, radius));
-
+    private static GraphicsPath CreateRingPath(
+        RectangleF outerBounds,
+        float outerRadius,
+        float thickness)
+    {
+        GraphicsPath path = CreateRoundedPath(outerBounds, outerRadius);
+        RectangleF innerBounds = Inset(outerBounds, thickness);
+        float innerRadius = Math.Max(1, outerRadius - (2 * thickness));
+        using GraphicsPath innerPath = CreateRoundedPath(innerBounds, innerRadius);
+        path.FillMode = FillMode.Alternate;
+        path.AddPath(innerPath, connect: false);
         return path;
     }
 }

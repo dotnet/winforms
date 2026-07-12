@@ -30,6 +30,7 @@ internal partial interface IButtonRenderer
     ///  Renders the button with the specified style, state, and content.
     /// </summary>
     /// <param name="graphics">The graphics context to draw on.</param>
+    /// <param name="control">The button control whose parent surface is used for exposed regions.</param>
     /// <param name="bounds">The bounds of the button.</param>
     /// <param name="flatStyle">The flat style of the button.</param>
     /// <param name="state">The visual state of the button (normal, hot, pressed, disabled, default).</param>
@@ -41,6 +42,7 @@ internal partial interface IButtonRenderer
     /// <param name="paintField">An action to paint the text or field within the specified rectangle, color, and enabled state.</param>
     void RenderButton(
         Graphics graphics,
+        Control control,
         Rectangle bounds,
         FlatStyle flatStyle,
         PushButtonState state,

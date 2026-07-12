@@ -57,6 +57,8 @@ public abstract partial class TextBoxBase : Control
     private const int VisualStylesFixed3DBorderPadding = 5;
     private const int VisualStylesFixedSingleBorderPadding = 4;
     private const int VisualStylesNoBorderPadding = 3;
+    internal const int VisualStylesInternalChromeInset = 2;
+    private const int VisualStylesCornerRadius = 15;
     private const int BorderThickness = 1;
 
     /// <summary>
@@ -360,8 +362,21 @@ public abstract partial class TextBoxBase : Control
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _borderStyle = value;
+                CommonProperties.xClearPreferredSizeCache(this);
+                if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+                {
+                    AdjustHeight(false);
+                }
+
                 UpdateStyles();
-                RecreateHandle();
+                if (EffectiveVisualStylesMode >= VisualStylesMode.Net11 && IsHandleCreated)
+                {
+                    RecalculateVisualStylesClientArea();
+                }
+                else
+                {
+                    RecreateHandle();
+                }
 
                 // PreferredSize depends on BorderStyle : thru CreateParams.ExStyle in User32!AdjustRectEx.
                 // So when the BorderStyle changes let the parent of this control know about it.
@@ -853,8 +868,25 @@ public abstract partial class TextBoxBase : Control
     ///  Returns the preferred height for modern Visual Styles, taking the carved padding band
     ///  (including the live scrollbar allowance and the user <see cref="Padding"/>) into account.
     /// </summary>
-    private protected virtual int PreferredHeightCore =>
-        FontHeight + GetVisualStylesPadding(includeScrollbars: true).Vertical;
+    private protected virtual int PreferredHeightCore
+    {
+        get
+        {
+            int preferredHeight = FontHeight + GetVisualStylesPadding(includeScrollbars: true).Vertical;
+
+            if (AutoSize && !Multiline && BorderStyle == BorderStyle.Fixed3D)
+            {
+                // A naturally sized single-line control must leave enough room for the complete
+                // rounded chrome. Explicitly fixed controls are not forced through this floor.
+                int roundedChromeMinimumHeight = (ScaleVisualStylesMetric(VisualStylesCornerRadius) * 2)
+                    + ScaleVisualStylesMetric(BorderThickness)
+                    + ScaleVisualStylesMetric(VisualStylesInternalChromeInset);
+                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
+            }
+
+            return preferredHeight;
+        }
+    }
 
     /// <summary>
     ///  Returns the classic (Everett-compatible) preferred height for a single-line text box.
@@ -891,12 +923,13 @@ public abstract partial class TextBoxBase : Control
     /// <remarks>
     ///  <para>
     ///   The visible part of the padding is the area by which we extend the real-estate of the control
-    ///   with its back color. The user-provided <see cref="Padding"/> is always added on top.
+    ///  with its back color. Border/corner reservation, the DPI-scaled internal chrome inset, the
+    ///  user-provided <see cref="Padding"/>, and scrollbar reservation are each added once.
     ///  </para>
     /// </remarks>
     private protected Padding GetVisualStylesPadding(bool includeScrollbars)
     {
-        int offset = LogicalToDeviceUnits(BorderThickness);
+        int offset = ScaleVisualStylesMetric(BorderThickness);
 
         // The visible padding is selected per BorderStyle (not per VisualStylesMode): each border look
         // reserves a differently sized band around the native edit's client area for the modern chrome
@@ -905,29 +938,31 @@ public abstract partial class TextBoxBase : Control
         // single-line border; None reserves only a minimal band, plus extra room on the right and bottom
         // for the scrollbars and the focus line. BorderThickness (offset) is added so the drawn border
         // line sits inside the reserved band rather than on its outer edge.
-        Padding padding = BorderStyle switch
+        Padding borderPadding = BorderStyle switch
         {
             BorderStyle.Fixed3D => new Padding(
-                left: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
-                top: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
-                right: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
-                bottom: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset),
+                left: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
+                top: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
+                right: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
+                bottom: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset),
 
             BorderStyle.FixedSingle => new Padding(
-                left: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
-                top: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
-                right: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
-                bottom: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset),
+                left: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
+                top: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
+                right: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
+                bottom: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset),
 
             BorderStyle.None => new Padding(
-                left: LogicalToDeviceUnits(VisualStylesNoBorderPadding),
-                top: LogicalToDeviceUnits(VisualStylesNoBorderPadding),
-                right: LogicalToDeviceUnits(VisualStylesNoBorderPadding) + offset,
+                left: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
+                top: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
+                right: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + offset,
                 // We still need some extra space for the focus indication.
-                bottom: LogicalToDeviceUnits(VisualStylesNoBorderPadding) + offset),
+                bottom: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + offset),
 
             _ => Padding.Empty,
         };
+
+        Padding padding = borderPadding + new Padding(ScaleVisualStylesMetric(VisualStylesInternalChromeInset));
 
         if (includeScrollbars)
         {
@@ -938,6 +973,9 @@ public abstract partial class TextBoxBase : Control
 
         return padding;
     }
+
+    private int ScaleVisualStylesMetric(int logicalValue)
+        => ScaleHelper.ScaleToDpi(logicalValue, DeviceDpiInternal);
 
     /// <summary>
     ///  Returns the additional padding required to clear the live scrollbars,
@@ -1613,6 +1651,8 @@ public abstract partial class TextBoxBase : Control
             ScrollToCaret();
             _textBoxFlags[s_scrollToCaretOnHandleCreated] = false;
         }
+
+        RecalculateVisualStylesClientArea();
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
@@ -1622,6 +1662,27 @@ public abstract partial class TextBoxBase : Control
         // Update text selection cached values to be restored when recreating the handle.
         GetSelectionStartAndLength(out _selectionStart, out _selectionLength);
         base.OnHandleDestroyed(e);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        base.OnVisualStylesModeChanged(e);
+
+        CommonProperties.xClearPreferredSizeCache(this);
+        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.VisualStylesMode);
+        AdjustHeight(false);
+
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        // Update the native styles without recreating the handle so text, selection, and scroll state
+        // remain untouched. The client-area latch must be reset before requesting a new frame.
+        _triggerNewClientSizeRequest = false;
+        UpdateStyles();
+        RecalculateVisualStylesClientArea();
     }
 
     /// <summary>
@@ -1719,7 +1780,23 @@ public abstract partial class TextBoxBase : Control
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
+        CommonProperties.xClearPreferredSizeCache(this);
+        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Font);
         AdjustHeight(false);
+    }
+
+    protected override void OnDpiChangedAfterParent(EventArgs e)
+    {
+        base.OnDpiChangedAfterParent(e);
+
+        CommonProperties.xClearPreferredSizeCache(this);
+        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Bounds);
+        AdjustHeight(false);
+
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            RecalculateVisualStylesClientArea();
+        }
     }
 
     protected virtual void OnHideSelectionChanged(EventArgs e)
@@ -1778,6 +1855,8 @@ public abstract partial class TextBoxBase : Control
     protected override void OnPaddingChanged(EventArgs e)
     {
         base.OnPaddingChanged(e);
+        CommonProperties.xClearPreferredSizeCache(this);
+        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Padding);
         AdjustHeight(false);
 
         // The carved modern Visual Styles padding band includes the user Padding, so a runtime change
@@ -2339,14 +2418,14 @@ public abstract partial class TextBoxBase : Control
                 // Controls whose native window reserves its own non-client metrics (RichEdit reserves its
                 // border and scrollbars) must run the default handler first, so we carve the modern padding
                 // band from the already-adjusted client rectangle rather than the raw proposed window
-                // rectangle. Those controls report an empty GetScrollBarPadding so the scrollbar space the
-                // native handler already reserved is not counted twice.
+                // rectangle. Their managed scrollbar allowance is omitted from this carve because the
+                // native handler already reserved it.
                 if (ReservesNativeNonClientArea)
                 {
                     base.WndProc(ref m);
                 }
 
-                Padding padding = GetVisualStylesPadding(includeScrollbars: true);
+                Padding padding = GetVisualStylesPadding(includeScrollbars: !ReservesNativeNonClientArea);
 
                 ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;
 
@@ -2429,6 +2508,26 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private void WmPrint(ref Message m)
+    {
+        base.WndProc(ref m);
+
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11
+            || ((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) == 0)
+        {
+            return;
+        }
+
+        HDC hdc = (HDC)m.WParamInternal;
+        if (hdc.IsNull)
+        {
+            return;
+        }
+
+        using Graphics graphics = Graphics.FromHdc(hdc);
+        OnNcPaint(graphics, hdc);
+    }
+
     /// <summary>
     ///  Builds a non-client update region, in screen coordinates, that spans the whole window but
     ///  excludes the live client rectangle. This is handed to the default <c>WM_NCPAINT</c> handler so
@@ -2473,8 +2572,8 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
     {
-        int cornerRadius = LogicalToDeviceUnits(15);
-        int borderThickness = LogicalToDeviceUnits(BorderThickness);
+        int cornerRadius = ScaleVisualStylesMetric(VisualStylesCornerRadius);
+        int borderThickness = ScaleVisualStylesMetric(BorderThickness);
 
         Color adornerColor = ForeColor;
 
@@ -2498,17 +2597,10 @@ public abstract partial class TextBoxBase : Control
             width: Bounds.Width,
             height: Bounds.Height);
 
-        Padding clientPadding = GetVisualStylesPadding(includeScrollbars: false);
+        // The native client rectangle is the only protected area. It includes the border, internal
+        // chrome inset, user Padding, and scrollbar reservation exactly as the native window reports it.
+        Rectangle clientBounds = Rectangle.Intersect(bounds, GetNativeClientRectangle());
 
-        // This is the client area without the padding.
-        Rectangle clientBounds = new(
-            clientPadding.Left,
-            clientPadding.Top,
-            Math.Max(0, bounds.Width - clientPadding.Horizontal),
-            Math.Max(0, bounds.Height - clientPadding.Vertical));
-        clientBounds = Rectangle.Intersect(bounds, clientBounds);
-
-        // This is the client area of the actual original edit control.
         Rectangle deflatedBounds = bounds;
 
         // Making sure we never color outside the lines.
@@ -2535,13 +2627,21 @@ public abstract partial class TextBoxBase : Control
 
         bounds.Inflate(1, 1);
 
-        // Fill the buffer with the parent background color.
-        offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
-
         // Below roughly 2 * cornerRadius + thickness the rounded Fixed3D chrome renders as a broken
         // lozenge. When the available height is below that viable threshold we fall back to flat/simple
         // chrome. This is a render-only fallback - it does not change size, layout, or ClientSize.
         bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
+
+        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        {
+            using GraphicsPath roundedBodyPath = new();
+            roundedBodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+            ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, roundedBodyPath, parentBackColor);
+        }
+        else
+        {
+            offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
+        }
 
         switch (BorderStyle)
         {
@@ -2680,6 +2780,25 @@ public abstract partial class TextBoxBase : Control
         ];
     }
 
+    private Rectangle GetNativeClientRectangle()
+    {
+        if (!IsHandleCreated
+            || !PInvokeCore.GetWindowRect(this, out RECT windowRect))
+        {
+            return Rectangle.Empty;
+        }
+
+        PInvokeCore.GetClientRect(this, out RECT clientRect);
+        Point clientTopLeft = default;
+        PInvoke.ClientToScreen(this, ref clientTopLeft);
+
+        return new Rectangle(
+            clientTopLeft.X - windowRect.left,
+            clientTopLeft.Y - windowRect.top,
+            clientRect.Width,
+            clientRect.Height);
+    }
+
     private void WmReflectCommand(ref Message m)
     {
         if (_textBoxFlags[s_codeUpdateText] || _textBoxFlags[s_creatingHandle])
@@ -2766,6 +2885,9 @@ public abstract partial class TextBoxBase : Control
 
             case PInvokeCore.WM_NCPAINT:
                 WmNcPaint(ref m);
+                break;
+            case PInvokeCore.WM_PRINT:
+                WmPrint(ref m);
                 break;
 
             case PInvokeCore.WM_LBUTTONDBLCLK:
