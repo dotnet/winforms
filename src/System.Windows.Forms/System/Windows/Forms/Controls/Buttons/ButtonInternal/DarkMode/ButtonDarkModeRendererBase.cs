@@ -36,9 +36,53 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     internal int DeviceDpi { get; set; } = 96;
 
     /// <summary>
+    ///  Gets or sets the appearance settings for the button being rendered.
+    /// </summary>
+    internal FlatButtonAppearance? FlatAppearance { get; set; }
+
+    /// <summary>
     ///  Scales a logical (96-DPI) value to the current <see cref="DeviceDpi"/>.
     /// </summary>
     private protected int Scale(int logicalValue) => (int)Math.Round(logicalValue * (DeviceDpi / 96.0));
+
+    private protected int ScaleBorderThickness(int scaledThickness)
+    {
+        int borderSize = FlatAppearance?.BorderSize ?? 1;
+        if (borderSize == 0)
+        {
+            return 0;
+        }
+
+        float dpiScale = Math.Max(1f, DeviceDpi / 96f);
+        float factor = 1f + ((borderSize - 1) / dpiScale);
+
+        return Math.Max(1, (int)Math.Round(scaledThickness * factor));
+    }
+
+    private protected Color ResolveBorderColor(Color designColor)
+        => FlatAppearance is { BorderColor.IsEmpty: false } appearance
+            ? appearance.BorderColor
+            : designColor;
+
+    private protected static Color DeriveHoverColor(Color baseColor)
+        => baseColor.GetBrightness() < 0.5f
+            ? ControlPaint.Light(baseColor, 0.15f)
+            : ControlPaint.Dark(baseColor, 0.05f);
+
+    private protected static Color DerivePressedColor(Color baseColor)
+        => baseColor.GetBrightness() < 0.5f
+            ? ControlPaint.Light(baseColor, 0.30f)
+            : ControlPaint.Dark(baseColor, 0.12f);
+
+    private protected static Color DeriveDisabledColor(Color baseColor)
+    {
+        int average = (baseColor.R + baseColor.G + baseColor.B) / 3;
+
+        return Color.FromArgb(
+            ((average * 6) + (baseColor.R * 4)) / 10,
+            ((average * 6) + (baseColor.G * 4)) / 10,
+            ((average * 6) + (baseColor.B * 4)) / 10);
+    }
 
     /// <summary>
     ///  Clears the background with the parent's background color or the control's background color if no parent is available.
@@ -108,6 +152,34 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 
     public abstract Color GetTextColor(PushButtonState state, bool isDefault);
+
+    public Color GetBackgroundColor(PushButtonState state, bool isDefault, Color customBaseColor)
+    {
+        if (state == PushButtonState.Hot
+            && FlatAppearance is { MouseOverBackColor.IsEmpty: false } hoverAppearance)
+        {
+            return hoverAppearance.MouseOverBackColor;
+        }
+
+        if (state == PushButtonState.Pressed
+            && FlatAppearance is { MouseDownBackColor.IsEmpty: false } pressedAppearance)
+        {
+            return pressedAppearance.MouseDownBackColor;
+        }
+
+        if (!customBaseColor.IsEmpty)
+        {
+            return state switch
+            {
+                PushButtonState.Disabled => DeriveDisabledColor(customBaseColor),
+                PushButtonState.Hot => DeriveHoverColor(customBaseColor),
+                PushButtonState.Pressed => DerivePressedColor(customBaseColor),
+                _ => customBaseColor
+            };
+        }
+
+        return GetBackgroundColor(state, isDefault);
+    }
 
     public abstract Color GetBackgroundColor(PushButtonState state, bool isDefault);
 }

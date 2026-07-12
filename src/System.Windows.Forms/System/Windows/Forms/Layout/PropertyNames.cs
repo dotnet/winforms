@@ -79,6 +79,7 @@ internal static class PropertyNames
     public const string TextImageRelation = "TextImageRelation";
     public const string UseCompatibleTextRendering = "UseCompatibleTextRendering";
     public const string Visible = "Visible";
+    public const string VisualStylesMode = "VisualStylesMode";
     public const string WordWrap = "WordWrap";
     public const string WrapContents = "WrapContents";
 }

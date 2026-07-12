@@ -32,6 +32,7 @@ public partial class RadioButton : ButtonBase
     private bool _autoCheck = true;
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private Appearance _appearance = Appearance.Normal;
+    private Rendering.RadioButton.AnimatedRadioGlyphRenderer? _radioGlyphRenderer;
     private int _flatSystemStylePaddingWidth;
     private int _flatSystemStyleMinimumHeight;
 
@@ -89,6 +90,7 @@ public partial class RadioButton : ButtonBase
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                 {
                     _appearance = value;
+                    ResetAdapter();
 
                     // UpdateOwnerDraw checks if OwnerDraw state changed and calls RecreateHandle if needed.
                     UpdateOwnerDraw();
@@ -467,11 +469,38 @@ public partial class RadioButton : ButtonBase
         }
     }
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new RadioButtonFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Flat)
+            : new RadioButtonFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new RadioButtonPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Popup)
+            : new RadioButtonPopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new RadioButtonStandardAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Standard)
+            : new RadioButtonStandardAdapter(this);
+
+    internal Rendering.RadioButton.AnimatedRadioGlyphRenderer RadioGlyphRenderer
+        => _radioGlyphRenderer ??= new(this);
+
+    private bool UseModernGlyphRenderer
+        => Appearance == Appearance.Normal
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _radioGlyphRenderer?.Dispose();
+            _radioGlyphRenderer = null;
+        }
+
+        base.Dispose(disposing);
+    }
 
     private void OnAppearanceChanged(EventArgs e)
     {
