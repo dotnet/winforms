@@ -24,8 +24,8 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             // path reachable and lets Standard buttons support images, focus cues, etc.
             FlatStyle.Standard => modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
             FlatStyle.Flat => modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
-            // FlatStyle.Popup is owner-painted directly by Button using the animated key-cap renderer (see
-            // Button.IsPopupKeyCapAppearance); the adapter is used only for layout/sizing here, for which the
+            // FlatStyle.Popup is owner-painted directly by ButtonBase using the animated key-cap renderer; the
+            // adapter is used only for layout/sizing here, for which the
             // modern renderer's metrics are a good fit.
             FlatStyle.Popup => new ModernButtonDarkModeRenderer(),
             FlatStyle.System => new SystemButtonDarkModeRenderer(),

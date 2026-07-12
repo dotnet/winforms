@@ -15,6 +15,112 @@ namespace System.Windows.Forms.Tests;
 
 public class RadioButtonTests : AbstractButtonBaseTests
 {
+    [WinFormsTheory]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(10)]
+    [InlineData(11)]
+    public void RadioButton_ToggleSwitch_FontSize_DerivesSwitchGeometry(float fontSize)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, fontSize);
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Font = font,
+            Text = "Toggle",
+            Padding = new Padding(2)
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
+        Size preferredSize = control.GetPreferredSizeCore(Size.Empty);
+
+        Assert.Equal(font.Height, metrics.SwitchHeight);
+        Assert.Equal(2 * font.Height, metrics.SwitchWidth);
+        Assert.Equal(metrics.GetPreferredSize(control), preferredSize);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_ModernVisualStyles_PaintsAndAnimates()
+    {
+        using Panel parent = new();
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Text = "Toggle",
+            Size = new Size(120, 32)
+        };
+        parent.Controls.Add(control);
+        control.CreateControl();
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        Exception exception = Record.Exception(() => control.DrawToBitmap(bitmap, control.ClientRectangle));
+        Assert.Null(exception);
+
+        control.Checked = true;
+        Assert.True(control.ToggleSwitchRenderer.IsRunning);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_RetainsMutualExclusion()
+    {
+        using Panel parent = new();
+        using RadioButton first = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using RadioButton second = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(first);
+        parent.Controls.Add(second);
+
+        first.PerformClick();
+        second.PerformClick();
+
+        Assert.False(first.Checked);
+        Assert.True(second.Checked);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_ClassicVisualStyles_UsesClassicFallback()
+    {
+        using RadioButton classic = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Classic,
+            Text = "Toggle"
+        };
+        using RadioButton normal = new()
+        {
+            Appearance = Appearance.Normal,
+            VisualStylesMode = VisualStylesMode.Classic,
+            Text = "Toggle"
+        };
+
+        Assert.Equal(normal.GetPreferredSize(Size.Empty), classic.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_Dispose_DisposesRenderer()
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        _ = control.ToggleSwitchRenderer;
+        control.Dispose();
+
+        Assert.Null(control.TestAccessor.Dynamic._toggleSwitchRenderer);
+    }
+
     public static TheoryData<FlatStyle> ModernButtonFlatStyles => new()
     {
         FlatStyle.Standard,

@@ -3,11 +3,12 @@
 
 using System.Drawing;
 using System.Windows.Forms.Rendering.Animation;
+using PushButtonState = System.Windows.Forms.VisualStyles.PushButtonState;
 
 namespace System.Windows.Forms.Rendering.Button;
 
 /// <summary>
-///  Drives and renders a <see cref="Forms.Button"/> whose <see cref="Forms.ButtonBase.FlatStyle"/> is
+///  Drives and renders a <see cref="Forms.ButtonBase"/> whose <see cref="Forms.ButtonBase.FlatStyle"/> is
 ///  <see cref="FlatStyle.Popup"/> when modern visual styles or dark mode are active, using the concave key-cap
 ///  look of <see cref="PopupButtonKeyCapRenderer"/>.
 /// </summary>
@@ -29,22 +30,23 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     private float _pressCurrent;
     private float _pressStart;
     private float _pressTarget;
+    private readonly ModernButtonDarkModeRenderer _baseColorRenderer = new();
 
-    public AnimatedPopupButtonRenderer(Forms.Button button)
+    public AnimatedPopupButtonRenderer(Forms.ButtonBase button)
         : base(button)
     {
     }
 
-    private Forms.Button Button => (Forms.Button)Control;
+    private Forms.ButtonBase Button => (Forms.ButtonBase)Control;
 
     /// <summary>
     ///  Updates the hover and press targets from the current interaction state and, if anything changed,
     ///  (re)starts the interpolation from the current channel values towards the new targets.
     /// </summary>
-    public void SetInteractionState(bool hovered, bool pressed)
+    public void SetInteractionState(bool hovered, bool pressed, bool selected)
     {
         float hoverTarget = hovered ? 1f : 0f;
-        float pressTarget = pressed ? 1f : 0f;
+        float pressTarget = pressed || selected ? 1f : 0f;
 
         if (hoverTarget == _hoverTarget && pressTarget == _pressTarget)
         {
@@ -97,14 +99,65 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     /// </summary>
     public override void RenderControl(Graphics graphics)
     {
-        Forms.Button button = Button;
+        Forms.ButtonBase button = Button;
 
-        Color faceColor = button.BackColor;
         FlatButtonAppearance flatAppearance = button.FlatAppearance;
+        _baseColorRenderer.DeviceDpi = button.DeviceDpi;
+        _baseColorRenderer.FlatAppearance = flatAppearance;
 
-        Color borderColor = flatAppearance.BorderColor.IsEmpty
-            ? PopupButtonColorMath.TowardsContrast(faceColor, 0.35f)
-            : flatAppearance.BorderColor;
+        PushButtonState state = _pressTarget > 0f
+            ? PushButtonState.Pressed
+            : _hoverTarget > 0f
+                ? PushButtonState.Hot
+                : PushButtonState.Normal;
+        bool highContrast = SystemInformation.HighContrast;
+        Color faceColor;
+        Color foreColor;
+        Color borderColor;
+
+        if (highContrast)
+        {
+            bool highlighted = button.Enabled
+                && (button.Focused || button.MouseIsOver || button.IsDefault);
+            faceColor = highlighted ? SystemColors.Highlight : SystemColors.Control;
+            foreColor = !button.Enabled
+                ? SystemColors.GrayText
+                : highlighted
+                    ? SystemColors.HighlightText
+                    : SystemColors.ControlText;
+            borderColor = button.Enabled ? SystemColors.ControlText : SystemColors.GrayText;
+        }
+        else
+        {
+            Color baseColor = button.BackColor != Forms.Control.DefaultBackColor
+                ? button.BackColor
+                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, button.IsDefault);
+            bool useModernDefaults = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
+            Color hoverColor = !flatAppearance.MouseOverBackColorCore.IsEmpty
+                ? flatAppearance.MouseOverBackColorCore
+                : useModernDefaults
+                    ? ModernButtonColorMath.BlendWithAccent(baseColor)
+                    : baseColor;
+            Color pressedColor = !flatAppearance.MouseDownBackColorCore.IsEmpty
+                ? flatAppearance.MouseDownBackColorCore
+                : useModernDefaults
+                    ? ModernButtonColorMath.GetMouseDownColor()
+                    : baseColor;
+
+            faceColor = PopupButtonColorMath.Blend(baseColor, hoverColor, _hoverCurrent);
+            faceColor = PopupButtonColorMath.Blend(faceColor, pressedColor, _pressCurrent);
+            foreColor = button.ForeColor != Forms.Control.DefaultForeColor
+                ? button.ForeColor
+                : _baseColorRenderer.GetTextColor(state, button.IsDefault);
+            borderColor = flatAppearance.BorderColor.IsEmpty
+                ? PopupButtonColorMath.TowardsContrast(faceColor, 0.35f)
+                : flatAppearance.BorderColor;
+        }
+
+        using (PaintEventArgs paintEventArgs = new(graphics, button.ClientRectangle))
+        {
+            button.PaintBackground(paintEventArgs, button.ClientRectangle);
+        }
 
         PopupButtonRenderContext context = new()
         {
@@ -112,19 +165,24 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             Text = button.Text,
             Font = button.Font,
             BackColor = faceColor,
-            ForeColor = button.ForeColor,
+            ForeColor = foreColor,
             BorderColor = borderColor,
             BorderWidth = flatAppearance.BorderSize,
             Enabled = button.Enabled,
             Focused = button.Focused && button.ShowFocusCues,
-            Pressed = button.MouseIsDown,
+            Pressed = button.MouseIsDown || _pressTarget > 0f,
             IsDefault = button.IsDefault,
+            IsDarkMode = Application.IsDarkModeEnabled,
             AnimationState = new PopupButtonAnimationState(_hoverCurrent, _pressCurrent),
             TextAlign = button.TextAlign,
+            ImageSize = button.Image?.Size ?? Size.Empty,
+            ImageAlign = button.ImageAlign,
+            TextImageRelation = button.TextImageRelation,
             RightToLeft = button.RightToLeft,
             Padding = button.Padding,
             DeviceDpi = button.DeviceDpi,
             ShowKeyboardCues = button.ShowKeyboardCues,
+            HighContrast = highContrast
         };
 
         Action<Rectangle>? paintImage = null;
@@ -134,15 +192,18 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         {
             paintImage = contentBounds =>
             {
-                Rectangle imageBounds = AlignInRectangle(contentBounds, image.Size, button.ImageAlign);
-
                 if (button.Enabled)
                 {
-                    graphics.DrawImage(image, imageBounds);
+                    graphics.DrawImage(image, contentBounds);
                 }
                 else
                 {
-                    ControlPaint.DrawImageDisabled(graphics, image, imageBounds.X, imageBounds.Y, faceColor);
+                    ControlPaint.DrawImageDisabled(
+                        graphics,
+                        image,
+                        contentBounds.X,
+                        contentBounds.Y,
+                        faceColor);
                 }
             };
         }
@@ -151,23 +212,4 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     }
 
     private static float Lerp(float start, float end, float amount) => start + ((end - start) * amount);
-
-    private static Rectangle AlignInRectangle(Rectangle container, Size size, ContentAlignment alignment)
-    {
-        int x = alignment switch
-        {
-            ContentAlignment.TopLeft or ContentAlignment.MiddleLeft or ContentAlignment.BottomLeft => container.Left,
-            ContentAlignment.TopRight or ContentAlignment.MiddleRight or ContentAlignment.BottomRight => container.Right - size.Width,
-            _ => container.Left + ((container.Width - size.Width) / 2)
-        };
-
-        int y = alignment switch
-        {
-            ContentAlignment.TopLeft or ContentAlignment.TopCenter or ContentAlignment.TopRight => container.Top,
-            ContentAlignment.BottomLeft or ContentAlignment.BottomCenter or ContentAlignment.BottomRight => container.Bottom - size.Height,
-            _ => container.Top + ((container.Height - size.Height) / 2)
-        };
-
-        return new Rectangle(x, y, size.Width, size.Height);
-    }
 }

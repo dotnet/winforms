@@ -32,6 +32,8 @@ public sealed class VisualStylesButtons : Form
 
     private readonly List<Button> _sampleButtons = [];
     private readonly List<CheckBox> _sampleToggles = [];
+    private readonly List<RadioButton> _sampleRadioToggles = [];
+    private readonly List<ButtonBase> _sampleAppearanceButtons = [];
     private readonly CheckBox _modernToggle;
 
     public VisualStylesButtons()
@@ -103,6 +105,7 @@ public sealed class VisualStylesButtons : Form
         }
 
         Controls.Add(table);
+        Controls.Add(BuildCheckablePopupPanel());
         Controls.Add(BuildToggleSwitchPanel());
         Controls.Add(_modernToggle);
 
@@ -121,20 +124,86 @@ public sealed class VisualStylesButtons : Form
 
         panel.Controls.Add(new Label { Text = "Toggle switches:", AutoSize = true, Padding = new Padding(0, 6, 8, 0) });
 
-        foreach (string caption in new[] { "Wi\u2011Fi", "Bluetooth (off)", "Airplane mode" })
+        foreach (float fontSize in new[] { 8f, 9f, 11f })
         {
             CheckBox toggle = new()
             {
                 Appearance = Appearance.ToggleSwitch,
                 AutoSize = true,
-                Text = caption,
-                Checked = !caption.Contains("off", StringComparison.OrdinalIgnoreCase),
+                Text = $"CheckBox {fontSize:0} pt",
+                Checked = fontSize != 9f,
+                Font = new Font(Font.FontFamily, fontSize),
                 Margin = new Padding(8, 4, 8, 4)
             };
 
             _sampleToggles.Add(toggle);
             panel.Controls.Add(toggle);
+
+            RadioButton radioToggle = new()
+            {
+                Appearance = Appearance.ToggleSwitch,
+                AutoSize = true,
+                Text = $"RadioButton {fontSize:0} pt",
+                Checked = fontSize == 9f,
+                Font = new Font(Font.FontFamily, fontSize),
+                Margin = new Padding(8, 4, 8, 4)
+            };
+
+            _sampleRadioToggles.Add(radioToggle);
+            panel.Controls.Add(radioToggle);
         }
+
+        return panel;
+    }
+
+    private FlowLayoutPanel BuildCheckablePopupPanel()
+    {
+        FlowLayoutPanel panel = new()
+        {
+            Dock = DockStyle.Bottom,
+            AutoSize = true,
+            FlowDirection = FlowDirection.LeftToRight,
+            Padding = new Padding(4)
+        };
+
+        panel.Controls.Add(new Label
+        {
+            Text = "Popup focus/default:",
+            AutoSize = true,
+            Padding = new Padding(0, 9, 8, 0)
+        });
+
+        Button defaultButton = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            Text = "Default",
+            Size = new Size(100, 36)
+        };
+        defaultButton.NotifyDefault(true);
+        panel.Controls.Add(defaultButton);
+        _sampleButtons.Add(defaultButton);
+
+        CheckBox checkBox = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = FlatStyle.Popup,
+            Text = "CheckBox",
+            AutoSize = true,
+            Checked = true
+        };
+        panel.Controls.Add(checkBox);
+        _sampleAppearanceButtons.Add(checkBox);
+
+        RadioButton radioButton = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = FlatStyle.Popup,
+            Text = "RadioButton",
+            AutoSize = true,
+            Checked = true
+        };
+        panel.Controls.Add(radioButton);
+        _sampleAppearanceButtons.Add(radioButton);
 
         return panel;
     }
@@ -188,6 +257,16 @@ public sealed class VisualStylesButtons : Form
         foreach (CheckBox toggle in _sampleToggles)
         {
             toggle.VisualStylesMode = mode;
+        }
+
+        foreach (RadioButton toggle in _sampleRadioToggles)
+        {
+            toggle.VisualStylesMode = mode;
+        }
+
+        foreach (ButtonBase button in _sampleAppearanceButtons)
+        {
+            button.VisualStylesMode = mode;
         }
     }
 }

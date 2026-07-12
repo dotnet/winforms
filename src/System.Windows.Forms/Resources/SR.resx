@@ -4993,7 +4993,7 @@ Stack trace where the illegal operation occurred was:
     <value>Controls whether the Network button is displayed.</value>
   </data>
   <data name="RadioButtonAppearanceDescr" xml:space="preserve">
-    <value>Controls whether the RadioButton appears as normal or as a Windows PushButton.</value>
+    <value>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</value>
   </data>
   <data name="RadioButtonAutoCheckDescr" xml:space="preserve">
     <value>Causes the radio button to automatically change state when clicked.</value>
