@@ -2,6 +2,72 @@
 override System.Windows.Forms.Button.Dispose(bool disposing) -> void
 override System.Windows.Forms.Button.OnMouseDown(System.Windows.Forms.MouseEventArgs! mevent) -> void
 override System.Windows.Forms.Button.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
+System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
+System.Windows.Forms.ControlMutationExtensions
+System.Windows.Forms.Form.SystemTextSizeChanged -> System.EventHandler?
+System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Classic = 0 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Deferred = 1 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Inherit = -1 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.ISupportSuspendPainting
+System.Windows.Forms.ISupportSuspendPainting.BeginSuspendPainting() -> void
+System.Windows.Forms.ISupportSuspendPainting.EndSuspendPainting() -> void
+System.Windows.Forms.ISupportSuspendRelocation
+System.Windows.Forms.ISupportSuspendRelocation.BeginSuspendRelocation() -> void
+System.Windows.Forms.ISupportSuspendRelocation.EndSuspendRelocation() -> void
+System.Windows.Forms.KioskModeManager
+System.Windows.Forms.KioskModeManager.ContainerControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.KioskModeManager.ContainerControl.set -> void
+System.Windows.Forms.KioskModeManager.ContainerControlChanged -> System.EventHandler?
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.FullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreenChanged -> System.EventHandler?
+System.Windows.Forms.KioskModeManager.HideTaskbar.get -> bool
+System.Windows.Forms.KioskModeManager.HideTaskbar.set -> void
+System.Windows.Forms.KioskModeManager.KioskModeManager() -> void
+System.Windows.Forms.KioskModeManager.KioskModeManager(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.get -> int
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.set -> void
+System.Windows.Forms.KioskModeManager.SuppressPowerSaving.get -> bool
+System.Windows.Forms.KioskModeManager.SuppressPowerSaving.set -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreen() -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.get -> System.Windows.Forms.Keys
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.set -> void
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.set -> void
+System.Windows.Forms.KioskModeManager.WakeUpCommand.get -> System.Windows.Input.ICommand?
+System.Windows.Forms.KioskModeManager.WakeUpCommand.set -> void
+System.Windows.Forms.KioskModeManager.Wakeup -> System.Windows.Forms.KioskModeWakeupEventHandler?
+System.Windows.Forms.KioskModeWakeupEventArgs
+System.Windows.Forms.KioskModeWakeupEventArgs.KioskModeWakeupEventArgs(System.Windows.Forms.KioskModeWakeupSource source) -> void
+System.Windows.Forms.KioskModeWakeupEventArgs.Source.get -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupEventHandler
+System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Keyboard = 0 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Mouse = 1 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.PowerResume = 2 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Session = 3 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.SuspendPaintingScope
+System.Windows.Forms.SuspendPaintingScope.Dispose() -> void
+System.Windows.Forms.SuspendPaintingScope.SuspendPaintingScope(System.Windows.Forms.ISupportSuspendPainting? target) -> void
+System.Windows.Forms.SuspendRelocationScope
+System.Windows.Forms.SuspendRelocationScope.Dispose() -> void
+System.Windows.Forms.SuspendRelocationScope.SuspendRelocationScope(System.Windows.Forms.ISupportSuspendRelocation? target) -> void
+System.Windows.Forms.SystemTextSizeAwareness
+System.Windows.Forms.SystemTextSizeAwareness.Notify = 1 -> System.Windows.Forms.SystemTextSizeAwareness
+System.Windows.Forms.SystemTextSizeAwareness.Unaware = 0 -> System.Windows.Forms.SystemTextSizeAwareness
+System.Windows.Forms.TreeView.NodeLeading.get -> float
+System.Windows.Forms.TreeView.NodeLeading.set -> void
+System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
+System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Inherit = -1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Net11 = 2 -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.ButtonBase.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
@@ -12,6 +78,14 @@ override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) ->
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
 override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
+override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
+override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
+static System.Windows.Forms.Application.DefaultFormRevealMode.get -> System.Windows.Forms.FormRevealMode
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance

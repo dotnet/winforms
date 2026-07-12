@@ -156,7 +156,6 @@ public partial class Button : ButtonBase, IButtonControl
     protected override void OnMouseEnter(EventArgs e)
     {
         base.OnMouseEnter(e);
-        UpdatePopupKeyCapInteractionState();
     }
 
     /// <summary>
@@ -165,7 +164,6 @@ public partial class Button : ButtonBase, IButtonControl
     protected override void OnMouseLeave(EventArgs e)
     {
         base.OnMouseLeave(e);
-        UpdatePopupKeyCapInteractionState();
     }
 
     /// <hideinheritance/>
@@ -252,7 +250,6 @@ public partial class Button : ButtonBase, IButtonControl
         }
 
         base.OnMouseUp(mevent);
-        UpdatePopupKeyCapInteractionState();
     }
 
     protected override void OnTextChanged(EventArgs e)

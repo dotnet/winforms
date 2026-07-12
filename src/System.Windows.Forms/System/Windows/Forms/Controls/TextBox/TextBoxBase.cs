@@ -2420,7 +2420,7 @@ public abstract partial class TextBoxBase : Control
             // Restore the original wParam so nothing downstream observes our temporary clip region.
             m.WParamInternal = originalWParam;
 
-            OnNcPaint(graphics);
+            OnNcPaint(graphics, hdc);
         }
         finally
         {
@@ -2471,7 +2471,7 @@ public abstract partial class TextBoxBase : Control
     ///  Paints the modern Visual Styles non-client chrome (border, rounded <see cref="BorderStyle.Fixed3D"/>
     ///  lozenge, focus line) into a shared offscreen buffer and blits it to the supplied window DC.
     /// </summary>
-    private protected virtual void OnNcPaint(Graphics graphics)
+    private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
     {
         int cornerRadius = LogicalToDeviceUnits(15);
         int borderThickness = LogicalToDeviceUnits(BorderThickness);
@@ -2479,10 +2479,9 @@ public abstract partial class TextBoxBase : Control
         Color adornerColor = ForeColor;
 
         Color clientBackColor = BackColor;
+        Color parentBackColor = Parent?.BackColor ?? BackColor;
 
-        // Diagnostic: any LightCoral visible in the native edit client proves that the target clip does
-        // not protect the client area when BufferedGraphics.Render blits the non-client buffer.
-        using var parentBackgroundBrush = Color.LightCoral.GetCachedSolidBrushScope();
+        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
@@ -2505,8 +2504,9 @@ public abstract partial class TextBoxBase : Control
         Rectangle clientBounds = new(
             clientPadding.Left,
             clientPadding.Top,
-            bounds.Width - clientPadding.Horizontal,
-            bounds.Height - clientPadding.Vertical);
+            Math.Max(0, bounds.Width - clientPadding.Horizontal),
+            Math.Max(0, bounds.Height - clientPadding.Vertical));
+        clientBounds = Rectangle.Intersect(bounds, clientBounds);
 
         // This is the client area of the actual original edit control.
         Rectangle deflatedBounds = bounds;
@@ -2515,27 +2515,27 @@ public abstract partial class TextBoxBase : Control
         deflatedBounds.Width -= 1;
         deflatedBounds.Height -= 1;
 
-        // Intentional: ExcludeClip stays on the target (window-DC) graphics, set before the buffer
-        // draws. It governs where Render() may blit, protecting the client area.
+        // Keep the target clip excluded from the GDI+ drawing as well as from the explicit blits below.
         using Region region = new(bounds);
         graphics.Clip = region;
         graphics.ExcludeClip(clientBounds);
 
         // WinForms paints NC serially (one HWND at a time on the UI thread), so a single shared buffer
         // suffices for any number of controls. The buffer is reused when the size fits; steady-state
-        // allocation is zero. We allocate against the window-DC graphics so Render() blits to it.
+        // allocation is zero.
         BufferedGraphicsContext context = BufferedGraphicsManager.Current;
         using BufferedGraphics buffer = context.Allocate(graphics, bounds);
 
         // Intentional: the buffer owns this Graphics - do NOT dispose buffer.Graphics separately.
         Graphics offscreenGraphics = buffer.Graphics;
+        Rectangle bufferBounds = bounds;
 
         // We need anti-aliasing for the rounded chrome.
         offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
 
         bounds.Inflate(1, 1);
 
-        // Fill the buffer with the diagnostic non-client background color.
+        // Fill the buffer with the parent background color.
         offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
 
         // Below roughly 2 * cornerRadius + thickness the rounded Fixed3D chrome renders as a broken
@@ -2616,8 +2616,32 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
-        // Blit the buffer to the window-DC graphics captured at Allocate time.
-        buffer.Render();
+        Rectangle[] nonClientBands = GetNonClientPaintBands(bufferBounds, clientBounds);
+        IntPtr bufferHdc = offscreenGraphics.GetHdc();
+
+        try
+        {
+            foreach (Rectangle band in nonClientBands)
+            {
+                if (band.Width > 0 && band.Height > 0)
+                {
+                    PInvokeCore.BitBlt(
+                        windowHdc,
+                        band.X,
+                        band.Y,
+                        band.Width,
+                        band.Height,
+                        (HDC)bufferHdc,
+                        band.X,
+                        band.Y,
+                        ROP_CODE.SRCCOPY);
+                }
+            }
+        }
+        finally
+        {
+            offscreenGraphics.ReleaseHdcInternal(bufferHdc);
+        }
 
         void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
         {
@@ -2631,6 +2655,29 @@ public abstract partial class TextBoxBase : Control
             offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
             offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
         }
+    }
+
+    private static Rectangle[] GetNonClientPaintBands(Rectangle bounds, Rectangle clientBounds)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return [Rectangle.Empty, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty];
+        }
+
+        Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        if (protectedBounds.Width <= 0 || protectedBounds.Height <= 0)
+        {
+            return [bounds, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty];
+        }
+
+        return
+        [
+            Rectangle.FromLTRB(bounds.Left, bounds.Top, bounds.Right, protectedBounds.Top),
+            Rectangle.FromLTRB(bounds.Left, protectedBounds.Bottom, bounds.Right, bounds.Bottom),
+            Rectangle.FromLTRB(bounds.Left, protectedBounds.Top, protectedBounds.Left, protectedBounds.Bottom),
+            Rectangle.FromLTRB(protectedBounds.Right, protectedBounds.Top, bounds.Right, protectedBounds.Bottom)
+        ];
     }
 
     private void WmReflectCommand(ref Message m)

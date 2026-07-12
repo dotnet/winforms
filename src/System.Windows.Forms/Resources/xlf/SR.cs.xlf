@@ -8700,8 +8700,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">Určuje, zda je ovládací prvek RadioButton zobrazen standardně nebo jako tlačítko systému Windows (PushButton).</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">

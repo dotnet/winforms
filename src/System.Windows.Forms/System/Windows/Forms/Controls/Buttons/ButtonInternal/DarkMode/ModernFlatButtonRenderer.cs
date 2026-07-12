@@ -30,11 +30,14 @@ internal sealed class ModernFlatButtonRenderer : ButtonDarkModeRendererBase
 
     private protected override Padding PaddingCore => Padding.Empty;
 
+    private protected override bool UseModernStateDefaults => true;
+
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
         Rectangle bounds,
         PushButtonState state,
         bool isDefault,
+        bool focused,
         Color backColor)
     {
         GraphicsState? saved = graphics.Save();

@@ -23,7 +23,12 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private protected override Padding PaddingCore { get; } = new(0);
 
     public override Rectangle DrawButtonBackground(
-        Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        bool focused,
+        Color backColor)
     {
         // fill background
         using var back = backColor.GetCachedSolidBrushScope();

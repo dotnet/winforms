@@ -8700,8 +8700,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">控制 RadioButton 顯示為一般按鈕或 Windows PushButton。</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
