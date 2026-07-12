@@ -44,6 +44,9 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
     private static SystemColorMode? s_colorMode;
+#if NET11_0_OR_GREATER
+    private static FormRevealMode? s_defaultFormRevealMode;
+#endif
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -249,6 +252,45 @@ public sealed partial class Application
     /// </remarks>
     public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Gets the configured default <see cref="Forms.FormRevealMode"/> used as the reveal behavior for
+    ///  top-level forms that do not set <see cref="Form.FormRevealMode"/> explicitly.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If no mode has been configured with <see cref="SetDefaultFormRevealMode(FormRevealMode)"/>, this
+    ///   returns <see cref="FormRevealMode.Inherit"/>. Unlike <see cref="Form.FormRevealMode"/>, this
+    ///   getter may return the unresolved <see cref="FormRevealMode.Inherit"/> sentinel; use
+    ///   <see cref="IsFormRevealDeferred"/> for the fully resolved answer.
+    ///  </para>
+    /// </remarks>
+    public static FormRevealMode DefaultFormRevealMode
+        => s_defaultFormRevealMode ?? FormRevealMode.Inherit;
+
+    /// <summary>
+    ///  Gets a value indicating whether newly created top-level forms use deferred reveal by default.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is the fully resolved answer: <see langword="true"/> when
+    ///   <see cref="DefaultFormRevealMode"/> is <see cref="FormRevealMode.Deferred"/>, or when it is
+    ///   <see cref="FormRevealMode.Inherit"/> (the default, when <see cref="SetDefaultFormRevealMode(FormRevealMode)"/>
+    ///   has never been called) and <see cref="IsDarkModeEnabled"/> is <see langword="true"/>.
+    ///   Accessibility trumps compatibility here: an application that opts into dark mode gets
+    ///   flash-reduced form reveal automatically, without also having to call
+    ///   <see cref="SetDefaultFormRevealMode(FormRevealMode)"/> explicitly.
+    ///  </para>
+    /// </remarks>
+    public static bool IsFormRevealDeferred => DefaultFormRevealMode switch
+    {
+        FormRevealMode.Deferred => true,
+        FormRevealMode.Classic => false,
+        _ => IsDarkModeEnabled
+    };
+
+#endif
+
     /// <summary>
     ///  True if the <see cref="ColorMode"/> has been set at least once.
     /// </summary>
@@ -380,6 +422,36 @@ public sealed partial class Application
             }
         }
     }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Sets the process-wide default <see cref="Forms.FormRevealMode"/> used for top-level forms that do
+    ///  not set <see cref="Form.FormRevealMode"/> explicitly.
+    /// </summary>
+    /// <param name="mode">The default form reveal mode to use for newly created top-level forms.</param>
+    /// <remarks>
+    ///  <para>
+    ///   Set the default form reveal mode before creating UI to ensure newly created forms use the
+    ///   intended startup presentation behavior. Unlike the visual-styles default-mode setter (which is
+    ///   write-once, since rendering-version selection is a static, one-time choice), this method can be
+    ///   called more than once, and <see cref="FormRevealMode.Inherit"/> is a valid argument (it resets
+    ///   the default back to its own ambient resolution via <see cref="IsFormRevealDeferred"/>). Free
+    ///   reassignment is intentional: the effective default is derived in part from <see cref="ColorMode"/>
+    ///   and <see cref="IsDarkModeEnabled"/>, which can themselves change for the lifetime of the process;
+    ///   locking this value after first use would make forms created after a later dark-mode change use a
+    ///   stale reveal behavior.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///  <paramref name="mode"/> is not a valid <see cref="Forms.FormRevealMode"/> value.
+    /// </exception>
+    public static void SetDefaultFormRevealMode(FormRevealMode mode)
+    {
+        SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
+        s_defaultFormRevealMode = mode;
+    }
+
+#endif
 
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
