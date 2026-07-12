@@ -29,6 +29,7 @@ public partial class CheckBox : ButtonBase
     private CheckState _checkState;
     private Appearance _appearance;
 
+    private Rendering.CheckBox.AnimatedCheckGlyphRenderer? _checkGlyphRenderer;
     private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
 
     private int _flatSystemStylePaddingWidth;
@@ -77,6 +78,7 @@ public partial class CheckBox : ButtonBase
             using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
             {
                 _appearance = value;
+                ResetAdapter();
 
                 // UpdateOwnerDraw synchronizes control styles with the OwnerDraw state and recreates
                 // the handle if they differ. Since we hijack FlatStyle.Standard for DarkMode, the transition
@@ -129,6 +131,9 @@ public partial class CheckBox : ButtonBase
 
     private Rendering.CheckBox.AnimatedToggleSwitchRenderer ToggleSwitchRenderer =>
         _toggleSwitchRenderer ??= new(this, Rendering.CheckBox.ModernCheckBoxStyle.Rounded);
+
+    internal Rendering.CheckBox.AnimatedCheckGlyphRenderer CheckGlyphRenderer
+        => _checkGlyphRenderer ??= new(this);
 
     private void UpdateToggleSwitchStyles()
     {
@@ -600,6 +605,8 @@ public partial class CheckBox : ButtonBase
     {
         if (disposing)
         {
+            _checkGlyphRenderer?.Dispose();
+            _checkGlyphRenderer = null;
             _toggleSwitchRenderer?.Dispose();
             _toggleSwitchRenderer = null;
         }
@@ -634,11 +641,24 @@ public partial class CheckBox : ButtonBase
         base.OnMouseUp(mevent);
     }
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new CheckBoxFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Flat)
+            : new CheckBoxFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new CheckBoxPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Popup)
+            : new CheckBoxPopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new CheckBoxStandardAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Standard)
+            : new CheckBoxStandardAdapter(this);
+
+    private bool UseModernGlyphRenderer
+        => Appearance == Appearance.Normal
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11;
 
     /// <summary>
     ///  Overridden to handle mnemonics properly.

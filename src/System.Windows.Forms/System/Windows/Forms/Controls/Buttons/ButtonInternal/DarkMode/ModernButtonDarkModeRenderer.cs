@@ -57,16 +57,26 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private static bool IsDark => Application.IsDarkModeEnabled;
 
-    private int FocusRingThickness => Math.Max(1, Scale(FocusRingThicknessLogical));
+    private int FocusRingThickness
+        => ScaleBorderThickness(Math.Max(1, Scale(FocusRingThicknessLogical) - HighDpiCorrection));
 
-    private int FocusGapThickness => Math.Max(1, Scale(FocusGapThicknessLogical));
+    private int FocusGapThickness
+        => Math.Max(1, Scale(FocusGapThicknessLogical) - HighDpiCorrection);
+
+    private int FocusBodyInset
+        => Math.Max(
+            FocusRingThickness + FocusGapThickness,
+            Math.Max(1, Scale(FocusRingThicknessLogical))
+                + Math.Max(1, Scale(FocusGapThicknessLogical)));
+
+    private int HighDpiCorrection => DeviceDpi > ScaleHelper.OneHundredPercentLogicalDpi ? 1 : 0;
 
     private int CornerRadius => Math.Max(1, Scale(CornerRadiusLogical));
 
     // When focused, the body is inset just enough to leave room for the focus ring and a single-pixel gap,
     // keeping that gap tight so the rounded body claims as much real estate as possible.
     private protected override Padding PaddingCore
-        => new(FocusRingThickness + FocusGapThickness);
+        => new(FocusBodyInset);
 
     // When the focus ring is not drawn there is nothing to inset for, so the rounded body expands to fill the
     // whole client area - covering the band the ring and its gap would otherwise occupy. This gives the button
@@ -119,6 +129,11 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
+            if (FocusRingThickness == 0)
+            {
+                return;
+            }
+
             int radius = CornerRadius + FocusGapThickness + FocusRingThickness;
 
             // Dark gap ring between the focus ring and the button area.
@@ -133,11 +148,12 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
             }
 
             // Outer rounded focus ring.
-            Color ringColor = IsDark ? s_darkFocusRing : SystemColors.WindowText;
+            Color ringColor = ResolveBorderColor(IsDark ? s_darkFocusRing : SystemColors.WindowText);
             int ringInset = FocusRingThickness / 2;
             Rectangle ringRect = Rectangle.Inflate(bounds, -ringInset, -ringInset);
             ringRect.Width -= 1;
             ringRect.Height -= 1;
+
             using var ringPen = ringColor.GetCachedPenScope(FocusRingThickness);
             graphics.DrawRoundedRectangle(ringPen, ringRect, new Size(radius + ringInset, radius + ringInset));
         }

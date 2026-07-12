@@ -1,0 +1,106 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.Drawing;
+
+namespace System.Windows.Forms.ButtonInternal;
+
+/// <summary>
+///  Paints a normal-appearance <see cref="RadioButton"/> with the modern animated glyph renderer.
+/// </summary>
+internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
+{
+    private readonly FlatStyle _flatStyle;
+
+    internal RadioButtonModernAdapter(RadioButton control, FlatStyle flatStyle) : base(control)
+    {
+        _flatStyle = flatStyle;
+    }
+
+    internal override void PaintUp(PaintEventArgs e, CheckState state)
+    {
+        if (Control.Appearance == Appearance.Button)
+        {
+            ButtonAdapter.PaintUp(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
+            return;
+        }
+
+        PaintCore(e);
+    }
+
+    internal override void PaintDown(PaintEventArgs e, CheckState state)
+    {
+        if (Control.Appearance == Appearance.Button)
+        {
+            ButtonAdapter.PaintDown(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
+            return;
+        }
+
+        PaintCore(e);
+    }
+
+    internal override void PaintOver(PaintEventArgs e, CheckState state)
+    {
+        if (Control.Appearance == Appearance.Button)
+        {
+            ButtonAdapter.PaintOver(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
+            return;
+        }
+
+        PaintCore(e);
+    }
+
+    protected override ButtonBaseAdapter CreateButtonAdapter()
+        => _flatStyle switch
+        {
+            FlatStyle.Flat => DarkModeAdapterFactory.CreateFlatAdapter(Control),
+            FlatStyle.Popup => DarkModeAdapterFactory.CreatePopupAdapter(Control),
+            _ => DarkModeAdapterFactory.CreateStandardAdapter(Control)
+        };
+
+    protected override LayoutOptions Layout(PaintEventArgs e)
+    {
+        LayoutOptions layout = CommonLayout();
+        layout.CheckSize = Math.Max(
+            Control.LogicalToDeviceUnits(13),
+            (int)(Control.Font.Height * 0.9f));
+
+        return layout;
+    }
+
+    private void PaintCore(PaintEventArgs e)
+    {
+        Graphics graphics = e.GraphicsInternal;
+        graphics.Clear(Control.Parent?.BackColor ?? Control.BackColor);
+
+        LayoutData layout = Layout(e).Layout();
+        AdjustFocusRectangle(layout);
+
+        Color? customOnColor = Control.ShouldSerializeBackColor()
+            ? Control.BackColor
+            : null;
+
+        Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
+            ? null
+            : Control.FlatAppearance.BorderColor;
+
+        Control.RadioGlyphRenderer.NotifyCheckedChanged(Control.Checked);
+        Control.RadioGlyphRenderer.DrawGlyph(
+            graphics,
+            layout.CheckBounds,
+            _flatStyle,
+            Control.Enabled,
+            customOnColor,
+            customBorderColor);
+
+        PaintImage(e, layout);
+
+        Color textColor = Control.ShouldSerializeForeColor()
+            ? Control.ForeColor
+            : Application.IsDarkModeEnabled
+                ? Color.FromArgb(0xF0, 0xF0, 0xF0)
+                : SystemColors.WindowText;
+
+        PaintField(e, layout, PaintRender(e).Calculate(), textColor, drawFocus: true);
+    }
+}
