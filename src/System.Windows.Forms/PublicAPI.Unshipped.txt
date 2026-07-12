@@ -48,7 +48,6 @@ override System.Windows.Forms.RichTextBox.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
-#nullable enable
 System.Windows.Forms.KioskModeManager
 System.Windows.Forms.KioskModeManager.ContainerControl.get -> System.Windows.Forms.ContainerControl?
 System.Windows.Forms.KioskModeManager.ContainerControl.set -> void
@@ -121,4 +120,3 @@ virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.Even
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.VisualStylesMode.set -> void
-virtual System.Windows.Forms.Form.OnSystemTextSizeChanged(System.EventArgs! e) -> void
