@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms;
@@ -102,6 +103,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     /// </summary>
     public void RenderButton(
         Graphics graphics,
+        Control control,
         Rectangle bounds,
         FlatStyle flatStyle,
         PushButtonState state,
@@ -120,9 +122,6 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         // Scope the graphics state so all changes are reverted after rendering
         using (new GraphicsStateScope(graphics))
         {
-            // Clear the background over the whole button area.
-            ClearBackground(graphics, parentBackgroundColor);
-
             // Use padding from the renderer. When the focus ring is not drawn, renderers may return a smaller
             // padding so the button body expands into the space the ring and its gap would otherwise occupy.
             Padding padding = GetContentPadding(focused && showFocusCues);
@@ -133,21 +132,40 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
                 width: bounds.Width - padding.Horizontal,
                 height: bounds.Height - padding.Vertical);
 
-            // Draw button background and get content bounds
-            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, focused, backColor);
-
-            // Paint image and field using the provided delegates
-            paintImage(contentBounds);
-
-            paintField();
-
-            if (focused && showFocusCues)
+            GraphicsPath? backgroundPath = CreateBackgroundPath(paddedBounds, isDefault, focused);
+            try
             {
-                // Draw focus indicator for other styles
-                DrawFocusIndicator(graphics, bounds, isDefault);
+                if (backgroundPath is not null)
+                {
+                    ParentBackgroundRenderer.Paint(control, graphics, bounds, backgroundPath, parentBackgroundColor);
+                }
+                else
+                {
+                    // Rectangular renderers still need a complete background before painting their body.
+                    ClearBackground(graphics, parentBackgroundColor);
+                }
+
+                // Draw button background and get content bounds
+                Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, focused, backColor);
+
+                // Paint image and field using the provided delegates
+                paintImage(contentBounds);
+                paintField();
+
+                if (focused && showFocusCues)
+                {
+                    // Draw focus indicator for other styles
+                    DrawFocusIndicator(graphics, bounds, isDefault);
+                }
+            }
+            finally
+            {
+                backgroundPath?.Dispose();
             }
         }
     }
+
+    private protected virtual GraphicsPath? CreateBackgroundPath(Rectangle bounds, bool isDefault, bool focused) => null;
 
     public abstract Rectangle DrawButtonBackground(
         Graphics graphics,

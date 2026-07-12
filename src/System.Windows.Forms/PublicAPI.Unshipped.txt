@@ -130,6 +130,7 @@ override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
 override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.GetWindowsAccentColor() -> System.Drawing.Color
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void

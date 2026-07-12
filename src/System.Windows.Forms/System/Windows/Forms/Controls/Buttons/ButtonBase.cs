@@ -1314,6 +1314,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             // recomputes the preferred size.
             ResetAdapter();
 
+            _backColorAnimator?.Dispose();
+            _backColorAnimator = null;
+            _popupKeyCapRenderer?.Dispose();
+            _popupKeyCapRenderer = null;
+
             if (IsHandleCreated)
             {
                 Invalidate();

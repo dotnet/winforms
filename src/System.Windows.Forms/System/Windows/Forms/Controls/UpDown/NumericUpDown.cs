@@ -822,7 +822,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
         }
 
         // Call AdjustWindowRect to add space for the borders
-        int width = SizeFromClientSizeInternal(new(textWidth, height)).Width + _upDownButtons.Width;
+        int width = GetPreferredWidth(textWidth, height);
         return new Size(width, height) + Padding.Size;
     }
 

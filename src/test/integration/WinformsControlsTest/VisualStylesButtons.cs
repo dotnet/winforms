@@ -4,6 +4,7 @@
 #nullable enable
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace WinFormsControlsTest;
 
@@ -34,22 +35,59 @@ public sealed class VisualStylesButtons : Form
     private readonly List<CheckBox> _sampleToggles = [];
     private readonly List<RadioButton> _sampleRadioToggles = [];
     private readonly List<ButtonBase> _sampleAppearanceButtons = [];
+    private readonly List<Control> _sampleControls = [];
+    private readonly PatternedGradientPanel _sampleParent;
     private readonly CheckBox _modernToggle;
+    private readonly CheckBox _parentModernToggle;
+    private readonly CheckBox _rightToLeftToggle;
+    private readonly Label _environmentLabel;
 
     public VisualStylesButtons()
     {
         Text = "VisualStyles Buttons (exploratory)";
-        Size = new Size(900, 640);
+        AutoScaleMode = AutoScaleMode.Dpi;
+        Size = new Size(1100, 900);
         Padding = new Padding(8);
+
+        _sampleParent = new PatternedGradientPanel
+        {
+            Dock = DockStyle.Top,
+            Height = 330,
+            Padding = new Padding(8),
+            VisualStylesMode = VisualStylesMode.Classic
+        };
 
         _modernToggle = new CheckBox
         {
-            Text = "Modern visual styles (.NET 11)",
+            Text = "Modern child styles (.NET 11; off = inherit)",
             AutoSize = true,
             Dock = DockStyle.Top,
             Padding = new Padding(4)
         };
         _modernToggle.CheckedChanged += OnModernToggleChanged;
+
+        _parentModernToggle = new CheckBox
+        {
+            Text = "Modern parent mode",
+            AutoSize = true,
+            Checked = false,
+            Margin = new Padding(8, 4, 8, 4)
+        };
+        _parentModernToggle.CheckedChanged += OnParentModernToggleChanged;
+
+        _rightToLeftToggle = new CheckBox
+        {
+            Text = "Right-to-left",
+            AutoSize = true,
+            Margin = new Padding(8, 4, 8, 4)
+        };
+        _rightToLeftToggle.CheckedChanged += OnRightToLeftToggleChanged;
+
+        _environmentLabel = new Label
+        {
+            AutoSize = true,
+            Margin = new Padding(8, 8, 8, 4)
+        };
     }
 
     protected override void OnLoad(EventArgs e)
@@ -69,7 +107,9 @@ public sealed class VisualStylesButtons : Form
             "With Image",
             "With BackgroundImage",
             "FlatAppearance",
-            "AutoSize + AutoEllipsis"
+            "AutoSize + AutoEllipsis",
+            "Focused",
+            "Pressed (hold mouse)",
         ];
 
         table.RowCount = scenarios.Length + 1;
@@ -104,11 +144,19 @@ public sealed class VisualStylesButtons : Form
             }
         }
 
+        Button? focusedButton = _sampleButtons.FirstOrDefault(
+            button => button.Text == "Focus me" && button.FlatStyle == FlatStyle.Standard);
+
+        BuildTextAndUpDownSamples();
         Controls.Add(table);
+        Controls.Add(_sampleParent);
         Controls.Add(BuildCheckablePopupPanel());
         Controls.Add(BuildToggleSwitchPanel());
         Controls.Add(_modernToggle);
 
+        _environmentLabel.Text = $"DPI: {DeviceDpi}    High contrast: {SystemInformation.HighContrast}";
+        ApplyChildVisualStylesMode();
+        BeginInvoke(() => focusedButton?.Focus());
         base.OnLoad(e);
     }
 
@@ -153,7 +201,89 @@ public sealed class VisualStylesButtons : Form
             panel.Controls.Add(radioToggle);
         }
 
+        panel.Controls.Add(_parentModernToggle);
+        panel.Controls.Add(_rightToLeftToggle);
+        panel.Controls.Add(_environmentLabel);
+
         return panel;
+    }
+
+    private void BuildTextAndUpDownSamples()
+    {
+        TableLayoutPanel table = new()
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true,
+            BackColor = Color.Transparent,
+            ColumnCount = 3,
+            RowCount = 11,
+            Padding = new Padding(4)
+        };
+
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34));
+        table.Controls.Add(new Label { Text = "Control / font", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 0, 0);
+        table.Controls.Add(new Label { Text = "AutoSize", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 1, 0);
+        table.Controls.Add(new Label { Text = "Fixed small", AutoSize = true, Font = new Font(Font, FontStyle.Bold) }, 2, 0);
+
+        string[] controlKinds = ["TextBox", "MaskedTextBox", "RichTextBox", "NumericUpDown", "DomainUpDown"];
+        int row = 1;
+        foreach (float fontSize in new[] { 9f, 11f })
+        {
+            foreach (string controlKind in controlKinds)
+            {
+                table.Controls.Add(
+                    new Label
+                    {
+                        Text = $"{controlKind} ({fontSize:0} pt)",
+                        AutoSize = true,
+                        Anchor = AnchorStyles.Left
+                    },
+                    0,
+                    row);
+
+                Control autoSized = CreateSampleControl(controlKind, fontSize, autoSize: true);
+                Control fixedSmall = CreateSampleControl(controlKind, fontSize, autoSize: false);
+                _sampleControls.Add(autoSized);
+                _sampleControls.Add(fixedSmall);
+                table.Controls.Add(autoSized, 1, row);
+                table.Controls.Add(fixedSmall, 2, row);
+                row++;
+            }
+        }
+
+        _sampleParent.Controls.Add(table);
+    }
+
+    private static Control CreateSampleControl(string controlKind, float fontSize, bool autoSize)
+    {
+        Control control = controlKind switch
+        {
+            "TextBox" => new TextBox { Text = "Text sample" },
+            "MaskedTextBox" => new MaskedTextBox { Mask = "00000", Text = "12345" },
+            "RichTextBox" => new RichTextBox { Text = "Rich text", Multiline = true, ScrollBars = RichTextBoxScrollBars.Vertical },
+            "NumericUpDown" => new NumericUpDown { Minimum = 0, Maximum = 100, Value = 42 },
+            "DomainUpDown" => new DomainUpDown { Items = { "First", "Second", "Third" }, SelectedIndex = 1 },
+            _ => throw new ArgumentOutOfRangeException(nameof(controlKind))
+        };
+
+        control.Font = new Font(Control.DefaultFont.FontFamily, fontSize);
+        control.VisualStylesMode = VisualStylesMode.Inherit;
+        control.RightToLeft = RightToLeft.Inherit;
+        control.Margin = new Padding(4);
+        control.AutoSize = autoSize;
+
+        if (!autoSize)
+        {
+            control.Size = new Size(120, 14);
+        }
+        else
+        {
+            control.Width = 150;
+        }
+
+        return control;
     }
 
     private FlowLayoutPanel BuildCheckablePopupPanel()
@@ -177,9 +307,11 @@ public sealed class VisualStylesButtons : Form
         {
             FlatStyle = FlatStyle.Popup,
             Text = "Default",
-            Size = new Size(100, 36)
+            Size = new Size(100, 36),
+            TabStop = true
         };
         defaultButton.NotifyDefault(true);
+        defaultButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 90, 180);
         panel.Controls.Add(defaultButton);
         _sampleButtons.Add(defaultButton);
 
@@ -241,14 +373,32 @@ public sealed class VisualStylesButtons : Form
                 button.AutoEllipsis = true;
                 button.Size = new Size(90, 28);
                 break;
+            case "Focused":
+                button.Text = "Focus me";
+                button.TabStop = true;
+                break;
+            case "Pressed (hold mouse)":
+                button.Text = "Hold to press";
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 90, 180);
+                button.MouseDown += (_, _) => button.Text = "Pressed";
+                button.MouseUp += (_, _) => button.Text = "Hold to press";
+                break;
+        }
+
+        if (scenario.StartsWith("Default", StringComparison.Ordinal))
+        {
+            button.NotifyDefault(true);
         }
 
         return button;
     }
 
     private void OnModernToggleChanged(object? sender, EventArgs e)
+        => ApplyChildVisualStylesMode();
+
+    private void ApplyChildVisualStylesMode()
     {
-        VisualStylesMode mode = _modernToggle.Checked ? VisualStylesMode.Net11 : VisualStylesMode.Classic;
+        VisualStylesMode mode = _modernToggle.Checked ? VisualStylesMode.Net11 : VisualStylesMode.Inherit;
         foreach (Button button in _sampleButtons)
         {
             button.VisualStylesMode = mode;
@@ -267,6 +417,55 @@ public sealed class VisualStylesButtons : Form
         foreach (ButtonBase button in _sampleAppearanceButtons)
         {
             button.VisualStylesMode = mode;
+        }
+
+        foreach (Control control in _sampleControls)
+        {
+            control.VisualStylesMode = mode;
+        }
+    }
+
+    private void OnParentModernToggleChanged(object? sender, EventArgs e)
+    {
+        _sampleParent.VisualStylesMode = _parentModernToggle.Checked
+            ? VisualStylesMode.Net11
+            : VisualStylesMode.Classic;
+    }
+
+    private void OnRightToLeftToggleChanged(object? sender, EventArgs e)
+    {
+        RightToLeft = _rightToLeftToggle.Checked ? RightToLeft.Yes : RightToLeft.No;
+        RightToLeftLayout = _rightToLeftToggle.Checked;
+        _sampleParent.RightToLeft = RightToLeft;
+    }
+
+    private sealed class PatternedGradientPanel : Panel
+    {
+        public PatternedGradientPanel()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor, true);
+            BackColor = Color.Transparent;
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            if (ClientSize.Width == 0 || ClientSize.Height == 0)
+            {
+                return;
+            }
+
+            using LinearGradientBrush gradient = new(
+                ClientRectangle,
+                Color.FromArgb(38, 72, 126),
+                Color.FromArgb(126, 76, 128),
+                LinearGradientMode.Horizontal);
+            e.Graphics.FillRectangle(gradient, ClientRectangle);
+
+            using HatchBrush pattern = new(
+                HatchStyle.DiagonalCross,
+                Color.FromArgb(32, Color.White),
+                Color.Transparent);
+            e.Graphics.FillRectangle(pattern, ClientRectangle);
         }
     }
 }

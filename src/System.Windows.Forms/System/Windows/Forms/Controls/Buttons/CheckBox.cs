@@ -348,6 +348,12 @@ public partial class CheckBox : ButtonBase
             return Rendering.CheckBox.ToggleSwitchMetrics.Create(this).GetPreferredSize(this);
         }
 
+        if (Appearance == Appearance.Button && FlatStyle == FlatStyle.Popup)
+        {
+            return DarkModeAdapterFactory.CreatePopupAdapter(this).GetPreferredSizeCore(proposedConstraints)
+                + Padding.Size;
+        }
+
         if (Appearance == Appearance.Button)
         {
             ButtonStandardAdapter adapter = new(this);

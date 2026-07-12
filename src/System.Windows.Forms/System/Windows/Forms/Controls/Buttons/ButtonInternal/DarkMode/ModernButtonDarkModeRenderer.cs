@@ -25,6 +25,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private const int FocusGapThicknessLogical = 1;
     private const int FocusedCornerRadiusLogical = 6;
     private const int UnfocusedCornerRadiusLogical = 8;
+    private const int BorderThicknessLogical = 1;
     private const int ContentInsetLogical = 4;
 
     // Dark scheme - default (accept) button area.
@@ -88,6 +89,16 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private protected override bool UseModernStateDefaults => true;
 
+    private protected override GraphicsPath? CreateBackgroundPath(Rectangle bounds, bool isDefault, bool focused)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return null;
+        }
+
+        return CreateRoundedPath(GetPathBounds(bounds), GetCornerRadius(focused, isDefault));
+    }
+
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
         Rectangle bounds,
@@ -101,19 +112,31 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int radius = GetCornerRadius(focused, isDefault);
-            using (var brush = backColor.GetCachedSolidBrushScope())
+            RectangleF pathBounds = GetPathBounds(bounds);
+            float radius = GetCornerRadius(focused, isDefault);
+            int borderThickness = ScaleBorderThickness(
+                Math.Max(1, Scale(BorderThicknessLogical)));
+
+            if (!IsDark
+                && !isDefault
+                && state != PushButtonState.Disabled
+                && borderThickness > 0)
             {
-                graphics.FillRoundedRectangle(brush, bounds, new Size(radius, radius));
+                Color borderColor = ResolveBorderColor(s_lightBorder);
+                using var borderBrush = borderColor.GetCachedSolidBrushScope();
+                using GraphicsPath borderPath = CreateRingPath(
+                    pathBounds,
+                    radius,
+                    borderThickness);
+                graphics.FillPath(borderBrush, borderPath);
+
+                pathBounds = Inset(pathBounds, borderThickness);
+                radius = Math.Max(1, radius - (2 * borderThickness));
             }
 
-            // A subtle border for the light, non-default button, matching the WinUI neutral button.
-            if (!IsDark && !isDefault && state != PushButtonState.Disabled)
-            {
-                using var borderPen = s_lightBorder.GetCachedPenScope();
-                Rectangle borderRect = new(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                graphics.DrawRoundedRectangle(borderPen, borderRect, new Size(radius, radius));
-            }
+            using var brush = backColor.GetCachedSolidBrushScope();
+            using GraphicsPath bodyPath = CreateRoundedPath(pathBounds, radius);
+            graphics.FillPath(brush, bodyPath);
         }
         finally
         {
@@ -139,30 +162,28 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 return;
             }
 
-            int radius = GetCornerRadius(focused: true, isDefault: isDefault)
-                + FocusGapThickness
-                + FocusRingThickness;
+            RectangleF outerBounds = GetPathBounds(bounds);
+            int bodyInset = FocusRingThickness + FocusGapThickness;
+            float outerRadius = GetCornerRadius(focused: true, isDefault: isDefault)
+                + (2 * bodyInset);
 
-            // Dark gap ring between the focus ring and the button area.
             Color gapColor = IsDark ? s_darkGap : SystemColors.Window;
-            int gapInset = FocusRingThickness + (FocusGapThickness / 2);
-            Rectangle gapRect = Rectangle.Inflate(bounds, -gapInset, -gapInset);
-            gapRect.Width -= 1;
-            gapRect.Height -= 1;
-            using (var gapPen = gapColor.GetCachedPenScope(FocusGapThickness))
+            using (var gapBrush = gapColor.GetCachedSolidBrushScope())
             {
-                graphics.DrawRoundedRectangle(gapPen, gapRect, new Size(radius, radius));
+                using GraphicsPath gapPath = CreateRingPath(
+                    Inset(outerBounds, FocusRingThickness),
+                    outerRadius - (2 * FocusRingThickness),
+                    FocusGapThickness);
+                graphics.FillPath(gapBrush, gapPath);
             }
 
-            // Outer rounded focus ring.
             Color ringColor = ResolveBorderColor(IsDark ? s_darkFocusRing : SystemColors.WindowText);
-            int ringInset = FocusRingThickness / 2;
-            Rectangle ringRect = Rectangle.Inflate(bounds, -ringInset, -ringInset);
-            ringRect.Width -= 1;
-            ringRect.Height -= 1;
-
-            using var ringPen = ringColor.GetCachedPenScope(FocusRingThickness);
-            graphics.DrawRoundedRectangle(ringPen, ringRect, new Size(radius + ringInset, radius + ringInset));
+            using var ringBrush = ringColor.GetCachedSolidBrushScope();
+            using GraphicsPath ringPath = CreateRingPath(
+                outerBounds,
+                outerRadius,
+                FocusRingThickness);
+            graphics.FillPath(ringBrush, ringPath);
         }
         finally
         {
@@ -225,5 +246,41 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 PushButtonState.Pressed => s_lightNormalPressed,
                 _ => s_lightNormal
             };
+    }
+
+    private static RectangleF GetPathBounds(Rectangle bounds)
+        => new(
+            bounds.X,
+            bounds.Y,
+            Math.Max(1, bounds.Width - 1),
+            Math.Max(1, bounds.Height - 1));
+
+    private static RectangleF Inset(RectangleF bounds, float inset)
+        => new(
+            bounds.X + inset,
+            bounds.Y + inset,
+            Math.Max(1, bounds.Width - (2 * inset)),
+            Math.Max(1, bounds.Height - (2 * inset)));
+
+    private static GraphicsPath CreateRoundedPath(RectangleF bounds, float radius)
+    {
+        GraphicsPath path = new();
+        float clampedRadius = Math.Clamp(radius, 1, Math.Min(bounds.Width, bounds.Height));
+        path.AddRoundedRectangle(bounds, new SizeF(clampedRadius, clampedRadius));
+        return path;
+    }
+
+    private static GraphicsPath CreateRingPath(
+        RectangleF outerBounds,
+        float outerRadius,
+        float thickness)
+    {
+        GraphicsPath path = CreateRoundedPath(outerBounds, outerRadius);
+        RectangleF innerBounds = Inset(outerBounds, thickness);
+        float innerRadius = Math.Max(1, outerRadius - (2 * thickness));
+        using GraphicsPath innerPath = CreateRoundedPath(innerBounds, innerRadius);
+        path.FillMode = FillMode.Alternate;
+        path.AddPath(innerPath, connect: false);
+        return path;
     }
 }
