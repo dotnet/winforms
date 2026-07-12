@@ -48,6 +48,8 @@ public sealed partial class Application
     private static FormRevealMode? s_defaultFormRevealMode;
 #endif
 
+    private static VisualStylesMode? s_defaultVisualStylesMode;
+
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
     private const int SystemDarkModeDisabled = 1;
@@ -502,8 +504,8 @@ public sealed partial class Application
         return systemColorMode;
     }
 
-    private static bool IsSystemDarkModeAvailable =>
-        !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
+    private static bool IsSystemDarkModeAvailable
+        => !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
@@ -663,6 +665,86 @@ public sealed partial class Application
     /// </summary>
     public static bool RenderWithVisualStyles
         => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
+
+    /// <summary>
+    ///  Gets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="VisualStylesMode"/> used as the rendering style guideline for the application's
+    ///  controls. This is <see cref="VisualStylesMode.Classic"/> when visual styles are enabled and
+    ///  <see cref="VisualStylesMode.Disabled"/> otherwise, unless it has been changed by a call to
+    ///  <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The default value is <see cref="VisualStylesMode.Classic"/> so that applications that simply
+    ///   recompile against a newer framework keep their existing look. Opt in to a newer renderer by
+    ///   calling <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    ///  <para>
+    ///   While visual styles are disabled, the effective value remains <see cref="VisualStylesMode.Disabled"/>,
+    ///   even if a different default has already been requested through
+    ///   <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    /// </remarks>
+    public static VisualStylesMode DefaultVisualStylesMode
+        => s_defaultVisualStylesMode switch
+        {
+            { } visualStylesMode when UseVisualStyles => visualStylesMode,
+            { } => VisualStylesMode.Disabled,
+            _ => UseVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled
+        };
+
+    /// <summary>
+    ///  Sets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <param name="styleSetting">The version of the visual styles renderer to use by default.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  The default visual styles mode has already been set to a different value. It can only be set once.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="styleSetting"/> is <see cref="VisualStylesMode.Inherit"/>, which is not valid as
+    ///  the application-wide default because the application root has no parent to inherit from.
+    /// </exception>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///  <paramref name="styleSetting"/> is not a defined <see cref="VisualStylesMode"/> value.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   Call this method before creating any window. If visual styles have not been enabled through
+    ///   <see cref="EnableVisualStyles"/>, the effective mode remains <see cref="VisualStylesMode.Disabled"/>.
+    ///   Passing <see cref="VisualStylesMode.Disabled"/> has the same effect as not calling
+    ///   <see cref="EnableVisualStyles"/>.
+    ///  </para>
+    /// </remarks>
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
+        // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
+        // Latest) prevent using the source generated enum validator.
+        _ = styleSetting switch
+        {
+            VisualStylesMode.Classic => styleSetting,
+            VisualStylesMode.Disabled => styleSetting,
+            VisualStylesMode.Net11 => styleSetting,
+            VisualStylesMode.Latest => styleSetting,
+            VisualStylesMode.Inherit => throw new ArgumentException(
+                SR.Application_VisualStylesModeInheritInvalidAsDefault,
+                nameof(styleSetting)),
+            _ => throw new InvalidEnumArgumentException(nameof(styleSetting), (int)styleSetting, typeof(VisualStylesMode))
+        };
+
+        if (s_defaultVisualStylesMode is { } current && current != styleSetting)
+        {
+            throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
+        }
+
+        s_defaultVisualStylesMode = styleSetting;
+    }
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions

@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.UI.Controls.RichEdit;
 
 namespace System.Windows.Forms;
 
@@ -51,6 +51,19 @@ public abstract partial class TextBoxBase : Control
     ///  The current border for this edit control.
     /// </summary>
     private BorderStyle _borderStyle = BorderStyle.Fixed3D;
+
+    // Device-independent padding (in logical units) carved from the non-client band for each
+    // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
+    private const int VisualStylesFixed3DBorderPadding = 5;
+    private const int VisualStylesFixedSingleBorderPadding = 4;
+    private const int VisualStylesNoBorderPadding = 3;
+    private const int BorderThickness = 1;
+
+    /// <summary>
+    ///  One-shot latch that gates the single NC-calc round trip used to carve the modern Visual
+    ///  Styles padding band. Set by <see cref="InitializeClientArea"/> and reset on handle recreation.
+    /// </summary>
+    private bool _triggerNewClientSizeRequest;
 
     /// <summary>
     ///  Controls the maximum length of text in the edit control.
@@ -116,10 +129,7 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxAcceptsTabDescr))]
     public bool AcceptsTab
     {
-        get
-        {
-            return _textBoxFlags[s_acceptsTab];
-        }
+        get => _textBoxFlags[s_acceptsTab];
         set
         {
             if (_textBoxFlags[s_acceptsTab] != value)
@@ -148,10 +158,7 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))]
     public virtual bool ShortcutsEnabled
     {
-        get
-        {
-            return _textBoxFlags[s_shortcutsEnabled];
-        }
+        get => _textBoxFlags[s_shortcutsEnabled];
         set
         {
             s_shortcutsToDisable ??=
@@ -242,10 +249,7 @@ public abstract partial class TextBoxBase : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool AutoSize
     {
-        get
-        {
-            return _textBoxFlags[s_autoSize];
-        }
+        get => _textBoxFlags[s_autoSize];
         set
         {
             // Note that we intentionally do not call base. TextBoxes size themselves by
@@ -377,9 +381,11 @@ public abstract partial class TextBoxBase : Control
         remove => Events.RemoveHandler(s_borderStyleChangedEvent, value);
     }
 
-    internal virtual bool CanRaiseTextChangedEvent => true;
+    internal virtual bool CanRaiseTextChangedEvent
+        => true;
 
-    protected override bool CanEnableIme => !(ReadOnly || PasswordProtect) && base.CanEnableIme;
+    protected override bool CanEnableIme
+        => !(ReadOnly || PasswordProtect) && base.CanEnableIme;
 
     /// <summary>
     ///  Gets a value indicating whether the user can undo the previous operation in a text box control.
@@ -388,7 +394,9 @@ public abstract partial class TextBoxBase : Control
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxCanUndoDescr))]
-    public bool CanUndo => IsHandleCreated && (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_CANUNDO) != 0;
+    public bool CanUndo
+        => IsHandleCreated
+            && (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_CANUNDO) != 0;
 
     /// <summary>
     ///  Returns the parameters needed to create the handle. Inheriting classes
@@ -405,6 +413,7 @@ public abstract partial class TextBoxBase : Control
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_EDIT;
             cp.Style |= PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL;
+
             if (!_textBoxFlags[s_hideSelection])
             {
                 cp.Style |= PInvoke.ES_NOHIDESEL;
@@ -431,10 +440,21 @@ public abstract partial class TextBoxBase : Control
             if (_textBoxFlags[s_multiline])
             {
                 cp.Style |= PInvoke.ES_MULTILINE;
+
                 if (_textBoxFlags[s_wordWrap])
                 {
                     cp.Style &= ~PInvoke.ES_AUTOHSCROLL;
                 }
+            }
+
+            if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            {
+                // Under a modern VisualStylesMode we custom-draw the frame in the non-client area (see OnNcPaint),
+                // so the natively drawn border must be suppressed to avoid a double frame. Only the effective
+                // Win32 styles are stripped here; the public BorderStyle property remains authoritative for what
+                // the custom non-client paint draws.
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
             }
 
             return cp;
@@ -481,12 +501,7 @@ public abstract partial class TextBoxBase : Control
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
     protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(100, PreferredHeight);
-        }
-    }
+        => new Size(100, PreferredHeight);
 
     /// <summary>
     ///  Gets or sets the foreground color of the control.
@@ -496,17 +511,10 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.ControlForeColorDescr))]
     public override Color ForeColor
     {
-        get
-        {
-            if (ShouldSerializeForeColor())
-            {
-                return base.ForeColor;
-            }
-            else
-            {
-                return SystemColors.WindowText;
-            }
-        }
+        get => ShouldSerializeForeColor()
+            ? base.ForeColor
+            : SystemColors.WindowText;
+
         set => base.ForeColor = value;
     }
 
@@ -519,10 +527,7 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxHideSelectionDescr))]
     public bool HideSelection
     {
-        get
-        {
-            return _textBoxFlags[s_hideSelection];
-        }
+        get => _textBoxFlags[s_hideSelection];
 
         set
         {
@@ -550,7 +555,10 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     protected override ImeMode ImeModeBase
     {
-        get => (DesignMode || CanEnableIme) ? base.ImeModeBase : ImeMode.Disable;
+        get => (DesignMode || CanEnableIme)
+            ? base.ImeModeBase
+            : ImeMode.Disable;
+
         set => base.ImeModeBase = value;
     }
 
@@ -576,9 +584,11 @@ public abstract partial class TextBoxBase : Control
             while (lineStart < text.Length)
             {
                 int lineEnd = lineStart;
+
                 for (; lineEnd < text.Length; lineEnd++)
                 {
                     char c = text[lineEnd];
+
                     if (c is '\r' or '\n')
                     {
                         break;
@@ -610,18 +620,12 @@ public abstract partial class TextBoxBase : Control
 
             return [.. list];
         }
-        set
-        {
+
+        set =>
             // unparse this string list...
-            if (value is not null && value.Length > 0)
-            {
-                Text = string.Join(Environment.NewLine, value);
-            }
-            else
-            {
-                Text = string.Empty;
-            }
-        }
+            Text = value is not null && value.Length > 0
+                ? string.Join(Environment.NewLine, value)
+                : string.Empty;
     }
 
     /// <summary>
@@ -634,10 +638,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxMaxLengthDescr))]
     public virtual int MaxLength
     {
-        get
-        {
-            return _maxLength;
-        }
+        get => _maxLength;
+
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
@@ -662,21 +664,25 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                bool curState = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETMODIFY) != 0;
+                return _textBoxFlags[s_modified];
+            }
+            else
+            {
+                bool curState = (int)PInvokeCore.SendMessage(
+                    this,
+                    PInvokeCore.EM_GETMODIFY) != 0;
+
                 if (_textBoxFlags[s_modified] != curState)
                 {
-                    // Raise ModifiedChanged event. See WmReflectCommand for more info.
+                    // Raise ModifiedChanged event.
+                    // See WmReflectCommand for more info.
                     _textBoxFlags[s_modified] = curState;
                     OnModifiedChanged(EventArgs.Empty);
                 }
 
                 return curState;
-            }
-            else
-            {
-                return _textBoxFlags[s_modified];
             }
         }
 
@@ -686,11 +692,14 @@ public abstract partial class TextBoxBase : Control
             {
                 if (IsHandleCreated)
                 {
-                    PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMODIFY, (WPARAM)(BOOL)value);
-                    // Must maintain this state always in order for the
-                    // test in the Get method to work properly.
+                    PInvokeCore.SendMessage(
+                        this,
+                        PInvokeCore.EM_SETMODIFY,
+                        (WPARAM)(BOOL)value);
                 }
 
+                // Must maintain this state always in order for the
+                // test in the Get method to work properly.
                 _textBoxFlags[s_modified] = value;
                 OnModifiedChanged(EventArgs.Empty);
             }
@@ -716,33 +725,36 @@ public abstract partial class TextBoxBase : Control
     [RefreshProperties(RefreshProperties.All)]
     public virtual bool Multiline
     {
-        get
-        {
-            return _textBoxFlags[s_multiline];
-        }
+        get => _textBoxFlags[s_multiline];
         set
         {
-            if (_textBoxFlags[s_multiline] != value)
+            if (_textBoxFlags[s_multiline] == value)
             {
-                using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Multiline))
+                return;
+            }
+
+            using (LayoutTransaction.CreateTransactionIf(
+                condition: AutoSize,
+                controlToLayout: ParentInternal,
+                elementCausingLayout: this,
+                property: PropertyNames.Multiline))
+            {
+                _textBoxFlags[s_multiline] = value;
+
+                if (value)
                 {
-                    _textBoxFlags[s_multiline] = value;
-
-                    if (value)
-                    {
-                        // Multi-line textboxes do not have fixed height
-                        SetStyle(ControlStyles.FixedHeight, false);
-                    }
-                    else
-                    {
-                        // Single-line textboxes may have fixed height, depending on AutoSize
-                        SetStyle(ControlStyles.FixedHeight, AutoSize);
-                    }
-
-                    RecreateHandle();
-                    AdjustHeight(false);
-                    OnMultilineChanged(EventArgs.Empty);
+                    // Multi-line textboxes do not have fixed height
+                    SetStyle(ControlStyles.FixedHeight, false);
                 }
+                else
+                {
+                    // Single-line textboxes may have fixed height, depending on AutoSize
+                    SetStyle(ControlStyles.FixedHeight, AutoSize);
+                }
+
+                RecreateHandle();
+                AdjustHeight(false);
+                OnMultilineChanged(EventArgs.Empty);
             }
         }
     }
@@ -755,15 +767,47 @@ public abstract partial class TextBoxBase : Control
         remove => Events.RemoveHandler(s_multilineChangedEvent, value);
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    /// <summary>
+    ///  Gets or sets the distance, in pixels, between the text displayed in a text box control and the top, bottom and side edges of the control.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Note: While shadowing this property may seem redundant at first glance, it is necessary for binary compatibility.
+    ///   Prior to .NET 11, this property was marked with <see cref="BrowsableAttribute">Browsable(false)</see> and
+    ///   <see cref="EditorBrowsableAttribute">EditorBrowsable(EditorBrowsableState.Never)</see>,
+    ///   and was never serialized. Effectively, <see cref="Control.Padding"/> did not work before .NET 11. While this changed in .NET 11,
+    ///   removing the property shadowing would constitute a binary breaking change. Therefore, the shadowing is retained
+    ///   with updated attributes to ensure <c>Padding</c> now functions as expected.
+    ///  </para>
+    ///  <para>
+    ///   As long as the default value for the <c>Padding</c> property is not modified, <see cref="TextBoxBase"/>-derived
+    ///   controls (<see cref="TextBox"/>, <see cref="RichTextBox"/>) will behave as they always have. However, if you
+    ///   opt into modern styling by calling <see cref="Application.EnableVisualStyles"/> and set
+    ///   <see cref="VisualStylesMode"/> to a value other than <see cref="VisualStylesMode.Classic"/> or
+    ///   <see cref="VisualStylesMode.Disabled"/>, the control will automatically apply styling that conforms to the
+    ///   Windows 10+ Fluent Design Language. This provides both stylistic improvements (such as Dark Mode support) and
+    ///   functional enhancements (including increased touch targets for easier mouse and touch interaction), thereby
+    ///   meeting the accessibility requirements of modern high-resolution displays.
+    ///  </para>
+    /// </remarks>
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public new Padding Padding
     {
         get => base.Padding;
         set => base.Padding = value;
     }
 
+    private new bool ShouldSerializePadding()
+        => Padding != DefaultPadding;
+
+    private void ResetPadding()
+        => Padding = DefaultPadding;
+
+    // Not new API and not a breaking change: TextBoxBase.PaddingChanged is already in
+    // PublicAPI.Shipped.txt. It is re-declared here with 'new' purely to apply the designer-hiding
+    // attributes below (Browsable(false) / EditorBrowsable(Never)) on top of Control.PaddingChanged.
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -791,13 +835,41 @@ public abstract partial class TextBoxBase : Control
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
-    public int PreferredHeight
+    public int PreferredHeight =>
+        EffectiveVisualStylesMode switch
+        {
+            VisualStylesMode.Disabled => PreferredHeightClassic,
+            VisualStylesMode.Classic => PreferredHeightClassic,
+            >= VisualStylesMode.Net11 => PreferredHeightCore,
+
+            // We should never be here.
+            _ => throw new InvalidEnumArgumentException(
+                argumentName: nameof(VisualStylesMode),
+                invalidValue: (int)VisualStylesMode,
+                enumClass: typeof(VisualStylesMode))
+        };
+
+    /// <summary>
+    ///  Returns the preferred height for modern Visual Styles, taking the carved padding band
+    ///  (including the live scrollbar allowance and the user <see cref="Padding"/>) into account.
+    /// </summary>
+    private protected virtual int PreferredHeightCore =>
+        FontHeight + GetVisualStylesPadding(includeScrollbars: true).Vertical;
+
+    /// <summary>
+    ///  Returns the classic (Everett-compatible) preferred height for a single-line text box.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   COMPAT: we must return the same busted height we did in Everett, even if it does not take
+    ///   multiline and word wrap into account. For better accuracy and/or wrapping use
+    ///   <see cref="Control.GetPreferredSize(Size)"/> instead.
+    ///  </para>
+    /// </remarks>
+    private int PreferredHeightClassic
     {
         get
         {
-            // COMPAT we must return the same busted height we did in Everett, even
-            // if it doesn't take multiline and word wrap into account. For better accuracy and/or wrapping use
-            // GetPreferredSize instead.
             int height = FontHeight;
             if (_borderStyle != BorderStyle.None)
             {
@@ -808,37 +880,119 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    // GetPreferredSizeCore
-    //  This method can return a different value than PreferredHeight!  It properly handles
-    //  border style + multiline and wordwrap.
+    /// <summary>
+    ///  Defines the visible part of the padding band carved for modern Visual Styles chrome.
+    /// </summary>
+    /// <param name="includeScrollbars">
+    ///  <see langword="true"/> to add the live scrollbar allowance (see <see cref="GetScrollBarPadding"/>)
+    ///  on top of the border padding; otherwise <see langword="false"/>.
+    /// </param>
+    /// <returns>The visible padding dimensions.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   The visible part of the padding is the area by which we extend the real-estate of the control
+    ///   with its back color. The user-provided <see cref="Padding"/> is always added on top.
+    ///  </para>
+    /// </remarks>
+    private protected Padding GetVisualStylesPadding(bool includeScrollbars)
+    {
+        int offset = LogicalToDeviceUnits(BorderThickness);
 
+        // The visible padding is selected per BorderStyle (not per VisualStylesMode): each border look
+        // reserves a differently sized band around the native edit's client area for the modern chrome
+        // we paint in the non-client region. Fixed3D reserves the widest uniform band for the rounded
+        // lozenge and its focus line; FixedSingle reserves a slightly smaller uniform band for the flat
+        // single-line border; None reserves only a minimal band, plus extra room on the right and bottom
+        // for the scrollbars and the focus line. BorderThickness (offset) is added so the drawn border
+        // line sits inside the reserved band rather than on its outer edge.
+        Padding padding = BorderStyle switch
+        {
+            BorderStyle.Fixed3D => new Padding(
+                left: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
+                top: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
+                right: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset,
+                bottom: LogicalToDeviceUnits(VisualStylesFixed3DBorderPadding) + offset),
+
+            BorderStyle.FixedSingle => new Padding(
+                left: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
+                top: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
+                right: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset,
+                bottom: LogicalToDeviceUnits(VisualStylesFixedSingleBorderPadding) + offset),
+
+            BorderStyle.None => new Padding(
+                left: LogicalToDeviceUnits(VisualStylesNoBorderPadding),
+                top: LogicalToDeviceUnits(VisualStylesNoBorderPadding),
+                right: LogicalToDeviceUnits(VisualStylesNoBorderPadding) + offset,
+                // We still need some extra space for the focus indication.
+                bottom: LogicalToDeviceUnits(VisualStylesNoBorderPadding) + offset),
+
+            _ => Padding.Empty,
+        };
+
+        if (includeScrollbars)
+        {
+            padding += GetScrollBarPadding();
+        }
+
+        padding += Padding;
+
+        return padding;
+    }
+
+    /// <summary>
+    ///  Returns the additional padding required to clear the live scrollbars,
+    ///  if any are currently shown.
+    /// </summary>
+    private protected virtual Padding GetScrollBarPadding()
+    {
+        Padding padding = Padding.Empty;
+
+        // Are the scrollbars visible?
+        WINDOW_STYLE style = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
+            this,
+            WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+
+        bool hasHScroll = (style & WINDOW_STYLE.WS_HSCROLL) != 0;
+        bool hasVScroll = (style & WINDOW_STYLE.WS_VSCROLL) != 0;
+
+        if (hasHScroll)
+        {
+            padding.Bottom += SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
+        }
+
+        if (hasVScroll)
+        {
+            padding.Right += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+        }
+
+        return padding;
+    }
+
+    /// <summary>
+    ///  Computes the preferred size of the control, honoring border style, multiline, and word wrap.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This can return a different value than <see cref="PreferredHeight"/>. <see cref="PreferredHeight"/>
+    ///   is a single-line, border-only height kept for backward compatibility, whereas this method measures
+    ///   the actual text against the available width and additionally accounts for multiline and word wrap,
+    ///   and - for modern Visual Styles - the carved adorner band and the user <see cref="Padding"/>.
+    ///  </para>
+    /// </remarks>
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         // 3px vertical space is required between the text and the border to keep the last
         // line from being clipped.
-        // This 3 pixel size was added in everett and we do this to maintain compat.
-        // old everett behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3]
-        // however the [ ] was only added if borderstyle was not none.
-        Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
 
-        if (BorderStyle != BorderStyle.None)
-        {
-            bordersAndPadding += new Size(0, 3);
-        }
-
-        if (BorderStyle == BorderStyle.FixedSingle)
-        {
-            // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-            bordersAndPadding.Width += 2;
-            bordersAndPadding.Height += 2;
-        }
-
-        // Reduce constraints by border/padding size
-        proposedConstraints -= bordersAndPadding;
+        // This 3 pixel size was added in Everett, and we do this to maintain compat.
+        // Old Everett behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3],
+        // however the [ ] was only added if BorderStyle was not None.
+        Padding padding = default;
 
         // Fit the text to the remaining space.
-        // Fixed for .NET Framework 4.0
+        // Originally fixed for .NET Framework 4.0
         TextFormatFlags format = TextFormatFlags.NoPrefix;
+
         if (!Multiline)
         {
             format |= TextFormatFlags.SingleLine;
@@ -848,11 +1002,50 @@ public abstract partial class TextBoxBase : Control
             format |= TextFormatFlags.WordBreak;
         }
 
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // For modern Visual Styles we take the carved adorner band (including scrollbars
+            // and the user Padding) into account when measuring.
+            padding = GetVisualStylesPadding(includeScrollbars: true);
+            proposedConstraints -= padding.Size;
+        }
+        else
+        {
+            // Keep the pre-.NET 11 layout contract for classic or disabled visual styles. In these
+            // modes we retain the historic border sizing, but user Padding does not participate in
+            // preferred-size calculations until a modern visual styles mode is selected explicitly.
+            Size borders = SizeFromClientSize(Size.Empty);
+
+            if (BorderStyle != BorderStyle.None)
+            {
+                borders += new Size(0, 3);
+            }
+
+            if (BorderStyle == BorderStyle.FixedSingle)
+            {
+                // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
+                borders.Width += 2;
+                borders.Height += 2;
+            }
+
+            // Preserve the classic border-only measurement contract until a modern
+            // visual styles mode is selected.
+            padding.Left = 0;
+            padding.Top = 0;
+            padding.Right = borders.Width;
+            padding.Bottom = borders.Height;
+
+            // Reduce constraints by the classic border size.
+            proposedConstraints -= borders;
+        }
+
         Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
         // We use this old computation as a lower bound to ensure backwards compatibility.
         textSize.Height = Math.Max(textSize.Height, FontHeight);
-        Size preferredSize = textSize + bordersAndPadding;
+
+        Size preferredSize = textSize + new Size(padding.Horizontal, padding.Vertical);
+
         return preferredSize;
     }
 
@@ -885,9 +1078,9 @@ public abstract partial class TextBoxBase : Control
             // the windows call. This eliminates a problem on nt4 where
             // a huge negative # is being returned.
             start = Math.Max(0, start);
+
             // ditto for end
             end = Math.Max(0, end);
-
             length = end - start;
         }
 
@@ -898,14 +1091,9 @@ public abstract partial class TextBoxBase : Control
 
             end = start + length - 1;
 
-            if (t is null)
-            {
-                len = 0;
-            }
-            else
-            {
-                len = t.Length;
-            }
+            len = t is null
+                ? 0
+                : t.Length;
 
             Debug.Assert(end <= len,
                 $"SelectionEnd is outside the set of valid caret positions for the current WindowText (end ={end}, WindowText.Length ={len})");
@@ -922,10 +1110,8 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxReadOnlyDescr))]
     public bool ReadOnly
     {
-        get
-        {
-            return _textBoxFlags[s_readOnly];
-        }
+        get => _textBoxFlags[s_readOnly];
+
         set
         {
             if (_textBoxFlags[s_readOnly] != value)
@@ -939,7 +1125,6 @@ public abstract partial class TextBoxBase : Control
                 }
 
                 OnReadOnlyChanged(EventArgs.Empty);
-
                 VerifyImeRestrictedModeChanged();
             }
         }
@@ -952,7 +1137,10 @@ public abstract partial class TextBoxBase : Control
             && DarkModeRequestState is true
             && !ShouldSerializeBackColor())
         {
-            base.BackColor = value ? SystemColors.ControlLight : SystemColors.Window;
+            base.BackColor = value
+                ? SystemColors.ControlLight
+                : SystemColors.Window;
+
             Invalidate();
         }
     }
@@ -978,12 +1166,11 @@ public abstract partial class TextBoxBase : Control
         get
         {
             GetSelectionStartAndLength(out int selStart, out int selLength);
+
             return Text.Substring(selStart, selLength);
         }
-        set
-        {
-            SetSelectedTextInternal(value, true);
-        }
+
+        set => SetSelectedTextInternal(value, true);
     }
 
     /// <summary>
@@ -1077,11 +1264,13 @@ public abstract partial class TextBoxBase : Control
     public override string Text
     {
         get => base.Text;
+
         set
         {
             if (value != base.Text)
             {
                 base.Text = value;
+
                 if (IsHandleCreated)
                 {
                     // clear the modified flag
@@ -1098,9 +1287,16 @@ public abstract partial class TextBoxBase : Control
 
         => IsHandleCreated ? PInvokeCore.GetWindowTextLength(this) : Text.Length;
 
+    /// <summary>
+    ///  Gets or sets the underlying native window text (the edit control's caption). This is overridden
+    ///  so that setting the text from code raises a "code update" flag for the duration of the assignment:
+    ///  updating the text on a created handle produces a <c>WM_COMMAND</c> / <c>EN_CHANGE</c> notification,
+    ///  and the flag lets us swallow it so we do not raise a duplicate <see cref="Control.TextChanged"/> event.
+    /// </summary>
     internal override string WindowText
     {
         get => base.WindowText;
+
         set
         {
             value ??= string.Empty;
@@ -1111,6 +1307,7 @@ public abstract partial class TextBoxBase : Control
             if (!WindowText.Equals(value))
             {
                 _textBoxFlags[s_codeUpdateText] = true;
+
                 try
                 {
                     base.WindowText = value;
@@ -1133,6 +1330,7 @@ public abstract partial class TextBoxBase : Control
         value ??= string.Empty;
 
         _textBoxFlags[s_codeUpdateText] = true;
+
         try
         {
             if (IsHandleCreated)
@@ -1160,13 +1358,15 @@ public abstract partial class TextBoxBase : Control
     [SRDescription(nameof(SR.TextBoxWordWrapDescr))]
     public bool WordWrap
     {
-        get
-        {
-            return _textBoxFlags[s_wordWrap];
-        }
+        get => _textBoxFlags[s_wordWrap];
+
         set
         {
-            using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.WordWrap))
+            using (LayoutTransaction.CreateTransactionIf(
+                condition: AutoSize,
+                controlToLayout: ParentInternal,
+                elementCausingLayout: this,
+                property: PropertyNames.WordWrap))
             {
                 if (_textBoxFlags[s_wordWrap] != value)
                 {
@@ -1185,12 +1385,15 @@ public abstract partial class TextBoxBase : Control
     {
         // If we're anchored to two opposite sides of the form, don't adjust the size because
         // we'll lose our anchored size by resetting to the requested width.
-        if (returnIfAnchored && (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
+        if (returnIfAnchored
+            && (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom))
+                == (AnchorStyles.Top | AnchorStyles.Bottom))
         {
             return;
         }
 
         int saveHeight = _requestedHeight;
+
         try
         {
             if (_textBoxFlags[s_autoSize] && !_textBoxFlags[s_multiline])
@@ -1210,6 +1413,7 @@ public abstract partial class TextBoxBase : Control
                 }
 
                 _integralHeightAdjust = true;
+
                 try
                 {
                     Height = saveHeight;
@@ -1281,22 +1485,30 @@ public abstract partial class TextBoxBase : Control
 
     protected bool ContainsNavigationKeyCode(Keys keyCode) => keyCode switch
     {
-        Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
+        Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown
+        or Keys.Home or Keys.End or Keys.Left or Keys.Right => true,
         _ => false,
     };
 
     /// <summary>
     ///  Copies the current selection in the text box to the Clipboard.
     /// </summary>
-    public void Copy() => PInvokeCore.SendMessage(this, PInvokeCore.WM_COPY);
+    public void Copy()
+        => PInvokeCore.SendMessage(this, PInvokeCore.WM_COPY);
 
-    protected override AccessibleObject CreateAccessibilityInstance() => new TextBoxBaseAccessibleObject(this);
+    protected override AccessibleObject CreateAccessibilityInstance()
+        => new TextBoxBaseAccessibleObject(this);
 
     protected override void CreateHandle()
     {
+        // Should the handle be (re)created at this point, we need to reset the latch so the
+        // modern Visual Styles client area is re-carved against the new window.
+        _triggerNewClientSizeRequest = false;
+
         // This "creatingHandle" stuff is to avoid property change events
         // when we set the Text property.
         _textBoxFlags[s_creatingHandle] = true;
+
         try
         {
             base.CreateHandle();
@@ -1313,52 +1525,58 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     ///  Moves the current selection in the text box to the Clipboard.
     /// </summary>
-    public void Cut() => PInvokeCore.SendMessage(this, PInvokeCore.WM_CUT);
+    public void Cut()
+        => PInvokeCore.SendMessage(this, PInvokeCore.WM_CUT);
 
     /// <summary>
     ///  Returns the text end position (one past the last input character). This property is virtual to allow MaskedTextBox
     ///  to set the last input char position as opposed to the last char position which may be a mask character.
     /// </summary>
-    internal virtual int GetEndPosition()
-    {
+    internal virtual int GetEndPosition() =>
         // +1 because RichTextBox has this funny EOF pseudo-character after all the text.
-        return IsHandleCreated ? TextLength + 1 : TextLength;
-    }
+        IsHandleCreated
+            ? TextLength + 1
+        : TextLength;
 
     /// <summary>
     ///  Overridden to handle TAB key.
     /// </summary>
     protected override bool IsInputKey(Keys keyData)
     {
-        if ((keyData & Keys.Alt) != Keys.Alt)
+        if ((keyData & Keys.Alt) == Keys.Alt)
         {
-            switch (keyData & Keys.KeyCode)
-            {
-                case Keys.Tab:
-                    // Single-line RichEd's want tab characters (see WM_GETDLGCODE),
-                    // so we don't ask it
-                    return Multiline && _textBoxFlags[s_acceptsTab] && ((keyData & Keys.Control) == 0);
-                case Keys.Escape:
-                    if (Multiline)
-                    {
-                        return false;
-                    }
+            return base.IsInputKey(keyData);
+        }
 
-                    break;
-                case Keys.Back:
-                    if (!ReadOnly)
-                    {
-                        return true;
-                    }
+        switch (keyData & Keys.KeyCode)
+        {
+            case Keys.Tab:
+                // Single-line RichEd's want tab characters (see WM_GETDLGCODE),
+                // so we don't ask it
+                return Multiline && _textBoxFlags[s_acceptsTab] && ((keyData & Keys.Control) == 0);
 
-                    break;
-                case Keys.PageUp:
-                case Keys.PageDown:
-                case Keys.Home:
-                case Keys.End:
+            case Keys.Escape:
+                if (Multiline)
+                {
+                    return false;
+                }
+
+                break;
+
+            case Keys.Back:
+                if (!ReadOnly)
+                {
                     return true;
-                    // else fall through to base
-            }
+                }
+
+                break;
+
+            case Keys.PageUp:
+            case Keys.PageDown:
+            case Keys.Home:
+            case Keys.End:
+                return true;
+                // else fall through to base
         }
 
         return base.IsInputKey(keyData);
@@ -1371,6 +1589,7 @@ public abstract partial class TextBoxBase : Control
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
         if (!IsHandleCreated)
         {
             return;
@@ -1380,8 +1599,8 @@ public abstract partial class TextBoxBase : Control
         // the border size/etc.
         CommonProperties.xClearPreferredSizeCache(this);
         AdjustHeight(true);
-
         UpdateMaxLength();
+
         if (_textBoxFlags[s_modified])
         {
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMODIFY, (WPARAM)(BOOL)true);
@@ -1408,7 +1627,8 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     ///  Replaces the current selection in the text box with the contents of the Clipboard.
     /// </summary>
-    public void Paste() => PInvokeCore.SendMessage(this, PInvokeCore.WM_PASTE);
+    public void Paste()
+        => PInvokeCore.SendMessage(this, PInvokeCore.WM_PASTE);
 
     protected override bool ProcessDialogKey(Keys keyData)
     {
@@ -1449,6 +1669,51 @@ public abstract partial class TextBoxBase : Control
         {
             eh(this, e);
         }
+    }
+
+    protected override unsafe void OnGotFocus(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // We need to invalidate the non-client area so the focused adorners are drawn.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+
+        base.OnGotFocus(e);
+    }
+
+    protected override unsafe void OnLostFocus(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // We need to invalidate the non-client area so the un-focused adorners are drawn.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+
+        base.OnLostFocus(e);
+    }
+
+    protected override unsafe void OnSizeChanged(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // Invalidate the non-client area to ensure the border chrome is drawn correctly after a resize.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+
+        base.OnSizeChanged(e);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -1514,6 +1779,13 @@ public abstract partial class TextBoxBase : Control
     {
         base.OnPaddingChanged(e);
         AdjustHeight(false);
+
+        // The carved modern Visual Styles padding band includes the user Padding, so a runtime change
+        // has to re-provoke the non-client calculation for it to be reflected in the client rectangle.
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            RecalculateVisualStylesClientArea();
+        }
     }
 
     protected virtual void OnReadOnlyChanged(EventArgs e)
@@ -1594,7 +1866,8 @@ public abstract partial class TextBoxBase : Control
     ///  you pass the index of a overflowed character, GetLineFromCharIndex would
     ///  return 1 and not 0.
     /// </summary>
-    public virtual int GetLineFromCharIndex(int index) => (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_LINEFROMCHAR, (WPARAM)index);
+    public virtual int GetLineFromCharIndex(int index)
+        => (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_LINEFROMCHAR, (WPARAM)index);
 
     /// <summary>
     ///  Returns the location of the character at the given index.
@@ -1606,7 +1879,11 @@ public abstract partial class TextBoxBase : Control
             return Point.Empty;
         }
 
-        int i = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_POSFROMCHAR, (WPARAM)index);
+        int i = (int)PInvokeCore.SendMessage(
+            hWnd: this,
+            Msg: PInvokeCore.EM_POSFROMCHAR,
+            wParam: (WPARAM)index);
+
         return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
     }
 
@@ -1617,19 +1894,26 @@ public abstract partial class TextBoxBase : Control
     {
         ArgumentOutOfRangeException.ThrowIfNegative(lineNumber);
 
-        return (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_LINEINDEX, (WPARAM)lineNumber);
+        return (int)PInvokeCore.SendMessage(
+            hWnd: this,
+            Msg: PInvokeCore.EM_LINEINDEX,
+            wParam: (WPARAM)lineNumber);
     }
 
     /// <summary>
     ///  Returns the index of the first character of the line where the caret is.
     /// </summary>
-    public int GetFirstCharIndexOfCurrentLine() => (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_LINEINDEX, (WPARAM)(-1));
+    public int GetFirstCharIndexOfCurrentLine()
+        => (int)PInvokeCore.SendMessage(
+            hWnd: this,
+            Msg: PInvokeCore.EM_LINEINDEX,
+            wParam: (WPARAM)(-1));
 
     /// <summary>
     ///  Ensures that the caret is visible in the TextBox window, by scrolling the
     ///  TextBox control surface if necessary.
     /// </summary>
-    public unsafe void ScrollToCaret()
+    public void ScrollToCaret()
     {
         if (!IsHandleCreated)
         {
@@ -1643,56 +1927,22 @@ public abstract partial class TextBoxBase : Control
             return;
         }
 
-        using ComScope<IRichEditOle> richEdit = new(null);
-
-        if (PInvokeCore.SendMessage(this, PInvokeCore.EM_GETOLEINTERFACE, 0, (void**)richEdit) == 0)
-        {
-            PInvokeCore.SendMessage(this, PInvokeCore.EM_SCROLLCARET);
-            return;
-        }
-
-        using var textDocument = richEdit.TryQuery<ITextDocument>(out HRESULT hr);
-
-        if (hr.Succeeded)
-        {
-            // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as much text as
-            // possible. Here is how we do that:
-            //
-            //  1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
-            //  2. We get the first visible line.
-            //  3. If the first visible line is smaller than the start of the selection, then we are done:
-            //      The selection fits inside the RichTextBox display rectangle.
-            //  4. Otherwise, scroll the selection to the top of the RichTextBox.
-
-            GetSelectionStartAndLength(out int selStart, out int selLength);
-            int selStartLine = GetLineFromCharIndex(selStart);
-
-            using ComScope<ITextRange> windowTextRange = new(null);
-            textDocument.Value->Range(WindowText.Length - 1, WindowText.Length - 1, windowTextRange).ThrowOnFailure();
-
-            // 1. Scroll the RichTextBox all the way to the bottom
-            windowTextRange.Value->ScrollIntoView((int)tomConstants.tomEnd).ThrowOnFailure();
-
-            // 2. Get the first visible line.
-            int firstVisibleLine = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETFIRSTVISIBLELINE);
-
-            // 3. If the first visible line is smaller than the start of the selection, we are done.
-            if (firstVisibleLine <= selStartLine)
-            {
-                return;
-            }
-            else
-            {
-                // 4. Scroll the selection to the top of the RichTextBox.
-                using ComScope<ITextRange> selectionTextRange = new(null);
-                textDocument.Value->Range(selStart, selStart + selLength, selectionTextRange).ThrowOnFailure();
-                selectionTextRange.Value->ScrollIntoView((int)tomConstants.tomStart).ThrowOnFailure();
-                return;
-            }
-        }
-
-        PInvokeCore.SendMessage(this, PInvokeCore.EM_SCROLLCARET);
+        ScrollToCaretCore();
     }
+
+    /// <summary>
+    ///  Performs the control-specific work of scrolling the caret into view. The base implementation
+    ///  asks the native edit control to scroll the caret into view; <see cref="RichTextBox"/> overrides
+    ///  this to additionally show as much of the surrounding text as possible.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Invoked by <see cref="ScrollToCaret"/> only once the handle exists and the control has text, so
+    ///   overrides do not need to re-check those conditions.
+    ///  </para>
+    /// </remarks>
+    private protected virtual void ScrollToCaretCore()
+        => PInvokeCore.SendMessage(this, PInvokeCore.EM_SCROLLCARET);
 
     /// <summary>
     ///  Sets the SelectionLength to 0.
@@ -1716,14 +1966,10 @@ public abstract partial class TextBoxBase : Control
             // We shouldn't allow positive length if you're starting at the end, but
             // should allow negative length.
             long longLength = Math.Min(0, (long)length + start - textLen);
-            if (longLength < int.MinValue)
-            {
-                length = int.MinValue;
-            }
-            else
-            {
-                length = (int)longLength;
-            }
+
+            length = longLength < int.MinValue
+                ? int.MinValue
+                : (int)longLength;
 
             start = textLen;
         }
@@ -1742,9 +1988,22 @@ public abstract partial class TextBoxBase : Control
     private protected virtual void SelectInternal(int selectionStart, int selectionLength, int textLength)
     {
         // if our handle is created - send message...
-        if (IsHandleCreated)
+        if (!IsHandleCreated)
         {
-            AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, textLength);
+            // otherwise, wait until handle is created to send this message.
+            // Store the indices until then...
+            _selectionStart = selectionStart;
+            _selectionLength = selectionLength;
+            _textBoxFlags[s_setSelectionOnHandleCreated] = true;
+        }
+        else
+        {
+            AdjustSelectionStartAndEnd(
+                selectionStart,
+                selectionLength,
+                out int start,
+                out int end,
+                textLength);
 
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)start, (LPARAM)end);
 
@@ -1754,14 +2013,6 @@ public abstract partial class TextBoxBase : Control
                     ? UIA_EVENT_ID.UIA_AutomationFocusChangedEventId
                     : UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
             }
-        }
-        else
-        {
-            // otherwise, wait until handle is created to send this message.
-            // Store the indices until then...
-            _selectionStart = selectionStart;
-            _selectionLength = selectionLength;
-            _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         }
     }
 
@@ -1792,7 +2043,8 @@ public abstract partial class TextBoxBase : Control
         base.SetBoundsCore(x, y, width, height, specified);
     }
 
-    private static void Swap(ref int n1, ref int n2) => (n1, n2) = (n2, n1);
+    private static void Swap(ref int n1, ref int n2)
+        => (n1, n2) = (n2, n1);
 
     // Send in -1 if you don't have the text length cached
     // when calling this method. It will be computed. If not,
@@ -1810,16 +2062,9 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            int textLength;
-
-            if (textLen >= 0)
-            {
-                textLength = textLen;
-            }
-            else
-            {
-                textLength = TextLength;
-            }
+            int textLength = textLen >= 0
+                ? textLen
+                : TextLength;
 
             if (start > textLength)
             {
@@ -1855,6 +2100,7 @@ public abstract partial class TextBoxBase : Control
     internal void SetSelectionOnHandle()
     {
         Debug.Assert(IsHandleCreated, "Don't call this method until the handle is created.");
+
         if (_textBoxFlags[s_setSelectionOnHandleCreated])
         {
             _textBoxFlags[s_setSelectionOnHandleCreated] = false;
@@ -1876,6 +2122,7 @@ public abstract partial class TextBoxBase : Control
         byte[] bytes = e.GetBytes(str);
 
         bool swap = start > end;
+
         if (swap)
         {
             Swap(ref start, ref end);
@@ -1922,6 +2169,7 @@ public abstract partial class TextBoxBase : Control
         Encoding e = Encoding.Default;
 
         bool swap = start > end;
+
         if (swap)
         {
             Swap(ref start, ref end);
@@ -1971,6 +2219,7 @@ public abstract partial class TextBoxBase : Control
         string s = base.ToString();
 
         string txt = Text;
+
         if (txt.Length > 40)
         {
             txt = $"{txt.AsSpan(0, 40)}...";
@@ -1982,7 +2231,8 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     ///  Undoes the last edit operation in the text box.
     /// </summary>
-    public void Undo() => PInvokeCore.SendMessage(this, PInvokeCore.EM_UNDO);
+    public void Undo()
+        => PInvokeCore.SendMessage(this, PInvokeCore.EM_UNDO);
 
     internal virtual void UpdateMaxLength()
     {
@@ -1994,6 +2244,8 @@ public abstract partial class TextBoxBase : Control
 
     internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
+        InitializeClientArea(dc, (HWND)Handle);
+
         if (msg == PInvokeCore.WM_CTLCOLORSTATIC && !ShouldSerializeBackColor())
         {
             // Let the Win32 Edit control handle background colors itself.
@@ -2007,26 +2259,451 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    /// <summary>
+    ///  Provokes the single non-client calc round trip that carves the modern Visual Styles padding
+    ///  band from the client area.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This runs only for <see cref="VisualStylesMode"/> values of <see cref="VisualStylesMode.Net11"/>
+    ///   and above, and only once per handle. The latch (<see cref="_triggerNewClientSizeRequest"/>) is
+    ///   reset on handle recreation in <see cref="CreateHandle"/>.
+    ///  </para>
+    /// </remarks>
+    private protected virtual unsafe void InitializeClientArea(HDC hDC, HWND hwnd)
+    {
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11
+            || _triggerNewClientSizeRequest)
+        {
+            return;
+        }
+
+        RecalculateVisualStylesClientArea();
+    }
+
+    /// <summary>
+    ///  Sets the latch and provokes the <c>WM_NCCALCSIZE</c> round trip that carves the modern Visual
+    ///  Styles padding band from the client area. Safe to call repeatedly; it re-carves against the
+    ///  current <see cref="Padding"/> and scrollbar state.
+    /// </summary>
+    private protected void RecalculateVisualStylesClientArea()
+    {
+        if (!IsHandleCreated || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        _triggerNewClientSizeRequest = true;
+
+        // Call SetWindowPos with the current bounds and the SWP_FRAMECHANGED flag. We do not change the
+        // window position/size, but this provokes the WM_NCCALCSIZE message we need to carve the client area.
+        PInvoke.SetWindowPos(
+            hWnd: this,
+            hWndInsertAfter: HWND.HWND_TOP,
+            X: 0,
+            Y: 0,
+            cx: 0,
+            cy: 0,
+            uFlags: SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
+                | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+
+        Invalidate(true);
+    }
+
+    /// <summary>
+    ///  When <see langword="true"/>, the native window reserves its own non-client metrics (border and
+    ///  scrollbars) during <c>WM_NCCALCSIZE</c>, so the modern Visual Styles padding band is carved from
+    ///  the client rectangle the default handler produces rather than from the raw proposed window
+    ///  rectangle. The default is <see langword="false"/>: the managed carve is authoritative and the
+    ///  default handler is not invoked (a plain <c>EDIT</c> control keeps its scrollbars inside the
+    ///  managed <see cref="GetScrollBarPadding"/> allowance).
+    /// </summary>
+    private protected virtual bool ReservesNativeNonClientArea => false;
+
+    /// <summary>
+    ///  Handles <c>WM_NCCALCSIZE</c> by carving the modern Visual Styles padding band from the client
+    ///  rectangle. The carve is floored so the client rectangle can never invert.
+    /// </summary>
+    private unsafe void WmNcCalcSize(ref Message m)
+    {
+        // Make sure we actually kicked this off.
+        if (_triggerNewClientSizeRequest)
+        {
+            NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
+
+            if (ncCalcSizeParams is not null)
+            {
+                // Controls whose native window reserves its own non-client metrics (RichEdit reserves its
+                // border and scrollbars) must run the default handler first, so we carve the modern padding
+                // band from the already-adjusted client rectangle rather than the raw proposed window
+                // rectangle. Those controls report an empty GetScrollBarPadding so the scrollbar space the
+                // native handler already reserved is not counted twice.
+                if (ReservesNativeNonClientArea)
+                {
+                    base.WndProc(ref m);
+                }
+
+                Padding padding = GetVisualStylesPadding(includeScrollbars: true);
+
+                ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;
+
+                // Never-invert clamp: a large Padding plus the live scrollbar allowance can drive the
+                // carved client rect to zero or inverted. A 0-1px client area is acceptable and intended
+                // (shipping multiline TextBox already collapses this way); we only prevent underflow past
+                // zero. This is deliberately NOT a MinimumSize and does not vary by VisualStylesMode.
+                int newTop = clientRect.top + padding.Top;
+                int newBottom = clientRect.bottom - padding.Bottom;
+                int newLeft = clientRect.left + padding.Left;
+                int newRight = clientRect.right - padding.Right;
+
+                clientRect.top = newTop;
+                clientRect.bottom = Math.Max(newTop, newBottom);
+                clientRect.left = newLeft;
+                clientRect.right = Math.Max(newLeft, newRight);
+
+                m.ResultInternal = (LRESULT)0;
+
+                return;
+            }
+        }
+
+        base.WndProc(ref m);
+    }
+
+    /// <summary>
+    ///  Handles <c>WM_NCPAINT</c> for modern Visual Styles by painting the custom chrome into the
+    ///  window DC. The <c>wParam</c> clip region is intentionally ignored for our own paint and the
+    ///  whole frame is repainted to avoid the offscreen-restore "dirty corners" artifact.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The default (themed) non-client paint for a scrollbar-bearing edit control fills the client
+    ///   rectangle, which erases the control's content on every non-client repaint - for example when
+    ///   the mouse hovers over the frame. To prevent that, the default handler is invoked with an update
+    ///   region that spans the whole window but excludes the live client rectangle, so the border and
+    ///   scrollbars still paint while the client area is left untouched.
+    ///  </para>
+    /// </remarks>
+    private void WmNcPaint(ref Message m)
+    {
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            base.WndProc(ref m);
+            return;
+        }
+
+        HWND hwnd = (HWND)m.HWnd;
+
+        // A non-client update region (in screen coordinates, as WM_NCPAINT requires) that excludes the
+        // client rectangle. Handing this to the default handler keeps it from overpainting the client.
+        using RegionScope nonClientRegion = CreateNonClientClipRegion();
+        WPARAM originalWParam = m.WParamInternal;
+
+        HDC hdc = PInvokeCore.GetWindowDC(hwnd);
+
+        // Intentional: Graphics.FromHdc does NOT own the DC, so we release the DC ourselves in the
+        // finally. Do not "tidy" the DC into a single using - that would be a regression.
+        using Graphics graphics = Graphics.FromHdc(hdc);
+
+        try
+        {
+            if (!nonClientRegion.IsNull)
+            {
+                m.WParamInternal = (WPARAM)(nuint)(nint)nonClientRegion.Region;
+            }
+
+            base.WndProc(ref m);
+
+            // Restore the original wParam so nothing downstream observes our temporary clip region.
+            m.WParamInternal = originalWParam;
+
+            OnNcPaint(graphics, hdc);
+        }
+        finally
+        {
+            int result = PInvokeCore.ReleaseDC(hwnd, hdc);
+            Debug.Assert(result != 0);
+        }
+    }
+
+    /// <summary>
+    ///  Builds a non-client update region, in screen coordinates, that spans the whole window but
+    ///  excludes the live client rectangle. This is handed to the default <c>WM_NCPAINT</c> handler so
+    ///  it cannot overpaint (erase) the client area of scrollbar-bearing edit controls.
+    /// </summary>
+    /// <returns>
+    ///  The non-client region scope, or a null scope when the window rectangle cannot be retrieved.
+    /// </returns>
+    private RegionScope CreateNonClientClipRegion()
+    {
+        if (!PInvokeCore.GetWindowRect(this, out RECT windowRect))
+        {
+            return new RegionScope(HRGN.Null);
+        }
+
+        PInvokeCore.GetClientRect(this, out RECT clientRect);
+
+        Point clientTopLeft = default;
+        PInvoke.ClientToScreen(this, ref clientTopLeft);
+
+        RegionScope nonClientRegion = new(windowRect.left, windowRect.top, windowRect.right, windowRect.bottom);
+
+        using RegionScope clientRegion = new(
+            clientTopLeft.X,
+            clientTopLeft.Y,
+            clientTopLeft.X + clientRect.Width,
+            clientTopLeft.Y + clientRect.Height);
+
+        if (PInvokeCore.CombineRgn(nonClientRegion.Region, nonClientRegion.Region, clientRegion.Region, RGN_COMBINE_MODE.RGN_DIFF)
+            == GDI_REGION_TYPE.RGN_ERROR)
+        {
+            nonClientRegion.Dispose();
+            return new RegionScope(HRGN.Null);
+        }
+
+        return nonClientRegion;
+    }
+
+    /// <summary>
+    ///  Paints the modern Visual Styles non-client chrome (border, rounded <see cref="BorderStyle.Fixed3D"/>
+    ///  lozenge, focus line) into a shared offscreen buffer and blits it to the supplied window DC.
+    /// </summary>
+    private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
+    {
+        int cornerRadius = LogicalToDeviceUnits(15);
+        int borderThickness = LogicalToDeviceUnits(BorderThickness);
+
+        Color adornerColor = ForeColor;
+
+        Color clientBackColor = BackColor;
+        Color parentBackColor = Parent?.BackColor ?? BackColor;
+
+        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
+        using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+        using var focusPenScope = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
+
+        // The cache Scope is a ref struct in Release builds and so cannot be captured by the local
+        // focus-line helpers below (CS8175). Capture the plain cached Pen it wraps instead - the Scope
+        // stays alive (and ref-counted) for the duration of this method via the using declaration.
+        Pen focusPen = focusPenScope;
+
+        Rectangle bounds = new(
+            x: 0,
+            y: 0,
+            width: Bounds.Width,
+            height: Bounds.Height);
+
+        Padding clientPadding = GetVisualStylesPadding(includeScrollbars: false);
+
+        // This is the client area without the padding.
+        Rectangle clientBounds = new(
+            clientPadding.Left,
+            clientPadding.Top,
+            Math.Max(0, bounds.Width - clientPadding.Horizontal),
+            Math.Max(0, bounds.Height - clientPadding.Vertical));
+        clientBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        // This is the client area of the actual original edit control.
+        Rectangle deflatedBounds = bounds;
+
+        // Making sure we never color outside the lines.
+        deflatedBounds.Width -= 1;
+        deflatedBounds.Height -= 1;
+
+        // Keep the target clip excluded from the GDI+ drawing as well as from the explicit blits below.
+        using Region region = new(bounds);
+        graphics.Clip = region;
+        graphics.ExcludeClip(clientBounds);
+
+        // WinForms paints NC serially (one HWND at a time on the UI thread), so a single shared buffer
+        // suffices for any number of controls. The buffer is reused when the size fits; steady-state
+        // allocation is zero.
+        BufferedGraphicsContext context = BufferedGraphicsManager.Current;
+        using BufferedGraphics buffer = context.Allocate(graphics, bounds);
+
+        // Intentional: the buffer owns this Graphics - do NOT dispose buffer.Graphics separately.
+        Graphics offscreenGraphics = buffer.Graphics;
+        Rectangle bufferBounds = bounds;
+
+        // We need anti-aliasing for the rounded chrome.
+        offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        bounds.Inflate(1, 1);
+
+        // Fill the buffer with the parent background color.
+        offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
+
+        // Below roughly 2 * cornerRadius + thickness the rounded Fixed3D chrome renders as a broken
+        // lozenge. When the available height is below that viable threshold we fall back to flat/simple
+        // chrome. This is a render-only fallback - it does not change size, layout, or ClientSize.
+        bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
+
+        switch (BorderStyle)
+        {
+            case BorderStyle.None:
+
+                // Just fill a rectangle.
+                offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                break;
+
+            case BorderStyle.FixedSingle:
+
+                offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                offscreenGraphics.DrawRectangle(adornerPen, deflatedBounds);
+                break;
+
+            case BorderStyle.Fixed3D:
+
+                if (canRenderRoundedChrome)
+                {
+                    Size radius = new(cornerRadius, cornerRadius);
+
+                    offscreenGraphics.FillRoundedRectangle(clientBackgroundBrush, deflatedBounds, radius);
+                    offscreenGraphics.DrawRoundedRectangle(adornerPen, deflatedBounds, radius);
+                }
+                else
+                {
+                    // Chrome degradation fallback - flat render in place of the broken lozenge.
+                    offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                    offscreenGraphics.DrawRectangle(adornerPen, deflatedBounds);
+                }
+
+                break;
+        }
+
+        // Draw the focus as one line over the bottom border.
+        if (Focused)
+        {
+            switch (BorderStyle)
+            {
+                case BorderStyle.None:
+                case BorderStyle.FixedSingle:
+
+                    DrawStandardFocusLine(
+                        x1: deflatedBounds.Left,
+                        y1: deflatedBounds.Bottom,
+                        x2: deflatedBounds.Right,
+                        y2: deflatedBounds.Bottom);
+
+                    break;
+
+                case BorderStyle.Fixed3D:
+
+                    if (canRenderRoundedChrome)
+                    {
+                        // We must shorten the line on both sides to not draw into the curve.
+                        Draw3DFocusLine(
+                            x1: deflatedBounds.Left + ((cornerRadius - 3) / 2),
+                            y1: deflatedBounds.Bottom,
+                            x2: deflatedBounds.Right - ((cornerRadius - 3) / 2),
+                            y2: deflatedBounds.Bottom);
+                    }
+                    else
+                    {
+                        DrawStandardFocusLine(
+                            x1: deflatedBounds.Left,
+                            y1: deflatedBounds.Bottom,
+                            x2: deflatedBounds.Right,
+                            y2: deflatedBounds.Bottom);
+                    }
+
+                    break;
+            }
+        }
+
+        Rectangle[] nonClientBands = GetNonClientPaintBands(bufferBounds, clientBounds);
+        IntPtr bufferHdc = offscreenGraphics.GetHdc();
+
+        try
+        {
+            foreach (Rectangle band in nonClientBands)
+            {
+                if (band.Width > 0 && band.Height > 0)
+                {
+                    PInvokeCore.BitBlt(
+                        windowHdc,
+                        band.X,
+                        band.Y,
+                        band.Width,
+                        band.Height,
+                        (HDC)bufferHdc,
+                        band.X,
+                        band.Y,
+                        ROP_CODE.SRCCOPY);
+                }
+            }
+        }
+        finally
+        {
+            offscreenGraphics.ReleaseHdcInternal(bufferHdc);
+        }
+
+        void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
+        {
+            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+            offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
+        }
+
+        void Draw3DFocusLine(int x1, int y1, int x2, int y2)
+        {
+            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+            offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
+            offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
+        }
+    }
+
+    private static Rectangle[] GetNonClientPaintBands(Rectangle bounds, Rectangle clientBounds)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return [Rectangle.Empty, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty];
+        }
+
+        Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        if (protectedBounds.Width <= 0 || protectedBounds.Height <= 0)
+        {
+            return [bounds, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty];
+        }
+
+        return
+        [
+            Rectangle.FromLTRB(bounds.Left, bounds.Top, bounds.Right, protectedBounds.Top),
+            Rectangle.FromLTRB(bounds.Left, protectedBounds.Bottom, bounds.Right, bounds.Bottom),
+            Rectangle.FromLTRB(bounds.Left, protectedBounds.Top, protectedBounds.Left, protectedBounds.Bottom),
+            Rectangle.FromLTRB(protectedBounds.Right, protectedBounds.Top, bounds.Right, protectedBounds.Bottom)
+        ];
+    }
+
     private void WmReflectCommand(ref Message m)
     {
-        if (!_textBoxFlags[s_codeUpdateText] && !_textBoxFlags[s_creatingHandle])
+        if (_textBoxFlags[s_codeUpdateText] || _textBoxFlags[s_creatingHandle])
         {
-            uint hiword = m.WParamInternal.HIWORD;
-            if (hiword == PInvoke.EN_CHANGE && CanRaiseTextChangedEvent)
-            {
-                OnTextChanged(EventArgs.Empty);
-            }
-            else if (hiword == PInvoke.EN_UPDATE)
-            {
-                // Force update to the Modified property, which will trigger ModifiedChanged event handlers
-                _ = Modified;
-            }
+            return;
+        }
+
+        uint hiword = m.WParamInternal.HIWORD;
+
+        if (hiword == PInvoke.EN_CHANGE && CanRaiseTextChangedEvent)
+        {
+            OnTextChanged(EventArgs.Empty);
+        }
+        else if (hiword == PInvoke.EN_UPDATE)
+        {
+            // Force update to the Modified property, which will trigger ModifiedChanged event handlers
+            _ = Modified;
         }
     }
 
     private void WmSetFont(ref Message m)
     {
         base.WndProc(ref m);
+
         if (!_textBoxFlags[s_multiline])
         {
             PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
@@ -2036,9 +2713,11 @@ public abstract partial class TextBoxBase : Control
     private void WmGetDlgCode(ref Message m)
     {
         base.WndProc(ref m);
+
         m.ResultInternal = AcceptsTab
-            ? (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB)
-            : (LRESULT)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB | PInvoke.DLGC_WANTALLKEYS));
+            ? (LRESULT)(nint)(m.ResultInternal | (int)PInvoke.DLGC_WANTTAB)
+            : (LRESULT)(nint)(m.ResultInternal & ~(int)(PInvoke.DLGC_WANTTAB
+                | PInvoke.DLGC_WANTALLKEYS));
     }
 
     /// <summary>
@@ -2081,19 +2760,31 @@ public abstract partial class TextBoxBase : Control
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_NCCALCSIZE:
+                WmNcCalcSize(ref m);
+                break;
+
+            case PInvokeCore.WM_NCPAINT:
+                WmNcPaint(ref m);
+                break;
+
             case PInvokeCore.WM_LBUTTONDBLCLK:
                 _doubleClickFired = true;
                 base.WndProc(ref m);
                 break;
+
             case MessageId.WM_REFLECT_COMMAND:
                 WmReflectCommand(ref m);
                 break;
+
             case PInvokeCore.WM_GETDLGCODE:
                 WmGetDlgCode(ref m);
                 break;
+
             case PInvokeCore.WM_SETFONT:
                 WmSetFont(ref m);
                 break;
+
             case PInvokeCore.WM_CONTEXTMENU:
                 if (ShortcutsEnabled)
                 {
@@ -2109,6 +2800,7 @@ public abstract partial class TextBoxBase : Control
                 }
 
                 break;
+
             case PInvokeCore.WM_DESTROY:
                 if (TryGetAccessibilityObject(out AccessibleObject? @object) && @object is TextBoxBaseAccessibleObject accessibleObject &&
                     !RecreatingHandle)
@@ -2119,6 +2811,7 @@ public abstract partial class TextBoxBase : Control
                 base.WndProc(ref m);
 
                 break;
+
             default:
                 base.WndProc(ref m);
                 break;

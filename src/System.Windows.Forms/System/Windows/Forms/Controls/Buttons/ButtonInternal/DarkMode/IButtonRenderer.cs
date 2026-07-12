@@ -59,8 +59,15 @@ internal partial interface IButtonRenderer
     /// <param name="bounds">Bounds of the button</param>
     /// <param name="state">State of the button (normal, hot, pressed, disabled)</param>
     /// <param name="isDefault">True if button is the default button</param>
+    /// <param name="focused">True if the button is focused</param>
     /// <returns>The content bounds (area inside the button for text/image)</returns>
-    Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
+    Rectangle DrawButtonBackground(
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        bool focused,
+        Color backColor);
 
     /// <summary>
     ///  Draws focus indicator appropriate for this style.

@@ -800,8 +800,12 @@ public partial class TextBox : TextBoxBase
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
+
+        // In modern Visual Styles mode the base TextBoxBase NC painting owns the border chrome, so we
+        // must not also draw the classic Fixed3D edge here - that would double-draw over the modern chrome.
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles
-            && BorderStyle == BorderStyle.Fixed3D)
+            && BorderStyle == BorderStyle.Fixed3D
+            && EffectiveVisualStylesMode < VisualStylesMode.Net11)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);

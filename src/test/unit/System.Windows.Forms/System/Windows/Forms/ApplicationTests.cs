@@ -178,6 +178,32 @@ public partial class ApplicationTests
         Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
     }
 
+    [Fact]
+    public void Application_SetDefaultVisualStylesMode_IsWriteOnce()
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
+        {
+            VisualStylesMode expectedInitialMode = Application.UseVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled;
+            Assert.Equal(expectedInitialMode, Application.DefaultVisualStylesMode);
+
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+            Assert.Equal(
+                Application.UseVisualStyles ? VisualStylesMode.Net11 : VisualStylesMode.Disabled,
+                Application.DefaultVisualStylesMode);
+
+            // Setting the same value again is allowed.
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+
+            // Setting a different value after the mode has been established throws.
+            Assert.Throws<InvalidOperationException>(
+                () => Application.SetDefaultVisualStylesMode(VisualStylesMode.Latest));
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
+    }
+
 #pragma warning restore SYSLIB5002
 
 #if NET11_0_OR_GREATER

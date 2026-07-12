@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Button;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -46,6 +47,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private ButtonBaseAdapter? _adapter;
     private FlatStyle _cachedAdapterType;
+    private ButtonBackColorAnimator? _backColorAnimator;
+    private AnimatedPopupButtonRenderer? _popupKeyCapRenderer;
 
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
@@ -838,6 +841,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _imageList?.Disposed -= DetachImageList;
             _textToolTip?.Dispose();
             _textToolTip = null;
+            _backColorAnimator?.Dispose();
+            _backColorAnimator = null;
+            _popupKeyCapRenderer?.Dispose();
+            _popupKeyCapRenderer = null;
         }
 
         base.Dispose(disposing);
@@ -1067,6 +1074,29 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return null;
     }
 
+    internal ButtonBackColorAnimator BackColorAnimator
+        => _backColorAnimator ??= new(this);
+
+    private AnimatedPopupButtonRenderer PopupKeyCapRenderer
+        => _popupKeyCapRenderer ??= new(this);
+
+    private bool IsPopupKeyCapAppearance
+        => FlatStyle == FlatStyle.Popup
+            && (Application.IsDarkModeEnabled || EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            && this is Button
+                or CheckBox { Appearance: Appearance.Button }
+                or RadioButton { Appearance: Appearance.Button };
+
+    private bool IsPopupKeyCapSelected
+        => this is CheckBox { Checked: true }
+            or RadioButton { Checked: true };
+
+    private protected void ResetAdapter()
+    {
+        _adapter = null;
+        _cachedAdapterType = (FlatStyle)(-1);
+    }
+
     internal virtual StringFormat CreateStringFormat()
     {
         if (Adapter is null)
@@ -1250,11 +1280,60 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             Animate();
             ImageAnimator.UpdateFrames(Image);
 
-            PaintControl(pevent);
+            if (IsPopupKeyCapAppearance)
+            {
+                PopupKeyCapRenderer.SetInteractionState(
+                    hovered: MouseIsOver,
+                    pressed: MouseIsDown,
+                    selected: IsPopupKeyCapSelected);
+
+                using GraphicsStateScope scope = new(pevent.Graphics);
+                PopupKeyCapRenderer.RenderControl(pevent.Graphics);
+            }
+            else
+            {
+                PaintControl(pevent);
+            }
         }
 
         base.OnPaint(pevent);
     }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        using (LayoutTransaction.CreateTransactionIf(
+            AutoSize,
+            ParentInternal,
+            this,
+            PropertyNames.VisualStylesMode))
+        {
+            base.OnVisualStylesModeChanged(e);
+
+            // Renderer padding can change with VisualStylesMode, so recreate the adapter before layout
+            // recomputes the preferred size.
+            ResetAdapter();
+
+            if (IsHandleCreated)
+            {
+                Invalidate();
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        ResetAdapter();
+        base.OnSystemColorsChanged(e);
+    }
+
+    /// <summary>
+    ///  Exposes the (otherwise <c>private protected</c>) <see cref="Control.EffectiveVisualStylesMode"/>
+    ///  to the owner-drawn button adapters in the <c>ButtonInternal</c> namespace, so that renderer selection
+    ///  honors the Windows High Contrast clamp just like the control's own paint and <see cref="CreateParams"/>.
+    /// </summary>
+    internal VisualStylesMode EffectiveVisualStylesModeInternal => EffectiveVisualStylesMode;
 
     protected override void OnParentChanged(EventArgs e)
     {

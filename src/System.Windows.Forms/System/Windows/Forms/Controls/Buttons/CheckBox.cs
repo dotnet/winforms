@@ -28,6 +28,10 @@ public partial class CheckBox : ButtonBase
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private CheckState _checkState;
     private Appearance _appearance;
+    private bool _threeState;
+
+    private Rendering.CheckBox.AnimatedCheckGlyphRenderer? _checkGlyphRenderer;
+    private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
 
     private int _flatSystemStylePaddingWidth;
     private int _flatSystemStyleMinimumHeight;
@@ -75,11 +79,13 @@ public partial class CheckBox : ButtonBase
             using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
             {
                 _appearance = value;
+                ResetAdapter();
 
                 // UpdateOwnerDraw synchronizes control styles with the OwnerDraw state and recreates
                 // the handle if they differ. Since we hijack FlatStyle.Standard for DarkMode, the transition
                 // between Normal and Button appearance is critical for updating the OwnerDraw flag.
                 UpdateOwnerDraw();
+                UpdateToggleSwitchStyles();
 
                 // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
                 if (OwnerDraw)
@@ -97,16 +103,52 @@ public partial class CheckBox : ButtonBase
     }
 
     private protected override bool OwnerDraw =>
+            // The modern toggle switch is always owner-drawn (so UserPaint is enabled for it).
+            IsToggleSwitchAppearance
+            ||
             // We want NO owner draw ONLY when we're
             // * In Dark Mode
             // * When _then_ the Appearance is Button
             // * But then ONLY when we're rendering with FlatStyle.Standard
             //   (because that would let us usually let us draw with the VisualStyleRenderers,
             //   which cause HighDPI issues in Dark Mode).
-            (!Application.IsDarkModeEnabled
+            ((!Application.IsDarkModeEnabled
                 || Appearance != Appearance.Button
                 || FlatStyle != FlatStyle.Standard)
-                && base.OwnerDraw;
+                && base.OwnerDraw);
+
+    /// <summary>
+    ///  Gets a value indicating whether the check box should render as the modern, animated toggle switch.
+    /// </summary>
+    private bool IsToggleSwitchAppearance
+    {
+        get
+        {
+            return Appearance == Appearance.ToggleSwitch
+                && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+                && !ThreeState;
+        }
+    }
+
+    private Rendering.CheckBox.AnimatedToggleSwitchRenderer ToggleSwitchRenderer =>
+        _toggleSwitchRenderer ??= new(this, Rendering.CheckBox.ModernCheckBoxStyle.Rounded);
+
+    internal Rendering.CheckBox.AnimatedCheckGlyphRenderer CheckGlyphRenderer
+        => _checkGlyphRenderer ??= new(this);
+
+    private void UpdateToggleSwitchStyles()
+    {
+        if (IsToggleSwitchAppearance)
+        {
+            // Owner-paint with WinForms double buffering for a flicker-free, fluent animation.
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            _toggleSwitchRenderer?.SynchronizeState();
+        }
+        else
+        {
+            _toggleSwitchRenderer?.StopAnimation();
+        }
+    }
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
@@ -199,6 +241,14 @@ public partial class CheckBox : ButtonBase
                 return;
             }
 
+            // For the animated toggle switch, stop any in-flight animation (leaving the thumb at its current
+            // position) before the state changes, then start a fresh animation toward the new position.
+            bool animateToggleSwitch = IsToggleSwitchAppearance && IsHandleCreated;
+            if (animateToggleSwitch)
+            {
+                ToggleSwitchRenderer.PrepareStateChange();
+            }
+
             bool oldChecked = Checked;
 
             _checkState = value;
@@ -218,6 +268,11 @@ public partial class CheckBox : ButtonBase
             _notifyAccessibilityStateChangedNeeded = !checkedChanged;
             OnCheckStateChanged(EventArgs.Empty);
             _notifyAccessibilityStateChangedNeeded = false;
+
+            if (animateToggleSwitch)
+            {
+                ToggleSwitchRenderer.StartAnimation();
+            }
         }
     }
 
@@ -288,6 +343,11 @@ public partial class CheckBox : ButtonBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        if (IsToggleSwitchAppearance)
+        {
+            return Rendering.CheckBox.ToggleSwitchMetrics.Create(this).GetPreferredSize(this);
+        }
+
         if (Appearance == Appearance.Button)
         {
             ButtonStandardAdapter adapter = new(this);
@@ -365,7 +425,29 @@ public partial class CheckBox : ButtonBase
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.CheckBoxThreeStateDescr))]
-    public bool ThreeState { get; set; }
+    public bool ThreeState
+    {
+        get => _threeState;
+        set
+        {
+            if (_threeState == value)
+            {
+                return;
+            }
+
+            _toggleSwitchRenderer?.StopAnimation();
+            _threeState = value;
+            ResetAdapter();
+            UpdateOwnerDraw();
+            UpdateToggleSwitchStyles();
+            LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, nameof(ThreeState));
+
+            if (IsHandleCreated)
+            {
+                Invalidate();
+            }
+        }
+    }
 
     /// <summary>
     ///  Occurs when the value of the <see cref="Checked"/> property changes.
@@ -497,6 +579,62 @@ public partial class CheckBox : ButtonBase
         {
             PInvokeCore.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
         }
+
+        UpdateToggleSwitchStyles();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+        if (IsToggleSwitchAppearance)
+        {
+            using GraphicsStateScope scope = new(pevent.Graphics);
+            ToggleSwitchRenderer.RenderControl(pevent.Graphics);
+            return;
+        }
+
+        base.OnPaint(pevent);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        base.OnVisualStylesModeChanged(e);
+
+        // Entering or leaving the modern toggle-switch appearance changes whether the control is owner-drawn.
+        UpdateOwnerDraw();
+        UpdateToggleSwitchStyles();
+
+        if (IsHandleCreated)
+        {
+            Invalidate();
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        base.OnSystemColorsChanged(e);
+        UpdateOwnerDraw();
+        UpdateToggleSwitchStyles();
+    }
+
+    internal ContentAlignment RtlTranslatedCheckAlign
+        => RtlTranslateContent(CheckAlign);
+
+    internal bool ShowFocusCuesInternal => ShowFocusCues;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _checkGlyphRenderer?.Dispose();
+            _checkGlyphRenderer = null;
+            _toggleSwitchRenderer?.Dispose();
+            _toggleSwitchRenderer = null;
+        }
+
+        base.Dispose(disposing);
     }
 
     /// <summary>
@@ -526,11 +664,24 @@ public partial class CheckBox : ButtonBase
         base.OnMouseUp(mevent);
     }
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new CheckBoxFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Flat)
+            : new CheckBoxFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new CheckBoxPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Popup)
+            : new CheckBoxPopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new CheckBoxStandardAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter()
+        => UseModernGlyphRenderer
+            ? new CheckBoxModernAdapter(this, FlatStyle.Standard)
+            : new CheckBoxStandardAdapter(this);
+
+    private bool UseModernGlyphRenderer
+        => Appearance == Appearance.Normal
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11;
 
     /// <summary>
     ///  Overridden to handle mnemonics properly.

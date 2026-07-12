@@ -8,22 +8,42 @@ namespace System.Windows.Forms.ButtonInternal;
 
 internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 {
+    private readonly bool _animateBackgroundColors;
     private readonly ButtonDarkModeRendererBase _buttonDarkModeRenderer;
 
     internal ButtonDarkModeAdapter(ButtonBase control) : base(control)
     {
+        bool modern = control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
+        _animateBackgroundColors = modern && !SystemInformation.HighContrast;
+
         _buttonDarkModeRenderer = control.FlatStyle switch
         {
-            FlatStyle.Standard => new FlatButtonDarkModeRenderer(),
-            FlatStyle.Flat => new FlatButtonDarkModeRenderer(),
-            FlatStyle.Popup => new PopupButtonDarkModeRenderer(),
+            // With VisualStyles (.NET 11+) the modern, WinUI-inspired renderer is used for the owner-drawn
+            // styles. Otherwise FlatStyle.Standard renders with a conservative owner-drawn renderer that mimics
+            // the dark-mode system button (instead of delegating to the Win32 control); this makes the owner-drawn
+            // path reachable and lets Standard buttons support images, focus cues, etc.
+            FlatStyle.Standard => modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
+            FlatStyle.Flat => modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
+            // FlatStyle.Popup is owner-painted directly by ButtonBase using the animated key-cap renderer; the
+            // adapter is used only for layout/sizing here, for which the
+            // modern renderer's metrics are a good fit.
+            FlatStyle.Popup => new ModernButtonDarkModeRenderer(),
             FlatStyle.System => new SystemButtonDarkModeRenderer(),
             _ => throw new ArgumentOutOfRangeException(nameof(control))
         };
+
+        _buttonDarkModeRenderer.DeviceDpi = control.DeviceDpi;
+        _buttonDarkModeRenderer.FlatAppearance = control.FlatAppearance;
     }
 
-    private ButtonDarkModeRendererBase ButtonDarkModeRenderer =>
-        _buttonDarkModeRenderer;
+    private ButtonDarkModeRendererBase ButtonDarkModeRenderer
+    {
+        get
+        {
+            _buttonDarkModeRenderer.DeviceDpi = Control.DeviceDpi;
+            return _buttonDarkModeRenderer;
+        }
+    }
 
     private Color GetButtonTextColor(IDeviceContext deviceContext, PushButtonState state)
     {
@@ -55,7 +75,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
         if (Control.BackColor != Forms.Control.DefaultBackColor)
         {
-            backColor = Control.BackColor;
+            backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                state,
+                Control.IsDefault,
+                Control.BackColor);
 
             if (IsHighContrastHighlighted())
             {
@@ -64,7 +87,16 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
         else
         {
-            backColor = ButtonDarkModeRenderer.GetBackgroundColor(state, Control.IsDefault);
+            backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                state,
+                Control.IsDefault,
+                customBaseColor: Color.Empty);
+        }
+
+        if (_animateBackgroundColors)
+        {
+            Control.BackColorAnimator.AnimateTo(backColor);
+            backColor = Control.BackColorAnimator.CurrentColor;
         }
 
         return backColor;
