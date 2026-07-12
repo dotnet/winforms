@@ -2478,13 +2478,11 @@ public abstract partial class TextBoxBase : Control
 
         Color adornerColor = ForeColor;
 
-        // Intentional: corners blend against the parent's flat back color, so they mismatch over a
-        // gradient/image/Mica/sibling. For the common case (solid form/panel) this is correct; this is
-        // a documented limitation, not a bug to "improve" into a fake general-case solution.
-        Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
 
-        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        // Diagnostic: any LightCoral visible in the native edit client proves that the target clip does
+        // not protect the client area when BufferedGraphics.Render blits the non-client buffer.
+        using var parentBackgroundBrush = Color.LightCoral.GetCachedSolidBrushScope();
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
@@ -2537,7 +2535,7 @@ public abstract partial class TextBoxBase : Control
 
         bounds.Inflate(1, 1);
 
-        // Fill the background with the parent's back color.
+        // Fill the buffer with the diagnostic non-client background color.
         offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
 
         // Below roughly 2 * cornerRadius + thickness the rounded Fixed3D chrome renders as a broken
