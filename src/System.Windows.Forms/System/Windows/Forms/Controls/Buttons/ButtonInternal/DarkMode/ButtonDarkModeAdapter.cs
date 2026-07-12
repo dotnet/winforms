@@ -8,11 +8,13 @@ namespace System.Windows.Forms.ButtonInternal;
 
 internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 {
+    private readonly bool _animateBackgroundColors;
     private readonly ButtonDarkModeRendererBase _buttonDarkModeRenderer;
 
     internal ButtonDarkModeAdapter(ButtonBase control) : base(control)
     {
         bool modern = control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
+        _animateBackgroundColors = modern && !SystemInformation.HighContrast;
 
         _buttonDarkModeRenderer = control.FlatStyle switch
         {
@@ -21,7 +23,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             // the dark-mode system button (instead of delegating to the Win32 control); this makes the owner-drawn
             // path reachable and lets Standard buttons support images, focus cues, etc.
             FlatStyle.Standard => modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
-            FlatStyle.Flat => modern ? new ModernButtonDarkModeRenderer() : new FlatButtonDarkModeRenderer(),
+            FlatStyle.Flat => modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
             // FlatStyle.Popup is owner-painted directly by Button using the animated key-cap renderer (see
             // Button.IsPopupKeyCapAppearance); the adapter is used only for layout/sizing here, for which the
             // modern renderer's metrics are a good fit.
@@ -31,6 +33,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         };
 
         _buttonDarkModeRenderer.DeviceDpi = control.DeviceDpi;
+        _buttonDarkModeRenderer.FlatAppearance = control.FlatAppearance;
     }
 
     private ButtonDarkModeRendererBase ButtonDarkModeRenderer
@@ -72,7 +75,10 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
         if (Control.BackColor != Forms.Control.DefaultBackColor)
         {
-            backColor = Control.BackColor;
+            backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                state,
+                Control.IsDefault,
+                Control.BackColor);
 
             if (IsHighContrastHighlighted())
             {
@@ -81,7 +87,16 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
         else
         {
-            backColor = ButtonDarkModeRenderer.GetBackgroundColor(state, Control.IsDefault);
+            backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                state,
+                Control.IsDefault,
+                customBaseColor: Color.Empty);
+        }
+
+        if (_animateBackgroundColors)
+        {
+            Control.BackColorAnimator.AnimateTo(backColor);
+            backColor = Control.BackColorAnimator.CurrentColor;
         }
 
         return backColor;

@@ -117,6 +117,7 @@ override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArg
 override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
+override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
