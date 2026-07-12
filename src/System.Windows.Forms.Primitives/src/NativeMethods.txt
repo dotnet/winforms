@@ -516,6 +516,9 @@ PD_RESULT_*
 PostQuitMessage
 PostQuitMessage
 PostThreadMessage
+PowerCreateRequest
+PowerClearRequest
+PowerSetRequest
 PRF_*
 PROGRESS_CLASS
 PROPERTYKEY
@@ -696,6 +699,8 @@ WC_TABCONTROL
 WC_TREEVIEW
 WHEEL_DELTA
 WindowFromPoint
+WTSRegisterSessionNotification
+WTSUnRegisterSessionNotification
 WINDOWPOS
 WINEVENT_INCONTEXT
 WSF_VISIBLE
