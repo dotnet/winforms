@@ -11024,6 +11024,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La couleur des lignes qui connectent les nœuds du TreeView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeViewNodeLeadingDescr">
+        <source>The uniform row-height leading factor applied to all nodes.</source>
+        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">Se produit lors d'un clic de souris sur un nœud.</target>
@@ -11047,6 +11052,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">Les nœuds racine dans le contrôle TreeView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
+        <source>Occurs when the value of the NodeLeading property changes.</source>
+        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">
