@@ -72,9 +72,15 @@ public abstract partial class UpDownBase
 
             if (UseSideBySideButtons)
             {
-                int half = client.Width / 2;
-                Rectangle leadingRect = new(client.X, client.Y, half, client.Height);
-                Rectangle trailingRect = new(client.X + half, client.Y, client.Width - half, client.Height);
+                int spacing = Math.Min(_parent.ModernButtonGroupSpacing, client.Width);
+                int availableWidth = Math.Max(0, client.Width - spacing);
+                int leadingWidth = (availableWidth + 1) / 2;
+                Rectangle leadingRect = new(client.X, client.Y, leadingWidth, client.Height);
+                Rectangle trailingRect = new(
+                    client.X + leadingWidth + spacing,
+                    client.Y,
+                    availableWidth - leadingWidth,
+                    client.Height);
 
                 bool rightToLeft = _parent.RightToLeft == RightToLeft.Yes;
                 Rectangle upRect = rightToLeft ? leadingRect : trailingRect;
@@ -96,9 +102,18 @@ public abstract partial class UpDownBase
         /// <param name="e">The mouse event arguments.</param>
         private void BeginButtonPress(MouseEventArgs e)
         {
-            _pushed = _captured = GetButtonRectangle(ButtonID.Up).Contains(e.Location)
+            ButtonID button = GetButtonRectangle(ButtonID.Up).Contains(e.Location)
                 ? ButtonID.Up
-                : ButtonID.Down;
+                : GetButtonRectangle(ButtonID.Down).Contains(e.Location)
+                    ? ButtonID.Down
+                    : ButtonID.None;
+
+            if (button == ButtonID.None)
+            {
+                return;
+            }
+
+            _pushed = _captured = button;
             Invalidate();
 
             // Capture the mouse
@@ -212,14 +227,15 @@ public abstract partial class UpDownBase
             Rectangle rectDown = GetButtonRectangle(ButtonID.Down);
 
             // Check if the mouse is on the upper or lower button. Note that it could be in neither.
-            if (rectUp.Contains(e.X, e.Y))
+            ButtonID mouseOver = rectUp.Contains(e.X, e.Y)
+                ? ButtonID.Up
+                : rectDown.Contains(e.X, e.Y)
+                    ? ButtonID.Down
+                    : ButtonID.None;
+
+            if (_mouseOver != mouseOver)
             {
-                _mouseOver = ButtonID.Up;
-                Invalidate();
-            }
-            else if (rectDown.Contains(e.X, e.Y))
-            {
-                _mouseOver = ButtonID.Down;
+                _mouseOver = mouseOver;
                 Invalidate();
             }
 
@@ -296,27 +312,41 @@ public abstract partial class UpDownBase
                 // the modern control-button renderer, which adapts to both light and dark modes.
                 bool isDarkMode = Application.IsDarkModeEnabled;
 
-                Graphics cachedGraphics = EnsureCachedBitmap(ClientSize.Width, ClientSize.Height);
+                using Graphics cachedGraphics = EnsureCachedBitmap(ClientSize.Width, ClientSize.Height);
 
                 DrawModernControlButton(
                     cachedGraphics,
                     GetButtonRectangle(ButtonID.Down),
-                    ModernControlButtonStyle.Down | ModernControlButtonStyle.SingleBorder,
+                    ModernControlButtonStyle.Down,
                     GetButtonState(ButtonID.Down),
                     isDarkMode);
 
                 DrawModernControlButton(
                     cachedGraphics,
                     GetButtonRectangle(ButtonID.Up),
-                    ModernControlButtonStyle.Up | ModernControlButtonStyle.SingleBorder,
+                    ModernControlButtonStyle.Up,
                     GetButtonState(ButtonID.Up),
                     isDarkMode);
 
                 e.GraphicsInternal.DrawImageUnscaled(_cachedBitmap, new Point(0, 0));
+
+                int spacing = _parent.ModernButtonGroupSpacing;
+                if (spacing > 0)
+                {
+                    Rectangle upBounds = GetButtonRectangle(ButtonID.Up);
+                    Rectangle downBounds = GetButtonRectangle(ButtonID.Down);
+                    Rectangle gap = new(
+                        Math.Min(upBounds.Right, downBounds.Right),
+                        0,
+                        spacing,
+                        ClientSize.Height);
+                    using var gapBrush = _parent.BackColor.GetCachedSolidBrushScope();
+                    e.Graphics.FillRectangle(gapBrush, gap);
+                }
             }
             else if (Application.IsDarkModeEnabled)
             {
-                Graphics cachedGraphics = EnsureCachedBitmap(
+                using Graphics cachedGraphics = EnsureCachedBitmap(
                     _parent._defaultButtonsWidth,
                     ClientSize.Height);
 

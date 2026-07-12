@@ -30,6 +30,20 @@ namespace System.Windows.Forms.Rendering.Button;
 /// </remarks>
 internal static class PopupButtonKeyCapRenderer
 {
+    internal static GraphicsPath? CreateBodyPath(PopupButtonRenderContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        Rectangle bounds = context.Bounds;
+        if (context.HighContrast || bounds.Width < 8 || bounds.Height < 8)
+        {
+            return null;
+        }
+
+        Metrics metrics = Metrics.Create(context);
+        return CreateRoundedPath(metrics.KeyRect, metrics.CornerRadius);
+    }
+
     /// <summary>
     ///  Renders the key into the given <see cref="Graphics"/>.
     /// </summary>
@@ -73,7 +87,7 @@ internal static class PopupButtonKeyCapRenderer
         (Rectangle textBounds, Rectangle imageBounds) = CreateContentLayout(
             context,
             metrics.BowlRect,
-            applySurfaceInset: true);
+            applySurfaceInset: false);
 
         GraphicsState state = graphics.Save();
 
@@ -279,11 +293,6 @@ internal static class PopupButtonKeyCapRenderer
             return;
         }
 
-        // The key top already moves with the press; the caption sinks a touch further, which sells the
-        // "finger pushes the key down" moment.
-        int extraSink = (int)MathF.Round(context.AnimationState.PressProgress * 0.75f * metrics.Scale);
-        textRect.Offset(0, extraSink);
-
         TextFormatFlags flags = GetTextFormatFlags(context);
         int reliefOffset = metrics.TextReliefOffset;
 
@@ -407,6 +416,9 @@ internal static class PopupButtonKeyCapRenderer
         contentBounds = ApplyPadding(contentBounds, context.Padding);
         bool hasText = !string.IsNullOrEmpty(context.Text);
         bool hasImage = !context.ImageSize.IsEmpty;
+        ContentAlignment imageAlign = context.RightToLeft == RightToLeft.Yes
+            ? MirrorAlignment(context.ImageAlign)
+            : context.ImageAlign;
 
         if (!hasImage)
         {
@@ -421,7 +433,7 @@ internal static class PopupButtonKeyCapRenderer
         {
             return (
                 hasText ? contentBounds : Rectangle.Empty,
-                AlignInRectangle(contentBounds, imageSize, context.ImageAlign));
+                AlignInRectangle(contentBounds, imageSize, imageAlign));
         }
 
         TextImageRelation relation = context.RightToLeft == RightToLeft.Yes
@@ -435,7 +447,7 @@ internal static class PopupButtonKeyCapRenderer
             TextImageRelation.TextBeforeImage => CreateHorizontalLayout(imageFirst: false),
             TextImageRelation.ImageAboveText => CreateVerticalLayout(imageFirst: true),
             TextImageRelation.TextAboveImage => CreateVerticalLayout(imageFirst: false),
-            _ => (contentBounds, AlignInRectangle(contentBounds, imageSize, context.ImageAlign))
+            _ => (contentBounds, AlignInRectangle(contentBounds, imageSize, imageAlign))
         };
 
         (Rectangle TextBounds, Rectangle ImageBounds) CreateHorizontalLayout(bool imageFirst)
@@ -450,7 +462,7 @@ internal static class PopupButtonKeyCapRenderer
 
             return (
                 textBounds,
-                AlignInRectangle(imageSlot, imageSize with { Width = imageWidth }, context.ImageAlign));
+                AlignInRectangle(imageSlot, imageSize with { Width = imageWidth }, imageAlign));
         }
 
         (Rectangle TextBounds, Rectangle ImageBounds) CreateVerticalLayout(bool imageFirst)
@@ -465,7 +477,7 @@ internal static class PopupButtonKeyCapRenderer
 
             return (
                 textBounds,
-                AlignInRectangle(imageSlot, imageSize with { Height = imageHeight }, context.ImageAlign));
+                AlignInRectangle(imageSlot, imageSize with { Height = imageHeight }, imageAlign));
         }
     }
 
@@ -608,6 +620,9 @@ internal static class PopupButtonKeyCapRenderer
     /// </summary>
     private readonly struct Metrics
     {
+        private const float SideClearanceDip = 1f;
+        private const float PressTravelDip = 1.5f;
+
         public float Scale { get; init; }
         public int Ambient { get; init; }
         public int BorderWidth { get; init; }
@@ -632,19 +647,27 @@ internal static class PopupButtonKeyCapRenderer
             float hover = context.AnimationState.HoverProgress;
             float press = context.AnimationState.PressProgress;
 
-            int ambient = Math.Max(1, (int)MathF.Round(2.5f * scale));
+            int sideClearance = Math.Max(1, (int)MathF.Round(SideClearanceDip * scale));
+            int pressTravel = Math.Max(1, (int)MathF.Round(PressTravelDip * scale));
+            int ambient = sideClearance + pressTravel;
             int maxBorder = Math.Max(0, (Math.Min(bounds.Width, bounds.Height) / 4) - 1);
             int defaultBorderIncrease = context.IsDefault && context.Enabled
                 ? Math.Max(1, (int)MathF.Round(scale))
                 : 0;
             int borderWidth = Math.Clamp(context.BorderWidth + defaultBorderIncrease, 0, maxBorder);
 
-            Rectangle keyRect = Rectangle.Inflate(bounds, -ambient, -ambient);
+            Rectangle keyRect = new(
+                bounds.X + sideClearance,
+                bounds.Y + sideClearance,
+                Math.Max(1, bounds.Width - (2 * sideClearance)),
+                Math.Max(1, bounds.Height - sideClearance - ambient));
 
-            // Pressing sinks the key top; the bottom edge stays put, so the cap compresses.
-            int pressOffset = (int)MathF.Round(press * 1.5f * scale);
-            keyRect.Y += pressOffset;
-            keyRect.Height = Math.Max(4, keyRect.Height - pressOffset);
+            // Pressing translates the complete key top into the space released by its shortening shadow.
+            // Keeping the key height constant avoids moving the bowl, border, and content independently.
+            int pressOffset = Math.Min(
+                (int)MathF.Round(press * PressTravelDip * scale),
+                Math.Max(0, bounds.Bottom - sideClearance - keyRect.Bottom));
+            keyRect.Offset(0, pressOffset);
 
             int rim = Math.Max(2, (int)MathF.Round(3f * scale));
             int bowlInset = borderWidth + rim;

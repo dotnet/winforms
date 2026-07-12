@@ -288,6 +288,12 @@ public partial class RadioButton : ButtonBase
             return Rendering.CheckBox.ToggleSwitchMetrics.Create(this).GetPreferredSize(this);
         }
 
+        if (Appearance == Appearance.Button && FlatStyle == FlatStyle.Popup)
+        {
+            return DarkModeAdapterFactory.CreatePopupAdapter(this).GetPreferredSizeCore(proposedConstraints)
+                + Padding.Size;
+        }
+
         if (FlatStyle != FlatStyle.System)
         {
             return base.GetPreferredSizeCore(proposedConstraints);

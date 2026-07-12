@@ -141,6 +141,20 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_OnVisualStylesModeChanged_InvalidatesBeforeRaisingEvent()
+    {
+        using SubControlWithVisualStyles control = new();
+        control.CreateControl();
+        bool invalidated = false;
+        control.Invalidated += (sender, e) => invalidated = true;
+        control.VisualStylesModeChanged += (sender, e) => Assert.True(invalidated);
+
+        control.OnVisualStylesModeChanged(EventArgs.Empty);
+
+        Assert.True(invalidated);
+    }
+
+    [WinFormsFact]
     public void Control_VisualStylesMode_AmbientBehaviorTest()
     {
         using SubControlWithVisualStyles parent = new();
