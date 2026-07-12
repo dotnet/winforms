@@ -23,7 +23,8 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     // Logical (96-DPI) layout constants. DPI-scaled via the base Scale() helper.
     private const int FocusRingThicknessLogical = 2;
     private const int FocusGapThicknessLogical = 1;
-    private const int CornerRadiusLogical = 6;
+    private const int FocusedCornerRadiusLogical = 6;
+    private const int UnfocusedCornerRadiusLogical = 8;
     private const int ContentInsetLogical = 4;
 
     // Dark scheme - default (accept) button area.
@@ -71,7 +72,8 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private int HighDpiCorrection => DeviceDpi > ScaleHelper.OneHundredPercentLogicalDpi ? 1 : 0;
 
-    private int CornerRadius => Math.Max(1, Scale(CornerRadiusLogical));
+    private int GetCornerRadius(bool focused, bool isDefault)
+        => Math.Max(1, Scale(focused || isDefault ? FocusedCornerRadiusLogical : UnfocusedCornerRadiusLogical));
 
     // When focused, the body is inset just enough to leave room for the focus ring and a single-pixel gap,
     // keeping that gap tight so the rounded body claims as much real estate as possible.
@@ -84,11 +86,14 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private protected override Padding GetContentPadding(bool focusRingVisible)
         => focusRingVisible ? PaddingCore : Padding.Empty;
 
+    private protected override bool UseModernStateDefaults => true;
+
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
         Rectangle bounds,
         PushButtonState state,
         bool isDefault,
+        bool focused,
         Color backColor)
     {
         GraphicsState? saved = graphics.Save();
@@ -96,7 +101,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int radius = CornerRadius;
+            int radius = GetCornerRadius(focused, isDefault);
             using (var brush = backColor.GetCachedSolidBrushScope())
             {
                 graphics.FillRoundedRectangle(brush, bounds, new Size(radius, radius));
@@ -134,7 +139,9 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 return;
             }
 
-            int radius = CornerRadius + FocusGapThickness + FocusRingThickness;
+            int radius = GetCornerRadius(focused: true, isDefault: isDefault)
+                + FocusGapThickness
+                + FocusRingThickness;
 
             // Dark gap ring between the focus ring and the button area.
             Color gapColor = IsDark ? s_darkGap : SystemColors.Window;

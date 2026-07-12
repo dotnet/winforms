@@ -3,7 +3,9 @@
 
 #nullable disable
 
+using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Rendering.Button;
 
 namespace System.Windows.Forms.Tests;
 
@@ -164,7 +166,8 @@ public class ButtonVisualStylesTests
             new Rectangle(0, 0, bitmap.Width, bitmap.Height),
             VisualStyles.PushButtonState.Hot,
             isDefault: false,
-            background);
+            focused: false,
+            backColor: background);
 
         Assert.Equal(Color.Blue, background);
         Assert.True(ContainsPixel(bitmap, Color.Lime));
@@ -184,6 +187,179 @@ public class ButtonVisualStylesTests
 
         Assert.False(animator.IsRunning);
         Assert.Equal(Color.Blue, animator.CurrentColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Classic)]
+    [InlineData(VisualStylesMode.Disabled)]
+    public void FlatButtonAppearance_ModernStateColors_ClassicModeReturnsEmpty(
+        VisualStylesMode visualStylesMode)
+    {
+        using Button button = new() { VisualStylesMode = visualStylesMode };
+
+        Assert.Equal(Color.Empty, button.FlatAppearance.MouseDownBackColor);
+        Assert.Equal(Color.Empty, button.FlatAppearance.MouseOverBackColor);
+    }
+
+    [WinFormsFact]
+    public void FlatButtonAppearance_ModernStateColors_UnsetResolvesFromAccentAndRenderedBase()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Flat,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Color accent = Application.GetWindowsAccentColor();
+        Color expectedBase = ModernButtonColorMath.GetRenderedBaseColor(button, button.FlatAppearance);
+
+        Assert.Equal(accent, button.FlatAppearance.MouseDownBackColor);
+        Assert.Equal(
+            PopupButtonColorMath.Blend(
+                expectedBase,
+                accent,
+                ModernButtonColorMath.AccentBlendAmount),
+            button.FlatAppearance.MouseOverBackColor);
+    }
+
+    [WinFormsFact]
+    public void FlatButtonAppearance_ModernStateColors_ExplicitValuesWin()
+    {
+        using Button button = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Color mouseDown = Color.FromArgb(1, 2, 3);
+        Color mouseOver = Color.FromArgb(4, 5, 6);
+
+        button.FlatAppearance.MouseDownBackColor = mouseDown;
+        button.FlatAppearance.MouseOverBackColor = mouseOver;
+
+        Assert.Equal(mouseDown, button.FlatAppearance.MouseDownBackColor);
+        Assert.Equal(mouseOver, button.FlatAppearance.MouseOverBackColor);
+    }
+
+    [WinFormsFact]
+    public void FlatButtonAppearance_ModernStateColors_ResetAndShouldSerializeUseBackingFields()
+    {
+        using Button button = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        FlatButtonAppearance appearance = button.FlatAppearance;
+        PropertyDescriptor mouseDown = TypeDescriptor.GetProperties(appearance)[nameof(appearance.MouseDownBackColor)]!;
+        PropertyDescriptor mouseOver = TypeDescriptor.GetProperties(appearance)[nameof(appearance.MouseOverBackColor)]!;
+
+        Assert.False(mouseDown.ShouldSerializeValue(appearance));
+        Assert.False(mouseOver.ShouldSerializeValue(appearance));
+
+        appearance.MouseDownBackColor = Color.Red;
+        appearance.MouseOverBackColor = Color.Blue;
+        Assert.True(mouseDown.ShouldSerializeValue(appearance));
+        Assert.True(mouseOver.ShouldSerializeValue(appearance));
+
+        mouseDown.ResetValue(appearance);
+        mouseOver.ResetValue(appearance);
+
+        Assert.Equal(Color.Empty, appearance.MouseDownBackColorCore);
+        Assert.Equal(Color.Empty, appearance.MouseOverBackColorCore);
+        Assert.False(mouseDown.ShouldSerializeValue(appearance));
+        Assert.False(mouseOver.ShouldSerializeValue(appearance));
+    }
+
+    [WinFormsFact]
+    public void ModernButtonColorMath_ExplicitBackColorIsTheRenderedBase()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.FromArgb(10, 20, 30)
+        };
+
+        Assert.Equal(button.BackColor, ModernButtonColorMath.GetRenderedBaseColor(button, button.FlatAppearance));
+
+        Color accent = Application.GetWindowsAccentColor();
+        Assert.Equal(
+            PopupButtonColorMath.Blend(
+                button.BackColor,
+                accent,
+                ModernButtonColorMath.AccentBlendAmount),
+            button.FlatAppearance.MouseOverBackColor);
+    }
+
+    [WinFormsFact]
+    public void ModernButtonDarkModeRenderer_CornerRadiusDependsOnFocusAndDefaultState()
+    {
+        ModernButtonDarkModeRenderer renderer = new() { DeviceDpi = 96 };
+        dynamic accessor = renderer.TestAccessor.Dynamic;
+
+        Assert.Equal(8, (int)accessor.GetCornerRadius(focused: false, isDefault: false));
+        Assert.Equal(6, (int)accessor.GetCornerRadius(focused: true, isDefault: false));
+        Assert.Equal(6, (int)accessor.GetCornerRadius(focused: false, isDefault: true));
+    }
+
+    [WinFormsFact]
+    public void ModernButtonDarkModeRenderer_ModernStateDefaultsUseAccentAndExplicitValuesWin()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        ModernButtonDarkModeRenderer renderer = new()
+        {
+            FlatAppearance = button.FlatAppearance
+        };
+        Color accent = Application.GetWindowsAccentColor();
+
+        Assert.Equal(accent, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, false, Color.Empty));
+        Assert.Equal(
+            button.FlatAppearance.MouseOverBackColor,
+            renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, false, Color.Empty));
+
+        button.FlatAppearance.MouseDownBackColor = Color.Red;
+        button.FlatAppearance.MouseOverBackColor = Color.Blue;
+        Assert.Equal(Color.Red, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, false, Color.Empty));
+        Assert.Equal(Color.Blue, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, false, Color.Empty));
+    }
+
+    [WinFormsFact]
+    public void ButtonBackColorAnimator_InterpolatesReversesAndStops()
+    {
+        using Button button = new();
+        using ButtonInternal.ButtonBackColorAnimator animator = new(button);
+
+        animator.AnimateTo(Color.Red);
+        animator.AnimateTo(Color.Blue);
+        animator.AnimationProc(0.5f);
+        Assert.Equal(Color.FromArgb(255, 128, 0, 127), animator.CurrentColor);
+
+        animator.AnimateTo(Color.Green);
+        animator.AnimationProc(0.5f);
+        Assert.Equal(Color.FromArgb(255, 64, 64, 64), animator.CurrentColor);
+
+        animator.StopAnimation();
+        Assert.False(animator.IsRunning);
+        Assert.Equal(Color.FromArgb(255, 64, 64, 64), animator.CurrentColor);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_InteractionPaintStateStartsColorAnimation()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        ButtonInternal.ButtonDarkModeAdapter adapter = (ButtonInternal.ButtonDarkModeAdapter)button.CreateFlatAdapter();
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+        ButtonInternal.ButtonBackColorAnimator animator = button.BackColorAnimator;
+
+        _ = accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+        Assert.False(animator.IsRunning);
+
+        _ = accessor.GetButtonBackColor(VisualStyles.PushButtonState.Hot);
+        Assert.True(animator.IsRunning);
     }
 
     private static bool ContainsPixel(Bitmap bitmap, Color color)

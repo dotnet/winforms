@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Button;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -47,6 +48,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     private ButtonBaseAdapter? _adapter;
     private FlatStyle _cachedAdapterType;
     private ButtonBackColorAnimator? _backColorAnimator;
+    private AnimatedPopupButtonRenderer? _popupKeyCapRenderer;
 
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
@@ -841,6 +843,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _textToolTip = null;
             _backColorAnimator?.Dispose();
             _backColorAnimator = null;
+            _popupKeyCapRenderer?.Dispose();
+            _popupKeyCapRenderer = null;
         }
 
         base.Dispose(disposing);
@@ -1073,6 +1077,20 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     internal ButtonBackColorAnimator BackColorAnimator
         => _backColorAnimator ??= new(this);
 
+    private AnimatedPopupButtonRenderer PopupKeyCapRenderer
+        => _popupKeyCapRenderer ??= new(this);
+
+    private bool IsPopupKeyCapAppearance
+        => FlatStyle == FlatStyle.Popup
+            && (Application.IsDarkModeEnabled || EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            && this is Button
+                or CheckBox { Appearance: Appearance.Button }
+                or RadioButton { Appearance: Appearance.Button };
+
+    private bool IsPopupKeyCapSelected
+        => this is CheckBox { Checked: true }
+            or RadioButton { Checked: true };
+
     private protected void ResetAdapter()
     {
         _adapter = null;
@@ -1262,7 +1280,20 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             Animate();
             ImageAnimator.UpdateFrames(Image);
 
-            PaintControl(pevent);
+            if (IsPopupKeyCapAppearance)
+            {
+                PopupKeyCapRenderer.SetInteractionState(
+                    hovered: MouseIsOver,
+                    pressed: MouseIsDown,
+                    selected: IsPopupKeyCapSelected);
+
+                using GraphicsStateScope scope = new(pevent.Graphics);
+                PopupKeyCapRenderer.RenderControl(pevent.Graphics);
+            }
+            else
+            {
+                PaintControl(pevent);
+            }
         }
 
         base.OnPaint(pevent);

@@ -14,6 +14,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     // Define padding values for each renderer type
     private protected abstract Padding PaddingCore { get; }
 
+    private protected virtual bool UseModernStateDefaults => false;
+
     /// <summary>
     ///  Gets the padding that insets the button body from the control bounds for the given focus state.
     /// </summary>
@@ -132,7 +134,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
                 height: bounds.Height - padding.Vertical);
 
             // Draw button background and get content bounds
-            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor);
+            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, focused, backColor);
 
             // Paint image and field using the provided delegates
             paintImage(contentBounds);
@@ -147,7 +149,13 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         }
     }
 
-    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
+    public abstract Rectangle DrawButtonBackground(
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        bool focused,
+        Color backColor);
 
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 
@@ -156,15 +164,22 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     public Color GetBackgroundColor(PushButtonState state, bool isDefault, Color customBaseColor)
     {
         if (state == PushButtonState.Hot
-            && FlatAppearance is { MouseOverBackColor.IsEmpty: false } hoverAppearance)
+            && FlatAppearance is { MouseOverBackColorCore.IsEmpty: false } hoverAppearance)
         {
-            return hoverAppearance.MouseOverBackColor;
+            return hoverAppearance.MouseOverBackColorCore;
         }
 
         if (state == PushButtonState.Pressed
-            && FlatAppearance is { MouseDownBackColor.IsEmpty: false } pressedAppearance)
+            && FlatAppearance is { MouseDownBackColorCore.IsEmpty: false } pressedAppearance)
         {
-            return pressedAppearance.MouseDownBackColor;
+            return pressedAppearance.MouseDownBackColorCore;
+        }
+
+        if (UseModernStateDefaults
+            && FlatAppearance is not null
+            && state is PushButtonState.Hot or PushButtonState.Pressed)
+        {
+            return ModernButtonColorMath.GetStateColor(this, state, isDefault, customBaseColor);
         }
 
         if (!customBaseColor.IsEmpty)

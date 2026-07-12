@@ -676,9 +676,11 @@ public class CheckBoxTests : AbstractButtonBaseTests
         box.DeviceDpiInternal = deviceDpi;
 
         Size preferredSize = box.GetPreferredSizeCore(Size.Empty);
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
 
-        Assert.Equal(box.LogicalToDeviceUnits(70), preferredSize.Width);
-        Assert.Equal(box.LogicalToDeviceUnits(25), preferredSize.Height);
+        Assert.Equal(metrics.SwitchWidth, 2 * box.Font.Height);
+        Assert.Equal(metrics.SwitchHeight, box.Font.Height);
+        Assert.Equal(metrics.GetPreferredSize(box), preferredSize);
     }
 
     [WinFormsFact]
@@ -700,6 +702,46 @@ public class CheckBoxTests : AbstractButtonBaseTests
             .Invoke(renderer, null);
 
         Assert.False(renderer.IsRunning);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_RapidStateChange_PreservesThumbPosition()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        box.Checked = true;
+        renderer.AnimationProc(0.5f);
+        float positionBeforeReverse = renderer.TestAccessor.Dynamic._positionCurrent;
+
+        box.Checked = false;
+        float positionAfterReverse = renderer.TestAccessor.Dynamic._positionCurrent;
+
+        Assert.Equal(positionBeforeReverse, positionAfterReverse);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_ThreeStateChange_UpdatesOwnerDraw()
+    {
+        using SubCheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+        Assert.True(box.GetStyle(ControlStyles.UserPaint));
+
+        box.ThreeState = true;
+
+        Assert.False(box.GetStyle(ControlStyles.UserPaint));
     }
 
     private static (int Left, int Right) FindSwitchColumnBand(Bitmap bitmap)
