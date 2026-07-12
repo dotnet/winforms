@@ -6992,6 +6992,8 @@ public unsafe partial class Control :
             return;
         }
 
+        Invalidate();
+
         if (Events[s_visualStylesModeChangedEvent] is EventHandler eventHandler)
         {
             eventHandler(this, e);

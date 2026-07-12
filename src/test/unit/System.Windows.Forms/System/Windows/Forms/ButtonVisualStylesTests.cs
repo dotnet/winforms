@@ -318,6 +318,73 @@ public class ButtonVisualStylesTests
         Assert.Equal(Color.Blue, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, false, Color.Empty));
     }
 
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, 96)]
+    [InlineData(FlatStyle.Standard, 144)]
+    [InlineData(FlatStyle.Standard, 192)]
+    [InlineData(FlatStyle.System, 96)]
+    [InlineData(FlatStyle.System, 144)]
+    [InlineData(FlatStyle.System, 192)]
+    public void RoundedButtonRenderers_FocusedBitmap_UsesUniformEdgeWeight(
+        FlatStyle flatStyle,
+        int deviceDpi)
+    {
+        using Button button = new()
+        {
+            FlatStyle = flatStyle
+        };
+        button.FlatAppearance.BorderColor = Color.Lime;
+        button.FlatAppearance.BorderSize = 1;
+
+        ButtonDarkModeRendererBase renderer = flatStyle == FlatStyle.Standard
+            ? new ModernButtonDarkModeRenderer()
+            : new SystemButtonDarkModeRenderer();
+        renderer.DeviceDpi = deviceDpi;
+        renderer.FlatAppearance = button.FlatAppearance;
+
+        int scale = Math.Max(1, (int)Math.Round(deviceDpi / 96f));
+        int margin = (int)Math.Round(12 * deviceDpi / 96f);
+        Rectangle bounds = new(
+            margin,
+            margin,
+            (int)Math.Round(120 * deviceDpi / 96f),
+            (int)Math.Round(40 * deviceDpi / 96f));
+        Color parentColor = Color.Black;
+        Color bodyColor = Color.FromArgb(96, 96, 96);
+
+        using Bitmap bitmap = new(bounds.Right + margin, bounds.Bottom + margin);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(parentColor);
+        renderer.RenderButton(
+            graphics,
+            button,
+            bounds,
+            flatStyle,
+            VisualStyles.PushButtonState.Normal,
+            isDefault: true,
+            focused: true,
+            showFocusCues: true,
+            parentBackgroundColor: parentColor,
+            backColor: bodyColor,
+            paintImage: _ => { },
+            paintField: () => { });
+
+        Assert.True(ContainsPixel(bitmap, Color.Lime));
+
+        int bodyOffset = FindBodyOffset(bitmap, bounds, bodyColor, vertical: true);
+        int leftBodyOffset = FindBodyOffset(bitmap, bounds, bodyColor, vertical: false);
+        Assert.InRange(bodyOffset, 1, 12 * scale);
+        Assert.InRange(Math.Abs(bodyOffset - leftBodyOffset), 0, 1);
+
+        int topLuminance = GetLuminance(bitmap.GetPixel(bounds.Left + (bounds.Width / 2), bounds.Top));
+        int leftLuminance = GetLuminance(bitmap.GetPixel(bounds.Left, bounds.Top + (bounds.Height / 2)));
+        Assert.InRange(Math.Abs(topLuminance - leftLuminance), 0, 4);
+
+        int cornerLuminance = GetLuminance(bitmap.GetPixel(bounds.Left + scale, bounds.Top + scale));
+        int parentLuminance = GetLuminance(parentColor);
+        Assert.InRange(cornerLuminance, parentLuminance - 3, 255);
+    }
+
     [WinFormsFact]
     public void ButtonBackColorAnimator_InterpolatesReversesAndStops()
     {
@@ -378,4 +445,35 @@ public class ButtonVisualStylesTests
 
         return false;
     }
+
+    private static int FindBodyOffset(
+        Bitmap bitmap,
+        Rectangle bounds,
+        Color bodyColor,
+        bool vertical)
+    {
+        int targetLuminance = GetLuminance(bodyColor);
+        int maximumOffset = vertical ? bounds.Height / 2 : bounds.Width / 2;
+
+        for (int offset = 0; offset < maximumOffset; offset++)
+        {
+            int x = vertical
+                ? bounds.Left + (bounds.Width / 2)
+                : bounds.Left + offset;
+            int y = vertical
+                ? bounds.Top + offset
+                : bounds.Top + (bounds.Height / 2);
+            Color pixel = bitmap.GetPixel(x, y);
+
+            if (Math.Abs(GetLuminance(pixel) - targetLuminance) <= 2)
+            {
+                return offset;
+            }
+        }
+
+        return maximumOffset;
+    }
+
+    private static int GetLuminance(Color color)
+        => ((299 * color.R) + (587 * color.G) + (114 * color.B)) / 1000;
 }

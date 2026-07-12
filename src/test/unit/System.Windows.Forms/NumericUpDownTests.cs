@@ -20,6 +20,25 @@ public class NumericUpDownTests
     }
 
     [WinFormsFact]
+    public void NumericUpDown_ModernVisualStylesMode_PreferredSizeIncludesButtonGroup()
+    {
+        using NumericUpDown nud = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            AutoSize = true
+        };
+
+        if (!nud.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Size preferredSize = nud.GetPreferredSize(Size.Empty);
+        Assert.True(preferredSize.Height >= nud.PreferredHeight);
+        Assert.True(preferredSize.Width >= nud.LogicalToDeviceUnits(3) * 2 + nud.GetModernButtonGroupWidth());
+    }
+
+    [WinFormsFact]
     public void NumericUpDown_VisualStyles_off_BasicRendering_ControlEnabled()
     {
         if (Application.RenderWithVisualStyles)

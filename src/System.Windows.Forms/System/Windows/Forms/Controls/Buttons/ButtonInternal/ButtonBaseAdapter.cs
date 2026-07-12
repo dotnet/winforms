@@ -59,6 +59,16 @@ internal abstract partial class ButtonBaseAdapter
         return options.GetPreferredSizeCore(proposedSize);
     }
 
+    protected static Size GetPopupPreferredSizeCore(LayoutOptions layout, Size proposedSize)
+    {
+        layout.GrowBorderBy1PxWhenDefault = false;
+        layout.MaxFocus = false;
+        layout.BorderSize = 0;
+        layout.PaddingSize = 1;
+
+        return layout.GetPreferredSizeCore(proposedSize);
+    }
+
     protected abstract LayoutOptions Layout(PaintEventArgs e);
 
     internal abstract void PaintUp(PaintEventArgs e, CheckState state);

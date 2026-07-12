@@ -328,10 +328,25 @@ public partial class RichTextBox : TextBoxBase
 
     /// <summary>
     ///  RichEdit reserves the scrollbar space itself while processing <c>WM_NCCALCSIZE</c> (see
-    ///  <see cref="ReservesNativeNonClientArea"/>), so no additional managed scrollbar allowance is
-    ///  added on top; otherwise the space would be counted twice.
+    ///  <see cref="ReservesNativeNonClientArea"/>). Return the configured reservation for preferred-size
+    ///  measurement; the native client-area calculation explicitly excludes it.
     /// </summary>
-    private protected override Padding GetScrollBarPadding() => Padding.Empty;
+    private protected override Padding GetScrollBarPadding()
+    {
+        Padding padding = Padding.Empty;
+
+        if (Multiline && !WordWrap && (ScrollBars & RichTextBoxScrollBars.Horizontal) != 0)
+        {
+            padding.Bottom = SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
+        }
+
+        if (Multiline && (ScrollBars & RichTextBoxScrollBars.Vertical) != 0)
+        {
+            padding.Right = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+        }
+
+        return padding;
+    }
 
     /// <summary>
     ///  Controls whether or not the rich edit control will automatically highlight URLs.
@@ -437,6 +452,12 @@ public partial class RichTextBox : TextBoxBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // TextBoxBase owns the modern inset, user Padding, and scrollbar geometry.
+            return base.GetPreferredSizeCore(proposedConstraints);
+        }
+
         Size scrollBarPadding = Size.Empty;
 
         // If the RTB is multiline, we won't have a horizontal scrollbar.
@@ -657,6 +678,7 @@ public partial class RichTextBox : TextBoxBase
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                 {
                     _richTextBoxFlags[s_scrollBarsSection] = (int)value;
+                    CommonProperties.xClearPreferredSizeCache(this);
                     RecreateHandle();
                 }
             }

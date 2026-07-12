@@ -116,6 +116,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             PushButtonState pushButtonState = ToPushButtonState(state, Control.Enabled);
             ButtonDarkModeRenderer.RenderButton(
                 g,
+                Control,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 pushButtonState,
@@ -154,6 +155,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
                 g,
+                Control,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 PushButtonState.Pressed,
@@ -192,6 +194,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             LayoutData layout = CommonLayout().Layout();
             ButtonDarkModeRenderer.RenderButton(
                 g,
+                Control,
                 Control.ClientRectangle,
                 Control.FlatStyle,
                 PushButtonState.Hot,
@@ -218,6 +221,11 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     }
 
     protected override LayoutOptions Layout(PaintEventArgs e) => CommonLayout();
+
+    internal override Size GetPreferredSizeCore(Size proposedSize)
+        => Control.FlatStyle == FlatStyle.Popup
+            ? GetPopupPreferredSizeCore(CommonLayout(), proposedSize)
+            : base.GetPreferredSizeCore(proposedSize);
 
     private new LayoutOptions CommonLayout()
     {

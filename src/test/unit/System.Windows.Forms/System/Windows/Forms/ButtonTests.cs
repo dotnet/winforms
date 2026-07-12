@@ -3698,6 +3698,22 @@ public class ButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void Button_OnVisualStylesModeChanged_RecreatesCachedAdapter()
+    {
+        using SubButton button = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        object originalAdapter = button.AdapterAccessor;
+        var originalAnimator = button.BackColorAnimator;
+
+        button.OnVisualStylesModeChanged(EventArgs.Empty);
+
+        Assert.NotSame(originalAdapter, button.AdapterAccessor);
+        Assert.NotSame(originalAnimator, button.BackColorAnimator);
+    }
+
+    [WinFormsFact]
     public void ButtonDarkModeAdapter_Paint_UpdatesRendererDpi()
     {
         using SubButton button = new()
@@ -3814,6 +3830,8 @@ public class ButtonTests : AbstractButtonBaseTests
         public new void OnMouseUp(MouseEventArgs eventargs) => base.OnMouseUp(eventargs);
 
         public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
+
+        public new void OnVisualStylesModeChanged(EventArgs e) => base.OnVisualStylesModeChanged(e);
 
         public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
