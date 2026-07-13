@@ -12969,6 +12969,7 @@ public unsafe partial class Control :
                 QueueSystemVisualSettingsRefresh();
                 break;
 
+            case PInvokeCore.WM_DWMCOLORIZATIONCOLORCHANGED:
             case PInvokeCore.WM_SYSCOLORCHANGE:
                 if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
                 {

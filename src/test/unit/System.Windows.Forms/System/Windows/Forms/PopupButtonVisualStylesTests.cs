@@ -221,6 +221,90 @@ public class PopupButtonVisualStylesTests
         Assert.Equal(button.GetPreferredSize(Size.Empty), checkable.GetPreferredSize(Size.Empty));
     }
 
+    [WinFormsTheory]
+    [InlineData(typeof(Button))]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void PopupButton_PreferredSize_FitsSharedContentLayout(Type controlType)
+    {
+        using Bitmap image = new(16, 16);
+        using ButtonBase control = CreateAppearanceButton(controlType);
+        control.Image = image;
+        control.Padding = new Padding(3, 2, 4, 3);
+        control.Text = "Popup button with a complete caption";
+        control.TextImageRelation = TextImageRelation.ImageBeforeText;
+        Size preferredSize = control.GetPreferredSize(Size.Empty);
+        control.Size = preferredSize;
+
+        PopupButtonRenderContext context = CreateContext(
+            deviceDpi: control.DeviceDpi,
+            bounds: control.ClientRectangle,
+            padding: control.Padding,
+            text: control.Text);
+        Rectangle contentBounds = PopupButtonKeyCapRenderer.GetContentBounds(context);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        ButtonInternal.ButtonBaseAdapter.LayoutData actual = adapter.GetLayoutData(contentBounds);
+        ButtonInternal.ButtonBaseAdapter.LayoutData unconstrained = adapter.GetLayoutData(
+            new Rectangle(0, 0, 2_000, 500));
+
+        Assert.True(
+            actual.TextBounds.Width >= unconstrained.TextBounds.Width,
+            $"Preferred={preferredSize}, content={contentBounds}, client={actual.Client}, field={actual.Field}, actual={actual.TextBounds}, unconstrained={unconstrained.TextBounds}");
+        Assert.True(
+            actual.TextBounds.Height >= unconstrained.TextBounds.Height,
+            $"Preferred={preferredSize}, content={contentBounds}, client={actual.Client}, field={actual.Field}, actual={actual.TextBounds}, unconstrained={unconstrained.TextBounds}");
+        Assert.True(contentBounds.Contains(actual.TextBounds));
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(144)]
+    [InlineData(192)]
+    public void PopupButton_PreferredSizeChrome_ContainsReleasedAndDefaultGeometry(int deviceDpi)
+    {
+        Size chrome = PopupButtonKeyCapRenderer.GetPreferredSizeChrome(deviceDpi, borderWidth: 1);
+        PopupButtonRenderContext context = CreateContext(
+            deviceDpi: deviceDpi,
+            isDefault: true,
+            bounds: new Rectangle(0, 0, 300, 100));
+        Rectangle contentBounds = PopupButtonKeyCapRenderer.GetContentBounds(context);
+        Size actualChrome = new(
+            context.Bounds.Width - contentBounds.Width,
+            context.Bounds.Height - contentBounds.Height);
+
+        Assert.True(chrome.Width >= actualChrome.Width);
+        Assert.True(chrome.Height >= actualChrome.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 120, 215)]
+    [InlineData(255, 185, 0)]
+    [InlineData(240, 240, 240)]
+    [InlineData(24, 24, 24)]
+    [InlineData(180, 20, 90)]
+    public void PopupButtonKeyCapRenderer_AutomaticForeground_MeetsWcagContrast(
+        byte red,
+        byte green,
+        byte blue)
+    {
+        PopupButtonRenderContext context = CreateContext(
+            backColor: Color.FromArgb(red, green, blue),
+            useAutomaticForeColor: true);
+
+        AssertAutomaticPaletteContrast(context);
+    }
+
+    [WinFormsFact]
+    public void PopupButtonKeyCapRenderer_TranslucentAutomaticForeground_UsesCompositedSurface()
+    {
+        PopupButtonRenderContext context = CreateContext(
+            backColor: Color.FromArgb(24, Color.White),
+            surfaceColor: Color.Black,
+            useAutomaticForeColor: true);
+
+        AssertAutomaticPaletteContrast(context);
+    }
+
     private static PopupButtonRenderContext CreateContext(
         int deviceDpi = 96,
         bool focused = false,
@@ -232,13 +316,18 @@ public class PopupButtonVisualStylesTests
         string text = null,
         Size imageSize = default,
         ContentAlignment imageAlign = ContentAlignment.MiddleCenter,
-        RightToLeft rightToLeft = RightToLeft.No)
+        RightToLeft rightToLeft = RightToLeft.No,
+        Color? backColor = null,
+        Color? surfaceColor = null,
+        bool useAutomaticForeColor = false)
         => new()
         {
             Bounds = bounds ?? new Rectangle(0, 0, 120, 40),
             Font = Control.DefaultFont,
-            BackColor = Color.FromArgb(100, 120, 140),
+            BackColor = backColor ?? Color.FromArgb(100, 120, 140),
             ForeColor = Color.White,
+            SurfaceColor = surfaceColor ?? SystemColors.Control,
+            UseAutomaticForeColor = useAutomaticForeColor,
             BorderColor = Color.Black,
             BorderWidth = 1,
             Enabled = true,
@@ -251,8 +340,72 @@ public class PopupButtonVisualStylesTests
             Text = text,
             ImageSize = imageSize,
             ImageAlign = imageAlign,
-            RightToLeft = rightToLeft
+            RightToLeft = rightToLeft,
+            HighContrast = false
         };
+
+    private static void AssertAutomaticPaletteContrast(PopupButtonRenderContext context)
+    {
+        object metrics = CreateMetrics(context);
+        Type paletteType = typeof(PopupButtonKeyCapRenderer).GetNestedType(
+            "Palette",
+            BindingFlags.NonPublic);
+        MethodInfo createMethod = paletteType.GetMethod(
+            "Create",
+            BindingFlags.Public | BindingFlags.Static);
+        object palette = createMethod.Invoke(
+            null,
+            [context, metrics, InvokeGetSurfaceBackColor(context)]);
+        Color text = (Color)paletteType.GetProperty("Text").GetValue(palette);
+        Color textOutline = (Color)paletteType.GetProperty("TextOutline").GetValue(palette);
+        Color darkestBowl = (Color)paletteType.GetProperty("DarkestTextBackground").GetValue(palette);
+        Color lightestBowl = (Color)paletteType.GetProperty("LightestTextBackground").GetValue(palette);
+
+        AssertSurfaceContrast(darkestBowl);
+        AssertSurfaceContrast(lightestBowl);
+
+        void AssertSurfaceContrast(Color surface)
+        {
+            float textContrast = PopupButtonColorMath.GetContrastRatio(text, surface);
+            float outlineContrast = textOutline.IsEmpty
+                ? 0f
+                : PopupButtonColorMath.GetContrastRatio(textOutline, surface);
+
+            Assert.True(
+                Math.Max(textContrast, outlineContrast)
+                    >= ModernButtonColorMath.MinimumTextContrastRatio);
+
+            if (!textOutline.IsEmpty)
+            {
+                Assert.True(
+                    PopupButtonColorMath.GetContrastRatio(text, textOutline)
+                        >= ModernButtonColorMath.MinimumTextContrastRatio);
+            }
+        }
+    }
+
+    private static ButtonBase CreateAppearanceButton(Type controlType)
+    {
+        ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.AutoSize = true;
+        control.FlatStyle = FlatStyle.Popup;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        if (control is Button button)
+        {
+            button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        }
+        else if (control is CheckBox checkBox)
+        {
+            checkBox.Appearance = Appearance.Button;
+        }
+        else
+        {
+            ((RadioButton)control).Appearance = Appearance.Button;
+        }
+
+        return control;
+    }
 
     private static object CreateMetrics(PopupButtonRenderContext context)
     {

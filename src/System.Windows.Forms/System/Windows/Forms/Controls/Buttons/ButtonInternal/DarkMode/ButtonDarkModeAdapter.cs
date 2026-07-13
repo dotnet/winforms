@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Rendering.Button;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms.ButtonInternal;
@@ -10,11 +11,12 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 {
     private readonly bool _animateBackgroundColors;
     private readonly ButtonDarkModeRendererBase _buttonDarkModeRenderer;
+    private readonly bool _modern;
 
     internal ButtonDarkModeAdapter(ButtonBase control) : base(control)
     {
-        bool modern = control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
-        _animateBackgroundColors = modern && !SystemInformation.HighContrast;
+        _modern = control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
+        _animateBackgroundColors = _modern && !SystemInformation.HighContrast;
 
         _buttonDarkModeRenderer = control.FlatStyle switch
         {
@@ -22,8 +24,8 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
             // styles. Otherwise FlatStyle.Standard renders with a conservative owner-drawn renderer that mimics
             // the dark-mode system button (instead of delegating to the Win32 control); this makes the owner-drawn
             // path reachable and lets Standard buttons support images, focus cues, etc.
-            FlatStyle.Standard => modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
-            FlatStyle.Flat => modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
+            FlatStyle.Standard => _modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
+            FlatStyle.Flat => _modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
             // FlatStyle.Popup is owner-painted directly by ButtonBase using the animated key-cap renderer; the
             // adapter is used only for layout/sizing here, for which the
             // modern renderer's metrics are a good fit.
@@ -45,13 +47,23 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
     }
 
-    private Color GetButtonTextColor(IDeviceContext deviceContext, PushButtonState state)
+    private Color GetButtonTextColor(
+        IDeviceContext deviceContext,
+        PushButtonState state,
+        Color backColor)
     {
         Color textColor;
 
-        if (Control.ForeColor != Forms.Control.DefaultForeColor)
+        bool useEffectiveForeColor = _modern
+            ? Control.ShouldSerializeForeColor()
+            : Control.ForeColor != Forms.Control.DefaultForeColor;
+
+        if (useEffectiveForeColor)
         {
-            textColor = new ColorOptions(deviceContext, Control.ForeColor, Control.BackColor)
+            textColor = Control.Enabled
+                && Control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+                    ? Control.ForeColor
+                    : new ColorOptions(deviceContext, Control.ForeColor, Control.BackColor)
             {
                 Enabled = Control.Enabled
             }.Calculate().WindowText;
@@ -63,7 +75,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         }
         else
         {
-            textColor = ButtonDarkModeRenderer.GetTextColor(state, Control.IsDefault);
+            textColor = ButtonDarkModeRenderer.GetTextColor(state, Control.IsDefault, backColor);
         }
 
         return textColor;
@@ -103,120 +115,51 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     }
 
     internal override void PaintUp(PaintEventArgs e, CheckState state)
-    {
-        try
-        {
-            // Use GraphicsInternal for better performance (GDI+ best practice)
-            var g = e.GraphicsInternal;
-            var smoothingMode = g.SmoothingMode;
-            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            LayoutData layout = CommonLayout().Layout();
-
-            PushButtonState pushButtonState = ToPushButtonState(state, Control.Enabled);
-            ButtonDarkModeRenderer.RenderButton(
-                g,
-                Control,
-                Control.ClientRectangle,
-                Control.FlatStyle,
-                pushButtonState,
-                Control.IsDefault,
-                Control.Focused,
-                Control.ShowFocusCues,
-                Control.Parent?.BackColor ?? Control.BackColor,
-                GetButtonBackColor(pushButtonState),
-                _ => PaintImage(e, layout),
-                () => PaintField(
-                    e,
-                    layout,
-                    PaintDarkModeRender(e).Calculate(),
-                    GetButtonTextColor(e, pushButtonState),
-                    drawFocus: false)
-            );
-
-            g.SmoothingMode = smoothingMode;
-        }
-        catch (Exception)
-        {
-            // Handle exceptions gracefully, possibly logging them or showing a message
-            Debug.Assert(false, "Exception in PaintUp: Unable to render button in dark mode.");
-        }
-    }
+        => PaintCore(e, ToPushButtonState(state, Control.Enabled));
 
     internal override void PaintDown(PaintEventArgs e, CheckState state)
-    {
-        try
-        {
-            // Use GraphicsInternal for better performance (GDI+ best practice)
-            var g = e.GraphicsInternal;
-            var smoothingMode = g.SmoothingMode;
-            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            LayoutData layout = CommonLayout().Layout();
-            ButtonDarkModeRenderer.RenderButton(
-                g,
-                Control,
-                Control.ClientRectangle,
-                Control.FlatStyle,
-                PushButtonState.Pressed,
-                Control.IsDefault,
-                Control.Focused,
-                Control.ShowFocusCues,
-                Control.Parent?.BackColor ?? Control.BackColor,
-                GetButtonBackColor(PushButtonState.Pressed),
-                _ => PaintImage(e, layout),
-                () => PaintField(
-                    e,
-                    layout,
-                    PaintDarkModeRender(e).Calculate(),
-                    GetButtonTextColor(e, PushButtonState.Pressed),
-                    drawFocus: false)
-            );
-
-            g.SmoothingMode = smoothingMode;
-        }
-        catch (Exception)
-        {
-            // Handle exceptions gracefully, possibly logging them or showing a message
-            Debug.Assert(false, "Exception in PaintDown: Unable to render button in dark mode.");
-        }
-    }
+        => PaintCore(e, PushButtonState.Pressed);
 
     internal override void PaintOver(PaintEventArgs e, CheckState state)
+        => PaintCore(e, PushButtonState.Hot);
+
+    private void PaintCore(PaintEventArgs e, PushButtonState state)
     {
+        var graphics = e.GraphicsInternal;
+        Drawing.Drawing2D.SmoothingMode smoothingMode = graphics.SmoothingMode;
+
         try
         {
-            // Use GraphicsInternal for better performance (GDI+ best practice)
-            var g = e.GraphicsInternal;
-            var smoothingMode = g.SmoothingMode;
-            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            LayoutData layout = CommonLayout().Layout();
+            graphics.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Color backColor = GetButtonBackColor(state);
+            Color parentBackColor = Control.Parent?.BackColor ?? Control.BackColor;
+            Color textBackColor = PopupButtonColorMath.Composite(backColor, parentBackColor);
             ButtonDarkModeRenderer.RenderButton(
-                g,
+                graphics,
                 Control,
                 Control.ClientRectangle,
                 Control.FlatStyle,
-                PushButtonState.Hot,
+                state,
                 Control.IsDefault,
                 Control.Focused,
                 Control.ShowFocusCues,
-                Control.Parent?.BackColor ?? Control.BackColor,
-                GetButtonBackColor(PushButtonState.Hot),
-                _ => PaintImage(e, layout),
-                () => PaintField(
-                    e,
-                    layout,
-                    PaintDarkModeRender(e).Calculate(),
-                    GetButtonTextColor(e, PushButtonState.Hot),
-                    drawFocus: false)
-            );
-
-            g.SmoothingMode = smoothingMode;
+                parentBackColor,
+                backColor,
+                contentBounds =>
+                {
+                    LayoutData layout = GetLayoutData(contentBounds);
+                    PaintImage(e, layout);
+                    PaintField(
+                        e,
+                        layout,
+                        PaintDarkModeRender(e).Calculate(),
+                        GetButtonTextColor(e, state, textBackColor),
+                        drawFocus: false);
+                });
         }
-        catch (Exception ex)
+        finally
         {
-            Debug.Assert(false, $"Exception in PaintOver: {ex.Message}");
+            graphics.SmoothingMode = smoothingMode;
         }
     }
 
@@ -224,12 +167,25 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
         => Control.FlatStyle == FlatStyle.Popup
-            ? GetPopupPreferredSizeCore(CommonLayout(), proposedSize)
-            : base.GetPreferredSizeCore(proposedSize);
+            ? GetModernPopupPreferredSizeCore(
+                CommonLayout(),
+                proposedSize,
+                Control.DeviceDpi,
+                Control.FlatAppearance.BorderSize)
+            : _modern
+                ? GetModernPreferredSizeCore(
+                    CommonLayout(),
+                    proposedSize,
+                    ButtonDarkModeRenderer.GetPreferredSizePadding().Size)
+                : base.GetPreferredSizeCore(proposedSize);
 
-    private new LayoutOptions CommonLayout()
+    internal override LayoutOptions CommonLayout()
     {
         LayoutOptions layout = base.CommonLayout();
+        layout.DisableWordWrapping = Control.AutoSize;
+        layout.DotNetOneButtonCompat = !_modern;
+        layout.ClipImagesToClient = _modern;
+        layout.EnsureImagePreferredSizeInset = _modern;
         layout.FocusOddEvenFixup = false;
         layout.ShadowedText = false;
 

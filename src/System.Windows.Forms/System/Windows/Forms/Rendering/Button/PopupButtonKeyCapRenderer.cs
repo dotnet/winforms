@@ -39,7 +39,11 @@ internal static class PopupButtonKeyCapRenderer
     ///  Optional callback used to paint an image onto the key surface. It is invoked after the key chrome and
     ///  before the caption, and receives the bowl (content) rectangle.
     /// </param>
-    public static void Render(Graphics graphics, PopupButtonRenderContext context, Action<Rectangle>? paintImage = null)
+    public static void Render(
+        Graphics graphics,
+        PopupButtonRenderContext context,
+        Action<Rectangle>? paintImage = null,
+        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout = null)
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(context);
@@ -63,17 +67,18 @@ internal static class PopupButtonKeyCapRenderer
 
         if (context.HighContrast)
         {
-            RenderHighContrast(graphics, context, surfaceBackColor, paintImage);
+            RenderHighContrast(graphics, context, surfaceBackColor, paintImage, contentLayout);
 
             return;
         }
 
         Metrics metrics = Metrics.Create(context);
         Palette palette = Palette.Create(context, metrics, surfaceBackColor);
-        (Rectangle textBounds, Rectangle imageBounds) = CreateContentLayout(
-            context,
-            metrics.BowlRect,
-            applySurfaceInset: false);
+        (Rectangle textBounds, Rectangle imageBounds) = contentLayout
+            ?? CreateContentLayout(
+                context,
+                metrics.BowlRect,
+                applySurfaceInset: false);
 
         GraphicsState state = graphics.Save();
 
@@ -99,6 +104,42 @@ internal static class PopupButtonKeyCapRenderer
         }
 
         DrawText(graphics, context, metrics, palette, textBounds);
+    }
+
+    internal static Rectangle GetContentBounds(PopupButtonRenderContext context)
+    {
+        if (!context.HighContrast)
+        {
+            return Metrics.Create(context).BowlRect;
+        }
+
+        float scale = context.DeviceDpi / 96f;
+        Rectangle contentBounds = Rectangle.Inflate(
+            context.Bounds,
+            -(int)(4 * scale),
+            -(int)(4 * scale));
+
+        if (context.Pressed)
+        {
+            contentBounds.Offset((int)scale, (int)scale);
+        }
+
+        return contentBounds;
+    }
+
+    internal static Size GetPreferredSizeChrome(int deviceDpi, int borderWidth)
+    {
+        float scale = Math.Max(0.5f, deviceDpi / 96f);
+        int sideClearance = Math.Max(1, (int)MathF.Round(Metrics.SideClearanceDip * scale));
+        int pressTravel = Math.Max(1, (int)MathF.Round(Metrics.PressTravelDip * scale));
+        int defaultBorderIncrease = Math.Max(1, (int)MathF.Round(scale));
+        int stableBorderWidth = Math.Max(0, borderWidth + defaultBorderIncrease);
+        int rim = Math.Max(2, (int)MathF.Round(3f * scale));
+        int bowlInset = stableBorderWidth + rim;
+
+        return new Size(
+            2 * (sideClearance + bowlInset),
+            (2 * sideClearance) + pressTravel + (2 * bowlInset));
     }
 
     private static void DrawAmbientShadow(Graphics graphics, Metrics metrics, Palette palette)
@@ -284,6 +325,30 @@ internal static class PopupButtonKeyCapRenderer
 
         PopupButtonTextEffect effect = context.TextEffect;
 
+        if (!palette.TextOutline.IsEmpty)
+        {
+            for (int y = -reliefOffset; y <= reliefOffset; y += reliefOffset)
+            {
+                for (int x = -reliefOffset; x <= reliefOffset; x += reliefOffset)
+                {
+                    if (x == 0 && y == 0)
+                    {
+                        continue;
+                    }
+
+                    Rectangle outlineRect = textRect;
+                    outlineRect.Offset(x, y);
+                    TextRenderer.DrawText(
+                        graphics,
+                        text,
+                        context.Font,
+                        outlineRect,
+                        palette.TextOutline,
+                        flags);
+                }
+            }
+        }
+
         if (effect is not PopupButtonTextEffect.Flat)
         {
             // GDI text ignores alpha, so the relief colors are opaque blends against the bowl center - see
@@ -318,7 +383,8 @@ internal static class PopupButtonKeyCapRenderer
         Graphics graphics,
         PopupButtonRenderContext context,
         Color surfaceBackColor,
-        Action<Rectangle>? paintImage)
+        Action<Rectangle>? paintImage,
+        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout)
     {
         Rectangle bounds = context.Bounds;
         bool pressed = context.Pressed;
@@ -348,17 +414,12 @@ internal static class PopupButtonKeyCapRenderer
             graphics.DrawRectangle(borderPen, borderRect);
         }
 
-        Rectangle contentRect = Rectangle.Inflate(bounds, -(int)(4 * scale), -(int)(4 * scale));
-
-        if (pressed)
-        {
-            contentRect.Offset((int)scale, (int)scale);
-        }
-
-        (Rectangle textRect, Rectangle imageRect) = CreateContentLayout(
-            context,
-            contentRect,
-            applySurfaceInset: false);
+        Rectangle contentRect = GetContentBounds(context);
+        (Rectangle textRect, Rectangle imageRect) = contentLayout
+            ?? CreateContentLayout(
+                context,
+                contentRect,
+                applySurfaceInset: false);
         if (imageRect.Width > 0 && imageRect.Height > 0)
         {
             paintImage?.Invoke(imageRect);
@@ -606,8 +667,8 @@ internal static class PopupButtonKeyCapRenderer
     /// </summary>
     private readonly struct Metrics
     {
-        private const float SideClearanceDip = 1f;
-        private const float PressTravelDip = 1.5f;
+        internal const float SideClearanceDip = 1f;
+        internal const float PressTravelDip = 1.5f;
 
         public float Scale { get; init; }
         public int Ambient { get; init; }
@@ -719,10 +780,13 @@ internal static class PopupButtonKeyCapRenderer
         public Color BodyDark { get; init; }
         public Color BowlEdge { get; init; }
         public Color BowlCenter { get; init; }
+        public Color DarkestTextBackground { get; init; }
+        public Color LightestTextBackground { get; init; }
         public Color LipLight { get; init; }
         public Color LipDark { get; init; }
         public Color Border { get; init; }
         public Color Text { get; init; }
+        public Color TextOutline { get; init; }
         public Color TextHighlight { get; init; }
         public Color TextShadow { get; init; }
         public Color Focus { get; init; }
@@ -747,23 +811,49 @@ internal static class PopupButtonKeyCapRenderer
             // Keep the border visible even if the user picked one too close to the face color.
             border = PopupButtonColorMath.EnsureContrast(border, back, 0.08f);
 
-            Color text = enabled
-                ? context.ForeColor
-                : PopupButtonColorMath.EnsureContrast(PopupButtonColorMath.Blend(context.ForeColor, back, 0.45f), back, 0.18f);
-
             float reliefStrength = (enabled ? 1f : 0.4f) + (metrics.Press * 0.25f);
+            Color bodyLight = PopupButtonColorMath.Lighten(back, metrics.HighlightAmount * 0.9f * contrast);
+            Color bodyDark = PopupButtonColorMath.Darken(back, metrics.ShadowAmount * 0.9f * contrast);
             Color bowlCenter = PopupButtonColorMath.Darken(back, (metrics.ShadowAmount * 0.75f * contrast) + (enabled ? 0f : 0.02f));
+            Color bowlEdge = PopupButtonColorMath.Lighten(back, metrics.HighlightAmount * 0.55f * contrast);
+            int innerShadowAlpha = Math.Clamp(
+                (int)((30f + (metrics.ShadowAmount * 380f)) * contrast), 0, 120);
+            int innerLightAlpha = Math.Clamp(
+                (int)((20f + (metrics.HighlightAmount * 300f)) * contrast), 0, 100);
+            Color darkestBowl = Color.White;
+            Color lightestBowl = Color.Black;
+            float darkestLuminance = 1f;
+            float lightestLuminance = 0f;
+            EvaluateBowlExtremes(bodyLight, bowlCenter);
+            EvaluateBowlExtremes(bodyLight, bowlEdge);
+            EvaluateBowlExtremes(bodyDark, bowlCenter);
+            EvaluateBowlExtremes(bodyDark, bowlEdge);
+            Color text = enabled
+                ? context.UseAutomaticForeColor
+                    ? PopupButtonColorMath.GetReadableForeColor(darkestBowl, lightestBowl)
+                    : context.ForeColor
+                : PopupButtonColorMath.EnsureContrast(PopupButtonColorMath.Blend(context.ForeColor, back, 0.45f), back, 0.18f);
+            float textContrast = Math.Min(
+                PopupButtonColorMath.GetContrastRatio(text, darkestBowl),
+                PopupButtonColorMath.GetContrastRatio(text, lightestBowl));
+            Color textOutline = context.UseAutomaticForeColor
+                && textContrast < PopupButtonColorMath.MinimumReadableContrastRatio
+                    ? text == Color.Black ? Color.White : Color.Black
+                    : Color.Empty;
 
             return new Palette
             {
-                BodyLight = PopupButtonColorMath.Lighten(back, metrics.HighlightAmount * 0.9f * contrast),
-                BodyDark = PopupButtonColorMath.Darken(back, metrics.ShadowAmount * 0.9f * contrast),
-                BowlEdge = PopupButtonColorMath.Lighten(back, metrics.HighlightAmount * 0.55f * contrast),
+                BodyLight = bodyLight,
+                BodyDark = bodyDark,
+                BowlEdge = bowlEdge,
                 BowlCenter = bowlCenter,
+                DarkestTextBackground = darkestBowl,
+                LightestTextBackground = lightestBowl,
                 LipLight = PopupButtonColorMath.Lighten(back, metrics.HighlightAmount * 1.3f * contrast),
                 LipDark = PopupButtonColorMath.Darken(back, metrics.ShadowAmount * 1.2f * contrast),
                 Border = border,
                 Text = text,
+                TextOutline = textOutline,
                 TextHighlight = PopupButtonColorMath.GetTextHighlight(bowlCenter, reliefStrength),
                 TextShadow = PopupButtonColorMath.GetTextShadow(bowlCenter, reliefStrength),
                 Focus = PopupButtonColorMath.EnsureContrast(
@@ -773,11 +863,40 @@ internal static class PopupButtonKeyCapRenderer
                 AmbientAlpha = (int)((luminance > 0.5f ? 55f : 85f)
                     * (1f - (metrics.Press * 0.6f))
                     * (enabled ? 1f : 0.5f)),
-                InnerShadowAlpha = Math.Clamp(
-                    (int)((30f + (metrics.ShadowAmount * 380f)) * contrast), 0, 120),
-                InnerLightAlpha = Math.Clamp(
-                    (int)((20f + (metrics.HighlightAmount * 300f)) * contrast), 0, 100)
+                InnerShadowAlpha = innerShadowAlpha,
+                InnerLightAlpha = innerLightAlpha
             };
+
+            void EvaluateBowlExtremes(Color bodyColor, Color bowlColor)
+            {
+                Color renderedBody = PopupButtonColorMath.Composite(bodyColor, context.SurfaceColor);
+                Color renderedBowl = PopupButtonColorMath.Composite(bowlColor, renderedBody);
+                EvaluateLuminance(renderedBowl);
+                EvaluateLuminance(
+                    PopupButtonColorMath.Composite(
+                        Color.FromArgb(innerShadowAlpha, Color.Black),
+                        renderedBowl));
+                EvaluateLuminance(
+                    PopupButtonColorMath.Composite(
+                        Color.FromArgb(innerLightAlpha, Color.White),
+                        renderedBowl));
+            }
+
+            void EvaluateLuminance(Color color)
+            {
+                float luminance = PopupButtonColorMath.GetRelativeLuminance(color);
+                if (luminance < darkestLuminance)
+                {
+                    darkestBowl = color;
+                    darkestLuminance = luminance;
+                }
+
+                if (luminance > lightestLuminance)
+                {
+                    lightestBowl = color;
+                    lightestLuminance = luminance;
+                }
+            }
         }
     }
 }

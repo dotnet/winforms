@@ -12,6 +12,9 @@ namespace System.Windows.Forms;
 internal static class ModernButtonColorMath
 {
     internal const float AccentBlendAmount = 0.2f;
+    internal const float MinimumTextContrastRatio = PopupButtonColorMath.MinimumReadableContrastRatio;
+    private const float DefaultHoverLightenAmount = 0.08f;
+    private const float DefaultPressedDarkenAmount = 0.12f;
 
     internal static Color GetMouseDownColor()
         => Application.GetWindowsAccentColor();
@@ -26,12 +29,41 @@ internal static class ModernButtonColorMath
     internal static Color BlendWithAccent(Color baseColor)
         => PopupButtonColorMath.Blend(baseColor, Application.GetWindowsAccentColor(), AccentBlendAmount);
 
+    internal static Color GetDefaultButtonColor(PushButtonState state)
+        => GetDefaultButtonColor(Application.GetWindowsAccentColor(), state);
+
+    internal static Color GetDefaultButtonColor(Color accentColor, PushButtonState state)
+        => state switch
+        {
+            PushButtonState.Hot => PopupButtonColorMath.Lighten(accentColor, DefaultHoverLightenAmount),
+            PushButtonState.Pressed => PopupButtonColorMath.Darken(accentColor, DefaultPressedDarkenAmount),
+            _ => accentColor
+        };
+
+    internal static Color GetReadableForeColor(Color backColor)
+    {
+        float blackContrast = PopupButtonColorMath.GetContrastRatio(Color.Black, backColor);
+        float whiteContrast = PopupButtonColorMath.GetContrastRatio(Color.White, backColor);
+        Color foreColor = PopupButtonColorMath.GetReadableForeColor(backColor);
+
+        Debug.Assert(
+            Math.Max(blackContrast, whiteContrast) >= MinimumTextContrastRatio,
+            "Either black or white should meet WCAG AA contrast against an opaque background.");
+
+        return foreColor;
+    }
+
     internal static Color GetStateColor(
         ButtonDarkModeRendererBase renderer,
         PushButtonState state,
         bool isDefault,
         Color customBaseColor)
     {
+        if (customBaseColor.IsEmpty && isDefault)
+        {
+            return GetDefaultButtonColor(state);
+        }
+
         Color baseColor = customBaseColor.IsEmpty
             ? renderer.GetBackgroundColor(PushButtonState.Normal, isDefault)
             : customBaseColor;
