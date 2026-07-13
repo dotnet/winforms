@@ -38,8 +38,7 @@ internal partial interface IButtonRenderer
     /// <param name="focused">True if the button is focused; otherwise, false.</param>
     /// <param name="showFocusCues">True to show focus cues; otherwise, false.</param>
     /// <param name="parentBackgroundColor">The background color of the parent control.</param>
-    /// <param name="paintImage">An action to paint the image within the specified rectangle.</param>
-    /// <param name="paintField">An action to paint the text or field within the specified rectangle, color, and enabled state.</param>
+    /// <param name="paintContent">An action to lay out and paint the image and text within the content rectangle.</param>
     void RenderButton(
         Graphics graphics,
         Control control,
@@ -51,8 +50,7 @@ internal partial interface IButtonRenderer
         bool showFocusCues,
         Color parentBackgroundColor,
         Color backColor,
-        Action<Rectangle> paintImage,
-        Action paintField);
+        Action<Rectangle> paintContent);
 
     /// <summary>
     ///  Draws button background with appropriate styling.
@@ -82,5 +80,5 @@ internal partial interface IButtonRenderer
     /// <summary>
     ///  Gets the text color appropriate for the button state and type.
     /// </summary>
-    Color GetTextColor(PushButtonState state, bool isDefault);
+    Color GetTextColor(PushButtonState state, bool isDefault, Color backColor);
 }

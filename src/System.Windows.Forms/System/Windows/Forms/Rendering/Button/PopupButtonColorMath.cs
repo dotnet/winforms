@@ -16,11 +16,84 @@ namespace System.Windows.Forms.Rendering.Button;
 /// </remarks>
 internal static class PopupButtonColorMath
 {
+    public const float MinimumReadableContrastRatio = 4.5f;
+
     /// <summary>
     ///  Gets the relative luminance of a color in the range <c>0</c>-<c>1</c>.
     /// </summary>
     public static float GetLuminance(Color color)
         => ((0.299f * color.R) + (0.587f * color.G) + (0.114f * color.B)) / 255f;
+
+    /// <summary>
+    ///  Gets the WCAG relative luminance of a color, including the required sRGB linearization.
+    /// </summary>
+    public static float GetRelativeLuminance(Color color)
+        => (0.2126f * Linearize(color.R))
+            + (0.7152f * Linearize(color.G))
+            + (0.0722f * Linearize(color.B));
+
+    /// <summary>
+    ///  Gets the WCAG contrast ratio between two colors.
+    /// </summary>
+    public static float GetContrastRatio(Color first, Color second)
+    {
+        float firstLuminance = GetRelativeLuminance(first);
+        float secondLuminance = GetRelativeLuminance(second);
+        float lighter = Math.Max(firstLuminance, secondLuminance);
+        float darker = Math.Min(firstLuminance, secondLuminance);
+
+        return (lighter + 0.05f) / (darker + 0.05f);
+    }
+
+    /// <summary>
+    ///  Chooses black or white, whichever has the greater WCAG contrast ratio against the background.
+    /// </summary>
+    public static Color GetReadableForeColor(Color backColor)
+        => GetContrastRatio(Color.Black, backColor) >= GetContrastRatio(Color.White, backColor)
+            ? Color.Black
+            : Color.White;
+
+    /// <summary>
+    ///  Chooses black or white by its worst contrast ratio across the darkest and lightest rendered surfaces.
+    /// </summary>
+    public static Color GetReadableForeColor(Color darkestBackColor, Color lightestBackColor)
+    {
+        float blackContrast = Math.Min(
+            GetContrastRatio(Color.Black, darkestBackColor),
+            GetContrastRatio(Color.Black, lightestBackColor));
+        float whiteContrast = Math.Min(
+            GetContrastRatio(Color.White, darkestBackColor),
+            GetContrastRatio(Color.White, lightestBackColor));
+
+        return blackContrast >= whiteContrast ? Color.Black : Color.White;
+    }
+
+    /// <summary>
+    ///  Composites a foreground color over a background color.
+    /// </summary>
+    public static Color Composite(Color foreground, Color background)
+    {
+        float foregroundAlpha = foreground.A / 255f;
+        float backgroundAlpha = background.A / 255f;
+        float alpha = foregroundAlpha + (backgroundAlpha * (1f - foregroundAlpha));
+
+        if (alpha <= 0f)
+        {
+            return Color.Transparent;
+        }
+
+        return Color.FromArgb(
+            (int)MathF.Round(alpha * 255f),
+            CompositeChannel(foreground.R, background.R),
+            CompositeChannel(foreground.G, background.G),
+            CompositeChannel(foreground.B, background.B));
+
+        int CompositeChannel(byte foregroundChannel, byte backgroundChannel)
+            => (int)MathF.Round(
+                ((foregroundChannel * foregroundAlpha)
+                    + (backgroundChannel * backgroundAlpha * (1f - foregroundAlpha)))
+                / alpha);
+    }
 
     /// <summary>
     ///  Linearly blends <paramref name="baseColor"/> towards <paramref name="target"/>.
@@ -117,4 +190,13 @@ internal static class PopupButtonColorMath
     /// </summary>
     public static Color GetTextShadow(Color surface, float strength)
         => Darken(surface, 0.34f * strength);
+
+    private static float Linearize(byte channel)
+    {
+        float value = channel / 255f;
+
+        return value <= 0.04045f
+            ? value / 12.92f
+            : MathF.Pow((value + 0.055f) / 1.055f, 2.4f);
+    }
 }

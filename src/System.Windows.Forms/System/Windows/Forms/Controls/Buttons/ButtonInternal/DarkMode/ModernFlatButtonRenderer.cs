@@ -32,6 +32,9 @@ internal sealed class ModernFlatButtonRenderer : ButtonDarkModeRendererBase
 
     private protected override bool UseModernStateDefaults => true;
 
+    internal override Padding GetPreferredSizePadding()
+        => new(Math.Max(BorderThickness, Scale(ContentInsetLogical)));
+
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
         Rectangle bounds,
@@ -91,30 +94,32 @@ internal sealed class ModernFlatButtonRenderer : ButtonDarkModeRendererBase
         graphics.DrawRectangle(focusPen, focusRectangle);
     }
 
-    public override Color GetTextColor(PushButtonState state, bool isDefault)
+    public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor)
     {
         if (state == PushButtonState.Disabled)
         {
             return IsDark ? Color.FromArgb(0x88, 0x88, 0x88) : Color.FromArgb(0xA0, 0xA0, 0xA0);
         }
 
-        if (isDefault)
-        {
-            return IsDark ? Color.Black : Color.White;
-        }
-
-        return IsDark ? Color.FromArgb(0xF0, 0xF0, 0xF0) : Color.FromArgb(0x1A, 0x1A, 0x1A);
+        return ModernButtonColorMath.GetReadableForeColor(backColor);
     }
 
     public override Color GetBackgroundColor(PushButtonState state, bool isDefault)
     {
-        Color baseColor = isDefault
-            ? (IsDark ? Color.FromArgb(0x4C, 0xC2, 0xFF) : SystemColors.Highlight)
-            : (IsDark ? s_darkNormal : s_lightNormal);
+        if (state == PushButtonState.Disabled)
+        {
+            return IsDark ? s_darkDisabled : s_lightDisabled;
+        }
+
+        if (isDefault)
+        {
+            return ModernButtonColorMath.GetDefaultButtonColor(state);
+        }
+
+        Color baseColor = IsDark ? s_darkNormal : s_lightNormal;
 
         return state switch
         {
-            PushButtonState.Disabled => IsDark ? s_darkDisabled : s_lightDisabled,
             PushButtonState.Hot => DeriveHoverColor(baseColor),
             PushButtonState.Pressed => DerivePressedColor(baseColor),
             _ => baseColor

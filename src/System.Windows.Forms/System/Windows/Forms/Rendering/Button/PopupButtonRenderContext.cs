@@ -43,6 +43,16 @@ internal sealed class PopupButtonRenderContext
     public Color ForeColor { get; init; } = SystemColors.ControlText;
 
     /// <summary>
+    ///  Gets the color behind the rendered key, used to resolve translucent automatic-color surfaces.
+    /// </summary>
+    public Color SurfaceColor { get; init; } = SystemColors.Control;
+
+    /// <summary>
+    ///  Gets a value indicating whether the renderer should select a readable caption color from the final bowl color.
+    /// </summary>
+    public bool UseAutomaticForeColor { get; init; }
+
+    /// <summary>
     ///  Gets the border color of the key body.
     /// </summary>
     public Color BorderColor { get; init; } = SystemColors.ControlDark;
