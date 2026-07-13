@@ -139,11 +139,37 @@ public class TreeViewLabelEditAccessibleObjectTests
         treeView.CreateControl();
 
         TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+        _ = treeView.AccessibilityObject;
+
+        Assert.True(labelEdit.IsHandleCreated);
 
         labelEdit.TestAccessor.Dynamic._isReleasing = true;
         labelEdit.TestAccessor.Dynamic.OnHandleChange();
 
         Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+    }
+
+    [WinFormsFact]
+    public void LabelEditNativeWindow_OnHandleChange_AfterHandleDestroyed_DoesNotReinstallHooks()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+
+        // Simulate installed hooks.
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+        // Simulate handle already destroyed.
+        labelEdit.ReleaseHandle();
+
+        labelEdit.TestAccessor.Dynamic._isReleasing = false;
+        labelEdit.TestAccessor.Dynamic.OnHandleChange();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+        Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
     }
 
     [WinFormsFact]
