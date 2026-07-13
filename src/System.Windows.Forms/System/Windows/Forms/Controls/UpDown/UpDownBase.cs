@@ -228,6 +228,7 @@ public abstract partial class UpDownBase : ContainerControl
             CreateParams cp = base.CreateParams;
 
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+
             if (!Application.RenderWithVisualStyles)
             {
                 switch (_borderStyle)
@@ -976,8 +977,10 @@ public abstract partial class UpDownBase : ContainerControl
 
     private int ModernContentInset
         => LogicalToDeviceUnits(
-            (_borderStyle == BorderStyle.None ? 0 : ModernBorderThickness)
-                + TextBoxBase.VisualStylesInternalChromeInset);
+            (_borderStyle == BorderStyle.None
+                ? 0
+                : ModernBorderThickness)
+            + TextBoxBase.VisualStylesInternalChromeInset);
 
     internal int ModernButtonGroupSpacing
         => LogicalToDeviceUnits(ModernButtonGroupSpacingLogical);
@@ -1007,6 +1010,7 @@ public abstract partial class UpDownBase : ContainerControl
 
         Rectangle inner = clientArea;
         inner.Inflate(-pad, -pad);
+
         if (inner.Width < 0 || inner.Height < 0)
         {
             inner = new Rectangle(
@@ -1049,6 +1053,7 @@ public abstract partial class UpDownBase : ContainerControl
     private void DrawModernBorder(PaintEventArgs e)
     {
         Rectangle bounds = ClientRectangle;
+
         if (bounds.Width <= 0 || bounds.Height <= 0)
         {
             return;
@@ -1078,6 +1083,7 @@ public abstract partial class UpDownBase : ContainerControl
         bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
 
         using GraphicsPath bodyPath = new();
+
         if (canRenderRoundedChrome)
         {
             bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
@@ -1119,6 +1125,7 @@ public abstract partial class UpDownBase : ContainerControl
         if (Focused && _borderStyle == BorderStyle.Fixed3D)
         {
             using var focusPen = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
+
             if (canRenderRoundedChrome)
             {
                 int focusInset = Math.Max(1, (cornerRadius - 3) / 2);
@@ -1162,7 +1169,8 @@ public abstract partial class UpDownBase : ContainerControl
     /// <summary>
     ///  Selects a range of text in the up-down control.
     /// </summary>
-    public void Select(int start, int length) => _upDownEdit.Select(start, length);
+    public void Select(int start, int length)
+        => _upDownEdit.Select(start, length);
 
     /// <summary>
     ///  Create a new <see cref="MouseEventArgs"/> with the points translated from the <paramref name="child"/>
