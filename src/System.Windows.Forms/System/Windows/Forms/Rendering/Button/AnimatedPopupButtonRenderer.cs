@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms.Rendering.Animation;
 using PushButtonState = System.Windows.Forms.VisualStyles.PushButtonState;
 
@@ -181,8 +180,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             HighContrast = highContrast
         };
 
-        using GraphicsPath? bodyPath = PopupButtonKeyCapRenderer.CreateBodyPath(context);
-        if (bodyPath is null)
+        if (context.HighContrast || context.Bounds.Width < 8 || context.Bounds.Height < 8)
         {
             using PaintEventArgs paintEventArgs = new(graphics, button.ClientRectangle);
             button.PaintBackground(paintEventArgs, button.ClientRectangle);
@@ -193,7 +191,6 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
                 button,
                 graphics,
                 button.ClientRectangle,
-                bodyPath,
                 button.Parent?.BackColor ?? button.BackColor);
         }
 

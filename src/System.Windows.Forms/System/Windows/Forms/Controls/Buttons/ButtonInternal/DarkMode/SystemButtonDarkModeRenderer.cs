@@ -27,15 +27,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private protected override Padding PaddingCore { get; } = new Padding(SystemStylePadding);
 
-    private protected override GraphicsPath? CreateBackgroundPath(Rectangle bounds, bool isDefault, bool focused)
-    {
-        if (bounds.Width <= 0 || bounds.Height <= 0)
-        {
-            return null;
-        }
-
-        return CreateRoundedPath(GetPathBounds(bounds), CornerRadius - DarkBorderGapThickness);
-    }
+    private protected override bool PaintParentBackground => true;
 
     /// <summary>
     ///  Draws button background with system styling (larger rounded corners).

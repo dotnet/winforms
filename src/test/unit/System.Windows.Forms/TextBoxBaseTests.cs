@@ -77,11 +77,11 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, fontSize)
         };
 
-        int radius = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
+        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
         int border = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
         int inset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
 
-        Assert.True(control.PreferredHeight >= (radius * 2) + border + inset);
+        Assert.True(control.PreferredHeight >= cornerSize + border + inset);
         Assert.Equal(control.PreferredHeight, control.Height);
     }
 
@@ -110,8 +110,66 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, 9f)
         };
 
-        int radius = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
-        Assert.True(control.Height >= (radius * 2) + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
+        Assert.True(control.Height >= cornerSize + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.Fixed3D, 3)]
+    [InlineData(BorderStyle.FixedSingle, 2)]
+    [InlineData(BorderStyle.None, 1)]
+    public void TextBoxBase_ModernGeometry_UsesExpectedBorderPadding(
+        BorderStyle borderStyle,
+        int logicalBorderPadding)
+    {
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        int borderPadding = ScaleHelper.ScaleToDpi(logicalBorderPadding, control.DeviceDpi);
+        int borderThickness = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int internalInset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+        int leftAndTop = borderPadding + internalInset;
+        int rightAndBottom = leftAndTop;
+
+        if (borderStyle != BorderStyle.None)
+        {
+            leftAndTop += borderThickness;
+            rightAndBottom += borderThickness;
+        }
+        else
+        {
+            rightAndBottom += borderThickness;
+        }
+
+        Padding expected = new(
+            left: leftAndTop,
+            top: leftAndTop,
+            right: rightAndBottom,
+            bottom: rightAndBottom);
+
+        Assert.Equal(expected, control.GetVisualStylesPaddingCore(includeScrollbars: false));
+    }
+
+    [Theory]
+    [InlineData(13, 13, 12, 1, true)]
+    [InlineData(12, 13, 12, 1, false)]
+    [InlineData(13, 12, 12, 1, false)]
+    public void TextBoxBase_CanRenderVisualStylesRoundedChrome_RequiresBothDimensions(
+        int width,
+        int height,
+        int cornerSize,
+        int borderThickness,
+        bool expected)
+    {
+        bool actual = TextBoxBase.CanRenderVisualStylesRoundedChrome(
+            new Rectangle(0, 0, width, height),
+            cornerSize,
+            borderThickness);
+
+        Assert.Equal(expected, actual);
     }
 
     [WinFormsFact]
@@ -145,7 +203,7 @@ public partial class TextBoxBaseTests
         Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: false);
 
         Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, 144));
-        Assert.True(control.PreferredHeight >= (ScaleHelper.ScaleToDpi(15, 144) * 2)
+        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(12, 144)
             + ScaleHelper.ScaleToDpi(1, 144)
             + ScaleHelper.ScaleToDpi(2, 144));
     }
@@ -387,6 +445,29 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createParams.Y);
         Assert.Same(createParams, control.CreateParams);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.None)]
+    [InlineData(BorderStyle.Fixed3D)]
+    [InlineData(BorderStyle.FixedSingle)]
+    public void TextBoxBase_CreateParams_ModernVisualStyles_RemovesNativeBorderStyles(BorderStyle borderStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        CreateParams createParams = control.CreateParams;
+
+        Assert.Equal(0, createParams.Style & (int)WINDOW_STYLE.WS_BORDER);
+        Assert.Equal(0, createParams.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
     }
 
     [WinFormsTheory]

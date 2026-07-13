@@ -3248,7 +3248,7 @@ public class UpDownBaseTests
         }
 
         int inset = ScaleHelper.ScaleToDpi(3, deviceDpi);
-        int minimumHeight = (ScaleHelper.ScaleToDpi(15, deviceDpi) * 2)
+        int minimumHeight = ScaleHelper.ScaleToDpi(12, deviceDpi)
             + ScaleHelper.ScaleToDpi(1, deviceDpi)
             + ScaleHelper.ScaleToDpi(2, deviceDpi);
         upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
@@ -3274,10 +3274,12 @@ public class UpDownBaseTests
             return;
         }
 
-        int minimumHeight = (upDownBase.LogicalToDeviceUnits(15) * 2)
+        int minimumHeight = upDownBase.LogicalToDeviceUnits(12)
             + upDownBase.LogicalToDeviceUnits(1)
             + upDownBase.LogicalToDeviceUnits(2);
-        upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
+        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(3) * 2);
+
+        upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
     }
 
     [WinFormsFact]
