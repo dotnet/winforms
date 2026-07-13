@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests;
 public class ParentBackgroundRendererTests
 {
     [WinFormsFact]
-    public void Paint_PaintsPatternInRoundedCutout_LeavesBodyUnchanged()
+    public void Paint_PaintsPatternAcrossBounds()
     {
         using PatternControl parent = new() { Size = new Size(40, 30) };
         using Control child = new() { Size = parent.Size };
@@ -19,18 +19,15 @@ public class ParentBackgroundRendererTests
         using Graphics graphics = Graphics.FromImage(bitmap);
         graphics.Clear(Color.Lime);
 
-        using GraphicsPath body = new();
-        body.AddRoundedRectangle(child.ClientRectangle, new Size(8, 8));
-
-        ParentBackgroundRenderer.Paint(child, graphics, child.ClientRectangle, body, Color.Magenta);
+        ParentBackgroundRenderer.Paint(child, graphics, child.ClientRectangle, Color.Magenta);
 
         Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(1, 1).ToArgb());
         Assert.Equal(Color.Blue.ToArgb(), bitmap.GetPixel(1, 29).ToArgb());
-        Assert.Equal(Color.Lime.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
     }
 
     [WinFormsFact]
-    public void Paint_TextBoxBodyRemainsUnpaintedWhenParentPatternFillsCorners()
+    public void Paint_TextBoxReceivesPatternAcrossBounds()
     {
         using PatternControl parent = new() { Size = new Size(40, 30) };
         using TextBox textBox = new() { Size = parent.Size };
@@ -40,13 +37,62 @@ public class ParentBackgroundRendererTests
         using Graphics graphics = Graphics.FromImage(bitmap);
         graphics.Clear(Color.Yellow);
 
-        using GraphicsPath body = new();
-        body.AddRoundedRectangle(textBox.ClientRectangle, new Size(8, 8));
-
-        ParentBackgroundRenderer.Paint(textBox, graphics, textBox.ClientRectangle, body, Color.Magenta);
+        ParentBackgroundRenderer.Paint(textBox, graphics, textBox.ClientRectangle, Color.Magenta);
 
         Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(1, 1).ToArgb());
-        Assert.Equal(Color.Yellow.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void Paint_PaintsParentBackgroundImage()
+    {
+        using Bitmap backgroundImage = new(2, 1);
+        backgroundImage.SetPixel(0, 0, Color.Red);
+        backgroundImage.SetPixel(1, 0, Color.Blue);
+
+        using Panel parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.Tile,
+            Size = new Size(40, 30)
+        };
+        using Control child = new() { Size = parent.Size };
+        parent.Controls.Add(child);
+        parent.CreateControl();
+        child.CreateControl();
+
+        using Bitmap bitmap = new(child.Width, child.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Lime);
+
+        ParentBackgroundRenderer.Paint(child, graphics, child.ClientRectangle, Color.Magenta);
+
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+        Assert.Equal(Color.Blue.ToArgb(), bitmap.GetPixel(1, 0).ToArgb());
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void Paint_ProvidesParentPixelsBeneathAntialiasedRoundedBody()
+    {
+        using PatternControl parent = new() { Size = new Size(40, 30) };
+        using Control child = new() { Size = parent.Size };
+        parent.Controls.Add(child);
+
+        using Bitmap bitmap = new(child.Width, child.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Lime);
+
+        ParentBackgroundRenderer.Paint(child, graphics, child.ClientRectangle, Color.Magenta);
+
+        using GraphicsPath body = new();
+        body.AddRoundedRectangle(child.ClientRectangle, new Size(8, 8));
+        using SolidBrush bodyBrush = new(Color.White);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        graphics.FillPath(bodyBrush, body);
+
+        Assert.NotEqual(Color.Lime.ToArgb(), bitmap.GetPixel(2, 2).ToArgb());
+        Assert.Equal(Color.White.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
     }
 
     private sealed class PatternControl : Control

@@ -30,20 +30,6 @@ namespace System.Windows.Forms.Rendering.Button;
 /// </remarks>
 internal static class PopupButtonKeyCapRenderer
 {
-    internal static GraphicsPath? CreateBodyPath(PopupButtonRenderContext context)
-    {
-        ArgumentNullException.ThrowIfNull(context);
-
-        Rectangle bounds = context.Bounds;
-        if (context.HighContrast || bounds.Width < 8 || bounds.Height < 8)
-        {
-            return null;
-        }
-
-        Metrics metrics = Metrics.Create(context);
-        return CreateRoundedPath(metrics.KeyRect, metrics.CornerRadius);
-    }
-
     /// <summary>
     ///  Renders the key into the given <see cref="Graphics"/>.
     /// </summary>

@@ -26,7 +26,7 @@ public abstract partial class UpDownBase : ContainerControl
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
     private const int ModernBorderThickness = 1;
     private const int ModernButtonGroupSpacingLogical = 2;
-    private const int ModernCornerRadius = 15;
+    private const int ModernCornerRadius = 12;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -358,7 +358,7 @@ public abstract partial class UpDownBase : ContainerControl
 
                 if (_borderStyle == BorderStyle.Fixed3D)
                 {
-                    int roundedChromeMinimumHeight = (LogicalToDeviceUnits(ModernCornerRadius) * 2)
+                    int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernCornerRadius)
                         + LogicalToDeviceUnits(ModernBorderThickness)
                         + LogicalToDeviceUnits(TextBoxBase.VisualStylesInternalChromeInset);
                     preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
@@ -1078,22 +1078,14 @@ public abstract partial class UpDownBase : ContainerControl
         using GraphicsStateScope graphicsState = new(graphics);
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Below roughly 2 * cornerRadius + thickness the rounded chrome renders as a broken lozenge; fall
-        // back to a flat rectangle in that case.
-        bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
+        // AddRoundedRectangle receives the bounding size of each corner arc, so one corner size plus
+        // the border thickness is the minimum height that avoids overlapping curves.
+        bool canRenderRoundedChrome = TextBoxBase.CanRenderVisualStylesRoundedChrome(
+            deflatedBounds,
+            cornerRadius,
+            borderThickness);
 
-        using GraphicsPath bodyPath = new();
-
-        if (canRenderRoundedChrome)
-        {
-            bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
-        }
-        else
-        {
-            bodyPath.AddRectangle(deflatedBounds);
-        }
-
-        ParentBackgroundRenderer.Paint(this, graphics, bounds, bodyPath, parentBackColor);
+        ParentBackgroundRenderer.Paint(this, graphics, bounds, parentBackColor);
 
         switch (_borderStyle)
         {
@@ -1109,9 +1101,10 @@ public abstract partial class UpDownBase : ContainerControl
             case BorderStyle.Fixed3D:
                 if (canRenderRoundedChrome)
                 {
-                    Size radius = new(cornerRadius, cornerRadius);
-                    graphics.FillRoundedRectangle(clientBackgroundBrush, deflatedBounds, radius);
-                    graphics.DrawRoundedRectangle(adornerPen, deflatedBounds, radius);
+                    using GraphicsPath bodyPath = new();
+                    bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+                    graphics.FillPath(clientBackgroundBrush, bodyPath);
+                    graphics.DrawPath(adornerPen, bodyPath);
                 }
                 else
                 {

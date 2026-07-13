@@ -89,15 +89,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private protected override bool UseModernStateDefaults => true;
 
-    private protected override GraphicsPath? CreateBackgroundPath(Rectangle bounds, bool isDefault, bool focused)
-    {
-        if (bounds.Width <= 0 || bounds.Height <= 0)
-        {
-            return null;
-        }
-
-        return CreateRoundedPath(GetPathBounds(bounds), GetCornerRadius(focused, isDefault));
-    }
+    private protected override bool PaintParentBackground => true;
 
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
