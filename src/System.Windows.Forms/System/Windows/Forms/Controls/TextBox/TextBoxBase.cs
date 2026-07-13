@@ -54,11 +54,11 @@ public abstract partial class TextBoxBase : Control
 
     // Device-independent padding (in logical units) carved from the non-client band for each
     // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
-    private const int VisualStylesFixed3DBorderPadding = 4;
-    private const int VisualStylesFixedSingleBorderPadding = 3;
-    private const int VisualStylesNoBorderPadding = 2;
-    internal const int VisualStylesInternalChromeInset = 1;
-    private const int VisualStylesCornerRadius = 15;
+    private const int VisualStylesFixed3DBorderPadding = 3;
+    private const int VisualStylesFixedSingleBorderPadding = 2;
+    private const int VisualStylesNoBorderPadding = 1;
+    internal const int VisualStylesInternalChromeInset = 2;
+    private const int VisualStylesCornerRadius = 12;
     private const int BorderThickness = 1;
 
     /// <summary>
@@ -885,7 +885,7 @@ public abstract partial class TextBoxBase : Control
             {
                 // A naturally sized single-line control must leave enough room for the complete
                 // rounded chrome. Explicitly fixed controls are not forced through this floor.
-                int roundedChromeMinimumHeight = (ScaleVisualStylesMetric(VisualStylesCornerRadius) * 2)
+                int roundedChromeMinimumHeight = ScaleVisualStylesMetric(VisualStylesCornerRadius)
                     + ScaleVisualStylesMetric(BorderThickness)
                     + ScaleVisualStylesMetric(VisualStylesInternalChromeInset);
 
@@ -986,6 +986,15 @@ public abstract partial class TextBoxBase : Control
 
     private int ScaleVisualStylesMetric(int logicalValue)
         => ScaleHelper.ScaleToDpi(logicalValue, DeviceDpiInternal);
+
+    internal static bool CanRenderVisualStylesRoundedChrome(
+        Rectangle bounds,
+        int cornerSize,
+        int borderThickness)
+    {
+        int minimumDimension = cornerSize + borderThickness;
+        return bounds.Width >= minimumDimension && bounds.Height >= minimumDimension;
+    }
 
     /// <summary>
     ///  Returns the additional padding required to clear the live scrollbars,
@@ -2593,7 +2602,6 @@ public abstract partial class TextBoxBase : Control
         Color clientBackColor = BackColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
 
-        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
@@ -2638,21 +2646,20 @@ public abstract partial class TextBoxBase : Control
         // We need anti-aliasing for the rounded chrome.
         offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        bounds.Inflate(1, 1);
-
-        // Below roughly 2 * cornerRadius + thickness the rounded Fixed3D chrome renders as a broken
-        // lozenge. When the available height is below that viable threshold we fall back to flat/simple
-        // chrome. This is a render-only fallback - it does not change size, layout, or ClientSize.
-        bool canRenderRoundedChrome = deflatedBounds.Height >= (2 * cornerRadius) + borderThickness;
+        // AddRoundedRectangle receives the bounding size of each corner arc, so one corner size plus
+        // the border thickness is the minimum height that avoids overlapping curves.
+        bool canRenderRoundedChrome = CanRenderVisualStylesRoundedChrome(
+            deflatedBounds,
+            cornerRadius,
+            borderThickness);
 
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            using GraphicsPath roundedBodyPath = new();
-            roundedBodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
-            ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, roundedBodyPath, parentBackColor);
+            ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, parentBackColor);
         }
         else
         {
+            using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
             offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
         }
 
@@ -2674,10 +2681,10 @@ public abstract partial class TextBoxBase : Control
 
                 if (canRenderRoundedChrome)
                 {
-                    Size radius = new(cornerRadius, cornerRadius);
-
-                    offscreenGraphics.FillRoundedRectangle(clientBackgroundBrush, deflatedBounds, radius);
-                    offscreenGraphics.DrawRoundedRectangle(adornerPen, deflatedBounds, radius);
+                    using GraphicsPath roundedBodyPath = new();
+                    roundedBodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+                    offscreenGraphics.FillPath(clientBackgroundBrush, roundedBodyPath);
+                    offscreenGraphics.DrawPath(adornerPen, roundedBodyPath);
                 }
                 else
                 {

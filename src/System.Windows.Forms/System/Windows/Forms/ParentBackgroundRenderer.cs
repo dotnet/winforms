@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms;
 
@@ -12,31 +11,28 @@ internal static class ParentBackgroundRenderer
         Control control,
         Graphics graphics,
         Rectangle bounds,
-        GraphicsPath opaquePath,
         Color fallbackColor)
     {
         ArgumentNullException.ThrowIfNull(control);
         ArgumentNullException.ThrowIfNull(graphics);
-        ArgumentNullException.ThrowIfNull(opaquePath);
 
         using GraphicsStateScope state = new(graphics);
-        using Region exposedRegion = new(bounds);
-        exposedRegion.Exclude(opaquePath);
+        using Region paintRegion = new(bounds);
 
-        // Keep an existing clip (for example, the native TextBox client area) in effect while
-        // PaintTransparentBackground establishes the parent-coordinate clip.
+        // Keep an existing clip (for example, the native TextBox client area) in effect while the
+        // parent background is painted beneath the complete antialiased control body.
         using Region currentClip = graphics.Clip;
-        exposedRegion.Intersect(currentClip);
+        paintRegion.Intersect(currentClip);
 
         Control? parent = control.ParentInternal;
         if (parent is null || parent.IsDisposed)
         {
-            using SolidBrush fallbackBrush = new(fallbackColor);
-            graphics.FillRegion(fallbackBrush, exposedRegion);
+            using var fallbackBrush = fallbackColor.GetCachedSolidBrushScope();
+            graphics.FillRegion(fallbackBrush, paintRegion);
             return;
         }
 
         using PaintEventArgs paintEventArgs = new(graphics, bounds);
-        control.PaintTransparentBackground(paintEventArgs, bounds, exposedRegion);
+        control.PaintTransparentBackground(paintEventArgs, bounds, paintRegion);
     }
 }
