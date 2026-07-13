@@ -54,10 +54,10 @@ public abstract partial class TextBoxBase : Control
 
     // Device-independent padding (in logical units) carved from the non-client band for each
     // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
-    private const int VisualStylesFixed3DBorderPadding = 5;
-    private const int VisualStylesFixedSingleBorderPadding = 4;
-    private const int VisualStylesNoBorderPadding = 3;
-    internal const int VisualStylesInternalChromeInset = 2;
+    private const int VisualStylesFixed3DBorderPadding = 4;
+    private const int VisualStylesFixedSingleBorderPadding = 3;
+    private const int VisualStylesNoBorderPadding = 2;
+    internal const int VisualStylesInternalChromeInset = 1;
     private const int VisualStylesCornerRadius = 15;
     private const int BorderThickness = 1;
 
@@ -161,6 +161,7 @@ public abstract partial class TextBoxBase : Control
     public virtual bool ShortcutsEnabled
     {
         get => _textBoxFlags[s_shortcutsEnabled];
+
         set
         {
             s_shortcutsToDisable ??=
@@ -202,6 +203,7 @@ public abstract partial class TextBoxBase : Control
         if (_textBoxFlags[s_readOnly])
         {
             int k = (int)keyData;
+
             if (k is ((int)Shortcut.CtrlL)        // align left
                 or ((int)Shortcut.CtrlR)          // align right
                 or ((int)Shortcut.CtrlE)          // align center
@@ -211,27 +213,29 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
-        if (!ReadOnly && (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
+        if (ReadOnly
+            || (keyData != (Keys.Control | Keys.Back)
+                && keyData != (Keys.Control | Keys.Shift | Keys.Back)))
         {
-            if (SelectionLength != 0)
-            {
-                SetSelectedTextInternal(string.Empty, clearUndo: false);
-            }
-            else if (SelectionStart != 0)
-            {
-                int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
-                int length = SelectionStart - boundaryStart;
-                BeginUpdateInternal();
-                SelectionStart = boundaryStart;
-                SelectionLength = length;
-                EndUpdateInternal();
-                SetSelectedTextInternal(string.Empty, clearUndo: false);
-            }
-
-            return true;
+            return returnedValue;
         }
 
-        return returnedValue;
+        if (SelectionLength != 0)
+        {
+            SetSelectedTextInternal(string.Empty, clearUndo: false);
+        }
+        else if (SelectionStart != 0)
+        {
+            int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
+            int length = SelectionStart - boundaryStart;
+            BeginUpdateInternal();
+            SelectionStart = boundaryStart;
+            SelectionLength = length;
+            EndUpdateInternal();
+            SetSelectedTextInternal(string.Empty, clearUndo: false);
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -252,6 +256,7 @@ public abstract partial class TextBoxBase : Control
     public override bool AutoSize
     {
         get => _textBoxFlags[s_autoSize];
+
         set
         {
             // Note that we intentionally do not call base. TextBoxes size themselves by
@@ -363,12 +368,14 @@ public abstract partial class TextBoxBase : Control
 
                 _borderStyle = value;
                 CommonProperties.xClearPreferredSizeCache(this);
+
                 if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
                 {
                     AdjustHeight(false);
                 }
 
                 UpdateStyles();
+
                 if (EffectiveVisualStylesMode >= VisualStylesMode.Net11 && IsHandleCreated)
                 {
                     RecalculateVisualStylesClientArea();
@@ -881,6 +888,7 @@ public abstract partial class TextBoxBase : Control
                 int roundedChromeMinimumHeight = (ScaleVisualStylesMetric(VisualStylesCornerRadius) * 2)
                     + ScaleVisualStylesMetric(BorderThickness)
                     + ScaleVisualStylesMetric(VisualStylesInternalChromeInset);
+
                 preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
             }
 
@@ -903,9 +911,11 @@ public abstract partial class TextBoxBase : Control
         get
         {
             int height = FontHeight;
+
             if (_borderStyle != BorderStyle.None)
             {
-                height += SystemInformation.GetBorderSizeForDpi(DeviceDpiInternal).Height * 4 + 3;
+                height += SystemInformation.GetBorderSizeForDpi(DeviceDpiInternal).Height
+                    * 4 + 3;
             }
 
             return height;
@@ -1152,19 +1162,21 @@ public abstract partial class TextBoxBase : Control
 
         set
         {
-            if (_textBoxFlags[s_readOnly] != value)
+            if (_textBoxFlags[s_readOnly] == value)
             {
-                _textBoxFlags[s_readOnly] = value;
-
-                if (IsHandleCreated)
-                {
-                    PInvokeCore.SendMessage(this, PInvokeCore.EM_SETREADONLY, (WPARAM)(BOOL)value);
-                    EnsureReadonlyBackgroundColor(value);
-                }
-
-                OnReadOnlyChanged(EventArgs.Empty);
-                VerifyImeRestrictedModeChanged();
+                return;
             }
+
+            _textBoxFlags[s_readOnly] = value;
+
+            if (IsHandleCreated)
+            {
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_SETREADONLY, (WPARAM)(BOOL)value);
+                EnsureReadonlyBackgroundColor(value);
+            }
+
+            OnReadOnlyChanged(EventArgs.Empty);
+            VerifyImeRestrictedModeChanged();
         }
     }
 
@@ -2519,6 +2531,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         HDC hdc = (HDC)m.WParamInternal;
+
         if (hdc.IsNull)
         {
             return;
@@ -2726,15 +2739,15 @@ public abstract partial class TextBoxBase : Control
                 if (band.Width > 0 && band.Height > 0)
                 {
                     PInvokeCore.BitBlt(
-                        windowHdc,
-                        band.X,
-                        band.Y,
-                        band.Width,
-                        band.Height,
-                        (HDC)bufferHdc,
-                        band.X,
-                        band.Y,
-                        ROP_CODE.SRCCOPY);
+                        hdc: windowHdc,
+                        x: band.X,
+                        y: band.Y,
+                        cx: band.Width,
+                        cy: band.Height,
+                        hdcSrc: (HDC)bufferHdc,
+                        x1: band.X,
+                        y1: band.Y,
+                        rop: ROP_CODE.SRCCOPY);
                 }
             }
         }
@@ -2766,18 +2779,14 @@ public abstract partial class TextBoxBase : Control
 
         Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
 
-        if (protectedBounds.Width <= 0 || protectedBounds.Height <= 0)
-        {
-            return [bounds, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty];
-        }
-
-        return
-        [
-            Rectangle.FromLTRB(bounds.Left, bounds.Top, bounds.Right, protectedBounds.Top),
-            Rectangle.FromLTRB(bounds.Left, protectedBounds.Bottom, bounds.Right, bounds.Bottom),
-            Rectangle.FromLTRB(bounds.Left, protectedBounds.Top, protectedBounds.Left, protectedBounds.Bottom),
-            Rectangle.FromLTRB(protectedBounds.Right, protectedBounds.Top, bounds.Right, protectedBounds.Bottom)
-        ];
+        return protectedBounds.Width <= 0 || protectedBounds.Height <= 0
+            ? [bounds, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty]
+            : [
+                Rectangle.FromLTRB(bounds.Left, bounds.Top, bounds.Right, protectedBounds.Top),
+                Rectangle.FromLTRB(bounds.Left, protectedBounds.Bottom, bounds.Right, bounds.Bottom),
+                Rectangle.FromLTRB(bounds.Left, protectedBounds.Top, protectedBounds.Left, protectedBounds.Bottom),
+                Rectangle.FromLTRB(protectedBounds.Right, protectedBounds.Top, bounds.Right, protectedBounds.Bottom)
+              ];
     }
 
     private Rectangle GetNativeClientRectangle()
