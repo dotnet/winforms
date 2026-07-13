@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Rendering.Animation;
 using PushButtonState = System.Windows.Forms.VisualStyles.PushButtonState;
 
@@ -31,10 +32,12 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     private float _pressStart;
     private float _pressTarget;
     private readonly ModernButtonDarkModeRenderer _baseColorRenderer = new();
+    private readonly ButtonDarkModeAdapter _layoutAdapter;
 
     public AnimatedPopupButtonRenderer(Forms.ButtonBase button)
         : base(button)
     {
+        _layoutAdapter = new ButtonDarkModeAdapter(button);
     }
 
     private Forms.ButtonBase Button => (Forms.ButtonBase)Control;
@@ -146,9 +149,12 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 
             faceColor = PopupButtonColorMath.Blend(baseColor, hoverColor, _hoverCurrent);
             faceColor = PopupButtonColorMath.Blend(faceColor, pressedColor, _pressCurrent);
-            foreColor = button.ForeColor != Forms.Control.DefaultForeColor
+            bool useAutomaticForeColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+                ? !button.ShouldSerializeForeColor()
+                : button.ForeColor == Forms.Control.DefaultForeColor;
+            foreColor = !useAutomaticForeColor
                 ? button.ForeColor
-                : _baseColorRenderer.GetTextColor(state, button.IsDefault);
+                : _baseColorRenderer.GetTextColor(state, button.IsDefault, faceColor);
             borderColor = flatAppearance.BorderColor.IsEmpty
                 ? PopupButtonColorMath.TowardsContrast(faceColor, 0.35f)
                 : flatAppearance.BorderColor;
@@ -161,6 +167,10 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             Font = button.Font,
             BackColor = faceColor,
             ForeColor = foreColor,
+            SurfaceColor = button.Parent?.BackColor ?? button.BackColor,
+            UseAutomaticForeColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+                ? !button.ShouldSerializeForeColor()
+                : button.ForeColor == Forms.Control.DefaultForeColor,
             BorderColor = borderColor,
             BorderWidth = flatAppearance.BorderSize,
             Enabled = button.Enabled,
@@ -194,30 +204,31 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
                 button.Parent?.BackColor ?? button.BackColor);
         }
 
-        Action<Rectangle>? paintImage = null;
+        if (context.Bounds.Width < 8 || context.Bounds.Height < 8)
+        {
+            PopupButtonKeyCapRenderer.Render(graphics, context);
+            return;
+        }
+
         Image? image = button.Image;
+        Rectangle contentBounds = PopupButtonKeyCapRenderer.GetContentBounds(context);
+        ButtonBaseAdapter.LayoutData layout = _layoutAdapter.GetLayoutData(contentBounds);
+        Action<Rectangle>? paintImage = null;
 
         if (image is not null)
         {
-            paintImage = contentBounds =>
+            paintImage = _ =>
             {
-                if (button.Enabled)
-                {
-                    graphics.DrawImage(image, contentBounds);
-                }
-                else
-                {
-                    ControlPaint.DrawImageDisabled(
-                        graphics,
-                        image,
-                        contentBounds.X,
-                        contentBounds.Y,
-                        faceColor);
-                }
+                using PaintEventArgs paintEventArgs = new(graphics, button.ClientRectangle);
+                _layoutAdapter.PaintImage(paintEventArgs, layout);
             };
         }
 
-        PopupButtonKeyCapRenderer.Render(graphics, context, paintImage);
+        PopupButtonKeyCapRenderer.Render(
+            graphics,
+            context,
+            paintImage,
+            (layout.TextBounds, layout.ImageBounds));
     }
 
     private static float Lerp(float start, float end, float amount) => start + ((end - start) * amount);

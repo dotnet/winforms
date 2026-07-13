@@ -356,6 +356,16 @@ public partial class CheckBox : ButtonBase
 
         if (Appearance == Appearance.Button)
         {
+            if (EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+                && FlatStyle is FlatStyle.Standard or FlatStyle.Flat)
+            {
+                ButtonBaseAdapter modernAdapter = FlatStyle == FlatStyle.Flat
+                    ? DarkModeAdapterFactory.CreateFlatAdapter(this)
+                    : DarkModeAdapterFactory.CreateStandardAdapter(this);
+
+                return modernAdapter.GetPreferredSizeCore(proposedConstraints) + Padding.Size;
+            }
+
             ButtonStandardAdapter adapter = new(this);
             return adapter.GetPreferredSizeCore(proposedConstraints);
         }

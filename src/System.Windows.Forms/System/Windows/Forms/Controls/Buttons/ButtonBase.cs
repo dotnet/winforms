@@ -1330,6 +1330,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     protected override void OnSystemColorsChanged(EventArgs e)
     {
         ResetAdapter();
+        _backColorAnimator?.Dispose();
+        _backColorAnimator = null;
+        _popupKeyCapRenderer?.Dispose();
+        _popupKeyCapRenderer = null;
         base.OnSystemColorsChanged(e);
     }
 

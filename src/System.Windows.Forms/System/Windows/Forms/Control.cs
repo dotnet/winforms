@@ -12854,6 +12854,7 @@ public unsafe partial class Control :
 
                 break;
 
+            case PInvokeCore.WM_DWMCOLORIZATIONCOLORCHANGED:
             case PInvokeCore.WM_SYSCOLORCHANGE:
                 if (GetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged) && GetTopLevel())
                 {

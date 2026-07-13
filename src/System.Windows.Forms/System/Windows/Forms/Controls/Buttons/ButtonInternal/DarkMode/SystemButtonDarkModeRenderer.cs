@@ -94,7 +94,7 @@ internal class SystemButtonDarkModeRenderer : ButtonDarkModeRendererBase
     /// <summary>
     ///  Gets the text color appropriate for the button state and type.
     /// </summary>
-    public override Color GetTextColor(PushButtonState state, bool isDefault) =>
+    public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor) =>
         state == PushButtonState.Disabled
             ? DefaultColors.DisabledTextColor
             : isDefault

@@ -366,8 +366,7 @@ public class ButtonVisualStylesTests
             showFocusCues: true,
             parentBackgroundColor: parentColor,
             backColor: bodyColor,
-            paintImage: _ => { },
-            paintField: () => { });
+            paintContent: _ => { });
 
         Assert.True(ContainsPixel(bitmap, Color.Lime));
 
@@ -429,6 +428,376 @@ public class ButtonVisualStylesTests
         Assert.True(animator.IsRunning);
     }
 
+    public static TheoryData<Type, FlatStyle, ContentAlignment, TextImageRelation> ModernImageLayoutData
+    {
+        get
+        {
+            Type[] controlTypes = [typeof(Button), typeof(CheckBox), typeof(RadioButton)];
+            FlatStyle[] flatStyles = [FlatStyle.Standard, FlatStyle.Flat, FlatStyle.Popup];
+            (ContentAlignment Alignment, TextImageRelation Relation)[] layouts =
+            [
+                (ContentAlignment.TopLeft, TextImageRelation.Overlay),
+                (ContentAlignment.MiddleLeft, TextImageRelation.ImageBeforeText),
+                (ContentAlignment.MiddleRight, TextImageRelation.TextBeforeImage),
+                (ContentAlignment.TopCenter, TextImageRelation.ImageAboveText),
+                (ContentAlignment.BottomCenter, TextImageRelation.TextAboveImage)
+            ];
+            TheoryData<Type, FlatStyle, ContentAlignment, TextImageRelation> data = new();
+
+            foreach (Type controlType in controlTypes)
+            {
+                foreach (FlatStyle flatStyle in flatStyles)
+                {
+                    foreach ((ContentAlignment alignment, TextImageRelation relation) in layouts)
+                    {
+                        data.Add(controlType, flatStyle, alignment, relation);
+                    }
+                }
+            }
+
+            return data;
+        }
+    }
+
+    public static TheoryData<Type, FlatStyle> ModernButtonTypeAndStyleData
+    {
+        get
+        {
+            TheoryData<Type, FlatStyle> data = new();
+
+            foreach (Type controlType in new[] { typeof(Button), typeof(CheckBox), typeof(RadioButton) })
+            {
+                foreach (FlatStyle flatStyle in new[] { FlatStyle.Standard, FlatStyle.Flat, FlatStyle.Popup })
+                {
+                    data.Add(controlType, flatStyle);
+                }
+            }
+
+            return data;
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernImageLayoutData))]
+    public void ButtonBase_ModernImageLayout_MatchesRendererContentBounds(
+        Type controlType,
+        FlatStyle flatStyle,
+        ContentAlignment imageAlign,
+        TextImageRelation textImageRelation)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap image = CreateSolidBitmap(new Size(9, 7), Color.Fuchsia);
+        using ButtonBase control = CreateAppearanceButton(controlType, flatStyle);
+        control.Image = image;
+        control.ImageAlign = imageAlign;
+        control.Size = new Size(140, 52);
+        control.Text = " ";
+        control.TextImageRelation = textImageRelation;
+        control.CreateControl();
+
+        Rectangle contentBounds = GetModernContentBounds(control, flatStyle);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        ButtonInternal.ButtonBaseAdapter.LayoutData expected = adapter.GetLayoutData(contentBounds);
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
+
+        Rectangle actualImageBounds = FindColorBounds(actual, Color.Fuchsia);
+        Assert.InRange(actualImageBounds.X - expected.ImageBounds.X, 0, 1);
+        Assert.InRange(actualImageBounds.Y - expected.ImageBounds.Y, 0, 1);
+        Assert.InRange(image.Width - actualImageBounds.Width, 0, 1);
+        Assert.InRange(image.Height - actualImageBounds.Height, 0, 1);
+        Assert.True(contentBounds.Contains(actualImageBounds));
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void Button_ModernDisabledImage_RendersWithinContentBounds(FlatStyle flatStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap image = CreateSolidBitmap(new Size(9, 7), Color.Black);
+        using Button button = new()
+        {
+            Enabled = false,
+            FlatStyle = flatStyle,
+            Image = image,
+            ImageAlign = ContentAlignment.TopLeft,
+            Size = new Size(120, 44),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        button.CreateControl();
+
+        Rectangle contentBounds = GetModernContentBounds(button, flatStyle);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        Rectangle imageBounds = adapter.GetLayoutData(contentBounds).ImageBounds;
+        using Bitmap withImage = new(button.Width, button.Height);
+        using Bitmap withoutImage = new(button.Width, button.Height);
+
+        button.DrawToBitmap(withImage, new Rectangle(Point.Empty, button.Size));
+        button.Image = null;
+        button.DrawToBitmap(withoutImage, new Rectangle(Point.Empty, button.Size));
+
+        Assert.True(CountDifferentPixels(withImage, withoutImage, imageBounds) > 0);
+        Assert.True(contentBounds.Contains(imageBounds));
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonTypeAndStyleData))]
+    public void ButtonBase_ModernPreferredSize_FitsRendererContent(
+        Type controlType,
+        FlatStyle flatStyle)
+    {
+        using ButtonBase control = CreateAppearanceButton(controlType, flatStyle);
+        control.AutoSize = true;
+        control.Padding = new Padding(3, 2, 4, 3);
+        control.Text = "Modern button with a complete caption";
+        if (control is Button button)
+        {
+            button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        }
+
+        Size preferredSize = control.GetPreferredSize(Size.Empty);
+        control.Size = preferredSize;
+        Rectangle contentBounds = GetModernContentBounds(control, flatStyle);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        ButtonInternal.ButtonBaseAdapter.LayoutData actual = adapter.GetLayoutData(contentBounds);
+        ButtonInternal.ButtonBaseAdapter.LayoutData unconstrained = adapter.GetLayoutData(
+            new Rectangle(0, 0, 2_000, 500));
+
+        Assert.True(actual.TextBounds.Width >= unconstrained.TextBounds.Width);
+        Assert.True(actual.TextBounds.Height >= unconstrained.TextBounds.Height);
+        Assert.True(contentBounds.Contains(actual.TextBounds));
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonTypeAndStyleData))]
+    public void ButtonBase_ModernOversizedImage_DoesNotPaintOverChrome(
+        Type controlType,
+        FlatStyle flatStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap image = CreateSolidBitmap(new Size(200, 100), Color.Fuchsia);
+        using ButtonBase control = CreateAppearanceButton(controlType, flatStyle);
+        control.Image = image;
+        control.Size = new Size(120, 44);
+        control.CreateControl();
+        Rectangle contentBounds = GetModernContentBounds(control, flatStyle);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        Rectangle imageClient = adapter.GetLayoutData(contentBounds).Client;
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
+
+        Rectangle actualImageBounds = FindColorBounds(actual, Color.Fuchsia);
+        Assert.True(imageClient.Contains(actualImageBounds));
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonTypeAndStyleData))]
+    public void ButtonBase_ModernImageOnlyPreferredSize_FitsImage(
+        Type controlType,
+        FlatStyle flatStyle)
+    {
+        using Bitmap image = new(16, 16);
+        using ButtonBase control = CreateAppearanceButton(controlType, flatStyle);
+        control.AutoSize = true;
+        control.Image = image;
+        control.Padding = new Padding(2);
+        control.Text = string.Empty;
+        if (control is Button button)
+        {
+            button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        }
+
+        control.Size = control.GetPreferredSize(Size.Empty);
+        Rectangle contentBounds = GetModernContentBounds(control, flatStyle);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        ButtonInternal.ButtonBaseAdapter.LayoutData layout = adapter.GetLayoutData(contentBounds);
+
+        Assert.Equal(image.Size, layout.ImageBounds.Size);
+        Assert.True(layout.Client.Contains(layout.ImageBounds));
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStyles.PushButtonState.Normal)]
+    [InlineData(VisualStyles.PushButtonState.Hot)]
+    [InlineData(VisualStyles.PushButtonState.Pressed)]
+    public void ModernButtonRenderers_DefaultBackground_UsesCurrentAccent(
+        VisualStyles.PushButtonState state)
+    {
+        Color accent = Application.GetWindowsAccentColor();
+        Color expected = ModernButtonColorMath.GetDefaultButtonColor(accent, state);
+        ModernButtonDarkModeRenderer standardRenderer = new();
+        ModernFlatButtonRenderer flatRenderer = new();
+
+        Assert.Equal(expected, standardRenderer.GetBackgroundColor(state, isDefault: true));
+        Assert.Equal(expected, flatRenderer.GetBackgroundColor(state, isDefault: true));
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 120, 215)]
+    [InlineData(255, 185, 0)]
+    [InlineData(240, 240, 240)]
+    [InlineData(24, 24, 24)]
+    [InlineData(180, 20, 90)]
+    public void ModernButtonColorMath_AutomaticForeground_MeetsWcagContrast(
+        byte red,
+        byte green,
+        byte blue)
+    {
+        Color accent = Color.FromArgb(red, green, blue);
+        Color normal = ModernButtonColorMath.GetDefaultButtonColor(
+            accent,
+            VisualStyles.PushButtonState.Normal);
+        Color pressed = ModernButtonColorMath.GetDefaultButtonColor(
+            accent,
+            VisualStyles.PushButtonState.Pressed);
+
+        for (int step = 0; step <= 10; step++)
+        {
+            Color backColor = PopupButtonColorMath.Blend(normal, pressed, step / 10f);
+            Color foreColor = ModernButtonColorMath.GetReadableForeColor(backColor);
+
+            Assert.True(
+                PopupButtonColorMath.GetContrastRatio(foreColor, backColor)
+                    >= ModernButtonColorMath.MinimumTextContrastRatio);
+        }
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_ExplicitForeColor_IsPreserved()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            ForeColor = Color.FromArgb(30, 80, 130),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonTextColor(
+            graphics,
+            VisualStyles.PushButtonState.Normal,
+            Color.White);
+
+        Assert.Equal(button.ForeColor, actual);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_InheritedForeColor_UsesAutomaticContrast()
+    {
+        using Panel parent = new() { ForeColor = Color.Red };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(button);
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonTextColor(
+            graphics,
+            VisualStyles.PushButtonState.Normal,
+            Color.White);
+
+        Assert.Equal(Color.Black, actual);
+        Assert.False(button.ShouldSerializeForeColor());
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_LegacyInheritedForeColor_IsPreserved()
+    {
+        using Panel parent = new() { ForeColor = Color.Red };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        parent.Controls.Add(button);
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonTextColor(
+            graphics,
+            VisualStyles.PushButtonState.Normal,
+            Color.White);
+
+        Assert.Equal(Color.Red, actual);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_AppearanceButton_SystemPreferredSize_IsUnchangedByNet11Mode()
+    {
+        using CheckBox classic = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = FlatStyle.System,
+            Text = "System",
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using CheckBox modern = new()
+        {
+            Appearance = classic.Appearance,
+            FlatStyle = classic.FlatStyle,
+            Text = classic.Text,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(classic.GetPreferredSize(Size.Empty), modern.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
+    public void ButtonBase_SystemColorsChanged_ResetsBackgroundAnimator()
+    {
+        using Button button = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        _ = button.BackColorAnimator;
+        _ = button.TestAccessor.Dynamic.PopupKeyCapRenderer;
+
+        button.TestAccessor.Dynamic.OnSystemColorsChanged(EventArgs.Empty);
+
+        Assert.Null(button.TestAccessor.Dynamic._backColorAnimator);
+        Assert.Null(button.TestAccessor.Dynamic._popupKeyCapRenderer);
+    }
+
+    [WinFormsFact]
+    public void Control_DwmColorizationColorChanged_RefreshesChildButtonRenderers()
+    {
+        using AccentMessageForm form = new();
+        using Button button = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        form.Controls.Add(button);
+        form.CreateControl();
+        _ = button.BackColorAnimator;
+        _ = button.TestAccessor.Dynamic.PopupKeyCapRenderer;
+        Message message = new() { Msg = (int)PInvokeCore.WM_DWMCOLORIZATIONCOLORCHANGED };
+
+        form.WndProc(ref message);
+
+        Assert.Null(button.TestAccessor.Dynamic._backColorAnimator);
+        Assert.Null(button.TestAccessor.Dynamic._popupKeyCapRenderer);
+    }
+
     private static bool ContainsPixel(Bitmap bitmap, Color color)
     {
         int argb = color.ToArgb();
@@ -444,6 +813,124 @@ public class ButtonVisualStylesTests
         }
 
         return false;
+    }
+
+    private static ButtonBase CreateAppearanceButton(Type controlType, FlatStyle flatStyle)
+    {
+        ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.FlatStyle = flatStyle;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        if (control is CheckBox checkBox)
+        {
+            checkBox.Appearance = Appearance.Button;
+        }
+        else if (control is RadioButton radioButton)
+        {
+            radioButton.Appearance = Appearance.Button;
+        }
+
+        return control;
+    }
+
+    private static Rectangle GetModernContentBounds(ButtonBase control, FlatStyle flatStyle)
+    {
+        if (flatStyle == FlatStyle.Popup)
+        {
+            PopupButtonRenderContext context = new()
+            {
+                Bounds = control.ClientRectangle,
+                Text = control.Text,
+                Font = control.Font,
+                BorderWidth = control.FlatAppearance.BorderSize,
+                Enabled = control.Enabled,
+                ImageSize = control.Image?.Size ?? Size.Empty,
+                ImageAlign = control.ImageAlign,
+                TextAlign = control.TextAlign,
+                TextImageRelation = control.TextImageRelation,
+                RightToLeft = control.RightToLeft,
+                DeviceDpi = control.DeviceDpi,
+                HighContrast = false
+            };
+
+            return PopupButtonKeyCapRenderer.GetContentBounds(context);
+        }
+
+        ButtonDarkModeRendererBase renderer = flatStyle == FlatStyle.Standard
+            ? new ModernButtonDarkModeRenderer()
+            : new ModernFlatButtonRenderer();
+        renderer.DeviceDpi = control.DeviceDpi;
+        renderer.FlatAppearance = control.FlatAppearance;
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        VisualStyles.PushButtonState state = control.Enabled
+            ? VisualStyles.PushButtonState.Normal
+            : VisualStyles.PushButtonState.Disabled;
+        Color backColor = renderer.GetBackgroundColor(state, isDefault: false);
+
+        return renderer.DrawButtonBackground(
+            graphics,
+            control.ClientRectangle,
+            state,
+            isDefault: false,
+            focused: false,
+            backColor: backColor);
+    }
+
+    private static Bitmap CreateSolidBitmap(Size size, Color color)
+    {
+        Bitmap bitmap = new(size.Width, size.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(color);
+
+        return bitmap;
+    }
+
+    private static Rectangle FindColorBounds(Bitmap bitmap, Color color)
+    {
+        int argb = color.ToArgb();
+        int left = bitmap.Width;
+        int top = bitmap.Height;
+        int right = -1;
+        int bottom = -1;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() != argb)
+                {
+                    continue;
+                }
+
+                left = Math.Min(left, x);
+                top = Math.Min(top, y);
+                right = Math.Max(right, x);
+                bottom = Math.Max(bottom, y);
+            }
+        }
+
+        return right >= left && bottom >= top
+            ? Rectangle.FromLTRB(left, top, right + 1, bottom + 1)
+            : Rectangle.Empty;
+    }
+
+    private static int CountDifferentPixels(Bitmap first, Bitmap second, Rectangle bounds)
+    {
+        int count = 0;
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                if (first.GetPixel(x, y).ToArgb() != second.GetPixel(x, y).ToArgb())
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     private static int FindBodyOffset(
@@ -476,4 +963,12 @@ public class ButtonVisualStylesTests
 
     private static int GetLuminance(Color color)
         => ((299 * color.R) + (587 * color.G) + (114 * color.B)) / 1000;
+
+    /// <summary>
+    ///  Exposes colorization messages for renderer-refresh tests.
+    /// </summary>
+    private sealed class AccentMessageForm : Form
+    {
+        public new void WndProc(ref Message message) => base.WndProc(ref message);
+    }
 }
