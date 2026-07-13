@@ -31,6 +31,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     /// </remarks>
     private protected virtual Padding GetContentPadding(bool focusRingVisible) => PaddingCore;
 
+    internal virtual Padding GetPreferredSizePadding() => PaddingCore;
+
     /// <summary>
     ///  The device DPI of the control being rendered. Set by the adapter before each paint so renderers
     ///  can DPI-scale their logical (96-DPI) constants. Defaults to 96 (100%).
@@ -98,7 +100,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     }
 
     /// <summary>
-    ///  Renders a button with the specified properties and delegates for painting image and field.
+    ///  Renders a button with the specified properties and a delegate for painting its content.
     /// </summary>
     public void RenderButton(
         Graphics graphics,
@@ -111,12 +113,10 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         bool showFocusCues,
         Color parentBackgroundColor,
         Color backColor,
-        Action<Rectangle> paintImage,
-        Action paintField)
+        Action<Rectangle> paintContent)
     {
         ArgumentNullException.ThrowIfNull(graphics);
-        ArgumentNullException.ThrowIfNull(paintImage);
-        ArgumentNullException.ThrowIfNull(paintField);
+        ArgumentNullException.ThrowIfNull(paintContent);
 
         // Scope the graphics state so all changes are reverted after rendering
         using (new GraphicsStateScope(graphics))
@@ -144,9 +144,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
             // Draw button background and get content bounds
             Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, focused, backColor);
 
-            // Paint image and field using the provided delegates
-            paintImage(contentBounds);
-            paintField();
+            paintContent(contentBounds);
 
             if (focused && showFocusCues)
             {
@@ -168,7 +166,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
 
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 
-    public abstract Color GetTextColor(PushButtonState state, bool isDefault);
+    public abstract Color GetTextColor(PushButtonState state, bool isDefault, Color backColor);
 
     public Color GetBackgroundColor(PushButtonState state, bool isDefault, Color customBaseColor)
     {

@@ -28,19 +28,12 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private const int BorderThicknessLogical = 1;
     private const int ContentInsetLogical = 4;
 
-    // Dark scheme - default (accept) button area.
-    private static readonly Color s_darkDefaultNormal = Color.FromArgb(0x4C, 0xC2, 0xFF);
-    private static readonly Color s_darkDefaultHover = Color.FromArgb(0x47, 0xB1, 0xE8);
-    private static readonly Color s_darkDefaultPressed = Color.FromArgb(0x42, 0xA1, 0xD2);
-
     // Dark scheme - normal button area.
     private static readonly Color s_darkNormal = Color.FromArgb(0x2D, 0x2D, 0x2D);
     private static readonly Color s_darkNormalHover = Color.FromArgb(0x32, 0x32, 0x32);
     private static readonly Color s_darkNormalPressed = Color.FromArgb(0x2A, 0x2A, 0x2A);
     private static readonly Color s_darkDisabled = Color.FromArgb(0x25, 0x25, 0x25);
 
-    private static readonly Color s_darkDefaultText = Color.Black;
-    private static readonly Color s_darkNormalText = Color.FromArgb(0xF0, 0xF0, 0xF0);
     private static readonly Color s_darkDisabledText = Color.FromArgb(0x88, 0x88, 0x88);
 
     private static readonly Color s_darkGap = Color.FromArgb(0x0A, 0x0A, 0x0A);
@@ -53,9 +46,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private static readonly Color s_lightDisabled = Color.FromArgb(0xFA, 0xFA, 0xFA);
     private static readonly Color s_lightBorder = Color.FromArgb(0xD0, 0xD0, 0xD0);
 
-    private static readonly Color s_lightNormalText = Color.FromArgb(0x1A, 0x1A, 0x1A);
     private static readonly Color s_lightDisabledText = Color.FromArgb(0xA0, 0xA0, 0xA0);
-    private static readonly Color s_lightDefaultText = Color.White;
 
     private static bool IsDark => Application.IsDarkModeEnabled;
 
@@ -86,6 +77,9 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     // a more generous, less cramped background without changing the control's own Padding.
     private protected override Padding GetContentPadding(bool focusRingVisible)
         => focusRingVisible ? PaddingCore : Padding.Empty;
+
+    internal override Padding GetPreferredSizePadding()
+        => new(FocusBodyInset + Scale(ContentInsetLogical));
 
     private protected override bool UseModernStateDefaults => true;
 
@@ -186,19 +180,14 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
         }
     }
 
-    public override Color GetTextColor(PushButtonState state, bool isDefault)
+    public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor)
     {
         if (state == PushButtonState.Disabled)
         {
             return IsDark ? s_darkDisabledText : s_lightDisabledText;
         }
 
-        if (isDefault)
-        {
-            return IsDark ? s_darkDefaultText : s_lightDefaultText;
-        }
-
-        return IsDark ? s_darkNormalText : s_lightNormalText;
+        return ModernButtonColorMath.GetReadableForeColor(backColor);
     }
 
     public override Color GetBackgroundColor(PushButtonState state, bool isDefault)
@@ -210,19 +199,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
         if (isDefault)
         {
-            return IsDark
-                ? state switch
-                {
-                    PushButtonState.Hot => s_darkDefaultHover,
-                    PushButtonState.Pressed => s_darkDefaultPressed,
-                    _ => s_darkDefaultNormal
-                }
-                : state switch
-                {
-                    PushButtonState.Hot => ControlPaint.Light(SystemColors.Highlight, 0.1f),
-                    PushButtonState.Pressed => ControlPaint.Dark(SystemColors.Highlight, 0.1f),
-                    _ => SystemColors.Highlight
-                };
+            return ModernButtonColorMath.GetDefaultButtonColor(state);
         }
 
         return IsDark

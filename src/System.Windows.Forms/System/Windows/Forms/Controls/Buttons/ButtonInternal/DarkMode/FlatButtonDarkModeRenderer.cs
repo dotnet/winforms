@@ -56,7 +56,7 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
             focusBackColor);
     }
 
-    public override Color GetTextColor(PushButtonState state, bool isDefault) =>
+    public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor) =>
         state == PushButtonState.Disabled
             ? DefaultColors.DisabledTextColor
             : isDefault
