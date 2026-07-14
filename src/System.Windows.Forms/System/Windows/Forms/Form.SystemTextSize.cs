@@ -16,7 +16,9 @@ public partial class Form
     ///  Occurs on this top-level <see cref="Form"/> when the Windows Accessibility text-scale setting changes.
     /// </summary>
     /// <remarks>
-    ///  On operating systems earlier than Windows 10 version 1507, this event is not raised.
+    ///  <para>
+    ///   On operating systems earlier than Windows 10 version 1507, this event is not raised.
+    ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.FormOnSystemTextSizeChangedDescr))]
