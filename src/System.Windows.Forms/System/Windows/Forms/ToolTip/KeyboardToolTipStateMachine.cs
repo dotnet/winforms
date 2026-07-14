@@ -248,7 +248,7 @@ internal sealed partial class KeyboardToolTipStateMachine
         return wrapper;
     }
 
-    private void Transit(SmEvent @event, IKeyboardToolTip source)
+    private void Transit(SmEvent @event, IKeyboardToolTip? source)
     {
         bool fullFsmResetRequired = false;
         try
