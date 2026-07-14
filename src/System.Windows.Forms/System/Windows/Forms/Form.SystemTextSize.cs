@@ -13,9 +13,11 @@ public partial class Form
     private double _lastSystemTextSize = ScaleHelper.GetSystemTextScaleFactor();
 
     /// <summary>
-    ///  Occurs on this top-level <see cref="Form"/> when the Windows Accessibility text-scale setting changes,
-    ///  while <see cref="Application.SystemTextSizeAwareness"/> is <see cref="SystemTextSizeAwareness.Notify"/>.
+    ///  Occurs on this top-level <see cref="Form"/> when the Windows Accessibility text-scale setting changes.
     /// </summary>
+    /// <remarks>
+    ///  On operating systems earlier than Windows 10 version 1507, this event is not raised.
+    /// </remarks>
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.FormOnSystemTextSizeChangedDescr))]
     public event EventHandler? SystemTextSizeChanged
@@ -62,11 +64,7 @@ public partial class Form
         }
 
         _lastSystemTextSize = systemTextSize;
-
-        if (Application.SystemTextSizeAwareness == SystemTextSizeAwareness.Notify)
-        {
-            OnSystemTextSizeChanged(EventArgs.Empty);
-        }
+        OnSystemTextSizeChanged(EventArgs.Empty);
     }
 #endif
 }
