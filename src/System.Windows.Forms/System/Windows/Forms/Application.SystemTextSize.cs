@@ -108,7 +108,7 @@ public sealed partial class Application
             return;
         }
 
-        EventHandler? handler = null;
+        EventHandler? handler;
 
         lock (s_internalSyncObject)
         {
