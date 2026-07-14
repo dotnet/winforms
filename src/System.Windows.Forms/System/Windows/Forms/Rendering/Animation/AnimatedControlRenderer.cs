@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Rendering.Button;
 
 namespace System.Windows.Forms.Rendering.Animation;
 
@@ -11,6 +12,10 @@ namespace System.Windows.Forms.Rendering.Animation;
 /// <param name="control">The control associated with the renderer.</param>
 internal abstract class AnimatedControlRenderer(Control control) : IDisposable
 {
+    private const float InteractionShadeAmount = 0.08f;
+
+    private Color _accentColor;
+    private bool _accentColorInitialized;
     private bool _disposedValue;
     protected float AnimationProgress = 1;
 
@@ -116,6 +121,31 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
     ///  Gets the control associated with the renderer.
     /// </summary>
     protected Control Control => control;
+
+    protected Color WindowsAccentColor
+    {
+        get
+        {
+            if (!_accentColorInitialized)
+            {
+                _accentColor = Application.GetWindowsAccentColor();
+                _accentColorInitialized = true;
+            }
+
+            return _accentColor;
+        }
+    }
+
+    internal bool IsAccentColorCached => _accentColorInitialized;
+
+    internal void InvalidateAccentColor()
+        => _accentColorInitialized = false;
+
+    internal static Color ApplyInteractionShade(Color color, float progress)
+    {
+        Color interactionColor = PopupButtonColorMath.TowardsContrast(color, InteractionShadeAmount);
+        return PopupButtonColorMath.Blend(color, interactionColor, progress);
+    }
 
     /// <summary>
     ///  Releases the unmanaged resources used by the <see cref="AnimatedControlRenderer"/> and optionally releases the managed resources.

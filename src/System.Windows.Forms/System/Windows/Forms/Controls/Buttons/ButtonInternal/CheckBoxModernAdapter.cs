@@ -91,6 +91,8 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
             layout.CheckBounds,
             _flatStyle,
             Control.Enabled,
+            Control.MouseIsOver,
+            Control.Focused && Control.ShowFocusCues,
             customOnColor,
             customBorderColor);
 

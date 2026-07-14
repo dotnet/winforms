@@ -23,6 +23,8 @@ namespace System.Windows.Forms.Rendering.Button;
 internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 {
     private const int AnimationDurationMilliseconds = 160;
+    private const float CustomHoverShadeAmount = 0.05f;
+    private const float CustomPressedShadeAmount = 0.12f;
 
     private float _hoverCurrent;
     private float _hoverStart;
@@ -132,20 +134,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         }
         else
         {
-            Color baseColor = button.BackColor != Forms.Control.DefaultBackColor
-                ? button.BackColor
-                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, button.IsDefault);
-            bool useModernDefaults = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11;
-            Color hoverColor = !flatAppearance.MouseOverBackColorCore.IsEmpty
-                ? flatAppearance.MouseOverBackColorCore
-                : useModernDefaults
-                    ? ModernButtonColorMath.BlendWithAccent(baseColor)
-                    : baseColor;
-            Color pressedColor = !flatAppearance.MouseDownBackColorCore.IsEmpty
-                ? flatAppearance.MouseDownBackColorCore
-                : useModernDefaults
-                    ? ModernButtonColorMath.GetMouseDownColor()
-                    : baseColor;
+            (Color baseColor, Color hoverColor, Color pressedColor) = GetStateColors();
 
             faceColor = PopupButtonColorMath.Blend(baseColor, hoverColor, _hoverCurrent);
             faceColor = PopupButtonColorMath.Blend(faceColor, pressedColor, _pressCurrent);
@@ -229,6 +218,31 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             context,
             paintImage,
             (layout.TextBounds, layout.ImageBounds));
+    }
+
+    internal (Color BaseColor, Color HoverColor, Color PressedColor) GetStateColors()
+    {
+        Forms.ButtonBase button = Button;
+        FlatButtonAppearance flatAppearance = button.FlatAppearance;
+        _baseColorRenderer.DeviceDpi = button.DeviceDpi;
+        _baseColorRenderer.FlatAppearance = flatAppearance;
+
+        bool hasCustomBackColor = button.BackColor != Forms.Control.DefaultBackColor;
+        Color baseColor = hasCustomBackColor
+            ? button.BackColor
+            : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, isDefault: false);
+        Color hoverColor = !flatAppearance.MouseOverBackColorCore.IsEmpty
+            ? flatAppearance.MouseOverBackColorCore
+            : hasCustomBackColor
+                ? PopupButtonColorMath.TowardsContrast(baseColor, CustomHoverShadeAmount)
+                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Hot, isDefault: false);
+        Color pressedColor = !flatAppearance.MouseDownBackColorCore.IsEmpty
+            ? flatAppearance.MouseDownBackColorCore
+            : hasCustomBackColor
+                ? PopupButtonColorMath.TowardsContrast(baseColor, CustomPressedShadeAmount)
+                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Pressed, isDefault: false);
+
+        return (baseColor, hoverColor, pressedColor);
     }
 
     private static float Lerp(float start, float end, float amount) => start + ((end - start) * amount);

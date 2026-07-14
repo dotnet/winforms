@@ -85,6 +85,73 @@ public class PopupButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void AnimatedPopupButtonRenderer_DefaultButton_UsesNeutralStateColors()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        button.NotifyDefault(true);
+        using AnimatedPopupButtonRenderer renderer = new(button);
+        ModernButtonDarkModeRenderer neutralRenderer = new()
+        {
+            DeviceDpi = button.DeviceDpi,
+            FlatAppearance = button.FlatAppearance
+        };
+
+        (Color baseColor, Color hoverColor, Color pressedColor) = renderer.GetStateColors();
+
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Normal, isDefault: false),
+            baseColor);
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, isDefault: false),
+            hoverColor);
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, isDefault: false),
+            pressedColor);
+    }
+
+    [WinFormsFact]
+    public void AnimatedPopupButtonRenderer_ExplicitStateColorsWin()
+    {
+        using Button button = new()
+        {
+            BackColor = Color.Red,
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        button.FlatAppearance.MouseOverBackColor = Color.Green;
+        button.FlatAppearance.MouseDownBackColor = Color.Blue;
+        using AnimatedPopupButtonRenderer renderer = new(button);
+
+        (Color baseColor, Color hoverColor, Color pressedColor) = renderer.GetStateColors();
+
+        Assert.Equal(Color.Red, baseColor);
+        Assert.Equal(Color.Green, hoverColor);
+        Assert.Equal(Color.Blue, pressedColor);
+    }
+
+    [WinFormsFact]
+    public void AnimatedPopupButtonRenderer_CustomBackColor_DerivesNeutralStateColors()
+    {
+        using Button button = new()
+        {
+            BackColor = Color.FromArgb(40, 80, 120),
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using AnimatedPopupButtonRenderer renderer = new(button);
+
+        (Color baseColor, Color hoverColor, Color pressedColor) = renderer.GetStateColors();
+
+        Assert.Equal(button.BackColor, baseColor);
+        Assert.Equal(PopupButtonColorMath.TowardsContrast(button.BackColor, 0.05f), hoverColor);
+        Assert.Equal(PopupButtonColorMath.TowardsContrast(button.BackColor, 0.12f), pressedColor);
+    }
+
+    [WinFormsFact]
     public void PopupButtonKeyCapRenderer_FocusedDefault_RendersWithoutThrow()
     {
         PopupButtonRenderContext context = CreateContext(

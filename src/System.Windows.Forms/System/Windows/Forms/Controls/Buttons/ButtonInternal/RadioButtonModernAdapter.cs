@@ -90,6 +90,8 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             layout.CheckBounds,
             _flatStyle,
             Control.Enabled,
+            Control.MouseIsOver,
+            Control.Focused && Control.ShowFocusCues,
             customOnColor,
             customBorderColor);
 
