@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Rendering.Animation;
+using System.Windows.Forms.Rendering.Button;
 
 namespace System.Windows.Forms.Rendering.CheckBox;
 
@@ -17,6 +18,16 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     private const int AnimationDuration = 300;
 
     private readonly ModernCheckBoxStyle _switchStyle;
+    private float _focusCurrent;
+    private float _focusStart;
+    private float _focusTarget;
+    private float _hoverCurrent;
+    private float _hoverStart;
+    private float _hoverTarget;
+    private bool _interactionInitialized;
+    private float _onAmountCurrent;
+    private float _onAmountStart;
+    private float _onAmountTarget;
     private bool _positionInitialized;
     private float _positionCurrent;
     private float _positionStart;
@@ -31,7 +42,11 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     public override void AnimationProc(float animationProgress)
     {
         base.AnimationProc(animationProgress);
-        _positionCurrent = Lerp(_positionStart, _positionTarget, EaseOut(animationProgress));
+        float easedProgress = EaseOut(animationProgress);
+        _positionCurrent = Lerp(_positionStart, _positionTarget, easedProgress);
+        _onAmountCurrent = Lerp(_onAmountStart, _onAmountTarget, easedProgress);
+        _focusCurrent = Lerp(_focusStart, _focusTarget, easedProgress);
+        _hoverCurrent = Lerp(_hoverStart, _hoverTarget, easedProgress);
         Invalidate();
     }
 
@@ -40,6 +55,10 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         EnsurePositionInitialized();
         _positionStart = _positionCurrent;
         _positionTarget = IsChecked ? 1f : 0f;
+        _onAmountStart = _onAmountCurrent;
+        _onAmountTarget = IsChecked ? 1f : 0f;
+        _focusStart = _focusCurrent;
+        _hoverStart = _hoverCurrent;
         AnimationProgress = 0;
 
         return (AnimationDuration, AnimationCycle.Once);
@@ -53,14 +72,21 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     public override void RenderControl(Graphics graphics)
     {
         EnsurePositionInitialized();
+        SetInteractionState(
+            hovered: MouseIsOver,
+            focused: Control.Focused && ShowFocusCues);
 
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
         Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
         int textY = contentTop + ((totalHeight - textSize.Height) / 2);
+        Rectangle switchBounds = GetSwitchBounds(
+            Control,
+            RtlTranslatedCheckAlign,
+            metrics,
+            textSize);
 
         graphics.Clear(Control.BackColor);
 
@@ -71,20 +97,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         if (IsSwitchOnRight(RtlTranslatedCheckAlign))
         {
-            int switchX = Math.Max(contentBounds.Left, contentBounds.Right - metrics.SwitchWidth);
-            int textX = Math.Max(contentBounds.Left, switchX - metrics.TextGap - textSize.Width);
-            RenderSwitch(
-                graphics,
-                new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight),
-                metrics);
+            int textX = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap - textSize.Width);
+            RenderSwitch(graphics, switchBounds, metrics);
             RenderText(graphics, new Point(textX, textY));
         }
         else
         {
-            RenderSwitch(
-                graphics,
-                new Rectangle(contentBounds.Left, switchY, metrics.SwitchWidth, metrics.SwitchHeight),
-                metrics);
+            RenderSwitch(graphics, switchBounds, metrics);
             RenderText(graphics, new Point(contentBounds.Left + metrics.SwitchWidth + metrics.TextGap, textY));
         }
 
@@ -99,10 +118,59 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         }
     }
 
+    internal void SetInteractionState(bool hovered, bool focused)
+    {
+        float hoverTarget = hovered ? 1f : 0f;
+        float focusTarget = focused ? 1f : 0f;
+        if (!_interactionInitialized)
+        {
+            _interactionInitialized = true;
+            _hoverCurrent = _hoverStart = _hoverTarget = hoverTarget;
+            _focusCurrent = _focusStart = _focusTarget = focusTarget;
+            return;
+        }
+
+        if (_hoverTarget == hoverTarget && _focusTarget == focusTarget)
+        {
+            return;
+        }
+
+        _hoverTarget = hoverTarget;
+        _focusTarget = focusTarget;
+        RestartAnimation();
+    }
+
     private static bool IsSwitchOnRight(ContentAlignment checkAlign) => checkAlign is
         ContentAlignment.TopRight or
         ContentAlignment.MiddleRight or
         ContentAlignment.BottomRight;
+
+    internal static Rectangle GetSwitchBounds(
+        Control control,
+        ContentAlignment checkAlign,
+        ToggleSwitchMetrics metrics)
+        => GetSwitchBounds(
+            control,
+            checkAlign,
+            metrics,
+            TextRenderer.MeasureText(control.Text, control.Font));
+
+    private static Rectangle GetSwitchBounds(
+        Control control,
+        ContentAlignment checkAlign,
+        ToggleSwitchMetrics metrics,
+        Size textSize)
+    {
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
+        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
+        int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
+        int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
+        int switchX = IsSwitchOnRight(checkAlign)
+            ? Math.Max(contentBounds.Left, contentBounds.Right - metrics.SwitchWidth)
+            : contentBounds.Left;
+
+        return new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight);
+    }
 
     private void RenderText(Graphics graphics, Point position)
         => TextRenderer.DrawText(
@@ -119,23 +187,42 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             return;
         }
 
-        // The background color flips at 80% of the animation so the thumb travels visibly before the color change.
-        Color backgroundColor = !Control.Enabled
-            ? SystemColors.Control
-            : IsChecked ^ (AnimationProgress < 0.8f)
-                ? SystemColors.Highlight
-                : SystemColors.ControlDark;
-
-        Color circleColor = Control.Enabled
-            ? SystemColors.ControlText
+        bool highContrast = SystemInformation.HighContrast;
+        Color onColor = highContrast
+            ? SystemColors.Highlight
+            : WindowsAccentColor;
+        Color offColor = highContrast ? SystemColors.Window : SystemColors.ControlDark;
+        Color backgroundColor = Control.Enabled
+            ? PopupButtonColorMath.Blend(offColor, onColor, _onAmountCurrent)
+            : SystemColors.Control;
+        Color highContrastForeground = PopupButtonColorMath.Blend(
+            SystemColors.WindowText,
+            SystemColors.HighlightText,
+            _onAmountCurrent);
+        Color borderColor = Control.Enabled
+            ? highContrast
+                ? highContrastForeground
+                : SystemColors.WindowFrame
             : SystemColors.GrayText;
+        float focus = Control.Enabled && !highContrast ? _focusCurrent : 0f;
+        backgroundColor = ApplyInteractionShade(backgroundColor, focus);
+        Color circleColor = Control.Enabled
+            ? highContrast
+                ? highContrastForeground
+                : PopupButtonColorMath.GetReadableForeColor(offColor, onColor)
+            : SystemColors.GrayText;
+        circleColor = ApplyInteractionShade(circleColor, focus);
+        borderColor = ApplyInteractionShade(borderColor, focus);
 
-        float circlePosition = (rect.Width - metrics.ThumbDiameter) * _positionCurrent;
+        float thumbDiameter = Lerp(
+            metrics.ThumbDiameter,
+            metrics.HoverThumbDiameter,
+            Control.Enabled ? _hoverCurrent : 0f);
+        float circlePosition = (rect.Width - thumbDiameter) * _positionCurrent;
 
         using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
         using var circleBrush = circleColor.GetCachedSolidBrushScope();
-        using var backgroundPen =
-            SystemColors.WindowFrame.GetCachedPenScope(metrics.BorderThickness);
+        using var backgroundPen = borderColor.GetCachedPenScope(metrics.BorderThickness);
 
         SmoothingMode previousSmoothingMode = graphics.SmoothingMode;
         try
@@ -162,13 +249,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 graphics.DrawRectangle(backgroundPen, rect);
             }
 
-            float circleTop = rect.Y + ((rect.Height - metrics.ThumbDiameter) / 2f);
+            float circleTop = rect.Y + ((rect.Height - thumbDiameter) / 2f);
             graphics.FillEllipse(
                 circleBrush,
                 rect.X + circlePosition,
                 circleTop,
-                metrics.ThumbDiameter,
-                metrics.ThumbDiameter);
+                thumbDiameter,
+                thumbDiameter);
         }
         finally
         {
@@ -188,6 +275,12 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         _positionCurrent = IsChecked ? 1f : 0f;
         _positionStart = _positionCurrent;
         _positionTarget = _positionCurrent;
+        _onAmountCurrent = IsChecked ? 1f : 0f;
+        _onAmountStart = _onAmountCurrent;
+        _onAmountTarget = _onAmountCurrent;
+        _focusCurrent = _focusStart = _focusTarget;
+        _hoverCurrent = _hoverStart = _hoverTarget;
+        _interactionInitialized = true;
         _positionInitialized = true;
         AnimationProgress = 1;
     }
@@ -201,6 +294,12 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         StopAnimation();
         _positionCurrent = _positionTarget;
         _positionStart = _positionCurrent;
+        _onAmountCurrent = _onAmountTarget;
+        _onAmountStart = _onAmountCurrent;
+        _focusCurrent = _focusTarget;
+        _focusStart = _focusCurrent;
+        _hoverCurrent = _hoverTarget;
+        _hoverStart = _hoverCurrent;
         AnimationProgress = 1;
         Invalidate();
     }
@@ -215,6 +314,9 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         _positionCurrent = IsChecked ? 1f : 0f;
         _positionStart = _positionCurrent;
         _positionTarget = _positionCurrent;
+        _onAmountCurrent = IsChecked ? 1f : 0f;
+        _onAmountStart = _onAmountCurrent;
+        _onAmountTarget = _onAmountCurrent;
         _positionInitialized = true;
     }
 
@@ -244,6 +346,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Forms.RadioButton radioButton => radioButton.ShowFocusCuesInternal,
         _ => false
     };
+
+    private bool MouseIsOver => Control switch
+    {
+        Forms.CheckBox checkBox => checkBox.MouseIsOver,
+        Forms.RadioButton radioButton => radioButton.MouseIsOver,
+        _ => false
+    };
 }
 
 /// <summary>
@@ -255,12 +364,14 @@ internal readonly struct ToggleSwitchMetrics
         int switchWidth,
         int switchHeight,
         int thumbDiameter,
+        int hoverThumbDiameter,
         int borderThickness,
         int textGap)
     {
         SwitchWidth = switchWidth;
         SwitchHeight = switchHeight;
         ThumbDiameter = thumbDiameter;
+        HoverThumbDiameter = hoverThumbDiameter;
         BorderThickness = borderThickness;
         TextGap = textGap;
     }
@@ -271,22 +382,35 @@ internal readonly struct ToggleSwitchMetrics
 
     internal int ThumbDiameter { get; }
 
+    internal int HoverThumbDiameter { get; }
+
     internal int BorderThickness { get; }
 
     internal int TextGap { get; }
 
     internal static ToggleSwitchMetrics Create(Control control)
     {
-        int switchHeight = Math.Max(1, control.Font.Height);
+        int switchHeight = Math.Max(
+            control.LogicalToDeviceUnits(13),
+            (int)(control.Font.Height * 0.9f));
         int minimumMetric = Math.Max(1, control.LogicalToDeviceUnits(1));
         int borderThickness = Math.Max(minimumMetric, switchHeight / 12);
-        int thumbDiameter = Math.Max(1, switchHeight - (2 * (borderThickness + minimumMetric)));
+        int maximumThumbDiameter = Math.Max(1, switchHeight - (2 * borderThickness));
+        int thumbDiameter = Math.Max(
+            1,
+            Math.Min(
+                switchHeight - (2 * (borderThickness + minimumMetric)),
+                (int)Math.Floor(maximumThumbDiameter / 1.1f)));
+        int hoverThumbDiameter = Math.Min(
+            maximumThumbDiameter,
+            Math.Max(thumbDiameter, (int)Math.Ceiling(thumbDiameter * 1.1f)));
         int textGap = Math.Max(2 * minimumMetric, switchHeight / 3);
 
         return new(
             switchWidth: 2 * switchHeight,
             switchHeight: switchHeight,
             thumbDiameter: thumbDiameter,
+            hoverThumbDiameter: hoverThumbDiameter,
             borderThickness: borderThickness,
             textGap: textGap);
     }

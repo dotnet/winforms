@@ -116,7 +116,9 @@ public class FlatButtonAppearance
     [EditorBrowsable(EditorBrowsableState.Always)]
     public Color MouseDownBackColor
     {
-        get => _mouseDownBackColor.IsEmpty && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+        get => _mouseDownBackColor.IsEmpty
+            && _owner.FlatStyle != FlatStyle.Popup
+            && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
             ? ModernButtonColorMath.GetMouseDownColor()
             : _mouseDownBackColor;
         set
@@ -141,7 +143,9 @@ public class FlatButtonAppearance
     [EditorBrowsable(EditorBrowsableState.Always)]
     public Color MouseOverBackColor
     {
-        get => _mouseOverBackColor.IsEmpty && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+        get => _mouseOverBackColor.IsEmpty
+            && _owner.FlatStyle != FlatStyle.Popup
+            && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
             ? ModernButtonColorMath.GetMouseOverColor(_owner, this)
             : _mouseOverBackColor;
         set

@@ -413,6 +413,8 @@ public partial class RadioButton : ButtonBase
     protected override void OnSystemColorsChanged(EventArgs e)
     {
         base.OnSystemColorsChanged(e);
+        _radioGlyphRenderer?.InvalidateAccentColor();
+        _toggleSwitchRenderer?.InvalidateAccentColor();
         UpdateOwnerDraw();
         UpdateToggleSwitchStyles();
     }

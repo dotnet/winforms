@@ -631,6 +631,8 @@ public partial class CheckBox : ButtonBase
     protected override void OnSystemColorsChanged(EventArgs e)
     {
         base.OnSystemColorsChanged(e);
+        _checkGlyphRenderer?.InvalidateAccentColor();
+        _toggleSwitchRenderer?.InvalidateAccentColor();
         UpdateOwnerDraw();
         UpdateToggleSwitchStyles();
     }
