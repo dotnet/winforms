@@ -54,11 +54,11 @@ public abstract partial class TextBoxBase : Control
 
     // Device-independent padding (in logical units) carved from the non-client band for each
     // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
-    private const int VisualStylesFixed3DBorderPadding = 3;
-    private const int VisualStylesFixedSingleBorderPadding = 2;
+    private const int VisualStylesFixed3DBorderPadding = 2;
+    private const int VisualStylesFixedSingleBorderPadding = 1;
     private const int VisualStylesNoBorderPadding = 1;
     internal const int VisualStylesInternalChromeInset = 2;
-    private const int VisualStylesCornerRadius = 12;
+    private const int VisualStylesCornerRadius = 15;
     private const int BorderThickness = 1;
 
     /// <summary>
@@ -98,8 +98,7 @@ public abstract partial class TextBoxBase : Control
     private BitVector32 _textBoxFlags;
 
     /// <summary>
-    ///  Creates a new TextBox control. Uses the parent's current font and color
-    ///  set.
+    ///  Creates a new TextBox control. Uses the parent's current font and color set.
     /// </summary>
     internal TextBoxBase() : base()
     {
@@ -454,6 +453,7 @@ public abstract partial class TextBoxBase : Control
                 case BorderStyle.Fixed3D:
                     cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                     break;
+
                 case BorderStyle.FixedSingle:
                     cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                     break;
@@ -995,6 +995,11 @@ public abstract partial class TextBoxBase : Control
         int minimumDimension = cornerSize + borderThickness;
         return bounds.Width >= minimumDimension && bounds.Height >= minimumDimension;
     }
+
+    internal static Color GetVisualStylesFocusColor(bool highContrast)
+        => highContrast
+            ? SystemColors.Highlight
+            : Application.GetWindowsAccentColor();
 
     /// <summary>
     ///  Returns the additional padding required to clear the live scrollbars,
@@ -2605,12 +2610,6 @@ public abstract partial class TextBoxBase : Control
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
-        using var focusPenScope = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
-
-        // The cache Scope is a ref struct in Release builds and so cannot be captured by the local
-        // focus-line helpers below (CS8175). Capture the plain cached Pen it wraps instead - the Scope
-        // stays alive (and ref-counted) for the duration of this method via the using declaration.
-        Pen focusPen = focusPenScope;
 
         Rectangle bounds = new(
             x: 0,
@@ -2699,6 +2698,13 @@ public abstract partial class TextBoxBase : Control
         // Draw the focus as one line over the bottom border.
         if (Focused)
         {
+            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            using var focusPenScope = focusColor.GetCachedPenScope(borderThickness);
+
+            // The cache Scope is a ref struct in Release builds and so cannot be captured by the local
+            // focus-line helpers below (CS8175). Capture the plain cached Pen it wraps instead.
+            Pen focusPen = focusPenScope;
+
             switch (BorderStyle)
             {
                 case BorderStyle.None:
@@ -2734,6 +2740,19 @@ public abstract partial class TextBoxBase : Control
 
                     break;
             }
+
+            void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
+            {
+                offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+                offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
+            }
+
+            void Draw3DFocusLine(int x1, int y1, int x2, int y2)
+            {
+                offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+                offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
+                offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
+            }
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(bufferBounds, clientBounds);
@@ -2761,19 +2780,6 @@ public abstract partial class TextBoxBase : Control
         finally
         {
             offscreenGraphics.ReleaseHdcInternal(bufferHdc);
-        }
-
-        void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
-        {
-            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
-            offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
-        }
-
-        void Draw3DFocusLine(int x1, int y1, int x2, int y2)
-        {
-            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
-            offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
-            offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
         }
     }
 

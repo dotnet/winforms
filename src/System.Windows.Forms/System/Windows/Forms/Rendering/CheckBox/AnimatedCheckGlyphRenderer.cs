@@ -14,9 +14,20 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 220;
 
-    private CheckState _fromState;
-    private CheckState _toState;
-    private bool _initialized;
+    private float _checkAlphaCurrent;
+    private float _checkAlphaStart;
+    private float _checkAlphaTarget;
+    private float _dashAlphaCurrent;
+    private float _dashAlphaStart;
+    private float _dashAlphaTarget;
+    private float _fillCurrent;
+    private float _fillStart;
+    private float _fillTarget;
+    private float _interactionCurrent;
+    private float _interactionStart;
+    private float _interactionTarget;
+    private bool _interactionInitialized;
+    private bool _stateInitialized;
 
     public AnimatedCheckGlyphRenderer(Control control) : base(control)
     {
@@ -24,21 +35,45 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
 
     internal void NotifyCheckStateChanged(CheckState newState)
     {
-        if (!_initialized)
+        (float fill, float checkAlpha, float dashAlpha) = GetStateTargets(newState);
+        if (!_stateInitialized)
         {
-            _initialized = true;
-            _fromState = newState;
-            _toState = newState;
+            _stateInitialized = true;
+            _fillCurrent = _fillStart = _fillTarget = fill;
+            _checkAlphaCurrent = _checkAlphaStart = _checkAlphaTarget = checkAlpha;
+            _dashAlphaCurrent = _dashAlphaStart = _dashAlphaTarget = dashAlpha;
             return;
         }
 
-        if (newState == _toState)
+        if (_fillTarget == fill
+            && _checkAlphaTarget == checkAlpha
+            && _dashAlphaTarget == dashAlpha)
         {
             return;
         }
 
-        _fromState = AnimationProgress >= 1 ? _toState : _fromState;
-        _toState = newState;
+        _fillTarget = fill;
+        _checkAlphaTarget = checkAlpha;
+        _dashAlphaTarget = dashAlpha;
+        RestartAnimation();
+    }
+
+    internal void SetInteractionState(bool hovered, bool focused)
+    {
+        float interactionTarget = hovered || focused ? 1f : 0f;
+        if (!_interactionInitialized)
+        {
+            _interactionInitialized = true;
+            _interactionCurrent = _interactionStart = _interactionTarget = interactionTarget;
+            return;
+        }
+
+        if (_interactionTarget == interactionTarget)
+        {
+            return;
+        }
+
+        _interactionTarget = interactionTarget;
         RestartAnimation();
     }
 
@@ -47,28 +82,51 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
         Rectangle bounds,
         FlatStyle flatStyle,
         bool enabled,
+        bool hovered,
+        bool focused,
         Color? customOnColor,
         Color? customBorderColor)
     {
+        SetInteractionState(hovered, focused);
+
         bool isDark = Application.IsDarkModeEnabled;
-        Color onColor = customOnColor
-            ?? (isDark ? Color.FromArgb(0x4C, 0xC2, 0xFF) : SystemColors.Highlight);
+        bool highContrast = SystemInformation.HighContrast;
+        Color onColor = highContrast
+            ? SystemColors.Highlight
+            : customOnColor ?? WindowsAccentColor;
 
-        Color offBorderColor = customBorderColor
-            ?? (isDark ? Color.FromArgb(0x9B, 0x9B, 0x9B) : SystemColors.ControlDark);
+        Color offBorderColor = highContrast
+            ? SystemColors.WindowText
+            : customBorderColor
+                ?? (isDark
+                    ? Color.FromArgb(0x9B, 0x9B, 0x9B)
+                    : SystemColors.ControlDark);
 
-        Color offBackColor = isDark ? Color.FromArgb(0x2D, 0x2D, 0x2D) : Color.White;
+        Color offBackColor = highContrast
+            ? SystemColors.Window
+            : isDark
+                ? Color.FromArgb(0x2D, 0x2D, 0x2D)
+                : Color.White;
 
         if (!enabled)
         {
-            onColor = isDark ? Color.FromArgb(0x55, 0x55, 0x55) : Color.FromArgb(0xC0, 0xC0, 0xC0);
-            offBorderColor = isDark ? Color.FromArgb(0x45, 0x45, 0x45) : Color.FromArgb(0xD0, 0xD0, 0xD0);
+            onColor = highContrast
+                ? SystemColors.GrayText
+                : isDark
+                    ? Color.FromArgb(0x55, 0x55, 0x55)
+                    : Color.FromArgb(0xC0, 0xC0, 0xC0);
+            offBorderColor = highContrast
+                ? SystemColors.GrayText
+                : isDark
+                    ? Color.FromArgb(0x45, 0x45, 0x45)
+                    : Color.FromArgb(0xD0, 0xD0, 0xD0);
         }
 
-        float progress = AnimationProgress;
-        float fill = Lerp(FillAmount(_fromState), FillAmount(_toState), progress);
-        Color backColor = LerpColor(offBackColor, onColor, fill);
-        Color borderColor = LerpColor(offBorderColor, onColor, fill);
+        Color backColor = LerpColor(offBackColor, onColor, _fillCurrent);
+        Color borderColor = LerpColor(offBorderColor, onColor, _fillCurrent);
+        float interaction = enabled && !highContrast ? _interactionCurrent : 0f;
+        backColor = ApplyInteractionShade(backColor, interaction);
+        borderColor = ApplyInteractionShade(borderColor, interaction);
 
         GraphicsState? saved = graphics.Save();
         try
@@ -91,19 +149,19 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
             }
 
             Color glyphColor = enabled
-                ? (isDark ? Color.Black : Color.White)
+                ? highContrast
+                    ? SystemColors.HighlightText
+                    : ModernButtonColorMath.GetReadableForeColor(onColor)
                 : offBackColor;
 
-            float checkAlpha = GlyphAlpha(CheckState.Checked, progress);
-            if (checkAlpha > 0)
+            if (_checkAlphaCurrent > 0)
             {
-                DrawCheckmark(graphics, bounds, glyphColor, checkAlpha);
+                DrawCheckmark(graphics, bounds, glyphColor, _checkAlphaCurrent);
             }
 
-            float dashAlpha = GlyphAlpha(CheckState.Indeterminate, progress);
-            if (dashAlpha > 0)
+            if (_dashAlphaCurrent > 0)
             {
-                DrawDash(graphics, bounds, glyphColor, dashAlpha);
+                DrawDash(graphics, bounds, glyphColor, _dashAlphaCurrent);
             }
         }
         finally
@@ -118,6 +176,11 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
     public override void AnimationProc(float animationProgress)
     {
         base.AnimationProc(animationProgress);
+        float easedProgress = EaseOut(animationProgress);
+        _fillCurrent = Lerp(_fillStart, _fillTarget, easedProgress);
+        _checkAlphaCurrent = Lerp(_checkAlphaStart, _checkAlphaTarget, easedProgress);
+        _dashAlphaCurrent = Lerp(_dashAlphaStart, _dashAlphaTarget, easedProgress);
+        _interactionCurrent = Lerp(_interactionStart, _interactionTarget, easedProgress);
         Invalidate();
     }
 
@@ -127,6 +190,10 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
 
     protected override (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted()
     {
+        _fillStart = _fillCurrent;
+        _checkAlphaStart = _checkAlphaCurrent;
+        _dashAlphaStart = _dashAlphaCurrent;
+        _interactionStart = _interactionCurrent;
         AnimationProgress = 0;
         return (AnimationDuration, AnimationCycle.Once);
     }
@@ -138,29 +205,21 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
     protected override void OnAnimationEnded()
     {
         StopAnimation();
-        _fromState = _toState;
+        _fillCurrent = _fillTarget;
+        _checkAlphaCurrent = _checkAlphaTarget;
+        _dashAlphaCurrent = _dashAlphaTarget;
+        _interactionCurrent = _interactionTarget;
         AnimationProgress = 1;
         Invalidate();
     }
 
-    private float GlyphAlpha(CheckState glyphState, float progress)
-    {
-        float alpha = 0;
-        if (_fromState == glyphState)
+    private static (float Fill, float CheckAlpha, float DashAlpha) GetStateTargets(CheckState state)
+        => state switch
         {
-            alpha += 1 - progress;
-        }
-
-        if (_toState == glyphState)
-        {
-            alpha += progress;
-        }
-
-        return Math.Clamp(alpha, 0f, 1f);
-    }
-
-    private static float FillAmount(CheckState state)
-        => state == CheckState.Unchecked ? 0f : 1f;
+            CheckState.Checked => (1f, 1f, 0f),
+            CheckState.Indeterminate => (1f, 0f, 1f),
+            _ => (0f, 0f, 0f)
+        };
 
     private static float Lerp(float from, float to, float progress)
         => from + ((to - from) * Math.Clamp(progress, 0f, 1f));
@@ -178,6 +237,9 @@ internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
         static int LerpChannel(int from, int to, float progress)
             => from + (int)((to - from) * progress);
     }
+
+    private static float EaseOut(float progress)
+        => 1 - ((1 - progress) * (1 - progress));
 
     private static GraphicsPath CreateBoxPath(Rectangle bounds, FlatStyle flatStyle)
     {

@@ -77,7 +77,7 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, fontSize)
         };
 
-        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
         int border = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
         int inset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
 
@@ -110,13 +110,13 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, 9f)
         };
 
-        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
         Assert.True(control.Height >= cornerSize + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
     }
 
     [WinFormsTheory]
-    [InlineData(BorderStyle.Fixed3D, 3)]
-    [InlineData(BorderStyle.FixedSingle, 2)]
+    [InlineData(BorderStyle.Fixed3D, 2)]
+    [InlineData(BorderStyle.FixedSingle, 1)]
     [InlineData(BorderStyle.None, 1)]
     public void TextBoxBase_ModernGeometry_UsesExpectedBorderPadding(
         BorderStyle borderStyle,
@@ -154,9 +154,9 @@ public partial class TextBoxBaseTests
     }
 
     [Theory]
-    [InlineData(13, 13, 12, 1, true)]
-    [InlineData(12, 13, 12, 1, false)]
-    [InlineData(13, 12, 12, 1, false)]
+    [InlineData(16, 16, 15, 1, true)]
+    [InlineData(15, 16, 15, 1, false)]
+    [InlineData(16, 15, 15, 1, false)]
     public void TextBoxBase_CanRenderVisualStylesRoundedChrome_RequiresBothDimensions(
         int width,
         int height,
@@ -170,6 +170,18 @@ public partial class TextBoxBaseTests
             borderThickness);
 
         Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void TextBoxBase_GetVisualStylesFocusColor_ReturnsExpected(bool highContrast)
+    {
+        Color expected = highContrast
+            ? SystemColors.Highlight
+            : Application.GetWindowsAccentColor();
+
+        Assert.Equal(expected, TextBoxBase.GetVisualStylesFocusColor(highContrast));
     }
 
     [WinFormsFact]
@@ -203,7 +215,7 @@ public partial class TextBoxBaseTests
         Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: false);
 
         Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, 144));
-        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(12, 144)
+        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(15, 144)
             + ScaleHelper.ScaleToDpi(1, 144)
             + ScaleHelper.ScaleToDpi(2, 144));
     }

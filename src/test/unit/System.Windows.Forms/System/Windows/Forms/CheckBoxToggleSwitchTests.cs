@@ -29,10 +29,31 @@ public class CheckBoxToggleSwitchTests
         };
 
         Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(checkBox);
+        int expectedHeight = Math.Max(
+            checkBox.LogicalToDeviceUnits(13),
+            (int)(font.Height * 0.9f));
 
-        Assert.Equal(font.Height, metrics.SwitchHeight);
-        Assert.Equal(2 * font.Height, metrics.SwitchWidth);
+        Assert.Equal(expectedHeight, metrics.SwitchHeight);
+        Assert.Equal(2 * expectedHeight, metrics.SwitchWidth);
+        Assert.True(metrics.HoverThumbDiameter > metrics.ThumbDiameter);
         Assert.Equal(metrics.GetPreferredSize(checkBox), checkBox.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_LargeFont_ReservesTenPercentHoverGrowth()
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, 72f);
+        using CheckBox checkBox = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Font = font,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(checkBox);
+        float growth = metrics.HoverThumbDiameter / (float)metrics.ThumbDiameter;
+
+        Assert.InRange(growth, 1.08f, 1.12f);
     }
 
     [WinFormsFact]
