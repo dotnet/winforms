@@ -1,10 +1,5 @@
 static System.Windows.Forms.Application.GetWindowsAccentColor() -> System.Drawing.Color
-static System.Windows.Forms.Application.SetSystemTextSizeAwareness(System.Windows.Forms.SystemTextSizeAwareness awareness) -> void
 static System.Windows.Forms.Application.SystemTextSize.get -> double
-static System.Windows.Forms.Application.SystemTextSizeAwareness.get -> System.Windows.Forms.SystemTextSizeAwareness
 static System.Windows.Forms.Application.SystemTextSizeChanged -> System.EventHandler?
 System.Windows.Forms.Form.SystemTextSizeChanged -> System.EventHandler?
-System.Windows.Forms.SystemTextSizeAwareness
-System.Windows.Forms.SystemTextSizeAwareness.Notify = 1 -> System.Windows.Forms.SystemTextSizeAwareness
-System.Windows.Forms.SystemTextSizeAwareness.Unaware = 0 -> System.Windows.Forms.SystemTextSizeAwareness
 virtual System.Windows.Forms.Form.OnSystemTextSizeChanged(System.EventArgs! e) -> void

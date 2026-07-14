@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
@@ -11,7 +10,6 @@ public sealed partial class Application
 #if NET11_0_OR_GREATER
     private static readonly object s_eventSystemTextSizeChanged = new();
 
-    private static SystemTextSizeAwareness s_systemTextSizeAwareness;
     private static double s_lastSystemTextSize = 1.0;
     private static bool s_systemTextSizeNotificationsInitialized;
 
@@ -33,18 +31,7 @@ public sealed partial class Application
     public static double SystemTextSize => ScaleHelper.GetSystemTextScaleFactor();
 
     /// <summary>
-    ///  Gets the application's mode for reacting to changes in the Windows Accessibility text-scale setting.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   Use <see cref="SetSystemTextSizeAwareness(SystemTextSizeAwareness)"/> to change this value.
-    ///  </para>
-    /// </remarks>
-    public static SystemTextSizeAwareness SystemTextSizeAwareness => s_systemTextSizeAwareness;
-
-    /// <summary>
-    ///  Occurs once per process when the Windows Accessibility text-scale setting changes,
-    ///  while <see cref="SystemTextSizeAwareness"/> is <see cref="SystemTextSizeAwareness.Notify"/>.
+    ///  Occurs once per process when the Windows Accessibility text-scale setting changes.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -58,30 +45,43 @@ public sealed partial class Application
     ///   notifications from their window procedures and do not subscribe to this static event, avoiding framework-managed
     ///   static-event rooting of forms.
     ///  </para>
+    ///  <para>
+    ///   On operating systems earlier than Windows 10 version 1507, this event is not raised.
+    ///  </para>
     /// </remarks>
     public static event EventHandler? SystemTextSizeChanged
     {
-        add => AddEventHandler(s_eventSystemTextSizeChanged, value);
-        remove => RemoveEventHandler(s_eventSystemTextSizeChanged, value);
-    }
-
-    /// <summary>
-    ///  Sets the application's mode for reacting to changes in the Windows Accessibility text-scale setting.
-    /// </summary>
-    /// <param name="awareness">
-    ///  One of the enumeration values that specifies how the application reacts to Accessibility text-scale changes.
-    /// </param>
-    /// <exception cref="InvalidEnumArgumentException">
-    ///  <paramref name="awareness"/> is not a valid <see cref="SystemTextSizeAwareness"/> value.
-    /// </exception>
-    public static void SetSystemTextSizeAwareness(SystemTextSizeAwareness awareness)
-    {
-        SourceGenerated.EnumValidator.Validate(awareness, nameof(awareness));
-
-        lock (s_internalSyncObject)
+        add
         {
-            EnsureSystemTextSizeNotificationsInitialized();
-            s_systemTextSizeAwareness = awareness;
+            if (value is null)
+            {
+                return;
+            }
+
+            lock (s_internalSyncObject)
+            {
+                EnsureSystemTextSizeNotificationsInitialized();
+                AddEventHandler(s_eventSystemTextSizeChanged, value);
+            }
+        }
+        remove
+        {
+            if (value is null)
+            {
+                return;
+            }
+
+            lock (s_internalSyncObject)
+            {
+                RemoveEventHandler(s_eventSystemTextSizeChanged, value);
+
+                if (s_systemTextSizeNotificationsInitialized
+                    && s_eventHandlers?[s_eventSystemTextSizeChanged] is null)
+                {
+                    SystemEvents.UserPreferenceChanged -= OnSystemTextSizeUserPreferenceChanged;
+                    s_systemTextSizeNotificationsInitialized = false;
+                }
+            }
         }
     }
 
@@ -118,11 +118,7 @@ public sealed partial class Application
             }
 
             s_lastSystemTextSize = systemTextSize;
-
-            if (s_systemTextSizeAwareness == SystemTextSizeAwareness.Notify)
-            {
-                handler = s_eventHandlers?[s_eventSystemTextSizeChanged] as EventHandler;
-            }
+            handler = s_eventHandlers?[s_eventSystemTextSizeChanged] as EventHandler;
         }
 
         handler?.Invoke(null, EventArgs.Empty);

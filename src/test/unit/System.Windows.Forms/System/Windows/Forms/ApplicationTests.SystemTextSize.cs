@@ -3,9 +3,6 @@
 
 #nullable disable
 
-using System.ComponentModel;
-using Microsoft.DotNet.RemoteExecutor;
-
 namespace System.Windows.Forms.Tests;
 
 public partial class ApplicationTests
@@ -18,41 +15,15 @@ public partial class ApplicationTests
     }
 
     [WinFormsFact]
-    public void Application_SystemTextSizeAwareness_DefaultValueIsUnaware()
+    public void Application_SystemTextSizeChanged_AddRemove_Success()
     {
-        RemoteExecutor.Invoke(() =>
-        {
-            Assert.Equal(SystemTextSizeAwareness.Unaware, Application.SystemTextSizeAwareness);
-        }).Dispose();
-    }
+        int callCount = 0;
+        EventHandler handler = (sender, e) => callCount++;
 
-    [WinFormsTheory]
-    [EnumData<SystemTextSizeAwareness>]
-    public void Application_SystemTextSizeAwareness_Set_GetReturnsExpected(SystemTextSizeAwareness value)
-    {
-        SystemTextSizeAwareness originalValue = Application.SystemTextSizeAwareness;
+        Application.SystemTextSizeChanged += handler;
+        Application.SystemTextSizeChanged -= handler;
 
-        try
-        {
-            Application.SetSystemTextSizeAwareness(value);
-            Assert.Equal(value, Application.SystemTextSizeAwareness);
-
-            Application.SetSystemTextSizeAwareness(value);
-            Assert.Equal(value, Application.SystemTextSizeAwareness);
-        }
-        finally
-        {
-            Application.SetSystemTextSizeAwareness(originalValue);
-        }
-    }
-
-    [WinFormsTheory]
-    [InvalidEnumData<SystemTextSizeAwareness>]
-    public void Application_SetSystemTextSizeAwareness_InvalidValue_ThrowsInvalidEnumArgumentException(SystemTextSizeAwareness value)
-    {
-        Assert.Throws<InvalidEnumArgumentException>(
-            "awareness",
-            () => Application.SetSystemTextSizeAwareness(value));
+        Assert.Equal(0, callCount);
     }
 #endif
 }
