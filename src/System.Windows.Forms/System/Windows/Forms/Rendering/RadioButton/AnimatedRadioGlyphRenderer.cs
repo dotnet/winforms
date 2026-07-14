@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Rendering.Animation;
+using System.Windows.Forms.Rendering.Button;
 
 namespace System.Windows.Forms.Rendering.RadioButton;
 
@@ -13,10 +14,19 @@ namespace System.Windows.Forms.Rendering.RadioButton;
 internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 200;
+    private const float HoverGrowth = 1.1f;
 
-    private bool _fromChecked;
-    private bool _toChecked;
-    private bool _initialized;
+    private float _dotScaleCurrent;
+    private float _dotScaleStart;
+    private float _dotScaleTarget;
+    private float _focusCurrent;
+    private float _focusStart;
+    private float _focusTarget;
+    private float _hoverCurrent;
+    private float _hoverStart;
+    private float _hoverTarget;
+    private bool _interactionInitialized;
+    private bool _stateInitialized;
 
     public AnimatedRadioGlyphRenderer(Control control) : base(control)
     {
@@ -24,21 +34,42 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
     internal void NotifyCheckedChanged(bool newChecked)
     {
-        if (!_initialized)
+        float dotScaleTarget = newChecked ? 1f : 0f;
+        if (!_stateInitialized)
         {
-            _initialized = true;
-            _fromChecked = newChecked;
-            _toChecked = newChecked;
+            _stateInitialized = true;
+            _dotScaleCurrent = _dotScaleStart = _dotScaleTarget = dotScaleTarget;
             return;
         }
 
-        if (newChecked == _toChecked)
+        if (_dotScaleTarget == dotScaleTarget)
         {
             return;
         }
 
-        _fromChecked = AnimationProgress >= 1 ? _toChecked : _fromChecked;
-        _toChecked = newChecked;
+        _dotScaleTarget = dotScaleTarget;
+        RestartAnimation();
+    }
+
+    internal void SetInteractionState(bool hovered, bool focused)
+    {
+        float hoverTarget = hovered ? 1f : 0f;
+        float focusTarget = focused ? 1f : 0f;
+        if (!_interactionInitialized)
+        {
+            _interactionInitialized = true;
+            _hoverCurrent = _hoverStart = _hoverTarget = hoverTarget;
+            _focusCurrent = _focusStart = _focusTarget = focusTarget;
+            return;
+        }
+
+        if (_hoverTarget == hoverTarget && _focusTarget == focusTarget)
+        {
+            return;
+        }
+
+        _hoverTarget = hoverTarget;
+        _focusTarget = focusTarget;
         RestartAnimation();
     }
 
@@ -47,28 +78,55 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
         Rectangle bounds,
         FlatStyle flatStyle,
         bool enabled,
+        bool hovered,
+        bool focused,
         Color? customOnColor,
         Color? customBorderColor)
     {
+        SetInteractionState(hovered, focused);
+
         bool isDark = Application.IsDarkModeEnabled;
-        Color onColor = customOnColor
-            ?? (isDark ? Color.FromArgb(0x4C, 0xC2, 0xFF) : SystemColors.Highlight);
+        bool highContrast = SystemInformation.HighContrast;
+        Color onColor = highContrast
+            ? SystemColors.Highlight
+            : customOnColor ?? WindowsAccentColor;
 
-        Color borderColor = customBorderColor
-            ?? (isDark ? Color.FromArgb(0x9B, 0x9B, 0x9B) : SystemColors.ControlDark);
+        Color borderColor = highContrast
+            ? SystemColors.WindowText
+            : customBorderColor
+                ?? (isDark
+                    ? Color.FromArgb(0x9B, 0x9B, 0x9B)
+                    : SystemColors.ControlDark);
 
-        Color backColor = isDark ? Color.FromArgb(0x2D, 0x2D, 0x2D) : Color.White;
+        Color backColor = highContrast
+            ? SystemColors.Window
+            : isDark
+                ? Color.FromArgb(0x2D, 0x2D, 0x2D)
+                : Color.White;
 
         if (!enabled)
         {
-            onColor = isDark ? Color.FromArgb(0x55, 0x55, 0x55) : Color.FromArgb(0xC0, 0xC0, 0xC0);
-            borderColor = isDark ? Color.FromArgb(0x45, 0x45, 0x45) : Color.FromArgb(0xD0, 0xD0, 0xD0);
+            onColor = highContrast
+                ? SystemColors.GrayText
+                : isDark
+                    ? Color.FromArgb(0x55, 0x55, 0x55)
+                    : Color.FromArgb(0xC0, 0xC0, 0xC0);
+            borderColor = highContrast
+                ? SystemColors.GrayText
+                : isDark
+                    ? Color.FromArgb(0x45, 0x45, 0x45)
+                    : Color.FromArgb(0xD0, 0xD0, 0xD0);
         }
 
-        float dotScale = Lerp(
-            _fromChecked ? 1f : 0f,
-            _toChecked ? 1f : 0f,
-            EaseOut(AnimationProgress));
+        float focus = enabled && !highContrast ? _focusCurrent : 0f;
+        onColor = ApplyInteractionShade(onColor, focus);
+        borderColor = ApplyInteractionShade(borderColor, focus);
+        backColor = ApplyInteractionShade(backColor, focus);
+
+        float normalOuterScale = 1f / HoverGrowth;
+        float outerScale = Lerp(normalOuterScale, 1f, enabled ? _hoverCurrent : 0f);
+        RectangleF outerBounds = ScaleFromCenter(bounds, outerScale);
+        RectangleF normalBounds = ScaleFromCenter(bounds, normalOuterScale);
 
         GraphicsState? saved = graphics.Save();
         try
@@ -77,7 +135,7 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
             using (var brush = backColor.GetCachedSolidBrushScope())
             {
-                graphics.FillEllipse(brush, bounds);
+                graphics.FillEllipse(brush, outerBounds);
             }
 
             int borderThickness = Math.Max(
@@ -86,20 +144,34 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
             using (var pen = new Pen(borderColor, borderThickness))
             {
-                graphics.DrawEllipse(pen, bounds);
+                graphics.DrawEllipse(pen, outerBounds);
             }
 
-            if (dotScale > 0.001f)
+            if (_dotScaleCurrent > 0.001f)
             {
-                float dotDiameter = bounds.Width * 0.5f * dotScale;
+                float dotDiameter = normalBounds.Width * 0.5f * _dotScaleCurrent;
                 RectangleF dotRectangle = new(
-                    bounds.X + ((bounds.Width - dotDiameter) / 2f),
-                    bounds.Y + ((bounds.Height - dotDiameter) / 2f),
+                    normalBounds.X + ((normalBounds.Width - dotDiameter) / 2f),
+                    normalBounds.Y + ((normalBounds.Height - dotDiameter) / 2f),
                     dotDiameter,
                     dotDiameter);
 
-                using var dotBrush = onColor.GetCachedSolidBrushScope();
-                graphics.FillEllipse(dotBrush, dotRectangle);
+                Color dotOutlineColor = highContrast
+                    ? SystemColors.HighlightText
+                    : PopupButtonColorMath.GetReadableForeColor(onColor, backColor);
+                int outlineThickness = Math.Max(1, Control.LogicalToDeviceUnits(1));
+                using var outlineBrush = dotOutlineColor.GetCachedSolidBrushScope();
+                graphics.FillEllipse(outlineBrush, dotRectangle);
+
+                RectangleF accentRectangle = RectangleF.Inflate(
+                    dotRectangle,
+                    -outlineThickness,
+                    -outlineThickness);
+                if (accentRectangle.Width > 0 && accentRectangle.Height > 0)
+                {
+                    using var dotBrush = onColor.GetCachedSolidBrushScope();
+                    graphics.FillEllipse(dotBrush, accentRectangle);
+                }
             }
         }
         finally
@@ -114,6 +186,10 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
     public override void AnimationProc(float animationProgress)
     {
         base.AnimationProc(animationProgress);
+        float easedProgress = EaseOut(animationProgress);
+        _dotScaleCurrent = Lerp(_dotScaleStart, _dotScaleTarget, easedProgress);
+        _focusCurrent = Lerp(_focusStart, _focusTarget, easedProgress);
+        _hoverCurrent = Lerp(_hoverStart, _hoverTarget, easedProgress);
         Invalidate();
     }
 
@@ -123,6 +199,9 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
     protected override (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted()
     {
+        _dotScaleStart = _dotScaleCurrent;
+        _focusStart = _focusCurrent;
+        _hoverStart = _hoverCurrent;
         AnimationProgress = 0;
         return (AnimationDuration, AnimationCycle.Once);
     }
@@ -134,7 +213,9 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
     protected override void OnAnimationEnded()
     {
         StopAnimation();
-        _fromChecked = _toChecked;
+        _dotScaleCurrent = _dotScaleTarget;
+        _focusCurrent = _focusTarget;
+        _hoverCurrent = _hoverTarget;
         AnimationProgress = 1;
         Invalidate();
     }
@@ -144,4 +225,16 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
     private static float Lerp(float from, float to, float progress)
         => from + ((to - from) * Math.Clamp(progress, 0f, 1f));
+
+    private static RectangleF ScaleFromCenter(Rectangle bounds, float scale)
+    {
+        float width = bounds.Width * scale;
+        float height = bounds.Height * scale;
+
+        return new(
+            bounds.X + ((bounds.Width - width) / 2f),
+            bounds.Y + ((bounds.Height - height) / 2f),
+            width,
+            height);
+    }
 }

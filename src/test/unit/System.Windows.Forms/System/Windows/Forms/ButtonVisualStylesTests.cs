@@ -223,6 +223,25 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void FlatButtonAppearance_ModernStateColors_PopupReturnsOnlyExplicitValues()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(Color.Empty, button.FlatAppearance.MouseDownBackColor);
+        Assert.Equal(Color.Empty, button.FlatAppearance.MouseOverBackColor);
+
+        button.FlatAppearance.MouseDownBackColor = Color.Red;
+        button.FlatAppearance.MouseOverBackColor = Color.Blue;
+
+        Assert.Equal(Color.Red, button.FlatAppearance.MouseDownBackColor);
+        Assert.Equal(Color.Blue, button.FlatAppearance.MouseOverBackColor);
+    }
+
+    [WinFormsFact]
     public void FlatButtonAppearance_ModernStateColors_ExplicitValuesWin()
     {
         using Button button = new() { VisualStylesMode = VisualStylesMode.Net11 };
@@ -579,6 +598,47 @@ public class ButtonVisualStylesTests
         Assert.True(contentBounds.Contains(actual.TextBounds));
     }
 
+    [WinFormsFact]
+    public void Button_StandardPreferredSize_UsesFocusedContentConstraint()
+    {
+        using Button button = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            FlatStyle = FlatStyle.Standard,
+            Padding = new Padding(3, 2, 4, 3),
+            Text = "Modern Standard button with a complete caption",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Size preferredSize = button.GetPreferredSize(Size.Empty);
+        button.Size = preferredSize;
+        Rectangle unfocusedContent = GetModernStandardContentBounds(button, focused: false);
+        Rectangle focusedContent = GetModernStandardContentBounds(button, focused: true);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        ButtonInternal.ButtonBaseAdapter.LayoutData focusedLayout = adapter.GetLayoutData(focusedContent);
+        ButtonInternal.ButtonBaseAdapter.LayoutData unconstrained = adapter.GetLayoutData(
+            new Rectangle(0, 0, 2_000, 500));
+        ModernButtonDarkModeRenderer renderer = new()
+        {
+            DeviceDpi = button.DeviceDpi,
+            FlatAppearance = button.FlatAppearance
+        };
+
+        Assert.True(focusedContent.Width < unfocusedContent.Width);
+        Assert.True(focusedContent.Height < unfocusedContent.Height);
+        Assert.Equal(
+            preferredSize.Width - renderer.GetPreferredSizePadding().Horizontal,
+            focusedContent.Width);
+        Assert.Equal(
+            preferredSize.Height - renderer.GetPreferredSizePadding().Vertical,
+            focusedContent.Height);
+        Assert.True(focusedLayout.TextBounds.Width >= unconstrained.TextBounds.Width);
+        Assert.True(focusedLayout.TextBounds.Height >= unconstrained.TextBounds.Height);
+        Assert.True(focusedContent.Contains(focusedLayout.TextBounds));
+        Assert.Equal(preferredSize, button.GetPreferredSize(Size.Empty));
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(ModernButtonTypeAndStyleData))]
     public void ButtonBase_ModernOversizedImage_DoesNotPaintOverChrome(
@@ -875,6 +935,36 @@ public class ButtonVisualStylesTests
             isDefault: false,
             focused: false,
             backColor: backColor);
+    }
+
+    private static Rectangle GetModernStandardContentBounds(Button button, bool focused)
+    {
+        ModernButtonDarkModeRenderer renderer = new()
+        {
+            DeviceDpi = button.DeviceDpi,
+            FlatAppearance = button.FlatAppearance
+        };
+        using Bitmap bitmap = new(button.Width, button.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Rectangle contentBounds = Rectangle.Empty;
+        Color backColor = renderer.GetBackgroundColor(
+            VisualStyles.PushButtonState.Normal,
+            button.IsDefault);
+
+        renderer.RenderButton(
+            graphics,
+            button,
+            button.ClientRectangle,
+            button.FlatStyle,
+            VisualStyles.PushButtonState.Normal,
+            button.IsDefault,
+            focused,
+            showFocusCues: true,
+            parentBackgroundColor: button.Parent?.BackColor ?? button.BackColor,
+            backColor: backColor,
+            paintContent: bounds => contentBounds = bounds);
+
+        return contentBounds;
     }
 
     private static Bitmap CreateSolidBitmap(Size size, Color color)

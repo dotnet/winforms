@@ -34,9 +34,13 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
         Size preferredSize = control.GetPreferredSizeCore(Size.Empty);
+        int expectedHeight = Math.Max(
+            control.LogicalToDeviceUnits(13),
+            (int)(font.Height * 0.9f));
 
-        Assert.Equal(font.Height, metrics.SwitchHeight);
-        Assert.Equal(2 * font.Height, metrics.SwitchWidth);
+        Assert.Equal(expectedHeight, metrics.SwitchHeight);
+        Assert.Equal(2 * expectedHeight, metrics.SwitchWidth);
+        Assert.True(metrics.HoverThumbDiameter > metrics.ThumbDiameter);
         Assert.Equal(metrics.GetPreferredSize(control), preferredSize);
     }
 
@@ -206,6 +210,11 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [InlineData(true, true)]
     public void RadioButton_ModernGlyph_RendersAccentWhenChecked(bool isChecked, bool expectedAccent)
     {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
         using Panel parent = new() { BackColor = Color.White };
         using RadioButton control = new()
         {
@@ -225,6 +234,81 @@ public class RadioButtonTests : AbstractButtonBaseTests
             isChecked ? CheckState.Checked : CheckState.Unchecked);
 
         Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_DefaultCheckedColorUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.NotifyCheckedChanged(newChecked: true);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: null,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Application.GetWindowsAccentColor()) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_BrightAccentUsesContrastingDotOutline()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.NotifyCheckedChanged(newChecked: true);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Color brightAccent = Color.FromArgb(0xFF, 0xB9, 0x00);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: brightAccent,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Color.Black) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_HoverAndFocusUseIndependentAnimationChannels()
+    {
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.SetInteractionState(hovered: false, focused: false);
+
+        renderer.SetInteractionState(hovered: true, focused: false);
+        renderer.EndAnimation();
+
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._hoverCurrent);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._focusCurrent);
+
+        renderer.SetInteractionState(hovered: false, focused: true);
+
+        Assert.True(renderer.IsRunning);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._hoverTarget);
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._focusTarget);
     }
 
     [WinFormsFact]
