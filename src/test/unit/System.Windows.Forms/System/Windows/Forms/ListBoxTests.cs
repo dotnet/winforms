@@ -1849,11 +1849,11 @@ public class ListBoxTests
     public void ListBox_ScaleControl_OwnerDrawFixed_ScalesItemHeight()
     {
         // #6382: an OwnerDrawFixed item height must scale with the control during autoscaling.
-        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 25 };
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 20 };
 
         control.ScaleControl(new SizeF(1.5f, 1.5f), BoundsSpecified.All);
 
-        Assert.Equal(38, control.ItemHeight); // 25 * 1.5 = 37.5 -> 38
+        Assert.Equal(30, control.ItemHeight);
     }
 
     [WinFormsFact]
@@ -1867,6 +1867,30 @@ public class ListBoxTests
 
         Assert.Equal(40, control.ItemHeight);
         Assert.Equal(40, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETITEMHEIGHT));
+    }
+
+    [WinFormsTheory]
+    [InlineData(25, 38)] // 37.5 rounds up
+    [InlineData(15, 23)] // 22.5 rounds up, not down to 22 as banker's rounding would
+    public void ListBox_ScaleControl_OwnerDrawFixed_RoundsMidpointsAwayFromZero(int itemHeight, int expected)
+    {
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = itemHeight };
+
+        control.ScaleControl(new SizeF(1.5f, 1.5f), BoundsSpecified.All);
+
+        Assert.Equal(expected, control.ItemHeight);
+    }
+
+    [WinFormsFact]
+    public void ListBox_ScaleControl_OwnerDrawFixed_HeightExcluded_DoesNotScaleItemHeight()
+    {
+        // A scaling pass that excludes the height axis must leave the item height alone, otherwise the
+        // included/excluded pass pair in ContainerControl.PerformAutoScale would apply the factor twice.
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 25 };
+
+        control.ScaleControl(new SizeF(1.5f, 1.5f), BoundsSpecified.Width);
+
+        Assert.Equal(25, control.ItemHeight);
     }
 
     [WinFormsFact]

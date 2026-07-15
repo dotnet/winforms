@@ -2073,9 +2073,11 @@ public partial class ListBox : ListControl
 
         // In OwnerDrawFixed the native list box doesn't rescale the fixed item height when the control
         // autoscales, so scale it here (clamped to [1, 255]; height-axis guard avoids a double-apply). #6382
+        // Round away from zero: banker's rounding would round .5 midpoints down (15 * 1.5 -> 22), which
+        // re-introduces the cramped rows this fixes.
         if (_drawMode == DrawMode.OwnerDrawFixed && factor.Height != 1F && (specified & BoundsSpecified.Height) != 0)
         {
-            ItemHeight = Math.Clamp((int)Math.Round(_itemHeight * factor.Height), 1, 255);
+            ItemHeight = Math.Clamp((int)Math.Round(_itemHeight * factor.Height, MidpointRounding.AwayFromZero), 1, 255);
         }
 
         base.ScaleControl(factor, specified);
