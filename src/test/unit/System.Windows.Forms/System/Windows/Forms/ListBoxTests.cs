@@ -1845,6 +1845,52 @@ public class ListBoxTests
         Assert.False(property.ShouldSerializeValue(control));
     }
 
+    [WinFormsFact]
+    public void ListBox_ScaleControl_OwnerDrawFixed_ScalesItemHeight()
+    {
+        // #6382: an OwnerDrawFixed item height must scale with the control during autoscaling.
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 25 };
+
+        control.ScaleControl(new SizeF(1.5f, 1.5f), BoundsSpecified.All);
+
+        Assert.Equal(38, control.ItemHeight); // 25 * 1.5 = 37.5 -> 38
+    }
+
+    [WinFormsFact]
+    public void ListBox_ScaleControl_OwnerDrawFixed_WithHandle_UpdatesNativeItemHeight()
+    {
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 20 };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal(20, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETITEMHEIGHT));
+
+        control.ScaleControl(new SizeF(2f, 2f), BoundsSpecified.All);
+
+        Assert.Equal(40, control.ItemHeight);
+        Assert.Equal(40, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETITEMHEIGHT));
+    }
+
+    [WinFormsFact]
+    public void ListBox_ScaleControl_OwnerDrawFixed_ClampsItemHeightToMax()
+    {
+        // Scaling must not throw when the result exceeds the 255 maximum; it clamps instead.
+        using SubListBox control = new() { DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 200 };
+
+        control.ScaleControl(new SizeF(2f, 2f), BoundsSpecified.All);
+
+        Assert.Equal(255, control.ItemHeight);
+    }
+
+    [WinFormsFact]
+    public void ListBox_ScaleControl_Normal_DoesNotChangeItemHeight()
+    {
+        using SubListBox control = new() { DrawMode = DrawMode.Normal };
+        int before = control.ItemHeight;
+
+        control.ScaleControl(new SizeF(1.5f, 1.5f), BoundsSpecified.All);
+
+        Assert.Equal(before, control.ItemHeight);
+    }
+
     public static IEnumerable<object[]> Items_CustomCreateItemCollection_TestData()
     {
         yield return new object[] { null };

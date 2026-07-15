@@ -2071,6 +2071,13 @@ public partial class ListBox : ListControl
             UpdateFontCache();
         }
 
+        // In OwnerDrawFixed the native list box doesn't rescale the fixed item height when the control
+        // autoscales, so scale it here (clamped to [1, 255]; height-axis guard avoids a double-apply). #6382
+        if (_drawMode == DrawMode.OwnerDrawFixed && factor.Height != 1F && (specified & BoundsSpecified.Height) != 0)
+        {
+            ItemHeight = Math.Clamp((int)Math.Round(_itemHeight * factor.Height), 1, 255);
+        }
+
         base.ScaleControl(factor, specified);
     }
 
