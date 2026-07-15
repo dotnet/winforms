@@ -9246,6 +9246,51 @@ public class ButtonBaseTests : AbstractButtonBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsFact]
+    public static void ButtonBase_OnSystemColorsChanged_StandardFlatStyle_RestoresOwnerDraw()
+    {
+        using SubButtonBase control = new()
+        {
+            FlatStyle = FlatStyle.Standard
+        };
+
+        control.SetUserPaintAndUserMouseStyles(false);
+
+        Assert.False(control.GetUserPaintStyle());
+        Assert.False(control.GetUserMouseStyle());
+
+        control.OnSystemColorsChangedEntry(EventArgs.Empty);
+
+        Assert.True(control.GetUserPaintStyle());
+        Assert.True(control.GetUserMouseStyle());
+    }
+
+    [WinFormsFact]
+    public static void ButtonBase_OnSystemColorsChanged_SystemFlatStyle_ClassicMode_ClearsOwnerDraw()
+    {
+        RemoteExecutor.Invoke(static () =>
+        {
+#pragma warning disable WFO5001
+            Application.SetColorMode(SystemColorMode.Classic);
+#pragma warning restore WFO5001
+
+            using SubButtonBase control = new()
+            {
+                FlatStyle = FlatStyle.System
+            };
+
+            control.SetUserPaintAndUserMouseStyles(true);
+
+            Assert.True(control.GetUserPaintStyle());
+            Assert.True(control.GetUserMouseStyle());
+
+            control.OnSystemColorsChangedEntry(EventArgs.Empty);
+
+            Assert.False(control.GetUserPaintStyle());
+            Assert.False(control.GetUserMouseStyle());
+        }).Dispose();
+    }
+
     private class SubButton : Button
     {
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
@@ -9377,6 +9422,17 @@ public class ButtonBaseTests : AbstractButtonBaseTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+        
+        public void OnSystemColorsChangedEntry(EventArgs e) => OnSystemColorsChanged(e);
+
+        public bool GetUserPaintStyle() => GetStyle(ControlStyles.UserPaint);
+
+        public bool GetUserMouseStyle() => GetStyle(ControlStyles.UserMouse);
+
+        public void SetUserPaintAndUserMouseStyles(bool value)
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.UserMouse, value);
+        }
     }
 
     protected override ButtonBase CreateButton() => new Button();
