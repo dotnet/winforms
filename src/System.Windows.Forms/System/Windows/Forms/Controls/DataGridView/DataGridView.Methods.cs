@@ -21929,7 +21929,7 @@ public partial class DataGridView
 
     protected override bool ProcessKeyPreview(ref Message m)
     {
-        if (m.MsgInternal == PInvokeCore.WM_KEYDOWN || m.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
+        if (m.MsgInternal == PInvokeCore.WM_KEYDOWN || m.MsgInternal == PInvokeCore.WM_SYSKEYDOWN || m.MsgInternal == PInvokeCore.WM_CHAR)
         {
             if (m.HWND != HWND && (EditingControl is null || m.HWND != EditingControl.HWND))
             {
