@@ -48,8 +48,13 @@ jobs:
   - checkout: self
     clean: true
 
-  - task: NuGetAuthenticate@1
-    displayName: Authenticate to internal feeds (build identity)
+  - task: PowerShell@2
+    displayName: Setup Private Feeds Credentials
+    inputs:
+      filePath: $(Build.SourcesDirectory)/eng/common/SetupNugetSources.ps1
+      arguments: -ConfigFile $(Build.SourcesDirectory)/NuGet.config -Password $Env:Token
+    env:
+      Token: $(System.AccessToken)
 
   - task: MicroBuildSigningPlugin@4
     displayName: Install MicroBuild plugin for Signing
