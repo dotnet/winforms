@@ -279,6 +279,92 @@ public partial class TextBoxBaseTests
             control.GetScrollBarPaddingCore().Right);
     }
 
+    [WinFormsTheory]
+    [InlineData(RichTextBoxScrollBars.Both, false, 0)]
+    [InlineData(RichTextBoxScrollBars.Both, true, 2)]
+    [InlineData(RichTextBoxScrollBars.ForcedBoth, false, 2)]
+    public void RichTextBox_ModernGeometry_DetectsOnlyVisibleNativeScrollBars(
+        RichTextBoxScrollBars scrollBars,
+        bool overflow,
+        int expectedScrollBarCount)
+    {
+        using RichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            ScrollBars = scrollBars,
+            WordWrap = false,
+            Size = new Size(160, 80),
+            Text = overflow
+                ? string.Join("\r\n", Enumerable.Repeat(new string('W', 200), 20))
+                : "Short"
+        };
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        Rectangle[] scrollBarBounds = control.TestAccessor.Dynamic.GetVisibleScrollBarRectangles(bounds);
+
+        Assert.Equal(expectedScrollBarCount, scrollBarBounds.Length);
+        Assert.All(
+            scrollBarBounds,
+            scrollBarRectangle =>
+            {
+                Assert.Equal(scrollBarRectangle, Rectangle.Intersect(bounds, scrollBarRectangle));
+                Assert.True(scrollBarRectangle.Width > 0);
+                Assert.True(scrollBarRectangle.Height > 0);
+            });
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernGeometry_DetectsVisibleNativeScrollBars()
+    {
+        using TextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.Both,
+            WordWrap = false,
+            Size = new Size(160, 80),
+            Text = string.Join("\r\n", Enumerable.Repeat(new string('W', 200), 20))
+        };
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        Rectangle[] scrollBarBounds = control.TestAccessor.Dynamic.GetVisibleScrollBarRectangles(bounds);
+
+        Assert.Equal(2, scrollBarBounds.Length);
+    }
+
+    [Fact]
+    public void TextBoxBase_GetNonClientPaintBands_ExcludesAdditionalProtectedBounds()
+    {
+        Rectangle bounds = new(0, 0, 20, 15);
+        Rectangle clientBounds = new(3, 2, 10, 9);
+        Rectangle[] scrollBarBounds =
+        [
+            new Rectangle(16, 2, 4, 9),
+            new Rectangle(3, 12, 13, 3)
+        ];
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+
+        Rectangle[] bands = accessor.GetNonClientPaintBands(
+            bounds,
+            clientBounds,
+            scrollBarBounds);
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                Point point = new(x, y);
+                bool isProtected = clientBounds.Contains(point)
+                    || scrollBarBounds.Any(scrollBarBoundsItem => scrollBarBoundsItem.Contains(point));
+                int containingBands = bands.Count(band => band.Contains(point));
+
+                Assert.Equal(isProtected ? 0 : 1, containingBands);
+            }
+        }
+    }
+
     public static IEnumerable<object[]> NonClientPaintBands_TestData()
     {
         yield return

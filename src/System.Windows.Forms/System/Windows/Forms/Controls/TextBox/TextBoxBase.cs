@@ -59,6 +59,9 @@ public abstract partial class TextBoxBase : Control
     private const int VisualStylesNoBorderPadding = 1;
     internal const int VisualStylesInternalChromeInset = 2;
     private const int VisualStylesCornerRadius = 15;
+    private const OBJECT_IDENTIFIER HorizontalScrollBarObjectId = (OBJECT_IDENTIFIER)(-6);
+    private const OBJECT_IDENTIFIER VerticalScrollBarObjectId = (OBJECT_IDENTIFIER)(-5);
+    private const uint StateSystemInvisible = 0x00008000;
     private const int BorderThickness = 1;
 
     /// <summary>
@@ -2481,7 +2484,7 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     ///  Handles <c>WM_NCPAINT</c> for modern Visual Styles by painting the custom chrome into the
     ///  window DC. The <c>wParam</c> clip region is intentionally ignored for our own paint and the
-    ///  whole frame is repainted to avoid the offscreen-restore "dirty corners" artifact.
+    ///  custom frame is repainted to avoid the offscreen-restore "dirty corners" artifact.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -2490,6 +2493,10 @@ public abstract partial class TextBoxBase : Control
     ///   the mouse hovers over the frame. To prevent that, the default handler is invoked with an update
     ///   region that spans the whole window but excludes the live client rectangle, so the border and
     ///   scrollbars still paint while the client area is left untouched.
+    ///  </para>
+    ///  <para>
+    ///   The custom chrome blit also excludes native scrollbars that are currently visible. This keeps
+    ///   the native scrollbar pixels painted by the default handler from being covered by the frame.
     ///  </para>
     /// </remarks>
     private void WmNcPaint(ref Message m)
@@ -2617,9 +2624,10 @@ public abstract partial class TextBoxBase : Control
             width: Bounds.Width,
             height: Bounds.Height);
 
-        // The native client rectangle is the only protected area. It includes the border, internal
-        // chrome inset, user Padding, and scrollbar reservation exactly as the native window reports it.
+        // Protect the native client and any currently visible native scrollbars. Scrollbars are outside
+        // the client rectangle and have already been painted by the default WM_NCPAINT handler.
         Rectangle clientBounds = Rectangle.Intersect(bounds, GetNativeClientRectangle());
+        Rectangle[] scrollBarBounds = GetVisibleScrollBarRectangles(bounds);
 
         Rectangle deflatedBounds = bounds;
 
@@ -2755,7 +2763,10 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
-        Rectangle[] nonClientBands = GetNonClientPaintBands(bufferBounds, clientBounds);
+        Rectangle[] nonClientBands = GetNonClientPaintBands(
+            bufferBounds,
+            clientBounds,
+            scrollBarBounds);
         IntPtr bufferHdc = offscreenGraphics.GetHdc();
 
         try
@@ -2784,6 +2795,12 @@ public abstract partial class TextBoxBase : Control
     }
 
     private static Rectangle[] GetNonClientPaintBands(Rectangle bounds, Rectangle clientBounds)
+        => GetNonClientPaintBands(bounds, clientBounds, []);
+
+    private static Rectangle[] GetNonClientPaintBands(
+        Rectangle bounds,
+        Rectangle clientBounds,
+        Rectangle[] additionalProtectedBounds)
     {
         if (bounds.Width <= 0 || bounds.Height <= 0)
         {
@@ -2792,7 +2809,7 @@ public abstract partial class TextBoxBase : Control
 
         Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
 
-        return protectedBounds.Width <= 0 || protectedBounds.Height <= 0
+        Rectangle[] initialBands = protectedBounds.Width <= 0 || protectedBounds.Height <= 0
             ? [bounds, Rectangle.Empty, Rectangle.Empty, Rectangle.Empty]
             : [
                 Rectangle.FromLTRB(bounds.Left, bounds.Top, bounds.Right, protectedBounds.Top),
@@ -2800,6 +2817,91 @@ public abstract partial class TextBoxBase : Control
                 Rectangle.FromLTRB(bounds.Left, protectedBounds.Top, protectedBounds.Left, protectedBounds.Bottom),
                 Rectangle.FromLTRB(protectedBounds.Right, protectedBounds.Top, bounds.Right, protectedBounds.Bottom)
               ];
+
+        if (additionalProtectedBounds.Length == 0)
+        {
+            return initialBands;
+        }
+
+        List<Rectangle> paintBands = [.. initialBands];
+
+        foreach (Rectangle additionalProtectedBoundsItem in additionalProtectedBounds)
+        {
+            Rectangle clippedProtectedBounds = Rectangle.Intersect(bounds, additionalProtectedBoundsItem);
+
+            if (clippedProtectedBounds.Width <= 0 || clippedProtectedBounds.Height <= 0)
+            {
+                continue;
+            }
+
+            for (int i = paintBands.Count - 1; i >= 0; i--)
+            {
+                Rectangle band = paintBands[i];
+                Rectangle intersection = Rectangle.Intersect(band, clippedProtectedBounds);
+
+                if (intersection.Width <= 0 || intersection.Height <= 0)
+                {
+                    continue;
+                }
+
+                paintBands.RemoveAt(i);
+                AddPaintBand(Rectangle.FromLTRB(band.Left, band.Top, band.Right, intersection.Top));
+                AddPaintBand(Rectangle.FromLTRB(band.Left, intersection.Bottom, band.Right, band.Bottom));
+                AddPaintBand(Rectangle.FromLTRB(band.Left, intersection.Top, intersection.Left, intersection.Bottom));
+                AddPaintBand(Rectangle.FromLTRB(intersection.Right, intersection.Top, band.Right, intersection.Bottom));
+            }
+        }
+
+        return [.. paintBands];
+
+        void AddPaintBand(Rectangle band)
+        {
+            if (band.Width > 0 && band.Height > 0)
+            {
+                paintBands.Add(band);
+            }
+        }
+    }
+
+    private unsafe Rectangle[] GetVisibleScrollBarRectangles(Rectangle bounds)
+    {
+        if (!IsHandleCreated
+            || !PInvokeCore.GetWindowRect(this, out RECT windowRect))
+        {
+            return [];
+        }
+
+        List<Rectangle> scrollBarBounds = [];
+        AddVisibleScrollBar(HorizontalScrollBarObjectId);
+        AddVisibleScrollBar(VerticalScrollBarObjectId);
+
+        return [.. scrollBarBounds];
+
+        void AddVisibleScrollBar(OBJECT_IDENTIFIER objectId)
+        {
+            SCROLLBARINFO scrollBarInfo = new()
+            {
+                cbSize = (uint)sizeof(SCROLLBARINFO)
+            };
+
+            if (!PInvoke.GetScrollBarInfo((HWND)Handle, objectId, ref scrollBarInfo)
+                || (scrollBarInfo.rgstate[0] & StateSystemInvisible) != 0)
+            {
+                return;
+            }
+
+            Rectangle scrollBarRectangle = Rectangle.FromLTRB(
+                scrollBarInfo.rcScrollBar.left - windowRect.left,
+                scrollBarInfo.rcScrollBar.top - windowRect.top,
+                scrollBarInfo.rcScrollBar.right - windowRect.left,
+                scrollBarInfo.rcScrollBar.bottom - windowRect.top);
+            scrollBarRectangle.Intersect(bounds);
+
+            if (scrollBarRectangle.Width > 0 && scrollBarRectangle.Height > 0)
+            {
+                scrollBarBounds.Add(scrollBarRectangle);
+            }
+        }
     }
 
     private Rectangle GetNativeClientRectangle()
