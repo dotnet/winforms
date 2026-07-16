@@ -1041,6 +1041,9 @@
   <data name="ControlMinimumSizeDescr" xml:space="preserve">
     <value>Specifies the minimum size of the control.</value>
   </data>
+  <data name="ControlMutationExtensionsLayoutSuspensionRequiresControl" xml:space="preserve">
+    <value>Layout suspension requires a target derived from Control.</value>
+  </data>
   <data name="ControlNotChild" xml:space="preserve">
     <value>'child' is not a child control of this parent.</value>
   </data>

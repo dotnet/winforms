@@ -18,7 +18,7 @@ public partial class ComboBox
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdate();
+            EndUpdate(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 #endif

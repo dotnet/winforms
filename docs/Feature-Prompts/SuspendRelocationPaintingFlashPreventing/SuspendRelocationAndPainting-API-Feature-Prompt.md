@@ -2,75 +2,75 @@
 
 ## Prerequisite
 
-This prompt consumes the **approved API suggestion** produced by Prompt 1 (and refined
-through API review). Before implementing, read that proposal in full and treat its final
-`API Proposal` section as the contract. Where the approved proposal and this prompt
-disagree, the **approved proposal wins** — note any such conflict explicitly rather than
-silently picking one.
-
-## Your task
-
-Implement the three sub-features in **dotnet/winforms**, production quality, against the
-approved API surface. You have engineering latitude on *internals* — the public surface
-is fixed by the proposal, the implementation is yours to do well.
+Read the current upstream API suggestion before implementation. Treat its latest
+`API Proposal` section as the public contract and report any conflict instead of silently
+choosing a different shape.
 
 ## Scope
 
-### A — `ISupportSuspendPainting` / `ISupportSuspendRelocation`
-- The two interfaces, `System.Windows.Forms` namespace.
-- `Control` implementation: refcounted painting suspension; lazy refcount state via the
-  existing property-store slot pattern (follow the established `Control` precedent — do
-  not add an eager field). Layout-suspension methods forward to existing
-  `SuspendLayout` / `ResumeLayout`.
-- Overrides on `ListView`, `ListBox`, `ComboBox`, `TreeView`, `RichTextBox` forwarding
-  the painting methods to their existing `BeginUpdate` / `EndUpdate`. The existing public
-  `BeginUpdate` / `EndUpdate` signatures and behavior MUST NOT change.
-- The user-facing scope type(s) and extension methods, exactly as the approved proposal
-  specifies them (`ref struct` vs `class` per the proposal's final decision).
-- Unbalanced `End*` must match `ResumeLayout` precedent (the proposal will have settled
-  throw-vs-no-op; follow it).
+### A — painting suspension with optional layout traversal
 
-### B — `DeferLocationChange` + `DeferWindowPos` batching
-- The scope and its overloads per the approved proposal.
-- Win32 batching via `BeginDeferWindowPos` / `DeferWindowPos` / `EndDeferWindowPos`.
-  Capture and thread the returned `HDWP` correctly on every `DeferWindowPos` call.
-- `Dispose` must handle a `NULL` HDWP coherently and must not leak on exception unwind.
-- Compose paint suppression from sub-feature A; do not duplicate `WM_SETREDRAW` logic.
+- Implement `ISupportSuspendPainting` on `Control` with ref-counted
+  `BeginSuspendPaintingCore` / `EndSuspendPaintingCore` hooks.
+- Route `ListView`, `ListBox`, `ComboBox`, `TreeView`, and `RichTextBox` through their
+  existing `BeginUpdate` / `EndUpdate` mechanisms.
+- Keep `SuspendPaintingScope` as a sealed, idempotent `IDisposable` class so it can span
+  `await`.
+- Provide these extension methods:
 
-### C — `Application.SetFormAppearanceMode` + `FormAppearanceMode`
-- The enum (`Classic = 0`, `Deferred = 1`) and the `Application` configuration API.
-- `Deferred` is the runtime default when the API is never called; `Classic` restores
-  pre-.NET 11 behavior.
-- DWM cloaking at top-level form handle creation; uncloak per the timing strategy the
-  approved proposal settled on.
-- Must be inert / safe when the OS does not support the relevant DWM attributes.
+  ```csharp
+  public static SuspendPaintingScope SuspendPainting(
+      this ISupportSuspendPainting target);
+
+  public static SuspendPaintingScope SuspendPainting(
+      this ISupportSuspendPainting target,
+      LayoutSuspendTraversal layoutSuspendTraversal);
+
+  public static SuspendPaintingScope SuspendPainting(
+      this ISupportSuspendPainting target,
+      Func<Control, bool> suspendLayoutContainerFilter);
+  ```
+
+- `LayoutSuspendTraversal` has `None`, `TopLevelOnly`, and `Traverse`.
+- Snapshot selected controls before suspension. Suspend root-to-leaf and resume
+  deepest-first.
+- The predicate is evaluated for the target and every descendant. A `false` result skips
+  suspension for that node without pruning its descendants.
+- Suspend selected controls even when they currently have no children.
+- Validate layout-aware calls before beginning painting. A non-`Control` target is invalid.
+- Resume all selected layout scopes before ending painting so the recursive invalidation
+  occurs after layout.
+
+### B — deferred form reveal
+
+- Implement the approved `FormRevealMode`, `Form.FormRevealMode`, and
+  `Application` configuration APIs.
+- Preserve classic behavior when deferred reveal is not active.
+- Cloak eligible top-level form handles and uncloak according to the timing strategy in the
+  proposal.
+- Keep unsupported DWM and window configurations inert and safe.
 
 ## Engineering requirements
 
-- Target the C# language version and runtime of the current dotnet/winforms `main`.
-- NRTs enabled; assume the repo's global usings.
-- Match dotnet/winforms code style, P/Invoke conventions (CsWin32-generated `PInvoke`
-  surface), and the existing interop patterns — do not hand-roll `DllImport` if a
-  generated entry point exists.
-- All public API gets XML docs. For `FormAppearanceMode.Deferred`, the flash-elimination
-  benefit goes in `<summary>`; the "background only, deep child trees may still update"
-  caveat goes in `<remarks>`.
-- Public API additions require matching entries in the `*.cs` reference-assembly /
-  public-API-baseline files the repo uses.
-- Thread affinity: all of this assumes the UI thread; add debug assertions where the
-  repo already does, and do not let them affect release behavior.
+- Match the current repository language version, nullable annotations, code style, and
+  interop conventions.
+- Add XML documentation for every public or protected API.
+- Update `PublicAPI.Unshipped.txt`.
+- Keep state lazy where existing `Control` property-store patterns apply.
+- Do not change existing public `BeginUpdate` / `EndUpdate` behavior.
 
 ## Tests
 
-- Unit tests for refcount balance, including nesting and unbalanced-`End`.
-- Tests that `ListView` et al. route through their native path and do not double-suspend.
-- Tests for `DeferLocationChange` correctness including the `NULL`-HDWP fallback and
-  exception-unwind path.
-- For `FormAppearanceMode`, tests for `Classic` (no behavior change) and `Deferred`
-  (cloak/uncloak lifecycle), plus the OS-unsupported fallback.
+- Painting ref-count balance, nesting, idempotent disposal, handle creation, and handle
+  recreation.
+- `None`, `TopLevelOnly`, and `Traverse` layout selection.
+- Predicate selection, continued traversal after a rejected node, and empty containers.
+- Deepest-first layout resume and recursive invalidation after layout.
+- Null, invalid-enum, and non-`Control` target failures without partial suspension.
+- Existing native update paths for the selected built-in controls.
+- Classic/deferred form reveal behavior and unsupported-OS fallback.
 
 ## Deliverable
 
-A pull request (or a clear set of commits) implementing the above, with a PR description
-that summarizes the change, links the API suggestion, and calls out any place the
-implementation revealed a problem with the approved design that review should revisit.
+Provide production code, focused tests, updated API tracking, and an updated API proposal.
+Call out any behavior that the implementation proves unsafe or unnecessarily costly.

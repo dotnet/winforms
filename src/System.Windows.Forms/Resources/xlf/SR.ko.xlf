@@ -1707,6 +1707,11 @@
         <target state="translated">컨트롤의 최소 크기를 지정합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child'는 이 부모의 자식 컨트롤이 아닙니다.</target>
