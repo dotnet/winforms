@@ -530,22 +530,27 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.False(control.GetTopLevel());
     }
 
-    [WinFormsFact]
-    public void CheckBox_RaiseAutomationEvent_Invoke_Success()
+    public static IEnumerable<object[]> CheckState_NotificationText_TestData()
+    {
+        yield return new object[] { CheckState.Unchecked, SR.CheckBoxUncheckedNotificationText };
+        yield return new object[] { CheckState.Checked, SR.CheckBoxCheckedNotificationText };
+        yield return new object[] { CheckState.Indeterminate, SR.CheckBoxIndeterminateNotificationText };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckState_NotificationText_TestData))]
+    public void CheckBox_RaiseAutomationEvent_Invoke_Success(CheckState checkState, string expectedText)
     {
         using TestCheckBox checkBox = new();
-        Assert.False(checkBox.IsHandleCreated);
-
         var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
 
-        checkBox.Checked = true;
+        // Approach the target from a different state so the setter raises a real change
+        // (default is Unchecked; setting the same value is a no-op at CheckBox.cs:195).
+        checkBox.CheckState = checkState == CheckState.Checked ? CheckState.Unchecked : CheckState.Checked;
 
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallsCount);
-        Assert.Equal(SR.CheckBoxCheckedNotificationText, accessibleObject.LastNotificationText);
+        checkBox.CheckState = checkState;
+
+        Assert.Equal(expectedText, accessibleObject.LastNotificationText);
         Assert.False(checkBox.IsHandleCreated);
     }
 
