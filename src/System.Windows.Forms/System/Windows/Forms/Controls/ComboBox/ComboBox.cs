@@ -1855,7 +1855,9 @@ public partial class ComboBox : ListControl
     ///  beginUpdate(), any redrawing caused by operations performed on the
     ///  combo box is deferred until the call to endUpdate().
     /// </summary>
-    public unsafe void EndUpdate()
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private unsafe void EndUpdate(bool invalidate)
     {
         _updateCount--;
         if (_updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -1863,7 +1865,7 @@ public partial class ComboBox : ListControl
             SetAutoComplete(false, false);
         }
 
-        if (EndUpdateInternal())
+        if (EndUpdateInternal(invalidate) && invalidate)
         {
             if (_childEdit is not null && !_childEdit.HWND.IsNull)
             {

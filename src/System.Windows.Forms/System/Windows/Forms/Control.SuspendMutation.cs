@@ -5,8 +5,7 @@ namespace System.Windows.Forms;
 
 #if NET11_0_OR_GREATER
 public unsafe partial class Control :
-    ISupportSuspendPainting,
-    ISupportSuspendRelocation
+    ISupportSuspendPainting
 #else
 public unsafe partial class Control
 #endif
@@ -20,17 +19,11 @@ public unsafe partial class Control
     /// <summary>
     ///  Ends a painting suspension region for this control.
     /// </summary>
-    void ISupportSuspendPainting.EndSuspendPainting() => EndSuspendPaintingCore();
-
-    /// <summary>
-    ///  Begins a relocation suspension region for this control.
-    /// </summary>
-    void ISupportSuspendRelocation.BeginSuspendRelocation() => BeginSuspendRelocationCore();
-
-    /// <summary>
-    ///  Ends a relocation suspension region for this control.
-    /// </summary>
-    void ISupportSuspendRelocation.EndSuspendRelocation() => EndSuspendRelocationCore();
+    void ISupportSuspendPainting.EndSuspendPainting()
+    {
+        EndSuspendPaintingCore();
+        CompleteRecursiveInvalidateAfterSuspendPainting();
+    }
 
     /// <summary>
     ///  When overridden in a derived class, begins a painting suspension region for this control.
@@ -56,26 +49,28 @@ public unsafe partial class Control
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdateInternal(invalidate: true);
+            EndUpdateInternal(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 
-    /// <summary>
-    ///  When overridden in a derived class, begins a relocation suspension region for this control.
-    /// </summary>
-    protected virtual void BeginSuspendRelocationCore() => SuspendLayout();
+    internal bool IsRecursiveInvalidateAfterSuspendPaintingRequested
+        => Properties.ContainsKey(s_recursiveInvalidateAfterSuspendPaintingProperty);
 
-    /// <summary>
-    ///  When overridden in a derived class, ends a relocation suspension region for this control.
-    /// </summary>
-    protected virtual void EndSuspendRelocationCore() => ResumeLayout();
+    internal int SuspendPaintingCount
+        => Properties.GetValueOrDefault(s_suspendPaintingCountProperty, 0);
+
+    internal void RequestRecursiveInvalidateAfterSuspendPainting()
+        => Properties.AddValue(s_recursiveInvalidateAfterSuspendPaintingProperty, true);
 
     internal bool BeginSuspendPaintingScope()
     {
-        int suspendPaintingCount = Properties.GetValueOrDefault(s_suspendPaintingCountProperty, 0);
+        int suspendPaintingCount = Properties.GetValueOrDefault(
+            key: s_suspendPaintingCountProperty,
+            defaultValue: 0);
+
         Properties.AddOrRemoveValue(
-            s_suspendPaintingCountProperty,
-            suspendPaintingCount + 1,
+            key: s_suspendPaintingCountProperty,
+            value: suspendPaintingCount + 1,
             defaultValue: 0);
 
         return true;
@@ -83,7 +78,10 @@ public unsafe partial class Control
 
     internal bool EndSuspendPaintingScope()
     {
-        int suspendPaintingCount = Properties.GetValueOrDefault(s_suspendPaintingCountProperty, 0);
+        int suspendPaintingCount = Properties.GetValueOrDefault(
+            key: s_suspendPaintingCountProperty,
+            defaultValue: 0);
+
         if (suspendPaintingCount == 0)
         {
             return false;
@@ -95,6 +93,37 @@ public unsafe partial class Control
             defaultValue: 0);
 
         return true;
+    }
+
+    internal void ResumeLayoutAfterSuspendPainting()
+    {
+        byte layoutSuspendCount = LayoutSuspendCount;
+
+        try
+        {
+            ResumeLayout();
+        }
+        catch
+        {
+            if (LayoutSuspendCount == layoutSuspendCount && LayoutSuspendCount > 0)
+            {
+                LayoutSuspendCount--;
+            }
+
+            throw;
+        }
+    }
+
+    private void CompleteRecursiveInvalidateAfterSuspendPainting()
+    {
+        if (Properties.GetValueOrDefault(s_suspendPaintingCountProperty, 0) != 0
+            || !Properties.ContainsKey(s_recursiveInvalidateAfterSuspendPaintingProperty))
+        {
+            return;
+        }
+
+        Properties.RemoveValue(s_recursiveInvalidateAfterSuspendPaintingProperty);
+        Invalidate(invalidateChildren: true);
     }
 #endif
 }

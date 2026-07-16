@@ -18,7 +18,7 @@ public partial class ListView
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdate();
+            EndUpdate(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 #endif
