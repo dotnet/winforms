@@ -183,6 +183,7 @@ GetProcessWindowStation
 GETPROPERTYSTOREFLAGS
 GetRgnBox
 GetROP2
+GetScrollBarInfo
 GetScrollInfo
 GetShortPathName
 GetStartupInfo
