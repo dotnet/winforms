@@ -18,7 +18,7 @@ public partial class TreeView
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdate();
+            EndUpdate(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 #endif

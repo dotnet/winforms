@@ -18,7 +18,7 @@ public partial class ListBox
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdate();
+            EndUpdate(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 #endif

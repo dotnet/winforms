@@ -1697,6 +1697,11 @@
         <target state="translated">Denetimin en küçük boyutunu belirtir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'alt' bu üstün alt denetimi değil.</target>
