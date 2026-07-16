@@ -18,7 +18,7 @@ public partial class RichTextBox
     {
         if (EndSuspendPaintingScope())
         {
-            EndUpdateInternal();
+            EndUpdateInternal(invalidate: !IsRecursiveInvalidateAfterSuspendPaintingRequested);
         }
     }
 #endif

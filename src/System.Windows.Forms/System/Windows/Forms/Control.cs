@@ -232,6 +232,7 @@ public unsafe partial class Control :
     private static readonly int s_systemVisualSettingsProperty = PropertyStore.CreateKey();
     private static readonly int s_systemVisualSettingsRefreshPendingProperty = PropertyStore.CreateKey();
 #if NET11_0_OR_GREATER
+    private static readonly int s_recursiveInvalidateAfterSuspendPaintingProperty = PropertyStore.CreateKey();
     private static readonly int s_suspendPaintingCountProperty = PropertyStore.CreateKey();
 #endif
     private static readonly int s_updateCountProperty = PropertyStore.CreateKey();
@@ -5095,9 +5096,11 @@ public unsafe partial class Control :
     internal bool EndUpdateInternal(bool invalidate)
     {
         int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
+
         if (updateCount > 0)
         {
             updateCount--;
+
             Properties.AddOrRemoveValue(
                 s_updateCountProperty,
                 updateCount,
@@ -5106,6 +5109,7 @@ public unsafe partial class Control :
             if (updateCount == 0 && IsHandleCreated)
             {
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
+
                 if (invalidate)
                 {
                     Invalidate();
