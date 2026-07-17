@@ -14,6 +14,60 @@ namespace System.Windows.Forms.Tests;
 public class UpDownBaseTests
 {
     [WinFormsFact]
+    public void UpDownBase_ModernFocusColor_UsesWindowsAccentColor()
+    {
+        using SubUpDownBase control = new();
+
+        Color expected = SystemInformation.HighContrast
+            ? SystemColors.Highlight
+            : Application.GetWindowsAccentColor();
+        Color actual = typeof(UpDownBase).TestAccessor.Dynamic.ModernFocusColor;
+
+        actual.ToArgb().Should().Be(expected.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_FocusTransitionReversesFromCurrentBlend()
+    {
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        dynamic accessor = ((UpDownBase)control).TestAccessor.Dynamic;
+        accessor.SetModernFocusState(true);
+        Rendering.Animation.AnimatedFocusIndicatorRenderer renderer =
+            accessor._focusIndicatorRenderer;
+
+        if (!SystemInformation.UIEffectsEnabled)
+        {
+            renderer.FocusAmount.Should().Be(1f);
+            renderer.IsRunning.Should().BeFalse();
+            accessor.SetModernFocusState(false);
+            renderer.FocusAmount.Should().Be(0f);
+            return;
+        }
+
+        renderer.IsRunning.Should().BeTrue();
+        renderer.AnimationProc(0.5f);
+        renderer.FocusAmount.Should().BeApproximately(0.75f, 0.001f);
+
+        accessor.SetModernFocusState(false);
+        renderer.AnimationProc(0.5f);
+
+        renderer.FocusAmount.Should().BeApproximately(0.1875f, 0.001f);
+        renderer.EndAnimation();
+        renderer.IsRunning.Should().BeFalse();
+        renderer.FocusAmount.Should().Be(0f);
+    }
+
+    [WinFormsFact]
     public void UpDownBase_VisualStylesModeChanged_RepositionsChildControls()
     {
         using SubUpDownBase control = new();
@@ -3248,7 +3302,7 @@ public class UpDownBaseTests
         }
 
         int inset = ScaleHelper.ScaleToDpi(3, deviceDpi);
-        int minimumHeight = ScaleHelper.ScaleToDpi(12, deviceDpi)
+        int minimumHeight = ScaleHelper.ScaleToDpi(14, deviceDpi)
             + ScaleHelper.ScaleToDpi(1, deviceDpi)
             + ScaleHelper.ScaleToDpi(2, deviceDpi);
         upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
@@ -3274,7 +3328,7 @@ public class UpDownBaseTests
             return;
         }
 
-        int minimumHeight = upDownBase.LogicalToDeviceUnits(12)
+        int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
             + upDownBase.LogicalToDeviceUnits(1)
             + upDownBase.LogicalToDeviceUnits(2);
         int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(3) * 2);
