@@ -218,6 +218,29 @@ public class DomainUpDownTests : IDisposable
         _control.IsHandleCreated.Should().BeFalse();
     }
 
+    [WinFormsFact]
+    public void DomainUpDown_Padding_DesignerMetadataAndResetBehavior()
+    {
+        PropertyDescriptor property = TypeDescriptor.GetProperties(_control)[nameof(DomainUpDown.Padding)];
+
+        property.IsBrowsable.Should().BeTrue();
+        ((EditorBrowsableAttribute)property.Attributes[typeof(EditorBrowsableAttribute)])
+            .State.Should().Be(EditorBrowsableState.Always);
+        property.Attributes[typeof(DesignerSerializationVisibilityAttribute)]
+            .Should().Be(DesignerSerializationVisibilityAttribute.Visible);
+        property.ShouldSerializeValue(_control).Should().BeFalse();
+
+        _control.Padding = new Padding(1, 2, 3, 4);
+
+        property.ShouldSerializeValue(_control).Should().BeTrue();
+        property.CanResetValue(_control).Should().BeTrue();
+
+        property.ResetValue(_control);
+
+        _control.Padding.Should().Be(Padding.Empty);
+        property.ShouldSerializeValue(_control).Should().BeFalse();
+    }
+
     [WinFormsTheory]
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
     public void DomainUpDown_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)

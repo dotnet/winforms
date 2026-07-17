@@ -3,6 +3,7 @@
 
 #nullable disable
 
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.Metafiles;
@@ -390,6 +391,30 @@ public class NumericUpDownTests
         Padding padding = new(1, 2, 3, 4);
         upDown.Padding = padding;
         upDown.Padding.Should().Be(padding);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Padding_DesignerMetadataAndResetBehavior()
+    {
+        using NumericUpDown upDown = new();
+        PropertyDescriptor property = TypeDescriptor.GetProperties(upDown)[nameof(NumericUpDown.Padding)];
+
+        property.IsBrowsable.Should().BeTrue();
+        ((EditorBrowsableAttribute)property.Attributes[typeof(EditorBrowsableAttribute)])
+            .State.Should().Be(EditorBrowsableState.Always);
+        property.Attributes[typeof(DesignerSerializationVisibilityAttribute)]
+            .Should().Be(DesignerSerializationVisibilityAttribute.Visible);
+        property.ShouldSerializeValue(upDown).Should().BeFalse();
+
+        upDown.Padding = new Padding(1, 2, 3, 4);
+
+        property.ShouldSerializeValue(upDown).Should().BeTrue();
+        property.CanResetValue(upDown).Should().BeTrue();
+
+        property.ResetValue(upDown);
+
+        upDown.Padding.Should().Be(Padding.Empty);
+        property.ShouldSerializeValue(upDown).Should().BeFalse();
     }
 
     [WinFormsFact]

@@ -309,7 +309,9 @@ public partial class RichTextBox : TextBoxBase
 
             // Remove the WS_BORDER style from the control, if we're trying to set it,
             // to prevent the control from displaying the single point rectangle around the 3D border
-            if (BorderStyle == BorderStyle.FixedSingle && ((cp.Style & (int)WINDOW_STYLE.WS_BORDER) != 0))
+            if (EffectiveVisualStylesMode < VisualStylesMode.Net11
+                && BorderStyle == BorderStyle.FixedSingle
+                && ((cp.Style & (int)WINDOW_STYLE.WS_BORDER) != 0))
             {
                 cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
