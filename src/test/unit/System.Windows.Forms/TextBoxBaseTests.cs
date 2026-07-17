@@ -185,6 +185,69 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
+    public void TextBoxBase_ModernFixed3D_FocusTransitionReversesFromCurrentBlend()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = BorderStyle.Fixed3D,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        control.OnGotFocus(EventArgs.Empty);
+        Rendering.Animation.AnimatedFocusIndicatorRenderer renderer =
+            control.TestAccessor.Dynamic._focusIndicatorRenderer;
+
+        if (!SystemInformation.UIEffectsEnabled)
+        {
+            Assert.Equal(1f, renderer.FocusAmount);
+            Assert.False(renderer.IsRunning);
+            control.OnLostFocus(EventArgs.Empty);
+            Assert.Equal(0f, renderer.FocusAmount);
+            return;
+        }
+
+        Assert.True(renderer.IsRunning);
+        renderer.AnimationProc(0.5f);
+        Assert.Equal(0.75f, renderer.FocusAmount, precision: 3);
+
+        control.OnLostFocus(EventArgs.Empty);
+        renderer.AnimationProc(0.5f);
+
+        Assert.Equal(0.1875f, renderer.FocusAmount, precision: 4);
+        renderer.EndAnimation();
+        Assert.False(renderer.IsRunning);
+        Assert.Equal(0f, renderer.FocusAmount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.None)]
+    [InlineData(BorderStyle.FixedSingle)]
+    public void TextBoxBase_ModernNon3DBorder_FocusDoesNotStartAnimation(BorderStyle borderStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        control.OnGotFocus(EventArgs.Empty);
+
+        Assert.Null(control.TestAccessor.Dynamic._focusIndicatorRenderer);
+    }
+
+    [WinFormsFact]
     public void TextBoxBase_ModernGeometry_UsesInternalInsetBeforeUserPadding()
     {
         using SubTextBox control = new()
@@ -220,27 +283,56 @@ public partial class TextBoxBaseTests
             + ScaleHelper.ScaleToDpi(2, 144));
     }
 
-    [WinFormsFact]
-    public void TextBoxBase_ModernGeometry_ProtectsActualNativeClient()
+    [WinFormsTheory]
+    [InlineData(typeof(TextBox))]
+    [InlineData(typeof(MaskedTextBox))]
+    [InlineData(typeof(RichTextBox))]
+    public void TextBoxBase_ModernGeometry_ClearsOnePixelInsideNativeClient(Type controlType)
     {
-        using TextBox control = new()
-        {
-            VisualStylesMode = VisualStylesMode.Net11,
-            Size = new Size(180, 40)
-        };
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Size = new Size(180, 40);
         control.CreateControl();
 
         Rectangle bounds = new(Point.Empty, control.Size);
-        Rectangle client = Rectangle.Intersect(bounds, control.TestAccessor.Dynamic.GetNativeClientRectangle());
-        Rectangle[] bands = typeof(TextBoxBase).TestAccessor.Dynamic.GetNonClientPaintBands(bounds, client);
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+        Rectangle nativeClient = Rectangle.Intersect(
+            bounds,
+            control.TestAccessor.Dynamic.GetNativeClientRectangle());
+        Rectangle protectedClient = accessor.GetProtectedClientBounds(nativeClient);
+        Rectangle[] bands = accessor.GetNonClientPaintBands(bounds, protectedClient);
 
-        Assert.True(client.Width > 0);
-        Assert.True(client.Height > 0);
+        Assert.True(nativeClient.Width > 2);
+        Assert.True(nativeClient.Height > 2);
+        Assert.Equal(Rectangle.Inflate(nativeClient, -1, -1), protectedClient);
 
         foreach (Rectangle band in bands)
         {
-            Assert.False(band.IntersectsWith(client));
+            Assert.False(band.IntersectsWith(protectedClient));
         }
+
+        for (int y = nativeClient.Top; y < nativeClient.Bottom; y++)
+        {
+            for (int x = nativeClient.Left; x < nativeClient.Right; x++)
+            {
+                Point point = new(x, y);
+                int containingBands = bands.Count(band => band.Contains(point));
+                Assert.Equal(protectedClient.Contains(point) ? 0 : 1, containingBands);
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(2, 2)]
+    public void TextBoxBase_GetProtectedClientBounds_DoesNotCollapseSmallClients(int width, int height)
+    {
+        Rectangle clientBounds = new(3, 4, width, height);
+
+        Rectangle actual = typeof(TextBoxBase).TestAccessor.Dynamic.GetProtectedClientBounds(clientBounds);
+
+        Assert.Equal(clientBounds, actual);
     }
 
     [WinFormsFact]
@@ -546,23 +638,35 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(BorderStyle.None)]
-    [InlineData(BorderStyle.Fixed3D)]
-    [InlineData(BorderStyle.FixedSingle)]
-    public void TextBoxBase_CreateParams_ModernVisualStyles_RemovesNativeBorderStyles(BorderStyle borderStyle)
+    [InlineData(typeof(SubTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubTextBox), BorderStyle.FixedSingle)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.FixedSingle)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.FixedSingle)]
+    public void TextBoxBase_CreateParams_ModernVisualStyles_RemovesNativeBorderStyles(
+        Type controlType,
+        BorderStyle borderStyle)
     {
         if (SystemInformation.HighContrast)
         {
             return;
         }
 
-        using SubTextBox control = new()
-        {
-            BorderStyle = borderStyle,
-            VisualStylesMode = VisualStylesMode.Net11
-        };
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.BorderStyle = borderStyle;
+        control.VisualStylesMode = VisualStylesMode.Net11;
 
-        CreateParams createParams = control.CreateParams;
+        CreateParams createParams = control switch
+        {
+            SubTextBox textBox => textBox.CreateParams,
+            SubMaskedTextBox maskedTextBox => maskedTextBox.CreateParams,
+            SubRichTextBox richTextBox => richTextBox.CreateParams,
+            _ => throw new InvalidOperationException()
+        };
 
         Assert.Equal(0, createParams.Style & (int)WINDOW_STYLE.WS_BORDER);
         Assert.Equal(0, createParams.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
@@ -8255,11 +8359,15 @@ public partial class TextBoxBaseTests
 
         public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
 
+        public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
+
         public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 
         public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
 
         public new void OnHideSelectionChanged(EventArgs e) => base.OnHideSelectionChanged(e);
+
+        public new void OnLostFocus(EventArgs e) => base.OnLostFocus(e);
 
         public new void OnModifiedChanged(EventArgs e) => base.OnModifiedChanged(e);
 
@@ -8292,11 +8400,18 @@ public partial class TextBoxBaseTests
 
     private class SubRichTextBox : RichTextBox
     {
+        public new CreateParams CreateParams => base.CreateParams;
+
         public Padding GetVisualStylesPaddingCore(bool includeScrollbars)
             => base.GetVisualStylesPadding(includeScrollbars);
 
         public Padding GetScrollBarPaddingCore()
             => base.GetScrollBarPadding();
+    }
+
+    private class SubMaskedTextBox : MaskedTextBox
+    {
+        public new CreateParams CreateParams => base.CreateParams;
     }
 
     private class SubTextBoxBase : TextBoxBase

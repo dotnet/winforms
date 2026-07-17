@@ -57,17 +57,23 @@ public partial class DomainUpDown : UpDownBase
     [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {Assemblies.SystemDesign}", typeof(UITypeEditor))]
     public DomainUpDownItemCollection Items => _domainItems ??= new DomainUpDownItemCollection(this);
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public new Padding Padding
     {
         get => base.Padding;
         set => base.Padding = value;
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    private new bool ShouldSerializePadding()
+        => Padding != DefaultPadding;
+
+    private void ResetPadding()
+        => Padding = DefaultPadding;
+
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
     public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;

@@ -126,6 +126,7 @@ public abstract partial class UpDownBase
         protected override void OnGotFocus(EventArgs e)
         {
             _parent.SetActiveControl(this);
+            _parent.SetModernFocusState(focused: true);
             _parent.InvokeGotFocus(_parent, e);
             _parent.Invalidate();
 
@@ -137,6 +138,7 @@ public abstract partial class UpDownBase
 
         protected override void OnLostFocus(EventArgs e)
         {
+            _parent.SetModernFocusState(focused: false);
             _parent.InvokeLostFocus(_parent, e);
             _parent.Invalidate();
         }

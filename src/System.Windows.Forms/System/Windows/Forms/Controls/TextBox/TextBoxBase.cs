@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Animation;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -51,6 +52,7 @@ public abstract partial class TextBoxBase : Control
     ///  The current border for this edit control.
     /// </summary>
     private BorderStyle _borderStyle = BorderStyle.Fixed3D;
+    private AnimatedFocusIndicatorRenderer? _focusIndicatorRenderer;
 
     // Device-independent padding (in logical units) carved from the non-client band for each
     // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
@@ -59,6 +61,7 @@ public abstract partial class TextBoxBase : Control
     private const int VisualStylesNoBorderPadding = 1;
     internal const int VisualStylesInternalChromeInset = 2;
     private const int VisualStylesCornerRadius = 15;
+    private const int VisualStylesFocusBandHeight = 4;
     private const OBJECT_IDENTIFIER HorizontalScrollBarObjectId = (OBJECT_IDENTIFIER)(-6);
     private const OBJECT_IDENTIFIER VerticalScrollBarObjectId = (OBJECT_IDENTIFIER)(-5);
     private const uint StateSystemInvisible = 0x00008000;
@@ -369,6 +372,7 @@ public abstract partial class TextBoxBase : Control
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _borderStyle = value;
+                _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
                 CommonProperties.xClearPreferredSizeCache(this);
 
                 if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
@@ -1686,6 +1690,8 @@ public abstract partial class TextBoxBase : Control
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
+        _focusIndicatorRenderer?.Dispose();
+        _focusIndicatorRenderer = null;
         _textBoxFlags[s_modified] = Modified;
         _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         // Update text selection cached values to be restored when recreating the handle.
@@ -1697,6 +1703,7 @@ public abstract partial class TextBoxBase : Control
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
         base.OnVisualStylesModeChanged(e);
+        _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         CommonProperties.xClearPreferredSizeCache(this);
         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.VisualStylesMode);
@@ -1765,12 +1772,16 @@ public abstract partial class TextBoxBase : Control
     {
         if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
-            // We need to invalidate the non-client area so the focused adorners are drawn.
-            PInvoke.RedrawWindow(
-                hWnd: this,
-                lprcUpdate: null,
-                hrgnUpdate: HRGN.Null,
-                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+            if (BorderStyle == BorderStyle.Fixed3D)
+            {
+                FocusIndicatorRenderer.SetFocused(
+                    focused: true,
+                    animate: SystemInformation.UIEffectsEnabled && !SystemInformation.HighContrast);
+            }
+            else
+            {
+                InvalidateVisualStylesFrame();
+            }
         }
 
         base.OnGotFocus(e);
@@ -1780,12 +1791,16 @@ public abstract partial class TextBoxBase : Control
     {
         if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
         {
-            // We need to invalidate the non-client area so the un-focused adorners are drawn.
-            PInvoke.RedrawWindow(
-                hWnd: this,
-                lprcUpdate: null,
-                hrgnUpdate: HRGN.Null,
-                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+            if (BorderStyle == BorderStyle.Fixed3D)
+            {
+                FocusIndicatorRenderer.SetFocused(
+                    focused: false,
+                    animate: SystemInformation.UIEffectsEnabled && !SystemInformation.HighContrast);
+            }
+            else
+            {
+                InvalidateVisualStylesFrame();
+            }
         }
 
         base.OnLostFocus(e);
@@ -2602,7 +2617,7 @@ public abstract partial class TextBoxBase : Control
 
     /// <summary>
     ///  Paints the modern Visual Styles non-client chrome (border, rounded <see cref="BorderStyle.Fixed3D"/>
-    ///  lozenge, focus line) into a shared offscreen buffer and blits it to the supplied window DC.
+    ///  lozenge, focus indicator) into a shared offscreen buffer and blits it to the supplied window DC.
     /// </summary>
     private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
     {
@@ -2624,9 +2639,10 @@ public abstract partial class TextBoxBase : Control
             width: Bounds.Width,
             height: Bounds.Height);
 
-        // Protect the native client and any currently visible native scrollbars. Scrollbars are outside
-        // the client rectangle and have already been painted by the default WM_NCPAINT handler.
-        Rectangle clientBounds = Rectangle.Intersect(bounds, GetNativeClientRectangle());
+        // Repaint the outermost client pixel with the chrome background so no residual native edge can
+        // remain between the managed frame and edit surface. The rest of the live client stays protected.
+        Rectangle nativeClientBounds = Rectangle.Intersect(bounds, GetNativeClientRectangle());
+        Rectangle protectedClientBounds = GetProtectedClientBounds(nativeClientBounds);
         Rectangle[] scrollBarBounds = GetVisibleScrollBarRectangles(bounds);
 
         Rectangle deflatedBounds = bounds;
@@ -2638,7 +2654,7 @@ public abstract partial class TextBoxBase : Control
         // Keep the target clip excluded from the GDI+ drawing as well as from the explicit blits below.
         using Region region = new(bounds);
         graphics.Clip = region;
-        graphics.ExcludeClip(clientBounds);
+        graphics.ExcludeClip(protectedClientBounds);
 
         // WinForms paints NC serially (one HWND at a time on the UI thread), so a single shared buffer
         // suffices for any number of controls. The buffer is reused when the size fits; steady-state
@@ -2703,69 +2719,39 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
-        // Draw the focus as one line over the bottom border.
-        if (Focused)
+        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
             Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
-            using var focusPenScope = focusColor.GetCachedPenScope(borderThickness);
-
-            // The cache Scope is a ref struct in Release builds and so cannot be captured by the local
-            // focus-line helpers below (CS8175). Capture the plain cached Pen it wraps instead.
-            Pen focusPen = focusPenScope;
-
-            switch (BorderStyle)
-            {
-                case BorderStyle.None:
-                case BorderStyle.FixedSingle:
-
-                    DrawStandardFocusLine(
-                        x1: deflatedBounds.Left,
-                        y1: deflatedBounds.Bottom,
-                        x2: deflatedBounds.Right,
-                        y2: deflatedBounds.Bottom);
-
-                    break;
-
-                case BorderStyle.Fixed3D:
-
-                    if (canRenderRoundedChrome)
-                    {
-                        // We must shorten the line on both sides to not draw into the curve.
-                        Draw3DFocusLine(
-                            x1: deflatedBounds.Left + ((cornerRadius - 3) / 2),
-                            y1: deflatedBounds.Bottom,
-                            x2: deflatedBounds.Right - ((cornerRadius - 3) / 2),
-                            y2: deflatedBounds.Bottom);
-                    }
-                    else
-                    {
-                        DrawStandardFocusLine(
-                            x1: deflatedBounds.Left,
-                            y1: deflatedBounds.Bottom,
-                            x2: deflatedBounds.Right,
-                            y2: deflatedBounds.Bottom);
-                    }
-
-                    break;
-            }
-
-            void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
-            {
-                offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
-                offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
-            }
-
-            void Draw3DFocusLine(int x1, int y1, int x2, int y2)
-            {
-                offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
-                offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
-                offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
-            }
+            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
+                offscreenGraphics,
+                deflatedBounds,
+                cornerRadius,
+                borderThickness,
+                ScaleVisualStylesMetric(VisualStylesFocusBandHeight),
+                adornerColor,
+                focusColor);
+        }
+        else if (Focused)
+        {
+            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            using var focusPen = focusColor.GetCachedPenScope(borderThickness);
+            offscreenGraphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
+            offscreenGraphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom - 1,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom - 1);
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(
             bufferBounds,
-            clientBounds,
+            protectedClientBounds,
             scrollBarBounds);
         IntPtr bufferHdc = offscreenGraphics.GetHdc();
 
@@ -2796,6 +2782,11 @@ public abstract partial class TextBoxBase : Control
 
     private static Rectangle[] GetNonClientPaintBands(Rectangle bounds, Rectangle clientBounds)
         => GetNonClientPaintBands(bounds, clientBounds, []);
+
+    private static Rectangle GetProtectedClientBounds(Rectangle clientBounds)
+        => clientBounds.Width > 2 && clientBounds.Height > 2
+            ? Rectangle.Inflate(clientBounds, -1, -1)
+            : clientBounds;
 
     private static Rectangle[] GetNonClientPaintBands(
         Rectangle bounds,
@@ -2921,6 +2912,23 @@ public abstract partial class TextBoxBase : Control
             clientTopLeft.Y - windowRect.top,
             clientRect.Width,
             clientRect.Height);
+    }
+
+    private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer
+        => _focusIndicatorRenderer ??= new(this, InvalidateVisualStylesFrame);
+
+    private unsafe void InvalidateVisualStylesFrame()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        PInvoke.RedrawWindow(
+            hWnd: this,
+            lprcUpdate: null,
+            hrgnUpdate: HRGN.Null,
+            flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
     }
 
     private void WmReflectCommand(ref Message m)

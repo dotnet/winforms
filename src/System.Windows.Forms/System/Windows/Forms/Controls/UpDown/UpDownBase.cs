@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Animation;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
@@ -20,13 +21,16 @@ public abstract partial class UpDownBase : ContainerControl
     private const int DefaultWheelScrollLinesPerPage = 1;
     private const int DefaultButtonsWidth = 16;
     private const int DefaultControlWidth = 120;
-    private const int ThemedBorderWidth = 1; // width of custom border we draw when themed
+
+    // width of custom border we draw when themed
+    private const int ThemedBorderWidth = 1;
 
     // Modern (Net11+) chrome geometry. The edit and button group share the border thickness and
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
     private const int ModernBorderThickness = 1;
     private const int ModernButtonGroupSpacingLogical = 2;
-    private const int ModernCornerRadius = 12;
+    private const int ModernCornerRadius = 14;
+    private const int ModernFocusBandHeight = 4;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -41,6 +45,7 @@ public abstract partial class UpDownBase : ContainerControl
     ///  The current border for this edit control.
     /// </summary>
     private BorderStyle _borderStyle = DefaultBorderStyle;
+    private AnimatedFocusIndicatorRenderer? _focusIndicatorRenderer;
 
     // Mouse wheel movement
     private int _wheelDelta;
@@ -55,6 +60,7 @@ public abstract partial class UpDownBase : ContainerControl
         _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
 
         _upDownButtons = new UpDownButtons(this);
+
         _upDownEdit = new UpDownEdit(this)
         {
             BorderStyle = BorderStyle.None,
@@ -72,7 +78,10 @@ public abstract partial class UpDownBase : ContainerControl
 
         Controls.AddRange([_upDownButtons, _upDownEdit]);
 
-        SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.ResizeRedraw, true);
+        SetStyle(ControlStyles.Opaque
+            | ControlStyles.FixedHeight
+            | ControlStyles.ResizeRedraw, true);
+
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
     }
@@ -351,35 +360,36 @@ public abstract partial class UpDownBase : ContainerControl
     {
         get
         {
-            if (UseSideBySideButtons)
+            if (!UseSideBySideButtons)
             {
-                int contentInset = ModernContentInset;
-                int preferredHeight = FontHeight + (contentInset * 2);
+                int height = FontHeight;
 
-                if (_borderStyle == BorderStyle.Fixed3D)
+                // Adjust for the border style
+                if (_borderStyle != BorderStyle.None)
                 {
-                    int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernCornerRadius)
-                        + LogicalToDeviceUnits(ModernBorderThickness)
-                        + LogicalToDeviceUnits(TextBoxBase.VisualStylesInternalChromeInset);
-                    preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
+                    height += SystemInformation.BorderSize.Height * 4 + 3;
+                }
+                else
+                {
+                    height += 3;
                 }
 
-                return preferredHeight;
+                return height;
             }
 
-            int height = FontHeight;
+            int contentInset = ModernContentInset;
+            int preferredHeight = FontHeight + (contentInset * 2);
 
-            // Adjust for the border style
-            if (_borderStyle != BorderStyle.None)
+            if (_borderStyle == BorderStyle.Fixed3D)
             {
-                height += SystemInformation.BorderSize.Height * 4 + 3;
-            }
-            else
-            {
-                height += 3;
+                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernCornerRadius)
+                    + LogicalToDeviceUnits(ModernBorderThickness)
+                    + LogicalToDeviceUnits(TextBoxBase.VisualStylesInternalChromeInset);
+
+                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
             }
 
-            return height;
+            return preferredHeight;
         }
     }
 
@@ -550,6 +560,8 @@ public abstract partial class UpDownBase : ContainerControl
     protected override void OnHandleDestroyed(EventArgs e)
     {
         SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
+        _focusIndicatorRenderer?.Dispose();
+        _focusIndicatorRenderer = null;
         base.OnHandleDestroyed(e);
     }
 
@@ -557,6 +569,7 @@ public abstract partial class UpDownBase : ContainerControl
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
         base.OnVisualStylesModeChanged(e);
+        _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
         CommonProperties.xClearPreferredSizeCache(this);
 
         if (AutoSize)
@@ -833,6 +846,7 @@ public abstract partial class UpDownBase : ContainerControl
 
         // Evaluate number of bands to scroll
         int scrollBands = (int)(wheelScrollLines * partialNotches);
+
         if (scrollBands != 0)
         {
             int absScrollBands;
@@ -923,6 +937,7 @@ public abstract partial class UpDownBase : ContainerControl
         Rectangle clientArea = LayoutUtils.DeflateRect(
             new Rectangle(Point.Empty, ClientSize),
             Padding);
+
         bool themed = Application.RenderWithVisualStyles;
         BorderStyle borderStyle = BorderStyle;
 
@@ -941,6 +956,7 @@ public abstract partial class UpDownBase : ContainerControl
         if (_upDownButtons is not null)
         {
             int borderFixup = (themed) ? 1 : 2;
+
             if (borderStyle == BorderStyle.None)
             {
                 borderFixup = 0;
@@ -1024,10 +1040,10 @@ public abstract partial class UpDownBase : ContainerControl
         upDownEditBounds.Width = Math.Max(0, inner.Width - buttonsWidth);
 
         Rectangle upDownButtonsBounds = new(
-            inner.Right - buttonsWidth,
-            inner.Top,
-            buttonsWidth,
-            inner.Height);
+            x: inner.Right - buttonsWidth,
+            y: inner.Top,
+            width: buttonsWidth,
+            height: inner.Height);
 
         // Left/right updown align translation (also honors RTL).
         if (RtlTranslateLeftRight(UpDownAlign) == LeftRightAlignment.Left)
@@ -1115,48 +1131,62 @@ public abstract partial class UpDownBase : ContainerControl
                 break;
         }
 
-        if (Focused && _borderStyle == BorderStyle.Fixed3D)
+        if (_borderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            using var focusPen = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
-
-            if (canRenderRoundedChrome)
-            {
-                int focusInset = Math.Max(1, (cornerRadius - 3) / 2);
-                graphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left + focusInset,
-                    deflatedBounds.Bottom,
-                    deflatedBounds.Right - focusInset,
-                    deflatedBounds.Bottom);
-                graphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left + focusInset - 2,
-                    deflatedBounds.Bottom - 1,
-                    deflatedBounds.Right - focusInset + 2,
-                    deflatedBounds.Bottom - 1);
-                graphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left + focusInset - 3,
-                    deflatedBounds.Bottom - 2,
-                    deflatedBounds.Right - focusInset + 3,
-                    deflatedBounds.Bottom - 2);
-            }
-            else
-            {
-                graphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left,
-                    deflatedBounds.Bottom,
-                    deflatedBounds.Right,
-                    deflatedBounds.Bottom);
-                graphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left,
-                    deflatedBounds.Bottom - 1,
-                    deflatedBounds.Right,
-                    deflatedBounds.Bottom - 1);
-            }
+            Color focusColor = ModernFocusColor;
+            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
+                graphics,
+                deflatedBounds,
+                cornerRadius,
+                borderThickness,
+                LogicalToDeviceUnits(ModernFocusBandHeight),
+                adornerColor,
+                focusColor);
         }
+        else if (Focused && _borderStyle == BorderStyle.Fixed3D)
+        {
+            Color focusColor = ModernFocusColor;
+            using var focusPen = focusColor.GetCachedPenScope(borderThickness);
+            graphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
+            graphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom - 1,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom - 1);
+        }
+    }
+
+    private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer
+        => _focusIndicatorRenderer ??= new(this, InvalidateModernFocusIndicator);
+
+    private static Color ModernFocusColor
+        => TextBoxBase.GetVisualStylesFocusColor(SystemInformation.HighContrast);
+
+    private void SetModernFocusState(bool focused)
+    {
+        if (!UseSideBySideButtons || _borderStyle != BorderStyle.Fixed3D)
+        {
+            return;
+        }
+
+        FocusIndicatorRenderer.SetFocused(
+            focused,
+            animate: SystemInformation.UIEffectsEnabled && !SystemInformation.HighContrast);
+    }
+
+    private void InvalidateModernFocusIndicator()
+    {
+        int focusBandHeight = LogicalToDeviceUnits(ModernFocusBandHeight);
+        Rectangle focusBounds = ClientRectangle;
+        focusBounds.Y = Math.Max(focusBounds.Top, focusBounds.Bottom - focusBandHeight);
+        focusBounds.Height = Math.Min(focusBandHeight, focusBounds.Height);
+        Invalidate(focusBounds);
     }
 
     /// <summary>
