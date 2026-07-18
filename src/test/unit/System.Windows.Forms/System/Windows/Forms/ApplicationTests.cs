@@ -154,28 +154,33 @@ public partial class ApplicationTests
     [Fact]
     public void Application_SetColorMode_PlausibilityTests()
     {
-        if (SystemInformation.HighContrast)
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
         {
-            // We don't run this test in HighContrast mode.
-            return;
-        }
+            if (SystemInformation.HighContrast)
+            {
+                // We don't run this test in HighContrast mode.
+                return;
+            }
 
-        SystemColorMode systemColorMode = Application.SystemColorMode;
+            SystemColorMode systemColorMode = Application.SystemColorMode;
 
-        Application.SetColorMode(SystemColorMode.Classic);
-        Assert.False(Application.IsDarkModeEnabled);
-        Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
-        Assert.False(SystemColors.UseAlternativeColorSet);
+            Application.SetColorMode(SystemColorMode.Classic);
+            Assert.False(Application.IsDarkModeEnabled);
+            Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
+            Assert.False(SystemColors.UseAlternativeColorSet);
 
-        Application.SetColorMode(SystemColorMode.Dark);
-        Assert.True(Application.IsDarkModeEnabled);
-        Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
-        Assert.True(SystemColors.UseAlternativeColorSet);
+            Application.SetColorMode(SystemColorMode.Dark);
+            Assert.True(Application.IsDarkModeEnabled);
+            Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
+            Assert.True(SystemColors.UseAlternativeColorSet);
 
-        Application.SetColorMode(SystemColorMode.System);
-        Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
-        Assert.Equal(SystemColorMode.System, Application.ColorMode);
-        Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+            Application.SetColorMode(SystemColorMode.System);
+            Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
+            Assert.Equal(SystemColorMode.System, Application.ColorMode);
+            Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
     }
 
     [Fact]
