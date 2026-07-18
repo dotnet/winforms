@@ -8783,6 +8783,7 @@ public unsafe partial class Control :
     private void QueueSystemVisualSettingsRefresh()
     {
         if (!GetTopLevel()
+            || !IsHandleCreated
             || Disposing
             || IsDisposed
             || Properties.GetValueOrDefault<bool>(s_systemVisualSettingsRefreshPendingProperty))
