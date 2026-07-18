@@ -6592,9 +6592,6 @@ Stack trace where the illegal operation occurred was:
   <data name="FormOnDpiChangedDescr" xml:space="preserve">
     <value>Occurs when form is moved to a monitor with a different resolution and scaling level, or when form's monitor scaling level is changed in the Windows settings.</value>
   </data>
-  <data name="FormOnSystemTextSizeChangedDescr" xml:space="preserve">
-    <value>Occurs when the Windows Accessibility text size setting changes for this top-level form.</value>
-  </data>
   <data name="MDIChildSystemMenuItemAccessibleName" xml:space="preserve">
     <value>System</value>
   </data>

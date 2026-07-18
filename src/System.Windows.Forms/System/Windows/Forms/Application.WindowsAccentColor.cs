@@ -22,7 +22,7 @@ public sealed partial class Application
     ///   this method always yields a usable color rather than throwing or returning an empty value.
     ///  </para>
     /// </remarks>
-    public static unsafe Color GetWindowsAccentColor()
+    internal static unsafe Color GetWindowsAccentColor()
     {
         HSTRING className = default;
 
