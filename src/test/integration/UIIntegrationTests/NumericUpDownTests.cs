@@ -42,7 +42,7 @@ public class NumericUpDownTests : ControlTestBase
                 return;
             }
 
-            Assert.True(control.Height >= control.LogicalToDeviceUnits(15) * 2);
+            Assert.True(control.Height >= control.PreferredHeight);
             Assert.Equal(control.LogicalToDeviceUnits(3), control.TextBox.Left);
             Assert.Equal(control.LogicalToDeviceUnits(3), control.UpDownButtonsInternal.Top);
             Assert.True(control.UpDownButtonsInternal.Bounds.Left >= control.TextBox.Bounds.Right);
