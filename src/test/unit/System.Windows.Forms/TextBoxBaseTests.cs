@@ -404,6 +404,8 @@ public partial class TextBoxBaseTests
     [WinFormsFact]
     public void TextBoxBase_ModernFixed3D_FocusTransitionReversesFromCurrentBlend()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+
         if (SystemInformation.HighContrast)
         {
             return;

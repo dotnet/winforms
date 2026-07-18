@@ -698,6 +698,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ModernGlyph_InteractionChange_AnimatesFromCurrentShade()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
         Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
         renderer.SetInteractionState(hovered: false, focused: false);
@@ -715,6 +716,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ModernGlyph_EndAnimation_StopsAndSettles()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
         Assert.NotEqual(IntPtr.Zero, box.Handle);
 
@@ -832,6 +834,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_HoverAndFocusAnimateWithoutChangingPreferredSize()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
@@ -861,6 +864,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_SynchronizeState_SettlesInteractionChannels()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
@@ -886,6 +890,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_OnAnimationEnded_StopsAnimation()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,

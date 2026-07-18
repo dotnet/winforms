@@ -53,6 +53,7 @@ public sealed class AnimationManagerTests : IDisposable
     [WinFormsFact]
     public async Task AnimationManager_UsesHighPrecisionTimerTickTimeline()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Control control = new();
         using TestRenderer renderer = new(control);
         renderer.StartAnimation();
@@ -67,6 +68,7 @@ public sealed class AnimationManagerTests : IDisposable
     [WinFormsFact]
     public async Task AnimationManager_RendererFault_DoesNotStopOtherRenderers()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Control control = new();
         using TestRenderer healthyRenderer = new(control);
         using TestRenderer faultingRenderer = new(control, throwOnFrame: true);

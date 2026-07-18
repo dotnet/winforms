@@ -77,6 +77,28 @@ public class SystemVisualSettingsTests
     }
 
     [WinFormsFact]
+    public void SystemVisualSettingsTestScope_OverridesAnimationsAndRestoresPreviousSnapshot()
+    {
+        SystemVisualSettings disabled = CreateSettings(clientAreaAnimationEnabled: false);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(disabled);
+
+            using (new SystemVisualSettingsTestScope(clientAreaAnimationEnabled: true))
+            {
+                Assert.True(Application.SystemVisualSettings.ClientAreaAnimationEnabled);
+            }
+
+            Assert.Same(disabled, Application.SystemVisualSettings);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
     public void Application_SystemVisualSettingsChanged_RefreshRaisesOncePerTransition()
     {
         SystemVisualSettings initial = CreateSettings();

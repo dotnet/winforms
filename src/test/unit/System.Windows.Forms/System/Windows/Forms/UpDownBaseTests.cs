@@ -29,6 +29,7 @@ public class UpDownBaseTests
     [WinFormsFact]
     public void UpDownBase_ModernVisualStylesMode_FocusTransitionReversesFromCurrentBlend()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using SubUpDownBase control = new()
         {
             VisualStylesMode = VisualStylesMode.Net11
