@@ -176,6 +176,7 @@ public class ButtonVisualStylesTests
     [WinFormsFact]
     public void ButtonBackColorAnimator_EndAnimation_StopsAndSettles()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Button button = new();
         using ButtonInternal.ButtonBackColorAnimator animator = new(button);
 
@@ -406,6 +407,7 @@ public class ButtonVisualStylesTests
     [WinFormsFact]
     public void ButtonBackColorAnimator_InterpolatesReversesAndStops()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Button button = new();
         using ButtonInternal.ButtonBackColorAnimator animator = new(button);
 
@@ -426,6 +428,8 @@ public class ButtonVisualStylesTests
     [WinFormsFact]
     public void ButtonDarkModeAdapter_InteractionPaintStateStartsColorAnimation()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+
         if (SystemInformation.HighContrast)
         {
             return;

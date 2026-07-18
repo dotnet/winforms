@@ -88,6 +88,7 @@ public class AnimatedControlRendererTests
     [WinFormsFact]
     public void AnimatedFocusIndicatorRenderer_AnimationProc_ReversesFromCurrentBlend()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Control control = new();
         using AnimatedFocusIndicatorRenderer renderer = new(control, () => { });
 

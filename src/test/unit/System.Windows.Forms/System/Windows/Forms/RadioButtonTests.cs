@@ -47,6 +47,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ToggleSwitch_ModernVisualStyles_PaintsAndAnimates()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using Panel parent = new();
         using RadioButton control = new()
         {
@@ -294,6 +295,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ModernGlyph_HoverAndFocusUseIndependentAnimationChannels()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
         Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
         renderer.SetInteractionState(hovered: false, focused: false);
@@ -314,6 +316,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ModernGlyph_EndAnimation_StopsAndSettles()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
