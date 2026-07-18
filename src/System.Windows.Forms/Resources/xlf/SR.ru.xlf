@@ -5640,11 +5640,6 @@ Do you want to replace it?</source>
         <target state="translated">Возникает при первом отображении формы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormOnSystemTextSizeChangedDescr">
-        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
-        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormOpacityDescr">
         <source>The opacity percentage of the control. </source>
         <target state="translated">Степень прозрачности элемента управления (в процентах). </target>
