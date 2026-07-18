@@ -8,11 +8,9 @@ using System.Windows.Forms.Rendering.Animation;
 
 namespace System.Windows.Forms.Tests;
 
-// NOTE: AnimationManager is a process-wide singleton driven by the real HighPrecisionTimer
-// (which raises the system timer resolution and starts a background loop). To keep these unit
-// tests deterministic and free of process-wide side effects, they exercise the
-// AnimatedControlRenderer contract that does NOT touch AnimationManager. Start/stop/cycle
-// behavior is covered by the control-level tests and manual exploratory testing.
+// NOTE: AnimationManager is per UI thread and driven by the real HighPrecisionTimer. To keep
+// these unit tests deterministic, they exercise the AnimatedControlRenderer contract that does
+// NOT touch AnimationManager. Start/stop/cycle behavior is covered by AnimationManagerTests.
 public class AnimatedControlRendererTests
 {
     [WinFormsFact]
