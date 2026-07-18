@@ -243,6 +243,217 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_EffectiveEqualityInHighContrast_SkipsEventCascadeAndLayout()
+    {
+        using SubControlWithVisualStyles parent = new() { HighContrast = true };
+        using SubControlWithVisualStyles child = new() { HighContrast = true };
+        parent.Controls.Add(child);
+
+        int parentChangedCallCount = 0;
+        int childChangedCallCount = 0;
+        int parentLayoutCallCount = 0;
+        parent.VisualStylesModeChanged += (sender, e) => parentChangedCallCount++;
+        child.VisualStylesModeChanged += (sender, e) => childChangedCallCount++;
+        parent.Layout += (sender, e) => parentLayoutCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Net11, parent.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, parent.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(0, parentChangedCallCount);
+        Assert.Equal(0, childChangedCallCount);
+        Assert.Equal(0, parentLayoutCallCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_ReparentingWithEffectiveEquality_DoesNotRaiseChanged()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            HighContrast = true,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubControlWithVisualStyles child = new() { HighContrast = true };
+        int changedCallCount = 0;
+        child.VisualStylesModeChanged += (sender, e) => changedCallCount++;
+
+        child.AssignParent(parent);
+
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(0, changedCallCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_DefaultImpact_RepaintsWithoutUpdatingStyles()
+    {
+        using SubControlWithVisualStyles control = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        control.CreateControl();
+
+        bool invalidated = false;
+        int styleChangedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidated = true;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.True(invalidated);
+        Assert.Equal(0, styleChangedCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData((int)VisualStylesModeChangeImpactForTest.None)]
+    [InlineData((int)VisualStylesModeChangeImpactForTest.Repaint)]
+    [InlineData((int)VisualStylesModeChangeImpactForTest.NonClientUpdate)]
+    [InlineData((int)VisualStylesModeChangeImpactForTest.Metrics)]
+    public void Control_VisualStylesMode_ImpactDispatcher_AppliesExpectedImpact(int impactValue)
+    {
+        VisualStylesModeChangeImpactForTest impact = (VisualStylesModeChangeImpactForTest)impactValue;
+
+        using ImpactControl control = new()
+        {
+            HighContrast = false,
+            Impact = impact,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        control.CreateControl();
+
+        bool invalidated = false;
+        int changedCallCount = 0;
+        int layoutCallCount = 0;
+        int styleChangedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidated = true;
+        control.Layout += (sender, e) => layoutCallCount++;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+        control.VisualStylesModeChanged += (sender, e) => changedCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(1, changedCallCount);
+
+        switch (impact)
+        {
+            case VisualStylesModeChangeImpactForTest.None:
+                Assert.False(invalidated);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, layoutCallCount);
+                break;
+            case VisualStylesModeChangeImpactForTest.Repaint:
+                Assert.True(invalidated);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, layoutCallCount);
+                break;
+            case VisualStylesModeChangeImpactForTest.NonClientUpdate:
+                Assert.True(invalidated);
+                Assert.Equal(1, styleChangedCallCount);
+                Assert.Equal(0, layoutCallCount);
+                break;
+            case VisualStylesModeChangeImpactForTest.Metrics:
+                Assert.True(invalidated);
+                Assert.Equal(1, styleChangedCallCount);
+                Assert.Equal(1, layoutCallCount);
+                break;
+            default:
+                throw new InvalidOperationException($"Unexpected impact: {impact}");
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_NoneImpact_RaisesEventAndCascadesToChildren()
+    {
+        using ImpactControl parent = new()
+        {
+            HighContrast = false,
+            Impact = VisualStylesModeChangeImpactForTest.None,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using SubControlWithVisualStyles child = new() { HighContrast = false };
+        parent.Controls.Add(child);
+        child.CreateControl();
+
+        int parentChangedCallCount = 0;
+        int childChangedCallCount = 0;
+        bool childInvalidated = false;
+        parent.VisualStylesModeChanged += (sender, e) => parentChangedCallCount++;
+        child.VisualStylesModeChanged += (sender, e) => childChangedCallCount++;
+        child.Invalidated += (sender, e) => childInvalidated = true;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(1, parentChangedCallCount);
+        Assert.Equal(1, childChangedCallCount);
+        Assert.True(childInvalidated);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_MetricsImpact_CoalescesLayoutPerContainer()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using ImpactControl firstChild = new()
+        {
+            HighContrast = false,
+            Impact = VisualStylesModeChangeImpactForTest.Metrics
+        };
+        using ImpactControl secondChild = new()
+        {
+            HighContrast = false,
+            Impact = VisualStylesModeChangeImpactForTest.Metrics
+        };
+        parent.Controls.Add(firstChild);
+        parent.Controls.Add(secondChild);
+
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(1, layoutCallCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_ReentrantChange_SuppressesStaleChildCascade()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using SubControlWithVisualStyles child = new() { HighContrast = false };
+        parent.Controls.Add(child);
+
+        bool reentered = false;
+        int parentChangedCallCount = 0;
+        int childChangedCallCount = 0;
+        parent.VisualStylesModeChanged += (sender, e) =>
+        {
+            parentChangedCallCount++;
+            if (!reentered)
+            {
+                reentered = true;
+                parent.VisualStylesMode = VisualStylesMode.Latest;
+            }
+        };
+        child.VisualStylesModeChanged += (sender, e) => childChangedCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Latest, parent.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Latest, child.VisualStylesMode);
+        Assert.Equal(2, parentChangedCallCount);
+        Assert.Equal(1, childChangedCallCount);
+    }
+
+    [WinFormsFact]
     public void Appearance_ToggleSwitch_HasExpectedValue()
     {
         Assert.Equal(2, (int)Appearance.ToggleSwitch);
@@ -250,12 +461,43 @@ public partial class ControlTests
 
     private class SubControlWithVisualStyles : Control
     {
+        public bool HighContrast { get; set; }
+
         public VisualStylesMode DefaultVisualStylesModeAccessor => base.DefaultVisualStylesMode;
+
+        public VisualStylesMode EffectiveVisualStylesModeAccessor => base.EffectiveVisualStylesMode;
 
         public new void AssignParent(Control value) => base.AssignParent(value);
 
         public new void OnVisualStylesModeChanged(EventArgs e) => base.OnVisualStylesModeChanged(e);
 
         public new void OnParentVisualStylesModeChanged(EventArgs e) => base.OnParentVisualStylesModeChanged(e);
+
+        internal override bool IsHighContrast => HighContrast;
+    }
+
+    private class ImpactControl : SubControlWithVisualStyles
+    {
+        public VisualStylesModeChangeImpactForTest Impact { get; set; }
+
+        protected override VisualStylesModeChangeImpact GetVisualStylesModeChangeImpact(
+            VisualStylesMode oldMode,
+            VisualStylesMode newMode)
+            => Impact switch
+            {
+                VisualStylesModeChangeImpactForTest.None => VisualStylesModeChangeImpact.None,
+                VisualStylesModeChangeImpactForTest.Repaint => VisualStylesModeChangeImpact.Repaint,
+                VisualStylesModeChangeImpactForTest.NonClientUpdate => VisualStylesModeChangeImpact.NonClientUpdate,
+                VisualStylesModeChangeImpactForTest.Metrics => VisualStylesModeChangeImpact.Metrics,
+                _ => throw new InvalidOperationException($"Unexpected impact: {Impact}"),
+            };
+    }
+
+    private enum VisualStylesModeChangeImpactForTest
+    {
+        None,
+        Repaint,
+        NonClientUpdate,
+        Metrics,
     }
 }

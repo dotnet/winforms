@@ -2,28 +2,32 @@
 
 This document records animation infrastructure findings that require architecture and lifecycle decisions before they can be patched safely.
 
-## Animation timer remains active and can consume a CPU core
+## VisualStylesMode transition impact dispatch
 
-`AnimationManager` retains its high-precision timer registration after the first animation. The timer uses a 14 ms `PeriodicTimer` cadence with a 16.667 ms absolute frame target and then actively spins to that target. Once the periodic schedule falls behind, ticks can complete immediately and the loop can spend nearly an entire frame spinning. The process can therefore retain 1 ms timer resolution and consume approximately one logical processor after animations have settled.
+`Control.OnVisualStylesModeChanged` now owns impact processing for effective renderer changes. Overrides that
+call `base` inherit preferred-size cache clearing, style/non-client frame refresh, invalidation, and deferred
+layout for metric-affecting changes. The transition carries immutable old/new effective modes through the
+existing `EventArgs` virtual shape; nested property changes cannot overwrite an outer transition, and stale
+child cascades are suppressed.
 
-A safe redesign must establish:
+Metric layout requests are collected while the complete affected subtree transitions, then coalesced to one
+layout per container. This is required so a container measures only fully updated children and so
+`AutoSize = false` text boxes still trigger parent remeasurement. `TextBoxBase` treats only crossings between
+classic/disabled and Net11-or-later rendering as metric changes; Net11-to-Latest shares its preferred-height
+and non-client padding metrics and repaints only.
 
-- lazy timer ownership based on the number of running animations;
-- an idle-shutdown invariant after the final animation settles;
-- balanced `timeBeginPeriod` and `timeEndPeriod` calls;
-- atomic registration, unregistration, start, and stop transitions;
-- a scheduling algorithm that does not accumulate backlog or busy-wait indefinitely;
-- disposal behavior during application and message-loop shutdown.
+## Animation timing and thread ownership
 
-Before implementation, capture CPU and timer-resolution measurements, analyze current register/unregister races, and add tests proving that the timer parks after all animations stop.
+The timer now uses an absolute `Stopwatch` schedule with a high-resolution waitable timer on supported Windows
+versions and a coarse 30 Hz fallback. It no longer changes process-wide timer resolution, and residual spinning is
+bounded to the sub-millisecond remainder. Registration/start/stop transitions are generation-owned, callback
+dispatch is allocation-free in steady state, and stale generations cannot dispatch after replacement.
 
-## Process-wide animation dispatch targets the first UI thread
+`AnimationManager` is now per UI thread. Each manager captures that thread's synchronization context, derives
+animation progress from the timer tick timeline, and is disposed when its message loop exits. A renderer fault
+quarantines that renderer without stopping unrelated animations on the same thread.
 
-The process-wide `AnimationManager` singleton captures the `SynchronizationContext` of the first UI thread that initializes it. Renderers created by another supported WinForms UI thread are then ticked on the first thread. Renderer callbacks invalidate their controls directly, even though `Control.Invalidate` is not a cross-thread-safe API. The singleton's unsynchronized initialization also permits competing manager construction.
-
-A safe redesign must choose between:
-
-- one animation manager per UI thread or synchronization context; or
-- per-renderer dispatch to each control's owning context.
-
-The selected ownership model must cover message-loop teardown, renderer disposal, concurrent registration, and controls moving through handle recreation. Validation should include two independent `Application.Run` UI threads and prove that every animation callback executes on its control's owning thread.
+The remaining power risk is idle registration lifetime: after a UI thread starts its first animation, its manager
+keeps one timer registration until `Application.ThreadExit`, even when no renderer is currently running. The pacer
+therefore continues waking and dispatching an empty frame callback. A future optimization can make manager
+registration lazy while preserving the generation and thread-ownership invariants established by the rework.
