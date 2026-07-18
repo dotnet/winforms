@@ -1,3 +1,4 @@
+#nullable enable
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
 virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
@@ -62,6 +63,47 @@ override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
 #nullable enable
+System.Windows.Forms.KioskModeManager
+System.Windows.Forms.KioskModeManager.ContainerControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.KioskModeManager.ContainerControl.set -> void
+System.Windows.Forms.KioskModeManager.ContainerControlChanged -> System.EventHandler?
+override System.Windows.Forms.KioskModeManager.Dispose(bool disposing) -> void
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.FullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreenChanged -> System.EventHandler?
+System.Windows.Forms.KioskModeManager.HideTaskbar.get -> bool
+System.Windows.Forms.KioskModeManager.HideTaskbar.set -> void
+System.Windows.Forms.KioskModeManager.KioskModeManager() -> void
+System.Windows.Forms.KioskModeManager.KioskModeManager(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.get -> int
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.set -> void
+virtual System.Windows.Forms.KioskModeManager.OnContainerControlChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.KioskModeManager.OnFullScreenChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.KioskModeManager.OnWakeup(System.Windows.Forms.KioskModeWakeupEventArgs! e) -> void
+override System.Windows.Forms.KioskModeManager.Site.get -> System.ComponentModel.ISite?
+override System.Windows.Forms.KioskModeManager.Site.set -> void
+System.Windows.Forms.KioskModeManager.SuppressPowerSaving.get -> bool
+System.Windows.Forms.KioskModeManager.SuppressPowerSaving.set -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreen() -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.get -> System.Windows.Forms.Keys
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.set -> void
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.set -> void
+System.Windows.Forms.KioskModeManager.Wakeup -> System.Windows.Forms.KioskModeWakeupEventHandler?
+System.Windows.Forms.KioskModeManager.WakeUpCommand.get -> System.Windows.Input.ICommand?
+System.Windows.Forms.KioskModeManager.WakeUpCommand.set -> void
+System.Windows.Forms.KioskModeWakeupEventArgs
+System.Windows.Forms.KioskModeWakeupEventArgs.KioskModeWakeupEventArgs(System.Windows.Forms.KioskModeWakeupSource source) -> void
+System.Windows.Forms.KioskModeWakeupEventArgs.Source.get -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupEventHandler
+virtual System.Windows.Forms.KioskModeWakeupEventHandler.Invoke(object? sender, System.Windows.Forms.KioskModeWakeupEventArgs! e) -> void
+System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Keyboard = 0 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Mouse = 1 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.PowerResume = 2 -> System.Windows.Forms.KioskModeWakeupSource
+System.Windows.Forms.KioskModeWakeupSource.Session = 3 -> System.Windows.Forms.KioskModeWakeupSource
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
 System.Windows.Forms.Control.EffectiveVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode

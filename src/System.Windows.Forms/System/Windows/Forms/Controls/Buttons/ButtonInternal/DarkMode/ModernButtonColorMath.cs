@@ -17,7 +17,7 @@ internal static class ModernButtonColorMath
     private const float DefaultPressedDarkenAmount = 0.12f;
 
     internal static Color GetMouseDownColor()
-        => Application.GetWindowsAccentColor();
+        => Application.SystemVisualSettings.AccentColor;
 
     internal static Color GetMouseOverColor(ButtonBase owner, FlatButtonAppearance appearance)
     {
@@ -27,10 +27,10 @@ internal static class ModernButtonColorMath
     }
 
     internal static Color BlendWithAccent(Color baseColor)
-        => PopupButtonColorMath.Blend(baseColor, Application.GetWindowsAccentColor(), AccentBlendAmount);
+        => PopupButtonColorMath.Blend(baseColor, Application.SystemVisualSettings.AccentColor, AccentBlendAmount);
 
     internal static Color GetDefaultButtonColor(PushButtonState state)
-        => GetDefaultButtonColor(Application.GetWindowsAccentColor(), state);
+        => GetDefaultButtonColor(Application.SystemVisualSettings.AccentColor, state);
 
     internal static Color GetDefaultButtonColor(Color accentColor, PushButtonState state)
         => state switch

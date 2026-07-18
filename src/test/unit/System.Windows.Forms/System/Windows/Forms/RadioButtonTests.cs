@@ -260,7 +260,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
             customOnColor: null,
             customBorderColor: null);
 
-        Assert.True(CountPixels(bitmap, Application.GetWindowsAccentColor()) > 0);
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
     }
 
     [WinFormsFact]

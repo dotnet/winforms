@@ -174,7 +174,6 @@ public unsafe partial class Control :
     private const byte RequiredScalingMask = 0x0F;
 
     private const byte HighOrderBitMask = 0x80;
-    private const uint WmDwmColorizationColorChanged = 0x0320;
 
     private static Font? s_defaultFont;
 
@@ -960,8 +959,8 @@ public unsafe partial class Control :
     ///  </para>
     ///  <para>
     ///   Windows High Contrast can be toggled while the application is running, so this value is <b>not stable</b>
-    ///   across such a transition and <b>must not be cached</b>. Affected controls rebuild their handles on the
-    ///   transition (see <see cref="Form.OnSystemColorsChanged(EventArgs)"/>), which re-reads this value.
+    ///   across such a transition and <b>must not be cached</b>. Affected controls route the changed effective
+    ///   value through <see cref="OnSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs)"/>.
     ///  </para>
     /// </remarks>
     protected VisualStylesMode EffectiveVisualStylesMode
@@ -973,7 +972,7 @@ public unsafe partial class Control :
 
         return mode is VisualStylesMode.Disabled
             ? VisualStylesMode.Disabled
-            : IsHighContrast
+            : highContrast
                 ? VisualStylesMode.Classic
                 : mode;
     }
@@ -986,7 +985,8 @@ public unsafe partial class Control :
     ///   This internal seam keeps visual-styles transition tests independent of the operating system setting.
     ///  </para>
     /// </remarks>
-    internal virtual bool IsHighContrast => SystemInformation.HighContrast;
+    internal virtual bool IsHighContrast
+        => SystemVisualSettingsTracker.CurrentSettings.HighContrastEnabled;
 
     /// <summary>
     ///  Describes the work a control requires when its effective <see cref="VisualStylesMode"/> changes.
@@ -7128,10 +7128,18 @@ public unsafe partial class Control :
         if (ChildControls is { } children
             && (transition is null || transition.IsCurrent))
         {
-            for (int i = 0; i < children.Count && (transition is null || transition.IsCurrent); i++)
-            {
-                children[i].OnParentVisualStylesModeChanged(e);
-            }
+            CascadeVisualStylesModeChanged(children, e, transition);
+        }
+    }
+
+    private static void CascadeVisualStylesModeChanged(
+        Control.ControlCollection children,
+        EventArgs e,
+        VisualStylesModeChangeEventArgs? transition)
+    {
+        for (int i = 0; i < children.Count && (transition is null || transition.IsCurrent); i++)
+        {
+            children[i].OnParentVisualStylesModeChanged(e);
         }
     }
 
@@ -7415,6 +7423,29 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
     {
+        if (e is VisualStylesModeChangeEventArgs highContrastTransition
+            && highContrastTransition.SystemVisualSettingsTransition is not null)
+        {
+            if (!highContrastTransition.IsCurrent)
+            {
+                return;
+            }
+
+            VisualStylesModeChangeEventArgs transitionForControl =
+                highContrastTransition.CreateForControl(this);
+            if (transitionForControl.OldEffectiveVisualStylesMode
+                != transitionForControl.NewEffectiveVisualStylesMode)
+            {
+                OnVisualStylesModeChanged(transitionForControl);
+            }
+            else if (ChildControls is { } children)
+            {
+                CascadeVisualStylesModeChanged(children, transitionForControl, transitionForControl);
+            }
+
+            return;
+        }
+
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
             if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
@@ -7451,50 +7482,90 @@ public unsafe partial class Control :
     /// </remarks>
     private sealed class VisualStylesModeChangeEventArgs : EventArgs
     {
-        private List<VisualStylesModeLayoutRequest>? _layoutRequests;
-        private bool _layoutsPerformed;
+        private readonly VisualStylesModeChangeState _state;
 
         public VisualStylesModeChangeEventArgs(
             Control source,
             int sourceChangeVersion,
             VisualStylesMode oldEffectiveVisualStylesMode,
-            VisualStylesMode newEffectiveVisualStylesMode)
+            VisualStylesMode newEffectiveVisualStylesMode,
+            SystemVisualSettingsChangedEventArgs? systemVisualSettingsTransition = null)
+            : this(
+                new VisualStylesModeChangeState(source, sourceChangeVersion),
+                source,
+                sourceChangeVersion,
+                oldEffectiveVisualStylesMode,
+                newEffectiveVisualStylesMode,
+                systemVisualSettingsTransition)
         {
-            Source = source;
-            SourceChangeVersion = sourceChangeVersion;
+        }
+
+        private VisualStylesModeChangeEventArgs(
+            VisualStylesModeChangeState state,
+            Control control,
+            int controlChangeVersion,
+            VisualStylesMode oldEffectiveVisualStylesMode,
+            VisualStylesMode newEffectiveVisualStylesMode,
+            SystemVisualSettingsChangedEventArgs? systemVisualSettingsTransition)
+        {
+            _state = state;
+            Control = control;
+            ControlChangeVersion = controlChangeVersion;
             OldEffectiveVisualStylesMode = oldEffectiveVisualStylesMode;
             NewEffectiveVisualStylesMode = newEffectiveVisualStylesMode;
+            SystemVisualSettingsTransition = systemVisualSettingsTransition;
         }
+
+        private Control Control { get; }
+
+        private int ControlChangeVersion { get; }
 
         public VisualStylesMode NewEffectiveVisualStylesMode { get; }
 
         public VisualStylesMode OldEffectiveVisualStylesMode { get; }
 
-        private Control Source { get; }
-
-        private int SourceChangeVersion { get; }
+        public SystemVisualSettingsChangedEventArgs? SystemVisualSettingsTransition { get; }
 
         public bool IsCurrent
-            => Source.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0) == SourceChangeVersion;
+            => _state.Source.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0)
+                == _state.SourceChangeVersion
+                && Control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0)
+                    == ControlChangeVersion;
+
+        public VisualStylesModeChangeEventArgs CreateForControl(Control control)
+        {
+            if (SystemVisualSettingsTransition is not { } systemVisualSettingsTransition)
+            {
+                return this;
+            }
+
+            return new(
+                _state,
+                control,
+                control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
+                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.OldSettings.HighContrastEnabled),
+                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.NewSettings.HighContrastEnabled),
+                systemVisualSettingsTransition);
+        }
 
         public void PerformLayouts()
         {
-            if (_layoutsPerformed || _layoutRequests is null)
+            if (_state.LayoutsPerformed || _state.LayoutRequests is null)
             {
                 return;
             }
 
-            _layoutsPerformed = true;
+            _state.LayoutsPerformed = true;
 
-            for (int i = _layoutRequests.Count - 1; i >= 0; i--)
+            for (int i = _state.LayoutRequests.Count - 1; i >= 0; i--)
             {
-                _layoutRequests[i].Transaction.Dispose();
+                _state.LayoutRequests[i].Transaction.Dispose();
             }
 
-            _layoutRequests.Sort(
+            _state.LayoutRequests.Sort(
                 static (left, right) => GetLayoutDepth(right.Target).CompareTo(GetLayoutDepth(left.Target)));
 
-            foreach (VisualStylesModeLayoutRequest request in _layoutRequests)
+            foreach (VisualStylesModeLayoutRequest request in _state.LayoutRequests)
             {
                 LayoutTransaction.DoLayout(request.Target, request.Cause, PropertyNames.VisualStylesMode);
             }
@@ -7507,9 +7578,9 @@ public unsafe partial class Control :
                 return;
             }
 
-            _layoutRequests ??= [];
+            _state.LayoutRequests ??= [];
 
-            foreach (VisualStylesModeLayoutRequest request in _layoutRequests)
+            foreach (VisualStylesModeLayoutRequest request in _state.LayoutRequests)
             {
                 if (ReferenceEquals(request.Target, target))
                 {
@@ -7517,7 +7588,7 @@ public unsafe partial class Control :
                 }
             }
 
-            _layoutRequests.Add(new VisualStylesModeLayoutRequest(target, cause));
+            _state.LayoutRequests.Add(new VisualStylesModeLayoutRequest(target, cause));
         }
 
         public void RequestAncestorLayouts(Control? target, Control cause)
@@ -7538,6 +7609,16 @@ public unsafe partial class Control :
             }
 
             return depth;
+        }
+
+        private sealed class VisualStylesModeChangeState(
+            Control source,
+            int sourceChangeVersion)
+        {
+            public List<VisualStylesModeLayoutRequest>? LayoutRequests;
+            public bool LayoutsPerformed;
+            public int SourceChangeVersion { get; } = sourceChangeVersion;
+            public Control Source { get; } = source;
         }
     }
 
@@ -8648,11 +8729,27 @@ public unsafe partial class Control :
     ///   miss a transition and should query <see cref="Application.SystemVisualSettings"/> when
     ///   it creates a handle or is parented.
     ///  </para>
+    ///  <para>
+    ///   A High Contrast transition also routes each changed effective
+    ///   <see cref="VisualStylesMode"/> through <see cref="OnVisualStylesModeChanged(EventArgs)"/>.
+    ///  Controls whose effective mode is unchanged do not receive a visual-styles transition.
+    ///  </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
     {
+        if ((e.Changed & SystemVisualSettingsCategories.HighContrast) != 0
+            && ParentInternal is null)
+        {
+            RaiseHighContrastVisualStylesModeChanged(e);
+        }
+
         Properties.AddOrRemoveValue(s_systemVisualSettingsProperty, e.NewSettings);
+
+        if ((e.Changed & SystemVisualSettingsCategories.AccentColor) != 0)
+        {
+            Invalidate();
+        }
 
         if (ChildControls is { } children)
         {
@@ -8663,6 +8760,39 @@ public unsafe partial class Control :
         }
 
         ((SystemVisualSettingsChangedEventHandler?)Events[s_systemVisualSettingsChangedEvent])?.Invoke(this, e);
+    }
+
+    private void RaiseHighContrastVisualStylesModeChanged(SystemVisualSettingsChangedEventArgs e)
+    {
+        VisualStylesMode oldEffectiveVisualStylesMode =
+            GetEffectiveVisualStylesMode(e.OldSettings.HighContrastEnabled);
+        VisualStylesMode newEffectiveVisualStylesMode =
+            GetEffectiveVisualStylesMode(e.NewSettings.HighContrastEnabled);
+        int changeVersion = Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0) + 1;
+        Properties.AddValue(s_visualStylesModeChangeVersionProperty, changeVersion);
+
+        VisualStylesModeChangeEventArgs transition = new(
+            this,
+            changeVersion,
+            oldEffectiveVisualStylesMode,
+            newEffectiveVisualStylesMode,
+            e);
+
+        try
+        {
+            if (oldEffectiveVisualStylesMode != newEffectiveVisualStylesMode)
+            {
+                OnVisualStylesModeChanged(transition);
+            }
+            else if (ChildControls is { } children)
+            {
+                CascadeVisualStylesModeChanged(children, transition, transition);
+            }
+        }
+        finally
+        {
+            transition.PerformLayouts();
+        }
     }
 
     private void QueueSystemVisualSettingsRefresh()
@@ -13262,7 +13392,6 @@ public unsafe partial class Control :
                 break;
 
             case PInvokeCore.WM_THEMECHANGED:
-            case WmDwmColorizationColorChanged:
                 DefWndProc(ref m);
                 QueueSystemVisualSettingsRefresh();
                 break;

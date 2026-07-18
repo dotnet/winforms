@@ -621,7 +621,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
             customOnColor: null,
             customBorderColor: null);
 
-        Assert.True(CountPixels(bitmap, Application.GetWindowsAccentColor()) > 0);
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
     }
 
     [WinFormsFact]
@@ -826,7 +826,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         renderer.RenderControl(graphics);
 
-        Assert.True(CountPixels(bitmap, Application.GetWindowsAccentColor()) > 0);
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
     }
 
     [WinFormsFact]

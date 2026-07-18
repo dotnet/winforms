@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms.Rendering.Animation;
 
 namespace System.Windows.Forms.Tests;
 
@@ -191,6 +192,238 @@ public class SystemVisualSettingsTests
 
         Assert.Equal(1, parentCallCount);
         Assert.Equal(1, childCallCount);
+    }
+
+    [WinFormsFact]
+    public void AnimatedControlRenderer_SystemVisualSettingsAccentChange_InvalidatesCachedAccentAndRepaints()
+    {
+        SystemVisualSettings initial = CreateSettings(accentColor: Color.Crimson);
+        SystemVisualSettings next = CreateSettings(accentColor: Color.RoyalBlue);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using SubSystemVisualSettingsControl control = new();
+            control.CreateControl();
+            using SettingsAnimationRenderer renderer = new(control);
+            bool invalidated = false;
+            control.Invalidated += (sender, e) => invalidated = true;
+
+            Assert.Equal(Color.Crimson, renderer.AccentColor);
+            Assert.True(renderer.IsAccentColorCached);
+
+            SystemVisualSettingsTracker.ResetForTesting(next);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    next,
+                    SystemVisualSettingsCategories.AccentColor));
+
+            Assert.False(renderer.IsAccentColorCached);
+            Assert.Equal(Color.RoyalBlue, renderer.AccentColor);
+            Assert.True(invalidated);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
+    public void AnimatedControlRenderer_AnimationsDisabled_StartsAndSettlesWithoutRegistering()
+    {
+        SystemVisualSettings disabled = CreateSettings(clientAreaAnimationEnabled: false);
+
+        try
+        {
+            AnimationManager.DisposeCurrentForTesting();
+            SystemVisualSettingsTracker.ResetForTesting(disabled);
+            using Control control = new();
+            using SettingsAnimationRenderer renderer = new(control);
+
+            renderer.StartAnimation();
+
+            Assert.False(renderer.IsRunning);
+            Assert.Equal(1, renderer.StartCount);
+            Assert.Equal(1, renderer.EndCount);
+            Assert.Equal(1f, renderer.LastProgress);
+        }
+        finally
+        {
+            AnimationManager.DisposeCurrentForTesting();
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
+    public void AnimatedControlRenderer_AnimationsDisabledAtRuntime_SnapsAndReenablingOnlyAffectsFutureTransitions()
+    {
+        SystemVisualSettings enabled = CreateSettings(clientAreaAnimationEnabled: true);
+        SystemVisualSettings disabled = CreateSettings(clientAreaAnimationEnabled: false);
+
+        try
+        {
+            AnimationManager.DisposeCurrentForTesting();
+            SystemVisualSettingsTracker.ResetForTesting(enabled);
+            using SubSystemVisualSettingsControl control = new();
+            using SettingsAnimationRenderer renderer = new(control);
+            renderer.StartAnimation();
+            AnimationManager manager = AnimationManager.GetCurrentForTesting();
+
+            Assert.True(renderer.IsRunning);
+
+            SystemVisualSettingsTracker.ResetForTesting(disabled);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    enabled,
+                    disabled,
+                    SystemVisualSettingsCategories.Animations));
+
+            Assert.False(renderer.IsRunning);
+            Assert.Equal(1f, renderer.LastProgress);
+            Assert.Equal(1, renderer.EndCount);
+            Assert.Equal(0, manager.RendererCountForTesting);
+
+            SystemVisualSettingsTracker.ResetForTesting(enabled);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    disabled,
+                    enabled,
+                    SystemVisualSettingsCategories.Animations));
+
+            Assert.False(renderer.IsRunning);
+            Assert.Equal(1, renderer.StartCount);
+            Assert.Equal(1, renderer.EndCount);
+
+            renderer.StartAnimation();
+
+            Assert.True(renderer.IsRunning);
+            Assert.Equal(2, renderer.StartCount);
+        }
+        finally
+        {
+            AnimationManager.DisposeCurrentForTesting();
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_SystemVisualSettingsChanged_HighContrastTransitionDispatchesVisualStylesImpactOnce()
+    {
+        SystemVisualSettings initial = CreateSettings(highContrastEnabled: false);
+        SystemVisualSettings next = CreateSettings(highContrastEnabled: true);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using VisualStylesImpactForm parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+            using VisualStylesImpactPanel child = new();
+            parent.Controls.Add(child);
+            parent.CreateControl();
+            child.CreateControl();
+            parent.ResetVisualStylesTransitionCount();
+            child.ResetVisualStylesTransitionCount();
+            int parentLayoutCount = 0;
+            parent.Layout += (sender, e) => parentLayoutCount++;
+
+            SystemVisualSettingsTracker.ResetForTesting(next);
+            parent.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    next,
+                    SystemVisualSettingsCategories.HighContrast));
+
+            Assert.Equal(1, parent.VisualStylesTransitionCount);
+            Assert.Equal(1, child.VisualStylesTransitionCount);
+            Assert.Equal(1, parentLayoutCount);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_SystemVisualSettingsChanged_HighContrastEffectiveEqualityDoesNotDispatchVisualStylesImpact()
+    {
+        SystemVisualSettings initial = CreateSettings(highContrastEnabled: false);
+        SystemVisualSettings next = CreateSettings(highContrastEnabled: true);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using VisualStylesImpactForm parent = new() { VisualStylesMode = VisualStylesMode.Classic };
+            using VisualStylesImpactPanel child = new();
+            parent.Controls.Add(child);
+            parent.CreateControl();
+            child.CreateControl();
+            parent.ResetVisualStylesTransitionCount();
+            child.ResetVisualStylesTransitionCount();
+            int parentLayoutCount = 0;
+            parent.Layout += (sender, e) => parentLayoutCount++;
+
+            SystemVisualSettingsTracker.ResetForTesting(next);
+            parent.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    next,
+                    SystemVisualSettingsCategories.HighContrast));
+
+            Assert.Equal(0, parent.VisualStylesTransitionCount);
+            Assert.Equal(0, child.VisualStylesTransitionCount);
+            Assert.Equal(0, parentLayoutCount);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_SystemVisualSettingsChanged_HighContrastReentrantChildChangeDoesNotRecascadeGrandchild()
+    {
+        SystemVisualSettings initial = CreateSettings(highContrastEnabled: true);
+        SystemVisualSettings next = CreateSettings(highContrastEnabled: false);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using VisualStylesImpactForm parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+            using VisualStylesImpactPanel child = new();
+            using VisualStylesImpactPanel grandchild = new();
+            parent.Controls.Add(child);
+            child.Controls.Add(grandchild);
+            parent.CreateControl();
+            child.CreateControl();
+            grandchild.CreateControl();
+            parent.ResetVisualStylesTransitionCount();
+            child.ResetVisualStylesTransitionCount();
+            grandchild.ResetVisualStylesTransitionCount();
+            bool reentered = false;
+            child.VisualStylesModeChanged += (sender, e) =>
+            {
+                if (!reentered)
+                {
+                    reentered = true;
+                    child.VisualStylesMode = VisualStylesMode.Latest;
+                }
+            };
+
+            SystemVisualSettingsTracker.ResetForTesting(next);
+            parent.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    next,
+                    SystemVisualSettingsCategories.HighContrast));
+
+            Assert.Equal(1, parent.VisualStylesTransitionCount);
+            Assert.Equal(2, child.VisualStylesTransitionCount);
+            Assert.Equal(1, grandchild.VisualStylesTransitionCount);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting();
+        }
     }
 
     [WinFormsFact]
@@ -495,6 +728,84 @@ public class SystemVisualSettingsTests
 
         public void OnInstanceSystemVisualSettingsChanged(object? sender, SystemVisualSettingsChangedEventArgs e)
         {
+        }
+    }
+
+    private sealed class SettingsAnimationRenderer : AnimatedControlRenderer
+    {
+        public SettingsAnimationRenderer(Control control) : base(control)
+        {
+        }
+
+        public Color AccentColor => WindowsAccentColor;
+
+        public int EndCount { get; private set; }
+
+        public float LastProgress { get; private set; }
+
+        public int StartCount { get; private set; }
+
+        public override void AnimationProc(float animationProgress)
+        {
+            LastProgress = animationProgress;
+            base.AnimationProc(animationProgress);
+        }
+
+        public override void RenderControl(Graphics graphics)
+        {
+        }
+
+        protected override (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted()
+        {
+            StartCount++;
+            return (100, AnimationCycle.Once);
+        }
+
+        protected override void OnAnimationEnded() => EndCount++;
+
+        protected override void OnAnimationStopped()
+        {
+        }
+    }
+
+    private sealed class VisualStylesImpactForm : Form
+    {
+        public int VisualStylesTransitionCount { get; private set; }
+
+        public void RaiseSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
+
+        public void ResetVisualStylesTransitionCount()
+            => VisualStylesTransitionCount = 0;
+
+        protected override VisualStylesModeChangeImpact GetVisualStylesModeChangeImpact(
+            VisualStylesMode oldMode,
+            VisualStylesMode newMode)
+            => VisualStylesModeChangeImpact.Metrics;
+
+        protected override void OnVisualStylesModeChanged(EventArgs e)
+        {
+            VisualStylesTransitionCount++;
+            base.OnVisualStylesModeChanged(e);
+        }
+    }
+
+    private sealed class VisualStylesImpactPanel : Panel
+    {
+        public int VisualStylesTransitionCount { get; private set; }
+
+        public void ResetVisualStylesTransitionCount()
+            => VisualStylesTransitionCount = 0;
+
+        protected override VisualStylesModeChangeImpact GetVisualStylesModeChangeImpact(
+            VisualStylesMode oldMode,
+            VisualStylesMode newMode)
+            => VisualStylesModeChangeImpact.Metrics;
+
+        protected override void OnVisualStylesModeChanged(EventArgs e)
+        {
+            VisualStylesTransitionCount++;
+            base.OnVisualStylesModeChanged(e);
         }
     }
 

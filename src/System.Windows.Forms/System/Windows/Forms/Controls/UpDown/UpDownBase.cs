@@ -1181,7 +1181,7 @@ public abstract partial class UpDownBase : ContainerControl
         => _focusIndicatorRenderer ??= new(this, InvalidateModernFocusIndicator);
 
     private static Color ModernFocusColor
-        => TextBoxBase.GetVisualStylesFocusColor(SystemInformation.HighContrast);
+        => TextBoxBase.GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
 
     private void SetModernFocusState(bool focused)
     {

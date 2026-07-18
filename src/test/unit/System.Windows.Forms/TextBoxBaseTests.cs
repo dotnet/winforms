@@ -396,7 +396,7 @@ public partial class TextBoxBaseTests
     {
         Color expected = highContrast
             ? SystemColors.Highlight
-            : Application.GetWindowsAccentColor();
+            : Application.SystemVisualSettings.AccentColor;
 
         Assert.Equal(expected, TextBoxBase.GetVisualStylesFocusColor(highContrast));
     }

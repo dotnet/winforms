@@ -121,10 +121,13 @@ internal partial class AnimationManager
     internal static void Suspend(AnimatedControlRenderer animatedControlRenderer)
     {
         if (s_instance is AnimationManager manager
-            && manager._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? renderItem))
+            && manager._renderer.TryRemove(animatedControlRenderer, out AnimationRendererItem? renderItem))
         {
             renderItem.Renderer.StopAnimationInternal();
+            return;
         }
+
+        animatedControlRenderer.StopAnimationInternal();
     }
 
     /// <summary>

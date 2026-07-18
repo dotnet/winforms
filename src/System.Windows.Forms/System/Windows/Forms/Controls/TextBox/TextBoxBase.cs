@@ -990,6 +990,7 @@ public abstract partial class TextBoxBase : Control
             focusBorderMetrics,
             textScaleFactor,
             deviceDpi);
+
     internal static bool CanRenderVisualStylesRoundedChrome(
         Rectangle bounds,
         int cornerSize,
@@ -1002,7 +1003,7 @@ public abstract partial class TextBoxBase : Control
     internal static Color GetVisualStylesFocusColor(bool highContrast)
         => highContrast
             ? SystemColors.Highlight
-            : Application.GetWindowsAccentColor();
+            : Application.SystemVisualSettings.AccentColor;
 
     /// <summary>
     ///  Returns the additional padding required to clear the live scrollbars,
@@ -2760,7 +2761,7 @@ public abstract partial class TextBoxBase : Control
 
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             FocusIndicatorRenderer.DrawRoundedFocusIndicator(
                 offscreenGraphics,
                 deflatedBounds,
@@ -2772,20 +2773,20 @@ public abstract partial class TextBoxBase : Control
         }
         else if (Focused)
         {
-            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             using var focusPen = focusColor.GetCachedPenScope(borderThickness);
-            offscreenGraphics.DrawLine(
-                focusPen,
-                deflatedBounds.Left,
-                deflatedBounds.Bottom,
-                deflatedBounds.Right,
-                deflatedBounds.Bottom);
-            offscreenGraphics.DrawLine(
-                focusPen,
-                deflatedBounds.Left,
-                deflatedBounds.Bottom - 1,
-                deflatedBounds.Right,
-                deflatedBounds.Bottom - 1);
+            int focusLineCount = Math.Min(
+                Math.Max(2, focusBorderMetrics.Height),
+                Math.Max(1, deflatedBounds.Height));
+            for (int i = 0; i < focusLineCount; i++)
+            {
+                offscreenGraphics.DrawLine(
+                    focusPen,
+                    deflatedBounds.Left,
+                    deflatedBounds.Bottom - i,
+                    deflatedBounds.Right,
+                    deflatedBounds.Bottom - i);
+            }
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(

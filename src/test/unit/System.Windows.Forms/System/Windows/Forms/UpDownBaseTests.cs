@@ -20,7 +20,7 @@ public class UpDownBaseTests
 
         Color expected = SystemInformation.HighContrast
             ? SystemColors.Highlight
-            : Application.GetWindowsAccentColor();
+            : Application.SystemVisualSettings.AccentColor;
         Color actual = typeof(UpDownBase).TestAccessor.Dynamic.ModernFocusColor;
 
         actual.ToArgb().Should().Be(expected.ToArgb());
