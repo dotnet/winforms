@@ -65,6 +65,108 @@ public partial class TextBoxBaseTests
         Assert.Equal(6, control.SelectionLength);
     }
 
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_MetricsImpact_ClearsPreferredSizeCache()
+    {
+        using VisualStylesModeTextBox control = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+
+        Assert.Equal(new Size(100, 20), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(new Size(100, 20), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(2, control.PreferredSizeCoreCallCount);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_Net11ToLatest_RepaintsWithoutClearingPreferredSizeCache()
+    {
+        using VisualStylesModeTextBox control = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+
+        control.VisualStylesMode = VisualStylesMode.Latest;
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_LiveSwitchRemeasuresAutoSizeTableLayoutRow()
+    {
+        using Form form = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink
+        };
+        using TableLayoutPanel tableLayoutPanel = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            ColumnCount = 1,
+            RowCount = 1,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        form.Controls.Add(tableLayoutPanel);
+
+        using VisualStylesModeTextBox textBox = new()
+        {
+            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+            AutoSize = true,
+            HighContrast = false,
+            Width = 140
+        };
+        tableLayoutPanel.Controls.Add(textBox, 0, 0);
+        form.CreateControl();
+        tableLayoutPanel.CreateControl();
+        textBox.CreateControl();
+
+        IntPtr handle = textBox.Handle;
+        int classicRowHeight = tableLayoutPanel.GetRowHeights()[0];
+
+        tableLayoutPanel.VisualStylesMode = VisualStylesMode.Net11;
+
+        int modernRowHeight = tableLayoutPanel.GetRowHeights()[0];
+        Assert.Equal(handle, textBox.Handle);
+        Assert.NotEqual(classicRowHeight, modernRowHeight);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_MetricsImpactWithAutoSizeDisabled_RequestsParentLayout()
+    {
+        using VisualStylesModePanel parent = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using VisualStylesModeTextBox textBox = new()
+        {
+            AutoSize = false,
+            HighContrast = false
+        };
+        parent.Controls.Add(textBox);
+
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(1, layoutCallCount);
+    }
+
     [WinFormsTheory]
     [InlineData(9f)]
     [InlineData(11f)]
@@ -8396,6 +8498,31 @@ public partial class TextBoxBaseTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class VisualStylesModeTextBox : TextBox
+    {
+        public bool HighContrast { get; set; }
+
+        public int PreferredSizeCoreCallCount { get; private set; }
+
+        internal override bool IsHighContrast => HighContrast;
+
+        internal override Size GetPreferredSizeCore(Size proposedConstraints)
+        {
+            PreferredSizeCoreCallCount++;
+
+            return EffectiveVisualStylesMode >= VisualStylesMode.Net11
+                ? new Size(100, 30)
+                : new Size(100, 20);
+        }
+    }
+
+    private class VisualStylesModePanel : Panel
+    {
+        public bool HighContrast { get; set; }
+
+        internal override bool IsHighContrast => HighContrast;
     }
 
     private class SubRichTextBox : RichTextBox
