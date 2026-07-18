@@ -912,6 +912,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_RapidStateChange_PreservesThumbPosition()
     {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
