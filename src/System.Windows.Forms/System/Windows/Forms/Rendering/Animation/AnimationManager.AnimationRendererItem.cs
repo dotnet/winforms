@@ -5,10 +5,11 @@ namespace System.Windows.Forms.Rendering.Animation;
 
 internal partial class AnimationManager
 {
-    private class AnimationRendererItem
+    /// <summary>
+    ///  Stores the timeline state for one animated renderer.
+    /// </summary>
+    private sealed class AnimationRendererItem
     {
-        public long StopwatchTarget;
-
         public AnimationRendererItem(AnimatedControlRenderer renderer, int animationDuration, AnimationCycle animationCycle)
         {
             Renderer = renderer;
@@ -21,5 +22,6 @@ internal partial class AnimationManager
         public int FrameCount { get; set; }
         public AnimationCycle AnimationCycle { get; set; }
         public int FrameOffset { get; set; } = 1;
+        public TimeSpan? TargetTimestamp { get; set; }
     }
 }
