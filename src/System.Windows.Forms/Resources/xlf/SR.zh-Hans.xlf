@@ -2027,6 +2027,11 @@
         <target state="translated">在系统颜色更改时引发的事件。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex 属性值更改时引发的事件。</target>
@@ -5598,11 +5603,6 @@ Do you want to replace it?</source>
       <trans-unit id="FormOnShownDescr">
         <source>Occurs whenever the form is first shown.</source>
         <target state="translated">每当窗体第一次显示时发生。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormOnSystemTextSizeChangedDescr">
-        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
-        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOpacityDescr">

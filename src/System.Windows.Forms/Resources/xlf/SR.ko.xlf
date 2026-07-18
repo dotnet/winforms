@@ -2027,6 +2027,11 @@
         <target state="translated">시스템 색이 변경되면 이벤트가 발생합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex 속성 값이 변경되면 이벤트가 발생합니다.</target>
@@ -5598,11 +5603,6 @@ Do you want to replace it?</source>
       <trans-unit id="FormOnShownDescr">
         <source>Occurs whenever the form is first shown.</source>
         <target state="translated">폼이 처음 표시될 때마다 발생합니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormOnSystemTextSizeChangedDescr">
-        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
-        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOpacityDescr">
