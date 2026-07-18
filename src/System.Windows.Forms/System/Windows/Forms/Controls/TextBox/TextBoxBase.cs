@@ -1702,23 +1702,34 @@ public abstract partial class TextBoxBase : Control
     /// <inheritdoc/>
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
+        // UpdateStyles may synchronously provoke WM_NCCALCSIZE, so it must observe a cleared latch.
+        _triggerNewClientSizeRequest = false;
         base.OnVisualStylesModeChanged(e);
+        AdjustHeight(false);
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
-        CommonProperties.xClearPreferredSizeCache(this);
-        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.VisualStylesMode);
-        AdjustHeight(false);
-
-        if (!IsHandleCreated)
-        {
-            return;
-        }
-
-        // Update the native styles without recreating the handle so text, selection, and scroll state
-        // remain untouched. The client-area latch must be reset before requesting a new frame.
-        _triggerNewClientSizeRequest = false;
-        UpdateStyles();
         RecalculateVisualStylesClientArea();
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///  <para>
+    ///   <see cref="PreferredHeightCore"/> and the modern non-client padding table are shared by
+    ///   <see cref="VisualStylesMode.Net11"/> and <see cref="VisualStylesMode.Latest"/>. Consequently, switching
+    ///   between those modes only repaints. Crossing the classic or disabled boundary changes both the preferred
+    ///   height selection and the non-client padding model, so it requires a metrics update.
+    ///  </para>
+    /// </remarks>
+    protected override VisualStylesModeChangeImpact GetVisualStylesModeChangeImpact(
+        VisualStylesMode oldMode,
+        VisualStylesMode newMode)
+    {
+        bool oldUsesModernMetrics = oldMode >= VisualStylesMode.Net11;
+        bool newUsesModernMetrics = newMode >= VisualStylesMode.Net11;
+
+        return oldUsesModernMetrics != newUsesModernMetrics
+            ? VisualStylesModeChangeImpact.Metrics
+            : VisualStylesModeChangeImpact.Repaint;
     }
 
     /// <summary>
