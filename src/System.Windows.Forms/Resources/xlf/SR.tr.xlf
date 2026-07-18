@@ -2027,6 +2027,11 @@
         <target state="translated">Sistem renkleri değiştiğinde harekete geçirilen olay.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex özelliğinin değeri değiştirildiğinde harekete geçirilen olay.</target>
@@ -5598,11 +5603,6 @@ Değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormOnShownDescr">
         <source>Occurs whenever the form is first shown.</source>
         <target state="translated">Formun her ilk görüntülenişinde gerçekleşir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormOnSystemTextSizeChangedDescr">
-        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
-        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOpacityDescr">

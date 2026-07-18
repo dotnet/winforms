@@ -2027,6 +2027,11 @@
         <target state="translated">Evento generato alla modifica dei colori di sistema.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">Generato quando il valore della proprietà TabIndex cambia.</target>
@@ -5598,11 +5603,6 @@ Sostituirlo?</target>
       <trans-unit id="FormOnShownDescr">
         <source>Occurs whenever the form is first shown.</source>
         <target state="translated">Generato alla prima visualizzazione del form.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormOnSystemTextSizeChangedDescr">
-        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
-        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOpacityDescr">

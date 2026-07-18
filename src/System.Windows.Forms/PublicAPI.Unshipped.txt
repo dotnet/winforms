@@ -1,5 +1,25 @@
-static System.Windows.Forms.Application.GetWindowsAccentColor() -> System.Drawing.Color
-static System.Windows.Forms.Application.SystemTextSize.get -> double
-static System.Windows.Forms.Application.SystemTextSizeChanged -> System.EventHandler?
-System.Windows.Forms.Form.SystemTextSizeChanged -> System.EventHandler?
-virtual System.Windows.Forms.Form.OnSystemTextSizeChanged(System.EventArgs! e) -> void
+static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
+static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+System.Windows.Forms.Control.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+System.Windows.Forms.SystemVisualSettings.AccentColor.get -> System.Drawing.Color
+System.Windows.Forms.SystemVisualSettings.ClientAreaAnimationEnabled.get -> bool
+System.Windows.Forms.SystemVisualSettings.FocusBorderMetrics.get -> System.Drawing.Size
+System.Windows.Forms.SystemVisualSettings.HighContrastEnabled.get -> bool
+System.Windows.Forms.SystemVisualSettings.KeyboardCuesVisible.get -> bool
+System.Windows.Forms.SystemVisualSettings.TextScaleFactor.get -> float
+System.Windows.Forms.SystemVisualSettings
+System.Windows.Forms.SystemVisualSettingsCategories.AccentColor = 1 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.Animations = 8 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.FocusMetrics = 32 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.HighContrast = 4 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.KeyboardCues = 16 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.None = 0 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.TextScale = 2 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.Changed.get -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.NewSettings.get -> System.Windows.Forms.SystemVisualSettings!
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.OldSettings.get -> System.Windows.Forms.SystemVisualSettings!
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs
+System.Windows.Forms.SystemVisualSettingsChangedEventHandler
+virtual System.Windows.Forms.SystemVisualSettingsChangedEventHandler.Invoke(object? sender, System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
