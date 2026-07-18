@@ -4240,35 +4240,6 @@ public partial class Form : ContainerControl
         }
     }
 
-    // Snapshot of the Windows High Contrast state, used to detect a transition in OnSystemColorsChanged.
-    private bool _lastHighContrast = SystemInformation.HighContrast;
-
-    /// <inheritdoc/>
-    protected override void OnSystemColorsChanged(EventArgs e)
-    {
-        base.OnSystemColorsChanged(e);
-
-        // Windows High Contrast forces Classic rendering (see Control.EffectiveVisualStylesMode), which changes
-        // CreateParams for this form and its children. When the High Contrast state actually toggles we must
-        // rebuild the handle so those CreateParams are re-read. Recreating the top-level Form destroys and
-        // rebuilds the entire child HWND tree, so the rebuild itself propagates the new mode to every child -
-        // no per-child notification is needed. Doing this only on Form (not Control) avoids recreating each
-        // child a second time as Control.OnSystemColorsChanged walks down the tree.
-        bool highContrast = SystemInformation.HighContrast;
-
-        if (highContrast != _lastHighContrast)
-        {
-            _lastHighContrast = highContrast;
-
-            // If visual styles are explicitly disabled they stay disabled regardless of High Contrast, so
-            // nothing about CreateParams changes and there is no need to recreate.
-            if (VisualStylesMode is not VisualStylesMode.Disabled)
-            {
-                RecreateHandle();
-            }
-        }
-    }
-
     /// <summary>
     ///  Handles the event that a helpButton is clicked
     /// </summary>

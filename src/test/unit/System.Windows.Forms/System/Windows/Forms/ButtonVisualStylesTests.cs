@@ -210,7 +210,7 @@ public class ButtonVisualStylesTests
             VisualStylesMode = VisualStylesMode.Net11
         };
 
-        Color accent = Application.GetWindowsAccentColor();
+        Color accent = Application.SystemVisualSettings.AccentColor;
         Color expectedBase = ModernButtonColorMath.GetRenderedBaseColor(button, button.FlatAppearance);
 
         Assert.Equal(accent, button.FlatAppearance.MouseDownBackColor);
@@ -292,7 +292,7 @@ public class ButtonVisualStylesTests
 
         Assert.Equal(button.BackColor, ModernButtonColorMath.GetRenderedBaseColor(button, button.FlatAppearance));
 
-        Color accent = Application.GetWindowsAccentColor();
+        Color accent = Application.SystemVisualSettings.AccentColor;
         Assert.Equal(
             PopupButtonColorMath.Blend(
                 button.BackColor,
@@ -324,7 +324,7 @@ public class ButtonVisualStylesTests
         {
             FlatAppearance = button.FlatAppearance
         };
-        Color accent = Application.GetWindowsAccentColor();
+        Color accent = Application.SystemVisualSettings.AccentColor;
 
         Assert.Equal(accent, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, false, Color.Empty));
         Assert.Equal(
@@ -699,7 +699,7 @@ public class ButtonVisualStylesTests
     public void ModernButtonRenderers_DefaultBackground_UsesCurrentAccent(
         VisualStyles.PushButtonState state)
     {
-        Color accent = Application.GetWindowsAccentColor();
+        Color accent = Application.SystemVisualSettings.AccentColor;
         Color expected = ModernButtonColorMath.GetDefaultButtonColor(accent, state);
         ModernButtonDarkModeRenderer standardRenderer = new();
         ModernFlatButtonRenderer flatRenderer = new();

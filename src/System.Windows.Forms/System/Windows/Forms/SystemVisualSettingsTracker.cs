@@ -140,7 +140,7 @@ internal static class SystemVisualSettingsTracker
             && highContrast.dwFlags.HasFlag(HIGHCONTRASTW_FLAGS.HCF_HIGHCONTRASTON);
 
         SystemVisualSettingsNativeValues values = new(
-            GetWindowsAccentColor(),
+            GetAccentColor(),
             (float)ScaleHelper.GetSystemTextScaleFactor(),
             highContrastEnabled,
             PInvokeCore.SystemParametersInfoBool(SPI_GETCLIENTAREAANIMATION),
@@ -152,11 +152,11 @@ internal static class SystemVisualSettingsTracker
         return CreateSnapshot(values);
     }
 
-    private static Color GetWindowsAccentColor()
+    private static Color GetAccentColor()
     {
         try
         {
-            return GetWindowsAccentColorCore();
+            return GetAccentColorCore();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -165,7 +165,7 @@ internal static class SystemVisualSettingsTracker
         }
     }
 
-    private static unsafe Color GetWindowsAccentColorCore()
+    private static unsafe Color GetAccentColorCore()
     {
         HSTRING className = default;
 

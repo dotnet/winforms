@@ -50,11 +50,23 @@ public sealed class SystemVisualSettings
     /// <summary>
     ///  Gets a value indicating whether the user has enabled Windows high-contrast mode.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   When this value is <see langword="true"/>, controls use the classic effective
+    ///   <see cref="VisualStylesMode"/> so custom modern chrome does not bypass the High Contrast palette.
+    ///  </para>
+    /// </remarks>
     public bool HighContrastEnabled { get; }
 
     /// <summary>
     ///  Gets a value indicating whether Windows enables client-area animations.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   When this value changes to <see langword="false"/>, active client-area animations complete immediately.
+    ///   Re-enabling animations affects later transitions only.
+    ///  </para>
+    /// </remarks>
     public bool ClientAreaAnimationEnabled { get; }
 
     /// <summary>

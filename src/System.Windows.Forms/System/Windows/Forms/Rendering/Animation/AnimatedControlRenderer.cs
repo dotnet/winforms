@@ -9,15 +9,25 @@ namespace System.Windows.Forms.Rendering.Animation;
 /// <summary>
 ///  Represents an abstract base class for animated control renderers.
 /// </summary>
-/// <param name="control">The control associated with the renderer.</param>
-internal abstract class AnimatedControlRenderer(Control control) : IDisposable
+internal abstract class AnimatedControlRenderer : IDisposable
 {
     private const float InteractionShadeAmount = 0.08f;
 
+    private readonly Control _control;
     private Color _accentColor;
     private bool _accentColorInitialized;
     private bool _disposedValue;
     protected float AnimationProgress = 1;
+
+    /// <summary>
+    ///  Initializes a renderer for the specified control.
+    /// </summary>
+    /// <param name="control">The control associated with the renderer.</param>
+    protected AnimatedControlRenderer(Control control)
+    {
+        _control = control;
+        _control.SystemVisualSettingsChanged += OnSystemVisualSettingsChanged;
+    }
 
     /// <summary>
     ///  Callback for the animation progress. This method is called by the animation manager on each
@@ -39,7 +49,7 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
     ///  Invalidates the control, causing it to be redrawn, which in turns triggers
     ///  <see cref="RenderControl(Graphics)"/>.
     /// </summary>
-    public void Invalidate() => control.Invalidate();
+    public void Invalidate() => _control.Invalidate();
 
     /// <summary>
     ///  Starts the animation and gets the animation parameters.
@@ -51,8 +61,15 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
             return;
         }
 
-        // Get the animation parameters.
+        // Get the animation parameters before testing the system setting so a disabled transition
+        // settles against the same final target as an animated transition.
         (int animationDuration, AnimationCycle animationCycle) = OnAnimationStarted();
+
+        if (!Application.SystemVisualSettings.ClientAreaAnimationEnabled)
+        {
+            CompleteAnimation();
+            return;
+        }
 
         // Register the renderer with the animation manager.
         AnimationManager.RegisterOrUpdateAnimationRenderer(
@@ -87,7 +104,12 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
     ///  Called by the animation manager when the animation ends.
     /// </summary>
     internal void EndAnimation()
+        => CompleteAnimation();
+
+    private void CompleteAnimation()
     {
+        AnimationProc(1f);
+        AnimationManager.Suspend(this);
         OnAnimationEnded();
     }
 
@@ -120,7 +142,7 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
     /// <summary>
     ///  Gets the control associated with the renderer.
     /// </summary>
-    protected Control Control => control;
+    protected Control Control => _control;
 
     protected Color WindowsAccentColor
     {
@@ -128,7 +150,7 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
         {
             if (!_accentColorInitialized)
             {
-                _accentColor = Application.GetWindowsAccentColor();
+                _accentColor = Application.SystemVisualSettings.AccentColor;
                 _accentColorInitialized = true;
             }
 
@@ -140,6 +162,21 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
 
     internal void InvalidateAccentColor()
         => _accentColorInitialized = false;
+
+    private void OnSystemVisualSettingsChanged(object? sender, SystemVisualSettingsChangedEventArgs e)
+    {
+        if ((e.Changed & SystemVisualSettingsCategories.AccentColor) != 0)
+        {
+            InvalidateAccentColor();
+        }
+
+        if ((e.Changed & SystemVisualSettingsCategories.Animations) != 0
+            && !e.NewSettings.ClientAreaAnimationEnabled
+            && IsRunning)
+        {
+            CompleteAnimation();
+        }
+    }
 
     internal static Color ApplyInteractionShade(Color color, float progress)
     {
@@ -157,6 +194,8 @@ internal abstract class AnimatedControlRenderer(Control control) : IDisposable
         {
             if (disposing)
             {
+                _control.SystemVisualSettingsChanged -= OnSystemVisualSettingsChanged;
+
                 // Remove the renderer from the animation manager.
                 AnimationManager.UnregisterAnimationRenderer(this);
             }

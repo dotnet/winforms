@@ -1,3 +1,4 @@
+#nullable enable
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
 virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
@@ -62,7 +63,6 @@ override System.Windows.Forms.RichTextBox.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
-#nullable enable
 System.Windows.Forms.KioskModeManager
 System.Windows.Forms.KioskModeManager.ContainerControl.get -> System.Windows.Forms.ContainerControl?
 System.Windows.Forms.KioskModeManager.ContainerControl.set -> void
@@ -104,7 +104,6 @@ System.Windows.Forms.KioskModeWakeupSource.Keyboard = 0 -> System.Windows.Forms.
 System.Windows.Forms.KioskModeWakeupSource.Mouse = 1 -> System.Windows.Forms.KioskModeWakeupSource
 System.Windows.Forms.KioskModeWakeupSource.PowerResume = 2 -> System.Windows.Forms.KioskModeWakeupSource
 System.Windows.Forms.KioskModeWakeupSource.Session = 3 -> System.Windows.Forms.KioskModeWakeupSource
-#nullable enable
 System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
 System.Windows.Forms.Control.EffectiveVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
@@ -125,7 +124,6 @@ override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
 override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void

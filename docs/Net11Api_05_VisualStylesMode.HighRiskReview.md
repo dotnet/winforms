@@ -16,6 +16,22 @@ layout per container. This is required so a container measures only fully update
 classic/disabled and Net11-or-later rendering as metric changes; Net11-to-Latest shares its preferred-height
 and non-client padding metrics and repaints only.
 
+`SystemVisualSettings` High Contrast transitions enter the same dispatcher with immutable old/new snapshots.
+Every affected control compares its own effective mode, so locally configured descendants are included, while
+effective-equality controls bypass visual-styles events, invalidation, and layout. The shared transition state
+preserves existing reentrant-change suppression and layout coalescing.
+
+## System visual settings renderer composition
+
+Animated renderers subscribe only to their owning control's instance settings cascade. Accent transitions clear
+their cached accent color; the control cascade repaints the tree. Disabling client-area animation completes an
+active transition at progress 1 and unregisters it from the per-thread manager. Re-enabling does not restart a
+completed transition; a later state change starts a new one.
+
+`TextBoxBase` derives modern focus-border thickness and focus-band height from the system focus-border metrics,
+text-scale factor, and device DPI. These metrics affect only modern chrome. The existing never-invert client
+carve, small-control flat fallback, and classic-mode metrics remain unchanged.
+
 ## Animation timing and thread ownership
 
 The timer now uses an absolute `Stopwatch` schedule with a high-resolution waitable timer on supported Windows

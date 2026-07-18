@@ -892,8 +892,9 @@ public abstract partial class TextBoxBase : Control
             {
                 // A naturally sized single-line control must leave enough room for the complete
                 // rounded chrome. Explicitly fixed controls are not forced through this floor.
+                Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
                 int roundedChromeMinimumHeight = ScaleVisualStylesMetric(VisualStylesCornerRadius)
-                    + ScaleVisualStylesMetric(BorderThickness)
+                    + Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height)
                     + ScaleVisualStylesMetric(VisualStylesInternalChromeInset);
 
                 preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
@@ -946,7 +947,9 @@ public abstract partial class TextBoxBase : Control
     /// </remarks>
     private protected Padding GetVisualStylesPadding(bool includeScrollbars)
     {
-        int offset = ScaleVisualStylesMetric(BorderThickness);
+        Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
+        int horizontalOffset = focusBorderMetrics.Width;
+        int verticalOffset = focusBorderMetrics.Height;
 
         // The visible padding is selected per BorderStyle (not per VisualStylesMode): each border look
         // reserves a differently sized band around the native edit's client area for the modern chrome
@@ -958,23 +961,23 @@ public abstract partial class TextBoxBase : Control
         Padding borderPadding = BorderStyle switch
         {
             BorderStyle.Fixed3D => new Padding(
-                left: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
-                top: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
-                right: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset,
-                bottom: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + offset),
+                left: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + horizontalOffset,
+                top: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + verticalOffset,
+                right: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + horizontalOffset,
+                bottom: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + verticalOffset),
 
             BorderStyle.FixedSingle => new Padding(
-                left: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
-                top: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
-                right: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset,
-                bottom: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + offset),
+                left: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + horizontalOffset,
+                top: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + verticalOffset,
+                right: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + horizontalOffset,
+                bottom: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + verticalOffset),
 
             BorderStyle.None => new Padding(
                 left: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
                 top: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
-                right: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + offset,
+                right: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + horizontalOffset,
                 // We still need some extra space for the focus indication.
-                bottom: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + offset),
+                bottom: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + verticalOffset),
 
             _ => Padding.Empty,
         };
@@ -994,6 +997,62 @@ public abstract partial class TextBoxBase : Control
     private int ScaleVisualStylesMetric(int logicalValue)
         => ScaleHelper.ScaleToDpi(logicalValue, DeviceDpiInternal);
 
+    private Size GetVisualStylesFocusBorderMetrics()
+    {
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        return GetVisualStylesFocusBorderMetrics(
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
+    }
+
+    private int GetVisualStylesFocusBandHeight()
+    {
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        return GetVisualStylesFocusBandHeight(
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
+    }
+
+    internal static Size GetVisualStylesFocusBorderMetrics(
+        Size focusBorderMetrics,
+        float textScaleFactor,
+        int deviceDpi)
+        => new(
+            ScaleVisualStylesFocusMetric(focusBorderMetrics.Width, textScaleFactor, deviceDpi),
+            ScaleVisualStylesFocusMetric(focusBorderMetrics.Height, textScaleFactor, deviceDpi));
+
+    internal static int GetVisualStylesFocusBandHeight(
+        Size focusBorderMetrics,
+        float textScaleFactor,
+        int deviceDpi)
+    {
+        Size scaledFocusBorderMetrics = GetVisualStylesFocusBorderMetrics(
+            focusBorderMetrics,
+            textScaleFactor,
+            deviceDpi);
+        int scaledFocusBandHeight = ScaleVisualStylesFocusMetric(
+            VisualStylesFocusBandHeight,
+            textScaleFactor,
+            deviceDpi);
+
+        return Math.Max(scaledFocusBandHeight, scaledFocusBorderMetrics.Height);
+    }
+
+    private static int ScaleVisualStylesFocusMetric(
+        int metric,
+        float textScaleFactor,
+        int deviceDpi)
+    {
+        float scale = Math.Clamp(textScaleFactor, 1f, 2.25f);
+        int dpiScaledMetric = ScaleHelper.ScaleToDpi(Math.Max(metric, BorderThickness), deviceDpi);
+
+        return Math.Max(
+            ScaleHelper.ScaleToDpi(BorderThickness, deviceDpi),
+            (int)Math.Ceiling(dpiScaledMetric * scale));
+    }
+
     internal static bool CanRenderVisualStylesRoundedChrome(
         Rectangle bounds,
         int cornerSize,
@@ -1006,7 +1065,7 @@ public abstract partial class TextBoxBase : Control
     internal static Color GetVisualStylesFocusColor(bool highContrast)
         => highContrast
             ? SystemColors.Highlight
-            : Application.GetWindowsAccentColor();
+            : Application.SystemVisualSettings.AccentColor;
 
     /// <summary>
     ///  Returns the additional padding required to clear the live scrollbars,
@@ -1709,6 +1768,26 @@ public abstract partial class TextBoxBase : Control
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         RecalculateVisualStylesClientArea();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+    {
+        base.OnSystemVisualSettingsChanged(e);
+
+        if ((e.Changed & (SystemVisualSettingsCategories.TextScale | SystemVisualSettingsCategories.FocusMetrics)) == 0
+            || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        CommonProperties.xClearPreferredSizeCache(this);
+        RecalculateVisualStylesClientArea();
+
+        if (ParentInternal is { } parent)
+        {
+            LayoutTransaction.DoLayout(parent, this, PropertyNames.SystemVisualSettings);
+        }
     }
 
     /// <inheritdoc/>
@@ -2633,7 +2712,9 @@ public abstract partial class TextBoxBase : Control
     private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
     {
         int cornerRadius = ScaleVisualStylesMetric(VisualStylesCornerRadius);
-        int borderThickness = ScaleVisualStylesMetric(BorderThickness);
+        Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
+        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
+        int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         Color adornerColor = ForeColor;
 
@@ -2732,32 +2813,32 @@ public abstract partial class TextBoxBase : Control
 
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             FocusIndicatorRenderer.DrawRoundedFocusIndicator(
                 offscreenGraphics,
                 deflatedBounds,
                 cornerRadius,
                 borderThickness,
-                ScaleVisualStylesMetric(VisualStylesFocusBandHeight),
+                focusBandHeight,
                 adornerColor,
                 focusColor);
         }
         else if (Focused)
         {
-            Color focusColor = GetVisualStylesFocusColor(SystemInformation.HighContrast);
+            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             using var focusPen = focusColor.GetCachedPenScope(borderThickness);
-            offscreenGraphics.DrawLine(
-                focusPen,
-                deflatedBounds.Left,
-                deflatedBounds.Bottom,
-                deflatedBounds.Right,
-                deflatedBounds.Bottom);
-            offscreenGraphics.DrawLine(
-                focusPen,
-                deflatedBounds.Left,
-                deflatedBounds.Bottom - 1,
-                deflatedBounds.Right,
-                deflatedBounds.Bottom - 1);
+            int focusLineCount = Math.Min(
+                Math.Max(2, focusBorderMetrics.Height),
+                Math.Max(1, deflatedBounds.Height));
+            for (int i = 0; i < focusLineCount; i++)
+            {
+                offscreenGraphics.DrawLine(
+                    focusPen,
+                    deflatedBounds.Left,
+                    deflatedBounds.Bottom - i,
+                    deflatedBounds.Right,
+                    deflatedBounds.Bottom - i);
+            }
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(

@@ -256,6 +256,67 @@ public partial class TextBoxBaseTests
     }
 
     [Theory]
+    [InlineData(1, 1, 1f, 96, 1, 1, 4)]
+    [InlineData(2, 3, 1.5f, 96, 3, 5, 6)]
+    [InlineData(1, 2, 1.5f, 144, 3, 5, 9)]
+    public void TextBoxBase_ModernFocusMetrics_ScaleWithTextSizeAndDpi(
+        int focusBorderWidth,
+        int focusBorderHeight,
+        float textScaleFactor,
+        int deviceDpi,
+        int expectedBorderWidth,
+        int expectedBorderHeight,
+        int expectedFocusBandHeight)
+    {
+        Size focusBorderMetrics = new(focusBorderWidth, focusBorderHeight);
+
+        Assert.Equal(
+            new Size(expectedBorderWidth, expectedBorderHeight),
+            TextBoxBase.GetVisualStylesFocusBorderMetrics(
+                focusBorderMetrics,
+                textScaleFactor,
+                deviceDpi));
+        Assert.Equal(
+            expectedFocusBandHeight,
+            TextBoxBase.GetVisualStylesFocusBandHeight(
+                focusBorderMetrics,
+                textScaleFactor,
+                deviceDpi));
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_SystemVisualSettingsAccentAndAnimationsDoNotRequestLayout()
+    {
+        using VisualStylesModePanel parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using SubTextBox textBox = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        parent.Controls.Add(textBox);
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+        SystemVisualSettings oldSettings = new(
+            Color.Crimson,
+            1f,
+            highContrastEnabled: false,
+            clientAreaAnimationEnabled: true,
+            keyboardCuesVisible: false,
+            focusBorderMetrics: new Size(1, 1));
+        SystemVisualSettings newSettings = new(
+            Color.RoyalBlue,
+            1f,
+            highContrastEnabled: false,
+            clientAreaAnimationEnabled: false,
+            keyboardCuesVisible: false,
+            focusBorderMetrics: new Size(1, 1));
+
+        parent.RaiseSystemVisualSettingsChanged(
+            new SystemVisualSettingsChangedEventArgs(
+                oldSettings,
+                newSettings,
+                SystemVisualSettingsCategories.AccentColor | SystemVisualSettingsCategories.Animations));
+
+        Assert.Equal(0, layoutCallCount);
+    }
+
+    [Theory]
     [InlineData(16, 16, 15, 1, true)]
     [InlineData(15, 16, 15, 1, false)]
     [InlineData(16, 15, 15, 1, false)]
@@ -281,7 +342,7 @@ public partial class TextBoxBaseTests
     {
         Color expected = highContrast
             ? SystemColors.Highlight
-            : Application.GetWindowsAccentColor();
+            : Application.SystemVisualSettings.AccentColor;
 
         Assert.Equal(expected, TextBoxBase.GetVisualStylesFocusColor(highContrast));
     }
@@ -8523,6 +8584,9 @@ public partial class TextBoxBaseTests
         public bool HighContrast { get; set; }
 
         internal override bool IsHighContrast => HighContrast;
+
+        public void RaiseSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
     }
 
     private class SubRichTextBox : RichTextBox
