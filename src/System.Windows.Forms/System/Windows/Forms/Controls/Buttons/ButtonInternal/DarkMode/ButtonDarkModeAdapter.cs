@@ -47,6 +47,13 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color textColor;
 
+        if (_modern && !Control.Enabled)
+        {
+            return ModernControlColorMath.GetDisabledTextColor(
+                Control.ForeColor,
+                backColor);
+        }
+
         bool useEffectiveForeColor = _modern
             ? Control.ShouldSerializeForeColor()
             : Control.ForeColor != Forms.Control.DefaultForeColor;
@@ -141,7 +148,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 contentBounds =>
                 {
                     LayoutData layout = GetLayoutData(contentBounds);
-                    PaintBackgroundImage(e);
+                    PaintBackgroundImage(e, contentBounds);
                     PaintImage(e, layout);
                     PaintField(
                         e,
