@@ -73,6 +73,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private const POWER_REQUEST_CONTEXT_FLAGS PowerRequestContextSimpleString = (POWER_REQUEST_CONTEXT_FLAGS)0x00000001;
     private const uint NotifyForThisSession = 0;
     private const nint PbtApmResumeAutomatic = 0x0012;
+    private const nint SpiSetWorkArea = 0x002F;
     private const nint WtsConsoleConnect = 0x0001;
     private const nint WtsRemoteConnect = 0x0003;
     private const nint WtsSessionLogon = 0x0005;
@@ -839,6 +840,15 @@ public class KioskModeManager : Component, ISupportInitialize
         form.Bounds = fullScreenBounds;
     }
 
+    private void RefreshFullScreenBounds()
+    {
+        if (_isFullScreen
+            && _targetForm is { IsDisposed: false } form)
+        {
+            ApplyFullScreen(form);
+        }
+    }
+
     private void UpdateFormObserver()
     {
         if (DesignMode)
@@ -1201,6 +1211,13 @@ public class KioskModeManager : Component, ISupportInitialize
             }
 
             base.WndProc(ref m);
+
+            if (m.MsgInternal == PInvokeCore.WM_DISPLAYCHANGE
+                || (m.MsgInternal == PInvokeCore.WM_SETTINGCHANGE
+                    && (nint)m.WParamInternal == SpiSetWorkArea))
+            {
+                _owner.RefreshFullScreenBounds();
+            }
         }
     }
 }
