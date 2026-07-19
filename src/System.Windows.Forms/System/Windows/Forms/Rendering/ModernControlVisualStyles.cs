@@ -11,6 +11,12 @@ internal static class ModernControlVisualStyles
     internal const int BorderThickness = 1;
     internal const int FieldCornerRadius = 15;
     internal const int FocusBandHeight = 4;
+    internal const float GroupBoxCaptionFontScale = 1.15f;
+    internal const int GroupBoxCaptionGap = 4;
+    internal const int GroupBoxContentInset = 8;
+    internal const int GroupBoxCornerRadius = 8;
+    internal const int GroupBoxHeaderHorizontalPadding = 10;
+    internal const int GroupBoxHeaderVerticalPadding = 5;
     internal const int InternalChromeInset = 2;
     internal const int Fixed3DBorderPadding = 2;
     internal const int FixedSingleBorderPadding = 1;

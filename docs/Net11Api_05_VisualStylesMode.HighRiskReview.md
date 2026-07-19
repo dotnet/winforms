@@ -32,6 +32,14 @@ completed transition; a later state change starts a new one.
 text-scale factor, and device DPI. These metrics affect only modern chrome. The existing never-invert client
 carve, small-control flat fallback, and classic-mode metrics remain unchanged.
 
+## GroupBox content geometry
+
+The Net11 `FlatStyle.Standard` GroupBox renders its caption above the rounded card frame. Its
+`DisplayRectangle` therefore starts lower and is shorter than the classic etched-frame rectangle. This is the
+largest compatibility lever in the GroupBox change: the mode is opt-in, the paint and layout paths share the
+same metrics, and the VisualStylesMode impact dispatcher remeasures AutoSize containers when the effective
+renderer crosses the classic/modern boundary. `FlatStyle.System` remains native and does not use these metrics.
+
 ## Animation timing and thread ownership
 
 The timer now uses an absolute `Stopwatch` schedule with a high-resolution waitable timer on supported Windows
