@@ -98,7 +98,13 @@ internal sealed class ModernFlatButtonRenderer : ButtonDarkModeRendererBase
     {
         if (state == PushButtonState.Disabled)
         {
-            return IsDark ? Color.FromArgb(0x88, 0x88, 0x88) : Color.FromArgb(0xA0, 0xA0, 0xA0);
+            Color preferredForeColor = IsDark
+                ? Color.FromArgb(0x88, 0x88, 0x88)
+                : Color.FromArgb(0xA0, 0xA0, 0xA0);
+
+            return ModernControlColorMath.GetDisabledTextColor(
+                preferredForeColor,
+                backColor);
         }
 
         return ModernButtonColorMath.GetReadableForeColor(backColor);
