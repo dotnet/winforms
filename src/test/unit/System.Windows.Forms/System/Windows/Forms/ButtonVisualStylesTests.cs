@@ -673,6 +673,154 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsTheory]
+    [MemberData(nameof(ModernButtonTypeAndStyleData))]
+    public void ButtonBase_ModernBackgroundImage_RendersWithoutForegroundImage(
+        Type controlType,
+        FlatStyle flatStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap backgroundImage = CreateSolidBitmap(
+            new Size(9, 7),
+            Color.Fuchsia);
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(
+            controlType);
+        control.BackgroundImage = backgroundImage;
+        control.BackgroundImageLayout = ImageLayout.Center;
+        control.FlatStyle = flatStyle;
+        control.Size = new Size(120, 44);
+        control.Text = string.Empty;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, control.Size));
+
+        Assert.False(FindColorBounds(actual, Color.Fuchsia).IsEmpty);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ImageLayout.None)]
+    [InlineData(ImageLayout.Tile)]
+    [InlineData(ImageLayout.Center)]
+    [InlineData(ImageLayout.Stretch)]
+    [InlineData(ImageLayout.Zoom)]
+    public void Button_ModernBackgroundImageLayout_PositionsImage(
+        ImageLayout imageLayout)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap backgroundImage = CreateSolidBitmap(
+            new Size(8, 8),
+            Color.Fuchsia);
+        using Button button = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = imageLayout,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(80, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        button.CreateControl();
+        using Bitmap actual = new(button.Width, button.Height);
+        using Bitmap withoutBackgroundImage = new(
+            button.Width,
+            button.Height);
+
+        button.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, button.Size));
+        button.BackgroundImage = null;
+        button.DrawToBitmap(
+            withoutBackgroundImage,
+            new Rectangle(Point.Empty, button.Size));
+
+        Rectangle clipRectangle = Rectangle.Inflate(
+            button.ClientRectangle,
+            -4,
+            -4);
+        Rectangle expected = GetExpectedBackgroundImageBounds(
+            button.ClientRectangle,
+            clipRectangle,
+            backgroundImage.Size,
+            imageLayout);
+        Rectangle actualImageBounds = FindDifferenceBounds(
+            actual,
+            withoutBackgroundImage);
+        Assert.InRange(
+            Math.Abs(expected.X - actualImageBounds.X),
+            0,
+            1);
+        Assert.InRange(
+            Math.Abs(expected.Y - actualImageBounds.Y),
+            0,
+            1);
+        Assert.InRange(
+            Math.Abs(expected.Width - actualImageBounds.Width),
+            0,
+            1);
+        Assert.InRange(
+            Math.Abs(expected.Height - actualImageBounds.Height),
+            0,
+            1);
+    }
+
+    [WinFormsFact]
+    public void Button_ModernBackgroundImageNone_RightToLeftAlignsRight()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Bitmap backgroundImage = CreateSolidBitmap(
+            new Size(8, 8),
+            Color.Fuchsia);
+        using Button button = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.None,
+            FlatStyle = FlatStyle.Standard,
+            RightToLeft = RightToLeft.Yes,
+            Size = new Size(80, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        button.CreateControl();
+        using Bitmap actual = new(button.Width, button.Height);
+        using Bitmap withoutBackgroundImage = new(
+            button.Width,
+            button.Height);
+
+        button.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, button.Size));
+        button.BackgroundImage = null;
+        button.DrawToBitmap(
+            withoutBackgroundImage,
+            new Rectangle(Point.Empty, button.Size));
+
+        Rectangle actualImageBounds = FindDifferenceBounds(
+            actual,
+            withoutBackgroundImage);
+        Rectangle clipRectangle = Rectangle.Inflate(
+            button.ClientRectangle,
+            -4,
+            -4);
+        Assert.InRange(
+            Math.Abs(actualImageBounds.Right - clipRectangle.Right),
+            0,
+            1);
+    }
+
+    [WinFormsTheory]
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
@@ -1115,6 +1263,31 @@ public class ButtonVisualStylesTests
         return bitmap;
     }
 
+    private static Rectangle GetExpectedBackgroundImageBounds(
+        Rectangle bounds,
+        Rectangle clipRectangle,
+        Size imageSize,
+        ImageLayout imageLayout)
+    {
+        if (imageLayout == ImageLayout.Tile)
+        {
+            return clipRectangle;
+        }
+
+        Rectangle imageRectangle = ControlPaint.CalculateBackgroundImageRectangle(
+            bounds,
+            imageSize,
+            imageLayout);
+        if (imageLayout == ImageLayout.None
+            && !clipRectangle.Contains(imageRectangle))
+        {
+            imageRectangle.Offset(clipRectangle.Location);
+        }
+
+        imageRectangle.Intersect(clipRectangle);
+        return imageRectangle;
+    }
+
     private static Rectangle FindColorBounds(Bitmap bitmap, Color color)
     {
         int argb = color.ToArgb();
@@ -1128,6 +1301,37 @@ public class ButtonVisualStylesTests
             for (int x = 0; x < bitmap.Width; x++)
             {
                 if (bitmap.GetPixel(x, y).ToArgb() != argb)
+                {
+                    continue;
+                }
+
+                left = Math.Min(left, x);
+                top = Math.Min(top, y);
+                right = Math.Max(right, x);
+                bottom = Math.Max(bottom, y);
+            }
+        }
+
+        return right >= left && bottom >= top
+            ? Rectangle.FromLTRB(left, top, right + 1, bottom + 1)
+            : Rectangle.Empty;
+    }
+
+    private static Rectangle FindDifferenceBounds(
+        Bitmap first,
+        Bitmap second)
+    {
+        int left = first.Width;
+        int top = first.Height;
+        int right = -1;
+        int bottom = -1;
+
+        for (int y = 0; y < first.Height; y++)
+        {
+            for (int x = 0; x < first.Width; x++)
+            {
+                if (first.GetPixel(x, y).ToArgb()
+                    == second.GetPixel(x, y).ToArgb())
                 {
                     continue;
                 }

@@ -202,7 +202,17 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         Image? image = button.Image;
         Rectangle contentBounds = PopupButtonKeyCapRenderer.GetContentBounds(context);
         ButtonBaseAdapter.LayoutData layout = _layoutAdapter.GetLayoutData(contentBounds);
+        Action<Rectangle>? paintBackgroundImage = null;
         Action<Rectangle>? paintImage = null;
+
+        if (button.BackgroundImage is not null)
+        {
+            paintBackgroundImage = bounds =>
+            {
+                using PaintEventArgs paintEventArgs = new(graphics, button.ClientRectangle);
+                _layoutAdapter.PaintBackgroundImage(paintEventArgs, bounds);
+            };
+        }
 
         if (image is not null)
         {
@@ -217,7 +227,8 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             graphics,
             context,
             paintImage,
-            (layout.TextBounds, layout.ImageBounds));
+            (layout.TextBounds, layout.ImageBounds),
+            paintBackgroundImage);
     }
 
     internal (Color BaseColor, Color HoverColor, Color PressedColor) GetStateColors()

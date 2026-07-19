@@ -603,25 +603,40 @@ internal abstract partial class ButtonBaseAdapter
     }
 
     /// <summary>
-    ///  Draws the button's image.
+    ///  Draws the button's background image.
+    /// </summary>
+    internal void PaintBackgroundImage(
+        PaintEventArgs e,
+        Rectangle? clipRectangle = null)
+    {
+        if (Control.BackgroundImage is null
+            || DisplayInformation.HighContrast)
+        {
+            return;
+        }
+
+        Rectangle imageClip = clipRectangle ?? Control.ClientRectangle;
+        if (clipRectangle is null)
+        {
+            imageClip.Inflate(-ButtonBorderSize, -ButtonBorderSize);
+        }
+
+        ControlPaint.DrawBackgroundImage(
+            e.GraphicsInternal,
+            Control.BackgroundImage,
+            Color.Transparent,
+            Control.BackgroundImageLayout,
+            Control.ClientRectangle,
+            imageClip,
+            Control.DisplayRectangle.Location,
+            Control.RightToLeft);
+    }
+
+    /// <summary>
+    ///  Draws the button's foreground image.
     /// </summary>
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
-        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
-        {
-            Rectangle bounds = Control.ClientRectangle;
-            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
-            ControlPaint.DrawBackgroundImage(
-                e.GraphicsInternal,
-                Control.BackgroundImage,
-                Color.Transparent,
-                Control.BackgroundImageLayout,
-                Control.ClientRectangle,
-                bounds,
-                Control.DisplayRectangle.Location,
-                Control.RightToLeft);
-        }
-
         if (Control.Image is not null)
         {
             // Setup new clip region & draw
