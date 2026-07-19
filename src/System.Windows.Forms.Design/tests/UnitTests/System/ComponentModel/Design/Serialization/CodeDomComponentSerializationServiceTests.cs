@@ -179,6 +179,74 @@ public class CodeDomComponentSerializationServiceTests
         Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
     }
 
+    [Theory]
+    [InlineData(VisualStylesMode.Inherit, false)]
+    [InlineData(VisualStylesMode.Classic, true)]
+    [InlineData(VisualStylesMode.Disabled, true)]
+    [InlineData(VisualStylesMode.Net11, true)]
+    [InlineData(VisualStylesMode.Latest, true)]
+    public void CreateStore_ControlVisualStylesMode_SerializesOnlyRawOverride(
+        VisualStylesMode value,
+        bool expectedAssignment)
+    {
+        CodeDomComponentSerializationService service = new();
+        using Container container = new();
+        using Control control = new()
+        {
+            VisualStylesMode = value
+        };
+        container.Add(control, "control");
+        using SerializationStore store = service.CreateStore();
+
+        service.Serialize(store, control);
+        store.Close();
+
+        Assert.Empty(store.Errors);
+        ISerializable serializable =
+            Assert.IsAssignableFrom<ISerializable>(store);
+        SerializationInfo info = new(
+            store.GetType(),
+            new FormatterConverter());
+        serializable.GetObjectData(info, default);
+        CodeDomComponentSerializationState state =
+            GetState(info)["control"];
+        CodeStatementCollection statements =
+            Assert.IsType<CodeStatementCollection>(state.Code);
+        CodeAssignStatement visualStylesAssignment = statements
+            .Cast<CodeStatement>()
+            .OfType<CodeAssignStatement>()
+            .FirstOrDefault(
+                statement => statement.Left
+                    is CodePropertyReferenceExpression
+                    {
+                        PropertyName: nameof(Control.VisualStylesMode)
+                    });
+
+        Assert.Equal(
+            expectedAssignment,
+            visualStylesAssignment is not null);
+
+        ICollection deserializedObjects = service.Deserialize(store);
+        Control roundTripped = Assert.IsType<Control>(
+            Assert.Single(deserializedObjects.Cast<object>()));
+        try
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(
+                roundTripped)[nameof(Control.VisualStylesMode)];
+            Assert.Equal(
+                expectedAssignment,
+                property.ShouldSerializeValue(roundTripped));
+            if (expectedAssignment)
+            {
+                Assert.Equal(value, roundTripped.VisualStylesMode);
+            }
+        }
+        finally
+        {
+            roundTripped.Dispose();
+        }
+    }
+
     public static IEnumerable<object[]> CreateStore_CloseSerializeWithInvalidProvider_TestData()
     {
         yield return new object[] { null };
