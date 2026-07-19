@@ -9,8 +9,8 @@ using System.Drawing.Drawing2D;
 namespace WinFormsControlsTest;
 
 /// <summary>
-///  Exploratory-testing harness for the conservative and modern (.NET 11 VisualStyles) button renderers.
-///  Toggle the "Modern visual styles" check box to flip every sample button between
+///  Exploratory-testing harness for conservative and modern (.NET 11 VisualStyles) control renderers.
+///  Toggle the "Modern visual styles" check box to flip every sample control between
 ///  <see cref="VisualStylesMode.Classic"/> and <see cref="VisualStylesMode.Net11"/> at runtime.
 /// </summary>
 /// <remarks>
@@ -46,13 +46,13 @@ public sealed class VisualStylesButtons : Form
     {
         Text = "VisualStyles Buttons (exploratory)";
         AutoScaleMode = AutoScaleMode.Dpi;
-        Size = new Size(1100, 900);
+        Size = new Size(1100, 1050);
         Padding = new Padding(8);
 
         _sampleParent = new PatternedGradientPanel
         {
             Dock = DockStyle.Top,
-            Height = 330,
+            Height = 600,
             Padding = new Padding(8),
             VisualStylesMode = VisualStylesMode.Classic
         };
@@ -148,6 +148,7 @@ public sealed class VisualStylesButtons : Form
             button => button.Text == "Focus me" && button.FlatStyle == FlatStyle.Standard);
 
         BuildTextAndUpDownSamples();
+        _sampleParent.Controls.Add(BuildGroupAndComboSamples());
         Controls.Add(table);
         Controls.Add(_sampleParent);
         Controls.Add(BuildCheckablePopupPanel());
@@ -254,6 +255,119 @@ public sealed class VisualStylesButtons : Form
         }
 
         _sampleParent.Controls.Add(table);
+    }
+
+    private TableLayoutPanel BuildGroupAndComboSamples()
+    {
+        TableLayoutPanel table = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = s_styles.Length + 1,
+            Dock = DockStyle.Bottom,
+            RowCount = 5,
+            Padding = new Padding(4)
+        };
+        table.Controls.Add(
+            new Label
+            {
+                AutoSize = true,
+                Font = new Font(Font, FontStyle.Bold),
+                Text = "GroupBox / ComboBox"
+            },
+            0,
+            0);
+
+        for (int column = 0; column < s_styles.Length; column++)
+        {
+            FlatStyle flatStyle = s_styles[column];
+            table.Controls.Add(
+                new Label
+                {
+                    AutoSize = true,
+                    Font = new Font(Font, FontStyle.Bold),
+                    Text = flatStyle.ToString()
+                },
+                column + 1,
+                0);
+
+            GroupBox groupBox = new()
+            {
+                FlatStyle = flatStyle,
+                Size = new Size(160, 76),
+                Text = "Group caption",
+                VisualStylesMode = VisualStylesMode.Inherit
+            };
+            groupBox.Controls.Add(
+                new Label
+                {
+                    AutoSize = true,
+                    Dock = DockStyle.Fill,
+                    Text = "Docked content"
+                });
+            _sampleControls.Add(groupBox);
+            table.Controls.Add(groupBox, column + 1, 1);
+
+            AddComboBox(
+                ComboBoxStyle.DropDown,
+                flatStyle,
+                column + 1,
+                row: 2);
+            AddComboBox(
+                ComboBoxStyle.DropDownList,
+                flatStyle,
+                column + 1,
+                row: 3);
+            AddComboBox(
+                ComboBoxStyle.Simple,
+                flatStyle,
+                column + 1,
+                row: 4);
+        }
+
+        table.Controls.Add(
+            new Label { AutoSize = true, Text = "GroupBox" },
+            0,
+            1);
+        table.Controls.Add(
+            new Label { AutoSize = true, Text = "Combo DropDown" },
+            0,
+            2);
+        table.Controls.Add(
+            new Label { AutoSize = true, Text = "Combo DropDownList" },
+            0,
+            3);
+        table.Controls.Add(
+            new Label { AutoSize = true, Text = "Combo Simple" },
+            0,
+            4);
+
+        return table;
+
+        void AddComboBox(
+            ComboBoxStyle dropDownStyle,
+            FlatStyle flatStyle,
+            int column,
+            int row)
+        {
+            ComboBox comboBox = new()
+            {
+                DropDownStyle = dropDownStyle,
+                FlatStyle = flatStyle,
+                Width = 160,
+                VisualStylesMode = VisualStylesMode.Inherit
+            };
+            comboBox.Items.AddRange(["First", "Second", "Third"]);
+            comboBox.SelectedIndex = 0;
+            if (dropDownStyle == ComboBoxStyle.Simple)
+            {
+                comboBox.Height = 72;
+            }
+
+            _sampleControls.Add(comboBox);
+            table.Controls.Add(comboBox, column, row);
+        }
     }
 
     private static Control CreateSampleControl(string controlKind, float fontSize, bool autoSize)

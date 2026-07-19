@@ -316,6 +316,52 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, layoutCallCount);
     }
 
+    [WinFormsFact]
+    public void TextBoxBase_ModernTextScaleChangeAdjustsNaturalHeight()
+    {
+        SystemVisualSettings previous =
+            SystemVisualSettingsTracker.CurrentSettings;
+        SystemVisualSettings initial = new(
+            previous.AccentColor,
+            1f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+        SystemVisualSettings scaled = new(
+            previous.AccentColor,
+            1.5f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using SubTextBox control = new()
+            {
+                AutoSize = true,
+                VisualStylesMode = VisualStylesMode.Net11
+            };
+            int initialHeight = control.Height;
+
+            SystemVisualSettingsTracker.ResetForTesting(scaled);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    scaled,
+                    SystemVisualSettingsCategories.TextScale));
+
+            Assert.True(control.Height > initialHeight);
+            Assert.Equal(control.PreferredHeight, control.Height);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting(previous);
+        }
+    }
+
     [Theory]
     [InlineData(16, 16, 15, 1, true)]
     [InlineData(15, 16, 15, 1, false)]
@@ -8559,6 +8605,10 @@ public partial class TextBoxBaseTests
         public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
+        public void RaiseSystemVisualSettingsChanged(
+            SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }

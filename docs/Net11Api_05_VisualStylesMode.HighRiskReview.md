@@ -40,6 +40,13 @@ largest compatibility lever in the GroupBox change: the mode is opt-in, the pain
 same metrics, and the VisualStylesMode impact dispatcher remeasures AutoSize containers when the effective
 renderer crosses the classic/modern boundary. `FlatStyle.System` remains native and does not use these metrics.
 
+## ComboBox adapter routing
+
+Net11 routes `FlatStyle.Standard` ComboBox controls through the WinForms adapter path for the first time so the
+field can share TextBoxBase's rounded chrome metrics. `Flat` and `Popup` continue to use an adapter, but select
+their new underline and focus/hover treatments only in an effective Net11-or-later mode. The adapter changes the
+preferred height across the classic/modern boundary; `FlatStyle.System` remains native and bypasses the adapter.
+
 ## Animation timing and thread ownership
 
 The timer now uses an absolute `Stopwatch` schedule with a high-resolution waitable timer on supported Windows

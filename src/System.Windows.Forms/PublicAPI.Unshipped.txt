@@ -124,6 +124,10 @@ override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.ComboBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.GroupBox.Dispose(bool disposing) -> void
 override System.Windows.Forms.GroupBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
 override System.Windows.Forms.GroupBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
