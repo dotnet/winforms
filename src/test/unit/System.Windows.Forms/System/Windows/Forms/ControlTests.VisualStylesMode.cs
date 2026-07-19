@@ -222,6 +222,32 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_ShouldSerializeValue_TracksRawOverride()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubControlWithVisualStyles child = new();
+        parent.Controls.Add(child);
+        PropertyDescriptor property = TypeDescriptor.GetProperties(child)[
+            nameof(Control.VisualStylesMode)];
+
+        Assert.False(property.ShouldSerializeValue(child));
+
+        child.VisualStylesMode = VisualStylesMode.Disabled;
+        Assert.True(property.ShouldSerializeValue(child));
+
+        property.ResetValue(child);
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.False(property.ShouldSerializeValue(child));
+
+        child.VisualStylesMode = VisualStylesMode.Inherit;
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.False(property.ShouldSerializeValue(child));
+    }
+
+    [WinFormsFact]
     public void Control_VisualStylesMode_ParentChangeWithLocalValue_DoesNotRaiseChanged()
     {
         using SubControlWithVisualStyles parent = new()
