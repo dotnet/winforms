@@ -43,7 +43,8 @@ internal static class PopupButtonKeyCapRenderer
         Graphics graphics,
         PopupButtonRenderContext context,
         Action<Rectangle>? paintImage = null,
-        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout = null)
+        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout = null,
+        Action<Rectangle>? paintBackgroundImage = null)
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(context);
@@ -67,7 +68,13 @@ internal static class PopupButtonKeyCapRenderer
 
         if (context.HighContrast)
         {
-            RenderHighContrast(graphics, context, surfaceBackColor, paintImage, contentLayout);
+            RenderHighContrast(
+                graphics,
+                context,
+                surfaceBackColor,
+                paintImage,
+                contentLayout,
+                paintBackgroundImage);
 
             return;
         }
@@ -92,6 +99,7 @@ internal static class PopupButtonKeyCapRenderer
             DrawBowl(graphics, metrics, palette);
             DrawBorder(graphics, metrics, palette);
             DrawStateCues(graphics, context, metrics, palette);
+            paintBackgroundImage?.Invoke(metrics.BowlRect);
 
             if (imageBounds.Width > 0 && imageBounds.Height > 0)
             {
@@ -390,7 +398,8 @@ internal static class PopupButtonKeyCapRenderer
         PopupButtonRenderContext context,
         Color surfaceBackColor,
         Action<Rectangle>? paintImage,
-        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout)
+        (Rectangle TextBounds, Rectangle ImageBounds)? contentLayout,
+        Action<Rectangle>? paintBackgroundImage)
     {
         Rectangle bounds = context.Bounds;
         bool pressed = context.Pressed;
@@ -426,6 +435,7 @@ internal static class PopupButtonKeyCapRenderer
                 context,
                 contentRect,
                 applySurfaceInset: false);
+        paintBackgroundImage?.Invoke(contentRect);
         if (imageRect.Width > 0 && imageRect.Height > 0)
         {
             paintImage?.Invoke(imageRect);

@@ -88,6 +88,7 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
+        PaintBackgroundImage(e);
 
         Color? customOnColor = Control.ShouldSerializeBackColor()
             ? Control.BackColor
