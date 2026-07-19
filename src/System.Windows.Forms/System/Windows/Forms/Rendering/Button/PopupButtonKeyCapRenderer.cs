@@ -97,9 +97,12 @@ internal static class PopupButtonKeyCapRenderer
             DrawAmbientShadow(graphics, metrics, palette);
             DrawKeyBody(graphics, metrics, palette);
             DrawBowl(graphics, metrics, palette);
+            PaintBackgroundImage(
+                graphics,
+                metrics,
+                paintBackgroundImage);
             DrawBorder(graphics, metrics, palette);
             DrawStateCues(graphics, context, metrics, palette);
-            paintBackgroundImage?.Invoke(metrics.BowlRect);
 
             if (imageBounds.Width > 0 && imageBounds.Height > 0)
             {
@@ -393,6 +396,37 @@ internal static class PopupButtonKeyCapRenderer
             ? context.TextEffect
             : PopupButtonTextEffect.Flat;
 
+    private static void PaintBackgroundImage(
+        Graphics graphics,
+        Metrics metrics,
+        Action<Rectangle>? paintBackgroundImage)
+    {
+        if (paintBackgroundImage is null)
+        {
+            return;
+        }
+
+        int inset = Math.Max(
+            1,
+            (int)MathF.Ceiling(metrics.Scale));
+        Rectangle backgroundBounds = Rectangle.Inflate(
+            metrics.BowlRect,
+            -inset,
+            -inset);
+        if (backgroundBounds.Width <= 0
+            || backgroundBounds.Height <= 0)
+        {
+            return;
+        }
+
+        using GraphicsStateScope state = new(graphics);
+        using GraphicsPath clipPath = CreateRoundedPath(
+            backgroundBounds,
+            Math.Max(1f, metrics.BowlRadius - inset));
+        graphics.SetClip(clipPath, CombineMode.Intersect);
+        paintBackgroundImage(backgroundBounds);
+    }
+
     private static void RenderHighContrast(
         Graphics graphics,
         PopupButtonRenderContext context,
@@ -408,11 +442,14 @@ internal static class PopupButtonKeyCapRenderer
         Color back = surfaceBackColor;
         Color fore = context.Enabled ? context.ForeColor : SystemColors.GrayText;
         Color border = context.Enabled ? context.ForeColor : SystemColors.GrayText;
+        Rectangle contentRect = GetContentBounds(context);
 
         using (SolidBrush backBrush = new(back))
         {
             graphics.FillRectangle(backBrush, bounds);
         }
+
+        paintBackgroundImage?.Invoke(contentRect);
 
         int defaultBorderIncrease = context.IsDefault && context.Enabled
             ? Math.Max(1, (int)MathF.Round(scale))
@@ -429,13 +466,11 @@ internal static class PopupButtonKeyCapRenderer
             graphics.DrawRectangle(borderPen, borderRect);
         }
 
-        Rectangle contentRect = GetContentBounds(context);
         (Rectangle textRect, Rectangle imageRect) = contentLayout
             ?? CreateContentLayout(
                 context,
                 contentRect,
                 applySurfaceInset: false);
-        paintBackgroundImage?.Invoke(contentRect);
         if (imageRect.Width > 0 && imageRect.Height > 0)
         {
             paintImage?.Invoke(imageRect);

@@ -253,6 +253,74 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void ButtonDarkModeAdapter_ModernDisabledExplicitForeColor_MeetsMinimumContrast()
+    {
+        using Button button = new()
+        {
+            BackColor = Color.Black,
+            Enabled = false,
+            FlatStyle = FlatStyle.Standard,
+            ForeColor = Color.White,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonTextColor(
+            graphics,
+            VisualStyles.PushButtonState.Disabled,
+            Color.Black);
+
+        Assert.True(
+            PopupButtonColorMath.GetContrastRatio(actual, Color.Black)
+                >= ModernControlColorMath.MinimumDisabledTextContrastRatio);
+    }
+
+    [WinFormsFact]
+    public void PopupButtonDarkModeRenderer_PaintsParentBackgroundAtRoundedCorners()
+    {
+        using Bitmap backgroundImage = CreateSolidBitmap(
+            new Size(2, 1),
+            Color.Red);
+        backgroundImage.SetPixel(1, 0, Color.Blue);
+        using Panel parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.Tile,
+            Size = new Size(40, 30)
+        };
+        using Button button = new() { Size = parent.Size };
+        parent.Controls.Add(button);
+        parent.CreateControl();
+        button.CreateControl();
+        using Bitmap actual = new(button.Width, button.Height);
+        using Graphics graphics = Graphics.FromImage(actual);
+        PopupButtonDarkModeRenderer renderer = new();
+
+        renderer.RenderButton(
+            graphics,
+            button,
+            button.ClientRectangle,
+            FlatStyle.Popup,
+            VisualStyles.PushButtonState.Normal,
+            isDefault: false,
+            focused: false,
+            showFocusCues: false,
+            parent.BackColor,
+            Color.FromArgb(0x33, 0x33, 0x33),
+            _ => { });
+
+        Assert.Equal(
+            Color.Red.ToArgb(),
+            actual.GetPixel(0, 0).ToArgb());
+        Assert.Equal(
+            Color.Blue.ToArgb(),
+            actual.GetPixel(1, 0).ToArgb());
+    }
+
+    [WinFormsFact]
     public void ModernButtonDarkModeRenderer_HighDpi_CorrectsRingAndGapWithoutChangingBodyInset()
     {
         ModernButtonDarkModeRenderer renderer = new() { DeviceDpi = 144 };
