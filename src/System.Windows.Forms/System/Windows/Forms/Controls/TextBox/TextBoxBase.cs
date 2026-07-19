@@ -54,18 +54,9 @@ public abstract partial class TextBoxBase : Control
     private BorderStyle _borderStyle = BorderStyle.Fixed3D;
     private AnimatedFocusIndicatorRenderer? _focusIndicatorRenderer;
 
-    // Device-independent padding (in logical units) carved from the non-client band for each
-    // border style when modern Visual Styles chrome is active. These are DPI-scaled at use time.
-    private const int VisualStylesFixed3DBorderPadding = 2;
-    private const int VisualStylesFixedSingleBorderPadding = 1;
-    private const int VisualStylesNoBorderPadding = 1;
-    internal const int VisualStylesInternalChromeInset = 2;
-    private const int VisualStylesCornerRadius = 15;
-    private const int VisualStylesFocusBandHeight = 4;
     private const OBJECT_IDENTIFIER HorizontalScrollBarObjectId = (OBJECT_IDENTIFIER)(-6);
     private const OBJECT_IDENTIFIER VerticalScrollBarObjectId = (OBJECT_IDENTIFIER)(-5);
     private const uint StateSystemInvisible = 0x00008000;
-    private const int BorderThickness = 1;
 
     /// <summary>
     ///  One-shot latch that gates the single NC-calc round trip used to carve the modern Visual
@@ -893,9 +884,9 @@ public abstract partial class TextBoxBase : Control
                 // A naturally sized single-line control must leave enough room for the complete
                 // rounded chrome. Explicitly fixed controls are not forced through this floor.
                 Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-                int roundedChromeMinimumHeight = ScaleVisualStylesMetric(VisualStylesCornerRadius)
+                int roundedChromeMinimumHeight = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius)
                     + Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height)
-                    + ScaleVisualStylesMetric(VisualStylesInternalChromeInset);
+                    + ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset);
 
                 preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
             }
@@ -961,28 +952,29 @@ public abstract partial class TextBoxBase : Control
         Padding borderPadding = BorderStyle switch
         {
             BorderStyle.Fixed3D => new Padding(
-                left: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + horizontalOffset,
-                top: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + verticalOffset,
-                right: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + horizontalOffset,
-                bottom: ScaleVisualStylesMetric(VisualStylesFixed3DBorderPadding) + verticalOffset),
+                left: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + horizontalOffset,
+                top: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + verticalOffset,
+                right: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + horizontalOffset,
+                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + verticalOffset),
 
             BorderStyle.FixedSingle => new Padding(
-                left: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + horizontalOffset,
-                top: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + verticalOffset,
-                right: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + horizontalOffset,
-                bottom: ScaleVisualStylesMetric(VisualStylesFixedSingleBorderPadding) + verticalOffset),
+                left: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + horizontalOffset,
+                top: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + verticalOffset,
+                right: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + horizontalOffset,
+                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + verticalOffset),
 
             BorderStyle.None => new Padding(
-                left: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
-                top: ScaleVisualStylesMetric(VisualStylesNoBorderPadding),
-                right: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + horizontalOffset,
+                left: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding),
+                top: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding),
+                right: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding) + horizontalOffset,
                 // We still need some extra space for the focus indication.
-                bottom: ScaleVisualStylesMetric(VisualStylesNoBorderPadding) + verticalOffset),
+                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding) + verticalOffset),
 
             _ => Padding.Empty,
         };
 
-        Padding padding = borderPadding + new Padding(ScaleVisualStylesMetric(VisualStylesInternalChromeInset));
+        Padding padding = borderPadding + new Padding(
+            ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset));
 
         if (includeScrollbars)
         {
@@ -1033,7 +1025,7 @@ public abstract partial class TextBoxBase : Control
             textScaleFactor,
             deviceDpi);
         int scaledFocusBandHeight = ScaleVisualStylesFocusMetric(
-            VisualStylesFocusBandHeight,
+            ModernControlVisualStyles.FocusBandHeight,
             textScaleFactor,
             deviceDpi);
 
@@ -1046,10 +1038,12 @@ public abstract partial class TextBoxBase : Control
         int deviceDpi)
     {
         float scale = Math.Clamp(textScaleFactor, 1f, 2.25f);
-        int dpiScaledMetric = ScaleHelper.ScaleToDpi(Math.Max(metric, BorderThickness), deviceDpi);
+        int dpiScaledMetric = ScaleHelper.ScaleToDpi(
+            Math.Max(metric, ModernControlVisualStyles.BorderThickness),
+            deviceDpi);
 
         return Math.Max(
-            ScaleHelper.ScaleToDpi(BorderThickness, deviceDpi),
+            ScaleHelper.ScaleToDpi(ModernControlVisualStyles.BorderThickness, deviceDpi),
             (int)Math.Ceiling(dpiScaledMetric * scale));
     }
 
@@ -2711,7 +2705,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private protected virtual void OnNcPaint(Graphics graphics, HDC windowHdc)
     {
-        int cornerRadius = ScaleVisualStylesMetric(VisualStylesCornerRadius);
+        int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
