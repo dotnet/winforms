@@ -12,6 +12,11 @@ namespace System.Windows.Forms;
 ///   Newer versions can adjust minimum sizes, padding, and margins to satisfy current accessibility
 ///   requirements without changing the behavior of applications that target an earlier version.
 ///  </para>
+///  <para>
+///   A visual styles version defines the latest rendering behavior a control may use; it does not require
+///   every control to change. Each control determines which visual features and appearance values it supports
+///   for a given version.
+///  </para>
 /// </remarks>
 public enum VisualStylesMode : short
 {
@@ -46,6 +51,12 @@ public enum VisualStylesMode : short
     ///  of the common controls library, and the adorner rendering or the layout of specific controls
     ///  has been improved based on the latest accessibility requirements.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Controls opt into the .NET 11 rendering changes they support. For example, support for
+    ///   <see cref="Appearance.ToggleSwitch"/> depends on the control and its current state.
+    ///  </para>
+    /// </remarks>
     Net11 = 2,
 
     /// <summary>
