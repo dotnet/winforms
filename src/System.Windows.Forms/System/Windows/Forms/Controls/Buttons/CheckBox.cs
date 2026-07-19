@@ -103,7 +103,9 @@ public partial class CheckBox : ButtonBase
     }
 
     private protected override bool OwnerDraw =>
-            // The modern toggle switch is always owner-drawn (so UserPaint is enabled for it).
+            // Appearance.ToggleSwitch intentionally wins over FlatStyle.System: a toggle has no
+            // native BS_GROUPBOX rendering and must remain owner-drawn so the requested appearance
+            // is never ignored and mouse-state geometry is always available.
             IsToggleSwitchAppearance
             ||
             // We want NO owner draw ONLY when we're
@@ -388,7 +390,9 @@ public partial class CheckBox : ButtonBase
     {
         get
         {
-            if (Appearance == Appearance.Button)
+            if (IsToggleSwitchAppearance
+                || Appearance == Appearance.Button
+                || !OwnerDraw)
             {
                 return base.OverChangeRectangle;
             }
@@ -409,7 +413,8 @@ public partial class CheckBox : ButtonBase
     {
         get
         {
-            if (Appearance == Appearance.Button
+            if (IsToggleSwitchAppearance
+                || Appearance == Appearance.Button
                 || !OwnerDraw)
             {
                 return base.DownChangeRectangle;
