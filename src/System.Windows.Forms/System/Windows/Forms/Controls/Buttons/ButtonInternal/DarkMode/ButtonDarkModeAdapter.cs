@@ -144,6 +144,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 contentBounds =>
                 {
                     LayoutData layout = GetLayoutData(contentBounds);
+                    PaintBackgroundImage(e);
                     PaintImage(e, layout);
                     PaintField(
                         e,

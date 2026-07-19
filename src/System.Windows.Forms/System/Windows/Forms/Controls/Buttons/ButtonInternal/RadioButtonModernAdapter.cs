@@ -87,6 +87,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
+        PaintBackgroundImage(e);
 
         Color? customOnColor = Control.ShouldSerializeBackColor()
             ? Control.BackColor
