@@ -20,6 +20,8 @@ internal sealed class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     private protected override Padding PaddingCore => Padding.Empty;
 
+    private protected override bool PaintParentBackground => true;
+
     public override Rectangle DrawButtonBackground(
         Graphics graphics,
         Rectangle bounds,
