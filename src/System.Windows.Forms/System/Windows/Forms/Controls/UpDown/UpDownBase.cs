@@ -27,9 +27,7 @@ public abstract partial class UpDownBase : ContainerControl
 
     // Modern (Net11+) chrome geometry. The edit and button group share the border thickness and
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
-    private const int ModernBorderThickness = 1;
     private const int ModernButtonGroupSpacingLogical = 2;
-    private const int ModernCornerRadius = 14;
     private const int ModernFocusBandHeight = 4;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
@@ -382,9 +380,9 @@ public abstract partial class UpDownBase : ContainerControl
 
             if (_borderStyle == BorderStyle.Fixed3D)
             {
-                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernCornerRadius)
-                    + LogicalToDeviceUnits(ModernBorderThickness)
-                    + LogicalToDeviceUnits(TextBoxBase.VisualStylesInternalChromeInset);
+                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius)
+                    + LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness)
+                    + LogicalToDeviceUnits(ModernControlVisualStyles.InternalChromeInset);
 
                 preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
             }
@@ -995,8 +993,8 @@ public abstract partial class UpDownBase : ContainerControl
         => LogicalToDeviceUnits(
             (_borderStyle == BorderStyle.None
                 ? 0
-                : ModernBorderThickness)
-            + TextBoxBase.VisualStylesInternalChromeInset);
+                : ModernControlVisualStyles.BorderThickness)
+            + ModernControlVisualStyles.InternalChromeInset);
 
     internal int ModernButtonGroupSpacing
         => LogicalToDeviceUnits(ModernButtonGroupSpacingLogical);
@@ -1075,8 +1073,8 @@ public abstract partial class UpDownBase : ContainerControl
             return;
         }
 
-        int cornerRadius = LogicalToDeviceUnits(ModernCornerRadius);
-        int borderThickness = LogicalToDeviceUnits(ModernBorderThickness);
+        int cornerRadius = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius);
+        int borderThickness = LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
 
         // The adorner (border) color matches the modern TextBox chrome, which uses the fore color.
         Color adornerColor = ForeColor;
