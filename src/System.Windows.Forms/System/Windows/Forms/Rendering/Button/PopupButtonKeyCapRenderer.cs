@@ -323,7 +323,7 @@ internal static class PopupButtonKeyCapRenderer
         TextFormatFlags flags = GetTextFormatFlags(context);
         int reliefOffset = metrics.TextReliefOffset;
 
-        PopupButtonTextEffect effect = context.TextEffect;
+        PopupButtonTextEffect effect = GetTextEffect(context);
 
         if (!palette.TextOutline.IsEmpty)
         {
@@ -378,6 +378,12 @@ internal static class PopupButtonKeyCapRenderer
 
         TextRenderer.DrawText(graphics, text, context.Font, textRect, palette.Text, flags);
     }
+
+    internal static PopupButtonTextEffect GetTextEffect(
+        PopupButtonRenderContext context)
+        => context.Enabled
+            ? context.TextEffect
+            : PopupButtonTextEffect.Flat;
 
     private static void RenderHighContrast(
         Graphics graphics,
@@ -832,11 +838,15 @@ internal static class PopupButtonKeyCapRenderer
                 ? context.UseAutomaticForeColor
                     ? PopupButtonColorMath.GetReadableForeColor(darkestBowl, lightestBowl)
                     : context.ForeColor
-                : PopupButtonColorMath.EnsureContrast(PopupButtonColorMath.Blend(context.ForeColor, back, 0.45f), back, 0.18f);
+                : ModernControlColorMath.GetDisabledTextColor(
+                    context.ForeColor,
+                    darkestBowl,
+                    lightestBowl);
             float textContrast = Math.Min(
                 PopupButtonColorMath.GetContrastRatio(text, darkestBowl),
                 PopupButtonColorMath.GetContrastRatio(text, lightestBowl));
-            Color textOutline = context.UseAutomaticForeColor
+            Color textOutline = enabled
+                && context.UseAutomaticForeColor
                 && textContrast < PopupButtonColorMath.MinimumReadableContrastRatio
                     ? text == Color.Black ? Color.White : Color.Black
                     : Color.Empty;
