@@ -20,6 +20,10 @@ override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventAr
 override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.GroupBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.GroupBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.GroupBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.GroupBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
 override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void

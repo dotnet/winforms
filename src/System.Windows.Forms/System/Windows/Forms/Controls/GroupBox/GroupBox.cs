@@ -143,6 +143,11 @@ public partial class GroupBox : Control
     {
         get
         {
+            if (UsesModernRenderer)
+            {
+                return ModernDisplayRectangle;
+            }
+
             Size size = ClientSize;
 
             if (_fontHeight == -1)
@@ -204,10 +209,30 @@ public partial class GroupBox : Control
             if (needRecreate)
             {
                 RecreateHandle();
+                if (!OwnerDraw && Application.RenderWithVisualStyles)
+                {
+                    Invalidate();
+                }
             }
             else
             {
                 Refresh();
+            }
+
+            if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            {
+                CommonProperties.xClearPreferredSizeCache(this);
+                LayoutTransaction.DoLayout(
+                    this,
+                    this,
+                    PropertyNames.FlatStyle);
+                if (ParentInternal is { } parent)
+                {
+                    LayoutTransaction.DoLayout(
+                        parent,
+                        this,
+                        PropertyNames.FlatStyle);
+                }
             }
         }
     }
@@ -395,6 +420,13 @@ public partial class GroupBox : Control
 
     protected override void OnPaint(PaintEventArgs e)
     {
+        if (UsesModernRenderer)
+        {
+            DrawModernGroupBox(e);
+            base.OnPaint(e);
+            return;
+        }
+
         // BACKCOMPAT requirement:
         //
         // Why the Height/Width < 10 check? This is because uxtheme doesn't seem to handle those cases similar to
@@ -597,6 +629,18 @@ public partial class GroupBox : Control
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
     {
+        if (UsesModernRenderer)
+        {
+            Padding decoration = GetModernDecorationPadding();
+            Size modernBorderSize = SizeFromClientSize(Size.Empty);
+            Size totalDecoration = modernBorderSize + decoration.Size;
+            Size preferredSize = LayoutEngine.GetPreferredSize(
+                this,
+                proposedSize - totalDecoration);
+
+            return preferredSize + totalDecoration;
+        }
+
         // Translating 0,0 from ClientSize to actual Size tells us how much space is required for the borders.
         Size borderSize = SizeFromClientSize(Size.Empty);
         Size totalPadding = borderSize + new Size(0, _fontHeight) + Padding.Size;
@@ -607,6 +651,7 @@ public partial class GroupBox : Control
 
     protected override void OnFontChanged(EventArgs e)
     {
+        InvalidateModernCaptionFont();
         _fontHeight = -1;
         _cachedFont = null;
         Invalidate();
@@ -637,6 +682,7 @@ public partial class GroupBox : Control
             // be called on us by our parent.
             _fontHeight = -1;
             _cachedFont = null;
+            InvalidateModernCaptionFont();
         }
 
         base.ScaleControl(factor, specified);
