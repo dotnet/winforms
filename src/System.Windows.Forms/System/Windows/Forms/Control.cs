@@ -948,7 +948,10 @@ public unsafe partial class Control :
     }
 
     private bool ShouldSerializeVisualStylesMode()
-        => Properties.ContainsKey(s_visualStylesModeProperty);
+        => Properties.TryGetValue(
+            s_visualStylesModeProperty,
+            out VisualStylesMode value)
+            && value != VisualStylesMode.Inherit;
 
     private void ResetVisualStylesMode()
         => VisualStylesMode = VisualStylesMode.Inherit;
