@@ -4,19 +4,22 @@
 namespace System.Windows.Forms.Tests;
 
 /// <summary>
-///  Temporarily overrides client-area animation settings for deterministic renderer tests.
+///  Temporarily overrides system visual settings for deterministic renderer tests.
 /// </summary>
 internal sealed class SystemVisualSettingsTestScope : IDisposable
 {
     private readonly SystemVisualSettings _previousSettings = SystemVisualSettingsTracker.CurrentSettings;
 
-    public SystemVisualSettingsTestScope(bool clientAreaAnimationEnabled)
+    public SystemVisualSettingsTestScope(
+        bool clientAreaAnimationEnabled,
+        bool? highContrastEnabled = null)
     {
         SystemVisualSettingsTracker.ResetForTesting(
             new SystemVisualSettings(
                 _previousSettings.AccentColor,
                 _previousSettings.TextScaleFactor,
-                _previousSettings.HighContrastEnabled,
+                highContrastEnabled
+                    ?? _previousSettings.HighContrastEnabled,
                 clientAreaAnimationEnabled,
                 _previousSettings.KeyboardCuesVisible,
                 _previousSettings.FocusBorderMetrics));

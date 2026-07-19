@@ -1082,7 +1082,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool IsPopupKeyCapAppearance
         => FlatStyle == FlatStyle.Popup
-            && (Application.IsDarkModeEnabled || EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
             && this is Button
                 or CheckBox { Appearance: Appearance.Button }
                 or RadioButton { Appearance: Appearance.Button };
