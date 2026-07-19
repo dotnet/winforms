@@ -176,13 +176,15 @@ public class KioskModeManagerTests
             HideTaskbar = false,
             TopMostInFullScreen = true
         };
+        Rectangle workingArea = Screen.FromRectangle(form.Bounds).WorkingArea;
 
         manager.ToggleFullScreen();
 
         Assert.True(manager.FullScreen);
         Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
         Assert.True(form.TopMost);
-        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(workingArea, form.Bounds);
 
         manager.ToggleFullScreen();
 
@@ -191,6 +193,54 @@ public class KioskModeManagerTests
         Assert.False(form.TopMost);
         Assert.Equal(FormWindowState.Normal, form.WindowState);
         Assert.Equal(new Rectangle(10, 20, 300, 200), form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_HideTaskbar_UsesScreenBounds()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200)
+        };
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            HideTaskbar = true
+        };
+        Rectangle screenBounds = Screen.FromRectangle(form.Bounds).Bounds;
+
+        manager.FullScreen = true;
+
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(screenBounds, form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_StatusStripDropDown_RemainsAttached()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200)
+        };
+        using StatusStrip statusStrip = new();
+        using ToolStripDropDownButton dropDownButton = new("Options");
+        dropDownButton.DropDownItems.Add("First");
+        statusStrip.Items.Add(dropDownButton);
+        form.Controls.Add(statusStrip);
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        form.Show();
+        manager.FullScreen = true;
+        dropDownButton.ShowDropDown();
+
+        Rectangle itemScreenBounds = statusStrip.RectangleToScreen(dropDownButton.Bounds);
+        Assert.InRange(
+            Math.Abs(dropDownButton.DropDown.Bounds.Bottom - itemScreenBounds.Top),
+            0,
+            1);
     }
 
     [WinFormsFact]
@@ -619,6 +669,7 @@ public class KioskModeManagerTests
 
         using KioskModeManager manager = new();
         ISupportInitialize supportInitialize = manager;
+        Rectangle workingArea = Screen.FromRectangle(form.Bounds).WorkingArea;
 
         supportInitialize.BeginInit();
         manager.ContainerControl = form;
@@ -631,7 +682,8 @@ public class KioskModeManagerTests
 
         Assert.True(manager.FullScreen);
         Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
-        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(workingArea, form.Bounds);
     }
 
     [WinFormsFact]
