@@ -823,22 +823,17 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void ApplyFullScreen(Form form)
     {
+        Screen screen = Screen.FromRectangle(form.Bounds);
+        Rectangle fullScreenBounds = _hideTaskbar
+            ? screen.Bounds
+            : screen.WorkingArea;
+
         // Apply fullscreen from a normal state so bounds and border changes do
         // not operate on Windows' maximized window rectangle.
         form.WindowState = FormWindowState.Normal;
         form.FormBorderStyle = FormBorderStyle.None;
-
         form.TopMost = _topMostInFullScreen;
-
-        if (_hideTaskbar)
-        {
-            Screen screen = Screen.FromControl(form);
-            form.Bounds = screen.Bounds;
-        }
-        else
-        {
-            form.WindowState = FormWindowState.Maximized;
-        }
+        form.Bounds = fullScreenBounds;
     }
 
     private void UpdateFormObserver()
