@@ -22,10 +22,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         {
             FlatStyle.Standard => _modern ? new ModernButtonDarkModeRenderer() : new FlatButtonDarkModeRenderer(),
             FlatStyle.Flat => _modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
-            // FlatStyle.Popup is owner-painted directly by ButtonBase using the animated key-cap renderer; the
-            // adapter is used only for layout/sizing here, for which the
-            // modern renderer's metrics are a good fit.
-            FlatStyle.Popup => new ModernButtonDarkModeRenderer(),
+            FlatStyle.Popup => _modern ? new ModernButtonDarkModeRenderer() : new PopupButtonDarkModeRenderer(),
             FlatStyle.System => new SystemButtonDarkModeRenderer(),
             _ => throw new ArgumentOutOfRangeException(nameof(control))
         };
@@ -163,7 +160,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     protected override LayoutOptions Layout(PaintEventArgs e) => CommonLayout();
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
-        => Control.FlatStyle == FlatStyle.Popup
+        => Control.FlatStyle == FlatStyle.Popup && _modern
             ? GetModernPopupPreferredSizeCore(
                 CommonLayout(),
                 proposedSize,
