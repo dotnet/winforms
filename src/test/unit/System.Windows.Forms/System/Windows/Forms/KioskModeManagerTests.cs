@@ -239,6 +239,31 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_FullScreen_RefreshBounds_ReappliesWorkingArea()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200)
+        };
+        Rectangle workingArea = Screen.FromRectangle(
+            form.Bounds).WorkingArea;
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            FullScreen = true
+        };
+        form.Bounds = new Rectangle(
+            workingArea.X + 10,
+            workingArea.Y + 10,
+            300,
+            200);
+
+        manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
+
+        Assert.Equal(workingArea, form.Bounds);
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_FullScreen_StatusStripDropDown_RemainsAttached()
     {
         using Form form = new()
