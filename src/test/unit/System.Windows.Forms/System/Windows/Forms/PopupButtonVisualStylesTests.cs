@@ -73,6 +73,58 @@ public class PopupButtonVisualStylesTests
         Assert.NotNull(control.TestAccessor.Dynamic._popupKeyCapRenderer);
     }
 
+    [WinFormsTheory]
+    [InlineData(typeof(Button))]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ButtonBase_AppearanceButton_Popup_ClassicDoesNotUseSharedRenderer(
+        Type controlType)
+    {
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(
+            controlType);
+        control.FlatStyle = FlatStyle.Popup;
+        control.VisualStylesMode = VisualStylesMode.Classic;
+
+        if (control is CheckBox checkBox)
+        {
+            checkBox.Appearance = Appearance.Button;
+        }
+        else if (control is RadioButton radioButton)
+        {
+            radioButton.Appearance = Appearance.Button;
+        }
+
+        Assert.False(
+            (bool)control.TestAccessor.Dynamic.IsPopupKeyCapAppearance);
+    }
+
+    [WinFormsFact]
+    public void ButtonBase_AppearanceButton_Popup_HighContrastDoesNotUseSharedRenderer()
+    {
+        using Button button = new HighContrastButton
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.False(
+            (bool)button.TestAccessor.Dynamic.IsPopupKeyCapAppearance);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_ClassicPopup_UsesClassicRenderer()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        object renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+
+        Assert.IsType<PopupButtonDarkModeRenderer>(renderer);
+    }
+
     [WinFormsFact]
     public void AnimatedPopupButtonRenderer_SelectedState_TargetsPressedPosition()
     {
@@ -573,5 +625,13 @@ public class PopupButtonVisualStylesTests
         }
 
         return count;
+    }
+
+    /// <summary>
+    ///  Provides a deterministic High Contrast effective mode for renderer-selection tests.
+    /// </summary>
+    private sealed class HighContrastButton : Button
+    {
+        internal override bool IsHighContrast => true;
     }
 }
