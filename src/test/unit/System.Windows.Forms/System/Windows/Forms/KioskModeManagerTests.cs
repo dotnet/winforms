@@ -216,6 +216,29 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_FullScreen_MinimizedForm_UsesRestoreMonitor()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        form.WindowState = FormWindowState.Minimized;
+        Rectangle restoreBounds = form.RestoreBounds;
+        Rectangle workingArea = Screen.FromRectangle(
+            restoreBounds).WorkingArea;
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        manager.FullScreen = true;
+
+        Assert.Equal(workingArea, form.Bounds);
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_FullScreen_StatusStripDropDown_RemainsAttached()
     {
         using Form form = new()
