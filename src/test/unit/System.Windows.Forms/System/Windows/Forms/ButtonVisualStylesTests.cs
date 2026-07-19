@@ -61,6 +61,66 @@ public class ButtonVisualStylesTests
         button.DrawToBitmap(bitmap, new Rectangle(Point.Empty, button.Size));
     }
 
+    [WinFormsTheory]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ModernGlyphControl_PaintsParentBackgroundImage(Type controlType)
+    {
+        using Bitmap backgroundImage = CreateSolidBitmap(new Size(2, 1), Color.Red);
+        backgroundImage.SetPixel(1, 0, Color.Blue);
+        using Panel parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.Tile,
+            Size = new Size(40, 30)
+        };
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.Size = parent.Size;
+        control.Text = string.Empty;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
+
+        Assert.Equal(Color.Red.ToArgb(), actual.GetPixel(control.Width - 2, 2).ToArgb());
+        Assert.Equal(Color.Blue.ToArgb(), actual.GetPixel(control.Width - 1, 2).ToArgb());
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ModernGlyphControl_ThemedTabPage_PaintsOpaqueBackground(Type controlType)
+    {
+        if (!Application.RenderWithVisualStyles)
+        {
+            return;
+        }
+
+        using TabControl tabControl = new() { Size = new Size(120, 80) };
+        using TabPage tabPage = new()
+        {
+            Size = tabControl.Size,
+            UseVisualStyleBackColor = true
+        };
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.Size = new Size(40, 30);
+        control.Text = string.Empty;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        tabPage.Controls.Add(control);
+        tabControl.TabPages.Add(tabPage);
+        tabControl.CreateControl();
+        tabPage.CreateControl();
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
+
+        Assert.Equal(255, actual.GetPixel(control.Width - 2, 2).A);
+    }
+
     [WinFormsFact]
     public void Button_VisualStylesMode_ChangedToNet11_Invalidates()
     {

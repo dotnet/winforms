@@ -71,7 +71,11 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        graphics.Clear(Control.Parent?.BackColor ?? Control.BackColor);
+        ParentBackgroundRenderer.Paint(
+            Control,
+            graphics,
+            Control.ClientRectangle,
+            Control.BackColor);
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
