@@ -173,12 +173,21 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     }
 
     private void RenderText(Graphics graphics, Point position)
-        => TextRenderer.DrawText(
+    {
+        TextRenderer.DrawText(
             graphics,
             Control.Text,
             Control.Font,
             position,
-            Control.Enabled ? Control.ForeColor : SystemColors.GrayText);
+            GetTextColor());
+    }
+
+    internal Color GetTextColor()
+        => Control.Enabled
+            ? Control.ForeColor
+            : ModernControlColorMath.GetDisabledTextColor(
+                Control.ForeColor,
+                Control.BackColor);
 
     private void RenderSwitch(Graphics graphics, Rectangle rect, ToggleSwitchMetrics metrics)
     {

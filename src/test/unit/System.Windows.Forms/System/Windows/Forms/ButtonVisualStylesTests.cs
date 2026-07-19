@@ -188,6 +188,70 @@ public class ButtonVisualStylesTests
         Assert.IsType<FlatButtonDarkModeRenderer>(renderer);
     }
 
+    [WinFormsTheory]
+    [InlineData(245, 245, 245, 0, 0, 0)]
+    [InlineData(32, 32, 32, 240, 240, 240)]
+    [InlineData(0, 120, 215, 255, 255, 255)]
+    [InlineData(255, 185, 0, 0, 0, 0)]
+    public void ModernControlColorMath_DisabledText_MeetsMinimumContrast(
+        byte backRed,
+        byte backGreen,
+        byte backBlue,
+        byte foreRed,
+        byte foreGreen,
+        byte foreBlue)
+    {
+        Color backColor = Color.FromArgb(backRed, backGreen, backBlue);
+        Color preferredForeColor = Color.FromArgb(foreRed, foreGreen, foreBlue);
+
+        Color actual = ModernControlColorMath.GetDisabledTextColor(
+            preferredForeColor,
+            backColor);
+
+        Assert.True(
+            PopupButtonColorMath.GetContrastRatio(actual, backColor)
+                >= ModernControlColorMath.MinimumDisabledTextContrastRatio);
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ModernGlyphControl_DisabledText_IsNotShadowed(Type controlType)
+    {
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.Enabled = false;
+        control.FlatStyle = FlatStyle.Popup;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        ButtonInternal.ButtonBaseAdapter adapter = control.CreatePopupAdapter();
+
+        Assert.False(adapter.CommonLayout().ShadowedText);
+    }
+
+    [WinFormsFact]
+    public void ToggleSwitch_DisabledText_UsesControlBackground()
+    {
+        using Panel parent = new() { BackColor = Color.White };
+        using CheckBox checkBox = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.FromArgb(20, 40, 80),
+            Enabled = false,
+            ForeColor = Color.Black,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(checkBox);
+        using Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer = new(
+            checkBox,
+            Rendering.CheckBox.ModernCheckBoxStyle.Rounded);
+
+        Color actual = renderer.GetTextColor();
+
+        Assert.True(
+            PopupButtonColorMath.GetContrastRatio(actual, checkBox.BackColor)
+                >= ModernControlColorMath.MinimumDisabledTextContrastRatio);
+    }
+
     [WinFormsFact]
     public void ModernButtonDarkModeRenderer_HighDpi_CorrectsRingAndGapWithoutChangingBodyInset()
     {

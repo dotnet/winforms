@@ -372,6 +372,19 @@ public class PopupButtonVisualStylesTests
         AssertAutomaticPaletteContrast(context);
     }
 
+    [WinFormsFact]
+    public void PopupButtonKeyCapRenderer_DisabledText_IsFlatAndReadable()
+    {
+        PopupButtonRenderContext context = CreateContext(
+            enabled: false,
+            textEffect: PopupButtonTextEffect.Raised);
+
+        Assert.Equal(
+            PopupButtonTextEffect.Flat,
+            PopupButtonKeyCapRenderer.GetTextEffect(context));
+        AssertDisabledPaletteContrast(context);
+    }
+
     private static PopupButtonRenderContext CreateContext(
         int deviceDpi = 96,
         bool focused = false,
@@ -386,7 +399,9 @@ public class PopupButtonVisualStylesTests
         RightToLeft rightToLeft = RightToLeft.No,
         Color? backColor = null,
         Color? surfaceColor = null,
-        bool useAutomaticForeColor = false)
+        bool useAutomaticForeColor = false,
+        bool enabled = true,
+        PopupButtonTextEffect textEffect = PopupButtonTextEffect.Raised)
         => new()
         {
             Bounds = bounds ?? new Rectangle(0, 0, 120, 40),
@@ -397,7 +412,7 @@ public class PopupButtonVisualStylesTests
             UseAutomaticForeColor = useAutomaticForeColor,
             BorderColor = Color.Black,
             BorderWidth = 1,
-            Enabled = true,
+            Enabled = enabled,
             Focused = focused,
             IsDefault = isDefault,
             IsDarkMode = isDarkMode,
@@ -408,6 +423,7 @@ public class PopupButtonVisualStylesTests
             ImageSize = imageSize,
             ImageAlign = imageAlign,
             RightToLeft = rightToLeft,
+            TextEffect = textEffect,
             HighContrast = false
         };
 
@@ -449,6 +465,31 @@ public class PopupButtonVisualStylesTests
                         >= ModernButtonColorMath.MinimumTextContrastRatio);
             }
         }
+    }
+
+    private static void AssertDisabledPaletteContrast(
+        PopupButtonRenderContext context)
+    {
+        object metrics = CreateMetrics(context);
+        Type paletteType = typeof(PopupButtonKeyCapRenderer).GetNestedType(
+            "Palette",
+            BindingFlags.NonPublic);
+        MethodInfo createMethod = paletteType.GetMethod(
+            "Create",
+            BindingFlags.Public | BindingFlags.Static);
+        object palette = createMethod.Invoke(
+            null,
+            [context, metrics, InvokeGetSurfaceBackColor(context)]);
+        Color text = (Color)paletteType.GetProperty("Text").GetValue(palette);
+        Color darkestBowl = (Color)paletteType.GetProperty("DarkestTextBackground").GetValue(palette);
+        Color lightestBowl = (Color)paletteType.GetProperty("LightestTextBackground").GetValue(palette);
+
+        Assert.True(
+            PopupButtonColorMath.GetContrastRatio(text, darkestBowl)
+                >= ModernControlColorMath.MinimumDisabledTextContrastRatio);
+        Assert.True(
+            PopupButtonColorMath.GetContrastRatio(text, lightestBowl)
+                >= ModernControlColorMath.MinimumDisabledTextContrastRatio);
     }
 
     private static ButtonBase CreateAppearanceButton(Type controlType)

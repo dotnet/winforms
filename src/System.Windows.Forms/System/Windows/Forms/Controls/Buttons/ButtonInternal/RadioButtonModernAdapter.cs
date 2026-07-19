@@ -68,6 +68,14 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         return layout;
     }
 
+    internal override LayoutOptions CommonLayout()
+    {
+        LayoutOptions layout = base.CommonLayout();
+        layout.ShadowedText = false;
+
+        return layout;
+    }
+
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
@@ -101,11 +109,16 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
 
         PaintImage(e, layout);
 
-        Color textColor = Control.ShouldSerializeForeColor()
+        Color preferredTextColor = Control.ShouldSerializeForeColor()
             ? Control.ForeColor
             : Application.IsDarkModeEnabled
                 ? Color.FromArgb(0xF0, 0xF0, 0xF0)
                 : SystemColors.WindowText;
+        Color textColor = Control.Enabled
+            ? preferredTextColor
+            : ModernControlColorMath.GetDisabledTextColor(
+                preferredTextColor,
+                Control.Parent?.BackColor ?? Control.BackColor);
 
         PaintField(e, layout, PaintRender(e).Calculate(), textColor, drawFocus: true);
     }
