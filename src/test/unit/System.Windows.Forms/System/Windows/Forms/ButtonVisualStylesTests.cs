@@ -114,6 +114,21 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void ButtonDarkModeAdapter_ClassicStandard_UsesFlatRenderer()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        object renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+
+        Assert.IsType<FlatButtonDarkModeRenderer>(renderer);
+    }
+
+    [WinFormsFact]
     public void ModernButtonDarkModeRenderer_HighDpi_CorrectsRingAndGapWithoutChangingBodyInset()
     {
         ModernButtonDarkModeRenderer renderer = new() { DeviceDpi = 144 };
