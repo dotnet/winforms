@@ -134,6 +134,323 @@ public class ComboBoxTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [EnumData<FlatStyle>]
+    public void ComboBox_ModernVisualStyles_AdapterSelection(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        FlatComboAdapter adapter = control.CreateAdapter();
+
+        if (flatStyle == FlatStyle.System)
+        {
+            Assert.IsType<FlatComboAdapter>(adapter);
+        }
+        else
+        {
+            Assert.IsType<ComboBox.ModernComboAdapter>(adapter);
+        }
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [EnumData<FlatStyle>]
+    public void ComboBox_HighContrast_DoesNotSelectModernAdapter(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: true);
+        using ComboBox control = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        FlatComboAdapter adapter = control.CreateFlatComboAdapterInstance();
+
+        Assert.IsNotType<ComboBox.ModernComboAdapter>(adapter);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void ComboBox_ModernVisualStyles_PreferredHeightMatchesTextBox(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font font = new(
+            Control.DefaultFont.FontFamily,
+            11f);
+        using TextBox textBox = new()
+        {
+            Font = font,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using ComboBox comboBox = new()
+        {
+            FlatStyle = flatStyle,
+            Font = font,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
+        Assert.Equal(textBox.Height, comboBox.Height);
+
+        textBox.CreateControl();
+        comboBox.CreateControl();
+
+        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
+        Assert.Equal(textBox.Height, comboBox.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown, FlatStyle.Standard)]
+    [InlineData(ComboBoxStyle.DropDown, FlatStyle.Flat)]
+    [InlineData(ComboBoxStyle.DropDown, FlatStyle.Popup)]
+    [InlineData(ComboBoxStyle.DropDownList, FlatStyle.Standard)]
+    [InlineData(ComboBoxStyle.DropDownList, FlatStyle.Flat)]
+    [InlineData(ComboBoxStyle.DropDownList, FlatStyle.Popup)]
+    [InlineData(ComboBoxStyle.Simple, FlatStyle.Standard)]
+    [InlineData(ComboBoxStyle.Simple, FlatStyle.Flat)]
+    [InlineData(ComboBoxStyle.Simple, FlatStyle.Popup)]
+    public void ComboBox_ModernVisualStyles_DropDownStyleMatrixPaints(
+        ComboBoxStyle dropDownStyle,
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new() { Size = new Size(180, 140) };
+        using ComboBox control = new()
+        {
+            DropDownStyle = dropDownStyle,
+            FlatStyle = flatStyle,
+            Size = dropDownStyle == ComboBoxStyle.Simple
+                ? new Size(160, 100)
+                : new Size(160, 40),
+            Text = "Modern combo",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["First", "Second"]);
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+        using Bitmap bitmap = new(
+            control.Width,
+            control.Height);
+
+        control.DrawToBitmap(
+            bitmap,
+            new Rectangle(Point.Empty, control.Size));
+
+        Assert.True(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_SystemModeChangeDoesNotRequestLayout()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        parent.Controls.Add(control);
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(0, layoutCallCount);
+        Assert.IsType<FlatComboAdapter>(control.CreateAdapter());
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_ModeChangeRemeasuresAutoSizeRow()
+    {
+        SystemVisualSettings previous =
+            SystemVisualSettingsTracker.CurrentSettings;
+        SystemVisualSettings modernMetrics = new(
+            previous.AccentColor,
+            1.5f,
+            highContrastEnabled: false,
+            clientAreaAnimationEnabled: false,
+            previous.KeyboardCuesVisible,
+            focusBorderMetrics: new Size(3, 3));
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(
+                modernMetrics);
+            using Form form = new();
+            using TableLayoutPanel tableLayoutPanel = new()
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+                RowCount = 1
+            };
+            tableLayoutPanel.ColumnStyles.Add(
+                new ColumnStyle(SizeType.AutoSize));
+            tableLayoutPanel.RowStyles.Add(
+                new RowStyle(SizeType.AutoSize));
+            using Font font = new(
+                Control.DefaultFont.FontFamily,
+                11f);
+            using VisualStylesComboBox control = new()
+            {
+                AutoSize = true,
+                FlatStyle = FlatStyle.Standard,
+                Font = font,
+                VisualStylesMode = VisualStylesMode.Classic
+            };
+            tableLayoutPanel.Controls.Add(control, 0, 0);
+            form.Controls.Add(tableLayoutPanel);
+            form.CreateControl();
+            IntPtr handle = control.Handle;
+            int classicControlHeight = control.Height;
+            int classicHeight = tableLayoutPanel.GetRowHeights()[0];
+
+            control.VisualStylesMode = VisualStylesMode.Net11;
+
+            Assert.Equal(control.PreferredHeight, control.Height);
+            Assert.NotEqual(classicControlHeight, control.Height);
+            Assert.NotEqual(
+                classicHeight,
+                tableLayoutPanel.GetRowHeights()[0]);
+            Assert.Equal(handle, control.Handle);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting(previous);
+        }
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_RtlMirrorsDropDownButton()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox leftToRight = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            RightToLeft = RightToLeft.No,
+            Size = new Size(120, 32),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using VisualStylesComboBox rightToLeft = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            RightToLeft = RightToLeft.Yes,
+            Size = new Size(120, 32),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        var leftToRightAdapter =
+            (ComboBox.ModernComboAdapter)leftToRight.CreateAdapter();
+        var rightToLeftAdapter =
+            (ComboBox.ModernComboAdapter)rightToLeft.CreateAdapter();
+
+        Rectangle leftToRightButton =
+            leftToRightAdapter.TestAccessor.Dynamic._buttonBounds;
+        Rectangle rightToLeftButton =
+            rightToLeftAdapter.TestAccessor.Dynamic._buttonBounds;
+
+        Assert.Equal(
+            leftToRight.ClientRectangle.Right,
+            leftToRightButton.Right);
+        Assert.Equal(
+            rightToLeft.ClientRectangle.Left,
+            rightToLeftButton.Left);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_RoundedCornersPaintParentBackground()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Bitmap backgroundImage = new(2, 1);
+        backgroundImage.SetPixel(0, 0, Color.Red);
+        backgroundImage.SetPixel(1, 0, Color.Blue);
+        using Panel parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.Tile,
+            Size = new Size(80, 40)
+        };
+        using VisualStylesComboBox control = new()
+        {
+            BackColor = Color.White,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(60, 30),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+        using Bitmap actual = new(
+            control.ClientSize.Width,
+            control.ClientSize.Height);
+        using Graphics graphics = Graphics.FromImage(actual);
+        var adapter =
+            (ComboBox.ModernComboAdapter)control.CreateAdapter();
+
+        adapter.DrawFlatCombo(control, graphics);
+
+        Assert.Equal(
+            Color.Red.ToArgb(),
+            actual.GetPixel(0, 0).ToArgb());
+        Assert.Equal(
+            Color.Blue.ToArgb(),
+            actual.GetPixel(1, 0).ToArgb());
+        Assert.Equal(
+            Color.Blue.ToArgb(),
+            actual.GetPixel(actual.Width - 1, 0).ToArgb());
+        Assert.Equal(
+            Color.Red.ToArgb(),
+            actual.GetPixel(0, actual.Height - 1).ToArgb());
+        Assert.Equal(
+            Color.Blue.ToArgb(),
+            actual.GetPixel(
+                actual.Width - 1,
+                actual.Height - 1).ToArgb());
+    }
+
+    [Theory]
+    [InlineData(10, 0, 21999, false)]
+    [InlineData(10, 0, 22000, true)]
+    [InlineData(10, 1, 0, true)]
+    public void ComboBox_SupportsModernDropDownCorners_ReturnsExpected(
+        int major,
+        int minor,
+        int build,
+        bool expected)
+    {
+        Assert.Equal(
+            expected,
+            ComboBox.SupportsModernDropDownCorners(
+                new Version(major, minor, build)));
+    }
+
     [WinFormsFact]
     public void ComboBox_CreateParams_GetDefault_ReturnsExpected()
     {
@@ -2806,6 +3123,17 @@ public class ComboBoxTests
             _raiseAutomationCallCount++;
             return base.RaiseAutomationEvent(eventId);
         }
+    }
+
+    /// <summary>
+    ///  Exposes modern ComboBox seams for deterministic renderer tests.
+    /// </summary>
+    private sealed class VisualStylesComboBox : SubComboBox
+    {
+        public FlatComboAdapter CreateAdapter()
+            => base.CreateFlatComboAdapterInstance();
+
+        internal override bool IsHighContrast => false;
     }
 
     private class SubComboBox : ComboBox

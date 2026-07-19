@@ -877,18 +877,16 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            int preferredHeight = FontHeight + GetVisualStylesPadding(includeScrollbars: true).Vertical;
+            Padding visualStylesPadding = GetVisualStylesPadding(
+                includeScrollbars: true);
+            int preferredHeight = FontHeight + visualStylesPadding.Vertical;
 
             if (AutoSize && !Multiline && BorderStyle == BorderStyle.Fixed3D)
             {
-                // A naturally sized single-line control must leave enough room for the complete
-                // rounded chrome. Explicitly fixed controls are not forced through this floor.
-                Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-                int roundedChromeMinimumHeight = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius)
-                    + Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height)
-                    + ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset);
-
-                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
+                preferredHeight = ModernControlVisualStyles.GetPreferredFieldHeight(
+                    FontHeight,
+                    visualStylesPadding,
+                    DeviceDpiInternal);
             }
 
             return preferredHeight;
@@ -938,50 +936,18 @@ public abstract partial class TextBoxBase : Control
     /// </remarks>
     private protected Padding GetVisualStylesPadding(bool includeScrollbars)
     {
-        Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int horizontalOffset = focusBorderMetrics.Width;
-        int verticalOffset = focusBorderMetrics.Height;
-
-        // The visible padding is selected per BorderStyle (not per VisualStylesMode): each border look
-        // reserves a differently sized band around the native edit's client area for the modern chrome
-        // we paint in the non-client region. Fixed3D reserves the widest uniform band for the rounded
-        // lozenge and its focus line; FixedSingle reserves a slightly smaller uniform band for the flat
-        // single-line border; None reserves only a minimal band, plus extra room on the right and bottom
-        // for the scrollbars and the focus line. BorderThickness (offset) is added so the drawn border
-        // line sits inside the reserved band rather than on its outer edge.
-        Padding borderPadding = BorderStyle switch
-        {
-            BorderStyle.Fixed3D => new Padding(
-                left: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + horizontalOffset,
-                top: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + verticalOffset,
-                right: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + horizontalOffset,
-                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.Fixed3DBorderPadding) + verticalOffset),
-
-            BorderStyle.FixedSingle => new Padding(
-                left: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + horizontalOffset,
-                top: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + verticalOffset,
-                right: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + horizontalOffset,
-                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.FixedSingleBorderPadding) + verticalOffset),
-
-            BorderStyle.None => new Padding(
-                left: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding),
-                top: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding),
-                right: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding) + horizontalOffset,
-                // We still need some extra space for the focus indication.
-                bottom: ScaleVisualStylesMetric(ModernControlVisualStyles.NoBorderPadding) + verticalOffset),
-
-            _ => Padding.Empty,
-        };
-
-        Padding padding = borderPadding + new Padding(
-            ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset));
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        Padding padding = ModernControlVisualStyles.GetFieldPadding(
+            BorderStyle,
+            Padding,
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
 
         if (includeScrollbars)
         {
             padding += GetScrollBarPadding();
         }
-
-        padding += Padding;
 
         return padding;
     }
@@ -1011,41 +977,19 @@ public abstract partial class TextBoxBase : Control
         Size focusBorderMetrics,
         float textScaleFactor,
         int deviceDpi)
-        => new(
-            ScaleVisualStylesFocusMetric(focusBorderMetrics.Width, textScaleFactor, deviceDpi),
-            ScaleVisualStylesFocusMetric(focusBorderMetrics.Height, textScaleFactor, deviceDpi));
+        => ModernControlVisualStyles.GetFocusBorderMetrics(
+            focusBorderMetrics,
+            textScaleFactor,
+            deviceDpi);
 
     internal static int GetVisualStylesFocusBandHeight(
         Size focusBorderMetrics,
         float textScaleFactor,
         int deviceDpi)
-    {
-        Size scaledFocusBorderMetrics = GetVisualStylesFocusBorderMetrics(
+        => ModernControlVisualStyles.GetFocusBandHeight(
             focusBorderMetrics,
             textScaleFactor,
             deviceDpi);
-        int scaledFocusBandHeight = ScaleVisualStylesFocusMetric(
-            ModernControlVisualStyles.FocusBandHeight,
-            textScaleFactor,
-            deviceDpi);
-
-        return Math.Max(scaledFocusBandHeight, scaledFocusBorderMetrics.Height);
-    }
-
-    private static int ScaleVisualStylesFocusMetric(
-        int metric,
-        float textScaleFactor,
-        int deviceDpi)
-    {
-        float scale = Math.Clamp(textScaleFactor, 1f, 2.25f);
-        int dpiScaledMetric = ScaleHelper.ScaleToDpi(
-            Math.Max(metric, ModernControlVisualStyles.BorderThickness),
-            deviceDpi);
-
-        return Math.Max(
-            ScaleHelper.ScaleToDpi(ModernControlVisualStyles.BorderThickness, deviceDpi),
-            (int)Math.Ceiling(dpiScaledMetric * scale));
-    }
     internal static bool CanRenderVisualStylesRoundedChrome(
         Rectangle bounds,
         int cornerSize,
@@ -1761,6 +1705,27 @@ public abstract partial class TextBoxBase : Control
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         RecalculateVisualStylesClientArea();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+    {
+        base.OnSystemVisualSettingsChanged(e);
+
+        if ((e.Changed & (SystemVisualSettingsCategories.TextScale | SystemVisualSettingsCategories.FocusMetrics)) == 0
+            || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        CommonProperties.xClearPreferredSizeCache(this);
+        AdjustHeight(false);
+        RecalculateVisualStylesClientArea();
+
+        if (ParentInternal is { } parent)
+        {
+            LayoutTransaction.DoLayout(parent, this, PropertyNames.SystemVisualSettings);
+        }
     }
 
     /// <inheritdoc/>
