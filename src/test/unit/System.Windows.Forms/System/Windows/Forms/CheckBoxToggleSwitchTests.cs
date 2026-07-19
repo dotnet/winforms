@@ -11,6 +11,63 @@ namespace System.Windows.Forms.Tests;
 // These cover public behavior and the shared metrics without depending on pixel-level rendering details.
 public class CheckBoxToggleSwitchTests
 {
+    private const int LeftMouseButtonKeyState = 0x0001;
+
+    public static IEnumerable<object[]> RenderingMatrixData()
+    {
+        foreach (FlatStyle flatStyle in Enum.GetValues<FlatStyle>())
+        {
+            foreach (Appearance appearance in Enum.GetValues<Appearance>())
+            {
+                yield return [flatStyle, appearance, VisualStylesMode.Inherit];
+                yield return [flatStyle, appearance, VisualStylesMode.Classic];
+                yield return [flatStyle, appearance, VisualStylesMode.Disabled];
+                yield return [flatStyle, appearance, VisualStylesMode.Net11];
+                yield return [flatStyle, appearance, VisualStylesMode.Latest];
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(RenderingMatrixData))]
+    public void CheckBox_RenderingMatrix_DoesNotThrow(
+        FlatStyle flatStyle,
+        Appearance appearance,
+        VisualStylesMode visualStylesMode)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using CheckBox checkBox = new()
+        {
+            Appearance = appearance,
+            FlatStyle = flatStyle,
+            Size = new Size(140, 36),
+            Text = "Matrix",
+            VisualStylesMode = visualStylesMode
+        };
+        checkBox.CreateControl();
+        using Bitmap bitmap = new(
+            checkBox.Width,
+            checkBox.Height);
+
+        _ = checkBox.DownChangeRectangle;
+        _ = checkBox.OverChangeRectangle;
+        checkBox.DrawToBitmap(
+            bitmap,
+            new Rectangle(Point.Empty, checkBox.Size));
+        PInvokeCore.SendMessage(
+            checkBox,
+            PInvokeCore.WM_LBUTTONDOWN,
+            (WPARAM)LeftMouseButtonKeyState,
+            LPARAM.MAKELPARAM(5, 5));
+        PInvokeCore.SendMessage(
+            checkBox,
+            PInvokeCore.WM_LBUTTONUP,
+            0,
+            LPARAM.MAKELPARAM(5, 5));
+    }
+
     [WinFormsTheory]
     [InlineData(8)]
     [InlineData(9)]
