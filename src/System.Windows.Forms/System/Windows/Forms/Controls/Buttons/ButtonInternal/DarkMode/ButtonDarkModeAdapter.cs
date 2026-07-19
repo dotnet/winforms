@@ -20,11 +20,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
         _buttonDarkModeRenderer = control.FlatStyle switch
         {
-            // With VisualStyles (.NET 11+) the modern, WinUI-inspired renderer is used for the owner-drawn
-            // styles. Otherwise FlatStyle.Standard renders with a conservative owner-drawn renderer that mimics
-            // the dark-mode system button (instead of delegating to the Win32 control); this makes the owner-drawn
-            // path reachable and lets Standard buttons support images, focus cues, etc.
-            FlatStyle.Standard => _modern ? new ModernButtonDarkModeRenderer() : new SystemButtonDarkModeRenderer(),
+            FlatStyle.Standard => _modern ? new ModernButtonDarkModeRenderer() : new FlatButtonDarkModeRenderer(),
             FlatStyle.Flat => _modern ? new ModernFlatButtonRenderer() : new FlatButtonDarkModeRenderer(),
             // FlatStyle.Popup is owner-painted directly by ButtonBase using the animated key-cap renderer; the
             // adapter is used only for layout/sizing here, for which the
