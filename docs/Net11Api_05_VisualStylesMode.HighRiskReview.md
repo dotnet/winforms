@@ -34,11 +34,14 @@ carve, small-control flat fallback, and classic-mode metrics remain unchanged.
 
 ## GroupBox content geometry
 
-The Net11 `FlatStyle.Standard` GroupBox renders its caption above the rounded card frame. Its
+The Net11 `FlatStyle.Standard` GroupBox renders its caption above a borderless rectangular surface. Its
 `DisplayRectangle` therefore starts lower and is shorter than the classic etched-frame rectangle. This is the
 largest compatibility lever in the GroupBox change: the mode is opt-in, the paint and layout paths share the
 same metrics, and the VisualStylesMode impact dispatcher remeasures AutoSize containers when the effective
-renderer crosses the classic/modern boundary. `FlatStyle.System` remains native and does not use these metrics.
+renderer crosses the classic/modern boundary. The caption aligns to the control Padding, and the smaller bottom
+content inset preserves separation when GroupBoxes are stacked. `FlatStyle.Flat` uses a rounded Windows-accent
+outline; `FlatStyle.Popup` uses a Windows-accent header. `FlatStyle.System` remains native and does not use these
+metrics.
 
 ## ComboBox adapter routing
 
