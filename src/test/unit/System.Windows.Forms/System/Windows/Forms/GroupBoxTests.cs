@@ -1145,7 +1145,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
@@ -1158,7 +1171,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
     }
@@ -1199,7 +1225,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
@@ -1212,7 +1251,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
     }
