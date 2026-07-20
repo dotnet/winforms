@@ -247,6 +247,68 @@ public class CodeDomComponentSerializationServiceTests
         }
     }
 
+    [Theory]
+    [InlineData(0, false)]
+    [InlineData(3, true)]
+    public void CreateStore_ComboBoxPadding_SerializesOnlyNonDefaultValue(
+        int all,
+        bool expectedAssignment)
+    {
+        CodeDomComponentSerializationService service = new();
+        using Container container = new();
+        using ComboBox comboBox = new()
+        {
+            Padding = new Padding(all)
+        };
+        container.Add(comboBox, "comboBox");
+        using SerializationStore store = service.CreateStore();
+
+        service.Serialize(store, comboBox);
+        store.Close();
+
+        Assert.Empty(store.Errors);
+        ISerializable serializable =
+            Assert.IsAssignableFrom<ISerializable>(store);
+        SerializationInfo info = new(
+            store.GetType(),
+            new FormatterConverter());
+        serializable.GetObjectData(info, default);
+        CodeDomComponentSerializationState state =
+            GetState(info)["comboBox"];
+        CodeStatementCollection statements =
+            Assert.IsType<CodeStatementCollection>(state.Code);
+        CodeAssignStatement paddingAssignment = statements
+            .Cast<CodeStatement>()
+            .OfType<CodeAssignStatement>()
+            .FirstOrDefault(
+                statement => statement.Left
+                    is CodePropertyReferenceExpression
+                    {
+                        PropertyName: nameof(ComboBox.Padding)
+                    });
+
+        Assert.Equal(
+            expectedAssignment,
+            paddingAssignment is not null);
+
+        ICollection deserializedObjects = service.Deserialize(store);
+        ComboBox roundTripped = Assert.IsType<ComboBox>(
+            Assert.Single(deserializedObjects.Cast<object>()));
+        try
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(
+                roundTripped)[nameof(ComboBox.Padding)];
+            Assert.Equal(
+                expectedAssignment,
+                property.ShouldSerializeValue(roundTripped));
+            Assert.Equal(new Padding(all), roundTripped.Padding);
+        }
+        finally
+        {
+            roundTripped.Dispose();
+        }
+    }
+
     public static IEnumerable<object[]> CreateStore_CloseSerializeWithInvalidProvider_TestData()
     {
         yield return new object[] { null };

@@ -750,14 +750,30 @@ public partial class ComboBox : ListControl
         }
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    /// <summary>
+    ///  Gets or sets the distance between the ComboBox text and its field edges.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   In an effective .NET 11-or-later visual-styles mode, WinForms applies an additional
+    ///   one-logical-pixel style inset around the user-provided value. The public default remains
+    ///   <see cref="Padding.Empty"/>.
+    ///  </para>
+    /// </remarks>
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public new Padding Padding
     {
         get => base.Padding;
         set => base.Padding = value;
     }
+
+    private new bool ShouldSerializePadding()
+        => Padding != DefaultPadding;
+
+    private void ResetPadding()
+        => Padding = DefaultPadding;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -2379,8 +2395,9 @@ public partial class ComboBox : ListControl
             }
         }
 
-        UpdateModernEditMargins();
+        _modernHandleInitialized = true;
         ApplyPreferredFieldHeight();
+        UpdateModernEditMargins();
         if (hasComboBoxInfo)
         {
             ApplyModernDropDownCornerPreference(
@@ -2412,6 +2429,8 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
+        _modernHandleInitialized = false;
+        ResetModernEditBounds();
         _modernFieldHeightApplied = false;
         _dropDownHandle = HWND.Null;
         if (Disposing)
@@ -2698,7 +2717,10 @@ public partial class ComboBox : ListControl
     protected override void OnParentBackColorChanged(EventArgs e)
     {
         base.OnParentBackColorChanged(e);
-        if (DropDownStyle == ComboBoxStyle.Simple)
+        if (DropDownStyle == ComboBoxStyle.Simple
+            || (UsesModernComboAdapter
+                && FlatStyle is FlatStyle.Standard
+                    or FlatStyle.Popup))
         {
             Invalidate();
         }
@@ -2710,6 +2732,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override void OnFontChanged(EventArgs e)
     {
+        RestoreAndResetModernEditBounds();
         base.OnFontChanged(e);
         ResetHeightCache();
 
@@ -2860,7 +2883,14 @@ public partial class ComboBox : ListControl
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        if (DropDownStyle == ComboBoxStyle.Simple && IsHandleCreated)
+        if (DropDownStyle == ComboBoxStyle.DropDown
+            && IsHandleCreated)
+        {
+            UpdateModernEditMargins();
+        }
+
+        if (DropDownStyle == ComboBoxStyle.Simple
+            && IsHandleCreated)
         {
             // simple style combo boxes have more painting problems than you can shake a stick at
             InvalidateEverything();
@@ -3437,6 +3467,7 @@ public partial class ComboBox : ListControl
         }
 
         ApplyPreferredFieldHeight();
+        UpdateModernEditMargins();
     }
 
     /// <summary>
@@ -3847,7 +3878,10 @@ public partial class ComboBox : ListControl
                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                     // Special handling for disabled DropDownList in dark mode
-                    if (Application.IsDarkModeEnabled && !Enabled && DropDownStyle == ComboBoxStyle.DropDownList)
+                    if (Application.IsDarkModeEnabled
+                        && !Enabled
+                        && DropDownStyle == ComboBoxStyle.DropDownList
+                        && !UsesModernComboAdapter)
                     {
                         // The text area for DropDownList (excluding the dropdown button)
                         Rectangle textBounds = ClientRectangle;
@@ -3947,6 +3981,14 @@ public partial class ComboBox : ListControl
                 }
 
                 _suppressNextWindowsPos = false;
+                if (DropDownStyle == ComboBoxStyle.Simple
+                    && _modernHandleInitialized
+                    && !_adjustingModernChildBounds)
+                {
+                    ResizeModernSimpleBaseBounds();
+                    UpdateModernEditMargins();
+                }
+
                 break;
 
             case PInvokeCore.WM_NCDESTROY:

@@ -355,6 +355,7 @@ public sealed class VisualStylesButtons : Form
             {
                 DropDownStyle = dropDownStyle,
                 FlatStyle = flatStyle,
+                Padding = new Padding(2, 1, 4, 3),
                 Width = 160,
                 VisualStylesMode = VisualStylesMode.Inherit
             };
