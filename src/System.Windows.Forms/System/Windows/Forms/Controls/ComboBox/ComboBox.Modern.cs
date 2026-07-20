@@ -9,6 +9,8 @@ namespace System.Windows.Forms;
 
 public partial class ComboBox
 {
+    private bool _modernFieldHeightApplied;
+
     internal bool UsesModernComboAdapter
         => EffectiveVisualStylesMode >= VisualStylesMode.Net11
             && FlatStyle != FlatStyle.System;
@@ -42,6 +44,13 @@ public partial class ComboBox
     private void ApplyPreferredFieldHeight()
     {
         if (DropDownStyle == ComboBoxStyle.Simple)
+        {
+            return;
+        }
+
+        bool usesModernMetrics = UsesModernComboAdapter;
+        if (!usesModernMetrics
+            && !_modernFieldHeightApplied)
         {
             return;
         }
@@ -81,6 +90,8 @@ public partial class ComboBox
                 this,
                 PropertyNames.Bounds);
         }
+
+        _modernFieldHeightApplied = usesModernMetrics;
     }
 
     private void UpdateModernEditMargins()

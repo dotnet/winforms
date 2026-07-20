@@ -2412,6 +2412,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
+        _modernFieldHeightApplied = false;
         _dropDownHandle = HWND.Null;
         if (Disposing)
         {
