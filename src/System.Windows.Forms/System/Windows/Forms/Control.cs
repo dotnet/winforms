@@ -879,27 +879,7 @@ public unsafe partial class Control :
     private void ResetDataContext()
         => Properties.RemoveValue(s_dataContextProperty);
 
-    /// <summary>
-    ///  Gets or sets how the control renders itself when visual styles are applied. This is an ambient property.
-    /// </summary>
-    /// <value>
-    ///  The <see cref="Forms.VisualStylesMode"/> for the control. When not explicitly set, the value is inherited
-    ///  from the parent control, or, for a top-level control, from <see cref="Application.DefaultVisualStylesMode"/>.
-    /// </value>
-    /// <remarks>
-    ///  <para>
-    ///   As an ambient property, a control that does not have its <see cref="VisualStylesMode"/> set explicitly
-    ///   inherits the value from its parent, or, if it has no parent, from
-    ///   <see cref="Application.DefaultVisualStylesMode"/>. Derived controls can override
-    ///   <see cref="DefaultVisualStylesMode"/> to pin themselves to a specific renderer version for backward
-    ///   compatibility (see <see cref="TextBoxBase"/> for an example).
-    ///  </para>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [EditorBrowsable(EditorBrowsableState.Always)]
-    [AmbientValue(VisualStylesMode.Inherit)]
-    [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
-    public virtual VisualStylesMode VisualStylesMode
+    public virtual partial VisualStylesMode VisualStylesMode
     {
         get
         {
