@@ -125,9 +125,10 @@ button's preferred width or height.
 
 ## Align TextBox and ComboBox rows
 
-Modern non-`Simple` ComboBox fields share their height metrics with an equivalently padded, AutoSize, single-line
-modern TextBox using `BorderStyle.Fixed3D`. Put both in an AutoSize row, anchor them left and right, and avoid
-hard-coded heights:
+Modern non-`Simple` ComboBox fields share their height metrics with an AutoSize, single-line modern TextBox using
+`BorderStyle.Fixed3D`. ComboBox adds one logical pixel of internal style inset on top of its public Padding; apply
+the same Padding to the TextBox when exact field-height parity is required. Put both in an AutoSize row, anchor
+them left and right, and avoid hard-coded heights:
 
 ```csharp
 TableLayoutPanel editorTable = new()
@@ -151,7 +152,8 @@ Label nameLabel = new()
 TextBox nameEditor = new()
 {
     Anchor = AnchorStyles.Left | AnchorStyles.Right,
-    AutoSize = true
+    AutoSize = true,
+    Padding = new Padding(1)
 };
 
 Label categoryLabel = new()
@@ -173,7 +175,8 @@ editorTable.Controls.Add(categoryEditor, 1, 1);
 ```
 
 Do not derive a ComboBox height from `ItemHeight`. Item height controls list content; the modern selection field
-uses TextBox-compatible padding and focus metrics.
+uses TextBox-compatible padding and focus metrics. ComboBox Padding is designer-visible in .NET 11 and is
+serialized only when it differs from `Padding.Empty`.
 
 ## Account for GroupBox DisplayRectangle
 

@@ -70,9 +70,16 @@ public partial class ComboBox
             borderBounds.Height--;
 
             using GraphicsStateScope state = new(graphics);
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            if (_flatStyle != FlatStyle.Flat)
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            }
 
             ClearNativeFrame(
+                comboBox,
+                graphics,
+                clientBounds);
+            DrawDropDownListText(
                 comboBox,
                 graphics,
                 clientBounds);
@@ -88,7 +95,7 @@ public partial class ComboBox
                         borderBounds);
                     break;
                 case FlatStyle.Flat:
-                    DrawFlatUnderline(
+                    DrawFlatFrame(
                         comboBox,
                         graphics,
                         borderBounds);
@@ -148,15 +155,10 @@ public partial class ComboBox
             Rectangle borderBounds)
         {
             Color background = GetEffectiveBackColor(comboBox);
-            Color borderColor = PopupButtonColorMath.TowardsContrast(
+            Color borderColor = GetBorderColor(
+                comboBox,
                 background,
-                0.2f);
-            if (!comboBox.Enabled)
-            {
-                borderColor = PopupButtonColorMath.Mute(
-                    borderColor,
-                    0.55f);
-            }
+                useAccent: false);
 
             CutOutRoundedCorners(
                 comboBox,
@@ -169,33 +171,24 @@ public partial class ComboBox
                 borderColor);
         }
 
-        private static void DrawFlatUnderline(
+        private static void DrawFlatFrame(
             ComboBox comboBox,
             Graphics graphics,
             Rectangle bounds)
         {
-            if (!comboBox.Enabled || !comboBox.ContainsFocus)
+            if (bounds.Width <= 0 || bounds.Height <= 0)
             {
                 return;
             }
 
-            int thickness = Math.Max(
-                ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.BorderThickness,
-                    comboBox.DeviceDpiInternal),
-                ModernControlVisualStyles.GetFocusBorderMetrics(
-                    Application.SystemVisualSettings.FocusBorderMetrics,
-                    Application.SystemVisualSettings.TextScaleFactor,
-                    comboBox.DeviceDpiInternal).Height);
-            using var pen = Application.SystemVisualSettings.AccentColor
-                .GetCachedPenScope(thickness);
-            int y = bounds.Bottom - Math.Max(1, thickness / 2);
-            graphics.DrawLine(
-                pen,
-                bounds.Left,
-                y,
-                bounds.Right,
-                y);
+            Color background = GetEffectiveBackColor(comboBox);
+            Color borderColor = GetBorderColor(
+                comboBox,
+                background,
+                useAccent: false);
+            using var pen = borderColor.GetCachedPenScope(
+                GetBorderThickness(comboBox));
+            graphics.DrawRectangle(pen, bounds);
         }
 
         private static void DrawPopupFrame(
@@ -204,18 +197,11 @@ public partial class ComboBox
             Rectangle clientBounds,
             Rectangle borderBounds)
         {
-            if (!comboBox.Enabled
-                || (!comboBox.ContainsFocus && !comboBox.MouseIsOver))
-            {
-                return;
-            }
-
             Color background = GetEffectiveBackColor(comboBox);
-            Color borderColor = comboBox.ContainsFocus
-                ? Application.SystemVisualSettings.AccentColor
-                : PopupButtonColorMath.TowardsContrast(
-                    background,
-                    0.22f);
+            Color borderColor = GetBorderColor(
+                comboBox,
+                background,
+                useAccent: true);
             CutOutRoundedCorners(
                 comboBox,
                 graphics,
@@ -291,6 +277,116 @@ public partial class ComboBox
             graphics.DrawLines(pen, points);
         }
 
+        private void DrawDropDownListText(
+            ComboBox comboBox,
+            Graphics graphics,
+            Rectangle clientBounds)
+        {
+            if (_dropDownStyle != ComboBoxStyle.DropDownList
+                || comboBox.DrawMode != DrawMode.Normal)
+            {
+                return;
+            }
+
+            Rectangle selectionBounds = clientBounds;
+            if (comboBox.RightToLeft == RightToLeft.Yes)
+            {
+                selectionBounds.X = _buttonBounds.Right;
+                selectionBounds.Width = Math.Max(
+                    0,
+                    clientBounds.Right - selectionBounds.X);
+            }
+            else
+            {
+                selectionBounds.Width = Math.Max(
+                    0,
+                    _buttonBounds.Left - clientBounds.Left);
+            }
+
+            bool drawFocusedSelection = comboBox.ContainsFocus;
+            Color background = drawFocusedSelection
+                ? SystemColors.Highlight
+                : GetEffectiveBackColor(comboBox);
+            using (var backgroundBrush = background.GetCachedSolidBrushScope())
+            {
+                graphics.FillRectangle(
+                    backgroundBrush,
+                    selectionBounds);
+            }
+
+            Rectangle textBounds = GetDropDownListTextBounds(
+                comboBox,
+                clientBounds);
+            if (textBounds.Width <= 0
+                || textBounds.Height <= 0
+                || string.IsNullOrEmpty(comboBox.Text))
+            {
+                return;
+            }
+
+            Color textColor = drawFocusedSelection
+                ? SystemColors.HighlightText
+                : comboBox.Enabled
+                    ? comboBox.ShouldSerializeForeColor()
+                        ? comboBox.ForeColor
+                        : PopupButtonColorMath.GetReadableForeColor(
+                            background)
+                    : ModernControlColorMath.GetDisabledTextColor(
+                        comboBox.ForeColor,
+                        background);
+            TextFormatFlags flags = TextFormatFlags.SingleLine
+                | TextFormatFlags.VerticalCenter
+                | TextFormatFlags.EndEllipsis
+                | TextFormatFlags.NoPrefix
+                | TextFormatFlags.PreserveGraphicsClipping
+                | TextFormatFlags.PreserveGraphicsTranslateTransform;
+            if (comboBox.RightToLeft == RightToLeft.Yes)
+            {
+                flags |= TextFormatFlags.Right
+                    | TextFormatFlags.RightToLeft;
+            }
+
+            TextRenderer.DrawText(
+                graphics,
+                comboBox.Text,
+                comboBox.Font,
+                textBounds,
+                textColor,
+                background,
+                flags);
+
+            if (drawFocusedSelection
+                && comboBox.ShowFocusCues)
+            {
+                ControlPaint.DrawFocusRectangle(
+                    graphics,
+                    textBounds,
+                    textColor,
+                    background);
+            }
+        }
+
+        private Rectangle GetDropDownListTextBounds(
+            ComboBox comboBox,
+            Rectangle clientBounds)
+        {
+            Padding padding = comboBox.GetModernFieldPadding();
+            int left = comboBox.RightToLeft == RightToLeft.Yes
+                ? _buttonBounds.Right + padding.Left
+                : clientBounds.Left + padding.Left;
+            int right = comboBox.RightToLeft == RightToLeft.Yes
+                ? clientBounds.Right - padding.Right
+                : _buttonBounds.Left - padding.Right;
+
+            return new Rectangle(
+                left,
+                clientBounds.Top + padding.Top,
+                Math.Max(0, right - left),
+                Math.Max(
+                    0,
+                    clientBounds.Height - padding.Vertical));
+        }
+
         private static void CutOutRoundedCorners(
             ComboBox comboBox,
             Graphics graphics,
@@ -323,13 +419,36 @@ public partial class ComboBox
             using GraphicsPath path = CreateFieldPath(
                 comboBox,
                 bounds);
-            int thickness = Math.Max(
-                1,
-                ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.BorderThickness,
-                    comboBox.DeviceDpiInternal));
+            int thickness = GetBorderThickness(comboBox);
             using var pen = borderColor.GetCachedPenScope(thickness);
             graphics.DrawPath(pen, path);
+        }
+
+        private static Color GetBorderColor(
+            ComboBox comboBox,
+            Color background,
+            bool useAccent)
+        {
+            Color borderColor = useAccent
+                ? Application.SystemVisualSettings.AccentColor
+                : comboBox.ForeColor;
+
+            return comboBox.Enabled
+                ? borderColor
+                : ModernControlColorMath.GetDisabledTextColor(
+                    borderColor,
+                    background);
+        }
+
+        private static int GetBorderThickness(ComboBox comboBox)
+        {
+            SystemVisualSettings settings = Application.SystemVisualSettings;
+            Size borderMetrics = ModernControlVisualStyles.GetFocusBorderMetrics(
+                settings.FocusBorderMetrics,
+                settings.TextScaleFactor,
+                comboBox.DeviceDpiInternal);
+
+            return Math.Max(borderMetrics.Width, borderMetrics.Height);
         }
 
         private static GraphicsPath CreateFieldPath(

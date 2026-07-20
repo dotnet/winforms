@@ -292,7 +292,10 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     [MemberData(nameof(ComboBoxItemAccessibleObject_ScrollIntoView_EnsureVisible_TestData))]
     public void ComboBoxItemAccessibleObject_ScrollIntoView_EnsureVisible(ComboBoxStyle comboBoxStyle, bool scrollingDown, int itemIndex, int itemsCount)
     {
-        using ComboBox comboBox = new();
+        using ComboBox comboBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
         comboBox.IntegralHeight = false;
         comboBox.DropDownStyle = comboBoxStyle;
         comboBox.CreateControl();
