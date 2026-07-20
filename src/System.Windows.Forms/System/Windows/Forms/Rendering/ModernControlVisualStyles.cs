@@ -11,6 +11,7 @@ namespace System.Windows.Forms;
 internal static class ModernControlVisualStyles
 {
     internal const int BorderThickness = 1;
+    internal const int ComboBoxStyleInset = 1;
     internal const int FieldCornerRadius = 15;
     internal const int FocusBandHeight = 4;
     internal const float GroupBoxCaptionFontScale = 1.15f;

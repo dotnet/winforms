@@ -46,9 +46,11 @@ metrics.
 ## ComboBox adapter routing
 
 Net11 routes `FlatStyle.Standard` ComboBox controls through the WinForms adapter path for the first time so the
-field can share TextBoxBase's rounded chrome metrics. `Flat` and `Popup` continue to use an adapter, but select
-their new underline and focus/hover treatments only in an effective Net11-or-later mode. The adapter changes the
-preferred height across the classic/modern boundary; `FlatStyle.System` remains native and bypasses the adapter.
+field can share TextBoxBase's rounded chrome metrics and color scheme. `Flat` uses the same scheme with a
+square-corner border; `Popup` keeps the rounded Standard geometry but uses the Windows accent color for its
+border. All three styles add one logical pixel of framework inset on top of the now-designer-visible public
+Padding. The adapter changes preferred height across the classic/modern boundary; `FlatStyle.System` remains
+native and bypasses the adapter.
 
 ## Animation timing and thread ownership
 

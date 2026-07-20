@@ -9,7 +9,13 @@ namespace System.Windows.Forms;
 
 public partial class ComboBox
 {
+    private Rectangle _modernEditAppliedBounds;
+    private Rectangle _modernEditBaseBounds;
+    private Size _modernEditBaseClientSize;
+    private bool _adjustingModernChildBounds;
     private bool _modernFieldHeightApplied;
+    private bool _modernHandleInitialized;
+    private Rectangle _modernSimpleListBaseBounds;
 
     internal bool UsesModernComboAdapter
         => EffectiveVisualStylesMode >= VisualStylesMode.Net11
@@ -23,17 +29,9 @@ public partial class ComboBox
     {
         get
         {
-            SystemVisualSettings settings = Application.SystemVisualSettings;
-            Padding fieldPadding = ModernControlVisualStyles.GetFieldPadding(
-                BorderStyle.Fixed3D,
-                Padding,
-                settings.FocusBorderMetrics,
-                settings.TextScaleFactor,
-                DeviceDpiInternal);
-
             return ModernControlVisualStyles.GetPreferredFieldHeight(
                 FontHeight,
-                fieldPadding,
+                GetModernFieldPadding(),
                 DeviceDpiInternal);
         }
     }
@@ -94,26 +92,268 @@ public partial class ComboBox
         _modernFieldHeightApplied = usesModernMetrics;
     }
 
-    private void UpdateModernEditMargins()
+    private unsafe void UpdateModernEditMargins()
     {
-        if (_childEdit is null
-            || _childEdit.HWND.IsNull
-            || DropDownStyle != ComboBoxStyle.DropDown)
+        if (!_modernHandleInitialized
+            || !IsHandleCreated
+            || DropDownStyle == ComboBoxStyle.DropDownList
+            || (!UsesModernComboAdapter
+                && _modernEditBaseBounds.IsEmpty))
         {
             return;
         }
 
-        int margin = UsesModernComboAdapter
+        COMBOBOXINFO comboBoxInfo = default;
+        comboBoxInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+        if (!PInvoke.GetComboBoxInfo(
+            HWND,
+            ref comboBoxInfo)
+            || comboBoxInfo.hwndItem.IsNull)
+        {
+            return;
+        }
+
+        int styleMargin = UsesModernComboAdapter
             ? ScaleHelper.ScaleToDpi(
                 ModernControlVisualStyles.Fixed3DBorderPadding
-                    + ModernControlVisualStyles.InternalChromeInset,
+                    + ModernControlVisualStyles.InternalChromeInset
+                    + ModernControlVisualStyles.ComboBoxStyleInset,
                 DeviceDpiInternal)
             : 0;
+        int leftMargin = styleMargin
+            + (UsesModernComboAdapter ? Padding.Left : 0);
+        int rightMargin = styleMargin
+            + (UsesModernComboAdapter ? Padding.Right : 0);
         PInvokeCore.SendMessage(
-            _childEdit,
+            comboBoxInfo.hwndItem,
             PInvokeCore.EM_SETMARGINS,
             (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
-            LPARAM.MAKELPARAM(margin, margin));
+            LPARAM.MAKELPARAM(leftMargin, rightMargin));
+
+        UpdateModernEditBounds(comboBoxInfo);
+    }
+
+    private void UpdateModernEditBounds(
+        COMBOBOXINFO comboBoxInfo)
+    {
+        int styleInset = UsesModernComboAdapter
+            ? ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.ComboBoxStyleInset,
+                DeviceDpiInternal)
+            : 0;
+        if (DropDownStyle == ComboBoxStyle.Simple)
+        {
+            UpdateModernSimpleEditBounds(
+                comboBoxInfo,
+                styleInset);
+            return;
+        }
+
+        int topInset = styleInset
+            + (UsesModernComboAdapter ? Padding.Top : 0);
+        int bottomInset = styleInset
+            + (UsesModernComboAdapter ? Padding.Bottom : 0);
+        Rectangle itemBounds = _modernEditBaseBounds.IsEmpty
+            ? comboBoxInfo.rcItem
+            : _modernEditBaseBounds;
+        if (!_modernEditBaseBounds.IsEmpty
+            && _modernEditBaseClientSize != ClientSize)
+        {
+            itemBounds.X = comboBoxInfo.rcItem.left;
+            itemBounds.Width = comboBoxInfo.rcItem.Width;
+        }
+
+        Rectangle editBounds = new(
+            itemBounds.Left,
+            itemBounds.Top + topInset,
+            itemBounds.Width,
+            Math.Max(
+                1,
+                itemBounds.Height - topInset - bottomInset));
+
+        PInvoke.SetWindowPos(
+            comboBoxInfo.hwndItem,
+            HWND.Null,
+            editBounds.Left,
+            editBounds.Top,
+            editBounds.Width,
+            editBounds.Height,
+            SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+        _modernEditBaseBounds = itemBounds;
+        _modernEditBaseClientSize = ClientSize;
+        _modernEditAppliedBounds = editBounds;
+    }
+
+    private void UpdateModernSimpleEditBounds(
+        COMBOBOXINFO comboBoxInfo,
+        int styleInset)
+    {
+        if (_modernEditBaseBounds.IsEmpty)
+        {
+            _modernEditBaseBounds = GetChildBounds(
+                comboBoxInfo.hwndItem);
+            _modernSimpleListBaseBounds = GetChildBounds(
+                comboBoxInfo.hwndList);
+            _modernEditBaseClientSize = ClientSize;
+        }
+
+        int topInset = styleInset
+            + (UsesModernComboAdapter ? Padding.Top : 0);
+        int bottomInset = styleInset
+            + (UsesModernComboAdapter ? Padding.Bottom : 0);
+        Rectangle editBounds = _modernEditBaseBounds;
+        editBounds.Y += topInset;
+        Rectangle listBounds = _modernSimpleListBaseBounds;
+        listBounds.Y = editBounds.Bottom + bottomInset;
+        listBounds.Height = Math.Max(
+            1,
+            _modernSimpleListBaseBounds.Bottom - listBounds.Top);
+
+        _adjustingModernChildBounds = true;
+        try
+        {
+            PInvoke.SetWindowPos(
+                comboBoxInfo.hwndItem,
+                HWND.Null,
+                editBounds.Left,
+                editBounds.Top,
+                0,
+                0,
+                SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+            PInvoke.SetWindowPos(
+                comboBoxInfo.hwndList,
+                HWND.Null,
+                listBounds.Left,
+                listBounds.Top,
+                listBounds.Width,
+                listBounds.Height,
+                SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+        }
+        finally
+        {
+            _adjustingModernChildBounds = false;
+        }
+
+        _modernEditAppliedBounds = editBounds;
+    }
+
+    private unsafe void RestoreModernEditBounds()
+    {
+        if (!_modernHandleInitialized
+            || !IsHandleCreated
+            || _modernEditBaseBounds.IsEmpty)
+        {
+            return;
+        }
+
+        COMBOBOXINFO comboBoxInfo = default;
+        comboBoxInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+        if (!PInvoke.GetComboBoxInfo(
+            HWND,
+            ref comboBoxInfo))
+        {
+            return;
+        }
+
+        _adjustingModernChildBounds = true;
+        try
+        {
+            PInvoke.SetWindowPos(
+                comboBoxInfo.hwndItem,
+                HWND.Null,
+                _modernEditBaseBounds.Left,
+                _modernEditBaseBounds.Top,
+                _modernEditBaseBounds.Width,
+                _modernEditBaseBounds.Height,
+                SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+            if (DropDownStyle == ComboBoxStyle.Simple
+                && !_modernSimpleListBaseBounds.IsEmpty)
+            {
+                PInvoke.SetWindowPos(
+                    comboBoxInfo.hwndList,
+                    HWND.Null,
+                    _modernSimpleListBaseBounds.Left,
+                    _modernSimpleListBaseBounds.Top,
+                    _modernSimpleListBaseBounds.Width,
+                    _modernSimpleListBaseBounds.Height,
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                        | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+            }
+        }
+        finally
+        {
+            _adjustingModernChildBounds = false;
+        }
+    }
+
+    private void RestoreAndResetModernEditBounds()
+    {
+        RestoreModernEditBounds();
+        ResetModernEditBounds();
+    }
+
+    private void ResizeModernSimpleBaseBounds()
+    {
+        if (_modernEditBaseBounds.IsEmpty
+            || _modernEditBaseClientSize.IsEmpty
+            || _modernEditBaseClientSize == ClientSize)
+        {
+            return;
+        }
+
+        int widthDelta = ClientSize.Width
+            - _modernEditBaseClientSize.Width;
+        int heightDelta = ClientSize.Height
+            - _modernEditBaseClientSize.Height;
+        _modernEditBaseBounds.Width = Math.Max(
+            1,
+            _modernEditBaseBounds.Width + widthDelta);
+        _modernSimpleListBaseBounds.Width = Math.Max(
+            1,
+            _modernSimpleListBaseBounds.Width + widthDelta);
+        _modernSimpleListBaseBounds.Height = Math.Max(
+            1,
+            _modernSimpleListBaseBounds.Height + heightDelta);
+        _modernEditBaseClientSize = ClientSize;
+    }
+
+    private Rectangle GetChildBounds(HWND child)
+    {
+        PInvokeCore.GetWindowRect(child, out RECT bounds);
+        Point topLeft = PointToClient(
+            new Point(bounds.left, bounds.top));
+
+        return new Rectangle(
+            topLeft,
+            new Size(bounds.Width, bounds.Height));
+    }
+
+    private void ResetModernEditBounds()
+    {
+        _modernEditAppliedBounds = Rectangle.Empty;
+        _modernEditBaseBounds = Rectangle.Empty;
+        _modernEditBaseClientSize = Size.Empty;
+        _modernSimpleListBaseBounds = Rectangle.Empty;
+    }
+
+    private Padding GetModernFieldPadding()
+    {
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        int styleInset = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.ComboBoxStyleInset,
+            DeviceDpiInternal);
+
+        return ModernControlVisualStyles.GetFieldPadding(
+            BorderStyle.Fixed3D,
+            Padding + new Padding(styleInset),
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
     }
 
     private unsafe void ApplyModernDropDownCornerPreference(
@@ -203,6 +443,7 @@ public partial class ComboBox
             & (SystemVisualSettingsCategories.TextScale
                 | SystemVisualSettingsCategories.FocusMetrics)) != 0)
         {
+            RestoreAndResetModernEditBounds();
             ResetComboAdapter();
             ResetHeightCache();
             CommonProperties.xClearPreferredSizeCache(this);
@@ -227,6 +468,36 @@ public partial class ComboBox
                 | SystemVisualSettingsCategories.AccentColor)) != 0)
         {
             Invalidate();
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPaddingChanged(EventArgs e)
+    {
+        ResetComboAdapter();
+        ResetHeightCache();
+        base.OnPaddingChanged(e);
+
+        if (!UsesModernComboAdapter)
+        {
+            return;
+        }
+
+        CommonProperties.xClearPreferredSizeCache(this);
+        ApplyPreferredFieldHeight();
+        UpdateModernEditMargins();
+        Invalidate();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnLayout(LayoutEventArgs levent)
+    {
+        base.OnLayout(levent);
+
+        if (UsesModernComboAdapter
+            && DropDownStyle == ComboBoxStyle.Simple)
+        {
+            UpdateModernEditMargins();
         }
     }
 
@@ -260,6 +531,7 @@ public partial class ComboBox
         int deviceDpiOld,
         int deviceDpiNew)
     {
+        RestoreAndResetModernEditBounds();
         ResetComboAdapter();
         ResetHeightCache();
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
