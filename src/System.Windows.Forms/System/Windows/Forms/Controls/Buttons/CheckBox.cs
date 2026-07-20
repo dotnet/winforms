@@ -57,14 +57,7 @@ public partial class CheckBox : ButtonBase
 
     private bool AccObjDoDefaultAction { get; set; }
 
-    /// <summary>
-    ///  Gets or sets the value that determines the appearance of a check box control.
-    /// </summary>
-    [DefaultValue(Appearance.Normal)]
-    [Localizable(true)]
-    [SRCategory(nameof(SR.CatAppearance))]
-    [SRDescription(nameof(SR.CheckBoxAppearanceDescr))]
-    public Appearance Appearance
+    public partial Appearance Appearance
     {
         get => _appearance;
         set

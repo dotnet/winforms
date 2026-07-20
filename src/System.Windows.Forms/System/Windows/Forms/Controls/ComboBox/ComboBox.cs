@@ -495,14 +495,7 @@ public partial class ComboBox : ListControl
         }
     }
 
-    /// <summary>
-    ///  Gets or sets the flat style appearance of the button control.
-    /// </summary>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(FlatStyle.Standard)]
-    [Localizable(true)]
-    [SRDescription(nameof(SR.ComboBoxFlatStyleDescr))]
-    public FlatStyle FlatStyle
+    public partial FlatStyle FlatStyle
     {
         get => _flatStyle;
         set
