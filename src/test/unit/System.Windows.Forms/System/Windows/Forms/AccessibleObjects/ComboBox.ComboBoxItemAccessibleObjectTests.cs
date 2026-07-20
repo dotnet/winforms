@@ -477,6 +477,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         public DifferentHeightComboBox() : base()
         {
             DrawMode = DrawMode.OwnerDrawVariable;
+            VisualStylesMode = VisualStylesMode.Classic;
         }
 
         public static int GetCustomItemHeight(int index) => 15 + (index % 5) * 5;
