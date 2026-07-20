@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -40,6 +40,7 @@ internal static class SystemVisualSettingsTracker
             SystemVisualSettings current = CurrentSettings;
             SystemVisualSettings next = Volatile.Read(ref s_snapshotProvider).Invoke();
             SystemVisualSettingsCategories changed = GetChangedCategories(current, next);
+
             if (changed == SystemVisualSettingsCategories.None)
             {
                 return current;
@@ -171,7 +172,10 @@ internal static class SystemVisualSettingsTracker
 
         fixed (char* pClassName = "Windows.UI.ViewManagement.UISettings")
         {
-            PInvokeCore.WindowsCreateString((PCWSTR)pClassName, 36u, &className).ThrowOnFailure();
+            PInvokeCore.WindowsCreateString(
+                sourceString: (PCWSTR)pClassName,
+                length: 36u,
+                @string: &className).ThrowOnFailure();
         }
 
         try
