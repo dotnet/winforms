@@ -1270,7 +1270,27 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
     [WinFormsTheory]
     [MemberData(nameof(Appearance_FlatStyle_TestData))]
-    public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
+    public void CheckBox_OverChangeRectangle_Get(
+        Appearance appearance,
+        FlatStyle flatStyle)
+    {
+        if (appearance == Appearance.Normal
+            && flatStyle == FlatStyle.System)
+        {
+            using SubCheckBox control = (SubCheckBox)CreateButton();
+            control.Appearance = appearance;
+            control.FlatStyle = flatStyle;
+
+            Assert.Equal(
+                control.ClientRectangle,
+                control.OverChangeRectangle);
+            return;
+        }
+
+        base.ButtonBase_OverChangeRectangle_Get(
+            appearance,
+            flatStyle);
+    }
 
     [WinFormsTheory]
     [MemberData(nameof(Appearance_FlatStyle_TestData))]
