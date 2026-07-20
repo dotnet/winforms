@@ -173,10 +173,7 @@ public partial class GroupBox : Control
         }
     }
 
-    [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(FlatStyle.Standard)]
-    [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
-    public FlatStyle FlatStyle
+    public partial FlatStyle FlatStyle
     {
         get
         {

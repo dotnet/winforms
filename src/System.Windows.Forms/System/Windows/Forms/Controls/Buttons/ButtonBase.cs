@@ -340,52 +340,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    /// <summary>
-    ///  Gets or sets the flat style appearance of the button control.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   The <see cref="FlatStyle"/> property determines how the button is rendered. The following values are supported:
-    ///  </para>
-    ///  <list type="bullet">
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Standard"/></term>
-    ///    <description>
-    ///     The default style. The button is not wrapping the system button. It is rendered using the StandardButton adapter.
-    ///     VisualStyleRenderer from the OS is used for certain parts, which may have issues in high-resolution scenarios.
-    ///     Dark mode works to some extent, but improvements are needed.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Popup"/></term>
-    ///    <description>
-    ///     The button is fully owner-drawn. No rendering is delegated to the OS, not even VisualStyleRenderer.
-    ///     This style works well in dark mode and is fully controlled by the application.
-    ///     3D effects are expected but may not be rendered; consider revisiting for meaningful styling.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Flat"/></term>
-    ///    <description>
-    ///     The button is fully owner-drawn, with no OS calls or VisualStyleRenderer usage.
-    ///     This fits modern design language and works well in dark mode.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.System"/></term>
-    ///    <description>
-    ///     The button wraps the system button and is not owner-drawn.
-    ///     No <c>OnPaint</c>, <c>OnPaintBackground</c>, or adapter is involved.
-    ///     In dark mode, this style is used as a fallback for Standard-style buttons.
-    ///    </description>
-    ///   </item>
-    ///  </list>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(FlatStyle.Standard)]
-    [Localizable(true)]
-    [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
-    public FlatStyle FlatStyle
+    public partial FlatStyle FlatStyle
     {
         get => _flatStyle;
         set
