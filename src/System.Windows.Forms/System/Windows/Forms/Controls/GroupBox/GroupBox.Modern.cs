@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -11,8 +12,14 @@ namespace System.Windows.Forms;
 
 public partial class GroupBox
 {
+    private const string MissingSemiBoldFamily = "";
+
+    private static readonly ConcurrentDictionary<string, string> s_semiBoldFamilyNames =
+        new(StringComparer.OrdinalIgnoreCase);
+
     private Font? _modernCaptionFont;
     private Font? _modernCaptionSourceFont;
+    private FlatStyle _modernCaptionFlatStyle;
     private float _modernCaptionTextScale;
     private int _modernCaptionDpi;
 
@@ -31,23 +38,15 @@ public partial class GroupBox
 
             if (_modernCaptionFont is null
                 || !ReferenceEquals(_modernCaptionSourceFont, Font)
+                || _modernCaptionFlatStyle != FlatStyle
                 || _modernCaptionTextScale != textScale
                 || _modernCaptionDpi != DeviceDpiInternal)
             {
                 InvalidateModernCaptionFont();
 
-                FontStyle desiredStyle = Font.Style | FontStyle.Bold;
-                FontStyle style = Font.FontFamily.IsStyleAvailable(desiredStyle)
-                    ? desiredStyle
-                    : Font.Style;
-                _modernCaptionFont = new Font(
-                    Font.FontFamily,
-                    Font.Size * ModernControlVisualStyles.GroupBoxCaptionFontScale * textScale,
-                    style,
-                    Font.Unit,
-                    Font.GdiCharSet,
-                    Font.GdiVerticalFont);
+                _modernCaptionFont = CreateModernCaptionFont(textScale);
                 _modernCaptionSourceFont = Font;
+                _modernCaptionFlatStyle = FlatStyle;
                 _modernCaptionTextScale = textScale;
                 _modernCaptionDpi = DeviceDpiInternal;
             }
@@ -73,52 +72,62 @@ public partial class GroupBox
 
     private Padding GetModernDecorationPadding()
     {
-        int contentInset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentInset);
+        int horizontalInset = ScaleModernMetric(
+            ModernControlVisualStyles.GroupBoxContentHorizontalInset);
+        int topInset = ScaleModernMetric(
+            ModernControlVisualStyles.GroupBoxContentTopInset);
+        int bottomInset = FlatStyle == FlatStyle.Standard
+            ? ScaleModernMetric(
+                ModernControlVisualStyles.GroupBoxContentBottomInset)
+            : topInset;
         int captionHeight = ModernCaptionFont.Height;
         int top = FlatStyle switch
         {
             FlatStyle.Standard => captionHeight
                 + ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap)
-                + contentInset,
-            FlatStyle.Flat => captionHeight + contentInset,
+                + topInset,
+            FlatStyle.Flat => captionHeight + topInset,
             FlatStyle.Popup => captionHeight
                 + (2 * ScaleModernMetric(ModernControlVisualStyles.GroupBoxHeaderVerticalPadding))
-                + contentInset,
-            _ => captionHeight + contentInset
+                + topInset,
+            _ => captionHeight + topInset
         };
 
         return new Padding(
-            left: Padding.Left + contentInset,
+            left: Padding.Left + horizontalInset,
             top: Padding.Top + top,
-            right: Padding.Right + contentInset,
-            bottom: Padding.Bottom + contentInset);
+            right: Padding.Right + horizontalInset,
+            bottom: Padding.Bottom + bottomInset);
     }
 
     private void DrawModernGroupBox(PaintEventArgs e)
     {
-        Rectangle bounds = ClientRectangle;
-        if (bounds.Width <= 1 || bounds.Height <= 1)
+        Rectangle clientBounds = ClientRectangle;
+        if (clientBounds.Width <= 1 || clientBounds.Height <= 1)
         {
             return;
         }
 
-        bounds.Width--;
-        bounds.Height--;
+        Rectangle strokeBounds = clientBounds;
+        strokeBounds.Width--;
+        strokeBounds.Height--;
 
         using GraphicsStateScope state = new(e.Graphics);
-        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        if (FlatStyle != FlatStyle.Standard)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        }
 
         switch (FlatStyle)
         {
             case FlatStyle.Standard:
-                DrawModernCard(e, bounds);
+                DrawModernCard(e, clientBounds);
                 break;
             case FlatStyle.Flat:
-                DrawModernOutline(e, bounds);
+                DrawModernOutline(e, strokeBounds);
                 break;
             case FlatStyle.Popup:
-                DrawModernPopup(e, bounds);
+                DrawModernPopup(e, strokeBounds);
                 break;
         }
     }
@@ -128,37 +137,26 @@ public partial class GroupBox
         int captionHeight = ModernCaptionFont.Height;
         int captionGap = ScaleModernMetric(
             ModernControlVisualStyles.GroupBoxCaptionGap);
-        int inset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentInset);
         Rectangle frameBounds = new(
             bounds.Left,
             bounds.Top + captionHeight + captionGap,
             bounds.Width,
             Math.Max(0, bounds.Height - captionHeight - captionGap));
-        Rectangle captionBounds = new(
-            bounds.Left + inset,
-            bounds.Top,
-            Math.Max(0, bounds.Width - (2 * inset)),
+        Rectangle captionBounds = GetStandardCaptionBounds(
+            bounds,
             captionHeight);
 
         Color effectiveBackColor = DisabledColor;
         Color surfaceColor = PopupButtonColorMath.TowardsContrast(
             effectiveBackColor,
             0.035f);
-        Color borderColor = PopupButtonColorMath.TowardsContrast(
-            effectiveBackColor,
-            0.16f);
         if (!Enabled)
         {
             surfaceColor = PopupButtonColorMath.Mute(surfaceColor, 0.55f);
-            borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
         }
 
-        FillAndStrokeRoundedFrame(
-            e.Graphics,
-            frameBounds,
-            surfaceColor,
-            borderColor);
+        using var surfaceBrush = surfaceColor.GetCachedSolidBrushScope();
+        e.Graphics.FillRectangle(surfaceBrush, frameBounds);
         DrawModernCaption(
             e.Graphics,
             captionBounds,
@@ -169,7 +167,7 @@ public partial class GroupBox
     {
         int captionHeight = ModernCaptionFont.Height;
         int inset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentInset);
+            ModernControlVisualStyles.GroupBoxContentHorizontalInset);
         Rectangle frameBounds = new(
             bounds.Left,
             bounds.Top + (captionHeight / 2),
@@ -181,9 +179,7 @@ public partial class GroupBox
             Math.Max(0, bounds.Width - (2 * inset)),
             captionHeight);
         Color effectiveBackColor = DisabledColor;
-        Color borderColor = PopupButtonColorMath.TowardsContrast(
-            effectiveBackColor,
-            0.22f);
+        Color borderColor = Application.SystemVisualSettings.AccentColor;
         if (!Enabled)
         {
             borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
@@ -197,7 +193,7 @@ public partial class GroupBox
         if (!captionBackground.IsEmpty)
         {
             captionBackground.Inflate(
-                ScaleModernMetric(ModernControlVisualStyles.BorderThickness) + 2,
+                GetModernBorderThickness() + 2,
                 0);
             PaintBackground(e, captionBackground);
         }
@@ -226,14 +222,10 @@ public partial class GroupBox
             Math.Max(0, bounds.Width - (2 * horizontalPadding)),
             ModernCaptionFont.Height);
 
-        Color effectiveBackColor = DisabledColor;
         Color bodyColor = BackColor.A == 0
             ? Color.Transparent
             : BackColor;
-        Color headerColor = PopupButtonColorMath.Blend(
-            effectiveBackColor,
-            Application.SystemVisualSettings.AccentColor,
-            Application.IsDarkModeEnabled ? 0.4f : 0.28f);
+        Color headerColor = Application.SystemVisualSettings.AccentColor;
         Color borderColor = PopupButtonColorMath.TowardsContrast(
             headerColor,
             0.2f);
@@ -258,7 +250,7 @@ public partial class GroupBox
         }
 
         using var borderPen = borderColor.GetCachedPenScope(
-            ScaleModernMetric(ModernControlVisualStyles.BorderThickness));
+            GetModernBorderThickness());
         e.Graphics.DrawPath(borderPen, path);
 
         Color captionColor = Enabled
@@ -267,25 +259,6 @@ public partial class GroupBox
                 PopupButtonColorMath.GetReadableForeColor(headerColor),
                 headerColor);
         DrawModernCaption(e.Graphics, captionBounds, captionColor);
-    }
-
-    private void FillAndStrokeRoundedFrame(
-        Graphics graphics,
-        Rectangle bounds,
-        Color fillColor,
-        Color borderColor)
-    {
-        if (bounds.Width <= 0 || bounds.Height <= 0)
-        {
-            return;
-        }
-
-        using GraphicsPath path = CreateModernFramePath(bounds);
-        using var brush = fillColor.GetCachedSolidBrushScope();
-        graphics.FillPath(brush, path);
-        using var pen = borderColor.GetCachedPenScope(
-            ScaleModernMetric(ModernControlVisualStyles.BorderThickness));
-        graphics.DrawPath(pen, path);
     }
 
     private void DrawRoundedFrame(
@@ -300,7 +273,7 @@ public partial class GroupBox
 
         using GraphicsPath path = CreateModernFramePath(bounds);
         using var pen = borderColor.GetCachedPenScope(
-            ScaleModernMetric(ModernControlVisualStyles.BorderThickness));
+            GetModernBorderThickness());
         graphics.DrawPath(pen, path);
     }
 
@@ -322,6 +295,97 @@ public partial class GroupBox
             : ModernControlColorMath.GetDisabledTextColor(
                 ForeColor,
                 backgroundColor);
+
+    private Rectangle GetStandardCaptionBounds(
+        Rectangle bounds,
+        int captionHeight)
+        => new(
+            bounds.Left + Padding.Left,
+            bounds.Top,
+            Math.Max(0, bounds.Width - Padding.Horizontal),
+            captionHeight);
+
+    private Font CreateModernCaptionFont(float textScale)
+    {
+        float styleScale = FlatStyle == FlatStyle.Flat
+            ? 1f
+            : ModernControlVisualStyles.GroupBoxCaptionFontScale;
+        string semiBoldFamilyName = Font.Style == FontStyle.Regular
+            ? s_semiBoldFamilyNames.GetOrAdd(
+                Font.FontFamily.Name,
+                FindSemiBoldFamilyName)
+            : MissingSemiBoldFamily;
+
+        if (semiBoldFamilyName.Length == 0)
+        {
+            return new Font(
+                Font.FontFamily,
+                Font.Size * styleScale * textScale,
+                Font.Style,
+                Font.Unit,
+                Font.GdiCharSet,
+                Font.GdiVerticalFont);
+        }
+
+        using FontFamily semiBoldFamily = new(semiBoldFamilyName);
+        return new Font(
+            semiBoldFamily,
+            Font.Size * styleScale * textScale,
+            FontStyle.Regular,
+            Font.Unit,
+            Font.GdiCharSet,
+            Font.GdiVerticalFont);
+    }
+
+    internal static string FindSemiBoldFamilyName(string sourceFamilyName)
+    {
+        string baseFamilyName = sourceFamilyName.EndsWith(
+            " Regular",
+            StringComparison.OrdinalIgnoreCase)
+            ? sourceFamilyName[..^" Regular".Length]
+            : sourceFamilyName;
+        string expectedName = IsSemiBoldFamilyName(sourceFamilyName)
+            ? sourceFamilyName
+            : $"{baseFamilyName} Semibold";
+
+        using InstalledFontCollection installedFonts = new();
+        foreach (FontFamily family in installedFonts.Families)
+        {
+            if (family.Name.Equals(
+                expectedName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return family.Name;
+            }
+        }
+
+        return MissingSemiBoldFamily;
+    }
+
+    internal static bool IsSemiBoldFamilyName(string familyName)
+        => familyName.Contains(
+            "Semibold",
+            StringComparison.OrdinalIgnoreCase)
+            || familyName.Contains(
+                "Semi Bold",
+                StringComparison.OrdinalIgnoreCase)
+            || familyName.Contains(
+                "Demibold",
+                StringComparison.OrdinalIgnoreCase)
+            || familyName.Contains(
+                "Demi Bold",
+                StringComparison.OrdinalIgnoreCase);
+
+    private int GetModernBorderThickness()
+    {
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        Size borderMetrics = ModernControlVisualStyles.GetFocusBorderMetrics(
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
+
+        return Math.Max(borderMetrics.Width, borderMetrics.Height);
+    }
 
     private Rectangle GetCaptionTextBounds(
         Graphics graphics,
@@ -423,6 +487,7 @@ public partial class GroupBox
         _modernCaptionFont?.Dispose();
         _modernCaptionFont = null;
         _modernCaptionSourceFont = null;
+        _modernCaptionFlatStyle = default;
         _modernCaptionTextScale = 0f;
         _modernCaptionDpi = 0;
     }
@@ -457,7 +522,8 @@ public partial class GroupBox
 
         if ((e.Changed
             & (SystemVisualSettingsCategories.TextScale
-                | SystemVisualSettingsCategories.AccentColor)) != 0)
+                | SystemVisualSettingsCategories.AccentColor
+                | SystemVisualSettingsCategories.FocusMetrics)) != 0)
         {
             Invalidate();
         }
