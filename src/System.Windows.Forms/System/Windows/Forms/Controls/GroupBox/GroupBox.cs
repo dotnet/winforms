@@ -191,6 +191,10 @@ public partial class GroupBox : Control
 
             bool originalOwnerDraw = OwnerDraw;
             _flatStyle = value;
+            if (value != FlatStyle.System)
+            {
+                InvalidateModernCaptionFont();
+            }
 
             // In CreateParams, we pick our class style based on OwnerDraw
             // if this has changed we need to recreate
@@ -206,10 +210,6 @@ public partial class GroupBox : Control
             if (needRecreate)
             {
                 RecreateHandle();
-                if (!OwnerDraw && Application.RenderWithVisualStyles)
-                {
-                    Invalidate();
-                }
             }
             else
             {

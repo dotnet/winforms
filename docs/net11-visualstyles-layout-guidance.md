@@ -177,8 +177,10 @@ uses TextBox-compatible padding and focus metrics.
 
 ## Account for GroupBox DisplayRectangle
 
-In modern `FlatStyle.Standard`, the GroupBox caption sits above the card frame. Its `DisplayRectangle` starts lower
-than the classic etched-frame rectangle. Docked and anchored children are relaid out against the new rectangle.
+In modern `FlatStyle.Standard`, the GroupBox caption sits above a borderless rectangular surface. Its
+`DisplayRectangle` starts lower than the classic etched-frame rectangle and reserves more content space above
+than below. The caption aligns with the control Padding. Docked and anchored children are relaid out against the
+new rectangle.
 
 Use the GroupBox as a real layout container:
 
@@ -205,9 +207,9 @@ addressGroup.Controls.Add(addressTable);
 Avoid positioning children with a fixed Y offset derived from `Font.Height`. The renderer owns caption metrics,
 and `DisplayRectangle` is the supported content boundary.
 
-The modern caption is derived from the ambient font at paint time. If an application already assigns a bold
-GroupBox font, the modern caption receives both the application's emphasis and the modern size treatment. Remove
-manual bolding when that produces excessive emphasis.
+The modern caption is derived from the ambient font at paint time. Standard and Popup enlarge the caption; Flat
+keeps the ambient size. If the ambient font is regular and a matching installed Semibold family exists, WinForms
+uses that real face. Otherwise the ambient weight is preserved; already styled fonts are never promoted.
 
 ## React to live text-scale changes
 
