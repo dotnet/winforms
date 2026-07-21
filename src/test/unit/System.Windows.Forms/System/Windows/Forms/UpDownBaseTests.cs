@@ -3156,10 +3156,10 @@ public class UpDownBaseTests
             return;
         }
 
-        int inset = upDownBase.LogicalToDeviceUnits(3);
+        int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownEdit.Left.Should().Be(inset);
         upDownBase._upDownEdit.Top.Should().Be(inset);
-        upDownBase._upDownEdit.Height.Should().Be(3);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
         upDownBase.Height.Should().Be(9);
     }
 
@@ -3214,7 +3214,7 @@ public class UpDownBaseTests
             return;
         }
 
-        int inset = upDownBase.LogicalToDeviceUnits(3);
+        int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownEdit.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left + inset);
         upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Top + inset);
         upDownBase._upDownButtons.Right.Should().BeLessThanOrEqualTo(
@@ -3240,7 +3240,7 @@ public class UpDownBaseTests
             return;
         }
 
-        int inset = upDownBase.LogicalToDeviceUnits(3);
+        int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownButtons.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left + inset);
         upDownBase._upDownEdit.Right.Should().BeLessThanOrEqualTo(
             upDownBase.ClientSize.Width - upDownBase.Padding.Right - inset);
@@ -3301,14 +3301,14 @@ public class UpDownBaseTests
             return;
         }
 
-        int inset = ScaleHelper.ScaleToDpi(3, deviceDpi);
+        int inset = ScaleHelper.ScaleToDpi(4, deviceDpi);
         int minimumHeight = ScaleHelper.ScaleToDpi(14, deviceDpi)
             + ScaleHelper.ScaleToDpi(1, deviceDpi)
             + ScaleHelper.ScaleToDpi(2, deviceDpi);
         upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
         upDownBase.GetModernButtonGroupWidth().Should().Be(
             (upDownBase._defaultButtonsWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
-        upDownBase.LogicalToDeviceUnits(3).Should().Be(inset);
+        upDownBase.LogicalToDeviceUnits(4).Should().Be(inset);
     }
 
     [WinFormsTheory]
@@ -3331,7 +3331,7 @@ public class UpDownBaseTests
         int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
             + upDownBase.LogicalToDeviceUnits(1)
             + upDownBase.LogicalToDeviceUnits(2);
-        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(3) * 2);
+        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(4) * 2);
 
         upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
     }
