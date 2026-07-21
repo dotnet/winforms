@@ -6,28 +6,69 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Defines shared device-independent metrics for modern control chrome.
+///  Defines shared device-independent metrics for modern control chrome. All values are logical
+///  (96-DPI) pixels and are scaled to the target device DPI at the point of use.
 /// </summary>
 internal static class ModernControlVisualStyles
 {
+    /// <summary>Stroke thickness of the modern rounded control border.</summary>
     internal const int BorderThickness = 1;
+
+    /// <summary>Extra width added to the modern ComboBox drop-down button beyond the native metric.</summary>
     internal const int ComboBoxButtonExtraWidth = 4;
+
+    /// <summary>Horizontal clearance so the flat native edit child's square corners clear the field's rounded arcs.</summary>
     internal const int ComboBoxFieldArcClearance = 2;
+
+    /// <summary>Minimal modern ComboBox field chrome inset (excludes classic 3D-border metrics).</summary>
     internal const int ComboBoxStyleInset = 1;
+
+    /// <summary>Corner radius of a modern text field's rounded frame.</summary>
     internal const int FieldCornerRadius = 15;
+
+    /// <summary>Height of the animated focus underline band drawn beneath a focused modern field.</summary>
     internal const int FocusBandHeight = 4;
+
+    /// <summary>Scale factor applied to the GroupBox caption font in modern mode.</summary>
     internal const float GroupBoxCaptionFontScale = 1.15f;
+
+    /// <summary>Gap between the GroupBox caption text and the surrounding frame line.</summary>
     internal const int GroupBoxCaptionGap = 4;
+
+    /// <summary>Inset from the GroupBox bottom frame to its content area.</summary>
     internal const int GroupBoxContentBottomInset = 4;
+
+    /// <summary>Inset from the GroupBox left/right frame to its content area.</summary>
     internal const int GroupBoxContentHorizontalInset = 8;
+
+    /// <summary>Inset from the GroupBox top frame (below the caption) to its content area.</summary>
     internal const int GroupBoxContentTopInset = 8;
+
+    /// <summary>Corner radius of the GroupBox rounded frame.</summary>
     internal const int GroupBoxCornerRadius = 8;
+
+    /// <summary>Horizontal padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderHorizontalPadding = 10;
+
+    /// <summary>Vertical padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderVerticalPadding = 5;
+
+    /// <summary>
+    ///  Inset between a control's border and its content, shared by modern text fields and the up-down
+    ///  control. Added on top of the border-padding component (see <see cref="GetFieldPadding"/>).
+    /// </summary>
     internal const int InternalChromeInset = 2;
+
+    /// <summary>Border-padding component for a <see cref="BorderStyle.Fixed3D"/> border.</summary>
     internal const int Fixed3DBorderPadding = 2;
+
+    /// <summary>Border-padding component for a <see cref="BorderStyle.FixedSingle"/> border.</summary>
     internal const int FixedSingleBorderPadding = 1;
+
+    /// <summary>Border-padding component for a control with <see cref="BorderStyle.None"/>.</summary>
     internal const int NoBorderPadding = 1;
+
+    /// <summary>Corner radius of the up-down control's rounded frame.</summary>
     internal const int UpDownCornerRadius = 14;
 
     internal static Padding GetFieldPadding(

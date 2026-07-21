@@ -990,10 +990,18 @@ public abstract partial class UpDownBase : ContainerControl
     }
 
     private int ModernContentInset
+        // Match the per-border-style internal padding a modern TextBoxBase applies (see
+        // ModernControlVisualStyles.GetFieldPadding): the border-padding component depends on the
+        // border style rather than the flat 1px border stroke. This keeps the edit/button content
+        // inset one pixel inside the frame for a Fixed3D border, aligning UpDownBase with the other
+        // modern controls (Fixed3D = 2 + 2, FixedSingle = 1 + 2, None = 1 + 2).
         => LogicalToDeviceUnits(
-            (_borderStyle == BorderStyle.None
-                ? 0
-                : ModernControlVisualStyles.BorderThickness)
+            (_borderStyle switch
+            {
+                BorderStyle.Fixed3D => ModernControlVisualStyles.Fixed3DBorderPadding,
+                BorderStyle.FixedSingle => ModernControlVisualStyles.FixedSingleBorderPadding,
+                _ => ModernControlVisualStyles.NoBorderPadding,
+            })
             + ModernControlVisualStyles.InternalChromeInset);
 
     internal int ModernButtonGroupSpacing
