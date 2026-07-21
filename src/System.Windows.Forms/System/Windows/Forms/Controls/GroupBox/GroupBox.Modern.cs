@@ -301,7 +301,7 @@ public partial class GroupBox
         int captionHeight)
         => new(
             bounds.Left + Padding.Left,
-            bounds.Top,
+            bounds.Top + Padding.Top,
             Math.Max(0, bounds.Width - Padding.Horizontal),
             captionHeight);
 

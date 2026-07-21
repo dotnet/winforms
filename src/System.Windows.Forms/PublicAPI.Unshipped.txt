@@ -69,6 +69,7 @@ System.Windows.Forms.Control.VisualStylesModeChangeImpact
 System.Windows.Forms.Control.VisualStylesModeChangeImpact.Metrics = 3 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
 System.Windows.Forms.Control.VisualStylesModeChangeImpact.None = 0 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
 System.Windows.Forms.Control.VisualStylesModeChangeImpact.NonClientUpdate = 2 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Recreate = 4 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
 System.Windows.Forms.Control.VisualStylesModeChangeImpact.Repaint = 1 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode

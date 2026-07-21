@@ -10,13 +10,20 @@ namespace System.Windows.Forms.Tests;
 public partial class ControlTests
 {
     [WinFormsFact]
-    public void Control_VisualStylesMode_DefaultMatchesApplicationDefault()
+    public void Control_VisualStylesMode_DefaultIsInherit()
     {
         using SubControlWithVisualStyles control = new();
+        PropertyDescriptor property = TypeDescriptor.GetProperties(control)[
+            nameof(Control.VisualStylesMode)];
+        AmbientValueAttribute ambientValue = Assert.IsType<AmbientValueAttribute>(
+            property.Attributes[typeof(AmbientValueAttribute)]);
 
-        // With no parent and no explicit value, the control inherits the application-wide default.
-        Assert.Equal(Application.DefaultVisualStylesMode, control.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, control.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, property.GetValue(control));
+        Assert.Equal(VisualStylesMode.Inherit, ambientValue.Value);
         Assert.Equal(Application.DefaultVisualStylesMode, control.DefaultVisualStylesModeAccessor);
+        Assert.Equal(Application.DefaultVisualStylesMode, control.EffectiveVisualStylesModeAccessor);
+        Assert.False(property.ShouldSerializeValue(control));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -57,22 +64,24 @@ public partial class ControlTests
 
         // Setting Inherit clears the local override so the child inherits from the parent again.
         child.VisualStylesMode = VisualStylesMode.Inherit;
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
 
         // The child is ambient again, so a later change on the parent flows through.
         parent.VisualStylesMode = VisualStylesMode.Classic;
-        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
     }
 
     [WinFormsFact]
-    public void Control_VisualStylesMode_GetNeverReturnsInherit()
+    public void Control_VisualStylesMode_InheritReportsRequestedValue()
     {
         using SubControlWithVisualStyles control = new();
 
-        // Inherit is an assignable sentinel, but the resolved value is never Inherit.
         control.VisualStylesMode = VisualStylesMode.Inherit;
-        Assert.NotEqual(VisualStylesMode.Inherit, control.VisualStylesMode);
-        Assert.Equal(Application.DefaultVisualStylesMode, control.VisualStylesMode);
+
+        Assert.Equal(VisualStylesMode.Inherit, control.VisualStylesMode);
+        Assert.Equal(Application.DefaultVisualStylesMode, control.EffectiveVisualStylesModeAccessor);
     }
 
     [Fact]
@@ -164,7 +173,8 @@ public partial class ControlTests
         // Setting the parent propagates to the child, which has no explicit value.
         parent.VisualStylesMode = VisualStylesMode.Net11;
         Assert.Equal(VisualStylesMode.Net11, parent.VisualStylesMode);
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
 
         // The child can override the inherited value.
         child.VisualStylesMode = VisualStylesMode.Disabled;
@@ -174,11 +184,13 @@ public partial class ControlTests
         // Setting the child back to the parent's value makes it ambient again, so a later
         // change on the parent flows through to the child once more.
         child.VisualStylesMode = VisualStylesMode.Net11;
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
 
         parent.VisualStylesMode = VisualStylesMode.Classic;
         Assert.Equal(VisualStylesMode.Classic, parent.VisualStylesMode);
-        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
     }
 
     [WinFormsFact]
@@ -194,7 +206,8 @@ public partial class ControlTests
 
         child.AssignParent(parent);
 
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
         Assert.Equal(1, callCount);
     }
 
@@ -216,7 +229,8 @@ public partial class ControlTests
 
         property.ResetValue(child);
 
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
         Assert.False(property.ShouldSerializeValue(child));
         Assert.Equal(1, callCount);
     }
@@ -239,11 +253,13 @@ public partial class ControlTests
         Assert.True(property.ShouldSerializeValue(child));
 
         property.ResetValue(child);
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
         Assert.False(property.ShouldSerializeValue(child));
 
         child.VisualStylesMode = VisualStylesMode.Inherit;
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
         Assert.False(property.ShouldSerializeValue(child));
     }
 
@@ -285,7 +301,7 @@ public partial class ControlTests
         parent.VisualStylesMode = VisualStylesMode.Net11;
 
         Assert.Equal(VisualStylesMode.Net11, parent.VisualStylesMode);
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Classic, parent.EffectiveVisualStylesModeAccessor);
         Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
         Assert.Equal(0, parentChangedCallCount);
@@ -307,7 +323,7 @@ public partial class ControlTests
 
         child.AssignParent(parent);
 
-        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
         Assert.Equal(0, changedCallCount);
     }
@@ -474,7 +490,8 @@ public partial class ControlTests
         parent.VisualStylesMode = VisualStylesMode.Net11;
 
         Assert.Equal(VisualStylesMode.Latest, parent.VisualStylesMode);
-        Assert.Equal(VisualStylesMode.Latest, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Latest, child.EffectiveVisualStylesModeAccessor);
         Assert.Equal(2, parentChangedCallCount);
         Assert.Equal(1, childChangedCallCount);
     }

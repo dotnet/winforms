@@ -426,6 +426,9 @@ public class GroupBoxTests
 
         Assert.Equal(control.Padding.Left, captionBounds.Left);
         Assert.Equal(
+            bounds.Top + control.Padding.Top,
+            captionBounds.Top);
+        Assert.Equal(
             bounds.Right - control.Padding.Right,
             captionBounds.Right);
     }

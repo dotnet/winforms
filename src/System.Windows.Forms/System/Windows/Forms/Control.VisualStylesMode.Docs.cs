@@ -11,13 +11,13 @@ public partial class Control
     ///  Gets or sets how the control renders itself when visual styles are applied. This is an ambient property.
     /// </summary>
     /// <value>
-    ///  The <see cref="Forms.VisualStylesMode"/> for the control. When not explicitly set, the value is inherited
-    ///  from the parent control, or, for a top-level control, from <see cref="Application.DefaultVisualStylesMode"/>.
+    ///  The requested <see cref="Forms.VisualStylesMode"/> for the control. The default is
+    ///  <see cref="Forms.VisualStylesMode.Inherit"/>.
     /// </value>
     /// <remarks>
     ///  <para>
-    ///   A control without an explicit value inherits from its parent or from
-    ///   <see cref="Application.DefaultVisualStylesMode"/>. Derived controls can override
+    ///   When this property is <see cref="Forms.VisualStylesMode.Inherit"/>, the effective renderer mode comes from
+    ///   the parent control or from <see cref="Application.DefaultVisualStylesMode"/>. Derived controls can override
     ///   <see cref="DefaultVisualStylesMode"/> to pin a renderer version for compatibility.
     ///  </para>
     ///  <para>

@@ -224,6 +224,6 @@ public class CheckBoxToggleSwitchTests
     {
         using CheckBox checkBox = new();
 
-        Assert.Equal(Application.DefaultVisualStylesMode, checkBox.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Inherit, checkBox.VisualStylesMode);
     }
 }
