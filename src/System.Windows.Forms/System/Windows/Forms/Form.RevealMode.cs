@@ -103,10 +103,16 @@ public partial class Form
     private void ClearDeferredAppearanceCloakState() => DeferredAppearanceCloaked = false;
 
     private bool ShouldUseDeferredAppearanceCloak()
+        // This is evaluated from OnHandleCreated, at which point a top-level form's window is
+        // always still hidden: Form clears WS_VISIBLE from the create params and defers the show
+        // (see CreateParams / s_formStateShowWindowOnCreate). The window's Visible state is only
+        // set later, while WM_SHOWWINDOW is processed. Checking Visible here would therefore never
+        // be true and the cloak would never engage, so the window is shown uncloaked and the
+        // default-background flash the mode is meant to prevent still occurs. Cloaking the
+        // already-hidden window now is exactly the intended behavior for both Show and ShowDialog.
         => FormRevealMode == FormRevealMode.Deferred
             && TopLevel
             && !IsMdiChild
-            && Visible
             && IsHandleCreated;
 
     private unsafe bool SetDwmCloak(bool cloaked)
