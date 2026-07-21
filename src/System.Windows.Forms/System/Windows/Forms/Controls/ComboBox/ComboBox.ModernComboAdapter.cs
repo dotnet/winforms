@@ -36,7 +36,10 @@ public partial class ComboBox
             }
 
             int buttonWidth = SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(
-                _deviceDpi);
+                _deviceDpi)
+                + ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.ComboBoxButtonExtraWidth,
+                    _deviceDpi);
             _buttonBounds = new Rectangle(
                 comboBox.RightToLeft == RightToLeft.Yes
                     ? _clientBounds.Left
@@ -75,7 +78,7 @@ public partial class ComboBox
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
             }
 
-            ClearNativeFrame(
+            PaintFieldSurface(
                 comboBox,
                 graphics,
                 clientBounds);
@@ -110,42 +113,19 @@ public partial class ComboBox
             }
         }
 
-        private static void ClearNativeFrame(
+        private static void PaintFieldSurface(
             ComboBox comboBox,
             Graphics graphics,
             Rectangle bounds)
         {
-            int thickness = Math.Max(
-                1,
-                ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.Fixed3DBorderPadding,
-                    comboBox.DeviceDpiInternal));
+            // Paint the entire modern field surface in one pass. This covers any client-area
+            // frame the native ComboBox drew (the sharp inner rectangle), so only our rounded
+            // field, the drop-down button, and the flat edit child remain visible. The rounded
+            // corners are restored afterwards by CutOutRoundedCorners, and the single rounded
+            // border is drawn last, spanning the full control.
             Color background = GetEffectiveBackColor(comboBox);
             using var brush = background.GetCachedSolidBrushScope();
-            graphics.FillRectangle(
-                brush,
-                bounds.Left,
-                bounds.Top,
-                bounds.Width,
-                Math.Min(thickness, bounds.Height));
-            graphics.FillRectangle(
-                brush,
-                bounds.Left,
-                Math.Max(bounds.Top, bounds.Bottom - thickness),
-                bounds.Width,
-                Math.Min(thickness, bounds.Height));
-            graphics.FillRectangle(
-                brush,
-                bounds.Left,
-                bounds.Top,
-                Math.Min(thickness, bounds.Width),
-                bounds.Height);
-            graphics.FillRectangle(
-                brush,
-                Math.Max(bounds.Left, bounds.Right - thickness),
-                bounds.Top,
-                Math.Min(thickness, bounds.Width),
-                bounds.Height);
+            graphics.FillRectangle(brush, bounds);
         }
 
         private static void DrawStandardFrame(

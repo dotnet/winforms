@@ -873,16 +873,9 @@ public unsafe partial class Control :
 
     public virtual partial VisualStylesMode VisualStylesMode
     {
-        get
-        {
-            if (!Properties.TryGetValue(s_visualStylesModeProperty, out VisualStylesMode value)
-                || value == VisualStylesMode.Inherit)
-            {
-                value = ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
-            }
-
-            return value;
-        }
+        get => Properties.GetValueOrDefault(
+            s_visualStylesModeProperty,
+            VisualStylesMode.Inherit);
         set
         {
             // Can't use the source generated enum validator here, since it cannot deal with the
@@ -897,13 +890,12 @@ public unsafe partial class Control :
                 _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
             };
 
-            VisualStylesMode oldValue = VisualStylesMode;
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
             // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
             // drop any local override so the value is inherited again.
             if (value == VisualStylesMode.Inherit
-                || (ParentInternal is { } parent && parent.VisualStylesMode == value))
+                || (ParentInternal is { } parent && parent.ResolvedVisualStylesMode == value))
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
@@ -912,7 +904,7 @@ public unsafe partial class Control :
                 Properties.AddValue(s_visualStylesModeProperty, value);
             }
 
-            if (oldValue != VisualStylesMode && oldEffectiveValue != EffectiveVisualStylesMode)
+            if (oldEffectiveValue != EffectiveVisualStylesMode)
             {
                 RaiseVisualStylesModeChanged(oldEffectiveValue, EffectiveVisualStylesMode);
             }
@@ -928,6 +920,18 @@ public unsafe partial class Control :
     private void ResetVisualStylesMode()
         => VisualStylesMode = VisualStylesMode.Inherit;
 
+    private VisualStylesMode ResolvedVisualStylesMode
+    {
+        get
+        {
+            VisualStylesMode value = VisualStylesMode;
+
+            return value == VisualStylesMode.Inherit
+                ? ParentInternal?.ResolvedVisualStylesMode ?? DefaultVisualStylesMode
+                : value;
+        }
+    }
+
     /// <summary>
     ///  Gets the renderer-authoritative <see cref="Forms.VisualStylesMode"/> that controls must honor when deciding
     ///  <see cref="CreateParams"/> or paint behavior, after applying the High Contrast and disabled clamps.
@@ -935,8 +939,8 @@ public unsafe partial class Control :
     /// <value>
     ///  <see cref="VisualStylesMode.Disabled"/> when visual styles are explicitly disabled;
     ///  <see cref="VisualStylesMode.Classic"/> when Windows High Contrast is active (so custom non-client
-    ///  painting, which does not honor the High Contrast palette, is bypassed); otherwise the raw
-    ///  <see cref="VisualStylesMode"/> value.
+    ///  painting, which does not honor the High Contrast palette, is bypassed); otherwise the resolved ambient
+    ///  <see cref="VisualStylesMode"/>.
     /// </value>
     /// <remarks>
     ///  <para>
@@ -953,11 +957,18 @@ public unsafe partial class Control :
     ///  </para>
     /// </remarks>
     protected VisualStylesMode EffectiveVisualStylesMode
-        => VisualStylesMode is VisualStylesMode.Disabled
+        => GetEffectiveVisualStylesMode(IsHighContrast);
+
+    private VisualStylesMode GetEffectiveVisualStylesMode(bool highContrast)
+    {
+        VisualStylesMode mode = ResolvedVisualStylesMode;
+
+        return mode is VisualStylesMode.Disabled
             ? VisualStylesMode.Disabled
             : IsHighContrast
                 ? VisualStylesMode.Classic
-                : VisualStylesMode;
+                : mode;
+    }
 
     /// <summary>
     ///  Gets a value indicating whether the High Contrast renderer clamp is active.
@@ -993,6 +1004,14 @@ public unsafe partial class Control :
         ///  Preferred-size or layout metrics changed and layout must be refreshed.
         /// </summary>
         Metrics,
+
+        /// <summary>
+        ///  The change cannot be applied to the existing native handle and requires the handle to be
+        ///  recreated (for example, when native-window state such as the client area or a per-handle
+        ///  baseline was established for a specific renderer). Preferred-size and layout metrics are
+        ///  also refreshed.
+        /// </summary>
+        Recreate,
     }
 
     /// <summary>
@@ -7047,6 +7066,21 @@ public unsafe partial class Control :
                 RefreshVisualStylesModeNonClientArea();
                 Invalidate();
                 break;
+            case VisualStylesModeChangeImpact.Recreate:
+                CommonProperties.xClearPreferredSizeCache(this);
+
+                // The renderer transition established native-window state that cannot be unwound in
+                // place (for example, a modified client area or per-handle baseline), so rebuild the
+                // handle. RecreateHandle re-runs handle creation and repaints; when no handle exists
+                // yet the pending layout below still applies the new metrics.
+                if (IsHandleCreated)
+                {
+                    RecreateHandle();
+                }
+
+                transition!.RequestLayout(this, this);
+                transition.RequestAncestorLayouts(ParentInternal, this);
+                break;
             default:
                 Debug.Fail($"Unexpected {nameof(VisualStylesModeChangeImpact)}: {impact}");
                 break;
@@ -7349,7 +7383,8 @@ public unsafe partial class Control :
     {
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty) == Parent?.VisualStylesMode)
+            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
+                == ParentInternal?.ResolvedVisualStylesMode)
             {
                 // Same as the parent value, make it ambient again by removing it.
                 Properties.RemoveValue(s_visualStylesModeProperty);
