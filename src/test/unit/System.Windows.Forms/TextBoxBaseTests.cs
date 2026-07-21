@@ -108,15 +108,15 @@ public partial class TextBoxBaseTests
         using Form form = new()
         {
             AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            VisualStylesMode = VisualStylesMode.Classic
         };
         using TableLayoutPanel tableLayoutPanel = new()
         {
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             ColumnCount = 1,
-            RowCount = 1,
-            VisualStylesMode = VisualStylesMode.Classic
+            RowCount = 1
         };
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -136,12 +136,20 @@ public partial class TextBoxBaseTests
 
         IntPtr handle = textBox.Handle;
         int classicRowHeight = tableLayoutPanel.GetRowHeights()[0];
+        Size classicTableSize = tableLayoutPanel.Size;
 
-        tableLayoutPanel.VisualStylesMode = VisualStylesMode.Net11;
+        form.VisualStylesMode = VisualStylesMode.Net11;
 
         int modernRowHeight = tableLayoutPanel.GetRowHeights()[0];
         Assert.Equal(handle, textBox.Handle);
         Assert.NotEqual(classicRowHeight, modernRowHeight);
+        Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
+
+        form.VisualStylesMode = VisualStylesMode.Classic;
+
+        Assert.Equal(handle, textBox.Handle);
+        Assert.Equal(classicRowHeight, tableLayoutPanel.GetRowHeights()[0]);
+        Assert.Equal(classicTableSize, tableLayoutPanel.Size);
     }
 
     [WinFormsFact]

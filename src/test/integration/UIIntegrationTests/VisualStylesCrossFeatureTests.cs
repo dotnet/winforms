@@ -82,7 +82,7 @@ public class VisualStylesCrossFeatureTests : ControlTestBase
 
                 foreach (Control sample in samples)
                 {
-                    Assert.Equal(VisualStylesMode.Classic, sample.VisualStylesMode);
+                    Assert.Equal(VisualStylesMode.Inherit, sample.VisualStylesMode);
                     Assert.True(sample.Width > 0);
                     Assert.True(sample.Height > 0);
                     using Bitmap bitmap = new(sample.Width, sample.Height);
@@ -91,7 +91,9 @@ public class VisualStylesCrossFeatureTests : ControlTestBase
 
                 parent.VisualStylesMode = VisualStylesMode.Net11;
                 form.PerformLayout();
-                Assert.All(samples, sample => Assert.Equal(VisualStylesMode.Net11, sample.VisualStylesMode));
+                Assert.All(
+                    samples,
+                    sample => Assert.Equal(VisualStylesMode.Inherit, sample.VisualStylesMode));
 
                 foreach (Control sample in samples)
                 {
@@ -101,7 +103,9 @@ public class VisualStylesCrossFeatureTests : ControlTestBase
 
                 parent.VisualStylesMode = VisualStylesMode.Classic;
                 await Task.Yield();
-                Assert.All(samples, sample => Assert.Equal(VisualStylesMode.Classic, sample.VisualStylesMode));
+                Assert.All(
+                    samples,
+                    sample => Assert.Equal(VisualStylesMode.Inherit, sample.VisualStylesMode));
             });
     }
 

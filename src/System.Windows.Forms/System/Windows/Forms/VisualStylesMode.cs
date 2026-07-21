@@ -22,8 +22,8 @@ public enum VisualStylesMode : short
 {
     /// <summary>
     ///  The control inherits its <see cref="Control.VisualStylesMode"/> from its parent, or, for a
-    ///  top-level control, from <see cref="Application.DefaultVisualStylesMode"/>. This is the ambient
-    ///  default and is never returned by <see cref="Control.VisualStylesMode"/> after resolution.
+    ///  top-level control, from <see cref="Application.DefaultVisualStylesMode"/>. This is the ambient default
+    ///  returned by <see cref="Control.VisualStylesMode"/> when no local mode is set.
     /// </summary>
     /// <remarks>
     ///  <para>

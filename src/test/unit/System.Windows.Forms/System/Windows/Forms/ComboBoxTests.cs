@@ -304,7 +304,10 @@ public class ComboBoxTests
         {
             SystemVisualSettingsTracker.ResetForTesting(
                 modernMetrics);
-            using Form form = new();
+            using Form form = new()
+            {
+                VisualStylesMode = VisualStylesMode.Classic
+            };
             using TableLayoutPanel tableLayoutPanel = new()
             {
                 AutoSize = true,
@@ -321,10 +324,12 @@ public class ComboBoxTests
                 11f);
             using VisualStylesComboBox control = new()
             {
+                Anchor = AnchorStyles.Left
+                    | AnchorStyles.Top
+                    | AnchorStyles.Bottom,
                 AutoSize = true,
                 FlatStyle = FlatStyle.Standard,
-                Font = font,
-                VisualStylesMode = VisualStylesMode.Classic
+                Font = font
             };
             tableLayoutPanel.Controls.Add(control, 0, 0);
             form.Controls.Add(tableLayoutPanel);
@@ -332,14 +337,25 @@ public class ComboBoxTests
             IntPtr handle = control.Handle;
             int classicControlHeight = control.Height;
             int classicHeight = tableLayoutPanel.GetRowHeights()[0];
+            Size classicTableSize = tableLayoutPanel.Size;
 
-            control.VisualStylesMode = VisualStylesMode.Net11;
+            form.VisualStylesMode = VisualStylesMode.Net11;
 
             Assert.Equal(control.PreferredHeight, control.Height);
             Assert.NotEqual(classicControlHeight, control.Height);
             Assert.NotEqual(
                 classicHeight,
                 tableLayoutPanel.GetRowHeights()[0]);
+            Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
+            Assert.Equal(handle, control.Handle);
+
+            form.VisualStylesMode = VisualStylesMode.Classic;
+
+            Assert.Equal(classicControlHeight, control.Height);
+            Assert.Equal(
+                classicHeight,
+                tableLayoutPanel.GetRowHeights()[0]);
+            Assert.Equal(classicTableSize, tableLayoutPanel.Size);
             Assert.Equal(handle, control.Handle);
         }
         finally
@@ -427,13 +443,17 @@ public class ComboBoxTests
             Color.Blue.ToArgb(),
             actual.GetPixel(1, 0).ToArgb());
         Assert.Equal(
-            Color.Blue.ToArgb(),
+            backgroundImage.GetPixel(
+                (actual.Width - 1) % backgroundImage.Width,
+                0).ToArgb(),
             actual.GetPixel(actual.Width - 1, 0).ToArgb());
         Assert.Equal(
             Color.Red.ToArgb(),
             actual.GetPixel(0, actual.Height - 1).ToArgb());
         Assert.Equal(
-            Color.Blue.ToArgb(),
+            backgroundImage.GetPixel(
+                (actual.Width - 1) % backgroundImage.Width,
+                0).ToArgb(),
             actual.GetPixel(
                 actual.Width - 1,
                 actual.Height - 1).ToArgb());
@@ -603,12 +623,9 @@ public class ComboBoxTests
         if (dropDownStyle == ComboBoxStyle.Simple)
         {
             Rectangle listBounds = control.GetListBounds();
-            int styleInset = ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.ComboBoxStyleInset,
-                control.DeviceDpi);
             Assert.Equal(
                 bottomWeightedBounds.Bottom
-                    + styleInset
+                    + control.ModernChromeInsets.Bottom
                     + control.Padding.Bottom,
                 listBounds.Top);
         }
@@ -819,9 +836,7 @@ public class ComboBoxTests
                 > initialListBounds.Bottom);
         Assert.Equal(
             control.GetEditBounds().Bottom
-                + ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.ComboBoxStyleInset,
-                    control.DeviceDpi)
+                + control.ModernChromeInsets.Bottom
                 + control.Padding.Bottom,
             resizedListBounds.Top);
     }
@@ -856,6 +871,327 @@ public class ComboBoxTests
         Assert.Equal(
             classic.GetEditBounds(),
             control.GetEditBounds());
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernDropDown_ModeChangeResetsNativeChildGeometry()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDown,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(140, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        IntPtr handle = control.Handle;
+        Rectangle nativeEditBounds = control.ModernEditBaseBounds;
+        int nativeSelectionHeight = control.NativeSelectionHeight;
+
+        control.VisualStylesMode = VisualStylesMode.Classic;
+
+        Assert.Equal(handle, control.Handle);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(nativeSelectionHeight, control.GetSelectionHeight());
+        Assert.Equal(nativeEditBounds, control.GetEditBounds());
+        Assert.IsNotType<ComboBox.ModernComboAdapter>(control.CreateAdapter());
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        Assert.NotEqual(nativeEditBounds, control.GetEditBounds());
+        Assert.IsType<ComboBox.ModernComboAdapter>(control.CreateAdapter());
+
+        control.VisualStylesMode = VisualStylesMode.Classic;
+
+        Assert.Equal(handle, control.Handle);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(nativeSelectionHeight, control.GetSelectionHeight());
+        Assert.Equal(nativeEditBounds, control.GetEditBounds());
+        Assert.IsNotType<ComboBox.ModernComboAdapter>(control.CreateAdapter());
+    }
+
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No)]
+    [InlineData(RightToLeft.Yes)]
+    public void ComboBox_ModernDropDown_RepeatedModeRoundTripsRestoreNativeState(
+        RightToLeft rightToLeft)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            RightToLeft = rightToLeft,
+            Size = new Size(160, 40),
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        control.CreateControl();
+        control.InitializeNativeComboBaseline();
+        IntPtr handle = control.Handle;
+        var classicState = GetNativeComboState(control);
+
+        for (int i = 0; i < 10; i++)
+        {
+            control.VisualStylesMode = VisualStylesMode.Net11;
+            Rectangle modernButtonBounds = control.GetButtonBounds();
+            Assert.True(modernButtonBounds.Width > 0);
+            Assert.True(modernButtonBounds.Height > 0);
+            Assert.NotEqual(classicState, GetNativeComboState(control));
+
+            control.VisualStylesMode = VisualStylesMode.Classic;
+            Assert.Equal(classicState, GetNativeComboState(control));
+            Assert.Equal(handle, control.Handle);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void ComboBox_ModernDropDown_PropertyOrderConverges(
+        int order)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font font = new(
+            Control.DefaultFont.FontFamily,
+            11f);
+        using VisualStylesComboBox expected = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            Font = font,
+            Padding = new Padding(2, 3, 4, 5),
+            Size = new Size(180, 50),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        expected.CreateControl();
+        var expectedState = GetNativeComboState(expected);
+
+        using VisualStylesComboBox actual = new()
+        {
+            Size = expected.Size,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        switch (order)
+        {
+            case 0:
+                actual.FlatStyle = FlatStyle.Popup;
+                actual.Font = font;
+                actual.Padding = expected.Padding;
+                actual.VisualStylesMode = VisualStylesMode.Net11;
+                actual.CreateControl();
+                break;
+            case 1:
+                actual.VisualStylesMode = VisualStylesMode.Net11;
+                actual.Padding = expected.Padding;
+                actual.Font = font;
+                actual.FlatStyle = FlatStyle.Popup;
+                actual.CreateControl();
+                break;
+            case 2:
+                actual.CreateControl();
+                actual.FlatStyle = FlatStyle.Popup;
+                actual.Font = font;
+                actual.Padding = expected.Padding;
+                actual.VisualStylesMode = VisualStylesMode.Net11;
+                break;
+            case 3:
+                actual.CreateControl();
+                actual.VisualStylesMode = VisualStylesMode.Net11;
+                actual.Padding = expected.Padding;
+                actual.Font = font;
+                actual.FlatStyle = FlatStyle.Popup;
+                break;
+            default:
+                throw new InvalidOperationException();
+        }
+
+        Assert.Equal(expectedState, GetNativeComboState(actual));
+    }
+
+    [WinFormsTheory]
+    [InlineData(DrawMode.OwnerDrawFixed)]
+    [InlineData(DrawMode.OwnerDrawVariable)]
+    public void ComboBox_ModernOwnerDraw_PreservesSelectionFieldAuthority(
+        DrawMode drawMode)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DrawMode = drawMode,
+            FlatStyle = FlatStyle.Standard,
+            ItemHeight = 31,
+            Size = new Size(160, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["First", "Second"]);
+        control.CreateControl();
+        int selectionHeight = control.GetSelectionHeight();
+
+        control.ApplyModernComboLayout();
+        control.VisualStylesMode = VisualStylesMode.Classic;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(selectionHeight, control.GetSelectionHeight());
+        Assert.Equal(control.PreferredHeight, control.Height);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_FontChangeRecomputesNativeSplit()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font font = new(
+            Control.DefaultFont.FontFamily,
+            16f);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(180, 120),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        Rectangle initialEditBounds = control.GetEditBounds();
+
+        control.Font = font;
+
+        Rectangle updatedEditBounds = control.GetEditBounds();
+        Assert.NotEqual(initialEditBounds.Height, updatedEditBounds.Height);
+        Assert.Equal(
+            updatedEditBounds.Bottom
+                + control.ModernChromeInsets.Bottom
+                + control.Padding.Bottom,
+            control.GetListBounds().Top);
+        int writeCount = control.ModernComboLayoutWriteCount;
+        var state = GetNativeComboState(control);
+
+        control.ApplyModernComboLayout();
+
+        Assert.Equal(state, GetNativeComboState(control));
+        Assert.Equal(writeCount, control.ModernComboLayoutWriteCount);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_HandleRecreationImmediatelyReappliesLayout()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Padding = new Padding(2),
+            Size = new Size(180, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        _ = control.Handle;
+        Assert.True(control.GetEditMargins().left > 0);
+        int handleCreatedCallCount = 0;
+        control.HandleCreated += (sender, e) =>
+            handleCreatedCallCount++;
+
+        control.DropDownStyle = ComboBoxStyle.Simple;
+
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.True(
+            control.GetEditBounds().Top
+                >= control.ModernChromeInsets.Top
+                    + control.Padding.Top);
+        int writeCount = control.ModernComboLayoutWriteCount;
+
+        control.ApplyModernComboLayout();
+
+        Assert.Equal(writeCount, control.ModernComboLayoutWriteCount);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernDropDown_RepeatedApplyPerformsNoNativeWrites()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Padding = new Padding(3),
+            Size = new Size(160, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        int initialWriteCount = control.ModernComboLayoutWriteCount;
+        var initialState = GetNativeComboState(control);
+
+        for (int i = 0; i < 5; i++)
+        {
+            control.ApplyModernComboLayout();
+        }
+
+        Assert.Equal(initialWriteCount, control.ModernComboLayoutWriteCount);
+        Assert.Equal(initialState, GetNativeComboState(control));
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernDropDown_EmptyPaddingKeepsEditInsideChrome()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(200, 60),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.SetTestDeviceDpi(
+            ScaleHelper.OneHundredPercentLogicalDpi);
+        control.CreateControl();
+
+        Rectangle editBounds = control.GetEditBounds();
+        Padding chromeInsets = control.ModernChromeInsets;
+        Assert.True(
+            editBounds.Top >= chromeInsets.Top,
+            $"Edit {editBounds} must start inside {chromeInsets}.");
+        Assert.True(
+            editBounds.Bottom
+                <= control.ClientRectangle.Bottom - chromeInsets.Bottom,
+            $"Edit {editBounds} must end inside {chromeInsets} within {control.ClientRectangle}.");
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(144)]
+    [InlineData(192)]
+    public void ComboBox_ModernChromeInsets_ScaleWithDpi(
+        int deviceDpi)
+    {
+        using VisualStylesComboBox control = new();
+        control.SetTestDeviceDpi(deviceDpi);
+
+        Padding chromeInsets = control.ModernChromeInsets;
+
+        Assert.Equal(
+            ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.Fixed3DBorderPadding
+                    + ModernControlVisualStyles.InternalChromeInset
+                    + ModernControlVisualStyles.ComboBoxStyleInset,
+                deviceDpi),
+            chromeInsets.Left);
+        Assert.Equal(
+            ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.Fixed3DBorderPadding
+                    + ModernControlVisualStyles.ComboBoxStyleInset,
+                deviceDpi),
+            chromeInsets.Top);
     }
 
     [WinFormsFact]
@@ -926,6 +1262,22 @@ public class ComboBoxTests
             ComboBox.SupportsModernDropDownCorners(
                 new Version(major, minor, build)));
     }
+
+    private static (
+        Size size,
+        int selectionHeight,
+        (int left, int right) margins,
+        Rectangle editBounds,
+        Rectangle itemBounds,
+        Rectangle buttonBounds) GetNativeComboState(
+            VisualStylesComboBox control)
+        => (
+            control.Size,
+            control.GetSelectionHeight(),
+            control.GetEditMargins(),
+            control.GetEditBounds(),
+            control.GetItemBounds(),
+            control.GetButtonBounds());
 
     [WinFormsFact]
     public void ComboBox_CreateParams_GetDefault_ReturnsExpected()
@@ -3619,6 +3971,12 @@ public class ComboBoxTests
             return (PARAM.LOWORD(margins), PARAM.HIWORD(margins));
         }
 
+        public int GetSelectionHeight()
+            => (int)PInvokeCore.SendMessage(
+                this,
+                PInvoke.CB_GETITEMHEIGHT,
+                (WPARAM)(-1));
+
         public Rectangle GetEditBounds()
         {
             COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
@@ -3647,6 +4005,28 @@ public class ComboBoxTests
                 new Size(bounds.Width, bounds.Height));
         }
 
+        public Rectangle GetItemBounds()
+        {
+            COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
+
+            return new Rectangle(
+                comboBoxInfo.rcItem.left,
+                comboBoxInfo.rcItem.top,
+                comboBoxInfo.rcItem.Width,
+                comboBoxInfo.rcItem.Height);
+        }
+
+        public Rectangle GetButtonBounds()
+        {
+            COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
+
+            return new Rectangle(
+                comboBoxInfo.rcButton.left,
+                comboBoxInfo.rcButton.top,
+                comboBoxInfo.rcButton.Width,
+                comboBoxInfo.rcButton.Height);
+        }
+
         private unsafe COMBOBOXINFO GetComboBoxInfo()
         {
             COMBOBOXINFO comboBoxInfo = default;
@@ -3661,11 +4041,33 @@ public class ComboBoxTests
         public Padding ModernFieldPadding
             => (Padding)this.TestAccessor.Dynamic.GetModernFieldPadding();
 
+        public Padding ModernChromeInsets
+            => (Padding)this.TestAccessor.Dynamic.GetModernChromeInsets();
+
         public Rectangle ModernEditBaseBounds
-            => (Rectangle)this.TestAccessor.Dynamic._modernEditBaseBounds;
+            => (Rectangle)this.TestAccessor.Dynamic
+                .GetNativeComboBaselineEditBounds();
 
         public Rectangle ModernSimpleListBaseBounds
-            => (Rectangle)this.TestAccessor.Dynamic._modernSimpleListBaseBounds;
+            => (Rectangle)this.TestAccessor.Dynamic
+                .GetNativeComboBaselineSimpleListBounds();
+
+        public int ModernComboLayoutWriteCount
+            => (int)this.TestAccessor.Dynamic
+                .GetModernComboLayoutWriteCount();
+
+        public int NativeSelectionHeight
+            => (int)this.TestAccessor.Dynamic
+                .GetNativeComboBaselineSelectionFieldItemHeight();
+
+        public void ApplyModernComboLayout()
+            => this.TestAccessor.Dynamic.ApplyModernComboLayout();
+
+        public void InitializeNativeComboBaseline()
+            => this.TestAccessor.Dynamic.InitializeNativeComboBaseline();
+
+        public void SetTestDeviceDpi(int deviceDpi)
+            => DeviceDpiInternal = deviceDpi;
 
         public void RaiseSystemVisualSettingsChanged(
             SystemVisualSettingsChangedEventArgs e)

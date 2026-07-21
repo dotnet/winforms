@@ -11,6 +11,8 @@ namespace System.Windows.Forms;
 internal static class ModernControlVisualStyles
 {
     internal const int BorderThickness = 1;
+    internal const int ComboBoxButtonExtraWidth = 4;
+    internal const int ComboBoxFieldArcClearance = 2;
     internal const int ComboBoxStyleInset = 1;
     internal const int FieldCornerRadius = 15;
     internal const int FocusBandHeight = 4;
@@ -39,8 +41,10 @@ internal static class ModernControlVisualStyles
             focusBorderMetrics,
             textScaleFactor,
             deviceDpi);
+
         int horizontalOffset = scaledFocusBorderMetrics.Width;
         int verticalOffset = scaledFocusBorderMetrics.Height;
+
         Padding borderPadding = borderStyle switch
         {
             BorderStyle.Fixed3D => new Padding(
@@ -48,11 +52,13 @@ internal static class ModernControlVisualStyles
                 top: ScaleToDpi(Fixed3DBorderPadding, deviceDpi) + verticalOffset,
                 right: ScaleToDpi(Fixed3DBorderPadding, deviceDpi) + horizontalOffset,
                 bottom: ScaleToDpi(Fixed3DBorderPadding, deviceDpi) + verticalOffset),
+
             BorderStyle.FixedSingle => new Padding(
                 left: ScaleToDpi(FixedSingleBorderPadding, deviceDpi) + horizontalOffset,
                 top: ScaleToDpi(FixedSingleBorderPadding, deviceDpi) + verticalOffset,
                 right: ScaleToDpi(FixedSingleBorderPadding, deviceDpi) + horizontalOffset,
                 bottom: ScaleToDpi(FixedSingleBorderPadding, deviceDpi) + verticalOffset),
+
             BorderStyle.None => new Padding(
                 left: ScaleToDpi(NoBorderPadding, deviceDpi),
                 top: ScaleToDpi(NoBorderPadding, deviceDpi),
@@ -105,6 +111,7 @@ internal static class ModernControlVisualStyles
         int deviceDpi)
     {
         int preferredHeight = fontHeight + fieldPadding.Vertical;
+
         int roundedChromeMinimumHeight = ScaleToDpi(
             FieldCornerRadius,
             deviceDpi)
@@ -120,6 +127,7 @@ internal static class ModernControlVisualStyles
         int deviceDpi)
     {
         float scale = Math.Clamp(textScaleFactor, 1f, 2.25f);
+
         int dpiScaledMetric = ScaleToDpi(
             Math.Max(metric, BorderThickness),
             deviceDpi);
