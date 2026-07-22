@@ -277,7 +277,7 @@ public class SystemVisualSettingsTests
                 new SystemVisualSettingsChangedEventArgs(
                     enabled,
                     disabled,
-                    SystemVisualSettingsCategories.Animations));
+                    SystemVisualSettingsCategories.ClientAreaAnimations));
 
             Assert.False(renderer.IsRunning);
             Assert.Equal(1f, renderer.LastProgress);
@@ -289,7 +289,7 @@ public class SystemVisualSettingsTests
                 new SystemVisualSettingsChangedEventArgs(
                     disabled,
                     enabled,
-                    SystemVisualSettingsCategories.Animations));
+                    SystemVisualSettingsCategories.ClientAreaAnimations));
 
             Assert.False(renderer.IsRunning);
             Assert.Equal(1, renderer.StartCount);
