@@ -123,7 +123,7 @@ public partial class ComboBox
             // field, the drop-down button, and the flat edit child remain visible. The rounded
             // corners are restored afterwards by CutOutRoundedCorners, and the single rounded
             // border is drawn last, spanning the full control.
-            Color background = GetEffectiveBackColor(comboBox);
+            Color background = GetEffectiveFieldColor(comboBox);
             using var brush = background.GetCachedSolidBrushScope();
             graphics.FillRectangle(brush, bounds);
         }
@@ -286,7 +286,7 @@ public partial class ComboBox
             bool drawFocusedSelection = comboBox.ContainsFocus;
             Color background = drawFocusedSelection
                 ? SystemColors.Highlight
-                : GetEffectiveBackColor(comboBox);
+                : GetEffectiveFieldColor(comboBox);
             using (var backgroundBrush = background.GetCachedSolidBrushScope())
             {
                 graphics.FillRectangle(
@@ -473,5 +473,18 @@ public partial class ComboBox
                 ? comboBox.BackColor
                 : comboBox.ParentInternal?.BackColor
                     ?? SystemColors.Window;
+
+        /// <summary>
+        ///  Returns the field surface color, muted when the ComboBox is disabled so a disabled
+        ///  control no longer shows its full custom <see cref="Control.BackColor"/> (issue #14797).
+        /// </summary>
+        private static Color GetEffectiveFieldColor(ComboBox comboBox)
+        {
+            Color background = GetEffectiveBackColor(comboBox);
+
+            return comboBox.Enabled
+                ? background
+                : PopupButtonColorMath.Mute(background, 0.55f);
+        }
     }
 }
