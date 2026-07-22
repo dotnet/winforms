@@ -5,23 +5,26 @@ namespace System.Windows.Forms;
 
 #if NET11_0_OR_GREATER
 /// <summary>
-///  Specifies how layout suspension traverses a control tree while painting is suspended.
+///  Specifies which controls in a target's control tree suspend layout while painting is suspended.
 /// </summary>
 public enum LayoutSuspendTraversal
 {
     /// <summary>
-    ///  Does not suspend layout.
+    ///  Suspends layout for the target control only. The target does not re-lay-out its own children
+    ///  while the scope is active; a nested container child can still perform its own layout.
     /// </summary>
-    None = 0,
+    TargetOnly = 0,
 
     /// <summary>
-    ///  Suspends layout only for the target control.
+    ///  Suspends layout for the target control and each of its immediate child controls. Because a
+    ///  container suspends the layout of its own children, this additionally holds the layout of the
+    ///  target's grandchildren, but not of any deeper descendants.
     /// </summary>
-    TopLevelOnly = 1,
+    TargetAndChildren = 1,
 
     /// <summary>
-    ///  Suspends layout for the target control and all its descendants.
+    ///  Suspends layout for the target control and every control in its subtree.
     /// </summary>
-    Traverse = 2,
+    TargetAndDescendants = 2,
 }
 #endif

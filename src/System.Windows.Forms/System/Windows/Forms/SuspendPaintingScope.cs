@@ -8,7 +8,7 @@ using System.Runtime.ExceptionServices;
 
 #if NET11_0_OR_GREATER
 /// <summary>
-///  Suspends painting for a target until the scope is disposed.
+///  Suspends painting (and optionally layout) for a target until the scope is disposed.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -17,8 +17,13 @@ using System.Runtime.ExceptionServices;
 ///   the duration of an async data reload). <see cref="Dispose"/> is idempotent: disposing the scope more
 ///   than once only resumes painting once.
 ///  </para>
+///  <para>
+///   The type is internal; callers obtain it as an <see cref="IDisposable"/> from
+///   <see cref="ControlMutationExtensions"/>, which is why the consumer-facing guidance above is also
+///   documented on those extension methods.
+///  </para>
 /// </remarks>
-public sealed class SuspendPaintingScope : IDisposable
+internal sealed class SuspendPaintingScope : IDisposable
 {
     private ISupportSuspendPainting? _target;
     private Control[]? _layoutControls;
@@ -27,7 +32,7 @@ public sealed class SuspendPaintingScope : IDisposable
     ///  Initializes a new instance of the <see cref="SuspendPaintingScope"/> class.
     /// </summary>
     /// <param name="target">The target whose painting should be suspended.</param>
-    public SuspendPaintingScope(ISupportSuspendPainting? target)
+    internal SuspendPaintingScope(ISupportSuspendPainting? target)
     {
         _target = target;
 
@@ -128,14 +133,32 @@ public sealed class SuspendPaintingScope : IDisposable
 
         return layoutSuspendTraversal switch
         {
-            LayoutSuspendTraversal.None => [],
-            LayoutSuspendTraversal.TopLevelOnly => [control],
-            LayoutSuspendTraversal.Traverse => GetLayoutControls(control, static _ => true),
+            LayoutSuspendTraversal.TargetOnly => [control],
+            LayoutSuspendTraversal.TargetAndChildren => GetTargetAndImmediateChildren(control),
+            LayoutSuspendTraversal.TargetAndDescendants => GetLayoutControls(control, static _ => true),
             _ => throw new InvalidEnumArgumentException(
                 nameof(layoutSuspendTraversal),
                 (int)layoutSuspendTraversal,
                 typeof(LayoutSuspendTraversal))
         };
+    }
+
+    private static Control[] GetTargetAndImmediateChildren(Control target)
+    {
+        if (target.ChildControls is not { Count: > 0 } children)
+        {
+            return [target];
+        }
+
+        Control[] layoutControls = new Control[children.Count + 1];
+        layoutControls[0] = target;
+
+        for (int i = 0; i < children.Count; i++)
+        {
+            layoutControls[i + 1] = children[i];
+        }
+
+        return layoutControls;
     }
 
     private static Control[] GetLayoutControls(
