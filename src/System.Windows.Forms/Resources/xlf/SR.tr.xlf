@@ -5580,6 +5580,11 @@ Değiştirmek istiyor musunuz?</target>
         <target state="translated">Kullanıcı formu her kapattığında, form kapatılmadan önce gerçekleşir ve kapatılma nedenini belirtir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Bu formda giriş için kullanılan dil her değiştiğinde gerçekleşir.</target>

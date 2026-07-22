@@ -5580,6 +5580,11 @@ Do you want to replace it?</source>
         <target state="translated">ユーザーがフォームを閉じるたびに、フォームが閉じられる前、および閉じる理由を指定する前に発生します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">このフォームの入力に使用された言語が変更されたときに発生します。</target>

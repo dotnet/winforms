@@ -5580,6 +5580,11 @@ Chcete ho nahradit?</target>
         <target state="translated">Vyvolá se vždy, když uživatel zavírá formulář, a to před jeho zavřením, a určí důvod zavření.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Vyvolá se vždy, když se změní jazyk použitý pro výstup tohoto formuláře.</target>

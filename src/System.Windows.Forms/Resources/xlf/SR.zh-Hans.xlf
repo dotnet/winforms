@@ -5580,6 +5580,11 @@ Do you want to replace it?</source>
         <target state="translated">每当用户关闭窗体时，在窗体已关闭并指定关闭原因前发生。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">每当更改此窗体的输入语言时发生。</target>
