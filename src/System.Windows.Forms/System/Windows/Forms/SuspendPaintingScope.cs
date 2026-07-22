@@ -133,32 +133,14 @@ internal sealed class SuspendPaintingScope : IDisposable
 
         return layoutSuspendTraversal switch
         {
+            LayoutSuspendTraversal.None => [],
             LayoutSuspendTraversal.TargetOnly => [control],
-            LayoutSuspendTraversal.TargetAndChildren => GetTargetAndImmediateChildren(control),
             LayoutSuspendTraversal.TargetAndDescendants => GetLayoutControls(control, static _ => true),
             _ => throw new InvalidEnumArgumentException(
                 nameof(layoutSuspendTraversal),
                 (int)layoutSuspendTraversal,
                 typeof(LayoutSuspendTraversal))
         };
-    }
-
-    private static Control[] GetTargetAndImmediateChildren(Control target)
-    {
-        if (target.ChildControls is not { Count: > 0 } children)
-        {
-            return [target];
-        }
-
-        Control[] layoutControls = new Control[children.Count + 1];
-        layoutControls[0] = target;
-
-        for (int i = 0; i < children.Count; i++)
-        {
-            layoutControls[i + 1] = children[i];
-        }
-
-        return layoutControls;
     }
 
     private static Control[] GetLayoutControls(
