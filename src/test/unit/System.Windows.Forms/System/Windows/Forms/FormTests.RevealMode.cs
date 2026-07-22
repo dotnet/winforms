@@ -74,5 +74,38 @@ public partial class FormTests
         property.ResetValue(form);
         Assert.False(property.ShouldSerializeValue(form));
     }
+
+    [WinFormsFact]
+    public void Form_FormRevealModeChanged_RaisedOnlyWhenEffectiveValueChanges()
+    {
+        using SubForm form = new();
+        form.FormRevealMode = FormRevealMode.Classic;
+
+        int callCount = 0;
+        object eventSender = null;
+        EventArgs eventArgs = null;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            eventSender = sender;
+            eventArgs = e;
+        };
+        form.FormRevealModeChanged += handler;
+
+        // Changing the effective value raises the event.
+        form.FormRevealMode = FormRevealMode.Deferred;
+        Assert.Equal(1, callCount);
+        Assert.Same(form, eventSender);
+        Assert.Same(EventArgs.Empty, eventArgs);
+
+        // Setting the same effective value again does not raise the event.
+        form.FormRevealMode = FormRevealMode.Deferred;
+        Assert.Equal(1, callCount);
+
+        // After removing the handler no further notifications are raised.
+        form.FormRevealModeChanged -= handler;
+        form.FormRevealMode = FormRevealMode.Classic;
+        Assert.Equal(1, callCount);
+    }
 #endif
 }

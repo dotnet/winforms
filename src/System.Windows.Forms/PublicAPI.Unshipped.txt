@@ -1,7 +1,8 @@
 System.Windows.Forms.ControlMutationExtensions
-static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.Windows.Forms.SuspendPaintingScope!
-static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Func<System.Windows.Forms.Control!, bool>! suspendLayoutContainerFilter) -> System.Windows.Forms.SuspendPaintingScope!
-static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Windows.Forms.LayoutSuspendTraversal layoutSuspendTraversal) -> System.Windows.Forms.SuspendPaintingScope!
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.IDisposable!
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Func<System.Windows.Forms.Control!, bool>! suspendLayoutContainerFilter) -> System.IDisposable!
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Windows.Forms.LayoutSuspendTraversal layoutSuspendTraversal) -> System.IDisposable!
+System.Windows.Forms.Form.FormRevealModeChanged -> System.EventHandler?
 System.Windows.Forms.FormRevealMode
 System.Windows.Forms.FormRevealMode.Classic = 0 -> System.Windows.Forms.FormRevealMode
 System.Windows.Forms.FormRevealMode.Deferred = 1 -> System.Windows.Forms.FormRevealMode
@@ -10,12 +11,9 @@ System.Windows.Forms.ISupportSuspendPainting
 System.Windows.Forms.ISupportSuspendPainting.BeginSuspendPainting() -> void
 System.Windows.Forms.ISupportSuspendPainting.EndSuspendPainting() -> void
 System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.LayoutSuspendTraversal.None = 0 -> System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.LayoutSuspendTraversal.TopLevelOnly = 1 -> System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.LayoutSuspendTraversal.Traverse = 2 -> System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.SuspendPaintingScope
-System.Windows.Forms.SuspendPaintingScope.Dispose() -> void
-System.Windows.Forms.SuspendPaintingScope.SuspendPaintingScope(System.Windows.Forms.ISupportSuspendPainting? target) -> void
+System.Windows.Forms.LayoutSuspendTraversal.TargetAndChildren = 1 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.TargetAndDescendants = 2 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.TargetOnly = 0 -> System.Windows.Forms.LayoutSuspendTraversal
 static System.Windows.Forms.Application.DefaultFormRevealMode.get -> System.Windows.Forms.FormRevealMode
 static System.Windows.Forms.Application.IsFormRevealDeferred.get -> bool
 static System.Windows.Forms.Application.SetDefaultFormRevealMode(System.Windows.Forms.FormRevealMode mode) -> void
@@ -23,6 +21,7 @@ virtual System.Windows.Forms.Control.BeginSuspendPaintingCore() -> void
 virtual System.Windows.Forms.Control.EndSuspendPaintingCore() -> void
 virtual System.Windows.Forms.Form.FormRevealMode.get -> System.Windows.Forms.FormRevealMode
 virtual System.Windows.Forms.Form.FormRevealMode.set -> void
+virtual System.Windows.Forms.Form.OnFormRevealModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ComboBox.BeginSuspendPaintingCore() -> void
 override System.Windows.Forms.ComboBox.EndSuspendPaintingCore() -> void
 override System.Windows.Forms.ListBox.BeginSuspendPaintingCore() -> void

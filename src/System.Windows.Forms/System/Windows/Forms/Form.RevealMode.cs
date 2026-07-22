@@ -10,6 +10,7 @@ public partial class Form
 {
 #if NET11_0_OR_GREATER
     private static readonly int s_propFormRevealMode = PropertyStore.CreateKey();
+    private static readonly object s_formRevealModeChangedEvent = new();
 
     /// <summary>
     ///  Gets or sets how this form is presented while its initial appearance is prepared.
@@ -53,6 +54,8 @@ public partial class Form
         {
             SourceGenerated.EnumValidator.Validate(value, nameof(value));
 
+            FormRevealMode previous = FormRevealMode;
+
             if (value == FormRevealMode.Inherit)
             {
                 Properties.RemoveValue(s_propFormRevealMode);
@@ -61,8 +64,31 @@ public partial class Form
             {
                 Properties.AddValue(s_propFormRevealMode, value);
             }
+
+            if (FormRevealMode != previous)
+            {
+                OnFormRevealModeChanged(EventArgs.Empty);
+            }
         }
     }
+
+    /// <summary>
+    ///  Occurs when the effective value of the <see cref="FormRevealMode"/> property changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatPropertyChanged))]
+    [SRDescription(nameof(SR.FormOnFormRevealModeChangedDescr))]
+    public event EventHandler? FormRevealModeChanged
+    {
+        add => Events.AddHandler(s_formRevealModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_formRevealModeChangedEvent, value);
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormRevealModeChanged"/> event.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    protected virtual void OnFormRevealModeChanged(EventArgs e)
+        => (Events[s_formRevealModeChangedEvent] as EventHandler)?.Invoke(this, e);
 
     private bool ShouldSerializeFormRevealMode() => Properties.ContainsKey(s_propFormRevealMode);
 
