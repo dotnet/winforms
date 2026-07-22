@@ -145,44 +145,131 @@ public class GroupBoxTests
         };
 
         Font captionFont = control.ModernCaptionFont;
-        int horizontalInset = ScaleHelper.ScaleToDpi(
-            ModernControlVisualStyles.GroupBoxContentHorizontalInset,
-            control.DeviceDpi);
-        int topInset = ScaleHelper.ScaleToDpi(
-            ModernControlVisualStyles.GroupBoxContentTopInset,
-            control.DeviceDpi);
-        int bottomInset = flatStyle == FlatStyle.Standard
-            ? ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.GroupBoxContentBottomInset,
-                control.DeviceDpi)
-            : topInset;
-        int expectedTop = flatStyle switch
-        {
-            FlatStyle.Standard => captionFont.Height
-                + ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.GroupBoxCaptionGap,
-                    control.DeviceDpi)
-                + topInset,
-            FlatStyle.Flat => captionFont.Height + topInset,
-            FlatStyle.Popup => captionFont.Height
-                + (2 * ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
-                    control.DeviceDpi))
-                + topInset,
-            _ => throw new InvalidOperationException()
-        };
         Padding padding = control.Padding;
+        int deviceDpi = control.DeviceDpi;
+
+        Padding expectedInsets;
+        switch (flatStyle)
+        {
+            case FlatStyle.Standard:
+            {
+                // Card reserves only the caption band plus its gap at the top; no internal
+                // horizontal or bottom inset, so a docked child can fill the card.
+                int top = captionFont.Height
+                    + ScaleHelper.ScaleToDpi(
+                        ModernControlVisualStyles.GroupBoxCaptionGap,
+                        deviceDpi);
+                expectedInsets = new Padding(
+                    padding.Left,
+                    padding.Top + top,
+                    padding.Right,
+                    padding.Bottom);
+                break;
+            }
+
+            case FlatStyle.Flat:
+            {
+                // Content clears the descenders below the baseline border line, and sits just
+                // inside the border on the other sides.
+                (int ascent, int descent) = control.ModernCaptionMetrics;
+                int leeway = ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxFlatBaselineLeeway,
+                    deviceDpi);
+                int borderInset = control.ModernBorderThickness + leeway;
+                expectedInsets = new Padding(
+                    padding.Left + borderInset,
+                    padding.Top + ascent + descent + leeway,
+                    padding.Right + borderInset,
+                    padding.Bottom + borderInset);
+                break;
+            }
+
+            case FlatStyle.Popup:
+            {
+                // Content is flush to the header rectangle (0 top gap) with a 2px inset elsewhere.
+                int headerHeight = captionFont.Height
+                    + (2 * ScaleHelper.ScaleToDpi(
+                        ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                        deviceDpi));
+                int inset = ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxPopupContentInset,
+                    deviceDpi);
+                expectedInsets = new Padding(
+                    padding.Left + inset,
+                    padding.Top + headerHeight,
+                    padding.Right + inset,
+                    padding.Bottom + inset);
+                break;
+            }
+
+            default:
+                throw new InvalidOperationException();
+        }
+
         Rectangle expected = new(
-            padding.Left + horizontalInset,
-            padding.Top + expectedTop,
-            control.ClientSize.Width - padding.Horizontal - (2 * horizontalInset),
-            control.ClientSize.Height
-                - padding.Vertical
-                - expectedTop
-                - bottomInset);
+            expectedInsets.Left,
+            expectedInsets.Top,
+            control.ClientSize.Width - expectedInsets.Horizontal,
+            control.ClientSize.Height - expectedInsets.Vertical);
 
         Assert.Equal(expected, control.DisplayRectangle);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernStandard_ZeroPaddingDisplayRectangleFillsCard()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Padding = new Padding(0),
+            Size = new Size(200, 100),
+            Text = "Modern group",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        int top = control.ModernCaptionFont.Height
+            + ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.GroupBoxCaptionGap,
+                control.DeviceDpi);
+        Rectangle displayRectangle = control.DisplayRectangle;
+
+        // With Padding = 0 the content area spans the full width and reaches the bottom edge, so a
+        // docked child fills the card surface exactly.
+        Assert.Equal(0, displayRectangle.Left);
+        Assert.Equal(top, displayRectangle.Top);
+        Assert.Equal(control.ClientSize.Width, displayRectangle.Width);
+        Assert.Equal(control.ClientSize.Height, displayRectangle.Bottom);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void GroupBox_ModernVisualStyles_PaddingDoesNotMoveCaptionVertically(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = flatStyle,
+            Padding = new Padding(9, 13, 9, 13),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        // The caption band always starts at the very top of the control regardless of Padding.Top:
+        // DisplayRectangle.Top only differs from a zero-padding control by Padding.Top itself.
+        control.Padding = new Padding(9, 13, 9, 13);
+        int paddedTop = control.DisplayRectangle.Top;
+        control.Padding = new Padding(9, 0, 9, 13);
+        int zeroTopTop = control.DisplayRectangle.Top;
+
+        Assert.Equal(13, paddedTop - zeroTopTop);
     }
 
     [WinFormsTheory]
@@ -424,13 +511,11 @@ public class GroupBoxTests
         Rectangle captionBounds = control.GetStandardCaptionBounds(
             bounds);
 
+        // Padding only shifts the caption horizontally by Padding.Left in LTR (it never insets the
+        // right edge and never moves the caption vertically).
         Assert.Equal(control.Padding.Left, captionBounds.Left);
-        Assert.Equal(
-            bounds.Top + control.Padding.Top,
-            captionBounds.Top);
-        Assert.Equal(
-            bounds.Right - control.Padding.Right,
-            captionBounds.Right);
+        Assert.Equal(bounds.Top, captionBounds.Top);
+        Assert.Equal(bounds.Right, captionBounds.Right);
     }
 
     [WinFormsFact]
@@ -2783,6 +2868,9 @@ public class GroupBoxTests
 
         public int ModernBorderThickness
             => (int)this.TestAccessor.Dynamic.GetModernBorderThickness();
+
+        public (int Ascent, int Descent) ModernCaptionMetrics
+            => ((int, int))this.TestAccessor.Dynamic.GetModernCaptionMetrics();
 
         public Rectangle GetStandardCaptionBounds(Rectangle bounds)
             => (Rectangle)this.TestAccessor.Dynamic.GetStandardCaptionBounds(

@@ -47,11 +47,17 @@ internal static class ModernControlVisualStyles
     /// <summary>Corner radius of the GroupBox rounded frame.</summary>
     internal const int GroupBoxCornerRadius = 8;
 
+    /// <summary>Extra baseline leeway added to the modern flat GroupBox border inset.</summary>
+    internal const int GroupBoxFlatBaselineLeeway = 1;
+
     /// <summary>Horizontal padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderHorizontalPadding = 10;
 
     /// <summary>Vertical padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderVerticalPadding = 5;
+
+    /// <summary>Extra content inset for the modern Popup-style GroupBox, applied on top of the header height.</summary>
+    internal const int GroupBoxPopupContentInset = 2;
 
     /// <summary>
     ///  Inset between a control's border and its content, shared by modern text fields and the up-down
