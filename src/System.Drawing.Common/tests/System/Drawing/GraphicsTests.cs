@@ -3002,5 +3002,44 @@ public partial class GraphicsTests
         graphics.FillRoundedRectangle(Brushes.Green, new RectangleF(0, 0, 10, 10), new(2, 2));
         VerifyBitmapNotEmpty(bitmap);
     }
+
+    [Fact]
+    public void Graphics_DrawRoundedRectangle_ThickPen()
+    {
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using Pen pen = new(Color.Blue, 3);
+        graphics.DrawRoundedRectangle(pen, new RectangleF(0, 0, 20, 20), new(6, 6));
+        VerifyBitmapNotEmpty(bitmap);
+    }
+
+    [Fact]
+    public void Graphics_DrawRoundedRectangle_RestoresRenderingModes()
+    {
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.SmoothingMode = SmoothingMode.None;
+        graphics.PixelOffsetMode = PixelOffsetMode.Half;
+
+        using Pen pen = new(Color.Blue, 3);
+        graphics.DrawRoundedRectangle(pen, new RectangleF(0, 0, 20, 20), new(6, 6));
+
+        graphics.SmoothingMode.Should().Be(SmoothingMode.None);
+        graphics.PixelOffsetMode.Should().Be(PixelOffsetMode.Half);
+    }
+
+    [Fact]
+    public void Graphics_FillRoundedRectangle_RestoresRenderingModes()
+    {
+        using Bitmap bitmap = new(20, 20);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.SmoothingMode = SmoothingMode.None;
+        graphics.PixelOffsetMode = PixelOffsetMode.Half;
+
+        graphics.FillRoundedRectangle(Brushes.Green, new RectangleF(0, 0, 20, 20), new(6, 6));
+
+        graphics.SmoothingMode.Should().Be(SmoothingMode.None);
+        graphics.PixelOffsetMode.Should().Be(PixelOffsetMode.Half);
+    }
 #endif
 }

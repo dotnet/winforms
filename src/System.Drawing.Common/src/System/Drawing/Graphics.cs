@@ -730,9 +730,41 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
     public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF radius)
     {
+        ArgumentNullException.ThrowIfNull(pen);
+
+        // Inset the stroke by half the pen width so the entire border sits inside the requested
+        // bounds on a consistent sub-pixel grid. Combined with high-quality pixel offset and
+        // anti-aliasing this realigns the corner arcs with the straight edges and removes the
+        // artifacts a centered, default-offset stroke would otherwise produce.
+        RectangleF strokeRect = rect;
+        SizeF strokeRadius = radius;
+
+        if (rect.Width > pen.Width && rect.Height > pen.Width)
+        {
+            float inset = pen.Width / 2f;
+            strokeRect = RectangleF.Inflate(rect, -inset, -inset);
+            strokeRadius = new(
+                Math.Max(0f, radius.Width - inset),
+                Math.Max(0f, radius.Height - inset));
+        }
+
         using GraphicsPath path = new();
-        path.AddRoundedRectangle(rect, radius);
-        DrawPath(pen, path);
+        path.AddRoundedRectangle(strokeRect, strokeRadius);
+
+        Drawing2D.SmoothingMode previousSmoothingMode = this.SmoothingMode;
+        PixelOffsetMode previousPixelOffsetMode = this.PixelOffsetMode;
+
+        try
+        {
+            this.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias;
+            this.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            DrawPath(pen, path);
+        }
+        finally
+        {
+            this.SmoothingMode = previousSmoothingMode;
+            this.PixelOffsetMode = previousPixelOffsetMode;
+        }
     }
 #endif
 
@@ -1204,9 +1236,28 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
     public void FillRoundedRectangle(Brush brush, RectangleF rect, SizeF radius)
     {
+        ArgumentNullException.ThrowIfNull(brush);
+
         using GraphicsPath path = new();
         path.AddRoundedRectangle(rect, radius);
-        FillPath(brush, path);
+
+        // Anti-aliasing plus high-quality pixel offset gives the filled corners the same crisp,
+        // uniform edge as the straight sides instead of the softer, offset arcs the default
+        // rendering mode produces.
+        Drawing2D.SmoothingMode previousSmoothingMode = this.SmoothingMode;
+        PixelOffsetMode previousPixelOffsetMode = this.PixelOffsetMode;
+
+        try
+        {
+            this.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias;
+            this.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            FillPath(brush, path);
+        }
+        finally
+        {
+            this.SmoothingMode = previousSmoothingMode;
+            this.PixelOffsetMode = previousPixelOffsetMode;
+        }
     }
 #endif
 
