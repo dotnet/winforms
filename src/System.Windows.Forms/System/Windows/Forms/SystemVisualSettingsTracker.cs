@@ -83,7 +83,7 @@ internal static class SystemVisualSettingsTracker
 
         if (oldSettings.ClientAreaAnimationEnabled != newSettings.ClientAreaAnimationEnabled)
         {
-            changed |= SystemVisualSettingsCategories.Animations;
+            changed |= SystemVisualSettingsCategories.ClientAreaAnimations;
         }
 
         if (oldSettings.KeyboardCuesVisible != newSettings.KeyboardCuesVisible)

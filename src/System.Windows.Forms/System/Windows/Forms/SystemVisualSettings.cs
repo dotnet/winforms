@@ -109,7 +109,7 @@ public enum SystemVisualSettingsCategories
     /// <summary>
     ///  The Windows client-area animation setting changed.
     /// </summary>
-    Animations = 1 << 3,
+    ClientAreaAnimations = 1 << 3,
 
     /// <summary>
     ///  The Windows keyboard-cue default changed.
