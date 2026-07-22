@@ -34,7 +34,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
 
-        using SuspendPaintingScope scope = control.SuspendPainting();
+        using IDisposable scope = control.SuspendPainting();
 
         Assert.False(control.IsHandleCreated);
     }
@@ -44,7 +44,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
 
-        SuspendPaintingScope scope = control.SuspendPainting();
+        IDisposable scope = control.SuspendPainting();
         scope.Dispose();
         scope.Dispose();
 
@@ -56,7 +56,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
 
-        using SuspendPaintingScope scope = control.SuspendPainting();
+        using IDisposable scope = control.SuspendPainting();
         await Task.Yield();
 
         Assert.False(control.IsHandleCreated);
@@ -67,7 +67,7 @@ public partial class ControlTests
     {
         using RedrawTrackingControl control = new();
 
-        SuspendPaintingScope scope = control.SuspendPainting();
+        IDisposable scope = control.SuspendPainting();
         Assert.True(control.IsUpdating());
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal([false], control.RedrawStates);
@@ -84,7 +84,7 @@ public partial class ControlTests
         using RedrawTrackingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-        SuspendPaintingScope scope = control.SuspendPainting();
+        IDisposable scope = control.SuspendPainting();
         control.RedrawStates.Clear();
         control.RecreateHandle();
 
@@ -98,24 +98,24 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
-    public void Control_SuspendPainting_WithNone_DoesNotSuspendLayout()
+    public void Control_SuspendPainting_Parameterless_DoesNotSuspendLayout()
     {
         using SubControl control = new();
 
-        using SuspendPaintingScope scope = control.SuspendPainting(LayoutSuspendTraversal.None);
+        using IDisposable scope = control.SuspendPainting();
 
         Assert.Equal((byte)0, control.LayoutSuspendCount);
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsFact]
-    public void Control_SuspendPainting_WithTopLevelOnly_SuspendsOnlyTargetLayout()
+    public void Control_SuspendPainting_WithTargetOnly_SuspendsOnlyTargetLayout()
     {
         using SubControl control = new();
         using Control child = new();
         control.Controls.Add(child);
 
-        SuspendPaintingScope scope = control.SuspendPainting(LayoutSuspendTraversal.TopLevelOnly);
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
 
         Assert.Equal((byte)1, control.LayoutSuspendCount);
         Assert.Equal((byte)0, child.LayoutSuspendCount);
@@ -129,7 +129,7 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
-    public void Control_SuspendPainting_WithTraverse_SuspendsEntireTreeLayout()
+    public void Control_SuspendPainting_WithTargetAndDescendants_SuspendsEntireTreeLayout()
     {
         using SubControl control = new();
         using Control child = new();
@@ -137,11 +137,36 @@ public partial class ControlTests
         control.Controls.Add(child);
         child.Controls.Add(grandchild);
 
-        SuspendPaintingScope scope = control.SuspendPainting(LayoutSuspendTraversal.Traverse);
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndDescendants);
 
         Assert.Equal((byte)1, control.LayoutSuspendCount);
         Assert.Equal((byte)1, child.LayoutSuspendCount);
         Assert.Equal((byte)1, grandchild.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+        Assert.False(child.IsHandleCreated);
+        Assert.False(grandchild.IsHandleCreated);
+
+        scope.Dispose();
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithTargetAndChildren_SuspendsTargetAndImmediateChildrenLayout()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        using Control grandchild = new();
+        control.Controls.Add(child);
+        child.Controls.Add(grandchild);
+
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndChildren);
+
+        Assert.Equal((byte)1, control.LayoutSuspendCount);
+        Assert.Equal((byte)1, child.LayoutSuspendCount);
+        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
         Assert.False(control.IsHandleCreated);
         Assert.False(child.IsHandleCreated);
         Assert.False(grandchild.IsHandleCreated);
@@ -163,7 +188,7 @@ public partial class ControlTests
         child.Controls.Add(grandchild);
         List<Control> visitedControls = [];
 
-        SuspendPaintingScope scope = control.SuspendPainting(candidate =>
+        IDisposable scope = control.SuspendPainting(candidate =>
         {
             visitedControls.Add(candidate);
             return candidate != child;
@@ -189,8 +214,8 @@ public partial class ControlTests
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
 
-        SuspendPaintingScope outerScope = control.SuspendPainting(LayoutSuspendTraversal.TopLevelOnly);
-        SuspendPaintingScope innerScope = control.SuspendPainting(LayoutSuspendTraversal.TopLevelOnly);
+        IDisposable outerScope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
+        IDisposable innerScope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
 
         Assert.Equal((byte)2, control.LayoutSuspendCount);
         Assert.Equal([false], control.RedrawStates);
@@ -221,7 +246,7 @@ public partial class ControlTests
         child.Layout += (sender, e) => events.Add("child-layout");
         control.Invalidated += (sender, e) => events.Add("parent-invalidated");
 
-        SuspendPaintingScope scope = control.SuspendPainting(LayoutSuspendTraversal.Traverse);
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndDescendants);
         control.PerformLayout();
         child.PerformLayout();
 
@@ -326,7 +351,7 @@ public partial class ControlTests
             ThrowOnBegin = false
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        SuspendPaintingScope outerScope = control.SuspendPainting();
+        IDisposable outerScope = control.SuspendPainting();
         control.ThrowOnBegin = true;
         control.CallBaseBeforeThrow = false;
 
@@ -345,7 +370,7 @@ public partial class ControlTests
     {
         using ThrowingLayoutResumingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        SuspendPaintingScope scope = control.SuspendPainting(LayoutSuspendTraversal.TopLevelOnly);
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
         control.ThrowOnLayoutResuming = true;
 
         Assert.Throws<InvalidOperationException>(() => scope.Dispose());

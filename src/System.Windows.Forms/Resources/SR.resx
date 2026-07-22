@@ -3340,6 +3340,9 @@ Do you want to replace it?</value>
   <data name="FormFormRevealModeDescr" xml:space="preserve">
     <value>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</value>
   </data>
+  <data name="FormOnFormRevealModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the effective value of the FormRevealMode property changes.</value>
+  </data>
   <data name="FormTransparencyKeyDescr" xml:space="preserve">
     <value>A color which will appear transparent when painted on the form.</value>
   </data>
