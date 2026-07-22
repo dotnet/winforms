@@ -107,5 +107,34 @@ public partial class FormTests
         form.FormRevealMode = FormRevealMode.Classic;
         Assert.Equal(1, callCount);
     }
+
+    [WinFormsFact]
+    public void Form_FormRevealMode_Deferred_ShowDoesNotRemainCloaked()
+    {
+        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
+
+        try
+        {
+            Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
+
+            using SubForm form = new();
+            Assert.Equal(FormRevealMode.Deferred, form.FormRevealMode);
+
+            form.Show();
+
+            // A deferred form is cloaked while it paints its first frame and is revealed from the
+            // posted OnShown callback; pump the message queue so that reveal runs. Regardless of
+            // whether the DWM cloak actually engaged in this environment, the form must never be
+            // left cloaked once shown.
+            Application.DoEvents();
+
+            Assert.True(form.Visible);
+            Assert.False(form.DeferredAppearanceCloaked);
+        }
+        finally
+        {
+            Application.SetDefaultFormRevealMode(originalDefault);
+        }
+    }
 #endif
 }
