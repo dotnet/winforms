@@ -3803,6 +3803,12 @@ public partial class Form : ContainerControl
     private void CallShownEvent()
     {
         OnShown(EventArgs.Empty);
+#if NET11_0_OR_GREATER
+        // Primary deferred-reveal trigger: OnShown is a guaranteed one-shot for a shown top-level
+        // form and runs before the first natural WM_PAINT, so revealing here shows the fully painted
+        // window tree at once rather than mid-paint.
+        RevealDeferredAppearance();
+#endif
     }
 
     /// <summary>
@@ -7188,7 +7194,10 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_PAINT:
                 base.WndProc(ref m);
 #if NET11_0_OR_GREATER
-                UncloakDeferredAppearanceIfNeeded();
+                // Fallback deferred-reveal trigger. RevealDeferredAppearance is idempotent and forces
+                // a full-tree paint before uncloaking, so even if OnShown was delayed the window is
+                // never revealed mid-paint and never stays stuck cloaked.
+                RevealDeferredAppearance();
 #endif
                 break;
 
