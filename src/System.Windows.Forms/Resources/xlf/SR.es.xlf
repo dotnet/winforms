@@ -5555,6 +5555,11 @@ Do you want to replace it?</source>
         <target state="translated">Tiene lugar cuando el usuario cierra el formulario, antes de cerrarlo, y especifica el motivo del cierre.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Tiene lugar cuando el lenguaje de entrada utilizado para este formulario cambia.</target>

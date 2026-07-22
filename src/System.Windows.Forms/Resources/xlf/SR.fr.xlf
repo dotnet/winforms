@@ -5555,6 +5555,11 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Se produit lorsque l'utilisateur ferme le formulaire, avant la fermeture du formulaire et donne la raison de cette fermeture.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Se produit lorsque le langage utilisé pour les entrées de ce formulaire change.</target>

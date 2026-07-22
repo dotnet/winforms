@@ -5555,6 +5555,11 @@ Do you want to replace it?</source>
         <target state="translated">Возникает при каждом завершении работы с формой до того, как форма была закрыта, и определяет причины этого закрытия.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Происходит при каждом изменении языка, используемого для заполнения этой формы.</target>
