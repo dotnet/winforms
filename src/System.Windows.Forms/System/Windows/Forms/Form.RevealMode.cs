@@ -12,6 +12,10 @@ public partial class Form
     private static readonly int s_propFormRevealMode = PropertyStore.CreateKey();
     private static readonly object s_formRevealModeChangedEvent = new();
 
+    // Guards RevealDeferredAppearance against re-entrancy: its forced RDW_UPDATENOW repaint can
+    // dispatch WM_PAINT synchronously, and the form's WM_PAINT handler also calls the reveal.
+    private bool _isRevealingDeferredAppearance;
+
     /// <summary>
     ///  Gets or sets how this form is presented while its initial appearance is prepared.
     /// </summary>
@@ -94,7 +98,7 @@ public partial class Form
 
     private void ResetFormRevealMode() => Properties.RemoveValue(s_propFormRevealMode);
 
-    private bool DeferredAppearanceCloaked
+    internal bool DeferredAppearanceCloaked
     {
         get => Properties.GetValueOrDefault(s_propFormAppearanceCloaked, false);
         set => Properties.AddOrRemoveValue(s_propFormAppearanceCloaked, value, defaultValue: false);
@@ -123,6 +127,56 @@ public partial class Form
         if (SetDwmCloak(cloaked: false))
         {
             DeferredAppearanceCloaked = false;
+        }
+    }
+
+    /// <summary>
+    ///  Reveals a form that was cloaked for deferred appearance, once its entire control tree has
+    ///  painted its first frame.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The window is cloaked from <see cref="OnHandleCreated"/> while still hidden and shown while
+    ///   cloaked, so nothing reaches the screen yet. Simply uncloaking on the form's own first
+    ///   <c>WM_PAINT</c> would reveal the window before its child controls — each a separate window —
+    ///   have painted, leaving a residual flash of controls popping in. This forces a synchronous
+    ///   paint of the whole tree (<see cref="REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN"/> plus
+    ///   <see cref="REDRAW_WINDOW_FLAGS.RDW_UPDATENOW"/>) into the still-cloaked redirection surface,
+    ///   then uncloaks, so the finished first frame appears at once. It is a no-op once the form has
+    ///   already been revealed (or was never cloaked), so it is safe to call from more than one hook.
+    ///  </para>
+    ///  <para>
+    ///   <see cref="REDRAW_WINDOW_FLAGS.RDW_UPDATENOW"/> dispatches <c>WM_PAINT</c> synchronously, and
+    ///   one of this method's callers is the form's own <c>WM_PAINT</c> handler, so a re-entrancy guard
+    ///   prevents the forced repaint from recursively re-entering the reveal before the cloak clears.
+    ///  </para>
+    /// </remarks>
+    private void RevealDeferredAppearance()
+    {
+        if (!DeferredAppearanceCloaked || _isRevealingDeferredAppearance)
+        {
+            return;
+        }
+
+        _isRevealingDeferredAppearance = true;
+        try
+        {
+            // Flush the first-frame paint for the form and its entire child tree into the still-cloaked
+            // redirection surface before revealing, so the finished frame appears in one step.
+            PInvoke.RedrawWindow(
+                this,
+                lprcUpdate: null,
+                HRGN.Null,
+                REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                    | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                    | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN
+                    | REDRAW_WINDOW_FLAGS.RDW_UPDATENOW);
+
+            UncloakDeferredAppearanceIfNeeded();
+        }
+        finally
+        {
+            _isRevealingDeferredAppearance = false;
         }
     }
 
