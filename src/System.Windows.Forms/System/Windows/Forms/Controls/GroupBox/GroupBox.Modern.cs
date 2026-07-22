@@ -157,10 +157,46 @@ public partial class GroupBox
 
         using var surfaceBrush = surfaceColor.GetCachedSolidBrushScope();
         e.Graphics.FillRectangle(surfaceBrush, frameBounds);
+
+        // The modern card fills an opaque surface over the whole body, which would hide a
+        // BackgroundImage painted by OnPaintBackground. Composite the image back over the surface
+        // so it remains visible (issue #14779).
+        PaintModernBackgroundImage(e, frameBounds);
+
         DrawModernCaption(
             e.Graphics,
             captionBounds,
             GetCaptionColor(effectiveBackColor));
+    }
+
+    /// <summary>
+    ///  Composites the control's <see cref="Control.BackgroundImage"/> over an already-painted
+    ///  modern surface, clipped to <paramref name="clipBounds"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The modern GroupBox renderers fill an opaque body surface that would otherwise hide the
+    ///   BackgroundImage that <see cref="Control.OnPaintBackground"/> painted. Using a transparent
+    ///   back color keeps the surface visible around a non-tiling image layout while restoring the
+    ///   image itself.
+    ///  </para>
+    /// </remarks>
+    private void PaintModernBackgroundImage(PaintEventArgs e, Rectangle clipBounds)
+    {
+        if (BackgroundImage is null || clipBounds.Width <= 0 || clipBounds.Height <= 0)
+        {
+            return;
+        }
+
+        ControlPaint.DrawBackgroundImage(
+            e.Graphics,
+            BackgroundImage,
+            Color.Transparent,
+            BackgroundImageLayout,
+            ClientRectangle,
+            clipBounds,
+            DisplayRectangle.Location,
+            RightToLeft);
     }
 
     private void DrawModernOutline(PaintEventArgs e, Rectangle bounds)
@@ -240,6 +276,15 @@ public partial class GroupBox
         using (var bodyBrush = bodyColor.GetCachedSolidBrushScope())
         {
             e.Graphics.FillPath(bodyBrush, path);
+        }
+
+        // Composite the BackgroundImage over the opaque body fill, clipped to the rounded frame,
+        // so it stays visible under the modern Popup surface (issue #14779).
+        if (BackgroundImage is not null)
+        {
+            using GraphicsStateScope imageState = new(e.Graphics);
+            e.Graphics.SetClip(path);
+            PaintModernBackgroundImage(e, bounds);
         }
 
         using (GraphicsStateScope state = new(e.Graphics))
