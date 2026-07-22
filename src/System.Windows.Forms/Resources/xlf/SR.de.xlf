@@ -5550,6 +5550,11 @@ Möchten Sie den Pfad ersetzen?</target>
         <target state="translated">Tritt ein, wenn der Benutzer das Formular schließt, bevor das Formular geschlossen wurde, und den Grund für das Schließen angibt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Tritt ein, wenn sich die Eingabesprache für dieses Formular ändert.</target>

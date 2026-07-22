@@ -5550,6 +5550,11 @@ Sostituirlo?</target>
         <target state="translated">Generato prima della chiusura del form da parte dell'utente. Specifica il motivo della chiusura.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Generato quando la lingua per l'immissione di dati nel form viene modificata.</target>

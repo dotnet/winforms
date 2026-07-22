@@ -5550,6 +5550,11 @@ Czy chcesz zastąpić?</target>
         <target state="translated">Występuje przy każdym zamknięciu formularza przez użytkownika przed zamknięciem formularza i określa przyczynę zamknięcia.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
         <source>Occurs whenever the language used for input for this form changes.</source>
         <target state="translated">Występuje za każdym razem, gdy zostanie zmieniony język, w którym wypełniany jest formularz.</target>
