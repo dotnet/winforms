@@ -72,32 +72,99 @@ public partial class GroupBox
 
     private Padding GetModernDecorationPadding()
     {
-        int horizontalInset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentHorizontalInset);
-        int topInset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentTopInset);
-        int bottomInset = FlatStyle == FlatStyle.Standard
-            ? ScaleModernMetric(
-                ModernControlVisualStyles.GroupBoxContentBottomInset)
-            : topInset;
         int captionHeight = ModernCaptionFont.Height;
-        int top = FlatStyle switch
-        {
-            FlatStyle.Standard => captionHeight
-                + ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap)
-                + topInset,
-            FlatStyle.Flat => captionHeight + topInset,
-            FlatStyle.Popup => captionHeight
-                + (2 * ScaleModernMetric(ModernControlVisualStyles.GroupBoxHeaderVerticalPadding))
-                + topInset,
-            _ => captionHeight + topInset
-        };
 
-        return new Padding(
-            left: Padding.Left + horizontalInset,
-            top: Padding.Top + top,
-            right: Padding.Right + horizontalInset,
-            bottom: Padding.Bottom + bottomInset);
+        switch (FlatStyle)
+        {
+            case FlatStyle.Standard:
+            {
+                // Card: reserve the caption band plus its visual gap to the card. No internal
+                // horizontal or bottom inset, so a docked child with Padding = 0 fills the card.
+                int gap = ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap);
+
+                return new Padding(
+                    left: Padding.Left,
+                    top: Padding.Top + captionHeight + gap,
+                    right: Padding.Right,
+                    bottom: Padding.Bottom);
+            }
+
+            case FlatStyle.Flat:
+            {
+                // Outline: the top border line runs along the caption baseline, so content clears
+                // the descenders that hang below it (descent + 1px leeway). Left/right/bottom sit
+                // just inside the border.
+                (int ascent, int descent) = GetModernCaptionMetrics();
+                int leeway = ScaleModernMetric(
+                    ModernControlVisualStyles.GroupBoxFlatBaselineLeeway);
+                int borderInset = GetModernBorderThickness() + leeway;
+
+                return new Padding(
+                    left: Padding.Left + borderInset,
+                    top: Padding.Top + ascent + descent + leeway,
+                    right: Padding.Right + borderInset,
+                    bottom: Padding.Bottom + borderInset);
+            }
+
+            case FlatStyle.Popup:
+            {
+                // Accent header: content is flush to the bottom of the filled header rectangle
+                // (0 top gap) with a 2px inset on the remaining sides.
+                int verticalPadding = ScaleModernMetric(
+                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding);
+                int headerHeight = captionHeight + (2 * verticalPadding);
+                int inset = ScaleModernMetric(
+                    ModernControlVisualStyles.GroupBoxPopupContentInset);
+
+                return new Padding(
+                    left: Padding.Left + inset,
+                    top: Padding.Top + headerHeight,
+                    right: Padding.Right + inset,
+                    bottom: Padding.Bottom + inset);
+            }
+
+            default:
+            {
+                int gap = ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap);
+
+                return new Padding(
+                    left: Padding.Left,
+                    top: Padding.Top + captionHeight + gap,
+                    right: Padding.Right,
+                    bottom: Padding.Bottom);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Returns the modern caption font's ascent and descent in device pixels.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The values are derived from the font family's design metrics (cell ascent/descent scaled
+    ///   against the line spacing) applied to the caption font's device-pixel line height, so they
+    ///   track the current DPI and text-scale factor.
+    ///  </para>
+    /// </remarks>
+    private (int Ascent, int Descent) GetModernCaptionMetrics()
+    {
+        Font font = ModernCaptionFont;
+        FontFamily family = font.FontFamily;
+        FontStyle style = font.Style;
+
+        int lineSpacingDesignUnits = family.GetLineSpacing(style);
+        if (lineSpacingDesignUnits <= 0)
+        {
+            return (font.Height, 0);
+        }
+
+        float lineHeightPixels = font.GetHeight(DeviceDpiInternal);
+        int ascent = (int)Math.Ceiling(
+            lineHeightPixels * family.GetCellAscent(style) / lineSpacingDesignUnits);
+        int descent = (int)Math.Ceiling(
+            lineHeightPixels * family.GetCellDescent(style) / lineSpacingDesignUnits);
+
+        return (ascent, descent);
     }
 
     private void DrawModernGroupBox(PaintEventArgs e)
@@ -202,18 +269,30 @@ public partial class GroupBox
     private void DrawModernOutline(PaintEventArgs e, Rectangle bounds)
     {
         int captionHeight = ModernCaptionFont.Height;
-        int inset = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxContentHorizontalInset);
+        (int ascent, _) = GetModernCaptionMetrics();
+        int cornerRadius = ScaleModernMetric(
+            ModernControlVisualStyles.GroupBoxCornerRadius);
+
+        // The top border line runs along the caption text baseline.
+        int baseline = bounds.Top + ascent;
         Rectangle frameBounds = new(
             bounds.Left,
-            bounds.Top + (captionHeight / 2),
+            baseline,
             bounds.Width,
-            Math.Max(0, bounds.Height - (captionHeight / 2)));
+            Math.Max(0, bounds.Bottom - baseline));
+
+        // The caption is indented by the corner radius so it clears the rounded corner. Padding
+        // does not move the Flat caption. In RTL the indent is applied on the right.
+        bool rightToLeft = RightToLeft == RightToLeft.Yes;
+        int captionX = rightToLeft
+            ? bounds.Left
+            : bounds.Left + cornerRadius;
         Rectangle captionBounds = new(
-            bounds.Left + inset,
+            captionX,
             bounds.Top,
-            Math.Max(0, bounds.Width - (2 * inset)),
+            Math.Max(0, bounds.Width - cornerRadius),
             captionHeight);
+
         Color effectiveBackColor = DisabledColor;
         Color borderColor = Application.SystemVisualSettings.AccentColor;
         if (!Enabled)
@@ -252,10 +331,16 @@ public partial class GroupBox
             bounds.Top,
             bounds.Width,
             Math.Min(bounds.Height, headerHeight));
+
+        // Caption uses the same alignment rule as Standard: shifted by Padding.Left (LTR) /
+        // Padding.Right (RTL) on top of the header's own horizontal padding.
+        bool rightToLeft = RightToLeft == RightToLeft.Yes;
+        int leftBase = horizontalPadding + (rightToLeft ? 0 : Padding.Left);
+        int rightBase = horizontalPadding + (rightToLeft ? Padding.Right : 0);
         Rectangle captionBounds = new(
-            bounds.Left + horizontalPadding,
+            bounds.Left + leftBase,
             bounds.Top + verticalPadding,
-            Math.Max(0, bounds.Width - (2 * horizontalPadding)),
+            Math.Max(0, bounds.Width - leftBase - rightBase),
             ModernCaptionFont.Height);
 
         Color bodyColor = BackColor.A == 0
@@ -367,11 +452,19 @@ public partial class GroupBox
     private Rectangle GetStandardCaptionBounds(
         Rectangle bounds,
         int captionHeight)
-        => new(
-            bounds.Left + Padding.Left,
-            bounds.Top + Padding.Top,
-            Math.Max(0, bounds.Width - Padding.Horizontal),
+    {
+        // Padding only shifts the caption horizontally: right by Padding.Left in LTR, left by
+        // Padding.Right in RTL. It never moves the caption vertically.
+        bool rightToLeft = RightToLeft == RightToLeft.Yes;
+        int leftOffset = rightToLeft ? 0 : Padding.Left;
+        int rightOffset = rightToLeft ? Padding.Right : 0;
+
+        return new Rectangle(
+            bounds.Left + leftOffset,
+            bounds.Top,
+            Math.Max(0, bounds.Width - leftOffset - rightOffset),
             captionHeight);
+    }
 
     private Font CreateModernCaptionFont(float textScale)
     {
