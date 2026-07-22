@@ -170,7 +170,7 @@ internal abstract class AnimatedControlRenderer : IDisposable
             InvalidateAccentColor();
         }
 
-        if ((e.Changed & SystemVisualSettingsCategories.Animations) != 0
+        if ((e.Changed & SystemVisualSettingsCategories.ClientAreaAnimations) != 0
             && !e.NewSettings.ClientAreaAnimationEnabled
             && IsRunning)
         {
