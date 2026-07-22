@@ -69,7 +69,7 @@ public class SystemVisualSettingsTests
             SystemVisualSettingsCategories.AccentColor
                 | SystemVisualSettingsCategories.TextScale
                 | SystemVisualSettingsCategories.HighContrast
-                | SystemVisualSettingsCategories.Animations
+                | SystemVisualSettingsCategories.ClientAreaAnimations
                 | SystemVisualSettingsCategories.KeyboardCues
                 | SystemVisualSettingsCategories.FocusMetrics,
             changed);
@@ -223,7 +223,7 @@ public class SystemVisualSettingsTests
             {
                 Assert.Null(sender);
                 Assert.Equal(
-                    SystemVisualSettingsCategories.HighContrast | SystemVisualSettingsCategories.Animations,
+                    SystemVisualSettingsCategories.HighContrast | SystemVisualSettingsCategories.ClientAreaAnimations,
                     e.Changed);
                 applicationCallCount++;
             };

@@ -10,7 +10,7 @@ System.Windows.Forms.SystemVisualSettings.KeyboardCuesVisible.get -> bool
 System.Windows.Forms.SystemVisualSettings.TextScaleFactor.get -> float
 System.Windows.Forms.SystemVisualSettings
 System.Windows.Forms.SystemVisualSettingsCategories.AccentColor = 1 -> System.Windows.Forms.SystemVisualSettingsCategories
-System.Windows.Forms.SystemVisualSettingsCategories.Animations = 8 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.ClientAreaAnimations = 8 -> System.Windows.Forms.SystemVisualSettingsCategories
 System.Windows.Forms.SystemVisualSettingsCategories.FocusMetrics = 32 -> System.Windows.Forms.SystemVisualSettingsCategories
 System.Windows.Forms.SystemVisualSettingsCategories.HighContrast = 4 -> System.Windows.Forms.SystemVisualSettingsCategories
 System.Windows.Forms.SystemVisualSettingsCategories.KeyboardCues = 16 -> System.Windows.Forms.SystemVisualSettingsCategories
