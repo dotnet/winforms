@@ -319,7 +319,7 @@ public partial class TextBoxBaseTests
             new SystemVisualSettingsChangedEventArgs(
                 oldSettings,
                 newSettings,
-                SystemVisualSettingsCategories.AccentColor | SystemVisualSettingsCategories.Animations));
+                SystemVisualSettingsCategories.AccentColor | SystemVisualSettingsCategories.ClientAreaAnimations));
 
         Assert.Equal(0, layoutCallCount);
     }
