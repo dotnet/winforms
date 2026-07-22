@@ -10,17 +10,16 @@ namespace System.Windows.Forms;
 public enum LayoutSuspendTraversal
 {
     /// <summary>
-    ///  Suspends layout for the target control only. The target does not re-lay-out its own children
-    ///  while the scope is active; a nested container child can still perform its own layout.
+    ///  Does not suspend layout. Painting is still suspended; use this value (or the parameterless
+    ///  <see cref="ControlMutationExtensions.SuspendPainting(ISupportSuspendPainting)"/> overload) when
+    ///  no layout suspension is wanted.
     /// </summary>
-    TargetOnly = 0,
+    None = 0,
 
     /// <summary>
-    ///  Suspends layout for the target control and each of its immediate child controls. Because a
-    ///  container suspends the layout of its own children, this additionally holds the layout of the
-    ///  target's grandchildren, but not of any deeper descendants.
+    ///  Suspends layout for the target control only.
     /// </summary>
-    TargetAndChildren = 1,
+    TargetOnly = 1,
 
     /// <summary>
     ///  Suspends layout for the target control and every control in its subtree.

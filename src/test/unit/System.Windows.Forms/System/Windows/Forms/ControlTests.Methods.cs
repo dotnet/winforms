@@ -154,28 +154,17 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
-    public void Control_SuspendPainting_WithTargetAndChildren_SuspendsTargetAndImmediateChildrenLayout()
+    public void Control_SuspendPainting_WithNone_DoesNotSuspendLayout()
     {
         using SubControl control = new();
         using Control child = new();
-        using Control grandchild = new();
         control.Controls.Add(child);
-        child.Controls.Add(grandchild);
 
-        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndChildren);
-
-        Assert.Equal((byte)1, control.LayoutSuspendCount);
-        Assert.Equal((byte)1, child.LayoutSuspendCount);
-        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
-        Assert.False(control.IsHandleCreated);
-        Assert.False(child.IsHandleCreated);
-        Assert.False(grandchild.IsHandleCreated);
-
-        scope.Dispose();
+        using IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.None);
 
         Assert.Equal((byte)0, control.LayoutSuspendCount);
         Assert.Equal((byte)0, child.LayoutSuspendCount);
-        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsFact]

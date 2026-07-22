@@ -40,9 +40,9 @@ System.Windows.Forms.ISupportSuspendPainting
 System.Windows.Forms.ISupportSuspendPainting.BeginSuspendPainting() -> void
 System.Windows.Forms.ISupportSuspendPainting.EndSuspendPainting() -> void
 System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.LayoutSuspendTraversal.TargetAndChildren = 1 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.None = 0 -> System.Windows.Forms.LayoutSuspendTraversal
 System.Windows.Forms.LayoutSuspendTraversal.TargetAndDescendants = 2 -> System.Windows.Forms.LayoutSuspendTraversal
-System.Windows.Forms.LayoutSuspendTraversal.TargetOnly = 0 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.TargetOnly = 1 -> System.Windows.Forms.LayoutSuspendTraversal
 static System.Windows.Forms.Application.DefaultFormRevealMode.get -> System.Windows.Forms.FormRevealMode
 static System.Windows.Forms.Application.IsFormRevealDeferred.get -> bool
 static System.Windows.Forms.Application.SetDefaultFormRevealMode(System.Windows.Forms.FormRevealMode mode) -> void
