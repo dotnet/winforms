@@ -2766,7 +2766,7 @@ public abstract partial class TextBoxBase : Control
                 deflatedBounds,
                 cornerRadius,
                 borderThickness,
-                ScaleVisualStylesMetric(VisualStylesFocusBandHeight),
+                focusBandHeight,
                 adornerColor,
                 focusColor);
         }
