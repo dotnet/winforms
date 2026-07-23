@@ -253,6 +253,16 @@ public partial class GroupBox
             GetModernBorderThickness());
         e.Graphics.DrawPath(borderPen, path);
 
+        // The rounded frame is clipped with a non-antialiased region; blend the resulting corner
+        // artifacts into the parent by tracing the parent color just outside the border.
+        int frameRadius = GetModernFrameCornerRadius(bounds);
+        ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            e.Graphics,
+            bounds,
+            new Size(frameRadius, frameRadius),
+            GetModernBorderThickness(),
+            ParentInternal?.BackColor ?? BackColor);
+
         Color captionColor = Enabled
             ? PopupButtonColorMath.GetReadableForeColor(headerColor)
             : ModernControlColorMath.GetDisabledTextColor(
@@ -275,19 +285,32 @@ public partial class GroupBox
         using var pen = borderColor.GetCachedPenScope(
             GetModernBorderThickness());
         graphics.DrawPath(pen, path);
+
+        // The rounded frame is clipped with a non-antialiased region; blend the resulting corner
+        // artifacts into the parent by tracing the parent color just outside the border.
+        int frameRadius = GetModernFrameCornerRadius(bounds);
+        ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            graphics,
+            bounds,
+            new Size(frameRadius, frameRadius),
+            GetModernBorderThickness(),
+            ParentInternal?.BackColor ?? BackColor);
     }
 
     private GraphicsPath CreateModernFramePath(Rectangle bounds)
     {
         GraphicsPath path = new();
-        int radius = Math.Clamp(
-            ScaleModernMetric(ModernControlVisualStyles.GroupBoxCornerRadius),
-            1,
-            Math.Max(1, Math.Min(bounds.Width, bounds.Height)));
+        int radius = GetModernFrameCornerRadius(bounds);
         path.AddRoundedRectangle(bounds, new Size(radius, radius));
 
         return path;
     }
+
+    private int GetModernFrameCornerRadius(Rectangle bounds)
+        => Math.Clamp(
+            ScaleModernMetric(ModernControlVisualStyles.GroupBoxCornerRadius),
+            1,
+            Math.Max(1, Math.Min(bounds.Width, bounds.Height)));
 
     private Color GetCaptionColor(Color backgroundColor)
         => Enabled

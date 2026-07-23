@@ -402,6 +402,18 @@ public partial class ComboBox
             int thickness = GetBorderThickness(comboBox);
             using var pen = borderColor.GetCachedPenScope(thickness);
             graphics.DrawPath(pen, path);
+
+            // The corners are cut out with a non-antialiased region; blend the resulting corner
+            // artifacts into the parent by tracing the parent color just outside the border.
+            int radius = GetFieldCornerRadius(comboBox, bounds);
+            Color parentColor = comboBox.ParentInternal?.BackColor
+                ?? SystemColors.Control;
+            ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                graphics,
+                bounds,
+                new Size(radius, radius),
+                thickness,
+                parentColor);
         }
 
         private static Color GetBorderColor(
@@ -436,7 +448,18 @@ public partial class ComboBox
             Rectangle bounds)
         {
             GraphicsPath path = new();
-            int radius = Math.Clamp(
+            int radius = GetFieldCornerRadius(comboBox, bounds);
+            path.AddRoundedRectangle(
+                bounds,
+                new Size(radius, radius));
+
+            return path;
+        }
+
+        private static int GetFieldCornerRadius(
+            ComboBox comboBox,
+            Rectangle bounds)
+            => Math.Clamp(
                 ScaleHelper.ScaleToDpi(
                     ModernControlVisualStyles.FieldCornerRadius,
                     comboBox.DeviceDpiInternal),
@@ -444,12 +467,6 @@ public partial class ComboBox
                 Math.Max(
                     1,
                     Math.Min(bounds.Width, bounds.Height)));
-            path.AddRoundedRectangle(
-                bounds,
-                new Size(radius, radius));
-
-            return path;
-        }
 
         private static Color GetEffectiveBackColor(ComboBox comboBox)
             => comboBox.BackColor.A == byte.MaxValue
