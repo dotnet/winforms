@@ -141,10 +141,10 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
             if (state == PushButtonState.Pressed)
             {
-                // In pressed state, invert the 3D effect: highlight bottom/right, shadow top/left
-                topLeftOuter = DefaultColors.ShadowColor;       // shadow
-                bottomRightOuter = DefaultColors.HighlightColor; // highlight
-                topLeftInner = DefaultColors.ShadowDarkColor;   // deeper shadow
+                // In pressed state, brighter all borders to simulate the button being pressed.
+                topLeftOuter = DefaultColors.HighlightBrightColor;       // brighter highlight
+                bottomRightOuter = DefaultColors.HighlightBrightColor; // brighter highlight
+                topLeftInner = DefaultColors.HighlightBrightColor;   // deeper shadow
                 bottomRightInner = DefaultColors.HighlightBrightColor; // brighter highlight
             }
             else if (state == PushButtonState.Disabled)
@@ -155,9 +155,17 @@ internal class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 topLeftInner = DefaultColors.DisabledBorderMidColor;
                 bottomRightInner = DefaultColors.DisabledBorderMidColor;
             }
+            else if (state == PushButtonState.Hot)
+            {
+                // In hover state, invert the 3D effect: highlight bottom/right, shadow top/left
+                topLeftOuter = DefaultColors.ShadowColor;       // shadow
+                bottomRightOuter = DefaultColors.HighlightColor; // highlight
+                topLeftInner = DefaultColors.ShadowColor;   // shadow
+                bottomRightInner = DefaultColors.HighlightColor; // highlight
+            }
             else
             {
-                // Normal/hot: highlight top/left, shadow bottom/right
+                // Normal: highlight top/left, shadow bottom/right
                 topLeftOuter = DefaultColors.HighlightColor;     // highlight
                 bottomRightOuter = DefaultColors.ShadowColor;     // shadow
                 topLeftInner = DefaultColors.HighlightBrightColor; // brighter highlight
