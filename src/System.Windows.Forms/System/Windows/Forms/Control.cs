@@ -146,6 +146,7 @@ public unsafe partial class Control :
     private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
+    private static readonly object s_visualStylesModeChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -224,9 +225,14 @@ public unsafe partial class Control :
     private static readonly int s_cacheTextFieldProperty = PropertyStore.CreateKey();
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
+    private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static readonly int s_deviceDpiInternal = PropertyStore.CreateKey();
     private static readonly int s_originalDeviceDpiInternal = PropertyStore.CreateKey();
+#if NET11_0_OR_GREATER
+    private static readonly int s_suspendPaintingCountProperty = PropertyStore.CreateKey();
+#endif
+    private static readonly int s_updateCountProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
 
@@ -268,7 +274,6 @@ public unsafe partial class Control :
     // bits 0-4: BoundsSpecified stored in RequiredScaling property. Bit 5: RequiredScalingEnabled property.
     private byte _requiredScaling;
     private TRACKMOUSEEVENT _trackMouseEvent;
-    private short _updateCount;
     private LayoutEventArgs? _cachedLayoutEventArgs;
     private Queue<ThreadMethodEntry>? _threadCallbackList;
 
@@ -824,6 +829,18 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatData))]
     [Browsable(false)]
     [Bindable(true)]
+    // Note: unlike Font/Cursor (which use [AmbientValue(null)]) or RightToLeft (which uses
+    // [AmbientValue(RightToLeft.Inherit)]), DataContext intentionally has NO [AmbientValue].
+    // [AmbientValue] only matters for the designer's CodeDOM serializer: when it is forced to emit an
+    // otherwise-ambient property (inherited/"difference" forms, member relationships, absolute
+    // serialization), it writes the AmbientValue as the "reset to ambient" sentinel. That only works
+    // when the setter treats that sentinel as "clear the local override." Font does (its setter uses
+    // AddOrRemoveValue, so Font = null re-inherits); RightToLeft does (the getter resolves Inherit to
+    // the parent). DataContext's setter instead stores an explicit null when the parent value differs
+    // (see below), so null would SUPPRESS inheritance rather than restore it - making [AmbientValue(null)]
+    // a leaky, incorrect sentinel. Combined with this property being [Browsable(false)], runtime-oriented,
+    // and typically holding a non-CodeDOM-serializable object, the forced-serialization "bake-in" is a
+    // non-issue, so we deliberately leave it off rather than introduce a setter behavior change.
     public virtual object? DataContext
     {
         get => Properties.TryGetValue(s_dataContextProperty, out object? value)
@@ -855,6 +872,124 @@ public unsafe partial class Control :
 
     private void ResetDataContext()
         => Properties.RemoveValue(s_dataContextProperty);
+
+    /// <summary>
+    ///  Gets or sets how the control renders itself when visual styles are applied. This is an ambient property.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="Forms.VisualStylesMode"/> for the control. When not explicitly set, the value is inherited
+    ///  from the parent control, or, for a top-level control, from <see cref="Application.DefaultVisualStylesMode"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   As an ambient property, a control that does not have its <see cref="VisualStylesMode"/> set explicitly
+    ///   inherits the value from its parent, or, if it has no parent, from
+    ///   <see cref="Application.DefaultVisualStylesMode"/>. Derived controls can override
+    ///   <see cref="DefaultVisualStylesMode"/> to pin themselves to a specific renderer version for backward
+    ///   compatibility (see <see cref="TextBoxBase"/> for an example).
+    ///  </para>
+    /// </remarks>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [AmbientValue(VisualStylesMode.Inherit)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
+    public virtual VisualStylesMode VisualStylesMode
+    {
+        get
+        {
+            if (!Properties.TryGetValue(s_visualStylesModeProperty, out VisualStylesMode value)
+                || value == VisualStylesMode.Inherit)
+            {
+                value = ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
+            }
+
+            return value;
+        }
+        set
+        {
+            // Can't use the source generated enum validator here, since it cannot deal with the
+            // non-contiguous Inherit (-1), LatestPreview (short.MaxValue - 1), and Latest
+            // (short.MaxValue) members.
+            _ = value switch
+            {
+                VisualStylesMode.Inherit => value,
+                VisualStylesMode.Classic => value,
+                VisualStylesMode.Disabled => value,
+                VisualStylesMode.Net11 => value,
+                VisualStylesMode.LatestPreview => value,
+                VisualStylesMode.Latest => value,
+                _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
+            };
+
+            VisualStylesMode oldValue = VisualStylesMode;
+
+            // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
+            // drop any local override so the value is inherited again.
+            if (value == VisualStylesMode.Inherit
+                || (ParentInternal is { } parent && parent.VisualStylesMode == value))
+            {
+                Properties.RemoveValue(s_visualStylesModeProperty);
+            }
+            else
+            {
+                Properties.AddValue(s_visualStylesModeProperty, value);
+            }
+
+            if (oldValue != VisualStylesMode)
+            {
+                OnVisualStylesModeChanged(EventArgs.Empty);
+            }
+        }
+    }
+
+    private bool ShouldSerializeVisualStylesMode()
+        => Properties.ContainsKey(s_visualStylesModeProperty);
+
+    private void ResetVisualStylesMode()
+        => VisualStylesMode = VisualStylesMode.Inherit;
+
+    /// <summary>
+    ///  Gets the <see cref="Forms.VisualStylesMode"/> that controls should actually honor when deciding
+    ///  <see cref="CreateParams"/> or paint behavior, after applying the Windows High Contrast clamp.
+    /// </summary>
+    /// <value>
+    ///  <see cref="VisualStylesMode.Disabled"/> when visual styles are explicitly disabled;
+    ///  <see cref="VisualStylesMode.Classic"/> when Windows High Contrast is active (so custom non-client
+    ///  painting, which does not honor the High Contrast palette, is bypassed); otherwise the raw
+    ///  <see cref="VisualStylesMode"/> value.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   In-box controls <b>MUST</b> read this property, not the raw <see cref="VisualStylesMode"/>, whenever they
+    ///   decide their <see cref="CreateParams"/> or paint behavior. The raw <see cref="VisualStylesMode"/> stays
+    ///   pure so that before/after comparisons across a High Contrast transition remain meaningful; the High
+    ///   Contrast clamp lives here instead.
+    ///  </para>
+    ///  <para>
+    ///   Windows High Contrast can be toggled while the application is running, so this value is <b>not stable</b>
+    ///   across such a transition and <b>must not be cached</b>. Affected controls rebuild their handles on the
+    ///   transition (see <see cref="Form.OnSystemColorsChanged(EventArgs)"/>), which re-reads this value.
+    ///  </para>
+    /// </remarks>
+    private protected VisualStylesMode EffectiveVisualStylesMode
+        => VisualStylesMode is VisualStylesMode.Disabled
+            ? VisualStylesMode.Disabled
+            : SystemInformation.HighContrast
+                ? VisualStylesMode.Classic
+                : VisualStylesMode;
+
+    /// <summary>
+    ///  Gets the default <see cref="Forms.VisualStylesMode"/> for the control, which is ambient to
+    ///  <see cref="Application.DefaultVisualStylesMode"/>.
+    /// </summary>
+    /// <value>The default visual styles mode for the control.</value>
+    /// <remarks>
+    ///  <para>
+    ///   Derived controls can override this property to pin themselves to a specific renderer version when their
+    ///   rendering or layout depends on it, independent of the application-wide default.
+    ///  </para>
+    /// </remarks>
+    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     /// <summary>
     ///  The background color of this control. This is an ambient property and
@@ -3739,6 +3874,19 @@ public unsafe partial class Control :
         remove => Events.RemoveHandler(s_dataContextEvent, value);
     }
 
+    /// <summary>
+    ///  Occurs when the value of the <see cref="VisualStylesMode"/> property changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
+    public event EventHandler? VisualStylesModeChanged
+    {
+        add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_visualStylesModeChangedEvent, value);
+    }
+
     [SRCategory(nameof(SR.CatDragDrop))]
     [SRDescription(nameof(SR.ControlOnDragDropDescr))]
     public event DragEventHandler? DragDrop
@@ -4246,6 +4394,7 @@ public unsafe partial class Control :
             RightToLeft oldRtl = RightToLeft;
             bool oldEnabled = Enabled;
             bool oldVisible = Visible;
+            VisualStylesMode oldVisualStylesMode = VisualStylesMode;
 
             // Update the parent
             _parent = value;
@@ -4289,6 +4438,11 @@ public unsafe partial class Control :
             if (oldRtl != RightToLeft)
             {
                 OnRightToLeftChanged(EventArgs.Empty);
+            }
+
+            if (oldVisualStylesMode != VisualStylesMode)
+            {
+                OnVisualStylesModeChanged(EventArgs.Empty);
             }
 
             if (!Properties.ContainsKey(s_bindingManagerProperty) && Created)
@@ -4374,17 +4528,16 @@ public unsafe partial class Control :
 
     internal void BeginUpdateInternal()
     {
-        if (!IsHandleCreated)
-        {
-            return;
-        }
-
-        if (_updateCount == 0)
+        int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
+        if (updateCount == 0 && IsHandleCreated)
         {
             PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
         }
 
-        _updateCount++;
+        Properties.AddOrRemoveValue(
+            s_updateCountProperty,
+            updateCount + 1,
+            defaultValue: 0);
     }
 
     /// <summary>
@@ -5070,11 +5223,16 @@ public unsafe partial class Control :
 
     internal bool EndUpdateInternal(bool invalidate)
     {
-        if (_updateCount > 0)
+        int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
+        if (updateCount > 0)
         {
-            Debug.Assert(IsHandleCreated, "Handle should be created by now");
-            _updateCount--;
-            if (_updateCount == 0)
+            updateCount--;
+            Properties.AddOrRemoveValue(
+                s_updateCountProperty,
+                updateCount,
+                defaultValue: 0);
+
+            if (updateCount == 0 && IsHandleCreated)
             {
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 if (invalidate)
@@ -5349,7 +5507,8 @@ public unsafe partial class Control :
     ///  by calling "WM_SETREDRAW" even if the control in "Begin - End" update cycle. Using this Function we can guard
     ///  against repetitively redrawing the control.
     /// </summary>
-    internal bool IsUpdating() => _updateCount > 0;
+    internal bool IsUpdating()
+        => Properties.GetValueOrDefault(s_updateCountProperty, 0) > 0;
 
     /// <summary>
     ///  This is a helper method that is called by ScaleControl to retrieve the bounds
@@ -6829,6 +6988,36 @@ public unsafe partial class Control :
         }
     }
 
+    /// <summary>
+    ///  Raises the <see cref="VisualStylesModeChanged"/> event. Inheriting classes should override this method
+    ///  to handle the event, and call <see langword="base"/>.<see cref="OnVisualStylesModeChanged(EventArgs)"/>
+    ///  to forward the event to any registered listeners.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnVisualStylesModeChanged(EventArgs e)
+    {
+        if (GetAnyDisposingInHierarchy())
+        {
+            return;
+        }
+
+        Invalidate();
+
+        if (Events[s_visualStylesModeChangedEvent] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+
+        if (ChildControls is { } children)
+        {
+            for (int i = 0; i < children.Count; i++)
+            {
+                children[i].OnParentVisualStylesModeChanged(e);
+            }
+        }
+    }
+
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnDockChanged(EventArgs e)
     {
@@ -7040,6 +7229,30 @@ public unsafe partial class Control :
 
         // In every other case we're going to raise the event.
         OnDataContextChanged(e);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changes.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
+    {
+        if (Properties.ContainsKey(s_visualStylesModeProperty))
+        {
+            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty) == Parent?.VisualStylesMode)
+            {
+                // Same as the parent value, make it ambient again by removing it.
+                Properties.RemoveValue(s_visualStylesModeProperty);
+            }
+
+            // A local value isolates this subtree from parent changes. If the local value matched the
+            // parent's new value, removing it preserves the effective value while making it ambient again.
+            return;
+        }
+
+        // In every other case we're going to raise the event.
+        OnVisualStylesModeChanged(e);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7406,6 +7619,11 @@ public unsafe partial class Control :
                     hwnd: HWND,
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
+            }
+
+            if (IsUpdating())
+            {
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
             }
         }
 

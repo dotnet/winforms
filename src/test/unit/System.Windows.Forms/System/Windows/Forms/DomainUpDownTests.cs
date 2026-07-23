@@ -29,6 +29,25 @@ public class DomainUpDownTests : IDisposable
     }
 
     [WinFormsFact]
+    public void DomainUpDown_ModernVisualStylesMode_PreferredSizeIncludesButtonGroup()
+    {
+        using DomainUpDown control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            AutoSize = true
+        };
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Size preferredSize = control.GetPreferredSize(Size.Empty);
+        Assert.True(preferredSize.Height >= control.PreferredHeight);
+        Assert.True(preferredSize.Width >= control.LogicalToDeviceUnits(3) * 2 + control.GetModernButtonGroupWidth());
+    }
+
+    [WinFormsFact]
     public void DomainUpDown_Ctor_Default()
     {
         _sub.ActiveControl.Should().BeNull();

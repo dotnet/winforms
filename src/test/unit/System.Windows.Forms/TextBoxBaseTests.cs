@@ -17,6 +17,338 @@ public partial class TextBoxBaseTests
 {
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
+    [WinFormsTheory]
+    [InlineData(typeof(TextBox))]
+    [InlineData(typeof(MaskedTextBox))]
+    [InlineData(typeof(RichTextBox))]
+    public void TextBoxBase_ModernVisualStyles_DrawToBitmapIncludesRoundedChrome(Type controlType)
+    {
+        using Panel parent = new()
+        {
+            BackColor = Color.Red,
+            Size = new Size(160, 80)
+        };
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.BackColor = Color.White;
+        control.BorderStyle = BorderStyle.Fixed3D;
+        control.Size = new Size(140, 50);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+        Assert.NotEqual(Color.Red.ToArgb(), bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesModeChanged_PreservesHandleAndSelection()
+    {
+        using TextBox control = new()
+        {
+            Text = "Visual styles mode refresh",
+            SelectionStart = 8,
+            SelectionLength = 6
+        };
+        control.CreateControl();
+        IntPtr handle = control.Handle;
+
+        control.VisualStylesMode = control.VisualStylesMode == VisualStylesMode.Net11
+            ? VisualStylesMode.Disabled
+            : VisualStylesMode.Net11;
+
+        Assert.Equal(handle, control.Handle);
+        Assert.Equal(8, control.SelectionStart);
+        Assert.Equal(6, control.SelectionLength);
+    }
+
+    [WinFormsTheory]
+    [InlineData(9f)]
+    [InlineData(11f)]
+    public void TextBoxBase_ModernFixed3D_NaturalHeightIncludesRoundedChrome(float fontSize)
+    {
+        using TextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
+
+        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
+        int border = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int inset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+
+        Assert.True(control.PreferredHeight >= cornerSize + border + inset);
+        Assert.Equal(control.PreferredHeight, control.Height);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernFixed3D_ExplicitlySmallControlPreservesHeight()
+    {
+        using TextBox control = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Size = new Size(100, 10)
+        };
+
+        Assert.Equal(10, control.Height);
+        Assert.True(control.PreferredHeight > control.Height);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_ModernFixed3D_NaturalHeightIncludesRoundedChrome()
+    {
+        using MaskedTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Font = new Font(Control.DefaultFont.FontFamily, 9f)
+        };
+
+        int cornerSize = ScaleHelper.ScaleToDpi(12, control.DeviceDpi);
+        Assert.True(control.Height >= cornerSize + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.Fixed3D, 3)]
+    [InlineData(BorderStyle.FixedSingle, 2)]
+    [InlineData(BorderStyle.None, 1)]
+    public void TextBoxBase_ModernGeometry_UsesExpectedBorderPadding(
+        BorderStyle borderStyle,
+        int logicalBorderPadding)
+    {
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        int borderPadding = ScaleHelper.ScaleToDpi(logicalBorderPadding, control.DeviceDpi);
+        int borderThickness = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int internalInset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+        int leftAndTop = borderPadding + internalInset;
+        int rightAndBottom = leftAndTop;
+
+        if (borderStyle != BorderStyle.None)
+        {
+            leftAndTop += borderThickness;
+            rightAndBottom += borderThickness;
+        }
+        else
+        {
+            rightAndBottom += borderThickness;
+        }
+
+        Padding expected = new(
+            left: leftAndTop,
+            top: leftAndTop,
+            right: rightAndBottom,
+            bottom: rightAndBottom);
+
+        Assert.Equal(expected, control.GetVisualStylesPaddingCore(includeScrollbars: false));
+    }
+
+    [Theory]
+    [InlineData(13, 13, 12, 1, true)]
+    [InlineData(12, 13, 12, 1, false)]
+    [InlineData(13, 12, 12, 1, false)]
+    public void TextBoxBase_CanRenderVisualStylesRoundedChrome_RequiresBothDimensions(
+        int width,
+        int height,
+        int cornerSize,
+        int borderThickness,
+        bool expected)
+    {
+        bool actual = TextBoxBase.CanRenderVisualStylesRoundedChrome(
+            new Rectangle(0, 0, width, height),
+            cornerSize,
+            borderThickness);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernGeometry_UsesInternalInsetBeforeUserPadding()
+    {
+        using SubTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Padding baseline = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+        control.Padding = new Padding(1, 2, 3, 4);
+        Padding padded = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.True(baseline.Left >= ScaleHelper.ScaleToDpi(2, control.DeviceDpi));
+        Assert.Equal(baseline.Left + 1, padded.Left);
+        Assert.Equal(baseline.Top + 2, padded.Top);
+        Assert.Equal(baseline.Right + 3, padded.Right);
+        Assert.Equal(baseline.Bottom + 4, padded.Bottom);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernGeometry_ScalesInternalInsetWithDpi()
+    {
+        using SubTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.DeviceDpiInternal = 144;
+
+        Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, 144));
+        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(12, 144)
+            + ScaleHelper.ScaleToDpi(1, 144)
+            + ScaleHelper.ScaleToDpi(2, 144));
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernGeometry_ProtectsActualNativeClient()
+    {
+        using TextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(180, 40)
+        };
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        Rectangle client = Rectangle.Intersect(bounds, control.TestAccessor.Dynamic.GetNativeClientRectangle());
+        Rectangle[] bands = typeof(TextBoxBase).TestAccessor.Dynamic.GetNonClientPaintBands(bounds, client);
+
+        Assert.True(client.Width > 0);
+        Assert.True(client.Height > 0);
+
+        foreach (Rectangle band in bands)
+        {
+            Assert.False(band.IntersectsWith(client));
+        }
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernGeometry_DoesNotDoubleCountScrollbars()
+    {
+        using TextBox withoutScrollBar = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.None
+        };
+        using TextBox withScrollBar = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.Vertical
+        };
+
+        int expected = SystemInformation.GetVerticalScrollBarWidthForDpi(withScrollBar.DeviceDpi);
+        Assert.Equal(expected, withScrollBar.GetPreferredSize(Size.Empty).Width - withoutScrollBar.GetPreferredSize(Size.Empty).Width);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_ModernGeometry_UsesInternalInsetAndNativeScrollbars()
+    {
+        using SubRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            ScrollBars = RichTextBoxScrollBars.Vertical
+        };
+
+        Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: true);
+        Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, control.DeviceDpi));
+        Assert.Equal(
+            SystemInformation.GetVerticalScrollBarWidthForDpi(control.DeviceDpi),
+            control.GetScrollBarPaddingCore().Right);
+    }
+
+    public static IEnumerable<object[]> NonClientPaintBands_TestData()
+    {
+        yield return
+        [
+            new Rectangle(0, 0, 10, 8),
+            new Rectangle(2, 2, 6, 4)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 1, 1),
+            new Rectangle(0, 0, 1, 1)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 2, 2),
+            new Rectangle(1, 1, 0, 0)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 20, 15),
+            new Rectangle(3, 2, 10, 9)
+        ];
+        yield return [Rectangle.Empty, Rectangle.Empty];
+    }
+
+    [Theory]
+    [MemberData(nameof(NonClientPaintBands_TestData))]
+    public void TextBoxBase_GetNonClientPaintBands_ReturnsCompleteNonOverlappingBands(
+        Rectangle bounds,
+        Rectangle clientBounds)
+    {
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+        Rectangle[] bands = accessor.GetNonClientPaintBands(bounds, clientBounds);
+        Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        Assert.Equal(4, bands.Length);
+
+        for (int i = 0; i < bands.Length; i++)
+        {
+            Rectangle band = bands[i];
+
+            if (band.Width <= 0 || band.Height <= 0)
+            {
+                continue;
+            }
+
+            Assert.Equal(band, Rectangle.Intersect(bounds, band));
+            if (protectedBounds.Width > 0 && protectedBounds.Height > 0)
+            {
+                Assert.False(band.IntersectsWith(protectedBounds));
+            }
+
+            for (int j = i + 1; j < bands.Length; j++)
+            {
+                if (bands[j].Width > 0 && bands[j].Height > 0)
+                {
+                    Assert.False(band.IntersectsWith(bands[j]));
+                }
+            }
+        }
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                Point point = new(x, y);
+                bool isProtected = protectedBounds.Contains(point);
+                int containingBands = 0;
+
+                foreach (Rectangle band in bands)
+                {
+                    if (band.Contains(point))
+                    {
+                        containingBands++;
+                    }
+                }
+
+                Assert.Equal(isProtected ? 0 : 1, containingBands);
+            }
+        }
+    }
+
     [WinFormsFact]
     public void TextBoxBase_CreateParams_GetDefault_ReturnsExpected()
     {
@@ -113,6 +445,29 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createParams.Y);
         Assert.Same(createParams, control.CreateParams);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.None)]
+    [InlineData(BorderStyle.Fixed3D)]
+    [InlineData(BorderStyle.FixedSingle)]
+    public void TextBoxBase_CreateParams_ModernVisualStyles_RemovesNativeBorderStyles(BorderStyle borderStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        CreateParams createParams = control.CreateParams;
+
+        Assert.Equal(0, createParams.Style & (int)WINDOW_STYLE.WS_BORDER);
+        Assert.Equal(0, createParams.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
     }
 
     [WinFormsTheory]
@@ -5036,22 +5391,68 @@ public partial class TextBoxBaseTests
 
     [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_TestData))]
-    public void TextBox_GetPreferredSize_InvokeWithPadding_ReturnsExpected(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
+    public void TextBox_GetPreferredSize_InvokeWithPaddingWithoutModernVisualStyles_ReturnsExpected(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
     {
         Padding padding = new(1, 2, 3, 4);
         using SubTextBox control = new()
         {
+            VisualStylesMode = VisualStylesMode.Classic,
             Padding = padding,
             Multiline = multiline,
             WordWrap = wordWrap,
             BorderStyle = borderStyle
         };
-        Assert.Equal(expected + padding.Size, control.GetPreferredSize(proposedSize));
+        Assert.Equal(expected, control.GetPreferredSize(proposedSize));
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        Assert.Equal(expected + padding.Size, control.GetPreferredSize(proposedSize));
+        Assert.Equal(expected, control.GetPreferredSize(proposedSize));
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void TextBoxBase_Padding_WithModernVisualStyles_ChangesPreferredSize(VisualStylesMode visualStylesMode)
+    {
+        Padding padding = new(1, 2, 3, 4);
+        Size proposedSize = new(200, 80);
+
+        using TextBox baseline = new()
+        {
+            VisualStylesMode = visualStylesMode
+        };
+
+        using TextBox padded = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Padding = padding
+        };
+
+        Size baselinePreferredSize = baseline.GetPreferredSize(proposedSize);
+        Size paddedPreferredSize = padded.GetPreferredSize(proposedSize);
+
+        Assert.Equal(baselinePreferredSize.Width + padding.Horizontal, paddedPreferredSize.Width);
+        Assert.Equal(baselinePreferredSize.Height + padding.Vertical, paddedPreferredSize.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void TextBoxBase_Padding_WithModernVisualStyles_ChangesVisualStylesPadding(VisualStylesMode visualStylesMode)
+    {
+        Padding padding = new(1, 2, 3, 4);
+
+        using SubTextBox baseline = new() { VisualStylesMode = visualStylesMode };
+        using SubTextBox padded = new() { VisualStylesMode = visualStylesMode, Padding = padding };
+
+        Padding baselineVisualStylesPadding = baseline.GetVisualStylesPaddingCore(includeScrollbars: false);
+        Padding paddedVisualStylesPadding = padded.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.Equal(baselineVisualStylesPadding.Left + padding.Left, paddedVisualStylesPadding.Left);
+        Assert.Equal(baselineVisualStylesPadding.Top + padding.Top, paddedVisualStylesPadding.Top);
+        Assert.Equal(baselineVisualStylesPadding.Right + padding.Right, paddedVisualStylesPadding.Right);
+        Assert.Equal(baselineVisualStylesPadding.Bottom + padding.Bottom, paddedVisualStylesPadding.Bottom);
     }
 
     public static IEnumerable<object[]> GetPreferredSize_WithText_TestData()
@@ -7718,6 +8119,10 @@ public partial class TextBoxBaseTests
             set => base.FontHeight = value;
         }
 
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => base.GetVisualStylesPadding(includeScrollbars);
+
+        public Padding GetScrollBarPaddingCore() => base.GetScrollBarPadding();
+
         public new ImeMode ImeModeBase
         {
             get => base.ImeModeBase;
@@ -7785,6 +8190,15 @@ public partial class TextBoxBaseTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class SubRichTextBox : RichTextBox
+    {
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars)
+            => base.GetVisualStylesPadding(includeScrollbars);
+
+        public Padding GetScrollBarPaddingCore()
+            => base.GetScrollBarPadding();
     }
 
     private class SubTextBoxBase : TextBoxBase

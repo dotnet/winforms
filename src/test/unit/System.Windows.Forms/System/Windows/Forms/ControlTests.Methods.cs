@@ -15,6 +15,122 @@ namespace System.Windows.Forms.Tests;
 
 public partial class ControlTests
 {
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Control_BeginEndSuspendPainting_InvokeWithoutHandle_Success()
+    {
+        using SubControl control = new();
+        ISupportSuspendPainting suspendPainting = control;
+
+        suspendPainting.BeginSuspendPainting();
+        suspendPainting.EndSuspendPainting();
+        suspendPainting.EndSuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_ScopeDisposes_Success()
+    {
+        using SubControl control = new();
+
+        using SuspendPaintingScope scope = control.SuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_ScopeDispose_IsIdempotent()
+    {
+        using SubControl control = new();
+
+        SuspendPaintingScope scope = control.SuspendPainting();
+        scope.Dispose();
+        scope.Dispose();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public async Task Control_SuspendPainting_ScopeSpansAwait_Success()
+    {
+        using SubControl control = new();
+
+        using SuspendPaintingScope scope = control.SuspendPainting();
+        await Task.Yield();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_HandleCreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+
+        SuspendPaintingScope scope = control.SuspendPainting();
+        Assert.True(control.IsUpdating());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_HandleRecreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        SuspendPaintingScope scope = control.SuspendPainting();
+        control.RedrawStates.Clear();
+        control.RecreateHandle();
+
+        Assert.True(control.IsUpdating());
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_BeginEndSuspendRelocation_Invoke_SuspendsLayout()
+    {
+        using SubControl control = new();
+        ISupportSuspendRelocation suspendRelocation = control;
+
+        suspendRelocation.BeginSuspendRelocation();
+        suspendRelocation.EndSuspendRelocation();
+        suspendRelocation.EndSuspendRelocation();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    /// <summary>
+    ///  Records redraw-state messages sent while painting is suspended.
+    /// </summary>
+    private sealed class RedrawTrackingControl : Control
+    {
+        public List<bool> RedrawStates { get; } = [];
+
+        public new void RecreateHandle() => base.RecreateHandle();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.MsgInternal == PInvokeCore.WM_SETREDRAW)
+            {
+                RedrawStates.Add((nint)m.WParamInternal != 0);
+            }
+
+            base.WndProc(ref m);
+        }
+    }
+#endif
+
     public static IEnumerable<object[]> AccessibilityNotifyClients_AccessibleEvents_Int_TestData()
     {
         yield return new object[] { AccessibleEvents.DescriptionChange, int.MinValue };

@@ -242,6 +242,16 @@
         <target state="translated">İş parçacığında herhangi bir Denetim oluşturulduktan sonra iş parçacığı özel durum modu değiştirilemez.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="new">VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Uygula</target>
@@ -2170,6 +2180,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Denetimin görünür mü yoksa gizli mi olduğunu belirler.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4519,6 +4539,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Genellikle ListView, TreeView veya ToolStrip gibi diğer denetimler tarafından kullanılan resim koleksiyonunu düzenler.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="new">Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">Bir denetim için çalışma zamanı bilgileri veya açıklayıcı metin sağlar.</target>
@@ -5420,6 +5445,11 @@ Değiştirmek istiyor musunuz?</target>
         <target state="translated">Bu formun iletişim kutusu olarak görüntülendiğinde döndüreceği değer.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Yardım düğmesi tıklatıldığında harekete geçirilen olay.</target>
@@ -5598,6 +5628,11 @@ Değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormOnShownDescr">
         <source>Occurs whenever the form is first shown.</source>
         <target state="translated">Formun her ilk görüntülenişinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnSystemTextSizeChangedDescr">
+        <source>Occurs when the Windows Accessibility text size setting changes for this top-level form.</source>
+        <target state="new">Occurs when the Windows Accessibility text size setting changes for this top-level form.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOpacityDescr">
@@ -6102,6 +6137,66 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Anahtar birleşimi geçerli değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="new">Occurs when the ContainerControl property value changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="new">The container whose containing form is controlled by the kiosk mode manager.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="new">Indicates whether pressing Escape exits fullscreen mode.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="new">Gets or sets a value indicating whether the resolved form is currently fullscreen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="new">Occurs when the fullscreen state changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerHideTaskbarDescr">
+        <source>Indicates whether fullscreen mode covers the Windows taskbar.</source>
+        <target state="new">Indicates whether fullscreen mode covers the Windows taskbar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerSuppressPowerSavingDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeyDescr">
+        <source>The key that toggles between fullscreen and restored mode.</source>
+        <target state="new">The key that toggles between fullscreen and restored mode.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="new">Indicates whether the form is topmost while fullscreen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerWakeupDescr">
+        <source>Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</source>
+        <target state="new">Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerWakeUpCommandDescr">
+        <source>The command that is executed whenever the kiosk experience is woken.</source>
+        <target state="new">The command that is executed whenever the kiosk experience is woken.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8675,8 +8770,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">RadioButton'ın normal mi ya da bir Windows PushButton olarak mı görüneceğini denetler.</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
@@ -11019,6 +11114,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">TreeView'in düğümlerini bağlayan çizgilerin rengi.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeViewNodeLeadingDescr">
+        <source>The uniform row-height leading factor applied to all nodes.</source>
+        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">Öğe fareyle tıklatıldığında gerçekleşir.</target>
@@ -11042,6 +11142,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">TreeView denetiminde kök düğümler.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
+        <source>Occurs when the value of the NodeLeading property changes.</source>
+        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">

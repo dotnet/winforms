@@ -512,7 +512,7 @@ public partial class DomainUpDown : UpDownBase
         int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
         // AdjustWindowRect with our border, since textbox is borderless.
-        width = SizeFromClientSizeInternal(new(width, height)).Width + _upDownButtons.Width;
+        width = GetPreferredWidth(width, height);
         return new Size(width, height) + Padding.Size;
     }
 }

@@ -137,6 +137,9 @@ public partial class Form : ContainerControl
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
     private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
+#if NET11_0_OR_GREATER
+    private static readonly int s_propFormAppearanceCloaked = PropertyStore.CreateKey();
+#endif
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -4209,6 +4212,10 @@ public partial class Form : ContainerControl
         {
             SetScreenCaptureModeInternal(FormScreenCaptureMode);
         }
+
+#if NET11_0_OR_GREATER
+        CloakForDeferredAppearanceIfNeeded();
+#endif
     }
 
     /// <summary>
@@ -4219,6 +4226,9 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnHandleDestroyed(EventArgs e)
     {
+#if NET11_0_OR_GREATER
+        ClearDeferredAppearanceCloakState();
+#endif
         base.OnHandleDestroyed(e);
         _formStateEx[s_formStateExUseMdiChildProc] = 0;
 
@@ -4227,6 +4237,35 @@ public partial class Form : ContainerControl
         if (!_inRecreateHandle)
         {
             Application.OpenForms.Remove(this);
+        }
+    }
+
+    // Snapshot of the Windows High Contrast state, used to detect a transition in OnSystemColorsChanged.
+    private bool _lastHighContrast = SystemInformation.HighContrast;
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        base.OnSystemColorsChanged(e);
+
+        // Windows High Contrast forces Classic rendering (see Control.EffectiveVisualStylesMode), which changes
+        // CreateParams for this form and its children. When the High Contrast state actually toggles we must
+        // rebuild the handle so those CreateParams are re-read. Recreating the top-level Form destroys and
+        // rebuilds the entire child HWND tree, so the rebuild itself propagates the new mode to every child -
+        // no per-child notification is needed. Doing this only on Form (not Control) avoids recreating each
+        // child a second time as Control.OnSystemColorsChanged walks down the tree.
+        bool highContrast = SystemInformation.HighContrast;
+
+        if (highContrast != _lastHighContrast)
+        {
+            _lastHighContrast = highContrast;
+
+            // If visual styles are explicitly disabled they stay disabled regardless of High Contrast, so
+            // nothing about CreateParams changes and there is no need to recreate.
+            if (VisualStylesMode is not VisualStylesMode.Disabled)
+            {
+                RecreateHandle();
+            }
         }
     }
 
@@ -7175,6 +7214,12 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
                 break;
+            case PInvokeCore.WM_PAINT:
+                base.WndProc(ref m);
+#if NET11_0_OR_GREATER
+                UncloakDeferredAppearanceIfNeeded();
+#endif
+                break;
 
             case PInvokeCore.WM_NCDESTROY:
                 WmNCDestroy(ref m);
@@ -7225,6 +7270,11 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_DPICHANGED:
                 WmDpiChanged(ref m);
                 break;
+#if NET11_0_OR_GREATER
+            case PInvokeCore.WM_SETTINGCHANGE:
+                WmSettingChange(ref m);
+                break;
+#endif
             default:
                 base.WndProc(ref m);
                 break;

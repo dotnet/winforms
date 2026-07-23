@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
@@ -19,11 +19,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
-                colorMode As SystemColorMode)
+                colorMode As SystemColorMode,
+                formRevealMode As FormRevealMode,
+                visualStylesMode As VisualStylesMode)
 
             Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
             Me.HighDpiMode = highDpiMode
             Me.ColorMode = colorMode
+            Me.FormRevealMode = formRevealMode
+            Me.VisualStylesMode = visualStylesMode
         End Sub
 
         ''' <summary>
@@ -31,6 +35,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
         Public Property ColorMode As SystemColorMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the default
+        '''  <see cref="FormRevealMode"/> for newly created top-level forms.
+        ''' </summary>
+        Public Property FormRevealMode As FormRevealMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the
+        '''  <see cref="Application.DefaultVisualStylesMode"/> for the application.
+        ''' </summary>
+        Public Property VisualStylesMode As VisualStylesMode
 
         ''' <summary>
         '''  Setting this property inside the event handler causes a
@@ -58,6 +74,34 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
             WindowsFormsApplicationBase.MinimumSplashExposureDefault
+
+        Friend Sub New(minimumSplashScreenDisplayTime As Integer,
+                highDpiMode As HighDpiMode,
+                colorMode As SystemColorMode,
+                formRevealMode As FormRevealMode)
+
+            Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
+            Me.HighDpiMode = highDpiMode
+            Me.ColorMode = colorMode
+            Me.FormRevealMode = formRevealMode
+        End Sub
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the default
+        '''  <see cref="FormRevealMode"/> for newly created top-level forms.
+        ''' </summary>
+        Public Property FormRevealMode As FormRevealMode
+
+        Friend Sub New(minimumSplashScreenDisplayTime As Integer,
+                highDpiMode As HighDpiMode,
+                colorMode As SystemColorMode,
+                visualStylesMode As VisualStylesMode)
+
+            Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
+            Me.HighDpiMode = highDpiMode
+            Me.ColorMode = colorMode
+            Me.VisualStylesMode = visualStylesMode
+        End Sub
 
     End Class
 End Namespace

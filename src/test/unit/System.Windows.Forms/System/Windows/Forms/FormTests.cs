@@ -2793,7 +2793,7 @@ public partial class FormTests
         }
     }
 
-    public class SubForm : Form
+    public partial class SubForm : Form
     {
         public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
