@@ -15,6 +15,340 @@ namespace System.Windows.Forms.Tests;
 
 public class RadioButtonTests : AbstractButtonBaseTests
 {
+    [WinFormsTheory]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(10)]
+    [InlineData(11)]
+    public void RadioButton_ToggleSwitch_FontSize_DerivesSwitchGeometry(float fontSize)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, fontSize);
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Font = font,
+            Text = "Toggle",
+            Padding = new Padding(2)
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
+        Size preferredSize = control.GetPreferredSizeCore(Size.Empty);
+        int expectedHeight = Math.Max(
+            control.LogicalToDeviceUnits(13),
+            (int)(font.Height * 0.9f));
+
+        Assert.Equal(expectedHeight, metrics.SwitchHeight);
+        Assert.Equal(2 * expectedHeight, metrics.SwitchWidth);
+        Assert.True(metrics.HoverThumbDiameter > metrics.ThumbDiameter);
+        Assert.Equal(metrics.GetPreferredSize(control), preferredSize);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_ModernVisualStyles_PaintsAndAnimates()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using Panel parent = new();
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Text = "Toggle",
+            Size = new Size(120, 32)
+        };
+        parent.Controls.Add(control);
+        control.CreateControl();
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        Exception exception = Record.Exception(() => control.DrawToBitmap(bitmap, control.ClientRectangle));
+        Assert.Null(exception);
+
+        control.Checked = true;
+        Assert.True(control.ToggleSwitchRenderer.IsRunning);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_RetainsMutualExclusion()
+    {
+        using Panel parent = new();
+        using RadioButton first = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using RadioButton second = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(first);
+        parent.Controls.Add(second);
+
+        first.PerformClick();
+        second.PerformClick();
+
+        Assert.False(first.Checked);
+        Assert.True(second.Checked);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_ClassicVisualStyles_UsesClassicFallback()
+    {
+        using RadioButton classic = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Classic,
+            Text = "Toggle"
+        };
+        using RadioButton normal = new()
+        {
+            Appearance = Appearance.Normal,
+            VisualStylesMode = VisualStylesMode.Classic,
+            Text = "Toggle"
+        };
+
+        Assert.Equal(normal.GetPreferredSize(Size.Empty), classic.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ToggleSwitch_Dispose_DisposesRenderer()
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        _ = control.ToggleSwitchRenderer;
+        control.Dispose();
+
+        Assert.Null(control.TestAccessor.Dynamic._toggleSwitchRenderer);
+    }
+
+    public static TheoryData<FlatStyle> ModernButtonFlatStyles => new()
+    {
+        FlatStyle.Standard,
+        FlatStyle.Flat,
+        FlatStyle.Popup
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void RadioButton_AppearanceButton_ModernVisualStyles_PaintsWithoutThrow(FlatStyle flatStyle)
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            Size = new Size(120, 40),
+            Checked = true
+        };
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => control.CreateStandardAdapter(),
+            FlatStyle.Popup => control.CreatePopupAdapter(),
+            _ => control.CreateFlatAdapter()
+        };
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(Point.Empty, control.Size));
+
+        // Appearance.Button under modern visual styles is delegated to the shared modern button renderer.
+        Exception exception = Record.Exception(() =>
+        {
+            adapter.PaintUp(e, CheckState.Checked);
+            adapter.PaintOver(e, CheckState.Checked);
+            adapter.PaintDown(e, CheckState.Checked);
+        });
+
+        Assert.Null(exception);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void RadioButton_AppearanceNormal_ModernVisualStyles_UsesModernAdapter(FlatStyle flatStyle)
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.Normal,
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => control.CreateStandardAdapter(),
+            FlatStyle.Popup => control.CreatePopupAdapter(),
+            _ => control.CreateFlatAdapter()
+        };
+
+        Assert.IsType<ButtonInternal.RadioButtonModernAdapter>(adapter);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_AppearanceChanged_RecreatesModernAdapter()
+    {
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.Button,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.IsNotType<ButtonInternal.RadioButtonModernAdapter>(control.Adapter);
+
+        control.Appearance = Appearance.Normal;
+
+        Assert.IsType<ButtonInternal.RadioButtonModernAdapter>(control.Adapter);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(true, true)]
+    public void RadioButton_ModernGlyph_RendersAccentWhenChecked(bool isChecked, bool expectedAccent)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Panel parent = new() { BackColor = Color.White };
+        using RadioButton control = new()
+        {
+            BackColor = Color.Red,
+            Checked = isChecked,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(
+            e,
+            isChecked ? CheckState.Checked : CheckState.Unchecked);
+
+        Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_DefaultCheckedColorUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.NotifyCheckedChanged(newChecked: true);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: null,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_BrightAccentUsesContrastingDotOutline()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.NotifyCheckedChanged(newChecked: true);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Color brightAccent = Color.FromArgb(0xFF, 0xB9, 0x00);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: brightAccent,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Color.Black) > 0);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_HoverAndFocusUseIndependentAnimationChannels()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.SetInteractionState(hovered: false, focused: false);
+
+        renderer.SetInteractionState(hovered: true, focused: false);
+        renderer.EndAnimation();
+
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._hoverCurrent);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._focusCurrent);
+
+        renderer.SetInteractionState(hovered: false, focused: true);
+
+        Assert.True(renderer.IsRunning);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._hoverTarget);
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._focusTarget);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_EndAnimation_StopsAndSettles()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using RadioButton control = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        Rendering.RadioButton.AnimatedRadioGlyphRenderer renderer = control.RadioGlyphRenderer;
+        renderer.NotifyCheckedChanged(newChecked: false);
+        renderer.NotifyCheckedChanged(newChecked: true);
+        Assert.True(renderer.IsRunning);
+
+        renderer.EndAnimation();
+
+        Assert.False(renderer.IsRunning);
+    }
+
+    private static int CountPixels(Bitmap bitmap, Color color)
+    {
+        int argb = color.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     [WinFormsFact]
     public void RadioButton_Ctor_Default()
     {

@@ -2884,7 +2884,9 @@ public partial class MaskedTextBox : TextBoxBase
     {
         base.WndProc(ref m);
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0
-            && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            && Application.RenderWithVisualStyles
+            && BorderStyle == BorderStyle.Fixed3D
+            && EffectiveVisualStylesMode < VisualStylesMode.Net11)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);

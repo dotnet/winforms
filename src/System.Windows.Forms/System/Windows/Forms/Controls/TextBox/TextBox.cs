@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.UI.Accessibility;
 
@@ -383,6 +384,8 @@ public partial class TextBox : TextBoxBase
 
                 _scrollBars = value;
                 RecreateHandle();
+                CommonProperties.xClearPreferredSizeCache(this);
+                LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars);
             }
         }
     }
@@ -391,6 +394,13 @@ public partial class TextBox : TextBoxBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // TextBoxBase already includes the native scrollbar reservation in the modern geometry.
+            // Applying the legacy adjustment here would count each scrollbar twice.
+            return base.GetPreferredSizeCore(proposedConstraints);
+        }
+
         Size scrollBarPadding = Size.Empty;
 
         if (Multiline && !WordWrap && (ScrollBars & ScrollBars.Horizontal) != 0)
@@ -409,6 +419,31 @@ public partial class TextBox : TextBoxBase
         Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
 
         return prefSize + scrollBarPadding;
+    }
+
+    private protected override Padding GetScrollBarPadding()
+    {
+        if (IsHandleCreated)
+        {
+            return base.GetScrollBarPadding();
+        }
+
+        Padding padding = Padding.Empty;
+
+        if (Multiline
+            && !WordWrap
+            && _textAlign == HorizontalAlignment.Left
+            && (_scrollBars & ScrollBars.Horizontal) != 0)
+        {
+            padding.Bottom = SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
+        }
+
+        if (Multiline && (_scrollBars & ScrollBars.Vertical) != 0)
+        {
+            padding.Right = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+        }
+
+        return padding;
     }
 
     /// <summary>
@@ -800,8 +835,12 @@ public partial class TextBox : TextBoxBase
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
+
+        // In modern Visual Styles mode the base TextBoxBase NC painting owns the border chrome, so we
+        // must not also draw the classic Fixed3D edge here - that would double-draw over the modern chrome.
         if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles
-            && BorderStyle == BorderStyle.Fixed3D)
+            && BorderStyle == BorderStyle.Fixed3D
+            && EffectiveVisualStylesMode < VisualStylesMode.Net11)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new(0, 0, Size.Width - 1, Size.Height - 1);

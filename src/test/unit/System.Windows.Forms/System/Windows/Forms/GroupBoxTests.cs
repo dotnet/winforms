@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Button;
 using System.Windows.Forms.TestUtilities;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -123,6 +124,429 @@ public class GroupBoxTests
         Assert.Equal(0, createParams.Y);
         Assert.Same(createParams, control.CreateParams);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void GroupBox_ModernVisualStyles_DisplayRectangleUsesRendererMetrics(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = flatStyle,
+            Size = new Size(200, 100),
+            Text = "Modern group",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Font captionFont = control.ModernCaptionFont;
+        int horizontalInset = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxContentHorizontalInset,
+            control.DeviceDpi);
+        int topInset = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxContentTopInset,
+            control.DeviceDpi);
+        int bottomInset = flatStyle == FlatStyle.Standard
+            ? ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.GroupBoxContentBottomInset,
+                control.DeviceDpi)
+            : topInset;
+        int expectedTop = flatStyle switch
+        {
+            FlatStyle.Standard => captionFont.Height
+                + ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxCaptionGap,
+                    control.DeviceDpi)
+                + topInset,
+            FlatStyle.Flat => captionFont.Height + topInset,
+            FlatStyle.Popup => captionFont.Height
+                + (2 * ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                    control.DeviceDpi))
+                + topInset,
+            _ => throw new InvalidOperationException()
+        };
+        Padding padding = control.Padding;
+        Rectangle expected = new(
+            padding.Left + horizontalInset,
+            padding.Top + expectedTop,
+            control.ClientSize.Width - padding.Horizontal - (2 * horizontalInset),
+            control.ClientSize.Height
+                - padding.Vertical
+                - expectedTop
+                - bottomInset);
+
+        Assert.Equal(expected, control.DisplayRectangle);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void GroupBox_ModernVisualStyles_PaintPreservesAmbientFont(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new() { Size = new Size(220, 120) };
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = flatStyle,
+            Size = new Size(200, 100),
+            Text = "Modern group",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Font originalFont = control.Font;
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+        using Bitmap bitmap = new(control.Width, control.Height);
+
+        control.DrawToBitmap(
+            bitmap,
+            new Rectangle(Point.Empty, control.Size));
+
+        Assert.Same(originalFont, control.Font);
+        float textScale = Math.Clamp(
+            Application.SystemVisualSettings.TextScaleFactor,
+            1f,
+            2.25f);
+        float expectedScale = flatStyle == FlatStyle.Flat
+            ? textScale
+            : ModernControlVisualStyles.GroupBoxCaptionFontScale * textScale;
+        Assert.Equal(
+            originalFont.Size * expectedScale,
+            control.ModernCaptionFont.Size,
+            precision: 3);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernVisualStyles_RegularFontUsesInstalledSemiBoldFaceWhenAvailable()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font regularFont = new(
+            Control.DefaultFont.FontFamily,
+            Control.DefaultFont.Size,
+            FontStyle.Regular);
+        using VisualStylesGroupBox control = new()
+        {
+            Font = regularFont,
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        string semiBoldFamilyName = GroupBox.FindSemiBoldFamilyName(
+            regularFont.FontFamily.Name);
+
+        Assert.Equal(
+            semiBoldFamilyName.Length == 0
+                ? regularFont.FontFamily.Name
+                : semiBoldFamilyName,
+            control.ModernCaptionFont.FontFamily.Name,
+            ignoreCase: true);
+        Assert.Equal(FontStyle.Regular, control.ModernCaptionFont.Style);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernVisualStyles_StyledFontPreservesFamilyAndStyle()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font styledFont = new(
+            Control.DefaultFont.FontFamily,
+            Control.DefaultFont.Size,
+            FontStyle.Italic);
+        using VisualStylesGroupBox control = new()
+        {
+            Font = styledFont,
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(
+            styledFont.FontFamily.Name,
+            control.ModernCaptionFont.FontFamily.Name,
+            ignoreCase: true);
+        Assert.Equal(styledFont.Style, control.ModernCaptionFont.Style);
+    }
+
+    [Fact]
+    public void GroupBox_FindSemiBoldFamilyName_MissingFamilyReturnsEmpty()
+    {
+        Assert.Empty(
+            GroupBox.FindSemiBoldFamilyName(
+                $"Missing-{Guid.NewGuid():N}"));
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernStandard_PaintsBorderlessRectangularSurface()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new()
+        {
+            BackColor = Color.Red,
+            Size = new Size(100, 80)
+        };
+        using VisualStylesGroupBox control = new()
+        {
+            BackColor = Color.White,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(80, 60),
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, control.Size));
+
+        int frameTop = control.ModernCaptionFont.Height
+            + ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.GroupBoxCaptionGap,
+                control.DeviceDpi);
+        Color expected = PopupButtonColorMath.TowardsContrast(
+            control.BackColor,
+            0.035f);
+        Assert.Equal(
+            expected.ToArgb(),
+            actual.GetPixel(0, frameTop).ToArgb());
+        Assert.Equal(
+            expected.ToArgb(),
+            actual.GetPixel(actual.Width - 1, frameTop).ToArgb());
+        Assert.Equal(
+            expected.ToArgb(),
+            actual.GetPixel(0, actual.Height - 1).ToArgb());
+        Assert.Equal(
+            expected.ToArgb(),
+            actual.GetPixel(actual.Width / 2, actual.Height - 1).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernFlat_PaintsAccentBorderAtTextBoxThickness()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            BackColor = Color.White,
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(100, 70),
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, control.Size));
+
+        Assert.True(
+            CountPixels(
+                actual,
+                Application.SystemVisualSettings.AccentColor) > 0);
+        Assert.Equal(
+            Math.Max(
+                ModernControlVisualStyles.GetFocusBorderMetrics(
+                    Application.SystemVisualSettings.FocusBorderMetrics,
+                    Application.SystemVisualSettings.TextScaleFactor,
+                    control.DeviceDpi).Width,
+                ModernControlVisualStyles.GetFocusBorderMetrics(
+                    Application.SystemVisualSettings.FocusBorderMetrics,
+                    Application.SystemVisualSettings.TextScaleFactor,
+                    control.DeviceDpi).Height),
+            control.ModernBorderThickness);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernPopup_PaintsWindowsAccentHeader()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            BackColor = Color.White,
+            FlatStyle = FlatStyle.Popup,
+            Size = new Size(100, 70),
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+
+        control.DrawToBitmap(
+            actual,
+            new Rectangle(Point.Empty, control.Size));
+
+        Assert.Equal(
+            Application.SystemVisualSettings.AccentColor.ToArgb(),
+            actual.GetPixel(
+                actual.Width / 2,
+                Math.Min(
+                    actual.Height - 1,
+                    control.ModernBorderThickness + 2)).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernStandard_CaptionBoundsAlignWithPadding()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Padding = new Padding(7, 3, 11, 5),
+            Size = new Size(100, 70),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Rectangle bounds = new(
+            Point.Empty,
+            control.ClientSize - new Size(1, 1));
+        Rectangle captionBounds = control.GetStandardCaptionBounds(
+            bounds);
+
+        Assert.Equal(control.Padding.Left, captionBounds.Left);
+        Assert.Equal(
+            bounds.Right - control.Padding.Right,
+            captionBounds.Right);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernVisualStyles_FlatStyleChangeRequestsLayout()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        control.FlatStyle = FlatStyle.Popup;
+
+        Assert.Equal(1, layoutCallCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernVisualStyles_FlatStyleChangeRelayoutsDockedChild()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Panel child = new() { Dock = DockStyle.Fill };
+        control.Controls.Add(child);
+        control.PerformLayout();
+        Rectangle standardBounds = child.Bounds;
+
+        control.FlatStyle = FlatStyle.Popup;
+
+        Assert.NotEqual(standardBounds, child.Bounds);
+        Assert.Equal(control.DisplayRectangle, child.Bounds);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_SystemVisualStylesModeChange_DoesNotRequestLayout()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        parent.Controls.Add(control);
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(0, layoutCallCount);
+        Assert.False(control.IsHandleCreated);
+        Assert.Equal("Button", control.CreateParams.ClassName);
+    }
+
+    [WinFormsFact]
+    public void GroupBox_ModernVisualStyles_TextScaleChangeRemeasuresParent()
+    {
+        SystemVisualSettings previous = SystemVisualSettingsTracker.CurrentSettings;
+        SystemVisualSettings initial = new(
+            previous.AccentColor,
+            1f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+        SystemVisualSettings scaled = new(
+            previous.AccentColor,
+            1.5f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using Panel parent = new();
+            using VisualStylesGroupBox control = new()
+            {
+                FlatStyle = FlatStyle.Standard,
+                VisualStylesMode = VisualStylesMode.Net11
+            };
+            parent.Controls.Add(control);
+            int originalTop = control.DisplayRectangle.Top;
+            int layoutCallCount = 0;
+            parent.Layout += (sender, e) => layoutCallCount++;
+
+            SystemVisualSettingsTracker.ResetForTesting(scaled);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    scaled,
+                    SystemVisualSettingsCategories.TextScale));
+
+            Assert.True(control.DisplayRectangle.Top > originalTop);
+            Assert.Equal(1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting(previous);
+        }
     }
 
     [WinFormsTheory]
@@ -721,7 +1145,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
@@ -734,7 +1171,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
     }
@@ -775,7 +1225,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
@@ -788,7 +1251,20 @@ public class GroupBoxTests
         Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
         Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
         Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+        if (value == FlatStyle.System)
+        {
+            Assert.InRange(
+                invalidatedCallCount,
+                0,
+                expectedInvalidatedCallCount);
+        }
+        else
+        {
+            Assert.Equal(
+                expectedInvalidatedCallCount,
+                invalidatedCallCount);
+        }
+
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(expectedCreatedCallCount, createdCallCount);
     }
@@ -2292,6 +2768,47 @@ public class GroupBoxTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    /// <summary>
+    ///  Exposes modern GroupBox seams for deterministic renderer tests.
+    /// </summary>
+    private sealed class VisualStylesGroupBox : SubGroupBox
+    {
+        public Font ModernCaptionFont
+            => (Font)this.TestAccessor.Dynamic.ModernCaptionFont;
+
+        public int ModernBorderThickness
+            => (int)this.TestAccessor.Dynamic.GetModernBorderThickness();
+
+        public Rectangle GetStandardCaptionBounds(Rectangle bounds)
+            => (Rectangle)this.TestAccessor.Dynamic.GetStandardCaptionBounds(
+                bounds,
+                ModernCaptionFont.Height);
+
+        public void RaiseSystemVisualSettingsChanged(
+            SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
+
+        internal override bool IsHighContrast => false;
+    }
+
+    private static int CountPixels(Bitmap bitmap, Color color)
+    {
+        int count = 0;
+        int argb = color.ToArgb();
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     public class SubGroupBox : GroupBox

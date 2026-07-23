@@ -27,4 +27,25 @@ public class NumericUpDownTests : ControlTestBase
             Assert.NotNull(focused);
         });
     }
+
+    [WinFormsFact]
+    public async Task NumericUpDown_ModernChrome_UsesInsetEditAndSideBySideButtonsAsync()
+    {
+        await RunSingleControlTestAsync<NumericUpDown>(async (form, control) =>
+        {
+            control.VisualStylesMode = VisualStylesMode.Net11;
+            control.AutoSize = true;
+            form.PerformLayout();
+
+            if (!control.UseSideBySideButtons)
+            {
+                return;
+            }
+
+            Assert.True(control.Height >= control.PreferredHeight);
+            Assert.Equal(control.LogicalToDeviceUnits(3), control.TextBox.Left);
+            Assert.Equal(control.LogicalToDeviceUnits(3), control.UpDownButtonsInternal.Top);
+            Assert.True(control.UpDownButtonsInternal.Bounds.Left >= control.TextBox.Bounds.Right);
+        });
+    }
 }

@@ -12,7 +12,7 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms.Tests;
 
-public class ApplicationTests
+public partial class ApplicationTests
 {
     [WinFormsFact]
     public void Application_CurrentCulture_Get_ReturnsExpected()
@@ -154,31 +154,114 @@ public class ApplicationTests
     [Fact]
     public void Application_SetColorMode_PlausibilityTests()
     {
-        if (SystemInformation.HighContrast)
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
         {
-            // We don't run this test in HighContrast mode.
-            return;
-        }
+            if (SystemInformation.HighContrast)
+            {
+                // We don't run this test in HighContrast mode.
+                return;
+            }
 
-        SystemColorMode systemColorMode = Application.SystemColorMode;
+            SystemColorMode systemColorMode = Application.SystemColorMode;
 
-        Application.SetColorMode(SystemColorMode.Classic);
-        Assert.False(Application.IsDarkModeEnabled);
-        Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
-        Assert.False(SystemColors.UseAlternativeColorSet);
+            Application.SetColorMode(SystemColorMode.Classic);
+            Assert.False(Application.IsDarkModeEnabled);
+            Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
+            Assert.False(SystemColors.UseAlternativeColorSet);
 
-        Application.SetColorMode(SystemColorMode.Dark);
-        Assert.True(Application.IsDarkModeEnabled);
-        Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
-        Assert.True(SystemColors.UseAlternativeColorSet);
+            Application.SetColorMode(SystemColorMode.Dark);
+            Assert.True(Application.IsDarkModeEnabled);
+            Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
+            Assert.True(SystemColors.UseAlternativeColorSet);
 
-        Application.SetColorMode(SystemColorMode.System);
-        Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
-        Assert.Equal(SystemColorMode.System, Application.ColorMode);
-        Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+            Application.SetColorMode(SystemColorMode.System);
+            Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
+            Assert.Equal(SystemColorMode.System, Application.ColorMode);
+            Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
+    }
+
+    [Fact]
+    public void Application_SetDefaultVisualStylesMode_IsWriteOnce()
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
+        {
+            VisualStylesMode expectedInitialMode = Application.UseVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled;
+            Assert.Equal(expectedInitialMode, Application.DefaultVisualStylesMode);
+
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+            Assert.Equal(
+                Application.UseVisualStyles ? VisualStylesMode.Net11 : VisualStylesMode.Disabled,
+                Application.DefaultVisualStylesMode);
+
+            // Setting the same value again is allowed.
+            Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
+
+            // Setting a different value after the mode has been established throws.
+            Assert.Throws<InvalidOperationException>(
+                () => Application.SetDefaultVisualStylesMode(VisualStylesMode.Latest));
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
     }
 
 #pragma warning restore SYSLIB5002
+
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Application_DefaultFormRevealMode_Default_ReturnsInherit()
+    {
+        // Run in an isolated child process: DefaultFormRevealMode is process-wide state, and other tests
+        // in this shared-process test binary may have already called SetDefaultFormRevealMode.
+        RemoteExecutor.Invoke(() =>
+        {
+            Assert.Equal(FormRevealMode.Inherit, Application.DefaultFormRevealMode);
+        }).Dispose();
+    }
+
+    [WinFormsTheory]
+    [InlineData(FormRevealMode.Classic)]
+    [InlineData(FormRevealMode.Deferred)]
+    [InlineData(FormRevealMode.Inherit)]
+    public void Application_SetDefaultFormRevealMode_GetReturnsExpected(FormRevealMode mode)
+    {
+        Application.SetDefaultFormRevealMode(mode);
+        Assert.Equal(mode, Application.DefaultFormRevealMode);
+    }
+
+    [WinFormsFact]
+    public void Application_SetDefaultFormRevealMode_Invalid_ThrowsInvalidEnumArgumentException()
+    {
+        Assert.Throws<InvalidEnumArgumentException>(
+            "mode",
+            () => Application.SetDefaultFormRevealMode((FormRevealMode)int.MaxValue));
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Classic_ReturnsFalse()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Classic);
+        Assert.False(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Deferred_ReturnsTrue()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
+        Assert.True(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Inherit_MatchesIsDarkModeEnabled()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Inherit);
+        Assert.Equal(Application.IsDarkModeEnabled, Application.IsFormRevealDeferred);
+    }
+#endif
 
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
