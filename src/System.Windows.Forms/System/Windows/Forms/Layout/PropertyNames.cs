@@ -73,6 +73,7 @@ internal static class PropertyNames
     public const string ShowCheckMargin = "ShowCheckMargin";
     public const string Spring = "Spring";
     public const string Style = "Style";
+    public const string SystemVisualSettings = "SystemVisualSettings";
     public const string TableIndex = "TableIndex";
     public const string Text = "Text";
     public const string TextAlign = "TextAlign";
