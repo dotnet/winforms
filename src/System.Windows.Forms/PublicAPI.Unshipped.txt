@@ -1,0 +1,1 @@
+override System.Windows.Forms.TrackBar.OnSizeChanged(System.EventArgs! e) -> void
