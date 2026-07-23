@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.Tests;
 
 /// <summary>
@@ -12,17 +14,19 @@ internal sealed class SystemVisualSettingsTestScope : IDisposable
 
     public SystemVisualSettingsTestScope(
         bool clientAreaAnimationEnabled,
-        bool? highContrastEnabled = null)
+        bool highContrastEnabled = false,
+        Color? accentColor = null,
+        float textScaleFactor = 1f,
+        Size? focusBorderMetrics = null)
     {
         SystemVisualSettingsTracker.ResetForTesting(
             new SystemVisualSettings(
-                _previousSettings.AccentColor,
-                _previousSettings.TextScaleFactor,
-                highContrastEnabled
-                    ?? _previousSettings.HighContrastEnabled,
+                accentColor ?? Color.DodgerBlue,
+                textScaleFactor,
+                highContrastEnabled,
                 clientAreaAnimationEnabled,
                 _previousSettings.KeyboardCuesVisible,
-                _previousSettings.FocusBorderMetrics));
+                focusBorderMetrics ?? new Size(1, 1)));
     }
 
     public void Dispose()
