@@ -78,10 +78,15 @@ public partial class ComboBox
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
             }
 
-            PaintFieldSurface(
-                comboBox,
-                graphics,
-                clientBounds);
+            if (_dropDownStyle != ComboBoxStyle.DropDownList
+                || comboBox.DrawMode == DrawMode.Normal)
+            {
+                PaintFieldSurface(
+                    comboBox,
+                    graphics,
+                    clientBounds);
+            }
+
             DrawDropDownListText(
                 comboBox,
                 graphics,

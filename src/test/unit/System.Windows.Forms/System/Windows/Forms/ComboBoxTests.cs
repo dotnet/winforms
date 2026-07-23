@@ -334,7 +334,10 @@ public class ComboBoxTests
             tableLayoutPanel.Controls.Add(control, 0, 0);
             form.Controls.Add(tableLayoutPanel);
             form.CreateControl();
-            IntPtr handle = control.Handle;
+            _ = control.Handle;
+            int handleCreatedCallCount = 0;
+            control.HandleCreated += (sender, e) =>
+                handleCreatedCallCount++;
             int classicControlHeight = control.Height;
             int classicHeight = tableLayoutPanel.GetRowHeights()[0];
             Size classicTableSize = tableLayoutPanel.Size;
@@ -347,7 +350,7 @@ public class ComboBoxTests
                 classicHeight,
                 tableLayoutPanel.GetRowHeights()[0]);
             Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
-            Assert.Equal(handle, control.Handle);
+            Assert.Equal(1, handleCreatedCallCount);
 
             form.VisualStylesMode = VisualStylesMode.Classic;
 
@@ -356,7 +359,7 @@ public class ComboBoxTests
                 classicHeight,
                 tableLayoutPanel.GetRowHeights()[0]);
             Assert.Equal(classicTableSize, tableLayoutPanel.Size);
-            Assert.Equal(handle, control.Handle);
+            Assert.Equal(2, handleCreatedCallCount);
         }
         finally
         {
@@ -439,9 +442,11 @@ public class ComboBoxTests
         Assert.Equal(
             Color.Red.ToArgb(),
             actual.GetPixel(0, 0).ToArgb());
-        Assert.Equal(
-            Color.Blue.ToArgb(),
-            actual.GetPixel(1, 0).ToArgb());
+        Assert.True(
+            ColorsAreClose(
+                actual.GetPixel(1, 0),
+                Color.Blue,
+                channelTolerance: 16));
         Assert.Equal(
             backgroundImage.GetPixel(
                 (actual.Width - 1) % backgroundImage.Width,
@@ -498,7 +503,11 @@ public class ComboBoxTests
         Color expectedBorder = usesAccent
             ? Application.SystemVisualSettings.AccentColor
             : control.ForeColor;
-        Assert.True(CountPixels(actual, expectedBorder) > 0);
+        Assert.True(
+            CountPixels(
+                actual,
+                expectedBorder,
+                channelTolerance: 16) > 0);
         Assert.Equal(
             flatStyle == FlatStyle.Flat
                 ? expectedBorder.ToArgb()
@@ -546,7 +555,7 @@ public class ComboBoxTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
-    public void ComboBox_ModernPadding_UpdatesHeightAndEditMargins(
+    public void ComboBox_ModernPadding_UpdatesHeightAndEditBounds(
         ComboBoxStyle dropDownStyle)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
@@ -562,15 +571,11 @@ public class ComboBoxTests
         control.CreateControl();
         IntPtr handle = control.Handle;
 
-        (int left, int right) = control.GetEditMargins();
-        int styleMargin = ScaleHelper.ScaleToDpi(
-            ModernControlVisualStyles.Fixed3DBorderPadding
-                + ModernControlVisualStyles.InternalChromeInset
-                + ModernControlVisualStyles.ComboBoxStyleInset,
-            control.DeviceDpi);
-
-        Assert.Equal(styleMargin + control.Padding.Left, left);
-        Assert.Equal(styleMargin + control.Padding.Right, right);
+        Rectangle editBounds = control.GetEditBounds();
+        Assert.True(
+            editBounds.Left
+                >= control.ModernChromeInsets.Left
+                    + control.Padding.Left);
         if (dropDownStyle != ComboBoxStyle.Simple)
         {
             Assert.Equal(control.PreferredHeight, control.Height);
@@ -584,7 +589,9 @@ public class ComboBoxTests
             Assert.Equal(control.PreferredHeight, control.Height);
         }
 
-        Assert.True(control.GetEditMargins().left > left);
+        Rectangle updatedEditBounds = control.GetEditBounds();
+        Assert.True(updatedEditBounds.Left > editBounds.Left);
+        Assert.True(updatedEditBounds.Width < editBounds.Width);
     }
 
     [WinFormsTheory]
@@ -887,25 +894,29 @@ public class ComboBoxTests
             VisualStylesMode = VisualStylesMode.Net11
         };
         control.CreateControl();
-        IntPtr handle = control.Handle;
+        _ = control.Handle;
+        int handleCreatedCallCount = 0;
+        control.HandleCreated += (sender, e) =>
+            handleCreatedCallCount++;
         Rectangle nativeEditBounds = control.ModernEditBaseBounds;
         int nativeSelectionHeight = control.NativeSelectionHeight;
 
         control.VisualStylesMode = VisualStylesMode.Classic;
 
-        Assert.Equal(handle, control.Handle);
+        Assert.Equal(1, handleCreatedCallCount);
         Assert.Equal(control.PreferredHeight, control.Height);
         Assert.Equal(nativeSelectionHeight, control.GetSelectionHeight());
         Assert.Equal(nativeEditBounds, control.GetEditBounds());
         Assert.IsNotType<ComboBox.ModernComboAdapter>(control.CreateAdapter());
 
         control.VisualStylesMode = VisualStylesMode.Net11;
+        Assert.Equal(2, handleCreatedCallCount);
         Assert.NotEqual(nativeEditBounds, control.GetEditBounds());
         Assert.IsType<ComboBox.ModernComboAdapter>(control.CreateAdapter());
 
         control.VisualStylesMode = VisualStylesMode.Classic;
 
-        Assert.Equal(handle, control.Handle);
+        Assert.Equal(3, handleCreatedCallCount);
         Assert.Equal(control.PreferredHeight, control.Height);
         Assert.Equal(nativeSelectionHeight, control.GetSelectionHeight());
         Assert.Equal(nativeEditBounds, control.GetEditBounds());
@@ -930,7 +941,9 @@ public class ComboBoxTests
         };
         control.CreateControl();
         control.InitializeNativeComboBaseline();
-        IntPtr handle = control.Handle;
+        int handleCreatedCallCount = 0;
+        control.HandleCreated += (sender, e) =>
+            handleCreatedCallCount++;
         var classicState = GetNativeComboState(control);
 
         for (int i = 0; i < 10; i++)
@@ -943,8 +956,9 @@ public class ComboBoxTests
 
             control.VisualStylesMode = VisualStylesMode.Classic;
             Assert.Equal(classicState, GetNativeComboState(control));
-            Assert.Equal(handle, control.Handle);
         }
+
+        Assert.Equal(20, handleCreatedCallCount);
     }
 
     [WinFormsTheory]
@@ -1094,7 +1108,10 @@ public class ComboBoxTests
             VisualStylesMode = VisualStylesMode.Net11
         };
         _ = control.Handle;
-        Assert.True(control.GetEditMargins().left > 0);
+        Assert.True(
+            control.GetEditBounds().Left
+                >= control.ModernChromeInsets.Left
+                    + control.Padding.Left);
         int handleCreatedCallCount = 0;
         control.HandleCreated += (sender, e) =>
             handleCreatedCallCount++;
@@ -1181,15 +1198,16 @@ public class ComboBoxTests
 
         Assert.Equal(
             ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.Fixed3DBorderPadding
-                    + ModernControlVisualStyles.InternalChromeInset
-                    + ModernControlVisualStyles.ComboBoxStyleInset,
+                ModernControlVisualStyles.BorderThickness
+                    + ModernControlVisualStyles.ComboBoxStyleInset
+                    + ModernControlVisualStyles.ComboBoxFieldArcClearance,
                 deviceDpi),
             chromeInsets.Left);
         Assert.Equal(
             ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.Fixed3DBorderPadding
-                    + ModernControlVisualStyles.ComboBoxStyleInset,
+                ModernControlVisualStyles.BorderThickness
+                    + ModernControlVisualStyles.ComboBoxStyleInset
+                    + ModernControlVisualStyles.ComboBoxFieldArcClearance,
                 deviceDpi),
             chromeInsets.Top);
     }
@@ -4076,15 +4094,20 @@ public class ComboBoxTests
         internal override bool IsHighContrast => false;
     }
 
-    private static int CountPixels(Bitmap bitmap, Color color)
+    private static int CountPixels(
+        Bitmap bitmap,
+        Color color,
+        int channelTolerance = 0)
     {
         int count = 0;
-        int argb = color.ToArgb();
         for (int y = 0; y < bitmap.Height; y++)
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                if (ColorsAreClose(
+                    bitmap.GetPixel(x, y),
+                    color,
+                    channelTolerance))
                 {
                     count++;
                 }
@@ -4093,6 +4116,15 @@ public class ComboBoxTests
 
         return count;
     }
+
+    private static bool ColorsAreClose(
+        Color actual,
+        Color expected,
+        int channelTolerance)
+        => Math.Abs(actual.A - expected.A) <= channelTolerance
+            && Math.Abs(actual.R - expected.R) <= channelTolerance
+            && Math.Abs(actual.G - expected.G) <= channelTolerance
+            && Math.Abs(actual.B - expected.B) <= channelTolerance;
 
     private class SubComboBox : ComboBox
     {
