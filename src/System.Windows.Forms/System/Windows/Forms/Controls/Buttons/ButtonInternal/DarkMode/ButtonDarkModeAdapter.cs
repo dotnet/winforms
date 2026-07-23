@@ -29,17 +29,12 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color textColor;
 
-        if (Control.ForeColor != Forms.Control.DefaultForeColor)
+        if (Control.ShouldSerializeForeColor())
         {
             textColor = new ColorOptions(deviceContext, Control.ForeColor, Control.BackColor)
             {
                 Enabled = Control.Enabled
             }.Calculate().WindowText;
-
-            if (IsHighContrastHighlighted())
-            {
-                textColor = SystemColors.HighlightText;
-            }
         }
         else
         {
@@ -53,14 +48,9 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color backColor;
 
-        if (Control.BackColor != Forms.Control.DefaultBackColor)
+        if (!Control.UseVisualStyleBackColor || Control.ShouldSerializeBackColor())
         {
             backColor = Control.BackColor;
-
-            if (IsHighContrastHighlighted())
-            {
-                backColor = SystemColors.HighlightText;
-            }
         }
         else
         {
