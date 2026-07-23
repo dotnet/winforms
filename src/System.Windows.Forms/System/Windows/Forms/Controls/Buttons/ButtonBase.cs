@@ -1306,6 +1306,12 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        UpdateOwnerDraw();
+        base.OnSystemColorsChanged(e);
+    }
+
     /// <summary>
     ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
     /// </summary>

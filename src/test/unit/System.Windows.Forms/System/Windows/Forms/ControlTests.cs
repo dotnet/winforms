@@ -1201,6 +1201,54 @@ public partial class ControlTests
         control.Region.Should().BeNull();
     }
 
+    [WinFormsFact]
+    public static void Control_WndProc_WM_SETTINGCHANGE_ImmersiveColorSet_RaisesSystemColorsChanged()
+    {
+        RemoteExecutor.Invoke(static () =>
+        {
+#pragma warning disable WFO5001
+            Application.SetColorMode(SystemColorMode.System);
+#pragma warning restore WFO5001
+
+            using SubSystemColorsChangedForm form = new();
+
+            int systemColorsChangedCallCount = 0;
+            form.SystemColorsChanged += (_, _) => systemColorsChangedCallCount++;
+
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+
+            form.SendWmSettingChange("ImmersiveColorSet");
+
+            Assert.Equal(1, systemColorsChangedCallCount);
+            Assert.Equal(1, form.OnSystemColorsChangedCallCount);
+        }).Dispose();
+    }
+
+    private class SubSystemColorsChangedForm : Form
+    {
+        public int OnSystemColorsChangedCallCount { get; private set; }
+
+        public unsafe void SendWmSettingChange(string settingName)
+        {
+            fixed (char* settingNamePtr = settingName)
+            {
+                Message message = Message.Create(
+                    Handle,
+                    (int)PInvokeCore.WM_SETTINGCHANGE,
+                    wparam: IntPtr.Zero,
+                    lparam: (IntPtr)settingNamePtr);
+
+                WndProc(ref message);
+            }
+        }
+
+        protected override void OnSystemColorsChanged(EventArgs e)
+        {
+            OnSystemColorsChangedCallCount++;
+            base.OnSystemColorsChanged(e);
+        }
+    }
+
     private class OnCreateControlCounter : Control
     {
         public int OnCreateControlCount { get; set; }
