@@ -520,6 +520,177 @@ public class GroupBoxTests
         Assert.Equal(bounds.Right, captionBounds.Right);
     }
 
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No)]
+    [InlineData(RightToLeft.Yes)]
+    public void GroupBox_ModernPopup_CaptionBoundsApplyStandardPaddingBeforeHeaderInset(
+        RightToLeft rightToLeft)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            Padding = new Padding(7, 3, 11, 5),
+            RightToLeft = rightToLeft,
+            Size = new Size(140, 80),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Rectangle bounds = new(
+            Point.Empty,
+            control.ClientSize - new Size(1, 1));
+        int horizontalPadding = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxHeaderHorizontalPadding,
+            control.DeviceDpi);
+        int verticalPadding = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+            control.DeviceDpi);
+
+        Rectangle standardBounds = control.GetStandardCaptionBounds(
+            bounds);
+        Rectangle popupBounds = control.GetPopupCaptionBounds(
+            bounds);
+
+        Assert.Equal(
+            standardBounds.Left + horizontalPadding,
+            popupBounds.Left);
+        Assert.Equal(
+            standardBounds.Top + verticalPadding,
+            popupBounds.Top);
+        Assert.Equal(
+            standardBounds.Right - horizontalPadding,
+            popupBounds.Right);
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(144)]
+    [InlineData(192)]
+    public void GroupBox_ModernFlat_CaptionIsLoweredByLogicalBorderStroke(
+        int deviceDpi)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(140, 80),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.SetTestDeviceDpi(deviceDpi);
+        Rectangle bounds = new(
+            new Point(4, 6),
+            control.ClientSize - new Size(5, 7));
+
+        Rectangle captionBounds = control.GetFlatCaptionBounds(bounds);
+
+        Assert.Equal(
+            bounds.Top + ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.BorderThickness,
+                deviceDpi),
+            captionBounds.Top);
+    }
+
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No, false)]
+    [InlineData(RightToLeft.No, true)]
+    [InlineData(RightToLeft.Yes, false)]
+    [InlineData(RightToLeft.Yes, true)]
+    public void GroupBox_ModernFlat_CaptionBorderGapsAreSymmetric(
+        RightToLeft rightToLeft,
+        bool useCompatibleTextRendering)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Flat,
+            RightToLeft = rightToLeft,
+            Size = new Size(220, 90),
+            Text = "Modern group",
+            UseCompatibleTextRendering = useCompatibleTextRendering,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Rectangle frameBounds = control.GetFlatFrameBounds(
+            new Rectangle(
+                Point.Empty,
+                control.ClientSize - new Size(1, 1)));
+        Rectangle captionBounds = control.GetFlatCaptionBounds(
+            new Rectangle(
+                Point.Empty,
+                control.ClientSize - new Size(1, 1)));
+
+        Rectangle textBounds = control.GetCaptionTextBounds(
+            graphics,
+            captionBounds);
+        Rectangle backgroundBounds = control.GetFlatCaptionBackgroundBounds(
+            graphics,
+            captionBounds,
+            frameBounds);
+        int expectedGap = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxCaptionGap,
+            control.DeviceDpi);
+
+        Assert.False(textBounds.IsEmpty);
+        Assert.Equal(
+            expectedGap,
+            textBounds.Left - backgroundBounds.Left);
+        Assert.Equal(
+            expectedGap,
+            backgroundBounds.Right - textBounds.Right);
+    }
+
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData("A caption that is much wider than the available bounds")]
+    public void GroupBox_ModernFlat_CaptionBorderGapBoundsRemainValid(
+        string text)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesGroupBox control = new()
+        {
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(32, 40),
+            Text = text,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Rectangle bounds = new(
+            Point.Empty,
+            control.ClientSize - new Size(1, 1));
+        Rectangle frameBounds = control.GetFlatFrameBounds(bounds);
+        Rectangle captionBounds = control.GetFlatCaptionBounds(bounds);
+
+        Rectangle backgroundBounds = control.GetFlatCaptionBackgroundBounds(
+            graphics,
+            captionBounds,
+            frameBounds);
+
+        if (text.Length == 0)
+        {
+            Assert.True(backgroundBounds.IsEmpty);
+        }
+        else
+        {
+            Assert.InRange(
+                backgroundBounds.Left,
+                frameBounds.Left,
+                frameBounds.Right);
+            Assert.InRange(
+                backgroundBounds.Right,
+                frameBounds.Left,
+                frameBounds.Right);
+        }
+    }
+
     [WinFormsFact]
     public void GroupBox_ModernVisualStyles_FlatStyleChangeRequestsLayout()
     {
@@ -2878,6 +3049,55 @@ public class GroupBoxTests
             => (Rectangle)this.TestAccessor.Dynamic.GetStandardCaptionBounds(
                 bounds,
                 ModernCaptionFont.Height);
+
+        public Rectangle GetPopupCaptionBounds(Rectangle bounds)
+            => (Rectangle)this.TestAccessor.Dynamic.GetPopupCaptionBounds(
+                bounds,
+                ModernCaptionFont.Height,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxHeaderHorizontalPadding,
+                    DeviceDpi),
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                    DeviceDpi));
+
+        public Rectangle GetFlatCaptionBounds(Rectangle bounds)
+            => (Rectangle)this.TestAccessor.Dynamic.GetFlatCaptionBounds(
+                bounds,
+                ModernCaptionFont.Height,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxCornerRadius,
+                    DeviceDpi));
+
+        public Rectangle GetFlatFrameBounds(Rectangle bounds)
+        {
+            (int ascent, _) = ModernCaptionMetrics;
+
+            return new Rectangle(
+                bounds.Left,
+                bounds.Top + ascent,
+                bounds.Width,
+                Math.Max(0, bounds.Bottom - bounds.Top - ascent));
+        }
+
+        public Rectangle GetCaptionTextBounds(
+            Graphics graphics,
+            Rectangle availableBounds)
+            => (Rectangle)this.TestAccessor.Dynamic.GetCaptionTextBounds(
+                graphics,
+                availableBounds);
+
+        public Rectangle GetFlatCaptionBackgroundBounds(
+            Graphics graphics,
+            Rectangle captionBounds,
+            Rectangle frameBounds)
+            => (Rectangle)this.TestAccessor.Dynamic.GetFlatCaptionBackgroundBounds(
+                graphics,
+                captionBounds,
+                frameBounds);
+
+        public void SetTestDeviceDpi(int deviceDpi)
+            => DeviceDpiInternal = deviceDpi;
 
         public void RaiseSystemVisualSettingsChanged(
             SystemVisualSettingsChangedEventArgs e)
