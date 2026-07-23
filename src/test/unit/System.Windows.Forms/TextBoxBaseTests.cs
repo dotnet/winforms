@@ -8642,6 +8642,9 @@ public partial class TextBoxBaseTests
         public bool HighContrast { get; set; }
 
         internal override bool IsHighContrast => HighContrast;
+
+        public void RaiseSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
     }
 
     private class SubRichTextBox : RichTextBox
