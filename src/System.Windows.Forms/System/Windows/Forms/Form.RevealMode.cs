@@ -20,7 +20,7 @@ public partial class Form
     ///  Gets or sets how this form is presented while its initial appearance is prepared.
     /// </summary>
     /// <value>
-    ///  A <see cref="Forms.FormRevealMode"/> value. When not explicitly set, the effective value is
+    ///  A <see cref="FormRevealMode"/> value. When not explicitly set, the effective value is
     ///  <see cref="FormRevealMode.Deferred"/> or <see cref="FormRevealMode.Classic"/>, resolved from
     ///  <see cref="Application.IsFormRevealDeferred"/>.
     /// </value>

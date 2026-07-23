@@ -254,7 +254,7 @@ public sealed partial class Application
 
 #if NET11_0_OR_GREATER
     /// <summary>
-    ///  Gets the configured default <see cref="Forms.FormRevealMode"/> used as the reveal behavior for
+    ///  Gets the configured default <see cref="FormRevealMode"/> used as the reveal behavior for
     ///  top-level forms that do not set <see cref="Form.FormRevealMode"/> explicitly.
     /// </summary>
     /// <remarks>
@@ -425,7 +425,7 @@ public sealed partial class Application
 
 #if NET11_0_OR_GREATER
     /// <summary>
-    ///  Sets the process-wide default <see cref="Forms.FormRevealMode"/> used for top-level forms that do
+    ///  Sets the process-wide default <see cref="FormRevealMode"/> used for top-level forms that do
     ///  not set <see cref="Form.FormRevealMode"/> explicitly.
     /// </summary>
     /// <param name="mode">The default form reveal mode to use for newly created top-level forms.</param>
@@ -443,7 +443,7 @@ public sealed partial class Application
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidEnumArgumentException">
-    ///  <paramref name="mode"/> is not a valid <see cref="Forms.FormRevealMode"/> value.
+    ///  <paramref name="mode"/> is not a valid <see cref="FormRevealMode"/> value.
     /// </exception>
     public static void SetDefaultFormRevealMode(FormRevealMode mode)
     {
