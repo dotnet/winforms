@@ -281,17 +281,10 @@ public partial class GroupBox
             bounds.Width,
             Math.Max(0, bounds.Bottom - baseline));
 
-        // The caption is indented by the corner radius so it clears the rounded corner. Padding
-        // does not move the Flat caption. In RTL the indent is applied on the right.
-        bool rightToLeft = RightToLeft == RightToLeft.Yes;
-        int captionX = rightToLeft
-            ? bounds.Left
-            : bounds.Left + cornerRadius;
-        Rectangle captionBounds = new(
-            captionX,
-            bounds.Top,
-            Math.Max(0, bounds.Width - cornerRadius),
-            captionHeight);
+        Rectangle captionBounds = GetFlatCaptionBounds(
+            bounds,
+            captionHeight,
+            cornerRadius);
 
         Color effectiveBackColor = DisabledColor;
         Color borderColor = Application.SystemVisualSettings.AccentColor;
@@ -302,14 +295,12 @@ public partial class GroupBox
 
         DrawRoundedFrame(e.Graphics, frameBounds, borderColor);
 
-        Rectangle captionBackground = GetCaptionTextBounds(
+        Rectangle captionBackground = GetFlatCaptionBackgroundBounds(
             e.Graphics,
-            captionBounds);
+            captionBounds,
+            frameBounds);
         if (!captionBackground.IsEmpty)
         {
-            captionBackground.Inflate(
-                GetModernBorderThickness() + 2,
-                0);
             PaintBackground(e, captionBackground);
         }
 
@@ -332,16 +323,11 @@ public partial class GroupBox
             bounds.Width,
             Math.Min(bounds.Height, headerHeight));
 
-        // Caption uses the same alignment rule as Standard: shifted by Padding.Left (LTR) /
-        // Padding.Right (RTL) on top of the header's own horizontal padding.
-        bool rightToLeft = RightToLeft == RightToLeft.Yes;
-        int leftBase = horizontalPadding + (rightToLeft ? 0 : Padding.Left);
-        int rightBase = horizontalPadding + (rightToLeft ? Padding.Right : 0);
-        Rectangle captionBounds = new(
-            bounds.Left + leftBase,
-            bounds.Top + verticalPadding,
-            Math.Max(0, bounds.Width - leftBase - rightBase),
-            ModernCaptionFont.Height);
+        Rectangle captionBounds = GetPopupCaptionBounds(
+            bounds,
+            ModernCaptionFont.Height,
+            horizontalPadding,
+            verticalPadding);
 
         Color bodyColor = BackColor.A == 0
             ? Color.Transparent
@@ -399,6 +385,77 @@ public partial class GroupBox
                 PopupButtonColorMath.GetReadableForeColor(headerColor),
                 headerColor);
         DrawModernCaption(e.Graphics, captionBounds, captionColor);
+    }
+
+    private Rectangle GetFlatCaptionBounds(
+        Rectangle bounds,
+        int captionHeight,
+        int cornerRadius)
+    {
+        // The caption is indented by the corner radius so it clears the rounded corner. Padding
+        // does not move the Flat caption. In RTL the indent is applied on the right.
+        bool rightToLeft = RightToLeft == RightToLeft.Yes;
+        int captionX = rightToLeft
+            ? bounds.Left
+            : bounds.Left + cornerRadius;
+        int captionOffset = ScaleModernMetric(
+            ModernControlVisualStyles.BorderThickness);
+
+        return new Rectangle(
+            captionX,
+            bounds.Top + captionOffset,
+            Math.Max(0, bounds.Width - cornerRadius),
+            captionHeight);
+    }
+
+    private Rectangle GetFlatCaptionBackgroundBounds(
+        Graphics graphics,
+        Rectangle captionBounds,
+        Rectangle frameBounds)
+    {
+        Rectangle textBounds = GetCaptionTextBounds(
+            graphics,
+            captionBounds);
+        if (textBounds.IsEmpty)
+        {
+            return Rectangle.Empty;
+        }
+
+        int gap = ScaleModernMetric(
+            ModernControlVisualStyles.GroupBoxCaptionGap);
+        int left = Math.Max(
+            frameBounds.Left,
+            textBounds.Left - gap);
+        int right = Math.Min(
+            frameBounds.Right,
+            textBounds.Right + gap);
+
+        return right <= left
+            ? Rectangle.Empty
+            : new Rectangle(
+                left,
+                captionBounds.Top,
+                right - left,
+                captionBounds.Height);
+    }
+
+    private Rectangle GetPopupCaptionBounds(
+        Rectangle bounds,
+        int captionHeight,
+        int horizontalPadding,
+        int verticalPadding)
+    {
+        Rectangle captionBounds = GetStandardCaptionBounds(
+            bounds,
+            captionHeight);
+
+        return new Rectangle(
+            captionBounds.Left + horizontalPadding,
+            captionBounds.Top + verticalPadding,
+            Math.Max(
+                0,
+                captionBounds.Width - (2 * horizontalPadding)),
+            captionHeight);
     }
 
     private void DrawRoundedFrame(
@@ -561,17 +618,15 @@ public partial class GroupBox
 
         Size measuredSize = UseCompatibleTextRendering
             ? Size.Ceiling(
-                graphics.MeasureString(
-                    Text,
-                    ModernCaptionFont,
-                    availableBounds.Width))
+                MeasureModernCaption(
+                    graphics,
+                    availableBounds.Size))
             : TextRenderer.MeasureText(
                 graphics,
                 Text,
                 ModernCaptionFont,
                 availableBounds.Size,
-                TextFormatFlags.SingleLine
-                    | TextFormatFlags.NoPadding);
+                GetModernCaptionTextFormatFlags());
         int width = Math.Min(measuredSize.Width, availableBounds.Width);
         int x = RightToLeft == RightToLeft.Yes
             ? availableBounds.Right - width
@@ -597,25 +652,43 @@ public partial class GroupBox
         if (UseCompatibleTextRendering)
         {
             using var brush = color.GetCachedSolidBrushScope();
-            using StringFormat format = new()
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center,
-                HotkeyPrefix = ShowKeyboardCues
-                    ? HotkeyPrefix.Show
-                    : HotkeyPrefix.Hide,
-                Trimming = StringTrimming.EllipsisCharacter
-            };
-
-            if (RightToLeft == RightToLeft.Yes)
-            {
-                format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
-            }
+            using StringFormat format = CreateModernCaptionStringFormat();
 
             graphics.DrawString(Text, ModernCaptionFont, brush, bounds, format);
             return;
         }
 
+        TextRenderer.DrawText(
+            graphics,
+            Text,
+            ModernCaptionFont,
+            bounds,
+            color,
+            GetModernCaptionTextFormatFlags());
+    }
+
+    private StringFormat CreateModernCaptionStringFormat()
+    {
+        StringFormat format = new()
+        {
+            Alignment = StringAlignment.Near,
+            LineAlignment = StringAlignment.Center,
+            HotkeyPrefix = ShowKeyboardCues
+                ? HotkeyPrefix.Show
+                : HotkeyPrefix.Hide,
+            Trimming = StringTrimming.EllipsisCharacter
+        };
+
+        if (RightToLeft == RightToLeft.Yes)
+        {
+            format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
+        }
+
+        return format;
+    }
+
+    private TextFormatFlags GetModernCaptionTextFormatFlags()
+    {
         TextFormatFlags flags = TextFormatFlags.SingleLine
             | TextFormatFlags.VerticalCenter
             | TextFormatFlags.EndEllipsis
@@ -631,13 +704,20 @@ public partial class GroupBox
             flags |= TextFormatFlags.Right | TextFormatFlags.RightToLeft;
         }
 
-        TextRenderer.DrawText(
-            graphics,
+        return flags;
+    }
+
+    private SizeF MeasureModernCaption(
+        Graphics graphics,
+        Size availableSize)
+    {
+        using StringFormat format = CreateModernCaptionStringFormat();
+
+        return graphics.MeasureString(
             Text,
             ModernCaptionFont,
-            bounds,
-            color,
-            flags);
+            availableSize,
+            format);
     }
 
     private int ScaleModernMetric(int value)
