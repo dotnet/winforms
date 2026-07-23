@@ -5812,9 +5812,10 @@ public partial class TextBoxBaseTests
 
     [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_TestData))]
-    public void TextBox_GetPreferredSize_InvokeWithPaddingWithoutModernVisualStyles_ReturnsExpected(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
+    public void TextBox_GetPreferredSize_InvokeWithPaddingWithoutModernVisualStyles_IncludesPadding(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
     {
         Padding padding = new(1, 2, 3, 4);
+        expected += padding.Size;
         using SubTextBox control = new()
         {
             VisualStylesMode = VisualStylesMode.Classic,
