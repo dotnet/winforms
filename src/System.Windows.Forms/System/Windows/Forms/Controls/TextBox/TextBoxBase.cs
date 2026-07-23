@@ -2738,6 +2738,15 @@ public abstract partial class TextBoxBase : Control
                     roundedBodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
                     offscreenGraphics.FillPath(clientBackgroundBrush, roundedBodyPath);
                     offscreenGraphics.DrawPath(adornerPen, roundedBodyPath);
+
+                    // The rounded chrome is clipped with a non-antialiased region; blend the resulting
+                    // corner artifacts into the parent by tracing the parent color just outside the border.
+                    ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        offscreenGraphics,
+                        deflatedBounds,
+                        new Size(cornerRadius, cornerRadius),
+                        borderThickness,
+                        parentBackColor);
                 }
                 else
                 {

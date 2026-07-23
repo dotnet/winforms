@@ -1127,6 +1127,15 @@ public abstract partial class UpDownBase : ContainerControl
                     bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
                     graphics.FillPath(clientBackgroundBrush, bodyPath);
                     graphics.DrawPath(adornerPen, bodyPath);
+
+                    // The rounded chrome is clipped with a non-antialiased region; blend the resulting
+                    // corner artifacts into the parent by tracing the parent color just outside the border.
+                    ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        graphics,
+                        deflatedBounds,
+                        new Size(cornerRadius, cornerRadius),
+                        borderThickness,
+                        parentBackColor);
                 }
                 else
                 {
