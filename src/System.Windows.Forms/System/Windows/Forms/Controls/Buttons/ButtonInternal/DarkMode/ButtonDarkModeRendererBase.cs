@@ -32,6 +32,8 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         Graphics graphics,
         Rectangle bounds,
         FlatStyle flatStyle,
+        int borderSize,
+        Color borderColor,
         PushButtonState state,
         bool isDefault,
         bool focused,
@@ -61,11 +63,16 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
                 height: bounds.Height - padding.Vertical);
 
             // Draw button background and get content bounds
-            Rectangle contentBounds = DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor);
+            Rectangle contentBounds =
+                DrawButtonBackground(graphics, paddedBounds, state, isDefault, backColor, borderSize, borderColor);
 
-            // Paint image and field using the provided delegates
+            // Paint image using the provided delegates
             paintImage(contentBounds);
 
+            // Draw button border
+            DrawButtonBorder(graphics, bounds, borderSize, borderColor, state, isDefault);
+
+            // Paint field using the provided delegates
             paintField();
 
             if (focused && showFocusCues)
@@ -76,7 +83,13 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         }
     }
 
-    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor);
+    public virtual void DrawButtonBorder(Graphics graphics, Rectangle bounds, int borderSize,
+        Color borderColor, PushButtonState state, bool isDefault)
+    {
+    }
+
+    public abstract Rectangle DrawButtonBackground(Graphics graphics, Rectangle bounds,
+        PushButtonState state, bool isDefault, Color backColor, int borderSize, Color borderColor);
 
     public abstract void DrawFocusIndicator(Graphics graphics, Rectangle contentBounds, bool isDefault);
 
