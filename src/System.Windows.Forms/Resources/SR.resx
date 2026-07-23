@@ -1224,6 +1224,9 @@
   <data name="ControlOnSystemColorsChangedDescr" xml:space="preserve">
     <value>Event raised when the system colors change.</value>
   </data>
+  <data name="ControlOnSystemVisualSettingsChangedDescr" xml:space="preserve">
+    <value>Event raised when a Windows visual or accessibility setting changes.</value>
+  </data>
   <data name="ControlOnTabIndexChangedDescr" xml:space="preserve">
     <value>Event raised when the value of the TabIndex property is changed.</value>
   </data>

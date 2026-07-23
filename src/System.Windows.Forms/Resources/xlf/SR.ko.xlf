@@ -2027,6 +2027,11 @@
         <target state="translated">시스템 색이 변경되면 이벤트가 발생합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex 속성 값이 변경되면 이벤트가 발생합니다.</target>

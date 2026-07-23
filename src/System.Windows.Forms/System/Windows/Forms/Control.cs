@@ -146,6 +146,7 @@ public unsafe partial class Control :
     private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
+    private static readonly object s_systemVisualSettingsChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -172,6 +173,7 @@ public unsafe partial class Control :
     private const byte RequiredScalingMask = 0x0F;
 
     private const byte HighOrderBitMask = 0x80;
+    private const uint WmDwmColorizationColorChanged = 0x0320;
 
     private static Font? s_defaultFont;
 
@@ -227,6 +229,8 @@ public unsafe partial class Control :
 
     private static readonly int s_deviceDpiInternal = PropertyStore.CreateKey();
     private static readonly int s_originalDeviceDpiInternal = PropertyStore.CreateKey();
+    private static readonly int s_systemVisualSettingsProperty = PropertyStore.CreateKey();
+    private static readonly int s_systemVisualSettingsRefreshPendingProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
 
@@ -4189,6 +4193,24 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Occurs when a Windows visual or accessibility setting changes.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This instance event is the leak-free default for controls and forms. Unlike
+    ///   <see cref="Application.SystemVisualSettingsChanged"/>, it does not require
+    ///   unsubscription when the control is disposed.
+    ///  </para>
+    /// </remarks>
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ControlOnSystemVisualSettingsChangedDescr))]
+    public event SystemVisualSettingsChangedEventHandler? SystemVisualSettingsChanged
+    {
+        add => Events.AddHandler(s_systemVisualSettingsChangedEvent, value);
+        remove => Events.RemoveHandler(s_systemVisualSettingsChangedEvent, value);
+    }
+
+    /// <summary>
     ///  Occurs when the control is validating.
     /// </summary>
     [SRCategory(nameof(SR.CatFocus))]
@@ -7292,6 +7314,8 @@ public unsafe partial class Control :
         {
             OnTopMostActiveXParentChanged(EventArgs.Empty);
         }
+
+        ResynchronizeSystemVisualSettings();
     }
 
     /// <summary>
@@ -7420,6 +7444,8 @@ public unsafe partial class Control :
                 PInvokeCore.PostMessage(this, s_threadCallbackMessage);
                 SetState(States.ThreadMarshalPending, false);
             }
+
+            ResynchronizeSystemVisualSettings();
         }
 
         void HandleHighDpi()
@@ -8110,6 +8136,78 @@ public unsafe partial class Control :
 
         ((EventHandler?)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
     }
+
+    /// <summary>
+    ///  Raises the <see cref="SystemVisualSettingsChanged"/> event.
+    /// </summary>
+    /// <param name="e">The event data.</param>
+    /// <remarks>
+    ///  <para>
+    ///   The cascade reaches parented controls only. A control created before it is parented can
+    ///   miss a transition and should query <see cref="Application.SystemVisualSettings"/> when
+    ///   it creates a handle or is parented.
+    ///  </para>
+    /// </remarks>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+    {
+        Properties.AddOrRemoveValue(s_systemVisualSettingsProperty, e.NewSettings);
+
+        if (ChildControls is { } children)
+        {
+            for (int i = 0; i < children.Count; i++)
+            {
+                children[i].OnSystemVisualSettingsChanged(e);
+            }
+        }
+
+        ((SystemVisualSettingsChangedEventHandler?)Events[s_systemVisualSettingsChangedEvent])?.Invoke(this, e);
+    }
+
+    private void QueueSystemVisualSettingsRefresh()
+    {
+        if (!GetTopLevel()
+            || !IsHandleCreated
+            || Disposing
+            || IsDisposed
+            || Properties.GetValueOrDefault<bool>(s_systemVisualSettingsRefreshPendingProperty))
+        {
+            return;
+        }
+
+        Properties.AddOrRemoveValue(s_systemVisualSettingsRefreshPendingProperty, true, defaultValue: false);
+        BeginInvoke((Action)ProcessSystemVisualSettingsChange);
+    }
+
+    internal void ProcessSystemVisualSettingsChange()
+    {
+        Properties.AddOrRemoveValue(s_systemVisualSettingsRefreshPendingProperty, false, defaultValue: false);
+
+        if (!GetTopLevel() || Disposing || IsDisposed)
+        {
+            return;
+        }
+
+        SystemVisualSettings newSettings = SystemVisualSettingsTracker.Refresh();
+        SystemVisualSettings? oldSettings = Properties.GetValueOrDefault<SystemVisualSettings>(s_systemVisualSettingsProperty);
+        if (oldSettings is null)
+        {
+            ResynchronizeSystemVisualSettings();
+            return;
+        }
+
+        SystemVisualSettingsCategories changed = SystemVisualSettingsTracker.GetChangedCategories(oldSettings, newSettings);
+        if (changed != SystemVisualSettingsCategories.None)
+        {
+            OnSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(oldSettings, newSettings, changed));
+        }
+    }
+
+    private void ResynchronizeSystemVisualSettings()
+        => Properties.AddOrRemoveValue(
+            s_systemVisualSettingsProperty,
+            Application.SystemVisualSettings);
 
     /// <summary>
     ///  Raises the <see cref="Validating"/> event.
@@ -12649,6 +12747,7 @@ public unsafe partial class Control :
                     }
                 }
 
+                QueueSystemVisualSettingsRefresh();
                 break;
 
             case PInvokeCore.WM_SYSCOLORCHANGE:
@@ -12657,6 +12756,13 @@ public unsafe partial class Control :
                     OnSystemColorsChanged(EventArgs.Empty);
                 }
 
+                QueueSystemVisualSettingsRefresh();
+                break;
+
+            case PInvokeCore.WM_THEMECHANGED:
+            case WmDwmColorizationColorChanged:
+                DefWndProc(ref m);
+                QueueSystemVisualSettingsRefresh();
                 break;
 
             case PInvokeCore.WM_EXITMENULOOP:
