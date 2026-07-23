@@ -75,13 +75,16 @@ public class ComboBoxNativeLayoutTests
         form.CreateControl();
         table.CreateControl();
         comboBox.CreateControl();
-        IntPtr handle = comboBox.Handle;
+        _ = comboBox.Handle;
 
         form.VisualStylesMode = VisualStylesMode.Net11;
         form.PerformLayout();
         form.VisualStylesMode = VisualStylesMode.Classic;
         form.PerformLayout();
         var classicState = GetNativeComboState(comboBox);
+        int handleCreatedCallCount = 0;
+        comboBox.HandleCreated += (sender, e) =>
+            handleCreatedCallCount++;
 
         for (int i = 0; i < 10; i++)
         {
@@ -100,7 +103,7 @@ public class ComboBoxNativeLayoutTests
             form.VisualStylesMode = VisualStylesMode.Classic;
             form.PerformLayout();
             Assert.Equal(classicState, GetNativeComboState(comboBox));
-            Assert.Equal(handle, comboBox.Handle);
+            Assert.Equal((i + 1) * 2, handleCreatedCallCount);
         }
     }
 
