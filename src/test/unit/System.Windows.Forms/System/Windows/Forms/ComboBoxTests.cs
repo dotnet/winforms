@@ -474,7 +474,8 @@ public class ComboBoxTests
     {
         using SystemVisualSettingsTestScope settingsScope = new(
             clientAreaAnimationEnabled: false,
-            highContrastEnabled: false);
+            highContrastEnabled: false,
+            focusBorderMetrics: new Size(3, 3));
         using Panel parent = new()
         {
             BackColor = Color.Red,

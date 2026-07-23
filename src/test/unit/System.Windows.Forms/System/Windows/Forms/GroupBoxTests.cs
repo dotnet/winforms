@@ -428,7 +428,8 @@ public class GroupBoxTests
     {
         using SystemVisualSettingsTestScope settingsScope = new(
             clientAreaAnimationEnabled: false,
-            highContrastEnabled: false);
+            highContrastEnabled: false,
+            focusBorderMetrics: new Size(3, 3));
         using VisualStylesGroupBox control = new()
         {
             BackColor = Color.White,
