@@ -1076,32 +1076,29 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            // Keep the pre-.NET 11 layout contract for classic or disabled visual styles. In these
-            // modes we retain the historic border sizing, but user Padding does not participate in
-            // preferred-size calculations until a modern visual styles mode is selected explicitly.
-            Size borders = SizeFromClientSize(Size.Empty);
+            // Keep the pre-.NET 11 layout contract for classic or disabled visual styles, including
+            // the user Padding contribution that historically participated in preferred-size calculations.
+            Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
 
             if (BorderStyle != BorderStyle.None)
             {
-                borders += new Size(0, 3);
+                bordersAndPadding += new Size(0, 3);
             }
 
             if (BorderStyle == BorderStyle.FixedSingle)
             {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-                borders.Width += 2;
-                borders.Height += 2;
+                bordersAndPadding.Width += 2;
+                bordersAndPadding.Height += 2;
             }
 
-            // Preserve the classic border-only measurement contract until a modern
-            // visual styles mode is selected.
             padding.Left = 0;
             padding.Top = 0;
-            padding.Right = borders.Width;
-            padding.Bottom = borders.Height;
+            padding.Right = bordersAndPadding.Width;
+            padding.Bottom = bordersAndPadding.Height;
 
-            // Reduce constraints by the classic border size.
-            proposedConstraints -= borders;
+            // Reduce constraints by the classic border and padding size.
+            proposedConstraints -= bordersAndPadding;
         }
 
         Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
