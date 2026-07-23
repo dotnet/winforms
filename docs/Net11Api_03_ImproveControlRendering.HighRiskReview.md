@@ -4,7 +4,7 @@ This document records a review finding that needs native lifecycle investigation
 
 ## Deferred reveal is not activated during initial display
 
-Reviewed merge base: `8b618e7f5`  
+Reviewed merge base: `8b618e7f5`
 Reviewed branch tip: `1ee2b58a6`
 
 The deferred-reveal implementation attempts to cloak a form from `OnHandleCreated`, while `ShouldUseDeferredAppearanceCloak` requires both `IsHandleCreated` and `Visible`. During `Show`, `ShowDialog`, and `Application.Run(form)`, the handle is created while evaluating `HWND`, before `ShowWindow` makes the form visible. The visibility state changes later while processing `WM_SHOWWINDOW`, and there is no subsequent cloak attempt. The intended initial-display cloak therefore does not activate on the normal display path.
