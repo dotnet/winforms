@@ -227,6 +227,11 @@ public unsafe partial class Control :
 
     private static readonly int s_deviceDpiInternal = PropertyStore.CreateKey();
     private static readonly int s_originalDeviceDpiInternal = PropertyStore.CreateKey();
+#if NET11_0_OR_GREATER
+    private static readonly int s_recursiveInvalidateAfterSuspendPaintingProperty = PropertyStore.CreateKey();
+    private static readonly int s_suspendPaintingCountProperty = PropertyStore.CreateKey();
+#endif
+    private static readonly int s_updateCountProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
 
@@ -268,7 +273,6 @@ public unsafe partial class Control :
     // bits 0-4: BoundsSpecified stored in RequiredScaling property. Bit 5: RequiredScalingEnabled property.
     private byte _requiredScaling;
     private TRACKMOUSEEVENT _trackMouseEvent;
-    private short _updateCount;
     private LayoutEventArgs? _cachedLayoutEventArgs;
     private Queue<ThreadMethodEntry>? _threadCallbackList;
 
@@ -4374,17 +4378,16 @@ public unsafe partial class Control :
 
     internal void BeginUpdateInternal()
     {
-        if (!IsHandleCreated)
-        {
-            return;
-        }
-
-        if (_updateCount == 0)
+        int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
+        if (updateCount == 0 && IsHandleCreated)
         {
             PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
         }
 
-        _updateCount++;
+        Properties.AddOrRemoveValue(
+            s_updateCountProperty,
+            updateCount + 1,
+            defaultValue: 0);
     }
 
     /// <summary>
@@ -5070,13 +5073,21 @@ public unsafe partial class Control :
 
     internal bool EndUpdateInternal(bool invalidate)
     {
-        if (_updateCount > 0)
+        int updateCount = Properties.GetValueOrDefault(s_updateCountProperty, 0);
+
+        if (updateCount > 0)
         {
-            Debug.Assert(IsHandleCreated, "Handle should be created by now");
-            _updateCount--;
-            if (_updateCount == 0)
+            updateCount--;
+
+            Properties.AddOrRemoveValue(
+                s_updateCountProperty,
+                updateCount,
+                defaultValue: 0);
+
+            if (updateCount == 0 && IsHandleCreated)
             {
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
+
                 if (invalidate)
                 {
                     Invalidate();
@@ -5349,7 +5360,8 @@ public unsafe partial class Control :
     ///  by calling "WM_SETREDRAW" even if the control in "Begin - End" update cycle. Using this Function we can guard
     ///  against repetitively redrawing the control.
     /// </summary>
-    internal bool IsUpdating() => _updateCount > 0;
+    internal bool IsUpdating()
+        => Properties.GetValueOrDefault(s_updateCountProperty, 0) > 0;
 
     /// <summary>
     ///  This is a helper method that is called by ScaleControl to retrieve the bounds
@@ -7406,6 +7418,11 @@ public unsafe partial class Control :
                     hwnd: HWND,
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
+            }
+
+            if (IsUpdating())
+            {
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
             }
         }
 

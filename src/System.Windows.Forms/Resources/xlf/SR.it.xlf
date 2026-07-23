@@ -1697,6 +1697,11 @@
         <target state="translated">Specifica le dimensioni minime del controllo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' non è un controllo figlio di questo elemento.</target>
@@ -5420,6 +5425,11 @@ Sostituirlo?</target>
         <target state="translated">Il valore che questo form restituirà se viene visualizzato come finestra di dialogo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Evento generato quando si fa clic sul pulsante ?.</target>
@@ -5538,6 +5548,11 @@ Sostituirlo?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Generato prima della chiusura del form da parte dell'utente. Specifica il motivo della chiusura.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">

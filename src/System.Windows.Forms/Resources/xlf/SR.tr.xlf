@@ -1697,6 +1697,11 @@
         <target state="translated">Denetimin en küçük boyutunu belirtir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'alt' bu üstün alt denetimi değil.</target>
@@ -5420,6 +5425,11 @@ Değiştirmek istiyor musunuz?</target>
         <target state="translated">Bu formun iletişim kutusu olarak görüntülendiğinde döndüreceği değer.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Yardım düğmesi tıklatıldığında harekete geçirilen olay.</target>
@@ -5538,6 +5548,11 @@ Değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Kullanıcı formu her kapattığında, form kapatılmadan önce gerçekleşir ve kapatılma nedenini belirtir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">

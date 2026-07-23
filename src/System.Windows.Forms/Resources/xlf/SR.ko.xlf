@@ -1697,6 +1697,11 @@
         <target state="translated">컨트롤의 최소 크기를 지정합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child'는 이 부모의 자식 컨트롤이 아닙니다.</target>
@@ -5420,6 +5425,11 @@ Do you want to replace it?</source>
         <target state="translated">대화 상자로 표시할 경우, 이 폼에서 반환하는 값입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">[도움말] 단추를 클릭하면 이벤트가 발생합니다.</target>
@@ -5538,6 +5548,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">사용자가 폼을 닫을 때마다 또는 폼이 닫히기 전에 발생하며 닫는 이유를 지정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">

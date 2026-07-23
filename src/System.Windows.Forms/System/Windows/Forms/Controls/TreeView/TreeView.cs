@@ -1569,10 +1569,9 @@ public partial class TreeView : Control
     ///  beginUpdate(), any redrawing caused by operations performed on the
     ///  combo box is deferred until the call to endUpdate().
     /// </summary>
-    public void EndUpdate()
-    {
-        EndUpdateInternal();
-    }
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private void EndUpdate(bool invalidate) => EndUpdateInternal(invalidate);
 
     /// <summary>
     ///  Expands all nodes at the root level.

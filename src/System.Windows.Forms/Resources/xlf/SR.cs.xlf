@@ -1697,6 +1697,11 @@
         <target state="translated">Určuje minimální velikost ovládacího prvku.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">Objekt child není podřízeným ovládacím prvkem tohoto nadřazeného objektu.</target>
@@ -5420,6 +5425,11 @@ Chcete ho nahradit?</target>
         <target state="translated">Hodnota, kterou tento formulář vrátí, pokud bude zobrazen jako dialogové okno.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Událost aktivovaná při kliknutí na tlačítko nápovědy</target>
@@ -5538,6 +5548,11 @@ Chcete ho nahradit?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Vyvolá se vždy, když uživatel zavírá formulář, a to před jeho zavřením, a určí důvod zavření.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">

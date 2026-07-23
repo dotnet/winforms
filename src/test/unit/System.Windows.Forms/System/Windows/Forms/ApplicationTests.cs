@@ -180,6 +180,58 @@ public class ApplicationTests
 
 #pragma warning restore SYSLIB5002
 
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Application_DefaultFormRevealMode_Default_ReturnsInherit()
+    {
+        // Run in an isolated child process: DefaultFormRevealMode is process-wide state, and other tests
+        // in this shared-process test binary may have already called SetDefaultFormRevealMode.
+        RemoteExecutor.Invoke(() =>
+        {
+            Assert.Equal(FormRevealMode.Inherit, Application.DefaultFormRevealMode);
+        }).Dispose();
+    }
+
+    [WinFormsTheory]
+    [InlineData(FormRevealMode.Classic)]
+    [InlineData(FormRevealMode.Deferred)]
+    [InlineData(FormRevealMode.Inherit)]
+    public void Application_SetDefaultFormRevealMode_GetReturnsExpected(FormRevealMode mode)
+    {
+        Application.SetDefaultFormRevealMode(mode);
+        Assert.Equal(mode, Application.DefaultFormRevealMode);
+    }
+
+    [WinFormsFact]
+    public void Application_SetDefaultFormRevealMode_Invalid_ThrowsInvalidEnumArgumentException()
+    {
+        Assert.Throws<InvalidEnumArgumentException>(
+            "mode",
+            () => Application.SetDefaultFormRevealMode((FormRevealMode)int.MaxValue));
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Classic_ReturnsFalse()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Classic);
+        Assert.False(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Deferred_ReturnsTrue()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
+        Assert.True(Application.IsFormRevealDeferred);
+    }
+
+    [WinFormsFact]
+    public void Application_IsFormRevealDeferred_Inherit_MatchesIsDarkModeEnabled()
+    {
+        Application.SetDefaultFormRevealMode(FormRevealMode.Inherit);
+        Assert.Equal(Application.IsDarkModeEnabled, Application.IsFormRevealDeferred);
+    }
+#endif
+
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {
