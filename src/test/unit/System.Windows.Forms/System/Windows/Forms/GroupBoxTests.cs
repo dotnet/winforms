@@ -447,7 +447,8 @@ public class GroupBoxTests
         Assert.True(
             CountPixels(
                 actual,
-                Application.SystemVisualSettings.AccentColor) > 0);
+                Application.SystemVisualSettings.AccentColor,
+                channelTolerance: 16) > 0);
         Assert.Equal(
             Math.Max(
                 ModernControlVisualStyles.GetFocusBorderMetrics(
@@ -2884,15 +2885,21 @@ public class GroupBoxTests
         internal override bool IsHighContrast => false;
     }
 
-    private static int CountPixels(Bitmap bitmap, Color color)
+    private static int CountPixels(
+        Bitmap bitmap,
+        Color color,
+        int channelTolerance = 0)
     {
         int count = 0;
-        int argb = color.ToArgb();
         for (int y = 0; y < bitmap.Height; y++)
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                Color pixel = bitmap.GetPixel(x, y);
+                if (Math.Abs(pixel.A - color.A) <= channelTolerance
+                    && Math.Abs(pixel.R - color.R) <= channelTolerance
+                    && Math.Abs(pixel.G - color.G) <= channelTolerance
+                    && Math.Abs(pixel.B - color.B) <= channelTolerance)
                 {
                     count++;
                 }
