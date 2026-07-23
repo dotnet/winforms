@@ -1,0 +1,48 @@
+#nullable enable
+System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
+System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
+System.Windows.Forms.Control.EffectiveVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Metrics = 3 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.None = 0 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.NonClientUpdate = 2 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Recreate = 4 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Repaint = 1 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Inherit = -1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Net11 = 2 -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.ButtonBase.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.Form.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.ComboBox.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.ComboBox.OnPaddingChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+override System.Windows.Forms.GroupBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.GroupBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.GroupBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.GroupBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
+override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
+override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
+virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+virtual System.Windows.Forms.Control.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+virtual System.Windows.Forms.Control.VisualStylesMode.set -> void

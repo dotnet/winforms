@@ -171,6 +171,12 @@
   <data name="ApplicationCannotChangeApplicationExceptionMode" xml:space="preserve">
     <value>Application exception mode cannot be changed once any Controls are created in the application.</value>
   </data>
+  <data name="Application_VisualStylesModeCanOnlyBeSetOnce" xml:space="preserve">
+    <value>The default visual styles mode can only be set once and cannot be changed afterwards.</value>
+  </data>
+  <data name="Application_VisualStylesModeInheritInvalidAsDefault" xml:space="preserve">
+    <value>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</value>
+  </data>
   <data name="ApplyCaption" xml:space="preserve">
     <value>&amp;Apply</value>
   </data>
@@ -4987,7 +4993,7 @@ Stack trace where the illegal operation occurred was:
     <value>Controls whether the Network button is displayed.</value>
   </data>
   <data name="RadioButtonAppearanceDescr" xml:space="preserve">
-    <value>Controls whether the RadioButton appears as normal or as a Windows PushButton.</value>
+    <value>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</value>
   </data>
   <data name="RadioButtonAutoCheckDescr" xml:space="preserve">
     <value>Causes the radio button to automatically change state when clicked.</value>
@@ -6930,6 +6936,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ControlDataContextChangedDescr" xml:space="preserve">
     <value>Occurs when the value of the DataContext property changes.</value>
+  </data>
+  <data name="ControlVisualStylesModeDescr" xml:space="preserve">
+    <value>Determines how the control renders itself when visual styles are applied.</value>
+  </data>
+  <data name="ControlVisualStylesModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the value of the VisualStylesMode property changes.</value>
   </data>
   <data name="CommandComponentCommandParameterDescr" xml:space="preserve">
     <value>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</value>
