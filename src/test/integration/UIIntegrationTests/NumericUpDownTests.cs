@@ -42,9 +42,13 @@ public class NumericUpDownTests : ControlTestBase
                 return;
             }
 
+            int expectedInset = control.LogicalToDeviceUnits(
+                ModernControlVisualStyles.Fixed3DBorderPadding
+                    + ModernControlVisualStyles.InternalChromeInset);
+
             Assert.True(control.Height >= control.PreferredHeight);
-            Assert.Equal(control.LogicalToDeviceUnits(3), control.TextBox.Left);
-            Assert.Equal(control.LogicalToDeviceUnits(3), control.UpDownButtonsInternal.Top);
+            Assert.Equal(expectedInset, control.TextBox.Left);
+            Assert.Equal(expectedInset, control.UpDownButtonsInternal.Top);
             Assert.True(control.UpDownButtonsInternal.Bounds.Left >= control.TextBox.Bounds.Right);
         });
     }
