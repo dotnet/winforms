@@ -80,6 +80,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private Color _selectedItemWithFocusBackColor = SystemColors.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
 
+    // The PropertyGrid pins its effective VisualStylesMode to Classic (see the VisualStylesMode override).
+    // A value assigned through the setter is remembered here for potential future use only.
+    private VisualStylesMode _requestedVisualStylesMode = VisualStylesMode.Inherit;
+
     private AttributeCollection? _browsableAttributes;
 
     private SnappableControl? _targetMove;
@@ -817,6 +821,39 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
+    }
+
+    /// <summary>
+    ///  Gets or sets how the <see cref="PropertyGrid"/> renders itself when visual styles are applied.
+    /// </summary>
+    /// <value>
+    ///  Always <see cref="VisualStylesMode.Classic"/>. Assigning a different value is remembered but does
+    ///  not change how the grid or its hosted editing controls render.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The <see cref="PropertyGrid"/> pins its effective <see cref="VisualStylesMode"/> to
+    ///   <see cref="VisualStylesMode.Classic"/>. The editing controls hosted inside the grid (the value
+    ///   text boxes and drop-down editors) read the ambient <see cref="VisualStylesMode"/> from their
+    ///   parent. They must render in the classic style so their frames and glyphs line up with the grid's
+    ///   own fixed layout. Because this override always returns <see cref="VisualStylesMode.Classic"/> and
+    ///   <see cref="VisualStylesMode"/> is a virtual ambient property, those children never switch to a
+    ///   modern renderer, regardless of <see cref="Application.DefaultVisualStylesMode"/> or the parent
+    ///   form's setting.
+    ///  </para>
+    ///  <para>
+    ///   A value assigned through the setter is stored for potential future use but currently has no
+    ///   effect; the getter continues to report <see cref="VisualStylesMode.Classic"/>. This keeps the
+    ///   surface forward compatible for a later release in which the grid may honor a modern mode.
+    ///  </para>
+    /// </remarks>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override VisualStylesMode VisualStylesMode
+    {
+        get => VisualStylesMode.Classic;
+        set => _requestedVisualStylesMode = value;
     }
 
     /// <summary>
