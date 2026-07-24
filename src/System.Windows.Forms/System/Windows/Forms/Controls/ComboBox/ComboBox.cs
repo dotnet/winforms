@@ -75,6 +75,11 @@ public partial class ComboBox : ListControl
     private bool _mouseEvents;
     private bool _mouseInEdit;
 
+    // Modern VisualStyles: set on WM_LBUTTONDOWN when the press lands on the modern drop-down
+    // button, so the list is toggled on the matching WM_LBUTTONUP. Opening on button-up avoids
+    // the freshly shown list popup capturing the still-pending button-up and closing again.
+    private bool _modernDropDownButtonPressed;
+
     private bool _sorted;
     private bool _fireSetFocus = true;
     private bool _fireLostFocus = true;
@@ -157,7 +162,9 @@ public partial class ComboBox : ListControl
             }
 
             bool resetAutoComplete = false;
-            if (_autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
+
+            if (_autoCompleteMode != AutoCompleteMode.None
+                && value == AutoCompleteMode.None)
             {
                 resetAutoComplete = true;
             }
@@ -300,7 +307,8 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit!.HWND);
+            _childEditAccessibleObject ??=
+                new ComboBoxChildEditUiaProvider(this, _childEdit!.HWND);
 
             return _childEditAccessibleObject;
         }
@@ -311,7 +319,11 @@ public partial class ComboBox : ListControl
         get
         {
             _childListAccessibleObject ??=
-                    new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox!.HWND : _dropDownHandle);
+                    new ComboBoxChildListUiaProvider(
+                        owningComboBox: this,
+                        childListControlhandle: DropDownStyle == ComboBoxStyle.Simple
+                            ? _childListBox!.HWND
+                            : _dropDownHandle);
 
             return _childListAccessibleObject;
         }
@@ -321,15 +333,18 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            _childTextAccessibleObject ??= new ComboBoxChildTextUiaProvider(this);
+            _childTextAccessibleObject ??=
+                new ComboBoxChildTextUiaProvider(this);
 
             return _childTextAccessibleObject;
         }
     }
 
-    internal void ClearChildEditAccessibleObject() => _childEditAccessibleObject = null;
+    internal void ClearChildEditAccessibleObject()
+        => _childEditAccessibleObject = null;
 
-    internal void ClearChildListAccessibleObject() => _childListAccessibleObject = null;
+    internal void ClearChildListAccessibleObject()
+        => _childListAccessibleObject = null;
 
     protected override CreateParams CreateParams
     {
@@ -339,6 +354,7 @@ public partial class ComboBox : ListControl
             cp.ClassName = PInvoke.WC_COMBOBOX;
             cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.CBS_HASSTRINGS | PInvoke.CBS_AUTOHSCROLL;
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
+
             if (!_integralHeight)
             {
                 cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
@@ -349,15 +365,17 @@ public partial class ComboBox : ListControl
                 case ComboBoxStyle.Simple:
                     cp.Style |= PInvoke.CBS_SIMPLE;
                     break;
+
                 case ComboBoxStyle.DropDown:
                     cp.Style |= PInvoke.CBS_DROPDOWN;
                     // Make sure we put the height back or we won't be able to size the dropdown!
-                    cp.Height = PreferredHeight;
+                    cp.Height = GetClassicPreferredHeight();
                     break;
+
                 case ComboBoxStyle.DropDownList:
                     cp.Style |= PInvoke.CBS_DROPDOWNLIST;
                     // Comment above...
-                    cp.Height = PreferredHeight;
+                    cp.Height = GetClassicPreferredHeight();
                     break;
             }
 
@@ -366,6 +384,7 @@ public partial class ComboBox : ListControl
                 case DrawMode.OwnerDrawFixed:
                     cp.Style |= PInvoke.CBS_OWNERDRAWFIXED;
                     break;
+
                 case DrawMode.OwnerDrawVariable:
                     cp.Style |= PInvoke.CBS_OWNERDRAWVARIABLE;
                     break;
@@ -380,12 +399,7 @@ public partial class ComboBox : ListControl
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
     protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(121, PreferredHeight);
-        }
-    }
+        => new Size(121, PreferredHeight);
 
     /// <summary>
     ///  The ListSource to consume as this ListBox's source of data.
@@ -433,7 +447,10 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))]
     public int DropDownWidth
     {
-        get => Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth) ? dropDownWidth : Width;
+        get => Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth)
+            ? dropDownWidth
+            : Width;
+
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
@@ -441,6 +458,7 @@ public partial class ComboBox : ListControl
             if (Properties.GetValueOrDefault<int>(s_propDropDownWidth) != value)
             {
                 Properties.AddValue(s_propDropDownWidth, value);
+
                 if (IsHandleCreated)
                 {
                     PInvokeCore.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
@@ -459,7 +477,10 @@ public partial class ComboBox : ListControl
     [DefaultValue(106)]
     public int DropDownHeight
     {
-        get => Properties.TryGetValue(s_propDropDownHeight, out int dropDownHeight) ? dropDownHeight : DefaultDropDownHeight;
+        get => Properties.TryGetValue(s_propDropDownHeight, out int dropDownHeight)
+            ? dropDownHeight
+            : DefaultDropDownHeight;
+
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
@@ -495,24 +516,46 @@ public partial class ComboBox : ListControl
         }
     }
 
-    /// <summary>
-    ///  Gets or sets the flat style appearance of the button control.
-    /// </summary>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(FlatStyle.Standard)]
-    [Localizable(true)]
-    [SRDescription(nameof(SR.ComboBoxFlatStyleDescr))]
-    public FlatStyle FlatStyle
+    public partial FlatStyle FlatStyle
     {
-        get
-        {
-            return _flatStyle;
-        }
+        get => _flatStyle;
+
         set
         {
             // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
+
+            if (_flatStyle == value)
+            {
+                return;
+            }
+
+            bool usedModernMetrics = UsesModernComboAdapter;
             _flatStyle = value;
+            ResetComboAdapter();
+
+            if (usedModernMetrics != UsesModernComboAdapter)
+            {
+                ResetHeightCache();
+                CommonProperties.xClearPreferredSizeCache(this);
+                ApplyModernComboLayout();
+
+                LayoutTransaction.DoLayout(
+                    this,
+                    this,
+                    PropertyNames.FlatStyle);
+
+                if (ParentInternal is { } parent)
+                {
+                    LayoutTransaction.DoLayout(
+                        parent,
+                        this,
+                        PropertyNames.FlatStyle);
+                }
+            }
+
+            ApplyModernComboLayout();
+            RefreshModernDropDownCornerPreference();
             Invalidate();
         }
     }
@@ -720,7 +763,9 @@ public partial class ComboBox : ListControl
                 // Nothing to see here... Just keep on walking...
                 // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                 // our drawing gets a little messed up. So in case theming is off, force a draw here.
-                if ((!ContainsFocus || !Application.RenderWithVisualStyles) && FlatStyle == FlatStyle.Popup)
+                if (UsesModernComboAdapter
+                    || ((!ContainsFocus || !Application.RenderWithVisualStyles)
+                        && FlatStyle == FlatStyle.Popup))
                 {
                     Invalidate();
                     Update();
@@ -729,14 +774,30 @@ public partial class ComboBox : ListControl
         }
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    /// <summary>
+    ///  Gets or sets the distance between the ComboBox text and its field edges.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   In an effective .NET 11-or-later visual-styles mode, WinForms applies an additional
+    ///   one-logical-pixel style inset around the user-provided value. The public default remains
+    ///   <see cref="Padding.Empty"/>.
+    ///  </para>
+    /// </remarks>
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public new Padding Padding
     {
         get => base.Padding;
         set => base.Padding = value;
     }
+
+    private new bool ShouldSerializePadding()
+        => Padding != DefaultPadding;
+
+    private void ResetPadding()
+        => Padding = DefaultPadding;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -757,55 +818,66 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            if (!FormattingEnabled)
+            if (UsesModernComboAdapter
+                && DropDownStyle != ComboBoxStyle.Simple)
             {
-                // do preferred height the old broken way for everett apps
-                // we need this for compat reasons because (get this)
-                //  (a) everett PreferredHeight was always wrong.
-                //  (b) so, when ComboBox1.Size = actualdefaultsize was called, it would enter setboundscore
-                //  (c) this updated requestedheight
-                //  (d) if the user then changed the combo to simple style, the height did not change.
-                // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
-                // occurs. We simply do not know when Size was set.
-
-                // So in whidbey, the behavior will be:
-                //  (1) user uses default size = setting dropdownstyle=simple will revert to simple height
-                //  (2) user uses nondefault size = setting dropdownstyle=simple will not change height from this value
-
-                // In everett
-                //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidbey.(1) above
-                //  user usually uses nondefault size and will experience whidbey.(2) above
-
-                Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
-                _prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
-
-                return _prefHeightCache;
+                return ModernPreferredHeight;
             }
 
-            // Normally we do this sort of calculation in GetPreferredSizeCore which has builtin
-            // caching, but in this case we can not because PreferredHeight is used in ApplySizeConstraints
-            // which is used by GetPreferredSize (infinite loop).
-            if (_prefHeightCache < 0)
-            {
-                Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+            return GetClassicPreferredHeight();
+        }
+    }
 
-                // For a "simple" style ComboBox, the preferred height depends on the
-                // number of items in the ComboBox.
-                if (DropDownStyle == ComboBoxStyle.Simple)
-                {
-                    int itemCount = Items.Count + 1;
-                    _prefHeightCache = (short)(textSize.Height * itemCount + SystemInformation.BorderSize.Height * 16 + Padding.Size.Height);
-                }
-                else
-                {
-                    // We do this old school rather than use SizeFromClientSize because CreateParams calls this
-                    // method and SizeFromClientSize calls CreateParams (another infinite loop.)
-                    _prefHeightCache = (short)GetComboHeight();
-                }
-            }
+    private int GetClassicPreferredHeight()
+    {
+        if (!FormattingEnabled)
+        {
+            // do preferred height the old broken way for everett apps
+            // we need this for compat reasons because (get this)
+            //  (a) everett PreferredHeight was always wrong.
+            //  (b) so, when ComboBox1.Size = actualdefaultsize was called, it would enter setboundscore
+            //  (c) this updated requestedheight
+            //  (d) if the user then changed the combo to simple style, the height did not change.
+            // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
+            // occurs. We simply do not know when Size was set.
+
+            // So in whidbey, the behavior will be:
+            //  (1) user uses default size = setting dropdownstyle=simple will revert to simple height
+            //  (2) user uses nondefault size = setting dropdownstyle=simple will not change height from this value
+
+            // In everett
+            //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidbey.(1) above
+            //  user usually uses nondefault size and will experience whidbey.(2) above
+
+            Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+            _prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
             return _prefHeightCache;
         }
+
+        // Normally we do this sort of calculation in GetPreferredSizeCore which has builtin
+        // caching, but in this case we can not because PreferredHeight is used in ApplySizeConstraints
+        // which is used by GetPreferredSize (infinite loop).
+        if (_prefHeightCache < 0)
+        {
+            Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
+
+            // For a "simple" style ComboBox, the preferred height depends on the
+            // number of items in the ComboBox.
+            if (DropDownStyle == ComboBoxStyle.Simple)
+            {
+                int itemCount = Items.Count + 1;
+                _prefHeightCache = (short)(textSize.Height * itemCount + SystemInformation.BorderSize.Height * 16 + Padding.Size.Height);
+            }
+            else
+            {
+                // We do this old school rather than use SizeFromClientSize because CreateParams calls this
+                // method and SizeFromClientSize calls CreateParams (another infinite loop.)
+                _prefHeightCache = (short)GetComboHeight();
+            }
+        }
+
+        return _prefHeightCache;
     }
 
     // ComboBox.PreferredHeight returns incorrect values
@@ -1575,10 +1647,7 @@ public partial class ComboBox : ListControl
                 DefChildWndProc(ref m);
                 if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                 {
-                    PInvokeCore.SendMessage(
-                        _childEdit,
-                        PInvokeCore.EM_SETMARGINS,
-                        (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
+                    ApplyModernComboLayout();
                 }
 
                 break;
@@ -1855,7 +1924,9 @@ public partial class ComboBox : ListControl
     ///  beginUpdate(), any redrawing caused by operations performed on the
     ///  combo box is deferred until the call to endUpdate().
     /// </summary>
-    public unsafe void EndUpdate()
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private unsafe void EndUpdate(bool invalidate)
     {
         _updateCount--;
         if (_updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -1863,7 +1934,7 @@ public partial class ComboBox : ListControl
             SetAutoComplete(false, false);
         }
 
-        if (EndUpdateInternal())
+        if (EndUpdateInternal(invalidate) && invalidate)
         {
             if (_childEdit is not null && !_childEdit.HWND.IsNull)
             {
@@ -2332,16 +2403,37 @@ public partial class ComboBox : ListControl
             _fromHandleCreate = false;
         }
 
+        COMBOBOXINFO comboBoxInfo = default;
+        comboBoxInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+        bool hasComboBoxInfo = PInvoke.GetComboBoxInfo(
+            HWND,
+            ref comboBoxInfo);
         if (Application.IsDarkModeEnabled)
         {
             // Style the ComboBox Open-Button:
             PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}", null);
-            COMBOBOXINFO cInfo = default;
-            cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
 
             // Style the ComboBox drop-down (including its ScrollBar(s)):
-            _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
-            PInvoke.SetWindowTheme(cInfo.hwndList, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+            if (hasComboBoxInfo)
+            {
+                PInvoke.SetWindowTheme(
+                    comboBoxInfo.hwndList,
+                    $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    null);
+            }
+        }
+
+        _nativeComboHandleInitialized = true;
+        if (UsesModernComboAdapter)
+        {
+            InitializeNativeComboBaseline();
+            ApplyModernComboLayout();
+        }
+
+        if (hasComboBoxInfo)
+        {
+            ApplyModernDropDownCornerPreference(
+                comboBoxInfo.hwndList);
         }
 
         if (_itemsCollection is not null)
@@ -2369,6 +2461,11 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
+        _nativeComboBaseline = default;
+        _applyingModernComboLayout = false;
+        _nativeComboHandleInitialized = false;
+        _normalizingNativeComboBaseline = false;
+        _modernComboLayoutWriteCount = 0;
         _dropDownHandle = HWND.Null;
         if (Disposing)
         {
@@ -2654,7 +2751,10 @@ public partial class ComboBox : ListControl
     protected override void OnParentBackColorChanged(EventArgs e)
     {
         base.OnParentBackColorChanged(e);
-        if (DropDownStyle == ComboBoxStyle.Simple)
+        if (DropDownStyle == ComboBoxStyle.Simple
+            || (UsesModernComboAdapter
+                && FlatStyle is FlatStyle.Standard
+                    or FlatStyle.Popup))
         {
             Invalidate();
         }
@@ -2680,6 +2780,8 @@ public partial class ComboBox : ListControl
         }
 
         CommonProperties.xClearPreferredSizeCache(this);
+        ResetComboAdapter();
+        ApplyModernComboLayout();
     }
 
     private void OnAutoCompleteCustomSourceChanged(object? sender, CollectionChangeEventArgs e)
@@ -2813,7 +2915,10 @@ public partial class ComboBox : ListControl
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        if (DropDownStyle == ComboBoxStyle.Simple && IsHandleCreated)
+        ApplyModernComboLayout();
+
+        if (DropDownStyle == ComboBoxStyle.Simple
+            && IsHandleCreated)
         {
             // simple style combo boxes have more painting problems than you can shake a stick at
             InvalidateEverything();
@@ -3388,6 +3493,8 @@ public partial class ComboBox : ListControl
                 }
             }
         }
+
+        ApplyModernComboLayout();
     }
 
     /// <summary>
@@ -3461,6 +3568,8 @@ public partial class ComboBox : ListControl
             // Reset the child list accessible object in case the DDL is recreated.
             // For instance when dialog window containing the ComboBox is reopened.
             _childListAccessibleObject = null;
+            ApplyModernDropDownCornerPreference(
+                _dropDownHandle);
         }
     }
 
@@ -3616,6 +3725,46 @@ public partial class ComboBox : ListControl
     {
         switch (m.MsgInternal)
         {
+            // Modern VisualStyles: expand the client area to the full window so the drop-down
+            // button, which the themed ComboBox otherwise reserves as non-client (outside
+            // ClientRectangle), becomes part of the client and is covered by our rounded field.
+            // Simple combos have no drop-down button (their client already spans the full width
+            // and hosts a permanent list), so they must never be expanded.
+            case PInvokeCore.WM_NCCALCSIZE:
+                if (UsesModernComboAdapter
+                    && DropDownStyle != ComboBoxStyle.Simple
+                    && m.WParamInternal != 0u)
+                {
+                    RECT* ncRects = (RECT*)(nint)m.LParamInternal;
+                    RECT proposedWindow = ncRects[0];
+                    base.WndProc(ref m);
+                    ncRects[0] = proposedWindow;
+                    return;
+                }
+
+                base.WndProc(ref m);
+                break;
+
+            // Modern VisualStyles: comctl32 still reports the drop-down button region as a
+            // non-client hit (HTVSCROLL) even though WM_NCCALCSIZE folded it into our client
+            // area, so a button click would arrive as WM_NCLBUTTONDOWN and never reach the
+            // WM_LBUTTONDOWN hit-test below. Force HTCLIENT across the expanded client so the
+            // button click is delivered as a normal client message we can act on.
+            case PInvokeCore.WM_NCHITTEST:
+                base.WndProc(ref m);
+                if (UsesModernComboAdapter
+                    && DropDownStyle != ComboBoxStyle.Simple
+                    && m.ResultInternal != PInvoke.HTCLIENT)
+                {
+                    Point hitPoint = PointToClient(PARAM.ToPoint(m.LParamInternal));
+                    if (ClientRectangle.Contains(hitPoint))
+                    {
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.HTCLIENT;
+                    }
+                }
+
+                break;
+
             // We don't want to fire the focus events twice -
             // once in the ComboBox and once in the ChildWndProc.
             case PInvokeCore.WM_SETFOCUS:
@@ -3718,10 +3867,29 @@ public partial class ComboBox : ListControl
                 WmReflectMeasureItem(ref m);
                 break;
             case PInvokeCore.WM_LBUTTONDOWN:
+                // Modern VisualStyles: the drop-down button now lives inside our expanded client
+                // area, so comctl32 no longer opens the list on a button click. Track the press
+                // here and toggle on the matching WM_LBUTTONUP (see _modernDropDownButtonPressed).
+                if (IsModernDropDownButtonClick(PARAM.ToPoint(m.LParamInternal)))
+                {
+                    _modernDropDownButtonPressed = true;
+                    Focus();
+                    break;
+                }
+
                 _mouseEvents = true;
                 base.WndProc(ref m);
                 break;
             case PInvokeCore.WM_LBUTTONUP:
+                // Modern VisualStyles: complete the drop-down button interaction started on
+                // WM_LBUTTONDOWN by toggling the list now that the button has been released.
+                if (_modernDropDownButtonPressed)
+                {
+                    _modernDropDownButtonPressed = false;
+                    DroppedDown = !DroppedDown;
+                    break;
+                }
+
                 PInvokeCore.GetWindowRect(this, out var rect);
                 Rectangle clientRect = rect;
 
@@ -3755,9 +3923,12 @@ public partial class ComboBox : ListControl
                 break;
 
             case PInvokeCore.WM_PAINT:
+                ApplyModernComboLayout();
                 if (!GetStyle(ControlStyles.UserPaint)
-                    && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
-                    && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
+                    && UsesComboAdapter
+                    && (UsesModernComboAdapter
+                        || !(SystemInformation.HighContrast
+                            && BackColor == SystemColors.Window)))
                 {
                     using RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
                     using RegionScope windowRegion = new(Bounds);
@@ -3777,6 +3948,52 @@ public partial class ComboBox : ListControl
 
                     using SaveDcScope savedDcState = new(dc);
 
+                    // Modern VisualStyles: double-buffer the native field paint and our rounded
+                    // overpaint into an offscreen buffer that is blitted in a single pass, so the
+                    // drop-down button and rounded chrome no longer flicker between the native
+                    // paint and our overpaint. Classic Flat keeps painting straight to the DC.
+                    if (UsesModernComboAdapter)
+                    {
+                        Rectangle bufferBounds = ClientRectangle;
+                        if (bufferBounds is { Width: > 0, Height: > 0 })
+                        {
+                            using Graphics targetGraphics = Graphics.FromHdcInternal((IntPtr)dc);
+                            BufferedGraphicsContext bufferContext = BufferedGraphicsManager.Current;
+                            using BufferedGraphics buffer = bufferContext.Allocate(targetGraphics, bufferBounds);
+                            Graphics bufferGraphics = buffer.Graphics;
+
+                            // Let the native ComboBox paint the field (minus our drop-down button)
+                            // into the buffer, exactly as it would into the window DC.
+                            IntPtr bufferHdc = bufferGraphics.GetHdc();
+                            try
+                            {
+                                if (getRegionSucceeded)
+                                {
+                                    PInvokeCore.SelectClipRgn((HDC)bufferHdc, dropDownRegion);
+                                }
+
+                                m.WParamInternal = (WPARAM)(HDC)bufferHdc;
+                                DefWndProc(ref m);
+
+                                if (getRegionSucceeded)
+                                {
+                                    PInvokeCore.SelectClipRgn((HDC)bufferHdc, windowRegion);
+                                }
+                            }
+                            finally
+                            {
+                                bufferGraphics.ReleaseHdcInternal(bufferHdc);
+                            }
+
+                            // Overpaint the modern rounded field, button, and text, then blit the
+                            // finished buffer to the window in one clip-limited pass.
+                            FlatComboBoxAdapter.DrawFlatCombo(this, bufferGraphics);
+                            buffer.Render(targetGraphics);
+                        }
+
+                        return;
+                    }
+
                     if (getRegionSucceeded)
                     {
                         PInvokeCore.SelectClipRgn(dc, dropDownRegion);
@@ -3794,24 +4011,58 @@ public partial class ComboBox : ListControl
                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                     // Special handling for disabled DropDownList in dark mode
-                    if (Application.IsDarkModeEnabled && !Enabled && DropDownStyle == ComboBoxStyle.DropDownList)
+                    if (Application.IsDarkModeEnabled
+                        && !Enabled
+                        && DropDownStyle == ComboBoxStyle.DropDownList
+                        && !UsesModernComboAdapter)
                     {
                         // The text area for DropDownList (excluding the dropdown button)
                         Rectangle textBounds = ClientRectangle;
-                        textBounds.Width -= SystemInformation.VerticalScrollBarWidth;
+                        TextFormatFlags textFormatFlags = TextFormatFlags.VerticalCenter
+                            | TextFormatFlags.EndEllipsis;
+                        int buttonWidth = SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(
+                            DeviceDpiInternal);
 
-                        // Fill the background
-                        using var bgBrush = new SolidBrush(Color.FromArgb(64, 64, 64));
-                        g.FillRectangle(bgBrush, textBounds);
+                        if (UsesModernComboAdapter)
+                        {
+                            int frameInset = ScaleHelper.ScaleToDpi(
+                                ModernControlVisualStyles.Fixed3DBorderPadding
+                                    + ModernControlVisualStyles.BorderThickness,
+                                DeviceDpiInternal);
+                            textBounds.Inflate(
+                                -frameInset,
+                                -frameInset);
+                        }
 
-                        // Draw the text
-                        TextRenderer.DrawText(
-                            g,
-                            Text,
-                            Font,
-                            textBounds,
-                            Color.FromArgb(180, 180, 180),
-                            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                        if (RightToLeft == RightToLeft.Yes)
+                        {
+                            textBounds.X += buttonWidth;
+                            textBounds.Width -= buttonWidth;
+                            textFormatFlags |= TextFormatFlags.Right
+                                | TextFormatFlags.RightToLeft;
+                        }
+                        else
+                        {
+                            textBounds.Width -= buttonWidth;
+                            textFormatFlags |= TextFormatFlags.Left;
+                        }
+
+                        if (textBounds.Width > 0
+                            && textBounds.Height > 0)
+                        {
+                            // Fill the background
+                            using var bgBrush = new SolidBrush(Color.FromArgb(64, 64, 64));
+                            g.FillRectangle(bgBrush, textBounds);
+
+                            // Draw the text
+                            TextRenderer.DrawText(
+                                g,
+                                Text,
+                                Font,
+                                textBounds,
+                                Color.FromArgb(180, 180, 180),
+                                textFormatFlags);
+                        }
                     }
 
                     return;
@@ -3822,13 +4073,15 @@ public partial class ComboBox : ListControl
 
             case PInvokeCore.WM_PRINTCLIENT:
                 // All the fancy stuff we do in OnPaint has to happen again in OnPrint.
-                if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                if (!GetStyle(ControlStyles.UserPaint)
+                    && UsesComboAdapter)
                 {
                     DefWndProc(ref m);
 
                     if (((nint)m.LParamInternal & PInvoke.PRF_CLIENT) == PInvoke.PRF_CLIENT)
                     {
-                        if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                        if (!GetStyle(ControlStyles.UserPaint)
+                            && UsesComboAdapter)
                         {
                             using Graphics g = Graphics.FromHdcInternal((HDC)m.WParamInternal);
                             FlatComboBoxAdapter.DrawFlatCombo(this, g);
@@ -3861,6 +4114,13 @@ public partial class ComboBox : ListControl
                 }
 
                 _suppressNextWindowsPos = false;
+                if (DropDownStyle == ComboBoxStyle.Simple
+                    && _nativeComboBaseline.IsCaptured
+                    && !_applyingModernComboLayout)
+                {
+                    ApplyModernComboLayout();
+                }
+
                 break;
 
             case PInvokeCore.WM_NCDESTROY:
@@ -3896,5 +4156,7 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, smallButton: false);
+        => UsesModernComboAdapter
+            ? new ModernComboAdapter(this)
+            : new FlatComboAdapter(this, smallButton: false);
 }

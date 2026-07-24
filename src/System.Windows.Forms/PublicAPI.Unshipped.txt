@@ -1,0 +1,110 @@
+#nullable enable
+static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
+static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+System.Windows.Forms.Control.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+System.Windows.Forms.SystemVisualSettings.AccentColor.get -> System.Drawing.Color
+System.Windows.Forms.SystemVisualSettings.ClientAreaAnimationEnabled.get -> bool
+System.Windows.Forms.SystemVisualSettings.FocusBorderMetrics.get -> System.Drawing.Size
+System.Windows.Forms.SystemVisualSettings.HighContrastEnabled.get -> bool
+System.Windows.Forms.SystemVisualSettings.KeyboardCuesVisible.get -> bool
+System.Windows.Forms.SystemVisualSettings.TextScaleFactor.get -> float
+System.Windows.Forms.SystemVisualSettings
+System.Windows.Forms.SystemVisualSettingsCategories.AccentColor = 1 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.ClientAreaAnimations = 8 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.FocusMetrics = 32 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.HighContrast = 4 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.KeyboardCues = 16 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.None = 0 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories.TextScale = 2 -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.Changed.get -> System.Windows.Forms.SystemVisualSettingsCategories
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.NewSettings.get -> System.Windows.Forms.SystemVisualSettings!
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs.OldSettings.get -> System.Windows.Forms.SystemVisualSettings!
+System.Windows.Forms.SystemVisualSettingsChangedEventArgs
+System.Windows.Forms.SystemVisualSettingsChangedEventHandler
+virtual System.Windows.Forms.SystemVisualSettingsChangedEventHandler.Invoke(object? sender, System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+System.Windows.Forms.TreeView.NodeLeading.get -> float
+System.Windows.Forms.TreeView.NodeLeading.set -> void
+System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
+virtual System.Windows.Forms.TreeView.OnNodeLeadingChanged(System.EventArgs! e) -> void
+System.Windows.Forms.ControlMutationExtensions
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.IDisposable!
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Func<System.Windows.Forms.Control!, bool>! suspendLayoutContainerFilter) -> System.IDisposable!
+static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Windows.Forms.LayoutSuspendTraversal layoutSuspendTraversal) -> System.IDisposable!
+System.Windows.Forms.Form.FormRevealModeChanged -> System.EventHandler?
+System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Classic = 0 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Deferred = 1 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.FormRevealMode.Inherit = -1 -> System.Windows.Forms.FormRevealMode
+System.Windows.Forms.ISupportSuspendPainting
+System.Windows.Forms.ISupportSuspendPainting.BeginSuspendPainting() -> void
+System.Windows.Forms.ISupportSuspendPainting.EndSuspendPainting() -> void
+System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.None = 0 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.TargetAndDescendants = 2 -> System.Windows.Forms.LayoutSuspendTraversal
+System.Windows.Forms.LayoutSuspendTraversal.TargetOnly = 1 -> System.Windows.Forms.LayoutSuspendTraversal
+static System.Windows.Forms.Application.DefaultFormRevealMode.get -> System.Windows.Forms.FormRevealMode
+static System.Windows.Forms.Application.IsFormRevealDeferred.get -> bool
+static System.Windows.Forms.Application.SetDefaultFormRevealMode(System.Windows.Forms.FormRevealMode mode) -> void
+virtual System.Windows.Forms.Control.BeginSuspendPaintingCore() -> void
+virtual System.Windows.Forms.Control.EndSuspendPaintingCore() -> void
+virtual System.Windows.Forms.Form.FormRevealMode.get -> System.Windows.Forms.FormRevealMode
+virtual System.Windows.Forms.Form.FormRevealMode.set -> void
+virtual System.Windows.Forms.Form.OnFormRevealModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.ComboBox.EndSuspendPaintingCore() -> void
+override System.Windows.Forms.ListBox.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.ListBox.EndSuspendPaintingCore() -> void
+override System.Windows.Forms.ListView.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.ListView.EndSuspendPaintingCore() -> void
+override System.Windows.Forms.RichTextBox.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.RichTextBox.EndSuspendPaintingCore() -> void
+override System.Windows.Forms.TreeView.BeginSuspendPaintingCore() -> void
+override System.Windows.Forms.TreeView.EndSuspendPaintingCore() -> void
+System.Windows.Forms.Appearance.ToggleSwitch = 2 -> System.Windows.Forms.Appearance
+System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
+System.Windows.Forms.Control.EffectiveVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Metrics = 3 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.None = 0 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.NonClientUpdate = 2 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Recreate = 4 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.Control.VisualStylesModeChangeImpact.Repaint = 1 -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Inherit = -1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Net11 = 2 -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.ButtonBase.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.CheckBox.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.CheckBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.ComboBox.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.ComboBox.OnPaddingChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.ComboBox.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ComboBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+override System.Windows.Forms.GroupBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.GroupBox.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+override System.Windows.Forms.GroupBox.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
+override System.Windows.Forms.GroupBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+override System.Windows.Forms.PropertyGrid.VisualStylesMode.set -> void
+override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
+override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
+virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+virtual System.Windows.Forms.Control.GetVisualStylesModeChangeImpact(System.Windows.Forms.VisualStylesMode oldMode, System.Windows.Forms.VisualStylesMode newMode) -> System.Windows.Forms.Control.VisualStylesModeChangeImpact
+virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
+virtual System.Windows.Forms.Control.VisualStylesMode.set -> void

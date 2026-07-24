@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -486,6 +487,488 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.NotNull(checkBoxSndAdptr);
     }
 
+    public static TheoryData<FlatStyle> ModernButtonFlatStyles => new()
+    {
+        FlatStyle.Standard,
+        FlatStyle.Flat,
+        FlatStyle.Popup
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void CheckBox_AppearanceButton_ModernVisualStyles_PaintsWithoutThrow(FlatStyle flatStyle)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            Size = new Size(120, 40),
+            Checked = true
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => box.CreateStandardAdapter(),
+            FlatStyle.Popup => box.CreatePopupAdapter(),
+            _ => box.CreateFlatAdapter()
+        };
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, new Rectangle(Point.Empty, box.Size));
+
+        // Appearance.Button under modern visual styles is delegated to the shared modern button renderer.
+        Exception exception = Record.Exception(() =>
+        {
+            adapter.PaintUp(e, CheckState.Checked);
+            adapter.PaintOver(e, CheckState.Checked);
+            adapter.PaintDown(e, CheckState.Checked);
+        });
+
+        Assert.Null(exception);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ModernButtonFlatStyles))]
+    public void CheckBox_AppearanceNormal_ModernVisualStyles_UsesModernAdapter(FlatStyle flatStyle)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Normal,
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        ButtonInternal.ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Standard => box.CreateStandardAdapter(),
+            FlatStyle.Popup => box.CreatePopupAdapter(),
+            _ => box.CreateFlatAdapter()
+        };
+
+        Assert.IsType<ButtonInternal.CheckBoxModernAdapter>(adapter);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_AppearanceChanged_RecreatesModernAdapter()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.Button,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.IsNotType<ButtonInternal.CheckBoxModernAdapter>(box.Adapter);
+
+        box.Appearance = Appearance.Normal;
+
+        Assert.IsType<ButtonInternal.CheckBoxModernAdapter>(box.Adapter);
+    }
+
+    [WinFormsTheory]
+    [InlineData(CheckState.Unchecked, false)]
+    [InlineData(CheckState.Checked, true)]
+    [InlineData(CheckState.Indeterminate, true)]
+    public void CheckBox_ModernGlyph_RendersAccentForCheckedStates(CheckState checkState, bool expectedAccent)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Panel parent = new() { BackColor = Color.White };
+        using CheckBox box = new()
+        {
+            BackColor = Color.Red,
+            CheckState = checkState,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(box);
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, checkState);
+
+        Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_DefaultCheckedColorUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.NotifyCheckStateChanged(CheckState.Checked);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: null,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_BrightAccentUsesReadableCheckmark()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.NotifyCheckStateChanged(CheckState.Checked);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        Color brightAccent = Color.FromArgb(0xFF, 0xB9, 0x00);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: brightAccent,
+            customBorderColor: null);
+
+        Assert.True(CountPixels(bitmap, Color.Black) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_AccentCacheCanBeInvalidated()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.NotifyCheckStateChanged(CheckState.Checked);
+        using Bitmap bitmap = new(24, 24);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawGlyph(
+            graphics,
+            new Rectangle(4, 4, 16, 16),
+            FlatStyle.Standard,
+            enabled: true,
+            hovered: false,
+            focused: false,
+            customOnColor: null,
+            customBorderColor: null);
+
+        Assert.True(renderer.IsAccentColorCached);
+
+        renderer.InvalidateAccentColor();
+
+        Assert.False(renderer.IsAccentColorCached);
+    }
+
+    [Fact]
+    public void AnimatedControlRenderer_InteractionShade_BlendsEightPercentTowardsContrast()
+    {
+        Color color = Color.FromArgb(40, 80, 120);
+        Color expectedTarget = Rendering.Button.PopupButtonColorMath.TowardsContrast(color, 0.08f);
+        Color expected = Rendering.Button.PopupButtonColorMath.Blend(color, expectedTarget, 0.5f);
+
+        Color actual = Rendering.Animation.AnimatedControlRenderer.ApplyInteractionShade(color, 0.5f);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_InteractionChange_AnimatesFromCurrentShade()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.SetInteractionState(hovered: false, focused: false);
+        renderer.SetInteractionState(hovered: true, focused: false);
+        renderer.AnimationProc(0.5f);
+        float beforeReverse = renderer.TestAccessor.Dynamic._interactionCurrent;
+
+        renderer.SetInteractionState(hovered: false, focused: false);
+
+        Assert.True(renderer.IsRunning);
+        Assert.Equal(beforeReverse, (float)renderer.TestAccessor.Dynamic._interactionStart);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._interactionTarget);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_EndAnimation_StopsAndSettles()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        Rendering.CheckBox.AnimatedCheckGlyphRenderer renderer = box.CheckGlyphRenderer;
+        renderer.NotifyCheckStateChanged(CheckState.Unchecked);
+        renderer.NotifyCheckStateChanged(CheckState.Checked);
+        Assert.True(renderer.IsRunning);
+
+        renderer.EndAnimation();
+
+        Assert.False(renderer.IsRunning);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ContentAlignment.MiddleLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.TopLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.BottomLeft, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.MiddleCenter, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.TopCenter, RightToLeft.No, false)]
+    [InlineData(ContentAlignment.MiddleRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.TopRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.BottomRight, RightToLeft.No, true)]
+    [InlineData(ContentAlignment.MiddleLeft, RightToLeft.Yes, true)]
+    [InlineData(ContentAlignment.MiddleRight, RightToLeft.Yes, false)]
+    public void CheckBox_ToggleSwitch_CheckAlign_PositionsSwitch(
+        ContentAlignment checkAlign,
+        RightToLeft rightToLeft,
+        bool switchOnRight)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = "x",
+            CheckAlign = checkAlign,
+            RightToLeft = rightToLeft,
+            Checked = true,
+            Size = new Size(180, 30),
+            BackColor = Color.White
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+        box.CreateControl();
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        // The modern toggle switch is owner-painted from CheckBox.OnPaint via the animated renderer.
+        Exception exception = Record.Exception(() => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+        Assert.Null(exception);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box);
+
+        Assert.Equal(
+            switchOnRight ? contentBounds.Right : contentBounds.Left,
+            switchOnRight ? switchBounds.Right : switchBounds.Left);
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(120)]
+    [InlineData(144)]
+    public void CheckBox_ToggleSwitch_GetPreferredSize_ScalesWithDeviceDpi(int deviceDpi)
+    {
+        using SubCheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        box.DeviceDpiInternal = deviceDpi;
+
+        Size preferredSize = box.GetPreferredSizeCore(Size.Empty);
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        int expectedHeight = Math.Max(
+            box.LogicalToDeviceUnits(13),
+            (int)(box.Font.Height * 0.9f));
+
+        Assert.Equal(expectedHeight, metrics.SwitchHeight);
+        Assert.Equal(2 * expectedHeight, metrics.SwitchWidth);
+        Assert.True(metrics.HoverThumbDiameter > metrics.ThumbDiameter);
+        Assert.Equal(metrics.GetPreferredSize(box), preferredSize);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_DefaultOnColorUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.White,
+            Checked = true,
+            Size = new Size(60, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.RenderControl(graphics);
+
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_HoverAndFocusAnimateWithoutChangingPreferredSize()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = "Toggle",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        renderer.SetInteractionState(hovered: false, focused: false);
+        Size preferredSize = box.GetPreferredSize(Size.Empty);
+
+        renderer.SetInteractionState(hovered: true, focused: false);
+        renderer.EndAnimation();
+
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._hoverCurrent);
+        Assert.Equal(preferredSize, box.GetPreferredSize(Size.Empty));
+
+        renderer.SetInteractionState(hovered: false, focused: true);
+
+        Assert.True(renderer.IsRunning);
+        Assert.Equal(0f, (float)renderer.TestAccessor.Dynamic._hoverTarget);
+        Assert.Equal(1f, (float)renderer.TestAccessor.Dynamic._focusTarget);
+        Assert.Equal(preferredSize, box.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_SynchronizeState_SettlesInteractionChannels()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        renderer.SetInteractionState(hovered: true, focused: true);
+        renderer.AnimationProc(0.5f);
+
+        renderer.SynchronizeState();
+
+        Assert.False(renderer.IsRunning);
+        Assert.Equal(
+            (float)renderer.TestAccessor.Dynamic._hoverTarget,
+            (float)renderer.TestAccessor.Dynamic._hoverCurrent);
+        Assert.Equal(
+            (float)renderer.TestAccessor.Dynamic._focusTarget,
+            (float)renderer.TestAccessor.Dynamic._focusCurrent);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_OnAnimationEnded_StopsAnimation()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        box.Checked = true;
+        var renderer = (Rendering.CheckBox.AnimatedToggleSwitchRenderer)box.TestAccessor.Dynamic._toggleSwitchRenderer;
+        Assert.True(renderer.IsRunning);
+
+        typeof(Rendering.CheckBox.AnimatedToggleSwitchRenderer)
+            .GetMethod("OnAnimationEnded", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .Invoke(renderer, null);
+
+        Assert.False(renderer.IsRunning);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_RapidStateChange_PreservesThumbPosition()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        box.Checked = true;
+        renderer.AnimationProc(0.5f);
+        float positionBeforeReverse = renderer.TestAccessor.Dynamic._positionCurrent;
+
+        box.Checked = false;
+        float positionAfterReverse = renderer.TestAccessor.Dynamic._positionCurrent;
+
+        Assert.Equal(positionBeforeReverse, positionAfterReverse);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_ThreeStateChange_UpdatesOwnerDraw()
+    {
+        using SubCheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Assert.NotEqual(IntPtr.Zero, box.Handle);
+        Assert.True(box.GetStyle(ControlStyles.UserPaint));
+
+        box.ThreeState = true;
+
+        Assert.False(box.GetStyle(ControlStyles.UserPaint));
+    }
+
+    private static int CountPixels(Bitmap bitmap, Color color)
+    {
+        int argb = color.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     [WinFormsFact]
     public void CheckBox_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
@@ -787,7 +1270,27 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
     [WinFormsTheory]
     [MemberData(nameof(Appearance_FlatStyle_TestData))]
-    public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
+    public void CheckBox_OverChangeRectangle_Get(
+        Appearance appearance,
+        FlatStyle flatStyle)
+    {
+        if (appearance == Appearance.Normal
+            && flatStyle == FlatStyle.System)
+        {
+            using SubCheckBox control = (SubCheckBox)CreateButton();
+            control.Appearance = appearance;
+            control.FlatStyle = flatStyle;
+
+            Assert.Equal(
+                control.ClientRectangle,
+                control.OverChangeRectangle);
+            return;
+        }
+
+        base.ButtonBase_OverChangeRectangle_Get(
+            appearance,
+            flatStyle);
+    }
 
     [WinFormsTheory]
     [MemberData(nameof(Appearance_FlatStyle_TestData))]
