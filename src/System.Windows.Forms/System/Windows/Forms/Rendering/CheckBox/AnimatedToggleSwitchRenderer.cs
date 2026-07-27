@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -79,14 +79,12 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
         Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
-        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
-        int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int textY = contentTop + ((totalHeight - textSize.Height) / 2);
         Rectangle switchBounds = GetSwitchBounds(
             Control,
             RtlTranslatedCheckAlign,
             metrics,
             textSize);
+        Rectangle textBounds = GetTextBounds(contentBounds, switchBounds, metrics, RtlTranslatedCheckAlign);
 
         graphics.Clear(Control.BackColor);
 
@@ -97,14 +95,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         if (IsSwitchOnRight(RtlTranslatedCheckAlign))
         {
-            int textX = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap - textSize.Width);
             RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(textX, textY));
+            RenderText(graphics, textBounds);
         }
         else
         {
             RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(contentBounds.Left + metrics.SwitchWidth + metrics.TextGap, textY));
+            RenderText(graphics, textBounds);
         }
 
         if (Control.Focused && ShowFocusCues)
@@ -172,15 +169,57 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         return new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight);
     }
 
-    private void RenderText(Graphics graphics, Point position)
+    internal static Rectangle GetTextBounds(
+        Control control,
+        ContentAlignment checkAlign,
+        ToggleSwitchMetrics metrics)
     {
+        Size textSize = TextRenderer.MeasureText(control.Text, control.Font);
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
+        Rectangle switchBounds = GetSwitchBounds(control, checkAlign, metrics, textSize);
+        return GetTextBounds(contentBounds, switchBounds, metrics, checkAlign);
+    }
+
+    private static Rectangle GetTextBounds(
+        Rectangle contentBounds,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        ContentAlignment checkAlign)
+    {
+        if (IsSwitchOnRight(checkAlign))
+        {
+            int right = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap);
+            return Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, right, contentBounds.Bottom);
+        }
+
+        int left = Math.Min(contentBounds.Right, switchBounds.Right + metrics.TextGap);
+        return Rectangle.FromLTRB(left, contentBounds.Top, contentBounds.Right, contentBounds.Bottom);
+    }
+
+    private void RenderText(Graphics graphics, Rectangle textBounds)
+    {
+        if (textBounds.Width <= 0 || textBounds.Height <= 0)
+        {
+            return;
+        }
+
+        TextFormatFlags flags = GetTextFormatFlags();
+
         TextRenderer.DrawText(
             graphics,
             Control.Text,
             Control.Font,
-            position,
-            GetTextColor());
+            textBounds,
+            GetTextColor(),
+            flags);
     }
+
+    private TextFormatFlags GetTextFormatFlags() => Control switch
+    {
+        Forms.CheckBox checkBox => checkBox.CreateTextFormatFlags(),
+        Forms.RadioButton radioButton => radioButton.CreateTextFormatFlags(),
+        _ => TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl
+    };
 
     internal Color GetTextColor()
         => Control.Enabled
