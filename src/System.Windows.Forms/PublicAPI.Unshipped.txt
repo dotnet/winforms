@@ -1,6 +1,7 @@
 #nullable enable
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+System.Windows.Forms.PropertyGrid.VisualStylesModeChanged -> System.EventHandler?
 virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
 System.Windows.Forms.Control.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
 System.Windows.Forms.SystemVisualSettings.AccentColor.get -> System.Drawing.Color

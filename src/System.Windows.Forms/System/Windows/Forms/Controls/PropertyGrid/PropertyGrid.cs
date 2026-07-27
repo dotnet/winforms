@@ -856,6 +856,14 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         set => _requestedVisualStylesMode = value;
     }
 
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? VisualStylesModeChanged
+    {
+        add => base.VisualStylesModeChanged += value;
+        remove => base.VisualStylesModeChanged -= value;
+    }
+
     /// <summary>
     ///  Sets or gets the current property sort type, which can be
     ///  PropertySort.Categorized or PropertySort.Alphabetical.
