@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -88,7 +88,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             metrics,
             textSize);
 
-        graphics.Clear(Control.BackColor);
+        PaintControlBackground(graphics);
 
         if (contentBounds.Width <= 0 || contentBounds.Height <= 0)
         {
@@ -327,6 +327,25 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         _onAmountStart = _onAmountCurrent;
         _onAmountTarget = _onAmountCurrent;
         _positionInitialized = true;
+    }
+
+    private void PaintControlBackground(Graphics graphics)
+    {
+        if (Control.BackgroundImage is null && !Control.BackColor.HasTransparency())
+        {
+            graphics.Clear(Control.BackColor);
+            return;
+        }
+
+        Rectangle clipRectangle = Rectangle.Ceiling(graphics.ClipBounds);
+        clipRectangle.Intersect(Control.ClientRectangle);
+        if (clipRectangle.Width <= 0 || clipRectangle.Height <= 0)
+        {
+            return;
+        }
+
+        using PaintEventArgs paintEventArgs = new(graphics, clipRectangle);
+        Control.PaintBackground(paintEventArgs, clipRectangle);
     }
 
     private static float EaseOut(float value)
