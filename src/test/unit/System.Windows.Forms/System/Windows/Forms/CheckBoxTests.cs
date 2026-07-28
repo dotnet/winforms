@@ -773,9 +773,21 @@ public class CheckBoxTests : AbstractButtonBaseTests
             metrics);
         Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box);
 
-        Assert.Equal(
-            switchOnRight ? contentBounds.Right : contentBounds.Left,
-            switchOnRight ? switchBounds.Right : switchBounds.Left);
+        const int EdgeTolerance = 2;
+        if (switchOnRight)
+        {
+            Assert.InRange(
+                switchBounds.Right,
+                contentBounds.Right - EdgeTolerance,
+                contentBounds.Right);
+        }
+        else
+        {
+            Assert.InRange(
+                switchBounds.Left,
+                contentBounds.Left,
+                contentBounds.Left + EdgeTolerance);
+        }
     }
 
     [WinFormsTheory]

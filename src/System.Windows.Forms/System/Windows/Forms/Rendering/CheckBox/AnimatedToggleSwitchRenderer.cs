@@ -162,9 +162,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
         int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
-        int switchX = IsSwitchOnRight(checkAlign)
-            ? Math.Max(contentBounds.Left, contentBounds.Right - metrics.SwitchWidth)
-            : contentBounds.Left;
+        int minimumSwitchX = contentBounds.Left;
+        int maximumSwitchX = Math.Max(minimumSwitchX, contentBounds.Right - metrics.SwitchWidth);
+        int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);
+        int targetSwitchX = IsSwitchOnRight(checkAlign)
+            ? maximumSwitchX - edgeInset
+            : minimumSwitchX + edgeInset;
+        int switchX = Math.Max(minimumSwitchX, Math.Min(maximumSwitchX, targetSwitchX));
 
         return new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight);
     }
@@ -186,13 +190,20 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         ToggleSwitchMetrics metrics,
         ContentAlignment checkAlign)
     {
+        int thresholdExtension = Math.Max(1, metrics.BorderThickness / 2) + 1;
         if (IsSwitchOnRight(checkAlign))
         {
-            int right = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap);
+            int right = Math.Min(
+                contentBounds.Right,
+                switchBounds.Left - Math.Max(0, metrics.TextGap - thresholdExtension));
+            right = Math.Max(contentBounds.Left, right);
             return Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, right, contentBounds.Bottom);
         }
 
-        int left = Math.Min(contentBounds.Right, switchBounds.Right + metrics.TextGap);
+        int left = Math.Max(
+            contentBounds.Left,
+            switchBounds.Right + Math.Max(0, metrics.TextGap - thresholdExtension));
+        left = Math.Min(contentBounds.Right, left);
         return Rectangle.FromLTRB(left, contentBounds.Top, contentBounds.Right, contentBounds.Bottom);
     }
 
