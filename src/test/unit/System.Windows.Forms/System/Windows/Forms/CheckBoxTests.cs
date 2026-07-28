@@ -773,12 +773,12 @@ public class CheckBoxTests : AbstractButtonBaseTests
             metrics);
         Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box);
 
-        const int EdgeTolerance = 2;
+        int edgeTolerance = Math.Max(1, (metrics.BorderThickness / 2) + 1);
         if (switchOnRight)
         {
             Assert.InRange(
                 switchBounds.Right,
-                contentBounds.Right - EdgeTolerance,
+                contentBounds.Right - edgeTolerance,
                 contentBounds.Right);
         }
         else
@@ -786,8 +786,38 @@ public class CheckBoxTests : AbstractButtonBaseTests
             Assert.InRange(
                 switchBounds.Left,
                 contentBounds.Left,
-                contentBounds.Left + EdgeTolerance);
+                contentBounds.Left + edgeTolerance);
         }
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_RtlLongText_AutoSizeFalse_TextBounds_DoNotOverlapSwitch()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            AutoSize = false,
+            RightToLeft = RightToLeft.Yes,
+            CheckAlign = ContentAlignment.MiddleLeft,
+            Text = "This is a very long toggle-switch label to verify RTL clipping does not overlap the switch glyph.",
+            Size = new Size(160, 30)
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+        box.CreateControl();
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Rectangle textBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetTextBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Rectangle overlap = Rectangle.Intersect(switchBounds, textBounds);
+
+        Assert.True(overlap.IsEmpty);
     }
 
     [WinFormsTheory]
@@ -1389,10 +1419,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {
