@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Windows.Input;
 using Moq;
 
 namespace System.Windows.Forms.Tests;
@@ -117,46 +116,6 @@ public class KioskModeManagerTests
         using KioskModeManager manager = new();
 
         Assert.Throws<ArgumentOutOfRangeException>("value", () => manager.MousePointerAutoHideDelay = -1);
-    }
-
-    [WinFormsTheory]
-    [EnumData<KioskModeWakeupSource>]
-    public void KioskModeWakeupEventArgs_Ctor_Source(KioskModeWakeupSource source)
-    {
-        KioskModeWakeupEventArgs eventArgs = new(source);
-
-        Assert.Equal(source, eventArgs.Source);
-    }
-
-    [WinFormsTheory]
-    [InvalidEnumData<KioskModeWakeupSource>]
-    public void KioskModeWakeupEventArgs_Ctor_InvalidSource_ThrowsInvalidEnumArgumentException(KioskModeWakeupSource source)
-    {
-        Assert.Throws<InvalidEnumArgumentException>("source", () => new KioskModeWakeupEventArgs(source));
-    }
-
-    [WinFormsTheory]
-    [EnumData<KioskModeWakeupSource>]
-    public void KioskModeManager_OnWakeup_Invoke_CallsWakeup(KioskModeWakeupSource source)
-    {
-        using SubKioskModeManager manager = new();
-        KioskModeWakeupEventArgs eventArgs = new(source);
-        int callCount = 0;
-        KioskModeWakeupEventHandler handler = (sender, e) =>
-        {
-            Assert.Same(manager, sender);
-            Assert.Same(eventArgs, e);
-            Assert.Equal(source, e.Source);
-            callCount++;
-        };
-
-        manager.Wakeup += handler;
-        manager.OnWakeup(eventArgs);
-        Assert.Equal(1, callCount);
-
-        manager.Wakeup -= handler;
-        manager.OnWakeup(eventArgs);
-        Assert.Equal(1, callCount);
     }
 
     [WinFormsFact]
@@ -578,52 +537,6 @@ public class KioskModeManagerTests
         Assert.Equal(1, callCount);
     }
 
-    [WinFormsTheory]
-    [EnumData<KioskModeWakeupSource>]
-    public void KioskModeManager_WakeUpCommand_ExecutedOnWakeup_WithSourceName(KioskModeWakeupSource source)
-    {
-        using SubKioskModeManager manager = new();
-        TestCommand command = new();
-        manager.WakeUpCommand = command;
-
-        Assert.Same(command, manager.WakeUpCommand);
-
-        manager.OnWakeup(new KioskModeWakeupEventArgs(source));
-
-        Assert.Equal(1, command.CanExecuteCount);
-        Assert.Equal(source.ToString(), command.LastCanExecuteParameter);
-        Assert.Equal(1, command.ExecuteCount);
-        Assert.Equal(source.ToString(), command.LastParameter);
-    }
-
-    [WinFormsFact]
-    public void KioskModeManager_WakeUpCommand_Null_DoesNotThrowOnWakeup()
-    {
-        using SubKioskModeManager manager = new();
-
-        Assert.Null(manager.WakeUpCommand);
-
-        manager.OnWakeup(new KioskModeWakeupEventArgs(KioskModeWakeupSource.Keyboard));
-    }
-
-    [WinFormsFact]
-    public void KioskModeManager_WakeUpCommand_CanExecuteFalse_DoesNotExecute()
-    {
-        using SubKioskModeManager manager = new();
-        TestCommand command = new()
-        {
-            CanExecuteResult = false
-        };
-
-        manager.WakeUpCommand = command;
-        manager.OnWakeup(new KioskModeWakeupEventArgs(KioskModeWakeupSource.Mouse));
-
-        Assert.Equal(1, command.CanExecuteCount);
-        Assert.Equal(KioskModeWakeupSource.Mouse.ToString(), command.LastCanExecuteParameter);
-        Assert.Equal(0, command.ExecuteCount);
-        Assert.Null(command.LastParameter);
-    }
-
     [WinFormsFact]
     public void KioskModeManager_Site_Set_AssignsRootComponentAsContainerControl()
     {
@@ -801,109 +714,23 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
-    public void KioskModeManager_ProcessMessage_MouseMove_CallsWakeup()
+    public void KioskModeManager_ProcessMessage_MouseMove_ShowsHiddenMousePointer()
     {
         using Form form = new();
         using KioskModeManager manager = new()
         {
-            ContainerControl = form
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 1,
+            FullScreen = true
         };
 
-        int callCount = 0;
-        KioskModeWakeupEventArgs lastEventArgs = null;
-        manager.Wakeup += (sender, e) =>
-        {
-            Assert.Same(manager, sender);
-            callCount++;
-            lastEventArgs = e;
-        };
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
 
         Message message = Message.Create(form.Handle, (int)PInvokeCore.WM_MOUSEMOVE, 0, 0);
         manager.TestAccessor.Dynamic.ProcessMessage(message);
 
-        Assert.Equal(1, callCount);
-        Assert.NotNull(lastEventArgs);
-        Assert.Equal(KioskModeWakeupSource.Mouse, lastEventArgs.Source);
-    }
-
-    [WinFormsFact]
-    public void KioskModeManager_ProcessPowerBroadcast_InteractiveResume_CallsWakeupOnce()
-    {
-        using SubKioskModeManager manager = new();
-        int callCount = 0;
-        KioskModeWakeupEventArgs lastEventArgs = null;
-        manager.Wakeup += (sender, e) =>
-        {
-            Assert.Same(manager, sender);
-            callCount++;
-            lastEventArgs = e;
-        };
-
-        Message automaticResume = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0012, 0);
-        Message interactiveResume = Message.Create(IntPtr.Zero, (int)PInvokeCore.WM_POWERBROADCAST, (nint)0x0007, 0);
-        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(automaticResume.WParamInternal);
-        manager.TestAccessor.Dynamic.ProcessPowerBroadcast(interactiveResume.WParamInternal);
-
-        Assert.Equal(1, callCount);
-        Assert.NotNull(lastEventArgs);
-        Assert.Equal(KioskModeWakeupSource.PowerResume, lastEventArgs.Source);
-    }
-
-    [WinFormsTheory]
-    [InlineData(0x0001)]
-    [InlineData(0x0003)]
-    [InlineData(0x0005)]
-    [InlineData(0x0008)]
-    public void KioskModeManager_ProcessSessionChange_RecognizedReason_CallsWakeup(nint sessionReason)
-    {
-        using SubKioskModeManager manager = new();
-        int callCount = 0;
-        KioskModeWakeupEventArgs lastEventArgs = null;
-        manager.Wakeup += (sender, e) =>
-        {
-            Assert.Same(manager, sender);
-            callCount++;
-            lastEventArgs = e;
-        };
-
-        Message message = Message.Create(IntPtr.Zero, 0, sessionReason, 0);
-        manager.TestAccessor.Dynamic.ProcessSessionChange(message.WParamInternal);
-
-        Assert.Equal(1, callCount);
-        Assert.NotNull(lastEventArgs);
-        Assert.Equal(KioskModeWakeupSource.Session, lastEventArgs.Source);
-    }
-
-    private class TestCommand : ICommand
-    {
-        public bool CanExecuteResult { get; set; } = true;
-
-        public int CanExecuteCount { get; private set; }
-
-        public object LastCanExecuteParameter { get; private set; }
-
-        public int ExecuteCount { get; private set; }
-
-        public object LastParameter { get; private set; }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { }
-            remove { }
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            CanExecuteCount++;
-            LastCanExecuteParameter = parameter;
-            return CanExecuteResult;
-        }
-
-        public void Execute(object parameter)
-        {
-            ExecuteCount++;
-            LastParameter = parameter;
-        }
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
     }
 
     private class SubKioskModeManager : KioskModeManager
@@ -915,9 +742,6 @@ public class KioskModeManagerTests
 
         public new void OnFullScreenChanged(EventArgs e)
             => base.OnFullScreenChanged(e);
-
-        public new void OnWakeup(KioskModeWakeupEventArgs e)
-            => base.OnWakeup(e);
     }
 }
 #endif

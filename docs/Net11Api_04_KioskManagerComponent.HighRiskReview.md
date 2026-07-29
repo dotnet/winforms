@@ -21,18 +21,3 @@ Before changing this behavior, decide whether `FullScreen` represents requested 
 - compatibility for applications already observing the property or event.
 
 Tests should define the complete transition matrix for requested, pending, entered, exited, reparented, and disposed states.
-
-## Session-notification registration is not retried
-
-`KioskModeFormObserver.RegisterSessionNotifications` records a failed `WTSRegisterSessionNotification` call as `false` and retries only after form handle recreation. During Windows startup, registration can fail with `RPC_S_INVALID_BINDING` before `Global\TermSrvReadyEvent` is signaled. A kiosk application started during that interval can therefore miss session notifications for the lifetime of its form handle.
-
-A safe fix needs a non-blocking retry design that specifies:
-
-- which Win32 errors are retryable and which are terminal;
-- how waiting for `Global\TermSrvReadyEvent` is cancelled;
-- how completion is marshalled to the form's UI thread;
-- how stale callbacks are rejected after handle recreation;
-- how registration and unregistration remain paired;
-- how disposal races with an outstanding wait.
-
-Tests should cover service-not-ready startup, successful retry, handle recreation during the wait, and disposal before the wait completes.

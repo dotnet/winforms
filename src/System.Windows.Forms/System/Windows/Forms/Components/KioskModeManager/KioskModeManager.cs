@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Input;
 using Windows.Win32.System.Power;
 using Windows.Win32.System.Threading;
 
@@ -25,8 +24,7 @@ namespace System.Windows.Forms;
 ///  <para>
 ///   The component can make the resolved form fullscreen, optionally cover the
 ///   taskbar, keep the form topmost while fullscreen, suppress display and
-///   system sleep, hide the mouse pointer after inactivity, and notify the
-///   application when user or system activity wakes the kiosk experience.
+///   system sleep, and hide the mouse pointer after a period of inactivity.
 ///  </para>
 /// </remarks>
 /// <example>
@@ -48,14 +46,6 @@ namespace System.Windows.Forms;
 ///               SuppressPowerSaving = true
 ///           };
 ///
-///           _kioskModeManager.Wakeup += (sender, e) =>
-///           {
-///               if (e.Source == KioskModeWakeupSource.Mouse)
-///               {
-///                   // Refresh the kiosk surface after mouse activity.
-///               }
-///           };
-///
 ///           if (!_kioskModeManager.FullScreen)
 ///           {
 ///              _kioskModeManager.ToggleFullScreen();
@@ -71,18 +61,11 @@ public class KioskModeManager : Component, ISupportInitialize
 {
     private const uint PowerRequestContextVersion = 0;
     private const POWER_REQUEST_CONTEXT_FLAGS PowerRequestContextSimpleString = (POWER_REQUEST_CONTEXT_FLAGS)0x00000001;
-    private const uint NotifyForThisSession = 0;
-    private const nint PbtApmResumeAutomatic = 0x0012;
     private const nint SpiSetWorkArea = 0x002F;
-    private const nint WtsConsoleConnect = 0x0001;
-    private const nint WtsRemoteConnect = 0x0003;
-    private const nint WtsSessionLogon = 0x0005;
-    private const nint WtsSessionUnlock = 0x0008;
     private const string PowerRequestReason = "WinForms KioskModeManager: Preventing screen saver and sleep";
 
     private static readonly object s_containerControlChangedEvent = new();
     private static readonly object s_fullScreenChangedEvent = new();
-    private static readonly object s_wakeupEvent = new();
 
     private ContainerControl? _containerControl;
     private bool _containerControlExplicitlySet;
@@ -107,7 +90,6 @@ public class KioskModeManager : Component, ISupportInitialize
     private bool _escapeExitsFullScreen = true;
     private bool _suppressPowerSaving;
     private int _mousePointerAutoHideDelay;
-    private ICommand? _wakeUpCommand;
 
     private HANDLE _powerRequestHandle;
 
@@ -494,75 +476,6 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     /// <summary>
-    ///  Occurs when keyboard, mouse, power resume, or session activity wakes
-    ///  the kiosk experience.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   The event reports activity that the component can observe on the UI
-    ///   thread or through Windows power/session notifications. It does not mean
-    ///   that the component caused the computer to wake from sleep, and it does
-    ///   not configure voice wake, network wake, or wake timers.
-    ///  </para>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatAction))]
-    [SRDescription(nameof(SR.KioskModeManagerWakeupDescr))]
-    public event KioskModeWakeupEventHandler? Wakeup
-    {
-        add => Events.AddHandler(s_wakeupEvent, value);
-        remove => Events.RemoveHandler(s_wakeupEvent, value);
-    }
-
-    /// <summary>
-    ///  Raises the <see cref="Wakeup"/> event.
-    /// </summary>
-    /// <param name="e">A <see cref="KioskModeWakeupEventArgs"/> that contains the event data.</param>
-    [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual void OnWakeup(KioskModeWakeupEventArgs e)
-    {
-        if (Events[s_wakeupEvent] is KioskModeWakeupEventHandler handler)
-        {
-            handler(this, e);
-        }
-
-        if (_wakeUpCommand is not null)
-        {
-            // The wakeup source is passed as its string name so the bound command stays
-            // independent of the WinForms-specific enum type.
-            string parameter = e.Source.ToString();
-            if (_wakeUpCommand.CanExecute(parameter))
-            {
-                _wakeUpCommand.Execute(parameter);
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Gets or sets the command that is executed whenever the <see cref="Wakeup"/>
-    ///  event is raised.
-    /// </summary>
-    /// <value>
-    ///  An <see cref="ICommand"/> to execute on every wakeup, or <see langword="null"/>
-    ///  to execute no command. The default is <see langword="null"/>.
-    /// </value>
-    /// <remarks>
-    ///  <para>
-    ///   The command is executed with the wakeup source name (the result of
-    ///   <see cref="KioskModeWakeupSource"/>.<see cref="object.ToString"/>) as the command
-    ///   parameter, keeping the command independent of the WinForms-specific enum type.
-    ///  </para>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatAction))]
-    [SRDescription(nameof(SR.KioskModeManagerWakeUpCommandDescr))]
-    [Bindable(true)]
-    [DefaultValue(null)]
-    public ICommand? WakeUpCommand
-    {
-        get => _wakeUpCommand;
-        set => _wakeUpCommand = value;
-    }
-
-    /// <summary>
     ///  Places the resolved form in fullscreen mode.
     /// </summary>
     /// <remarks>
@@ -877,23 +790,6 @@ public class KioskModeManager : Component, ISupportInitialize
         }
     }
 
-    private void ProcessPowerBroadcast(WPARAM powerEvent)
-    {
-        if ((nint)powerEvent.Value == PbtApmResumeAutomatic)
-        {
-            RaiseWakeup(KioskModeWakeupSource.PowerResume);
-        }
-    }
-
-    private void ProcessSessionChange(WPARAM sessionEvent)
-    {
-        nint value = (nint)sessionEvent.Value;
-        if (value is WtsConsoleConnect or WtsRemoteConnect or WtsSessionLogon or WtsSessionUnlock)
-        {
-            RaiseWakeup(KioskModeWakeupSource.Session);
-        }
-    }
-
     private void RestartMousePointerAutoHideTimer()
     {
         // Use a WinForms timer so cursor changes happen on the UI thread that
@@ -929,10 +825,6 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void ProcessKeyboardActivity(Keys keyData, Keys modifiers, bool isRepeat)
     {
-        // Any keyboard input wakes the kiosk experience, even when it does not
-        // match one of the configured fullscreen control keys.
-        RaiseWakeup(KioskModeWakeupSource.Keyboard);
-
         if (isRepeat)
         {
             return;
@@ -955,7 +847,6 @@ public class KioskModeManager : Component, ISupportInitialize
     {
         ShowMousePointerIfHidden();
         RestartMousePointerAutoHideTimer();
-        RaiseWakeup(KioskModeWakeupSource.Mouse);
     }
 
     private void ShowMousePointerIfHidden()
@@ -970,9 +861,6 @@ public class KioskModeManager : Component, ISupportInitialize
         Cursor.Show();
         _isCursorHidden = false;
     }
-
-    private void RaiseWakeup(KioskModeWakeupSource source)
-        => OnWakeup(new KioskModeWakeupEventArgs(source));
 
     private unsafe void CreatePowerRequest()
     {
@@ -1105,13 +993,12 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     /// <summary>
-    ///  Observes power and session messages that belong to the target form.
+    ///  Observes display and work area changes that affect the target form.
     /// </summary>
     private sealed class KioskModeFormObserver : NativeWindow
     {
         private readonly KioskModeManager _owner;
         private Form? _form;
-        private bool _sessionNotificationsRegistered;
 
         public KioskModeFormObserver(KioskModeManager owner)
         {
@@ -1151,7 +1038,6 @@ public class KioskModeManager : Component, ISupportInitialize
                 _form = null;
             }
 
-            UnregisterSessionNotifications();
             if (!HWND.IsNull)
             {
                 ReleaseHandle();
@@ -1166,50 +1052,18 @@ public class KioskModeManager : Component, ISupportInitialize
             }
 
             AssignHandle(_form.HWND);
-            RegisterSessionNotifications();
         }
 
         private void OnFormHandleDestroyed(object? sender, EventArgs e)
         {
-            UnregisterSessionNotifications();
             if (!HWND.IsNull)
             {
                 ReleaseHandle();
             }
         }
 
-        private void RegisterSessionNotifications()
-        {
-            if (_sessionNotificationsRegistered || HWND.IsNull)
-            {
-                return;
-            }
-
-            _sessionNotificationsRegistered = PInvoke.WTSRegisterSessionNotification(HWND, NotifyForThisSession);
-        }
-
-        private void UnregisterSessionNotifications()
-        {
-            if (!_sessionNotificationsRegistered)
-            {
-                return;
-            }
-
-            PInvoke.WTSUnRegisterSessionNotification(HWND);
-            _sessionNotificationsRegistered = false;
-        }
-
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == PInvokeCore.WM_POWERBROADCAST)
-            {
-                _owner.ProcessPowerBroadcast(m.WParamInternal);
-            }
-            else if (m.MsgInternal == PInvokeCore.WM_WTSSESSION_CHANGE)
-            {
-                _owner.ProcessSessionChange(m.WParamInternal);
-            }
-
             base.WndProc(ref m);
 
             if (m.MsgInternal == PInvokeCore.WM_DISPLAYCHANGE
