@@ -18,6 +18,7 @@ public class KioskModeManagerTests
     {
         using SubKioskModeManager manager = new();
 
+        Assert.False(manager.AlwaysOn);
         Assert.Null(manager.Container);
         Assert.Null(manager.ContainerControl);
         Assert.False(manager.DesignMode);
@@ -25,8 +26,7 @@ public class KioskModeManagerTests
         Assert.False(manager.FullScreen);
         Assert.Equal(0, manager.MousePointerAutoHideDelay);
         Assert.Null(manager.Site);
-        Assert.False(manager.SuppressPowerSaving);
-        Assert.Equal(Keys.F11, manager.ToggleFullScreenKey);
+        Assert.Equal(Keys.F11, manager.ToggleFullScreenKeys);
         Assert.False(manager.TopMostInFullScreen);
     }
 
@@ -115,6 +115,79 @@ public class KioskModeManagerTests
         using KioskModeManager manager = new();
 
         Assert.Throws<ArgumentOutOfRangeException>("value", () => manager.MousePointerAutoHideDelay = -1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(Keys.F11)]
+    [InlineData(Keys.None)]
+    [InlineData(Keys.Alt | Keys.Enter)]
+    [InlineData(Keys.Control | Keys.Shift | Keys.F)]
+    public void KioskModeManager_ToggleFullScreenKeys_Set_GetReturnsExpected(Keys value)
+    {
+        using KioskModeManager manager = new()
+        {
+            ToggleFullScreenKeys = value
+        };
+
+        Assert.Equal(value, manager.ToggleFullScreenKeys);
+
+        manager.ToggleFullScreenKeys = value;
+        Assert.Equal(value, manager.ToggleFullScreenKeys);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void KioskModeManager_AlwaysOn_Set_GetReturnsExpected(bool value)
+    {
+        using KioskModeManager manager = new()
+        {
+            AlwaysOn = value
+        };
+
+        Assert.Equal(value, manager.AlwaysOn);
+
+        manager.AlwaysOn = value;
+        Assert.Equal(value, manager.AlwaysOn);
+
+        manager.AlwaysOn = !value;
+        Assert.Equal(!value, manager.AlwaysOn);
+    }
+
+    [WinFormsTheory]
+    [InlineData(Keys.Alt | Keys.Enter)]
+    [InlineData(Keys.Control | Keys.Shift | Keys.F)]
+    public void KioskModeManager_ProcessKeyboardActivity_MatchingKeyCombination_TogglesFullScreen(Keys keys)
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            ToggleFullScreenKeys = keys
+        };
+
+        manager.TestAccessor.Dynamic.ProcessKeyboardActivity(keys, false);
+        Assert.True(manager.FullScreen);
+
+        manager.TestAccessor.Dynamic.ProcessKeyboardActivity(keys & Keys.KeyCode, false);
+        Assert.True(manager.FullScreen);
+
+        manager.TestAccessor.Dynamic.ProcessKeyboardActivity(keys, false);
+        Assert.False(manager.FullScreen);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ProcessKeyboardActivity_KeysNone_DoesNotToggleFullScreen()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            ToggleFullScreenKeys = Keys.None
+        };
+
+        manager.TestAccessor.Dynamic.ProcessKeyboardActivity(Keys.None, false);
+
+        Assert.False(manager.FullScreen);
     }
 
     [WinFormsFact]

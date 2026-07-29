@@ -6149,6 +6149,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La combinaison de touches n'est pas valide.</target>
         <note />
       </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlChangedDescr">
         <source>Occurs when the ContainerControl property value changes.</source>
         <target state="new">Occurs when the ContainerControl property value changes.</target>
@@ -6179,14 +6184,9 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KioskModeManagerSuppressPowerSavingDescr">
-        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
-        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KioskModeManagerToggleFullScreenKeyDescr">
-        <source>The key that toggles between fullscreen and restored mode.</source>
-        <target state="new">The key that toggles between fullscreen and restored mode.</target>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="new">The key combination that toggles between fullscreen and restored mode.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">

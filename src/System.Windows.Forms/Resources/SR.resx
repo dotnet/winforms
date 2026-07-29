@@ -2694,6 +2694,9 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DescriptionKioskModeManager" xml:space="preserve">
     <value>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</value>
   </data>
+  <data name="KioskModeManagerAlwaysOnDescr" xml:space="preserve">
+    <value>Indicates whether Windows should keep the display and system awake while this component is active.</value>
+  </data>
   <data name="KioskModeManagerContainerControlDescr" xml:space="preserve">
     <value>The container whose containing form is controlled by the kiosk mode manager.</value>
   </data>
@@ -2712,11 +2715,8 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="KioskModeManagerMousePointerAutoHideDelayDescr" xml:space="preserve">
     <value>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</value>
   </data>
-  <data name="KioskModeManagerSuppressPowerSavingDescr" xml:space="preserve">
-    <value>Indicates whether Windows should keep the display and system awake while this component is active.</value>
-  </data>
-  <data name="KioskModeManagerToggleFullScreenKeyDescr" xml:space="preserve">
-    <value>The key that toggles between fullscreen and restored mode.</value>
+  <data name="KioskModeManagerToggleFullScreenKeysDescr" xml:space="preserve">
+    <value>The key combination that toggles between fullscreen and restored mode.</value>
   </data>
   <data name="KioskModeManagerTopMostInFullScreenDescr" xml:space="preserve">
     <value>Indicates whether the form is topmost while fullscreen.</value>

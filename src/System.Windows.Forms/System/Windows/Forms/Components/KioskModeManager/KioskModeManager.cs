@@ -42,7 +42,7 @@ namespace System.Windows.Forms;
 ///               ContainerControl = this,
 ///               TopMostInFullScreen = true,
 ///               MousePointerAutoHideDelay = 3000,
-///               SuppressPowerSaving = true
+///               AlwaysOn = true
 ///           };
 ///
 ///           if (!_kioskModeManager.FullScreen)
@@ -53,7 +53,7 @@ namespace System.Windows.Forms;
 ///   }
 ///  </code>
 /// </example>
-[DefaultProperty(nameof(ToggleFullScreenKey))]
+[DefaultProperty(nameof(ToggleFullScreenKeys))]
 [ToolboxItemFilter("System.Windows.Forms")]
 [SRDescription(nameof(SR.DescriptionKioskModeManager))]
 public class KioskModeManager : Component, ISupportInitialize
@@ -83,9 +83,9 @@ public class KioskModeManager : Component, ISupportInitialize
     private bool _savedTopMost;
 
     private bool _topMostInFullScreen;
-    private Keys _toggleFullScreenKey = Keys.F11;
+    private Keys _toggleFullScreenKeys = Keys.F11;
     private bool _escapeExitsFullScreen = true;
-    private bool _suppressPowerSaving;
+    private bool _alwaysOn;
     private int _mousePointerAutoHideDelay;
 
     private HANDLE _powerRequestHandle;
@@ -223,26 +223,35 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     /// <summary>
-    ///  Gets or sets the key that toggles fullscreen mode.
+    ///  Gets or sets the key combination that toggles fullscreen mode.
     /// </summary>
     /// <value>
-    ///  A <see cref="Keys"/> value that is handled without modifiers. The
-    ///  default is <see cref="Keys.F11"/>.
+    ///  A <see cref="Keys"/> value that combines a key code with the modifiers that
+    ///  must be pressed with it, or <see cref="Keys.None"/> to disable key-based
+    ///  toggling. The default is <see cref="Keys.F11"/>.
     /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The key combination is evaluated only while the managed form or one of its
+    ///   child controls has input focus. The component observes the application's own
+    ///   message queue and never installs a global keyboard hook or registers a
+    ///   system-wide hot key, so other applications keep receiving these keys.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatBehavior))]
-    [SRDescription(nameof(SR.KioskModeManagerToggleFullScreenKeyDescr))]
+    [SRDescription(nameof(SR.KioskModeManagerToggleFullScreenKeysDescr))]
     [DefaultValue(Keys.F11)]
-    public Keys ToggleFullScreenKey
+    public Keys ToggleFullScreenKeys
     {
-        get => _toggleFullScreenKey;
+        get => _toggleFullScreenKeys;
         set
         {
-            if (_toggleFullScreenKey == value)
+            if (_toggleFullScreenKeys == value)
             {
                 return;
             }
 
-            _toggleFullScreenKey = value;
+            _toggleFullScreenKeys = value;
         }
     }
 
@@ -255,6 +264,12 @@ public class KioskModeManager : Component, ISupportInitialize
     ///  without modifiers; otherwise, <see langword="false"/>. The default is
     ///  <see langword="true"/>.
     /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   Like <see cref="ToggleFullScreenKeys"/>, Escape is evaluated only while the
+    ///   managed form or one of its child controls has input focus.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.KioskModeManagerEscapeExitsFullScreenDescr))]
     [DefaultValue(true)]
@@ -293,20 +308,20 @@ public class KioskModeManager : Component, ISupportInitialize
     ///  Windows could not create or activate the power request.
     /// </exception>
     [SRCategory(nameof(SR.CatBehavior))]
-    [SRDescription(nameof(SR.KioskModeManagerSuppressPowerSavingDescr))]
+    [SRDescription(nameof(SR.KioskModeManagerAlwaysOnDescr))]
     [DefaultValue(false)]
-    public bool SuppressPowerSaving
+    public bool AlwaysOn
     {
-        get => _suppressPowerSaving;
+        get => _alwaysOn;
         set
         {
-            if (_suppressPowerSaving == value)
+            if (_alwaysOn == value)
             {
                 return;
             }
 
-            bool previousValue = _suppressPowerSaving;
-            _suppressPowerSaving = value;
+            bool previousValue = _alwaysOn;
+            _alwaysOn = value;
 
             try
             {
@@ -314,7 +329,7 @@ public class KioskModeManager : Component, ISupportInitialize
             }
             catch
             {
-                _suppressPowerSaving = previousValue;
+                _alwaysOn = previousValue;
                 throw;
             }
         }
@@ -689,8 +704,10 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void EnsureMessageMonitoring()
     {
-        // IMessageFilter observes input for child controls without changing
-        // Form.KeyPreview or installing global keyboard/mouse hooks.
+        // IMessageFilter observes the input this application already receives, so keys
+        // stay focus driven: messages are only acted on when they target the managed
+        // form or one of its child controls. This changes neither Form.KeyPreview nor
+        // installs a global keyboard or mouse hook.
         if (_messageFilter is null)
         {
             _messageFilter = new KioskModeMessageFilter(this);
@@ -744,7 +761,7 @@ public class KioskModeManager : Component, ISupportInitialize
             return;
         }
 
-        if (_suppressPowerSaving)
+        if (_alwaysOn)
         {
             CreatePowerRequest();
         }
@@ -787,21 +804,19 @@ public class KioskModeManager : Component, ISupportInitialize
         }
     }
 
-    private void ProcessKeyboardActivity(Keys keyData, Keys modifiers, bool isRepeat)
+    private void ProcessKeyboardActivity(Keys keyData, bool isRepeat)
     {
+        // Key repeats must not toggle fullscreen mode again while the key is held down.
         if (isRepeat)
         {
             return;
         }
 
-        Keys keyCode = keyData & Keys.KeyCode;
-
-        if (keyCode == _toggleFullScreenKey && modifiers == Keys.None)
+        if (_toggleFullScreenKeys != Keys.None && keyData == _toggleFullScreenKeys)
         {
             ToggleFullScreen();
         }
-        else if (keyCode == Keys.Escape && modifiers == Keys.None
-            && _escapeExitsFullScreen && _isFullScreen)
+        else if (keyData == Keys.Escape && _escapeExitsFullScreen && _isFullScreen)
         {
             ExitFullScreen();
         }
@@ -926,10 +941,9 @@ public class KioskModeManager : Component, ISupportInitialize
             || message.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
         {
             bool isRepeat = ((nuint)(nint)message.LParamInternal & (1u << 30)) != 0;
-            ProcessKeyboardActivity(
-                (Keys)(nint)message.WParamInternal,
-                Control.ModifierKeys & Keys.Modifiers,
-                isRepeat);
+            Keys keyData = ((Keys)(nint)message.WParamInternal & Keys.KeyCode)
+                | (Control.ModifierKeys & Keys.Modifiers);
+            ProcessKeyboardActivity(keyData, isRepeat);
         }
         else if (message.MsgInternal >= PInvokeCore.WM_MOUSEFIRST
             && message.MsgInternal <= PInvokeCore.WM_MOUSELAST)
@@ -941,7 +955,8 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     /// <summary>
-    ///  Observes keyboard and mouse messages that belong to the target form.
+    ///  Observes keyboard and mouse messages that are dispatched to the target form
+    ///  or to one of its child controls.
     /// </summary>
     private sealed class KioskModeMessageFilter : IMessageFilter
     {
