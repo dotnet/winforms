@@ -2724,12 +2724,6 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="KioskModeManagerTopMostInFullScreenDescr" xml:space="preserve">
     <value>Indicates whether the form is topmost while fullscreen.</value>
   </data>
-  <data name="KioskModeManagerWakeupDescr" xml:space="preserve">
-    <value>Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</value>
-  </data>
-  <data name="KioskModeManagerWakeUpCommandDescr" xml:space="preserve">
-    <value>The command that is executed whenever the kiosk experience is woken.</value>
-  </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Provides run-time information or descriptive text for a control.</value>
   </data>
