@@ -6174,11 +6174,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="new">Occurs when the fullscreen state changes.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KioskModeManagerHideTaskbarDescr">
-        <source>Indicates whether fullscreen mode covers the Windows taskbar.</source>
-        <target state="new">Indicates whether fullscreen mode covers the Windows taskbar.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
         <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
         <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
