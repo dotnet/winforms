@@ -1028,7 +1028,18 @@ public abstract partial class TextBoxBase : Control
 
         if (hasVScroll)
         {
-            padding.Right += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            WINDOW_EX_STYLE exStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+                this,
+                WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+
+            if ((exStyle & WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR) != 0)
+            {
+                padding.Left += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            }
+            else
+            {
+                padding.Right += SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            }
         }
 
         return padding;
