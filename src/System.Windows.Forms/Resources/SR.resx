@@ -2709,9 +2709,6 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="KioskModeManagerFullScreenChangedDescr" xml:space="preserve">
     <value>Occurs when the fullscreen state changes.</value>
   </data>
-  <data name="KioskModeManagerHideTaskbarDescr" xml:space="preserve">
-    <value>Indicates whether fullscreen mode covers the Windows taskbar.</value>
-  </data>
   <data name="KioskModeManagerMousePointerAutoHideDelayDescr" xml:space="preserve">
     <value>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</value>
   </data>

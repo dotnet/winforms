@@ -22,9 +22,9 @@ namespace System.Windows.Forms;
 ///   <see cref="Form"/> when fullscreen behavior is needed.
 ///  </para>
 ///  <para>
-///   The component can make the resolved form fullscreen, optionally cover the
-///   taskbar, keep the form topmost while fullscreen, suppress display and
-///   system sleep, and hide the mouse pointer after a period of inactivity.
+///   The component can make the resolved form fullscreen, keep the form topmost
+///   while fullscreen, suppress display and system sleep, and hide the mouse
+///   pointer after a period of inactivity.
 ///  </para>
 /// </remarks>
 /// <example>
@@ -40,7 +40,6 @@ namespace System.Windows.Forms;
 ///           _kioskModeManager = new KioskModeManager
 ///           {
 ///               ContainerControl = this,
-///               HideTaskbar = true,
 ///               TopMostInFullScreen = true,
 ///               MousePointerAutoHideDelay = 3000,
 ///               SuppressPowerSaving = true
@@ -61,7 +60,6 @@ public class KioskModeManager : Component, ISupportInitialize
 {
     private const uint PowerRequestContextVersion = 0;
     private const POWER_REQUEST_CONTEXT_FLAGS PowerRequestContextSimpleString = (POWER_REQUEST_CONTEXT_FLAGS)0x00000001;
-    private const nint SpiSetWorkArea = 0x002F;
     private const string PowerRequestReason = "WinForms KioskModeManager: Preventing screen saver and sleep";
 
     private static readonly object s_containerControlChangedEvent = new();
@@ -84,7 +82,6 @@ public class KioskModeManager : Component, ISupportInitialize
     private Rectangle _savedBounds;
     private bool _savedTopMost;
 
-    private bool _hideTaskbar;
     private bool _topMostInFullScreen;
     private Keys _toggleFullScreenKey = Keys.F11;
     private bool _escapeExitsFullScreen = true;
@@ -191,45 +188,6 @@ public class KioskModeManager : Component, ISupportInitialize
         if (Events[s_containerControlChangedEvent] is EventHandler handler)
         {
             handler(this, e);
-        }
-    }
-
-    /// <summary>
-    ///  Gets or sets a value indicating whether fullscreen mode covers the
-    ///  Windows taskbar.
-    /// </summary>
-    /// <value>
-    ///  <see langword="true"/> to size the form to the complete screen bounds;
-    ///  <see langword="false"/> to use normal maximized form behavior.
-    ///  The default is <see langword="false"/>.
-    /// </value>
-    /// <remarks>
-    ///  <para>
-    ///   When this property is <see langword="false"/>, the form is maximized
-    ///   and Windows keeps the taskbar available according to the user's shell
-    ///   settings. When this property is <see langword="true"/>, the form is
-    ///   sized to the screen bounds so the kiosk surface covers the taskbar.
-    ///  </para>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatBehavior))]
-    [SRDescription(nameof(SR.KioskModeManagerHideTaskbarDescr))]
-    [DefaultValue(false)]
-    public bool HideTaskbar
-    {
-        get => _hideTaskbar;
-        set
-        {
-            if (_hideTaskbar == value)
-            {
-                return;
-            }
-
-            _hideTaskbar = value;
-
-            if (_isFullScreen && _targetForm is not null)
-            {
-                ApplyFullScreen(_targetForm);
-            }
         }
     }
 
@@ -423,6 +381,11 @@ public class KioskModeManager : Component, ISupportInitialize
     ///   setting it to <see langword="false"/> restores the previously saved form
     ///   state. The property is bindable so it can participate in two-way data
     ///   binding.
+    ///  </para>
+    ///  <para>
+    ///   In fullscreen mode the form is borderless and sized to the complete bounds
+    ///   of the screen that currently displays it, so the kiosk surface also covers
+    ///   the taskbar.
     ///  </para>
     /// </remarks>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -741,9 +704,10 @@ public class KioskModeManager : Component, ISupportInitialize
             ? form.Bounds
             : form.RestoreBounds;
         Screen screen = Screen.FromRectangle(screenReferenceBounds);
-        Rectangle fullScreenBounds = _hideTaskbar
-            ? screen.Bounds
-            : screen.WorkingArea;
+
+        // Kiosk fullscreen always covers the complete screen, including the
+        // taskbar, so there is only one window model to reason about.
+        Rectangle fullScreenBounds = screen.Bounds;
 
         // Apply fullscreen from a normal state so bounds and border changes do
         // not operate on Windows' maximized window rectangle.
@@ -993,7 +957,7 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     /// <summary>
-    ///  Observes display and work area changes that affect the target form.
+    ///  Observes display changes that affect the target form.
     /// </summary>
     private sealed class KioskModeFormObserver : NativeWindow
     {
@@ -1066,9 +1030,7 @@ public class KioskModeManager : Component, ISupportInitialize
         {
             base.WndProc(ref m);
 
-            if (m.MsgInternal == PInvokeCore.WM_DISPLAYCHANGE
-                || (m.MsgInternal == PInvokeCore.WM_SETTINGCHANGE
-                    && (nint)m.WParamInternal == SpiSetWorkArea))
+            if (m.MsgInternal == PInvokeCore.WM_DISPLAYCHANGE)
             {
                 _owner.RefreshFullScreenBounds();
             }

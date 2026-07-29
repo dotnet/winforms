@@ -22,7 +22,6 @@ public class KioskModeManagerTests
         Assert.Null(manager.ContainerControl);
         Assert.False(manager.DesignMode);
         Assert.True(manager.EscapeExitsFullScreen);
-        Assert.False(manager.HideTaskbar);
         Assert.False(manager.FullScreen);
         Assert.Equal(0, manager.MousePointerAutoHideDelay);
         Assert.Null(manager.Site);
@@ -132,10 +131,9 @@ public class KioskModeManagerTests
         using KioskModeManager manager = new()
         {
             ContainerControl = form,
-            HideTaskbar = false,
             TopMostInFullScreen = true
         };
-        Rectangle workingArea = Screen.FromRectangle(form.Bounds).WorkingArea;
+        Rectangle screenBounds = Screen.FromRectangle(form.Bounds).Bounds;
 
         manager.ToggleFullScreen();
 
@@ -143,7 +141,7 @@ public class KioskModeManagerTests
         Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
         Assert.True(form.TopMost);
         Assert.Equal(FormWindowState.Normal, form.WindowState);
-        Assert.Equal(workingArea, form.Bounds);
+        Assert.Equal(screenBounds, form.Bounds);
 
         manager.ToggleFullScreen();
 
@@ -155,7 +153,7 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
-    public void KioskModeManager_FullScreen_HideTaskbar_UsesScreenBounds()
+    public void KioskModeManager_FullScreen_CoversCompleteScreenBounds()
     {
         using Form form = new()
         {
@@ -163,8 +161,7 @@ public class KioskModeManagerTests
         };
         using KioskModeManager manager = new()
         {
-            ContainerControl = form,
-            HideTaskbar = true
+            ContainerControl = form
         };
         Rectangle screenBounds = Screen.FromRectangle(form.Bounds).Bounds;
 
@@ -185,8 +182,8 @@ public class KioskModeManagerTests
         form.Show();
         form.WindowState = FormWindowState.Minimized;
         Rectangle restoreBounds = form.RestoreBounds;
-        Rectangle workingArea = Screen.FromRectangle(
-            restoreBounds).WorkingArea;
+        Rectangle screenBounds = Screen.FromRectangle(
+            restoreBounds).Bounds;
         using KioskModeManager manager = new()
         {
             ContainerControl = form
@@ -194,32 +191,32 @@ public class KioskModeManagerTests
 
         manager.FullScreen = true;
 
-        Assert.Equal(workingArea, form.Bounds);
+        Assert.Equal(screenBounds, form.Bounds);
     }
 
     [WinFormsFact]
-    public void KioskModeManager_FullScreen_RefreshBounds_ReappliesWorkingArea()
+    public void KioskModeManager_FullScreen_RefreshBounds_ReappliesScreenBounds()
     {
         using Form form = new()
         {
             Bounds = new Rectangle(10, 20, 300, 200)
         };
-        Rectangle workingArea = Screen.FromRectangle(
-            form.Bounds).WorkingArea;
+        Rectangle screenBounds = Screen.FromRectangle(
+            form.Bounds).Bounds;
         using KioskModeManager manager = new()
         {
             ContainerControl = form,
             FullScreen = true
         };
         form.Bounds = new Rectangle(
-            workingArea.X + 10,
-            workingArea.Y + 10,
+            screenBounds.X + 10,
+            screenBounds.Y + 10,
             300,
             200);
 
         manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
 
-        Assert.Equal(workingArea, form.Bounds);
+        Assert.Equal(screenBounds, form.Bounds);
     }
 
     [WinFormsFact]
@@ -630,7 +627,7 @@ public class KioskModeManagerTests
 
         using KioskModeManager manager = new();
         ISupportInitialize supportInitialize = manager;
-        Rectangle workingArea = Screen.FromRectangle(form.Bounds).WorkingArea;
+        Rectangle screenBounds = Screen.FromRectangle(form.Bounds).Bounds;
 
         supportInitialize.BeginInit();
         manager.ContainerControl = form;
@@ -644,7 +641,7 @@ public class KioskModeManagerTests
         Assert.True(manager.FullScreen);
         Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
         Assert.Equal(FormWindowState.Normal, form.WindowState);
-        Assert.Equal(workingArea, form.Bounds);
+        Assert.Equal(screenBounds, form.Bounds);
     }
 
     [WinFormsFact]

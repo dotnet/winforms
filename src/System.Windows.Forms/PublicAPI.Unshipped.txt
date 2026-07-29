@@ -117,8 +117,6 @@ System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.set -> void
 System.Windows.Forms.KioskModeManager.FullScreen.get -> bool
 System.Windows.Forms.KioskModeManager.FullScreen.set -> void
 System.Windows.Forms.KioskModeManager.FullScreenChanged -> System.EventHandler?
-System.Windows.Forms.KioskModeManager.HideTaskbar.get -> bool
-System.Windows.Forms.KioskModeManager.HideTaskbar.set -> void
 System.Windows.Forms.KioskModeManager.KioskModeManager() -> void
 System.Windows.Forms.KioskModeManager.KioskModeManager(System.ComponentModel.IContainer! container) -> void
 System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.get -> int
