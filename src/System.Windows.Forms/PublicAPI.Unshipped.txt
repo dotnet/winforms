@@ -125,7 +125,6 @@ System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.get -> int
 System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.set -> void
 virtual System.Windows.Forms.KioskModeManager.OnContainerControlChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.KioskModeManager.OnFullScreenChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.KioskModeManager.OnWakeup(System.Windows.Forms.KioskModeWakeupEventArgs! e) -> void
 override System.Windows.Forms.KioskModeManager.Site.get -> System.ComponentModel.ISite?
 override System.Windows.Forms.KioskModeManager.Site.set -> void
 System.Windows.Forms.KioskModeManager.SuppressPowerSaving.get -> bool
@@ -135,16 +134,3 @@ System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.get -> System.Windows.
 System.Windows.Forms.KioskModeManager.ToggleFullScreenKey.set -> void
 System.Windows.Forms.KioskModeManager.TopMostInFullScreen.get -> bool
 System.Windows.Forms.KioskModeManager.TopMostInFullScreen.set -> void
-System.Windows.Forms.KioskModeManager.Wakeup -> System.Windows.Forms.KioskModeWakeupEventHandler?
-System.Windows.Forms.KioskModeManager.WakeUpCommand.get -> System.Windows.Input.ICommand?
-System.Windows.Forms.KioskModeManager.WakeUpCommand.set -> void
-System.Windows.Forms.KioskModeWakeupEventArgs
-System.Windows.Forms.KioskModeWakeupEventArgs.KioskModeWakeupEventArgs(System.Windows.Forms.KioskModeWakeupSource source) -> void
-System.Windows.Forms.KioskModeWakeupEventArgs.Source.get -> System.Windows.Forms.KioskModeWakeupSource
-System.Windows.Forms.KioskModeWakeupEventHandler
-virtual System.Windows.Forms.KioskModeWakeupEventHandler.Invoke(object? sender, System.Windows.Forms.KioskModeWakeupEventArgs! e) -> void
-System.Windows.Forms.KioskModeWakeupSource
-System.Windows.Forms.KioskModeWakeupSource.Keyboard = 0 -> System.Windows.Forms.KioskModeWakeupSource
-System.Windows.Forms.KioskModeWakeupSource.Mouse = 1 -> System.Windows.Forms.KioskModeWakeupSource
-System.Windows.Forms.KioskModeWakeupSource.PowerResume = 2 -> System.Windows.Forms.KioskModeWakeupSource
-System.Windows.Forms.KioskModeWakeupSource.Session = 3 -> System.Windows.Forms.KioskModeWakeupSource

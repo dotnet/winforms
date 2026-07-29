@@ -6199,16 +6199,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="new">Indicates whether the form is topmost while fullscreen.</target>
         <note />
       </trans-unit>
-      <trans-unit id="KioskModeManagerWakeupDescr">
-        <source>Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</source>
-        <target state="new">Occurs when keyboard, mouse, power resume, or session activity wakes the kiosk experience.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="KioskModeManagerWakeUpCommandDescr">
-        <source>The command that is executed whenever the kiosk experience is woken.</source>
-        <target state="new">The command that is executed whenever the kiosk experience is woken.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
         <source>Enables the automatic handling of text that extends beyond the width of the label control.</source>
         <target state="translated">Włącza automatyczną obsługę tekstu, który mieści się w szerokości formantu etykiety.</target>
